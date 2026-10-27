@@ -172,10 +172,6 @@
     "name": "Insectile Murmuration (Upgrade)",
     "detachment_id": "flyblown-host",
     "cost": 15,
-    "keyword_restrictions": [
-      "Death Guard",
-      "Plague Marines"
-    ],
     "ability_id": "insectile-murmuration-upgrade-flyblown-host-death-guard",
     "is_unique": true,
     "game_version": {
@@ -193,6 +189,14 @@
       {
         "namespace": "mfm",
         "id": "fa211b3a-a993-44c2-bbce-b954c4d653db"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "plague-marines",
+        "keywords": [
+          "Death Guard"
+        ]
       }
     ]
   },
@@ -261,10 +265,6 @@
     "name": "Plagueveil (Upgrade)",
     "detachment_id": "flyblown-host",
     "cost": 15,
-    "keyword_restrictions": [
-      "Death Guard",
-      "Plague Marines"
-    ],
     "ability_id": "plagueveil-upgrade-flyblown-host-death-guard",
     "is_unique": true,
     "game_version": {
@@ -282,6 +282,14 @@
       {
         "namespace": "mfm",
         "id": "ff671003-161c-417a-96b9-a62c53d7cd3d"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "plague-marines",
+        "keywords": [
+          "Death Guard"
+        ]
       }
     ]
   },
@@ -803,16 +811,6 @@
     "points_provisional": false,
     "upgrade_tag": true,
     "max_targets": 3,
-    "keyword_restriction_groups": [
-      [
-        "Death Guard",
-        "Helbrute"
-      ],
-      [
-        "Death Guard",
-        "Myphitic Blight-haulers"
-      ]
-    ],
     "external_refs": [
       {
         "namespace": "game-datacards",
@@ -821,6 +819,20 @@
       {
         "namespace": "mfm",
         "id": "6e0f3baf-ed09-4117-a0a1-181dee486e68"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "helbrute",
+        "keywords": [
+          "Death Guard"
+        ]
+      },
+      {
+        "unit_id": "myphitic-blight-haulers",
+        "keywords": [
+          "Death Guard"
+        ]
       }
     ]
   },

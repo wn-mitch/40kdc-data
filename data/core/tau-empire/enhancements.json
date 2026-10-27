@@ -612,10 +612,6 @@
     "name": "Negation Emitters (Upgrade)",
     "detachment_id": "advanced-acquisition-cadre",
     "cost": 15,
-    "keyword_restrictions": [
-      "Stealth Battlesuits",
-      "T’au Empire"
-    ],
     "ability_id": "negation-emitters-upgrade-advanced-acquisition-cadre-tau-empire",
     "is_unique": true,
     "game_version": {
@@ -633,6 +629,14 @@
       {
         "namespace": "mfm",
         "id": "0add3662-993d-4f60-b3bc-32084767e11b"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "stealth-battlesuits",
+        "keywords": [
+          "T’au Empire"
+        ]
       }
     ]
   },
@@ -652,13 +656,10 @@
     "max_targets": 3,
     "keyword_restriction_groups": [
       [
-        "Ghostkeel"
-      ],
-      [
         "Pathfinder Team"
       ],
       [
-        "Stealth Battlesuits"
+        "Ghostkeel"
       ]
     ],
     "external_refs": [
@@ -669,6 +670,11 @@
       {
         "namespace": "mfm",
         "id": "ebd0e184-f531-4a41-a7d2-51a7ae9bcd17"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "stealth-battlesuits"
       }
     ]
   },
@@ -686,14 +692,16 @@
       "combat-patrol"
     ],
     "points_provisional": false,
-    "keyword_restrictions": [
-      "Commander Cloudspear"
-    ],
     "ability_id": "earth-caste-modifications-sudden-dawn-cadre-tau-empire",
     "external_refs": [
       {
         "namespace": "mfm",
         "id": "ceebb987-c76b-4834-8d70-6f1cc0c5e3ee"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "commander-cloudspear"
       }
     ]
   },
@@ -711,15 +719,17 @@
       "combat-patrol"
     ],
     "points_provisional": false,
-    "keyword_restrictions": [
-      "Sudden Dawn Cadre Devilfish"
-    ],
     "upgrade_tag": true,
     "ability_id": "proximity-scanners-sudden-dawn-cadre-tau-empire",
     "external_refs": [
       {
         "namespace": "mfm",
         "id": "3513ccb4-3398-47a4-9518-5cc2ab78b9cb"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "sudden-dawn-cadre-devilfish"
       }
     ]
   }

@@ -791,10 +791,6 @@
     "name": "Long-range Scout (Upgrade)",
     "detachment_id": "designation-force",
     "cost": 10,
-    "keyword_restrictions": [
-      "Astra Militarum",
-      "Scout Sentinels"
-    ],
     "ability_id": "long-range-scout-upgrade-designation-force-astra-militarum",
     "is_unique": true,
     "game_version": {
@@ -812,6 +808,14 @@
       {
         "namespace": "mfm",
         "id": "4272bd39-3d22-455a-be75-91c7e5bbafce"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "scout-sentinels",
+        "keywords": [
+          "Astra Militarum"
+        ]
       }
     ]
   },
@@ -1116,14 +1120,16 @@
       "combat-patrol"
     ],
     "points_provisional": false,
-    "keyword_restrictions": [
-      "Drayden's Lance Kasrkin"
-    ],
     "upgrade_tag": true,
     "external_refs": [
       {
         "namespace": "mfm",
         "id": "36e98314-3cc0-47cd-8cc6-d572907d8ea1"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "draydens-lance-kasrkin"
       }
     ]
   },
@@ -1141,10 +1147,6 @@
     "points_provisional": false,
     "upgrade_tag": true,
     "max_targets": 3,
-    "keyword_restrictions": [
-      "Astra Militarum",
-      "Ratlings"
-    ],
     "external_refs": [
       {
         "namespace": "game-datacards",
@@ -1153,6 +1155,14 @@
       {
         "namespace": "mfm",
         "id": "7d98a055-2947-40f0-81b8-5f7d76adc637"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "ratlings",
+        "keywords": [
+          "Astra Militarum"
+        ]
       }
     ]
   }

@@ -712,10 +712,6 @@
     "name": "Precognicient Volleys (Upgrade)",
     "detachment_id": "fires-of-purgation",
     "cost": 10,
-    "keyword_restrictions": [
-      "Grey Knights",
-      "Purgation Squad"
-    ],
     "ability_id": "precognicient-volleys-upgrade-fires-of-purgation-grey-knights",
     "is_unique": true,
     "game_version": {
@@ -734,6 +730,14 @@
         "namespace": "mfm",
         "id": "044a1930-d6e9-4335-9da1-32c1bedd65e6"
       }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "purgation-squad",
+        "keywords": [
+          "Grey Knights"
+        ]
+      }
     ]
   },
   {
@@ -741,10 +745,6 @@
     "name": "Boons of Deimos (Upgrade)",
     "detachment_id": "fires-of-purgation",
     "cost": 20,
-    "keyword_restrictions": [
-      "Grey Knights",
-      "Purgation Squad"
-    ],
     "ability_id": "boons-of-deimos-upgrade-fires-of-purgation-grey-knights",
     "is_unique": true,
     "game_version": {
@@ -763,6 +763,14 @@
         "namespace": "mfm",
         "id": "880712dd-e7d0-4140-8b54-c7d395724841"
       }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "purgation-squad",
+        "keywords": [
+          "Grey Knights"
+        ]
+      }
     ]
   },
   {
@@ -770,10 +778,6 @@
     "name": "Predestined Coordinates (Upgrade)",
     "detachment_id": "immaterial-interdiction",
     "cost": 10,
-    "keyword_restrictions": [
-      "Grey Knights",
-      "Interceptor Squad"
-    ],
     "ability_id": "predestined-coordinates-upgrade-immaterial-interdiction-grey-knights",
     "is_unique": true,
     "game_version": {
@@ -792,6 +796,14 @@
         "namespace": "mfm",
         "id": "30ae63ee-c283-4329-8470-0fd38fc41770"
       }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "interceptor-squad",
+        "keywords": [
+          "Grey Knights"
+        ]
+      }
     ]
   },
   {
@@ -799,10 +811,6 @@
     "name": "Astral Overlap (Upgrade)",
     "detachment_id": "immaterial-interdiction",
     "cost": 10,
-    "keyword_restrictions": [
-      "Grey Knights",
-      "Interceptor Squad"
-    ],
     "ability_id": "astral-overlap-upgrade-immaterial-interdiction-grey-knights",
     "is_unique": true,
     "game_version": {
@@ -820,6 +828,14 @@
       {
         "namespace": "mfm",
         "id": "8f60b2f9-89ee-44cc-8294-35da72e5e06d"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "interceptor-squad",
+        "keywords": [
+          "Grey Knights"
+        ]
       }
     ]
   },

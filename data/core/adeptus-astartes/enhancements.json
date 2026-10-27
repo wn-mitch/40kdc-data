@@ -53,6 +53,11 @@
         "namespace": "mfm",
         "id": "8fc10e42-2978-43da-92e9-636e5e4ce564"
       }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "captain"
+      }
     ]
   },
   {
@@ -69,15 +74,19 @@
       "combat-patrol"
     ],
     "points_provisional": false,
-    "keyword_restrictions": [
-      "Adeptus Astartes",
-      "Assault Force Intercessor Squad"
-    ],
     "upgrade_tag": true,
     "external_refs": [
       {
         "namespace": "mfm",
         "id": "df54e4af-9023-4a38-ba72-88a7b7be921e"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "assault-force-intercessor-squad",
+        "keywords": [
+          "Adeptus Astartes"
+        ]
       }
     ]
   },
@@ -95,15 +104,19 @@
       "combat-patrol"
     ],
     "points_provisional": false,
-    "keyword_restrictions": [
-      "Adeptus Astartes",
-      "Assault Force Vanguard Veteran Squad With Jump Packs"
-    ],
     "upgrade_tag": true,
     "external_refs": [
       {
         "namespace": "mfm",
         "id": "5735eeb9-abd5-499c-8921-d569e62184f0"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "assault-force-vanguard-veteran-squad-with-jump-packs",
+        "keywords": [
+          "Adeptus Astartes"
+        ]
       }
     ]
   },
@@ -256,6 +269,11 @@
     "max_targets": 1,
     "keyword_restrictions": [
       "Captain"
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "captain"
+      }
     ]
   },
   {
@@ -425,8 +443,10 @@
     "points_provisional": false,
     "upgrade_tag": false,
     "max_targets": 1,
-    "keyword_restrictions": [
-      "Apothecary Biologis"
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "apothecary-biologis"
+      }
     ]
   },
   {
@@ -499,6 +519,11 @@
     "max_targets": 1,
     "keyword_restrictions": [
       "Captain"
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "captain"
+      }
     ]
   },
   {
@@ -826,6 +851,11 @@
     "max_targets": 1,
     "keyword_restrictions": [
       "Ancient"
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "ancient"
+      }
     ]
   },
   {

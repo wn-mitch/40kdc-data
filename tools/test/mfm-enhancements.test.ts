@@ -7,6 +7,7 @@ import {
   reconcileEnhancementEligibility,
   runEnhancements,
 } from "../src/mfm/enhancements.js";
+import type { DatasheetUnitResolver } from "../src/mfm/enhancement-datasheets.js";
 
 /**
  * Enhancement matching keys on the mirrored id (`<name>-<detachment>-<faction>`). The dump
@@ -88,6 +89,7 @@ describe("buildEnhCanon", () => {
  *   - exclusion_keywords    ← enhancement_excluded_keyword
  *   - keyword_restrictions       ← legacy union of required-keyword members
  *   - keyword_restriction_groups ← exact OR-of-AND eligibility groups
+ *   - datasheet_restriction_groups ← datasheet-scoped groups, by repo unit id
  */
 function fieldsDump(): MfmDump {
   return new MfmDump({
@@ -131,25 +133,32 @@ function fieldsDump(): MfmDump {
   });
 }
 
+/** Fabricated datasheet → core unit resolution: ds-ex is the exorcist unit, ds-twin two units, the rest none. */
+const units: DatasheetUnitResolver = (id) => (id === "ds-ex" ? { unit_id: "exorcist" } : id === "ds-twin" ? "ambiguous" : "none");
+
 describe("buildEnhFieldCanon", () => {
-  it("derives upgrade_tag, max_targets, exclusions and a datasheet+fkw restriction", () => {
-    const canon = buildEnhFieldCanon(fieldsDump());
+  it("derives upgrade_tag, max_targets, exclusions and a datasheet+fkw restriction by unit id", () => {
+    const canon = buildEnhFieldCanon(fieldsDump(), units);
     const up = canon.get("symphonic-payload-upgrade-chorus-of-condemnation-adepta-sororitas");
     expect(up).toBeDefined();
     expect(up!.upgrade_tag).toBe(true);
     expect(up!.max_targets).toBe(3);
-    expect(up!.keyword_restrictions).toEqual(["Adepta Sororitas", "Exorcist"]);
-    expect(up!.keyword_restriction_groups).toEqual([["Adepta Sororitas", "Exorcist"]]);
+    // The datasheet is the bearer's identity, never its name used as a keyword.
+    expect(up!.keyword_restrictions).toBeNull();
+    expect(up!.keyword_restriction_groups).toBeNull();
+    expect(up!.datasheet_restriction_groups).toEqual([{ unit_id: "exorcist", keywords: ["Adepta Sororitas"] }]);
     expect(up!.keywordRestrictionsAmbiguous).toBe(false);
     expect(up!.exclusion_keywords).toBeNull();
+    expect(up!.unresolvedKeywordIds).toEqual([]);
   });
 
   it("maps a miniature enhancement's fkw group and its exclusion", () => {
-    const min = buildEnhFieldCanon(fieldsDump()).get("plain-relic-chorus-of-condemnation-adepta-sororitas")!;
+    const min = buildEnhFieldCanon(fieldsDump(), units).get("plain-relic-chorus-of-condemnation-adepta-sororitas")!;
     expect(min.upgrade_tag).toBe(false);
     expect(min.max_targets).toBe(1);
     expect(min.keyword_restrictions).toEqual(["Adepta Sororitas"]);
     expect(min.keyword_restriction_groups).toEqual([["Adepta Sororitas"]]);
+    expect(min.datasheet_restriction_groups).toBeNull();
     expect(min.exclusion_keywords).toEqual(["Infantry"]);
     expect(min.attachment_bodyguard_ids).toEqual(["repentia-squad"]);
   });
@@ -180,7 +189,7 @@ describe("buildEnhFieldCanon", () => {
         ],
       },
     });
-    const canon = buildEnhFieldCanon(dump);
+    const canon = buildEnhFieldCanon(dump, units);
     const goad = canon.get("quantum-goad-pantheon-of-woe-necrons")!;
     expect(goad.keyword_restrictions).toEqual(["C’tan Shard of the Nightbringer", "Necrons"]);
     expect(goad.unresolvedKeywordIds).toEqual([]);
@@ -189,17 +198,52 @@ describe("buildEnhFieldCanon", () => {
     expect(unmapped.unresolvedKeywordIds).toEqual(["k-dnu"]);
   });
 
-  it("preserves divergent groups as explicit alternatives", () => {
-    const multi = buildEnhFieldCanon(fieldsDump()).get("split-relic-chorus-of-condemnation-adepta-sororitas")!;
-    expect(multi.keywordRestrictionsAmbiguous).toBe(true);
-    expect(multi.keyword_restrictions).toEqual(["Exorcist", "Infantry"]);
-    expect(multi.keyword_restriction_groups).toEqual([["Infantry"], ["Exorcist"]]);
+  it("keeps a datasheet group beside the keyword groups as a further alternative", () => {
+    const multi = buildEnhFieldCanon(fieldsDump(), units).get("split-relic-chorus-of-condemnation-adepta-sororitas")!;
+    expect(multi.keyword_restriction_groups).toEqual([["Infantry"]]);
+    expect(multi.datasheet_restriction_groups).toEqual([{ unit_id: "exorcist" }]);
+    expect(multi.keywordRestrictionsAmbiguous).toBe(false);
+  });
+
+  it("drops a datasheet no core unit carries beside other groups, and refuses it alone or when ambiguous", () => {
+    const base = fieldsDump();
+    const dump = new MfmDump({
+      metadata: { data_version: 963 },
+      data: {
+        ...base.tables,
+        enhancement: [
+          { id: "e-beside", detachmentId: "det", enhancementType: "miniature", limit: 1, basePointsCost: 10, localisations: { en: { name: "Beside Relic" } } },
+          { id: "e-alone", detachmentId: "det", enhancementType: "miniature", limit: 1, basePointsCost: 10, localisations: { en: { name: "Alone Relic" } } },
+          { id: "e-twin", detachmentId: "det", enhancementType: "miniature", limit: 1, basePointsCost: 10, localisations: { en: { name: "Twin Relic" } } },
+        ],
+        enhancement_required_keyword_group: [
+          { id: "g-b1", enhancementId: "e-beside", datasheetId: "ds-culled" },
+          { id: "g-b2", enhancementId: "e-beside", datasheetId: null },
+          { id: "g-a1", enhancementId: "e-alone", datasheetId: "ds-culled" },
+          { id: "g-t1", enhancementId: "e-twin", datasheetId: "ds-twin" },
+          { id: "g-t2", enhancementId: "e-twin", datasheetId: null },
+        ],
+        enhancement_required_keyword_group_keyword: [
+          { enhancementRequiredKeywordGroupId: "g-b2", keywordId: "k-inf" },
+          { enhancementRequiredKeywordGroupId: "g-t2", keywordId: "k-inf" },
+        ],
+        enhancement_required_keyword_group_faction_keyword: [],
+      },
+    });
+    const canon = buildEnhFieldCanon(dump, units);
+    const beside = canon.get("beside-relic-chorus-of-condemnation-adepta-sororitas")!;
+    expect(beside.keyword_restriction_groups).toEqual([["Infantry"]]);
+    expect(beside.datasheet_restriction_groups).toBeNull();
+    expect(beside.unresolvedKeywordIds).toEqual([]);
+    // Alone, dropping it would leave the enhancement open to every bearer.
+    expect(canon.get("alone-relic-chorus-of-condemnation-adepta-sororitas")!.unresolvedKeywordIds).toEqual(["ds-culled"]);
+    expect(canon.get("twin-relic-chorus-of-condemnation-adepta-sororitas")!.unresolvedKeywordIds).toEqual(["ds-twin"]);
   });
 });
 
 describe("authoritative enhancement eligibility", () => {
   it("replaces contradictory stale fields with the single source group", () => {
-    const fields = buildEnhFieldCanon(fieldsDump()).get("plain-relic-chorus-of-condemnation-adepta-sororitas")!;
+    const fields = buildEnhFieldCanon(fieldsDump(), units).get("plain-relic-chorus-of-condemnation-adepta-sororitas")!;
     const record = {
       id: "stale",
       name: "Fabricated Relic",
@@ -214,6 +258,7 @@ describe("authoritative enhancement eligibility", () => {
     expect(result.eligibility?.to).toEqual({
       keyword_restrictions: ["Adepta Sororitas"],
       keyword_restriction_groups: null,
+      datasheet_restriction_groups: null,
     });
     expect(result.exclusions?.to).toEqual(["Infantry"]);
     expect(record).toMatchObject({
@@ -223,32 +268,44 @@ describe("authoritative enhancement eligibility", () => {
     expect(record).not.toHaveProperty("keyword_restriction_groups");
   });
 
-  it("uses groups only for divergent source alternatives and clears both when absent", () => {
-    const multi = buildEnhFieldCanon(fieldsDump()).get("split-relic-chorus-of-condemnation-adepta-sororitas")!;
+  it("replaces a datasheet name used as a keyword with a datasheet group, and clears every form when absent", () => {
+    const multi = buildEnhFieldCanon(fieldsDump(), units).get("split-relic-chorus-of-condemnation-adepta-sororitas")!;
+    // The former ingest's shape: the datasheet's name as a keyword group.
     const record = {
       id: "stale",
       name: "Fabricated Relic",
       cost: 10,
-      keyword_restrictions: ["Stale"],
-      keyword_restriction_groups: [["Also stale"]],
+      keyword_restriction_groups: [["Infantry"], ["Exorcist"]],
       exclusion_keywords: ["Stale"],
     };
 
-    reconcileEnhancementEligibility(record, multi);
+    const result = reconcileEnhancementEligibility(record, multi);
+    expect(result.eligibility?.to.datasheet_restriction_groups).toEqual([{ unit_id: "exorcist" }]);
     expect(record).toMatchObject({
-      keyword_restriction_groups: [["Infantry"], ["Exorcist"]],
+      keyword_restrictions: ["Infantry"],
+      datasheet_restriction_groups: [{ unit_id: "exorcist" }],
     });
-    expect(record).not.toHaveProperty("keyword_restrictions");
+    expect(record).not.toHaveProperty("keyword_restriction_groups");
 
     reconcileEnhancementEligibility(record, {
       ...multi,
       exclusion_keywords: null,
       keyword_restrictions: null,
       keyword_restriction_groups: null,
+      datasheet_restriction_groups: null,
     });
     expect(record).not.toHaveProperty("keyword_restrictions");
     expect(record).not.toHaveProperty("keyword_restriction_groups");
+    expect(record).not.toHaveProperty("datasheet_restriction_groups");
     expect(record).not.toHaveProperty("exclusion_keywords");
+  });
+
+  it("leaves eligibility untouched while a datasheet is unresolved", () => {
+    const fields = { ...buildEnhFieldCanon(fieldsDump(), () => "ambiguous").get("symphonic-payload-upgrade-chorus-of-condemnation-adepta-sororitas")! };
+    expect(fields.unresolvedKeywordIds).toEqual(["ds-ex"]);
+    const record = { id: "kept", name: "Fabricated Relic", cost: 10, keyword_restrictions: ["Exorcist"] };
+    expect(reconcileEnhancementEligibility(record, fields)).toEqual({});
+    expect(record.keyword_restrictions).toEqual(["Exorcist"]);
   });
 });
 

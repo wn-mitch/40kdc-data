@@ -476,13 +476,15 @@
       "combat-patrol"
     ],
     "points_provisional": false,
-    "keyword_restrictions": [
-      "Inquisitor's Hand Eversor Assassin"
-    ],
     "external_refs": [
       {
         "namespace": "mfm",
         "id": "ea8674be-2fc5-4a42-919b-9470c0194c4c"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "inquisitors-hand-eversor-assassin"
       }
     ]
   },

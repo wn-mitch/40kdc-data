@@ -173,19 +173,29 @@ function characterImplied(dataRoot: string, record: CoreRecord): boolean {
 }
 
 
+/** A core enhancement's datasheet-scoped eligibility groups, keywords in upper case. */
+function datasheetGroups(record: CoreRecord): Array<{ unit_id: string; keywords: string[] }> {
+  const groups = Array.isArray(record.datasheet_restriction_groups) ? record.datasheet_restriction_groups as Array<{ unit_id: string; keywords?: unknown[] }> : [];
+  return groups.map((group) => ({ unit_id: group.unit_id, keywords: (group.keywords ?? []).map(upper) }));
+}
+
 function eligibilityProblem(record: CoreRecord, parameters: Record<string, unknown>, implied: boolean): string | null {
   const groups = Array.isArray(record.keyword_restriction_groups)
     ? (record.keyword_restriction_groups as unknown[][]).map((group) => group.map(upper))
     : Array.isArray(record.keyword_restrictions) ? [(record.keyword_restrictions as unknown[]).map(upper)] : [];
   // CHARACTER the record leaves implied is not a keyword its groups must list.
   const words = (parameters.keywords as string[]).map(upper).filter((word) => !(implied && word === "CHARACTER" && !groups.some((group) => group.includes(word))));
-  if (groups.length === 0) return "the core enhancement names no eligible keywords";
+  const datasheets = datasheetGroups(record);
+  if (groups.length === 0 && datasheets.length === 0) return "the core enhancement names no eligible keywords";
   // Excluded models, when the leaf names any, must be exactly the ones core excludes.
   if (Array.isArray(parameters.excluded_keywords)) {
     const excluded = (parameters.excluded_keywords as string[]).map(upper).sort();
     const coreExcluded = (Array.isArray(record.exclusion_keywords) ? record.exclusion_keywords as unknown[] : []).map(upper).sort();
     if (excluded.join() !== coreExcluded.join()) return `core excludes ${coreExcluded.join(", ") || "no keywords"}`;
   }
+  // A datasheet group admits a unit by identity, which keyword wording can only match through
+  // the units both readings admit (sameBearers).
+  if (datasheets.length) return `core allows ${[...groups.map((group) => group.join(" + ")), ...datasheets.map((group) => [`the ${group.unit_id} datasheet`, ...group.keywords].join(" + "))].join(" or ")}`;
   // Core adds the army's faction keyword the wording leaves out, so each named keyword must be
   // present, not the lists equal.
   if (Array.isArray(parameters.any_keywords)) {
@@ -215,16 +225,18 @@ function sameBearers(dataRoot: string, record: CoreRecord, parameters: Record<st
   const groups = Array.isArray(record.keyword_restriction_groups)
     ? (record.keyword_restriction_groups as unknown[][]).map((group) => group.map(upper))
     : Array.isArray(record.keyword_restrictions) ? [(record.keyword_restrictions as unknown[]).map(upper)] : [];
-  if (groups.length === 0) return false;
+  const datasheets = datasheetGroups(record);
+  if (groups.length === 0 && datasheets.length === 0) return false;
   const words = (parameters.keywords as string[]).map(upper);
   const any = Array.isArray(parameters.any_keywords) ? (parameters.any_keywords as string[]).map(upper) : null;
   const byLeaf = (labels: Set<string>) => any
     ? words.every((word) => labels.has(word)) && any.some((word) => labels.has(word))
     : parameters.match === "any" ? words.some((word) => labels.has(word)) : words.every((word) => labels.has(word));
-  const byCore = (labels: Set<string>) => groups.some((group) => group.every((word) => labels.has(word)));
+  const byCore = (unit: { id: string; labels: Set<string> }) => groups.some((group) => group.every((word) => unit.labels.has(word)))
+    || datasheets.some((group) => group.unit_id === unit.id && group.keywords.every((word) => unit.labels.has(word)));
   const units = factionUnits(dataRoot, faction).filter((unit) => !implied || unit.labels.has("CHARACTER"));
   const leafIds = units.filter((unit) => byLeaf(unit.labels)).map((unit) => unit.id).sort();
-  const coreIds = units.filter((unit) => byCore(unit.labels)).map((unit) => unit.id).sort();
+  const coreIds = units.filter((unit) => byCore(unit)).map((unit) => unit.id).sort();
   return leafIds.length > 0 && leafIds.join() === coreIds.join();
 }
 

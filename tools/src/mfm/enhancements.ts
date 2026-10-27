@@ -24,6 +24,13 @@ import { requiredKeywordsForDetachment } from "./detachment-fields.js";
 import { keywordLabel, factionKeywordLabel, keywordLabels } from "./keywords.js";
 import type { StagedWrite } from "./apply.js";
 import { currentGameVersion } from "./dataslate.js";
+import {
+  canonicalDatasheetGroups,
+  coreUnitIdsByDatasheet,
+  type DatasheetRestriction,
+  type DatasheetUnitResolver,
+  sameDatasheetGroups,
+} from "./enhancement-datasheets.js";
 
 
 
@@ -39,6 +46,7 @@ interface EnhRecord {
   exclusion_keywords?: string[] | null;
   keyword_restrictions?: string[] | null;
   keyword_restriction_groups?: string[][] | null;
+  datasheet_restriction_groups?: DatasheetRestriction[] | null;
   attachment_bodyguard_ids?: string[];
   [k: string]: unknown;
 }
@@ -63,8 +71,8 @@ export interface DirEnhResult {
   /** Source-owned eligibility representation that was replaced or cleared. */
   eligibilityChanged: {
     id: string;
-    from: { keyword_restrictions: string[] | null; keyword_restriction_groups: string[][] | null };
-    to: { keyword_restrictions: string[] | null; keyword_restriction_groups: string[][] | null };
+    from: EligibilityShape;
+    to: EligibilityShape;
   }[];
   attachmentBodyguardsChanged: { id: string; from: string[] | null; to: string[] | null }[];
   /** Dump keyword ids that did not resolve to a repo label (the eligibility source
@@ -150,19 +158,27 @@ function sameGroups(
   return sameLabels(canonical(a), canonical(b));
 }
 
-/** The core schema deliberately has one eligibility representation at a time. */
-function eligibilityShape(fields: EnhFields): {
+/** The source-owned eligibility fields of a core enhancement. */
+export interface EligibilityShape {
   keyword_restrictions: string[] | null;
   keyword_restriction_groups: string[][] | null;
-} {
+  datasheet_restriction_groups: DatasheetRestriction[] | null;
+}
+
+/**
+ * The core schema deliberately has one keyword-eligibility representation at a time; datasheet
+ * groups sit beside it as further alternatives.
+ */
+function eligibilityShape(fields: EnhFields): EligibilityShape {
   const groups = fields.keyword_restriction_groups ?? [];
+  const datasheet_restriction_groups = fields.datasheet_restriction_groups;
   if (groups.length === 1) {
-    return { keyword_restrictions: groups[0], keyword_restriction_groups: null };
+    return { keyword_restrictions: groups[0], keyword_restriction_groups: null, datasheet_restriction_groups };
   }
   if (groups.length > 1) {
-    return { keyword_restrictions: null, keyword_restriction_groups: groups };
+    return { keyword_restrictions: null, keyword_restriction_groups: groups, datasheet_restriction_groups };
   }
-  return { keyword_restrictions: null, keyword_restriction_groups: null };
+  return { keyword_restrictions: null, keyword_restriction_groups: null, datasheet_restriction_groups };
 }
 
 /** Structured enhancement fields the dump can supply beyond cost. */
@@ -170,13 +186,14 @@ function eligibilityShape(fields: EnhFields): {
 export interface EnhancementEligibilityRecord {
   keyword_restrictions?: string[] | null;
   keyword_restriction_groups?: string[][] | null;
+  datasheet_restriction_groups?: DatasheetRestriction[] | null;
   exclusion_keywords?: string[] | null;
 }
 
 export interface EligibilityReconcileResult {
   eligibility?: {
-    from: { keyword_restrictions: string[] | null; keyword_restriction_groups: string[][] | null };
-    to: { keyword_restrictions: string[] | null; keyword_restriction_groups: string[][] | null };
+    from: EligibilityShape;
+    to: EligibilityShape;
   };
   exclusions?: { from: string[] | null; to: string[] | null };
 }
@@ -189,14 +206,17 @@ export function reconcileEnhancementEligibility(
   const result: EligibilityReconcileResult = {};
   if (fields.unresolvedKeywordIds.length > 0) return result;
 
-  const from = {
+  const from: EligibilityShape = {
     keyword_restrictions: record.keyword_restrictions ?? null,
     keyword_restriction_groups: record.keyword_restriction_groups ?? null,
+    datasheet_restriction_groups: record.datasheet_restriction_groups ?? null,
   };
   const to = eligibilityShape(fields);
   if (
     !sameLabels(from.keyword_restrictions, to.keyword_restrictions) ||
     !sameGroups(from.keyword_restriction_groups, to.keyword_restriction_groups) ||
+    !sameDatasheetGroups(from.datasheet_restriction_groups, to.datasheet_restriction_groups) ||
+    (to.datasheet_restriction_groups === null && record.datasheet_restriction_groups !== undefined) ||
     (to.keyword_restrictions === null && record.keyword_restrictions !== undefined) ||
     (to.keyword_restriction_groups === null && record.keyword_restriction_groups !== undefined)
   ) {
@@ -205,6 +225,8 @@ export function reconcileEnhancementEligibility(
     else record.keyword_restrictions = to.keyword_restrictions;
     if (to.keyword_restriction_groups === null) delete record.keyword_restriction_groups;
     else record.keyword_restriction_groups = to.keyword_restriction_groups;
+    if (to.datasheet_restriction_groups === null) delete record.datasheet_restriction_groups;
+    else record.datasheet_restriction_groups = to.datasheet_restriction_groups;
   }
 
   const exclusionFrom = record.exclusion_keywords ?? null;
@@ -225,6 +247,8 @@ export interface EnhFields {
   keyword_restrictions: string[] | null;
   /** Exact required-keyword groups: AND within each group, OR across groups. */
   keyword_restriction_groups: string[][] | null;
+  /** Datasheet-scoped groups, by repo unit id: further alternatives (OR) to the keyword groups. */
+  datasheet_restriction_groups: DatasheetRestriction[] | null;
   /** Extra bodyguard datasheets the enhancement permits its bearer to join. */
   attachment_bodyguard_ids: string[] | null;
   /** True when >1 required-keyword group carries a different member set. */
@@ -264,12 +288,14 @@ const PLACEHOLDER_BEARER_KEYWORDS: Readonly<Record<string, string>> = {
  *   - keyword_restrictions  ← required-keyword-group keyword + faction-keyword members
  *
  * Required-keyword groups model "bearer must have keyword(s)". Every non-empty
- * source group becomes one conjunction in `keyword_restriction_groups`, including
- * a datasheet name when the group is datasheet-scoped. The groups are alternatives
- * (OR). The committed record uses the legacy flat field for one conjunction
- * and the grouped field for alternatives; the two forms are mutually exclusive.
+ * keyword-only source group becomes one conjunction in `keyword_restriction_groups`.
+ * A datasheet-scoped group becomes a `datasheet_restriction_groups` entry naming the
+ * repo unit `unitIdOf` maps the datasheet to, with the group's keywords; a datasheet
+ * no single unit maps to is unresolved. All groups are alternatives (OR). The
+ * committed record uses the legacy flat field for one keyword conjunction and the
+ * grouped field for alternatives; the two forms are mutually exclusive.
  */
-export function buildEnhFieldCanon(dump: MfmDump): Map<string, EnhFields> {
+export function buildEnhFieldCanon(dump: MfmDump, unitIdOf: DatasheetUnitResolver = coreUnitIdsByDatasheet()): Map<string, EnhFields> {
   const detName = dump.byId("detachment");
   const excludedByEnh = safeGroupBy(dump, "enhancement_excluded_keyword", "enhancementId");
   const groupsByEnh = safeGroupBy(dump, "enhancement_required_keyword_group", "enhancementId");
@@ -296,6 +322,8 @@ export function buildEnhFieldCanon(dump: MfmDump): Map<string, EnhFields> {
 
     const datasheetById = dump.tables.datasheet ? dump.byId("datasheet") : undefined;
     const groupSets: string[][] = [];
+    const datasheetGroups: DatasheetRestriction[] = [];
+    const absentDatasheets: string[] = [];
     for (const g of groupsByEnh.get(e.id) ?? []) {
       const members = new Set<string>();
       for (const r of kwByGroup.get(g.id) ?? []) {
@@ -309,17 +337,20 @@ export function buildEnhFieldCanon(dump: MfmDump): Map<string, EnhFields> {
         if (label) members.add(label);
         else unresolved.push(r.factionKeywordId);
       }
-      // A datasheet-scoped group names the specific unit the enhancement (usually a
-      // wargear upgrade) attaches to; the repo authors that datasheet name as a
-      // restriction keyword (e.g. "Exorcist"). Include it so a FILL of an empty field
-      // carries the unit specificity, not just the army keyword.
+      // A datasheet-scoped group admits that one datasheet (with the group's keywords), never
+      // another unit that carries the datasheet's name as a keyword.
       if (g.datasheetId) {
-        const dsName = dump.enName(datasheetById?.get(g.datasheetId));
-        if (dsName) members.add(dsName);
-        else unresolved.push(g.datasheetId);
+        const unit = unitIdOf(g.datasheetId);
+        if (unit === "none") absentDatasheets.push(g.datasheetId);
+        else if (unit === "ambiguous") unresolved.push(g.datasheetId);
+        else datasheetGroups.push(members.size ? { unit_id: unit.unit_id, keywords: [...members] } : { unit_id: unit.unit_id });
+        continue;
       }
       if (members.size) groupSets.push([...members].sort((a, b) => a.localeCompare(b)));
     }
+    // A datasheet no core unit carries admits no repo bearer, so its group drops out beside other
+    // groups; alone it would leave the enhancement unrestricted, so it stays unresolved.
+    if (absentDatasheets.length && groupSets.length === 0 && datasheetGroups.length === 0) unresolved.push(...absentDatasheets);
     const distinctGroupSets = [...new Map(groupSets.map((s) => [JSON.stringify(s), s])).values()];
     const union = [...new Set(distinctGroupSets.flat())].sort((a, b) => a.localeCompare(b));
     const attachmentBodyguardIds = new Set<string>();
@@ -337,6 +368,7 @@ export function buildEnhFieldCanon(dump: MfmDump): Map<string, EnhFields> {
       exclusion_keywords,
       keyword_restrictions: union.length ? union : null,
       keyword_restriction_groups: distinctGroupSets.length ? distinctGroupSets : null,
+      datasheet_restriction_groups: canonicalDatasheetGroups(datasheetGroups),
       attachment_bodyguard_ids: attachmentBodyguardIds.size
         ? [...attachmentBodyguardIds].sort((a, b) => a.localeCompare(b))
         : null,
@@ -675,6 +707,9 @@ export function runEnhancements(
     }
     if (eligibility.keyword_restriction_groups) {
       record.keyword_restriction_groups = eligibility.keyword_restriction_groups;
+    }
+    if (eligibility.datasheet_restriction_groups) {
+      record.datasheet_restriction_groups = eligibility.datasheet_restriction_groups;
     }
     if (fields.exclusion_keywords) {
       record.exclusion_keywords = fields.exclusion_keywords;

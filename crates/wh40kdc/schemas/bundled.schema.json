@@ -2362,6 +2362,31 @@
           },
           "description": "Alternative bearer eligibility groups. Every keyword in one group is required (AND), while satisfying any group is sufficient (OR). When present, this supersedes the legacy flat `keyword_restrictions` field."
         },
+        "datasheet_restriction_groups": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "unit_id": {
+                "$ref": "#/$defs/entity-id"
+              },
+              "keywords": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {
+                  "$ref": "#/$defs/keyword"
+                }
+              }
+            },
+            "required": [
+              "unit_id"
+            ],
+            "additionalProperties": false
+          },
+          "description": "Datasheet-scoped bearer eligibility groups: a bearer whose unit is `unit_id` and carries every listed keyword is eligible. Each group is a further alternative (OR) to the keyword groups in `keyword_restrictions` / `keyword_restriction_groups`. A datasheet group admits only that datasheet, never another unit that carries the datasheet's name as a keyword. `exclusion_keywords` still applies."
+        },
         "exclusion_keywords": {
           "oneOf": [
             {

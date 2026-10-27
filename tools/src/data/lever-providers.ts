@@ -7,6 +7,7 @@ import type { BuffSource, EngineContext } from "../cruncher/buffs.js";
 import type { ActivatableBuff, EffectTranslation, UnsupportedFragment } from "../cruncher/from-dsl.js";
 import type { Enhancement } from "../generated.js";
 import type { Dataset, StackableBuff, StackableBuffGroup } from "./dataset.js";
+import { meetsEnhancementGroups } from "./enhancement-eligibility.js";
 import type { AbilityView, UnitView } from "./entities.js";
 
 /** Lower-cased union of the units' keywords and faction keywords. */
@@ -31,7 +32,8 @@ export function sharedKeywordsLower(units: readonly UnitView[]): string[] {
 /**
  * Whether `bearer` can take `enhancement` under the Select Enhancements rules the roster validator
  * enforces: a CHARACTER (or an Upgrade), not an EPIC HERO, with a model that may take
- * Enhancements, carrying every keyword of one restriction group and none of the exclusions.
+ * Enhancements, meeting one eligibility group (its keywords, or its datasheet and keywords) and
+ * carrying none of the exclusions.
  */
 export function canTakeEnhancement(ds: Dataset, enhancement: Enhancement, bearer: UnitView): boolean {
   const keywords = new Set(combinedKeywordsLower([bearer]));
@@ -40,9 +42,7 @@ export function canTakeEnhancement(ds: Dataset, enhancement: Enhancement, bearer
   if (bearer.raw.role === "epic-hero" || has("epic hero")) return false;
   const rows = ds.unitCompositionOf(bearer.raw)?.models ?? [];
   if (rows.length > 0 && rows.every((model) => model.excluded_from_enhancements === true)) return false;
-  const eligible = enhancement.keyword_restriction_groups
-    ? enhancement.keyword_restriction_groups.some((group) => group.every(has))
-    : (enhancement.keyword_restrictions ?? []).every(has);
+  const eligible = meetsEnhancementGroups(enhancement, bearer.id, has);
   return eligible && !(enhancement.exclusion_keywords ?? []).some(has);
 }
 

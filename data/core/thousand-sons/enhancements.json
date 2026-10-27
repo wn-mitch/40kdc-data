@@ -839,10 +839,6 @@
     "name": "Unravelled Fates",
     "detachment_id": "servants-of-change",
     "cost": 15,
-    "keyword_restrictions": [
-      "Thousand Sons",
-      "Tzaangor Shaman"
-    ],
     "ability_id": "unravelled-fates-servants-of-change-thousand-sons",
     "is_unique": true,
     "game_version": {
@@ -860,6 +856,14 @@
       {
         "namespace": "mfm",
         "id": "3df871e5-cb4a-4570-93ea-c3bde4059876"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "tzaangor-shaman",
+        "keywords": [
+          "Thousand Sons"
+        ]
       }
     ]
   },

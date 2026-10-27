@@ -752,16 +752,6 @@
     "points_provisional": false,
     "upgrade_tag": false,
     "max_targets": 1,
-    "keyword_restriction_groups": [
-      [
-        "Genestealer Cults",
-        "Locus"
-      ],
-      [
-        "Genestealer Cults",
-        "Sanctus"
-      ]
-    ],
     "external_refs": [
       {
         "namespace": "game-datacards",
@@ -770,6 +760,20 @@
       {
         "namespace": "mfm",
         "id": "41aca640-4f20-4528-8342-11821d5aefa3"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "locus",
+        "keywords": [
+          "Genestealer Cults"
+        ]
+      },
+      {
+        "unit_id": "sanctus",
+        "keywords": [
+          "Genestealer Cults"
+        ]
       }
     ]
   },
@@ -787,16 +791,6 @@
     "points_provisional": false,
     "upgrade_tag": false,
     "max_targets": 1,
-    "keyword_restriction_groups": [
-      [
-        "Genestealer Cults",
-        "Kelermorph"
-      ],
-      [
-        "Genestealer Cults",
-        "Reductus Saboteur"
-      ]
-    ],
     "external_refs": [
       {
         "namespace": "game-datacards",
@@ -806,6 +800,20 @@
         "namespace": "mfm",
         "id": "75a729bf-56a4-44c1-9afd-f91861a38ba9"
       }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "kelermorph",
+        "keywords": [
+          "Genestealer Cults"
+        ]
+      },
+      {
+        "unit_id": "reductus-saboteur",
+        "keywords": [
+          "Genestealer Cults"
+        ]
+      }
     ]
   },
   {
@@ -813,10 +821,6 @@
     "name": "Mark of the Star Children (Upgrade)",
     "detachment_id": "purestrain-broodswarm",
     "cost": 30,
-    "keyword_restrictions": [
-      "Genestealer Cults",
-      "Purestrain Genestealers"
-    ],
     "ability_id": "mark-of-the-star-children-upgrade-purestrain-broodswarm-genestealer-cults",
     "is_unique": true,
     "game_version": {
@@ -835,6 +839,14 @@
         "namespace": "mfm",
         "id": "4fb6414e-4c63-4843-b06c-ebcb2e5d0469"
       }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "purestrain-genestealers",
+        "keywords": [
+          "Genestealer Cults"
+        ]
+      }
     ]
   },
   {
@@ -842,10 +854,6 @@
     "name": "Talons of the Sire",
     "detachment_id": "purestrain-broodswarm",
     "cost": 15,
-    "keyword_restrictions": [
-      "Genestealer Cults",
-      "Patriarch"
-    ],
     "ability_id": "talons-of-the-sire-purestrain-broodswarm-genestealer-cults",
     "is_unique": true,
     "game_version": {
@@ -864,6 +872,14 @@
         "namespace": "mfm",
         "id": "d8f93145-9454-48d7-b11f-b96faf9f4804"
       }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "patriarch",
+        "keywords": [
+          "Genestealer Cults"
+        ]
+      }
     ]
   },
   {
@@ -880,16 +896,6 @@
     "points_provisional": false,
     "upgrade_tag": false,
     "max_targets": 1,
-    "keyword_restriction_groups": [
-      [
-        "Genestealer Cults",
-        "Magus"
-      ],
-      [
-        "Genestealer Cults",
-        "Primus"
-      ]
-    ],
     "external_refs": [
       {
         "namespace": "game-datacards",
@@ -899,6 +905,20 @@
         "namespace": "mfm",
         "id": "0d190d2a-4b25-4ece-af3c-b1c62d4051e4"
       }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "magus",
+        "keywords": [
+          "Genestealer Cults"
+        ]
+      },
+      {
+        "unit_id": "primus",
+        "keywords": [
+          "Genestealer Cults"
+        ]
+      }
     ]
   },
   {
@@ -906,10 +926,6 @@
     "name": "Devious Disguises (Upgrade)",
     "detachment_id": "xenocult-masses",
     "cost": 15,
-    "keyword_restrictions": [
-      "Genestealer Cults",
-      "Neophyte Hybrids"
-    ],
     "ability_id": "devious-disguises-upgrade-xenocult-masses-genestealer-cults",
     "is_unique": true,
     "game_version": {
@@ -928,6 +944,14 @@
         "namespace": "mfm",
         "id": "cf7db9e4-a416-4da1-ab75-6895a6efdaf4"
       }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "neophyte-hybrids",
+        "keywords": [
+          "Genestealer Cults"
+        ]
+      }
     ]
   },
   {
@@ -944,14 +968,16 @@
       "combat-patrol"
     ],
     "points_provisional": false,
-    "keyword_restrictions": [
-      "Claw of Ascension Achilles Ridgerunner"
-    ],
     "upgrade_tag": true,
     "external_refs": [
       {
         "namespace": "mfm",
         "id": "e7fc2192-7062-46ff-a419-4fd5045ddf1f"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "claw-of-ascension-achilles-ridgerunner"
       }
     ]
   },

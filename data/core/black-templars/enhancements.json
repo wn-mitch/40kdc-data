@@ -25,6 +25,11 @@
         "namespace": "mfm",
         "id": "45370a58-d5a3-4830-a905-8babf4a76926"
       }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "sword-brethren-squad"
+      }
     ]
   },
   {
@@ -52,6 +57,11 @@
       {
         "namespace": "mfm",
         "id": "f5cbc8d3-b4dd-46d6-91cd-1932a8619287"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "sword-brethren-squad"
       }
     ]
   },
@@ -109,6 +119,11 @@
         "namespace": "mfm",
         "id": "8fc10e42-2978-43da-92e9-636e5e4ce564"
       }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "captain"
+      }
     ]
   },
   {
@@ -150,14 +165,16 @@
       "combat-patrol"
     ],
     "points_provisional": false,
-    "keyword_restrictions": [
-      "Vow-Sworn Sword Brethren Squad"
-    ],
     "upgrade_tag": true,
     "external_refs": [
       {
         "namespace": "mfm",
         "id": "10713481-e8fb-4559-8b59-8a38784a7bf3"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "vow-sworn-sword-brethren-squad"
       }
     ]
   },
@@ -181,13 +198,16 @@
     "points_provisional": false,
     "upgrade_tag": false,
     "max_targets": 1,
-    "keyword_restriction_groups": [
-      [
-        "Chaplain"
-      ],
-      [
-        "Judiciar"
-      ]
+    "keyword_restrictions": [
+      "Chaplain"
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "chaplain"
+      },
+      {
+        "unit_id": "judiciar"
+      }
     ]
   },
   {
@@ -261,6 +281,11 @@
     "max_targets": 3,
     "keyword_restrictions": [
       "Crusader Squad"
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "crusader-squad"
+      }
     ]
   },
   {

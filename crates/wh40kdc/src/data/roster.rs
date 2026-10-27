@@ -382,14 +382,28 @@ pub fn validate_roster_core_with_keyword_overrides(
                 severity: Severity::Error,
             });
         }
-        let eligible = if let Some(groups) = &enh.keyword_restriction_groups {
-            groups
-                .iter()
-                .any(|group| group.iter().all(|k| kws.contains(k.as_str())))
-        } else if let Some(req) = &enh.keyword_restrictions {
-            req.0.iter().all(|k| kws.contains(k.as_str()))
+        // Keyword groups or datasheet groups (mirror of TS `meetsEnhancementGroups`).
+        let keyword_eligible = if let Some(groups) = &enh.keyword_restriction_groups {
+            Some(
+                groups
+                    .iter()
+                    .any(|group| group.iter().all(|k| kws.contains(k.as_str()))),
+            )
         } else {
-            true
+            enh.keyword_restrictions
+                .as_ref()
+                .map(|req| req.0.iter().all(|k| kws.contains(k.as_str())))
+        };
+        let datasheet_eligible = enh.datasheet_restriction_groups.iter().any(|group| {
+            group.unit_id.as_str() == view.id.as_str()
+                && group
+                    .keywords
+                    .as_ref()
+                    .is_none_or(|ks| ks.iter().all(|k| kws.contains(k.as_str())))
+        });
+        let eligible = match keyword_eligible {
+            Some(ok) => ok || datasheet_eligible,
+            None => enh.datasheet_restriction_groups.is_empty() || datasheet_eligible,
         };
         if !eligible {
             army.push(RosterViolation {

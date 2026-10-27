@@ -15,6 +15,7 @@ import {
 	baseUnitPoints,
 	hostUnitPoints,
 	clampWeaponCount,
+	meetsEnhancementGroups,
 	exportRoster,
 	groupLoadout,
 	pointsTierMissing,
@@ -303,10 +304,8 @@ export function eligibleEnhancements(
 			if (seen.has(id)) continue;
 			const e = ds.enhancements.get(id);
 			if (!e) continue;
-			const restrict = e.keyword_restrictions ?? [];
-			if (restrict.length > 0 && !restrict.some((k) => unitKeywords.has(k.toLowerCase()))) {
-				continue;
-			}
+			// Keyword groups and datasheet groups, as the roster validator checks them.
+			if (!meetsEnhancementGroups(e, unit.id, (k) => unitKeywords.has(k.toLowerCase()))) continue;
 			const exclude = e.exclusion_keywords ?? [];
 			if (exclude.some((k) => unitKeywords.has(k.toLowerCase()))) continue;
 			seen.add(id);

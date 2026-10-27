@@ -1302,10 +1302,6 @@
     "name": "A Foot in the Future",
     "detachment_id": "fateful-performance",
     "cost": 15,
-    "keyword_restrictions": [
-      "Harlequins",
-      "Troupe Master"
-    ],
     "ability_id": "a-foot-in-the-future-fateful-performance-aeldari",
     "is_unique": true,
     "game_version": {
@@ -1324,6 +1320,14 @@
         "namespace": "mfm",
         "id": "0a7de918-b766-40e7-b070-5b35c1bedad5"
       }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "troupe-master",
+        "keywords": [
+          "Harlequins"
+        ]
+      }
     ]
   },
   {
@@ -1331,10 +1335,6 @@
     "name": "Mistweave",
     "detachment_id": "fateful-performance",
     "cost": 20,
-    "keyword_restrictions": [
-      "Harlequins",
-      "Shadowseer"
-    ],
     "ability_id": "mistweave-fateful-performance-aeldari",
     "is_unique": true,
     "game_version": {
@@ -1353,6 +1353,14 @@
         "namespace": "mfm",
         "id": "0b334c87-9ac3-471d-9708-20ecb762b900"
       }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "shadowseer",
+        "keywords": [
+          "Harlequins"
+        ]
+      }
     ]
   },
   {
@@ -1360,10 +1368,6 @@
     "name": "Camouflaged Snipers (Upgrade)",
     "detachment_id": "path-of-the-outcast",
     "cost": 10,
-    "keyword_restrictions": [
-      "Asuryani",
-      "Rangers"
-    ],
     "ability_id": "camouflaged-snipers-upgrade-path-of-the-outcast-aeldari",
     "is_unique": true,
     "game_version": {
@@ -1382,6 +1386,14 @@
         "namespace": "mfm",
         "id": "654f52bb-4966-4254-bdd1-242d120c8f03"
       }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "rangers",
+        "keywords": [
+          "Asuryani"
+        ]
+      }
     ]
   },
   {
@@ -1389,10 +1401,6 @@
     "name": "Shadowfall Masks (Upgrade)",
     "detachment_id": "twilight-flickers",
     "cost": 15,
-    "keyword_restrictions": [
-      "Harlequins",
-      "Troupe"
-    ],
     "ability_id": "shadowfall-masks-upgrade-twilight-flickers-aeldari",
     "is_unique": true,
     "game_version": {
@@ -1410,6 +1418,14 @@
       {
         "namespace": "mfm",
         "id": "627a96a6-71e7-4eb1-81ef-83be078a8900"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "troupe",
+        "keywords": [
+          "Harlequins"
+        ]
       }
     ]
   },
@@ -1455,14 +1471,16 @@
       "combat-patrol"
     ],
     "points_provisional": false,
-    "keyword_restrictions": [
-      "Kygharil's Protectors Warp Spiders"
-    ],
     "upgrade_tag": true,
     "external_refs": [
       {
         "namespace": "mfm",
         "id": "9f284647-768c-470b-a84e-42450935b075"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "kygharils-protectors-warp-spiders"
       }
     ]
   },
@@ -1480,13 +1498,15 @@
       "combat-patrol"
     ],
     "points_provisional": false,
-    "keyword_restrictions": [
-      "Spiritseer Kygharil"
-    ],
     "external_refs": [
       {
         "namespace": "mfm",
         "id": "38c84028-2718-4537-bf80-3808d06997bd"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "spiritseer-kygharil"
       }
     ]
   },
@@ -1532,16 +1552,6 @@
     "points_provisional": false,
     "upgrade_tag": true,
     "max_targets": 3,
-    "keyword_restriction_groups": [
-      [
-        "Asuryani",
-        "Rangers"
-      ],
-      [
-        "Asuryani",
-        "Shroud Runners"
-      ]
-    ],
     "external_refs": [
       {
         "namespace": "game-datacards",
@@ -1550,6 +1560,20 @@
       {
         "namespace": "mfm",
         "id": "95508954-f634-4150-9300-b76953d3217f"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "rangers",
+        "keywords": [
+          "Asuryani"
+        ]
+      },
+      {
+        "unit_id": "shroud-runners",
+        "keywords": [
+          "Asuryani"
+        ]
       }
     ]
   }

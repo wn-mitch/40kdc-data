@@ -133,6 +133,29 @@ describe("Semantic authoring restrictions", () => {
     expect(coreCheckErrors(root, "blade", bearers(["CHAMPION"], "all"))[0]).toMatch(/core requires/u);
   });
 
+  it("admits a datasheet group's own unit, not another that carries its name as a keyword", () => {
+    const bearers = (keywords: string[], anyOf: string[]) => compiled([leaf("RESTRICTION", "bearer-eligibility", { keywords, match: "all", any_keywords: anyOf }), grant()]).checks;
+    const root = dataRoot([], [
+      { id: "hat", ability_id: "hat", keyword_restriction_groups: [["Infantry", "Boss"], ["Infantry", "Tinkerer"]], datasheet_restriction_groups: [{ unit_id: "tinkerer" }] },
+      // The former reading: the datasheet's name as a keyword group, which also admits the walker.
+      { id: "old-hat", ability_id: "old-hat", keyword_restriction_groups: [["Tinkerer"], ["Infantry", "Boss"], ["Infantry", "Tinkerer"]] },
+      { id: "solo", ability_id: "solo", datasheet_restriction_groups: [{ unit_id: "tinkerer", keywords: ["Hive Faction"] }] },
+    ]);
+    writeFileSync(join(root, "core", "fixture", "units.json"), JSON.stringify([
+      { id: "tinkerer", name: "Tinkerer", keywords: ["Character", "Infantry", "Tinkerer"], faction_keywords: ["Hive Faction"] },
+      { id: "tinkerer-walker", name: "Tinkerer Walker", keywords: ["Character", "Vehicle", "Tinkerer"], faction_keywords: ["Hive Faction"] },
+      { id: "boss", name: "Boss", keywords: ["Character", "Infantry", "Boss"], faction_keywords: ["Hive Faction"] },
+    ]));
+    // "Tinkerer/Boss Infantry model only".
+    expect(coreCheckErrors(root, "hat", bearers(["INFANTRY"], ["TINKERER", "BOSS"]))).toEqual([]);
+    expect(coreCheckErrors(root, "old-hat", bearers(["INFANTRY"], ["TINKERER", "BOSS"]))[0]).toMatch(/core/u);
+    // "Tinkerer model only" names the datasheet; the walker's TINKERER keyword does not make it one.
+    const tinkerer = compiled([leaf("RESTRICTION", "bearer-eligibility", { keywords: ["TINKERER", "INFANTRY"], match: "all" }), grant()]).checks;
+    expect(coreCheckErrors(root, "solo", tinkerer)).toEqual([]);
+    const anyTinkerer = compiled([leaf("RESTRICTION", "bearer-eligibility", { keywords: ["TINKERER"], match: "all" }), grant()]).checks;
+    expect(coreCheckErrors(root, "solo", anyTinkerer)[0]).toMatch(/core allows .*the tinkerer datasheet/u);
+  });
+
   it("turns stratagem moments into their trigger events", () => {
     const trigger = (kind: string) => compiled([leaf("EVENT", "event", { kind }), grant()]).mechanics.trigger;
     expect(trigger("enemy-selected-targets")).toEqual({ event: "targets-selected", filter: { kind: "attack" }, subject: { owner: "enemy" }, object: "this-unit" });

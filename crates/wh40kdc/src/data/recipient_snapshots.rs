@@ -102,15 +102,32 @@ impl Dataset {
                 return false;
             }
         }
-        let eligible = if let Some(groups) = &enhancement.keyword_restriction_groups {
-            groups
-                .iter()
-                .any(|group| group.iter().all(|keyword| has(keyword.as_str())))
+        // Keyword groups or datasheet groups (mirror of TS `meetsEnhancementGroups`).
+        let keyword_eligible = if let Some(groups) = &enhancement.keyword_restriction_groups {
+            Some(
+                groups
+                    .iter()
+                    .any(|group| group.iter().all(|keyword| has(keyword.as_str()))),
+            )
         } else {
             enhancement
                 .keyword_restrictions
                 .as_ref()
-                .is_none_or(|keywords| keywords.0.iter().all(|keyword| has(keyword.as_str())))
+                .map(|keywords| keywords.0.iter().all(|keyword| has(keyword.as_str())))
+        };
+        let datasheet_eligible = enhancement
+            .datasheet_restriction_groups
+            .iter()
+            .any(|group| {
+                group.unit_id.as_str() == bearer.id.as_str()
+                    && group
+                        .keywords
+                        .as_ref()
+                        .is_none_or(|keywords| keywords.iter().all(|keyword| has(keyword.as_str())))
+            });
+        let eligible = match keyword_eligible {
+            Some(ok) => ok || datasheet_eligible,
+            None => enhancement.datasheet_restriction_groups.is_empty() || datasheet_eligible,
         };
         eligible
             && enhancement

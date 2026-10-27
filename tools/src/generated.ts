@@ -2732,6 +2732,27 @@ export interface Enhancement {
    * @minItems 1
    */
   keyword_restriction_groups?: [[Keyword, ...Keyword[]], ...[Keyword, ...Keyword[]][]];
+  /**
+   * Datasheet-scoped bearer eligibility groups: a bearer whose unit is `unit_id` and carries every listed keyword is eligible. Each group is a further alternative (OR) to the keyword groups in `keyword_restrictions` / `keyword_restriction_groups`. A datasheet group admits only that datasheet, never another unit that carries the datasheet's name as a keyword. `exclusion_keywords` still applies.
+   *
+   * @minItems 1
+   */
+  datasheet_restriction_groups?: [
+    {
+      unit_id: EntityId;
+      /**
+       * @minItems 1
+       */
+      keywords?: [Keyword, ...Keyword[]];
+    },
+    ...{
+      unit_id: EntityId;
+      /**
+       * @minItems 1
+       */
+      keywords?: [Keyword, ...Keyword[]];
+    }[]
+  ];
   exclusion_keywords?: KeywordList | null;
   /**
    * Additional bodyguard units the bearer may attach to because it carries this enhancement.

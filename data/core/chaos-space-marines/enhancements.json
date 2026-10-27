@@ -1536,10 +1536,6 @@
     "name": "Shadowcowl Talisman",
     "detachment_id": "murdertalon-raiders",
     "cost": 20,
-    "keyword_restrictions": [
-      "Chaos Lord with Jump Pack",
-      "Heretic Astartes"
-    ],
     "ability_id": "shadowcowl-talisman-murdertalon-raiders-chaos-space-marines",
     "is_unique": true,
     "game_version": {
@@ -1558,6 +1554,14 @@
         "namespace": "mfm",
         "id": "66eae82a-c460-42b5-9d4e-8f3be77fae03"
       }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "chaos-lord-with-jump-pack",
+        "keywords": [
+          "Heretic Astartes"
+        ]
+      }
     ]
   },
   {
@@ -1565,10 +1569,6 @@
     "name": "Pact of Cursed Pinions",
     "detachment_id": "murdertalon-raiders",
     "cost": 20,
-    "keyword_restrictions": [
-      "Chaos Lord with Jump Pack",
-      "Heretic Astartes"
-    ],
     "ability_id": "pact-of-cursed-pinions-murdertalon-raiders-chaos-space-marines",
     "is_unique": true,
     "game_version": {
@@ -1589,6 +1589,14 @@
       {
         "namespace": "mfm",
         "id": "fb3a3dfd-c4f0-4908-b0b4-ddc1da594d6a"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "chaos-lord-with-jump-pack",
+        "keywords": [
+          "Heretic Astartes"
+        ]
       }
     ]
   },
@@ -1867,14 +1875,16 @@
       "combat-patrol"
     ],
     "points_provisional": false,
-    "keyword_restrictions": [
-      "Zarkan's Daemonkin Possessed"
-    ],
     "upgrade_tag": true,
     "external_refs": [
       {
         "namespace": "mfm",
         "id": "a917fba0-b0a2-4103-a2a9-647ee9bf7467"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "zarkans-daemonkin-possessed"
       }
     ]
   }

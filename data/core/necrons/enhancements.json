@@ -888,10 +888,6 @@
     "name": "Enlivened Sentinels (Upgrade)",
     "detachment_id": "hand-of-the-dynasty",
     "cost": 20,
-    "keyword_restrictions": [
-      "Necron Warriors",
-      "Necrons"
-    ],
     "ability_id": "enlivened-sentinels-upgrade-hand-of-the-dynasty-necrons",
     "is_unique": true,
     "game_version": {
@@ -910,6 +906,14 @@
         "namespace": "mfm",
         "id": "08785e77-dca3-4170-ac4b-67317a780156"
       }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "necron-warriors",
+        "keywords": [
+          "Necrons"
+        ]
+      }
     ]
   },
   {
@@ -917,10 +921,6 @@
     "name": "Tools of Dominion (Upgrade)",
     "detachment_id": "hand-of-the-dynasty",
     "cost": 15,
-    "keyword_restrictions": [
-      "Immortals",
-      "Necrons"
-    ],
     "ability_id": "tools-of-dominion-upgrade-hand-of-the-dynasty-necrons",
     "is_unique": true,
     "game_version": {
@@ -939,6 +939,14 @@
         "namespace": "mfm",
         "id": "28910499-26bf-4cf0-823a-17462276ea57"
       }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "immortals",
+        "keywords": [
+          "Necrons"
+        ]
+      }
     ]
   },
   {
@@ -946,10 +954,6 @@
     "name": "Recursive Reanimation (Upgrade)",
     "detachment_id": "skyshroud-spearhead",
     "cost": 5,
-    "keyword_restrictions": [
-      "Necrons",
-      "Tomb Blades"
-    ],
     "ability_id": "recursive-reanimation-upgrade-skyshroud-spearhead-necrons",
     "is_unique": true,
     "game_version": {
@@ -967,6 +971,14 @@
       {
         "namespace": "mfm",
         "id": "b2fa2253-d5ff-4771-960a-a6a5c0bd9ebb"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "tomb-blades",
+        "keywords": [
+          "Necrons"
+        ]
       }
     ]
   },
@@ -1041,13 +1053,15 @@
       "combat-patrol"
     ],
     "points_provisional": false,
-    "keyword_restrictions": [
-      "Overlord Amonhotekh"
-    ],
     "external_refs": [
       {
         "namespace": "mfm",
         "id": "78e7ca8e-1321-4a1c-9b04-2383ca1a2572"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "overlord-amonhotekh"
       }
     ]
   },
@@ -1065,14 +1079,16 @@
       "combat-patrol"
     ],
     "points_provisional": false,
-    "keyword_restrictions": [
-      "Amonhotekh's Guard Necron Warriors"
-    ],
     "upgrade_tag": true,
     "external_refs": [
       {
         "namespace": "mfm",
         "id": "90ecb256-bc18-494a-89a9-57bba7ac455b"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "amonhotekhs-guard-necron-warriors"
       }
     ]
   },
@@ -1234,10 +1250,6 @@
     "points_provisional": false,
     "upgrade_tag": true,
     "max_targets": 3,
-    "keyword_restrictions": [
-      "Necrons",
-      "Obelisk"
-    ],
     "external_refs": [
       {
         "namespace": "game-datacards",
@@ -1246,6 +1258,14 @@
       {
         "namespace": "mfm",
         "id": "d1c6a70c-f9f2-444d-acb6-cdfdcc9f6e72"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "obelisk",
+        "keywords": [
+          "Necrons"
+        ]
       }
     ]
   }

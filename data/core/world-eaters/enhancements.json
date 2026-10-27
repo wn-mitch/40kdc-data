@@ -640,10 +640,6 @@
     "name": "Talons of Butchery (Upgrade)",
     "detachment_id": "brazen-engines",
     "cost": 20,
-    "keyword_restrictions": [
-      "Maulerfiend",
-      "World Eaters"
-    ],
     "ability_id": "talons-of-butchery-upgrade-brazen-engines-world-eaters",
     "is_unique": true,
     "game_version": {
@@ -661,6 +657,14 @@
       {
         "namespace": "mfm",
         "id": "5b1f2f75-b53c-4e8c-b9e0-27b709684271"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "maulerfiend",
+        "keywords": [
+          "World Eaters"
+        ]
       }
     ]
   },
@@ -763,13 +767,15 @@
       "combat-patrol"
     ],
     "points_provisional": false,
-    "keyword_restrictions": [
-      "Frenzied Reavers Master of Executions"
-    ],
     "external_refs": [
       {
         "namespace": "mfm",
         "id": "6cd5f3c7-7d51-4b69-8d5f-14e03ff378fe"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "frenzied-reavers-master-of-executions"
       }
     ]
   },

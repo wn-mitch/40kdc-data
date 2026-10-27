@@ -53,6 +53,11 @@
         "namespace": "mfm",
         "id": "8fc10e42-2978-43da-92e9-636e5e4ce564"
       }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "captain"
+      }
     ]
   },
   {
@@ -101,6 +106,11 @@
     "max_targets": 1,
     "keyword_restrictions": [
       "Techmarine"
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "techmarine"
+      }
     ]
   },
   {
@@ -149,6 +159,11 @@
     "max_targets": 1,
     "keyword_restrictions": [
       "Techmarine"
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "techmarine"
+      }
     ]
   }
 ]

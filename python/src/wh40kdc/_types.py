@@ -524,6 +524,11 @@ class Detachment(TypedDict):
 KeywordRestrictionGroup: TypeAlias = list[Keyword]
 
 
+class DatasheetRestrictionGroup(TypedDict):
+    unit_id: EntityId
+    keywords: NotRequired[list[Keyword]]
+
+
 class Enhancement(TypedDict):
     id: EntityId
     external_refs: NotRequired[ExternalReferenceList]
@@ -535,6 +540,7 @@ class Enhancement(TypedDict):
     max_targets: NotRequired[int]
     keyword_restrictions: NotRequired[KeywordList]
     keyword_restriction_groups: NotRequired[list[KeywordRestrictionGroup]]
+    datasheet_restriction_groups: NotRequired[list[DatasheetRestrictionGroup]]
     exclusion_keywords: NotRequired[KeywordList | None]
     attachment_bodyguard_ids: NotRequired[list[EntityId]]
     ability_id: NotRequired[EntityId | None]

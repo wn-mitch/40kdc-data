@@ -775,10 +775,6 @@
     "name": "Cacophonic Accompaniment",
     "detachment_id": "elegant-brutes",
     "cost": 20,
-    "keyword_restrictions": [
-      "Emperor’s Children",
-      "Lord Kakophonist"
-    ],
     "ability_id": "cacophonic-accompaniment-elegant-brutes-emperors-children",
     "is_unique": true,
     "game_version": {
@@ -796,6 +792,14 @@
       {
         "namespace": "mfm",
         "id": "364cea95-8b5d-480c-930c-22d543f96013"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "lord-kakophonist",
+        "keywords": [
+          "Emperor’s Children"
+        ]
       }
     ]
   },
@@ -833,10 +837,6 @@
     "name": "Euphoric Crown",
     "detachment_id": "frenzied-host",
     "cost": 20,
-    "keyword_restrictions": [
-      "Emperor’s Children",
-      "Lord Exultant"
-    ],
     "ability_id": "euphoric-crown-frenzied-host-emperors-children",
     "is_unique": true,
     "game_version": {
@@ -855,6 +855,14 @@
         "namespace": "mfm",
         "id": "07b233f5-b9d7-40a8-b114-06c572e45886"
       }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "lord-exultant",
+        "keywords": [
+          "Emperor’s Children"
+        ]
+      }
     ]
   },
   {
@@ -862,10 +870,6 @@
     "name": "Howling Plate",
     "detachment_id": "frenzied-host",
     "cost": 20,
-    "keyword_restrictions": [
-      "Emperor’s Children",
-      "Lord Exultant"
-    ],
     "ability_id": "howling-plate-frenzied-host-emperors-children",
     "is_unique": true,
     "game_version": {
@@ -884,6 +888,14 @@
         "namespace": "mfm",
         "id": "d4fcc7d3-1641-42fa-a300-9ba09b6776fb"
       }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "lord-exultant",
+        "keywords": [
+          "Emperor’s Children"
+        ]
+      }
     ]
   },
   {
@@ -891,10 +903,6 @@
     "name": "Eager Patrons (Upgrade)",
     "detachment_id": "spectacle-of-slaughter",
     "cost": 20,
-    "keyword_restrictions": [
-      "Emperor’s Children",
-      "Flawless Blades"
-    ],
     "ability_id": "eager-patrons-upgrade-spectacle-of-slaughter-emperors-children",
     "is_unique": true,
     "game_version": {
@@ -913,6 +921,14 @@
         "namespace": "mfm",
         "id": "87003c53-7a8a-49f0-bcc3-f07e7749ba3b"
       }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "flawless-blades",
+        "keywords": [
+          "Emperor’s Children"
+        ]
+      }
     ]
   },
   {
@@ -920,10 +936,6 @@
     "name": "Beguiling Grotesquerie (Upgrade)",
     "detachment_id": "spectacle-of-slaughter",
     "cost": 15,
-    "keyword_restrictions": [
-      "Emperor’s Children",
-      "Flawless Blades"
-    ],
     "ability_id": "beguiling-grotesquerie-upgrade-spectacle-of-slaughter-emperors-children",
     "is_unique": true,
     "game_version": {
@@ -941,6 +953,14 @@
       {
         "namespace": "mfm",
         "id": "efd71a11-ec2e-4043-a91a-de8a553280dd"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "flawless-blades",
+        "keywords": [
+          "Emperor’s Children"
+        ]
       }
     ]
   },
@@ -984,15 +1004,17 @@
       "combat-patrol"
     ],
     "points_provisional": false,
-    "keyword_restrictions": [
-      "Callous Blades Infractors"
-    ],
     "upgrade_tag": true,
     "ability_id": "martial-perfection-callous-blades-emperors-children",
     "external_refs": [
       {
         "namespace": "mfm",
         "id": "e61d3f70-e8b4-4f55-9641-2ab44322eb0d"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "callous-blades-infractors"
       }
     ]
   },

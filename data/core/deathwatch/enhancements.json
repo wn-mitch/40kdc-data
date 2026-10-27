@@ -30,6 +30,14 @@
         "namespace": "mfm",
         "id": "d6434703-aa58-4aa2-ba89-1d5b7404f16a"
       }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "techmarine"
+      },
+      {
+        "unit_id": "watch-master"
+      }
     ]
   },
   {
@@ -91,6 +99,14 @@
         "namespace": "mfm",
         "id": "c5bbad18-201d-41c8-b6ac-b62b7e098a49"
       }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "captain"
+      },
+      {
+        "unit_id": "watch-master"
+      }
     ]
   },
   {
@@ -147,6 +163,11 @@
         "namespace": "mfm",
         "id": "8fc10e42-2978-43da-92e9-636e5e4ce564"
       }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "captain"
+      }
     ]
   },
   {
@@ -176,6 +197,14 @@
       [
         "Captain"
       ]
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "captain"
+      },
+      {
+        "unit_id": "watch-master"
+      }
     ]
   }
 ]

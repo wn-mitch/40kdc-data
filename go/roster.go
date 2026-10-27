@@ -206,37 +206,11 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 				errV("enhancement-on-excluded-model", enhID, idx)
 			}
 		}
-		eligible := true
-		if rawGroups, present := enh["keyword_restriction_groups"]; present && rawGroups != nil {
-			eligible = false
-			groups, _ := asList(rawGroups)
-			for _, rawGroup := range groups {
-				group, _ := asList(rawGroup)
-				groupEligible := true
-				for _, rawKeyword := range group {
-					keyword, ok := rawKeyword.(string)
-					if !ok {
-						groupEligible = false
-						break
-					}
-					if _, has := kws[keyword]; !has {
-						groupEligible = false
-						break
-					}
-				}
-				if groupEligible {
-					eligible = true
-					break
-				}
-			}
-		} else {
-			for _, keyword := range getStrList(enh, "keyword_restrictions") {
-				if _, has := kws[keyword]; !has {
-					eligible = false
-					break
-				}
-			}
-		}
+		// Keyword groups or datasheet groups (mirror of TS meetsEnhancementGroups).
+		eligible := meetsEnhancementGroups(enh, view.ID(), func(keyword string) bool {
+			_, held := kws[keyword]
+			return held
+		})
 		if !eligible {
 			errV("enhancement-keyword-mismatch", enhID, idx)
 		}

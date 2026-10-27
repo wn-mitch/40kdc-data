@@ -179,9 +179,6 @@
     "name": "Nightforged Battery (Upgrade)",
     "detachment_id": "darkflight-pursuit",
     "cost": 10,
-    "keyword_restrictions": [
-      "Land Speeder Vengeance"
-    ],
     "ability_id": "nightforged-battery-upgrade-darkflight-pursuit-dark-angels",
     "is_unique": true,
     "game_version": {
@@ -199,6 +196,11 @@
       {
         "namespace": "mfm",
         "id": "4e119d31-30c8-4e94-be84-7f868ea1eb8b"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "land-speeder-vengeance"
       }
     ]
   },
@@ -256,6 +258,11 @@
         "namespace": "mfm",
         "id": "8fc10e42-2978-43da-92e9-636e5e4ce564"
       }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "captain"
+      }
     ]
   },
   {
@@ -272,15 +279,17 @@
       "combat-patrol"
     ],
     "points_provisional": false,
-    "keyword_restrictions": [
-      "Vengeful Brethren Bladeguard Veteran Squad"
-    ],
     "upgrade_tag": true,
     "ability_id": "dutiful-defenders-the-vengeful-brethren-dark-angels",
     "external_refs": [
       {
         "namespace": "mfm",
         "id": "997e3cbb-8a59-4792-9dc8-7f4227fa3ad1"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "vengeful-brethren-bladeguard-veteran-squad"
       }
     ]
   },

@@ -109,25 +109,8 @@ func historicalEnhancementEligible(ds *Dataset, enhancement map[string]any, owne
 			return false
 		}
 	}
-	if groups, present := enhancement["keyword_restriction_groups"]; present && groups != nil {
-		for _, rawGroup := range getListValue(groups) {
-			groupOK := true
-			for _, rawKeyword := range getListValue(rawGroup) {
-				if !has(getStringValue(rawKeyword)) {
-					groupOK = false
-					break
-				}
-			}
-			if groupOK {
-				return !historicalEnhancementExcluded(enhancement, has)
-			}
-		}
+	if !meetsEnhancementGroups(enhancement, owner.ID(), has) {
 		return false
-	}
-	for _, keyword := range getStrList(enhancement, "keyword_restrictions") {
-		if !has(keyword) {
-			return false
-		}
 	}
 	return !historicalEnhancementExcluded(enhancement, has)
 }

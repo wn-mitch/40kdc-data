@@ -346,3 +346,25 @@ describe("validateRosterCore — unit-excluded-from-faction", () => {
     expect(army.map((v) => v.code)).not.toContain("unit-excluded-from-faction");
   });
 });
+
+// --- validateRosterCore: datasheet-scoped enhancement eligibility -----------
+describe("validateRosterCore — datasheet-scoped enhancement eligibility", () => {
+  const norm = (unitId: string, enhancementId: string): NormRoster => ({
+    factionId: "orks",
+    battleSize: null,
+    forceDisposition: "purge-the-foe",
+    detachmentIds: ["wreckas"],
+    units: [{ unitId, modelCount: 1, isWarlord: true, enhancementId, leaderBodyguardId: null, counts: new Map() }],
+  });
+  const codes = (unitId: string) => validateRosterCore(norm(unitId, "kaptins-hat-wreckas-orks"), ds).army.map((v) => v.code);
+
+  // Kaptin's Hat's dump eligibility names the Big Mek datasheet; the Dakkarig carries BIG MEK but is not that datasheet.
+  it("refuses a unit that only shares the datasheet's name as a keyword", () => {
+    expect(codes("big-mek-dakkarig")).toContain("enhancement-keyword-mismatch");
+  });
+
+  it("accepts the named datasheet and the keyword groups beside it", () => {
+    expect(codes("big-mek")).not.toContain("enhancement-keyword-mismatch");
+    expect(codes("warboss")).not.toContain("enhancement-keyword-mismatch");
+  });
+});

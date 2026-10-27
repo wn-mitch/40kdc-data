@@ -590,10 +590,6 @@
     "name": "Clarion of Urgency",
     "detachment_id": "chorus-of-condemnation",
     "cost": 15,
-    "keyword_restrictions": [
-      "Adepta Sororitas",
-      "Canoness with Jump Pack"
-    ],
     "ability_id": "clarion-of-urgency-chorus-of-condemnation-adepta-sororitas",
     "is_unique": true,
     "game_version": {
@@ -612,6 +608,14 @@
         "namespace": "mfm",
         "id": "9ad0e533-9383-4c8d-8cc9-ad12fc7c906d"
       }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "canoness-with-jump-pack",
+        "keywords": [
+          "Adepta Sororitas"
+        ]
+      }
     ]
   },
   {
@@ -619,10 +623,6 @@
     "name": "Symphonic Payload (Upgrade)",
     "detachment_id": "chorus-of-condemnation",
     "cost": 10,
-    "keyword_restrictions": [
-      "Adepta Sororitas",
-      "Exorcist"
-    ],
     "ability_id": "symphonic-payload-upgrade-chorus-of-condemnation-adepta-sororitas",
     "is_unique": true,
     "game_version": {
@@ -641,6 +641,14 @@
         "namespace": "mfm",
         "id": "f532cd5a-329a-459c-bf49-61e9cbf7bd46"
       }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "exorcist",
+        "keywords": [
+          "Adepta Sororitas"
+        ]
+      }
     ]
   },
   {
@@ -648,10 +656,6 @@
     "name": "Writ of Compunction (Upgrade)",
     "detachment_id": "sacred-champions",
     "cost": 20,
-    "keyword_restrictions": [
-      "Adepta Sororitas",
-      "Celestian Sacresants"
-    ],
     "ability_id": "writ-of-compunction-upgrade-sacred-champions-adepta-sororitas",
     "is_unique": true,
     "game_version": {
@@ -669,6 +673,14 @@
       {
         "namespace": "mfm",
         "id": "0f265e7f-9e19-4caa-b1f3-42bcda062ef4"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "celestian-sacresants",
+        "keywords": [
+          "Adepta Sororitas"
+        ]
       }
     ]
   },
@@ -746,16 +758,20 @@
       "combat-patrol"
     ],
     "points_provisional": false,
-    "keyword_restrictions": [
-      "Adepta Sororitas",
-      "Sanctuary Guardians Battle Sisters Squad"
-    ],
     "upgrade_tag": true,
     "ability_id": "divine-miracle-sanctuary-guardians-adepta-sororitas",
     "external_refs": [
       {
         "namespace": "mfm",
         "id": "65302b30-0bc3-4ea0-a9ae-4a77a010185e"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "sanctuary-guardians-battle-sisters-squad",
+        "keywords": [
+          "Adepta Sororitas"
+        ]
       }
     ]
   },

@@ -22,6 +22,7 @@ from wh40kdc.data.battle_sizes import (
     unit_limit_for_battle_size,
 )
 from wh40kdc.data.dataset import Dataset
+from wh40kdc.data.enhancement_eligibility import meets_enhancement_groups
 from wh40kdc.data.loadout import check_unit_legality
 from wh40kdc.data.pricing import host_unit_points, wargear_points
 
@@ -242,12 +243,7 @@ def validate_roster_core(spec: dict[str, Any], dataset: Dataset) -> dict[str, An
                 f"{enh['id']} cannot be given to {view.id}: no model in it can take Enhancements",
                 idx,
             )
-        groups = enh.get("keyword_restriction_groups")
-        eligible = (
-            any(all(keyword in kws for keyword in group) for group in groups)
-            if groups is not None
-            else all(keyword in kws for keyword in (enh.get("keyword_restrictions") or []))
-        )
+        eligible = meets_enhancement_groups(enh, view.id, kws.__contains__)
         if not eligible:
             err(
                 "enhancement-keyword-mismatch",

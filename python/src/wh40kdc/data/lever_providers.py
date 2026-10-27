@@ -11,6 +11,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
+from wh40kdc.data.enhancement_eligibility import meets_enhancement_groups
+
 if TYPE_CHECKING:
     from wh40kdc.data.dataset import Dataset
     from wh40kdc.data.entities import AbilityView, UnitView
@@ -100,11 +102,7 @@ def can_take_enhancement(ds: Dataset, enhancement: dict[str, Any], bearer: UnitV
     rows = (composition or {}).get("models") or []
     if rows and all(model.get("excluded_from_enhancements") is True for model in rows):
         return False
-    groups = enhancement.get("keyword_restriction_groups")
-    if groups is not None:
-        eligible = any(all(has(k) for k in group) for group in groups)
-    else:
-        eligible = all(has(k) for k in enhancement.get("keyword_restrictions") or [])
+    eligible = meets_enhancement_groups(enhancement, bearer.id, has)
     return eligible and not any(has(k) for k in enhancement.get("exclusion_keywords") or [])
 
 

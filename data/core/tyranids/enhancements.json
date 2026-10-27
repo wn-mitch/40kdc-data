@@ -668,16 +668,6 @@
     "points_provisional": false,
     "upgrade_tag": false,
     "max_targets": 1,
-    "keyword_restriction_groups": [
-      [
-        "Tyranid Prime with Lash Whip",
-        "Tyranids"
-      ],
-      [
-        "Tyranids",
-        "Winged Tyranid Prime"
-      ]
-    ],
     "external_refs": [
       {
         "namespace": "game-datacards",
@@ -686,6 +676,20 @@
       {
         "namespace": "mfm",
         "id": "d2467e3a-c1bb-4d03-84db-047c045ddffa"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "tyranid-prime-with-lash-whip",
+        "keywords": [
+          "Tyranids"
+        ]
+      },
+      {
+        "unit_id": "winged-tyranid-prime",
+        "keywords": [
+          "Tyranids"
+        ]
       }
     ]
   },
@@ -703,16 +707,6 @@
     "points_provisional": false,
     "upgrade_tag": false,
     "max_targets": 1,
-    "keyword_restriction_groups": [
-      [
-        "Tyranids",
-        "Winged Tyranid Prime"
-      ],
-      [
-        "Tyranid Prime with Lash Whip",
-        "Tyranids"
-      ]
-    ],
     "external_refs": [
       {
         "namespace": "game-datacards",
@@ -721,6 +715,20 @@
       {
         "namespace": "mfm",
         "id": "92603e22-71b4-4e0a-a15f-99f2a81056b5"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "tyranid-prime-with-lash-whip",
+        "keywords": [
+          "Tyranids"
+        ]
+      },
+      {
+        "unit_id": "winged-tyranid-prime",
+        "keywords": [
+          "Tyranids"
+        ]
       }
     ]
   },
@@ -850,20 +858,6 @@
     "points_provisional": false,
     "upgrade_tag": true,
     "max_targets": 3,
-    "keyword_restriction_groups": [
-      [
-        "Neurolictor",
-        "Tyranids"
-      ],
-      [
-        "Lictor",
-        "Tyranids"
-      ],
-      [
-        "Tyranids",
-        "Von Ryan’s Leapers"
-      ]
-    ],
     "external_refs": [
       {
         "namespace": "game-datacards",
@@ -873,6 +867,26 @@
         "namespace": "mfm",
         "id": "e1bcdf2b-6285-4abd-a2a4-7d8ecf2dc703"
       }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "lictor",
+        "keywords": [
+          "Tyranids"
+        ]
+      },
+      {
+        "unit_id": "neurolictor",
+        "keywords": [
+          "Tyranids"
+        ]
+      },
+      {
+        "unit_id": "von-ryans-leapers",
+        "keywords": [
+          "Tyranids"
+        ]
+      }
     ]
   },
   {
@@ -880,10 +894,6 @@
     "name": "Cryptophotaic Camouflage (Upgrade)",
     "detachment_id": "ambush-predators",
     "cost": 15,
-    "keyword_restrictions": [
-      "Tyranids",
-      "Von Ryan’s Leapers"
-    ],
     "ability_id": "cryptophotaic-camouflage-upgrade-ambush-predators-tyranids",
     "is_unique": true,
     "game_version": {
@@ -902,6 +912,14 @@
         "namespace": "mfm",
         "id": "e2559df9-d5d8-4f02-ad1c-ae3a54d3c548"
       }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "von-ryans-leapers",
+        "keywords": [
+          "Tyranids"
+        ]
+      }
     ]
   },
   {
@@ -909,10 +927,6 @@
     "name": "Destabilising Predation (Upgrade)",
     "detachment_id": "talons-of-the-norn-queen",
     "cost": 20,
-    "keyword_restrictions": [
-      "Norn Emissary",
-      "Tyranids"
-    ],
     "ability_id": "destabilising-predation-upgrade-talons-of-the-norn-queen-tyranids",
     "is_unique": true,
     "game_version": {
@@ -931,6 +945,14 @@
         "namespace": "mfm",
         "id": "0666139a-ab22-4c98-9219-e369924291bf"
       }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "norn-emissary",
+        "keywords": [
+          "Tyranids"
+        ]
+      }
     ]
   },
   {
@@ -938,10 +960,6 @@
     "name": "Synaptoprescience (Upgrade)",
     "detachment_id": "talons-of-the-norn-queen",
     "cost": 30,
-    "keyword_restrictions": [
-      "Norn Assimilator",
-      "Tyranids"
-    ],
     "ability_id": "synaptoprescience-upgrade-talons-of-the-norn-queen-tyranids",
     "is_unique": true,
     "game_version": {
@@ -959,6 +977,14 @@
       {
         "namespace": "mfm",
         "id": "b7b413e4-78cc-4282-8085-202faf35633b"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "norn-assimilator",
+        "keywords": [
+          "Tyranids"
+        ]
       }
     ]
   },
@@ -1001,14 +1027,16 @@
       "combat-patrol"
     ],
     "points_provisional": false,
-    "keyword_restrictions": [
-      "Vardenghast Swarm Psychophage"
-    ],
     "upgrade_tag": true,
     "external_refs": [
       {
         "namespace": "mfm",
         "id": "1b109d97-b41c-4733-87b4-e8a359cc80db"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "vardenghast-swarm-psychophage"
       }
     ]
   },

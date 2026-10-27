@@ -684,10 +684,6 @@
     "name": "Explorator Dispensation",
     "detachment_id": "cohort-acquisitus",
     "cost": 20,
-    "keyword_restrictions": [
-      "Adeptus Mechanicus",
-      "Skitarii Marshal"
-    ],
     "ability_id": "explorator-dispensation-cohort-acquisitus-adeptus-mechanicus",
     "is_unique": true,
     "game_version": {
@@ -706,6 +702,14 @@
         "namespace": "mfm",
         "id": "070d6e51-e685-4f6b-bfa2-64f2d6807ce3"
       }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "skitarii-marshal",
+        "keywords": [
+          "Adeptus Mechanicus"
+        ]
+      }
     ]
   },
   {
@@ -713,10 +717,6 @@
     "name": "Stealth-screened Cybercanids (Upgrade)",
     "detachment_id": "cohort-acquisitus",
     "cost": 15,
-    "keyword_restrictions": [
-      "Adeptus Mechanicus",
-      "Serberys Raiders"
-    ],
     "ability_id": "stealth-screened-cybercanids-upgrade-cohort-acquisitus-adeptus-mechanicus",
     "is_unique": true,
     "game_version": {
@@ -735,6 +735,14 @@
         "namespace": "mfm",
         "id": "5a7312e4-d267-4775-a7e6-1328941bfc9f"
       }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "serberys-raiders",
+        "keywords": [
+          "Adeptus Mechanicus"
+        ]
+      }
     ]
   },
   {
@@ -742,10 +750,6 @@
     "name": "Vingh’s Wafers of Dynamism",
     "detachment_id": "lords-of-the-forge",
     "cost": 25,
-    "keyword_restrictions": [
-      "Adeptus Mechanicus",
-      "Cybernetica Datasmith"
-    ],
     "ability_id": "vinghs-wafers-of-dynamism-lords-of-the-forge-adeptus-mechanicus",
     "is_unique": true,
     "game_version": {
@@ -763,6 +767,14 @@
       {
         "namespace": "mfm",
         "id": "2869e91e-b7a6-41b0-ab24-b01ca6a55a29"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "cybernetica-datasmith",
+        "keywords": [
+          "Adeptus Mechanicus"
+        ]
       }
     ]
   },
@@ -981,14 +993,16 @@
       "combat-patrol"
     ],
     "points_provisional": false,
-    "keyword_restrictions": [
-      "Purge Corps Serberys Sulphurhounds"
-    ],
     "upgrade_tag": true,
     "external_refs": [
       {
         "namespace": "mfm",
         "id": "c434dc26-c687-4677-b72d-c879da0c169b"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "purge-corps-serberys-sulphurhounds"
       }
     ]
   },
@@ -1006,13 +1020,15 @@
       "combat-patrol"
     ],
     "points_provisional": false,
-    "keyword_restrictions": [
-      "Manipulus Skand"
-    ],
     "external_refs": [
       {
         "namespace": "mfm",
         "id": "6827bb88-e15b-4ae2-ac1a-00c20a4d9612"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "manipulus-skand"
       }
     ]
   }

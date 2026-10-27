@@ -15638,6 +15638,31 @@ pub struct EngagementFrontsConditionParameters {
 ///      "type": "integer",
 ///      "minimum": 0.0
 ///    },
+///    "datasheet_restriction_groups": {
+///      "description": "Datasheet-scoped bearer eligibility groups: a bearer whose unit is `unit_id` and carries every listed keyword is eligible. Each group is a further alternative (OR) to the keyword groups in `keyword_restrictions` / `keyword_restriction_groups`. A datasheet group admits only that datasheet, never another unit that carries the datasheet's name as a keyword. `exclusion_keywords` still applies.",
+///      "type": "array",
+///      "items": {
+///        "type": "object",
+///        "required": [
+///          "unit_id"
+///        ],
+///        "properties": {
+///          "keywords": {
+///            "type": "array",
+///            "items": {
+///              "$ref": "#/$defs/keyword"
+///            },
+///            "minItems": 1,
+///            "uniqueItems": true
+///          },
+///          "unit_id": {
+///            "$ref": "#/$defs/entity-id"
+///          }
+///        },
+///        "additionalProperties": false
+///      },
+///      "minItems": 1
+///    },
 ///    "detachment_id": {
 ///      "$ref": "#/$defs/entity-id"
 ///    },
@@ -15720,6 +15745,11 @@ pub struct Enhancement {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub attachment_bodyguard_ids: ::std::option::Option<Vec<EntityId>>,
     pub cost: u64,
+    ///Datasheet-scoped bearer eligibility groups: a bearer whose unit is `unit_id` and carries every listed keyword is eligible. Each group is a further alternative (OR) to the keyword groups in `keyword_restrictions` / `keyword_restriction_groups`. A datasheet group admits only that datasheet, never another unit that carries the datasheet's name as a keyword. `exclusion_keywords` still applies.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub datasheet_restriction_groups: ::std::vec::Vec<
+        EnhancementDatasheetRestrictionGroupsItem,
+    >,
     pub detachment_id: EntityId,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub exclusion_keywords: ::std::option::Option<KeywordList>,
@@ -15747,6 +15777,40 @@ pub struct Enhancement {
     ///11e: when true, this enhancement applies to up to `max_targets` non-character units while counting as a single Enhancement choice.
     #[serde(default)]
     pub upgrade_tag: bool,
+}
+///`EnhancementDatasheetRestrictionGroupsItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "unit_id"
+///  ],
+///  "properties": {
+///    "keywords": {
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/keyword"
+///      },
+///      "minItems": 1,
+///      "uniqueItems": true
+///    },
+///    "unit_id": {
+///      "$ref": "#/$defs/entity-id"
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct EnhancementDatasheetRestrictionGroupsItem {
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub keywords: ::std::option::Option<Vec<Keyword>>,
+    pub unit_id: EntityId,
 }
 ///`EnhancementName`
 ///

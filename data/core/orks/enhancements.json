@@ -23,6 +23,11 @@
         "namespace": "mfm",
         "id": "fd3cd4db-81a6-4567-abe9-fc8b99efe0cd"
       }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "big-mek"
+      }
     ]
   },
   {
@@ -37,15 +42,17 @@
       "edition": "11th",
       "dataslate": "mfm-995"
     },
-    "keyword_restrictions": [
-      "Boyz"
-    ],
     "upgrade_tag": true,
     "max_targets": 3,
     "external_refs": [
       {
         "namespace": "mfm",
         "id": "e8199306-d04e-451b-b3c4-fda04201f535"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "boyz"
       }
     ]
   },
@@ -113,9 +120,6 @@
       "edition": "11th",
       "dataslate": "mfm-995"
     },
-    "keyword_restrictions": [
-      "Deffkilla Wartrike"
-    ],
     "external_refs": [
       {
         "namespace": "game-datacards",
@@ -124,6 +128,11 @@
       {
         "namespace": "mfm",
         "id": "d221c093-20e3-4567-ab3b-7693d4d58de3"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "deffkilla-wartrike"
       }
     ]
   },
@@ -245,9 +254,6 @@
       "edition": "11th",
       "dataslate": "mfm-995"
     },
-    "keyword_restrictions": [
-      "Big Mek with Shokk Attack Gun"
-    ],
     "upgrade_tag": true,
     "max_targets": 3,
     "external_refs": [
@@ -258,6 +264,11 @@
       {
         "namespace": "mfm",
         "id": "ab017be1-2023-49f7-841f-eba9b0834573"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "big-mek-with-shokk-attack-gun"
       }
     ]
   },
@@ -273,9 +284,6 @@
       "edition": "11th",
       "dataslate": "mfm-995"
     },
-    "keyword_restrictions": [
-      "Gretchin"
-    ],
     "upgrade_tag": true,
     "max_targets": 3,
     "external_refs": [
@@ -286,6 +294,11 @@
       {
         "namespace": "mfm",
         "id": "cb08e1ee-da13-4f80-bdd3-c5cb97386d23"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "gretchin"
       }
     ]
   },
@@ -359,9 +372,6 @@
       "edition": "11th",
       "dataslate": "mfm-995"
     },
-    "keyword_restrictions": [
-      "Beastboss on Squigosaur"
-    ],
     "external_refs": [
       {
         "namespace": "game-datacards",
@@ -370,6 +380,11 @@
       {
         "namespace": "mfm",
         "id": "7cb15917-20d4-4586-a054-d4c3674bff0d"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "beastboss-on-squigosaur"
       }
     ]
   },
@@ -386,9 +401,6 @@
       "dataslate": "mfm-995"
     },
     "keyword_restriction_groups": [
-      [
-        "Big Mek"
-      ],
       [
         "Infantry",
         "Warboss"
@@ -409,6 +421,11 @@
       {
         "namespace": "mfm",
         "id": "75b36f49-54f5-440e-996f-bd82909ed1a4"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "big-mek"
       }
     ]
   },
@@ -436,6 +453,11 @@
         "namespace": "mfm",
         "id": "99f8a182-847d-4246-85e3-39b971c86dac"
       }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "big-mek"
+      }
     ]
   },
   {
@@ -450,9 +472,6 @@
       "edition": "11th",
       "dataslate": "mfm-995"
     },
-    "keyword_restrictions": [
-      "Gretchin"
-    ],
     "upgrade_tag": true,
     "max_targets": 3,
     "external_refs": [
@@ -463,6 +482,11 @@
       {
         "namespace": "mfm",
         "id": "dc12165f-cea0-40e4-b709-e5c8c1a62c82"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "gretchin"
       }
     ]
   },
@@ -588,9 +612,6 @@
       "edition": "11th",
       "dataslate": "mfm-995"
     },
-    "keyword_restrictions": [
-      "Flash Gitz"
-    ],
     "upgrade_tag": true,
     "max_targets": 3,
     "external_refs": [
@@ -601,6 +622,11 @@
       {
         "namespace": "mfm",
         "id": "97a9351c-5df1-4e64-b4df-4398311533d7"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "flash-gitz"
       }
     ]
   },
@@ -648,9 +674,6 @@
         "Big Mek"
       ],
       [
-        "Bigboss"
-      ],
-      [
         "Warboss"
       ]
     ],
@@ -662,6 +685,14 @@
       {
         "namespace": "mfm",
         "id": "4801d50d-f3c8-4526-b771-98c6326101ab"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "big-mek"
+      },
+      {
+        "unit_id": "bigboss"
       }
     ]
   },
@@ -703,9 +734,6 @@
       "edition": "11th",
       "dataslate": "mfm-995"
     },
-    "keyword_restrictions": [
-      "Big Mek with Shokk Attack Gun"
-    ],
     "upgrade_tag": true,
     "max_targets": 3,
     "external_refs": [
@@ -716,6 +744,11 @@
       {
         "namespace": "mfm",
         "id": "a00cea8c-dcbc-4b8e-b890-b72efc0d22c2"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "big-mek-with-shokk-attack-gun"
       }
     ]
   },
@@ -731,14 +764,6 @@
       "edition": "11th",
       "dataslate": "mfm-995"
     },
-    "keyword_restriction_groups": [
-      [
-        "Kommandos"
-      ],
-      [
-        "Stormboyz"
-      ]
-    ],
     "upgrade_tag": true,
     "max_targets": 3,
     "external_refs": [
@@ -749,6 +774,14 @@
       {
         "namespace": "mfm",
         "id": "9917fe1b-90a8-4136-8390-ef98111bf3ec"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "kommandos"
+      },
+      {
+        "unit_id": "stormboyz"
       }
     ]
   },
@@ -791,9 +824,6 @@
       "edition": "11th",
       "dataslate": "mfm-995"
     },
-    "keyword_restrictions": [
-      "Nobz"
-    ],
     "upgrade_tag": true,
     "max_targets": 3,
     "external_refs": [
@@ -804,6 +834,11 @@
       {
         "namespace": "mfm",
         "id": "49342390-a6c0-481e-bc7b-ae703cfb1132"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "nobz"
       }
     ]
   },
@@ -886,6 +921,11 @@
     ],
     "attachment_bodyguard_ids": [
       "kommandos"
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "big-mek"
+      }
     ]
   },
   {
@@ -1005,13 +1045,16 @@
     "points_provisional": false,
     "upgrade_tag": false,
     "max_targets": 1,
-    "keyword_restriction_groups": [
-      [
-        "Big Mek"
-      ],
-      [
-        "Mek"
-      ]
+    "keyword_restrictions": [
+      "Big Mek"
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "big-mek"
+      },
+      {
+        "unit_id": "mek"
+      }
     ]
   },
   {
@@ -1052,12 +1095,21 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"
     ],
-    "points_provisional": false
+    "points_provisional": false,
+    "upgrade_tag": true,
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "ardmob-wartrakk",
+        "keywords": [
+          "Orks"
+        ]
+      }
+    ]
   },
   {
     "id": "rallying-war-cry-ardmob-orks",
@@ -1073,11 +1125,19 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-963"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"
     ],
-    "points_provisional": false
+    "points_provisional": false,
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "ardmob-warboss",
+        "keywords": [
+          "Orks"
+        ]
+      }
+    ]
   }
 ]

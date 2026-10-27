@@ -98,16 +98,20 @@
       "combat-patrol"
     ],
     "points_provisional": false,
-    "keyword_restrictions": [
-      "Adeptus Custodes",
-      "Gilded Blades Allarus Custodians"
-    ],
     "upgrade_tag": true,
     "ability_id": "comrades-in-wrath-tristraens-gilded-blades-adeptus-custodes",
     "external_refs": [
       {
         "namespace": "mfm",
         "id": "d95b698f-01aa-4e91-94e2-709bd5e9097d"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "gilded-blades-allarus-custodians",
+        "keywords": [
+          "Adeptus Custodes"
+        ]
       }
     ]
   },
@@ -125,15 +129,19 @@
       "combat-patrol"
     ],
     "points_provisional": false,
-    "keyword_restrictions": [
-      "Adeptus Custodes",
-      "Tristraen of the Gilded Blades"
-    ],
     "ability_id": "shattering-charge-tristraens-gilded-blades-adeptus-custodes",
     "external_refs": [
       {
         "namespace": "mfm",
         "id": "f832b7c7-53b8-4bd3-856d-29b837ad35ea"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "tristraen-of-the-gilded-blades",
+        "keywords": [
+          "Adeptus Custodes"
+        ]
       }
     ]
   },
@@ -157,8 +165,10 @@
       "combat-patrol"
     ],
     "points_provisional": false,
-    "keyword_restrictions": [
-      "Aquilan Talon Shield-Captain"
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "aquilan-talon-shield-captain"
+      }
     ]
   },
   {
@@ -183,8 +193,10 @@
     "points_provisional": false,
     "upgrade_tag": true,
     "max_targets": 3,
-    "keyword_restrictions": [
-      "Aquilan Talon Contemptor-Achillus Dreadnought"
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "aquilan-talon-contemptor-achillus-dreadnought"
+      }
     ]
   },
   {
@@ -209,8 +221,10 @@
     "points_provisional": false,
     "upgrade_tag": true,
     "max_targets": 3,
-    "keyword_restrictions": [
-      "Aquilan Wing Venatari with Kinetic Destroyers"
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "aquilan-wing-venatari-with-kinetic-destroyers"
+      }
     ]
   },
   {
@@ -233,8 +247,10 @@
       "combat-patrol"
     ],
     "points_provisional": false,
-    "keyword_restrictions": [
-      "Aquilan Wing Shield-Captain"
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "aquilan-wing-shield-captain"
+      }
     ]
   },
   {
@@ -378,14 +394,14 @@
     "points_provisional": false,
     "upgrade_tag": false,
     "max_targets": 1,
-    "keyword_restriction_groups": [
-      [
-        "Adeptus Custodes",
-        "Shield-Captain"
-      ],
-      [
-        "Shield‑Captain"
-      ]
+    "keyword_restrictions": [
+      "Adeptus Custodes",
+      "Shield-Captain"
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "shield-captain"
+      }
     ]
   },
   {
@@ -564,8 +580,10 @@
     "points_provisional": false,
     "upgrade_tag": false,
     "max_targets": 1,
-    "keyword_restrictions": [
-      "Shield‑Captain in Allarus Terminator Armour"
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "shield-captain-in-allarus-terminator-armour"
+      }
     ]
   },
   {
@@ -588,8 +606,10 @@
     "points_provisional": false,
     "upgrade_tag": false,
     "max_targets": 1,
-    "keyword_restrictions": [
-      "Shield‑Captain in Allarus Terminator Armour"
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "shield-captain-in-allarus-terminator-armour"
+      }
     ]
   },
   {

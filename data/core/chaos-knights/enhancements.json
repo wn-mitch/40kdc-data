@@ -508,10 +508,6 @@
     "name": "Pterrorshade Rookery",
     "detachment_id": "bastions-of-tyranny",
     "cost": 20,
-    "keyword_restrictions": [
-      "Chaos Knights",
-      "Knight Tyrant"
-    ],
     "ability_id": "pterrorshade-rookery-bastions-of-tyranny-chaos-knights",
     "is_unique": true,
     "game_version": {
@@ -530,6 +526,14 @@
         "namespace": "mfm",
         "id": "4d3b271f-aae1-4f3e-9cf2-2984b590a6cd"
       }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "knight-tyrant",
+        "keywords": [
+          "Chaos Knights"
+        ]
+      }
     ]
   },
   {
@@ -537,10 +541,6 @@
     "name": "Hate-filled Dominion",
     "detachment_id": "bastions-of-tyranny",
     "cost": 20,
-    "keyword_restrictions": [
-      "Chaos Knights",
-      "Knight Tyrant"
-    ],
     "ability_id": "hate-filled-dominion-bastions-of-tyranny-chaos-knights",
     "is_unique": true,
     "game_version": {
@@ -558,6 +558,14 @@
       {
         "namespace": "mfm",
         "id": "809f4b45-88f7-4501-81cf-90eaf80733d9"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "knight-tyrant",
+        "keywords": [
+          "Chaos Knights"
+        ]
       }
     ]
   },

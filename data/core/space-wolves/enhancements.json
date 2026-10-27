@@ -141,15 +141,15 @@
         "id": "85e6d721-567a-4447-9fde-2260439a0f10"
       }
     ],
-    "keyword_restriction_groups": [
-      [
-        "Captain in Terminator Armour"
-      ],
-      [
-        "Adeptus Astartes",
-        "Captain",
-        "Terminator"
-      ]
+    "keyword_restrictions": [
+      "Adeptus Astartes",
+      "Captain",
+      "Terminator"
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "captain-in-terminator-armour"
+      }
     ]
   },
   {
@@ -177,6 +177,11 @@
       {
         "namespace": "mfm",
         "id": "4a02e680-5406-45f2-b2db-b19fa2d46356"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "wolf-priest"
       }
     ]
   },
@@ -232,14 +237,14 @@
         "id": "af0f6c25-cc30-4454-bf03-6ef1a30c0659"
       }
     ],
-    "keyword_restriction_groups": [
-      [
-        "Battle Leader",
-        "Wolf Guard"
-      ],
-      [
-        "Wolf Guard Battle Leader"
-      ]
+    "keyword_restrictions": [
+      "Battle Leader",
+      "Wolf Guard"
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "wolf-guard-battle-leader"
+      }
     ]
   },
   {
@@ -295,6 +300,11 @@
       {
         "namespace": "mfm",
         "id": "8fc10e42-2978-43da-92e9-636e5e4ce564"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "captain"
       }
     ]
   },

@@ -686,10 +686,6 @@
     "name": "Periapt of Torments",
     "detachment_id": "exhibition-of-slaughter",
     "cost": 20,
-    "keyword_restrictions": [
-      "Drukhari",
-      "Succubus"
-    ],
     "ability_id": "periapt-of-torments-exhibition-of-slaughter-drukhari",
     "is_unique": true,
     "game_version": {
@@ -708,6 +704,14 @@
         "namespace": "mfm",
         "id": "7b2fc03c-6b23-4550-a402-1d5693bc122b"
       }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "succubus",
+        "keywords": [
+          "Drukhari"
+        ]
+      }
     ]
   },
   {
@@ -715,10 +719,6 @@
     "name": "Hyperstimm Trafficker",
     "detachment_id": "exhibition-of-slaughter",
     "cost": 20,
-    "keyword_restrictions": [
-      "Drukhari",
-      "Succubus"
-    ],
     "ability_id": "hyperstimm-trafficker-exhibition-of-slaughter-drukhari",
     "is_unique": true,
     "game_version": {
@@ -737,6 +737,14 @@
         "namespace": "mfm",
         "id": "910abb59-9838-4b50-8180-fab4fedf9770"
       }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "succubus",
+        "keywords": [
+          "Drukhari"
+        ]
+      }
     ]
   },
   {
@@ -744,10 +752,6 @@
     "name": "Towering Arrogance",
     "detachment_id": "kabalite-agonysts",
     "cost": 15,
-    "keyword_restrictions": [
-      "Archon",
-      "Drukhari"
-    ],
     "ability_id": "towering-arrogance-kabalite-agonysts-drukhari",
     "is_unique": true,
     "game_version": {
@@ -766,6 +770,14 @@
         "namespace": "mfm",
         "id": "0904f021-9996-49f4-a13f-7e3c367a058e"
       }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "archon",
+        "keywords": [
+          "Drukhari"
+        ]
+      }
     ]
   },
   {
@@ -773,10 +785,6 @@
     "name": "Contempt for Rivals",
     "detachment_id": "kabalite-agonysts",
     "cost": 20,
-    "keyword_restrictions": [
-      "Archon",
-      "Drukhari"
-    ],
     "ability_id": "contempt-for-rivals-kabalite-agonysts-drukhari",
     "is_unique": true,
     "game_version": {
@@ -795,6 +803,14 @@
         "namespace": "mfm",
         "id": "5600dcd0-652a-4078-9d65-266dfff20443"
       }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "archon",
+        "keywords": [
+          "Drukhari"
+        ]
+      }
     ]
   },
   {
@@ -802,10 +818,6 @@
     "name": "Gnarlskin Experimentor",
     "detachment_id": "tools-of-torment",
     "cost": 20,
-    "keyword_restrictions": [
-      "Drukhari",
-      "Haemonculus"
-    ],
     "ability_id": "gnarlskin-experimentor-tools-of-torment-drukhari",
     "is_unique": true,
     "game_version": {
@@ -824,6 +836,14 @@
         "namespace": "mfm",
         "id": "03586339-4af2-4cd9-bb94-9bddc81d9144"
       }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "haemonculus",
+        "keywords": [
+          "Drukhari"
+        ]
+      }
     ]
   },
   {
@@ -840,16 +860,6 @@
     "points_provisional": false,
     "upgrade_tag": true,
     "max_targets": 3,
-    "keyword_restriction_groups": [
-      [
-        "Cronos",
-        "Drukhari"
-      ],
-      [
-        "Drukhari",
-        "Talos"
-      ]
-    ],
     "external_refs": [
       {
         "namespace": "game-datacards",
@@ -858,6 +868,20 @@
       {
         "namespace": "mfm",
         "id": "bb413bfb-9992-48af-8684-70e080379f3a"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "cronos",
+        "keywords": [
+          "Drukhari"
+        ]
+      },
+      {
+        "unit_id": "talos",
+        "keywords": [
+          "Drukhari"
+        ]
       }
     ]
   },
@@ -875,14 +899,16 @@
       "combat-patrol"
     ],
     "points_provisional": false,
-    "keyword_restrictions": [
-      "Coven of Agonies Cronos"
-    ],
     "upgrade_tag": true,
     "external_refs": [
       {
         "namespace": "mfm",
         "id": "fd120bfc-9c5f-4d5e-ba70-5f3fc53b36c6"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "coven-of-agonies-cronos"
       }
     ]
   },

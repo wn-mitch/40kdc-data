@@ -16,6 +16,7 @@ import {
   pointsLimitForBattleSize,
   unitLimitForBattleSize,
 } from "./battle-sizes.js";
+import { meetsEnhancementGroups } from "./enhancement-eligibility.js";
 import { checkUnitLegality, type Violation } from "./loadout.js";
 import { hostUnitPoints, wargearPoints } from "./pricing.js";
 
@@ -348,9 +349,7 @@ export function validateRosterCore(spec: NormRoster, dataset: Dataset): RosterLe
     if (rows.length > 0 && rows.every((m) => m.excluded_from_enhancements === true))
       err("enhancement-on-excluded-model", enh.id, `${enh.id} cannot be given to ${view.id}: no model in it can take Enhancements`, idx);
     const kws = keywordSet(view, su);
-    const eligible = enh.keyword_restriction_groups
-      ? enh.keyword_restriction_groups.some((group) => group.every((keyword) => kws.has(keyword)))
-      : (enh.keyword_restrictions ?? []).every((keyword) => kws.has(keyword));
+    const eligible = meetsEnhancementGroups(enh, view.id, (keyword) => kws.has(keyword));
     if (!eligible)
       err("enhancement-keyword-mismatch", enh.id, `${view.id} lacks an eligible keyword group for ${enh.id}`, idx);
     if ((enh.exclusion_keywords ?? []).some((k) => kws.has(k)))

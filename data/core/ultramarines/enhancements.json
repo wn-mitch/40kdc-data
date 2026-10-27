@@ -81,6 +81,11 @@
         "namespace": "mfm",
         "id": "1f56a6d4-45ac-4735-a563-b23f1c0f2569"
       }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "captain"
+      }
     ]
   },
   {
@@ -164,6 +169,11 @@
       {
         "namespace": "mfm",
         "id": "8fc10e42-2978-43da-92e9-636e5e4ce564"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "captain"
       }
     ]
   }

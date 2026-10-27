@@ -767,10 +767,6 @@
     "name": "Saturation Rounds (Upgrade)",
     "detachment_id": "armoured-trailblazers",
     "cost": 15,
-    "keyword_restrictions": [
-      "Leagues of Votann",
-      "Sagitaur"
-    ],
     "ability_id": "saturation-rounds-upgrade-armoured-trailblazers-leagues-of-votann",
     "is_unique": true,
     "game_version": {
@@ -789,6 +785,14 @@
         "namespace": "mfm",
         "id": "27e25b2c-5cf3-47df-8e2b-a3dff31cdd95"
       }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "sagitaur",
+        "keywords": [
+          "Leagues of Votann"
+        ]
+      }
     ]
   },
   {
@@ -796,10 +800,6 @@
     "name": "Optimised Attack Lines (Upgrade)",
     "detachment_id": "armoured-trailblazers",
     "cost": 15,
-    "keyword_restrictions": [
-      "Leagues of Votann",
-      "Sagitaur"
-    ],
     "ability_id": "optimised-attack-lines-upgrade-armoured-trailblazers-leagues-of-votann",
     "is_unique": true,
     "game_version": {
@@ -817,6 +817,14 @@
       {
         "namespace": "mfm",
         "id": "413cc70c-8df1-4d24-828b-3cbfde7af684"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "sagitaur",
+        "keywords": [
+          "Leagues of Votann"
+        ]
       }
     ]
   },
@@ -890,14 +898,16 @@
       "combat-patrol"
     ],
     "points_provisional": false,
-    "keyword_restrictions": [
-      "Bane Slayer's Bulwark Brokhyr Thunderkyn"
-    ],
     "upgrade_tag": true,
     "external_refs": [
       {
         "namespace": "mfm",
         "id": "f8a1fc4c-65b9-466e-90b7-eb939120033c"
+      }
+    ],
+    "datasheet_restriction_groups": [
+      {
+        "unit_id": "bane-slayers-bulwark-brokhyr-thunderkyn"
       }
     ]
   },
