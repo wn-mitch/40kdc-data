@@ -7224,6 +7224,651 @@
       }
     },
     {
+      "caseId": "canonical/scenario/rule-active-option-lever",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "rule-active",
+          "parameters": {
+            "rule": {
+              "ability_id": "example-doctrines",
+              "option_id": "assault"
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": [
+          {
+            "id": "fabricated-scenario#assault",
+            "label": "assault: +1 to hit",
+            "group": null,
+            "requires": null,
+            "capRaise": null,
+            "requiresOption": {
+              "ability_id": "example-doctrines",
+              "option_id": "assault"
+            },
+            "buffs": [
+              {
+                "type": "hit-mod",
+                "value": 1
+              }
+            ]
+          }
+        ],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/rule-active-option-with-condition",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "rule-active",
+              "parameters": {
+                "rule": {
+                  "ability_id": "example-doctrines",
+                  "option_id": "assault"
+                }
+              }
+            },
+            {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "shooting"
+              }
+            }
+          ]
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": [
+          {
+            "id": "fabricated-scenario#assault",
+            "label": "assault: +1 to hit",
+            "group": null,
+            "requires": null,
+            "capRaise": null,
+            "requiresOption": {
+              "ability_id": "example-doctrines",
+              "option_id": "assault"
+            },
+            "buffs": [
+              {
+                "type": "hit-mod",
+                "value": 1
+              }
+            ]
+          }
+        ],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/rule-active-option-with-failed-condition",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "rule-active",
+              "parameters": {
+                "rule": {
+                  "ability_id": "example-doctrines",
+                  "option_id": "assault"
+                }
+              }
+            },
+            {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "fight"
+              }
+            }
+          ]
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/rule-active-option-shared-lever",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "rule-active",
+              "parameters": {
+                "rule": {
+                  "ability_id": "example-doctrines",
+                  "option_id": "assault"
+                }
+              }
+            },
+            "effect": {
+              "type": "roll-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "hit",
+                "operation": "add",
+                "value": 1
+              }
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "rule-active",
+              "parameters": {
+                "rule": {
+                  "ability_id": "example-doctrines",
+                  "option_id": "assault"
+                }
+              }
+            },
+            "effect": {
+              "type": "roll-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "wound",
+                "operation": "add",
+                "value": 1
+              }
+            }
+          }
+        ]
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": [
+          {
+            "id": "fabricated-scenario#assault",
+            "label": "assault: +1 to hit, +1 to wound",
+            "group": null,
+            "requires": null,
+            "capRaise": null,
+            "requiresOption": {
+              "ability_id": "example-doctrines",
+              "option_id": "assault"
+            },
+            "buffs": [
+              {
+                "type": "hit-mod",
+                "value": 1
+              },
+              {
+                "type": "wound-mod",
+                "value": 1
+              }
+            ]
+          }
+        ],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/rule-active-option-in-choice",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "choice",
+        "options": [
+          {
+            "type": "roll-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "operation": "add",
+              "value": 1
+            }
+          },
+          {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "conditional",
+                "condition": {
+                  "type": "rule-active",
+                  "parameters": {
+                    "rule": {
+                      "ability_id": "example-doctrines",
+                      "option_id": "assault"
+                    }
+                  }
+                },
+                "effect": {
+                  "type": "roll-modifier",
+                  "target": "this-unit",
+                  "modifier": {
+                    "roll": "hit",
+                    "operation": "add",
+                    "value": 1
+                  }
+                }
+              },
+              {
+                "type": "conditional",
+                "condition": {
+                  "type": "rule-active",
+                  "parameters": {
+                    "rule": {
+                      "ability_id": "example-doctrines",
+                      "option_id": "assault"
+                    }
+                  }
+                },
+                "effect": {
+                  "type": "stat-modifier",
+                  "target": "this-unit",
+                  "modifier": {
+                    "stat": "AP",
+                    "operation": "improve",
+                    "value": 1
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": [
+          {
+            "id": "fabricated-scenario?0",
+            "label": "+1 to hit",
+            "group": {
+              "id": "fabricated-scenario?choice",
+              "maxActivations": 1
+            },
+            "requires": null,
+            "capRaise": null,
+            "buffs": [
+              {
+                "type": "hit-mod",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "id": "fabricated-scenario?1",
+            "label": "+1 to hit, AP -1",
+            "group": {
+              "id": "fabricated-scenario?choice",
+              "maxActivations": 1
+            },
+            "requires": null,
+            "capRaise": null,
+            "requiresOption": {
+              "ability_id": "example-doctrines",
+              "option_id": "assault"
+            },
+            "buffs": [
+              {
+                "type": "hit-mod",
+                "value": 1
+              },
+              {
+                "type": "ap-mod",
+                "value": -1
+              }
+            ]
+          }
+        ],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/rule-active-option-mixed-choice",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "choice",
+        "options": [
+          {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "roll-modifier",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "wound",
+                  "operation": "add",
+                  "value": 1
+                }
+              },
+              {
+                "type": "conditional",
+                "condition": {
+                  "type": "rule-active",
+                  "parameters": {
+                    "rule": {
+                      "ability_id": "example-doctrines",
+                      "option_id": "assault"
+                    }
+                  }
+                },
+                "effect": {
+                  "type": "roll-modifier",
+                  "target": "this-unit",
+                  "modifier": {
+                    "roll": "hit",
+                    "operation": "add",
+                    "value": 1
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "activation mixes stance-gated buffs with other buffs"
+        ],
+        "activatable": [
+          {
+            "id": "fabricated-scenario?0",
+            "label": "+1 to wound",
+            "group": {
+              "id": "fabricated-scenario?choice",
+              "maxActivations": 1
+            },
+            "requires": null,
+            "capRaise": null,
+            "buffs": [
+              {
+                "type": "wound-mod",
+                "value": 1
+              }
+            ]
+          }
+        ],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/rule-active-option-negated",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "operator": "not",
+          "operands": [
+            {
+              "type": "rule-active",
+              "parameters": {
+                "rule": {
+                  "ability_id": "example-doctrines",
+                  "option_id": "assault"
+                }
+              }
+            }
+          ]
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": [
+          {
+            "id": "fabricated-scenario#not-assault",
+            "label": "not-assault: +1 to hit",
+            "group": null,
+            "requires": null,
+            "capRaise": null,
+            "excludesOption": {
+              "ability_id": "example-doctrines",
+              "option_id": "assault"
+            },
+            "buffs": [
+              {
+                "type": "hit-mod",
+                "value": 1
+              }
+            ]
+          }
+        ],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/rule-active-option-both-sides",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "conditional",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "operator": "not",
+                  "operands": [
+                    {
+                      "type": "rule-active",
+                      "parameters": {
+                        "rule": {
+                          "ability_id": "example-doctrines",
+                          "option_id": "assault"
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "phase-is",
+                  "parameters": {
+                    "phase": "shooting"
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "roll-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "hit",
+                "operation": "add",
+                "value": 1
+              }
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "rule-active",
+              "parameters": {
+                "rule": {
+                  "ability_id": "example-doctrines",
+                  "option_id": "assault"
+                }
+              }
+            },
+            "effect": {
+              "type": "roll-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "wound",
+                "operation": "add",
+                "value": 1
+              }
+            }
+          }
+        ]
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": [
+          {
+            "id": "fabricated-scenario#not-assault",
+            "label": "not-assault: +1 to hit",
+            "group": null,
+            "requires": null,
+            "capRaise": null,
+            "excludesOption": {
+              "ability_id": "example-doctrines",
+              "option_id": "assault"
+            },
+            "buffs": [
+              {
+                "type": "hit-mod",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "id": "fabricated-scenario#assault",
+            "label": "assault: +1 to wound",
+            "group": null,
+            "requires": null,
+            "capRaise": null,
+            "requiresOption": {
+              "ability_id": "example-doctrines",
+              "option_id": "assault"
+            },
+            "buffs": [
+              {
+                "type": "wound-mod",
+                "value": 1
+              }
+            ]
+          }
+        ],
+        "applicableWhen": []
+      }
+    },
+    {
       "caseId": "canonical/scenario/in-region-rule-region",
       "abilityId": "fabricated-scenario",
       "source": {

@@ -937,14 +937,14 @@ func enumerateChoice(node, source map[string]any, opts dslOpts, out *effectTrans
 		maxActivations, _ = num(node["max_choices"])
 	}
 	for i, opt := range options {
-		buffs, requiresOption := collectOptionBuffs(opt, source, opts, &out.unsupported)
+		buffs, gate := collectOptionBuffs(opt, source, opts, &out.unsupported)
 		if len(buffs) == 0 {
 			continue
 		}
-		out.activatable = append(out.activatable, withRequiresOption(map[string]any{
+		out.activatable = append(out.activatable, withStanceGate(map[string]any{
 			"id": opts.abilityID + "?" + strconv.Itoa(i), "label": labelForBuffs(buffs),
 			"buffs": buffs, "group": map[string]any{"id": opts.abilityID + "?choice", "maxActivations": maxActivations},
-		}, requiresOption))
+		}, gate))
 	}
 }
 
@@ -959,7 +959,7 @@ func enumerateDicePool(node, source map[string]any, opts dslOpts, out *effectTra
 		if !ok {
 			continue
 		}
-		buffs, requiresOption := collectOptionBuffs(opt["effect"], source, opts, &out.unsupported)
+		buffs, gate := collectOptionBuffs(opt["effect"], source, opts, &out.unsupported)
 		if len(buffs) == 0 {
 			continue
 		}
@@ -967,10 +967,10 @@ func enumerateDicePool(node, source map[string]any, opts dslOpts, out *effectTra
 		if name == "" {
 			name = labelForBuffs(buffs)
 		}
-		out.activatable = append(out.activatable, withRequiresOption(map[string]any{
+		out.activatable = append(out.activatable, withStanceGate(map[string]any{
 			"id": opts.abilityID + "#" + name, "label": name, "buffs": buffs,
 			"group": map[string]any{"id": opts.abilityID, "maxActivations": maxActivations},
-		}, requiresOption))
+		}, gate))
 	}
 }
 
@@ -983,7 +983,7 @@ func enumerateNamedOptions(node, source map[string]any, opts dslOpts, out *effec
 		if !ok {
 			continue
 		}
-		buffs, requiresOption := collectOptionBuffs(opt["effect"], source, opts, &out.unsupported)
+		buffs, gate := collectOptionBuffs(opt["effect"], source, opts, &out.unsupported)
 		if len(buffs) == 0 {
 			continue
 		}
@@ -995,10 +995,10 @@ func enumerateNamedOptions(node, source map[string]any, opts dslOpts, out *effec
 		if node["type"] == "stance-select" {
 			id = getStr(opt, "id")
 		}
-		out.activatable = append(out.activatable, withRequiresOption(map[string]any{
+		out.activatable = append(out.activatable, withStanceGate(map[string]any{
 			"id": opts.abilityID + "#" + id, "label": name, "buffs": buffs,
 			"group": map[string]any{"id": groupID, "maxActivations": maxActivations},
-		}, requiresOption))
+		}, gate))
 	}
 }
 
@@ -1050,7 +1050,7 @@ func enumerateMenuActions(node, source map[string]any, opts dslOpts, out *effect
 			out.unsupported = append(out.unsupported, unsup("resource-action-menu action has no stable id", action))
 			continue
 		}
-		buffs, requiresOption := collectOptionBuffs(action["effect"], source, opts, &out.unsupported)
+		buffs, gate := collectOptionBuffs(action["effect"], source, opts, &out.unsupported)
 		if len(buffs) == 0 {
 			continue
 		}
@@ -1072,7 +1072,7 @@ func enumerateMenuActions(node, source map[string]any, opts dslOpts, out *effect
 				lever["group"] = map[string]any{"id": opts.abilityID + "?menu", "maxActivations": cap}
 			}
 		}
-		out.activatable = append(out.activatable, withRequiresOption(lever, requiresOption))
+		out.activatable = append(out.activatable, withStanceGate(lever, gate))
 	}
 }
 
@@ -1187,7 +1187,7 @@ func collectGatedBuffs(node any, source map[string]any, opts dslOpts, applicabil
 		}
 		if stance != nil && activeRulesUndeclared(opts.context) {
 			if split, ok := splitStanceOption(condition); ok {
-				stance.options = append(stance.options, split.option)
+				stance.gates = append(stance.gates, split.stanceGate)
 				collectGatedBuffs(stanceGatedNode(n, split), source, opts, applicability, &stance.buffs, diagnostics, stance)
 				return
 			}

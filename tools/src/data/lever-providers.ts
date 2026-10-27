@@ -71,9 +71,19 @@ export type AbilityLevers = {
   buffs: StackableBuff[];
   groups: StackableBuffGroup[];
   capRaises: Map<StackableBuff, CapacityRaise>;
-  /** Levers that apply only under a stance option, for {@link resolveOptionRequirements}. */
-  optionRequirements: Map<StackableBuff, StanceOptionRef>;
+  /** Levers gated on a stance option, for {@link resolveOptionRequirements}. */
+  optionRequirements: Map<StackableBuff, OptionGate>;
 };
+
+/** The stance option a lever applies under, or does not apply under. */
+export type OptionGate = Pick<ActivatableBuff, "requiresOption" | "excludesOption">;
+
+/** `act`'s stance option gate, if it has one. */
+function optionGate(act: ActivatableBuff): OptionGate | undefined {
+  if (act.requiresOption) return { requiresOption: act.requiresOption };
+  if (act.excludesOption) return { excludesOption: act.excludesOption };
+  return undefined;
+}
 
 /**
  * The levers one eligible ability gives the crunched unit.
@@ -118,7 +128,8 @@ export function abilityLevers(
       }
     }
     if (act.capRaise) out.capRaises.set(lever, act.capRaise);
-    if (act.requiresOption) out.optionRequirements.set(lever, act.requiresOption);
+    const gated = optionGate(act);
+    if (gated) out.optionRequirements.set(lever, gated);
     levers.push(lever);
   }
   for (const { abilityId } of grants) {
@@ -247,7 +258,7 @@ export function grantedRecordLevers(
   const buffs: StackableBuff[] = [];
   const groups = new Map<string, StackableBuffGroup>();
   const capRaises = new Map<StackableBuff, CapacityRaise>();
-  const optionRequirements = new Map<StackableBuff, StanceOptionRef>();
+  const optionRequirements = new Map<StackableBuff, OptionGate>();
   const prefix = `${provider.abilityId}>`;
   const dependency = provider.requiresLever ? { requiresLever: provider.requiresLever } : {};
   if (applied.length > 0) {
@@ -269,7 +280,8 @@ export function grantedRecordLevers(
     };
     buffs.push(grantedLever);
     if (act.capRaise) capRaises.set(grantedLever, act.capRaise);
-    if (act.requiresOption) optionRequirements.set(grantedLever, act.requiresOption);
+    const gated = optionGate(act);
+    if (gated) optionRequirements.set(grantedLever, gated);
   }
   return { buffs, groups: [...groups.values()], capRaises, optionRequirements };
 }
@@ -296,12 +308,13 @@ export function resolveCapRaises(
 /**
  * Bind each lever gated on a stance option to that option's lever, found by the owning ability's
  * immutable id and the option id. An option that gives no buff of its own has no lever; it gets a
- * buffless one in the stance's pool, so picking it still excludes the other options. A lever whose
- * stance pool is not available is dropped: the unit cannot pick that option.
+ * buffless one in the stance's pool, so picking it still excludes the other options. Where the
+ * stance pool is not available the unit cannot pick the option: a lever requiring it is dropped,
+ * and a lever excluding it always applies.
  */
 export function resolveOptionRequirements(
   levers: StackableBuff[],
-  pending: Map<StackableBuff, StanceOptionRef>,
+  pending: Map<StackableBuff, OptionGate>,
   groups: readonly StackableBuffGroup[],
   optionLabel: (option: StanceOptionRef) => string,
 ): StackableBuff[] {
@@ -318,10 +331,16 @@ export function resolveOptionRequirements(
     return id;
   };
   const resolved = levers.flatMap((lever) => {
-    const option = pending.get(lever);
-    if (!option) return [lever];
-    const requiresOption = optionLever(option);
-    return requiresOption ? [{ ...lever, requiresOption }] : [];
+    const gate = pending.get(lever);
+    if (gate?.requiresOption) {
+      const requiresOption = optionLever(gate.requiresOption);
+      return requiresOption ? [{ ...lever, requiresOption }] : [];
+    }
+    if (gate?.excludesOption) {
+      const excludesOption = optionLever(gate.excludesOption);
+      return [excludesOption ? { ...lever, excludesOption } : lever];
+    }
+    return [lever];
   });
   return [...resolved, ...added];
 }

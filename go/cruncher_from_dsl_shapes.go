@@ -49,7 +49,7 @@ func enumerateRollAllocation(node, source map[string]any, opts dslOpts, out *eff
 		maxActivations, _ = num(choice["max_choices"])
 	}
 	for _, g := range gates {
-		buffs, requiresOption := collectOptionBuffs(g.effect, source, opts, &out.unsupported)
+		buffs, stanceGate := collectOptionBuffs(g.effect, source, opts, &out.unsupported)
 		if len(buffs) == 0 {
 			continue
 		}
@@ -57,10 +57,10 @@ func enumerateRollAllocation(node, source map[string]any, opts dslOpts, out *eff
 		if name == "" {
 			name = labelForBuffs(buffs)
 		}
-		out.activatable = append(out.activatable, withRequiresOption(map[string]any{
+		out.activatable = append(out.activatable, withStanceGate(map[string]any{
 			"id": opts.abilityID + "#" + name, "label": name, "buffs": buffs,
 			"group": map[string]any{"id": opts.abilityID, "maxActivations": maxActivations},
-		}, requiresOption))
+		}, stanceGate))
 	}
 	return true
 }

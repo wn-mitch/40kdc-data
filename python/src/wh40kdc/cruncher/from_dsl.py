@@ -25,9 +25,11 @@ from wh40kdc.cruncher import from_dsl_selection as _selection
 from wh40kdc.cruncher.buffs import Buff, BuffSource, EngineContext
 from wh40kdc.cruncher.from_dsl_shapes import (
     UNSUPPORTED_SHAPE_REASONS,
+    StanceGate,
     enumerate_roll_allocation,
     roll_label,
     scaled_to_cap,
+    stance_gate_fields,
     unsized_value_reason,
 )
 from wh40kdc.cruncher.scenario_conditions import (
@@ -1746,41 +1748,57 @@ def _stance_option_of(operand: Any) -> dict[str, str] | None:
     return None
 
 
+def _stance_gate_of(operand: Any) -> StanceGate | None:
+    """The stance gate an operand is: ``rule-active`` on a stance option, or its single-operand
+    ``not``."""
+    option = _stance_option_of(operand)
+    if option is not None:
+        return {"option": option, "negated": False}
+    if not _is_object(operand) or operand.get("operator") != "not":
+        return None
+    operands = operand.get("operands")
+    if not isinstance(operands, list) or len(operands) != 1:
+        return None
+    negated = _stance_option_of(operands[0])
+    return {"option": negated, "negated": True} if negated is not None else None
+
+
 def _split_stance_option(
     condition: dict[str, Any],
-) -> tuple[dict[str, str], dict[str, Any] | None] | None:
+) -> tuple[StanceGate, dict[str, Any] | None] | None:
     """A condition that is, or is an ``and`` with exactly one top-level operand that is,
-    ``rule-active`` on a stance option: the option and the other operands (None when there are
-    none)."""
-    option = _stance_option_of(condition)
-    if option is not None:
-        return option, None
+    ``rule-active`` on a stance option or its single-operand ``not``: the gate and the other
+    operands (None when there are none)."""
+    gate = _stance_gate_of(condition)
+    if gate is not None:
+        return gate, None
     operands = condition.get("operands")
     if condition.get("operator") != "and" or not isinstance(operands, list):
         return None
-    matches = [operand for operand in operands if _stance_option_of(operand) is not None]
+    matches = [operand for operand in operands if _stance_gate_of(operand) is not None]
     if len(matches) != 1:
         return None
     rest = [operand for operand in operands if operand is not matches[0]]
-    option = _stance_option_of(matches[0])
-    assert option is not None
+    gate = _stance_gate_of(matches[0])
+    assert gate is not None
     remainder = (
         rest[0] if len(rest) == 1 and _is_object(rest[0]) else {"operator": "and", "operands": rest}
     )
-    return option, remainder
+    return gate, remainder
 
 
 def _offer_stance_gated(
     node: dict[str, Any],
-    stance: tuple[dict[str, str], dict[str, Any] | None],
+    stance: tuple[StanceGate, dict[str, Any] | None],
     source: BuffSource,
     opts: dict[str, Any],
     out: EffectTranslation,
 ) -> None:
     """A rule gated on a stance option the context does not declare follows the player's stance
     pick: what the effect (under any remaining condition) gives becomes a lever requiring that
-    option. Buffs gated on the same option within one ability share one lever."""
-    requires_option, rest = stance
+    option, or, for a negated gate, excluding it. Buffs under the same gate within one ability
+    share one lever."""
+    gate, rest = stance
     sub: EffectTranslation = {"applied": [], "unsupported": [], "activatable": []}
     if rest is not None:
         # The activation source rides on the node's private keys, so the copy keeps it.
@@ -1788,23 +1806,24 @@ def _offer_stance_gated(
     else:
         _walk(node.get("effect"), source, opts, sub)
     out["unsupported"].extend(sub["unsupported"])
-    out["activatable"].extend(
-        {**lever, "requiresOption": requires_option} for lever in sub["activatable"]
-    )
+    fields = stance_gate_fields(gate)
+    out["activatable"].extend({**lever, **fields} for lever in sub["activatable"])
     if not sub["applied"]:
         return
-    lever_id = f"{opts['abilityId']}#{requires_option['option_id']}"
+    option_id = gate["option"]["option_id"]
+    name = f"not-{option_id}" if gate["negated"] else option_id
+    lever_id = f"{opts['abilityId']}#{name}"
     existing = next((lever for lever in out["activatable"] if lever["id"] == lever_id), None)
     if existing is not None:
         existing["buffs"].extend(sub["applied"])
-        existing["label"] = f"{requires_option['option_id']}: {_label_for_buffs(existing['buffs'])}"
+        existing["label"] = f"{name}: {_label_for_buffs(existing['buffs'])}"
         return
     out["activatable"].append(
         {
             "id": lever_id,
-            "label": f"{requires_option['option_id']}: {_label_for_buffs(sub['applied'])}",
+            "label": f"{name}: {_label_for_buffs(sub['applied'])}",
             "buffs": sub["applied"],
-            "requiresOption": requires_option,
+            **fields,
         }
     )
 
@@ -2112,7 +2131,7 @@ def _enumerate_choice(
     if not isinstance(max_choices, (int, float)) or isinstance(max_choices, bool):
         max_choices = 1
     for i, opt in enumerate(options):
-        buffs, requires_option = _collect_option_buffs(opt, source, opts, out["unsupported"])
+        buffs, gate = _collect_option_buffs(opt, source, opts, out["unsupported"])
         if not buffs:
             continue
         out["activatable"].append(
@@ -2120,7 +2139,7 @@ def _enumerate_choice(
                 "id": f"{opts['abilityId']}?{i}",
                 "label": _label_for_buffs(buffs),
                 "buffs": buffs,
-                **({"requiresOption": requires_option} if requires_option else {}),
+                **stance_gate_fields(gate),
                 "group": {
                     "id": f"{opts['abilityId']}?choice",
                     "maxActivations": max_choices,
@@ -2143,9 +2162,7 @@ def _enumerate_dice_pool(
     for opt in options:
         if not _is_object(opt):
             continue
-        buffs, requires_option = _collect_option_buffs(
-            opt.get("effect"), source, opts, out["unsupported"]
-        )
+        buffs, gate = _collect_option_buffs(opt.get("effect"), source, opts, out["unsupported"])
         if not buffs:
             continue
         opt_name = opt.get("name")
@@ -2155,7 +2172,7 @@ def _enumerate_dice_pool(
                 "id": f"{opts['abilityId']}#{name}",
                 "label": name,
                 "buffs": buffs,
-                **({"requiresOption": requires_option} if requires_option else {}),
+                **stance_gate_fields(gate),
                 "group": {"id": opts["abilityId"], "maxActivations": max_activations},
             }
         )
@@ -2231,9 +2248,7 @@ def _enumerate_named_options(
     for opt in options:
         if not _is_object(opt):
             continue
-        buffs, requires_option = _collect_option_buffs(
-            opt.get("effect"), source, opts, out["unsupported"]
-        )
+        buffs, gate = _collect_option_buffs(opt.get("effect"), source, opts, out["unsupported"])
         if not buffs:
             continue
         if node.get("type") == "stance-select":
@@ -2249,7 +2264,7 @@ def _enumerate_named_options(
                 "id": f"{opts['abilityId']}#{option_id}",
                 "label": name,
                 "buffs": buffs,
-                **({"requiresOption": requires_option} if requires_option else {}),
+                **stance_gate_fields(gate),
                 "group": {"id": group_id, "maxActivations": max_activations},
             }
         )
@@ -2302,9 +2317,7 @@ def _enumerate_menu_actions(
                 }
             )
             continue
-        buffs, requires_option = _collect_option_buffs(
-            action.get("effect"), source, opts, out["unsupported"]
-        )
+        buffs, gate = _collect_option_buffs(action.get("effect"), source, opts, out["unsupported"])
         if not buffs:
             continue
         label_value = action.get("label")
@@ -2334,8 +2347,7 @@ def _enumerate_menu_actions(
                 "id": f"{opts['abilityId']}?menu",
                 "maxActivations": cap,
             }
-        if requires_option:
-            lever["requiresOption"] = requires_option
+        lever.update(stance_gate_fields(gate))
         out["activatable"].append(lever)
 
 
@@ -2386,23 +2398,25 @@ def _collect_option_buffs(
     source: BuffSource,
     opts: dict[str, Any],
     diagnostics: list[dict[str, Any]],
-) -> tuple[list[Buff], dict[str, str] | None]:
+) -> tuple[list[Buff], StanceGate | None]:
     """The buffs one activation gives, as :func:`_collect_gated_buffs` finds them, and the stance
-    option it requires. Buffs gated on a stance option the context does not declare make the
-    activation require that option when they are all it gives; mixed with ungated buffs, or gated
-    on different options, they are reported and left out."""
+    gate on them. Buffs under a gate on a stance option the context does not declare make the
+    activation carry that gate when they are all it gives; mixed with ungated buffs, or under
+    different gates, they are reported and left out."""
     buffs: list[Buff] = []
-    stance: dict[str, list[Any]] = {"buffs": [], "options": []}
+    stance: dict[str, list[Any]] = {"buffs": [], "gates": []}
     _collect_gated_buffs(node, source, opts, {}, buffs, diagnostics, stance)
     if not stance["buffs"]:
         return buffs, None
-    option = stance["options"][0]
+    gate = stance["gates"][0]
     single = all(
-        other["ability_id"] == option["ability_id"] and other["option_id"] == option["option_id"]
-        for other in stance["options"]
+        other["negated"] == gate["negated"]
+        and other["option"]["ability_id"] == gate["option"]["ability_id"]
+        and other["option"]["option_id"] == gate["option"]["option_id"]
+        for other in stance["gates"]
     )
     if not buffs and single:
-        return stance["buffs"], option
+        return stance["buffs"], gate
     diagnostics.append(
         {
             "reason": "activation mixes stance-gated buffs with other buffs",
@@ -2425,8 +2439,8 @@ def _collect_gated_buffs(
     contribute. Conditions are deferred to ``applicableWhen`` where
     expressible; nested decisions and stochastic rolls are not modelled.
 
-    With ``stance`` (``{"buffs", "options"}``), buffs gated on a stance option the context does
-    not declare go to ``stance["buffs"]`` and the option to ``stance["options"]``."""
+    With ``stance`` (``{"buffs", "gates"}``), buffs under a gate on a stance option the context
+    does not declare go to ``stance["buffs"]`` and the gate to ``stance["gates"]``."""
     if not _is_object(node):
         return
     node_type = node.get("type")
@@ -2441,8 +2455,8 @@ def _collect_gated_buffs(
         )
         if split is not None:
             assert stance is not None
-            option, rest = split
-            stance["options"].append(option)
+            gate, rest = split
+            stance["gates"].append(gate)
             gated = {**node, "condition": rest} if rest is not None else node.get("effect")
             _collect_gated_buffs(
                 gated, source, opts, applicability, stance["buffs"], diagnostics, stance

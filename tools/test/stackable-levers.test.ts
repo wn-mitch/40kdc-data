@@ -183,6 +183,7 @@ describe("Dataset.stackableBuffsFor: costs and providers", () => {
       } : record),
       ability("fix-surge", "stratagem", gatedOn("stable-hold", hitPlus("this-unit")), { detachment_id: "fix-det" }),
       ability("fix-edge", "stratagem", gatedOn("stable-lethal", { type: "roll-modifier", target: "this-unit", modifier: { roll: "wound", operation: "add", value: 1 } }), { detachment_id: "fix-det" }),
+      ability("fix-steady", "detachment", { ...gatedOn("stable-hold", hitPlus("this-unit")), condition: { operator: "not", operands: [gatedOn("stable-hold", null).condition] } }, { detachment_id: "fix-det" }),
     ] as never;
     raw.detachments = [{ ...raw.detachments[0], stratagem_ids: [...raw.detachments[0].stratagem_ids!, "fix-surge-s", "fix-edge-s"] }] as never;
     raw.stratagems = [
@@ -195,9 +196,15 @@ describe("Dataset.stackableBuffsFor: costs and providers", () => {
     expect(levers.get("fix-surge#stable-hold")).toMatchObject({ requiresOption: "fix-grant-rule>fix-granted#stable-hold", requiresLever: "detachment-stratagem:fix-surge" });
     expect(levers.get("fix-grant-rule>fix-granted#stable-hold")).toMatchObject({ label: "Fix Granted — Hold", buffs: [], enabled: false, group: "fix-grant-rule>fix-granted?stance" });
     expect(levers.get("fix-edge#stable-lethal")).toMatchObject({ requiresOption: "fix-grant-rule>fix-granted#stable-lethal" });
+    expect(levers.get("fix-steady#not-stable-hold")).toMatchObject({ excludesOption: "fix-grant-rule>fix-granted#stable-hold" });
     // The boss cannot pick the stance, so the rules gated on it offer it nothing.
     const boss = army.stackableBuffsFor({ unitId: "fix-boss", factionId: "orks", detachmentId: "fix-det" }, { phase: "fight" }).buffs.map((lever) => lever.id);
     expect(boss.filter((id) => id.startsWith("fix-surge#") || id.startsWith("fix-edge#"))).toEqual([]);
+    // A rule gated on the boss not picking it always holds.
+    const steady = army.stackableBuffsFor({ unitId: "fix-boss", factionId: "orks", detachmentId: "fix-det" }, { phase: "fight" }).buffs
+      .find((lever) => lever.id === "fix-steady#not-stable-hold");
+    expect(steady).toBeDefined();
+    expect(steady!.excludesOption).toBeUndefined();
     // A declared active rule is evaluated directly instead.
     const declared = army.stackableBuffsFor(mob, { phase: "fight", activeRules: [{ ability_id: "fix-granted", option_id: "stable-hold" }] }).buffs;
     expect(declared.find((lever) => lever.id === "detachment-stratagem:fix-surge")!.buffs).toHaveLength(1);

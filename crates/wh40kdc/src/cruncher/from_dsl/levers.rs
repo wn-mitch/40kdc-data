@@ -309,8 +309,8 @@ pub(super) fn conditional(node: &Obj, opts: &WalkOpts, out: &mut Out) {
     }
     // A gate on a stance option the context does not declare follows the player's stance pick.
     if opts.context.active_rules.is_none() {
-        if let Some((option, rest)) = split_stance_option(condition) {
-            offer_stance_gated(node, option, rest, opts, out);
+        if let Some((gate, rest)) = split_stance_option(condition) {
+            offer_stance_gated(node, gate, rest, opts, out);
             return;
         }
     }
@@ -423,7 +423,7 @@ pub(super) fn named_effect(node: &Obj, opts: &WalkOpts, out: &mut Out) {
             group: None,
             requires: requirements,
             cap_raise: None,
-            requires_option: None,
+            gate: None,
         });
     }
 }
@@ -437,7 +437,7 @@ fn cap(v: Option<&Value>, fallback: i64) -> i64 {
 pub(super) fn enumerate_choice(node: &Obj, opts: &WalkOpts, out: &mut Out) {
     let max = cap(node.get("max_choices"), 1);
     for (i, opt) in list(node.get("options")).iter().enumerate() {
-        let (buffs, requires_option) = collect_option_buffs(opt, opts, &mut out.unsupported);
+        let (buffs, gate) = collect_option_buffs(opt, opts, &mut out.unsupported);
         if buffs.is_empty() {
             continue;
         }
@@ -448,7 +448,7 @@ pub(super) fn enumerate_choice(node: &Obj, opts: &WalkOpts, out: &mut Out) {
             group: Some((format!("{}?choice", opts.ability_id), max)),
             requires: None,
             cap_raise: None,
-            requires_option,
+            gate,
         });
     }
 }
@@ -480,7 +480,7 @@ fn push_named(
     group: &str,
     max: i64,
 ) {
-    let (buffs, requires_option) =
+    let (buffs, gate) =
         collect_option_buffs(effect.unwrap_or(&Value::Null), opts, &mut out.unsupported);
     if buffs.is_empty() {
         return;
@@ -496,7 +496,7 @@ fn push_named(
         group: Some((group.to_string(), max)),
         requires: None,
         cap_raise: None,
-        requires_option,
+        gate,
     });
 }
 
@@ -534,7 +534,7 @@ pub(super) fn enumerate_roll_allocation(node: &Obj, opts: &WalkOpts, out: &mut O
     }
     let max = cap(choice.get("max_choices"), 1);
     for (name, effect) in gates {
-        let (buffs, requires_option) =
+        let (buffs, gate) =
             collect_option_buffs(effect.unwrap_or(&Value::Null), opts, &mut out.unsupported);
         if buffs.is_empty() {
             continue;
@@ -549,7 +549,7 @@ pub(super) fn enumerate_roll_allocation(node: &Obj, opts: &WalkOpts, out: &mut O
             group: Some((opts.ability_id.to_owned(), max)),
             requires: None,
             cap_raise: None,
-            requires_option,
+            gate,
         });
     }
     true
@@ -620,7 +620,7 @@ pub(super) fn enumerate_menu_actions(node: &Obj, opts: &WalkOpts, out: &mut Out)
             out.unsupported("resource-action-menu action has no stable id", a);
             continue;
         };
-        let (buffs, requires_option) = collect_option_buffs(
+        let (buffs, gate) = collect_option_buffs(
             a.get("effect").unwrap_or(&Value::Null),
             opts,
             &mut out.unsupported,
@@ -652,7 +652,7 @@ pub(super) fn enumerate_menu_actions(node: &Obj, opts: &WalkOpts, out: &mut Out)
             group,
             requires: Some(vec![Value::Object(requirements)]),
             cap_raise: None,
-            requires_option,
+            gate,
         });
     }
 }
@@ -695,7 +695,7 @@ fn enumerate_timing_gate(node: &Obj, opts: &WalkOpts, out: &mut Out) {
             group: None,
             requires: requirement.map(|value| vec![value]),
             cap_raise: None,
-            requires_option: None,
+            gate: None,
         });
     }
 }

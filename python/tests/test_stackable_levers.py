@@ -425,6 +425,18 @@ def test_rule_gated_on_a_stance_option_binds_to_that_options_lever() -> None:
         ability(
             "fix-edge", "stratagem", gated_on("stable-lethal", wound_plus), detachment_id="fix-det"
         ),
+        ability(
+            "fix-steady",
+            "detachment",
+            {
+                **gated_on("stable-hold", hit_plus("this-unit")),
+                "condition": {
+                    "operator": "not",
+                    "operands": [gated_on("stable-hold", None)["condition"]],
+                },
+            },
+            detachment_id="fix-det",
+        ),
     ]
     raw["detachments"][0]["stratagem_ids"] += ["fix-surge-s", "fix-edge-s"]
     raw["stratagems"] += [
@@ -453,9 +465,14 @@ def test_rule_gated_on_a_stance_option_binds_to_that_options_lever() -> None:
     assert levers["fix-edge#stable-lethal"]["requiresOption"] == (
         "fix-grant-rule>fix-granted#stable-lethal"
     )
+    assert levers["fix-steady#not-stable-hold"]["excludesOption"] == (
+        "fix-grant-rule>fix-granted#stable-hold"
+    )
     # The boss cannot pick the stance, so the rules gated on it offer it nothing.
     boss_levers, _ = by_id(BOSS, army)
     assert not any(id_.startswith(("fix-surge#", "fix-edge#")) for id_ in boss_levers)
+    # A rule gated on the boss not picking it always holds.
+    assert "excludesOption" not in boss_levers["fix-steady#not-stable-hold"]
     # A declared active rule is evaluated directly instead.
     declared = army.stackable_buffs_for(
         MOB,

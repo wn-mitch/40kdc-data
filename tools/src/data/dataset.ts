@@ -62,6 +62,7 @@ import {
   resolveOptionRequirements,
   stanceOptionName,
   type AbilityLevers,
+  type OptionGate,
   type LeverCost,
   type CapacityRaise,
 } from "./lever-providers.js";
@@ -107,6 +108,8 @@ export type StackableBuff = {
   requiresLever?: string;
   /** Id of the stance option lever this one needs on (a rule that applies only under that option). */
   requiresOption?: string;
+  /** Id of the stance option lever this one needs off (a rule that does not apply under that option). */
+  excludesOption?: string;
   /** Turning the lever on raises the cap of the pool `group` by `by` instead of adding buffs. */
   raisesCap?: Omit<CapacityRaise, "ability"> & { group: string };
 };
@@ -688,7 +691,7 @@ export class Dataset {
     const buffs: StackableBuff[] = [];
     const groups: StackableBuffGroup[] = [];
     const capRaises = new Map<StackableBuff, CapacityRaise>();
-    const optionRequirements = new Map<StackableBuff, StanceOptionRef>();
+    const optionRequirements = new Map<StackableBuff, OptionGate>();
     const take = (levers: AbilityLevers) => {
       buffs.push(...levers.buffs);
       for (const group of levers.groups) if (!groups.some((g) => g.id === group.id)) groups.push(group);

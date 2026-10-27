@@ -110,12 +110,24 @@ def _is_number(value: Any) -> bool:
     return isinstance(value, (int, float)) and not isinstance(value, bool)
 
 
-#: Collects one option's buffs into a diagnostics sink: the buffs and the stance option they
-#: require (None when they need none).
+#: A gate on a stance option: ``{"option": {"ability_id", "option_id"}, "negated": bool}``. It
+#: holds while the option is picked, or, ``negated``, while it is not.
+StanceGate = dict[str, Any]
+
+#: Collects one option's buffs into a diagnostics sink: the buffs and the stance gate on them
+#: (None when they have none).
 Collect = Callable[
     [Any, BuffSource, dict[str, Any], list[dict[str, Any]]],
-    tuple[list[Buff], dict[str, str] | None],
+    tuple[list[Buff], StanceGate | None],
 ]
+
+
+def stance_gate_fields(gate: StanceGate | None) -> dict[str, Any]:
+    """The lever fields that carry ``gate``: ``excludesOption`` for a negated gate, else
+    ``requiresOption``."""
+    if gate is None:
+        return {}
+    return {"excludesOption" if gate["negated"] else "requiresOption": gate["option"]}
 
 
 def enumerate_roll_allocation(
@@ -155,7 +167,7 @@ def enumerate_roll_allocation(
     is_number = isinstance(max_choices, (int, float)) and not isinstance(max_choices, bool)
     max_activations = max_choices if is_number else 1
     for name, effect in gates:
-        buffs, requires_option = collect(effect, source, opts, out["unsupported"])
+        buffs, gate = collect(effect, source, opts, out["unsupported"])
         if not buffs:
             continue
         lever = name if name is not None else label(buffs)
@@ -165,7 +177,7 @@ def enumerate_roll_allocation(
                 "label": lever,
                 "buffs": buffs,
                 "group": {"id": opts["abilityId"], "maxActivations": max_activations},
-                **({"requiresOption": requires_option} if requires_option else {}),
+                **stance_gate_fields(gate),
             }
         )
     return True

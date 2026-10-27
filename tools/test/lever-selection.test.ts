@@ -8,6 +8,15 @@ const legal = (levers: SelectableLever[], ids: string[], pools = groups) => isLe
 const ids = choices.map((choice) => choice.id);
 
 describe("complete lever selection legality", () => {
+  it("holds a stance-gated lever to its option: required on, or excluded off", () => {
+    const gated: SelectableLever[] = [{ id: "under-a", requiresOption: ids[0] }, { id: "not-a", excludesOption: ids[0] }];
+    expect(legal([...choices, ...gated], ["under-a"])).toBe(false);
+    expect(legal([...choices, ...gated], ["under-a", ids[0]])).toBe(true);
+    expect(legal([...choices, ...gated], ["not-a", ids[0]])).toBe(false);
+    expect(legal([...choices, ...gated], ["not-a", ids[1]])).toBe(true);
+    expect(legal([...choices, ...gated], ["not-a"])).toBe(true);
+  });
+
   it("checks every intersecting pool, including after a stance capacity raise", () => {
     const levers = choices.map((choice) => ({ ...choice, groups: ["usage"] }));
     const capacity: SelectableLever = { id: "raise", raisesCap: { group: "pool", by: 2, allocation: "choose-one-option" } };

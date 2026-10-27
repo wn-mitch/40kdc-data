@@ -1,6 +1,7 @@
 //! The buffs the body of a player gate contributes, and the stance options gating them. A
-//! `rule-active` gate on a stance option the context's `active_rules` does not declare follows
-//! the player's stance pick, so what it gives becomes a lever requiring that option. Mirrors
+//! `rule-active` gate (or its negation) on a stance option the context's `active_rules` does not
+//! declare follows the player's stance pick, so what it gives becomes a lever requiring (or
+//! excluding) that option. Mirrors
 //! `collectGatedBuffs`, `collectOptionBuffs`, `splitStanceOption` and `offerStanceGated` in
 //! `tools/src/cruncher/from-dsl.ts`.
 
@@ -15,9 +16,16 @@ use super::{walk, Lever, Out, StanceOptionRef, WalkOpts};
 
 const MIXED_STANCE_REASON: &str = "activation mixes stance-gated buffs with other buffs";
 
+/// A gate on a stance option: it holds while the option is picked, or, `negated`, while it is not.
+#[derive(Clone, Debug, PartialEq)]
+pub(crate) struct StanceGate {
+    pub(crate) option: StanceOptionRef,
+    pub(crate) negated: bool,
+}
+
 /// A condition that is, or is an `and` with exactly one top-level operand that is, `rule-active`
-/// on a stance option; the second value holds the other operands.
-pub(super) fn split_stance_option(condition: &Obj) -> Option<(StanceOptionRef, Option<Value>)> {
+/// on a stance option or its single-operand `not`; the second value holds the other operands.
+pub(super) fn split_stance_option(condition: &Obj) -> Option<(StanceGate, Option<Value>)> {
     fn option_of(operand: &Value) -> Option<StanceOptionRef> {
         let operand = operand.as_object()?;
         if !is_str(operand, "type", "rule-active") {
@@ -29,8 +37,27 @@ pub(super) fn split_stance_option(condition: &Obj) -> Option<(StanceOptionRef, O
             option_id: rule.get("option_id")?.as_str()?.to_owned(),
         })
     }
-    if let Some(option) = option_of(&Value::Object(condition.clone())) {
-        return Some((option, None));
+    fn gate_of(operand: &Value) -> Option<StanceGate> {
+        if let Some(option) = option_of(operand) {
+            return Some(StanceGate {
+                option,
+                negated: false,
+            });
+        }
+        let operand = operand.as_object()?;
+        if !is_str(operand, "operator", "not") {
+            return None;
+        }
+        match operand.get("operands")?.as_array()?.as_slice() {
+            [only] => option_of(only).map(|option| StanceGate {
+                option,
+                negated: true,
+            }),
+            _ => None,
+        }
+    }
+    if let Some(gate) = gate_of(&Value::Object(condition.clone())) {
+        return Some((gate, None));
     }
     if !is_str(condition, "operator", "and") {
         return None;
@@ -39,8 +66,8 @@ pub(super) fn split_stance_option(condition: &Obj) -> Option<(StanceOptionRef, O
     let mut matches = operands
         .iter()
         .enumerate()
-        .filter_map(|(i, operand)| option_of(operand).map(|option| (i, option)));
-    let (index, option) = matches.next()?;
+        .filter_map(|(i, operand)| gate_of(operand).map(|gate| (i, gate)));
+    let (index, gate) = matches.next()?;
     if matches.next().is_some() {
         return None;
     }
@@ -54,14 +81,15 @@ pub(super) fn split_stance_option(condition: &Obj) -> Option<(StanceOptionRef, O
         [only] if only.is_object() => only.clone(),
         _ => serde_json::json!({ "operator": "and", "operands": rest }),
     };
-    Some((option, Some(rest)))
+    Some((gate, Some(rest)))
 }
 
 /// What the effect (under any remaining condition) gives becomes a lever requiring the stance
-/// option. Buffs gated on the same option within one ability share one lever.
+/// option, or, for a negated gate, excluding it. Buffs under the same gate within one ability
+/// share one lever.
 pub(super) fn offer_stance_gated(
     node: &Obj,
-    option: StanceOptionRef,
+    gate: StanceGate,
     rest: Option<Value>,
     opts: &WalkOpts,
     out: &mut Out,
@@ -78,34 +106,39 @@ pub(super) fn offer_stance_gated(
     }
     out.unsupported.extend(sub.unsupported);
     for mut lever in sub.activatable {
-        lever.requires_option = Some(option.clone());
+        lever.gate = Some(gate.clone());
         out.activatable.push(lever);
     }
     if sub.applied.is_empty() {
         return;
     }
-    let id = format!("{}#{}", opts.ability_id, option.option_id);
+    let name = if gate.negated {
+        format!("not-{}", gate.option.option_id)
+    } else {
+        gate.option.option_id.clone()
+    };
+    let id = format!("{}#{name}", opts.ability_id);
     if let Some(existing) = out.activatable.iter_mut().find(|lever| lever.id == id) {
         existing.buffs.extend(sub.applied);
-        existing.label = format!("{}: {}", option.option_id, label_for_buffs(&existing.buffs));
+        existing.label = format!("{name}: {}", label_for_buffs(&existing.buffs));
         return;
     }
     out.activatable.push(Lever {
         id,
-        label: format!("{}: {}", option.option_id, label_for_buffs(&sub.applied)),
+        label: format!("{name}: {}", label_for_buffs(&sub.applied)),
         buffs: sub.applied,
         group: None,
         requires: None,
         cap_raise: None,
-        requires_option: Some(option),
+        gate: Some(gate),
     });
 }
 
-/// Buffs an activation gives only under a stance option, and the options gating them.
+/// Buffs an activation gives only under a stance gate, and the gates on them.
 #[derive(Default)]
 struct StanceGated {
     buffs: Vec<Value>,
-    options: Vec<StanceOptionRef>,
+    gates: Vec<StanceGate>,
 }
 
 /// Where collected buffs land: the plain list, or (under a stance gate) the stance list.
@@ -145,15 +178,14 @@ pub(super) fn gated(node: &Value, opts: &WalkOpts) -> Vec<Value> {
     buffs
 }
 
-/// The buffs one activation gives, as [`collect`] finds them. Buffs gated on a
-/// stance option the context does not declare make the activation require that option when they
-/// are all it gives; mixed with ungated buffs, or gated on different options, they are reported
-/// and left out.
+/// The buffs one activation gives, as [`collect`] finds them. Buffs under a gate on a stance
+/// option the context does not declare make the activation carry that gate when they are all it
+/// gives; mixed with ungated buffs, or under different gates, they are reported and left out.
 pub(super) fn collect_option_buffs(
     node: &Value,
     opts: &WalkOpts,
     diagnostics: &mut Vec<(String, Value)>,
-) -> (Vec<Value>, Option<StanceOptionRef>) {
+) -> (Vec<Value>, Option<StanceGate>) {
     let mut buffs = Vec::new();
     let mut stance = StanceGated::default();
     let mut sink = Sink {
@@ -165,10 +197,10 @@ pub(super) fn collect_option_buffs(
     if stance.buffs.is_empty() {
         return (buffs, None);
     }
-    let option = stance.options[0].clone();
-    let single = stance.options.iter().all(|other| *other == option);
+    let gate = stance.gates[0].clone();
+    let single = stance.gates.iter().all(|other| *other == gate);
     if buffs.is_empty() && single {
-        return (stance.buffs, Some(option));
+        return (stance.buffs, Some(gate));
     }
     diagnostics.push((MIXED_STANCE_REASON.into(), node.clone()));
     (buffs, None)
@@ -195,9 +227,9 @@ fn collect(
                 (Some(_), None) => split_stance_option(condition),
                 _ => None,
             };
-            if let Some((option, rest)) = split {
+            if let Some((gate, rest)) = split {
                 if let Some(stance) = sink.stance.as_deref_mut() {
-                    stance.options.push(option);
+                    stance.gates.push(gate);
                 }
                 let gated = match rest {
                     Some(rest) => {

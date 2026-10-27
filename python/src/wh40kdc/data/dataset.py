@@ -574,10 +574,10 @@ class Dataset:
 
         A lever may also carry ``cost`` (``{"cp"}`` for a Stratagem, ``{"points"}`` for an
         Enhancement), ``requires`` (DSL fragments the player vouches for), ``requiresLever`` (the
-        lever providing it), ``requiresOption`` (the stance option lever it applies under) and
-        ``raisesCap`` (``{"group", "by"}``: it raises a pool's cap instead
-        of adding buffs). Supporting units' levers are opt-in and name the supporting unit in
-        their source's ``sourceUnitId``.
+        lever providing it), ``requiresOption`` (the stance option lever it applies under),
+        ``excludesOption`` (the stance option lever it does not apply under) and ``raisesCap``
+        (``{"group", "by"}``: it raises a pool's cap instead of adding buffs). Supporting units'
+        levers are opt-in and name the supporting unit in their source's ``sourceUnitId``.
         """
         from wh40kdc.data.lever_providers import (
             AbilityLevers,

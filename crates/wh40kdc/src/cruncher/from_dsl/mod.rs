@@ -96,6 +96,9 @@ pub struct ActivatableBuff {
     /// lever.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub requires_option: Option<StanceOptionRef>,
+    /// The stance option the lever does not apply under: a negated `rule-active` gate on it.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub excludes_option: Option<StanceOptionRef>,
 }
 
 /// An [`ActivatableBuff`] that raises another ability's lever cap: `ability` names that ability
@@ -145,7 +148,7 @@ pub(crate) struct Lever {
     group: Option<(String, i64)>,
     requires: Option<Vec<Value>>,
     cap_raise: Option<CapRaise>,
-    requires_option: Option<StanceOptionRef>,
+    gate: Option<gated::StanceGate>,
 }
 
 /// The walk's sink, mirroring the TS `EffectTranslation` with JSON buffs.
@@ -299,7 +302,12 @@ fn finish(out: Out) -> EffectTranslation {
                 }),
                 groups: None,
                 cap_raise: l.cap_raise,
-                requires_option: l.requires_option,
+                requires_option: l
+                    .gate
+                    .as_ref()
+                    .filter(|gate| !gate.negated)
+                    .map(|gate| gate.option.clone()),
+                excludes_option: l.gate.filter(|gate| gate.negated).map(|gate| gate.option),
                 requires: l.requires,
             })
             .collect(),
@@ -356,6 +364,7 @@ pub fn apply_activation(result: &mut EffectTranslation, ability_id: &str, activa
             groups: None,
             cap_raise: None,
             requires_option: None,
+            excludes_option: None,
             requires: None,
         });
     }
@@ -699,7 +708,7 @@ fn dispatch(node: &Obj, opts: &WalkOpts, out: &mut Out) {
                         group: None,
                         requires: Some(vec![requirement]),
                         cap_raise: None,
-                        requires_option: None,
+                        gate: None,
                     });
                 }
             } else {

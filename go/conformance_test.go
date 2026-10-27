@@ -181,15 +181,16 @@ func runDSLCorpus(t *testing.T, filename string) {
 					"requires":       a["requires"],
 					"capRaise":       a["capRaise"],
 					"requiresOption": a["requiresOption"],
+					"excludesOption": a["excludesOption"],
 					"buffs":          orEmpty(buffs),
 				})
 			}
-			// An expected lever omits "group", "requires", "capRaise" and "requiresOption" when it has none.
+			// An expected lever omits "group", "requires", "capRaise", "requiresOption" and "excludesOption" when it has none.
 			var expActs []any
 			for _, eAny := range getList(expected, "activatable") {
 				e, _ := asMap(eAny)
 				ne := cloneMap(e)
-				for _, key := range []string{"group", "requires", "capRaise", "requiresOption"} {
+				for _, key := range []string{"group", "requires", "capRaise", "requiresOption", "excludesOption"} {
 					if _, has := ne[key]; !has {
 						ne[key] = nil
 					}

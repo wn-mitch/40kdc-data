@@ -1,6 +1,6 @@
 import type { Dataset } from "./data/dataset.js";
 import { crunch, type BuffSource, type EngineContext, type RecipientSnapshot, type WeaponKeywordRef } from "./cruncher/index.js";
-import { effectToBuffs } from "./cruncher/from-dsl.js";
+import { effectToBuffs, type ActivatableBuff } from "./cruncher/from-dsl.js";
 import type { Trigger, UnitSelector } from "./generated.js";
 
 export const RECIPIENT_CASE_PREFIX = "canonical/recipient-snapshot/";
@@ -63,10 +63,19 @@ export function canonicalRecipientCases() {
       activatable: result.activatable.map((lever) => ({
         id: lever.id, label: lever.label, group: lever.group ?? null,
         requires: lever.requires ?? null, capRaise: lever.capRaise ?? null,
+        ...stanceOptionFields(lever),
         buffs: lever.buffs.map((buff) => buff.contribution),
       })),
     } };
   });
+}
+
+/** A lever's stance-option gate, projected only when it has one so ungated goldens keep their shape. */
+export function stanceOptionFields(lever: ActivatableBuff): Pick<ActivatableBuff, "requiresOption" | "excludesOption"> {
+  return {
+    ...(lever.requiresOption ? { requiresOption: lever.requiresOption } : {}),
+    ...(lever.excludesOption ? { excludesOption: lever.excludesOption } : {}),
+  };
 }
 
 /** Fabricated conditional buff cases for the attacker/defender half-weapon relationship. */
@@ -102,6 +111,7 @@ export function canonicalHalfWeaponRangeCases() {
       activatable: result.activatable.map((lever) => ({
         id: lever.id, label: lever.label, group: lever.group ?? null,
         requires: lever.requires ?? null, capRaise: lever.capRaise ?? null,
+        ...stanceOptionFields(lever),
         buffs: lever.buffs.map((applied) => applied.contribution),
       })),
     } };
@@ -117,6 +127,7 @@ function dslExpectation(row: DslInput) {
     activatable: result.activatable.map((lever) => ({
       id: lever.id, label: lever.label, group: lever.group ?? null,
       requires: lever.requires ?? null, capRaise: lever.capRaise ?? null,
+        ...stanceOptionFields(lever),
       buffs: lever.buffs.map((applied) => applied.contribution),
     })),
   } };
@@ -139,6 +150,11 @@ export function canonicalScenarioCases() {
   });
   const doctrine = { type: "rule-active", parameters: { rule: { ability_id: "example-doctrines", option_id: "assault" } } };
   const ruleId = { type: "rule-active", parameters: { rule: "example-rule" } };
+  const notDoctrine = { operator: "not", operands: [doctrine] };
+  const shooting = { type: "phase-is", parameters: { phase: "shooting" } };
+  const hitPlus = { type: "roll-modifier", target: "this-unit", modifier: { roll: "hit", operation: "add", value: 1 } };
+  const woundPlus = { type: "roll-modifier", target: "this-unit", modifier: { roll: "wound", operation: "add", value: 1 } };
+  const apImprove = { type: "stat-modifier", target: "this-unit", modifier: { stat: "AP", operation: "improve", value: 1 } };
   const region = { type: "in-region", parameters: { subject: "this-unit", region: { rule_region: { owner_faction: "example", region_id: "example-region" } } } };
   const whollyTerrain = { type: "in-region", parameters: { subject: "this-unit", models: "every", region: { terrain_area: {} } } };
   const yourTerritory = { type: "in-region", parameters: { region: { territory: "your-territory" } } };
@@ -171,6 +187,14 @@ export function canonicalScenarioCases() {
     { id: "rule-active-other-option", effect: gated(doctrine), context: { activeRules: [{ ability_id: "example-doctrines", option_id: "tactical" }] } },
     { id: "rule-active-id-by-option", effect: gated(ruleId), context: { activeRules: [{ ability_id: "example-rule", definition_id: "one" }] } },
     { id: "rule-active-undeclared", effect: gated(ruleId), context: {} },
+    { id: "rule-active-option-lever", effect: gated(doctrine), context: {} },
+    { id: "rule-active-option-with-condition", effect: gated({ operator: "and", operands: [doctrine, shooting] }), context: {} },
+    { id: "rule-active-option-with-failed-condition", effect: gated({ operator: "and", operands: [doctrine, { type: "phase-is", parameters: { phase: "fight" } }] }), context: {} },
+    { id: "rule-active-option-shared-lever", effect: { type: "sequence", steps: [gated(doctrine), woundGated(doctrine)] }, context: {} },
+    { id: "rule-active-option-in-choice", effect: { type: "choice", options: [hitPlus, { type: "sequence", steps: [gated(doctrine), { type: "conditional", condition: doctrine, effect: apImprove }] }] }, context: {} },
+    { id: "rule-active-option-mixed-choice", effect: { type: "choice", options: [{ type: "sequence", steps: [woundPlus, gated(doctrine)] }] }, context: {} },
+    { id: "rule-active-option-negated", effect: gated(notDoctrine), context: {} },
+    { id: "rule-active-option-both-sides", effect: { type: "sequence", steps: [gated({ operator: "and", operands: [notDoctrine, shooting] }), woundGated(doctrine)] }, context: {} },
     { id: "in-region-rule-region", effect: gated(region), context: { attackerRegions: [{ ruleRegion: "example-region" }] } },
     { id: "in-region-elsewhere", effect: gated(region), context: { attackerRegions: [{ ruleRegion: "other-region" }] } },
     { id: "in-region-not-wholly", effect: gated(whollyTerrain), context: { attackerRegions: [{ terrainArea: true }] } },

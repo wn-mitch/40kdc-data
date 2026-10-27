@@ -76,6 +76,7 @@ import {
   HALF_WEAPON_RANGE_CASE_PREFIX,
   SCENARIO_CASE_PREFIX,
   RECIPIENT_CASE_PREFIX,
+  stanceOptionFields,
 } from "./gen-conformance-cruncher-cases.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -4200,6 +4201,7 @@ function genResolverDslCases(): void {
           group: lever.group ?? null,
           requires: lever.requires ?? null,
           capRaise: lever.capRaise ?? null,
+          ...stanceOptionFields(lever),
           buffs: lever.buffs.map((buff) => buff.contribution),
         })),
       };

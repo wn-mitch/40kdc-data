@@ -102,10 +102,21 @@ export type ActivatableBuff = {
    * `activeRules` does not declare. The lever pool binds it to that option's own lever.
    */
   requiresOption?: StanceOptionRef;
+  /** The stance option the lever does not apply under: a negated `rule-active` gate on it. */
+  excludesOption?: StanceOptionRef;
 };
 
 /** One option of a `stance-select` rule, as a `rule-active` condition names it. */
 export type StanceOptionRef = { ability_id: string; option_id: string };
+
+/** A gate on a stance option: it holds while the option is picked, or, `negated`, while it is not. */
+type StanceGate = { option: StanceOptionRef; negated: boolean };
+
+/** The lever fields that carry `gate`. */
+function stanceGateFields(gate: StanceGate | undefined): Pick<ActivatableBuff, "requiresOption" | "excludesOption"> {
+  if (!gate) return {};
+  return gate.negated ? { excludesOption: gate.option } : { requiresOption: gate.option };
+}
 
 export type EffectTranslation = {
   applied: Buff[];
@@ -1473,9 +1484,9 @@ function translateConditional(
 
 /**
  * A condition that is, or is an `and` with exactly one top-level operand that is, `rule-active` on a
- * stance option; `rest` holds the other operands.
+ * stance option or its single-operand `not`; `rest` holds the other operands.
  */
-function splitStanceOption(condition: Record<string, unknown>): { option: StanceOptionRef; rest?: Record<string, unknown> } | undefined {
+function splitStanceOption(condition: Record<string, unknown>): (StanceGate & { rest?: Record<string, unknown> }) | undefined {
   const optionOf = (operand: unknown): StanceOptionRef | undefined => {
     if (!isObject(operand) || operand.type !== "rule-active" || !isObject(operand.parameters)) return undefined;
     const rule = operand.parameters.rule;
@@ -1483,23 +1494,30 @@ function splitStanceOption(condition: Record<string, unknown>): { option: Stance
       ? { ability_id: rule.ability_id, option_id: rule.option_id }
       : undefined;
   };
-  const option = optionOf(condition);
-  if (option) return { option };
+  const gateOf = (operand: unknown): StanceGate | undefined => {
+    const option = optionOf(operand);
+    if (option) return { option, negated: false };
+    if (!isObject(operand) || operand.operator !== "not" || !Array.isArray(operand.operands) || operand.operands.length !== 1) return undefined;
+    const negated = optionOf(operand.operands[0]);
+    return negated ? { option: negated, negated: true } : undefined;
+  };
+  const gate = gateOf(condition);
+  if (gate) return gate;
   if (condition.operator !== "and" || !Array.isArray(condition.operands)) return undefined;
-  const matches = condition.operands.filter((operand) => optionOf(operand) !== undefined);
+  const matches = condition.operands.filter((operand) => gateOf(operand) !== undefined);
   if (matches.length !== 1) return undefined;
   const rest = condition.operands.filter((operand) => operand !== matches[0]);
-  return { option: optionOf(matches[0])!, rest: rest.length === 1 && isObject(rest[0]) ? rest[0] : { operator: "and", operands: rest } };
+  return { ...gateOf(matches[0])!, rest: rest.length === 1 && isObject(rest[0]) ? rest[0] : { operator: "and", operands: rest } };
 }
 
 /**
  * A rule gated on a stance option the context does not declare follows the player's stance pick:
- * what the effect (under any remaining condition) gives becomes a lever requiring that option.
- * Buffs gated on the same option within one ability share one lever.
+ * what the effect (under any remaining condition) gives becomes a lever requiring that option, or,
+ * for a negated gate, excluding it. Buffs under the same gate within one ability share one lever.
  */
 function offerStanceGated(
   node: Record<string, unknown>,
-  stance: { option: StanceOptionRef; rest?: Record<string, unknown> },
+  stance: StanceGate & { rest?: Record<string, unknown> },
   source: BuffSource,
   opts: WalkOpts,
   out: EffectTranslation,
@@ -1514,17 +1532,18 @@ function offerStanceGated(
     walk(node.effect, source, opts, sub);
   }
   out.unsupported.push(...sub.unsupported);
-  const requiresOption = stance.option;
-  out.activatable.push(...sub.activatable.map((lever) => ({ ...lever, requiresOption })));
+  const fields = stanceGateFields(stance);
+  out.activatable.push(...sub.activatable.map((lever) => ({ ...lever, ...fields })));
   if (sub.applied.length === 0) return;
-  const id = `${opts.abilityId}#${requiresOption.option_id}`;
+  const name = stance.negated ? `not-${stance.option.option_id}` : stance.option.option_id;
+  const id = `${opts.abilityId}#${name}`;
   const existing = out.activatable.find((lever) => lever.id === id);
   if (existing) {
     existing.buffs.push(...sub.applied);
-    existing.label = `${requiresOption.option_id}: ${labelForBuffs(existing.buffs)}`;
+    existing.label = `${name}: ${labelForBuffs(existing.buffs)}`;
     return;
   }
-  out.activatable.push({ id, label: `${requiresOption.option_id}: ${labelForBuffs(sub.applied)}`, buffs: sub.applied, requiresOption });
+  out.activatable.push({ id, label: `${name}: ${labelForBuffs(sub.applied)}`, buffs: sub.applied, ...fields });
 }
 
 /** A named rule is transparent unless using it requires an activation. */
@@ -1689,13 +1708,13 @@ function enumerateChoice(
 ): void {
   const options = Array.isArray(node.options) ? node.options : [];
   options.forEach((opt, i) => {
-    const { buffs, requiresOption } = collectOptionBuffs(opt, source, opts, out.unsupported);
+    const { buffs, gate } = collectOptionBuffs(opt, source, opts, out.unsupported);
     if (buffs.length === 0) return;
     out.activatable.push({
       id: `${opts.abilityId}?${i}`,
       label: labelForBuffs(buffs),
       buffs,
-      ...(requiresOption ? { requiresOption } : {}),
+      ...stanceGateFields(gate),
       group: { id: `${opts.abilityId}?choice`, maxActivations: typeof node.max_choices === "number" ? node.max_choices : 1 },
     });
   });
@@ -1713,14 +1732,14 @@ function enumerateDicePool(
     typeof node.max_activations === "number" ? node.max_activations : options.length;
   for (const opt of options) {
     if (!isObject(opt)) continue;
-    const { buffs, requiresOption } = collectOptionBuffs(opt.effect, source, opts, out.unsupported);
+    const { buffs, gate } = collectOptionBuffs(opt.effect, source, opts, out.unsupported);
     if (buffs.length === 0) continue;
     const name = typeof opt.name === "string" && opt.name ? opt.name : labelForBuffs(buffs);
     out.activatable.push({
       id: `${opts.abilityId}#${name}`,
       label: name,
       buffs,
-      ...(requiresOption ? { requiresOption } : {}),
+      ...stanceGateFields(gate),
       group: { id: opts.abilityId, maxActivations },
     });
   }
@@ -1750,10 +1769,10 @@ function enumerateRollAllocation(
   if (gates.some((g) => g == null)) return false;
   const maxActivations = typeof choice.max_choices === "number" ? choice.max_choices : 1;
   for (const gate of gates) {
-    const { buffs, requiresOption } = collectOptionBuffs(gate!.effect, source, opts, out.unsupported);
+    const { buffs, gate: stanceGate } = collectOptionBuffs(gate!.effect, source, opts, out.unsupported);
     if (buffs.length === 0) continue;
     const name = gate!.name ?? labelForBuffs(buffs);
-    out.activatable.push({ id: `${opts.abilityId}#${name}`, label: name, buffs, group: { id: opts.abilityId, maxActivations }, ...(requiresOption ? { requiresOption } : {}) });
+    out.activatable.push({ id: `${opts.abilityId}#${name}`, label: name, buffs, group: { id: opts.abilityId, maxActivations }, ...stanceGateFields(stanceGate) });
   }
   return true;
 }
@@ -1770,14 +1789,14 @@ function enumerateNamedOptions(
   const options = Array.isArray(node.options) ? node.options : [];
   for (const opt of options) {
     if (!isObject(opt)) continue;
-    const { buffs, requiresOption } = collectOptionBuffs(opt.effect, source, opts, out.unsupported);
+    const { buffs, gate } = collectOptionBuffs(opt.effect, source, opts, out.unsupported);
     if (buffs.length === 0) continue;
     const name = typeof opt.name === "string" && opt.name ? opt.name : labelForBuffs(buffs);
     out.activatable.push({
       id: `${opts.abilityId}#${node.type === "stance-select" ? String(opt.id) : name}`,
       label: name,
       buffs,
-      ...(requiresOption ? { requiresOption } : {}),
+      ...stanceGateFields(gate),
       group: { id: groupId, maxActivations },
     });
   }
@@ -1808,7 +1827,7 @@ function enumerateMenuActions(
       out.unsupported.push({ reason: "resource-action-menu action has no stable id", effectFragment: action });
       continue;
     }
-    const { buffs, requiresOption } = collectOptionBuffs(action.effect, source, opts, out.unsupported);
+    const { buffs, gate } = collectOptionBuffs(action.effect, source, opts, out.unsupported);
     if (buffs.length === 0) continue;
     const label = typeof action.label === "string" && action.label ? action.label : labelForBuffs(buffs);
     const { effect: _effect, ...requirement } = action;
@@ -1818,7 +1837,7 @@ function enumerateMenuActions(
       id: `${opts.abilityId}#${action.id}`, label, buffs,
       ...(typeof cap === "number" ? { group: { id: `${opts.abilityId}?menu`, maxActivations: cap } } : {}),
       requires: [{ menu_id: node.menu_id, pool_id: node.pool_id, shared_usage: node.shared_usage, capacity: node.capacity, action: requirement }],
-      ...(requiresOption ? { requiresOption } : {}),
+      ...stanceGateFields(gate),
     });
   }
 }
@@ -1879,36 +1898,37 @@ function enumerateTimingGate(
   }
 }
 
-/**
- * Walk the body of a player gate, collecting the buffs it would contribute.
- * Conditions are deferred to `applicableWhen` where expressible; nested
- * decisions and stochastic rolls inside an activation are not modelled.
- */
-/** Buffs an activation gives only under a stance option, and the options gating them. */
-type StanceGated = { buffs: Buff[]; options: StanceOptionRef[] };
+/** Buffs an activation gives only under a stance gate, and the gates on them. */
+type StanceGated = { buffs: Buff[]; gates: StanceGate[] };
 
 /**
- * The buffs one activation gives, as {@link collectGatedBuffs} finds them. Buffs gated on a stance
- * option the context does not declare make the activation require that option when they are all it
- * gives; mixed with ungated buffs, or gated on different options, they are reported and left out.
+ * The buffs one activation gives, as {@link collectGatedBuffs} finds them. Buffs under a gate on a
+ * stance option the context does not declare make the activation carry that gate when they are all
+ * it gives; mixed with ungated buffs, or under different gates, they are reported and left out.
  */
 function collectOptionBuffs(
   node: unknown,
   source: BuffSource,
   opts: WalkOpts,
   diagnostics: UnsupportedFragment[],
-): { buffs: Buff[]; requiresOption?: StanceOptionRef } {
+): { buffs: Buff[]; gate?: StanceGate } {
   const buffs: Buff[] = [];
-  const stance: StanceGated = { buffs: [], options: [] };
+  const stance: StanceGated = { buffs: [], gates: [] };
   collectGatedBuffs(node, source, opts, {}, buffs, diagnostics, stance);
   if (stance.buffs.length === 0) return { buffs };
-  const [option] = stance.options;
-  const single = stance.options.every((other) => other.ability_id === option.ability_id && other.option_id === option.option_id);
-  if (buffs.length === 0 && single) return { buffs: stance.buffs, requiresOption: option };
+  const [gate] = stance.gates;
+  const single = stance.gates.every((other) =>
+    other.negated === gate.negated && other.option.ability_id === gate.option.ability_id && other.option.option_id === gate.option.option_id);
+  if (buffs.length === 0 && single) return { buffs: stance.buffs, gate };
   diagnostics.push({ reason: "activation mixes stance-gated buffs with other buffs", effectFragment: node });
   return { buffs };
 }
 
+/**
+ * Walk the body of a player gate, collecting the buffs it would contribute.
+ * Conditions are deferred to `applicableWhen` where expressible; nested
+ * decisions and stochastic rolls inside an activation are not modelled.
+ */
 function collectGatedBuffs(
   node: unknown,
   source: BuffSource,
@@ -1925,7 +1945,7 @@ function collectGatedBuffs(
       if (!isObject(condition)) return;
       const split = stance && opts.context.activeRules === undefined ? splitStanceOption(condition) : undefined;
       if (split) {
-        stance!.options.push(split.option);
+        stance!.gates.push({ option: split.option, negated: split.negated });
         const gated = split.rest ? { ...node, condition: split.rest } : node.effect;
         collectGatedBuffs(gated, source, opts, applicability, stance!.buffs, diagnostics, stance);
         return;
