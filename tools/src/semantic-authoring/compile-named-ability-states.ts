@@ -3,10 +3,13 @@ import type { Compiled } from "./compile.js";
 import { duration } from "./compile-conditions.js";
 import { dslUnitFilter } from "./compile-unit-filters.js";
 import { ordered, placements, shapeSignature } from "./compile-placement.js";
+import { exactSpan } from "./contracts.js";
 import { NAMED_ABILITY_DEFINITION, NAMED_ABILITY_DEFINITION_END, RESOURCE_BEFORE_ABILITIES } from "./named-ability-state-families.js";
 
 type Node = Record<string, unknown>;
 type Compile = (leaves: readonly CompileLeaf[], sourceText?: string) => Compiled;
+/** Compiles the host; `oneRule` keeps its sentences one rule rather than independent parts. */
+type CompileHost = (leaves: readonly CompileLeaf[], sourceText: string | undefined, oneRule: boolean) => Compiled;
 type Definition = { id: string; label: string; leaves: CompileLeaf[] };
 type CompiledMechanics = Extract<Compiled, { ok: true }>["mechanics"];
 const object = (value: unknown): value is Node => value !== null && typeof value === "object" && !Array.isArray(value);
@@ -18,6 +21,19 @@ const NAMED_OPERATIONS: Record<string, true> = {
 };
 const contains = (outer: CompileLeaf, inner: CompileLeaf): boolean =>
   outer.end_byte !== undefined && inner.end_byte !== undefined && outer.start_byte <= inner.start_byte && inner.end_byte <= outer.end_byte;
+
+/**
+ * Whether every printed duration of the host is the lifetime of the named grant just before it ("your units have
+ * Ember until the start of your next Command phase"): the duration's wording follows the grant's with only spacing
+ * between. Then the compiled lifetime belongs to the grants, not to the record's other parts (resource income).
+ */
+function grantsOwnDurations(leaves: readonly CompileLeaf[], sourceText: string | undefined): boolean {
+  if (sourceText === undefined) return false;
+  const durations = leaves.filter((leaf) => leaf.family_id === "duration");
+  const grants = leaves.filter((leaf) => leaf.family_id === "named-ability-grant" && leaf.end_byte !== undefined);
+  return durations.length > 0 && durations.every((lifetime) => grants.some((grant) => grant.end_byte! <= lifetime.start_byte
+    && /^\s*$/u.test(exactSpan(sourceText, grant.end_byte!, lifetime.start_byte))));
+}
 
 /** A rule-wide state window sits between its shared recipient heading and the first state grant. */
 function sharedRecipientDuration(leaves: readonly CompileLeaf[]): CompileLeaf | undefined {
@@ -266,8 +282,8 @@ function definitionNode(definition: Definition, sourceText: string | undefined, 
 }
 
 /** The wrapper compiles bodies through the ordinary compiler, then compiles the remaining host. */
-export function compileNamedAbilityStates(leaves: readonly CompileLeaf[], sourceText: string | undefined, compileHost: Compile, compileBody: Compile, abilityId?: string): Compiled {
-  if (!leaves.some((leaf) => leaf.family_id.startsWith("named-ability-") || leaf.family_id === RESOURCE_BEFORE_ABILITIES)) return compileHost(leaves, sourceText);
+export function compileNamedAbilityStates(leaves: readonly CompileLeaf[], sourceText: string | undefined, compileHost: CompileHost, compileBody: Compile, abilityId?: string): Compiled {
+  if (!leaves.some((leaf) => leaf.family_id.startsWith("named-ability-") || leaf.family_id === RESOURCE_BEFORE_ABILITIES)) return compileHost(leaves, sourceText, false);
   const signature = shapeSignature(ordered(leaves), sourceText);
   try {
     const separated = splitDefinitions(leaves);
@@ -277,12 +293,16 @@ export function compileNamedAbilityStates(leaves: readonly CompileLeaf[], source
     const bodies = new Map<string, Node>();
     if (definitions.length && !abilityId) throw new CompileError("Named ability definitions require the containing ability's stable identity.");
     for (const definition of definitions) bodies.set(definition.id, definitionNode(definition, sourceText, compileBody));
-    const compiled = compileHost(host, sourceText);
+    // A resource order ("income is always gained before checking which ability …") ties the income paragraph to the
+    // determination: they are one rule, so the host is not split into independent sentence parts, which would give the
+    // determination's grants one shared lifetime apart from the income and leave nothing to order.
+    const compiled = compileHost(host, sourceText, pools.length > 0);
     if (!compiled.ok) return { ...compiled, signature };
     const compiledDuration = recipientDuration && duration(recipientDuration);
     const rootDuration = compiled.mechanics.scope.duration;
     let effect: unknown = compiled.mechanics.effect;
-    if (compiledDuration && typeof rootDuration === "string" && rootDuration !== "permanent" && rootDuration !== compiledDuration) {
+    const ownLifetimes = !compiledDuration && grantsOwnDurations(host, sourceText);
+    if ((compiledDuration || ownLifetimes) && typeof rootDuration === "string" && rootDuration !== "permanent" && rootDuration !== compiledDuration) {
       const localized = localizeNamedAbilityGrantDuration(effect, rootDuration);
       if (!localized.grants) throw new CompileError("A rule-wide named-ability duration has no named grants to qualify.");
       effect = localized.value;
@@ -294,7 +314,8 @@ export function compileNamedAbilityStates(leaves: readonly CompileLeaf[], source
       effect = declare(effect, abilityId!, bodies, declared);
       for (const id of bodies.keys()) if (!declared.has(id)) throw new CompileError(`Named ability ${id} has no grant to carry its declaration.`);
     }
-    const scope = compiledDuration ? { ...compiled.mechanics.scope, duration: compiledDuration } : compiled.mechanics.scope;
+    const scope = compiledDuration ? { ...compiled.mechanics.scope, duration: compiledDuration }
+      : ownLifetimes ? { ...compiled.mechanics.scope, duration: "permanent" } : compiled.mechanics.scope;
     return { ...compiled, signature, mechanics: { ...compiled.mechanics, scope, effect: effect as Node } };
   } catch (error) {
     if (!(error instanceof CompileError)) throw error;

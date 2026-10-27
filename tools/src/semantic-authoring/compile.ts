@@ -320,7 +320,7 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
   // An ability the record prints as granted compiles alone, as its holder's own (compile-granted.ts).
   // "This ability" inside a granted body is the granted one, not the record, so a body gets no id.
   const compiled = compileNamedAbilityStates(bound, sourceText,
-    (host, text) => compileGranted(host, text, (part, partText) => compileRecord(part, partText, options), (body, bodyText) => compileLeaves(body, bodyText), options.abilityId),
+    (host, text, oneRule) => compileGranted(host, text, (part, partText) => compileRecord(part, partText, options, oneRule), (body, bodyText) => compileLeaves(body, bodyText), options.abilityId),
     (body, text) => compileLeaves(body, text), options.abilityId);
   if (compiled.ok && bound.some((leaf) => leaf.family_id === "aura-range" && leaf.parameters.conditional_range !== undefined)) {
     try { compiled.mechanics.effect = lowerConditionalAuras(compiled.mechanics.effect); } catch (error) {
@@ -351,7 +351,11 @@ function containsRollMarker(value: unknown): boolean {
   return record.type === "__roll-result" || Object.values(record).some(containsRollMarker);
 }
 
-function compileRecord(given: readonly CompileLeaf[], sourceText?: string, options: CompileOptions = {}): Compiled {
+/**
+ * One record's leaves. With `oneRule`, the record's sentences are never split into independent parts
+ * (compile-segments.ts): a reviewed leaf has said they resolve together.
+ */
+function compileRecord(given: readonly CompileLeaf[], sourceText?: string, options: CompileOptions = {}, oneRule = false): Compiled {
   // "Those attacks" are named across the whole record before it splits into parts (compile-bound-attacks.ts).
   // "only within Engagement Range of …" folds onto the engaged state before filters attach to their neighbours (compile-engagement-exclusive.ts).
   let qualified: CompileLeaf[];
@@ -381,7 +385,7 @@ function compileRecord(given: readonly CompileLeaf[], sourceText?: string, optio
   if (reactions !== null) return reactions;
   const oath = compileOathRecord(leaves, sourceText, (group) => compilePart(group, sourceText, options));
   if (oath !== null) return oath;
-  const segments = sentenceSegments(ordered(leaves), sourceText);
+  const segments = oneRule ? null : sentenceSegments(ordered(leaves), sourceText);
   if (!segments) return compilePart(leaves, sourceText, options);
   // Independent sentences (compile-segments.ts) compile alone and join as parts of one ability.
   const signature = shapeSignature(ordered(leaves), sourceText);
@@ -1469,8 +1473,21 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   // A used or triggered ability with no printed duration lasts for its window's period. A passive
   // ability gated on a phase already holds only in that phase, and an aura only while in range.
   // A menu's options hold their own windows; only the leaves outside it say how long the menu's use lasts.
-  const period = durations.length === 0 && (behavior === "reactive" || behavior === "activated") && hasLastingEffect(body)
-    ? windowPeriod(list.filter((_, index) => !consumedByContainer.has(index))) : null;
+  // In a compound ability, a window printed in a later part's opening sentence, before its moment ("…. In your
+  // Shooting phase, when this unit has shot, …"), is that part's own: it bounds only that part's effects.
+  const windowPart = (index: number): number => {
+    const part = partOf(index);
+    const next = partStarts[part];
+    if (next === undefined || list[index]!.fragment === "RESTRICTIONS") return part;
+    const effectBetween = planned.some((item) => item.index > index && item.index < next.index);
+    return !effectBetween && places[index]!.sentence === places[next.index]!.sentence ? part + 1 : part;
+  };
+  const windowLeaves = (part: number | null) => list.filter((_, index) => !consumedByContainer.has(index) && (part === null || windowPart(index) === part));
+  const usedOrTriggered = durations.length === 0 && (behavior === "reactive" || behavior === "activated");
+  const period = usedOrTriggered && hasLastingEffect(body) ? windowPeriod(windowLeaves(partStarts.length ? 0 : null)) : null;
+  // A later part's own window gives it a lifetime when it holds a lasting effect and the record's window does not already bound it.
+  const partPeriods = partStarts.map((_, position) => usedOrTriggered && period === null && hasLastingEffect(pieces[position + 1])
+    ? windowPeriod(windowLeaves(position + 1)) : null);
   // "That X unit": the WHEN moment's unit must have the keywords the target names.
   const bound = targetParts.find((leaf) => leaf.family_id === "triggering-target");
   const offerMoments = triggerIndexes.some((index) => rawOf[index]! <= optionalSentence);
@@ -1548,6 +1565,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
         type: "ability-part", trigger: asTrigger(part.moments.map((index) => moments[index]!)), effect: own.length === 1 ? own[0]! : { type: "sequence", steps: own },
         ...(position === usagePart ? { usage: usages[0] } : {}),
         ...(connective.optionalParts.has(position + 1) ? { optional: true } : {}),
+        ...(partPeriods[position] ? { duration: partPeriods[position] } : {}),
       };
       if (under.has(position)) nestedSteps.push({ ...node, duration: "phase" });
       else partSteps.push(node);
