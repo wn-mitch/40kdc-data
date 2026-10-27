@@ -3,6 +3,7 @@ import { glob } from "glob";
 import { resolve, basename, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import type { ValidationResult } from "./validate.js";
+import { checkModelNames } from "./integrity-model-names.js";
 import { checkTargetProfiles } from "./integrity-target-profiles.js";
 import { checkWeaponGrantRefs } from "./integrity-weapon-grant.js";
 import { checkOfAbilityRollRefs } from "./integrity-of-ability-roll.js";
@@ -707,6 +708,7 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
   await checkAuraRangeRefs(root, result);
   await checkTargetProfiles(root, result);
   await checkWeaponGrantRefs(root, result);
+  await checkModelNames(root, result);
 
   // Shared core ability pool, available to every faction (optional).
   const coreAbilities = new Set<string>();
