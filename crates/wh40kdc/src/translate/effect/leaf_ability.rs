@@ -373,6 +373,33 @@ fn permission_weapons(m: &P, plural: bool) -> String {
     format!(" with {}", or_list(&nouns))
 }
 
+/// "; if it does, it counts as having made a Normal move that phase, and cannot declare a charge
+/// this turn": what using the permission does to its subject (counts_as_move, its counts_as_until
+/// window, and the activities then_cannot forbids for the rest of the turn).
+fn permission_consequences(m: &P, it: &str) -> String {
+    let they = it == "they";
+    let lead = format!("; if {it} {}, {it}", if they { "do" } else { "does" });
+    let cannot = map_arr(m, "then_cannot", |a| {
+        let a = jv(a);
+        activity(&a).map(str::to_string).unwrap_or(a)
+    })
+    .map(|acts| format!("cannot {} this turn", or_list(&acts)));
+    if let Some(c) = nn(m, "counts_as_move") {
+        let period = if jstr(m.get("counts_as_until")) == "end-of-phase" {
+            "that phase"
+        } else {
+            "this turn"
+        };
+        let tail = cannot.map(|no| format!(", and {no}")).unwrap_or_default();
+        return format!(
+            "{lead} {} as having made {} {period}{tail}",
+            if they { "count" } else { "counts" },
+            moved_phrase(Some(c))
+        );
+    }
+    cannot.map(|no| format!("{lead} {no}")).unwrap_or_default()
+}
+
 pub(super) fn permission(m: &P, subj: &str, ctx: &Ctx) -> String {
     let it = if subj.starts_with("all ") || has_word_end(subj, " units") {
         "they"
@@ -451,17 +478,7 @@ pub(super) fn permission(m: &P, subj: &str, ctx: &Ctx) -> String {
     if is_true(m, "next") {
         s.push_str(&format!(", and must be the next unit selected to {act}"));
     }
-    if let Some(c) = nn(m, "counts_as_move") {
-        let (does, counts) = if it == "they" {
-            ("do", "count")
-        } else {
-            ("does", "counts")
-        };
-        s.push_str(&format!(
-            "; if {it} {does}, {it} {counts} as having made {} this turn",
-            moved_phrase(Some(c))
-        ));
-    }
+    s.push_str(&permission_consequences(m, it));
     if is_false(m, "consumes_shared_use") {
         s.push_str(
             "; this use does not count toward that Stratagem's once-per-phase limit for other units",

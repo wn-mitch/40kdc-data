@@ -46,6 +46,11 @@ export type CompileLeaf = {
    * leaf-view.ts. Absent when none.
    */
   connectives?: LeafConnective[];
+  /**
+   * Leaves a fold carried into this one's own parameters (compile-counts-as-moved.ts: a charge
+   * refusal that "if it does" introduces becomes the permission's then_cannot). Absent when none.
+   */
+  absorbs?: Array<{ fragment: string; start_byte: number; end_byte: number; family_id: string }>;
 };
 
 /** A reviewed connective attached to the leaf it introduces (compile-connective-plan.ts reads it). */
@@ -624,6 +629,9 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
           ...(leaf.parameters.into !== undefined ? { into: permissionDestination(leaf) } : {}),
           // A folded counts-as-moved leaf (compile-counts-as-moved.ts): the units count as having made this move.
           ...(leaf.parameters.counts_as_move !== undefined ? { counts_as_move: closed(leaf, "counts_as_move") } : {}),
+          // "that phase", and a charge refusal on the same subject folded with it: "if it does, it cannot declare a charge".
+          ...(leaf.parameters.counts_as_until !== undefined ? { counts_as_until: closed(leaf, "counts_as_until") } : {}),
+          ...(leaf.parameters.then_cannot !== undefined ? { then_cannot: closed(leaf, "then_cannot") } : {}),
           // "with its sentry flamer, sentry grenade launcher or sentry hot-shot volley gun": any one of these weapons.
           ...(weaponNames !== undefined ? { weapons: weaponNames.map((name) => ({ name })) } : {}),
         },

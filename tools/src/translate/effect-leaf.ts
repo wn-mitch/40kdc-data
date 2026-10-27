@@ -312,6 +312,24 @@ const AS_IF: Record<string, string> = {
   "movement-phase": " as if it were your Movement phase", "charge-phase": " as if it were your Charge phase", "command-phase": " as if it were your Command phase",
 };
 
+/**
+ * "; if it does, it counts as having made a Normal move that phase, and cannot declare a charge
+ * this turn": what using the permission does to its subject (counts_as_move, its counts_as_until
+ * window, and the activities then_cannot forbids for the rest of the turn).
+ */
+function permissionConsequences(m: Record<string, unknown>, it: string): string {
+  const they = it === "they";
+  const lead = `; if ${it} ${they ? "do" : "does"}, ${it}`;
+  const cannot = Array.isArray(m.then_cannot)
+    ? `cannot ${orList((m.then_cannot as unknown[]).map((a) => ACTIVITIES[jstr(a)] ?? jstr(a)))} this turn`
+    : null;
+  if (m.counts_as_move != null) {
+    const period = m.counts_as_until === "end-of-phase" ? "that phase" : "this turn";
+    return `${lead} ${they ? "count" : "counts"} as having made ${movedPhrase(m.counts_as_move)} ${period}${cannot ? `, and ${cannot}` : ""}`;
+  }
+  return cannot ? `${lead} ${cannot}` : "";
+}
+
 function permission(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
   const it = subj.startsWith("all ") || / units\b/.test(subj) ? "they" : "it";
   const act =
@@ -334,7 +352,7 @@ function permission(m: Record<string, unknown>, subj: string, ctx: Ctx): string 
   }
   if (m.as_if != null) s += AS_IF[jstr(m.as_if)] ?? ` as if ${jstr(m.as_if)}`;
   if (m.next === true) s += `, and must be the next unit selected to ${act}`;
-  if (m.counts_as_move != null) s += `; if ${it} ${it === "they" ? "do" : "does"}, ${it} ${it === "they" ? "count" : "counts"} as having made ${movedPhrase(m.counts_as_move)} this turn`;
+  s += permissionConsequences(m, it);
   if (m.consumes_shared_use === false) s += "; this use does not count toward that Stratagem's once-per-phase limit for other units";
   return s;
 }

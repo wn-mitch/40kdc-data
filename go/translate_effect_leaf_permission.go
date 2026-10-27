@@ -69,6 +69,41 @@ func permissionWeapons(m map[string]any, plural bool) string {
 	return " with " + orList(nouns)
 }
 
+// permissionConsequences is "; if it does, it counts as having made a Normal move that phase, and
+// cannot declare a charge this turn": what using the permission does to its subject
+// (counts_as_move, its counts_as_until window, and the activities then_cannot forbids for the rest
+// of the turn).
+func permissionConsequences(m map[string]any, it string) string {
+	does, counts := "does", "counts"
+	if it == "they" {
+		does, counts = "do", "count"
+	}
+	lead := "; if " + it + " " + does + ", " + it
+	cannot := ""
+	if acts, ok := asList(m["then_cannot"]); ok {
+		parts := make([]string, len(acts))
+		for i, a := range acts {
+			parts[i] = lookupOr(permissionActivities, ejstr(a))
+		}
+		cannot = "cannot " + orList(parts) + " this turn"
+	}
+	if m["counts_as_move"] != nil {
+		period := "this turn"
+		if m["counts_as_until"] == "end-of-phase" {
+			period = "that phase"
+		}
+		tail := ""
+		if cannot != "" {
+			tail = ", and " + cannot
+		}
+		return lead + " " + counts + " as having made " + movedPhrase(m["counts_as_move"]) + " " + period + tail
+	}
+	if cannot != "" {
+		return lead + " " + cannot
+	}
+	return ""
+}
+
 func permissionLeaf(m map[string]any, subj string, ctx effCtx) string {
 	it := "it"
 	if strings.HasPrefix(subj, "all ") || unitsWordRe.MatchString(subj) {
@@ -136,13 +171,7 @@ func permissionLeaf(m map[string]any, subj string, ctx effCtx) string {
 	if m["next"] == true {
 		s += ", and must be the next unit selected to " + act
 	}
-	if m["counts_as_move"] != nil {
-		does, counts := "does", "counts"
-		if it == "they" {
-			does, counts = "do", "count"
-		}
-		s += "; if " + it + " " + does + ", " + it + " " + counts + " as having made " + movedPhrase(m["counts_as_move"]) + " this turn"
-	}
+	s += permissionConsequences(m, it)
 	if m["consumes_shared_use"] == false {
 		s += "; this use does not count toward that Stratagem's once-per-phase limit for other units"
 	}

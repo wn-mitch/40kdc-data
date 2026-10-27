@@ -6,6 +6,7 @@ import { ARMY_EXTENSIONS } from "./army.js";
 import { ATTACK_EXTENSIONS } from "./attacks.js";
 import { CHARACTERISTIC_EXTENSIONS } from "./characteristics.js";
 import { CHOICE_AND_DICE_EXTENSIONS } from "./choices-and-dice.js";
+import { COUNTS_AS_MOVED_EXTENSIONS } from "./counts-as-moved-own.js";
 import { DURATION_AND_DESIGNATION_EXTENSIONS } from "./durations-and-designations.js";
 import { ELIGIBILITY_EXTENSIONS } from "./eligibility.js";
 import { EVENT_USED_OBJECT_EXTENSIONS } from "./event-used-object.js";
@@ -58,6 +59,7 @@ export const FAMILY_EXTENSIONS: readonly FamilyExtension[] = [
   ...LEAF_STRUCTURE_EXTENSIONS,
   ...APOSTROPHE_KEYWORD_EXTENSIONS,
   ...EVENT_USED_OBJECT_EXTENSIONS,
+  ...COUNTS_AS_MOVED_EXTENSIONS,
 ];
 
 const extensionVersions = new Map<string, FamilyExtension>();

@@ -92,6 +92,26 @@ def _permission_weapons(m: dict[str, Any], plural: bool) -> str:
     return f" with {or_list([weapon_noun({'weapons': sc}) for sc in scopes])}"
 
 
+def _permission_consequences(m: dict[str, Any], it: str) -> str:
+    """ "; if it does, it counts as having made a Normal move that phase, and cannot declare a
+    charge this turn": what using the permission does to its subject (counts_as_move, its
+    counts_as_until window, and the activities then_cannot forbids for the rest of the turn)."""
+    they = it == "they"
+    lead = f"; if {it} {'do' if they else 'does'}, {it}"
+    cannot = None
+    if isinstance(m.get("then_cannot"), list):
+        acts = [_ACTIVITIES.get(jstr(a), jstr(a)) for a in m["then_cannot"]]
+        cannot = f"cannot {or_list(acts)} this turn"
+    if m.get("counts_as_move") is not None:
+        period = "that phase" if m.get("counts_as_until") == "end-of-phase" else "this turn"
+        tail = f", and {cannot}" if cannot else ""
+        return (
+            f"{lead} {'count' if they else 'counts'} as having made "
+            f"{moved_phrase(m['counts_as_move'])} {period}{tail}"
+        )
+    return f"{lead} {cannot}" if cannot else ""
+
+
 def permission(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
     it = "they" if subj.startswith("all ") or re.search(r" units\b", subj) else "it"
     activity = m.get("activity")
@@ -132,12 +152,7 @@ def permission(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
         s += _AS_IF.get(jstr(m["as_if"]), f" as if {jstr(m['as_if'])}")
     if m.get("next") is True:
         s += f", and must be the next unit selected to {act}"
-    if m.get("counts_as_move") is not None:
-        does, counts = ("do", "count") if it == "they" else ("does", "counts")
-        s += (
-            f"; if {it} {does}, {it} {counts} as having made "
-            f"{moved_phrase(m['counts_as_move'])} this turn"
-        )
+    s += _permission_consequences(m, it)
     if m.get("consumes_shared_use") is False:
         s += (
             "; this use does not count toward that Stratagem's once-per-phase limit for other units"

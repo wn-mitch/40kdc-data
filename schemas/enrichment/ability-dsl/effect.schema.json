@@ -1742,6 +1742,36 @@
                   "$ref": "../../defs/common.schema.json#/$defs/movement-kind",
                   "description": "Doing so counts as having made this move this turn (a disembark counting as a Normal move)."
                 },
+                "counts_as_until": {
+                  "enum": [
+                    "end-of-phase"
+                  ],
+                  "description": "The counts_as_move status holds only until the end of the phase the subject used the permission in (\"counts as having made a Normal move that phase\"); absent, it holds for the turn. Needs counts_as_move."
+                },
+                "then_cannot": {
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "items": {
+                    "enum": [
+                      "shoot",
+                      "declare-charge",
+                      "fight",
+                      "start-action",
+                      "embark",
+                      "disembark",
+                      "fall-back",
+                      "advance",
+                      "use-stratagem",
+                      "issue-order",
+                      "attempt-ritual",
+                      "use-enhancement",
+                      "move",
+                      "observe"
+                    ]
+                  },
+                  "description": "If the subject uses this permission, it cannot do these activities for the rest of the turn (\"if it does, it cannot declare a charge in the same turn\"). Only with allow true."
+                },
                 "consumes_shared_use": {
                   "const": false,
                   "description": "This use of the Stratagem does not count toward its once-per-phase limit for other units."
@@ -1789,6 +1819,32 @@
                     "properties": {
                       "activity": {
                         "const": "shoot"
+                      }
+                    }
+                  }
+                },
+                {
+                  "if": {
+                    "required": [
+                      "counts_as_until"
+                    ]
+                  },
+                  "then": {
+                    "required": [
+                      "counts_as_move"
+                    ]
+                  }
+                },
+                {
+                  "if": {
+                    "required": [
+                      "then_cannot"
+                    ]
+                  },
+                  "then": {
+                    "properties": {
+                      "allow": {
+                        "const": true
                       }
                     }
                   }

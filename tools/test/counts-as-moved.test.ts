@@ -26,8 +26,8 @@ const MOVE_ENDED = { kind: "move-ended" };
 const COUNTS = { move_type: "normal" };
 
 describe("the counts-as-moved family", () => {
-  it("is a CONDITION at version 1", () => {
-    expect(currentFamilyVersion("counts-as-moved")).toBe(1);
+  it("is a CONDITION at version 2", () => {
+    expect(currentFamilyVersion("counts-as-moved")).toBe(2);
     expect(familyRole("counts-as-moved")).toBe("CONDITION");
   });
 
@@ -58,13 +58,14 @@ describe("foldCountsAsMoved", () => {
     expect(folded[0]!.parameters.counts_as_move).toBe("normal");
   });
 
-  it("refuses a phase window as a DSL_GAP, since the DSL has no counts_as_until", () => {
+  it("folds a phase window as counts_as_until end-of-phase, and a turn window as none", () => {
     const phaseText = "Fabricated transport. It can disembark from it. After that, it has moved. Carried units that do so count as having made a Test move that phase.";
-    expect(() => foldCountsAsMoved(build(phaseText,
+    const folded = foldCountsAsMoved(build(phaseText,
       ["It can disembark from it.", "eligibility-permission", DISEMBARK],
       ["After that, it has moved.", "event", MOVE_ENDED],
-      ["Carried units that do so count as having made a Test move that phase.", "counts-as-moved", { move_type: "normal", window: "phase" }]), phaseText))
-      .toThrow(/DSL_GAP.*counts_as_until/);
+      ["Carried units that do so count as having made a Test move that phase.", "counts-as-moved", { move_type: "normal", window: "phase" }]), phaseText);
+    expect(folded[0]!.parameters).toMatchObject({ counts_as_move: "normal", counts_as_until: "end-of-phase" });
+    expect(foldCountsAsMoved(build(text, ...sentenceSplit), text)[0]!.parameters.counts_as_until).toBeUndefined();
   });
 
   it("refuses a permission for an activity other than disembark, as a DSL_GAP", () => {
@@ -208,7 +209,7 @@ describe("the seven record shapes after SS-0 authoring", () => {
         ["cannot declare a Test charge", "eligibility-permission", CHARGE_REFUSAL],
         ["this turn", "duration", END_OF_TURN],
       ],
-      reasons: [/counts_as_until/, /cannot name them/, /charge refusal/],
+      reasons: [/cannot name them/, /charge refusal/],
     },
     {
       av: "3377 (selected to Advance, that phase)",
@@ -220,7 +221,7 @@ describe("the seven record shapes after SS-0 authoring", () => {
         ["cannot declare a Test charge", "eligibility-permission", CHARGE_REFUSAL],
         ["in the same turn", "duration", END_OF_TURN],
       ],
-      reasons: [/counts_as_until/, /cannot name them/, /charge refusal/],
+      reasons: [/cannot name them/, /charge refusal/],
     },
     {
       av: "7091 and 7228 (transport, that phase)",
@@ -232,7 +233,7 @@ describe("the seven record shapes after SS-0 authoring", () => {
         ["cannot declare a Test charge", "eligibility-permission", CHARGE_REFUSAL],
         ["in the same turn", "duration", END_OF_TURN],
       ],
-      reasons: [/counts_as_until/, /cannot name them/, /charge refusal/],
+      reasons: [/cannot name them/, /charge refusal/],
     },
     {
       av: "8845 and 9642 (transport, that phase, remainder duration)",
@@ -245,7 +246,7 @@ describe("the seven record shapes after SS-0 authoring", () => {
         ["in the same turn", "duration", END_OF_TURN],
         ["in the remainder of the turn", "duration", END_OF_TURN],
       ],
-      reasons: [/counts_as_until/, /cannot name them/, /charge refusal/],
+      reasons: [/cannot name them/, /charge refusal/],
     },
     {
       av: "8362 (no printed period, that turn)",
@@ -271,8 +272,8 @@ describe("the seven record shapes after SS-0 authoring", () => {
       expect(message).toMatch(/^DSL_GAP:/);
       for (const reason of shape.reasons) expect(message).toMatch(reason);
       expect(message).not.toMatch(/only does ranges/);
-      // A row without a printed period has no counts_as_until reason (section 1.5).
-      if (!shape.reasons.some((reason) => reason.source === "counts_as_until")) expect(message).not.toMatch(/counts_as_until/);
+      // A printed period is not a gap: the DSL carries it as counts_as_until.
+      expect(message).not.toMatch(/counts_as_until/);
 
       const result = compileLeaves(leaves, shape.text);
       expect(result.ok).toBe(false);

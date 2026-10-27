@@ -76,8 +76,13 @@ export function lowerConditionOf(plans: readonly ConditionOfPlan[], context: Con
     }
     const antecedent = indexOf(plan.antecedent);
     if (antecedent === -1) throw new CompileError(`The ${describe(plan.antecedent)} that "if it does" refers back to was folded into another leaf; the permission has no planned effect of its own to make optional.`);
-    const consequents = plan.consequents.map(indexOf);
-    const absorbed = plan.consequents.filter((_, at) => consequents[at] === -1);
+    // A consequent folded into the permission itself (its then_cannot) is already that permission's "if it does".
+    const own = context.list[antecedent]!.absorbs ?? [];
+    const remaining = plan.consequents.filter((key) => !own.some((item) => item.fragment === key.fragment && item.family_id === key.family_id
+      && item.start_byte === key.start_byte && item.end_byte === key.end_byte));
+    if (remaining.length === 0) continue;
+    const consequents = remaining.map(indexOf);
+    const absorbed = remaining.filter((_, at) => consequents[at] === -1);
     if (absorbed.length > 0) throw new CompileError(`The consequents ${absorbed.map(describe).join(", ")} of "if it does" after ${describe(plan.antecedent)} were folded into other leaves, so the gate cannot hold them.`);
     const members = [antecedent, ...consequents];
     const insideContainer = members.filter((index) => context.consumed.has(index));

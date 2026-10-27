@@ -49,7 +49,8 @@ export function leafFragment(leaf: CompileLeaf): LeafFragment {
   }
   if (leaf.family_id === "counts-as-moved") {
     const period = leaf.parameters.window === "phase" ? " that phase" : " this turn";
-    return { kind: "implicit", note: `No separate text: the permission before it, in its sentence, counts as having made a ${String(leaf.parameters.move_type)} move${period}.` };
+    const who = leaf.parameters.units === "permission-subject" ? "the subject of the permission before it, in its sentence, counts" : "the permission before it, in its sentence, counts";
+    return { kind: "implicit", note: `No separate text: ${who} as having made a ${String(leaf.parameters.move_type)} move${period}.` };
   }
   if (leaf.family_id === "starting-strength") return { kind: "implicit", note: `No separate text: the unit the set-up or split before it produces has a Starting Strength of ${String(leaf.parameters.value)}.` };
   if (leaf.family_id === "count-scale") {
