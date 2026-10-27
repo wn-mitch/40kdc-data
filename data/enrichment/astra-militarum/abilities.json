@@ -13916,19 +13916,42 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "astra-militarum",
     "detachment_id": "siege-regiment",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
+      },
+      "effect": {
+        "type": "ability-activate",
+        "target": "this-unit",
+        "modifier": {
+          "ability": "voice-of-command-astra-militarum",
+          "option": "take-cover"
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "order"
+      },
+      "object": "this-unit"
+    },
+    "source_digest": "161643f8cee279325ff9512f4484a43b30a62909410ddbaf81d3b90bbb98730c"
   },
   {
     "ability_id": "survival-gear-recon-element-astra-militarum",

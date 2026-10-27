@@ -8,6 +8,7 @@ import { CHARACTERISTIC_EXTENSIONS } from "./characteristics.js";
 import { CHOICE_AND_DICE_EXTENSIONS } from "./choices-and-dice.js";
 import { DURATION_AND_DESIGNATION_EXTENSIONS } from "./durations-and-designations.js";
 import { ELIGIBILITY_EXTENSIONS } from "./eligibility.js";
+import { EVENT_USED_OBJECT_EXTENSIONS } from "./event-used-object.js";
 import { EVENT_EXTENSIONS } from "./events.js";
 import { LEAF_STRUCTURE_EXTENSIONS } from "./leaf-structure.js";
 import { MOVE_EXTENSIONS } from "./moves.js";
@@ -56,6 +57,7 @@ export const FAMILY_EXTENSIONS: readonly FamilyExtension[] = [
   ...DURATION_AND_DESIGNATION_EXTENSIONS,
   ...LEAF_STRUCTURE_EXTENSIONS,
   ...APOSTROPHE_KEYWORD_EXTENSIONS,
+  ...EVENT_USED_OBJECT_EXTENSIONS,
 ];
 
 const extensionVersions = new Map<string, FamilyExtension>();

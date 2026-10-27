@@ -131,6 +131,8 @@ function usedTrigger(leaf: CompileLeaf): Node {
     ...(leaf.parameters.owner !== undefined ? { subject: { owner: closed(leaf, "owner") } } : {}),
     ...(subject !== undefined && subject !== "this-unit" ? { subject: closed(leaf, "subject") } : {}),
     ...(leaf.parameters.targets_level !== undefined ? { object: { owner: "any", level: closed(leaf, "targets_level") } } : {}),
+    // "When this unit is issued an Order": the unit the used rule is aimed at.
+    ...(leaf.parameters.object !== undefined ? { object: closed(leaf, "object") } : {}),
     ...binding,
   };
 }
