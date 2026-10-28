@@ -2065,6 +2065,7 @@ EventFilter = TypedDict(
         "weapons": NotRequired[WeaponScope],
         "by": NotRequired[UnitRef],
         "timing": NotRequired[Literal["before-removal"]],
+        "phase": NotRequired[Phase],
         "first": NotRequired[Literal[True]],
         "step": NotRequired[Literal["battle-shock", "reinforcements"]],
         "state": NotRequired[UnitState],

@@ -1301,6 +1301,10 @@
           ],
           "description": "destroyed: resolve before the model is removed."
         },
+        "phase": {
+          "$ref": "#/$defs/phase",
+          "description": "The phase the event happened in (\"destroys one or more enemy units in the Fight phase\")."
+        },
         "first": {
           "const": true,
           "description": "Only the first time this happens in the window."

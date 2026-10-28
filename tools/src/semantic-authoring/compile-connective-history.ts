@@ -81,6 +81,11 @@ export function planHistory(list: readonly CompileLeaf[], at: number, connective
   const inSentence = (index: number) => places[index]!.sentence === sentence && fragmentOf(list[index]!) === fragmentOf(leaf);
   const attack = list.findIndex((other, index) => index > at && inSentence(index) && isAttackGate(other));
   if (attack === -1) {
+    // "If that unit destroys an enemy unit, until the end of the battle, …": from the moment it happens to the duration's
+    // end is exactly "it has happened" over that window, so the duration after it in its sentence names the window.
+    const after = list.findIndex((other, index) => index > at && inSentence(index) && other.role === "DURATION" && other.family_id === "duration");
+    const named = after === -1 ? undefined : DURATION_WINDOWS[String(list[after]!.parameters.endpoint)];
+    if (named !== undefined) return { kind: "history", moment, window: named, why: "" };
     throw new CompileError(`"${word}" before the ${kind} moment has nothing that checks what happened: no earlier moment, and no attack after it in its sentence. An event with nothing before it to look back from is when the ability fires; review the connective if it is.`);
   }
   let window: string | null = null;
@@ -89,6 +94,14 @@ export function planHistory(list: readonly CompileLeaf[], at: number, connective
     if (other.role === "DURATION" && other.family_id === "duration") { window = DURATION_WINDOWS[String(other.parameters.endpoint)] ?? null; break; }
   }
   return { kind: "history", moment, window, why: `"${word}" before the ${kind} moment is checked at each attack after it, but no duration before it in its sentence and no history-window leaf says how far back it looks.` };
+}
+
+/** A phase-window leaf naming one phase, written right after a history moment in its fragment ("… in the Fight phase"). */
+function phaseOfMoment(moment: CompileLeaf, next: CompileLeaf): boolean {
+  if (next.family_id !== "phase-window" || fragmentOf(next) !== fragmentOf(moment)) return false;
+  const keys = Object.keys(next.parameters);
+  const gap = next.start_byte - (moment.end_byte ?? moment.start_byte);
+  return keys.length === 1 && typeof next.parameters.phase === "string" && gap >= 0 && gap <= 1;
 }
 
 /**
@@ -115,6 +128,12 @@ export function lowerHistoryMoments(list: readonly CompileLeaf[], plans: readonl
     for (const key of ["subject", "object", "filter", "proximity"] as const) if (node[key] !== undefined) happened[key] = node[key];
     happened.window = window;
     out[index] = { ...leaf, role: "CONDITION", family_id: "__happened", family_version: 1, parameters: { happened } };
+    // "destroys one or more enemy units in the Fight phase": a phase right after the moment says when it happened.
+    const next = out[index + 1];
+    if (next !== undefined && phaseOfMoment(leaf, next)) {
+      happened.filter = { ...(happened.filter as Record<string, unknown> | undefined), phase: next.parameters.phase };
+      out.splice(index + 1, 1);
+    }
   }
   return out;
 }

@@ -4499,7 +4499,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "84bea8cce352a0969816e555a861d68845da50925e96ce5c97542a16417f4460",
     "version": "2025-q3",
@@ -4521,9 +4521,17 @@
               "operator": "not",
               "operands": [
                 {
-                  "type": "phase-is",
+                  "type": "happened",
                   "parameters": {
-                    "phase": "fight"
+                    "event": "destroyed",
+                    "subject": "this-unit",
+                    "object": {
+                      "owner": "enemy"
+                    },
+                    "window": "battle",
+                    "filter": {
+                      "phase": "fight"
+                    }
                   }
                 }
               ]
@@ -4537,28 +4545,26 @@
             }
           },
           {
-            "type": "ability-part",
-            "trigger": {
-              "event": "destroyed",
-              "subject": "this-unit",
-              "object": {
-                "owner": "enemy"
+            "type": "conditional",
+            "condition": {
+              "type": "happened",
+              "parameters": {
+                "event": "destroyed",
+                "subject": "this-unit",
+                "object": {
+                  "owner": "enemy"
+                },
+                "window": "battle",
+                "filter": {
+                  "phase": "fight"
+                }
               }
             },
             "effect": {
-              "type": "conditional",
-              "condition": {
-                "type": "phase-is",
-                "parameters": {
-                  "phase": "fight"
-                }
-              },
-              "effect": {
-                "type": "feel-no-pain",
-                "target": "this-unit",
-                "modifier": {
-                  "threshold": 5
-                }
+              "type": "feel-no-pain",
+              "target": "this-unit",
+              "modifier": {
+                "threshold": 5
               }
             }
           }
@@ -4572,7 +4578,7 @@
       "kroot-flesh-shaper"
     ],
     "ability_type": "unit",
-    "behavior": "reactive",
+    "behavior": "passive",
     "faction_id": "tau-empire"
   },
   {

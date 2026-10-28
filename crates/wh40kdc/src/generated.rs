@@ -16321,6 +16321,10 @@ impl<'de> ::serde::Deserialize<'de> for EventBoundReferenceEventVar {
 ///      "minItems": 1,
 ///      "uniqueItems": true
 ///    },
+///    "phase": {
+///      "description": "The phase the event happened in (\"destroys one or more enemy units in the Fight phase\").",
+///      "$ref": "#/$defs/phase"
+///    },
 ///    "pool": {
 ///      "type": "string",
 ///      "minLength": 1
@@ -16459,6 +16463,9 @@ pub struct EventFilter {
     pub mode: ::std::option::Option<MoveMode>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub move_types: ::std::option::Option<Vec<EventFilterMoveTypesItem>>,
+    ///The phase the event happened in ("destroys one or more enemy units in the Fight phase").
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub phase: ::std::option::Option<Phase>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub pool: ::std::option::Option<EventFilterPool>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -16507,6 +16514,7 @@ impl ::std::default::Default for EventFilter {
             marker: Default::default(),
             mode: Default::default(),
             move_types: Default::default(),
+            phase: Default::default(),
             pool: Default::default(),
             result: Default::default(),
             roll: Default::default(),

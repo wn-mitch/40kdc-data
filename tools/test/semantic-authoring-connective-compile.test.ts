@@ -327,6 +327,22 @@ describe("connective condition-of before a moment (history)", () => {
     });
   });
 
+  describe("with no earlier moment and no attack, a duration after it in its sentence names the window", () => {
+    it("holds from the moment to the duration's end, with the phase it happened in", () => {
+      const text = "If the squad destroys a foe in the Fight phase, until the end of the battle, The squad has +1 to saves.";
+      const list = placed(text,
+        ["the squad destroys a foe", "event", { kind: "unit-destroyed", by: "this-unit", object_owner: "enemy" }],
+        ["in the Fight phase", "phase-window", { phase: "fight" }],
+        ["until the end of the battle", "duration", { endpoint: "end-of-battle" }], saves);
+      const { trigger, effect } = mechanicsOf(text, withIf(text, list, "If"));
+      expect(trigger).toBeNull();
+      expect(effect.type).toBe("conditional");
+      expect(effect.condition).toMatchObject({ type: "happened", parameters: { event: "destroyed", object: { owner: "enemy" }, window: "battle", filter: { phase: "fight" } } });
+      // The phase says when it happened; it gates nothing on its own.
+      expect(nodesOf(effect, "phase-is")).toEqual([]);
+    });
+  });
+
   describe("refusals", () => {
     it("nothing checks it: the moment is the record's only one and no attack follows it", () => {
       const text = "If a model in the squad was destroyed, the squad is shaken.";

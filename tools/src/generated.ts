@@ -1978,6 +1978,10 @@ export interface EventFilter {
    */
   timing?: "before-removal";
   /**
+   * The five official game phases. Unchanged between 10th and 11th edition — 11e reorders Pile In timing within the Fight phase but adds no top-level phase.
+   */
+  phase?: "command" | "movement" | "shooting" | "charge" | "fight";
+  /**
    * Only the first time this happens in the window.
    */
   first?: true;
