@@ -14,7 +14,8 @@ import type { ProfileDamage } from "./loadout-scoring.js";
 import { attributeSelectedProfile, crunchProfileScorer, unitLoadoutDamage, type DamageAttribution } from "./unit-damage.js";
 import { translationWarnings } from "./translation-warnings.js";
 import { loadoutLeverBuffs, namedLoadoutWargear, surfacedByLoadout, wargearRules, wargearTranslation, type WargearRules } from "./wargear-levers.js";
-import { bearerEquippedBuffs, equippedBuffs, unequippedRules, unitWeaponGrants, wargearContext, type WeaponGrants } from "./weapon-grants.js";
+import { equippedBuffs, unequippedRules, unitWeaponGrants, wargearContext, type WeaponGrants } from "./weapon-grants.js";
+import { othersEquippedBuffs, othersUnequippedKey, settleMemberLoadouts, type MemberLoadouts } from "./member-loadouts.js";
 import type {
   DamageCellState,
   PoolLever,
@@ -25,14 +26,6 @@ import type {
   StackSpec,
   UnitLoadoutResult,
 } from "./model.js";
-
-/** Each stack member's chosen loadout, by unit id. */
-export type MemberLoadouts = ReadonlyMap<string, ReadonlyMap<string, number>>;
-
-function sameCounts(left: ReadonlyMap<string, number>, right: ReadonlyMap<string, number>): boolean {
-  const ids = new Set([...left.keys(), ...right.keys()]);
-  return [...ids].every((id) => (left.get(id) ?? 0) === (right.get(id) ?? 0));
-}
 
 /** Buffs that depend on the loadout scored; `key` names what else they depend on, for caching. */
 export interface LoadoutBuffs {
@@ -377,20 +370,8 @@ export class DamageScoringSession {
     const cached = this.stackCache.get(key);
     if (cached) return cached;
     this.stackEvaluations += 1;
-    const score = (chosen?: MemberLoadouts) => spec.members.map((member) => ({
-      member,
-      loadout: this.bestLoadout(member.unit, this.memberBuffs(spec, member, undefined, chosen), this.state.contextFor(spec, member), this.perLoadoutBuffs(spec, member, chosen)),
-    }));
-    // A rule one member's wargear prints reaches the others as `attached` only while that member's
-    // chosen loadout carries the item, so members are rescored against each other's choices until
-    // no choice changes (bounded, as a choice can flip back).
-    let members = score();
-    for (let round = 0; round < spec.members.length; round += 1) {
-      const next = score(new Map(members.map(({ member, loadout }) => [member.unit.id, loadout.counts])));
-      const settled = next.every(({ loadout }, index) => sameCounts(loadout.counts, members[index]!.loadout.counts));
-      members = next;
-      if (settled) break;
-    }
+    const members = settleMemberLoadouts(spec.members, (member, chosen) =>
+      this.bestLoadout(member.unit, this.memberBuffs(spec, member, undefined, chosen), this.state.contextFor(spec, member), this.perLoadoutBuffs(spec, member, chosen)));
     const result = { spec, total: members.reduce((sum, member) => sum + member.loadout.total, 0), members };
     this.stackCache.set(key, result);
     return result;
@@ -399,28 +380,14 @@ export class DamageScoringSession {
   /** How a member's buffs follow its loadout, when its rules read `unit-wargear`; `chosen` as in {@link memberBuffs}. */
   perLoadoutBuffs(spec: StackSpec, member: StackMember, chosen?: MemberLoadouts): LoadoutBuffs | undefined {
     if (!this.wargearRulesOf(spec, member).loadoutDependent) return undefined;
-    const dropped = this.unequippedAttached(spec, member, chosen);
-    return {
-      key: `${this.poolKey(spec)}|${[...spec.selectedLeverIds].sort().join("+")}${dropped ? `|${dropped}` : ""}`,
-      at: (counts) => this.memberBuffs(spec, member, counts, chosen),
-    };
-  }
-
-  /** The other members' wargear rules `chosen` leaves out, as a cache key part ("" for none). */
-  private unequippedAttached(spec: StackSpec, member: StackMember, chosen?: MemberLoadouts): string {
-    if (!chosen) return "";
-    return spec.members.filter((other) => other !== member).flatMap((other) => {
-      const counts = chosen.get(other.unit.id);
-      return counts ? [...unequippedRules(other.unit.raw, counts)].map((abilityId) => `${other.unit.id}:${abilityId}`) : [];
-    }).sort().join("+");
+    const key = `${this.poolKey(spec)}|${[...spec.selectedLeverIds].sort().join("+")}${othersUnequippedKey(spec, member, chosen)}`;
+    return { key, at: (counts) => this.memberBuffs(spec, member, counts, chosen) };
   }
 
   /**
    * The buffs a member attacks with under the spec's selected levers, with the target's defensive
-   * buffs. Given its loadout, the unit's printed rules for items it leaves out are dropped, and a
-   * member whose rules read `unit-wargear` has its levers translated under that loadout. Given the
-   * other members' `chosen` loadouts, the rules their wargear prints for items those leave out are
-   * dropped too.
+   * buffs. Its loadout drops its printed rules for items it leaves out (the others' `chosen` ones
+   * theirs) and translates the levers of a member whose rules read `unit-wargear`.
    */
   memberBuffs(spec: StackSpec, member: StackMember, counts?: ReadonlyMap<string, number>, chosen?: MemberLoadouts): Buff[] {
     const selected = new Set(spec.selectedLeverIds);
@@ -429,18 +396,11 @@ export class DamageScoringSession {
     const levers = translated
       ? loadoutLeverBuffs(translated, new Set(pool.levers.map((lever) => lever.id)), selected)
       : pool.levers.filter((lever) => selected.has(lever.id)).flatMap((lever) => lever.perMember.get(member.unit.id) ?? []);
-    let buffs = [...levers, ...this.defensiveBuffs];
-    for (const other of spec.members) {
-      const otherCounts = other !== member ? chosen?.get(other.unit.id) : undefined;
-      if (otherCounts) buffs = bearerEquippedBuffs(other.unit.raw, otherCounts, buffs);
-    }
+    const buffs = othersEquippedBuffs(spec, member, chosen, [...levers, ...this.defensiveBuffs]);
     return counts ? equippedBuffs(member.unit.raw, counts, buffs) : buffs;
   }
 
-  /**
-   * Leave-one-out attribution of one of a member's selected profiles in a scored stack with
-   * `counts`; `chosen` holds every member's loadout, as {@link scoreStack} scored them.
-   */
+  /** Leave-one-out attribution of one of a member's selected profiles in a scored stack with `counts` and the members' `chosen` loadouts. */
   attributeWeapon(spec: StackSpec, member: StackMember, weapon: SelectedWeaponResult, counts: ReadonlyMap<string, number>, chosen?: MemberLoadouts): DamageAttribution | null {
     return attributeSelectedProfile({
       dataset: this.dataset,
