@@ -4,6 +4,7 @@
  */
 import { describe, expect, it } from "vitest";
 import { api, mintToken } from "./helpers";
+import { DOC_KINDS } from "../src/index";
 
 describe("auth gate", () => {
   it("refuses missing, expired, and tampered tokens", async () => {
@@ -63,9 +64,30 @@ describe("docs CRUD", () => {
 
     const list = await api("/docs?kind=mission-matrix", { token });
     expect(list.status).toBe(200);
-    const entry = list.body.docs.find((d: any) => d.id === created.body.id);
+    const entry = list.body.docs.find((d: { id: string }) => d.id === created.body.id);
     expect(entry.name).toBe("Take and Hold vs Purge the Foe");
     expect((await api(`/docs/${created.body.id}`, { token })).body.payload).toEqual(game);
+  });
+
+  it("accepts the threat-matrix kind (live opponent triage)", async () => {
+    const token = await mintToken("tm-player");
+    const matrix = {
+      eventName: "ATC 2026 8-Player Event",
+      teamOrder: ["nemesis"],
+      cellsById: { "nemesis:p1": { verdict: 3, note: "kill the Exocrine first" } },
+    };
+    const created = await api("/docs", {
+      method: "POST",
+      token,
+      body: { kind: "threat-matrix", name: "ATC 2026 8-Player Event — threat matrix", payload: matrix },
+    });
+    expect(created.status).toBe(200);
+
+    const list = await api("/docs?kind=threat-matrix", { token });
+    expect(list.status).toBe(200);
+    const entry = list.body.docs.find((d: { id: string }) => d.id === created.body.id);
+    expect(entry.name).toBe("ATC 2026 8-Player Event — threat matrix");
+    expect((await api(`/docs/${created.body.id}`, { token })).body.payload).toEqual(matrix);
   });
 
   it("isolates owners: bob cannot read, update, or delete alice's doc", async () => {
@@ -154,5 +176,31 @@ describe("docs CRUD", () => {
     });
     expect(over.status).toBe(403);
     expect(over.body.error).toBe("doc_quota_exceeded");
+  });
+});
+
+/**
+ * The kind list is pinned twice: in DOC_KINDS and in a SQL CHECK on both
+ * `documents` and `shortlinks`. A kind added to one without the other ships as a
+ * 400 (bad_kind) or a 500 (SQLITE_CONSTRAINT) instead of a working feature, so
+ * every kind gets written through both tables.
+ */
+describe("doc kinds", () => {
+  it("round-trips a document and a shortlink for every DOC_KINDS entry", async () => {
+    expect(DOC_KINDS.length).toBeGreaterThan(0);
+    for (const kind of DOC_KINDS) {
+      // A fresh owner per kind keeps the pinned per-owner quotas out of the way.
+      const token = await mintToken(`kind-${kind}`);
+      const created = await api("/docs", {
+        method: "POST",
+        token,
+        body: { kind, name: `${kind} probe`, payload: { kind } },
+      });
+      expect(created.status, `POST /docs kind=${kind}`).toBe(200);
+
+      const minted = await api("/links", { method: "POST", token, body: { kind, payload: { kind } } });
+      expect(minted.status, `POST /links kind=${kind}`).toBe(200);
+      expect((await api(`/links/${minted.body.code}`)).body.kind, `resolve kind=${kind}`).toBe(kind);
+    }
   });
 });

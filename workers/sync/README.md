@@ -56,7 +56,12 @@ secrets. Resolving a shortlink or joining a live session is anonymous.
 | GET/PUT/DELETE | `/docs/:id` | Bearer (owner) | fetch / update (`ifUpdatedAt` → 409 conflict; 409 `doc_live` while a room is live) / delete |
 | POST | `/docs/:id/share` | Bearer (owner) | mint durable share tokens (idempotent; `{regenerate: true}` rotates) |
 
-Document kinds: `list` (canonical roster-json), `team-plan`, `sb-save`.
+Document kinds: `list` (canonical roster-json), `team-plan` (teams-planner
+plan), `threat-matrix` (teams-planner live opponent triage), `sb-save`
+(shadowboxing save), `mission-matrix` (WTC scoresheet). The worker's
+`DOC_KINDS` and the `CHECK (kind IN …)` constraints on `documents` and
+`shortlinks` must list the same set — a test writes one row per kind through
+both tables to hold them together.
 Shortlink URLs are `?s=CODE` on any app origin — shadowboxing's importer
 resolves a pasted list-builder link the same way.
 

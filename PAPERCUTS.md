@@ -26,7 +26,6 @@ Browser open waited on Vite networkidle0 and timed out because the dev UI keeps 
 
 Impeccable skill required .claude/skills/impeccable/scripts/load-context.mjs, but the prescribed project-relative path does not exist in this workspace, blocking its non-optional context loader.
 
-
 ## 2026-08-06T15:26:09Z — gpt-5.6-sol
 
 Impeccable setup documents a repo-local .claude loader path, but this repository only exposes the skill through skill://, causing the prescribed command to fail before context loading.
@@ -171,6 +170,12 @@ I ran a jq probe with a literal TARGET placeholder instead of first extracting t
 
 This installed jj version has no archive subcommand, so the planned whole-parent materialization failed before comparison; use jj file show per composition instead.
 
+## 2026-09-03T19:23:34Z — codex
+
+This installed jj version has no archive subcommand, so the planned whole-parent materialization failed before comparison; use jj file show per composition instead.
+<<<<<<< conflict 1 of 1
++++++++ qotqmzzv 02ae2248 "chore: Release 1.4.3" (rebase destination)
+
 ## 2026-09-08T16:37:21Z — gpt-6-astra
 
 The supplied review appeared only as truncated inline text, with no recoverable attachment URI. Earlier local exports were different reviews, so the full finding inventory requires the original Markdown upload.
@@ -246,6 +251,42 @@ Claude CLI accepted the structured-output schema locally but the API rejected to
 ## 2026-09-14T23:37:51Z — openai-codex/gpt-5.6-sol
 
 The repository guidance names upstream/main, but jj has no upstream/main revision, so the initial lineage query failed and required inspecting the local main bookmark instead.
+
+## 2026-09-15T00:05:56Z — openai-codex/gpt-5.6-sol
+
+ast_edit matched all faction JSON properties but proposed invalid arrays by stripping captured string quotes, forcing a parsed JSON codemod fallback.
+
+## 2026-09-15T00:13:12Z — openai-codex/gpt-5.6-sol
+
+just preflight fails by design on intended uncommitted generated artifacts, so it cannot serve as a pre-commit gate for schema changes; use verify-regen-stable plus test-all before committing, then preflight.
+
+## 2026-09-15T00:17:01Z — openai-codex/gpt-5.6-sol
+
+Example-local npm test and check failed because workspace dependencies were absent; the repository requires npm ci at the monorepo root before example validation.
+
+## 2026-09-15T00:30:03Z — openai-codex/gpt-5.6-sol
+
+gh pr merge failed in a jj detached working copy because it tried to determine a current git branch; pass -R owner/repo so the operation does not depend on checkout state.
+
+## 2026-09-15T00:55:38Z — openai-codex/gpt-5.6-sol
+
+Local npm credentials are unavailable, so accidental release cleanup must run through the authenticated GitHub Actions publish environment.
+
+## 2026-09-15T20:01:25Z — openai-codex/gpt-5.6-sol
+
+A shell glob for optional per-faction artifacts expanded through every data/core child, causing cp to report dozens of expected missing paths after copying valid files. Use an explicit file list or nullglob-capable invocation for heterogeneous trees.
+
+## 2026-09-15T20:04:36Z — openai-codex/gpt-5.6-sol
+
+Running npm test from tools with the repository-relative tools/test path made Vitest find no files because its root is already tools/. Use test/validate.test.ts or validate.test.ts from that workspace.
+
+## 2026-09-15T20:09:55Z — openai-codex/gpt-5.6-sol
+
+npm pack --dry-run --json interleaves prepack lifecycle output with JSON, so piping directly to jq fails and closes stdout, causing the postbuild audit to crash with EPIPE. Run prepack prerequisites separately and use --ignore-scripts for machine-readable inspection.
+
+## 2026-09-16T18:32:13Z — openai-codex/gpt-5.6-sol
+
+The browser tab.run context exposes Puppeteer, not Playwright: page.locator(...).count() is unavailable despite locator-style APIs being common elsewhere. Use page.99520eval/querySelectorAll for DOM counts.
 
 ## 2026-09-16T18:59:29Z — openai-codex/gpt-5.6-sol
 
@@ -434,6 +475,10 @@ tooling/parity/differ.py defaults to the stale gitignored tools/dist/runner.js w
 ## 2026-09-28T03:42:26Z — claude-opus-5-5
 
 lldb -b 'run; bt' on the wh40kdc debug test binary hung with no output (stack-overflow triage); bisecting RUST_MIN_STACK sizes found the needed stack faster.
+
+## 2026-09-28T15:02:33Z — gpt-6-sol
+
+In a new jj workspace, just test-all ran pytest against the editable wh40kdc installation in the sibling checkout rather than this workspace, producing hundreds of misleading failures; set PYTHONPATH=src or install this workspace editable before pytest.
 
 ## 2026-10-14T22:35:48Z — claude-opus-5-5
 

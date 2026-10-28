@@ -2302,11 +2302,11 @@
   },
   {
     "id": "scream-killer-talons",
-    "name": "Scream-Killer talons",
+    "name": "Screamer-Killer talons",
     "type": "melee",
     "profiles": [
       {
-        "name": "Scream-Killer talons",
+        "name": "Screamer-Killer talons",
         "range": "Melee",
         "stats": {
           "A": 10,
