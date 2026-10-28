@@ -27,6 +27,7 @@ import { withDesignationExpiry } from "./compile-designation-expiry.js";
 import { bindDesignationSubjects, foldHitFilters } from "./compile-conditions.js";
 import { foldDestructionAfterAttacks } from "./compile-destruction-after-attacks.js";
 import { foldObjectiveCriteria } from "./compile-objective-criteria.js";
+import { compileForEachPasses } from "./compile-for-each-passes.js";
 import { foldSelectedModelRolls } from "./compile-selected-model-roll.js";
 import { bindBareFilterHits, bindBeforeFormHits, foldDestroyFilters, foldLeadingHitFilters, refuseBeforeFormAnaphors } from "./compile-weapon-qualified.js";
 import { refuseUnmovedEventSubject } from "./compile-moved-subject.js";
@@ -58,6 +59,7 @@ import { foldModelState } from "./compile-model-state.js";
 import { foldStickyControl } from "./compile-sticky-control.js";
 import { foldSetUpLimits, foldSetUpPlacement, isPlacedLimit } from "./compile-set-up-placement.js";
 import { foldCountScales, markCountedSubjects } from "./compile-count-scale.js";
+import { foldImpliedHealCondition } from "./compile-implied-heal.js";
 import { joinSegments, sentenceSegments, STRATAGEM_HEADER } from "./compile-segments.js";
 import { compileGranted } from "./compile-granted.js";
 import { compileNamedAbilityStates } from "./compile-named-ability-states.js";
@@ -189,6 +191,9 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
   if (leaves.some((leaf) => leaf.fragment === NAME_FRAGMENT)) {
     return compileWithName(leaves, sourceText, options, compileLeaves, (list) => shapeSignature(ordered(list), sourceText));
   }
+  // Two for-each-unit-select passes in separate sentences: the second is a later part (compile-for-each-passes.ts).
+  const passes = compileForEachPasses(leaves, sourceText, options, compileLeaves, (list) => shapeSignature(ordered(list), sourceText));
+  if (passes) return passes;
   // Printed rule and ability names resolve to their records first (compile-rule-refs.ts). Qualifiers printed apart from their host are bound first: a characteristic amount after its recipient and a floor after its change (compile-characteristic-amount.ts), an additive option after its duration (compile-additive-option.ts), an ignore-modifier list after its lead-in (compile-ignore-list.ts), and a named range's defined values onto its aura (compile-named-range.ts).
   let bound: CompileLeaf[];
   try {
@@ -243,7 +248,8 @@ function compileRecord(given: readonly CompileLeaf[], sourceText?: string, optio
   // "only within Engagement Range of …" folds onto the engaged state before filters attach to their neighbours (compile-engagement-exclusive.ts).
   let qualified: CompileLeaf[];
   // "if this unit is controlling an objective, that objective is secured": the control test is the secured objective's own scope (compile-sticky-control.ts).
-  try { qualified = foldStickyControl(foldEngagementExclusive(given, sourceText), sourceText); } catch (error) {
+  // "has lost any wounds" before a heal of that model is what the heal already requires (compile-implied-heal.ts).
+  try { qualified = foldStickyControl(foldEngagementExclusive(foldImpliedHealCondition(given), sourceText), sourceText); } catch (error) {
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature: shapeSignature(ordered(given), sourceText), errors: [error.message] };
   }

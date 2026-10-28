@@ -11836,7 +11836,7 @@
           "steps": [
             {
               "type": "stat-modifier",
-              "target": "this-unit",
+              "target": "this-model",
               "modifier": {
                 "stat": "M",
                 "operation": "add",
@@ -11845,7 +11845,7 @@
             },
             {
               "type": "stat-modifier",
-              "target": "this-unit",
+              "target": "this-model",
               "modifier": {
                 "stat": "T",
                 "operation": "add",
@@ -11854,7 +11854,7 @@
             },
             {
               "type": "stat-modifier",
-              "target": "this-unit",
+              "target": "this-model",
               "modifier": {
                 "stat": "W",
                 "operation": "add",
@@ -11868,7 +11868,7 @@
           "steps": [
             {
               "type": "stat-modifier",
-              "target": "this-unit",
+              "target": "this-model",
               "modifier": {
                 "stat": "A",
                 "operation": "add",
@@ -11880,7 +11880,7 @@
             },
             {
               "type": "stat-modifier",
-              "target": "this-unit",
+              "target": "this-model",
               "modifier": {
                 "stat": "S",
                 "operation": "add",
@@ -11892,7 +11892,7 @@
             },
             {
               "type": "stat-modifier",
-              "target": "this-unit",
+              "target": "this-model",
               "modifier": {
                 "stat": "D",
                 "operation": "add",

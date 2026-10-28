@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
+import { describeAbility } from "../src/translate/index.js";
 
 type Item = [string, string, Record<string, unknown>];
 
@@ -49,5 +50,14 @@ describe("disembark modes", () => {
     expect(() => normalizeFingerprintParameters("event", { kind: "selected", to: "move", move_types: ["advance"], mode: "tactical" }, version)).toThrow(/move_types \[disembark\]/u);
     expect(() => normalizeFingerprintParameters("event", { kind: "move-ended", move_types: ["disembark"], mode: "tactical" }, version)).toThrow(/kind selected/u);
     expect(() => normalizeFingerprintParameters("make-move", { subject: "this-unit", move_type: "normal", mode: "shock" }, currentFamilyVersion("make-move"))).toThrow(/needs move_type disembark/u);
+  });
+
+  it("a disembark permission despite the Transport having Advanced reads as the Transport's move, not the unit's", () => {
+    const text = "This unit can disembark from a TRANSPORT after it has Advanced.";
+    const mechanics = mechanicsOf(text, ["This unit can disembark from a TRANSPORT after it has Advanced", "eligibility-permission", { subject: "this-unit", activity: "disembark", allow: true, despite: ["transport-advanced"] }]);
+    expect(mechanics.effect.modifier.despite).toEqual(["transport-advanced"]);
+    expect(describeAbility(mechanics as never)).toContain("eligible to disembark even if its Transport Advanced this turn");
+    const version = currentFamilyVersion("eligibility-permission");
+    expect(() => normalizeFingerprintParameters("eligibility-permission", { subject: "this-unit", activity: "declare-charge", allow: true, despite: ["transport-advanced"] }, version)).toThrow(/only to activity: disembark/u);
   });
 });

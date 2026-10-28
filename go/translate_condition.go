@@ -732,6 +732,8 @@ func territoryPhrase(territory string) string {
 		return "your deployment zone"
 	case "enemy-deployment-zone":
 		return "your opponent's deployment zone"
+	case "no-mans-land":
+		return "no man's land"
 	}
 	return dekebab(territory)
 }

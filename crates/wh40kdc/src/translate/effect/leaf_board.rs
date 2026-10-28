@@ -178,6 +178,9 @@ fn destroy_models(target: Option<&Value>, m: &P, subj: &str) -> String {
         }
     } else if sv(m, "count") == Some("all") {
         format!("every model in {subj}")
+    } else if dice_case(m.get("count")) == "1" && (subj == "model" || subj.ends_with(" model")) {
+        // One model of a single selected model ("that model") is that model, not "1 model in that model".
+        subj.to_string()
     } else {
         let n = dice_case(m.get("count"));
         format!(

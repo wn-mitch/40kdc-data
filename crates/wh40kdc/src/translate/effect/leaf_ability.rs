@@ -451,6 +451,11 @@ pub(super) fn permission(m: &P, subj: &str, ctx: &Ctx) -> String {
     }
     if let Some(clauses) = map_arr(m, "despite", |d| {
         let d = jv(d);
+        // The Transport the subject disembarks from Advanced, not the subject.
+        if d == "transport-advanced" {
+            let its = if it == "they" { "their" } else { "its" };
+            return format!("{its} Transport Advanced this turn");
+        }
         let phrase = despite_phrase(&d).map(str::to_string).unwrap_or(d.clone());
         if ["engaged", "battle-shocked", "performing-action"].contains(&d.as_str()) {
             let is = if it == "they" { "they are" } else { "it is" };

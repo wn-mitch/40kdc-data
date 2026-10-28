@@ -17473,7 +17473,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "Your deployment zone is within Flow of Magic. At the start of each phase, if you control at least half of the objectives, no mans land is within Flow of Magic until the end of the phase (evaluated once at that time). At the start of each phase, if you control at least half of the objectives, enemy deployment zone is within Flow of Magic until the end of the phase (evaluated once at that time). When resolving this use: you can re-roll a Wound roll of 1 with weapons with [PSYCHIC]. If this model is wholly within Flow of Magic, when resolving this use: all friendly THOUSAND-SONS THOUSAND SONS units get +1 to Wound rolls with weapons with [PSYCHIC] instead."
+      "text": "Your deployment zone is within Flow of Magic. At the start of each phase, if you control at least half of the objectives, no man's land is within Flow of Magic until the end of the phase (evaluated once at that time). At the start of each phase, if you control at least half of the objectives, your opponent's deployment zone is within Flow of Magic until the end of the phase (evaluated once at that time). When resolving this use: you can re-roll a Wound roll of 1 with weapons with [PSYCHIC]. If this model is wholly within Flow of Magic, when resolving this use: all friendly THOUSAND-SONS THOUSAND SONS units get +1 to Wound rolls with weapons with [PSYCHIC] instead."
     }
   },
   {
@@ -18379,7 +18379,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "Your deployment zone is within Hallowed Ground. At the start of each phase, if you control at least half of the objectives, no mans land is within Hallowed Ground until the end of the phase (evaluated once at that time). At the start of each phase, if you control at least half of the objectives, enemy deployment zone is within Hallowed Ground until the end of the phase (evaluated once at that time). The area within 6\" of one or more all friendly PURIFIER SQUAD GREY-KNIGHTS units is within Hallowed Ground, continuously as those units move. For each qualifying attack (for melee attacks or (for ranged attacks and the target is visible to the attacking model)): When resolving this use: you can re-roll a Hit roll of 1. If the unit has \"PURIFIER SQUAD\" or every model in the unit is wholly within Hallowed Ground, you can, when resolving this use: you can re-roll the Hit roll instead."
+      "text": "Your deployment zone is within Hallowed Ground. At the start of each phase, if you control at least half of the objectives, no man's land is within Hallowed Ground until the end of the phase (evaluated once at that time). At the start of each phase, if you control at least half of the objectives, your opponent's deployment zone is within Hallowed Ground until the end of the phase (evaluated once at that time). The area within 6\" of one or more friendly PURIFIER SQUAD GREY-KNIGHTS units is within Hallowed Ground, continuously as those units move. For each qualifying attack (for melee attacks or (for ranged attacks and the target is visible to the attacking model)): When resolving this use: you can re-roll a Hit roll of 1. If the unit has \"PURIFIER SQUAD\" or every model in the unit is wholly within Hallowed Ground, you can, when resolving this use: you can re-roll the Hit roll instead."
     }
   },
   {
@@ -20727,7 +20727,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "Your deployment zone is within Power Matrix. At the start of each phase, if you control at least half of the objectives, no mans land is within Power Matrix until the end of the phase (evaluated once at that time). At the start of each phase, if you control at least half of the objectives, enemy deployment zone is within Power Matrix until the end of the phase (evaluated once at that time). You can, when resolving this use: you can re-roll a Hit roll of 1. If every model in the unit is wholly within Power Matrix, you can, when resolving this use: you can re-roll the Hit roll instead."
+      "text": "Your deployment zone is within Power Matrix. At the start of each phase, if you control at least half of the objectives, no man's land is within Power Matrix until the end of the phase (evaluated once at that time). At the start of each phase, if you control at least half of the objectives, your opponent's deployment zone is within Power Matrix until the end of the phase (evaluated once at that time). You can, when resolving this use: you can re-roll a Hit roll of 1. If every model in the unit is wholly within Power Matrix, you can, when resolving this use: you can re-roll the Hit roll instead."
     }
   },
   {
@@ -21464,7 +21464,7 @@
       "duration": "battle"
     },
     "expected": {
-      "text": "If your Army Faction is LEAGUES OF VOTANN, for the rest of the battle:\n  -> At the start of the battle:\n    -> Until the start of your next Command phase: all friendly LEAGUES OF VOTANN units gain the Hostile Acquisition ability (while the target is within range of an objective marker, the unit gets +1 to Hit rolls; you can: you can re-roll the Charge roll; you can re-roll the Advance roll).\n  -> At the end of each phase:\n    During the Command phase:\n      -> If you control 1+ home objectives in your territory, you gain 1 YP.\n      From the second battle round onward:\n        -> If you control 1+ objectives (excluding home), you gain 1 YP.\n        -> If you control 2+ objectives (excluding home), you gain 1 YP.\n        -> If you hold more objectives than the opponent, you gain 1 YP.\n    During the Command phase, in your turn:\n      -> While the unit has at most 6 yp pool, until the start of your next Command phase: all friendly LEAGUES OF VOTANN units gain the Hostile Acquisition (Prioritised Efficiency) ability.\n    During the Command phase, in your turn:\n      -> While the unit has 7+ yp pool, until the start of your next Command phase: all friendly LEAGUES OF VOTANN units gain the Fortify Takeover ability (while the unit is within range of an objective marker you control, the unit gets +1 to Hit rolls; when the attack's S is more than the target's T, unless the unit has the VEHICLE keyword, the attacking unit gets -1 to Wound rolls)."
+      "text": "If your Army Faction is LEAGUES OF VOTANN, for the rest of the battle:\n  -> At the start of the battle:\n    -> Until the start of your next Command phase: all friendly LEAGUES OF VOTANN units gain the Hostile Acquisition ability (while the target is within range of an objective marker, the unit gets +1 to Hit rolls; you can re-roll the Charge roll; you can re-roll the Advance roll).\n  -> At the end of each phase:\n    During the Command phase:\n      -> If you control 1+ home objectives in your territory, you gain 1 YP.\n      From the second battle round onward:\n        -> If you control 1+ objectives (excluding home), you gain 1 YP.\n        -> If you control 2+ objectives (excluding home), you gain 1 YP.\n        -> If you hold more objectives than the opponent, you gain 1 YP.\n    During the Command phase, in your turn:\n      -> While the unit has at most 6 yp pool, until the start of your next Command phase: all friendly LEAGUES OF VOTANN units gain the Hostile Acquisition (Prioritised Efficiency) ability.\n    During the Command phase, in your turn:\n      -> While the unit has 7+ yp pool, until the start of your next Command phase: all friendly LEAGUES OF VOTANN units gain the Fortify Takeover ability (while the unit is within range of an objective marker you control, the unit gets +1 to Hit rolls; when the attack's S is more than the target's T, unless the unit has the VEHICLE keyword, the attacking unit gets -1 to Wound rolls)."
     }
   },
   {
@@ -26877,6 +26877,9 @@
                 "type": "controls",
                 "parameters": {
                   "by": "friendly",
+                  "objective": {
+                    "territory": "no-mans-land"
+                  },
                   "proportion": {
                     "comparison": "gte",
                     "fraction": 0.5
@@ -26897,6 +26900,9 @@
                 "type": "controls",
                 "parameters": {
                   "by": "friendly",
+                  "objective": {
+                    "territory": "enemy-deployment-zone"
+                  },
                   "proportion": {
                     "comparison": "gte",
                     "fraction": 0.5
@@ -26916,8 +26922,7 @@
               "filter": {
                 "owner": "friendly",
                 "all_of": [
-                  "PURIFIER SQUAD",
-                  "GREY-KNIGHTS"
+                  "PURIFIER SQUAD"
                 ]
               },
               "range": {
@@ -26931,6 +26936,12 @@
             "region_id": "hallowed-ground",
             "owner_faction": "grey-knights"
           },
+          "beneficiary_filter": {
+            "owner": "friendly",
+            "all_of": [
+              "GREY KNIGHTS"
+            ]
+          },
           "membership": {
             "unit_scope": "whole-unit",
             "relation": "wholly-within"
@@ -26941,6 +26952,7 @@
               {
                 "type": "matches",
                 "parameters": {
+                  "subject": "this-unit",
                   "filter": {
                     "all_of": [
                       "PURIFIER SQUAD"
@@ -26974,8 +26986,7 @@
                   "subset": "ones"
                 }
               },
-              "optional": false,
-              "duration": "resolution"
+              "optional": false
             }
           },
           "qualified_branch": {
@@ -26989,8 +27000,7 @@
                   "result_scope": "any-result"
                 }
               },
-              "optional": true,
-              "duration": "resolution"
+              "optional": true
             }
           },
           "attack_condition": {
@@ -27014,22 +27024,16 @@
                   {
                     "type": "matches",
                     "parameters": {
+                      "subject": "defender",
                       "filter": {
                         "visible": {
                           "to": "attacker"
                         }
-                      },
-                      "subject": "defender"
+                      }
                     }
                   }
                 ]
               }
-            ]
-          },
-          "beneficiary_filter": {
-            "owner": "friendly",
-            "all_of": [
-              "GREY KNIGHTS"
             ]
           }
         },
@@ -27040,7 +27044,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "Your deployment zone is within Hallowed Ground. At the start of each phase, if you control at least half of the objectives, no mans land is within Hallowed Ground until the end of the phase (evaluated once at that time). At the start of each phase, if you control at least half of the objectives, enemy deployment zone is within Hallowed Ground until the end of the phase (evaluated once at that time). The area within 6\" of one or more all friendly PURIFIER SQUAD GREY-KNIGHTS units is within Hallowed Ground, continuously as those units move. For each qualifying attack (for melee attacks or (for ranged attacks and the target is visible to the attacking model)): When resolving this use: you can re-roll a Hit roll of 1. If the unit has \"PURIFIER SQUAD\" or every model in the unit is wholly within Hallowed Ground, you can, when resolving this use: you can re-roll the Hit roll instead."
+      "text": "Your deployment zone is within Hallowed Ground. At the start of each phase, if you control at least half of the objectives in no man's land, no man's land is within Hallowed Ground until the end of the phase (evaluated once at that time). At the start of each phase, if you control at least half of the objectives in your opponent's deployment zone, your opponent's deployment zone is within Hallowed Ground until the end of the phase (evaluated once at that time). The area within 6\" of one or more friendly PURIFIER SQUAD units is within Hallowed Ground, continuously as those units move. For each qualifying attack (for melee attacks or (for ranged attacks and the target is visible to the attacking model)): You can re-roll a Hit roll of 1. If the unit has \"PURIFIER SQUAD\" or every model in the unit is wholly within Hallowed Ground, you can re-roll the Hit roll instead."
     }
   },
   {
@@ -32381,7 +32385,7 @@
       "duration": "battle"
     },
     "expected": {
-      "text": "If your Army Faction is LEAGUES OF VOTANN, for the rest of the battle:\n  -> At the start of the battle:\n    -> Until the start of your next Command phase: all friendly LEAGUES OF VOTANN units gain the Hostile Acquisition ability (while the target is within range of an objective marker, the unit gets +1 to Hit rolls; you can: you can re-roll the Charge roll; you can re-roll the Advance roll).\n  -> At the end of each phase:\n    During the Command phase:\n      -> If you control 1+ home objectives in your territory, you gain 1 YP.\n      From the second battle round onward:\n        -> If you control 1+ objectives (excluding home), you gain 1 YP.\n        -> If you control 2+ objectives (excluding home), you gain 1 YP.\n        -> If you hold more objectives than the opponent, you gain 1 YP.\n    During the Command phase, in your turn:\n      -> While the unit has at most 6 yp pool, until the start of your next Command phase: all friendly LEAGUES OF VOTANN units gain the Hostile Acquisition (Prioritised Efficiency) ability.\n    During the Command phase, in your turn:\n      -> While the unit has 7+ yp pool, until the start of your next Command phase: all friendly LEAGUES OF VOTANN units gain the Fortify Takeover ability (while the unit is within range of an objective marker you control, the unit gets +1 to Hit rolls; when the attack's S is more than the target's T, unless the unit has the VEHICLE keyword, the attacking unit gets -1 to Wound rolls)."
+      "text": "If your Army Faction is LEAGUES OF VOTANN, for the rest of the battle:\n  -> At the start of the battle:\n    -> Until the start of your next Command phase: all friendly LEAGUES OF VOTANN units gain the Hostile Acquisition ability (while the target is within range of an objective marker, the unit gets +1 to Hit rolls; you can re-roll the Charge roll; you can re-roll the Advance roll).\n  -> At the end of each phase:\n    During the Command phase:\n      -> If you control 1+ home objectives in your territory, you gain 1 YP.\n      From the second battle round onward:\n        -> If you control 1+ objectives (excluding home), you gain 1 YP.\n        -> If you control 2+ objectives (excluding home), you gain 1 YP.\n        -> If you hold more objectives than the opponent, you gain 1 YP.\n    During the Command phase, in your turn:\n      -> While the unit has at most 6 yp pool, until the start of your next Command phase: all friendly LEAGUES OF VOTANN units gain the Hostile Acquisition (Prioritised Efficiency) ability.\n    During the Command phase, in your turn:\n      -> While the unit has 7+ yp pool, until the start of your next Command phase: all friendly LEAGUES OF VOTANN units gain the Fortify Takeover ability (while the unit is within range of an objective marker you control, the unit gets +1 to Hit rolls; when the attack's S is more than the target's T, unless the unit has the VEHICLE keyword, the attacking unit gets -1 to Wound rolls)."
     }
   },
   {
@@ -33867,7 +33871,7 @@
       "duration": "resolution"
     },
     "expected": {
-      "text": "When resolving this use, Your deployment zone is within Example Region. At the start of each phase, if you control at least half of the objectives in no mans land, no mans land is within Example Region until the end of the phase (evaluated once at that time). At the start of each phase, if you control at least half of the objectives in enemy territory, enemy deployment zone is within Example Region until the end of the phase (evaluated once at that time). You can, when resolving this use: you can re-roll up to 2 rolls. If the unit has \"EXAMPLE\", you can, when resolving this use: you can re-roll up to 2 rolls instead."
+      "text": "When resolving this use, Your deployment zone is within Example Region. At the start of each phase, if you control at least half of the objectives in no man's land, no man's land is within Example Region until the end of the phase (evaluated once at that time). At the start of each phase, if you control at least half of the objectives in enemy territory, your opponent's deployment zone is within Example Region until the end of the phase (evaluated once at that time). You can, when resolving this use: you can re-roll up to 2 rolls. If the unit has \"EXAMPLE\", you can, when resolving this use: you can re-roll up to 2 rolls instead."
     }
   },
   {
@@ -37650,7 +37654,7 @@
       "duration": "resolution"
     },
     "expected": {
-      "text": "When resolving this use:\n  -> Select one enemy unit if the selected unit is a unit within Engagement Range of the unit, binding it as enemy:\n    -> Select at least one friendly EMBER SPRITE models in the unit, binding them as sprites:\n      -> For each selected model:\n        -> Roll one D6: on a 4+, destroy 1 model in that model; the bound enemy suffers 1 mortal wound."
+      "text": "When resolving this use:\n  -> Select one enemy unit if the selected unit is a unit within Engagement Range of the unit, binding it as enemy:\n    -> Select one or more friendly EMBER SPRITE models in the unit, binding them as sprites:\n      -> For each selected model:\n        -> Roll one D6: on a 4+, destroy that model; the bound enemy suffers 1 mortal wound."
     }
   },
   {
@@ -37854,6 +37858,136 @@
     }
   },
   {
+    "caseId": "fidelity/disembark-despite-transport-advanced",
+    "effect": {
+      "type": "permission",
+      "target": "this-unit",
+      "modifier": {
+        "activity": "disembark",
+        "allow": true,
+        "despite": [
+          "transport-advanced"
+        ]
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, the unit is eligible to disembark even if its Transport Advanced this turn."
+    }
+  },
+  {
+    "caseId": "fidelity/for-each-passes-secured-markers-later-part",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "for-each-unit",
+          "selector": {
+            "filter": {
+              "owner": "friendly",
+              "all_of": [
+                "SPRITE"
+              ]
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "objective-sticky",
+                "target": "recipient"
+              },
+              {
+                "type": "designate",
+                "target": "recipient",
+                "modifier": {
+                  "subject": {
+                    "objective": {
+                      "controlled_by_unit": "recipient"
+                    }
+                  },
+                  "tag": "secured"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "ability-part",
+          "duration": "control-lost",
+          "effect": {
+            "type": "for-each-unit",
+            "selector": {
+              "filter": {
+                "owner": "enemy"
+              }
+            },
+            "effect": {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "recipient",
+                  "filter": {
+                    "within": {
+                      "of": {
+                        "objective": {
+                          "controlled_by": "friendly",
+                          "designated": "secured"
+                        }
+                      },
+                      "range": "objective-control"
+                    }
+                  }
+                }
+              },
+              "effect": {
+                "type": "designate",
+                "target": "recipient",
+                "modifier": {
+                  "tag": "spotted"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use:\n  For each friendly SPRITE unit:\n    -> Objective markers the unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.\n    -> The objective that the unit was controlling when the rule was triggered is marked as secured.\n  -> Until you no longer control that objective marker:\n    For each enemy unit: While the unit is within range of an objective marker you control tagged secured, the unit is Spotted."
+    }
+  },
+  {
+    "caseId": "fidelity/part-until-end-of-next-turn",
+    "effect": {
+      "type": "ability-part",
+      "duration": "until-end-of-next-turn",
+      "effect": {
+        "type": "designate",
+        "target": {
+          "owner": "friendly",
+          "all_of": [
+            "SPRITE"
+          ]
+        },
+        "modifier": {
+          "tag": "riled-up"
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use:\n  -> Until the end of the next turn: all friendly SPRITE units are riled up."
+    }
+  },
+  {
     "caseId": "fidelity/named-region-producer-only",
     "effect": {
       "type": "conditional",
@@ -37922,7 +38056,7 @@
       "duration": "resolution"
     },
     "expected": {
-      "text": "If your Army Faction is EXAMPLE FACTION, when resolving this use, your deployment zone is within The Fabled Glade. At the start of each phase, if you control at least half of the objectives in no mans land, no mans land is within The Fabled Glade until the end of the phase (evaluated once at that time)."
+      "text": "If your Army Faction is EXAMPLE FACTION, when resolving this use, your deployment zone is within The Fabled Glade. At the start of each phase, if you control at least half of the objectives in no man's land, no man's land is within The Fabled Glade until the end of the phase (evaluated once at that time)."
     }
   },
   {
@@ -41050,7 +41184,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "Enemy deployment zone is within Fabricated Zone for the rest of the battle. At the start of the turn, if you control more than 25% of the objectives in your territory, your territory is within Fabricated Zone until the end of the turn (evaluated once at that time). The area within 4\" of one or more all friendly BEACON units is within Fabricated Zone, continuously as those units move. For each qualifying attack (for ranged attacks): You can, when resolving this use: you can re-roll a Hit roll of 1. If the unit has \"ELITE\", you can, when resolving this use: you can re-roll a failed Hit roll instead."
+      "text": "Your opponent's deployment zone is within Fabricated Zone for the rest of the battle. At the start of the turn, if you control more than 25% of the objectives in your territory, your territory is within Fabricated Zone until the end of the turn (evaluated once at that time). The area within 4\" of one or more friendly BEACON units is within Fabricated Zone, continuously as those units move. For each qualifying attack (for ranged attacks): You can, when resolving this use: you can re-roll a Hit roll of 1. If the unit has \"ELITE\", you can, when resolving this use: you can re-roll a failed Hit roll instead."
     }
   },
   {

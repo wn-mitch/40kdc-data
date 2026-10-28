@@ -83,7 +83,10 @@ function destroyModels(e: Leaf, m: Record<string, unknown>, subj: string): strin
   const modelTarget = e.target != null && typeof e.target === "object" && (e.target as P).level === "model";
   const what = modelTarget
     ? m.count === "all" ? subj : `${diceCase(m.count)} of the ${subj.replace(/^all /, "")}`
-    : m.count === "all" ? `every model in ${subj}` : `${diceCase(m.count)} ${diceCase(m.count) === "1" ? "model" : "models"} in ${subj}`;
+    : m.count === "all" ? `every model in ${subj}`
+    // One model of a single selected model ("that model") is that model, not "1 model in that model".
+    : diceCase(m.count) === "1" && /\bmodel$/u.test(subj) ? subj
+    : `${diceCase(m.count)} ${diceCase(m.count) === "1" ? "model" : "models"} in ${subj}`;
   const verb = m.remove_from_play === true ? "remove" : "destroy";
   const tail = m.remove_from_play === true ? " from play" : "";
   const triggers = m.ignore_death_triggers === true ? ", ignoring any rules triggered by their destruction" : "";

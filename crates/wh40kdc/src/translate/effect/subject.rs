@@ -6,7 +6,7 @@ use serde_json::Value;
 use super::words::*;
 use crate::translate::condition::{
     alternative_filters, and_list, article, designation_phrase, keyword_alternatives, nn, obj,
-    or_list, place_ref_phrase, range_phrase, state_phrase, P,
+    or_list, place_ref_phrase, range_phrase, state_phrase, territory_phrase, P,
 };
 use crate::translate::dekebab;
 
@@ -324,7 +324,7 @@ pub(crate) fn region_phrase(r: &P) -> String {
         return title_case(&jstr(obj(r.get("rule_region")).get("region_id")));
     }
     if truthy_key(r, "territory") {
-        return dekebab(&jstr(r.get("territory")));
+        return territory_phrase(&jstr(r.get("territory")));
     }
     let area = obj(nn(r, "terrain_area"));
     let mut place = match nn(area, "footprint") {

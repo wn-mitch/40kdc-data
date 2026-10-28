@@ -65,6 +65,10 @@ func selectorCountPhrase(sel map[string]any) (string, bool) {
 	case max != nil:
 		return "up to " + quantity(max), jsNumber(max) != 1
 	case min != nil:
+		// "Select one or more models", not "at least one models".
+		if jsNumber(min) == 1 {
+			return "one or more", true
+		}
 		return "at least " + quantity(min), true
 	default:
 		return "each", false

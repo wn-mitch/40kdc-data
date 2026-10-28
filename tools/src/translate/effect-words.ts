@@ -4,7 +4,7 @@
  * ASCII-only; pinned byte-for-byte across the ports by `conformance/effect-translation`.
  */
 
-import { alternativeFilters, andList, designationPhrase, dekebab, idLabel, keywordAlternatives, orList, placeRefPhrase, rangePhrase, statePhrase, titleCase, type P } from "./condition-refs.js";
+import { alternativeFilters, andList, designationPhrase, dekebab, idLabel, keywordAlternatives, orList, placeRefPhrase, rangePhrase, statePhrase, territoryPhrase, titleCase, type P } from "./condition-refs.js";
 import { designationLabel } from "./designations.js";
 
 export { andList, dekebab, orList, rangePhrase, titleCase };
@@ -391,7 +391,7 @@ export function weaponHolder(target: unknown, ctx: Ctx): string {
 /** A region-ref as a place: "enemy territory", "the Ruins terrain area", "Plague Zone". */
 export function regionPhrase(r: P): string {
   if (r.rule_region) return titleCase(jstr((r.rule_region as P).region_id));
-  if (r.territory) return dekebab(jstr(r.territory));
+  if (r.territory) return territoryPhrase(jstr(r.territory));
   const area = (r.terrain_area ?? {}) as P;
   let where = area.footprint != null ? `the ${dekebab(jstr(area.footprint))} terrain area` : "a terrain area";
   if (area.designated != null) where += ` tagged ${dekebab(jstr(area.designated))}`;

@@ -343,7 +343,7 @@ export function usedAbilityPhrase(f: P): string | undefined {
 }
 
 /** "your opponent's deployment zone": a deployment zone is named by whose it is; other territories by their words. */
-const TERRITORY_PHRASES: Record<string, string> = { "your-deployment-zone": "your deployment zone", "enemy-deployment-zone": "your opponent's deployment zone" };
-function territoryPhrase(territory: string): string {
+const TERRITORY_PHRASES: Record<string, string> = { "your-deployment-zone": "your deployment zone", "enemy-deployment-zone": "your opponent's deployment zone", "no-mans-land": "no man's land" };
+export function territoryPhrase(territory: string): string {
   return TERRITORY_PHRASES[territory] ?? dekebab(territory);
 }

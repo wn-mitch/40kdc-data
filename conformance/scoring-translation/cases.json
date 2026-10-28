@@ -359,7 +359,7 @@
     "cardId": "secure-no-mans-land",
     "expected": {
       "awards": [
-        "End of your turn: 5 VP when you control 2+ objectives in no mans land (excluding home)"
+        "End of your turn: 5 VP when you control 2+ objectives in no man's land (excluding home)"
       ]
     }
   },

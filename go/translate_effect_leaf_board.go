@@ -104,6 +104,9 @@ func destroyModelsLeaf(e, m map[string]any, subj string) string {
 		}
 	} else if m["count"] == "all" {
 		what = "every model in " + subj
+	} else if diceCase(m["count"]) == "1" && (subj == "model" || strings.HasSuffix(subj, " model")) {
+		// One model of a single selected model ("that model") is that model, not "1 model in that model".
+		what = subj
 	} else {
 		n := diceCase(m["count"])
 		kind := "models"

@@ -85,9 +85,11 @@ def _prefix(m: dict[str, Any]) -> str:
         )
     for entry in _items(producer.get("additive_extensions")):
         addition = _rec(entry)
+        # "one or more friendly X units": the quantifier replaces the filter's own "all".
+        source = filter_subject(_rec(addition.get("filter"))).removeprefix("all ")
         sentences.append(
             f"The area within {range_phrase(addition.get('range'))} of one or more "
-            f"{filter_subject(_rec(addition.get('filter')))} is within {region}, "
+            f"{source} is within {region}, "
             "continuously as those units move."
         )
     return " ".join(sentences)

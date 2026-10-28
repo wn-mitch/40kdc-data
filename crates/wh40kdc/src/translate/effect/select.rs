@@ -99,6 +99,8 @@ pub(super) fn selector_count(sel: &P) -> (String, bool) {
             format!("up to {}", quantity(max)),
             max.as_f64() != Some(1.0),
         ),
+        // "Select one or more models", not "at least one models".
+        (Some(min), _) if min.as_f64() == Some(1.0) => ("one or more".to_string(), true),
         (Some(min), _) => (format!("at least {}", quantity(min)), true),
         _ => ("each".to_string(), false),
     }

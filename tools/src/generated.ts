@@ -780,6 +780,7 @@ export type ScopeDuration =
   | "until-next-shooting-phase"
   | "until-end-of-your-next-turn"
   | "until-end-of-opponent-next-turn"
+  | "until-end-of-next-turn"
   | "until-this-unit-has-shot"
   | "control-lost"
   | "until-end-of-your-next-fight-phase"
@@ -3898,6 +3899,7 @@ export interface AbilityPart {
     | "until-next-shooting-phase"
     | "until-end-of-your-next-turn"
     | "until-end-of-opponent-next-turn"
+    | "until-end-of-next-turn"
     | "until-this-unit-has-shot"
     | "control-lost"
     | "until-end-of-your-next-fight-phase"
@@ -4271,6 +4273,7 @@ export interface ResourceActionMenuEffect {
         | "until-next-shooting-phase"
         | "until-end-of-your-next-turn"
         | "until-end-of-opponent-next-turn"
+        | "until-end-of-next-turn"
         | "until-this-unit-has-shot"
         | "control-lost"
         | "until-end-of-your-next-fight-phase"
@@ -4321,6 +4324,7 @@ export interface ResourceActionMenuEffect {
         | "until-next-shooting-phase"
         | "until-end-of-your-next-turn"
         | "until-end-of-opponent-next-turn"
+        | "until-end-of-next-turn"
         | "until-this-unit-has-shot"
         | "control-lost"
         | "until-end-of-your-next-fight-phase"
@@ -4736,6 +4740,7 @@ export interface PermissionEffect {
         | "advanced"
         | "fell-back"
         | "destroyed"
+        | "transport-advanced"
       ),
       ...(
         | "engaged"
@@ -4748,6 +4753,7 @@ export interface PermissionEffect {
         | "advanced"
         | "fell-back"
         | "destroyed"
+        | "transport-advanced"
       )[]
     ];
     into?: UnitRef;
@@ -7904,6 +7910,7 @@ export interface NamedObjectiveState {
     | "until-next-shooting-phase"
     | "until-end-of-your-next-turn"
     | "until-end-of-opponent-next-turn"
+    | "until-end-of-next-turn"
     | "until-this-unit-has-shot"
     | "control-lost"
     | "until-end-of-your-next-fight-phase"

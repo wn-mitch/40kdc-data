@@ -220,6 +220,10 @@ func partHead(e map[string]any) string {
 		usage = usageClause(e["usage"])
 	}
 	_, trail := durationClauses(e["duration"])
+	// A part's own control-lost duration leads it, with no objective marker before it for "it" to name.
+	if strings.HasSuffix(trail, "control it") {
+		trail = strings.TrimSuffix(trail, "it") + "that objective marker"
+	}
 	return joinNonEmpty([]string{label, moment, usage, named, cost, trail}, ", ")
 }
 
@@ -227,6 +231,10 @@ func partHead(e map[string]any) string {
 func partInline(e map[string]any, ctx effCtx) string {
 	head := partHead(e)
 	body := describeEffectInline(mapOr(e["effect"]), ctx)
+	// An optional part whose effect already reads "you can ..." needs no "you can:" before it.
+	if head == "you can" && strings.HasPrefix(body, "you can ") {
+		return body
+	}
 	if head != "" {
 		return head + ": " + body
 	}

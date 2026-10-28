@@ -75,7 +75,9 @@ fn prefix(m: &P) -> String {
     for entry in entries(producer, "additive_extensions") {
         let entry = obj(Some(entry));
         let filter = obj(entry.get("filter"));
-        let source = filter_subject(filter, &Ctx::default());
+        // "one or more friendly X units": the quantifier replaces the filter's own "all".
+        let subject = filter_subject(filter, &Ctx::default());
+        let source = subject.strip_prefix("all ").unwrap_or(&subject);
         sentences.push(format!(
             "The area within {} of one or more {source} is within {region}, continuously as those units move.",
             range_phrase(entry.get("range"))

@@ -50,7 +50,8 @@ export function selectorCount(sel: P): { phrase: string; plural: boolean } {
   if (bounds.min != null && bounds.min === bounds.max) return { phrase: quantity(bounds.min), plural: bounds.max !== 1 };
   if (bounds.min != null && bounds.max != null && bounds.min !== 0) return { phrase: `from ${quantity(bounds.min)} through ${quantity(bounds.max)}`, plural: bounds.max !== 1 };
   if (bounds.max != null) return { phrase: `up to ${quantity(bounds.max)}`, plural: bounds.max !== 1 };
-  if (bounds.min != null) return { phrase: `at least ${quantity(bounds.min)}`, plural: true };
+  // "Select one or more models", not "at least one models".
+  if (bounds.min != null) return { phrase: Number(bounds.min) === 1 ? "one or more" : `at least ${quantity(bounds.min)}`, plural: true };
   return { phrase: "each", plural: false };
 }
 

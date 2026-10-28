@@ -141,7 +141,10 @@ def permission(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
         clauses = []
         for d in m["despite"]:
             phrase = _DESPITE.get(jstr(d), jstr(d))
-            if jstr(d) in _IS_STATE:
+            if jstr(d) == "transport-advanced":
+                # The Transport the subject disembarks from Advanced, not the subject.
+                clauses.append(f"{'their' if it == 'they' else 'its'} Transport Advanced this turn")
+            elif jstr(d) in _IS_STATE:
                 clauses.append(f"{'they are' if it == 'they' else 'it is'} {phrase}")
             else:
                 # "they has already shot" → "they have already shot".

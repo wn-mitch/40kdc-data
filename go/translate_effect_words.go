@@ -673,7 +673,7 @@ func regionPhrase(r map[string]any) string {
 		return titleCase(ejstr(mapOr(r["rule_region"])["region_id"]))
 	}
 	if jsTruthy(r["territory"]) {
-		return dekebab(ejstr(r["territory"]))
+		return territoryPhrase(ejstr(r["territory"]))
 	}
 	area := mapOr(r["terrain_area"])
 	where := "a terrain area"

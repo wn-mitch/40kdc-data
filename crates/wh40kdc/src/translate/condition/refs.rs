@@ -710,10 +710,11 @@ pub(crate) fn keyword_list(p: &P) -> String {
 }
 
 /// "your opponent's deployment zone": a deployment zone is named by whose it is; other territories by their words.
-fn territory_phrase(territory: &str) -> String {
+pub(crate) fn territory_phrase(territory: &str) -> String {
     match territory {
         "your-deployment-zone" => "your deployment zone".to_string(),
         "enemy-deployment-zone" => "your opponent's deployment zone".to_string(),
+        "no-mans-land" => "no man's land".to_string(),
         _ => dekebab(territory),
     }
 }

@@ -52,8 +52,10 @@ func namedRegionPrefix(m map[string]any) string {
 	}
 	for _, raw := range getList(producer, "additive_extensions") {
 		entry := mapOr(raw)
+		// "one or more friendly X units": the quantifier replaces the filter's own "all".
+		source := strings.TrimPrefix(filterSubject(mapOr(entry["filter"]), effCtx{}), "all ")
 		sentences = append(sentences, "The area within "+rangePhrase(entry["range"])+" of one or more "+
-			filterSubject(mapOr(entry["filter"]), effCtx{})+" is within "+region+", continuously as those units move.")
+			source+" is within "+region+", continuously as those units move.")
 	}
 	return strings.Join(sentences, " ")
 }

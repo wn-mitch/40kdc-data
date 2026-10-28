@@ -120,6 +120,16 @@ export const DURATION_AND_DESIGNATION_EXTENSIONS: readonly FamilyExtension[] = [
       : previous(input),
   },
   {
+    // "Until the end of the next turn", from a moment in either player's turn: the turn after the current one, whoever's it is.
+    family: "duration",
+    version: 6,
+    description: "As the previous version, plus end-of-next-turn: until the end of the turn after the current one, whichever player's it is (\"until the end of the next turn\" from a moment that can fall in either turn). end-of-your-next-turn and end-of-opponents-next-turn name the player.",
+    schema: (previous) => withProperties(previous, { endpoint: widenedEnum(previous, "endpoint", ["end-of-next-turn"]) }),
+    normalize: (input, previous) => input.endpoint === "end-of-next-turn"
+      ? standIn(input, "endpoint", "end-of-turn", previous)
+      : previous(input),
+  },
+  {
     // "Once per battle, in any phase, just after …": every phase, said outright.
     family: "phase-window",
     version: 2,

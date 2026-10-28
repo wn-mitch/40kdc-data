@@ -162,6 +162,15 @@ export const TARGETING_FAMILIES: readonly SemanticFamilyDefinition[] = [
     parameterSchema: { type: "object", properties: {}, additionalProperties: false },
   },
   {
+    id: "with-embarked-units",
+    version: 1,
+    role: "COMBINATOR",
+    label: "And the units embarked within it",
+    description: "\"That unit (and any units embarked within that unit): …\": every effect after this leaf in its fragment also applies to the units embarked within the unit it names.",
+    starter: {},
+    parameterSchema: { type: "object", properties: {}, additionalProperties: false },
+  },
+  {
     id: "eligibility-permission",
     version: 1,
     role: "EFFECT",

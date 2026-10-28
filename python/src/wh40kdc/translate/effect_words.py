@@ -29,6 +29,7 @@ from wh40kdc.translate.condition_refs import (
 from wh40kdc.translate.condition_refs import (
     _or_list as or_list,
 )
+from wh40kdc.translate.condition_refs import territory_phrase
 from wh40kdc.translate.designations import designation_label
 
 __all__ = ["and_list", "dekebab", "or_list", "range_phrase", "title_case"]
@@ -599,7 +600,7 @@ def region_phrase(r: dict[str, Any]) -> str:
         rr = r["rule_region"] if isinstance(r["rule_region"], dict) else {}
         return title_case(jstr(rr.get("region_id")))
     if r.get("territory"):
-        return dekebab(jstr(r["territory"]))
+        return territory_phrase(jstr(r["territory"]))
     area = r.get("terrain_area")
     area = area if isinstance(area, dict) else {}
     where = (

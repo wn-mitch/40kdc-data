@@ -122,6 +122,33 @@ const NAMED_MODEL_AND_WEAPONS: FamilyExtension = {
   },
 };
 
+/** "can disembark from a TRANSPORT after it has Advanced": the Transport Advanced, not the subject. */
+const TRANSPORT_ADVANCED = "transport-advanced";
+
+/**
+ * A disembark permission despite the Transport having Advanced ("the bearer's unit can disembark
+ * from a TRANSPORT after it has Advanced"): `advanced` would say the disembarking unit Advanced.
+ */
+const DESPITE_TRANSPORT_ADVANCED: FamilyExtension = {
+  family: "eligibility-permission",
+  version: 10,
+  description: "As the previous version, plus despite transport-advanced: a disembark permission that holds even if the Transport the subject disembarks from Advanced this turn. Only with activity disembark.",
+  schema: (previous) => {
+    const despite = (previous.properties as Record<string, Record<string, unknown>>).despite!;
+    const items = despite.items as { enum: string[] };
+    return withProperties(previous, { despite: { ...despite, items: { ...items, enum: [...items.enum, TRANSPORT_ADVANCED] } } });
+  },
+  normalize: (input, previous) => {
+    if (!Array.isArray(input.despite) || !input.despite.includes(TRANSPORT_ADVANCED)) return previous(input);
+    if (input.activity !== "disembark") throw new TypeError("eligibility-permission.despite transport-advanced applies only to activity: disembark.");
+    const others = input.despite.filter((value) => value !== TRANSPORT_ADVANCED);
+    if (others.length + 1 !== input.despite.length) throw new TypeError("eligibility-permission.despite lists transport-advanced twice.");
+    const { despite: _despite, ...rest } = input;
+    const normalized = previous(others.length > 0 ? { ...rest, despite: others } : rest);
+    return { ...normalized, despite: [...((normalized.despite as string[] | undefined) ?? []), TRANSPORT_ADVANCED] };
+  },
+};
+
 export const ELIGIBILITY_EXTENSIONS: readonly FamilyExtension[] = [
   /**
    * Permission binding: a permission to end within Engagement Range of the enemy unit that the same
@@ -188,6 +215,7 @@ export const ELIGIBILITY_EXTENSIONS: readonly FamilyExtension[] = [
   },
   FIGHT_REACH_AND_NEXT,
   NAMED_MODEL_AND_WEAPONS,
+  DESPITE_TRANSPORT_ADVANCED,
   /**
    * Transport eligibility: "one friendly TRANSPORT that it is able to embark within". The subject
    * (a unit, possibly an earlier leaf's unit) is eligible to embark within the named Transport, by

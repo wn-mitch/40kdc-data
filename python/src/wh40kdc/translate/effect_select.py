@@ -142,7 +142,8 @@ def selector_count(sel: dict[str, Any]) -> tuple[str, bool]:
     if maximum is not None:
         return f"up to {quantity(maximum)}", maximum != 1
     if minimum is not None:
-        return f"at least {quantity(minimum)}", True
+        # "Select one or more models", not "at least one models".
+        return ("one or more" if minimum == 1 else f"at least {quantity(minimum)}"), True
     return "each", False
 
 

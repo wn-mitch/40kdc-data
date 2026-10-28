@@ -68,6 +68,8 @@ export const DURATIONS: Record<string, string> = {
   "end-of-your-next-turn": "until-end-of-your-next-turn", "end-of-opponents-next-turn": "until-end-of-opponent-next-turn",
   "this-unit-has-shot": "until-this-unit-has-shot", "control-lost": "control-lost",
   "after-this-use": "after-resolving",
+  // Version 6: the turn after the current one, whoever's.
+  "end-of-next-turn": "until-end-of-next-turn",
 };
 
 /** A unit's own activity, as the history it leaves: [event, filter, window]. */

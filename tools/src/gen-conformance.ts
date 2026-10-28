@@ -4086,6 +4086,19 @@ function genEffectTranslation(): void {
       target_condition: { operator: "or", operands: [
         { type: "happened", parameters: { event: "targets-selected", subject: { owner: "any", excluding: "ability-unit" }, object: "this-unit", filter: { kind: "attack" }, window: "phase" } },
         { type: "happened", parameters: { event: "targets-selected", subject: { owner: "any", excluding: "ability-unit" }, object: "this-unit", filter: { kind: "charge" }, window: "phase" } }] } } } },
+    // A disembark permission despite the Transport having Advanced, not the disembarking unit.
+    { caseId: "fidelity/disembark-despite-transport-advanced", effect: { type: "permission", target: "this-unit", modifier: { activity: "disembark", allow: true, despite: ["transport-advanced"] } } },
+    // Two for-each passes: the first secures and tags markers, a later part with its own duration reads them back.
+    { caseId: "fidelity/for-each-passes-secured-markers-later-part", effect: { type: "sequence", steps: [
+      { type: "for-each-unit", selector: { filter: { owner: "friendly", all_of: ["SPRITE"] } }, effect: { type: "sequence", steps: [
+        { type: "objective-sticky", target: "recipient" },
+        { type: "designate", target: "recipient", modifier: { subject: { objective: { controlled_by_unit: "recipient" } }, tag: "secured" } }] } },
+      { type: "ability-part", duration: "control-lost", effect: { type: "for-each-unit", selector: { filter: { owner: "enemy" } }, effect: { type: "conditional",
+        condition: { type: "matches", parameters: { subject: "recipient", filter: { within: { of: { objective: { controlled_by: "friendly", designated: "secured" } }, range: "objective-control" } } } },
+        effect: { type: "designate", target: "recipient", modifier: { tag: "spotted" } } } } }] } },
+    // A part lasting until the end of the turn after this one, whoever's turn that is.
+    { caseId: "fidelity/part-until-end-of-next-turn", effect: { type: "ability-part", duration: "until-end-of-next-turn",
+      effect: { type: "designate", target: { owner: "friendly", all_of: ["SPRITE"] }, modifier: { tag: "riled-up" } } } },
     // A named region declared with nothing reading it here (a producer-only named-region-state).
     { caseId: "fidelity/named-region-producer-only", effect: { type: "conditional", condition: { type: "army-faction", parameters: { faction: "example-faction" } },
       effect: { type: "named-region-state", target: { owner: "friendly" }, modifier: {

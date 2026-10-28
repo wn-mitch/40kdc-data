@@ -9216,9 +9216,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "beasts-of-nurgle"
     ],
@@ -9226,11 +9225,27 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "heal",
+      "target": {
+        "owner": "friendly",
+        "all_of": [
+          "BEASTS OF NURGLE"
+        ],
+        "level": "model",
+        "member_of": "this-unit"
+      },
+      "modifier": {
+        "amount": "full"
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-ended"
+    },
+    "source_digest": "3750dd9de69ef2e8a6cb9bf914db77a4017d74ba71bb42b1bc09072c22a63aed"
   },
   {
     "ability_id": "infected-outbreak-death-guard",

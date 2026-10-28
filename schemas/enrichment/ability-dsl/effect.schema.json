@@ -1730,7 +1730,8 @@
                       "performing-action",
                       "advanced",
                       "fell-back",
-                      "destroyed"
+                      "destroyed",
+                      "transport-advanced"
                     ]
                   },
                   "minItems": 1,

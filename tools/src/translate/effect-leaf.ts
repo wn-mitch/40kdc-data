@@ -347,6 +347,8 @@ function permission(m: Record<string, unknown>, subj: string, ctx: Ctx): string 
   if (Array.isArray(m.after)) s += ` in a turn in which ${it} ${orList((m.after as unknown[]).map((a) => AFTER[jstr(a)] ?? jstr(a)))}`;
   if (Array.isArray(m.despite)) {
     const clauses = (m.despite as unknown[]).map((d) => {
+      // The Transport the subject disembarks from Advanced, not the subject.
+      if (jstr(d) === "transport-advanced") return `${it === "they" ? "their" : "its"} Transport Advanced this turn`;
       const phrase = DESPITE[jstr(d)] ?? jstr(d);
       if (IS_STATE.has(jstr(d))) return `${it === "they" ? "they are" : "it is"} ${phrase}`;
       // "they has already shot" → "they have already shot".

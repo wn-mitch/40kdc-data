@@ -14448,7 +14448,7 @@
         "activity": "disembark",
         "allow": true,
         "despite": [
-          "advanced"
+          "transport-advanced"
         ],
         "counts_as_move": "normal",
         "counts_as_until": "end-of-phase",

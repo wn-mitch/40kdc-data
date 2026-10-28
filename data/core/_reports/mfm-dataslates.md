@@ -15,10 +15,10 @@ dump confirmation.
 | wargear-options | 0 | 0 | 1234 | 0 |
 | leader-attachments | 0 | 0 | 283 | 8 |
 | enhancements | 0 | 0 | 890 | 0 |
-| detachments | 3 | 0 | 165 | 289 |
+| detachments | 0 | 0 | 168 | 289 |
 | stratagems | 0 | 0 | 1032 | 281 |
-| abilities | 0 | 0 | 3635 | 900 |
-| phase-mappings | 3 | 0 | 1128 | 450 |
+| abilities | 0 | 0 | 3636 | 899 |
+| phase-mappings | 0 | 0 | 1131 | 450 |
 | resource-pools | 0 | 0 | 0 | 6 |
 
 ## Abilities by faction
@@ -39,7 +39,7 @@ dump confirmation.
 | chaos-knights | 0 | 0 | 83 | 27 |
 | chaos-space-marines | 0 | 0 | 220 | 61 |
 | dark-angels | 0 | 0 | 59 | 18 |
-| death-guard | 0 | 0 | 122 | 38 |
+| death-guard | 0 | 0 | 123 | 37 |
 | deathwatch | 0 | 0 | 31 | 5 |
 | drukhari | 0 | 0 | 125 | 39 |
 | emperors-children | 0 | 0 | 120 | 26 |
@@ -126,9 +126,9 @@ dump confirmation.
 | dark-angels | stub | 8 |
 | dark-angels | verified | 59 |
 | death-guard | digest-differs | 5 |
-| death-guard | stub | 19 |
+| death-guard | stub | 18 |
 | death-guard | unpublished | 14 |
-| death-guard | verified | 122 |
+| death-guard | verified | 123 |
 | deathwatch | ambiguous-source | 1 |
 | deathwatch | digest-differs | 1 |
 | deathwatch | no-source | 1 |

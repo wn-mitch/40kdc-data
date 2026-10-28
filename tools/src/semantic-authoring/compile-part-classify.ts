@@ -190,6 +190,12 @@ export function classifyLeaves(given: CompileLeaf[], places: Placement[], contai
   const perRecipient = !list.some((leaf) => leaf.family_id === "aura-range" || leaf.family_id === "for-each-unit-select");
   // The triggers of the moment a condition follows in its own source sentence, with no effect between, when an
   // effect comes before that moment: the moment opens a later part (compile-part-bindings.ts partStarts).
+  // A condition whose wording a colon follows ("While a unit is **riled up**:") introduces the sentences after it.
+  const introducesList = (index: number) => {
+    const end = list[index]!.end_byte;
+    if (sourceText === undefined || end === undefined) return false;
+    return /^\**[ \t]*:/u.test(Buffer.from(sourceText, "utf8").subarray(end, end + 8).toString("utf8"));
+  };
   const anyEffectBefore = (index: number) => list.slice(0, index).some((leaf) => leaf.role === "EFFECT");
   const partMomentsBefore = (index: number): number[] => {
     const moment = [...triggerIndexes].reverse().find((at) => at < index);
@@ -246,7 +252,12 @@ export function classifyLeaves(given: CompileLeaf[], places: Placement[], contai
         else global.push(node);
       } else if (leading) {
         if (node === "selected") selectedSentences.add(sentence);
-        else { sentenceGates.set(sentence, [...(sentenceGates.get(sentence) ?? []), node]); gateOrigin.set(node, index); }
+        else {
+          // "While a unit is riled up: A. B. C.": a condition that introduces a list gates each later sentence of the part too.
+          const gated = introducesList(index) ? [...new Set(places.map((place) => place.sentence))].filter((each) => each >= sentence) : [sentence];
+          for (const each of gated) sentenceGates.set(each, [...(sentenceGates.get(each) ?? []), node]);
+          gateOrigin.set(node, index);
+        }
       } else if (node === "selected") {
         selectedClauses.add(clause);
       } else {

@@ -740,7 +740,8 @@ function namedRegionPrefix(m: Record<string, unknown>): string {
   }
   for (const entry of Array.isArray(producer.additive_extensions) ? producer.additive_extensions : []) {
     const addition = namedRegionRecord(entry);
-    sentences.push(`The area within ${rangePhrase(addition.range)} of one or more ${filterSubject(namedRegionRecord(addition.filter))} is within ${region}, continuously as those units move.`);
+    // "one or more friendly X units": the quantifier replaces the filter's own "all".
+    sentences.push(`The area within ${rangePhrase(addition.range)} of one or more ${filterSubject(namedRegionRecord(addition.filter)).replace(/^all /u, "")} is within ${region}, continuously as those units move.`);
   }
   return sentences.join(" ");
 }
@@ -814,13 +815,17 @@ function partHead(e: Effect): string {
   const label = e.name && !moment && !e.optional ? `${jstr(e.name)}${level}` : "";
   const named = label ? "" : e.name ? `${e.optional ? "you can use " : "use "}${jstr(e.name)}${level}` : e.optional ? "you can" : "";
   const cost = e.cost ? `by paying this cost (${describeEffectInline(e.cost)})` : "";
-  return [label, moment, e.usage ? usageClause(e.usage) : "", named, cost, durationClauses(e.duration).trail].filter(Boolean).join(", ");
+  // A part's own control-lost duration leads it, with no objective marker before it for "it" to name.
+  const trail = durationClauses(e.duration).trail.replace(/control it$/u, "control that objective marker");
+  return [label, moment, e.usage ? usageClause(e.usage) : "", named, cost, trail].filter(Boolean).join(", ");
 }
 
 /** A part on one line: its head, then its effect. */
 function partInline(e: Effect, ctx: Ctx): string {
   const head = partHead(e);
   const body = describeEffectInline(e.effect ?? {}, ctx);
+  // An optional part whose effect already reads "you can …" needs no "you can:" before it.
+  if (head === "you can" && body.startsWith("you can ")) return body;
   return head ? `${head}: ${body}` : body;
 }
 

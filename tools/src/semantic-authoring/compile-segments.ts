@@ -102,6 +102,11 @@ const BULLET = /[■•]|(?:^|\n)[ \t]*[-*–—](?=\s)/u;
 const HEADING_LINE = /(?:^|[\r\n])[ \t]*\*\*[^*\r\n]+\*\*[ \t]*[\r\n]/u;
 /** A plain label that opens its own source line: "Bestial Forms: …" (a bold granted-ability name is not one). */
 const LABEL = /^[ \t]*(?!Or:)[A-Z][A-Za-z' ]{0,40}:/u;
+/**
+ * A bold rule name with its own usage limit that opens its line: "**War Cry (Once per battle, per army): **" is a
+ * rule of its own. A bare bold name ("**Additional Effect:**") is not: it can sit under a heading that gates it.
+ */
+const BOLD_LABEL = /^[ \t]*\*\*[A-Z][A-Za-z' ]{0,40}[ \t]\((?:Once|Twice) per /u;
 
 /**
  * Whether a sentence starts its own source line with a label. The gap before it must hold a
@@ -109,10 +114,11 @@ const LABEL = /^[ \t]*(?!Or:)[A-Z][A-Za-z' ]{0,40}:/u;
  */
 function labelLine(leaves: readonly CompileLeaf[], start: number, sentence: readonly CompileLeaf[], sourceText: string): boolean {
   const gap = sentenceGap(leaves, start, sentence, sourceText);
-  const newline = gap.lastIndexOf("\n");
+  // Some sources break lines with a bare carriage return.
+  const newline = Math.max(gap.lastIndexOf("\n"), gap.lastIndexOf("\r"));
   if (newline === -1) return false;
   const opening = `${gap.slice(newline + 1)}${between(sourceText, sentence[0]!.start_byte, sentence.at(-1)!.end_byte ?? sentence[0]!.start_byte)}`;
-  return LABEL.test(opening);
+  return LABEL.test(opening) || BOLD_LABEL.test(opening);
 }
 
 /**

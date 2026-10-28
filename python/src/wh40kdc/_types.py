@@ -1489,6 +1489,7 @@ ScopeDuration: TypeAlias = Literal[
     "until-next-shooting-phase",
     "until-end-of-your-next-turn",
     "until-end-of-opponent-next-turn",
+    "until-end-of-next-turn",
     "until-this-unit-has-shot",
     "control-lost",
     "until-end-of-your-next-fight-phase",
@@ -3000,6 +3001,7 @@ class Modifier16(TypedDict):
                 "advanced",
                 "fell-back",
                 "destroyed",
+                "transport-advanced",
             ]
         ]
     ]

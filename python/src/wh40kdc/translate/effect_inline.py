@@ -559,6 +559,8 @@ def part_head(e: Effect) -> str:
     )
     usage = usage_clause(e["usage"]) if e.get("usage") else ""
     _, trail = duration_clauses(e.get("duration"))
+    # A part's own control-lost duration leads it, with no objective marker before it for "it" to name.
+    trail = re.sub(r"control it$", "control that objective marker", trail)
     return ", ".join(p for p in (label, moment, usage, named, cost, trail) if p)
 
 
@@ -566,6 +568,9 @@ def part_inline(e: Effect, ctx: Ctx) -> str:
     """A part on one line: its head, then its effect."""
     head = part_head(e)
     body = inline(e.get("effect"), ctx)
+    # An optional part whose effect already reads "you can ..." needs no "you can:" before it.
+    if head == "you can" and body.startswith("you can "):
+        return body
     return f"{head}: {body}" if head else body
 
 

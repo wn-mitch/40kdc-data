@@ -28643,7 +28643,8 @@ impl ::std::convert::TryFrom<::std::string::String> for Period {
 ///          "performing-action",
 ///          "advanced",
 ///          "fell-back",
-///          "destroyed"
+///          "destroyed",
+///          "transport-advanced"
 ///        ]
 ///      },
 ///      "minItems": 1,
@@ -29158,7 +29159,8 @@ for PermissionEffectModifierCountsAsUntil {
 ///    "performing-action",
 ///    "advanced",
 ///    "fell-back",
-///    "destroyed"
+///    "destroyed",
+///    "transport-advanced"
 ///  ]
 ///}
 /// ```
@@ -29196,6 +29198,8 @@ pub enum PermissionEffectModifierDespiteItem {
     FellBack,
     #[serde(rename = "destroyed")]
     Destroyed,
+    #[serde(rename = "transport-advanced")]
+    TransportAdvanced,
 }
 impl ::std::fmt::Display for PermissionEffectModifierDespiteItem {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
@@ -29210,6 +29214,7 @@ impl ::std::fmt::Display for PermissionEffectModifierDespiteItem {
             Self::Advanced => f.write_str("advanced"),
             Self::FellBack => f.write_str("fell-back"),
             Self::Destroyed => f.write_str("destroyed"),
+            Self::TransportAdvanced => f.write_str("transport-advanced"),
         }
     }
 }
@@ -29229,6 +29234,7 @@ impl ::std::str::FromStr for PermissionEffectModifierDespiteItem {
             "advanced" => Ok(Self::Advanced),
             "fell-back" => Ok(Self::FellBack),
             "destroyed" => Ok(Self::Destroyed),
+            "transport-advanced" => Ok(Self::TransportAdvanced),
             _ => Err("invalid value".into()),
         }
     }
@@ -39313,6 +39319,7 @@ pub struct Scope {
 ///    "until-next-shooting-phase",
 ///    "until-end-of-your-next-turn",
 ///    "until-end-of-opponent-next-turn",
+///    "until-end-of-next-turn",
 ///    "until-this-unit-has-shot",
 ///    "control-lost",
 ///    "until-end-of-your-next-fight-phase",
@@ -39371,6 +39378,8 @@ pub enum ScopeDuration {
     UntilEndOfYourNextTurn,
     #[serde(rename = "until-end-of-opponent-next-turn")]
     UntilEndOfOpponentNextTurn,
+    #[serde(rename = "until-end-of-next-turn")]
+    UntilEndOfNextTurn,
     #[serde(rename = "until-this-unit-has-shot")]
     UntilThisUnitHasShot,
     #[serde(rename = "control-lost")]
@@ -39408,6 +39417,7 @@ impl ::std::fmt::Display for ScopeDuration {
             Self::UntilEndOfOpponentNextTurn => {
                 f.write_str("until-end-of-opponent-next-turn")
             }
+            Self::UntilEndOfNextTurn => f.write_str("until-end-of-next-turn"),
             Self::UntilThisUnitHasShot => f.write_str("until-this-unit-has-shot"),
             Self::ControlLost => f.write_str("control-lost"),
             Self::UntilEndOfYourNextFightPhase => {
@@ -39451,6 +39461,7 @@ impl ::std::str::FromStr for ScopeDuration {
             "until-next-shooting-phase" => Ok(Self::UntilNextShootingPhase),
             "until-end-of-your-next-turn" => Ok(Self::UntilEndOfYourNextTurn),
             "until-end-of-opponent-next-turn" => Ok(Self::UntilEndOfOpponentNextTurn),
+            "until-end-of-next-turn" => Ok(Self::UntilEndOfNextTurn),
             "until-this-unit-has-shot" => Ok(Self::UntilThisUnitHasShot),
             "control-lost" => Ok(Self::ControlLost),
             "until-end-of-your-next-fight-phase" => {

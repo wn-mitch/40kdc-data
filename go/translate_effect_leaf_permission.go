@@ -146,7 +146,14 @@ func permissionLeaf(m map[string]any, subj string, ctx effCtx) string {
 		for i, d := range despite {
 			ds := ejstr(d)
 			phrase := lookupOr(permissionDespite, ds)
-			if permissionIsState[ds] {
+			if ds == "transport-advanced" {
+				// The Transport the subject disembarks from Advanced, not the subject.
+				its := "its"
+				if it == "they" {
+					its = "their"
+				}
+				clauses[i] = its + " Transport Advanced this turn"
+			} else if permissionIsState[ds] {
 				pre := "it is "
 				if it == "they" {
 					pre = "they are "

@@ -367,13 +367,19 @@ fn part_head(e: &P) -> String {
         None => String::new(),
     };
     let (_, trail) = duration_clauses(e.get("duration"));
-    join_nonempty(&[&label, &moment, &usage, &named, &cost, trail], ", ")
+    // A part's own control-lost duration leads it, with no objective marker before it for "it" to name.
+    let trail = match trail.strip_suffix("control it") {
+        Some(head) => format!("{head}control that objective marker"),
+        None => trail.to_string(),
+    };
+    join_nonempty(&[&label, &moment, &usage, &named, &cost, &trail], ", ")
 }
 
 fn part_inline(e: &P, ctx: &Ctx) -> String {
     let head = part_head(e);
     let body = inline(child(e, "effect"), ctx);
-    if head.is_empty() {
+    // An optional part whose effect already reads "you can ..." needs no "you can:" before it.
+    if head.is_empty() || (head == "you can" && body.starts_with("you can ")) {
         body
     } else {
         format!("{head}: {body}")
