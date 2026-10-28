@@ -2168,44 +2168,44 @@
     "source_digest": "e0a6823fa0e330ec6d9b3ead3a78e1c8515df89ae1974cfe69c1bebdad1fa777",
     "version": "2025-q3",
     "effect": {
-      "type": "aura",
-      "target": "enemy-within-aura",
-      "modifier": {
-        "range": {
-          "inches": 6
-        },
-        "effect": {
-          "type": "sequence",
-          "steps": [
-            {
-              "type": "weapon-ability-grant",
-              "target": "this-unit",
-              "modifier": {
-                "keywords": [
-                  {
-                    "keyword_id": "sustained-hits",
-                    "parameters": {
-                      "value": 1
-                    }
-                  }
-                ]
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "sustained-hits",
+                "parameters": {
+                  "value": 1
+                }
               }
+            ]
+          }
+        },
+        {
+          "type": "aura",
+          "target": "enemy-within-aura",
+          "modifier": {
+            "range": {
+              "inches": 6
             },
-            {
+            "effect": {
               "type": "re-roll",
               "target": "this-unit",
               "modifier": {
                 "roll": "hit",
                 "subset": "ones"
               }
-            }
-          ]
-        },
-        "eligible": {
-          "owner": "enemy"
-        },
-        "of": "this-unit"
-      }
+            },
+            "eligible": {
+              "owner": "enemy"
+            },
+            "of": "this-unit"
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"

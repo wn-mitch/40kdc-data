@@ -5245,24 +5245,24 @@
     "detachment_id": "mercenary-oathband",
     "ability_type": "enhancement",
     "effect": {
-      "type": "aura",
-      "target": "enemy-within-aura",
-      "modifier": {
-        "range": {
-          "inches": 3
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "resource-spend",
+          "target": "this-model",
+          "modifier": {
+            "pool": "yp-pool",
+            "amount": 3
+          }
         },
-        "effect": {
-          "type": "sequence",
-          "steps": [
-            {
-              "type": "resource-spend",
-              "target": "this-model",
-              "modifier": {
-                "pool": "yp-pool",
-                "amount": 3
-              }
+        {
+          "type": "aura",
+          "target": "enemy-within-aura",
+          "modifier": {
+            "range": {
+              "inches": 3
             },
-            {
+            "effect": {
               "type": "stat-modifier",
               "target": "recipient",
               "modifier": {
@@ -5270,13 +5270,13 @@
                 "operation": "subtract",
                 "value": 1
               }
+            },
+            "eligible": {
+              "owner": "enemy"
             }
-          ]
-        },
-        "eligible": {
-          "owner": "enemy"
+          }
         }
-      }
+      ]
     },
     "scope": {
       "duration": "turn"

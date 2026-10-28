@@ -87,3 +87,25 @@ describe("an aura whose record goes on to a later moment", () => {
     if (!result.ok) expect(result.errors.join("; ")).toMatch(/aura .* reaches no effect's recipient/u);
   });
 });
+
+describe("an aura printed in a later sentence of one part", () => {
+  const text = "This unit's attacks have extra punch. While an enemy unit is within 6\" of this unit, worsen the Leadership characteristic of models in that unit by 1.";
+  const leaves = () => [
+    leaf(text, "This unit's attacks have extra punch", "core-ability-grant", 6, { subject: "this-unit", ability: "stealth" }),
+    leaf(text, "enemy unit", "unit-filter", 18, { side: "enemy" }),
+    leaf(text, "within 6\" of this unit", "aura-range", 6, { inches: 6, of: "this-unit" }),
+    leaf(text, "worsen the Leadership characteristic of models in that unit by 1", "characteristic-modifier", 19,
+      { subject: "antecedent", characteristics: ["Ld"], operation: "worsen", value: 1, weapon_type: "all" }),
+  ];
+
+  it("reaches only its own sentence's effects; the earlier sentence's effect stays outside the aura", () => {
+    const result = compileLeaves(leaves(), text);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    const effect = result.mechanics.effect as Node;
+    expect(effect.type).toBe("sequence");
+    const [own, aura] = effect.steps as Node[];
+    expect(own).toMatchObject({ type: "ability-grant", target: "this-unit" });
+    expect(aura).toMatchObject({ type: "aura", target: "enemy-within-aura", modifier: { range: { inches: 6 } } });
+    expect(aura!.modifier.effect).toMatchObject({ type: "stat-modifier", target: "recipient", modifier: { stat: "Ld" } });
+  });
+});

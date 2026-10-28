@@ -264,7 +264,22 @@ export function assemblePart(
   if (!body) return { ok: false, signature, errors };
   // With later parts, the aura wraps the first part only when that part names its recipient (compile-aura-parts.ts).
   const auraFirst = auraLeaf !== null && (partStarts.length === 0 || namesUnboundRecipient(unwrapped));
+  // "Your unit is blessed. … If …, while a friendly X unit is within 3\" of your unit, that unit is also blessed": an aura printed in a
+  // later sentence reaches that sentence's effects only; the effects of the sentences before it stay outside the aura.
+  const auraSentence = auraLeaf !== null ? places[list.indexOf(auraLeaf)]?.sentence : undefined;
+  // An earlier sentence with an aura of its own is another aura, not effects outside this one.
+  const earlierAura = auraSentence !== undefined && list.some((leaf, at) => leaf.family_id === "aura-range" && places[at]!.sentence < auraSentence);
+  const firstItems = pieceItems.filter((item) => partOf(item.index) === 0);
+  const before = auraSentence !== undefined && !earlierAura && partStarts.length === 0 && window === null && body === unwrapped && body.type === "sequence" && steps.length === firstItems.length
+    ? firstItems.map((item) => places[item.index]!.sentence < auraSentence) : [];
+  const outside = before.some(Boolean) && !before.every(Boolean) && before.indexOf(false) === before.lastIndexOf(true) + 1
+    ? steps.filter((_, at) => before[at]) : [];
+  if (outside.length) {
+    const reached = steps.filter((_, at) => !before[at]);
+    body = reached.length === 1 ? reached[0]! : { type: "sequence", steps: reached };
+  }
   if (auraLeaf && auraFirst) { const aura: CompileLeaf = auraLeaf; body = attempt(() => aura.parameters.model_recipient !== undefined ? wrapModelAura(aura, body!, triggers) : wrapAura(aura, body!)); }
+  if (body && outside.length) body = { type: "sequence", steps: [...outside, body] };
   if (leaderLeaf) { const leader = leaderLeaf; body = attempt(() => wrapLeaderTarget(leader, body!)); }
   if (!body) return { ok: false, signature, errors };
   // A refusal here returns at once: the errors list was already checked above, so a later attempt() error would be dropped.

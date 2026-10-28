@@ -7678,7 +7678,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "76f187500c36192d5fd22569524bb3617e0e136d00b9f5f9498a711c6598432f",
     "version": "2025-q3",
@@ -7687,25 +7687,87 @@
     "faction_id": "adepta-sororitas",
     "detachment_id": "army-of-faith",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "aura",
     "effect": {
-      "type": "rules-bundle",
+      "type": "sequence",
       "steps": [
         {
-          "type": "ignore-modifiers",
+          "type": "designate",
           "target": "this-unit",
           "modifier": {
-            "what": "characteristics"
+            "tag": "blessed"
           }
         },
         {
           "type": "ignore-modifiers",
-          "target": "this-unit",
+          "target": {
+            "owner": "friendly",
+            "designated": "blessed"
+          },
+          "modifier": {
+            "what": "characteristics",
+            "stats": [
+              "M",
+              "T",
+              "Sv",
+              "W",
+              "Ld",
+              "OC",
+              "WS",
+              "BS"
+            ]
+          }
+        },
+        {
+          "type": "ignore-modifiers",
+          "target": {
+            "owner": "friendly",
+            "designated": "blessed"
+          },
           "modifier": {
             "what": "rolls",
             "rolls": [
-              "any"
+              "all"
+            ],
+            "except_rolls": [
+              "save"
             ]
+          }
+        },
+        {
+          "type": "aura",
+          "target": "friendly-within-aura",
+          "modifier": {
+            "range": {
+              "inches": 3
+            },
+            "effect": {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "all_of": [
+                      "JUMP PACK"
+                    ]
+                  }
+                }
+              },
+              "effect": {
+                "type": "designate",
+                "target": "recipient",
+                "modifier": {
+                  "tag": "blessed"
+                }
+              }
+            },
+            "eligible": {
+              "owner": "friendly",
+              "all_of": [
+                "ADEPTA SORORITAS"
+              ]
+            },
+            "of": "this-unit"
           }
         }
       ]
