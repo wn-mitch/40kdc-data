@@ -146,21 +146,48 @@ pub(super) fn roll_result(node: &Obj, opts: &WalkOpts, out: &mut Out) {
 
 /// Ignoring modifiers to the buffed unit's own hit or wound rolls. Ignoring WS/BS modifiers is the
 /// same lever here: the buff layer changes WS/BS for incoming attacks only through hit modifiers.
+/// Every roll except saves reads as its hit and wound rolls: the only other roll the buff layer
+/// modifies is Damage, and it never applies a worsening Damage roll modifier to the attacker.
 pub(super) fn ignore_modifiers(node: &Obj, opts: &WalkOpts, out: &mut Out) {
     let empty = Obj::new();
     let m = object(node.get("modifier")).unwrap_or(&empty);
-    let listed = match m.get("what").and_then(Value::as_str) {
+    let what = m.get("what").and_then(Value::as_str);
+    let listed = match what {
         Some("rolls") => m.get("rolls"),
         Some("characteristics") => m.get("stats"),
         _ => None,
     };
-    let rolls: Vec<Option<&str>> = list(listed)
-        .iter()
-        .map(|item| match item.as_str() {
-            Some("WS" | "BS") => Some("hit"),
-            other => other,
-        })
-        .collect();
+    let except: Vec<&str> = if what == Some("rolls") {
+        list(m.get("except_rolls"))
+            .iter()
+            .filter_map(Value::as_str)
+            .collect()
+    } else {
+        Vec::new()
+    };
+    let every_roll_but_saves = !list(listed).is_empty()
+        && list(listed)
+            .iter()
+            .all(|item| matches!(item.as_str(), Some("all" | "any")))
+        && except.contains(&"save");
+    let rolls: Vec<Option<&str>> = if every_roll_but_saves {
+        ["hit", "wound"]
+            .into_iter()
+            .filter(|roll| !except.contains(roll))
+            .map(Some)
+            .collect()
+    } else {
+        list(listed)
+            .iter()
+            .map(|item| match item.as_str() {
+                Some("WS" | "BS") => Some("hit"),
+                other => other,
+            })
+            .collect()
+    };
+    if every_roll_but_saves && rolls.is_empty() {
+        return;
+    }
     if rolls.is_empty() || rolls.iter().any(|r| !matches!(r, Some("hit" | "wound"))) {
         out.unsupported(
             "ignore-modifiers: only hit and wound rolls and WS/BS are modelled",

@@ -1204,11 +1204,18 @@ function translateRollResult(node: Record<string, unknown>, source: BuffSource, 
 /**
  * Ignoring modifiers to the buffed unit's own hit or wound rolls. Ignoring WS/BS modifiers is the
  * same lever here: the buff layer changes WS/BS for incoming attacks only through hit modifiers.
+ * Every roll except saves reads as its hit and wound rolls: the only other roll the buff layer
+ * modifies is Damage, and it never applies a worsening Damage roll modifier to the attacker.
  */
 function translateIgnoreModifiers(node: Record<string, unknown>, source: BuffSource, opts: WalkOpts, out: EffectTranslation): void {
   const modifier = isObject(node.modifier) ? node.modifier : {};
   const listed = modifier.what === "rolls" ? modifier.rolls : modifier.what === "characteristics" ? modifier.stats : undefined;
-  const rolls = Array.isArray(listed) ? listed.map((item) => (item === "WS" || item === "BS" ? "hit" : item)) : [];
+  const except = modifier.what === "rolls" && Array.isArray(modifier.except_rolls) ? modifier.except_rolls : [];
+  const everyRollButSaves = Array.isArray(listed) && listed.length > 0 && listed.every((item) => item === "all" || item === "any") && except.includes("save");
+  const rolls = everyRollButSaves
+    ? ["hit", "wound"].filter((roll) => !except.includes(roll))
+    : Array.isArray(listed) ? listed.map((item) => (item === "WS" || item === "BS" ? "hit" : item)) : [];
+  if (everyRollButSaves && rolls.length === 0) return;
   if (rolls.length === 0 || rolls.some((roll) => roll !== "hit" && roll !== "wound")) {
     out.unsupported.push({ reason: "ignore-modifiers: only hit and wound rolls and WS/BS are modelled", effectFragment: node });
     return;

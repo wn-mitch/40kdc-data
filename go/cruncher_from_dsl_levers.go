@@ -224,7 +224,9 @@ func translateRollResult(node, source map[string]any, opts dslOpts, out *effectT
 
 // translateIgnoreModifiers handles ignoring modifiers to the buffed unit's own hit or wound
 // rolls. Ignoring WS/BS modifiers is the same lever here: the buff layer changes WS/BS for
-// incoming attacks only through hit modifiers.
+// incoming attacks only through hit modifiers. Every roll except saves reads as its hit and
+// wound rolls: the only other roll the buff layer modifies is Damage, and it never applies a
+// worsening Damage roll modifier to the attacker.
 func translateIgnoreModifiers(node, source map[string]any, opts dslOpts, out *effectTranslation) {
 	modifier := modifierOrEmpty(node)
 	var listed any
@@ -235,6 +237,32 @@ func translateIgnoreModifiers(node, source map[string]any, opts dslOpts, out *ef
 		listed = modifier["stats"]
 	}
 	items, _ := asList(listed)
+	except := map[string]bool{}
+	if modifier["what"] == "rolls" {
+		exceptItems, _ := asList(modifier["except_rolls"])
+		for _, item := range exceptItems {
+			if roll, ok := item.(string); ok {
+				except[roll] = true
+			}
+		}
+	}
+	everyRollButSaves := len(items) > 0 && except["save"]
+	for _, item := range items {
+		if item != "all" && item != "any" {
+			everyRollButSaves = false
+		}
+	}
+	if everyRollButSaves {
+		items = nil
+		for _, roll := range []string{"hit", "wound"} {
+			if !except[roll] {
+				items = append(items, roll)
+			}
+		}
+		if len(items) == 0 {
+			return
+		}
+	}
 	rolls := make([]string, 0, len(items))
 	supported := len(items) > 0
 	for _, item := range items {

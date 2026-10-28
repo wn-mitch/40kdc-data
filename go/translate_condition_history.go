@@ -36,6 +36,26 @@ func describeHappenedCore(p map[string]any, negated bool) string {
 	who := subjectOf(p, "the unit")
 	count := mapOr(p["count"])
 	amount := controlCountPhrase(p["count"])
+	// The phase the event happened in leads its window: "in the Fight phase this battle".
+	inPhase := ""
+	if f["phase"] != nil {
+		inPhase = "in the " + titleCase(cstr(f["phase"])) + " phase"
+	}
+	windowPhrase := func(w any) string {
+		parts := []string{}
+		for _, part := range []string{inPhase, windowPhrase(w)} {
+			if part != "" {
+				parts = append(parts, part)
+			}
+		}
+		return strings.Join(parts, " ")
+	}
+	withWindow := func(text string, w any) string {
+		if phrase := windowPhrase(w); phrase != "" {
+			return text + " " + phrase
+		}
+		return text
+	}
 	didNot := func(verb string) string {
 		if negated {
 			return "did not " + verb

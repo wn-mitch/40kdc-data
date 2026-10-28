@@ -12565,6 +12565,179 @@
       }
     },
     {
+      "caseId": "canonical/ignore-modifiers/all-except-save",
+      "abilityId": "fabricated-resolve",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-resolve",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "ignore-modifiers",
+        "target": "this-unit",
+        "modifier": {
+          "what": "rolls",
+          "rolls": [
+            "all"
+          ],
+          "except_rolls": [
+            "save"
+          ]
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "ignore-modifiers",
+            "roll": "hit"
+          },
+          {
+            "type": "ignore-modifiers",
+            "roll": "wound"
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/ignore-modifiers/any-except-save-and-hit",
+      "abilityId": "fabricated-resolve",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-resolve",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "ignore-modifiers",
+        "target": "this-unit",
+        "modifier": {
+          "what": "rolls",
+          "rolls": [
+            "any"
+          ],
+          "except_rolls": [
+            "save",
+            "hit"
+          ]
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "ignore-modifiers",
+            "roll": "wound"
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/ignore-modifiers/all-except-attack-rolls",
+      "abilityId": "fabricated-resolve",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-resolve",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "ignore-modifiers",
+        "target": "this-unit",
+        "modifier": {
+          "what": "rolls",
+          "rolls": [
+            "all"
+          ],
+          "except_rolls": [
+            "hit",
+            "wound",
+            "save"
+          ]
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/ignore-modifiers/all-except-hit",
+      "abilityId": "fabricated-resolve",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-resolve",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "ignore-modifiers",
+        "target": "this-unit",
+        "modifier": {
+          "what": "rolls",
+          "rolls": [
+            "all"
+          ],
+          "except_rolls": [
+            "hit"
+          ]
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "ignore-modifiers: only hit and wound rolls and WS/BS are modelled"
+        ],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/ignore-modifiers/all",
+      "abilityId": "fabricated-resolve",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-resolve",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "ignore-modifiers",
+        "target": "this-unit",
+        "modifier": {
+          "what": "rolls",
+          "rolls": [
+            "all"
+          ]
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "ignore-modifiers: only hit and wound rolls and WS/BS are modelled"
+        ],
+        "activatable": []
+      }
+    },
+    {
       "caseId": "canonical/trigger-subject/owned-moment-defaults-to-this-unit",
       "effect": {
         "type": "ability-part",

@@ -658,6 +658,8 @@ def describe_trigger(t: AbilityTrigger) -> str:
         weapon = f" with [{_str(keyword).upper()}] weapons" if _truthy(keyword) else ""
         s += f" by {atype}attacks made by {source}{weapon}" if atype or weapon else f" by {source}"
     s += event_relation_phrase(f)
+    if f.get("phase") is not None:
+        s += f" in the {_cap_word(_str(f['phase']))} phase"
     prox = t.get("proximity")
     if isinstance(prox, dict) and prox.get("range") is not None:
         of = "this model" if prox.get("of") == "this-model" else "this unit"

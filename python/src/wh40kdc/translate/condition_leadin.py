@@ -224,11 +224,14 @@ def condition_lead_in(c: Condition, defending: bool = False) -> str:
     if ctype == "happened":
         f = _obj(p.get("filter"))
         types = _list(f.get("move_types"))
+        # A phase filter reads in the full history phrase ("the unit charged in the Charge
+        # phase this turn").
         if (
             p.get("event") == "move-ended"
             and p.get("window") == "turn"
             and len(types) == 1
             and p.get("subject") is None
+            and f.get("phase") is None
         ):
             if types[0] == "charge":
                 return "if the unit charged this turn"
@@ -240,6 +243,7 @@ def condition_lead_in(c: Condition, defending: bool = False) -> str:
             p.get("event") == "disembarked"
             and p.get("subject") is None
             and f.get("transport") is None
+            and f.get("phase") is None
         ):
             window = _window_phrase(p.get("window"))
             return f"if the unit disembarked from a Transport {window}".rstrip()

@@ -551,15 +551,6 @@ pub(crate) fn window_phrase(w: Option<&Value>) -> String {
     }
 }
 
-pub(crate) fn with_window(s: &str, w: Option<&Value>) -> String {
-    let phrase = window_phrase(w);
-    if phrase.is_empty() {
-        s.to_string()
-    } else {
-        format!("{s} {phrase}")
-    }
-}
-
 pub(crate) fn move_name(t: &str) -> String {
     match t {
         "normal" => "Normal".to_string(),

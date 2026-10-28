@@ -89,6 +89,26 @@ fn happened_phrase(p: &P, negated: bool) -> String {
         .unwrap_or(1.0);
     let amount = count_phrase(p.get("count"));
     let window = p.get("window");
+    // The phase the event happened in leads its window: "in the Fight phase this battle".
+    let in_phase = match f.get("phase") {
+        None | Some(Value::Null) => String::new(),
+        phase => format!("in the {} phase", title_case(&st(phase))),
+    };
+    let window_phrase = |w: Option<&Value>| -> String {
+        [in_phase.clone(), super::refs::window_phrase(w)]
+            .into_iter()
+            .filter(|part| !part.is_empty())
+            .collect::<Vec<_>>()
+            .join(" ")
+    };
+    let with_window = |text: &str, w: Option<&Value>| -> String {
+        let phrase = window_phrase(w);
+        if phrase.is_empty() {
+            text.to_string()
+        } else {
+            format!("{text} {phrase}")
+        }
+    };
     match event.as_str() {
         "move-ended" => {
             let types: Vec<String> = strs(f.get("move_types")).unwrap_or_default();

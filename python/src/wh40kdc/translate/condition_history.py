@@ -20,7 +20,6 @@ from wh40kdc.translate.condition_refs import (
     _subject_of,
     _truthy,
     _window_phrase,
-    _with_window,
     count_phrase,
     dekebab,
     event_relation_phrase,
@@ -35,6 +34,7 @@ from wh40kdc.translate.condition_refs import (
     unit_ref_phrase,
     used_ability_phrase,
 )
+from wh40kdc.translate.condition_refs import _window_phrase as _base_window_phrase
 from wh40kdc.translate.effect_words import weapon_noun
 
 # A rule of one kind being used now, when the filter names none.
@@ -60,6 +60,15 @@ def _describe_happened_core(p: P, negated: bool) -> str:
     n = bounds.get("min", 1)
     window = p.get("window")
     who = _subject_of(p)
+    # The phase the event happened in leads its window: "in the Fight phase this battle".
+    in_phase = f"in the {title_case(_str(f['phase']))} phase" if f.get("phase") is not None else ""
+
+    def _window_phrase(w: object) -> str:
+        return " ".join(part for part in (in_phase, _base_window_phrase(w)) if part != "")
+
+    def _with_window(text: str, w: object) -> str:
+        phrase = _window_phrase(w)
+        return f"{text} {phrase}" if phrase else text
 
     def did_not(verb: str) -> str:
         return f"did not {verb}" if negated else _past_of(verb)

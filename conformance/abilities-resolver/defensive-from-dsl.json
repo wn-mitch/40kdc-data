@@ -1664,6 +1664,37 @@
         ],
         "activatable": []
       }
+    },
+    {
+      "caseId": "canonical/ignore-modifiers/all-except-save-target-walk",
+      "abilityId": "fabricated-resolve",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-resolve",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "ignore-modifiers",
+        "target": "this-unit",
+        "modifier": {
+          "what": "rolls",
+          "rolls": [
+            "all"
+          ],
+          "except_rolls": [
+            "save"
+          ]
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
     }
   ]
 }

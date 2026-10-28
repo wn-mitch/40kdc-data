@@ -84,6 +84,7 @@ import {
   stanceOptionFields,
 } from "./gen-conformance-cruncher-cases.js";
 import { canonicalDamageZeroingCases, DAMAGE_ZEROING_CASE_PREFIX } from "./gen-conformance-zeroing-cases.js";
+import { canonicalIgnoreModifiersCases, IGNORE_MODIFIERS_CASE_PREFIX } from "./gen-conformance-ignore-cases.js";
 import { canonicalGrantedRecordCases, GRANTED_RECORD_CASE_PREFIX, withGrantedRecords } from "./gen-conformance-granted-cases.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -4032,6 +4033,19 @@ function genEffectTranslation(): void {
       trigger: { event: "used", filter, ...(subject ? { subject } : {}), object: { owner: "friendly", all_of: ["EXAMPLE HOST"], within: { of: "this-model", range: { inches: 12 } } }, optional: true },
       effect: { type: "cp-gain", target: "this-model", modifier: { amount: 1 } },
     })),
+    // An event's phase filter leads the history window, and follows a trigger's event.
+    ...[
+      ["destroyed-by", { event: "destroyed", object: { owner: "enemy" }, filter: { by: "this-unit", phase: "fight" }, window: "battle" }],
+      ["destroyed-by-melee", { event: "destroyed", object: { owner: "enemy" }, filter: { by: "this-unit", attack_type: "melee", phase: "fight" }, window: "battle" }],
+      ["destroyed", { event: "destroyed", object: { owner: "enemy" }, filter: { phase: "shooting" }, window: "turn" }],
+      ["charged", { event: "move-ended", filter: { move_types: ["charge"], phase: "charge" }, window: "turn" }],
+      ["disembarked", { event: "disembarked", filter: { phase: "movement" }, window: "turn" }],
+    ].map(([name, parameters]) => ({
+      caseId: `fidelity/happened-phase-filter-${name as string}`,
+      effect: { type: "conditional", condition: { type: "happened", parameters }, effect: { type: "cp-gain", target: "this-model", modifier: { amount: 1 } } },
+    })),
+    { caseId: "fidelity/trigger-phase-filter-destroyed", trigger: { event: "destroyed", subject: "this-unit", object: { owner: "enemy" }, filter: { phase: "fight" } },
+      effect: { type: "cp-gain", target: "this-model", modifier: { amount: 1 } } },
   ];
   for (const example of fidelityBoundaryCases) {
     const scope = { duration: "resolution" };
@@ -4293,7 +4307,7 @@ function genResolverDslCases(): void {
 
 /** Append fabricated direct-API cases without duplicating their stable identities on regen. */
 function genCanonicalCruncherCases(): void {
-  const appended = [...canonicalRecipientCases(), ...canonicalHalfWeaponRangeCases(), ...canonicalScenarioCases(), ...canonicalGrantedRecordCases(), ...canonicalDamageZeroingCases(), ...canonicalTriggerSubjectCases()];
+  const appended = [...canonicalRecipientCases(), ...canonicalHalfWeaponRangeCases(), ...canonicalScenarioCases(), ...canonicalGrantedRecordCases(), ...canonicalDamageZeroingCases(), ...canonicalIgnoreModifiersCases(), ...canonicalTriggerSubjectCases()];
   for (const [filename, perspective] of [
     ["from-dsl.json", "attacker"],
     ["defensive-from-dsl.json", "target"],
@@ -4304,7 +4318,8 @@ function genCanonicalCruncherCases(): void {
       ...corpus.cases.filter((row) => typeof row.caseId !== "string" ||
         (!row.caseId.startsWith(RECIPIENT_CASE_PREFIX) && !row.caseId.startsWith(HALF_WEAPON_RANGE_CASE_PREFIX) &&
           !row.caseId.startsWith(SCENARIO_CASE_PREFIX) && !row.caseId.startsWith(GRANTED_RECORD_CASE_PREFIX) &&
-          !row.caseId.startsWith(DAMAGE_ZEROING_CASE_PREFIX) && !row.caseId.startsWith(TRIGGER_SUBJECT_CASE_PREFIX))),
+          !row.caseId.startsWith(DAMAGE_ZEROING_CASE_PREFIX) && !row.caseId.startsWith(IGNORE_MODIFIERS_CASE_PREFIX) &&
+          !row.caseId.startsWith(TRIGGER_SUBJECT_CASE_PREFIX))),
       ...appended.filter((row) => row.perspective === perspective),
     ];
     writeJson(path, corpus);

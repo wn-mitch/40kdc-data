@@ -299,6 +299,9 @@ pub fn describe_trigger_value(trigger: &Value) -> String {
         }
     }
     s.push_str(&super::condition::event_relation_phrase(f));
+    if let Some(phase) = nn(f, "phase") {
+        s.push_str(&format!(" in the {} phase", cap_word(&st(Some(phase)))));
+    }
     let proximity = obj(t.get("proximity"));
     if let Some(range) = nn(proximity, "range") {
         let of = if nn(proximity, "of").is_none() || is(proximity, "of", "this-unit") {

@@ -97,7 +97,9 @@ def translate_ignore_modifiers(
 ) -> None:
     """Ignoring modifiers to the buffed unit's own hit or wound rolls. Ignoring WS/BS modifiers
     is the same lever here: the buff layer changes WS/BS for incoming attacks only through hit
-    modifiers."""
+    modifiers. Every roll except saves reads as its hit and wound rolls: the only other roll the
+    buff layer modifies is Damage, and it never applies a worsening Damage roll modifier to the
+    attacker."""
     from wh40kdc.cruncher import from_dsl as dsl
 
     modifier = _modifier(node)
@@ -109,11 +111,24 @@ def translate_ignore_modifiers(
         if what == "characteristics"
         else None
     )
-    rolls = (
-        ["hit" if item in ("WS", "BS") else item for item in listed]
-        if isinstance(listed, list)
-        else []
+    except_rolls = modifier.get("except_rolls")
+    except_ = except_rolls if what == "rolls" and isinstance(except_rolls, list) else []
+    every_roll_but_saves = (
+        isinstance(listed, list)
+        and len(listed) > 0
+        and all(item in ("all", "any") for item in listed)
+        and "save" in except_
     )
+    if every_roll_but_saves:
+        rolls = [roll for roll in ("hit", "wound") if roll not in except_]
+        if not rolls:
+            return
+    else:
+        rolls = (
+            ["hit" if item in ("WS", "BS") else item for item in listed]
+            if isinstance(listed, list)
+            else []
+        )
     if not rolls or any(roll not in ("hit", "wound") for roll in rolls):
         out["unsupported"].append(
             {

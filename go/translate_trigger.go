@@ -838,6 +838,9 @@ func describeReactiveTrigger(t map[string]any) string {
 		}
 	}
 	s += eventRelationPhrase(f)
+	if f["phase"] != nil {
+		s += " in the " + capWord(cstr(f["phase"])) + " phase"
+	}
 	if prox, ok := asMap(t["proximity"]); ok && prox != nil && prox["range"] != nil {
 		of := "this unit"
 		if prox["of"] == "this-model" {

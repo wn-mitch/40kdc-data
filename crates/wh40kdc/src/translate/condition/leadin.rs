@@ -139,10 +139,13 @@ pub fn condition_lead_in_for(c: &Value, defending: bool) -> String {
         "happened" => {
             let f = obj(p.get("filter"));
             let types: Vec<String> = strs(f.get("move_types")).unwrap_or_default();
+            // A phase filter reads in the full history phrase ("the unit charged in the Charge
+            // phase this turn").
             if is(p, "event", "move-ended")
                 && is(p, "window", "turn")
                 && types.len() == 1
                 && nn(p, "subject").is_none()
+                && nn(f, "phase").is_none()
             {
                 match types[0].as_str() {
                     "charge" => return "if the unit charged this turn".to_string(),
@@ -156,6 +159,7 @@ pub fn condition_lead_in_for(c: &Value, defending: bool) -> String {
             if is(p, "event", "disembarked")
                 && nn(p, "subject").is_none()
                 && nn(f, "transport").is_none()
+                && nn(f, "phase").is_none()
             {
                 return format!(
                     "if the unit disembarked from a Transport {}",

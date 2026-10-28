@@ -109,12 +109,13 @@ export function conditionLeadIn(c: Condition, defending = false): string {
     case "happened": {
       const f = (p.filter ?? {}) as P;
       const types = (f.move_types as string[] | undefined) ?? [];
-      if (p.event === "move-ended" && p.window === "turn" && types.length === 1 && p.subject == null) {
+      // A phase filter reads in the full history phrase ("the unit charged in the Charge phase this turn").
+      if (p.event === "move-ended" && p.window === "turn" && types.length === 1 && p.subject == null && f.phase == null) {
         if (types[0] === "charge") return "if the unit charged this turn";
         if (types[0] === "advance") return "if the unit Advanced this turn";
         if (types[0] === "remain-stationary") return "if the unit Remained Stationary this turn";
       }
-      if (p.event === "disembarked" && p.subject == null && f.transport == null) return `if the unit disembarked from a Transport ${windowPhrase(p.window)}`.trimEnd();
+      if (p.event === "disembarked" && p.subject == null && f.transport == null && f.phase == null) return `if the unit disembarked from a Transport ${windowPhrase(p.window)}`.trimEnd();
       // "while the unit is performing an Agile Manoeuvre": the use is being resolved now.
       if (p.event === "used" && p.window === "event" && f.ability_keyword == null && f.same_rule_as == null) return `while ${describeHappened(p, false)}`;
       if ((p.event === "destroyed" || p.event === "model-destroyed") && p.object === "event-object" && p.window === "event")

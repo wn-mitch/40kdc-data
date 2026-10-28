@@ -400,6 +400,7 @@ export function describeTrigger(t: AbilityTrigger): string {
     s += type || weapon ? ` by ${type}attacks made by ${source}${weapon}` : ` by ${source}`;
   }
   s += eventRelationPhrase(f);
+  if (f.phase != null) s += ` in the ${capWord(str(f.phase))} phase`;
   if (t.proximity?.range != null) {
     const of = t.proximity.of == null || t.proximity.of === "this-unit" ? "this unit" : placeRefPhrase(t.proximity.of);
     s += ` within ${rangePhrase(t.proximity.range)} of ${of}`;

@@ -1,5 +1,5 @@
 /** The `happened` history predicate as English ("the unit charged this turn"). */
-import { countPhrase, dekebab, designationPhrase, eventRelationPhrase, idLabel, moveKinds, namedUsePhrase, objectivePhrase, type P, pastOf, placeRefPhrase, rangePhrase, rollWord, str, subjectOf, titleCase, unitFilterPhrase, unitRefPhrase, usedAbilityPhrase, windowPhrase, withWindow } from "./condition-refs.js";
+import { countPhrase, dekebab, designationPhrase, eventRelationPhrase, idLabel, moveKinds, namedUsePhrase, objectivePhrase, type P, pastOf, placeRefPhrase, rangePhrase, rollWord, str, subjectOf, titleCase, unitFilterPhrase, unitRefPhrase, usedAbilityPhrase, windowPhrase as baseWindowPhrase } from "./condition-refs.js";
 import { bracketKeyword, weaponNoun } from "./effect-words.js";
 
 /** A rule of one kind being used now, when the filter names none. */
@@ -29,6 +29,10 @@ function happenedPhrase(p: P, negated: boolean): string {
   const neg = negated ? "not " : "";
   const didNot = (verb: string): string => (negated ? `did not ${verb}` : pastOf(verb));
   const f = (p.filter ?? {}) as P;
+  // The phase the event happened in leads its window: "in the Fight phase this battle".
+  const inPhase = f.phase != null ? `in the ${titleCase(str(f.phase))} phase` : "";
+  const windowPhrase = (w: unknown): string => [inPhase, baseWindowPhrase(w)].filter((part) => part !== "").join(" ");
+  const withWindow = (text: string, w: unknown): string => (windowPhrase(w) ? `${text} ${windowPhrase(w)}` : text);
   const event = str(p.event);
   const who = subjectOf(p);
   const count = (p.count ?? {}) as P;
@@ -154,5 +158,5 @@ function happenedPhrase(p: P, negated: boolean): string {
 export function destroyedCount(side: P): string {
   const o = (side.object ?? {}) as P;
   const objects = unitRefPhrase(o).replace(/^an? /, "").replace(/\b(unit|model)\b/, "$1s");
-  return `${objects} ${windowPhrase(side.window)}`.trimEnd();
+  return `${objects} ${baseWindowPhrase(side.window)}`.trimEnd();
 }

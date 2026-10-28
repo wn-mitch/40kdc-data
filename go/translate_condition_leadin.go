@@ -185,7 +185,8 @@ func conditionLeadInFor(c map[string]any, defending bool) string {
 	case "happened":
 		f := mapOr(p["filter"])
 		types := cstrList(f["move_types"])
-		if p["event"] == "move-ended" && p["window"] == "turn" && len(types) == 1 && p["subject"] == nil {
+		// A phase filter reads in the full history phrase ("the unit charged in the Charge phase this turn").
+		if p["event"] == "move-ended" && p["window"] == "turn" && len(types) == 1 && p["subject"] == nil && f["phase"] == nil {
 			switch types[0] {
 			case "charge":
 				return "if the unit charged this turn"
@@ -195,7 +196,7 @@ func conditionLeadInFor(c map[string]any, defending bool) string {
 				return "if the unit Remained Stationary this turn"
 			}
 		}
-		if p["event"] == "disembarked" && p["subject"] == nil && f["transport"] == nil {
+		if p["event"] == "disembarked" && p["subject"] == nil && f["transport"] == nil && f["phase"] == nil {
 			return trimEnd("if the unit disembarked from a Transport " + windowPhrase(p["window"]))
 		}
 		// "while the unit is performing an Agile Manoeuvre": the use is being resolved now.
