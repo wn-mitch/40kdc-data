@@ -1593,31 +1593,12 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "owner": "friendly"
-              }
-            }
-          },
-          {
-            "type": "matches",
-            "parameters": {
-              "subject": "event-subject",
-              "filter": {
-                "within": {
-                  "of": "this-model",
-                  "range": {
-                    "inches": 12
-                  }
-                }
-              }
-            }
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
           }
-        ]
+        }
       },
       "effect": {
         "type": "cost-modifier",
@@ -1644,11 +1625,17 @@
       "filter": {
         "kind": "stratagem"
       },
-      "subject": {
+      "object": {
         "owner": "friendly",
         "all_of": [
           "DEATH GUARD"
-        ]
+        ],
+        "within": {
+          "of": "this-model",
+          "range": {
+            "inches": 12
+          }
+        }
       },
       "optional": true
     },

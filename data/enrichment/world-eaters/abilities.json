@@ -3043,31 +3043,12 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "owner": "friendly"
-              }
-            }
-          },
-          {
-            "type": "matches",
-            "parameters": {
-              "subject": "event-subject",
-              "filter": {
-                "within": {
-                  "of": "this-model",
-                  "range": {
-                    "inches": 12
-                  }
-                }
-              }
-            }
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
           }
-        ]
+        }
       },
       "effect": {
         "type": "cost-modifier",
@@ -3088,11 +3069,17 @@
       "filter": {
         "kind": "stratagem"
       },
-      "subject": {
+      "object": {
         "owner": "friendly",
         "all_of": [
           "WORLD EATERS"
-        ]
+        ],
+        "within": {
+          "of": "this-model",
+          "range": {
+            "inches": 12
+          }
+        }
       },
       "optional": true
     },
@@ -8975,28 +8962,13 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "effect": {
-      "type": "aura",
-      "target": "friendly-within-aura",
+      "type": "cost-modifier",
+      "target": "this-unit",
       "modifier": {
-        "range": {
-          "inches": 12
-        },
-        "effect": {
-          "type": "cost-modifier",
-          "target": "this-unit",
-          "modifier": {
-            "of": "stratagem",
-            "operation": "decrease",
-            "amount": 1,
-            "applies_to": "the-triggering-use"
-          }
-        },
-        "eligible": {
-          "owner": "friendly",
-          "all_of": [
-            "FRENZIED REAVERS"
-          ]
-        }
+        "of": "stratagem",
+        "operation": "decrease",
+        "amount": 1,
+        "applies_to": "the-triggering-use"
       }
     },
     "scope": {
@@ -9010,6 +8982,18 @@
       "event": "used",
       "filter": {
         "kind": "stratagem"
+      },
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "FRENZIED REAVERS"
+        ],
+        "within": {
+          "of": "this-model",
+          "range": {
+            "inches": 12
+          }
+        }
       },
       "optional": true
     },

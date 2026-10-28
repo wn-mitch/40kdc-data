@@ -89,6 +89,11 @@ export function triggerLeaves(leaf: CompileLeaf): CompileLeaf[] {
   if (leaf.family_id === "event" && leaf.parameters.kind === "unit-or-model-destroyed") {
     return ["unit-destroyed", "model-destroyed"].map((kind) => ({ ...leaf, parameters: { ...leaf.parameters, kind } }));
   }
+  // "The Fire Overwatch/Heroic Intervention Stratagem": one trigger per rule, any one of which fires it.
+  if (leaf.family_id === "event" && Array.isArray(leaf.parameters.ids)) {
+    const { ids, ...rest } = leaf.parameters as { ids: unknown[] } & Record<string, unknown>;
+    return ids.map((id) => ({ ...leaf, parameters: { ...rest, id } }));
+  }
   if (leaf.family_id !== "event" || !Array.isArray(leaf.parameters.rolls)) return [leaf];
   const { rolls, ...rest } = leaf.parameters as { rolls: unknown[] } & Record<string, unknown>;
   return rolls.map((roll) => ({ ...leaf, parameters: { ...rest, roll } }));
@@ -244,6 +249,8 @@ function destructionRelationCondition(relation: unknown, eventVariable: unknown,
 export function trigger(leaf: CompileLeaf): Node {
   // A list of roll kinds is several triggers; a caller that takes one trigger must use triggerLeaves().
   if (Array.isArray(leaf.parameters.rolls)) throw new CompileError("A moment that names several rolls lowers to one trigger per roll; it cannot be one trigger.");
+  if (Array.isArray(leaf.parameters.ids)) throw new CompileError("A moment that names several rules lowers to one trigger per rule; it cannot be one trigger.");
+  if (leaf.parameters.object === "filtered-units") throw new CompileError("A used moment aimed at a unit-filter's units needs that unit-filter right before it, in its sentence.");
   const node = eventTrigger(leaf);
   // Attack classifications which describe the event itself stay on its event filter. A mortal
   // damage allocation and Psychic attacks are not inferred from a concurrent attack predicate.

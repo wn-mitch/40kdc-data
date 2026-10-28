@@ -1,4 +1,4 @@
-import { type FamilyExtension, optional, withProperties } from "../family-extension-helpers.js";
+import { type FamilyExtension, optional, standIn, widenedEnum, withProperties } from "../family-extension-helpers.js";
 import { boundedInteger, enumValue } from "../family-validation.js";
 import { isObject, namedId } from "./shared.js";
 
@@ -111,5 +111,13 @@ export const CHOICE_AND_DICE_EXTENSIONS: readonly FamilyExtension[] = [
       const { option_id: optionId, ...rest } = input;
       return { ...previous(rest), option_id: namedId(optionId, "named-option.option_id") };
     },
+  },
+  {
+    // "that model regains all of its lost wounds".
+    family: "regain-wounds",
+    version: 5,
+    description: "As the previous version, plus amount all: every lost wound is regained (\"regains all of its lost wounds\").",
+    schema: (previous) => withProperties(previous, { amount: widenedEnum(previous, "amount", ["all"]) }),
+    normalize: (input, previous) => input.amount === "all" ? standIn(input, "amount", "1", previous) : previous(input),
   },
 ];

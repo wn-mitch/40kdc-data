@@ -6830,13 +6830,24 @@
         "BATTLELINE"
       ]
     },
-    "trigger": {
-      "event": "used",
-      "filter": {
-        "kind": "stratagem"
+    "trigger": [
+      {
+        "event": "used",
+        "filter": {
+          "kind": "stratagem",
+          "id": "heroic-intervention"
+        },
+        "object": "this-unit"
       },
-      "object": "this-unit"
-    }
+      {
+        "event": "used",
+        "filter": {
+          "kind": "stratagem",
+          "id": "fire-overwatch"
+        },
+        "object": "this-unit"
+      }
+    ]
   },
   {
     "ability_id": "from-beyond-the-veil-cavalcade-of-chaos-chaos-daemons",

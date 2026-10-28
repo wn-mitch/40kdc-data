@@ -5349,7 +5349,7 @@
       "condition": {
         "type": "army-faction",
         "parameters": {
-          "faction": "heretic-astartes"
+          "faction": "chaos-space-marines"
         }
       },
       "effect": {

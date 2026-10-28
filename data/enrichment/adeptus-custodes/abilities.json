@@ -2481,9 +2481,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "5116b203d2b22f1c963a47dcf09404b7851e80849b5791506e0e487dad0cfa2c",
+    "source_digest": "d5971167f5359b251f321da39bcc2c21e7239bb7be5921e1913e7a35b8a400e5",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -2511,7 +2511,7 @@
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -7783,19 +7783,24 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "guardians-of-the-throne",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "weapon-grant",
+      "target": "this-model",
+      "modifier": {
+        "weapon_id": "emperors-light-guardians-of-the-throne"
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "6e151eddd552f4a1e52f6b38c858c8f45a935a3981450708fc5203039893e4a7"
   },
   {
     "ability_id": "flawless-bladework-dread-host-adeptus-custodes",

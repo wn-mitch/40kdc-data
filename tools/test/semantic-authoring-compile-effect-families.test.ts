@@ -151,6 +151,9 @@ describe("Semantic authoring batch-3 families: targeting, eligibility and unit-s
         { type: "heal", target: "this-model", modifier: { amount: "D3+1" } }],
       [leaf("EFFECT", "regain-wounds", { subject: "this-unit", amount: "D6", per: "model" }, 3),
         { type: "heal", target: "this-unit", modifier: { amount: "D6", per: "model" } }],
+      // Version 5: "regains all of its lost wounds" is the full heal.
+      [leaf("EFFECT", "regain-wounds", { subject: "this-model", amount: "all" }, 5),
+        { type: "heal", target: "this-model", modifier: { amount: "full" } }],
     ];
     for (const [input, expected] of cases) {
       expect(compiled([input]).mechanics.effect).toEqual(expected);

@@ -438,3 +438,38 @@ describe("ordered resource-funded automatic ability states", () => {
     expect(() => orderResourceBeforeAbilities(start, "sample-pool")).toThrow("no separate phase-end");
   });
 });
+
+describe("a used moment aimed at a filtered unit, or at one of several rules", () => {
+  const cost: [string, string, Record<string, unknown>] = ["reduce the CP cost of that use by 1CP", "stratagem-cost", { of: "stratagem", operation: "decrease", amount: 1, applies_to: "the-triggering-use" }];
+  it("makes the filter and its distance the trigger's object", () => {
+    const words = "When a friendly ALPHA unit within 12\" of this model is targeted with a Stratagem, reduce the CP cost of that use by 1CP.";
+    const mechanics = compiled(placed(words,
+      ["friendly ALPHA unit", "unit-filter", { side: "friendly", keywords: ["ALPHA"] }],
+      ["within 12\" of this model", "unit-position", { kind: "within", inches: 12, of: "this-model", subject: "filtered-units", negated: false }],
+      ["targeted with a Stratagem", "event", { kind: "used", activity: "stratagem", object: "filtered-units" }],
+      cost), words);
+    expect(mechanics.trigger).toEqual({
+      event: "used", filter: { kind: "stratagem" },
+      object: { owner: "friendly", all_of: ["ALPHA"], within: { of: "this-model", range: { inches: 12 } } },
+    });
+  });
+
+  it("refuses a filtered object with no unit-filter before it", () => {
+    const words = "When a unit is targeted with a Stratagem, reduce the CP cost of that use by 1CP.";
+    expect(errorsOf(placed(words, ["targeted with a Stratagem", "event", { kind: "used", activity: "stratagem", object: "filtered-units" }], cost), words))
+      .toMatch(/unit-filter right before it/u);
+  });
+
+  it("is one trigger per named Stratagem", () => {
+    const words = "When you target this unit with the Foo/Bar Stratagem, reduce the CP cost of that use by 1CP.";
+    const mechanics = compiled(placed(words,
+      ["When you target this unit with the Foo/Bar Stratagem", "event", { kind: "used", activity: "stratagem", object: "this-unit", ids: ["foo", "bar"] }],
+      cost), words);
+    expect(mechanics.trigger).toEqual([
+      { event: "used", filter: { kind: "stratagem", id: "foo" }, object: "this-unit" },
+      { event: "used", filter: { kind: "stratagem", id: "bar" }, object: "this-unit" },
+    ]);
+    expect(() => normalize("event", { kind: "used", activity: "stratagem", ids: ["foo"] })).toThrow(/two or more/u);
+    expect(() => normalize("event", { kind: "used", activity: "stratagem", id: "foo", ids: ["foo", "bar"] })).toThrow(/instead of id/u);
+  });
+});

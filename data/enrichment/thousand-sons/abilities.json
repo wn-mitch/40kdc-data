@@ -2263,13 +2263,24 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "faction_id": "thousand-sons",
-    "trigger": {
-      "event": "used",
-      "filter": {
-        "kind": "stratagem"
+    "trigger": [
+      {
+        "event": "used",
+        "filter": {
+          "kind": "stratagem",
+          "id": "fire-overwatch"
+        },
+        "object": "this-unit"
       },
-      "object": "this-unit"
-    },
+      {
+        "event": "used",
+        "filter": {
+          "kind": "stratagem",
+          "id": "heroic-intervention"
+        },
+        "object": "this-unit"
+      }
+    ],
     "usage": {
       "frequency": "once-per-turn",
       "per": "unit"

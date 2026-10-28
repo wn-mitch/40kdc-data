@@ -59,6 +59,8 @@ function hasLastingEffect(node: unknown): boolean {
   if (Array.isArray(node)) return node.some(hasLastingEffect);
   if (node === null || typeof node !== "object") return false;
   const record = node as Node;
+  // An extra use "but not in the same phase" can only be spent after this phase, so the window cannot bound it.
+  if (record.type === "ability-modifier" && (record.modifier as Node | undefined)?.not_same === "phase") return false;
   return (typeof record.type === "string" && LASTING_EFFECTS.has(record.type)) || isForbiddenSetUp(record) || Object.values(record).some(hasLastingEffect);
 }
 

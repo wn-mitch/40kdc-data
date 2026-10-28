@@ -552,7 +552,9 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
     case "regain-wounds": {
       const amount = String(closed(leaf, "amount"));
       const per = leaf.parameters.per;
-      return { type: "heal", target: target(leaf.parameters.subject), modifier: { amount: /^\d+$/u.test(amount) ? Number(amount) : amount, ...(per ? { per } : {}) } };
+      // "Regains all of its lost wounds" is the DSL's full heal.
+      const quantity = amount === "all" ? "full" : /^\d+$/u.test(amount) ? Number(amount) : amount;
+      return { type: "heal", target: target(leaf.parameters.subject), modifier: { amount: quantity, ...(per ? { per } : {}) } };
     }
     case "characteristic-modifier": {
       // An additive change needs its amount: a change left without one is not lowered as a change of nothing.

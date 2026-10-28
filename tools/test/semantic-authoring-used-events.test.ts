@@ -9,7 +9,7 @@ import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from
 import { menuActionsForAbility } from "../src/semantic-authoring/named-ability-checks.js";
 
 type Node = Record<string, unknown>;
-function fixture(per: "model" | "army", sources: string[]): CompileLeaf[] {
+function fixture(per: "model" | "army", sources: string[], printedDuration = true): CompileLeaf[] {
   const rows: Array<[string, string, Node]> = [
     ["WHEN", "use-window", { your_phases: [], opponent_phases: [], either_phases: ["command", "movement", "shooting", "charge", "fight"] }],
     ["WHEN", "unit-filter", { side: "friendly", level: "model", keywords: ["EXAMPLE"] }],
@@ -20,7 +20,7 @@ function fixture(per: "model" | "army", sources: string[]): CompileLeaf[] {
     ["EFFECT", "ability-modifier", { subject: "this-model", ability: { event: "used", event_var: "used-ability" }, aspect: "uses", operation: "add", value: 1, not_same: "phase" }],
     ["EFFECT", "duration", { endpoint: "end-of-battle" }],
     ["RESTRICTIONS", "usage-limit", { frequency: "once-per-battle", per }],
-  ];
+  ].filter(([, family]) => printedDuration || family !== "duration") as Array<[string, string, Node]>;
   return rows.map(([fragment, family_id, parameters], index) => {
     const family_version = currentFamilyVersion(family_id);
     return { fragment, family_id, family_version, role: familyRole(family_id, family_version), parameters: normalizeFingerprintParameters(family_id, parameters, family_version), start_byte: index * 10, end_byte: index * 10 + 4 };
@@ -34,6 +34,12 @@ function effects(value: unknown): Node[] {
 }
 
 describe("exact used-ability additional allowance", () => {
+  it("is not bounded by the Stratagem's phase when the extra use cannot be spent in the same phase", () => {
+    const result = compileLeaves(fixture("model", ["unit"], false));
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    expect(result.mechanics.scope).toEqual({ duration: "permanent" });
+  });
+
   it.each(["model", "army"] as const)("preserves the parent's per-%s limit and bound ability identity", (per) => {
     const sources = per === "model" ? ["unit"] : ["unit", "enhancement"];
     const result = compileLeaves(fixture(per, sources));

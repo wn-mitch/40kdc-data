@@ -101,14 +101,26 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "faction_id": "leagues-of-votann",
-    "trigger": {
-      "event": "used",
-      "filter": {
-        "kind": "stratagem"
+    "trigger": [
+      {
+        "event": "used",
+        "filter": {
+          "kind": "stratagem",
+          "id": "fire-overwatch"
+        },
+        "object": "this-unit",
+        "optional": true
       },
-      "object": "this-unit",
-      "optional": true
-    },
+      {
+        "event": "used",
+        "filter": {
+          "kind": "stratagem",
+          "id": "heroic-intervention"
+        },
+        "object": "this-unit",
+        "optional": true
+      }
+    ],
     "usage": {
       "frequency": "once-per-battle-round",
       "per": "unit"
