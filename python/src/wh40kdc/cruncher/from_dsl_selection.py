@@ -405,9 +405,9 @@ def bind_event_subject(
     unit; one it fails names another unit. Seen from the target, an enemy unit filter the
     attacker matches names the attacker (the enemy whose action fired the trigger is the one
     attacking); one it fails names another unit. The binding is left in place when a clock or
-    destruction event names no subject, an enemy seen from the attacker, differs across alternative triggers, or
-    cannot be checked, so the translator reports it. A nested ability part with its own trigger
-    binds its own subject.
+    destruction event names no subject, an enemy seen from the attacker, differs across
+    alternative triggers, or cannot be checked, so the translator reports it. A nested ability
+    part with its own trigger binds its own subject.
     Returns ``effect`` itself when nothing is rebound.
     """
     from wh40kdc.cruncher import from_dsl as dsl

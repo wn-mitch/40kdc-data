@@ -480,13 +480,17 @@ def crunch_model(
     critical = (
         resolve_critical_wound(all_buffs, ctx) if has_critical_wound_buffs(all_buffs) else None
     )
-    critical_to_saves = crit_wounds_from_roll if critical is not None and not has_devastating else 0.0
+    critical_to_saves = (
+        crit_wounds_from_roll if critical is not None and not has_devastating else 0.0
+    )
     unsaved_regular, unsaved_critical = unsaved, 0.0
     p_saved_critical, critical_save_target = p_saved, effective_save_target
     if critical is not None:
         critical_armor = _clamp(sv - attack_ap(critical, stats["AP"]) - save_mod, 2, 7)
         critical_save_target = (
-            min(critical_armor, effective_invuln) if effective_invuln is not None else critical_armor
+            min(critical_armor, effective_invuln)
+            if effective_invuln is not None
+            else critical_armor
         )
 
         def stream(target: float, wounds: float) -> dict[str, float]:

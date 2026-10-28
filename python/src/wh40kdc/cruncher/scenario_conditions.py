@@ -19,8 +19,9 @@ supplied), ``attackerToughness`` (caller supplied); ``attackerNeighbours`` /
 relative to that unit); ``activeRules`` (complete list of rule ids or
 ``{ability_id, option_id?, definition_id?}``); ``attackerRegions`` / ``targetRegions`` (complete
 lists of ``{ruleRegion?, terrainArea?, designations?, territory?, deploymentZone?, wholly?}``);
-``objectivesControlled`` (``{attacker, target, total}``, else counted from ``objectives``); ``attackerMembers`` /
-``targetMembers`` (every unit of the combined unit, ``{unitId, role, keywords}``).
+``objectivesControlled`` (``{attacker, target, total}``, else counted from ``objectives``);
+``attackerMembers`` / ``targetMembers`` (every unit of the combined unit,
+``{unitId, role, keywords}``).
 """
 
 from __future__ import annotations

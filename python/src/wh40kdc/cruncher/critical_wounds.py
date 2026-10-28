@@ -27,7 +27,8 @@ def resolve_critical_wound(buffs: list[Any], ctx: dict[str, Any]) -> dict[str, A
 def attack_ap(resolved: dict[str, Any], printed_ap: float) -> float:
     """The AP an attack has under ``resolved``; worsening AP stops at 0."""
     set_ap = resolved["statSet"].get("AP")
-    return min(0, (set_ap["value"] if set_ap is not None else printed_ap) + resolved["apMod"]["value"])
+    base_ap = set_ap["value"] if set_ap is not None else printed_ap
+    return min(0, base_ap + resolved["apMod"]["value"])
 
 
 def split_unsaved(
@@ -52,7 +53,9 @@ def split_unsaved(
     return unsaved, dice
 
 
-def mix_distributions(parts: Sequence[tuple[float, Sequence[dict[str, float]]]]) -> list[dict[str, float]]:
+def mix_distributions(
+    parts: Sequence[tuple[float, Sequence[dict[str, float]]]],
+) -> list[dict[str, float]]:
     """Per-roll damage distributions mixed by weight, ascending by value with each value once, as
     ``one_damage_reroll_gain`` reads them."""
     total = sum(weight for weight, _ in parts)

@@ -114,7 +114,8 @@ def _actor(ref: Any) -> str:
 
 
 def _stratagem_target(ref: Any) -> str:
-    """The unit a used Stratagem targets: "the unit" for the holder's own role, else the object filter."""
+    """The unit a used Stratagem targets: "the unit" for the holder's own role, else the object
+    filter."""
     return _object_phrase(ref) if isinstance(ref, dict) else "the unit"
 
 

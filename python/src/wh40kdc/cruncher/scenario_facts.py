@@ -12,7 +12,8 @@ territory?, name?}``); ``attackerDesignationsApplied`` / ``targetDesignationsApp
 ``failure``); ``attackerSelected`` / ``targetSelected`` (every activity selected for this phase);
 ``attackerKills`` / ``targetKills`` (``{models, units}`` destroyed this phase); ``attackerLosses`` /
 ``targetLosses`` (models lost this phase); ``attackerRolls`` / ``targetRolls`` and
-``attackerRolledAgainst`` / ``targetRolledAgainst`` (``{roll, result}`` this phase). Each evaluator returns "unknown" when the context does not declare what it needs.
+``attackerRolledAgainst`` / ``targetRolledAgainst`` (``{roll, result}`` this phase). Each evaluator
+returns "unknown" when the context does not declare what it needs.
 """
 
 from __future__ import annotations
@@ -32,7 +33,9 @@ def _is_num(value: Any) -> bool:
     return isinstance(value, (int, float)) and not isinstance(value, bool)
 
 
-def objective_matches(filt: dict[str, Any], objective: dict[str, Any], ability_side: str) -> Verdict:
+def objective_matches(
+    filt: dict[str, Any], objective: dict[str, Any], ability_side: str
+) -> Verdict:
     """Whether one objective meets every property of an objective filter, read from the ability's
     side. A property the objective leaves out, or the filter states in a form the scenario cannot
     settle, is unknown."""
@@ -166,8 +169,11 @@ def evaluate_designated(
         )
         if applied is None:
             return "unknown"
-        return within(sum(units for d, units in applied.items() if d.lower() == tag.lower()))
-    # A unit's own designations are a `matches` filter; the schema gives this condition no such form.
+        return within(
+            sum(units for d, units in applied.items() if d.lower() == tag.lower())
+        )
+    # A unit's own designations are a `matches` filter; the schema gives this condition no such
+    # form.
     return "unknown"
 
 
