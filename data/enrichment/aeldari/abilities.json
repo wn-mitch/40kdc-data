@@ -8434,7 +8434,8 @@
     "scope": {
       "duration": "permanent"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "optional": true
   },
   {
     "ability_id": "mistweave-fateful-performance-aeldari",

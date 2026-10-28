@@ -8389,7 +8389,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "6ccb9cb5c334275774dff342a7e4eca9b40368782df8d92f65ec97eabef3e2de",
     "version": "2025-q3",
@@ -8409,18 +8409,27 @@
         }
       },
       "effect": {
-        "type": "ability-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "ability": "killing-blow-tau-empire",
-          "aspect": "duration",
-          "operation": "add",
-          "value": 1
+        "type": "conditional",
+        "condition": {
+          "type": "battle-round",
+          "parameters": {
+            "min": 4,
+            "max": 4
+          }
+        },
+        "effect": {
+          "type": "rule-state",
+          "target": "this-unit",
+          "modifier": {
+            "direction": "granted",
+            "rule_kind": "ability",
+            "rule": "killing-blow-tau-empire"
+          }
         }
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [

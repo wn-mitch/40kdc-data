@@ -3346,7 +3346,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "6c63d64104114aad4a20d3131b26358439fc34559d36aa812b14a31f7a20d11e",
     "version": "2025-q3",
@@ -3422,7 +3422,8 @@
     "ability_type": "unit",
     "behavior": "activated",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "optional": true
   },
   {
     "ability_id": "even-more-dakka-orks",
@@ -6682,7 +6683,8 @@
     "behavior": "activated",
     "detachment_id": "kult-of-speed",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "optional": true
   },
   {
     "ability_id": "da-boss-is-watchin-war-horde-orks",
@@ -14256,18 +14258,53 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "orks",
     "detachment_id": "ardmob",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "return-models",
+        "target": {
+          "level": "model",
+          "member_of": "this-unit",
+          "attachment_role": "bodyguard"
+        },
+        "modifier": {
+          "count": "D3+2"
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "activated",
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1,
+      "per": "unit"
+    },
+    "optional": true,
+    "source_digest": "6f6cee831f12586850976ccab0cbf7dc9c510f33b1c2c6b7458b4de7ad1da315"
   }
 ]

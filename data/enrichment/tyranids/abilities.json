@@ -1896,7 +1896,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "950a441698ee4ba29d637acfa89b12b46ac5f94716af325ef5bb238e78786ec9",
     "version": "2025-q3",
@@ -1947,7 +1947,8 @@
     "usage": {
       "frequency": "once-per-turn",
       "per": "model"
-    }
+    },
+    "optional": true
   },
   {
     "ability_id": "resilient-organism-tyranids",
@@ -4699,7 +4700,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "50abfa531feeebeda388d39ecae4272c43a09d5c2477e04197a91458b9522d04",
     "version": "2025-q3",
@@ -4750,7 +4751,8 @@
     "ability_type": "unit",
     "behavior": "activated",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "faction_id": "tyranids"
+    "faction_id": "tyranids",
+    "optional": true
   },
   {
     "ability_id": "mindhunger-tyranids",
@@ -6760,7 +6762,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "50abfa531feeebeda388d39ecae4272c43a09d5c2477e04197a91458b9522d04",
     "version": "2025-q3",
@@ -6810,7 +6812,8 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "tyranids"
+    "faction_id": "tyranids",
+    "optional": true
   },
   {
     "ability_id": "ablative-carapace-assimilation-swarm-tyranids",
@@ -10342,7 +10345,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "unit_ids": [],
     "faction_id": "tyranids",
@@ -10384,7 +10387,8 @@
       "count": 1,
       "per": "model"
     },
-    "source_digest": "fff10503b05527ea968c3958a3aff64dadfc0f3d486d71a1a10ab30f04142114"
+    "source_digest": "fff10503b05527ea968c3958a3aff64dadfc0f3d486d71a1a10ab30f04142114",
+    "optional": true
   },
   {
     "ability_id": "teeming-masses-unending-swarm-tyranids",

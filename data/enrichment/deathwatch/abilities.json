@@ -1447,7 +1447,8 @@
       "count": 1,
       "per": "army"
     },
-    "source_digest": "c2a051745ffff866c91bc3f3475547ebdb80535288a16188e116913acfa86e89"
+    "source_digest": "c2a051745ffff866c91bc3f3475547ebdb80535288a16188e116913acfa86e89",
+    "optional": true
   },
   {
     "ability_id": "blackstar-extraction-deathwatch-support-deathwatch",

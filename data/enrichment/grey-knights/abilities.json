@@ -4358,7 +4358,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "unit_ids": [],
     "faction_id": "grey-knights",
@@ -4406,7 +4406,8 @@
       "duration": "permanent"
     },
     "behavior": "activated",
-    "source_digest": "8eec7fb9bc775debffd1d005de3413be2c9b2e7a8f19d2ddade5f8473937c802"
+    "source_digest": "8eec7fb9bc775debffd1d005de3413be2c9b2e7a8f19d2ddade5f8473937c802",
+    "optional": true
   },
   {
     "ability_id": "fires-of-covenant-warpbane-task-force-grey-knights",
@@ -7092,7 +7093,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "unit_ids": [],
     "faction_id": "grey-knights",
@@ -7138,7 +7139,8 @@
       "duration": "permanent"
     },
     "behavior": "activated",
-    "source_digest": "a0b3775cf94b83c4c6f4a09309c992792bdc7da31b50f48b29e5c1029631ccab"
+    "source_digest": "a0b3775cf94b83c4c6f4a09309c992792bdc7da31b50f48b29e5c1029631ccab",
+    "optional": true
   },
   {
     "ability_id": "truesilver-aegis-argent-assault-grey-knights",

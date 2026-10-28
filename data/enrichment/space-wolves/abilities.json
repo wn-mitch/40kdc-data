@@ -3659,7 +3659,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "unit_ids": [],
     "faction_id": "space-wolves",
@@ -4047,7 +4047,8 @@
       "duration": "permanent"
     },
     "behavior": "activated",
-    "source_digest": "ed99220f5d8790e1626cbbeca31b82e1a6d179fff03bfb0074331af3641bc746"
+    "source_digest": "ed99220f5d8790e1626cbbeca31b82e1a6d179fff03bfb0074331af3641bc746",
+    "optional": true
   },
   {
     "ability_id": "rugged-resilience-askars-wolfpack-wolf-guard-terminators-space-wolves",

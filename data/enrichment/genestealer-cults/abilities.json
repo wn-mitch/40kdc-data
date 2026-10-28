@@ -6117,7 +6117,8 @@
       "duration": "permanent"
     },
     "behavior": "activated",
-    "source_digest": "faf9dc9bdc97883f6366f82b1b8390dd703381a448afa92ccedabfef4c181b9b"
+    "source_digest": "faf9dc9bdc97883f6366f82b1b8390dd703381a448afa92ccedabfef4c181b9b",
+    "optional": true
   },
   {
     "ability_id": "gene-twisted-muscle-biosanctic-broodsurge-genestealer-cults",
@@ -6863,7 +6864,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "unit_ids": [],
     "faction_id": "genestealer-cults",
@@ -6918,7 +6919,8 @@
       "duration": "permanent"
     },
     "behavior": "activated",
-    "source_digest": "a158aedbf3e8f1d874fb3b47b0e10524b9fb7a27c7c8f8d820f8bf5ce25234f9"
+    "source_digest": "a158aedbf3e8f1d874fb3b47b0e10524b9fb7a27c7c8f8d820f8bf5ce25234f9",
+    "optional": true
   },
   {
     "ability_id": "primed-and-readied-host-of-ascension-genestealer-cults",

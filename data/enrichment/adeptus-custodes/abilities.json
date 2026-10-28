@@ -123,7 +123,8 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "adeptus-custodes"
+    "faction_id": "adeptus-custodes",
+    "optional": true
   },
   {
     "ability_id": "advanced-firepower-adeptus-custodes",
@@ -7356,7 +7357,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
@@ -7408,7 +7409,8 @@
       "frequency": "once-per-phase",
       "per": "unit"
     },
-    "source_digest": "81d09394043f8e6f596c08fa7967e788ab1a2227eb82dd4417a3bd71f605aa0e"
+    "source_digest": "81d09394043f8e6f596c08fa7967e788ab1a2227eb82dd4417a3bd71f605aa0e",
+    "optional": true
   },
   {
     "ability_id": "combat-deployment-upgrade-grav-assault-force-adeptus-custodes",
@@ -8469,7 +8471,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
@@ -8521,7 +8523,8 @@
       "frequency": "once-per-phase",
       "per": "army"
     },
-    "source_digest": "60a5ab50ba0f51763fcf96cf45bd22cc712d25dc06e7c06bdd4195c11ffc7176"
+    "source_digest": "60a5ab50ba0f51763fcf96cf45bd22cc712d25dc06e7c06bdd4195c11ffc7176",
+    "optional": true
   },
   {
     "ability_id": "lightning-descent-lions-of-the-emperor-adeptus-custodes",

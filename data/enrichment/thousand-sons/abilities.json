@@ -1851,7 +1851,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "5d47c99e7260e0f1081782263169754dbf0c5fe21256ac2022631c497d03a5eb",
     "version": "2025-q3",
@@ -1901,7 +1901,8 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "thousand-sons"
+    "faction_id": "thousand-sons",
+    "optional": true
   },
   {
     "ability_id": "hunter-of-souls-thousand-sons",

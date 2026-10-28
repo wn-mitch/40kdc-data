@@ -1107,7 +1107,8 @@
     "scope": {
       "duration": "permanent"
     },
-    "community_notes": "Ravenwing model only"
+    "community_notes": "Ravenwing model only",
+    "optional": true
   },
   {
     "ability_id": "thundercowl-turbines-upgrade-darkflight-pursuit-dark-angels",

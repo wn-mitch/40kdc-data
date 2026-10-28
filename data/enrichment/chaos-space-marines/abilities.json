@@ -843,7 +843,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "2f9c20fe63dbdaf14d2012ece2e72ae2e859310dd18004b7c3a166fc1361e77a",
     "version": "2025-q3",
@@ -928,7 +928,8 @@
       "count": 1,
       "per": "unit"
     },
-    "faction_id": "chaos-space-marines"
+    "faction_id": "chaos-space-marines",
+    "optional": true
   },
   {
     "ability_id": "chaos-icon-chaos-space-marines",
@@ -6826,7 +6827,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "a8b16827f55402399afc94c74147f5e047448d899449808fa2605ab4d83bb5f9",
     "version": "2025-q3",
@@ -6879,7 +6880,8 @@
       "frequency": "n-per-battle",
       "count": 1,
       "per": "model"
-    }
+    },
+    "optional": true
   },
   {
     "ability_id": "eye-of-the-warp-warpstrike-champions-chaos-space-marines",
@@ -15825,7 +15827,8 @@
       "duration": "permanent"
     },
     "behavior": "activated",
-    "source_digest": "0a2e80575ddb83b011f0f9c9a36bf471914c095074f1011dc9c9ae6b60526b06"
+    "source_digest": "0a2e80575ddb83b011f0f9c9a36bf471914c095074f1011dc9c9ae6b60526b06",
+    "optional": true
   },
   {
     "ability_id": "undying-hatred-renegade-warband-chaos-space-marines",

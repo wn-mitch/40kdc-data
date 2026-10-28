@@ -3414,7 +3414,8 @@
     "scope": {
       "duration": "permanent"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "optional": true
   },
   {
     "ability_id": "sensational-performance-emperors-children",
@@ -6589,7 +6590,8 @@
         "EMPEROR’S CHILDREN"
       ]
     },
-    "community_notes": "While the bearer's unit is your army's Favoured Champions, also add 2\" to the Move characteristic of its models; the Favoured Champions rider is not encoded."
+    "community_notes": "While the bearer's unit is your army's Favoured Champions, also add 2\" to the Move characteristic of its models; the Favoured Champions rider is not encoded.",
+    "optional": true
   },
   {
     "ability_id": "repulsed-by-weakness-slaaneshs-chosen-emperors-children",
@@ -7151,7 +7153,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "e44d48f512582e9ede11cf399f96fdc4cf021239c70dcb2d9f3583a6c9a0c266",
     "version": "2025-q3",
@@ -7207,7 +7209,8 @@
         "EMPEROR’S CHILDREN"
       ]
     },
-    "community_notes": "The Heroic Intervention stratagem can target the bearer's unit regardless of other uses this phase, costs 1 CP less when doing so, and does not prevent uses on other units."
+    "community_notes": "The Heroic Intervention stratagem can target the bearer's unit regardless of other uses this phase, costs 1 CP less when doing so, and does not prevent uses on other units.",
+    "optional": true
   },
   {
     "ability_id": "blinding-speed-peerless-bladesmen-emperors-children",
@@ -9466,7 +9469,8 @@
       "duration": "permanent"
     },
     "behavior": "activated",
-    "source_digest": "860e5a10a7674594698f84758c2c6878894924d1d3454829d2454875ec86f777"
+    "source_digest": "860e5a10a7674594698f84758c2c6878894924d1d3454829d2454875ec86f777",
+    "optional": true
   },
   {
     "ability_id": "shining-aegis-emperors-children",
@@ -9635,6 +9639,7 @@
       "duration": "permanent"
     },
     "behavior": "activated",
-    "source_digest": "797298065f482b920541722874f1f141f9e56444dbfd88c13d7fd3d44f98d1a4"
+    "source_digest": "797298065f482b920541722874f1f141f9e56444dbfd88c13d7fd3d44f98d1a4",
+    "optional": true
   }
 ]

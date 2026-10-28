@@ -1404,7 +1404,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "50abfa531feeebeda388d39ecae4272c43a09d5c2477e04197a91458b9522d04",
     "version": "2025-q3",
@@ -1454,7 +1454,8 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "leagues-of-votann"
+    "faction_id": "leagues-of-votann",
+    "optional": true
   },
   {
     "ability_id": "merciless-eradication-leagues-of-votann",

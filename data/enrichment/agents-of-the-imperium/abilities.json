@@ -58,7 +58,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "a7358cd224b216dab86da951f21bcbac24907e40b8515f1f548e6c0352be1010",
     "version": "2025-q3",
@@ -110,7 +110,8 @@
       "frequency": "n-per-battle",
       "count": 1,
       "per": "unit"
-    }
+    },
+    "optional": true
   },
   {
     "ability_id": "salvationist-medikit-agents-of-the-imperium",
@@ -2623,7 +2624,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "db428c0db130a24e63e8756bd5d9b50163dd04025ad785cecc6128ef404c95f0",
     "version": "2025-q3",
@@ -2716,7 +2717,8 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "agents-of-the-imperium"
+    "faction_id": "agents-of-the-imperium",
+    "optional": true
   },
   {
     "ability_id": "malefic-wardings-agents-of-the-imperium",
@@ -2955,7 +2957,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "8ae2c7540c3240235354dc5061a915142a0fa36ed8828201b0a3dc355744754d",
     "version": "2025-q3",
@@ -3000,7 +3002,8 @@
       "frequency": "n-per-battle",
       "count": 1,
       "per": "unit"
-    }
+    },
+    "optional": true
   },
   {
     "ability_id": "blackstar-cluster-launcher-agents-of-the-imperium",

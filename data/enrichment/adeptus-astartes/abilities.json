@@ -1079,7 +1079,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "50abfa531feeebeda388d39ecae4272c43a09d5c2477e04197a91458b9522d04",
     "version": "2025-q3",
@@ -1129,7 +1129,8 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "adeptus-astartes"
+    "faction_id": "adeptus-astartes",
+    "optional": true
   },
   {
     "ability_id": "icon-of-obstinacy-adeptus-astartes",
@@ -1235,7 +1236,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "3b36bad66d73297902b3763ae9763f08a60788e44787a1a7d62369b991cdd34d",
     "version": "2025-q3",
@@ -1296,7 +1297,8 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "adeptus-astartes"
+    "faction_id": "adeptus-astartes",
+    "optional": true
   },
   {
     "ability_id": "hammerstrike-adeptus-astartes",
@@ -1722,7 +1724,8 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "adeptus-astartes"
+    "faction_id": "adeptus-astartes",
+    "optional": true
   },
   {
     "ability_id": "author-of-the-codex-adeptus-astartes",
@@ -2370,7 +2373,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "01a8891fc41eeb5dada73e0ae32355dbb21192639f2be4a55a468906b0fec7ea",
     "version": "2025-q3",
@@ -2420,7 +2423,8 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "faction_id": "adeptus-astartes"
+    "faction_id": "adeptus-astartes",
+    "optional": true
   },
   {
     "ability_id": "shrouding-adeptus-astartes",
@@ -12466,7 +12470,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "unit_ids": [
       "rhino"
@@ -12516,7 +12520,8 @@
       "duration": "permanent"
     },
     "behavior": "activated",
-    "source_digest": "49bc4c0915994d09f14b04df55cf33c2ea510d3bef9730a89fe9df36aefc7e07"
+    "source_digest": "49bc4c0915994d09f14b04df55cf33c2ea510d3bef9730a89fe9df36aefc7e07",
+    "optional": true
   },
   {
     "ability_id": "veteran-marksmen-adeptus-astartes",
