@@ -278,7 +278,7 @@ def evaluate_phase_event(
         found = _loss_range(params.get("object"), ctx, side_of)
     else:
         found = _kill_range(event == "model-destroyed", params.get("object"), filt, ctx, side_of)
-    if found is None or found == "unknown":
+    if found is None or isinstance(found, str):
         return found
     return bounds_verdict(bounds, found)
 

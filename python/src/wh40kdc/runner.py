@@ -25,7 +25,7 @@ from typing import Any, TypeGuard, cast
 from wh40kdc._spec import SPEC_VERSION
 from wh40kdc._version import __version__ as IMPL_VERSION
 from wh40kdc.compare import LoadoutLine, compare_cell, loadout_cell
-from wh40kdc.cruncher import allocate, attribute_stages, crunch
+from wh40kdc.cruncher import AllocationDefences, allocate, attribute_stages, crunch
 from wh40kdc.data.affordability import candidate_affordability
 from wh40kdc.data.base import encode_base
 from wh40kdc.data.dataset import Dataset
@@ -714,7 +714,11 @@ def _handle_allocate(state: RunnerState, args: Any) -> Response:
         return _err("INVALID_INPUT", {"detail": "allocate.zeroing must be an object"})
     try:
         return _ok(
-            allocate(input_, state.dataset(), None if zeroing is None else {"zeroing": zeroing})
+            allocate(
+                input_,
+                state.dataset(),
+                None if zeroing is None else AllocationDefences(zeroing=cast(Any, zeroing)),
+            )
         )
     except Exception as e:
         return _err("CRUNCH_ERROR", {"detail": str(e)})

@@ -1450,7 +1450,7 @@ def _zeroing_uses(usage: Any) -> dict[str, Any]:
         count = limit.get("count")
         whole = isinstance(count, int) and not isinstance(count, bool)
         whole = whole or (isinstance(count, float) and count.is_integer())
-        counts.append(int(count) if whole and count > 0 else 1)
+        counts.append(int(count) if whole and isinstance(count, (int, float)) and count > 0 else 1)
     per = "model" if all(limit.get("per") == "model" for limit in limits) else "unit"
     return {"uses": min(counts), "per": per}
 
@@ -3366,13 +3366,13 @@ def _evaluate_condition(
             if not isinstance(p["keyword"], str) or side is None:
                 return "unknown"
             prefix = "attacker" if side == "attacker" else "target"
-            bounds = keyword_model_bounds(
+            keyword_bounds = keyword_model_bounds(
                 p["keyword"],
                 ctx.get(f"{prefix}KeywordModels"),
                 ctx.get(f"{prefix}ModelKeywords"),
                 ctx.get(f"{prefix}ModelCount"),
             )
-            return "unknown" if bounds is None else bounds_verdict(p, bounds)
+            return "unknown" if keyword_bounds is None else bounds_verdict(p, keyword_bounds)
         if side is None:
             return "unknown"
         count = ctx.get("attackerModelCount" if side == "attacker" else "targetModelCount")
