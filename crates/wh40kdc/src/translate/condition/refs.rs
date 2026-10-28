@@ -472,7 +472,13 @@ pub(crate) fn objective_phrase(f: &P, plural: bool, noun: &str) -> String {
     if is(f, "role", "non-home") {
         s.push_str(" (excluding home)");
     }
-    if is(f, "controlled_by", "friendly") {
+    let within = nn(f, "within").map(|w| obj(Some(w)));
+    // Your control, within this unit's own range of it: the unit itself is controlling it.
+    let unit_controls = is(f, "controlled_by", "friendly")
+        && within.is_some_and(|w| is(w, "range", "objective-control") && is(w, "of", "this-unit"));
+    if unit_controls {
+        s.push_str(" your unit controls");
+    } else if is(f, "controlled_by", "friendly") {
         s.push_str(" you control");
     }
     if is(f, "controlled_by", "enemy") {
@@ -481,8 +487,7 @@ pub(crate) fn objective_phrase(f: &P, plural: bool, noun: &str) -> String {
     if let Some(d) = nn(f, "designated") {
         s.push_str(&format!(" tagged {}", dekebab(&st(Some(d)))));
     }
-    if let Some(within) = nn(f, "within") {
-        let within = obj(Some(within));
+    if let Some(within) = within.filter(|_| !unit_controls) {
         s.push_str(&format!(
             " within {} of {}",
             range_phrase(within.get("range")),

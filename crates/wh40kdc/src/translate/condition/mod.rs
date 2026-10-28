@@ -23,7 +23,7 @@ mod refs;
 use serde_json::Value;
 
 pub(crate) use js::*;
-pub use leadin::condition_lead_in_value;
+pub use leadin::{condition_lead_in_for, condition_lead_in_value, is_defensive_effect};
 use predicate::describe_predicate;
 pub(crate) use refs::*;
 

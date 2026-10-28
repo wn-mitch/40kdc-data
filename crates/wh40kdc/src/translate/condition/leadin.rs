@@ -36,27 +36,48 @@ pub(crate) fn onward_to_from(s: String) -> String {
     s
 }
 
+/// Whether an effect protects the unit being attacked (a save, Feel No Pain, damage
+/// reduction, its Save or Toughness): an attack condition on it is the incoming attack.
+pub fn is_defensive_effect(e: &Value) -> bool {
+    match e.get("type").and_then(Value::as_str) {
+        Some("invulnerable-save" | "feel-no-pain" | "damage-reduction") => true,
+        Some("stat-modifier") => matches!(
+            e.get("modifier")
+                .and_then(|m| m.get("stat"))
+                .and_then(Value::as_str),
+            Some("Sv" | "T")
+        ),
+        _ => false,
+    }
+}
+
 /// A condition as a natural lead-in clause (lowercase-initial; the caller capitalizes at the
 /// sentence boundary). Falls back to `if <condition>` for shapes without a dedicated framing.
 pub fn condition_lead_in_value(c: &Value) -> String {
+    condition_lead_in_for(c, false)
+}
+
+/// [`condition_lead_in_value`], with `defending` framing attack conditions from the attacked
+/// unit's side ("against ranged attacks"), for a condition gating a defensive effect.
+pub fn condition_lead_in_for(c: &Value, defending: bool) -> String {
     match (operator(c), operands(c)) {
-        (Some("and"), Some(ops)) => return join_lead_ins(ops),
+        (Some("and"), Some(ops)) => return join_lead_ins(ops, defending),
         (Some("or"), Some(ops)) => {
             return ops
                 .iter()
-                .map(condition_lead_in_value)
+                .map(|o| condition_lead_in_for(o, defending))
                 .collect::<Vec<_>>()
                 .join(" or ")
         }
         (Some("not"), Some(ops)) => {
             if ops.len() == 1 && ops[0].is_object() && !has_operator(&ops[0]) {
-                return negated_lead_in(&ops[0]);
+                return negated_lead_in(&ops[0], defending);
             }
             return format!(
                 "unless {}",
                 ops.iter()
                     .map(|o| {
-                        let l = condition_lead_in_value(o);
+                        let l = condition_lead_in_for(o, defending);
                         l.strip_prefix("if ").map(str::to_string).unwrap_or(l)
                     })
                     .collect::<Vec<_>>()
@@ -167,6 +188,7 @@ pub fn condition_lead_in_value(c: &Value) -> String {
             }
             let s = pred();
             match s.strip_prefix("for ") {
+                Some(rest) if defending => format!("against {rest}"),
                 Some(rest) => format!("while making {rest}"),
                 None => s,
             }
@@ -180,7 +202,7 @@ pub fn condition_lead_in_value(c: &Value) -> String {
     }
 }
 
-pub(crate) fn negated_lead_in(c: &Value) -> String {
+pub(crate) fn negated_lead_in(c: &Value, defending: bool) -> String {
     let t = ctype(c).unwrap_or("");
     if t == "same-unit" {
         return format!("if {}", describe_predicate(c, true));
@@ -191,7 +213,7 @@ pub(crate) fn negated_lead_in(c: &Value) -> String {
     if t == "unit-state" || t == "designated" {
         return format!("while {}", describe_predicate(c, true));
     }
-    let lead = condition_lead_in_value(c);
+    let lead = condition_lead_in_for(c, defending);
     for word in ["if ", "while ", "when "] {
         if let Some(rest) = lead.strip_prefix(word) {
             return format!("unless {rest}");
@@ -298,7 +320,7 @@ fn matches_lead_in(c: &Value, negated: bool) -> String {
 /// is applied to, "(excluding X or Y units)". Either attaches to the preceding clause with a
 /// space; a run of the unit's own keywords reads "if the unit is a X Y unit"; all other operands
 /// join with ", ".
-pub(crate) fn join_lead_ins(ops: &[Value]) -> String {
+pub(crate) fn join_lead_ins(ops: &[Value], defending: bool) -> String {
     let run = |mut i: usize, pick: &dyn Fn(&Value) -> Option<String>| -> (Vec<String>, usize) {
         let mut kws = Vec::new();
         while i < ops.len() {
@@ -344,7 +366,7 @@ pub(crate) fn join_lead_ins(ops: &[Value]) -> String {
             i = next;
             continue;
         }
-        parts.push(condition_lead_in_value(op));
+        parts.push(condition_lead_in_for(op, defending));
         i += 1;
     }
     let mut acc = String::new();
@@ -360,11 +382,28 @@ pub(crate) fn join_lead_ins(ops: &[Value]) -> String {
             acc.ends_with(" targets") && (acc.starts_with("against ") || acc.contains(", against "))
         }) {
             acc = format!("{acc} that are also {target}");
-        } else if part.starts_with("against ") || part.starts_with("(excluding ") {
+        } else if (part.starts_with("against ") && !is_incoming_attack(&part))
+            || part.starts_with("(excluding ")
+        {
+            // A target narrowing attaches to the clause before it; an incoming attack is its own clause.
             acc = format!("{acc} {part}");
         } else {
             acc = format!("{acc}, {part}");
         }
     }
     acc
+}
+
+/// `^against [a-z -]*attacks( |$)`: an incoming-attack lead-in ("against ranged attacks").
+fn is_incoming_attack(part: &str) -> bool {
+    let Some(rest) = part.strip_prefix("against ") else {
+        return false;
+    };
+    rest.match_indices("attacks").any(|(i, _)| {
+        let after = &rest[i + "attacks".len()..];
+        rest[..i]
+            .bytes()
+            .all(|b| b.is_ascii_lowercase() || b == b' ' || b == b'-')
+            && (after.is_empty() || after.starts_with(' '))
+    })
 }

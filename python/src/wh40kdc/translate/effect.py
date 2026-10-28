@@ -17,7 +17,7 @@ import re
 from typing import Any
 
 from wh40kdc.translate.condition import Condition, dekebab
-from wh40kdc.translate.condition_leadin import condition_lead_in
+from wh40kdc.translate.condition_leadin import condition_lead_in, is_defensive_effect
 from wh40kdc.translate.condition_refs import range_phrase
 from wh40kdc.translate.effect_bind import roll_head, select_objective_block
 from wh40kdc.translate.effect_inline import (
@@ -153,7 +153,7 @@ def describe_effect(e: Effect, depth: int = 0, ctx: Ctx | None = None) -> str:
     t = e.get("type")
     if t == "conditional":
         inner = _obj(e.get("effect"))
-        lead = capitalize(condition_lead_in(_obj(e.get("condition"))))
+        lead = capitalize(condition_lead_in(_obj(e.get("condition")), is_defensive_effect(inner)))
         if _is_container(inner):
             return f"{indent}{lead}:\n" + describe_effect(inner, depth + 1, ctx)
         return f"{indent}{arrow}{lead}, {describe_effect_inline(inner, ctx)}."
@@ -436,7 +436,7 @@ def _render_top_level(e: Effect, scope: Any, usage: Any = None, trigger: Any = N
     trig = " or ".join(parts)
     if e.get("type") == "conditional":
         inner = _obj(e.get("effect"))
-        lead_in = condition_lead_in(_obj(e.get("condition")))
+        lead_in = condition_lead_in(_obj(e.get("condition")), is_defensive_effect(inner))
         if _is_container(inner):
             header = ", ".join(p for p in (trig, lead, lead_in, trail) if p)
             return capitalize(header) + ":\n" + describe_effect(inner, 1, ctx)

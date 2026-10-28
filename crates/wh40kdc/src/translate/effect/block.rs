@@ -13,7 +13,7 @@ use super::{
     stance_pick, ty,
 };
 use crate::translate::condition::{
-    condition_lead_in_value, nn, obj, or_list, range_phrase, truthy, P,
+    condition_lead_in_for, is_defensive_effect, nn, obj, or_list, range_phrase, truthy, P,
 };
 
 /// Block translation of a container effect tree (multi-line, two-space indentation).
@@ -24,7 +24,10 @@ pub(super) fn block(e: &Value, depth: usize, ctx: &Ctx) -> String {
     match ty(e) {
         "conditional" => {
             let inner = child(e, "effect");
-            let lead = capitalize(&condition_lead_in_value(child(e, "condition")));
+            let lead = capitalize(&condition_lead_in_for(
+                child(e, "condition"),
+                is_defensive_effect(inner),
+            ));
             if is_container(obj(Some(inner))) {
                 return format!("{indent}{lead}:\n{}", block(inner, depth + 1, ctx));
             }

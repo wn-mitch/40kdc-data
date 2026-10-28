@@ -78,7 +78,7 @@ describe("canonical condition predicates", () => {
     expect(describeCondition({ type: "controls", parameters: { by: "enemy", objective: { role: "central" }, count: { min: 1 }, proportion: { comparison: "gt", fraction: 0.5 } } })).toBe("your opponent controls 1+ central objectives and your opponent controls more than half of the central objectives");
     expect(describeCondition({ type: "operation-markers", parameters: { count: { min: 2, max: 2 }, within: { range: "objective-control", of: { objective: { role: "central" } } }, friendly_unit_in_same_terrain_area: true, no_enemy_in_terrain_area: true } })).toBe("exactly 2 operation markers on the battlefield within range of a central objective marker with a friendly unit in the same terrain area and no enemy units in that terrain area");
     expect(describeCondition({ type: "destroyed-while-on-objective", parameters: { count: { max: 2 }, objective_role: "central", destroyer_on_objective: true, victim_started_turn_on_objective: true } })).toBe("at most 2 enemy units destroyed by a unit on a central objective that started the turn on a central objective");
-    expect(objectivePhrase({ controlled_by: "friendly", within: { range: "objective-control", of: "this-unit" } })).toBe("objective you control within range of the unit");
+    expect(objectivePhrase({ controlled_by: "friendly", within: { range: "objective-control", of: "this-unit" } })).toBe("objective your unit controls");
     expect(describeCondition(not({ type: "controls", parameters: { count: { min: 1 }, compare: { owner: "enemy", comparison: "gt" } } }))).toBe("not (you control 1+ objectives and you hold more objectives than the opponent)");
   });
 

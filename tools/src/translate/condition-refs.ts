@@ -238,10 +238,14 @@ export function objectivePhrase(f: P, plural = false, noun = "objective"): strin
   if (f.name != null) s += ` (${dekebab(str(f.name))})`;
   if (f.territory != null) s += ` in ${dekebab(str(f.territory))}`;
   if (f.role === "non-home") s += " (excluding home)";
-  if (f.controlled_by === "friendly") s += " you control";
+  const within = f.within as P | undefined;
+  // Your control, within this unit's own range of it: the unit itself is controlling it.
+  const unitControls = f.controlled_by === "friendly" && within?.range === "objective-control" && within.of === "this-unit";
+  if (unitControls) s += " your unit controls";
+  else if (f.controlled_by === "friendly") s += " you control";
   if (f.controlled_by === "enemy") s += " your opponent controls";
   if (f.designated != null) s += ` tagged ${dekebab(str(f.designated))}`;
-  if (f.within != null) {
+  if (f.within != null && !unitControls) {
     const within = f.within as P;
     s += ` within ${rangePhrase(within.range)} of ${placeRefPhrase(within.of)}`;
   }

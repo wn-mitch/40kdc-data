@@ -460,14 +460,22 @@ def _objective_phrase(f: Any, plural: bool = False, noun: str = "objective") -> 
         s += f" in {dekebab(_str(f['territory']))}"
     if role_v == "non-home":
         s += " (excluding home)"
-    if f.get("controlled_by") == "friendly":
+    within = _obj(f.get("within"))
+    # Your control, within this unit's own range of it: the unit itself is controlling it.
+    unit_controls = (
+        f.get("controlled_by") == "friendly"
+        and within.get("range") == "objective-control"
+        and within.get("of") == "this-unit"
+    )
+    if unit_controls:
+        s += " your unit controls"
+    elif f.get("controlled_by") == "friendly":
         s += " you control"
     if f.get("controlled_by") == "enemy":
         s += " your opponent controls"
     if f.get("designated") is not None:
         s += f" tagged {dekebab(_str(f['designated']))}"
-    if f.get("within") is not None:
-        within = _obj(f["within"])
+    if f.get("within") is not None and not unit_controls:
         s += f" within {range_phrase(within.get('range'))} of {place_ref_phrase(within.get('of'))}"
     return s
 

@@ -51,17 +51,30 @@ function keywordNames(p: P): string {
   return Array.isArray(p.any_of) ? orList((p.any_of as unknown[]).map(str)) : andList(((p.all_of as unknown[]) ?? []).map(str));
 }
 
+/** Leaves that protect the unit being attacked: an attack condition on them is the incoming attack. */
+const DEFENSIVE_LEAVES = new Set(["invulnerable-save", "feel-no-pain", "damage-reduction"]);
+const DEFENSIVE_STATS = new Set(["Sv", "T"]);
+
+/** Whether an effect protects the unit being attacked (a save, Feel No Pain, damage reduction, its Save or Toughness). */
+export function isDefensiveEffect(e: { type?: string; modifier?: Record<string, unknown> } | undefined): boolean {
+  if (e == null) return false;
+  if (DEFENSIVE_LEAVES.has(e.type ?? "")) return true;
+  return e.type === "stat-modifier" && DEFENSIVE_STATS.has(str(e.modifier?.stat));
+}
+
 /**
  * A condition as a natural lead-in clause (lowercase-initial; the caller capitalizes at the
  * sentence boundary). Falls back to `if <condition>` for shapes without a dedicated framing.
+ * `defending` frames attack conditions from the attacked unit's side ("against ranged
+ * attacks"), for a condition gating a defensive effect.
  */
-export function conditionLeadIn(c: Condition): string {
-  if (c.operator === "and" && c.operands) return joinLeadIns(c.operands);
-  if (c.operator === "or" && c.operands) return c.operands.map(conditionLeadIn).join(" or ");
+export function conditionLeadIn(c: Condition, defending = false): string {
+  if (c.operator === "and" && c.operands) return joinLeadIns(c.operands, defending);
+  if (c.operator === "or" && c.operands) return c.operands.map((o) => conditionLeadIn(o, defending)).join(" or ");
   if (c.operator === "not" && c.operands) {
     const only = c.operands[0];
-    if (c.operands.length === 1 && only && !only.operator) return negatedLeadIn(only);
-    return `unless ${c.operands.map((o) => conditionLeadIn(o).replace(/^if /, "")).join(" or ")}`;
+    if (c.operands.length === 1 && only && !only.operator) return negatedLeadIn(only, defending);
+    return `unless ${c.operands.map((o) => conditionLeadIn(o, defending).replace(/^if /, "")).join(" or ")}`;
   }
   const p = c.parameters ?? {};
   switch (c.type) {
@@ -106,7 +119,7 @@ export function conditionLeadIn(c: Condition): string {
       return `while ${describePredicate(c, false)}`;
     case "attack-is":
       if (p.all_target_same_unit === true) return `when ${describePredicate(c, false)}`;
-      return describePredicate(c, false).replace(/^for /, "while making ");
+      return describePredicate(c, false).replace(/^for /, defending ? "against " : "while making ");
     case "attack-compare":
       return `when ${describePredicate(c, false)}`;
     case "model-count":
@@ -123,12 +136,12 @@ export function conditionLeadIn(c: Condition): string {
   }
 }
 
-function negatedLeadIn(c: Condition): string {
+function negatedLeadIn(c: Condition, defending: boolean): string {
   if (c.type === "same-unit") return `if ${describePredicate(c, true)}`;
   if (c.type === "matches") return matchesLeadIn(c, true);
   if (c.type === "unit-state" || c.type === "designated") return `while ${describePredicate(c, true)}`;
   // Otherwise the positive lead-in, turned: "unless an enemy unit is within 12\"".
-  return `unless ${conditionLeadIn(c).replace(/^(if|while|when|during|in|against) /, (m, w: string) => (w === "during" || w === "in" || w === "against" ? m : ""))}`;
+  return `unless ${conditionLeadIn(c, defending).replace(/^(if|while|when|during|in|against) /, (m, w: string) => (w === "during" || w === "in" || w === "against" ? m : ""))}`;
 }
 
 /** A single canonical keyword filter used for compact lead-in grouping. */
@@ -169,7 +182,7 @@ function matchesLeadIn(c: Condition, negated: boolean): string {
  * space; a run of the unit's own keywords reads "if the unit is a X Y unit"; all other operands
  * join with ", ".
  */
-function joinLeadIns(operands: Condition[]): string {
+function joinLeadIns(operands: Condition[], defending: boolean): string {
   const parts: string[] = [];
   const run = (i: number, pick: (op: Condition) => string | null): [string[], number] => {
     const kws: string[] = [];
@@ -200,7 +213,7 @@ function joinLeadIns(operands: Condition[]): string {
       i = next;
       continue;
     }
-    parts.push(conditionLeadIn(op));
+    parts.push(conditionLeadIn(op, defending));
     i++;
   }
   return parts.reduce((acc, part) => {
@@ -208,6 +221,8 @@ function joinLeadIns(operands: Condition[]): string {
     // A second keyword gate on the same target narrows it: "against ORKS targets that are also VEHICLE".
     const target = /^against (.+) targets$/.exec(part);
     if (target && / targets$/.test(acc) && /(^|, )against /.test(acc)) return `${acc} that are also ${target[1]}`;
-    return part.startsWith("against ") || part.startsWith("(excluding ") ? `${acc} ${part}` : `${acc}, ${part}`;
+    // A target narrowing attaches to the clause before it; an incoming attack ("against ranged attacks") is its own clause.
+    const narrows = (part.startsWith("against ") && !/^against [a-z -]*attacks( |$)/.test(part)) || part.startsWith("(excluding ");
+    return narrows ? `${acc} ${part}` : `${acc}, ${part}`;
   }, "");
 }

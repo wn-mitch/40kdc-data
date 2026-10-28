@@ -362,7 +362,7 @@ func renderTopLevel(e, scope map[string]any, usage, trigger any) string {
 	trig := strings.Join(trigs, " or ")
 	if e["type"] == "conditional" {
 		inner := mapOr(e["effect"])
-		leadIn := conditionLeadIn(mapOr(e["condition"]))
+		leadIn := conditionLeadInFor(mapOr(e["condition"]), isDefensiveEffect(inner))
 		if containerTypes[ejstrType(inner)] {
 			header := joinNonEmpty([]string{trig, lead, leadIn, trail}, ", ")
 			return capitalize(header) + ":\n" + describeEffect(inner, 1, ctx)

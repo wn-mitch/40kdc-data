@@ -329,7 +329,7 @@ func describeEffectInlineBase(e map[string]any, ctx effCtx) string {
 		if inner["type"] == "named-region-state" {
 			return describeNamedRegionConditional(mod(inner), mapOr(e["condition"]), ctx)
 		}
-		return conditionLeadIn(mapOr(e["condition"])) + ", " + describeEffectInline(inner, ctx)
+		return conditionLeadInFor(mapOr(e["condition"]), isDefensiveEffect(inner)) + ", " + describeEffectInline(inner, ctx)
 	case "rules-bundle", "sequence":
 		steps := getList(e, "steps")
 		if rider, ok := rollWithRider(steps, ctx); ok {
@@ -550,7 +550,7 @@ func describeEffect(e map[string]any, depth int, ctx effCtx) string {
 	switch e["type"] {
 	case "conditional":
 		inner := mapOr(e["effect"])
-		lead := capitalize(conditionLeadIn(mapOr(e["condition"])))
+		lead := capitalize(conditionLeadInFor(mapOr(e["condition"]), isDefensiveEffect(inner)))
 		if containerTypes[ejstrType(inner)] {
 			return indent + lead + ":\n" + describeEffect(inner, depth+1, ctx)
 		}

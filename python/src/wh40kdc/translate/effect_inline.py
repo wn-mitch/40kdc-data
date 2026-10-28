@@ -10,7 +10,7 @@ import re
 from typing import Any
 
 from wh40kdc.translate.condition import dekebab, describe_condition
-from wh40kdc.translate.condition_leadin import condition_lead_in
+from wh40kdc.translate.condition_leadin import condition_lead_in, is_defensive_effect
 from wh40kdc.translate.condition_refs import _or_list, range_phrase, unit_ref_phrase
 from wh40kdc.translate.effect_bind import roll_head, select_objective_inline
 from wh40kdc.translate.effect_leaf import LEAF_TYPES, describe_leaf
@@ -378,9 +378,8 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx) -> str:
             return describe_named_region_conditional(
                 _obj(inner.get("modifier")), _obj(e.get("condition")), ctx, inline
             )
-        return (
-            f"{condition_lead_in(_obj(e.get('condition')))}, {describe_effect_inline(inner, ctx)}"
-        )
+        lead = condition_lead_in(_obj(e.get("condition")), is_defensive_effect(inner))
+        return f"{lead}, {describe_effect_inline(inner, ctx)}"
     if t in ("rules-bundle", "sequence"):
         steps = e.get("steps") or []
         rider = roll_with_rider(steps, ctx)

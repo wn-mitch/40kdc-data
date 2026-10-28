@@ -15,7 +15,7 @@
  */
 
 import { dekebab, describeCondition, titleCase, type Condition } from "./condition.js";
-import { conditionLeadIn, describeSelectionEligibility } from "./condition-leadin.js";
+import { conditionLeadIn, describeSelectionEligibility, isDefensiveEffect } from "./condition-leadin.js";
 import { unitRefPhrase, usageClause } from "./condition-refs.js";
 import { describeTrigger, normalizeTriggers, type AbilityTriggerSpec } from "./trigger.js";
 import { definedGrantHead, definitionPart, describeLeaf, isDefinedGrant, LEAF_TYPES, type Leaf } from "./effect-leaf.js";
@@ -573,7 +573,7 @@ function describeEffectInlineBase(e: Effect, ctx: Ctx = {}): string {
     case "conditional":
       if (e.effect?.type === "named-region-state")
         return describeNamedRegionConditional(e.effect.modifier ?? {}, e.condition ?? {}, ctx);
-      return `${conditionLeadIn(e.condition ?? {})}, ${describeEffectInline(e.effect ?? {}, ctx)}`;
+      return `${conditionLeadIn(e.condition ?? {}, isDefensiveEffect(e.effect))}, ${describeEffectInline(e.effect ?? {}, ctx)}`;
     case "rules-bundle":
     case "sequence": {
       const rider = rollWithRider(e.steps ?? [], ctx);
@@ -829,7 +829,7 @@ export function describeEffect(e: Effect, depth: number = 0, ctx: Ctx = {}): str
       if (CONTAINER_TYPES.has(inner.type ?? "")) {
         return `${indent}${capitalize(conditionLeadIn(e.condition ?? {}))}:\n` + describeEffect(inner, depth + 1, ctx);
       }
-      return `${indent}${arrow}${capitalize(conditionLeadIn(e.condition ?? {}))}, ${describeEffectInline(inner, ctx)}.`;
+      return `${indent}${arrow}${capitalize(conditionLeadIn(e.condition ?? {}, isDefensiveEffect(inner)))}, ${describeEffectInline(inner, ctx)}.`;
     }
     case "rules-bundle":
     case "sequence": {
@@ -1099,7 +1099,7 @@ function renderTopLevel(
 
   if (e.type === "conditional") {
     const inner = e.effect ?? {};
-    const leadIn = conditionLeadIn(e.condition ?? {});
+    const leadIn = conditionLeadIn(e.condition ?? {}, isDefensiveEffect(inner));
     if (CONTAINER_TYPES.has(inner.type ?? "")) {
       // Block: "<trigger>[, <lead-in>][, <duration>]:" then the indented container.
       const header = [trig, lead, leadIn, trail].filter((p) => p.length > 0).join(", ");

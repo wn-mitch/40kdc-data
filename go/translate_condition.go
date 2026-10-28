@@ -459,14 +459,23 @@ func objectivePhrase(f map[string]any, plural bool, noun string) string {
 	if f["role"] == "non-home" {
 		s += " (excluding home)"
 	}
-	switch f["controlled_by"] {
-	case "friendly":
+	within, hasWithin := asMap(f["within"])
+	hasWithin = hasWithin && within != nil
+	// Your control, within this unit's own range of it: the unit itself is controlling it.
+	unitControls := f["controlled_by"] == "friendly" && hasWithin && within["range"] == "objective-control" && within["of"] == "this-unit"
+	switch {
+	case unitControls:
+		s += " your unit controls"
+	case f["controlled_by"] == "friendly":
 		s += " you control"
-	case "enemy":
+	case f["controlled_by"] == "enemy":
 		s += " your opponent controls"
 	}
 	if f["designated"] != nil {
 		s += " tagged " + dekebab(cstr(f["designated"]))
+	}
+	if hasWithin && !unitControls {
+		s += " within " + rangePhrase(within["range"]) + " of " + placeRefPhrase(within["of"])
 	}
 	return s
 }

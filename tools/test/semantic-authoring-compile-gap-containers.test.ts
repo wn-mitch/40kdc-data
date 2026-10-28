@@ -392,6 +392,26 @@ describe("Semantic authoring select-objective compiler", () => {
     ])).toMatch(/objective marker within 6" of this model/u);
   });
 
+  it("keeps a distance-less origin as that unit's own control of the objective", () => {
+    const leaves = [
+      leaf("EFFECT", "select-objective-open", { bind_as: "objective", count: 1, origin: "this-unit", controlled_by: "your-army" }, "A"),
+      leaf("EFFECT", "fights-first", { subject: "this-unit" }, "B"),
+    ];
+    const effect = compiled(leaves).mechanics.effect as Record<string, any>;
+    expect(effect.selector.filter).toEqual({ controlled_by: "friendly", within: { range: "objective-control", of: "this-unit" } });
+    expect(rendered(base(), leaves)).toMatch(/one objective marker your unit controls/u);
+    // A bearer's reach stays a range clause, and a selection with no origin stays army-wide control.
+    expect(rendered(base(), [
+      leaf("EFFECT", "select-objective-open", { bind_as: "objective", origin: "this-model", controlled_by: "your-army" }, "A"),
+      leaf("EFFECT", "fights-first", { subject: "this-model" }, "B"),
+    ])).toMatch(/objective marker you control within range of this model/u);
+    const armyWide = compiled([
+      leaf("EFFECT", "select-objective-open", { bind_as: "objective", controlled_by: "your-army" }, "A"),
+      leaf("EFFECT", "fights-first", { subject: "this-unit" }, "B"),
+    ]).mechanics.effect as Record<string, any>;
+    expect(armyWide.selector.filter).toEqual({ controlled_by: "friendly" });
+  });
+
   it("iterates every eligible objective without selection bounds", () => {
     const effect = compiled([
       leaf("EFFECT", "select-objective-open", { bind_as: "x", each: true }, "A"),

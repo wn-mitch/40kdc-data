@@ -40,7 +40,9 @@ use std::sync::OnceLock;
 
 use serde_json::{Map, Value};
 
-use crate::translate::condition::{condition_lead_in_value, nn, obj, range_phrase, truthy, P};
+use crate::translate::condition::{
+    condition_lead_in_for, is_defensive_effect, nn, obj, range_phrase, truthy, P,
+};
 use designation::*;
 use dice::*;
 use leaf::{describe_leaf, LEAF_TYPES};
@@ -395,7 +397,10 @@ fn inline_base(e: &P, ctx: &Ctx) -> String {
             }
             format!(
                 "{}, {}",
-                condition_lead_in_value(child(e, "condition")),
+                condition_lead_in_for(
+                    child(e, "condition"),
+                    is_defensive_effect(child(e, "effect"))
+                ),
                 inline(child(e, "effect"), ctx)
             )
         }

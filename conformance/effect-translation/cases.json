@@ -2806,7 +2806,11 @@
       "type": "select-objective",
       "selector": {
         "filter": {
-          "controlled_by": "friendly"
+          "controlled_by": "friendly",
+          "within": {
+            "range": "objective-control",
+            "of": "this-unit"
+          }
         },
         "bind_as": "objective-marker",
         "count": {
@@ -2829,7 +2833,7 @@
       ]
     },
     "expected": {
-      "text": "Select one objective marker you control, binding it as objective marker: objective markers the unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.\nApplies to: units with EMPEROR’S CHILDREN, TRANSPORT."
+      "text": "Select one objective marker your unit controls, binding it as objective marker: objective markers the unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.\nApplies to: units with EMPEROR’S CHILDREN, TRANSPORT."
     }
   },
   {
@@ -4807,7 +4811,7 @@
     },
     "applies_to": {
       "all_of": [
-        "VIGILATORS"
+        "VIGILATOR SQUAD"
       ]
     },
     "trigger": {
@@ -4824,7 +4828,7 @@
       }
     },
     "expected": {
-      "text": "When a friendly unit with unit ID vigilator-squad is selected to fight, until the end of the phase:\n  Select one of the following:\n    - The unit's weapons gain [SUSTAINED HITS 1].\n    - The unit's weapons gain [LETHAL HITS].\nApplies to: units with VIGILATORS."
+      "text": "When a friendly unit with unit ID vigilator-squad is selected to fight, until the end of the phase:\n  Select one of the following:\n    - The unit's weapons gain [SUSTAINED HITS 1].\n    - The unit's weapons gain [LETHAL HITS].\nApplies to: units with VIGILATOR SQUAD."
     }
   },
   {
@@ -6370,7 +6374,11 @@
       "type": "select-objective",
       "selector": {
         "filter": {
-          "controlled_by": "friendly"
+          "controlled_by": "friendly",
+          "within": {
+            "range": "objective-control",
+            "of": "this-unit"
+          }
         },
         "bind_as": "objective",
         "count": {
@@ -6412,7 +6420,7 @@
       }
     },
     "expected": {
-      "text": "At the end of your Movement phase:\n  -> Select one objective marker you control, binding it as objective: objective markers the unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.\nApplies to: units with SEKHETAR ROBOTS."
+      "text": "At the end of your Movement phase:\n  -> Select one objective marker your unit controls, binding it as objective: objective markers the unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.\nApplies to: units with SEKHETAR ROBOTS."
     }
   },
   {
@@ -12295,7 +12303,11 @@
       "type": "select-objective",
       "selector": {
         "filter": {
-          "controlled_by": "friendly"
+          "controlled_by": "friendly",
+          "within": {
+            "range": "objective-control",
+            "of": "this-unit"
+          }
         },
         "bind_as": "objective",
         "count": {
@@ -12332,7 +12344,7 @@
       }
     },
     "expected": {
-      "text": "At the end of your Movement phase:\n  -> Select one objective marker you control, binding it as objective: objective markers the unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase."
+      "text": "At the end of your Movement phase:\n  -> Select one objective marker your unit controls, binding it as objective: objective markers the unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase."
     }
   },
   {
@@ -36631,6 +36643,282 @@
     },
     "expected": {
       "text": "If the unit has destroyed 1+ enemy units with melee attacks this phase, when resolving this use, you gain 1 Blood Tithe point."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-attack-is-defensive-invuln",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "attack-is",
+        "parameters": {
+          "attack_type": "ranged"
+        }
+      },
+      "effect": {
+        "type": "invulnerable-save",
+        "target": {
+          "owner": "friendly",
+          "all_of": [
+            "ALPHA"
+          ]
+        },
+        "modifier": {
+          "invuln_sv": 4
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "Against ranged attacks, when resolving this use, all friendly ALPHA units have a 4+ invulnerable save."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-attack-is-defensive-fnp-weapons",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "attack-is",
+        "parameters": {
+          "attack_type": "ranged",
+          "weapons": {
+            "keyword": {
+              "keyword_id": "blast"
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "feel-no-pain",
+        "target": "this-unit",
+        "modifier": {
+          "threshold": 5
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "Against ranged attacks made with [BLAST] weapons, when resolving this use, the unit has the Feel No Pain 5+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-attack-is-defensive-save-and",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": {
+                    "objective": {}
+                  },
+                  "range": "objective-control"
+                }
+              }
+            }
+          },
+          {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "ranged"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "stat": "Sv",
+          "operation": "improve",
+          "value": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "While the unit is within range of an objective marker, against ranged attacks, when resolving this use, improve the unit's Save characteristic by 1."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-attack-is-defensive-or-block",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "invulnerable-save",
+          "target": "this-unit",
+          "modifier": {
+            "invuln_sv": 6
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "or",
+            "operands": [
+              {
+                "type": "attack-is",
+                "parameters": {
+                  "attack_type": "psychic"
+                }
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "attacker",
+                  "filter": {
+                    "all_of": [
+                      "DAEMON"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "invulnerable-save",
+            "target": "this-unit",
+            "modifier": {
+              "invuln_sv": 4
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use:\n  -> The unit has a 6+ invulnerable save.\n  -> Against psychic attacks or if the attacking unit has \"DAEMON\", the unit has a 4+ invulnerable save."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-attack-is-offensive",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "attack-is",
+        "parameters": {
+          "attack_type": "ranged"
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "stat": "AP",
+          "operation": "improve",
+          "value": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "While making ranged attacks, when resolving this use, improve the unit's Armour Penetration characteristic by 1."
+    }
+  },
+  {
+    "caseId": "fidelity/select-objective-unit-controls",
+    "effect": {
+      "type": "select-objective",
+      "selector": {
+        "filter": {
+          "controlled_by": "friendly",
+          "within": {
+            "range": "objective-control",
+            "of": "this-unit"
+          }
+        },
+        "bind_as": "objective",
+        "count": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "effect": {
+        "type": "objective-sticky",
+        "target": "this-unit"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use:\n  -> Select one objective marker your unit controls, binding it as objective: objective markers the unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase."
+    }
+  },
+  {
+    "caseId": "fidelity/select-objective-model-range",
+    "effect": {
+      "type": "select-objective",
+      "selector": {
+        "filter": {
+          "controlled_by": "friendly",
+          "within": {
+            "range": "objective-control",
+            "of": "this-model"
+          }
+        },
+        "bind_as": "objective",
+        "count": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "effect": {
+        "type": "objective-sticky",
+        "target": "this-unit"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use:\n  -> Select one objective marker you control within range of this model, binding it as objective: objective markers the unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase."
+    }
+  },
+  {
+    "caseId": "fidelity/select-objective-within-inches",
+    "effect": {
+      "type": "select-objective",
+      "selector": {
+        "filter": {
+          "within": {
+            "range": {
+              "inches": 18
+            },
+            "of": "this-model"
+          }
+        },
+        "bind_as": "objective",
+        "count": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "effect": {
+        "type": "objective-sticky",
+        "target": "this-unit"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use:\n  -> Select one objective marker within 18\" of this model, binding it as objective: objective markers the unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase."
     }
   },
   {

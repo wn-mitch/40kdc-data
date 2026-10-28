@@ -9993,7 +9993,11 @@
       "type": "select-objective",
       "selector": {
         "filter": {
-          "controlled_by": "friendly"
+          "controlled_by": "friendly",
+          "within": {
+            "range": "objective-control",
+            "of": "this-unit"
+          }
         },
         "bind_as": "objective",
         "count": {
@@ -10289,7 +10293,11 @@
       "type": "select-objective",
       "selector": {
         "filter": {
-          "controlled_by": "friendly"
+          "controlled_by": "friendly",
+          "within": {
+            "range": "objective-control",
+            "of": "this-unit"
+          }
         },
         "bind_as": "objective",
         "count": {

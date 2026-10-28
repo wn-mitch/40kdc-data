@@ -11,7 +11,7 @@ use super::{child, inline, is_container, join_nonempty, ty};
 use crate::generated::{
     Ability, AbilityTrigger, AbilityUsage, EffectNode, KeywordPredicate, Scope,
 };
-use crate::translate::condition::{condition_lead_in_value, nn, obj, or_list};
+use crate::translate::condition::{condition_lead_in_for, is_defensive_effect, nn, obj, or_list};
 use crate::translate::dekebab;
 
 /// Join non-empty clauses with ", ", capitalize the sentence, and end with a period.
@@ -93,7 +93,7 @@ pub(super) fn render_top_level(
 
     if ty(e_map) == "conditional" {
         let inner = child(e_map, "effect");
-        let lead_in = condition_lead_in_value(child(e_map, "condition"));
+        let lead_in = condition_lead_in_for(child(e_map, "condition"), is_defensive_effect(inner));
         if is_container(obj(Some(inner))) {
             let header = join_nonempty(&[&trig, &lead, &lead_in, trail], ", ");
             return format!("{}:\n{}", capitalize(&header), block(inner, 1, &ctx));

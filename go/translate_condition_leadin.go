@@ -29,6 +29,7 @@ var (
 	belowStartingRe      = regexp.MustCompile(` is below starting strength$`)
 	leadingForRe         = regexp.MustCompile(`^for `)
 	negatedLeadInWordsRe = regexp.MustCompile(`^(if|while|when|during|in|against) `)
+	incomingAttackRe     = regexp.MustCompile(`^against [a-z -]*attacks( |$)`)
 )
 
 func matchesLeadIn(c map[string]any, negated bool) string {
@@ -84,30 +85,51 @@ func mapOrValue(m map[string]any, preferred, fallback string) []any {
 	return values
 }
 
+// isDefensiveEffect reports whether an effect protects the unit being attacked
+// (a save, Feel No Pain, damage reduction, its Save or Toughness): an attack
+// condition on it is the incoming attack.
+func isDefensiveEffect(e map[string]any) bool {
+	switch e["type"] {
+	case "invulnerable-save", "feel-no-pain", "damage-reduction":
+		return true
+	case "stat-modifier":
+		stat := mapOr(e["modifier"])["stat"]
+		return stat == "Sv" || stat == "T"
+	}
+	return false
+}
+
 // conditionLeadIn renders a condition as a natural lead-in clause
 // (lowercase-initial; the caller capitalizes at the sentence boundary). Falls
 // back to `if <condition>` for shapes without a dedicated framing.
 func conditionLeadIn(c map[string]any) string {
+	return conditionLeadInFor(c, false)
+}
+
+// conditionLeadInFor is conditionLeadIn with defending framing attack
+// conditions from the attacked unit's side ("against ranged attacks"), for a
+// condition gating a defensive effect.
+func conditionLeadInFor(c map[string]any, defending bool) string {
 	if c == nil {
 		c = map[string]any{}
 	}
 	if ops, ok := conditionOperands(c, "and"); ok {
-		return joinLeadIns(ops)
+		return joinLeadIns(ops, defending)
 	}
 	if ops, ok := conditionOperands(c, "or"); ok {
 		parts := make([]string, len(ops))
 		for i, o := range ops {
-			parts[i] = conditionLeadIn(o)
+			parts[i] = conditionLeadInFor(o, defending)
 		}
 		return strings.Join(parts, " or ")
 	}
 	if ops, ok := conditionOperands(c, "not"); ok {
 		if len(ops) == 1 && !jsTruthy(ops[0]["operator"]) {
-			return negatedLeadIn(ops[0])
+			return negatedLeadIn(ops[0], defending)
 		}
 		parts := make([]string, len(ops))
 		for i, o := range ops {
-			parts[i] = leadingIfRe.ReplaceAllString(conditionLeadIn(o), "")
+			parts[i] = leadingIfRe.ReplaceAllString(conditionLeadInFor(o, defending), "")
 		}
 		return "unless " + strings.Join(parts, " or ")
 	}
@@ -174,6 +196,9 @@ func conditionLeadIn(c map[string]any) string {
 		if p["all_target_same_unit"] == true {
 			return "when " + describePredicate(c, false)
 		}
+		if defending {
+			return leadingForRe.ReplaceAllString(describePredicate(c, false), "against ")
+		}
 		return leadingForRe.ReplaceAllString(describePredicate(c, false), "while making ")
 	case "attack-compare":
 		return "when " + describePredicate(c, false)
@@ -185,7 +210,7 @@ func conditionLeadIn(c map[string]any) string {
 	return "if " + describePredicate(c, false)
 }
 
-func negatedLeadIn(c map[string]any) string {
+func negatedLeadIn(c map[string]any, defending bool) string {
 	switch {
 	case c["type"] == "same-unit":
 		return "if " + describePredicate(c, true)
@@ -195,7 +220,7 @@ func negatedLeadIn(c map[string]any) string {
 		return "while " + describePredicate(c, true)
 	}
 	// Otherwise the positive lead-in, turned: "unless an enemy unit is within 12\"".
-	lead := conditionLeadIn(c)
+	lead := conditionLeadInFor(c, defending)
 	if m := negatedLeadInWordsRe.FindStringSubmatch(lead); m != nil {
 		if m[1] != "during" && m[1] != "in" && m[1] != "against" {
 			lead = lead[len(m[0]):]
@@ -237,7 +262,7 @@ func ownKeyword(op map[string]any) (string, bool) {
 // "(excluding X or Y units)". Either attaches to the preceding clause with a
 // space; a run of the unit's own keywords reads "if the unit is a X Y unit";
 // all other operands join with ", ".
-func joinLeadIns(operands []map[string]any) string {
+func joinLeadIns(operands []map[string]any, defending bool) string {
 	var parts []string
 	run := func(i int, pick func(map[string]any) (string, bool)) ([]string, int) {
 		var kws []string
@@ -281,7 +306,7 @@ func joinLeadIns(operands []map[string]any) string {
 			i = next
 			continue
 		}
-		parts = append(parts, conditionLeadIn(op))
+		parts = append(parts, conditionLeadInFor(op, defending))
 		i++
 	}
 	acc := ""
@@ -292,7 +317,8 @@ func joinLeadIns(operands []map[string]any) string {
 		case againstTargetsRe.MatchString(part) && strings.HasSuffix(acc, " targets") && againstClauseRe.MatchString(acc):
 			// A second keyword gate on the same target narrows it: "against ORKS targets that are also VEHICLE".
 			acc += " that are also " + againstTargetsRe.FindStringSubmatch(part)[1]
-		case strings.HasPrefix(part, "against ") || strings.HasPrefix(part, "(excluding "):
+		case (strings.HasPrefix(part, "against ") && !incomingAttackRe.MatchString(part)) || strings.HasPrefix(part, "(excluding "):
+			// A target narrowing attaches to the clause before it; an incoming attack is its own clause.
 			acc += " " + part
 		default:
 			acc += ", " + part

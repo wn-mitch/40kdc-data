@@ -122,25 +122,43 @@ def _matches_lead_in(c: Condition, negated: bool) -> str:
         return f"against {_str(f['designated'])} targets"
     return f"while {_describe_predicate(c, negated)}"
 
-def condition_lead_in(c: Condition) -> str:
+# Leaves that protect the unit being attacked: an attack condition on them is the incoming attack.
+_DEFENSIVE_LEAVES = frozenset({"invulnerable-save", "feel-no-pain", "damage-reduction"})
+_DEFENSIVE_STATS = frozenset({"Sv", "T"})
+
+
+def is_defensive_effect(e: object) -> bool:
+    """Whether an effect protects the unit being attacked (a save, Feel No Pain, damage
+    reduction, its Save or Toughness)."""
+    if not isinstance(e, dict):
+        return False
+    if e.get("type") in _DEFENSIVE_LEAVES:
+        return True
+    modifier = e.get("modifier")
+    stat = modifier.get("stat") if isinstance(modifier, dict) else None
+    return e.get("type") == "stat-modifier" and stat in _DEFENSIVE_STATS
+
+
+def condition_lead_in(c: Condition, defending: bool = False) -> str:
     """A condition as a natural lead-in clause (lowercase-initial; the caller capitalizes at
     the sentence boundary). Falls back to ``if <condition>`` for shapes without a dedicated
-    framing."""
+    framing. ``defending`` frames attack conditions from the attacked unit's side ("against
+    ranged attacks"), for a condition gating a defensive effect."""
     op = c.get("operator")
     operands = c.get("operands")
     if op == "and" and operands is not None:
-        return _join_lead_ins(operands)
+        return _join_lead_ins(operands, defending)
     if op == "or" and operands is not None:
-        return " or ".join(condition_lead_in(o) for o in operands)
+        return " or ".join(condition_lead_in(o, defending) for o in operands)
     if op == "not" and operands is not None:
         if (
             len(operands) == 1
             and isinstance(operands[0], dict)
             and not _truthy(operands[0].get("operator"))
         ):
-            return _negated_lead_in(operands[0])
+            return _negated_lead_in(operands[0], defending)
         return "unless " + " or ".join(
-            re.sub(r"^if ", "", condition_lead_in(o), count=1) for o in operands
+            re.sub(r"^if ", "", condition_lead_in(o, defending), count=1) for o in operands
         )
     p = _obj(c.get("parameters"))
     ctype = c.get("type")
@@ -241,13 +259,14 @@ def condition_lead_in(c: Condition) -> str:
     if ctype == "attack-is":
         if p.get("all_target_same_unit") is True:
             return f"when {_describe_predicate(c, False)}"
-        return re.sub(r"^for ", "while making ", _describe_predicate(c, False), count=1)
+        lead = "against " if defending else "while making "
+        return re.sub(r"^for ", lead, _describe_predicate(c, False), count=1)
     if ctype == "attack-compare":
         return f"when {_describe_predicate(c, False)}"
     return f"if {_describe_predicate(c, False)}"
 
 
-def _negated_lead_in(c: Condition) -> str:
+def _negated_lead_in(c: Condition, defending: bool) -> str:
     ctype = c.get("type")
     if ctype == "same-unit":
         return f"if {_describe_predicate(c, True)}"
@@ -261,7 +280,7 @@ def _negated_lead_in(c: Condition) -> str:
         return m.group(0) if m.group(1) in ("during", "in", "against") else ""
 
     return "unless " + re.sub(
-        r"^(if|while|when|during|in|against) ", turn, condition_lead_in(c), count=1
+        r"^(if|while|when|during|in|against) ", turn, condition_lead_in(c, defending), count=1
     )
 
 
@@ -301,7 +320,7 @@ def _own_keyword(op: Condition) -> str | None:
     return _str(all_of[0])
 
 
-def _join_lead_ins(operands: list[Condition]) -> str:
+def _join_lead_ins(operands: list[Condition], defending: bool) -> str:
     """Join the operands of an ``and`` lead-in. Runs of keyword exclusions collapse into one
     clause: on the attack's target, "against a unit that is not a X or Y"; on the unit an aura
     or effect is applied to, "(excluding X or Y units)". Either attaches to the preceding
@@ -338,7 +357,7 @@ def _join_lead_ins(operands: list[Condition]) -> str:
                 else f"if the unit has the {kws[0]} keyword"
             )
             continue
-        parts.append(condition_lead_in(op))
+        parts.append(condition_lead_in(op, defending))
         i += 1
     acc = ""
     for part in parts:
@@ -349,7 +368,11 @@ def _join_lead_ins(operands: list[Condition]) -> str:
             acc = part
         elif target and acc.endswith(" targets") and re.search(r"(^|, )against ", acc):
             acc = f"{acc} that are also {target.group(1)}"
-        elif part.startswith("against ") or part.startswith("(excluding "):
+        elif (
+            part.startswith("against ") and not re.match(r"^against [a-z -]*attacks( |$)", part)
+        ) or part.startswith("(excluding "):
+            # A target narrowing attaches to the clause before it;
+            # an incoming attack is its own clause.
             acc = f"{acc} {part}"
         else:
             acc = f"{acc}, {part}"

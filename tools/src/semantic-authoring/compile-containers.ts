@@ -493,6 +493,9 @@ function buildSelectObjective(head: CompileLeaf, groups: CompileLeaf[][]): Node 
       range: { inches: closed(head, "range_inches") },
       of: head.parameters.origin !== undefined ? closed(head, "origin") : "this-model",
     };
+  } else if (head.parameters.origin !== undefined) {
+    // An origin without a distance is the origin's own reach: "an objective your unit is controlling".
+    filter.within = { range: "objective-control", of: closed(head, "origin") };
   }
   const selector: Node = { filter, bind_as: closed(head, "bind_as") };
   if (head.parameters.each !== true) {
