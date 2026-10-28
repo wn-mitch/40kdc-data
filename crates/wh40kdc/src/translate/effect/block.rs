@@ -10,7 +10,7 @@ use super::select::*;
 use super::words::*;
 use super::{
     child, choice_prompt, inline, is_container, items, part_head, part_inline, stance_additive,
-    stance_pick, ty,
+    stance_initial, stance_pick, ty,
 };
 use crate::translate::condition::{
     condition_lead_in_for, is_defensive_effect, nn, obj, or_list, range_phrase, truthy, P,
@@ -215,6 +215,10 @@ pub(super) fn block(e: &Value, depth: usize, ctx: &Ctx) -> String {
                 capitalize(&stance_pick(e)),
                 stance_additive(e)
             )];
+            let initial = stance_initial(e);
+            if !initial.is_empty() {
+                lines.insert(0, format!("{indent}{arrow}{}.", capitalize(&initial)));
+            }
             for o in items(e, "options") {
                 let o = obj(Some(o));
                 lines.push(format!(

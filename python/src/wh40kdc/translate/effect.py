@@ -36,6 +36,7 @@ from wh40kdc.translate.effect_inline import (
     pool_text,
     roll_with_rider,
     stance_additive,
+    stance_initial,
     stance_pick,
     usage_clause,
 )
@@ -243,8 +244,10 @@ def describe_effect(e: Effect, depth: int = 0, ctx: Ctx | None = None) -> str:
         return _designate_target_block(e, depth, ctx, indent, arrow)
     if t == "stance-select":
         consum = " (each may be chosen once per battle)" if e.get("mode") == "consumable" else ""
+        initial = [f"{indent}{arrow}{capitalize(stance_initial(e))}."] if stance_initial(e) else []
         return "\n".join(
             [
+                *initial,
                 f"{indent}{arrow}{capitalize(stance_pick(e))}{consum}{stance_additive(e)}:",
                 *_option_lines(e, indent, ctx),
             ]

@@ -38430,6 +38430,48 @@
     }
   },
   {
+    "caseId": "fidelity/stance-select-initial-option",
+    "effect": {
+      "type": "stance-select",
+      "mode": "re-selectable",
+      "initial": "guard-stance",
+      "options": [
+        {
+          "id": "guard-stance",
+          "name": "Guard Stance",
+          "effect": {
+            "type": "stat-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "stat": "T",
+              "operation": "add",
+              "value": 1
+            }
+          }
+        },
+        {
+          "id": "strike-stance",
+          "name": "Strike Stance",
+          "effect": {
+            "type": "stat-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "stat": "A",
+              "operation": "add",
+              "value": 1
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use:\n  -> At the start of the battle, Guard Stance is active.\n  -> Select one:\n    - Guard Stance: add 1 to the unit's Toughness characteristic.\n    - Strike Stance: add 1 to the unit's Attacks characteristic."
+    }
+  },
+  {
     "caseId": "fidelity/named-region-producer-only",
     "effect": {
       "type": "conditional",

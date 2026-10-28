@@ -4099,6 +4099,10 @@ function genEffectTranslation(): void {
     // A part lasting until the end of the turn after this one, whoever's turn that is.
     { caseId: "fidelity/part-until-end-of-next-turn", effect: { type: "ability-part", duration: "until-end-of-next-turn",
       effect: { type: "designate", target: { owner: "friendly", all_of: ["SPRITE"] }, modifier: { tag: "riled-up" } } } },
+    // A stance menu with an option in force from the start of the battle, before any selection.
+    { caseId: "fidelity/stance-select-initial-option", effect: { type: "stance-select", mode: "re-selectable", initial: "guard-stance", options: [
+      { id: "guard-stance", name: "Guard Stance", effect: { type: "stat-modifier", target: "this-unit", modifier: { stat: "T", operation: "add", value: 1 } } },
+      { id: "strike-stance", name: "Strike Stance", effect: { type: "stat-modifier", target: "this-unit", modifier: { stat: "A", operation: "add", value: 1 } } }] } },
     // A named region declared with nothing reading it here (a producer-only named-region-state).
     { caseId: "fidelity/named-region-producer-only", effect: { type: "conditional", condition: { type: "army-faction", parameters: { faction: "example-faction" } },
       effect: { type: "named-region-state", target: { owner: "friendly" }, modifier: {

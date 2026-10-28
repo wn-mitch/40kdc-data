@@ -391,7 +391,11 @@ func describeEffectInlineBase(e map[string]any, ctx effCtx) string {
 		if e["mode"] == "consumable" {
 			consum = " (each may be chosen once per battle)"
 		}
-		return stancePick(e) + consum + stanceAdditive(e) + ": " + strings.Join(opts, " / ")
+		initial := ""
+		if s := stanceInitial(e); s != "" {
+			initial = s + "; "
+		}
+		return initial + stancePick(e) + consum + stanceAdditive(e) + ": " + strings.Join(opts, " / ")
 	case "stance-selection-capacity":
 		n := jsNumber(m["additional_selections"])
 		if n != n || n == 0 {
@@ -457,6 +461,22 @@ func stanceAdditive(e map[string]any) string {
 		return " (in addition to any already active)"
 	}
 	return ""
+}
+
+// stanceInitial renders the option in force from the start of the battle ("at the start of the
+// battle, Aegis Protocol is active"), or "".
+func stanceInitial(e map[string]any) string {
+	initial, ok := e["initial"].(string)
+	if !ok {
+		return ""
+	}
+	name := titleCase(initial)
+	for _, o := range getList(e, "options") {
+		if om := mapOr(o); om["id"] == initial && om["name"] != nil {
+			name = ejstr(om["name"])
+		}
+	}
+	return "at the start of the battle, " + name + " is active"
 }
 
 func stancePick(e map[string]any) string {
@@ -658,6 +678,9 @@ func describeEffect(e map[string]any, depth int, ctx effCtx) string {
 			consum = " (each may be chosen once per battle)"
 		}
 		lines := []string{indent + arrow + capitalize(stancePick(e)) + consum + stanceAdditive(e) + ":"}
+		if initial := stanceInitial(e); initial != "" {
+			lines = append([]string{indent + arrow + capitalize(initial) + "."}, lines...)
+		}
 		for _, o := range getList(e, "options") {
 			om := mapOr(o)
 			lines = append(lines, indent+"  - "+ejstr(om["name"])+": "+describeEffectInline(mapOr(om["effect"]), ctx)+".")

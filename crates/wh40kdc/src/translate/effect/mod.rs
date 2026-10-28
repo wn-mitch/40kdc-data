@@ -286,6 +286,21 @@ fn stance_additive(e: &P) -> &'static str {
     }
 }
 
+/// "at the start of the battle, Aegis Protocol is active": the option in force before any
+/// selection, or "".
+fn stance_initial(e: &P) -> String {
+    let Some(initial) = sv(e, "initial") else {
+        return String::new();
+    };
+    let name = items(e, "options")
+        .iter()
+        .map(|o| obj(Some(o)))
+        .find(|o| sv(o, "id") == Some(initial) && nn(o, "name").is_some())
+        .map(|o| jstr(o.get("name")))
+        .unwrap_or_else(|| title_case(initial));
+    format!("at the start of the battle, {name} is active")
+}
+
 /// "select one", "select two", "select up to two" — how many menu options are picked.
 fn stance_pick(e: &P) -> String {
     let min = num(Some(nn(e, "min_choices").unwrap_or(&Value::from(1))));
@@ -491,8 +506,14 @@ fn inline_base(e: &P, ctx: &Ctx) -> String {
             } else {
                 ""
             };
+            let initial = stance_initial(e);
             format!(
-                "{}{}{}: {}",
+                "{}{}{}{}: {}",
+                if initial.is_empty() {
+                    String::new()
+                } else {
+                    format!("{initial}; ")
+                },
                 stance_pick(e),
                 consumable,
                 stance_additive(e),

@@ -445,7 +445,8 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx) -> str:
             f"{jstr(_obj(o).get('name'))} ({inline(_obj(o).get('effect'), ctx)})"
             for o in (e.get("options") or [])
         )
-        return f"{stance_pick(e)}{stance_additive(e)}: {opts}"
+        initial = f"{stance_initial(e)}; " if stance_initial(e) else ""
+        return f"{initial}{stance_pick(e)}{stance_additive(e)}: {opts}"
     if t == "stance-selection-capacity":
         n = num(m.get("additional_selections"))
         n = 1.0 if n != n or n == 0 else n
@@ -496,6 +497,17 @@ def pool_text(e: Effect) -> str:
 
 
 _NUMBER_WORDS = ["zero", "one", "two", "three", "four"]
+
+
+def stance_initial(e: Effect) -> str:
+    """ "at the start of the battle, Aegis Protocol is active": the option in force before any
+    selection, or ""."""
+    initial = e.get("initial")
+    if not isinstance(initial, str):
+        return ""
+    option = next((_obj(o) for o in (e.get("options") or []) if _obj(o).get("id") == initial), {})
+    name = jstr(option["name"]) if option.get("name") is not None else title_case(initial)
+    return f"at the start of the battle, {name} is active"
 
 
 def stance_additive(e: Effect) -> str:

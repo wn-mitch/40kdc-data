@@ -66,6 +66,8 @@ export interface Effect {
   })[];
   choice_label?: string;
   choice_prompt?: string;
+  /** stance-select: the option id in force from the start of the battle. */
+  initial?: string;
   min_choices?: number;
   max_choices?: number;
   cost?: Effect;
@@ -628,7 +630,7 @@ function describeEffectInlineBase(e: Effect, ctx: Ctx = {}): string {
       return `select ${designationTargetSubject(sel)}${desig}; ${whenClause}, ${describeEffectInline(e.applies?.effect ?? {}, recipientCtx)}`;
     }
     case "stance-select":
-      return `${stancePick(e)}${e.mode === "consumable" ? " (each may be chosen once per battle)" : ""}${stanceAdditive(e)}: ${(e.options ?? []).map((o) => `${jstr(o.name)} (${describeEffectInline(o.effect ?? {}, ctx)})`).join(" / ")}`;
+      return `${stanceInitial(e) ? `${stanceInitial(e)}; ` : ""}${stancePick(e)}${e.mode === "consumable" ? " (each may be chosen once per battle)" : ""}${stanceAdditive(e)}: ${(e.options ?? []).map((o) => `${jstr(o.name)} (${describeEffectInline(o.effect ?? {}, ctx)})`).join(" / ")}`;
     case "stance-selection-capacity": {
       const m = (e.modifier ?? {}) as {
         ability_id?: unknown;
@@ -686,6 +688,13 @@ function diceGate(e: Effect, ctx: Ctx): string {
 
 /** "select one", "select two", "select up to two" — how many menu options are picked. */
 /** " (in addition to any already active)" when a stance pick joins the active options. */
+/** "at the start of the battle, Aegis Protocol is active": the option in force before any selection, or "". */
+function stanceInitial(e: Effect): string {
+  if (typeof e.initial !== "string") return "";
+  const option = (e.options ?? []).find((o) => o.id === e.initial);
+  return `at the start of the battle, ${option?.name != null ? jstr(option.name) : titleCase(e.initial)} is active`;
+}
+
 function stanceAdditive(e: Effect): string {
   return e.additive === true ? " (in addition to any already active)" : "";
 }
@@ -968,6 +977,7 @@ export function describeEffect(e: Effect, depth: number = 0, ctx: Ctx = {}): str
     case "stance-select": {
       const consum = e.mode === "consumable" ? " (each may be chosen once per battle)" : "";
       const lines = [`${indent}${arrow}${capitalize(stancePick(e))}${consum}${stanceAdditive(e)}:`];
+      if (stanceInitial(e)) lines.unshift(`${indent}${arrow}${capitalize(stanceInitial(e))}.`);
       for (const opt of e.options ?? []) {
         lines.push(`${indent}  - ${jstr(opt.name)}: ${describeEffectInline(opt.effect ?? {}, ctx)}.`);
       }
