@@ -135,6 +135,9 @@ class Dataset:
             id_of=lambda f: f["id"],
             external_refs_of=lambda f: f.get("external_refs"),
             name_of=lambda f: f.get("name"),
+            # Factions answer to alternate names ("Space Marines" for Adeptus
+            # Astartes) as exact matches, ahead of the substring fallback.
+            aliases_of=lambda f: f.get("aliases"),
             id_aliases=embedded_registry_aliases(),
             wrap=lambda f: FactionView(f, self),
         )

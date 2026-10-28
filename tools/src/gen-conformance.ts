@@ -532,6 +532,14 @@ const LINKED_API_QUERIES: LinkedApiQuery[] = [
     args: { query: "World Eaters" },
     comparison: "scalar",
   },
+  // find_faction: a faction alias is an exact match, so "Space Marines" is
+  // Adeptus Astartes, not a substring hit on Chaos Space Marines.
+  {
+    name: "find_faction by alias",
+    query: "find_faction",
+    args: { query: "Space Marines" },
+    comparison: "scalar",
+  },
   // find_ability: ability name lookup.
   {
     name: "find_ability by name",

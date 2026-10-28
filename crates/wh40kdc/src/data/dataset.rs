@@ -269,10 +269,13 @@ impl Dataset {
             |k| k.id.to_string(),
             |k| Some(k.name.as_str()),
         );
-        let factions = Collection::build(
+        let factions = Collection::build_with_aliases(
             raw.factions,
             |f| f.id.to_string(),
             |f| Some(f.name.as_str()),
+            // Factions answer to alternate names ("Space Marines" for Adeptus
+            // Astartes) as exact matches, ahead of the substring fallback.
+            |f| f.aliases.iter().map(|a| a.as_str()).collect(),
             |_| None,
             |f| f.id.to_string(),
         )

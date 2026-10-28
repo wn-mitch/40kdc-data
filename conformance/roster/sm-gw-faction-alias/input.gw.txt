@@ -1,0 +1,13 @@
++++++++++++++++++++++++++++++++++++++++++++++++
++ FACTION KEYWORD: Space Marines
++ DETACHMENT: Gladius Task Force
++ TOTAL ARMY POINTS: 75pts
++
++ NUMBER OF UNITS: 1
++++++++++++++++++++++++++++++++++++++++++++++++
+
+Assault Intercessor Squad (75 pts)
+• 1x Assault Intercessor Sergeant
+• 4x Assault Intercessor
+• 5x Chainsword
+• 5x Heavy bolt pistol

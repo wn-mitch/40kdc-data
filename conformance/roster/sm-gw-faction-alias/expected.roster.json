@@ -1,0 +1,130 @@
+{
+  "name": "Imported roster",
+  "source": {
+    "format": "gw",
+    "generated_by": null
+  },
+  "faction_id": "adeptus-astartes",
+  "detachments": [
+    {
+      "ref": {
+        "id": "gladius-task-force",
+        "raw_name": "Gladius Task Force",
+        "resolved": true,
+        "candidates": []
+      },
+      "dp_cost": 3
+    }
+  ],
+  "battle_size": null,
+  "force_disposition": "priority-assets",
+  "points": {
+    "declared_limit": 75,
+    "detachment_cap": null,
+    "total_reported": 75,
+    "total_computed": 75
+  },
+  "units": [
+    {
+      "ref": {
+        "id": "assault-intercessor-squad",
+        "raw_name": "Assault Intercessor Squad",
+        "resolved": true,
+        "candidates": []
+      },
+      "model_count": 5,
+      "points": 75,
+      "is_warlord": false,
+      "enhancement": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "ref": {
+            "id": "chainsword",
+            "raw_name": "Chainsword",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 5
+        },
+        {
+          "ref": {
+            "id": "heavy-bolt-pistol-assault-intercessor-squad",
+            "raw_name": "Heavy bolt pistol",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 5
+        }
+      ],
+      "loadout_groups": [
+        {
+          "model_name": "Assault Intercessor Sergeant",
+          "count": 1,
+          "wargear": [
+            {
+              "ref": {
+                "id": "chainsword",
+                "raw_name": "Chainsword",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            },
+            {
+              "ref": {
+                "id": "heavy-bolt-pistol-assault-intercessor-squad",
+                "raw_name": "Heavy bolt pistol",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model_name": "Assault Intercessor",
+          "count": 4,
+          "wargear": [
+            {
+              "ref": {
+                "id": "chainsword",
+                "raw_name": "Chainsword",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            },
+            {
+              "ref": {
+                "id": "heavy-bolt-pistol-assault-intercessor-squad",
+                "raw_name": "Heavy bolt pistol",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "leader_attachment": null
+    }
+  ],
+  "game_version": {
+    "edition": "11th",
+    "dataslate": "pre-launch-provisional"
+  },
+  "diagnostics": {
+    "resolved_units": 1,
+    "unresolved_units": 0,
+    "resolved_weapons": 2,
+    "unresolved_weapons": 0,
+    "warnings": [
+      {
+        "code": "battle-size-unmapped",
+        "message": "Battle size label could not be mapped.",
+        "raw_name": "Combat Patrol (500 Point limit)"
+      }
+    ]
+  }
+}

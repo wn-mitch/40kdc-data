@@ -36,6 +36,15 @@
     "expected": "world-eaters"
   },
   {
+    "name": "find_faction by alias",
+    "query": "find_faction",
+    "args": {
+      "query": "Space Marines"
+    },
+    "comparison": "scalar",
+    "expected": "adeptus-astartes"
+  },
+  {
     "name": "find_ability by name",
     "query": "find_ability",
     "args": {

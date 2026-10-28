@@ -243,6 +243,9 @@ export class Dataset {
       idOf: (f) => f.id,
       externalRefsOf: (f) => f.external_refs,
       nameOf: (f) => f.name,
+      // Factions answer to alternate names ("Space Marines" for Adeptus
+      // Astartes) as exact matches, ahead of the substring fallback.
+      aliasesOf: (f) => f.aliases,
       idAliases: SHARE_REGISTRY.aliases,
       wrap: (f) => new FactionView(f, this),
     });

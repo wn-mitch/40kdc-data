@@ -102,8 +102,11 @@ func NewDataset(raw rawData) *Dataset {
 	ds.Factions = newCollection(raw["factions"], func(i any) *FactionView {
 		return &FactionView{Raw: i.(map[string]any), ds: ds}
 	}, collectionOpts{
-		idOf:      func(i any) string { return getStr(i.(map[string]any), "id") },
-		nameOf:    func(i any) string { return getStr(i.(map[string]any), "name") },
+		idOf:   func(i any) string { return getStr(i.(map[string]any), "id") },
+		nameOf: func(i any) string { return getStr(i.(map[string]any), "name") },
+		// Factions answer to alternate names ("Space Marines" for Adeptus
+		// Astartes) as exact matches, ahead of the substring fallback.
+		aliasesOf: func(i any) []string { return getStrList(i.(map[string]any), "aliases") },
 		idAliases: embeddedRegistryAliases(),
 	})
 	ds.Abilities = newCollection(raw["abilities"], func(i any) *AbilityView {
