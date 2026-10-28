@@ -4,6 +4,7 @@ import type Ajv from "ajv";
 import { createValidator } from "../schema-loader.js";
 import { effectToBuffs, POST_ATTACK_MOMENT, type EffectTranslation } from "../cruncher/from-dsl.js";
 import { assumeEventSubjectMatches } from "../cruncher/from-dsl-selection.js";
+import { DEFENDER_SIDE_STAT, effectScope, isOutsideDamagePath as outsideDamagePath } from "../cruncher/unsupported-scope.js";
 import { grantedRecordIds } from "../data/lever-providers.js";
 import { resolveGrantedRecords, type GrantedRecord, type GrantedRecordLookup } from "../cruncher/granted-records.js";
 import type { ProjectionChecker } from "../mfm/apply.js";
@@ -115,39 +116,6 @@ function validEffect(fragment: unknown): boolean {
   return effectValidator.validate("https://40kdc.dev/schemas/enrichment/ability-dsl/effect.schema.json#/$defs/effect-node", fragment) === true;
 }
 
-/**
- * The cruncher estimates damage; healing, a Wounds-characteristic change, and any other roll or
- * stat that isn't part of the hit/wound/save/damage math are out of scope *by design*, not gaps.
- * `translateStatModifier` and `translateRollModifier` only ever reach their "outside the damage
- * path" default case for a stat/roll their own `switch` doesn't treat as damage-path (A/S/T/Sv for
- * stats; hit/wound/save/damage for rolls) — those two messages are unambiguous on their own.
- * `translateReroll`'s matching message is not: it fires both for a genuinely non-combat roll
- * (charge, advance, battle-shock, ...) *and* for a damage-path roll with an unparseable subset —
- * the latter is a real shape gap, so it's checked against the fragment's own `roll` field.
- */
-const DAMAGE_ROLLS = new Set(["hit", "wound", "save", "damage"]);
-const STAT_MODIFIER_OUTSIDE_DAMAGE_PATH = /^stat-modifier on ".*" is outside the damage path$/u;
-const ROLL_MODIFIER_OUTSIDE_DAMAGE_PATH = /^roll-modifier on ".*" is outside the damage path$/u;
-const REROLL_OUTSIDE_DAMAGE_PATH = /^re-roll on ".*" \(subset ".*"\) is outside the damage path$/u;
-// Leaf effect types that change no attack's damage: healing, moving, placement, eligibility permissions,
-// how many times a stance may be selected, list-building rules, unit keywords, tests, tags, resources,
-// unit composition, and mortal wounds or the extra fight of a dying model (attack sequences of their
-// own, which the attack-buff layer does not model by design). A type not reviewed stays a gap.
-const NON_DAMAGE_EFFECT_TYPES = new Set([
-  "heal", "move", "mortal-wounds", "set-up", "permission", "cost-modifier", "stance-selection-capacity",
-  "move-modifier", "army-rule", "keyword-grant", "act-on-death", "cp-gain", "resource-gain", "add-unit", "split-unit",
-  "transport-capacity", "destroy-models", "designate", "test", "targeting", "state-change", "no-effect",
-  "oath-modifier", "objective-sticky", "counts-as", "marker",
-]);
-// Core abilities (and Reanimation Protocols) that decide deployment, movement, fight order, attachment or
-// resurrection; none changes a hit, wound, save or damage roll.
-const NON_DAMAGE_ABILITIES = new Set([
-  "deadly-demise", "deep-strike", "fights-first", "hover", "infiltrators", "leader", "lone-operative", "scouts",
-  "support", "super-heavy-walker", "mobile", "reanimation-protocols", // mfm:mirror keep — core and named ability slugs, not record ids
-]);
-const DAMAGE_STATS = new Set(["A", "S", "T", "Sv", "AP", "D", "WS", "BS"]);
-// Which objective an ability picks decides control, never an attack's damage.
-const OBJECTIVE_SELECTION = /^select-objective: /u;
 const UNMODELLED_EFFECT_TYPE = /^effect type "(.*)" is not modelled by the buff layer$/u;
 /**
  * Effects marked as not damage-affecting for the cruncher. Each can change an attack in play, but the
@@ -179,73 +147,17 @@ const OUTSIDE_CRUNCHER_SCOPE: ReadonlyArray<{ reason: RegExp; why: string }> = [
 export function isOutsideCruncherScope(item: EffectTranslation["unsupported"][number]): boolean {
   return OUTSIDE_CRUNCHER_SCOPE.some((entry) => entry.reason.test(item.reason));
 }
-// translateStatModifier's note for a defender stat seen from the attacker; the target perspective models it.
-const DEFENDER_SIDE_STAT = /: defender-side stat; applies when the buffed unit is the target$/u;
 
 /**
- * Whether every leaf of an effect subtree is off the damage path, so a container the buff layer
- * stops at (a selection with a predicate, a dice gate, a dice table) hides no damage effect. Any
- * leaf or container not recognised here counts as damage-path, the conservative default.
+ * Whether every leaf of an effect subtree is off the damage path; the cruncher's scope classifier
+ * with this gate's schema check, since a compiled candidate is not yet validated.
  */
 export function isNonDamageEffect(node: unknown): boolean {
-  if (node === null) return true;
-  if (typeof node !== "object" || Array.isArray(node)) return false;
-  const effect = node as Record<string, unknown>;
-  const modifier = (typeof effect.modifier === "object" && effect.modifier !== null ? effect.modifier : {}) as Record<string, unknown>;
-  const all = (children: unknown): boolean => Array.isArray(children) && children.every(isNonDamageEffect);
-  switch (effect.type) {
-    case "sequence":
-    case "rules-bundle":
-      return all(effect.steps);
-    case "conditional":
-      return isNonDamageEffect(effect.effect) && (effect.else === undefined || isNonDamageEffect(effect.else));
-    case "select-units":
-    case "for-each-unit":
-    case "ability-part":
-      return isNonDamageEffect(effect.effect);
-    case "dice-gated":
-      return isNonDamageEffect(effect.on_success ?? null) && isNonDamageEffect(effect.on_fail ?? null);
-    case "dice-table":
-      return Array.isArray(effect.outcomes) && effect.outcomes.every((outcome) => isNonDamageEffect((outcome as { effect?: unknown }).effect ?? null));
-    case "roll-result":
-    case "roll-modifier":
-    case "re-roll":
-      return typeof modifier.roll === "string" && !DAMAGE_ROLLS.has(modifier.roll);
-    case "stat-modifier":
-      return typeof modifier.stat === "string" && !DAMAGE_STATS.has(modifier.stat);
-    case "ability-grant":
-      // A printed grant is judged by the body it carries.
-      if (modifier.definition !== undefined) return isNonDamageEffect(modifier.definition);
-      return typeof modifier.ability === "string" && NON_DAMAGE_ABILITIES.has(modifier.ability);
-    case "ability-activate":
-      return typeof modifier.ability === "string" && NON_DAMAGE_ABILITIES.has(modifier.ability);
-    case "rule-state":
-      return (modifier.rule_kind === "ability" && typeof modifier.rule === "string" && NON_DAMAGE_ABILITIES.has(modifier.rule))
-        || (modifier.rule_kind === "core-rule" && modifier.rule === "attacking-ends-hidden" && validEffect(effect));
-    // An aura's range only decides which units are in it, and the cruncher's range gates are permissive;
-    // a use count never changes an attack.
-    case "ability-modifier":
-      return modifier.aspect === "uses" || modifier.aspect === "range";
-    default:
-      return typeof effect.type === "string" && NON_DAMAGE_EFFECT_TYPES.has(effect.type);
-  }
+  return effectScope(node, validEffect) !== "unresolved";
 }
 
 export function isOutsideDamagePath(item: EffectTranslation["unsupported"][number]): boolean {
-  // The translator's own label is trusted only for a stat or roll this gate also counts as off the
-  // damage path: a damage stat the translator cannot place is a gap, not an exemption.
-  const fragmentModifier = (item.effectFragment as { modifier?: { stat?: unknown; roll?: unknown } } | undefined)?.modifier;
-  if (STAT_MODIFIER_OUTSIDE_DAMAGE_PATH.test(item.reason)) return typeof fragmentModifier?.stat !== "string" || !DAMAGE_STATS.has(fragmentModifier.stat);
-  if (ROLL_MODIFIER_OUTSIDE_DAMAGE_PATH.test(item.reason)) return typeof fragmentModifier?.roll !== "string" || !DAMAGE_ROLLS.has(fragmentModifier.roll);
-  if (REROLL_OUTSIDE_DAMAGE_PATH.test(item.reason)) {
-    const fragment = item.effectFragment as { modifier?: { roll?: unknown } } | undefined;
-    const roll = fragment?.modifier?.roll;
-    return typeof roll !== "string" || !DAMAGE_ROLLS.has(roll);
-  }
-  if (OBJECTIVE_SELECTION.test(item.reason)) return true;
-  // A moment after the unit's own attacks acts only on later attacks, never the one being crunched.
-  if (item.reason === POST_ATTACK_MOMENT) return true;
-  return isNonDamageEffect(item.effectFragment);
+  return outsideDamagePath(item, POST_ATTACK_MOMENT, validEffect);
 }
 
 const DEFENDER_CHECK_SOURCE: BuffSource = { kind: "ability", abilityId: "defender-check", abilityKind: "unit" };

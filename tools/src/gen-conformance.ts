@@ -4164,6 +4164,13 @@ function genEffectTranslation(): void {
     // A unit selected to make a disembark move of a named mode.
     { caseId: "fidelity/trigger-selected-disembark-mode", trigger: { event: "selected", subject: { owner: "friendly", all_of: ["FABLED SPRITE"], embarked_in: "this-unit" }, filter: { to: "move", move_types: ["disembark"], mode: "tactical" } },
       effect: { type: "cp-gain", target: "this-model", modifier: { amount: 1 } } },
+    // The cruncher's generated leaf for one outcome of a dice table, as a Needs toggle reads it.
+    { caseId: "fidelity/dice-table-result-run", effect: { type: "conditional",
+      condition: { type: "dice-table-result", parameters: { ability: "fabricated-barrier", dice: "D6", results: [2, 3, 4, 5, 6] } },
+      effect: { type: "invulnerable-save", target: "this-unit", modifier: { invuln_sv: 4 } } } },
+    { caseId: "fidelity/dice-table-result-negated-list", effect: { type: "conditional",
+      condition: { operator: "not", operands: [{ type: "dice-table-result", parameters: { ability: "fabricated-barrier", dice: "D6", results: [1, 3] } }] },
+      effect: { type: "cp-gain", target: "this-model", modifier: { amount: 1 } } } },
     { caseId: "fidelity/move-modifier-mode-choice-named-beside-clause", effect: { type: "move-modifier", target: "this-unit", modifier: { applies_to_moves: ["consolidation"], no_end_in_engagement: true, mode_choice: { modes: ["objective"], ignore_before_moving: true } } } },
   ];
   for (const example of fidelityBoundaryCases) {
@@ -4381,6 +4388,8 @@ type ResolverDslCase = {
   expected?: {
     applied: unknown[];
     unsupportedReasons: string[];
+    /** Each unsupported fragment's scope, parallel to `unsupportedReasons`. */
+    unsupportedScopes?: string[];
     needKeys?: string[];
     activatable?: unknown[];
   };
@@ -4411,6 +4420,7 @@ function genResolverDslCases(): void {
       row.expected = {
         applied: result.applied.map((buff) => buff.contribution),
         unsupportedReasons: result.unsupported.map((entry) => entry.reason),
+        unsupportedScopes: result.unsupported.map((entry) => entry.scope ?? "unresolved"),
         needKeys: needKeys(result),
         activatable: result.activatable.map((lever) => ({
           id: lever.id,

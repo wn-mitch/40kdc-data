@@ -18,7 +18,7 @@ import json
 import math
 import re
 from collections.abc import Callable
-from typing import Any, NotRequired, TypedDict
+from typing import Any, Literal, NotRequired, TypedDict
 
 from wh40kdc.cruncher.buffs import (
     Buff,
@@ -62,6 +62,8 @@ class AttackModel(TypedDict):
     modelsFiring: float
     #: One model's Attacks characteristic, before the flat additions below.
     attacksStat: Any
+    #: A re-roll of the Attacks dice, kept when at or above a fresh roll's mean (else absent).
+    attacksReroll: NotRequired[Literal["ones", "all-failures"]]
     #: Flat attacks every model adds: the modifier and Blast.
     attacksBonus: float
     #: Rapid Fire's extra attacks per model when active, else None.
@@ -218,7 +220,14 @@ def crunch_model(
     is_melee = weapon_profile.get("range") == "Melee"
     stats = weapon_profile["stats"]
     # A set characteristic replaces the profile's before any modifier applies.
-    base_a = _set_or_stat(resolved, "A", stats.get("A"))
+    # A re-roll of the Attacks dice keeps each roll at or above a fresh roll's mean.
+    attacks_reroll = (resolved["rerolls"].get("attacks") or {}).get("subset")
+    if "A" not in resolved["statSet"] and attacks_reroll:
+        base_a = damage_roll(
+            stat=stats.get("A"), bonus=0, modifier=0, reduction=0, reroll=attacks_reroll
+        )["expected"]
+    else:
+        base_a = _set_or_stat(resolved, "A", stats.get("A"))
     attacks_per_model = base_a + resolved["attacksMod"]["value"]
     rapid_fire = _find_keyword(resolved, "rapid-fire")
     half_range = ctx.get("withinHalfRange") is True
@@ -247,6 +256,13 @@ def crunch_model(
             "expected": attacks,
             "detail": _attacks_detail(
                 input["modelsFiring"], attacks_per_model, rapid_fire_extra, blast_extra
+            )
+            + (
+                f"; reroll {attacks_reroll} of A {stats['A']}"
+                if attacks_reroll
+                and "A" not in resolved["statSet"]
+                and isinstance(stats.get("A"), str)
+                else ""
             ),
         }
     )
@@ -710,6 +726,8 @@ def crunch_model(
         "wounds": wounds_stat,
         "modelCount": target_model_count,
     }
+    if attacks_reroll and "A" not in resolved["statSet"]:
+        model["attacksReroll"] = attacks_reroll
     if critical is not None:
         model["criticalWound"] = {
             "unsaved": 1 - p_saved_critical,

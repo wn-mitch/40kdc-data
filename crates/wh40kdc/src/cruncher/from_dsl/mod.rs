@@ -35,6 +35,9 @@ use serde_json::{json, Map, Value};
 
 use super::buffs::{AbilityKind, Buff, BuffSource, EngineContext};
 use super::condition_facts::ConditionNeed;
+use super::unsupported_scope::{
+    effect_scope, fragment_scope, is_undecided_condition, wider_scope, UnsupportedScope,
+};
 use js::*;
 
 pub use levers::{
@@ -59,6 +62,10 @@ pub struct UnsupportedFragment {
     /// [`EngineContext::condition_facts`] decides the condition.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub needs: Option<Vec<ConditionNeed>>,
+    /// Whether the fragment could change the attack being crunched. Every fragment
+    /// [`effect_to_buffs`] returns carries it.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub scope: Option<UnsupportedScope>,
 }
 
 /// A mutually-limited pool of [`ActivatableBuff`] levers: at most `max_activations` of the
@@ -235,8 +242,69 @@ pub fn effect_to_buffs(
     effect_to_buffs_with_duration(effect, source, context, perspective, None, None)
 }
 
-/// Translate an effect while retaining the owning ability's lifetime for activation gates.
+/// Translate an effect while retaining the owning ability's lifetime for activation gates. Every
+/// unsupported fragment carries its [`UnsupportedScope`].
 pub(crate) fn effect_to_buffs_with_duration(
+    effect: &Value,
+    source: &BuffSource,
+    context: &EngineContext,
+    perspective: TranslationPerspective,
+    duration: Option<&Value>,
+    usage: Option<&Value>,
+) -> EffectTranslation {
+    let mut out = translate_effect(effect, source, context, perspective, duration, usage);
+    for fragment in &mut out.unsupported {
+        fragment.scope = Some(scope_of(fragment, source, context, perspective, 0));
+    }
+    out
+}
+
+/// How deep an undecided condition's body is translated to find its scope.
+const SCOPE_DEPTH: usize = 4;
+
+/// The scope of a fragment. An undecided condition matters only as much as what it gates: its
+/// body is translated as if the condition held, and a body that yields no buff or lever takes the
+/// widest scope of its own fragments; a body that could change the attack keeps the condition
+/// unresolved.
+fn scope_of(
+    fragment: &UnsupportedFragment,
+    source: &BuffSource,
+    context: &EngineContext,
+    perspective: TranslationPerspective,
+    depth: usize,
+) -> UnsupportedScope {
+    if !is_undecided_condition(&fragment.reason) {
+        return fragment_scope(
+            &fragment.reason,
+            &fragment.effect_fragment,
+            POST_ATTACK_MOMENT,
+        );
+    }
+    let node = fragment.effect_fragment.as_object();
+    let body = match node {
+        Some(node)
+            if depth < SCOPE_DEPTH
+                && is_str(node, "type", "conditional")
+                && node.get("effect").is_some() =>
+        {
+            translate_effect(&node["effect"], source, context, perspective, None, None)
+        }
+        _ => return UnsupportedScope::Unresolved,
+    };
+    if !body.applied.is_empty() || !body.activatable.is_empty() {
+        return UnsupportedScope::Unresolved;
+    }
+    body.unsupported
+        .iter()
+        .fold(UnsupportedScope::OutOfScope, |scope, inner| {
+            wider_scope(
+                scope,
+                scope_of(inner, source, context, perspective, depth + 1),
+            )
+        })
+}
+
+fn translate_effect(
     effect: &Value,
     source: &BuffSource,
     context: &EngineContext,
@@ -260,6 +328,7 @@ pub(crate) fn effect_to_buffs_with_duration(
                         reason: reason.into(),
                         effect_fragment: effect,
                         needs: None,
+                        scope: None,
                     }],
                     ..Default::default()
                 }
@@ -313,6 +382,7 @@ fn finish(out: Out) -> EffectTranslation {
                 reason,
                 effect_fragment,
                 needs,
+                scope: None,
             })
             .collect(),
         activatable: out
@@ -667,6 +737,7 @@ fn dispatch(node: &Obj, opts: &WalkOpts, out: &mut Out) {
         }
         Some("choice") => levers::enumerate_choice(node, opts, out),
         Some("dice-gated") => out.unsupported(STOCHASTIC_DICE_GATED, node),
+        Some("dice-table") => translate_dice_table(node, opts, out),
         Some("dice-pool-allocation") => levers::enumerate_dice_pool(node, opts, out),
         Some("roll") => {
             // A pool roll whose dice are allocated to named options is the same lever set
@@ -805,6 +876,65 @@ fn dispatch(node: &Obj, opts: &WalkOpts, out: &mut Out) {
             ),
             node,
         ),
+    }
+}
+
+/// The reason a dice table's outcomes with no damage content are reported under.
+const DICE_TABLE_REASON: &str = "effect type \"dice-table\" is not modelled by the buff layer";
+
+/// A rolled table. Each outcome that could change the attack is gated on a generated
+/// `dice-table-result` leaf naming the ability, the dice and the outcome's results: the roll is a
+/// fact of the game, so the leaf is undecided until the caller answers it in
+/// [`EngineContext::condition_facts`], and an unanswered outcome applies nothing. The outcomes
+/// with no damage content are reported together, as the table restricted to them.
+fn translate_dice_table(node: &Obj, opts: &WalkOpts, out: &mut Out) {
+    let outcomes: Vec<&Obj> = node
+        .get("outcomes")
+        .and_then(Value::as_array)
+        .map(|all| all.iter().filter_map(Value::as_object).collect())
+        .unwrap_or_default();
+    let Some(dice) = node.get("dice").filter(|dice| dice.is_string()) else {
+        out.unsupported(DICE_TABLE_REASON, node);
+        return;
+    };
+    if outcomes.is_empty() {
+        out.unsupported(DICE_TABLE_REASON, node);
+        return;
+    }
+    let (rest, split): (Vec<&Obj>, Vec<&Obj>) = outcomes.iter().partition(|outcome| {
+        effect_scope(Some(outcome.get("effect").unwrap_or(&Value::Null)))
+            != UnsupportedScope::Unresolved
+    });
+    for outcome in split {
+        let mut parameters = Obj::new();
+        parameters.insert("ability".into(), Value::from(opts.ability_id));
+        parameters.insert("dice".into(), dice.clone());
+        if let Some(results) = outcome.get("results") {
+            parameters.insert("results".into(), results.clone());
+        }
+        let mut conditional = Obj::new();
+        conditional.insert("type".into(), Value::from("conditional"));
+        conditional.insert(
+            "condition".into(),
+            json!({ "type": "dice-table-result", "parameters": Value::Object(parameters) }),
+        );
+        if let Some(effect) = outcome.get("effect") {
+            conditional.insert("effect".into(), effect.clone());
+        }
+        levers::conditional(&conditional, opts, out);
+    }
+    if !rest.is_empty() {
+        let fragment = if rest.len() == outcomes.len() {
+            node.clone()
+        } else {
+            let mut restricted = node.clone();
+            restricted.insert(
+                "outcomes".into(),
+                Value::Array(rest.iter().map(|o| Value::Object((*o).clone())).collect()),
+            );
+            restricted
+        };
+        out.unsupported(DICE_TABLE_REASON, &fragment);
     }
 }
 

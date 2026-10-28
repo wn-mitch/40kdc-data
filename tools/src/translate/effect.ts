@@ -22,6 +22,7 @@ import { definedGrantHead, definitionPart, describeLeaf, isDefinedGrant, LEAF_TY
 import { expiryTrail } from "./expiry.js";
 import { objectiveSelectorPhrase, rollHead, selectObjectiveBlock, selectObjectiveInline, selectionBinding, selectionLimit, selectorCount, selectorNoun, selectorSubject, selectUnitsSubject } from "./effect-bind.js";
 import {
+  diceTableResultLabel,
   abilityLabel, capitalize, diceCase, filterSubject, formatComparison, jstr, orList, quantityPhrase, rangePhrase, regionPhrase, requirementPhrase, resourceNoun, rollKindNoun, scaleSource,
   signed, testName, type Ctx,
 } from "./effect-words.js";
@@ -520,15 +521,6 @@ export function describeEffectInline(e: Effect, ctx: Ctx = {}): string {
  */
 function describeRequirement(req: unknown): string {
   return requirementPhrase(req);
-}
-
-function diceTableResultLabel(results: unknown): string {
-  if (!Array.isArray(results)) return "";
-  const faces = results.filter((value): value is number => typeof value === "number").sort((a, b) => a - b);
-  if (faces.length > 1 && faces.every((face, index) => index === 0 || face === faces[index - 1] + 1)) {
-    return `${faces[0]}-${faces[faces.length - 1]}`;
-  }
-  return faces.join(", ");
 }
 
 /** "roll one D6", or "roll 2 D6 and resolve each one (re-rolling any repeated result)". */

@@ -63,10 +63,12 @@ def ability_needs(
     unsupported: list[dict[str, Any]], ability_id: str, label: str
 ) -> list[dict[str, Any]]:
     """Each need an ability's translation reports (``{key, condition, perspective}``), tagged
-    with that ability's ``abilityId`` and ``label``."""
+    with that ability's ``abilityId`` and ``label``. A need whose fragment has no damage content
+    (``scope`` out-of-scope or encounter-layer) is left out: answering it changes nothing scored."""
     return [
         {**need, "abilityId": ability_id, "label": label}
         for item in unsupported
+        if item.get("scope") is None or item.get("scope") == "unresolved"
         for need in item.get("needs") or []
     ]
 

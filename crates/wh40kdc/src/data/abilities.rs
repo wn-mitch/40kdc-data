@@ -440,6 +440,7 @@ impl Dataset {
                             reason: reason.into(),
                             effect_fragment: resolved,
                             needs: None,
+                            scope: None,
                         }],
                         ..Default::default()
                     }

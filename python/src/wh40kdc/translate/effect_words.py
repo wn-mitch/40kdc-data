@@ -620,3 +620,13 @@ def designation_for(tag: str) -> str:
     if label is not None:
         return label
     return tag if tag == tag.upper() else f"marked as {dekebab(tag)}"
+
+
+def dice_table_result_label(results: Any) -> str:
+    """A dice table outcome's results: a run of faces as "2-6", others listed ("1, 3")."""
+    if not isinstance(results, list):
+        return ""
+    faces = sorted(r for r in results if is_num(r))
+    if len(faces) > 1 and all(i == 0 or face == faces[i - 1] + 1 for i, face in enumerate(faces)):
+        return f"{jstr(faces[0])}-{jstr(faces[-1])}"
+    return ", ".join(jstr(f) for f in faces)

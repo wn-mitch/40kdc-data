@@ -468,6 +468,7 @@ describe("abilities-resolver conformance corpus", () => {
     expected: {
       applied: unknown[];
       unsupportedReasons: string[];
+      unsupportedScopes?: string[];
       needKeys?: string[];
       /** Opt-in levers behind player gates, projected to id/label/group/buffs. */
       activatable?: unknown[];
@@ -506,6 +507,9 @@ describe("abilities-resolver conformance corpus", () => {
         reasons,
         `unsupported reasons for ${c.abilityId} (${c.perspective ?? "attacker"})`,
       ).toEqual(c.expected.unsupportedReasons);
+      if (c.expected.unsupportedScopes) {
+        expect(result.unsupported.map((u) => u.scope), `unsupported scopes for ${c.abilityId}`).toEqual(c.expected.unsupportedScopes);
+      }
       expect(
         result.unsupported.flatMap((u) => (u.needs ?? []).map((need) => need.key)),
         `need keys for ${c.abilityId} (${c.perspective ?? "attacker"})`,

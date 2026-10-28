@@ -26,7 +26,7 @@ use std::fmt;
 
 use serde::Serialize;
 
-use super::damage_roll::quantity_distribution;
+use super::damage_roll::{quantity_distribution, quantity_roll};
 use super::engine::{crunch_model, AttackModel, CruncherError, EngineInput};
 use crate::data::Dataset;
 
@@ -295,7 +295,11 @@ fn attack_counts(model: &AttackModel) -> Result<Counts, AllocationError> {
         None => vec![(0.0, 1.0)],
         Some(stat) => quantity_distribution(stat)?,
     };
-    for (attacks, p) in quantity_distribution(&model.attacks_stat)? {
+    let rolled = match model.attacks_reroll {
+        Some(reroll) => quantity_roll(&model.attacks_stat, Some(reroll))?.distribution,
+        None => quantity_distribution(&model.attacks_stat)?,
+    };
+    for (attacks, p) in rolled {
         for &(extra, q) in &rapid {
             let total = integral(attacks + extra + model.attacks_bonus, "Attacks")?.max(0);
             one.add(total, p * q);

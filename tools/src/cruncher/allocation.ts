@@ -17,7 +17,7 @@
  * attacks with a Damage characteristic and are never zeroed.
  */
 import type { Dataset } from "../data/dataset.js";
-import { quantityDistribution } from "./damage-roll.js";
+import { damageRoll, quantityDistribution } from "./damage-roll.js";
 import { crunchModel, type AttackModel, type EngineInput } from "./engine.js";
 
 export type AllocationOutput = {
@@ -118,7 +118,10 @@ function perAttack(model: AttackModel): Joint {
 function attackCounts(model: AttackModel): Map<number, number> {
   const one = new Map<number, number>();
   const rapid = model.rapidFireStat == null ? [[0, 1] as [number, number]] : quantityDistribution(model.rapidFireStat);
-  for (const [attacks, p] of quantityDistribution(model.attacksStat)) {
+  const rolled: Array<[number, number]> = model.attacksReroll
+    ? damageRoll({ stat: model.attacksStat, bonus: 0, modifier: 0, reduction: 0, reroll: model.attacksReroll }).distribution.map(({ value, probability }) => [value, probability])
+    : quantityDistribution(model.attacksStat);
+  for (const [attacks, p] of rolled) {
     for (const [extra, q] of rapid) {
       const total = Math.max(0, integral(attacks + extra + model.attacksBonus, "Attacks"));
       one.set(total, (one.get(total) ?? 0) + p * q);

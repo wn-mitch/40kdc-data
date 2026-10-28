@@ -133,6 +133,7 @@ impl Walker<'_> {
             reason: reason.into(),
             effect_fragment: node.clone(),
             needs: None,
+            scope: None,
         });
     }
 

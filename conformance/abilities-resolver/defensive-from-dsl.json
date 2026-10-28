@@ -21,6 +21,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       },
@@ -41,6 +42,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -62,6 +64,11 @@
           "effect type \"permission\" is not modelled by the buff layer",
           "effect type \"permission\" is not modelled by the buff layer",
           "effect type \"permission\" is not modelled by the buff layer"
+        ],
+        "unsupportedScopes": [
+          "out-of-scope",
+          "out-of-scope",
+          "out-of-scope"
         ],
         "needKeys": [],
         "activatable": []
@@ -87,6 +94,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -108,6 +116,9 @@
         "applied": [],
         "unsupportedReasons": [
           "model-scoped effect from an attached model: applies to that model only (core rule 19.04)"
+        ],
+        "unsupportedScopes": [
+          "out-of-scope"
         ],
         "needKeys": [],
         "activatable": []
@@ -137,6 +148,9 @@
         "unsupportedReasons": [
           "model-in-this-unit: individual model identity is unresolved"
         ],
+        "unsupportedScopes": [
+          "unresolved"
+        ],
         "needKeys": [],
         "activatable": []
       }
@@ -165,6 +179,9 @@
         "applied": [],
         "unsupportedReasons": [
           "model-scoped effect from an attached model: applies to that model only (core rule 19.04)"
+        ],
+        "unsupportedScopes": [
+          "out-of-scope"
         ],
         "needKeys": [],
         "activatable": []
@@ -211,6 +228,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -294,6 +312,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -353,6 +372,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -386,6 +406,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -419,6 +440,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -452,6 +474,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -485,6 +508,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -521,6 +545,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -559,6 +584,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -602,6 +628,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -646,6 +673,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -703,6 +731,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -754,6 +783,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -799,6 +829,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -845,6 +876,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -884,6 +916,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -926,6 +959,9 @@
         "applied": [],
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"unit-wargear\" against current context"
+        ],
+        "unsupportedScopes": [
+          "unresolved"
         ],
         "needKeys": [
           "target:{\"parameters\":{\"subject\":\"this-unit\",\"wargear\":\"fab-guard-pod\"},\"type\":\"unit-wargear\"}"

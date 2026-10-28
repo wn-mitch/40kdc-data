@@ -28,7 +28,7 @@ from __future__ import annotations
 import math
 from typing import Any, Literal, NotRequired, TypedDict
 
-from wh40kdc.cruncher.damage_roll import quantity_distribution
+from wh40kdc.cruncher.damage_roll import damage_roll, quantity_distribution
 from wh40kdc.cruncher.engine import AttackModel, EngineInput, crunch_model
 from wh40kdc.data.dataset import Dataset
 
@@ -162,7 +162,18 @@ def _attack_counts(model: AttackModel) -> dict[int, float]:
     """Distribution of the unit's total attacks: each model rolls its own Attacks."""
     one: dict[int, float] = {}
     rapid = _optional_distribution(model["rapidFireStat"])
-    for attacks, p in quantity_distribution(model["attacksStat"]):
+    reroll = model.get("attacksReroll")
+    rolled: list[tuple[float, float]] = (
+        [
+            (o["value"], o["probability"])
+            for o in damage_roll(
+                stat=model["attacksStat"], bonus=0, modifier=0, reduction=0, reroll=reroll
+            )["distribution"]
+        ]
+        if reroll
+        else list(quantity_distribution(model["attacksStat"]))
+    )
+    for attacks, p in rolled:
         for extra, q in rapid:
             total = max(0, _integral(attacks + extra + model["attacksBonus"], "Attacks"))
             one[total] = one.get(total, 0.0) + p * q

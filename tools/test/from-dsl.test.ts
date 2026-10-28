@@ -83,12 +83,13 @@ describe("effectToBuffs: leaves", () => {
     const refused = effectToBuffs(two, armyRule, ctx);
     expect(refused.applied).toEqual([]);
     expect(refused.unsupported).toEqual([
-      { reason: "re-roll: a count-capped permission other than one die of any result is not modelled by the expected-value engine", effectFragment: two },
+      { reason: "re-roll: a count-capped permission other than one die of any result is not modelled by the expected-value engine", effectFragment: two, scope: "unresolved" },
     ]);
     // A roll off the damage path stays outside it, whatever its count.
     const charge = effectToBuffs({ type: "re-roll", target: "this-unit", modifier: { roll: "charge", result_scope: "any-result", count: 1 } }, armyRule, ctx);
     expect(charge.applied).toEqual([]);
     expect(charge.unsupported[0]!.reason).toMatch(/outside the damage path/u);
+    expect(charge.unsupported[0]!.scope).toBe("out-of-scope");
   });
 
   it("roll-modifier add → matching mod buff", () => {
@@ -212,6 +213,7 @@ describe("effectToBuffs: nested relationship containers", () => {
       {
         reason: "unit-filter target: identity, state or model membership is unresolved",
         effectFragment: effect,
+        scope: "unresolved",
       },
     ]);
   });
@@ -233,6 +235,7 @@ describe("effectToBuffs: nested relationship containers", () => {
       {
         reason: "persistent-designation: retained selection state is not resolved by the buff engine",
         effectFragment: effect,
+        scope: "unresolved",
       },
     ]);
   });
@@ -630,6 +633,7 @@ describe("effectToBuffs: target filtering", () => {
     expect(result.unsupported).toEqual([{
       reason: "unit-filter target: identity, state or model membership is unresolved",
       effectFragment: effect,
+      scope: "unresolved",
     }]);
   });
 
@@ -1540,7 +1544,7 @@ describe("structured weapon grants", () => {
     const removes = [{ keyword_id: "heavy" }];
     const result = effectToBuffs({ type: "weapon-ability-grant", target: "this-unit", modifier: { removes } }, unitRule, ctx);
     expect(result.applied).toEqual([]);
-    expect(result.unsupported).toEqual([{ reason: 'weapon-ability-removal: the cruncher does not model removing a weapon ability ("Heavy")', effectFragment: { removes } }]);
+    expect(result.unsupported).toEqual([{ reason: 'weapon-ability-removal: the cruncher does not model removing a weapon ability ("Heavy")', effectFragment: { removes }, scope: "unresolved" }]);
   });
 });
 

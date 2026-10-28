@@ -9,6 +9,7 @@ fn model() -> AttackModel {
     AttackModel {
         models_firing: 1,
         attacks_stat: json!(1),
+        attacks_reroll: None,
         attacks_bonus: 0.0,
         rapid_fire_stat: None,
         torrent: false,

@@ -57,6 +57,8 @@ export type AttackModel = {
   modelsFiring: number;
   /** One model's Attacks characteristic, before the flat additions below. */
   attacksStat: unknown;
+  /** A re-roll of the Attacks dice, kept when at or above a fresh roll's mean. */
+  attacksReroll?: "ones" | "all-failures";
   /** Flat attacks every model adds: the modifier and Blast. */
   attacksBonus: number;
   /** Rapid Fire's extra attacks per model when active, else null. */
@@ -158,7 +160,10 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
   // 1. Attacks
   const isMelee = isMeleeProfile(weaponProfile);
   // A set characteristic replaces the profile's before any modifier applies.
-  const baseA = resolved.statSet.A?.value ?? evalStatValue(weaponProfile.stats.A);
+  // A re-roll of the Attacks dice keeps each roll at or above a fresh roll's mean.
+  const attacksReroll = resolved.rerolls.attacks?.subset;
+  const baseA = resolved.statSet.A?.value
+    ?? (attacksReroll ? damageRoll({ stat: weaponProfile.stats.A, bonus: 0, modifier: 0, reduction: 0, reroll: attacksReroll }).expected : evalStatValue(weaponProfile.stats.A));
   const attacksPerModel = baseA + resolved.attacksMod.value;
   const rapidFire = findKeyword(resolved, "rapid-fire");
   const halfRange = ctx.withinHalfRange === true;
@@ -172,7 +177,8 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
   stages.push({
     name: "attacks",
     expected: attacks,
-    detail: attacksDetail(input.modelsFiring, attacksPerModel, rapidFireExtraPerModel, blastExtraPerModel),
+    detail: attacksDetail(input.modelsFiring, attacksPerModel, rapidFireExtraPerModel, blastExtraPerModel)
+      + (attacksReroll && resolved.statSet.A === undefined && typeof weaponProfile.stats.A === "string" ? `; reroll ${attacksReroll} of A ${weaponProfile.stats.A}` : ""),
   });
 
   // 2. Hits
@@ -447,6 +453,7 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
   const model: AttackModel = {
     modelsFiring: input.modelsFiring,
     attacksStat: resolved.statSet.A?.value ?? weaponProfile.stats.A,
+    ...(attacksReroll && resolved.statSet.A === undefined ? { attacksReroll } : {}),
     attacksBonus: resolved.attacksMod.value + blastExtraPerModel,
     rapidFireStat: rapidFire && halfRange ? rapidFire.parameters?.value : null,
     torrent,

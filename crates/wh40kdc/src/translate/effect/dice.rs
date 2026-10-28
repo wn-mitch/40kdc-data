@@ -13,7 +13,8 @@ pub(super) fn describe_requirement(req: Option<&Value>) -> String {
     requirement_phrase(req)
 }
 
-pub(super) fn dice_table_result_label(results: Option<&Value>) -> String {
+/// A dice table outcome's results: a run of faces as "2-6", others listed ("1, 3").
+pub(crate) fn dice_table_result_label(results: Option<&Value>) -> String {
     let Some(results) = results.and_then(Value::as_array) else {
         return String::new();
     };

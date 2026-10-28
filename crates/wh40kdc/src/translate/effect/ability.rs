@@ -227,12 +227,27 @@ pub fn describe_ability_parts_with_optional(
     trigger: Option<&AbilityTrigger>,
     optional: bool,
 ) -> String {
-    let rendered = render_top_level(
+    describe_ability_value_with_optional(
         &to_value(e),
         scope.map(to_value).as_ref(),
+        applies_to,
         usage.map(to_value).as_ref(),
         trigger.map(to_value).as_ref(),
-    );
+        optional,
+    )
+}
+
+/// [`describe_ability_parts_with_optional`] over the records' JSON form. Renders an effect the
+/// generated types do not model, such as the cruncher's generated `dice-table-result` leaf.
+pub fn describe_ability_value_with_optional(
+    e: &Value,
+    scope: Option<&Value>,
+    applies_to: Option<&KeywordPredicate>,
+    usage: Option<&Value>,
+    trigger: Option<&Value>,
+    optional: bool,
+) -> String {
+    let rendered = render_top_level(e, scope, usage, trigger);
     // An optional ability is the player's choice, unless its text already opens with that choice.
     let base = if optional && !rendered.is_empty() && !rendered.starts_with("You can ") {
         format!("You can: {rendered}")

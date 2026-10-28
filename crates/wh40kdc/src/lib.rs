@@ -136,9 +136,10 @@ pub mod translate;
 
 pub use translate::{
     condition_lead_in_value, describe_ability, describe_ability_parts,
-    describe_ability_parts_with_optional, describe_applies_to, describe_award, describe_condition,
-    describe_condition_value, describe_effect, describe_effect_inline, describe_effect_with_scope,
-    describe_scope, describe_scoring_card, describe_selection_eligibility_value, describe_trigger,
+    describe_ability_parts_with_optional, describe_ability_value_with_optional,
+    describe_applies_to, describe_award, describe_condition, describe_condition_value,
+    describe_effect, describe_effect_inline, describe_effect_with_scope, describe_scope,
+    describe_scoring_card, describe_selection_eligibility_value, describe_trigger,
     describe_trigger_value,
 };
 

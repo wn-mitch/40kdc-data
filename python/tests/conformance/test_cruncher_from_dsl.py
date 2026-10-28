@@ -147,6 +147,7 @@ def test_count_capped_reroll_is_not_applied_as_unlimited() -> None:
                 "is not modelled by the expected-value engine"
             ),
             "effectFragment": two,
+            "scope": "unresolved",
         }
     ]
     # A roll off the damage path stays outside it, whatever its count.
@@ -179,6 +180,7 @@ def test_leader_model_ability_grant_requires_resolved_beneficiary() -> None:
         {
             "reason": 'effect type "leader-model-ability-grant" is not modelled by the buff layer',
             "effectFragment": effect,
+            "scope": "unresolved",
         }
     ]
 
@@ -200,6 +202,7 @@ def test_persistent_designation_requires_retained_selection_state() -> None:
         {
             "reason": 'effect type "persistent-designation" is not modelled by the buff layer',
             "effectFragment": effect,
+            "scope": "unresolved",
         }
     ]
 

@@ -55,6 +55,14 @@ from wh40kdc.cruncher.scenario_facts import (
     keyword_model_bounds,
     objective_matches,
 )
+from wh40kdc.cruncher.unsupported_scope import (
+    OUT_OF_SCOPE,
+    UNDECIDED_CONDITION,
+    UNRESOLVED,
+    effect_scope,
+    fragment_scope,
+    wider_scope,
+)
 from wh40kdc.cruncher.weapon_bindings import resolve_named_weapon_bindings
 from wh40kdc.scope import unit_matches_applies_to
 
@@ -93,7 +101,56 @@ def effect_to_buffs(
     perspective: str = "attacker",
     activation: dict[str, Any] | None = None,
 ) -> EffectTranslation:
-    """Translate an effect tree and preserve player-controlled activation metadata."""
+    """Translate an effect tree and preserve player-controlled activation metadata. Every
+    unsupported fragment carries its ``scope`` (see ``unsupported_scope``)."""
+    out = _translate_effect(effect, source, context, perspective, activation)
+    for fragment in out["unsupported"]:
+        fragment["scope"] = _scope_of(fragment, source, context, perspective, 0)
+    return out
+
+
+#: How deep an undecided condition's body is translated to find its scope.
+_SCOPE_DEPTH = 4
+
+
+def _scope_of(
+    fragment: dict[str, Any],
+    source: BuffSource,
+    context: EngineContext,
+    perspective: str,
+    depth: int,
+) -> str:
+    """The scope of a fragment. An undecided condition matters only as much as what it gates: its
+    body is translated as if the condition held, and a body that yields no buff or lever takes the
+    widest scope of its own fragments; a body that could change the attack stays unresolved."""
+    if not UNDECIDED_CONDITION.match(fragment["reason"]):
+        return fragment_scope(
+            fragment["reason"], fragment.get("effectFragment"), POST_ATTACK_MOMENT
+        )
+    node = fragment.get("effectFragment")
+    if (
+        depth >= _SCOPE_DEPTH
+        or not _is_object(node)
+        or node.get("type") != "conditional"
+        or node.get("effect") is None
+    ):
+        return UNRESOLVED
+    body = _translate_effect(node["effect"], source, context, perspective)
+    if body["applied"] or body["activatable"]:
+        return UNRESOLVED
+    scope = OUT_OF_SCOPE
+    for inner in body["unsupported"]:
+        scope = wider_scope(scope, _scope_of(inner, source, context, perspective, depth + 1))
+    return scope
+
+
+def _translate_effect(
+    effect: Any,
+    source: BuffSource,
+    context: EngineContext,
+    perspective: str = "attacker",
+    activation: dict[str, Any] | None = None,
+) -> EffectTranslation:
     out: EffectTranslation = {"applied": [], "unsupported": [], "activatable": []}
     if recipient_snapshot_reason(None, effect) is not None:
         snapshot = resolve_recipient_snapshots(None, effect, source, context, perspective)
@@ -478,6 +535,8 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
                 "effectFragment": node,
             }
         )
+    elif node_type == "dice-table":
+        _translate_dice_table(node, source, opts, out)
     elif node_type == "dice-pool-allocation":
         # Player spends dice on options at runtime — each buff-bearing option
         # becomes an opt-in lever, grouped under the pool's activation cap.
@@ -738,6 +797,20 @@ def _translate_reroll(
     applicability = combine_optional(
         _attack_type_applicability(modifier), weapon_applicability(modifier)
     )
+    # Re-rolling a random Attacks characteristic: the engine re-rolls each model's dice below the
+    # mean.
+    if roll == "attacks" and modifier.get("count") is None and subset in ("ones", "all-failures"):
+        if opts["perspective"] == "attacker":
+            out["applied"].append(
+                with_applicability(
+                    {
+                        "source": source,
+                        "contribution": {"type": "reroll", "roll": roll, "subset": subset},
+                    },
+                    applicability,
+                )
+            )
+        return
     # "Re-roll one Hit roll": one die across the pool, which the engine prices
     # (engine.py one_reroll_dice). A larger finite permission is non-linear in a
     # way the engine does not model; applying it as an uncapped reroll would
@@ -1778,6 +1851,45 @@ def _without_selection_window(condition: dict[str, Any], effect: Any) -> dict[st
     if not kept:
         return None
     return kept[0] if len(kept) == 1 else {"operator": "and", "operands": kept}
+
+
+_DICE_TABLE_REASON = 'effect type "dice-table" is not modelled by the buff layer'
+
+
+def _translate_dice_table(
+    node: dict[str, Any], source: BuffSource, opts: dict[str, Any], out: EffectTranslation
+) -> None:
+    """A rolled table. Each outcome that could change the attack is gated on a generated
+    ``dice-table-result`` leaf naming the ability, the dice and the outcome's results: the roll is
+    a fact of the game, so the leaf is undecided until the caller answers it in ``conditionFacts``,
+    and an unanswered outcome applies nothing. The outcomes with no damage content are reported
+    together, as the table restricted to them."""
+    raw = node.get("outcomes")
+    outcomes = [o for o in raw if _is_object(o)] if isinstance(raw, list) else []
+    if not outcomes or not isinstance(node.get("dice"), str):
+        out["unsupported"].append({"reason": _DICE_TABLE_REASON, "effectFragment": node})
+        return
+    rest = [o for o in outcomes if effect_scope(o.get("effect")) != UNRESOLVED]
+    for outcome in outcomes:
+        if any(outcome is kept for kept in rest):
+            continue
+        condition = {
+            "type": "dice-table-result",
+            "parameters": {
+                "ability": opts["abilityId"],
+                "dice": node["dice"],
+                "results": outcome.get("results"),
+            },
+        }
+        _translate_conditional(
+            {"type": "conditional", "condition": condition, "effect": outcome.get("effect")},
+            source,
+            opts,
+            out,
+        )
+    if rest:
+        fragment = node if len(rest) == len(outcomes) else {**node, "outcomes": rest}
+        out["unsupported"].append({"reason": _DICE_TABLE_REASON, "effectFragment": fragment})
 
 
 def _translate_conditional(

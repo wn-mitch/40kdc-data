@@ -203,8 +203,10 @@ describe("pipeline-8b cruncher unsupported classification", () => {
     const nothing = { results: [1], effect: { type: "no-effect" } };
     const hitPenalty = { results: [6], effect: { type: "roll-modifier", target: "this-unit", modifier: { roll: "hit", operation: "add", value: 1 } } };
     expect(classify({ type: "dice-table", dice: "D6", outcomes: [nothing, harm] })).toEqual(outside);
-    // A rolled table is not a fixed buff: OUTSIDE_CRUNCHER_SCOPE marks it, so it is not a gap.
-    expect(classify({ type: "dice-table", dice: "D6", outcomes: [nothing, { ...harm, results: [2, 3, 4, 5] }, hitPenalty] })).toEqual(outside);
+    // An outcome that touches the attack is gated on its rolled result, an honest unknown the player
+    // answers; the outcomes with no damage content stay off the damage path.
+    expect(classify({ type: "dice-table", dice: "D6", outcomes: [nothing, { ...harm, results: [2, 3, 4, 5] }, hitPenalty] }))
+      .toEqual({ honestUnknown: 1, outsideDamagePath: 1, unrecognizedShape: 0 });
   });
 
   it("separates deployment grants and non-combat roll results from damage-path ones", () => {

@@ -9,8 +9,9 @@ use std::path::PathBuf;
 
 use serde_json::Value;
 use wh40kdc::{
-    describe_ability_parts_with_optional, describe_scoring_card, AbilityTrigger, AbilityUsage,
-    Dataset, EffectNode, KeywordPredicate, Scope,
+    describe_ability_parts_with_optional, describe_ability_value_with_optional,
+    describe_scoring_card, AbilityTrigger, AbilityUsage, Dataset, EffectNode, KeywordPredicate,
+    Scope,
 };
 
 fn corpus(path: &str) -> Value {
@@ -39,16 +40,34 @@ fn effect_translation_matches_goldens() {
     let mut failures = Vec::new();
     for case in cases {
         let id = case["caseId"].as_str().expect("caseId");
-        let effect: EffectNode = serde_json::from_value(case["effect"].clone())
-            .unwrap_or_else(|e| panic!("{id}: effect does not parse: {e}"));
-        let text = describe_ability_parts_with_optional(
-            &effect,
-            part::<Scope>(case, "scope").as_ref(),
-            part::<KeywordPredicate>(case, "applies_to").as_ref(),
-            part::<AbilityUsage>(case, "usage").as_ref(),
-            part::<AbilityTrigger>(case, "trigger").as_ref(),
-            case["optional"] == Value::Bool(true),
-        );
+        let scope = part::<Scope>(case, "scope");
+        let applies_to = part::<KeywordPredicate>(case, "applies_to");
+        let usage = part::<AbilityUsage>(case, "usage");
+        let trigger = part::<AbilityTrigger>(case, "trigger");
+        let optional = case["optional"] == Value::Bool(true);
+        // The generated types model only authored conditions; a case with the cruncher's
+        // generated `dice-table-result` leaf is rendered from its JSON form.
+        let text = match serde_json::from_value::<EffectNode>(case["effect"].clone()) {
+            Ok(effect) => describe_ability_parts_with_optional(
+                &effect,
+                scope.as_ref(),
+                applies_to.as_ref(),
+                usage.as_ref(),
+                trigger.as_ref(),
+                optional,
+            ),
+            Err(_) if case["effect"].to_string().contains("\"dice-table-result\"") => {
+                describe_ability_value_with_optional(
+                    &case["effect"],
+                    scope.map(|s| serde_json::to_value(s).unwrap()).as_ref(),
+                    applies_to.as_ref(),
+                    usage.map(|u| serde_json::to_value(u).unwrap()).as_ref(),
+                    trigger.map(|t| serde_json::to_value(t).unwrap()).as_ref(),
+                    optional,
+                )
+            }
+            Err(e) => panic!("{id}: effect does not parse: {e}"),
+        };
         let expected = case["expected"]["text"].as_str().expect("expected.text");
         if text != expected {
             failures.push(format!("{id}\n  expected: {expected}\n  actual:   {text}"));

@@ -1,5 +1,6 @@
 import type { BuffSource, EngineContext } from "../cruncher/index.js";
-import { effectToBuffs, POST_ATTACK_MOMENT, type EffectTranslation, type UnsupportedFragment } from "../cruncher/from-dsl.js";
+import type { EffectTranslation, UnsupportedFragment } from "../cruncher/from-dsl.js";
+import type { UnsupportedScope } from "../cruncher/unsupported-scope.js";
 import type { EligibleAbility } from "../abilities-resolver/index.js";
 import type { AbilityView } from "../data/entities.js";
 import { canTakeEnhancement, grantedRecordIds, grantedRecordLevers } from "../data/lever-providers.js";
@@ -33,29 +34,9 @@ export interface LedgerEntry {
   reasons: string[];
 }
 
-type FragmentClass = "out-of-scope" | "encounter-layer" | "unresolved";
+type FragmentClass = UnsupportedScope;
 
 const CLASS_RANK: Record<FragmentClass, number> = { "out-of-scope": 0, "encounter-layer": 1, unresolved: 2 };
-
-/** Effects that never act on the current attack: movement, set-up, CP, objectives, roster and targeting rules, reminder tokens. */
-const OUT_OF_ATTACK_EFFECTS = new Set([
-  "no-effect", "permission", "set-up", "test", "test-exemption", "move", "move-modifier", "cp-gain",
-  "cost-modifier", "objective-sticky", "transport-capacity", "split-unit", "add-unit", "army-rule",
-  "targeting", "marker",
-]);
-
-/**
- * Core abilities (`data/core/unit-keywords.json`) whose grant cannot change attack resolution:
- * deployment, movement, targeting restrictions and fight sequencing. Stealth and Feel No Pain do,
- * so their grants stay unresolved; Deadly Demise acts on death.
- */
-const NON_ATTACK_CORE_ABILITIES = new Set([
-  "deep-strike", "infiltrators", "scouts", "leader", "support", "lone-operative", "hover",
-  "firing-deck", "super-heavy-walker", "fights-first",
-]);
-
-/** Effects that act through events outside the current attack. */
-const ENCOUNTER_EFFECTS = new Set(["mortal-wounds", "act-on-death", "designate", "heal"]);
 
 /** Trigger events that fire on a death or on damage the unit takes, never during its own attack. */
 const ENCOUNTER_EVENTS = new Set(["destroyed", "model-destroyed", "damage-allocated"]);
@@ -103,40 +84,14 @@ function memberGrants(session: DamageScoringSession, result: StackResult, scored
   return { notes, fired };
 }
 
-const UNKNOWN_CONDITION = /^conditional: cannot evaluate condition /u;
-
 /**
- * An unevaluable condition matters only as much as what it gates: its body is translated as if
- * the condition held, and a body that yields no buff or lever and whose own fragments are all out
- * of scope (or all encounter-layer) takes that class. A body that could change the attack keeps
- * the condition unresolved.
+ * The fragment's scope as the cruncher classified it; a core record granting its own id marks the
+ * rule and carries no mechanic.
  */
-function gatedBodyClass(fragment: UnsupportedFragment, ownId: string, reading: Reading, depth: number): FragmentClass {
-  const node = fragment.effectFragment as { type?: unknown; effect?: unknown } | null;
-  if (depth >= 4 || !node || node.type !== "conditional" || node.effect === undefined) return "unresolved";
-  const body = effectToBuffs(node.effect, reading.source, reading.context, reading.perspective);
-  if (body.applied.length > 0 || body.activatable.length > 0) return "unresolved";
-  const classes = body.unsupported.map((inner) => fragmentClass(inner, ownId, reading, depth + 1));
-  if (classes.includes("unresolved")) return "unresolved";
-  return classes.includes("encounter-layer") ? "encounter-layer" : "out-of-scope";
-}
-
-function fragmentClass(fragment: UnsupportedFragment, ownId: string, reading: Reading, depth = 0): FragmentClass {
-  if (UNKNOWN_CONDITION.test(fragment.reason)) return gatedBodyClass(fragment, ownId, reading, depth);
-  if (fragment.reason.endsWith("is outside the damage path")) return "out-of-scope";
-  if (fragment.reason.startsWith("model-scoped effect from an attached model")) return "out-of-scope";
-  if (fragment.reason === POST_ATTACK_MOMENT) return "encounter-layer";
+function fragmentClass(fragment: UnsupportedFragment, ownId: string): FragmentClass {
   const node = fragment.effectFragment as { type?: unknown; modifier?: { ability?: unknown } } | null;
-  const type = node && typeof node === "object" ? node.type : undefined;
-  if (type === "ability-grant") {
-    const granted = node?.modifier?.ability;
-    // A core record granting its own id marks the rule; it carries no mechanic.
-    if (granted === ownId || (typeof granted === "string" && NON_ATTACK_CORE_ABILITIES.has(granted))) return "out-of-scope";
-    if (granted === "deadly-demise") return "encounter-layer";
-  }
-  if (typeof type === "string" && OUT_OF_ATTACK_EFFECTS.has(type)) return "out-of-scope";
-  if (typeof type === "string" && ENCOUNTER_EFFECTS.has(type)) return "encounter-layer";
-  return "unresolved";
+  if (node?.type === "ability-grant" && node.modifier?.ability === ownId) return "out-of-scope";
+  return fragment.scope ?? "unresolved";
 }
 
 /**
@@ -179,7 +134,7 @@ function classify(
     for (const fragment of reading.translation.unsupported) {
       // A weapon grant the loadout scored is resolved there, whether or not it fired.
       const note = grantNote(fragment, reading);
-      const kind = note ? "out-of-scope" : fragmentClass(fragment, ability.id, reading);
+      const kind = note ? "out-of-scope" : fragmentClass(fragment, ability.id);
       const settled = encounter && kind === "unresolved" ? "encounter-layer" : kind;
       const reason = note ?? fragment.reason;
       // One reason can arise from several fragments; the most consequential class wins.

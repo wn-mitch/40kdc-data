@@ -32,8 +32,8 @@ mod words;
 
 pub use ability::{
     describe_ability, describe_ability_parts, describe_ability_parts_with_optional,
-    describe_applies_to, describe_effect, describe_effect_inline, describe_effect_with_scope,
-    describe_scope,
+    describe_ability_value_with_optional, describe_applies_to, describe_effect,
+    describe_effect_inline, describe_effect_with_scope, describe_scope,
 };
 
 use std::sync::OnceLock;
@@ -44,6 +44,7 @@ use crate::translate::condition::{
     condition_lead_in_for, is_defensive_effect, nn, obj, range_phrase, truthy, P,
 };
 use designation::*;
+pub(crate) use dice::dice_table_result_label;
 use dice::*;
 use leaf::{describe_leaf, LEAF_TYPES};
 pub(crate) use menu::usage_clause;

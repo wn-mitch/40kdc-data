@@ -160,6 +160,18 @@ func runDSLCorpus(t *testing.T, filename string) {
 			t.Errorf("%s (%s) unsupportedReasons = %s, want %s", abilityID, perspective, got, want)
 		}
 
+		// Scopes, parallel to the reasons, when the case pins them.
+		if wantScopes, pinned := expected["unsupportedScopes"]; pinned {
+			var scopes []any
+			for _, u := range result.unsupported {
+				um, _ := asMap(u)
+				scopes = append(scopes, um["scope"])
+			}
+			if got, want := canon(t, orEmpty(scopes)), canon(t, wantScopes); got != want {
+				t.Errorf("%s (%s) unsupportedScopes = %s, want %s", abilityID, perspective, got, want)
+			}
+		}
+
 		// Need keys in order across every unsupported entry; a case without them expects none.
 		var needKeys []any
 		for _, u := range result.unsupported {

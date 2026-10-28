@@ -22,6 +22,11 @@
           "effect type \"permission\" is not modelled by the buff layer",
           "effect type \"permission\" is not modelled by the buff layer"
         ],
+        "unsupportedScopes": [
+          "out-of-scope",
+          "out-of-scope",
+          "out-of-scope"
+        ],
         "needKeys": [],
         "activatable": [
           {
@@ -89,6 +94,13 @@
           "effect type \"army-rule\" is not modelled by the buff layer",
           "effect type \"army-rule\" is not modelled by the buff layer"
         ],
+        "unsupportedScopes": [
+          "unresolved",
+          "unresolved",
+          "out-of-scope",
+          "out-of-scope",
+          "out-of-scope"
+        ],
         "needKeys": [
           "attacker:{\"parameters\":{\"filter\":{\"all_of\":[\"ADEPTUS ASTARTES\"],\"owner\":\"friendly\"},\"subject\":\"attacker\"},\"type\":\"matches\"}",
           "attacker:{\"parameters\":{\"filter\":{\"all_of\":[\"PSYKER\"]},\"subject\":\"defender\"},\"type\":\"matches\"}",
@@ -111,6 +123,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -129,6 +142,9 @@
         "applied": [],
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"army-faction\" against current context"
+        ],
+        "unsupportedScopes": [
+          "unresolved"
         ],
         "needKeys": [
           "attacker:{\"parameters\":{\"faction\":\"world-eaters\"},\"type\":\"army-faction\"}"
@@ -152,6 +168,9 @@
         "unsupportedReasons": [
           "effect type \"keyword-grant\" is not modelled by the buff layer"
         ],
+        "unsupportedScopes": [
+          "out-of-scope"
+        ],
         "needKeys": [],
         "activatable": []
       }
@@ -172,6 +191,9 @@
         "applied": [],
         "unsupportedReasons": [
           "model-scoped effect from an attached model: applies to that model only (core rule 19.04)"
+        ],
+        "unsupportedScopes": [
+          "out-of-scope"
         ],
         "needKeys": [],
         "activatable": []
@@ -201,6 +223,9 @@
         "unsupportedReasons": [
           "model-in-this-unit: individual model identity is unresolved"
         ],
+        "unsupportedScopes": [
+          "unresolved"
+        ],
         "needKeys": [],
         "activatable": []
       }
@@ -229,6 +254,9 @@
         "applied": [],
         "unsupportedReasons": [
           "model-scoped effect from an attached model: applies to that model only (core rule 19.04)"
+        ],
+        "unsupportedScopes": [
+          "out-of-scope"
         ],
         "needKeys": [],
         "activatable": []
@@ -293,6 +321,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": [
           {
@@ -340,6 +369,10 @@
           "conditional: cannot evaluate condition \"army-faction\" against current context",
           "conditional: cannot evaluate condition \"army-faction\" against current context"
         ],
+        "unsupportedScopes": [
+          "out-of-scope",
+          "unresolved"
+        ],
         "needKeys": [
           "attacker:{\"parameters\":{\"faction\":\"aeldari\"},\"type\":\"army-faction\"}",
           "attacker:{\"parameters\":{\"faction\":\"aeldari\"},\"type\":\"army-faction\"}"
@@ -361,6 +394,9 @@
         "applied": [],
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"and\" against current context"
+        ],
+        "unsupportedScopes": [
+          "unresolved"
         ],
         "needKeys": [
           "attacker:{\"parameters\":{\"turn\":\"your-turn\"},\"type\":\"player-turn-is\"}"
@@ -433,6 +469,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": [
           {
@@ -545,6 +582,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -597,6 +635,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -650,6 +689,9 @@
         "unsupportedReasons": [
           "unit-filter target: identity, state or model membership is unresolved"
         ],
+        "unsupportedScopes": [
+          "unresolved"
+        ],
         "needKeys": [],
         "activatable": []
       }
@@ -683,6 +725,9 @@
         "applied": [],
         "unsupportedReasons": [
           "weapon-ability-removal: the cruncher does not model removing a weapon ability (\"Heavy\")"
+        ],
+        "unsupportedScopes": [
+          "unresolved"
         ],
         "needKeys": [],
         "activatable": []
@@ -725,6 +770,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -757,6 +803,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -785,6 +832,9 @@
         "unsupportedReasons": [
           "roll-result on \"hit\": only a critical threshold on hit or wound rolls is modelled"
         ],
+        "unsupportedScopes": [
+          "unresolved"
+        ],
         "needKeys": [],
         "activatable": []
       }
@@ -812,6 +862,9 @@
         "applied": [],
         "unsupportedReasons": [
           "roll-result on \"advance\" is outside the damage path"
+        ],
+        "unsupportedScopes": [
+          "out-of-scope"
         ],
         "needKeys": [],
         "activatable": []
@@ -871,6 +924,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -937,6 +991,9 @@
         "unsupportedReasons": [
           "stat-modifier BS: operation \"set\" not supported"
         ],
+        "unsupportedScopes": [
+          "unresolved"
+        ],
         "needKeys": [],
         "activatable": []
       }
@@ -991,6 +1048,9 @@
         ],
         "unsupportedReasons": [
           "stat-modifier on \"Range\" is outside the damage path"
+        ],
+        "unsupportedScopes": [
+          "out-of-scope"
         ],
         "needKeys": [],
         "activatable": []
@@ -1062,6 +1122,12 @@
           "stat-modifier on \"M\" is outside the damage path",
           "effect type \"ability-grant\" is not modelled by the buff layer"
         ],
+        "unsupportedScopes": [
+          "out-of-scope",
+          "out-of-scope",
+          "out-of-scope",
+          "out-of-scope"
+        ],
         "needKeys": [],
         "activatable": []
       }
@@ -1102,6 +1168,9 @@
         "unsupportedReasons": [
           "unit-filter target: identity, state or model membership is unresolved"
         ],
+        "unsupportedScopes": [
+          "unresolved"
+        ],
         "needKeys": [],
         "activatable": []
       }
@@ -1136,6 +1205,9 @@
         "applied": [],
         "unsupportedReasons": [
           "ability-grant: the units holding the granted ability are not resolved"
+        ],
+        "unsupportedScopes": [
+          "unresolved"
         ],
         "needKeys": [],
         "activatable": []
@@ -1213,6 +1285,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": [
           {
@@ -1349,6 +1422,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -1424,6 +1498,9 @@
         "applied": [],
         "unsupportedReasons": [
           "effect type \"designate\" is not modelled by the buff layer"
+        ],
+        "unsupportedScopes": [
+          "encounter-layer"
         ],
         "needKeys": [],
         "activatable": [
@@ -1535,6 +1612,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -1570,6 +1648,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": [
           {
@@ -1616,6 +1695,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": [
           {
@@ -1649,6 +1729,9 @@
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"model-count\" against current context"
         ],
+        "unsupportedScopes": [
+          "unresolved"
+        ],
         "needKeys": [
           "attacker:{\"parameters\":{\"min\":6,\"subject\":\"defender\"},\"type\":\"model-count\"}"
         ],
@@ -1670,6 +1753,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -1699,6 +1783,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -1728,6 +1813,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -1757,6 +1843,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -1782,6 +1869,9 @@
         "applied": [],
         "unsupportedReasons": [
           "roll-modifier on \"leadership\" is outside the damage path"
+        ],
+        "unsupportedScopes": [
+          "out-of-scope"
         ],
         "needKeys": [],
         "activatable": [
@@ -1843,6 +1933,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -1863,6 +1954,10 @@
         "unsupportedReasons": [
           "target \"event-subject\" is not resolved by the buff engine",
           "target \"event-subject\" is not resolved by the buff engine"
+        ],
+        "unsupportedScopes": [
+          "out-of-scope",
+          "unresolved"
         ],
         "needKeys": [],
         "activatable": []
@@ -1901,6 +1996,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": [
           {
@@ -1955,6 +2051,9 @@
         "unsupportedReasons": [
           "target \"event-object\" is not resolved by the buff engine"
         ],
+        "unsupportedScopes": [
+          "unresolved"
+        ],
         "needKeys": [],
         "activatable": []
       }
@@ -1978,6 +2077,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": [
           {
@@ -2048,6 +2148,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -2069,6 +2170,10 @@
         "unsupportedReasons": [
           "target \"event-subject\" is not resolved by the buff engine",
           "target \"event-subject\" is not resolved by the buff engine"
+        ],
+        "unsupportedScopes": [
+          "unresolved",
+          "unresolved"
         ],
         "needKeys": [],
         "activatable": []
@@ -2093,6 +2198,9 @@
         "applied": [],
         "unsupportedReasons": [
           "post-attack moment: applies only to attacks made after the triggering unit's"
+        ],
+        "unsupportedScopes": [
+          "encounter-layer"
         ],
         "needKeys": [],
         "activatable": []
@@ -2130,6 +2238,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": [
           {
@@ -2190,6 +2299,9 @@
         "unsupportedReasons": [
           "post-attack moment: applies only to attacks made after the triggering unit's"
         ],
+        "unsupportedScopes": [
+          "encounter-layer"
+        ],
         "needKeys": [],
         "activatable": []
       }
@@ -2236,6 +2348,9 @@
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"not\" against current context"
         ],
+        "unsupportedScopes": [
+          "unresolved"
+        ],
         "needKeys": [
           "attacker:{\"parameters\":{\"filter\":{\"state\":\"battle-shocked\"},\"subject\":\"attacker\"},\"type\":\"matches\"}"
         ],
@@ -2259,6 +2374,9 @@
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"and\" against current context"
         ],
+        "unsupportedScopes": [
+          "out-of-scope"
+        ],
         "needKeys": [
           "attacker:{\"parameters\":{\"filter\":{\"has_ability\":[\"stealth\"]},\"subject\":\"this-unit\"},\"type\":\"matches\"}"
         ],
@@ -2281,6 +2399,9 @@
         "applied": [],
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"and\" against current context"
+        ],
+        "unsupportedScopes": [
+          "unresolved"
         ],
         "needKeys": [
           "target:{\"parameters\":{\"filter\":{\"has_ability\":[\"stealth\"]},\"subject\":\"this-unit\"},\"type\":\"matches\"}"
@@ -2317,6 +2438,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -2345,6 +2467,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -2389,6 +2512,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -2428,6 +2552,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -2467,6 +2592,9 @@
         "applied": [],
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"battle-round\" against current context"
+        ],
+        "unsupportedScopes": [
+          "unresolved"
         ],
         "needKeys": [
           "attacker:{\"parameters\":{\"max\":5,\"min\":3},\"type\":\"battle-round\"}"
@@ -2513,6 +2641,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -2551,6 +2680,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -2589,6 +2719,9 @@
         "applied": [],
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"player-turn-is\" against current context"
+        ],
+        "unsupportedScopes": [
+          "unresolved"
         ],
         "needKeys": [
           "attacker:{\"parameters\":{\"turn\":\"your-turn\"},\"type\":\"player-turn-is\"}"
@@ -2636,6 +2769,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -2675,6 +2809,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -2719,6 +2854,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -2758,6 +2894,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -2797,6 +2934,9 @@
         "applied": [],
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"strength\" against current context"
+        ],
+        "unsupportedScopes": [
+          "unresolved"
         ],
         "needKeys": [
           "attacker:{\"parameters\":{\"below\":\"starting\",\"subject\":\"defender\"},\"type\":\"strength\"}"
@@ -2847,6 +2987,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -2889,6 +3030,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -2931,6 +3073,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -2975,6 +3118,9 @@
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"wounds\" against current context"
         ],
+        "unsupportedScopes": [
+          "unresolved"
+        ],
         "needKeys": [
           "attacker:{\"parameters\":{\"damaged\":true,\"subject\":\"this-model\"},\"type\":\"wounds\"}"
         ],
@@ -3016,6 +3162,9 @@
         "applied": [],
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"wounds\" against current context"
+        ],
+        "unsupportedScopes": [
+          "unresolved"
         ],
         "needKeys": [
           "attacker:{\"parameters\":{\"remaining_max\":5,\"subject\":\"this-model\"},\"type\":\"wounds\"}"
@@ -3064,6 +3213,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -3104,6 +3254,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -3147,6 +3298,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -3187,6 +3339,9 @@
         "applied": [],
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"closest\" against current context"
+        ],
+        "unsupportedScopes": [
+          "unresolved"
         ],
         "needKeys": [
           "attacker:{\"parameters\":{\"among\":\"eligible-targets\",\"subject\":\"defender\",\"to\":\"attacker\"},\"type\":\"closest\"}"
@@ -3239,6 +3394,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -3281,6 +3437,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -3323,6 +3480,9 @@
         "applied": [],
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"matches\" against current context"
+        ],
+        "unsupportedScopes": [
+          "unresolved"
         ],
         "needKeys": [
           "attacker:{\"parameters\":{\"filter\":{\"designated\":\"SPOTTED\",\"owner\":\"enemy\"},\"subject\":\"defender\"},\"type\":\"matches\"}"
@@ -3375,6 +3535,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -3419,6 +3580,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -3461,6 +3623,9 @@
         "applied": [],
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"matches\" against current context"
+        ],
+        "unsupportedScopes": [
+          "unresolved"
         ],
         "needKeys": [
           "attacker:{\"parameters\":{\"filter\":{\"owner\":\"enemy\",\"state\":\"battle-shocked\"},\"subject\":\"defender\"},\"type\":\"matches\"}"
@@ -3510,6 +3675,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -3551,6 +3717,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -3608,6 +3775,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -3660,6 +3828,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -3712,6 +3881,9 @@
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"matches\" against current context"
         ],
+        "unsupportedScopes": [
+          "unresolved"
+        ],
         "needKeys": [
           "attacker:{\"parameters\":{\"filter\":{\"within\":{\"of\":{\"objective\":{\"controlled_by\":\"friendly\"}},\"range\":\"objective-control\"}},\"subject\":\"this-unit\"},\"type\":\"matches\"}"
         ],
@@ -3762,6 +3934,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -3822,6 +3995,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -3874,6 +4048,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -3921,6 +4096,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -3968,6 +4144,9 @@
         "applied": [],
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"matches\" against current context"
+        ],
+        "unsupportedScopes": [
+          "unresolved"
         ],
         "needKeys": [
           "attacker:{\"parameters\":{\"filter\":{\"owner\":\"enemy\",\"within\":{\"of\":\"this-unit\",\"range\":{\"inches\":12}}},\"subject\":\"defender\"},\"type\":\"matches\"}"
@@ -4017,6 +4196,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -4068,6 +4248,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -4112,6 +4293,9 @@
         "applied": [],
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"not\" against current context"
+        ],
+        "unsupportedScopes": [
+          "unresolved"
         ],
         "needKeys": [
           "attacker:{\"parameters\":{\"weapons\":{\"name\":\"Plague spewer\"}},\"type\":\"attack-is\"}"
@@ -4163,6 +4347,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -4207,6 +4392,9 @@
         "unsupportedReasons": [
           "unit-filter target: identity, state or model membership is unresolved"
         ],
+        "unsupportedScopes": [
+          "unresolved"
+        ],
         "needKeys": [],
         "activatable": []
       }
@@ -4249,6 +4437,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -4293,6 +4482,9 @@
         "unsupportedReasons": [
           "unit-filter target: identity, state or model membership is unresolved"
         ],
+        "unsupportedScopes": [
+          "unresolved"
+        ],
         "needKeys": [],
         "activatable": []
       }
@@ -4332,6 +4524,9 @@
         "applied": [],
         "unsupportedReasons": [
           "unit-filter target: identity, state or model membership is unresolved"
+        ],
+        "unsupportedScopes": [
+          "unresolved"
         ],
         "needKeys": [],
         "activatable": []
@@ -4389,6 +4584,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -4445,6 +4641,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": [
           {
@@ -4535,6 +4732,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": [
           {
@@ -4618,6 +4816,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -4658,6 +4857,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -4696,6 +4896,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -4734,6 +4935,9 @@
         "applied": [],
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"unit-wargear\" against current context"
+        ],
+        "unsupportedScopes": [
+          "unresolved"
         ],
         "needKeys": [
           "attacker:{\"parameters\":{\"subject\":\"this-unit\",\"wargear\":\"fab-gun-pod\"},\"type\":\"unit-wargear\"}"
@@ -4778,6 +4982,9 @@
         "applied": [],
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"unit-wargear\" against current context"
+        ],
+        "unsupportedScopes": [
+          "unresolved"
         ],
         "needKeys": [
           "attacker:{\"parameters\":{\"subject\":\"defender\",\"wargear\":\"fab-gun-pod\"},\"type\":\"unit-wargear\"}"
@@ -4828,6 +5035,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -4874,6 +5082,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -4927,6 +5136,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -4973,6 +5183,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -5026,6 +5237,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -5073,6 +5285,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -5120,6 +5333,9 @@
         "applied": [],
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"unit-wargear\" against current context"
+        ],
+        "unsupportedScopes": [
+          "unresolved"
         ],
         "needKeys": [
           "attacker:{\"parameters\":{\"models\":{\"count\":{\"min\":1},\"state\":\"lack\"},\"subject\":\"this-unit\",\"wargear\":\"fab-gun-pod\"},\"type\":\"unit-wargear\"}"
@@ -5171,6 +5387,9 @@
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"unit-wargear\" against current context"
         ],
+        "unsupportedScopes": [
+          "unresolved"
+        ],
         "needKeys": [
           "attacker:{\"parameters\":{\"models\":{\"count\":{\"min\":\"D3\"},\"state\":\"carry\"},\"subject\":\"this-unit\",\"wargear\":\"fab-gun-pod\"},\"type\":\"unit-wargear\"}"
         ],
@@ -5194,6 +5413,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": [
           {
@@ -5249,6 +5469,10 @@
           "select-weapon: a bound weapon is not resolved by the buff engine",
           "weapon-ability-grant: unresolved weapons.ref"
         ],
+        "unsupportedScopes": [
+          "unresolved",
+          "unresolved"
+        ],
         "needKeys": [],
         "activatable": []
       }
@@ -5287,6 +5511,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -5341,6 +5566,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -5373,6 +5599,9 @@
         "unsupportedReasons": [
           "stat-modifier D: setting the Damage of incoming attacks is not modelled"
         ],
+        "unsupportedScopes": [
+          "unresolved"
+        ],
         "needKeys": [],
         "activatable": []
       }
@@ -5403,6 +5632,539 @@
         "applied": [],
         "unsupportedReasons": [
           "stat-modifier T: setting the Toughness characteristic is not modelled"
+        ],
+        "unsupportedScopes": [
+          "unresolved"
+        ],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "A dice table whose outcomes are mortal wounds or nothing acts outside the attack: encounter-layer.",
+      "abilityId": "fabricated-scope-dice-table-mortal-wounds",
+      "effect": {
+        "type": "dice-table",
+        "dice": "D6",
+        "outcomes": [
+          {
+            "results": [
+              1
+            ],
+            "effect": {
+              "type": "no-effect"
+            }
+          },
+          {
+            "results": [
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "effect": {
+              "type": "mortal-wounds",
+              "target": "defender",
+              "modifier": {
+                "count": "D3"
+              }
+            }
+          }
+        ]
+      },
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scope-dice-table-mortal-wounds",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "effect type \"dice-table\" is not modelled by the buff layer"
+        ],
+        "unsupportedScopes": [
+          "encounter-layer"
+        ],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "A dice table with an invulnerable-save outcome could change the attack: unresolved, the widest of its outcomes.",
+      "abilityId": "fabricated-scope-dice-table-invulnerable",
+      "effect": {
+        "type": "dice-table",
+        "dice": "D6",
+        "outcomes": [
+          {
+            "results": [
+              1
+            ],
+            "effect": {
+              "type": "mortal-wounds",
+              "target": "this-unit",
+              "modifier": {
+                "count": "D3"
+              }
+            }
+          },
+          {
+            "results": [
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "effect": {
+              "type": "invulnerable-save",
+              "target": "this-unit",
+              "modifier": {
+                "invuln_sv": 4
+              }
+            }
+          }
+        ]
+      },
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scope-dice-table-invulnerable",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"dice-table-result\" against current context",
+          "effect type \"dice-table\" is not modelled by the buff layer"
+        ],
+        "unsupportedScopes": [
+          "out-of-scope",
+          "encounter-layer"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"ability\":\"fabricated-scope-dice-table-invulnerable\",\"dice\":\"D6\",\"results\":[2,3,4,5,6]},\"type\":\"dice-table-result\"}"
+        ],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "An undecided condition gating only a move characteristic takes its body's scope: out-of-scope.",
+      "abilityId": "fabricated-scope-undecided-condition-move",
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "strength",
+          "parameters": {
+            "subject": "recipient",
+            "below": "half"
+          }
+        },
+        "effect": {
+          "type": "stat-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "stat": "M",
+            "operation": "add",
+            "value": 2
+          }
+        }
+      },
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scope-undecided-condition-move",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"strength\" against current context"
+        ],
+        "unsupportedScopes": [
+          "out-of-scope"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"below\":\"half\",\"subject\":\"recipient\"},\"type\":\"strength\"}"
+        ],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "An undecided condition gating a hit modifier could change the attack: unresolved.",
+      "abilityId": "fabricated-scope-undecided-condition-hit",
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "strength",
+          "parameters": {
+            "subject": "recipient",
+            "below": "half"
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "value": 1
+          }
+        }
+      },
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scope-undecided-condition-hit",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"strength\" against current context"
+        ],
+        "unsupportedScopes": [
+          "unresolved"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"below\":\"half\",\"subject\":\"recipient\"},\"type\":\"strength\"}"
+        ],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "A Deadly Demise grant acts on death: encounter-layer.",
+      "abilityId": "fabricated-scope-grant-deadly-demise",
+      "effect": {
+        "type": "ability-grant",
+        "target": "this-unit",
+        "modifier": {
+          "ability": "deadly-demise",
+          "value": "D3"
+        }
+      },
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scope-grant-deadly-demise",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "effect type \"ability-grant\" is not modelled by the buff layer"
+        ],
+        "unsupportedScopes": [
+          "encounter-layer"
+        ],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "A Scouts grant decides deployment: out-of-scope.",
+      "abilityId": "fabricated-scope-grant-scouts",
+      "effect": {
+        "type": "ability-grant",
+        "target": "this-unit",
+        "modifier": {
+          "ability": "scouts",
+          "value": 6
+        }
+      },
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scope-grant-scouts",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "effect type \"ability-grant\" is not modelled by the buff layer"
+        ],
+        "unsupportedScopes": [
+          "out-of-scope"
+        ],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "A worsened AP of attacks against the unit, read from the attacker, is the defender's stat: out-of-scope here.",
+      "abilityId": "fabricated-scope-defender-ap-from-attacker",
+      "effect": {
+        "type": "stat-modifier",
+        "target": "attacker",
+        "modifier": {
+          "stat": "AP",
+          "operation": "worsen",
+          "value": 1
+        }
+      },
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scope-defender-ap-from-attacker",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "stat-modifier AP on the attacker: defender-side stat; applies when the buffed unit is the target"
+        ],
+        "unsupportedScopes": [
+          "out-of-scope"
+        ],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "A charge re-roll is off the damage path: out-of-scope.",
+      "abilityId": "fabricated-scope-charge-reroll",
+      "effect": {
+        "type": "re-roll",
+        "target": "this-unit",
+        "modifier": {
+          "roll": "charge",
+          "result_scope": "any-result"
+        }
+      },
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scope-charge-reroll",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "re-roll on \"charge\" (subset \"all-failures\") is outside the damage path"
+        ],
+        "unsupportedScopes": [
+          "out-of-scope"
+        ],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "A keyword grant changes no attack: out-of-scope.",
+      "abilityId": "fabricated-scope-keyword-grant",
+      "effect": {
+        "type": "keyword-grant",
+        "target": "this-unit",
+        "modifier": {
+          "keywords": [
+            "MOBILE"
+          ]
+        }
+      },
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scope-keyword-grant",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "effect type \"keyword-grant\" is not modelled by the buff layer"
+        ],
+        "unsupportedScopes": [
+          "out-of-scope"
+        ],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "A sequence of healing and a move: encounter-layer, the widest of its steps.",
+      "abilityId": "fabricated-scope-sequence-heal-and-move",
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "move-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "distance": 2
+            }
+          },
+          {
+            "type": "heal",
+            "target": "this-unit",
+            "modifier": {
+              "count": 1
+            }
+          }
+        ]
+      },
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scope-sequence-heal-and-move",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "effect type \"move-modifier\" is not modelled by the buff layer",
+          "effect type \"heal\" is not modelled by the buff layer"
+        ],
+        "unsupportedScopes": [
+          "out-of-scope",
+          "encounter-layer"
+        ],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "From the target, the 4+ invulnerable outcome is gated on a generated dice-table-result toggle: unresolved, with its need.",
+      "abilityId": "fabricated-scope-dice-table-invulnerable",
+      "effect": {
+        "type": "dice-table",
+        "dice": "D6",
+        "outcomes": [
+          {
+            "results": [
+              1
+            ],
+            "effect": {
+              "type": "mortal-wounds",
+              "target": "this-unit",
+              "modifier": {
+                "count": "D3"
+              }
+            }
+          },
+          {
+            "results": [
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "effect": {
+              "type": "invulnerable-save",
+              "target": "this-unit",
+              "modifier": {
+                "invuln_sv": 4
+              }
+            }
+          }
+        ]
+      },
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scope-dice-table-invulnerable",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"dice-table-result\" against current context",
+          "effect type \"dice-table\" is not modelled by the buff layer"
+        ],
+        "unsupportedScopes": [
+          "unresolved",
+          "encounter-layer"
+        ],
+        "needKeys": [
+          "target:{\"parameters\":{\"ability\":\"fabricated-scope-dice-table-invulnerable\",\"dice\":\"D6\",\"results\":[2,3,4,5,6]},\"type\":\"dice-table-result\"}"
+        ],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "Answering the dice-table-result toggle applies that outcome's invulnerable save.",
+      "abilityId": "fabricated-scope-dice-table-invulnerable",
+      "effect": {
+        "type": "dice-table",
+        "dice": "D6",
+        "outcomes": [
+          {
+            "results": [
+              1
+            ],
+            "effect": {
+              "type": "mortal-wounds",
+              "target": "this-unit",
+              "modifier": {
+                "count": "D3"
+              }
+            }
+          },
+          {
+            "results": [
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "effect": {
+              "type": "invulnerable-save",
+              "target": "this-unit",
+              "modifier": {
+                "invuln_sv": 4
+              }
+            }
+          }
+        ]
+      },
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scope-dice-table-invulnerable",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting",
+        "conditionFacts": {
+          "target:{\"parameters\":{\"ability\":\"fabricated-scope-dice-table-invulnerable\",\"dice\":\"D6\",\"results\":[2,3,4,5,6]},\"type\":\"dice-table-result\"}": true
+        }
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [
+          {
+            "type": "invulnerable-save",
+            "threshold": 4
+          }
+        ],
+        "unsupportedReasons": [
+          "effect type \"dice-table\" is not modelled by the buff layer"
+        ],
+        "unsupportedScopes": [
+          "encounter-layer"
         ],
         "needKeys": [],
         "activatable": []

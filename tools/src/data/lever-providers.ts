@@ -81,9 +81,14 @@ export type AbilityLevers = {
 /** A {@link ConditionNeed} with the ability whose condition raised it. */
 export type AbilityNeed = ConditionNeed & { abilityId: string; label: string };
 
-/** Each need an ability's translation reports, tagged with that ability. */
+/**
+ * Each need an ability's translation reports, tagged with that ability. A need whose fragment has no
+ * damage content ({@link UnsupportedFragment.scope}) is left out: answering it changes nothing scored.
+ */
 export function abilityNeeds(unsupported: readonly UnsupportedFragment[], abilityId: string, label: string): AbilityNeed[] {
-  return unsupported.flatMap((item) => (item.needs ?? []).map((need) => ({ ...need, abilityId, label })));
+  return unsupported
+    .filter((item) => item.scope === undefined || item.scope === "unresolved")
+    .flatMap((item) => (item.needs ?? []).map((need) => ({ ...need, abilityId, label })));
 }
 
 /** The stance option a lever applies under, or does not apply under. */

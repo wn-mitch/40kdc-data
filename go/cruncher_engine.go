@@ -214,7 +214,21 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 
 	// 1. Attacks
 	// A set characteristic replaces the profile's before any modifier applies.
-	baseA, err := evalStatValue(res.setOr("A", stats["A"]))
+	// A re-roll of the Attacks dice keeps each roll at or above a fresh roll's mean.
+	attacksReroll := ""
+	if e, ok := res.rerolls["attacks"]; ok {
+		attacksReroll = e.subset
+	}
+	_, attacksSet := res.statSet["A"]
+	var baseA float64
+	var err error
+	if attacksReroll != "" && !attacksSet {
+		var rolled damageRollResult
+		rolled, err = damageRoll(damageRollInput{stat: stats["A"], reroll: attacksReroll})
+		baseA = rolled.expected
+	} else {
+		baseA, err = evalStatValue(res.setOr("A", stats["A"]))
+	}
 	if err != nil {
 		return nil, nil, nil, err
 	}
@@ -565,6 +579,7 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 	model := &AttackModel{
 		ModelsFiring:    modelsFiring,
 		AttacksStat:     res.setOr("A", stats["A"]),
+		AttacksReroll:   rerollIfUnset(attacksReroll, attacksSet),
 		AttacksBonus:    res.attacksMod + blastExtra,
 		RapidFireStat:   rapidFireStat,
 		Torrent:         torrent,
@@ -853,4 +868,13 @@ func anyAttackComparison(buffs []any) bool {
 		}
 	}
 	return false
+}
+
+// rerollIfUnset is the Attacks re-roll the allocation stage applies: none when a set
+// characteristic replaced the printed dice.
+func rerollIfUnset(subset string, attacksSet bool) string {
+	if attacksSet {
+		return ""
+	}
+	return subset
 }

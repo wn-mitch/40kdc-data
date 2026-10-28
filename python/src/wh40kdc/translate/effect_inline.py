@@ -48,9 +48,9 @@ from wh40kdc.translate.effect_words import (
     ability_label,
     capitalize,
     dice_case,
+    dice_table_result_label,
     filter_subject,
     format_comparison,
-    is_num,
     jstr,
     num,
     num_str,
@@ -279,15 +279,6 @@ def describe_effect_inline(e: Effect, ctx: Ctx | None = None) -> str:
 def describe_requirement(req: Any) -> str:
     """A dice-pool requirement as a noun phrase ("pair of 4+"; alternatives join with " or ")."""
     return requirement_phrase(req)
-
-
-def dice_table_result_label(results: Any) -> str:
-    if not isinstance(results, list):
-        return ""
-    faces = sorted(r for r in results if is_num(r))
-    if len(faces) > 1 and all(i == 0 or face == faces[i - 1] + 1 for i, face in enumerate(faces)):
-        return f"{jstr(faces[0])}-{jstr(faces[-1])}"
-    return ", ".join(jstr(f) for f in faces)
 
 
 def dice_table_head(e: Effect) -> str:

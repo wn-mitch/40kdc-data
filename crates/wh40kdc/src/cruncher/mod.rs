@@ -50,6 +50,7 @@ mod resolved;
 pub mod scenario;
 mod scenario_conditions;
 mod scenario_facts;
+pub mod unsupported_scope;
 mod weapon_bindings;
 
 pub use allocation::{
@@ -82,3 +83,4 @@ pub use scenario::{
     ObjectiveTerritory, ObjectivesControlled, ScenarioNeighbour, ScenarioObjective, ScenarioRegion,
     ScenarioSide, UnitState, UnitStrength,
 };
+pub use unsupported_scope::UnsupportedScope;

@@ -158,6 +158,8 @@ pub struct Rerolls {
     pub wound: Option<RerollState>,
     pub save: Option<RerollState>,
     pub damage: Option<RerollState>,
+    /// Re-roll of a random Attacks characteristic's dice.
+    pub attacks: Option<RerollState>,
 }
 
 impl Rerolls {
@@ -167,6 +169,7 @@ impl Rerolls {
             RollKind::Wound => self.wound.as_ref(),
             RollKind::Save => self.save.as_ref(),
             RollKind::Damage => self.damage.as_ref(),
+            RollKind::Attacks => self.attacks.as_ref(),
         }
     }
 }
@@ -177,6 +180,8 @@ pub struct RerollOne {
     pub wound: Option<RerollOneState>,
     pub save: Option<RerollOneState>,
     pub damage: Option<RerollOneState>,
+    /// Never set by the translator; present so the roll kinds stay exhaustive.
+    pub attacks: Option<RerollOneState>,
 }
 
 impl RerollOne {
@@ -186,6 +191,7 @@ impl RerollOne {
             RollKind::Wound => self.wound.as_ref(),
             RollKind::Save => self.save.as_ref(),
             RollKind::Damage => self.damage.as_ref(),
+            RollKind::Attacks => self.attacks.as_ref(),
         }
     }
 
@@ -195,6 +201,7 @@ impl RerollOne {
             RollKind::Wound => &mut self.wound,
             RollKind::Save => &mut self.save,
             RollKind::Damage => &mut self.damage,
+            RollKind::Attacks => &mut self.attacks,
         }
     }
 }

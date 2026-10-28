@@ -68,6 +68,22 @@ pub(super) fn reroll(node: &Obj, opts: &WalkOpts, out: &mut Out) {
     let r = roll.and_then(Value::as_str);
     let s = subset.and_then(Value::as_str);
     let damage_path = matches!(r, Some("hit" | "wound" | "save" | "damage"));
+    // Re-rolling a random Attacks characteristic: the engine re-rolls each model's dice below the
+    // mean.
+    if r == Some("attacks")
+        && !m.contains_key("count")
+        && matches!(s, Some("ones" | "all-failures"))
+    {
+        if opts.perspective == Attacker {
+            emit(
+                opts,
+                out,
+                &weapon_applicability(m),
+                json!({ "type": "reroll", "roll": r, "subset": s }),
+            );
+        }
+        return;
+    }
     // "Re-roll one Hit roll": one die across the pool, which the engine prices (`one_reroll_dice`).
     // A larger finite permission is non-linear in a way the engine does not model; applying it as
     // an uncapped reroll would silently overstate the effect.

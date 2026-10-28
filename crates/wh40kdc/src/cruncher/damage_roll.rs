@@ -169,6 +169,29 @@ fn dice_totals(count: usize, die: usize) -> Vec<(usize, f64)> {
 /// optimal one-shot policy. `Ones` permits rerolling a dice total of 1, so it
 /// can only act on a single die; `AllFailures` permits rerolling any total.
 pub(crate) fn damage_roll(input: &DamageRollInput<'_>) -> Result<DamageRoll, CruncherError> {
+    roll_parsed(parse_damage(input.stat)?, input)
+}
+
+/// [`damage_roll`] of a quantity held as JSON (a number or a dice string), with no bonus,
+/// modifier or reduction: a random Attacks characteristic whose dice may be re-rolled.
+pub(crate) fn quantity_roll(
+    stat: &Value,
+    reroll: Option<RerollSubset>,
+) -> Result<DamageRoll, CruncherError> {
+    let input = DamageRollInput {
+        stat: &StatValue::Integer(0),
+        bonus: 0.0,
+        modifier: 0.0,
+        reduction: 0.0,
+        reroll,
+    };
+    roll_parsed(parse_quantity(stat)?, &input)
+}
+
+fn roll_parsed(
+    parsed: ParsedDamage,
+    input: &DamageRollInput<'_>,
+) -> Result<DamageRoll, CruncherError> {
     let final_value = |rolled: f64| {
         let before_reduction = (rolled + input.bonus + input.modifier).max(0.0);
         if input.reduction > 0.0 {
@@ -177,7 +200,7 @@ pub(crate) fn damage_roll(input: &DamageRollInput<'_>) -> Result<DamageRoll, Cru
             before_reduction
         }
     };
-    let dice = match parse_damage(input.stat)? {
+    let dice = match parsed {
         ParsedDamage::Fixed(n) => {
             let value = final_value(n);
             return Ok(DamageRoll {

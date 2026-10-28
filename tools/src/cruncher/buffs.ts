@@ -49,7 +49,8 @@ export type BuffContribution =
   | { type: "cover" }
   | {
       type: "reroll";
-      roll: "hit" | "wound" | "save" | "damage";
+      /** `attacks` re-rolls a random Attacks characteristic's dice. */
+      roll: "hit" | "wound" | "save" | "damage" | "attacks";
       subset: "ones" | "all-failures";
     }
   /**
@@ -502,7 +503,7 @@ export type ResolvedModifiers = {
   cover: { active: boolean; source: BuffSource | null };
   rerolls: Partial<
     Record<
-      "hit" | "wound" | "save" | "damage",
+      "hit" | "wound" | "save" | "damage" | "attacks",
       { subset: "ones" | "all-failures"; dominantSource: BuffSource }
     >
   >;

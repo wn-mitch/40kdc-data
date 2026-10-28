@@ -95,6 +95,7 @@ export type {
   TranslationPerspective,
   UnsupportedFragment,
 } from "../cruncher/from-dsl.js";
+export type { UnsupportedScope } from "../cruncher/unsupported-scope.js";
 
 export type { AbilityNeed } from "./lever-providers.js";
 export type { AbilityMortalWounds } from "./dataset-mortals.js";

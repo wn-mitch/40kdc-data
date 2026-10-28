@@ -56,6 +56,7 @@ describe("activation diagnostics", () => {
       reason: "activation condition cannot be evaluated against current context",
       effectFragment: part,
       needs: [{ key: conditionFactKey(trigger.condition, "attacker"), condition: trigger.condition, perspective: "attacker" }],
+      scope: "unresolved",
     }]);
     expect(JSON.stringify(result.unsupported)).not.toContain("timing-is");
   });

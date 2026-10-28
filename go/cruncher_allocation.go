@@ -34,6 +34,9 @@ type AttackModel struct {
 	ModelsFiring float64
 	// AttacksStat is one model's Attacks characteristic, before AttacksBonus.
 	AttacksStat any
+	// AttacksReroll is a re-roll of the Attacks dice ("ones" or "all-failures"), kept when at or
+	// above a fresh roll's mean; "" for none.
+	AttacksReroll string
 	// AttacksBonus is the flat attacks every model adds: the modifier and Blast.
 	AttacksBonus float64
 	// RapidFireStat is Rapid Fire's extra attacks per model when active, else nil.
@@ -266,9 +269,18 @@ func attackCounts(model *AttackModel) ([]float64, error) {
 	if err != nil {
 		return nil, err
 	}
-	attacks, err := quantityDistribution(model.AttacksStat)
-	if err != nil {
-		return nil, err
+	var attacks []DamageOutcome
+	if model.AttacksReroll != "" {
+		rolled, err := damageRoll(damageRollInput{stat: model.AttacksStat, reroll: model.AttacksReroll})
+		if err != nil {
+			return nil, err
+		}
+		attacks = rolled.distribution
+	} else {
+		attacks, err = quantityDistribution(model.AttacksStat)
+		if err != nil {
+			return nil, err
+		}
 	}
 	var one []float64
 	for _, a := range attacks {

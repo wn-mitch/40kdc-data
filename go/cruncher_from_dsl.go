@@ -60,9 +60,52 @@ type dslOpts struct {
 type attackRollInfo struct{ roll, outcome string }
 
 // effectToBuffs walks an ability DSL effect tree, producing the buff stack plus
-// unsupported and activatable lists. An optional activation record preserves
-// the source usage/cost metadata on every opt-in lever.
+// unsupported and activatable lists, each unsupported fragment carrying its "scope". An optional
+// activation record preserves the source usage/cost metadata on every opt-in lever.
 func effectToBuffs(effect any, source map[string]any, context map[string]any, perspective string, activation ...map[string]any) *effectTranslation {
+	out := translateEffect(effect, source, context, perspective, activation...)
+	for _, fragment := range out.unsupported {
+		if fm, ok := fragment.(map[string]any); ok {
+			fm["scope"] = scopeOf(fm, source, context, perspective, 0)
+		}
+	}
+	return out
+}
+
+// scopeDepth is how deep an undecided condition's body is translated to find its scope.
+const scopeDepth = 4
+
+// scopeOf is the scope of a fragment. An undecided condition matters only as much as what it
+// gates: its body is translated as if the condition held, and a body that yields no buff or lever
+// takes the widest scope of its own fragments; a body that could change the attack keeps the
+// condition unresolved.
+func scopeOf(fragment map[string]any, source map[string]any, context map[string]any, perspective string, depth int) string {
+	reason, _ := fragment["reason"].(string)
+	if !undecidedConditionReason.MatchString(reason) {
+		return fragmentScope(reason, fragment["effectFragment"])
+	}
+	node, _ := fragment["effectFragment"].(map[string]any)
+	if depth >= scopeDepth || node == nil || node["type"] != "conditional" {
+		return scopeUnresolved
+	}
+	body, has := node["effect"]
+	if !has {
+		return scopeUnresolved
+	}
+	translated := translateEffect(body, source, context, perspective)
+	if len(translated.applied) > 0 || len(translated.activatable) > 0 {
+		return scopeUnresolved
+	}
+	scope := scopeOut
+	for _, inner := range translated.unsupported {
+		if im, ok := inner.(map[string]any); ok {
+			scope = widerScope(scope, scopeOf(im, source, context, perspective, depth+1))
+		}
+	}
+	return scope
+}
+
+func translateEffect(effect any, source map[string]any, context map[string]any, perspective string, activation ...map[string]any) *effectTranslation {
 	out := &effectTranslation{applied: []any{}, unsupported: []any{}, activatable: []any{}}
 	if recipientSnapshotUnavailable(nil, effect) {
 		resolved, reason := resolveRecipientSnapshots(nil, effect, source, context, perspective)
@@ -386,6 +429,8 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 		enumerateChoice(n, source, opts, out)
 	case "dice-gated":
 		out.unsupported = append(out.unsupported, unsup(stochasticDiceGatedReason, n))
+	case "dice-table":
+		translateDiceTable(n, source, opts, out)
 	case "dice-pool-allocation":
 		enumerateDicePool(n, source, opts, out)
 	case "roll":
@@ -1462,6 +1507,13 @@ func translateReroll(node, source map[string]any, opts dslOpts, out *effectTrans
 	}
 	damagePath := roll == "hit" || roll == "wound" || roll == "save" || roll == "damage"
 	applicability := combineOptional(attackTypeApplicability(modifier), weaponApplicability(modifier))
+	// Re-rolling a random Attacks characteristic: the engine re-rolls each model's dice below the mean.
+	if _, capped := modifier["count"]; roll == "attacks" && !capped && (subset == "ones" || subset == "all-failures") {
+		if opts.perspective == "attacker" {
+			out.applied = append(out.applied, withApplicability(map[string]any{"source": source, "contribution": map[string]any{"type": "reroll", "roll": roll, "subset": subset}}, applicability))
+		}
+		return
+	}
 	// "Re-roll one Hit roll": one die across the pool, which the engine prices
 	// (oneRerollDice). A larger finite permission is non-linear in a way the
 	// engine does not model; applying it as an uncapped reroll would silently
@@ -1478,7 +1530,11 @@ func translateReroll(node, source map[string]any, opts dslOpts, out *effectTrans
 		out.applied = append(out.applied, withApplicability(map[string]any{"source": source, "contribution": map[string]any{"type": "reroll", "roll": roll, "subset": subset}}, applicability))
 		return
 	}
-	out.unsupported = append(out.unsupported, unsup("re-roll on \""+rollLabel(modifier["roll"])+"\" (subset \""+jsStr(modifier["subset"])+"\") is outside the damage path", node))
+	subsetLabel := subset
+	if subsetLabel == "" {
+		subsetLabel = jsStr(modifier["subset"])
+	}
+	out.unsupported = append(out.unsupported, unsup("re-roll on \""+rollLabel(modifier["roll"])+"\" (subset \""+subsetLabel+"\") is outside the damage path", node))
 }
 
 func translateRollModifier(node, source map[string]any, opts dslOpts, out *effectTranslation) {
@@ -3232,4 +3288,48 @@ func evaluateUnitWargear(params map[string]any, ctx map[string]any, perspective 
 		return false
 	}
 	return true
+}
+
+// diceTableReason is the reason a dice table's outcomes with no damage content are reported under.
+const diceTableReason = `effect type "dice-table" is not modelled by the buff layer`
+
+// translateDiceTable handles a rolled table. Each outcome that could change the attack is gated on
+// a generated `dice-table-result` leaf naming the ability, the dice and the outcome's results: the
+// roll is a fact of the game, so the leaf is undecided until the caller answers it in
+// conditionFacts, and an unanswered outcome applies nothing. The outcomes with no damage content
+// are reported together, as the table restricted to them.
+func translateDiceTable(node, source map[string]any, opts dslOpts, out *effectTranslation) {
+	var outcomes []map[string]any
+	for _, o := range getList(node, "outcomes") {
+		if om, ok := asMap(o); ok && om != nil {
+			outcomes = append(outcomes, om)
+		}
+	}
+	if _, isStr := node["dice"].(string); len(outcomes) == 0 || !isStr {
+		out.unsupported = append(out.unsupported, unsup(diceTableReason, node))
+		return
+	}
+	var rest []any
+	for _, outcome := range outcomes {
+		effect, has := outcome["effect"]
+		if !has {
+			effect = nil
+		}
+		if effectScope(effect) != scopeUnresolved {
+			rest = append(rest, outcome)
+			continue
+		}
+		condition := map[string]any{"type": "dice-table-result", "parameters": map[string]any{"ability": opts.abilityID, "dice": node["dice"], "results": outcome["results"]}}
+		translateConditional(map[string]any{"type": "conditional", "condition": condition, "effect": outcome["effect"]}, source, opts, out)
+	}
+	if len(rest) == 0 {
+		return
+	}
+	fragment := any(node)
+	if len(rest) != len(outcomes) {
+		restricted := cloneMap(node)
+		restricted["outcomes"] = rest
+		fragment = restricted
+	}
+	out.unsupported = append(out.unsupported, unsup(diceTableReason, fragment))
 }

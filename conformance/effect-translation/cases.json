@@ -39064,6 +39064,74 @@
     }
   },
   {
+    "caseId": "fidelity/dice-table-result-run",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "dice-table-result",
+        "parameters": {
+          "ability": "fabricated-barrier",
+          "dice": "D6",
+          "results": [
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        }
+      },
+      "effect": {
+        "type": "invulnerable-save",
+        "target": "this-unit",
+        "modifier": {
+          "invuln_sv": 4
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "If the D6 roll is 2-6, when resolving this use, the unit has a 4+ invulnerable save."
+    }
+  },
+  {
+    "caseId": "fidelity/dice-table-result-negated-list",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "dice-table-result",
+            "parameters": {
+              "ability": "fabricated-barrier",
+              "dice": "D6",
+              "results": [
+                1,
+                3
+              ]
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "cp-gain",
+        "target": "this-model",
+        "modifier": {
+          "amount": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "Unless the D6 roll is 1 or 3, when resolving this use, you gain 1CP."
+    }
+  },
+  {
     "caseId": "fidelity/move-modifier-mode-choice-named-beside-clause",
     "effect": {
       "type": "move-modifier",

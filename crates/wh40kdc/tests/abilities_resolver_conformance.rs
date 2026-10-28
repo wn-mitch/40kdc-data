@@ -156,6 +156,20 @@ fn run_dsl_corpus(filename: &str) {
                 json!(reasons)
             ));
         }
+        // Each fragment's scope, parallel to the reasons, pinned on the rows that carry it.
+        if let Some(want) = expected.get("unsupportedScopes") {
+            let got: Vec<Value> = result
+                .unsupported
+                .iter()
+                .map(|u| serde_json::to_value(u.scope).unwrap())
+                .collect();
+            if json!(got) != *want {
+                failures.push(format!(
+                    "{label} unsupportedScopes\n  want: {want}\n  got:  {}",
+                    json!(got)
+                ));
+            }
+        }
         // Each undecided condition's need keys, in order across every unsupported entry.
         let need_keys: Vec<&str> = result
             .unsupported

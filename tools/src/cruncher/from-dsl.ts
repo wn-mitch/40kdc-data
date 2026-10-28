@@ -50,6 +50,7 @@ import { RECIPIENT_SNAPSHOT_UNAVAILABLE, resolveRecipientSnapshots } from "./rec
 import { resolveNamedWeaponBindings } from "./weapon-bindings.js";
 import { conditionFactKey, conditionNeeds, type ConditionNeed } from "./condition-facts.js";
 import { quantityDistribution } from "./damage-roll.js";
+import { effectScope, fragmentScope, UNDECIDED_CONDITION, widerScope, type UnsupportedScope } from "./unsupported-scope.js";
 
 /** A fragment we couldn't translate. The SPA can render these as warnings. */
 export type UnsupportedFragment = {
@@ -60,6 +61,11 @@ export type UnsupportedFragment = {
    * {@link EngineContext.conditionFacts} decides the condition.
    */
   needs?: ConditionNeed[];
+  /**
+   * Whether the fragment could change the attack being crunched ({@link UnsupportedScope}). Every
+   * fragment {@link effectToBuffs} returns carries it.
+   */
+  scope?: UnsupportedScope;
 };
 
 const stochasticDiceGatedReason = "dice-gated effect: stochastic; not expressible as a buff";
@@ -219,13 +225,43 @@ const DEFENDER_TARGETS = new Set(["defender"]);
 /**
  * Walk an ability DSL `effect` tree and produce the buff stack it contributes
  * against `context` from the given `perspective`, plus an `unsupported` list
- * naming any branches the buff layer can't express today.
+ * naming any branches the buff layer can't express today, each with its scope.
  */
 export function effectToBuffs(
   effect: unknown,
   source: BuffSource,
   context: EngineContext,
   perspective: TranslationPerspective = "attacker",
+  activation?: { usage?: unknown; cost?: unknown; optional?: boolean; duration?: unknown },
+): EffectTranslation {
+  const out = translateEffect(effect, source, context, perspective, activation);
+  for (const fragment of out.unsupported) fragment.scope = scopeOf(fragment, source, context, perspective, 0);
+  return out;
+}
+
+/** How deep an undecided condition's body is translated to find its scope. */
+const SCOPE_DEPTH = 4;
+
+/**
+ * The scope of a fragment. An undecided condition matters only as much as what it gates: its body
+ * is translated as if the condition held, and a body that yields no buff or lever takes the widest
+ * scope of its own fragments; a body that could change the attack keeps the condition unresolved.
+ */
+function scopeOf(fragment: UnsupportedFragment, source: BuffSource, context: EngineContext, perspective: TranslationPerspective, depth: number): UnsupportedScope {
+  if (!UNDECIDED_CONDITION.test(fragment.reason)) return fragmentScope(fragment.reason, fragment.effectFragment, POST_ATTACK_MOMENT);
+  const node = fragment.effectFragment as { type?: unknown; effect?: unknown } | null;
+  if (depth >= SCOPE_DEPTH || !isObject(node) || node.type !== "conditional" || node.effect === undefined) return "unresolved";
+  const body = translateEffect(node.effect, source, context, perspective);
+  if (body.applied.length > 0 || body.activatable.length > 0) return "unresolved";
+  return body.unsupported.reduce<UnsupportedScope>(
+    (scope, inner) => widerScope(scope, scopeOf(inner, source, context, perspective, depth + 1)), "out-of-scope");
+}
+
+function translateEffect(
+  effect: unknown,
+  source: BuffSource,
+  context: EngineContext,
+  perspective: TranslationPerspective,
   activation?: { usage?: unknown; cost?: unknown; optional?: boolean; duration?: unknown },
 ): EffectTranslation {
   const out: EffectTranslation = { applied: [], unsupported: [], activatable: [] };
@@ -450,6 +486,9 @@ function walk(
         reason: stochasticDiceGatedReason,
         effectFragment: currentNode,
       });
+      return;
+    case "dice-table":
+      translateDiceTable(currentNode, source, opts, out);
       return;
     case "dice-pool-allocation":
       enumerateDicePool(currentNode, source, opts, out);
@@ -720,6 +759,11 @@ function translateReroll(
   // Under target perspective, only "save" rerolls fire on the buffed unit.
   if (opts.perspective === "target" && roll !== "save") return;
   const damagePath = roll === "hit" || roll === "wound" || roll === "save" || roll === "damage";
+  // Re-rolling a random Attacks characteristic: the engine re-rolls each model's dice below the mean.
+  if (roll === "attacks" && modifier.count === undefined && (subset === "ones" || subset === "all-failures")) {
+    if (opts.perspective === "attacker") out.applied.push(withApplicability({ source, contribution: { type: "reroll", roll, subset } }, combineOptional(attackTypeApplicability(modifier), weaponApplicability(modifier))));
+    return;
+  }
   // "Re-roll one Hit roll": one die across the pool, which the engine prices (engine.ts oneRerollDice).
   // A larger finite permission is non-linear in a way the engine does not model; applying it as an
   // uncapped reroll would silently overstate the effect.
@@ -1593,6 +1637,31 @@ function translateConditional(
   }
   if (!verdict) return;
   walk(effect, source, opts, out);
+}
+
+/** The reason a dice table's outcomes with no damage content are reported under. */
+const DICE_TABLE_REASON = 'effect type "dice-table" is not modelled by the buff layer';
+
+/**
+ * A rolled table. Each outcome that could change the attack is gated on a generated
+ * `dice-table-result` leaf naming the ability, the dice and the outcome's results: the roll is a
+ * fact of the game, so the leaf is undecided until the caller answers it in
+ * {@link EngineContext.conditionFacts}, and an unanswered outcome applies nothing. The outcomes with
+ * no damage content are reported together, as the table restricted to them.
+ */
+function translateDiceTable(node: Record<string, unknown>, source: BuffSource, opts: WalkOpts, out: EffectTranslation): void {
+  const outcomes = Array.isArray(node.outcomes) ? node.outcomes.filter(isObject) : [];
+  if (outcomes.length === 0 || typeof node.dice !== "string") {
+    out.unsupported.push({ reason: DICE_TABLE_REASON, effectFragment: node });
+    return;
+  }
+  const rest = outcomes.filter((outcome) => effectScope(outcome.effect ?? null) !== "unresolved");
+  for (const outcome of outcomes) {
+    if (rest.includes(outcome)) continue;
+    const condition = { type: "dice-table-result", parameters: { ability: opts.abilityId, dice: node.dice, results: outcome.results } };
+    translateConditional({ type: "conditional", condition, effect: outcome.effect }, source, opts, out);
+  }
+  if (rest.length > 0) out.unsupported.push({ reason: DICE_TABLE_REASON, effectFragment: rest.length === outcomes.length ? node : { ...node, outcomes: rest } });
 }
 
 /**

@@ -166,6 +166,7 @@ def test_activation_diagnostic_names_the_leaf_not_the_moment_gate() -> None:
         {
             "reason": "activation condition cannot be evaluated against current context",
             "effectFragment": part,
+            "scope": "unresolved",
             "needs": [
                 {
                     "key": condition_fact_key(condition, "attacker"),

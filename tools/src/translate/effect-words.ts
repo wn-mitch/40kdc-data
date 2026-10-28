@@ -427,3 +427,13 @@ export function rollKindNoun(kind: unknown): string {
   const name = rollName(kind);
   return `${/^[aeiou]/i.test(name) ? "an" : "a"} ${name} ${typeof kind === "string" && TEST_KINDS.has(kind) ? "test" : "roll"}`;
 }
+
+/** A dice table outcome's results: a run of faces as "2-6", others listed ("1, 3"). */
+export function diceTableResultLabel(results: unknown): string {
+  if (!Array.isArray(results)) return "";
+  const faces = results.filter((value): value is number => typeof value === "number").sort((a, b) => a - b);
+  if (faces.length > 1 && faces.every((face, index) => index === 0 || face === faces[index - 1] + 1)) {
+    return `${faces[0]}-${faces[faces.length - 1]}`;
+  }
+  return faces.join(", ");
+}

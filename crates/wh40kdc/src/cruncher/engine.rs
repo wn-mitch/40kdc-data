@@ -16,6 +16,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
 use super::attack_compare::has_attack_comparison;
+use super::buffs::RerollSubset;
 use super::buffs::{
     resolve_buffs, Buff, EngineContext, FeelNoPainState, ResolvedModifiers, ThresholdState,
     WeaponKeywordRef,
@@ -143,6 +144,8 @@ pub struct AttackModel {
     pub models_firing: u64,
     /// One model's Attacks characteristic, before the flat additions below.
     pub attacks_stat: Value,
+    /// A re-roll of the Attacks dice, kept when at or above a fresh roll's mean.
+    pub attacks_reroll: Option<RerollSubset>,
     /// Flat attacks every model adds: the modifier and Blast.
     pub attacks_bonus: f64,
     /// Rapid Fire's extra attacks per model when active, else `None`.
@@ -369,7 +372,21 @@ pub fn crunch_model(
     // 1. Attacks
     let is_melee = is_melee_profile(weapon_profile);
     // A set characteristic replaces the profile's before any modifier applies.
-    let base_a = set_or_stat(&resolved.stat_set.a, &weapon_profile.stats.a)?;
+    // A re-roll of the Attacks dice keeps each roll at or above a fresh roll's mean.
+    let attacks_reroll = resolved.rerolls.attacks.as_ref().map(|r| r.subset);
+    let base_a = match (&resolved.stat_set.a, attacks_reroll) {
+        (None, Some(reroll)) => {
+            damage_roll(&DamageRollInput {
+                stat: &weapon_profile.stats.a,
+                bonus: 0.0,
+                modifier: 0.0,
+                reduction: 0.0,
+                reroll: Some(reroll),
+            })?
+            .expected
+        }
+        _ => set_or_stat(&resolved.stat_set.a, &weapon_profile.stats.a)?,
+    };
     let attacks_per_model = base_a + resolved.attacks_mod.value;
     let rapid_fire = find_extra_keyword(&resolved, "rapid-fire");
     let half_range = ctx.within_half_range == Some(true);
@@ -397,12 +414,26 @@ pub fn crunch_model(
     stages.push(Stage {
         name: StageName::Attacks,
         expected: attacks,
-        detail: attacks_detail(
-            models_firing,
-            attacks_per_model,
-            rapid_fire_extra_per_model,
-            blast_extra_per_model,
-        ),
+        detail: {
+            let mut detail = attacks_detail(
+                models_firing,
+                attacks_per_model,
+                rapid_fire_extra_per_model,
+                blast_extra_per_model,
+            );
+            if let (None, Some(reroll), StatValue::DiceExpression(dice)) = (
+                &resolved.stat_set.a,
+                attacks_reroll,
+                &weapon_profile.stats.a,
+            ) {
+                let subset = match reroll {
+                    RerollSubset::Ones => "ones",
+                    RerollSubset::AllFailures => "all-failures",
+                };
+                detail.push_str(&format!("; reroll {subset} of A {}", &**dice));
+            }
+            detail
+        },
     });
 
     // 2. Hits
@@ -1036,6 +1067,7 @@ pub fn crunch_model(
             || stat_to_value(&weapon_profile.stats.a),
             |set| Value::from(set.value as u64),
         ),
+        attacks_reroll: attacks_reroll.filter(|_| resolved.stat_set.a.is_none()),
         attacks_bonus: resolved.attacks_mod.value + blast_extra_per_model,
         rapid_fire_stat: rapid_fire
             .filter(|_| half_range)

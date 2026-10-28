@@ -85,7 +85,8 @@ pub struct WeaponKeywordRef {
     pub parameters: Option<Value>,
 }
 
-/// Which die-roll a buff modifies. Matches TS `"hit" | "wound" | "save" | "damage"`.
+/// Which die-roll a buff modifies. Matches TS `"hit" | "wound" | "save" | "damage" | "attacks"`;
+/// `Attacks` occurs only in a re-roll (of a random Attacks characteristic's dice).
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "kebab-case")]
 pub enum RollKind {
@@ -93,6 +94,7 @@ pub enum RollKind {
     Wound,
     Save,
     Damage,
+    Attacks,
 }
 
 /// The attacker's own rolls a crit threshold or an ignored-modifier buff applies to.
@@ -619,6 +621,7 @@ fn merge_reroll(
         RollKind::Wound => &mut rerolls.wound,
         RollKind::Save => &mut rerolls.save,
         RollKind::Damage => &mut rerolls.damage,
+        RollKind::Attacks => &mut rerolls.attacks,
     };
     match slot {
         None => {

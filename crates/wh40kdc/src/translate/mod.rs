@@ -23,8 +23,8 @@ pub use condition::{
 pub(crate) use effect::dice_case;
 pub use effect::{
     describe_ability, describe_ability_parts, describe_ability_parts_with_optional,
-    describe_applies_to, describe_effect, describe_effect_inline, describe_effect_with_scope,
-    describe_scope,
+    describe_ability_value_with_optional, describe_applies_to, describe_effect,
+    describe_effect_inline, describe_effect_with_scope, describe_scope,
 };
 pub use trigger::describe_trigger_value;
 
