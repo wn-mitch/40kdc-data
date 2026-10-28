@@ -492,12 +492,32 @@ const eventSubject = "event-subject"
 // effect never reaches the buffed unit.
 const otherUnit = "other-unit"
 
+// ownedMoments are the moments a unit makes itself; one that names no subject is the
+// ability's own unit's (the DSL's default).
+var ownedMoments = map[string]bool{
+	"selected": true, "move-started": true, "move-ended": true, "targets-selected": true, "attacks-resolved": true,
+}
+
+// triggerSubject is who acts in a trigger: its subject, else `this-unit` for a unit's
+// own moment; clock and destruction events have none. Mirror of triggerSubject in
+// tools/src/cruncher/from-dsl-selection.ts.
+func triggerSubject(trigger map[string]any) any {
+	if subject := trigger["subject"]; subject != nil {
+		return subject
+	}
+	if event, ok := trigger["event"].(string); ok && ownedMoments[event] {
+		return "this-unit"
+	}
+	return nil
+}
+
 // bindEventSubject binds `event-subject` effects when the trigger says who acts.
-// `this-unit` names the ability's own unit. A friendly unit filter the buffed unit
-// matches names the buffed unit; one it fails names another unit. Seen from the
-// target, an enemy unit filter the attacker matches names the attacker (the enemy
-// whose action fired the trigger is the one attacking); one it fails names another
-// unit. The binding is left in place when the subject is absent, an enemy seen from
+// `this-unit` names the ability's own unit, as does an absent subject on a unit's own
+// moment (triggerSubject). A friendly unit filter the buffed unit matches names the
+// buffed unit; one it fails names another unit. Seen from the target, an enemy unit
+// filter the attacker matches names the attacker (the enemy whose action fired the
+// trigger is the one attacking); one it fails names another unit. The binding is left
+// in place when a clock or destruction event names no subject, an enemy seen from
 // the attacker, differs across alternative triggers, or cannot be checked, so the
 // translator reports it. A nested ability part with its own trigger binds its own
 // subject. changed reports whether any
@@ -517,9 +537,9 @@ func bindEventSubject(trigger, effect any, context map[string]any, perspective s
 	if len(triggers) == 0 {
 		return effect, false
 	}
-	subject := triggers[0]["subject"]
+	subject := triggerSubject(triggers[0])
 	for _, item := range triggers {
-		if !jsonEqual(item["subject"], subject) {
+		if !jsonEqual(triggerSubject(item), subject) {
 			return effect, false
 		}
 	}

@@ -6,6 +6,7 @@ import type { Trigger, UnitSelector } from "./generated.js";
 export const RECIPIENT_CASE_PREFIX = "canonical/recipient-snapshot/";
 export const HALF_WEAPON_RANGE_CASE_PREFIX = "canonical/half-weapon-range/";
 export const SCENARIO_CASE_PREFIX = "canonical/scenario/";
+export const TRIGGER_SUBJECT_CASE_PREFIX = "canonical/trigger-subject/";
 
 export interface DslInput {
   caseId: string;
@@ -55,6 +56,32 @@ export function canonicalRecipientCases() {
   add("recipient-relative-ap-ws-bs", [snapshot], { effect: { ...effect, effect: { ...pool, effect: { type: "sequence", steps: ["AP", "WS", "BS"].map((stat) => ({
     type: "stat-modifier", target: "recipient", modifier: { stat, operation: "improve", value: 1 },
   })) } } } });
+  return cases.map((row) => {
+    const result = effectToBuffs(row.effect, row.source, row.context, row.perspective);
+    return { ...row, expected: {
+      applied: result.applied.map((buff) => buff.contribution),
+      unsupportedReasons: result.unsupported.map((item) => item.reason),
+      activatable: result.activatable.map((lever) => ({
+        id: lever.id, label: lever.label, group: lever.group ?? null,
+        requires: lever.requires ?? null, capRaise: lever.capRaise ?? null,
+        ...stanceOptionFields(lever),
+        buffs: lever.buffs.map((buff) => buff.contribution),
+      })),
+    } };
+  });
+}
+
+/**
+ * Fabricated moments with no `subject`: a unit's own moment (selected to shoot) is the ability's own
+ * unit's, so `event-subject` binds to it; a clock moment (start of phase) names no unit and stays unbound.
+ */
+export function canonicalTriggerSubjectCases() {
+  const source = { kind: "ability", abilityId: "trigger-subject-example", abilityKind: "unit" } as const;
+  const grant = { type: "weapon-ability-grant", target: "event-subject", modifier: { keywords: [{ keyword_id: "sustained-hits", parameters: { value: 1 } }] } };
+  const cases: DslInput[] = [
+    { caseId: `${TRIGGER_SUBJECT_CASE_PREFIX}owned-moment-defaults-to-this-unit`, effect: { type: "ability-part", trigger: { event: "selected", filter: { to: "shoot" } }, effect: grant } },
+    { caseId: `${TRIGGER_SUBJECT_CASE_PREFIX}clock-moment-stays-unbound`, effect: { type: "ability-part", trigger: { event: "phase-started", condition: { type: "phase-is", parameters: { phase: "shooting" } } }, effect: grant } },
+  ].map((row) => ({ ...row, abilityId: source.abilityId, source, context: { phase: "shooting" }, perspective: "attacker" as const }));
   return cases.map((row) => {
     const result = effectToBuffs(row.effect, row.source, row.context, row.perspective);
     return { ...row, expected: {

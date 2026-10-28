@@ -377,16 +377,35 @@ _EVENT_SUBJECT = "event-subject"
 OTHER_UNIT = "other-unit"
 
 
+#: Moments a unit makes itself; one that names no subject is the ability's own unit's (the
+#: DSL's default).
+_OWNED_MOMENTS = frozenset(
+    {"selected", "move-started", "move-ended", "targets-selected", "attacks-resolved"}
+)
+
+
+def _trigger_subject(trigger: dict[str, Any]) -> Any:
+    """Who acts in a trigger: its subject, else ``this-unit`` for a unit's own moment.
+
+    Clock and destruction events have none. Mirrors TS ``triggerSubject``.
+    """
+    subject = trigger.get("subject")
+    if subject is not None:
+        return subject
+    return "this-unit" if trigger.get("event") in _OWNED_MOMENTS else None
+
+
 def bind_event_subject(
     trigger: Any, effect: Any, context: EngineContext, perspective: str
 ) -> Any:
     """Bind ``event-subject`` effects when the trigger says who acts.
 
-    ``this-unit`` names the ability's own unit. A friendly unit filter the buffed unit matches
-    names the buffed unit; one it fails names another unit. Seen from the target, an enemy unit
-    filter the attacker matches names the attacker (the enemy whose action fired the trigger is
-    the one attacking); one it fails names another unit. The binding is left in place when the
-    subject is absent, an enemy seen from the attacker, differs across alternative triggers, or
+    ``this-unit`` names the ability's own unit, as does an absent subject on a unit's own moment
+    (:func:`_trigger_subject`). A friendly unit filter the buffed unit matches names the buffed
+    unit; one it fails names another unit. Seen from the target, an enemy unit filter the
+    attacker matches names the attacker (the enemy whose action fired the trigger is the one
+    attacking); one it fails names another unit. The binding is left in place when a clock or
+    destruction event names no subject, an enemy seen from the attacker, differs across alternative triggers, or
     cannot be checked, so the translator reports it. A nested ability part with its own trigger
     binds its own subject.
     Returns ``effect`` itself when nothing is rebound.
@@ -399,8 +418,8 @@ def bind_event_subject(
     ]
     if not triggers:
         return effect
-    subject = triggers[0].get("subject")
-    if any(item.get("subject") != subject for item in triggers):
+    subject = _trigger_subject(triggers[0])
+    if any(_trigger_subject(item) != subject for item in triggers):
         return effect
     if subject == "this-unit":
         return _rebind_event_subject(effect, "this-unit")

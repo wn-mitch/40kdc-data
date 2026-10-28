@@ -236,11 +236,35 @@ const EVENT_SUBJECT: &str = "event-subject";
 /// unit.
 const OTHER_UNIT: &str = "other-unit";
 
+/// Moments a unit makes itself; one that names no subject is the ability's own unit's (the DSL's
+/// default).
+const OWNED_MOMENTS: [&str; 5] = [
+    "selected",
+    "move-started",
+    "move-ended",
+    "targets-selected",
+    "attacks-resolved",
+];
+
+/// Who acts in a trigger: its subject, else `this-unit` for a unit's own moment; clock and
+/// destruction events have none. Mirrors TS `triggerSubject`.
+fn trigger_subject(trigger: &Obj) -> Option<Value> {
+    match trigger.get("subject") {
+        Some(subject) if !subject.is_null() => Some(subject.clone()),
+        _ => trigger
+            .get("event")
+            .and_then(Value::as_str)
+            .filter(|event| OWNED_MOMENTS.contains(event))
+            .map(|_| Value::from("this-unit")),
+    }
+}
+
 /// Bind `event-subject` effects when the trigger says who acts. `this-unit` names the ability's
-/// own unit. A friendly unit filter the buffed unit matches names the buffed unit; one it fails
-/// names another unit. Seen from the target, an enemy unit filter the attacker matches names the
-/// attacker (the enemy whose action fired the trigger is the one attacking); one it fails names
-/// another unit. The binding is left in place (`None`) when the subject is absent, an enemy seen
+/// own unit, as does an absent subject on a unit's own moment (`trigger_subject`). A friendly unit
+/// filter the buffed unit matches names the buffed unit; one it fails names another unit. Seen
+/// from the target, an enemy unit filter the attacker matches names the attacker (the enemy whose
+/// action fired the trigger is the one attacking); one it fails names another unit. The binding is
+/// left in place (`None`) when a clock or destruction event names no subject, an enemy seen
 /// from the attacker, differs across alternative triggers, or cannot be checked, so the
 /// translator reports it. A nested ability part with its own trigger binds its own subject. Mirrors TS
 /// `bindEventSubject`; `Some` carries the rebound effect only when a target changed.
@@ -256,10 +280,11 @@ pub(crate) fn bind_event_subject(
         }
         other => object(other).into_iter().collect(),
     };
-    let subject = triggers.first()?.get("subject");
-    if triggers.iter().any(|item| item.get("subject") != subject) {
+    let subject = trigger_subject(triggers.first()?);
+    if triggers.iter().any(|item| trigger_subject(item) != subject) {
         return None;
     }
+    let subject = subject.as_ref();
     if subject.and_then(Value::as_str) == Some("this-unit") {
         return rebind_event_subject(effect, "this-unit");
     }

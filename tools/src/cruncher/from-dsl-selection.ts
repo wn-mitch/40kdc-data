@@ -173,12 +173,21 @@ const EVENT_SUBJECT = "event-subject";
 /** Internal binding: the event's subject is another unit, so the effect never reaches the buffed unit. */
 export const OTHER_UNIT = "other-unit";
 
+/** Moments a unit makes itself; one that names no subject is the ability's own unit's (the DSL's default). */
+const OWNED_MOMENTS = new Set(["selected", "move-started", "move-ended", "targets-selected", "attacks-resolved"]);
+
+/** Who acts in a trigger: its subject, else `this-unit` for a unit's own moment; clock and destruction events have none. */
+function triggerSubject(trigger: Record<string, unknown>): unknown {
+  return trigger.subject ?? (typeof trigger.event === "string" && OWNED_MOMENTS.has(trigger.event) ? "this-unit" : undefined);
+}
+
 /**
  * Bind `event-subject` effects when the trigger says who acts. `this-unit` names the ability's
- * own unit. A friendly unit filter the buffed unit matches names the buffed unit; one it fails
- * names another unit. Seen from the target, an enemy unit filter the attacker matches names the
- * attacker (the enemy whose action fired the trigger is the one attacking); one it fails names
- * another unit. The binding is left in place when the subject is absent, an enemy seen from the
+ * own unit, as does an absent subject on a unit's own moment ({@link triggerSubject}). A friendly
+ * unit filter the buffed unit matches names the buffed unit; one it fails names another unit.
+ * Seen from the target, an enemy unit filter the attacker matches names the attacker (the enemy
+ * whose action fired the trigger is the one attacking); one it fails names another unit. The
+ * binding is left in place when a clock or destruction event names no subject, an enemy seen from the
  * attacker, differs across alternative triggers, or cannot be checked, so the translator reports
  * it. A nested ability part with its own trigger binds its own subject.
  */
@@ -190,8 +199,8 @@ export function bindEventSubject(
 ): unknown {
   const triggers = (Array.isArray(trigger) ? trigger : [trigger]).filter(isObject);
   if (triggers.length === 0) return effect;
-  const subject = triggers[0]!.subject;
-  if (triggers.some((item) => JSON.stringify(item.subject) !== JSON.stringify(subject))) return effect;
+  const subject = triggerSubject(triggers[0]!);
+  if (triggers.some((item) => JSON.stringify(triggerSubject(item)) !== JSON.stringify(subject))) return effect;
   if (subject === "this-unit") return rebindEventSubject(effect, "this-unit");
   if (isObject(subject) && subject.owner === "enemy" && perspective === "target") {
     const attacker = matchesUnitFilter(subject, context, "attacker", "enemy");
@@ -214,8 +223,8 @@ export function assumeEventSubjectMatches(trigger: unknown, effect: unknown): { 
   const triggers = (Array.isArray(trigger) ? trigger : [trigger]).filter(isObject);
   const unbound = { effect, perspective: "attacker" as const };
   if (triggers.length === 0) return unbound;
-  const subject = triggers[0]!.subject;
-  if (triggers.some((item) => JSON.stringify(item.subject) !== JSON.stringify(subject))) return unbound;
+  const subject = triggerSubject(triggers[0]!);
+  if (triggers.some((item) => JSON.stringify(triggerSubject(item)) !== JSON.stringify(subject))) return unbound;
   if (subject === "this-unit") return { effect: rebindEventSubject(effect, "this-unit"), perspective: "attacker" };
   if (!isObject(subject)) return unbound;
   if (subject.owner === "enemy") return { effect: rebindEventSubject(effect, "attacker"), perspective: "target" };
