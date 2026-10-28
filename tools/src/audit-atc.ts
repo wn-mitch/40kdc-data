@@ -7,6 +7,13 @@
  * violations should be rare and real, and every cluster (the same `code:unitId`
  * across many independent players) is a data or checker bug, not mass cheating.
  *
+ * The lists were built under the game data current at the event, not the data
+ * this repo holds now. Once a later MFM dataslate changes compositions, wargear
+ * or names, lists it makes illegal or unresolvable are expected drift, not bugs.
+ * A cluster is a bug only when the current MFM dump allows what the checker
+ * rejects; refresh the baseline after a data drop rather than chasing old-patch
+ * lists.
+ *
  * Reports:
  *   - `data/_audit/atc-legality.md`   — human triage report
  *   - `data/_audit/atc-legality.json` — machine-readable, doubles as the
@@ -560,6 +567,11 @@ function renderMarkdown(report: AtcAuditReport): string {
     "the loadout-grouping classifier. The corpus is the accuracy baseline: violations",
     "should be rare and real — a `code:unitId` cluster across many independent players",
     "is a data or checker bug, not mass cheating.",
+    "",
+    "The lists follow the game data current at their event. After a later MFM",
+    "dataslate, violations and unresolved names that dataslate introduces are expected",
+    "drift; a cluster is a bug only when the current MFM dump allows what the checker",
+    "rejects.",
   );
   lines.push("");
   lines.push("## Headline");
