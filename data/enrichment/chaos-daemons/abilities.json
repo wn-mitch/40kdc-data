@@ -1400,24 +1400,19 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "841298ec31341f57477040cffc42209a547cecbe75c918c12f9a326d78251cd9",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "not",
-        "operands": [
-          {
-            "type": "happened",
-            "parameters": {
-              "event": "destroyed",
-              "window": "event",
-              "object": "this-unit"
-            }
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "state": "on-battlefield"
           }
-        ]
+        }
       },
       "effect": {
         "type": "dice-gated",
@@ -1432,24 +1427,21 @@
               "condition": {
                 "type": "matches",
                 "parameters": {
+                  "subject": "event-object",
                   "filter": {
                     "all_of": [
-                      "PINK HORROR"
+                      "PINK"
                     ]
                   }
                 }
               },
               "effect": {
-                "type": "return-models",
-                "target": {
-                  "member_of": "this-unit",
-                  "level": "model",
-                  "all_of": [
-                    "BLUE HORROR"
-                  ]
-                },
+                "type": "add-unit",
+                "target": "this-unit",
                 "modifier": {
-                  "count": 2
+                  "datasheet": "blue-horrors",
+                  "model_count": 2,
+                  "join": "this-unit"
                 }
               }
             },
@@ -1458,33 +1450,31 @@
               "condition": {
                 "type": "matches",
                 "parameters": {
+                  "subject": "event-object",
                   "filter": {
                     "all_of": [
-                      "BLUE HORROR"
+                      "BLUE"
                     ]
                   }
                 }
               },
               "effect": {
-                "type": "return-models",
-                "target": {
-                  "member_of": "this-unit",
-                  "level": "model",
-                  "all_of": [
-                    "BRIMSTONE HORROR"
-                  ]
-                },
+                "type": "add-unit",
+                "target": "this-unit",
                 "modifier": {
-                  "count": 1
+                  "datasheet": "brimstone-horrors",
+                  "model_count": 1,
+                  "join": "this-unit"
                 }
               }
             }
           ]
-        }
+        },
+        "on_fail": null
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "unit_ids": [
       "pink-horrors"
@@ -1493,7 +1483,19 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
-      "event": "attacks-resolved"
+      "event": "model-destroyed",
+      "object": {
+        "owner": "friendly",
+        "any_of": [
+          "BLUE HORROR",
+          "PINK HORROR"
+        ],
+        "level": "model",
+        "member_of": "this-unit"
+      },
+      "filter": {
+        "timing": "after-attacks"
+      }
     },
     "faction_id": "chaos-daemons"
   },
@@ -11156,25 +11158,20 @@
       "duration": "permanent"
     },
     "behavior": "reactive",
-    "trigger": [
-      {
-        "event": "model-destroyed",
-        "object": {
-          "owner": "friendly",
-          "all_of": [
-            "BLUE HORROR"
-          ],
-          "level": "model",
-          "member_of": "this-unit"
-        }
+    "trigger": {
+      "event": "model-destroyed",
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "BLUE HORROR"
+        ],
+        "level": "model",
+        "member_of": "this-unit"
       },
-      {
-        "event": "attacks-resolved",
-        "subject": {
-          "owner": "enemy"
-        }
+      "filter": {
+        "timing": "after-attacks"
       }
-    ],
+    },
     "source_digest": "91e0898a7a1ca3e9aa3dc2866fa00a7da9fb031c0e020354ad6163efe9535d8f"
   },
   {

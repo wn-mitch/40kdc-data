@@ -10723,9 +10723,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "pink-horrors"
     ],
@@ -10733,11 +10732,94 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "state": "on-battlefield"
+          }
+        }
+      },
+      "effect": {
+        "type": "dice-gated",
+        "dice": "D6",
+        "threshold": 4,
+        "comparison": "gte",
+        "on_success": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "event-object",
+                  "filter": {
+                    "all_of": [
+                      "PINK"
+                    ]
+                  }
+                }
+              },
+              "effect": {
+                "type": "add-unit",
+                "target": "this-unit",
+                "modifier": {
+                  "datasheet": "blue-horrors",
+                  "model_count": 2,
+                  "join": "this-unit"
+                }
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "event-object",
+                  "filter": {
+                    "all_of": [
+                      "BLUE"
+                    ]
+                  }
+                }
+              },
+              "effect": {
+                "type": "add-unit",
+                "target": "this-unit",
+                "modifier": {
+                  "datasheet": "brimstone-horrors",
+                  "model_count": 1,
+                  "join": "this-unit"
+                }
+              }
+            }
+          ]
+        },
+        "on_fail": null
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "model-destroyed",
+      "object": {
+        "owner": "friendly",
+        "any_of": [
+          "BLUE HORROR",
+          "PINK HORROR"
+        ],
+        "level": "model",
+        "member_of": "this-unit"
+      },
+      "filter": {
+        "timing": "after-attacks"
+      }
+    },
+    "source_digest": "841298ec31341f57477040cffc42209a547cecbe75c918c12f9a326d78251cd9"
   },
   {
     "ability_id": "split-thousand-sons",
@@ -10784,25 +10866,20 @@
       "duration": "permanent"
     },
     "behavior": "reactive",
-    "trigger": [
-      {
-        "event": "model-destroyed",
-        "object": {
-          "owner": "friendly",
-          "all_of": [
-            "BLUE HORROR"
-          ],
-          "level": "model",
-          "member_of": "this-unit"
-        }
+    "trigger": {
+      "event": "model-destroyed",
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "BLUE HORROR"
+        ],
+        "level": "model",
+        "member_of": "this-unit"
       },
-      {
-        "event": "attacks-resolved",
-        "subject": {
-          "owner": "enemy"
-        }
+      "filter": {
+        "timing": "after-attacks"
       }
-    ],
+    },
     "source_digest": "91e0898a7a1ca3e9aa3dc2866fa00a7da9fb031c0e020354ad6163efe9535d8f"
   },
   {

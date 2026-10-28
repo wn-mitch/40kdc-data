@@ -15,10 +15,10 @@ dump confirmation.
 | wargear-options | 0 | 0 | 1234 | 0 |
 | leader-attachments | 0 | 0 | 283 | 8 |
 | enhancements | 0 | 0 | 890 | 0 |
-| detachments | 1 | 0 | 161 | 295 |
+| detachments | 0 | 0 | 162 | 295 |
 | stratagems | 0 | 0 | 1029 | 284 |
-| abilities | 0 | 0 | 3614 | 921 |
-| phase-mappings | 1 | 0 | 1125 | 455 |
+| abilities | 0 | 0 | 3616 | 919 |
+| phase-mappings | 0 | 0 | 1126 | 455 |
 | resource-pools | 0 | 0 | 0 | 6 |
 
 ## Abilities by faction
@@ -35,7 +35,7 @@ dump confirmation.
 | astra-militarum | 0 | 0 | 193 | 58 |
 | black-templars | 0 | 0 | 50 | 13 |
 | blood-angels | 0 | 0 | 49 | 12 |
-| chaos-daemons | 0 | 0 | 159 | 36 |
+| chaos-daemons | 0 | 0 | 160 | 35 |
 | chaos-knights | 0 | 0 | 83 | 27 |
 | chaos-space-marines | 0 | 0 | 220 | 61 |
 | dark-angels | 0 | 0 | 59 | 18 |
@@ -55,7 +55,7 @@ dump confirmation.
 | salamanders | 0 | 0 | 6 | 5 |
 | space-wolves | 0 | 0 | 74 | 13 |
 | tau-empire | 0 | 0 | 134 | 32 |
-| thousand-sons | 0 | 0 | 118 | 40 |
+| thousand-sons | 0 | 0 | 119 | 39 |
 | tyranids | 0 | 0 | 150 | 36 |
 | ultramarines | 0 | 0 | 10 | 1 |
 | white-scars | 0 | 0 | 11 | 0 |
@@ -112,8 +112,8 @@ dump confirmation.
 | blood-angels | verified | 49 |
 | chaos-daemons | digest-differs | 4 |
 | chaos-daemons | stub | 17 |
-| chaos-daemons | unpublished | 15 |
-| chaos-daemons | verified | 159 |
+| chaos-daemons | unpublished | 14 |
+| chaos-daemons | verified | 160 |
 | chaos-knights | digest-differs | 5 |
 | chaos-knights | unpublished | 22 |
 | chaos-knights | verified | 83 |
@@ -186,9 +186,9 @@ dump confirmation.
 | tau-empire | unpublished | 24 |
 | tau-empire | verified | 134 |
 | thousand-sons | digest-differs | 8 |
-| thousand-sons | stub | 5 |
+| thousand-sons | stub | 4 |
 | thousand-sons | unpublished | 27 |
-| thousand-sons | verified | 118 |
+| thousand-sons | verified | 119 |
 | tyranids | digest-differs | 5 |
 | tyranids | stub | 19 |
 | tyranids | unpublished | 12 |
