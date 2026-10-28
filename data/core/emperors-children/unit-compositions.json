@@ -398,19 +398,33 @@
             "weapon_ids": [
               "close-combat-weapon-tormentors",
               "plasma-gun"
-            ],
-            "max_count": 2
+            ]
           },
           {
             "name": "Tormentor w/ meltagun",
             "weapon_ids": [
               "close-combat-weapon-tormentors",
               "meltagun"
-            ],
-            "max_count": 2
+            ]
           }
         ],
         "loadout_variant_budgets": [
+          {
+            "variant_names": [
+              "Tormentor w/ plasma gun"
+            ],
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
+          },
+          {
+            "variant_names": [
+              "Tormentor w/ meltagun"
+            ],
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
+          },
           {
             "variant_names": [
               "Tormentor",

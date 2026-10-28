@@ -98,6 +98,7 @@ export const BSDATA_EQUIPMENT_NAMES: Readonly<Record<string, Readonly<Record<str
     "Superfrag missile launcher": "Superfrag Rocket Launcher",
     "Superkrak missile launcher": "Superkrak Rocket Launcher",
   },
+  "hernkyn-pioneers": { "Pan-spectral scanner": "Panspectral Scanner" },
   "sisters-novitiate-squad": { "Novitiate autogun": "Autogun", "Novitiate melee weapon": "Novitiate melee weapons" },
   "thunderwolf-cavalry": { "Crushing teeth and claws": "Teeth and Claws" },
 };
@@ -194,7 +195,7 @@ export function projectUnit(
   notes: string[] = [],
   previous: readonly JsonNode[] = [],
   wargearBudgets: readonly JsonNode[] = [],
-  wargearOptions: readonly JsonNode[] = [],
+  wargearOptions?: readonly JsonNode[],
 ): VariantIssue[] {
   const issues: VariantIssue[] = [];
   const resolve = makeEquipmentResolver(equipment, unitId, factionUnitIds);
@@ -244,7 +245,7 @@ export function projectUnit(
   const sameItems = (left: readonly string[], right: readonly string[]): boolean =>
     left.length === right.length && [...left].sort().every((id, index) => id === [...right].sort()[index]);
   const menuGoverned = (rowBase: string, items: readonly string[]): boolean =>
-    wargearOptions.some((option) => {
+    (wargearOptions ?? []).some((option) => {
       const modelName = str((option.model_constraint as JsonNode | null | undefined)?.model_name);
       if (modelName && normModelName(modelName) !== rowBase) return false;
       const branches = (Array.isArray(option.replacement_choice) ? option.replacement_choice : [])
@@ -309,7 +310,7 @@ export function projectUnit(
         if (family.own.includes(peer) && !ownNames.includes(variantName)) ownNames.push(variantName);
         const existing = projected.variants.find((item) => item.name === variantName);
         if (!existing) projected.variants.push(variant);
-        else if (JSON.stringify(existing.weapon_ids) === JSON.stringify(variant.weapon_ids)) {
+        else if (sameItems(existing.weapon_ids, variant.weapon_ids)) {
           const mergedMax = Math.max(existing.max_count ?? 0, variant.max_count ?? 0);
           if (mergedMax > 0) existing.max_count = mergedMax;
         } else {
@@ -356,7 +357,7 @@ export function projectUnit(
       bucket.blockCaps.set(variant.name, sized ? blocks.set(blockSize, variant.max_count!) : undefined);
       const existing = bucket.variants.find((item) => item.name === variant.name);
       if (!existing) bucket.variants.push(variant);
-      else if (JSON.stringify(existing.weapon_ids) === JSON.stringify(variant.weapon_ids)) {
+      else if (sameItems(existing.weapon_ids, variant.weapon_ids)) {
         // A same-named peer may recur across families (tier blocks, a default
         // pick inside a nested slot); the merged variant keeps the larger
         // ceiling, and an uncapped copy leaves it uncapped.
@@ -371,6 +372,16 @@ export function projectUnit(
     grouped.set(base, bucket);
   }
   const targets = [...new Set(rules.map((rule) => rule.target))].filter((target) => !peerIds.has(target));
+  // The MFM rows' defaults and the unit's option items are everything the dump
+  // lets the unit carry; without the options or recorded defaults there is no
+  // inventory to hold a projection to.
+  const itemIds = (value: unknown): string[] => typeof value === "string" ? [value] : Array.isArray(value) ? value.flatMap(itemIds) : [];
+  const dumpItems = wargearOptions && rows.some((row) => Array.isArray(row.default_weapon_ids))
+    ? new Set([
+      ...rows.flatMap((row) => itemIds(row.default_weapon_ids)),
+      ...wargearOptions.flatMap((option) => [...itemIds(option.replaces), ...itemIds(option.replacement), ...itemIds(option.replacement_choice)]),
+    ])
+    : undefined;
   for (const [base, projected] of grouped) {
     if (incompleteRows.has(base) || !projected.variants.length) continue;
     const row = rows.find((candidate) => str(candidate.name)?.toLocaleLowerCase("en") === projected.rowName.toLocaleLowerCase("en"))
@@ -379,6 +390,28 @@ export function projectUnit(
     // Same-named rows each record their own default loadout (a miniature the MFM pass split
     // by default group); whole-loadout variants for the name cannot belong to one of them.
     if (rows.filter((candidate) => str(candidate.name) === str(row.name)).length > 1) continue;
+    // A variant carrying an item the dump never gives the unit is a loadout the
+    // live game does not offer (or a source name resolving to the wrong item),
+    // so the row keeps its committed variants.
+    const offDump = [...new Set(projected.variants.flatMap((variant) => variant.weapon_ids))].filter((id) => dumpItems && !dumpItems.has(id));
+    // Every model of a full row can keep the MFM default loadout, so some
+    // variant must carry exactly those items with room for the whole row.
+    const defaults = Array.isArray(row.default_weapon_ids) ? itemIds(row.default_weapon_ids) : undefined;
+    const rowMax = typeof row.max === "number" ? row.max : 0;
+    const holdsDefault = !defaults || projected.variants.some((variant) =>
+      sameItems(variant.weapon_ids, defaults) && (variant.max_count === undefined || variant.max_count >= rowMax));
+    // A peer named for another MFM row (a Soul Weaver beside a Shade Runner) is
+    // that row's model, not an alternative loadout of this one.
+    const ownRowOf = projected.variants.map((variant) => variant.name)
+      .filter((name) => rows.some((other) => other !== row && normModelName(str(other.name) ?? "") === normModelName(name)));
+    const refusal = offDump.length ? `${offDump.join(", ")} not in the unit's MFM wargear`
+      : !holdsDefault ? "no variant holds the MFM default loadout for the full row"
+      : ownRowOf.length ? `${ownRowOf.join(", ")} named for another MFM row`
+      : undefined;
+    if (refusal) {
+      noted(`${str(row.name)}: not projected: ${refusal}`);
+      continue;
+    }
     // A group's cap counts only the selections made through that group. A
     // variant another family also declares is indistinguishable once merged,
     // so the group cap cannot charge it.
@@ -475,6 +508,18 @@ export function prepareFactionProjection(
     const variantCount = rows.reduce((sum, row) => sum + arr(row.loadout_variants).length, 0);
     if (variantCount > 0) projectedUnits += 1;
     projectedVariants += variantCount;
+  }
+  // A row the source no longer projects onto (its peers renamed or removed
+  // upstream, or a projection refused) keeps its committed variants.
+  for (const [unitIndex, composition] of projected.entries()) {
+    const committed = arr(compositions[unitIndex]?.models);
+    for (const [index, row] of arr(composition.models).entries()) {
+      const kept = committed[index];
+      if (row.loadout_variants !== undefined || !kept?.loadout_variants) continue;
+      row.loadout_variants = structuredClone(kept.loadout_variants);
+      if (kept.loadout_variant_budgets) row.loadout_variant_budgets = structuredClone(kept.loadout_variant_budgets);
+      notes.push(`${str(composition.unit_id)}: ${str(row.name)}: committed variants kept; no source projection replaces them`);
+    }
   }
   return { compositions: projected, issues, notes, discoveredUnits, discoveredVariants, projectedUnits, projectedVariants };
 }

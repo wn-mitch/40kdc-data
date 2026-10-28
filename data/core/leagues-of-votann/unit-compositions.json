@@ -207,7 +207,8 @@
               "bolt-revolver",
               "bolt-shotgun",
               "magna-coil-autocannon",
-              "plasma-knife"
+              "plasma-knife",
+              "panspectral-scanner"
             ],
             "max_count": 1
           },
@@ -217,7 +218,8 @@
               "bolt-revolver",
               "bolt-shotgun",
               "magna-coil-autocannon",
-              "plasma-knife"
+              "plasma-knife",
+              "rollbar-searchlight"
             ],
             "max_count": 1
           },
@@ -261,9 +263,9 @@
               "Hernkyn Pioneer w/ HYLas rotary cannon",
               "Hernkyn Pioneer w/ ion beamer"
             ],
-            "count": 2,
-            "per_models": 0,
-            "scope": "model-row"
+            "count": 1,
+            "per_models": 3,
+            "scope": "unit"
           }
         ]
       }
@@ -837,6 +839,26 @@
             "count": 9,
             "per_models": 0,
             "scope": "model-row"
+          },
+          {
+            "variant_names": [
+              "Hernkyn Yaegir w/ bolt shotgun",
+              "Hernkyn Yaegir w/ APM launcher",
+              "Hernkyn Yaegir w/ magna-coil rifle"
+            ],
+            "count": 9,
+            "per_models": 0,
+            "scope": "model-row"
+          },
+          {
+            "variant_names": [
+              "Hernkyn Yaegir w/ revolver and knife",
+              "Hernkyn Yaegir w/ APM launcher",
+              "Hernkyn Yaegir w/ magna-coil rifle"
+            ],
+            "count": 9,
+            "per_models": 0,
+            "scope": "model-row"
           }
         ]
       }
@@ -1223,7 +1245,8 @@
             "name": "Hearthkyn Warrior w/ L7 missile launcher",
             "weapon_ids": [
               "autoch-pattern-bolt-pistol",
-              "close-combat-weapon-hearthkyn-warriors"
+              "close-combat-weapon-hearthkyn-warriors",
+              "l7-missile-launcher-hearthkyn-warriors"
             ],
             "max_count": 1
           },
@@ -1266,6 +1289,24 @@
               "Hearthkyn Warrior w/ EtaCarn plasma beamer"
             ],
             "count": 2,
+            "per_models": 0,
+            "scope": "model-row"
+          },
+          {
+            "variant_names": [
+              "Hearthkyn Warrior w/ bolter",
+              "Hearthkyn Warrior w/ plasma knife"
+            ],
+            "count": 9,
+            "per_models": 0,
+            "scope": "model-row"
+          },
+          {
+            "variant_names": [
+              "Hearthkyn Warrior w/ ion blaster",
+              "Hearthkyn Warrior w/ plasma knife"
+            ],
+            "count": 9,
             "per_models": 0,
             "scope": "model-row"
           }

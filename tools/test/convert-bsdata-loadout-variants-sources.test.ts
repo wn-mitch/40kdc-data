@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { makeEquipmentResolver, projectUnit } from "../src/convert-bsdata-loadout-variants.js";
+import { fixedEquipment } from "../src/bsdata-equipment.js";
+import { makeEquipmentResolver, prepareFactionProjection, projectUnit } from "../src/convert-bsdata-loadout-variants.js";
 import { variantBudgetCap, type LoadoutVariantBudget } from "../src/data/loadout.js";
 
 type Node = Record<string, unknown>;
@@ -73,5 +74,71 @@ describe("BSData variant sources", () => {
     const resolveRenamed = makeEquipmentResolver([{ id: "blaster" }], "corsair-voidscarred");
     expect(resolveRenamed({ name: "Corsair blaster" })).toBe("blaster");
     expect(makeEquipmentResolver([{ id: "blaster" }], "other-unit")({ name: "Corsair blaster" })).toBeUndefined();
+  });
+
+  const melee = (id: string, bounds: Node[] = []): Node => ({ id, name: id, type: "upgrade", constraints: bounds, profiles: [{ typeName: "Melee Weapons" }] });
+  const pick = (defaultId: string, options: Node[]): Node =>
+    ({ name: "Weapon", defaultSelectionEntryId: defaultId, constraints: [limit("min", 1), limit("max", 1)], selectionEntries: options });
+  const picks = (group: Node): string[][] =>
+    fixedEquipment({ name: "Trooper", type: "model", selectionEntryGroups: [group] }, new Map()).alternatives.map((alt) => alt.links.map((link) => String(link.name)));
+
+  it("reads a default id naming no child as a defaultless single pick", () => {
+    expect(picks(pick("stale-id", [melee("axe"), melee("maul")]))).toEqual([["axe"], ["maul"]]);
+  });
+
+  it("counts a single pick's default as one copy despite its automatic 0/0 bounds", () => {
+    expect(picks(pick("axe", [melee("axe", [limit("min", 0), limit("max", 0)]), melee("maul")]))).toEqual([["axe"]]);
+  });
+
+  it("merges same-named peers that list the same items in another order", () => {
+    const claw = { ...gunLink, name: "Claw", targetId: "claw" };
+    const crawler = (links: Node[]): Node => ({ ...trooper("Trooper w/ Claw", 1), entryLinks: links });
+    const unit = { selectionEntryGroups: [{ selectionEntries: [trooper("Trooper", 2), crawler([gunLink, claw]), crawler([claw, gunLink])] }] };
+    const [row] = project(unit, [{ name: "Trooper" }], [gun, { id: "claw", external_refs: [{ namespace: "bsdata", id: "claw" }], profiles: [{}] }]);
+    expect((row.loadout_variants as Node[]).map((variant) => variant.name)).toEqual(["Trooper", "Trooper w/ Claw"]);
+  });
+
+  describe("against the MFM rows", () => {
+    const flamer = { id: "flamer", external_refs: [{ namespace: "bsdata", id: "flamer" }], profiles: [{}] };
+    const flamerLink = { ...gunLink, name: "Flamer", targetId: "flamer" };
+    const squad = (troopers = 9): Node =>
+      ({ selectionEntryGroups: [{ selectionEntries: [trooper("Trooper", troopers), { ...trooper("Trooper w/ Flamer", 1), entryLinks: [flamerLink] }] }] });
+    const projectRows = (unit: Node, rows: Node[], options: Node[]): { rows: Node[]; notes: string[] } => {
+      const notes: string[] = [];
+      expect(projectUnit(unit, rows, [gun, flamer], "troopers", [], new Map(), [9], notes, [], [], options)).toEqual([]);
+      return { rows, notes };
+    };
+    const flamerOption = { unit_id: "troopers", replaces: ["gun"], replacement: ["flamer"] };
+
+    it("refuses a variant carrying an item the unit's MFM wargear lacks", () => {
+      const refused = projectRows(squad(), [{ name: "Trooper", max: 9, default_weapon_ids: ["gun"] }], []);
+      expect(refused.rows[0].loadout_variants).toBeUndefined();
+      expect(refused.notes.join()).toContain("flamer not in the unit's MFM wargear");
+      expect(projectRows(squad(), [{ name: "Trooper", max: 9, default_weapon_ids: ["gun"] }], [flamerOption]).rows[0].loadout_variants).toHaveLength(2);
+    });
+
+    it("refuses variants that cannot field the default loadout on every model", () => {
+      const refused = projectRows(squad(8), [{ name: "Trooper", max: 9, default_weapon_ids: ["gun"] }], [flamerOption]);
+      expect(refused.rows[0].loadout_variants).toBeUndefined();
+      expect(refused.notes.join()).toContain("no variant holds the MFM default loadout");
+    });
+
+    it("refuses a peer named for another MFM row", () => {
+      const unit = { selectionEntryGroups: [{ selectionEntries: [trooper("Trooper", 9), trooper("Sergeant", 1)] }] };
+      const rows = [{ name: "Trooper", max: 9, default_weapon_ids: ["gun"] }, { name: "Sergeant", max: 1, default_weapon_ids: ["gun"] }];
+      const refused = projectRows(unit, rows, []);
+      expect(refused.rows[0].loadout_variants).toBeUndefined();
+      expect(refused.notes.join()).toContain("Sergeant named for another MFM row");
+    });
+
+    it("keeps committed variants on a row the source no longer projects onto", () => {
+      const committed = [{ name: "Trooper w/ Gun", weapon_ids: ["gun"], max_count: 9 }];
+      const compositions = [{ unit_id: "troopers", models: [{ name: "Trooper", max: 9, loadout_variants: committed }] }];
+      const renamed = { id: "source", selectionEntryGroups: [{ selectionEntries: [trooper("Renamed Trooper", 9)] }] };
+      const units = [{ id: "troopers", external_refs: [{ namespace: "bsdata", id: "source" }] }];
+      const projection = prepareFactionProjection(units, compositions, [gun], new Map([["source", renamed]]));
+      expect(projection.compositions[0].models).toEqual(compositions[0].models);
+      expect(projection.notes.join()).toContain("committed variants kept");
+    });
   });
 });

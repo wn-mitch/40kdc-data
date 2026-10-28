@@ -631,7 +631,7 @@
         },
         "loadout_variants": [
           {
-            "name": "Scarab Occult Terminator w/ inferno combi-bolter and khopesh",
+            "name": "Scarab Occult Terminator",
             "weapon_ids": [
               "inferno-combi-bolter",
               "prosperine-khopesh"
@@ -661,9 +661,9 @@
               "Scarab Occult Terminator w/ heavy warpflamer",
               "Scarab Occult Terminator w/ soulreaper cannon"
             ],
-            "count": 2,
-            "per_models": 0,
-            "scope": "model-row"
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
           }
         ]
       }
@@ -842,7 +842,7 @@
         },
         "loadout_variants": [
           {
-            "name": "Tzaangor w/ tzaangor blades",
+            "name": "Tzaangor w/ Tzaangor blades",
             "weapon_ids": [
               "tzaangor-blades"
             ],
@@ -855,24 +855,17 @@
               "chainsword-tzaangors"
             ],
             "max_count": 19
-          },
+          }
+        ],
+        "loadout_variant_budgets": [
           {
-            "name": "Tzaangor w/ pistol and chainsword and brayhorn",
-            "weapon_ids": [
-              "autopistol",
-              "chainsword-tzaangors",
-              "brayhorn"
+            "variant_names": [
+              "Tzaangor w/ Tzaangor blades",
+              "Tzaangor w/ pistol and chainsword"
             ],
-            "max_count": 1
-          },
-          {
-            "name": "Tzaangor w/ pistol and chainsword and herd banner",
-            "weapon_ids": [
-              "autopistol",
-              "chainsword-tzaangors",
-              "herd-banner"
-            ],
-            "max_count": 1
+            "count": 19,
+            "per_models": 0,
+            "scope": "model-row"
           }
         ]
       }

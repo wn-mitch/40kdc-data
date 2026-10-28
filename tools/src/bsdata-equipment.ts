@@ -62,10 +62,11 @@ function product(left: EquipmentAlternative[], right: EquipmentAlternative[]): E
  * resolves nowhere in the source cannot be classified, so the entry is kept and
  * left to the equipment resolver, which reports it when no repo weapon or
  * wargear matches. A required single-pick group with no default selection (no
- * `defaultSelectionEntryId`, or `"none"`) fixes one of its children, so each
- * child yields its own alternative; a defaultless optional group fixes only the
- * children it explicitly requires. An inline entry with neither is kept when
- * `isEquipment` recognises it (a vox-caster's only profile is its ability).
+ * `defaultSelectionEntryId`, `"none"`, or an id naming no child) fixes one of
+ * its children, so each child yields its own alternative; a defaultless
+ * optional group fixes only the children it explicitly requires. An inline
+ * entry with neither is kept when `isEquipment` recognises it (a vox-caster's
+ * only profile is its ability).
  */
 export function fixedEquipment(
   peer: JsonNode,
@@ -99,18 +100,16 @@ export function fixedEquipment(
     const nested = asGroup(option);
     if (nested) return capped(children(nested).flatMap(choose));
     const label = str(option.name) ?? "(unnamed equipment)";
-    return capped(visit(option, true).map((alt) => ({ ...alt, labels: [label, ...alt.labels] })));
+    return capped(visit(option, true, true).map((alt) => ({ ...alt, labels: [label, ...alt.labels] })));
   };
   const visitGroup = (group: JsonNode): EquipmentAlternative[] => {
     const none: EquipmentAlternative[] = [{ links: [], labels: [], choices: [] }];
     const defaultId = str(group.defaultSelectionEntryId);
     const options = children(group);
     const selected = defaultId && defaultId !== "none" ? options.find((candidate) => candidate.id === defaultId) : undefined;
-    if (selected) return visit(selected, true);
-    if (defaultId && defaultId !== "none") {
-      unsupported(group, "default equipment selection is missing");
-      return none;
-    }
+    if (selected) return visit(selected, true, constraint(perModel(group), "min") === 1 && constraint(perModel(group), "max") === 1);
+    // A default naming no child (a stale upstream id) fixes nothing, so the
+    // group reads as defaultless below.
     const min = constraint(perModel(group), "min") ?? 0;
     if (min <= 0) {
       // An optional container still fixes the children it explicitly requires.
@@ -129,10 +128,12 @@ export function fixedEquipment(
     if (!alternatives.length) unsupported(group, "required equipment choice has no options");
     return alternatives.length ? alternatives : none;
   };
-  const visit = (node: JsonNode, includeNode = false): EquipmentAlternative[] => {
+  // `picked` marks the one pick of a single-pick group: it is one copy whatever
+  // its own bounds say (an automatic 0/0 that modifiers lift to 1/1).
+  const visit = (node: JsonNode, includeNode = false, picked = false): EquipmentAlternative[] => {
     let result: EquipmentAlternative[] = [{ links: [], labels: [], choices: [] }];
     const add = (entry: JsonNode): void => {
-      const copies = fixedCopies(entry);
+      const copies = picked && entry === node ? 1 : fixedCopies(entry);
       if (copies === undefined) {
         unsupported(entry, "configurable equipment multiplicity");
         return;

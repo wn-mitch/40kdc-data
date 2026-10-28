@@ -6764,9 +6764,35 @@
         "loadout_variant_budgets": [
           {
             "variant_names": [
+              "Wolf Guard Terminator w/ Assault Cannon"
+            ],
+            "count": 1,
+            "per_models": 3,
+            "scope": "unit"
+          },
+          {
+            "variant_names": [
               "Wolf Guard Terminator w/ storm bolter",
               "Wolf Guard Terminator w/ Assault Cannon",
               "Wolf Guard Terminator w/ storm shield"
+            ],
+            "count": 9,
+            "per_models": 0,
+            "scope": "model-row"
+          },
+          {
+            "variant_names": [
+              "Wolf Guard Terminator w/ storm bolter",
+              "Wolf Guard Terminator w/ Assault Cannon"
+            ],
+            "count": 9,
+            "per_models": 0,
+            "scope": "model-row"
+          },
+          {
+            "variant_names": [
+              "Wolf Guard Terminator w/ storm shield",
+              "Wolf Guard Terminator w/ Assault Cannon"
             ],
             "count": 9,
             "per_models": 0,
