@@ -276,7 +276,7 @@ export const UNIT_FILTER_EXTENSIONS: readonly FamilyExtension[] = [
    * **hidden** Phobos unit". The state is the adjective of the unit's own noun phrase, as unengaged
    * already is, so it stays in the filter. A distance, a visibility or an engagement with another
    * unit stays a separate leaf. Compilation holds one positive state per filter
-   * (compile-unit-filters.ts assertOneFilterState).
+   * (compile-unit-filter-dsl.ts assertOneFilterState).
    */
   {
     family: "unit-filter",

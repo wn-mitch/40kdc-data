@@ -2,7 +2,7 @@ import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { wordingBetween } from "./compile-discontiguous-gap.js";
 import { ordered } from "./compile-placement.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "./contracts.js";
-import { dslUnitFilter } from "./compile-unit-filters.js";
+import { dslUnitFilter } from "./compile-unit-filter-dsl.js";
 
 /**
  * "…until the start of your next Command phase, in addition to any other combat doctrine": the

@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { currentFamilyVersion, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { foldReturnedModelExclusions } from "../src/semantic-authoring/compile-returned-model-exclusions.js";
-import { dslUnitFilter } from "../src/semantic-authoring/compile-unit-filters.js";
+import { dslUnitFilter } from "../src/semantic-authoring/compile-unit-filter-dsl.js";
 import { selectUnit, wrapLeaderTarget } from "../src/semantic-authoring/compile-wrappers.js";
 import { trigger } from "../src/semantic-authoring/compile-triggers.js";
 

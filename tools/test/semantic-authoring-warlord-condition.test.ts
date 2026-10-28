@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { bindDesignationSubjects } from "../src/semantic-authoring/compile-conditions.js";
-import { dslUnitFilter } from "../src/semantic-authoring/compile-unit-filters.js";
+import { dslUnitFilter } from "../src/semantic-authoring/compile-unit-filter-dsl.js";
 import { foldWarlordTests } from "../src/semantic-authoring/compile-warlord-test.js";
 import { DESIGNATION_IDS, designationLabel, LIST_BUILDING_DESIGNATIONS } from "../src/translate/designations.js";
 import { describeAbility } from "../src/translate/index.js";

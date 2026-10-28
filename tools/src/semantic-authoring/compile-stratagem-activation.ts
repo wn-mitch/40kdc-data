@@ -3,7 +3,8 @@ import { activationWindowCondition, allOf, condition } from "./compile-condition
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { alternativeMoments } from "./compile-segments.js";
 import { trigger, triggerLeaves } from "./compile-triggers.js";
-import { foldUnitFilters, mergeStackedFilters } from "./compile-unit-filters.js";
+import { foldUnitFilters } from "./compile-unit-filters.js";
+import { mergeStackedFilters } from "./compile-unit-filter-merge.js";
 import { gatedMoment } from "./compile-usability-gate.js";
 
 type Node = Record<string, unknown>;

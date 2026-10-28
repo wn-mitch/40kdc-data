@@ -4,7 +4,7 @@ import { compileLeaves, type CompileLeaf, type CorePatch } from "../src/semantic
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { familyExtension } from "../src/semantic-authoring/families/index.js";
 import { claimedByEmbarkedState } from "../src/semantic-authoring/compile-embarked-exclusion.js";
-import { mergeStackedFilters } from "../src/semantic-authoring/compile-unit-filters.js";
+import { mergeStackedFilters } from "../src/semantic-authoring/compile-unit-filter-merge.js";
 
 /** The one target restriction a compiled core patch carries (a list is a test failure). */
 function oneRestriction(core: CorePatch | undefined): Record<string, unknown> | undefined {

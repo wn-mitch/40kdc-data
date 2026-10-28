@@ -7,7 +7,7 @@ import { afterEach, describe, expect, it } from "vitest";
 
 import { compileLeaves } from "../src/semantic-authoring/compile.js";
 import type { CompileLeaf } from "../src/semantic-authoring/compile-fragments.js";
-import { mergeStackedFilters } from "../src/semantic-authoring/compile-unit-filters.js";
+import { mergeStackedFilters } from "../src/semantic-authoring/compile-unit-filter-merge.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { coreCheckErrors } from "../src/semantic-authoring/core-checks.js";
 import { checkEntry, entryWithMechanics } from "../src/semantic-authoring/entries.js";

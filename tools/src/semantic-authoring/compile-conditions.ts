@@ -10,7 +10,7 @@ import { abilityUseCondition } from "./compile-ability-use.js";
 import { armyIncludesCondition } from "./compile-army.js";
 import { closed, CompileError, weaponScope, type CompileLeaf } from "./compile-fragments.js";
 import { isSelectionRef } from "./compile-pair-eligibility.js";
-import { dslUnitFilter } from "./compile-unit-filters.js";
+import { dslUnitFilter } from "./compile-unit-filter-dsl.js";
 import { everyModelFlag } from "./compile-every-model.js";
 import { isOneTargetRef } from "./compile-target-refs.js";
 import { isTriggeringDestruction, lowerTriggeringDestructions } from "./compile-triggering-destruction.js";

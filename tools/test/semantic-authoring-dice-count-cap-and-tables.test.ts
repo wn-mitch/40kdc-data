@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { familyExtension } from "../src/semantic-authoring/families/index.js";
-import { mergedFilter } from "../src/semantic-authoring/compile-unit-filters.js";
+import { mergedFilter } from "../src/semantic-authoring/compile-unit-filter-merge.js";
 import { createValidator } from "../src/schema-loader.js";
 
 /** The family versions the extensions under test create. */

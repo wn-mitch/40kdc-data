@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
-import { mergeStackedFilters } from "../src/semantic-authoring/compile-unit-filters.js";
+import { mergeStackedFilters } from "../src/semantic-authoring/compile-unit-filter-merge.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters as normalizeAt } from "../src/semantic-authoring/contracts.js";
 import { designationLabel } from "../src/translate/designations.js";
 

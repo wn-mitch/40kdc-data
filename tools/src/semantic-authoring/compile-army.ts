@@ -14,7 +14,8 @@
 import { ANTECEDENT } from "./antecedent-families.js";
 import { FILTERED_UNITS } from "./compile-antecedent.js";
 import { closed, CompileError, type CompileLeaf } from "./compile-fragments.js";
-import { dslUnitFilter, mergeStackedFilters } from "./compile-unit-filters.js";
+import { dslUnitFilter } from "./compile-unit-filter-dsl.js";
+import { mergeStackedFilters } from "./compile-unit-filter-merge.js";
 import { FOLLOWING_FILTER } from "./families/shared.js";
 import { ARMY_SUBJECT_RULES } from "./families/army.js";
 

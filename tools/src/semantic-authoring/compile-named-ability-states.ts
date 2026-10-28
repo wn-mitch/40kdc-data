@@ -1,7 +1,7 @@
 import { CompileError, type CompileLeaf, unitOf } from "./compile-fragments.js";
 import type { Compiled } from "./compile.js";
 import { duration } from "./compile-conditions.js";
-import { dslUnitFilter } from "./compile-unit-filters.js";
+import { dslUnitFilter } from "./compile-unit-filter-dsl.js";
 import { ordered, placements, shapeSignature } from "./compile-placement.js";
 import { exactSpan } from "./contracts.js";
 import { NAMED_ABILITY_DEFINITION, NAMED_ABILITY_DEFINITION_END, RESOURCE_BEFORE_ABILITIES } from "./named-ability-state-families.js";

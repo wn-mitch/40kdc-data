@@ -1,6 +1,6 @@
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { namesFilteredUnits } from "./compile-antecedent.js";
-import { dslUnitFilter } from "./compile-unit-filters.js";
+import { dslUnitFilter } from "./compile-unit-filter-dsl.js";
 
 /** Rolls an event can name that a roll-modifier can change too. */
 const MODIFIABLE_ROLLS = new Set(["hit", "wound", "charge", "advance", "save", "leadership", "battle-shock", "damage", "hazard", "psychic", "desperate-escape"]);

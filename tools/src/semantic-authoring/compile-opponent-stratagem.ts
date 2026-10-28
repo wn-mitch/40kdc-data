@@ -7,7 +7,7 @@
 
 import { ANTECEDENT } from "./antecedent-families.js";
 import { closed, CompileError, type CompileLeaf } from "./compile-fragments.js";
-import { dslUnitFilter } from "./compile-unit-filters.js";
+import { dslUnitFilter } from "./compile-unit-filter-dsl.js";
 import { sameSentence } from "./compile-named-ability.js";
 import { TARGETED_WITH_STRATAGEM } from "./families/unit-activity.js";
 

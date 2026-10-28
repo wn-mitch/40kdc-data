@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { groupMembership } from "../src/semantic-authoring/compile-model-level.js";
 import { sentenceSegments } from "../src/semantic-authoring/compile-segments.js";
-import { dslUnitFilter } from "../src/semantic-authoring/compile-unit-filters.js";
+import { dslUnitFilter } from "../src/semantic-authoring/compile-unit-filter-dsl.js";
 import { resolveNames, type WeaponNameContext } from "../src/semantic-authoring/compile-weapon-names.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 

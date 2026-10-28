@@ -1,6 +1,6 @@
 import { FILTERED_UNITS } from "./compile-antecedent.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
-import { dslUnitFilter } from "./compile-unit-filters.js";
+import { dslUnitFilter } from "./compile-unit-filter-dsl.js";
 import { STRATAGEM_HEADER } from "./compile-segments.js";
 import { DESTRUCTION_ACTIVITIES } from "./families/unit-activity.js";
 import { DESTROYED_STRATAGEM_TARGET } from "./families/unit-activity.js";

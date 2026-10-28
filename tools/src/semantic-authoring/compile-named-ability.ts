@@ -6,7 +6,7 @@
 
 import type { CoreCheck } from "./core-checks.js";
 import { abilityRollOf, CompileError, type CompileLeaf } from "./compile-fragments.js";
-import { dslUnitFilter } from "./compile-unit-filters.js";
+import { dslUnitFilter } from "./compile-unit-filter-dsl.js";
 import { ANTECEDENT } from "./antecedent-families.js";
 import { FILTERED_UNITS } from "./compile-antecedent.js";
 import { setUpWindow } from "./compile-history-values.js";

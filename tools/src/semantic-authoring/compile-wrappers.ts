@@ -4,7 +4,7 @@ import { closed, CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { condition } from "./compile-conditions.js";
 import { currentFamilyVersion } from "./contracts.js";
 import type { FilterAlternative } from "./unit-filter-alternatives.js";
-import { dslUnitFilter } from "./compile-unit-filters.js";
+import { dslUnitFilter } from "./compile-unit-filter-dsl.js";
 
 /**
  * Wrapping leaves (`aura-range`, `leader-target`, `for-each-unit-select`, `rules-bundle-marker`)

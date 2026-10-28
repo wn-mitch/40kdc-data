@@ -6,7 +6,7 @@ import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
-import { mergeStackedFilters } from "../src/semantic-authoring/compile-unit-filters.js";
+import { mergeStackedFilters } from "../src/semantic-authoring/compile-unit-filter-merge.js";
 import { checkEntry, entryWithMechanics } from "../src/semantic-authoring/entries.js";
 import { effectToBuffs } from "../src/cruncher/from-dsl.js";
 import { describeAbility } from "../src/translate/index.js";

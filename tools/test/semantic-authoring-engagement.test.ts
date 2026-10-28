@@ -3,7 +3,9 @@ import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { CompileError } from "../src/semantic-authoring/compile-fragments.js";
-import { dslUnitFilter, foldUnitFilters, mergeStackedFilters } from "../src/semantic-authoring/compile-unit-filters.js";
+import { dslUnitFilter } from "../src/semantic-authoring/compile-unit-filter-dsl.js";
+import { mergeStackedFilters } from "../src/semantic-authoring/compile-unit-filter-merge.js";
+import { foldUnitFilters } from "../src/semantic-authoring/compile-unit-filters.js";
 import { describeCondition } from "../src/translate/condition.js";
 
 /** Leaves on their own wording in `text`, in order (fabricated wording, not rules text). */

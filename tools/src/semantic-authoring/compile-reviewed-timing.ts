@@ -3,7 +3,7 @@ import { duration } from "./compile-conditions.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { foldHolderAbilities } from "./compile-holder-abilities.js";
 import { trigger } from "./compile-triggers.js";
-import { dslUnitFilter } from "./compile-unit-filters.js";
+import { dslUnitFilter } from "./compile-unit-filter-dsl.js";
 import { resolveUnitNames, type UnitNameContext } from "./compile-unit-names.js";
 import { selectUnit } from "./compile-wrappers.js";
 

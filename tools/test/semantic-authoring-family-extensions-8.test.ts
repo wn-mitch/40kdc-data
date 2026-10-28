@@ -8,7 +8,7 @@ import { describe, expect, it } from "vitest";
 import { compileLeaves } from "../src/semantic-authoring/compile.js";
 import { targetRestrictions } from "../src/semantic-authoring/compile-conditions.js";
 import type { CompileLeaf } from "../src/semantic-authoring/compile-fragments.js";
-import { dslUnitFilter } from "../src/semantic-authoring/compile-unit-filters.js";
+import { dslUnitFilter } from "../src/semantic-authoring/compile-unit-filter-dsl.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { coreCheckErrors } from "../src/semantic-authoring/core-checks.js";
 import { checkEntry, entryWithMechanics } from "../src/semantic-authoring/entries.js";
