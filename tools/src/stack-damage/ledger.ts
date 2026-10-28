@@ -17,10 +17,11 @@ import { printedWargear, WEAPON_GRANT_REASON } from "./weapon-grants.js";
  */
 export type LedgerStatus = "applied" | "rejected" | "unresolved";
 
-export type LedgerSourceKind = EligibleAbility["source"]["kind"] | "enhancement" | "granted";
+export type LedgerSourceKind = EligibleAbility["source"]["kind"] | "enhancement" | "granted" | "weapon";
 
 export interface LedgerEntry {
   side: "attacker" | "target";
+  /** The provider's ability id; for a `weapon` entry, the weapon whose profile the engine could not score. */
   abilityId: string;
   sourceKind: LedgerSourceKind;
   /** The supporting unit, attached unit or Enhancement bearer that provides it. */
@@ -327,4 +328,22 @@ export function buildLedger(session: DamageScoringSession, result: StackResult):
           : classify(ability, entry.side, readings, applied)),
     }))
     .sort((left, right) => entryKey(left).localeCompare(entryKey(right)));
+}
+
+/**
+ * A weapon profile the engine could not score in any candidate of the cell: unresolved and relevant,
+ * since the candidates carrying it were ranked without its damage.
+ */
+export function unscoreableEntries(session: DamageScoringSession): LedgerEntry[] {
+  return [...session.unscoreable.values()]
+    .map(({ unitId, weapon, profileIndex, reason }): LedgerEntry => ({
+      side: "attacker",
+      abilityId: weapon.id,
+      sourceKind: "weapon",
+      sourceUnitId: unitId,
+      status: "unresolved",
+      relevant: true,
+      reasons: [`unscoreable weapon profile ${profileIndex}: ${reason}`],
+    }))
+    .sort((left, right) => entryKey(left).localeCompare(entryKey(right)) || left.reasons[0]!.localeCompare(right.reasons[0]!));
 }

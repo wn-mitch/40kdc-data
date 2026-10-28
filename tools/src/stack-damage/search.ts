@@ -8,7 +8,7 @@ import type { MatrixConfig, Scenario } from "./config.js";
 import { preferFactionCopies, type FactionContext, unitInFaction } from "./factions.js";
 import { DamageScoringSession, type DamageScoringInvariants } from "./scoring.js";
 import { isCombatPatrolDetachment } from "../abilities-resolver/resolver.js";
-import { buildLedger } from "./ledger.js";
+import { buildLedger, unscoreableEntries } from "./ledger.js";
 import { baseWargear } from "./weapon-grants.js";
 import type { DamageCellState, StackMember, StackResult, StackSpec } from "./model.js";
 import { damageCellKey, type DamageCellReport, type LeverReport, type WinnerReport } from "./report.js";
@@ -369,7 +369,7 @@ export function runDamageCell(input: {
   const unsupported = offensiveWarnings.map(({ sourceKind: _sourceKind, ...warning }) => warning);
   const defensiveWarnings = session.defensiveWarnings.map(({ sourceKind: _sourceKind, ...warning }) => warning);
   const result = winner ? winnerReport(input.dataset, input.faction, session, winner) : null;
-  const ledger = winner ? buildLedger(session, winner) : [];
+  const ledger = [...(winner ? buildLedger(session, winner) : []), ...unscoreableEntries(session)];
   const incomplete = ledger.some((entry) => entry.relevant) || (winner?.spec.detachmentIssues.length ?? 0) > 0 || result?.members.some((member) => member.legalityErrors.length > 0);
   return {
     key: damageCellKey(input.faction.id, input.target.profileId, input.phase),

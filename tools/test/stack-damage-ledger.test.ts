@@ -4,11 +4,12 @@ import { resolveTarget } from "../src/compare.js";
 import { Dataset } from "../src/data/dataset.js";
 import { parseMatrixConfig } from "../src/stack-damage/config.js";
 import { resolveFactionContext } from "../src/stack-damage/factions.js";
-import { buildLedger } from "../src/stack-damage/ledger.js";
-import { damageScoringSession, emptySpec, runDamageCell } from "../src/stack-damage/search.js";
+import { buildLedger, unscoreableEntries } from "../src/stack-damage/ledger.js";
+import { damageScoringSession, emptySpec, legalDetachmentSpec, runDamageCell } from "../src/stack-damage/search.js";
+import { crunchProfileScorer, type UnscoreableProfile } from "../src/stack-damage/unit-damage.js";
 import { bearerEquippedBuffs, equippedBuffs } from "../src/stack-damage/weapon-grants.js";
 import type { Buff } from "../src/cruncher/index.js";
-import type { Unit } from "../src/generated.js";
+import type { Unit, Weapon } from "../src/generated.js";
 
 const dataset = Dataset.embedded();
 const faction = resolveFactionContext(dataset, "tau-empire");
@@ -186,6 +187,54 @@ describe("stack damage ledger", () => {
     const result = session.scoreStack(spec);
     const carried = (result.members[0]!.loadout.counts.get("pechra") ?? 0) > 0;
     expect(pechra(searched.at(-1)!)).toBe(carried);
+  });
+});
+
+describe("unscoreable weapon profiles", () => {
+  // A fabricated ranged profile printing no BS: only Torrent would let its hits resolve.
+  const skillless = (keywords: Weapon["profiles"][number]["keywords"] = []): Weapon => ({
+    id: "fabricated-skillless-cannon",
+    name: "Fabricated skillless cannon",
+    type: "ranged",
+    profiles: [{ name: "Fabricated skillless cannon", range: 12, stats: { A: 3, S: 4, AP: 0, D: 1, BS: null }, keywords }],
+  } as unknown as Weapon);
+  const request = (weapon: Weapon) => ({ weapon, profileIndex: 0, modelsFiring: 1, context: { phase: "shooting" as const } });
+
+  it("reports a profile with no hit skill and no Torrent instead of failing the crunch", () => {
+    const reported: UnscoreableProfile[] = [];
+    const scorer = crunchProfileScorer(dataset, { unit: target.unitRaw, modelCount: target.modelCount }, [], (profile) => reported.push(profile));
+    expect(scorer(request(skillless()))).toBeNull();
+    expect(reported.map(({ weapon, profileIndex, reason }) => [weapon.id, profileIndex, reason])).toEqual([
+      ["fabricated-skillless-cannon", 0, 'profile "Fabricated skillless cannon" prints no BS and no Torrent, so its hits cannot be rolled'],
+    ]);
+    // Torrent resolves its hits without a skill, so it scores and is not reported.
+    expect(scorer(request(skillless([{ keyword_id: "torrent" }])))?.damage).toBeGreaterThan(0);
+    expect(reported).toHaveLength(1);
+  });
+
+  it("still fails the crunch for a caller that asks for no report", () => {
+    const scorer = crunchProfileScorer(dataset, { unit: target.unitRaw, modelCount: target.modelCount }, []);
+    expect(() => scorer(request(skillless()))).toThrow(/missing BS/);
+  });
+
+  it("ranks a unit whose printed weapon has no BS and ledgers that weapon as relevant and unresolved", () => {
+    // Manipulus Skand's own transonic cannon prints BS "-" and no weapon abilities in the dump.
+    const factionId = "adeptus-mechanicus";
+    const admech = resolveFactionContext(dataset, factionId);
+    const config = parseMatrixConfig({ HC_FACTIONS: factionId, HC_TARGETS: "geq-guardsmen", HC_PHASES: "shooting", HC_OUTPUT: "ledger.json" },
+      { factionIds: new Set([factionId]), targetIds: ["geq-guardsmen"] });
+    const session = damageScoringSession({ dataset, config, faction: admech, target, phase: "shooting" });
+    const skand = admech.units.find((unit) => unit.id === "manipulus-skand")!;
+    const spec = legalDetachmentSpec(session, factionId, [{ unit: skand, role: "bodyguard" }], [dataset.detachments.getAny("data-psalm-conclave")!])!;
+    expect(Number.isFinite(session.optimiseLevers(spec).total)).toBe(true);
+    expect(unscoreableEntries(session)).toEqual([expect.objectContaining({
+      abilityId: "transonic-cannon-manipulus-skand",
+      sourceKind: "weapon",
+      sourceUnitId: "manipulus-skand",
+      status: "unresolved",
+      relevant: true,
+      reasons: ['unscoreable weapon profile 0: profile "Transonic Cannon" prints no BS and no Torrent, so its hits cannot be rolled'],
+    })]);
   });
 });
 

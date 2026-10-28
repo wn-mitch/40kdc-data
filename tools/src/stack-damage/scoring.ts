@@ -11,7 +11,7 @@ import { isLegalStackLevers } from "./lever-legality.js";
 import { searchLevers, type LeverSpace } from "./lever-search.js";
 import { searchLoadout, type LoadoutScaffold, type LoadoutSpace } from "./loadout-search.js";
 import type { ProfileDamage } from "./loadout-scoring.js";
-import { attributeSelectedProfile, crunchProfileScorer, unitLoadoutDamage, type DamageAttribution } from "./unit-damage.js";
+import { attributeSelectedProfile, crunchProfileScorer, unitLoadoutDamage, type DamageAttribution, type UnscoreableProfile } from "./unit-damage.js";
 import { translationWarnings } from "./translation-warnings.js";
 import { loadoutLeverBuffs, namedLoadoutWargear, surfacedByLoadout, wargearRules, wargearTranslation, type WargearRules } from "./wargear-levers.js";
 import { equippedBuffs, unequippedRules, unitWeaponGrants, wargearContext, type WeaponGrants } from "./weapon-grants.js";
@@ -68,6 +68,8 @@ export class DamageScoringSession {
   crunchCount = 0;
   stackEvaluations = 0;
   illegalLoadoutsRejected = 0;
+  /** Profiles no candidate of this cell could score (they score nothing), by unit, weapon and profile. */
+  readonly unscoreable = new Map<string, UnscoreableProfile & { unitId: string }>();
   private readonly scaffoldCache = new Map<string, LoadoutScaffold>();
   private readonly grantCache = new Map<string, WeaponGrants>();
   private readonly loadoutLegalityCache: Map<string, CandidateLoadoutLegality>;
@@ -175,7 +177,7 @@ export class DamageScoringSession {
     const buffs = equippedBuffs(unit.raw, counts, allBuffs);
     const scaffold = this.scaffold(unit);
     const target = { unit: this.state.target.unitRaw, modelCount: this.state.target.modelCount };
-    const crunchProfile = crunchProfileScorer(this.dataset, target, buffs);
+    const crunchProfile = crunchProfileScorer(this.dataset, target, buffs, (profile) => this.unscoreable.set(`${unit.id}|${profile.weapon.id}|${profile.profileIndex}`, { ...profile, unitId: unit.id }));
     const scored = unitLoadoutDamage({
       dataset: this.dataset,
       unit: unit.raw,

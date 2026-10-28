@@ -14,6 +14,7 @@ import {
   type StageLift,
 } from "../cruncher/index.js";
 import type { Dataset } from "../data/dataset.js";
+import { isMeleeProfile } from "../data/weapon-profile.js";
 import { completeLoadout, type LoadoutGroup, type LoadoutModel } from "../data/loadout.js";
 import type { Unit, WargearOption, Weapon } from "../generated.js";
 import { groupsWithGrantedWeapons, withGrantedWeapons, type WeaponGrant } from "./weapon-grants.js";
@@ -91,11 +92,44 @@ export function loadoutHitModifier(unit: Unit, profile: Weapon["profiles"][numbe
   return context.phase !== "fight" && isEngaged(context) && isMonsterOrVehicle(unit) ? bigGunsHitModifier(profile) : 0;
 }
 
-/** A profile scorer that crunches one model's attacks with `buffs`, skipping profiles that cannot target the unit. */
-export function crunchProfileScorer(dataset: Dataset, target: { unit: Unit; modelCount: number }, buffs: readonly Buff[]): ProfileScorer {
+/** A profile the engine cannot score, with why. */
+export interface UnscoreableProfile {
+  weapon: Weapon;
+  profileIndex: number;
+  reason: string;
+}
+
+/** Why a profile's hits cannot be rolled: it prints no hit skill (BS or WS) and no Torrent. */
+export function missingHitSkill(profile: Weapon["profiles"][number]): string | undefined {
+  const stat = isMeleeProfile(profile) ? "WS" : "BS";
+  if (typeof (profile.stats as Record<string, unknown>)[stat] === "number") return undefined;
+  if ((profile.keywords ?? []).some((keyword) => keyword.keyword_id === "torrent")) return undefined;
+  return `profile "${profile.name}" prints no ${stat} and no Torrent, so its hits cannot be rolled`;
+}
+
+/**
+ * A profile scorer that crunches one model's attacks with `buffs`, skipping profiles that cannot
+ * target the unit. With `onUnscoreable`, a profile whose hits cannot be rolled ({@link missingHitSkill})
+ * is reported and skipped instead of failing the crunch; a buff that grants it Torrent still scores it.
+ */
+export function crunchProfileScorer(
+  dataset: Dataset,
+  target: { unit: Unit; modelCount: number },
+  buffs: readonly Buff[],
+  onUnscoreable?: (profile: UnscoreableProfile) => void,
+): ProfileScorer {
   return ({ weapon, profileIndex, modelsFiring, context, hitModifier }) => {
     if (!profileCanTarget(weapon.profiles[profileIndex], target.unit)) return null;
-    const output = crunch(profileEngineInput({ weapon, profileIndex, target, modelsFiring, buffs, context, hitModifier }), dataset);
+    const input = profileEngineInput({ weapon, profileIndex, target, modelsFiring, buffs, context, hitModifier });
+    const missing = onUnscoreable ? missingHitSkill(weapon.profiles[profileIndex]) : undefined;
+    let output: ReturnType<typeof crunch>;
+    try {
+      output = crunch(input, dataset);
+    } catch (error) {
+      if (missing === undefined) throw error;
+      onUnscoreable!({ weapon, profileIndex, reason: missing });
+      return null;
+    }
     return {
       damage: output.stages.find((stage) => stage.name === "after-fnp")?.expected ?? 0,
       stages: output.stages.map((stage) => ({ name: stage.name, expected: stage.expected })),
