@@ -24,6 +24,20 @@ const RETURN_MODELS_WOUNDS: FamilyExtension = {
     : previous(input),
 };
 
+/** Rolled counts of returned models beyond return-models@5's. */
+const RETURN_COUNTS_ADDED = ["D3+2"] as const;
+
+const RETURN_MODELS_COUNTS: FamilyExtension = {
+  // "return up to D3+2 destroyed Bodyguard models to this unit".
+  family: "return-models",
+  version: 6,
+  description: "As the previous version, plus count D3+2.",
+  schema: (previous) => withProperties(previous, { count: widenedEnum(previous, "count", RETURN_COUNTS_ADDED) }),
+  normalize: (input, previous) => (RETURN_COUNTS_ADDED as readonly unknown[]).includes(input.count)
+    ? standIn(input, "count", "D3", previous)
+    : previous(input),
+};
+
 const HIT_THIS_PHASE: FamilyExtension = {
   // "that was hit by one or more Psychic Attacks made by a" + "THOUSAND SONS PSYKER model" + "this phase".
   family: "hit-by-attacks",
@@ -258,4 +272,5 @@ export const ATTACK_EXTENSIONS: readonly FamilyExtension[] = [
   printedKeywordsExtension("destroy-models", 3),
   printedKeywordsExtension("return-models", 3),
   RETURN_MODELS_WOUNDS,
+  RETURN_MODELS_COUNTS,
 ];

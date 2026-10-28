@@ -71,5 +71,5 @@ export const REGISTRY_ORDER: readonly string[] = [
   "triggering-target@5", "unit-activity@23", "unit-filter@18", "unit-keyword@7", "unit-position@26",
   "move-distance@3", "core-ability-grant@6", "characteristic-floor@2", "eligibility-permission@9", "event@35",
   "ability-modifier@7",
-  "counts-as-moved@2", "targeting-restriction@5",
+  "counts-as-moved@2", "targeting-restriction@5", "return-models@6",
 ];

@@ -68,6 +68,10 @@ describe("wounds-remaining, starting-strength and leaves-attached-unit leaves", 
     expect(restore("3")).toEqual({ subject: "this-model", count: "1", wounds_remaining: "3" });
     expect(restore("half-starting")).toEqual({ subject: "this-model", count: "1", wounds_remaining: "half-starting" });
     expect(() => restore("2")).toThrow();
+    // return-models@6 adds a D3+2 count; D3+2 was refused before it.
+    expect(norm("return-models", { subject: "this-unit", count: "D3+2", bodyguard_only: true })).toEqual({ subject: "this-unit", count: "D3+2", bodyguard_only: true });
+    expect(() => normalizeFingerprintParameters("return-models", { subject: "this-unit", count: "D3+2" }, 5)).toThrow();
+    expect(() => norm("return-models", { subject: "this-unit", count: "D3+4" })).toThrow();
   });
 
   it("previews each value in its own words", () => {
