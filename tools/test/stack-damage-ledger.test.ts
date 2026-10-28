@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { resolveTarget } from "../src/compare.js";
 import { Dataset } from "../src/data/dataset.js";
@@ -6,7 +6,7 @@ import { parseMatrixConfig } from "../src/stack-damage/config.js";
 import { resolveFactionContext } from "../src/stack-damage/factions.js";
 import { buildLedger } from "../src/stack-damage/ledger.js";
 import { damageScoringSession, emptySpec, runDamageCell } from "../src/stack-damage/search.js";
-import { equippedBuffs } from "../src/stack-damage/weapon-grants.js";
+import { bearerEquippedBuffs, equippedBuffs } from "../src/stack-damage/weapon-grants.js";
 import type { Buff } from "../src/cruncher/index.js";
 import type { Unit } from "../src/generated.js";
 
@@ -154,6 +154,39 @@ describe("stack damage ledger", () => {
       expect(candidate.reasons.includes("the chosen loadout does not include pechra, whose rule this is")).toBe(!carried);
     }
   });
+
+  it("scores the leader with a bodyguard's wargear rule only while the bodyguard's loadout carries it", () => {
+    const ctan = resolveTarget(dataset, dataset.targetProfiles.get("ctan-shard")!)!;
+    const config = parseMatrixConfig(
+      { HC_FACTIONS: "tau-empire", HC_TARGETS: "ctan-shard", HC_PHASES: "shooting", HC_OUTPUT: "ledger.json" },
+      { factionIds: new Set(["tau-empire"]), targetIds: ["ctan-shard"] },
+    );
+    const session = damageScoringSession({ dataset, config, faction, target: ctan, phase: "shooting" });
+    const unit = (id: string) => faction.units.find((candidate) => candidate.id === id)!;
+    const unled = emptySpec("tau-empire", [
+      { unit: unit("kroot-farstalkers"), role: "bodyguard" },
+      { unit: unit("kroot-war-shaper"), role: "leader" },
+    ]);
+    const levers = session.pool(unled).levers.filter((lever) => lever.source.kind === "ability" && lever.source.abilityId === "pechra-tau-empire");
+    const spec = { ...unled, selectedLeverIds: levers.map((lever) => lever.id) };
+    const leader = spec.members[1]!;
+    const pechra = (buffs: readonly Buff[]) => buffs.some(({ source }) => source.kind === "ability" && source.abilityId === "pechra-tau-empire");
+    const loadouts = (pechraCount: number) => new Map([["kroot-farstalkers", new Map([["pechra", pechraCount]])]]);
+    expect(pechra(session.memberBuffs(spec, leader))).toBe(true);
+    expect(pechra(session.memberBuffs(spec, leader, undefined, loadouts(0)))).toBe(false);
+    expect(pechra(session.memberBuffs(spec, leader, undefined, loadouts(1)))).toBe(true);
+
+    // The leader's final search runs under the bodyguard's chosen loadout.
+    const searched: Buff[][] = [];
+    const bestLoadout = session.bestLoadout.bind(session);
+    vi.spyOn(session, "bestLoadout").mockImplementation((member, buffs, ...rest) => {
+      if (member.id === "kroot-war-shaper") searched.push(buffs);
+      return bestLoadout(member, buffs, ...rest);
+    });
+    const result = session.scoreStack(spec);
+    const carried = (result.members[0]!.loadout.counts.get("pechra") ?? 0) > 0;
+    expect(pechra(searched.at(-1)!)).toBe(carried);
+  });
 });
 
 describe("equipped buffs", () => {
@@ -165,5 +198,11 @@ describe("equipped buffs", () => {
     const buffs = [buff("unit"), buff("attached", "bearers"), buff("attached", "leader")];
     expect(equippedBuffs(unit, new Map(), buffs)).toEqual([buff("attached", "leader")]);
     expect(equippedBuffs(unit, new Map([["item", 1]]), buffs)).toEqual(buffs);
+  });
+
+  it("drops the rule another member's item gives, and only while that member leaves the item out", () => {
+    const buffs = [buff("unit"), buff("attached", "bearers"), buff("attached", "leader")];
+    expect(bearerEquippedBuffs(unit, new Map(), buffs)).toEqual([buff("unit"), buff("attached", "leader")]);
+    expect(bearerEquippedBuffs(unit, new Map([["item", 1]]), buffs)).toEqual(buffs);
   });
 });

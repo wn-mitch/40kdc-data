@@ -203,6 +203,16 @@ export function equippedBuffs(unit: Unit, counts: ReadonlyMap<string, number>, b
     && (source.abilityKind === "unit" || (source.abilityKind === "attached" && source.sourceUnitId === unit.id))));
 }
 
+/**
+ * `buffs` without the printed wargear rules that `bearer`, another unit in the stack, gives them
+ * (`sourceUnitId`) while `counts`, the bearer's loadout, leaves the item out.
+ */
+export function bearerEquippedBuffs(bearer: Unit, counts: ReadonlyMap<string, number>, buffs: readonly Buff[]): Buff[] {
+  const unequipped = unequippedRules(bearer, counts);
+  if (unequipped.size === 0) return [...buffs];
+  return buffs.filter(({ source }) => !(source.kind === "ability" && source.sourceUnitId === bearer.id && unequipped.has(source.abilityId)));
+}
+
 /** What a loadout's wargear changes about scoring it; see {@link loadoutWargearScoring}. */
 export interface LoadoutWargearScoring {
   /** The caller's context with the loadout's wargear. */
