@@ -1,6 +1,6 @@
 import type { Buff } from "../cruncher/index.js";
-import type { StackMember, StackSpec, UnitLoadoutResult } from "./model.js";
-import { bearerEquippedBuffs, unequippedRules } from "./weapon-grants.js";
+import type { PoolLever, StackMember, StackSpec, UnitLoadoutResult } from "./model.js";
+import { bearerEquippedBuffs, equippedBuffs, unequippedRules } from "./weapon-grants.js";
 
 /** Each stack member's chosen loadout, by unit id. */
 export type MemberLoadouts = ReadonlyMap<string, ReadonlyMap<string, number>>;
@@ -49,4 +49,21 @@ export function othersUnequippedKey(spec: StackSpec, member: StackMember, chosen
     return counts ? [...unequippedRules(other.unit.raw, counts)].map((abilityId) => `${other.unit.id}:${abilityId}`) : [];
   });
   return dropped.length ? `|${dropped.sort().join("+")}` : "";
+}
+
+/**
+ * `levers` without those the members' `chosen` loadouts leave inert: each member's buffs from the
+ * lever are all rules printed by wargear its own or another member's loadout leaves out. An enabled
+ * rule lever stays selected while it costs nothing, so its item's absence alone would keep it listed.
+ */
+export function equippedLevers(levers: readonly PoolLever[], spec: StackSpec, chosen: MemberLoadouts): PoolLever[] {
+  return levers.filter((lever) => {
+    const reaching = spec.members.filter((member) => (lever.perMember.get(member.unit.id) ?? []).length > 0);
+    if (reaching.length === 0) return true;
+    return reaching.some((member) => {
+      const own = chosen.get(member.unit.id);
+      const buffs = lever.perMember.get(member.unit.id)!;
+      return othersEquippedBuffs(spec, member, chosen, own ? equippedBuffs(member.unit.raw, own, buffs) : buffs).length > 0;
+    });
+  });
 }

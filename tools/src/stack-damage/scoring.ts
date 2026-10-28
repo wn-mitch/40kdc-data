@@ -15,7 +15,7 @@ import { attributeSelectedProfile, crunchProfileScorer, unitLoadoutDamage, type 
 import { translationWarnings } from "./translation-warnings.js";
 import { loadoutLeverBuffs, namedLoadoutWargear, surfacedByLoadout, wargearRules, wargearTranslation, type WargearRules } from "./wargear-levers.js";
 import { equippedBuffs, unequippedRules, unitWeaponGrants, wargearContext, type WeaponGrants } from "./weapon-grants.js";
-import { othersEquippedBuffs, othersUnequippedKey, settleMemberLoadouts, type MemberLoadouts } from "./member-loadouts.js";
+import { equippedLevers, othersEquippedBuffs, othersUnequippedKey, settleMemberLoadouts, type MemberLoadouts } from "./member-loadouts.js";
 import type {
   DamageCellState,
   PoolLever,
@@ -481,7 +481,7 @@ export class DamageScoringSession {
     return [...new Map(warnings.map((warning) => [JSON.stringify(warning), warning])).values()];
   }
 
-  /** The selected levers, with the levers each member's winning loadout alone surfaces. */
+  /** The selected levers, with the levers each member's winning loadout alone surfaces, less those its loadouts leave inert. */
   selectedPoolLevers(result: StackResult): PoolLever[] {
     const pool = this.pool(result.spec);
     const levers = pool.levers.filter((lever) => result.spec.selectedLeverIds.includes(lever.id));
@@ -492,7 +492,7 @@ export class DamageScoringSession {
         current.perMember.set(member.unit.id, lever.buffs);
       }
     }
-    return levers;
+    return equippedLevers(levers, result.spec, new Map(result.members.map(({ member, loadout }) => [member.unit.id, loadout.counts])));
   }
 
   keywordsFor(spec: StackSpec): string[] {

@@ -8,6 +8,8 @@ import { buildLedger, unscoreableEntries } from "../src/stack-damage/ledger.js";
 import { damageScoringSession, emptySpec, legalDetachmentSpec, runDamageCell } from "../src/stack-damage/search.js";
 import { crunchProfileScorer, type UnscoreableProfile } from "../src/stack-damage/unit-damage.js";
 import { bearerEquippedBuffs, equippedBuffs } from "../src/stack-damage/weapon-grants.js";
+import { equippedLevers } from "../src/stack-damage/member-loadouts.js";
+import type { PoolLever } from "../src/stack-damage/model.js";
 import type { Buff } from "../src/cruncher/index.js";
 import type { Unit, Weapon } from "../src/generated.js";
 
@@ -235,6 +237,45 @@ describe("unscoreable weapon profiles", () => {
       relevant: true,
       reasons: ['unscoreable weapon profile 0: profile "Transonic Cannon" prints no BS and no Torrent, so its hits cannot be rolled'],
     })]);
+  });
+});
+
+describe("inert selected levers", () => {
+  // Kroot Farstalkers print Pech'ra for their pechra item; the Flesh Shaper reaches it as an attached rule.
+  const farstalkers = faction.units.find((unit) => unit.id === "kroot-farstalkers")!;
+  const shaper = faction.units.find((unit) => unit.id === "kroot-flesh-shaper")!;
+  const spec = emptySpec("tau-empire", [{ unit: farstalkers, role: "bodyguard" }, { unit: shaper, role: "leader" }]);
+  const buff = (abilityKind: "unit" | "attached"): Buff => ({
+    source: { kind: "ability", abilityId: "pechra-tau-empire", abilityKind, ...(abilityKind === "attached" ? { sourceUnitId: "kroot-farstalkers" } : {}) },
+    contribution: { type: "extra-keyword", keywordRef: { keyword_id: "ignores-cover" } },
+  } as Buff);
+  const lever = (id: string, perMember: [string, Buff[]][]): PoolLever => ({ id, label: id, buffs: perMember.flatMap(([, buffs]) => buffs), source: perMember[0]?.[1][0]?.source ?? { kind: "ability", abilityId: id, abilityKind: "unit" }, perMember: new Map(perMember) } as PoolLever);
+  const levers = [
+    lever("unit:pechra-tau-empire", [["kroot-farstalkers", [buff("unit")]]]),
+    lever("attached:pechra-tau-empire", [["kroot-flesh-shaper", [buff("attached")]]]),
+    lever("no-buffs", []),
+  ];
+  const chosen = (pechra: number) => new Map([["kroot-farstalkers", new Map([["pechra", pechra]])], ["kroot-flesh-shaper", new Map<string, number>()]]);
+
+  it("drops a rule lever whose item no member's loadout carries, however it reaches the member", () => {
+    expect(equippedLevers(levers, spec, chosen(0)).map((candidate) => candidate.id)).toEqual(["no-buffs"]);
+  });
+
+  it("keeps it while the bearer carries the item", () => {
+    expect(equippedLevers(levers, spec, chosen(1)).map((candidate) => candidate.id)).toEqual(["unit:pechra-tau-empire", "attached:pechra-tau-empire", "no-buffs"]);
+  });
+
+  it("leaves Pech'ra out of the selected levers of a stack whose loadout drops it", () => {
+    const ctan = resolveTarget(dataset, dataset.targetProfiles.get("ctan-shard")!)!;
+    const config = parseMatrixConfig({ HC_FACTIONS: "tau-empire", HC_TARGETS: "ctan-shard", HC_PHASES: "fight", HC_OUTPUT: "ledger.json" },
+      { factionIds: new Set(["tau-empire"]), targetIds: ["ctan-shard"] });
+    const session = damageScoringSession({ dataset, config, faction, target: ctan, phase: "fight" });
+    const result = session.optimiseLevers(spec);
+    const bearer = result.members.find(({ member }) => member.unit.id === "kroot-farstalkers")!;
+    // The enabled rule lever stays in the spec: dropping it never raises the total.
+    expect((bearer.loadout.counts.get("pechra") ?? 0)).toBe(0);
+    expect(result.spec.selectedLeverIds.filter((id) => id.includes("pechra"))).not.toEqual([]);
+    expect(session.selectedPoolLevers(result).filter((selected) => selected.id.includes("pechra"))).toEqual([]);
   });
 });
 
