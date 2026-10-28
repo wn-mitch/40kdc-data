@@ -1155,6 +1155,14 @@
             }
           },
           "description": "Only objective markers within this range of `of` (default the model with the ability)."
+        },
+        "controlled_by_unit": {
+          "$ref": "#/$defs/unit-ref",
+          "description": "Only the objective marker this unit was controlling (its models' Level of Control) at the moment the rule was triggered (\"an objective your unit was controlling when it was destroyed\")."
+        },
+        "clear_of": {
+          "$ref": "#/$defs/unit-filter",
+          "description": "Only objective markers with no unit matching this filter within range of them (\"has no enemy units (excluding AIRCRAFT units) within range of it\")."
         }
       }
     },
@@ -11188,8 +11196,17 @@
                   "description": "A distance bonus for the selected move; a negative integer shortens it (\"-2\\\" from that pile-in move\"). Numeric strings are not accepted."
                 },
                 "maximum": {
-                  "const": "unlimited",
-                  "description": "The selected Advance has no maximum distance. This is an explicit distance-ceiling override, not an additional move."
+                  "oneOf": [
+                    {
+                      "const": "unlimited"
+                    },
+                    {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 48
+                    }
+                  ],
+                  "description": "unlimited: the selected Advance has no maximum distance. A number: the selected moves can go up to that many inches (\"that unit can move up to 4\\\"\"). An explicit distance ceiling, not an additional move."
                 },
                 "advance": {
                   "enum": [
@@ -12213,7 +12230,12 @@
             "modifier": {
               "type": "object",
               "additionalProperties": false,
-              "properties": {}
+              "properties": {
+                "objective": {
+                  "$ref": "#/$defs/objective-filter",
+                  "description": "The one objective marker that stays under your control (\"that objective is secured\", the marker a select-objective bound as {selection_var}); without it, the objectives the target controls."
+                }
+              }
             },
             "scaling": {
               "$ref": "#/$defs/scaling"

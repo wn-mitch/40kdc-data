@@ -42,6 +42,13 @@ const poolLifecycleSchema = {
 // across at compile time.
 const OBJECTIVE_ORIGINS = ["this-model", "this-unit"] as const;
 const OBJECTIVE_CONTROLLERS = ["your-army", "opponent"] as const;
+const OBJECTIVE_CRITERIA = ["controlled-by-unit", "clear-of"] as const;
+const OBJECTIVE_CRITERION_UNITS = ["this-unit", "event-subject"] as const;
+
+function keywordArray(value: unknown, label: string): string[] {
+  if (!Array.isArray(value) || value.length === 0 || value.some((item) => typeof item !== "string" || !item.trim())) throw new TypeError(`${label} is a list of keywords.`);
+  return [...new Set(value.map((item) => (item as string).trim().toUpperCase()))];
+}
 
 export const GAP_CONTAINER_FAMILIES: readonly SemanticFamilyDefinition[] = [
   {
@@ -199,6 +206,26 @@ export const GAP_CONTAINER_FAMILIES: readonly SemanticFamilyDefinition[] = [
       additionalProperties: false,
     },
   },
+  {
+    id: "objective-criterion",
+    version: 1,
+    role: "CONDITION",
+    label: "Which objective markers a selection can take",
+    description: "A qualifier on the objective markers a select-objective-open right before it can select. controlled-by-unit: the marker that unit was controlling when the rule was triggered (\"that: your unit was controlling when it was destroyed\"). clear-of: no unit of side (with every keywords, none of excluded_keywords) within range of the marker (\"has no enemy units (excluding AIRCRAFT units) within range of it\").",
+    starter: { criterion: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["criterion"],
+      properties: {
+        criterion: { enum: OBJECTIVE_CRITERIA },
+        unit: { enum: OBJECTIVE_CRITERION_UNITS, "x-only-when": { criterion: ["controlled-by-unit"] } },
+        side: { enum: ["friendly", "enemy", "any"], "x-only-when": { criterion: ["clear-of"] } },
+        keywords: { type: "array", items: { type: "string", minLength: 1 }, minItems: 1, uniqueItems: true, "x-only-when": { criterion: ["clear-of"] }, "x-optional": true },
+        excluded_keywords: { type: "array", items: { type: "string", minLength: 1 }, minItems: 1, uniqueItems: true, "x-only-when": { criterion: ["clear-of"] }, "x-optional": true },
+      },
+      additionalProperties: false,
+    },
+  },
 ];
 
 export function normalizeGapContainerParameters(family: string, input: Record<string, unknown>, version = 1): Record<string, unknown> | null {
@@ -311,6 +338,21 @@ export function normalizeGapContainerParameters(family: string, input: Record<st
       if ("origin" in input) result.origin = enumValue(input.origin, OBJECTIVE_ORIGINS, "select-objective-open.origin");
       if ("controlled_by" in input) result.controlled_by = enumValue(input.controlled_by, OBJECTIVE_CONTROLLERS, "select-objective-open.controlled_by");
       return result;
+    }
+    case "objective-criterion": {
+      const criterion = enumValue(input.criterion, OBJECTIVE_CRITERIA, "objective-criterion.criterion");
+      if (criterion === "controlled-by-unit") {
+        exactKeys(input, ["criterion", "unit"], family);
+        return { criterion, unit: enumValue(input.unit, OBJECTIVE_CRITERION_UNITS, "objective-criterion.unit") };
+      }
+      const optional = ["keywords", "excluded_keywords"].filter((key) => key in input);
+      exactKeys(input, ["criterion", "side", ...optional], family);
+      return {
+        criterion,
+        side: enumValue(input.side, ["friendly", "enemy", "any"], "objective-criterion.side"),
+        ...("keywords" in input ? { keywords: keywordArray(input.keywords, "objective-criterion.keywords") } : {}),
+        ...("excluded_keywords" in input ? { excluded_keywords: keywordArray(input.excluded_keywords, "objective-criterion.excluded_keywords") } : {}),
+      };
     }
     default:
       return null;

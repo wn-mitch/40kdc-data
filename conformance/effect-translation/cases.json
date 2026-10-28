@@ -37676,6 +37676,62 @@
     }
   },
   {
+    "caseId": "fidelity/select-objective-controlled-by-unit-clear-of",
+    "effect": {
+      "type": "select-objective",
+      "selector": {
+        "filter": {
+          "controlled_by_unit": "this-unit",
+          "clear_of": {
+            "owner": "enemy",
+            "none_of": [
+              "AIRCRAFT"
+            ]
+          }
+        },
+        "bind_as": "objective",
+        "count": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "effect": {
+        "type": "objective-sticky",
+        "target": "this-unit",
+        "modifier": {
+          "objective": {
+            "selection_var": "objective"
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use:\n  -> Select one objective marker that the unit was controlling when the rule was triggered, with no enemy units (excluding AIRCRAFT units) within range of it, binding it as objective: that objective marker remains under your control until your opponent's Level of Control over it is greater than yours at the end of a phase."
+    }
+  },
+  {
+    "caseId": "fidelity/move-modifier-maximum-inches",
+    "effect": {
+      "type": "move-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "applies_to_moves": [
+          "consolidation"
+        ],
+        "maximum": 4
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, the unit can move up to 4\", during its Consolidation moves."
+    }
+  },
+  {
     "caseId": "fidelity/targeting-target-condition-engaged-at-turn-start",
     "effect": {
       "type": "targeting",

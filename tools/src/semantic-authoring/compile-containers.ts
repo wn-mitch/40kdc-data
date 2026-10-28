@@ -358,6 +358,9 @@ function buildSelectObjective(head: CompileLeaf, groups: CompileLeaf[][]): Node 
     // An origin without a distance is the origin's own reach: "an objective your unit is controlling".
     filter.within = { range: "objective-control", of: closed(head, "origin") };
   }
+  // Folded from objective-criterion leaves (compile-objective-criteria.ts).
+  if (head.parameters.controlled_by_unit !== undefined) filter.controlled_by_unit = head.parameters.controlled_by_unit;
+  if (head.parameters.clear_of !== undefined) filter.clear_of = head.parameters.clear_of;
   const selector: Node = { filter, bind_as: closed(head, "bind_as") };
   if (head.parameters.each !== true) {
     const count = head.parameters.count !== undefined ? closed(head, "count") : 1;

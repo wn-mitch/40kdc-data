@@ -14,6 +14,11 @@ describe("objective territory in the cruncher", () => {
     expect(objectiveMatches({ territory: "enemy-deployment-zone" }, { territory: "target" }, "attacker")).toBe("unknown");
     expect(objectiveMatches({ territory: "your-deployment-zone" }, { territory: "attacker" }, "attacker")).toBe("unknown");
   });
+
+  it("leaves a unit's control at the trigger and a marker clear of units unknown: the scenario models neither", () => {
+    expect(objectiveMatches({ controlled_by_unit: "this-unit" }, { controller: "attacker" }, "attacker")).toBe("unknown");
+    expect(objectiveMatches({ clear_of: { owner: "enemy" } }, { controller: "attacker" }, "attacker")).toBe("unknown");
+  });
 });
 
 describe("a producer-only named-region-state in the cruncher", () => {

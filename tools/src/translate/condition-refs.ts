@@ -249,6 +249,9 @@ export function objectivePhrase(f: P, plural = false, noun = "objective"): strin
     const within = f.within as P;
     s += ` within ${rangePhrase(within.range)} of ${placeRefPhrase(within.of)}`;
   }
+  // "that your unit was controlling when it was destroyed": the unit's control when the rule was triggered.
+  if (f.controlled_by_unit != null) s += ` that ${unitRefPhrase(f.controlled_by_unit)} was controlling when the rule was triggered`;
+  if (f.clear_of != null) s += `, with no ${unitFilterPhrase(f.clear_of as P).replace(/^an? /, "").replace(/\bunit\b/, "units")} within range of it`;
   return s;
 }
 

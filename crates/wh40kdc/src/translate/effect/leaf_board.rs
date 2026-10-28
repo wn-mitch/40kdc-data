@@ -10,7 +10,7 @@ use super::placement::{placement_limits, placement_phrase};
 use super::select::for_each_unit_subject;
 use super::words::*;
 use crate::translate::condition::{
-    and_list, condition_lead_in_value, nn, obj, or_list, range_phrase, P,
+    and_list, condition_lead_in_value, nn, obj, or_list, place_ref_phrase, range_phrase, P,
 };
 
 fn wounds(n: &str, noun: &str) -> String {
@@ -569,6 +569,11 @@ pub(crate) fn describe_board_leaf(e: &P, m: &P, subj: &str, ctx: &Ctx) -> String
             format!("spend {amount} {noun}{showing}")
         }
         Some("resource-die") => resource_die(m),
+        // "That objective is secured": one marker, the one a select-objective bound.
+        Some("objective-sticky") if nn(m, "objective").is_some() => format!(
+            "{} remains under your control until your opponent's Level of Control over it is greater than yours at the end of a phase",
+            place_ref_phrase(Some(&serde_json::json!({ "objective": m.get("objective") })))
+        ),
         Some("objective-sticky") => format!(
             "objective markers {subj} {} remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase",
             v(subj, "controls")

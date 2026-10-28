@@ -15,10 +15,10 @@ dump confirmation.
 | wargear-options | 0 | 0 | 1234 | 0 |
 | leader-attachments | 0 | 0 | 283 | 8 |
 | enhancements | 0 | 0 | 890 | 0 |
-| detachments | 2 | 0 | 162 | 293 |
-| stratagems | 24 | 0 | 1006 | 283 |
-| abilities | 53 | 0 | 3569 | 913 |
-| phase-mappings | 18 | 0 | 1109 | 454 |
+| detachments | 1 | 0 | 164 | 292 |
+| stratagems | 2 | 0 | 1030 | 281 |
+| abilities | 0 | 0 | 3631 | 904 |
+| phase-mappings | 1 | 0 | 1127 | 453 |
 | resource-pools | 0 | 0 | 0 | 6 |
 
 ## Abilities by faction
@@ -26,40 +26,40 @@ dump confirmation.
 | Faction | Promote | Demote | Kept | Untouched |
 |---|--:|--:|--:|--:|
 | _core | 0 | 0 | 8 | 18 |
-| adepta-sororitas | 3 | 0 | 114 | 31 |
-| adeptus-astartes | 4 | 0 | 204 | 42 |
-| adeptus-custodes | 1 | 0 | 137 | 20 |
-| adeptus-mechanicus | 2 | 0 | 135 | 30 |
-| aeldari | 4 | 0 | 239 | 57 |
-| agents-of-the-imperium | 2 | 0 | 94 | 42 |
-| astra-militarum | 4 | 0 | 189 | 58 |
-| black-templars | 1 | 0 | 49 | 13 |
+| adepta-sororitas | 0 | 0 | 117 | 31 |
+| adeptus-astartes | 0 | 0 | 209 | 41 |
+| adeptus-custodes | 0 | 0 | 144 | 14 |
+| adeptus-mechanicus | 0 | 0 | 137 | 30 |
+| aeldari | 0 | 0 | 243 | 57 |
+| agents-of-the-imperium | 0 | 0 | 96 | 42 |
+| astra-militarum | 0 | 0 | 193 | 58 |
+| black-templars | 0 | 0 | 51 | 12 |
 | blood-angels | 0 | 0 | 49 | 12 |
-| chaos-daemons | 1 | 0 | 160 | 34 |
-| chaos-knights | 1 | 0 | 82 | 27 |
-| chaos-space-marines | 4 | 0 | 216 | 61 |
-| dark-angels | 1 | 0 | 58 | 18 |
-| death-guard | 1 | 0 | 121 | 38 |
+| chaos-daemons | 0 | 0 | 161 | 34 |
+| chaos-knights | 0 | 0 | 83 | 27 |
+| chaos-space-marines | 0 | 0 | 220 | 61 |
+| dark-angels | 0 | 0 | 59 | 18 |
+| death-guard | 0 | 0 | 122 | 38 |
 | deathwatch | 0 | 0 | 31 | 5 |
-| drukhari | 1 | 0 | 124 | 39 |
-| emperors-children | 3 | 0 | 117 | 26 |
-| genestealer-cults | 1 | 0 | 114 | 32 |
-| grey-knights | 2 | 0 | 118 | 14 |
+| drukhari | 0 | 0 | 125 | 39 |
+| emperors-children | 0 | 0 | 120 | 26 |
+| genestealer-cults | 0 | 0 | 115 | 32 |
+| grey-knights | 0 | 0 | 120 | 14 |
 | imperial-fists | 0 | 0 | 8 | 3 |
 | imperial-knights | 0 | 0 | 89 | 29 |
 | iron-hands | 0 | 0 | 9 | 2 |
-| leagues-of-votann | 2 | 0 | 125 | 28 |
-| necrons | 2 | 0 | 187 | 41 |
-| orks | 3 | 0 | 169 | 38 |
+| leagues-of-votann | 0 | 0 | 127 | 28 |
+| necrons | 0 | 0 | 189 | 41 |
+| orks | 0 | 0 | 173 | 37 |
 | raven-guard | 0 | 0 | 10 | 1 |
 | salamanders | 0 | 0 | 6 | 5 |
 | space-wolves | 0 | 0 | 74 | 13 |
-| tau-empire | 3 | 0 | 131 | 32 |
-| thousand-sons | 2 | 0 | 118 | 38 |
-| tyranids | 3 | 0 | 147 | 36 |
+| tau-empire | 0 | 0 | 134 | 32 |
+| thousand-sons | 0 | 0 | 120 | 38 |
+| tyranids | 0 | 0 | 150 | 36 |
 | ultramarines | 0 | 0 | 10 | 1 |
 | white-scars | 0 | 0 | 11 | 0 |
-| world-eaters | 2 | 0 | 116 | 29 |
+| world-eaters | 0 | 0 | 118 | 29 |
 
 ## Ability verification outcomes
 
@@ -77,14 +77,14 @@ dump confirmation.
 | adeptus-astartes | ambiguous-source | 1 |
 | adeptus-astartes | digest-differs | 13 |
 | adeptus-astartes | no-source | 5 |
-| adeptus-astartes | stub | 22 |
+| adeptus-astartes | stub | 21 |
 | adeptus-astartes | unpublished | 1 |
-| adeptus-astartes | verified | 208 |
+| adeptus-astartes | verified | 209 |
 | adeptus-custodes | ambiguous-source | 1 |
-| adeptus-custodes | digest-differs | 3 |
-| adeptus-custodes | stub | 14 |
+| adeptus-custodes | digest-differs | 2 |
+| adeptus-custodes | stub | 9 |
 | adeptus-custodes | unpublished | 2 |
-| adeptus-custodes | verified | 138 |
+| adeptus-custodes | verified | 144 |
 | adeptus-mechanicus | digest-differs | 10 |
 | adeptus-mechanicus | stub | 16 |
 | adeptus-mechanicus | unpublished | 4 |
@@ -103,8 +103,8 @@ dump confirmation.
 | astra-militarum | unpublished | 26 |
 | astra-militarum | verified | 193 |
 | black-templars | digest-differs | 1 |
-| black-templars | stub | 12 |
-| black-templars | verified | 50 |
+| black-templars | stub | 11 |
+| black-templars | verified | 51 |
 | blood-angels | digest-differs | 6 |
 | blood-angels | no-source | 1 |
 | blood-angels | stub | 4 |
@@ -168,9 +168,9 @@ dump confirmation.
 | orks | ambiguous-source | 1 |
 | orks | digest-differs | 21 |
 | orks | no-source | 1 |
-| orks | stub | 9 |
+| orks | stub | 8 |
 | orks | unpublished | 6 |
-| orks | verified | 172 |
+| orks | verified | 173 |
 | raven-guard | stub | 1 |
 | raven-guard | verified | 10 |
 | salamanders | digest-differs | 2 |

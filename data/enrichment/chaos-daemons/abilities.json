@@ -8698,12 +8698,13 @@
                 }
               }
             ]
-          }
+          },
+          "duration": "turn"
         }
       ]
     },
     "scope": {
-      "duration": "turn"
+      "duration": "permanent"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },

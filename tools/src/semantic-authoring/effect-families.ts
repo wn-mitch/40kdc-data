@@ -10,6 +10,7 @@ const SUBJECTS = ["this-unit", "this-model"] as const;
 const STICKY_SUBJECTS = ["this-unit", "this-model", "selected-unit"] as const;
 /** Version 3 adds each unit a for-each loop reaches ("if a friendly K unit is controlling an objective"). */
 const STICKY_SUBJECTS_V3 = [...STICKY_SUBJECTS, "recipient"] as const;
+const STICKY_SUBJECTS_V4 = [...STICKY_SUBJECTS_V3, "selected-objective"] as const;
 /** Model characteristics, then weapon characteristics; only the weapon ones can be limited to melee or ranged. */
 export const MODEL_CHARACTERISTICS = ["M", "T", "Sv", "W", "Ld", "OC"] as const;
 export const WEAPON_CHARACTERISTICS = ["A", "WS", "BS", "S", "AP", "D"] as const;
@@ -62,6 +63,16 @@ export const EFFECT_FAMILIES: readonly SemanticFamilyDefinition[] = [
     description: "\"That objective marker remains under your control until your opponent's Level of Control over it is greater than yours at the end of a phase.\" Being within range of it is a separate condition. subject names whose objectives (default this-unit): a selected unit, or each unit a for-each loop reaches (recipient).",
     starter: {},
     parameterSchema: { type: "object", properties: { subject: { enum: STICKY_SUBJECTS_V3 } }, additionalProperties: false },
+    deprecated: true,
+  },
+  {
+    id: "sticky-objective",
+    version: 4,
+    role: "EFFECT",
+    label: "Sticky objective",
+    description: "\"That objective marker remains under your control until your opponent's Level of Control over it is greater than yours at the end of a phase.\" Being within range of it is a separate condition. subject names whose objectives (default this-unit): a selected unit, or each unit a for-each loop reaches (recipient); selected-objective is the one marker this record's select-objective chose (\"that objective is secured\").",
+    starter: {},
+    parameterSchema: { type: "object", properties: { subject: { enum: STICKY_SUBJECTS_V4 } }, additionalProperties: false },
   },
   {
     id: "no-advance-roll",
@@ -281,7 +292,7 @@ export function normalizeEffectParameters(family: string, input: Record<string, 
       }
       if ("subject" in input) {
         exactKeys(input, ["subject"], family);
-        return { subject: enumValue(input.subject, version >= 3 ? STICKY_SUBJECTS_V3 : STICKY_SUBJECTS, "sticky-objective.subject") };
+        return { subject: enumValue(input.subject, version >= 4 ? STICKY_SUBJECTS_V4 : version >= 3 ? STICKY_SUBJECTS_V3 : STICKY_SUBJECTS, "sticky-objective.subject") };
       }
       exactKeys(input, [], family);
       return {};

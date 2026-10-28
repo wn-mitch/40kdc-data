@@ -1154,6 +1154,14 @@
             }
           },
           "description": "Only objective markers within this range of `of` (default the model with the ability)."
+        },
+        "controlled_by_unit": {
+          "$ref": "#/$defs/unit-ref",
+          "description": "Only the objective marker this unit was controlling (its models' Level of Control) at the moment the rule was triggered (\"an objective your unit was controlling when it was destroyed\")."
+        },
+        "clear_of": {
+          "$ref": "#/$defs/unit-filter",
+          "description": "Only objective markers with no unit matching this filter within range of them (\"has no enemy units (excluding AIRCRAFT units) within range of it\")."
         }
       }
     },

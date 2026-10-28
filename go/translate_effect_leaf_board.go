@@ -348,6 +348,8 @@ func moveModifierLeaf(m map[string]any, subj string, ctx effCtx) string {
 	var clauses []string
 	if m["maximum"] == "unlimited" {
 		clauses = append(clauses, subj+" can move any distance")
+	} else if n, ok := m["maximum"].(float64); ok {
+		clauses = append(clauses, subj+" can move up to "+numStr(n)+"\"")
 	}
 	if m["distance_bonus"] != nil {
 		n := jsNumber(m["distance_bonus"])
@@ -711,6 +713,10 @@ func describeBoardLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 	case "resource-die":
 		return resourceDieLeaf(m)
 	case "objective-sticky":
+		// "That objective is secured": one marker, the one a select-objective bound.
+		if m["objective"] != nil {
+			return placeRefPhrase(map[string]any{"objective": m["objective"]}) + " remains under your control until your opponent's Level of Control over it is greater than yours at the end of a phase"
+		}
 		return "objective markers " + subj + " " + ev(subj, "controls") + " remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase"
 	case "designate":
 		return designateLeaf(m, subj, ctx)

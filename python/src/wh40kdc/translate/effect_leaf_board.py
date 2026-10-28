@@ -13,7 +13,7 @@ from typing import Any
 
 from wh40kdc.translate.condition import describe_condition
 from wh40kdc.translate.condition_leadin import condition_lead_in
-from wh40kdc.translate.condition_refs import _objective_phrase
+from wh40kdc.translate.condition_refs import _objective_phrase, place_ref_phrase
 from wh40kdc.translate.effect_leaf_army import (
     army_rule,
     cost_modifier,
@@ -503,6 +503,8 @@ def _move_modifier(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
     clauses: list[str] = []
     if m.get("maximum") == "unlimited":
         clauses.append(f"{subj} can move any distance")
+    elif isinstance(m.get("maximum"), int) and not isinstance(m.get("maximum"), bool):
+        clauses.append(f'{subj} can move up to {m["maximum"]}"')
     if m.get("distance_bonus") is not None:
         n = num(m["distance_bonus"])
         moves = f"{kinds} moves" if kinds else "Move characteristic"
@@ -833,6 +835,13 @@ def describe_board_leaf(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx, inline:
     if t == "resource-die":
         return resource_die(m)
     if t == "objective-sticky":
+        # "That objective is secured": one marker, the one a select-objective bound.
+        if m.get("objective") is not None:
+            marker = place_ref_phrase({"objective": m["objective"]})
+            return (
+                f"{marker} remains under your control until your opponent's Level of Control over "
+                "it is greater than yours at the end of a phase"
+            )
         return (
             f"objective markers {subj} {v(subj, 'controls')} remain under your control until "
             "your opponent's "

@@ -494,7 +494,41 @@ pub(crate) fn objective_phrase(f: &P, plural: bool, noun: &str) -> String {
             place_ref_phrase(within.get("of"))
         ));
     }
+    // "that your unit was controlling when it was destroyed": the unit's control when the rule was triggered.
+    if let Some(u) = nn(f, "controlled_by_unit") {
+        s.push_str(&format!(
+            " that {} was controlling when the rule was triggered",
+            unit_ref_phrase(Some(u), "the unit")
+        ));
+    }
+    if let Some(c) = nn(f, "clear_of") {
+        let phrase = unit_filter_phrase(obj(Some(c)));
+        let phrase = phrase
+            .strip_prefix("an ")
+            .or_else(|| phrase.strip_prefix("a "))
+            .unwrap_or(&phrase);
+        let phrase = first_unit_plural(phrase);
+        s.push_str(&format!(", with no {phrase} within range of it"));
+    }
     s
+}
+
+/// The first whole word "unit" made plural ("enemy unit (excluding AIRCRAFT units)" → "enemy units (…)").
+fn first_unit_plural(phrase: &str) -> String {
+    let bytes = phrase.as_bytes();
+    let mut from = 0;
+    while let Some(at) = phrase[from..].find("unit") {
+        let start = from + at;
+        let end = start + 4;
+        let word = |b: u8| b.is_ascii_alphanumeric() || b == b'_';
+        let before = start == 0 || !word(bytes[start - 1]);
+        let after = end == bytes.len() || !word(bytes[end]);
+        if before && after {
+            return format!("{}units{}", &phrase[..start], &phrase[end..]);
+        }
+        from = end;
+    }
+    phrase.to_string()
 }
 
 pub(crate) fn state_phrase_base(state: &str) -> Option<&'static str> {

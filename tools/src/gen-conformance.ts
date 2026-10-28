@@ -4070,6 +4070,12 @@ function genEffectTranslation(): void {
         ] } } } } },
     // A consolidation mode the unit could not otherwise select, regardless of the move's Before Moving restrictions.
     { caseId: "fidelity/move-modifier-mode-choice-any", effect: { type: "move-modifier", target: "this-unit", modifier: { applies_to_moves: ["consolidation"], mode_choice: { modes: "any", ignore_before_moving: true } } } },
+    // An objective marker the unit was controlling when the rule was triggered, clear of enemy units, then secured.
+    { caseId: "fidelity/select-objective-controlled-by-unit-clear-of", effect: { type: "select-objective",
+      selector: { filter: { controlled_by_unit: "this-unit", clear_of: { owner: "enemy", none_of: ["AIRCRAFT"] } }, bind_as: "objective", count: { min: 1, max: 1 } },
+      effect: { type: "objective-sticky", target: "this-unit", modifier: { objective: { selection_var: "objective" } } } } },
+    // A move's distance ceiling as printed: "can move up to 4\"".
+    { caseId: "fidelity/move-modifier-maximum-inches", effect: { type: "move-modifier", target: "this-unit", modifier: { applies_to_moves: ["consolidation"], maximum: 4 } } },
     // A targeting restriction that covers only targets meeting a condition (this-unit is the checked target).
     { caseId: "fidelity/targeting-target-condition-engaged-at-turn-start", effect: { type: "targeting", target: "this-unit", modifier: { by: "this-unit", may: "cannot-target", kind: "attack", target: { owner: "enemy" },
       target_condition: { type: "unit-state", parameters: { subject: "this-unit", state: "engaged", with: "ability-unit", at: "turn-start" } } } } },

@@ -147,6 +147,8 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   { family: "sticky-objective", from: 1, to: 2, map: (parameters) => parameters },
   // Version 3 only adds the recipient subject; v2 subjects still fit.
   { family: "sticky-objective", from: 2, to: 3, map: (parameters) => parameters },
+  // Version 4 only adds the selected-objective subject; v3 subjects still fit.
+  { family: "sticky-objective", from: 3, to: 4, map: (parameters) => parameters },
   // Version 2 only adds an optional roll_var (the phase-4 `roll` binding container); v1's plain dice still fits.
   { family: "dice-roll", from: 1, to: 2, map: (parameters) => parameters },
   // Version 3 only adds an optional count (several dice); one die leaves it out, so v2 still fits.

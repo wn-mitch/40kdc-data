@@ -1063,56 +1063,67 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "1fb4be0f60af942c5b208a18642dccf201c34b33640b15c4ffb0a0942cfad0d2",
+    "source_digest": "5a4f247833d9664496f1836b899c35eaa6d176e5bbc893917d7f02ae9f0c45fd",
     "version": "2025-q3",
     "effect": {
-      "type": "ability-part",
-      "trigger": {
-        "event": "disembarked",
-        "subject": {
-          "owner": "friendly"
-        },
-        "object": "this-model"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
       },
       "effect": {
-        "type": "conditional",
-        "condition": {
-          "operator": "not",
-          "operands": [
-            {
-              "type": "happened",
-              "parameters": {
-                "event": "move-ended",
-                "subject": "this-model",
-                "window": "turn"
-              }
-            }
+        "type": "permission",
+        "target": "event-subject",
+        "modifier": {
+          "activity": "declare-charge",
+          "allow": true,
+          "despite": [
+            "advanced"
           ]
-        },
-        "effect": {
-          "type": "permission",
-          "target": "event-subject",
-          "modifier": {
-            "activity": "declare-charge",
-            "allow": true,
-            "after": [
-              "advance"
-            ]
-          }
         }
       }
     },
     "scope": {
-      "duration": "turn"
+      "duration": "phase"
     },
     "unit_ids": [
       "orion-assault-dropship"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "adeptus-custodes"
+    "behavior": "reactive",
+    "faction_id": "adeptus-custodes",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "move_types": [
+          "disembark"
+        ],
+        "mode": "tactical",
+        "to": "move"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS CUSTODES"
+        ],
+        "embarked_in": "this-unit"
+      }
+    }
   },
   {
     "ability_id": "seekers-instincts-adeptus-custodes",
@@ -4282,9 +4293,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "anathema-psykana-rhino",
       "coronus-grav-carrier"
@@ -4293,11 +4303,49 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "move",
+        "target": {
+          "owner": "friendly",
+          "embarked_in": "this-unit"
+        },
+        "modifier": {
+          "move_type": "disembark",
+          "mode": "shock"
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "advance"
+        ]
+      }
+    },
+    "source_digest": "6ee640e827683ef2245a6393073b5c7e68b418ae5a65e4f3b22640ad66dd480f"
   },
   {
     "ability_id": "companions-watch-adeptus-custodes",
@@ -6219,19 +6267,62 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "aquilan-talon",
     "ability_type": "detachment",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "move-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "applies_to_moves": [
+              "consolidation"
+            ],
+            "maximum": 4
+          }
+        },
+        {
+          "type": "move-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "applies_to_moves": [
+              "consolidation"
+            ],
+            "mode_choice": {
+              "modes": "any",
+              "ignore_before_moving": true
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "move_types": [
+          "consolidation"
+        ],
+        "to": "move"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS CUSTODES",
+          "AQUILAN TALON"
+        ]
+      },
+      "optional": true
+    },
+    "source_digest": "fcaacd6aca4ffb5ed753cd68d0a90e8791027b14b7e617d4cc6aeda1abb69cb9"
   },
   {
     "ability_id": "silent-sisterhood-adeptus-custodes",
@@ -7763,19 +7854,48 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "honoured-companions",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "move-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "applies_to_moves": [
+          "consolidation"
+        ],
+        "mode_choice": {
+          "modes": [
+            "objective"
+          ],
+          "ignore_before_moving": true
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "move_types": [
+          "consolidation"
+        ],
+        "to": "move"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "TRUSTED SENTINEL"
+        ]
+      },
+      "optional": true
+    },
+    "source_digest": "b9aafad0761a09ec3eef6a94c3a647867185f403ac532b980f5af80c7c09ed05"
   },
   {
     "ability_id": "emperors-light-guardians-of-the-throne-adeptus-custodes",
@@ -9660,19 +9780,57 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "shadowkeepers",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "move-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "applies_to_moves": [
+              "pile-in",
+              "consolidation"
+            ],
+            "maximum": 4
+          }
+        },
+        {
+          "type": "move-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "applies_to_moves": [
+              "consolidation"
+            ],
+            "mode_choice": {
+              "modes": "any",
+              "ignore_before_moving": true
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "move_types": [
+          "pile-in",
+          "consolidation"
+        ],
+        "to": "move"
+      },
+      "optional": true
+    },
+    "source_digest": "83800159965cd4e5a8a42c4ddb14b971b9dc6d6c6c89af6a48beb04a02c91221"
   },
   {
     "ability_id": "unstoppable-momentum-might-of-the-moritoi-adeptus-custodes",
@@ -9777,18 +9935,87 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "grav-assault-force",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "event-object",
+          "filter": {
+            "within": {
+              "of": {
+                "objective": {}
+              },
+              "range": "objective-control"
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "permission",
+            "target": "this-unit",
+            "modifier": {
+              "activity": "use-stratagem",
+              "allow": true,
+              "despite": [
+                "destroyed"
+              ]
+            }
+          },
+          {
+            "type": "select-objective",
+            "selector": {
+              "filter": {
+                "controlled_by_unit": "this-unit",
+                "clear_of": {
+                  "owner": "enemy",
+                  "none_of": [
+                    "AIRCRAFT"
+                  ]
+                }
+              },
+              "bind_as": "objective",
+              "count": {
+                "min": 1,
+                "max": 1
+              }
+            },
+            "effect": {
+              "type": "objective-sticky",
+              "target": "this-unit",
+              "modifier": {
+                "objective": {
+                  "selection_var": "objective"
+                }
+              }
+            }
+          }
+        ]
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "destroyed",
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "GRAV-ASSAULT"
+        ]
+      },
+      "optional": true
+    },
+    "source_digest": "26c32e1ecd2aa9d764b2866f30be496c321a103f09bb3b2922ce2d5d0509cc68"
   }
 ]

@@ -514,6 +514,11 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
     case "fights-first":
       return { type: "ability-grant", target: target(leaf.parameters.subject), modifier: { ability: "fights-first" } };
     case "sticky-objective":
+      // Version 4: "that objective is secured", the marker the record's select-objective chose (compile.ts names it).
+      if (leaf.parameters.subject === "selected-objective") {
+        if (typeof leaf.parameters.selection_var !== "string") throw new CompileError("sticky-objective names the selected objective marker, but this record selects no objective marker.");
+        return { type: "objective-sticky", target: "this-unit", modifier: { objective: { selection_var: leaf.parameters.selection_var } } };
+      }
       // Version 1 leaves carry no subject at all, and always meant this-unit.
       return { type: "objective-sticky", target: leaf.parameters.subject !== undefined ? closed(leaf, "subject") : "this-unit" };
     case "no-advance-roll":

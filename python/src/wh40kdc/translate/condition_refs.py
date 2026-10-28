@@ -477,6 +477,15 @@ def _objective_phrase(f: Any, plural: bool = False, noun: str = "objective") -> 
         s += f" tagged {dekebab(_str(f['designated']))}"
     if f.get("within") is not None and not unit_controls:
         s += f" within {range_phrase(within.get('range'))} of {place_ref_phrase(within.get('of'))}"
+    # "that your unit was controlling when it was destroyed": the unit's control when the rule was
+    # triggered.
+    if f.get("controlled_by_unit") is not None:
+        unit = unit_ref_phrase(f["controlled_by_unit"])
+        s += f" that {unit} was controlling when the rule was triggered"
+    if f.get("clear_of") is not None:
+        bare = re.sub(r"^an? ", "", unit_filter_phrase(f["clear_of"]))
+        clear = re.sub(r"\bunit\b", "units", bare, count=1)
+        s += f", with no {clear} within range of it"
     return s
 
 

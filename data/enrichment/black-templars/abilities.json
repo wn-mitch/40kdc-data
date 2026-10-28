@@ -3381,9 +3381,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "impulsor"
     ],
@@ -3391,11 +3390,49 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "move",
+        "target": {
+          "owner": "friendly",
+          "embarked_in": "this-unit"
+        },
+        "modifier": {
+          "move_type": "disembark",
+          "mode": "shock"
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "advance"
+        ]
+      }
+    },
+    "source_digest": "a8912f7e98a5ea8e691c220997583e37c26c900a082bfad97ba7bd0c86e80181"
   },
   {
     "ability_id": "transhuman-strategist-black-templars",

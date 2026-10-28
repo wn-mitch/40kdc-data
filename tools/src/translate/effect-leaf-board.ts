@@ -16,6 +16,7 @@ import {
 import { expiryTrail } from "./expiry.js";
 import { forEachUnitSubject } from "./effect.js";
 import { placePhrase, placementLimits, placementPhrase } from "./effect-placement.js";
+import { placeRefPhrase } from "./condition-refs.js";
 
 function wounds(n: string, noun = "mortal wound"): string {
   return n === "1" ? noun : `${noun}s`;
@@ -208,6 +209,7 @@ function moveModifier(m: Record<string, unknown>, subj: string, ctx: Ctx): strin
   const kinds = Array.isArray(m.applies_to_moves) ? andList((m.applies_to_moves as unknown[]).map((x) => MOVE_NOUNS[jstr(x)] ?? dekebab(jstr(x)))) : null;
   const clauses: string[] = [];
   if (m.maximum === "unlimited") clauses.push(`${subj} can move any distance`);
+  else if (typeof m.maximum === "number") clauses.push(`${subj} can move up to ${m.maximum}"`);
   if (m.distance_bonus != null) {
     const n = Number(m.distance_bonus);
     const moves = kinds ? `${kinds} moves` : "Move characteristic";
@@ -529,6 +531,8 @@ export function describeBoardLeaf(e: Leaf, m: Record<string, unknown>, subj: str
     }
     case "resource-die": return resourceDie(m);
     case "objective-sticky":
+      // "That objective is secured": one marker, the one a select-objective bound.
+      if (m.objective != null) return `${placeRefPhrase({ objective: m.objective })} remains under your control until your opponent's Level of Control over it is greater than yours at the end of a phase`;
       return `objective markers ${subj} ${v(subj, "controls")} remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase`;
     case "designate": return designate(m, subj, ctx);
     case "army-rule": return armyRule(m, subj, ctx, e.target);

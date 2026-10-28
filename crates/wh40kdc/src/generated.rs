@@ -1460,7 +1460,7 @@ pub struct AbilityModifierEffectModifier {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub recipient_duration: ::std::option::Option<ScopeDuration>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub recipients: ::std::option::Option<UnitFilter>,
+    pub recipients: ::std::option::Option<::std::boxed::Box<UnitFilter>>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub selection: ::std::option::Option<UnitSelector>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -5192,10 +5192,10 @@ pub struct ArmyIncludesConditionParameters {
 pub struct ArmyRuleEffectModifier {
     ///attachment: a Leader that can join a unit matching this filter can join this unit.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub attach_as: ::std::option::Option<UnitFilter>,
+    pub attach_as: ::std::option::Option<::std::boxed::Box<UnitFilter>>,
     ///attachment: the target can be attached to a unit matching this filter, in addition to the units its datasheet lists.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub can_lead: ::std::option::Option<UnitFilter>,
+    pub can_lead: ::std::option::Option<::std::boxed::Box<UnitFilter>>,
     ///composition/unique: units of any of these datasheets (unit ids); with `with`, units matching both.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub datasheets: ::std::option::Option<Vec<EntityId>>,
@@ -5219,12 +5219,12 @@ pub struct ArmyRuleEffectModifier {
     pub measure: ::std::option::Option<ArmyRuleEffectModifierMeasure>,
     ///composition: max applies once per unit matching this filter (one per INQUISITOR).
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub per: ::std::option::Option<UnitFilter>,
+    pub per: ::std::option::Option<::std::boxed::Box<UnitFilter>>,
     pub rule: ArmyRuleEffectModifierRule,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub tag: ::std::option::Option<ArmyRuleEffectModifierTag>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub with: ::std::option::Option<UnitFilter>,
+    pub with: ::std::option::Option<::std::boxed::Box<UnitFilter>>,
 }
 ///`ArmyRuleEffectModifierEnhancementKind`
 ///
@@ -5837,7 +5837,7 @@ pub struct AttachmentConditionParameters {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub subject: ::std::option::Option<UnitRef>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub with: ::std::option::Option<UnitFilter>,
+    pub with: ::std::option::Option<::std::boxed::Box<UnitFilter>>,
 }
 ///`AttachmentConditionParametersRole`
 ///
@@ -6868,9 +6868,9 @@ pub struct AuraEffectModifier {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub effect: ::std::option::Option<EffectNode>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub eligible: ::std::option::Option<UnitFilter>,
+    pub eligible: ::std::option::Option<::std::boxed::Box<UnitFilter>>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub emitter_filter: ::std::option::Option<UnitFilter>,
+    pub emitter_filter: ::std::option::Option<::std::boxed::Box<UnitFilter>>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub of: ::std::option::Option<::std::string::String>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -6882,7 +6882,7 @@ pub struct AuraEffectModifier {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub range_cap: ::std::option::Option<RangeRef>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub recipient_filter: ::std::option::Option<UnitFilter>,
+    pub recipient_filter: ::std::option::Option<::std::boxed::Box<UnitFilter>>,
     ///The unit must be wholly within the range (no part of it outside), not merely within it (any part inside).
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub wholly: ::std::option::Option<::serde_json::Value>,
@@ -10750,9 +10750,9 @@ pub struct DesignateTargetEffect {
 #[serde(deny_unknown_fields)]
 pub struct DesignateTargetEffectApplies {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub attacker_filter: ::std::option::Option<UnitFilter>,
+    pub attacker_filter: ::std::option::Option<::std::boxed::Box<UnitFilter>>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub attacker_unit_filter: ::std::option::Option<UnitFilter>,
+    pub attacker_unit_filter: ::std::option::Option<::std::boxed::Box<UnitFilter>>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub beneficiary: ::std::option::Option<EventOrSelectionReference>,
     pub effect: EffectNode,
@@ -24681,8 +24681,17 @@ impl ::std::convert::TryFrom<::std::string::String> for MoveMode {
 ///      "const": true
 ///    },
 ///    "maximum": {
-///      "description": "The selected Advance has no maximum distance. This is an explicit distance-ceiling override, not an additional move.",
-///      "const": "unlimited"
+///      "description": "unlimited: the selected Advance has no maximum distance. A number: the selected moves can go up to that many inches (\"that unit can move up to 4\\\"\"). An explicit distance ceiling, not an additional move.",
+///      "oneOf": [
+///        {
+///          "const": "unlimited"
+///        },
+///        {
+///          "type": "integer",
+///          "maximum": 48.0,
+///          "minimum": 1.0
+///        }
+///      ]
 ///    },
 ///    "mode_choice": {
 ///      "description": "The unit can select a mode of its move (applies_to_moves) it otherwise could not: modes \"any\" is every mode of that move, a list names the modes. ignore_before_moving: the selection disregards the move's Before Moving restrictions (\"regardless of that consolidation move's Before Moving restrictions\").",
@@ -24803,9 +24812,9 @@ pub struct MoveModifierEffectModifier {
     pub ends_when_replaces: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub ignore_vertical: ::std::option::Option<::serde_json::Value>,
-    ///The selected Advance has no maximum distance. This is an explicit distance-ceiling override, not an additional move.
+    ///unlimited: the selected Advance has no maximum distance. A number: the selected moves can go up to that many inches ("that unit can move up to 4\""). An explicit distance ceiling, not an additional move.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub maximum: ::std::option::Option<::serde_json::Value>,
+    pub maximum: ::std::option::Option<MoveModifierEffectModifierMaximum>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub mode_choice: ::std::option::Option<MoveModifierEffectModifierModeChoice>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -25078,6 +25087,42 @@ impl ::std::convert::From<Quantity> for MoveModifierEffectModifierDistanceBonus 
 impl ::std::convert::From<i64> for MoveModifierEffectModifierDistanceBonus {
     fn from(value: i64) -> Self {
         Self::Integer(value)
+    }
+}
+///unlimited: the selected Advance has no maximum distance. A number: the selected moves can go up to that many inches ("that unit can move up to 4\""). An explicit distance ceiling, not an additional move.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "unlimited: the selected Advance has no maximum distance. A number: the selected moves can go up to that many inches (\"that unit can move up to 4\\\"\"). An explicit distance ceiling, not an additional move.",
+///  "oneOf": [
+///    {
+///      "const": "unlimited"
+///    },
+///    {
+///      "type": "integer",
+///      "maximum": 48.0,
+///      "minimum": 1.0
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(untagged)]
+pub enum MoveModifierEffectModifierMaximum {
+    Variant0(::serde_json::Value),
+    Variant1(::std::num::NonZeroU64),
+}
+impl ::std::convert::From<::serde_json::Value> for MoveModifierEffectModifierMaximum {
+    fn from(value: ::serde_json::Value) -> Self {
+        Self::Variant0(value)
+    }
+}
+impl ::std::convert::From<::std::num::NonZeroU64> for MoveModifierEffectModifierMaximum {
+    fn from(value: ::std::num::NonZeroU64) -> Self {
+        Self::Variant1(value)
     }
 }
 ///The unit can select a mode of its move (applies_to_moves) it otherwise could not: modes "any" is every mode of that move, a list names the modes. ignore_before_moving: the selection disregards the move's Before Moving restrictions ("regardless of that consolidation move's Before Moving restrictions").
@@ -27634,8 +27679,16 @@ pub struct OathStateConditionParameters {
 ///  "description": "Which objectives. Every listed property must hold.",
 ///  "type": "object",
 ///  "properties": {
+///    "clear_of": {
+///      "description": "Only objective markers with no unit matching this filter within range of them (\"has no enemy units (excluding AIRCRAFT units) within range of it\").",
+///      "$ref": "#/$defs/unit-filter"
+///    },
 ///    "controlled_by": {
 ///      "$ref": "#/$defs/owner"
+///    },
+///    "controlled_by_unit": {
+///      "description": "Only the objective marker this unit was controlling (its models' Level of Control) at the moment the rule was triggered (\"an objective your unit was controlling when it was destroyed\").",
+///      "$ref": "#/$defs/unit-ref"
 ///    },
 ///    "designated": {
 ///      "$ref": "#/$defs/designation-id"
@@ -27697,8 +27750,14 @@ pub struct OathStateConditionParameters {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct ObjectiveFilter {
+    ///Only objective markers with no unit matching this filter within range of them ("has no enemy units (excluding AIRCRAFT units) within range of it").
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub clear_of: ::std::option::Option<::std::boxed::Box<UnitFilter>>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub controlled_by: ::std::option::Option<Owner>,
+    ///Only the objective marker this unit was controlling (its models' Level of Control) at the moment the rule was triggered ("an objective your unit was controlling when it was destroyed").
+    #[serde(default)]
+    pub controlled_by_unit: ::std::boxed::Box<::std::option::Option<UnitRef>>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub designated: ::std::option::Option<DesignationId>,
     ///The friendly or the enemy home objective.
@@ -27720,7 +27779,9 @@ pub struct ObjectiveFilter {
 impl ::std::default::Default for ObjectiveFilter {
     fn default() -> Self {
         Self {
+            clear_of: Default::default(),
             controlled_by: Default::default(),
+            controlled_by_unit: Default::default(),
             designated: Default::default(),
             home_of: Default::default(),
             name: Default::default(),
@@ -28209,16 +28270,28 @@ impl<'de> ::serde::Deserialize<'de> for ObjectiveSelectorBindAs {
 /// ```json
 ///{
 ///  "type": "object",
+///  "properties": {
+///    "objective": {
+///      "description": "The one objective marker that stays under your control (\"that objective is secured\", the marker a select-objective bound as {selection_var}); without it, the objectives the target controls.",
+///      "$ref": "#/$defs/objective-filter"
+///    }
+///  },
 ///  "additionalProperties": false
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
-pub struct ObjectiveStickyEffectModifier {}
+pub struct ObjectiveStickyEffectModifier {
+    ///The one objective marker that stays under your control ("that objective is secured", the marker a select-objective bound as {selection_var}); without it, the objectives the target controls.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub objective: ::std::option::Option<ObjectiveFilter>,
+}
 impl ::std::default::Default for ObjectiveStickyEffectModifier {
     fn default() -> Self {
-        Self {}
+        Self {
+            objective: Default::default(),
+        }
     }
 }
 ///`OperationMarkersConditionParameters`
@@ -33687,7 +33760,7 @@ pub struct ResourceActionMenuEffectActionsItemEligibility {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub count: ::std::option::Option<CountBounds>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub filter: ::std::option::Option<UnitFilter>,
+    pub filter: ::std::option::Option<::std::boxed::Box<UnitFilter>>,
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub requires: ::std::vec::Vec<Condition>,
 }
@@ -49447,7 +49520,7 @@ pub struct TargetingEffectModifier {
     pub kind: ::std::option::Option<TargetingEffectModifierKind>,
     pub may: TargetingEffectModifierMay,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub only_if_none: ::std::option::Option<UnitFilter>,
+    pub only_if_none: ::std::option::Option<::std::boxed::Box<UnitFilter>>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub range: ::std::option::Option<RangeRef>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -51248,7 +51321,7 @@ pub enum TransportCapacityEffectModifier {
     Variant3 {
         capacity: ::std::num::NonZeroU64,
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-        eligible: ::std::option::Option<UnitFilter>,
+        eligible: ::std::option::Option<::std::boxed::Box<UnitFilter>>,
         #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
         space_per_model: ::std::vec::Vec<
             TransportCapacityEffectModifierVariant3SpacePerModelItem,

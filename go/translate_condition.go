@@ -1,6 +1,9 @@
 package wh40kdc
 
-import "strings"
+import (
+	"regexp"
+	"strings"
+)
 
 // Humanize an Ability-DSL / scoring condition into plain English. Shared by
 // the effect describer (which frames conditions as lead-ins, conditionLeadIn)
@@ -477,8 +480,21 @@ func objectivePhrase(f map[string]any, plural bool, noun string) string {
 	if hasWithin && !unitControls {
 		s += " within " + rangePhrase(within["range"]) + " of " + placeRefPhrase(within["of"])
 	}
+	// "that your unit was controlling when it was destroyed": the unit's control when the rule was triggered.
+	if f["controlled_by_unit"] != nil {
+		s += " that " + unitRefPhrase(f["controlled_by_unit"], "the unit") + " was controlling when the rule was triggered"
+	}
+	if clear, ok := asMap(f["clear_of"]); ok && clear != nil {
+		phrase := leadingArticleRe.ReplaceAllString(unitFilterPhrase(clear), "")
+		if loc := unitWordRe.FindStringIndex(phrase); loc != nil {
+			phrase = phrase[:loc[0]] + "units" + phrase[loc[1]:]
+		}
+		s += ", with no " + phrase + " within range of it"
+	}
 	return s
 }
+
+var unitWordRe = regexp.MustCompile(`\bunit\b`)
 
 var statePhrases = map[string]string{
 	"engaged":               "engaged",

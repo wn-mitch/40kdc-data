@@ -1,7 +1,7 @@
 import { ANTECEDENT } from "../antecedent-families.js";
 import type { SemanticFamilyDefinition } from "../contracts.js";
 import { DICE, EVENT_SUBJECT, type FamilyExtension, KEYWORD_ITEMS, keywordList, optional, properties, type Schema, standIn, widenedEnum, withProperties } from "../family-extension-helpers.js";
-import { enumSet, enumValue, exactKeys } from "../family-validation.js";
+import { boundedInteger, enumSet, enumValue, exactKeys } from "../family-validation.js";
 import { MOVE_SUBSET, PASSTHROUGH_ITEMS } from "../movement-families.js";
 import { FILTERED_UNITS, PASSTHROUGH_USED_VALUES } from "./shared.js";
 
@@ -408,6 +408,22 @@ export const MOVE_EXTENSIONS: readonly FamilyExtension[] = [
       const staged = { ...input, ...(input.subject === ANTECEDENT ? { subject: "this-unit" } : {}), ...(shortened ? { bonus: -(input.bonus as number) } : {}) };
       const result = previous(staged);
       return { ...result, ...(input.subject === ANTECEDENT ? { subject: ANTECEDENT } : {}), ...(shortened ? { bonus: -(result.bonus as number) } : {}) };
+    },
+  },
+  {
+    // "That unit can move up to 4\"": the move's distance ceiling as printed, not a bonus on an assumed base distance.
+    family: "move-distance",
+    version: 4,
+    description: "As the previous version, plus maximum as a number of inches (1-24): the named moves can go up to that far (\"can move up to 4\\\"\"), for any move type. maximum unlimited still names one Advance move.",
+    schema: (previous) => withProperties(previous, { maximum: { anyOf: [{ const: "unlimited" }, { type: "integer", minimum: 1, maximum: 24 }] } }),
+    normalize: (input, previous) => {
+      if (typeof input.maximum !== "number") return previous(input);
+      if (input.bonus !== undefined) throw new TypeError("move-distance.maximum and bonus are mutually exclusive.");
+      const { maximum, ...rest } = input;
+      const inches = boundedInteger(maximum, 1, 24, "move-distance.maximum");
+      // The previous version checks the subject and moves with a stand-in bonus.
+      const { bonus: _bonus, ...result } = previous({ ...rest, bonus: 1 });
+      return { ...result, maximum: inches };
     },
   },
   {
