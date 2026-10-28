@@ -27946,7 +27946,8 @@
           "trigger": {
             "event": "after-roll",
             "filter": {
-              "roll": "wound"
+              "roll": "wound",
+              "result": "success"
             }
           },
           "effect": {
@@ -27963,7 +27964,7 @@
       "duration": "phase"
     },
     "expected": {
-      "text": "Until the end of the phase:\n  -> When the unit is selected to fight, you may use this ability: spend 1 Miracle die.\n  -> After a Wound roll is made: the target suffers 1 mortal wound."
+      "text": "Until the end of the phase:\n  -> When the unit is selected to fight, you may use this ability: spend 1 Miracle die.\n  -> Each time an attack made by a model in this unit scores a wound: the target suffers 1 mortal wound."
     }
   },
   {

@@ -358,7 +358,8 @@
           "trigger": {
             "event": "after-roll",
             "filter": {
-              "roll": "wound"
+              "roll": "wound",
+              "result": "success"
             }
           },
           "effect": {

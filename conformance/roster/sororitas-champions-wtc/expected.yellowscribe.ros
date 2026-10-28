@@ -340,7 +340,7 @@
               <characteristics>
                 <characteristic name="Description">Until the end of the phase:
   -&gt; When the unit is selected to fight, you may use this ability: spend 1 Miracle die.
-  -&gt; After a Wound roll is made: the target suffers 1 mortal wound.</characteristic>
+  -&gt; Each time an attack made by a model in this unit scores a wound: the target suffers 1 mortal wound.</characteristic>
               </characteristics>
             </profile>
           </profiles>
