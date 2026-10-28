@@ -51,69 +51,6 @@ var gwhKeywordAnnotation = regexp.MustCompile(`(?i)^(?:40kdc\s+)?(?:detachment\s
 var gwhBulletAnywhere = regexp.MustCompile(`(?m)^[\t ]*[•◦]`)
 var gwhDetachmentPtsSuffix = regexp.MustCompile(`(?i)\s*\(\s*\d*\s*(?:Detachment Points?|Detachementpoints?|DP|PD)\s*\)\s*$`)
 
-// A line of only `+` characters — the BCP summary block's fence.
-var gwhPlusFence = regexp.MustCompile(`^\++$`)
-
-// A line inside that block identifying it as BCP's (not GW's own `+ …` fence).
-var gwhBcpSummaryMarker = regexp.MustCompile(`(?im)^\s*(?:Player Name|Team Name|Factions Used|Army Points)\s*:`)
-
-// Battle-size labels that look like unit headers (`Strike Force (2,000 Points)`)
-// but are army metadata, not datasheets.
-var gwhBattleSizeNames = map[string]bool{
-	"combat patrol": true,
-	"incursion":     true,
-	"strike force":  true,
-	"onslaught":     true,
-}
-
-func gwhParsePts(raw string) any {
-	n, err := strconv.Atoi(strings.ReplaceAll(raw, ",", ""))
-	if err != nil {
-		return nil
-	}
-	return float64(n)
-}
-
-func gwhIsBattleSize(name string) bool {
-	return gwhBattleSizeNames[strings.ToLower(strings.TrimSpace(name))]
-}
-
-func gwhIndent(raw string) int {
-	return len(raw) - len(strings.TrimLeft(raw, " \t"))
-}
-
-// gwhStripBcpSummary drops a leading `++…++`-fenced BCP summary block
-// (`Player Name:` / `Factions Used:` / `Army Points: N` / …). It is BCP
-// metadata, not part of the pasted roster, and would otherwise be consumed as
-// the roster title, turning the real title line into a phantom unit. Only a
-// block whose fence pair wraps a BCP marker is removed, so a framed GW export's
-// own `+ FACTION KEYWORD:` fence is left intact.
-func gwhStripBcpSummary(text string) string {
-	lines := splitLines(text)
-	open := 0
-	for open < len(lines) && strings.TrimSpace(lines[open]) == "" {
-		open++
-	}
-	if open >= len(lines) || !gwhPlusFence.MatchString(strings.TrimSpace(lines[open])) {
-		return text
-	}
-	closeIdx := -1
-	for j := open + 1; j < len(lines); j++ {
-		if gwhPlusFence.MatchString(strings.TrimSpace(lines[j])) {
-			closeIdx = j
-			break
-		}
-	}
-	if closeIdx == -1 {
-		return text
-	}
-	block := strings.Join(lines[open+1:closeIdx], "\n")
-	if !gwhBcpSummaryMarker.MatchString(block) {
-		return text
-	}
-	return strings.Join(lines[closeIdx+1:], "\n")
-}
-
 // gwhHeaderlessText accepts bullet-bearing plain text that no framed adapter
 // claims, returning the BCP-stripped body.
 func gwhHeaderlessText(decoded any) (string, bool) {
@@ -355,6 +292,8 @@ func finishGwhUnit(acc *gwhUnit) map[string]any {
 	isCharacter := acc.isCharacterSection
 	var enhancementRawName, enhancementPoints any
 	keywordOverrides := []string{}
+	// Per-model groups as the source lists them; kept only if exact.
+	var candidateGroups []gwhLoadoutGroup
 
 	for i := range acc.bullets {
 		b := acc.bullets[i]
@@ -386,11 +325,14 @@ func finishGwhUnit(acc *gwhUnit) map[string]any {
 		if b.colonWargear != nil {
 			n := gwhBulletCount(b)
 			modelCount += n
+			group := gwhLoadoutGroup{modelName: b.name, count: n, wargear: newOrderedCounter()}
 			for _, item := range strings.Split(b.colonWargear.(string), ",") {
 				if s := strings.TrimSpace(item); s != "" {
 					wargear.add(s, n)
+					group.wargear.add(s, 1)
 				}
 			}
+			candidateGroups = append(candidateGroups, group)
 			continue
 		}
 
@@ -400,7 +342,11 @@ func finishGwhUnit(acc *gwhUnit) map[string]any {
 			next = &acc.bullets[i+1]
 		}
 		if isModelGroup(b, next) {
-			modelCount += gwhBulletCount(b)
+			n := gwhBulletCount(b)
+			modelCount += n
+			if group, ok := gwhModelGroupLoadout(acc.bullets, i, n); ok {
+				candidateGroups = append(candidateGroups, group)
+			}
 			continue
 		}
 
@@ -465,6 +411,9 @@ func finishGwhUnit(acc *gwhUnit) map[string]any {
 	}
 	if len(keywordOverrides) > 0 {
 		result["keyword_overrides"] = strSliceToAny(keywordOverrides)
+	}
+	if groups, ok := gwhExactLoadoutGroups(candidateGroups, modelCount, wargear); ok {
+		result["loadout_groups"] = groups
 	}
 	return result
 }

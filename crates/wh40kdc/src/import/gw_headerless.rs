@@ -56,8 +56,9 @@ use super::attached_groups::{
     attached_as_role, attached_unit_number, is_attached_as_support, is_attached_section,
     pair_attached_groups, AttachedAs, GroupMember,
 };
+use super::loadout_candidates::exact_loadout_groups;
 use super::newrecruit_text::infer_battle_size_raw;
-use super::types::{ParsedRoster, ParsedUnit, ParsedWargear, RosterFormat};
+use super::types::{ParsedLoadoutGroup, ParsedRoster, ParsedUnit, ParsedWargear, RosterFormat};
 
 const CHARACTERS_SECTION: &str = "CHARACTERS";
 const ALLIED_SECTION: &str = "ALLIED UNITS";
@@ -556,6 +557,8 @@ fn finish_unit(acc: UnitAcc) -> ParsedUnit {
     let mut is_character = acc.is_character_section;
     let mut enhancement_raw_name: Option<String> = None;
     let mut enhancement_points: Option<u64> = None;
+    // Per-model groups as the source lists them; kept only if exact.
+    let mut candidate_groups: Vec<ParsedLoadoutGroup> = Vec::new();
 
     for (i, b) in acc.bullets.iter().enumerate() {
         // `Attached as: …` carries no model or gear; a `(Character)` role flags
@@ -581,15 +584,60 @@ fn finish_unit(acc: UnitAcc) -> ParsedUnit {
         if let Some(csv) = &b.colon_wargear {
             let n = b.count.unwrap_or(1);
             model_count += n;
+            let mut group_wargear: Vec<ParsedWargear> = Vec::new();
             for item in csv.split(',').map(str::trim).filter(|s| !s.is_empty()) {
                 add_wargear(item, n);
+                match group_wargear.iter_mut().find(|w| w.raw_name == item) {
+                    Some(w) => w.count += 1,
+                    None => group_wargear.push(ParsedWargear {
+                        raw_name: item.to_string(),
+                        count: 1,
+                    }),
+                }
             }
+            candidate_groups.push(ParsedLoadoutGroup {
+                model_name: Some(b.name.clone()),
+                count: n,
+                wargear: group_wargear,
+            });
             continue;
         }
 
         // Model group: counted bullet at the model indent with a deeper bulleted child.
         if is_model_group(b, acc.bullets.get(i + 1)) {
-            model_count += b.count.unwrap_or(1);
+            let n = b.count.unwrap_or(1);
+            model_count += n;
+            // Each child's count is the squad-wide total; split it per model.
+            let mut group_wargear: Vec<ParsedWargear> = Vec::new();
+            let mut exact = true;
+            for child in acc.bullets[i + 1..]
+                .iter()
+                .take_while(|c| c.indent > b.indent)
+            {
+                let total = child.count.unwrap_or(1);
+                if child.is_attachment
+                    || child.sets_character
+                    || child.enhancement.is_some()
+                    || child.is_annotation
+                    || child.colon_wargear.is_some()
+                    || n == 0
+                    || total % n != 0
+                {
+                    exact = false;
+                    continue;
+                }
+                group_wargear.push(ParsedWargear {
+                    raw_name: child.name.clone(),
+                    count: total / n,
+                });
+            }
+            if exact && !group_wargear.is_empty() {
+                candidate_groups.push(ParsedLoadoutGroup {
+                    model_name: Some(b.name.clone()),
+                    count: n,
+                    wargear: group_wargear,
+                });
+            }
             continue;
         }
 
@@ -628,6 +676,8 @@ fn finish_unit(acc: UnitAcc) -> ParsedUnit {
         (displayed, _) => displayed,
     };
 
+    let loadout_groups = exact_loadout_groups(candidate_groups, model_count, &wargear);
+
     ParsedUnit {
         raw_name: acc.raw_name,
         is_character,
@@ -638,7 +688,7 @@ fn finish_unit(acc: UnitAcc) -> ParsedUnit {
         enhancement_raw_name,
         enhancement_points,
         wargear,
-        loadout_groups: None,
+        loadout_groups,
         leader_attachment: None,
     }
 }

@@ -1,0 +1,135 @@
+package wh40kdc
+
+import (
+	"regexp"
+	"strconv"
+	"strings"
+)
+
+// Helpers for the headerless plain-text adapter (import_gw_headerless.go):
+// BCP summary stripping, points and battle-size parsing, and the exact
+// per-model loadout groups. Mirror of tools/src/import/gw-headerless.ts.
+
+// A line of only `+` characters — the BCP summary block's fence.
+var gwhPlusFence = regexp.MustCompile(`^\++$`)
+
+// A line inside that block identifying it as BCP's (not GW's own `+ …` fence).
+var gwhBcpSummaryMarker = regexp.MustCompile(`(?im)^\s*(?:Player Name|Team Name|Factions Used|Army Points)\s*:`)
+
+// Battle-size labels that look like unit headers (`Strike Force (2,000 Points)`)
+// but are army metadata, not datasheets.
+var gwhBattleSizeNames = map[string]bool{
+	"combat patrol": true,
+	"incursion":     true,
+	"strike force":  true,
+	"onslaught":     true,
+}
+
+func gwhParsePts(raw string) any {
+	n, err := strconv.Atoi(strings.ReplaceAll(raw, ",", ""))
+	if err != nil {
+		return nil
+	}
+	return float64(n)
+}
+
+func gwhIsBattleSize(name string) bool {
+	return gwhBattleSizeNames[strings.ToLower(strings.TrimSpace(name))]
+}
+
+func gwhIndent(raw string) int {
+	return len(raw) - len(strings.TrimLeft(raw, " \t"))
+}
+
+// gwhStripBcpSummary drops a leading `++…++`-fenced BCP summary block
+// (`Player Name:` / `Factions Used:` / `Army Points: N` / …). It is BCP
+// metadata, not part of the pasted roster, and would otherwise be consumed as
+// the roster title, turning the real title line into a phantom unit. Only a
+// block whose fence pair wraps a BCP marker is removed, so a framed GW export's
+// own `+ FACTION KEYWORD:` fence is left intact.
+func gwhStripBcpSummary(text string) string {
+	lines := splitLines(text)
+	open := 0
+	for open < len(lines) && strings.TrimSpace(lines[open]) == "" {
+		open++
+	}
+	if open >= len(lines) || !gwhPlusFence.MatchString(strings.TrimSpace(lines[open])) {
+		return text
+	}
+	closeIdx := -1
+	for j := open + 1; j < len(lines); j++ {
+		if gwhPlusFence.MatchString(strings.TrimSpace(lines[j])) {
+			closeIdx = j
+			break
+		}
+	}
+	if closeIdx == -1 {
+		return text
+	}
+	block := strings.Join(lines[open+1:closeIdx], "\n")
+	if !gwhBcpSummaryMarker.MatchString(block) {
+		return text
+	}
+	return strings.Join(lines[closeIdx+1:], "\n")
+}
+
+// gwhLoadoutGroup is one model group as the source lists it: the model name,
+// how many models carry it, and each item's count per model.
+type gwhLoadoutGroup struct {
+	modelName string
+	count     int
+	wargear   *orderedCounter
+}
+
+// gwhModelGroupLoadout reads the per-model loadout of the model group bullet
+// at index i (n models). Each child's count is the squad-wide total, so it
+// must divide evenly by n. Returns false when any child is an annotation or
+// does not divide, or when the group has no wargear.
+func gwhModelGroupLoadout(bullets []gwhBullet, i, n int) (gwhLoadoutGroup, bool) {
+	group := gwhLoadoutGroup{modelName: bullets[i].name, count: n, wargear: newOrderedCounter()}
+	exact := true
+	for _, child := range bullets[i+1:] {
+		if child.indent <= bullets[i].indent {
+			break
+		}
+		total := gwhBulletCount(child)
+		if child.isAttachment || child.setsCharacter || child.hasEnhancement ||
+			child.isAnnotation || child.colonWargear != nil || n == 0 || total%n != 0 {
+			exact = false
+			continue
+		}
+		group.wargear.add(child.name, total/n)
+	}
+	return group, exact && !group.wargear.empty()
+}
+
+// gwhExactLoadoutGroups returns the candidate groups as parsed loadout_groups
+// when they cover modelCount models and reproduce the unit's wargear totals
+// exactly; otherwise false, and resolve rebuilds groups from composition.
+func gwhExactLoadoutGroups(candidates []gwhLoadoutGroup, modelCount int, wargear *orderedCounter) ([]any, bool) {
+	groupedModels := 0
+	grouped := map[string]int{}
+	for _, g := range candidates {
+		groupedModels += g.count
+		for _, name := range g.wargear.keys {
+			grouped[name] += g.wargear.m[name] * g.count
+		}
+	}
+	if groupedModels != modelCount || len(grouped) != len(wargear.keys) {
+		return nil, false
+	}
+	for _, name := range wargear.keys {
+		if grouped[name] != wargear.m[name] {
+			return nil, false
+		}
+	}
+	out := make([]any, 0, len(candidates))
+	for _, g := range candidates {
+		out = append(out, map[string]any{
+			"model_name": g.modelName,
+			"count":      float64(g.count),
+			"wargear":    g.wargear.pairs(),
+		})
+	}
+	return out, true
+}

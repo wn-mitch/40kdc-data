@@ -1,0 +1,19 @@
+Exact Groups Test (170 points)
+
+Space Marines
+Gladius Task Force
+
+BATTLELINE
+
+Intercessor Squad (85 points)
+  • 5x Intercessor
+    • 5x Bolt Pistol
+      5x Bolt Rifle
+      5x Knives and Fists
+
+Assault Intercessor Squad (85 points)
+  • 5x Assault Intercessor
+    • 5x Chainsword
+      4x Heavy Bolt Pistol
+
+Exported with App Version: v2.0.5 (128), Data Version: v995

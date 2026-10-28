@@ -43,6 +43,8 @@ mod listforge;
 #[cfg(feature = "import")]
 mod listforge_text;
 #[cfg(feature = "import")]
+mod loadout_candidates;
+#[cfg(feature = "import")]
 mod newrecruit_json;
 #[cfg(feature = "import")]
 mod newrecruit_simple;
