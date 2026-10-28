@@ -1634,12 +1634,29 @@
                   }
                 }
               ]
-            },
-            "optional": true
+            }
           },
           "effect": {
-            "type": "objective-sticky",
-            "target": "this-unit"
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "within": {
+                    "of": {
+                      "objective": {
+                        "controlled_by": "friendly"
+                      }
+                    },
+                    "range": "objective-control"
+                  }
+                }
+              }
+            },
+            "effect": {
+              "type": "objective-sticky",
+              "target": "this-unit"
+            }
           }
         },
         {
@@ -1650,6 +1667,11 @@
               "to": "fight"
             },
             "optional": true
+          },
+          "usage": {
+            "frequency": "n-per-battle",
+            "count": 1,
+            "per": "army"
           },
           "effect": {
             "type": "sequence",
@@ -1679,11 +1701,6 @@
                 }
               }
             ]
-          },
-          "usage": {
-            "frequency": "n-per-battle",
-            "count": 1,
-            "per": "army"
           }
         }
       ]
@@ -2129,10 +2146,17 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "controls",
+        "type": "matches",
         "parameters": {
-          "count": {
-            "min": 1
+          "filter": {
+            "within": {
+              "of": {
+                "objective": {
+                  "controlled_by": "friendly"
+                }
+              },
+              "range": "objective-control"
+            }
           }
         }
       },
@@ -2753,10 +2777,13 @@
               "operator": "not",
               "operands": [
                 {
-                  "type": "eligible",
+                  "type": "happened",
                   "parameters": {
-                    "subject": "this-unit",
-                    "to": "fight"
+                    "event": "selected",
+                    "filter": {
+                      "to": "fight"
+                    },
+                    "window": "phase"
                   }
                 }
               ]
@@ -9016,10 +9043,13 @@
                     "operator": "not",
                     "operands": [
                       {
-                        "type": "eligible",
+                        "type": "happened",
                         "parameters": {
-                          "subject": "this-unit",
-                          "to": "fight"
+                          "event": "selected",
+                          "filter": {
+                            "to": "fight"
+                          },
+                          "window": "phase"
                         }
                       }
                     ]
@@ -9057,10 +9087,13 @@
                     "operator": "not",
                     "operands": [
                       {
-                        "type": "eligible",
+                        "type": "happened",
                         "parameters": {
-                          "subject": "this-unit",
-                          "to": "fight"
+                          "event": "selected",
+                          "filter": {
+                            "to": "fight"
+                          },
+                          "window": "phase"
                         }
                       }
                     ]
@@ -11067,8 +11100,26 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "objective-sticky",
-      "target": "this-unit"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "within": {
+              "of": {
+                "objective": {
+                  "controlled_by": "friendly"
+                }
+              },
+              "range": "objective-control"
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "objective-sticky",
+        "target": "this-unit"
+      }
     },
     "scope": {
       "duration": "permanent"
@@ -14224,10 +14275,13 @@
             "operator": "not",
             "operands": [
               {
-                "type": "eligible",
+                "type": "happened",
                 "parameters": {
-                  "subject": "this-unit",
-                  "to": "fight"
+                  "event": "selected",
+                  "filter": {
+                    "to": "fight"
+                  },
+                  "window": "phase"
                 }
               }
             ]

@@ -4482,19 +4482,13 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "faction_id": "tyranids",
-    "trigger": [
-      {
-        "event": "selected",
-        "subject": "this-model",
-        "filter": {
-          "to": "fight"
-        }
-      },
-      {
-        "event": "attacks-resolved",
-        "subject": "event-subject"
+    "trigger": {
+      "event": "attacks-resolved",
+      "subject": "this-model",
+      "filter": {
+        "kind": "fight"
       }
-    ]
+    }
   },
   {
     "ability_id": "pheromone-trail-tyranids",
@@ -7613,10 +7607,13 @@
               "operator": "not",
               "operands": [
                 {
-                  "type": "eligible",
+                  "type": "happened",
                   "parameters": {
-                    "subject": "this-unit",
-                    "to": "fight"
+                    "event": "selected",
+                    "filter": {
+                      "to": "fight"
+                    },
+                    "window": "phase"
                   }
                 }
               ]

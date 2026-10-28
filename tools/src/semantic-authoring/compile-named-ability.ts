@@ -42,6 +42,20 @@ export function foldAuraMoments(list: readonly CompileLeaf[], sourceText?: strin
       && sameSentence(sourceText, aura.end_byte, moment.start_byte)
       // "fails a Battle-shock test or is destroyed": the alternative moment's unit would stay unbound.
       && !(alternative?.family_id === "event" && alternative.fragment === moment.fragment && sameSentence(sourceText, moment.end_byte, alternative.start_byte));
+    // "fails a Battle-shock test or is destroyed": a recipient's roll and, joined by "or", its own
+    // destruction. Both moments are the aura recipient's, so each becomes a trigger within the range.
+    if (pairedDestruction(list, index, sourceText)) {
+      if (aura!.parameters.wholly === true || aura!.parameters.range_cap_inches !== undefined) {
+        throw new CompileError("A moment of an aura's recipient becomes a trigger's proximity, which cannot say wholly within or cap the range.");
+      }
+      if (filter.parameters.visible === true) throw new CompileError("An aura reaches units whether or not they are visible; drop visible from its unit-filter.");
+      const proximity = { of: aura!.parameters.of ?? "this-unit", inches: aura!.parameters.inches };
+      const { subject: _subject, ...rest } = moment!.parameters;
+      out.push({ ...moment!, parameters: { ...rest, subject_filter: dslUnitFilter(filter), proximity } });
+      out.push({ ...alternative!, parameters: { ...alternative!.parameters, object_filter: dslUnitFilter(filter), proximity } });
+      index += 3;
+      continue;
+    }
     const fits = sameAura && AURA_MOMENT_KINDS.has(String(moment!.parameters.kind)) && moment!.parameters.subject === ANTECEDENT;
     // "chosen by a Gadget": the chosen unit is the moment's object, and any owner may choose it.
     const targeted = sameAura && moment!.parameters.kind === "targets-selected" && moment!.parameters.object === ANTECEDENT
@@ -78,6 +92,25 @@ export function foldAuraMoments(list: readonly CompileLeaf[], sourceText?: strin
     index += 2;
   }
   return out;
+}
+
+/**
+ * A unit-filter, a side-less aura-range, an after-roll moment of the recipient (subject
+ * antecedent), and, joined to it by "or" in the same sentence, a bare unit-destroyed moment (no
+ * destroyer or owner named: the recipient itself is destroyed).
+ */
+function pairedDestruction(list: readonly CompileLeaf[], index: number, sourceText: string | undefined): boolean {
+  const [filter, aura, moment, alternative] = [list[index], list[index + 1], list[index + 2], list[index + 3]];
+  if (filter?.family_id !== "unit-filter" || aura?.family_id !== "aura-range" || aura.parameters.side !== undefined) return false;
+  if (moment?.family_id !== "event" || moment.parameters.kind !== "after-roll" || moment.parameters.subject !== ANTECEDENT) return false;
+  if (alternative?.family_id !== "event" || alternative.parameters.kind !== "unit-destroyed") return false;
+  if (["by", "object_owner", "object_keywords", "timing"].some((key) => alternative.parameters[key] !== undefined)) return false;
+  const fragment = filter.fragment;
+  if (aura.fragment !== fragment || moment.fragment !== fragment || alternative.fragment !== fragment) return false;
+  if (!sameSentence(sourceText, aura.end_byte, moment.start_byte) || !sameSentence(sourceText, moment.end_byte, alternative.start_byte)) return false;
+  if (sourceText === undefined || moment.end_byte === undefined) return false;
+  const gap = Buffer.from(sourceText, "utf8").subarray(moment.end_byte, alternative.start_byte).toString("utf8");
+  return /^\s*or\s*$/iu.test(gap);
 }
 
 /** Moments a `by-ability` leaf can say happened through an ability. */

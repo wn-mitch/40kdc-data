@@ -4440,7 +4440,10 @@
                 "type": "happened",
                 "parameters": {
                   "event": "model-destroyed",
-                  "object": "model-in-this-unit",
+                  "object": {
+                    "owner": "enemy",
+                    "level": "model"
+                  },
                   "window": "event"
                 }
               },

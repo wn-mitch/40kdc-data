@@ -12,13 +12,13 @@ dump confirmation.
 | weapons | 0 | 0 | 3413 | 123 |
 | wargear | 0 | 0 | 165 | 87 |
 | unit-compositions | 0 | 0 | 1063 | 0 |
-| wargear-options | 0 | 0 | 1346 | 0 |
+| wargear-options | 0 | 0 | 1234 | 0 |
 | leader-attachments | 0 | 0 | 283 | 8 |
 | enhancements | 0 | 0 | 890 | 0 |
 | detachments | 0 | 0 | 160 | 297 |
-| stratagems | 9 | 0 | 1016 | 288 |
-| abilities | 27 | 0 | 3571 | 937 |
-| phase-mappings | 15 | 0 | 1109 | 457 |
+| stratagems | 0 | 0 | 1025 | 288 |
+| abilities | 1 | 0 | 3601 | 933 |
+| phase-mappings | 0 | 0 | 1124 | 457 |
 | resource-pools | 0 | 0 | 0 | 6 |
 
 ## Abilities by faction
@@ -26,27 +26,27 @@ dump confirmation.
 | Faction | Promote | Demote | Kept | Untouched |
 |---|--:|--:|--:|--:|
 | _core | 0 | 0 | 8 | 18 |
-| adepta-sororitas | 2 | 0 | 114 | 32 |
+| adepta-sororitas | 0 | 0 | 116 | 32 |
 | adeptus-astartes | 0 | 0 | 208 | 42 |
 | adeptus-custodes | 0 | 0 | 136 | 22 |
 | adeptus-mechanicus | 0 | 0 | 136 | 31 |
-| aeldari | 4 | 0 | 237 | 59 |
-| agents-of-the-imperium | 4 | 0 | 92 | 42 |
-| astra-militarum | 3 | 0 | 190 | 58 |
+| aeldari | 0 | 0 | 241 | 59 |
+| agents-of-the-imperium | 0 | 0 | 96 | 42 |
+| astra-militarum | 0 | 0 | 193 | 58 |
 | black-templars | 0 | 0 | 50 | 13 |
 | blood-angels | 0 | 0 | 49 | 12 |
-| chaos-daemons | 3 | 0 | 155 | 37 |
+| chaos-daemons | 0 | 0 | 158 | 37 |
 | chaos-knights | 0 | 0 | 82 | 28 |
-| chaos-space-marines | 3 | 0 | 215 | 63 |
+| chaos-space-marines | 0 | 0 | 219 | 62 |
 | dark-angels | 0 | 0 | 58 | 19 |
-| death-guard | 1 | 0 | 120 | 39 |
+| death-guard | 0 | 0 | 121 | 39 |
 | deathwatch | 0 | 0 | 31 | 5 |
-| drukhari | 1 | 0 | 123 | 40 |
-| emperors-children | 1 | 0 | 118 | 27 |
+| drukhari | 0 | 0 | 125 | 39 |
+| emperors-children | 0 | 0 | 119 | 27 |
 | genestealer-cults | 0 | 0 | 115 | 32 |
-| grey-knights | 1 | 0 | 119 | 14 |
+| grey-knights | 0 | 0 | 120 | 14 |
 | imperial-fists | 0 | 0 | 7 | 4 |
-| imperial-knights | 0 | 0 | 87 | 31 |
+| imperial-knights | 0 | 0 | 88 | 30 |
 | iron-hands | 0 | 0 | 9 | 2 |
 | leagues-of-votann | 0 | 0 | 127 | 28 |
 | necrons | 0 | 0 | 189 | 41 |
@@ -55,11 +55,11 @@ dump confirmation.
 | salamanders | 0 | 0 | 6 | 5 |
 | space-wolves | 0 | 0 | 74 | 13 |
 | tau-empire | 0 | 0 | 133 | 33 |
-| thousand-sons | 2 | 0 | 114 | 42 |
-| tyranids | 1 | 0 | 149 | 36 |
+| thousand-sons | 1 | 0 | 116 | 41 |
+| tyranids | 0 | 0 | 150 | 36 |
 | ultramarines | 0 | 0 | 10 | 1 |
 | white-scars | 0 | 0 | 11 | 0 |
-| world-eaters | 1 | 0 | 117 | 29 |
+| world-eaters | 0 | 0 | 118 | 29 |
 
 ## Ability verification outcomes
 
@@ -117,10 +117,10 @@ dump confirmation.
 | chaos-knights | digest-differs | 5 |
 | chaos-knights | unpublished | 23 |
 | chaos-knights | verified | 82 |
-| chaos-space-marines | digest-differs | 19 |
+| chaos-space-marines | digest-differs | 18 |
 | chaos-space-marines | stub | 24 |
 | chaos-space-marines | unpublished | 20 |
-| chaos-space-marines | verified | 218 |
+| chaos-space-marines | verified | 219 |
 | dark-angels | digest-differs | 9 |
 | dark-angels | no-source | 1 |
 | dark-angels | stub | 9 |
@@ -136,8 +136,8 @@ dump confirmation.
 | deathwatch | verified | 31 |
 | drukhari | digest-differs | 9 |
 | drukhari | stub | 20 |
-| drukhari | unpublished | 11 |
-| drukhari | verified | 124 |
+| drukhari | unpublished | 10 |
+| drukhari | verified | 125 |
 | emperors-children | digest-differs | 7 |
 | emperors-children | unpublished | 20 |
 | emperors-children | verified | 119 |
@@ -152,9 +152,9 @@ dump confirmation.
 | imperial-fists | stub | 1 |
 | imperial-fists | verified | 7 |
 | imperial-knights | digest-differs | 6 |
-| imperial-knights | stub | 15 |
+| imperial-knights | stub | 14 |
 | imperial-knights | unpublished | 10 |
-| imperial-knights | verified | 87 |
+| imperial-knights | verified | 88 |
 | iron-hands | digest-differs | 1 |
 | iron-hands | stub | 1 |
 | iron-hands | verified | 9 |
@@ -187,8 +187,8 @@ dump confirmation.
 | tau-empire | verified | 133 |
 | thousand-sons | digest-differs | 8 |
 | thousand-sons | stub | 5 |
-| thousand-sons | unpublished | 29 |
-| thousand-sons | verified | 116 |
+| thousand-sons | unpublished | 28 |
+| thousand-sons | verified | 117 |
 | tyranids | digest-differs | 5 |
 | tyranids | stub | 19 |
 | tyranids | unpublished | 12 |

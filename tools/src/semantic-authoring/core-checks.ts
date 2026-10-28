@@ -206,6 +206,13 @@ function eligibilityProblem(record: CoreRecord, parameters: Record<string, unkno
     const coreExcluded = (Array.isArray(record.exclusion_keywords) ? record.exclusion_keywords as unknown[] : []).map(upper).sort();
     if (excluded.join() !== coreExcluded.join()) return `core excludes ${coreExcluded.join(", ") || "no keywords"}`;
   }
+  // A leaf that names its datasheets matches core's datasheet groups by identity.
+  if (Array.isArray(parameters.datasheets)) {
+    const named = [...(parameters.datasheets as string[])].sort();
+    const coreNamed = [...new Set(datasheets.map((group) => group.unit_id))].sort();
+    if (groups.length === 0 && named.join() === coreNamed.join()) return null;
+    return `core allows ${[...groups.map((group) => group.join(" + ")), ...coreNamed.map((id) => `the ${id} datasheet`)].join(" or ") || "no datasheet"}`;
+  }
   // A datasheet group admits a unit by identity, which keyword wording can only match through
   // the units both readings admit (sameBearers).
   if (datasheets.length) return `core allows ${[...groups.map((group) => group.join(" + ")), ...datasheets.map((group) => [`the ${group.unit_id} datasheet`, ...group.keywords].join(" + "))].join(" or ")}`;
@@ -242,19 +249,21 @@ function sameBearers(dataRoot: string, record: CoreRecord, parameters: Record<st
   if (groups.length === 0 && datasheets.length === 0) return false;
   const words = (parameters.keywords as string[]).map(upper);
   const any = Array.isArray(parameters.any_keywords) ? (parameters.any_keywords as string[]).map(upper) : null;
-  const byLeaf = (labels: Set<string>) => any
+  const named = Array.isArray(parameters.datasheets) ? new Set(parameters.datasheets as string[]) : null;
+  const byLeaf = (labels: Set<string>, id: string) => (named === null || named.has(id)) && (any
     ? words.every((word) => labels.has(word)) && any.some((word) => labels.has(word))
-    : parameters.match === "any" ? words.some((word) => labels.has(word)) : words.every((word) => labels.has(word));
+    : parameters.match === "any" ? words.some((word) => labels.has(word)) : words.every((word) => labels.has(word)));
   const byCore = (unit: { id: string; labels: Set<string> }) => groups.some((group) => group.every((word) => unit.labels.has(word)))
     || datasheets.some((group) => group.unit_id === unit.id && group.keywords.every((word) => unit.labels.has(word)));
   const units = factionUnits(dataRoot, faction).filter((unit) => !implied || unit.labels.has("CHARACTER"));
-  const leafIds = units.filter((unit) => byLeaf(unit.labels)).map((unit) => unit.id).sort();
+  const leafIds = units.filter((unit) => byLeaf(unit.labels, unit.id)).map((unit) => unit.id).sort();
   const coreIds = units.filter((unit) => byCore(unit)).map((unit) => unit.id).sort();
   return leafIds.length > 0 && leafIds.join() === coreIds.join();
 }
 
 function eligibleReading(parameters: Record<string, unknown>): string {
   const keywords = (parameters.keywords as string[]).join(parameters.match === "any" ? " or " : " + ");
+  if (Array.isArray(parameters.datasheets)) return `${keywords} (the ${(parameters.datasheets as string[]).join(" or ")} datasheet)`;
   return Array.isArray(parameters.any_keywords) ? `${keywords} + (${(parameters.any_keywords as string[]).join(" or ")})` : keywords;
 }
 

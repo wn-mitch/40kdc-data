@@ -143,10 +143,13 @@
             "operator": "not",
             "operands": [
               {
-                "type": "eligible",
+                "type": "happened",
                 "parameters": {
-                  "subject": "this-unit",
-                  "to": "fight"
+                  "event": "selected",
+                  "filter": {
+                    "to": "fight"
+                  },
+                  "window": "phase"
                 }
               }
             ]
@@ -1981,10 +1984,13 @@
               "operator": "not",
               "operands": [
                 {
-                  "type": "eligible",
+                  "type": "happened",
                   "parameters": {
-                    "subject": "this-unit",
-                    "to": "fight"
+                    "event": "selected",
+                    "filter": {
+                      "to": "fight"
+                    },
+                    "window": "phase"
                   }
                 }
               ]
@@ -2978,10 +2984,13 @@
               "operator": "not",
               "operands": [
                 {
-                  "type": "eligible",
+                  "type": "happened",
                   "parameters": {
-                    "subject": "this-unit",
-                    "to": "fight"
+                    "event": "selected",
+                    "filter": {
+                      "to": "fight"
+                    },
+                    "window": "phase"
                   }
                 }
               ]
@@ -3534,8 +3543,26 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "objective-sticky",
-      "target": "this-unit"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "within": {
+              "of": {
+                "objective": {
+                  "controlled_by": "friendly"
+                }
+              },
+              "range": "objective-control"
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "objective-sticky",
+        "target": "this-unit"
+      }
     },
     "scope": {
       "duration": "permanent"

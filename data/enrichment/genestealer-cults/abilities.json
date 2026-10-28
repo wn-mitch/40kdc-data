@@ -4304,7 +4304,7 @@
             },
             "effect": {
               "type": "stat-modifier",
-              "target": "this-unit",
+              "target": "event-subject",
               "modifier": {
                 "stat": "A",
                 "operation": "add",
@@ -5689,10 +5689,13 @@
             "operator": "not",
             "operands": [
               {
-                "type": "eligible",
+                "type": "happened",
                 "parameters": {
-                  "subject": "this-unit",
-                  "to": "fight"
+                  "event": "selected",
+                  "filter": {
+                    "to": "fight"
+                  },
+                  "window": "phase"
                 }
               }
             ]

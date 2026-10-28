@@ -25,7 +25,8 @@ type Node = Record<string, unknown>;
  * a part with a moment is a part of its own too: it holds whenever the record applies.
  */
 
-const MOMENT_OPENER = /^(?:once per (?:battle|turn|phase|battle round),\s*)?(?:each time|whenever|when|after|at the (?:start|end) of|during the declare battle formations step)\b/iu;
+// The usage prefix may be printed in parentheses with its owner: "(Once per battle, per army) When …".
+const MOMENT_OPENER = /^(?:once per (?:battle|turn|phase|battle round),\s*|\(once per (?:battle|turn|phase|battle round)(?:,\s*per (?:army|unit|model))?\)\s*)?(?:each time|whenever|when|after|at the (?:start|end) of|during the declare battle formations step)\b/iu;
 const TIED_BACK = /^(?:when doing so|(?:each time|when) (?:you|it|they) do(?:es)?)\b/iu;
 const IN_ADDITION = /^in addition\b/iu;
 // "In addition, each time a model in that unit …": the sentence's opening clause names a unit an

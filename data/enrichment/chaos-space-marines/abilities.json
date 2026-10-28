@@ -768,22 +768,18 @@
     "faction_id": "chaos-space-marines",
     "trigger": [
       {
-        "event": "selected",
+        "event": "attacks-resolved",
         "subject": "this-model",
         "filter": {
-          "to": "shoot"
-        }
-      },
-      {
-        "event": "selected",
-        "subject": "this-model",
-        "filter": {
-          "to": "fight"
+          "kind": "shoot"
         }
       },
       {
         "event": "attacks-resolved",
-        "subject": "event-subject"
+        "subject": "this-model",
+        "filter": {
+          "kind": "fight"
+        }
       }
     ]
   },
@@ -5344,52 +5340,76 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "b27b3c9da6880eeb4a9e816c248556a79b071334411766e466ac30e37ac39e54",
+    "source_digest": "325de55fb7c967fb3e3db0e9713b6b9bfb24cabc988b4eda41036ce2b0b601fe",
     "version": "2025-q3",
     "effect": {
-      "type": "risk-reward",
-      "reward": {
-        "type": "choice",
-        "choice_label": "Dark Pact ability",
-        "options": [
+      "type": "conditional",
+      "condition": {
+        "type": "army-faction",
+        "parameters": {
+          "faction": "heretic-astartes"
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
           {
-            "type": "weapon-ability-grant",
+            "type": "test",
             "target": "this-unit",
             "modifier": {
-              "keywords": [
-                {
-                  "keyword_id": "lethal-hits"
-                }
-              ]
+              "test": "leadership"
             }
           },
           {
-            "type": "weapon-ability-grant",
-            "target": "this-unit",
-            "modifier": {
-              "keywords": [
-                {
-                  "keyword_id": "sustained-hits",
-                  "parameters": {
-                    "value": 1
-                  }
-                }
-              ]
+            "type": "conditional",
+            "condition": {
+              "type": "roll-result",
+              "parameters": {
+                "roll": "leadership",
+                "result": "failure"
+              }
+            },
+            "effect": {
+              "type": "mortal-wounds",
+              "target": "event-subject",
+              "modifier": {
+                "count": "D3"
+              }
             }
+          },
+          {
+            "type": "choice",
+            "options": [
+              {
+                "type": "weapon-ability-grant",
+                "target": "event-subject",
+                "modifier": {
+                  "keywords": [
+                    {
+                      "keyword_id": "lethal-hits"
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "weapon-ability-grant",
+                "target": "event-subject",
+                "modifier": {
+                  "keywords": [
+                    {
+                      "keyword_id": "sustained-hits",
+                      "parameters": {
+                        "value": 1
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         ]
-      },
-      "risk": {
-        "test": "leadership",
-        "on_fail": {
-          "type": "mortal-wounds",
-          "target": "this-model",
-          "modifier": {
-            "count": "D3"
-          }
-        }
       }
     },
     "scope": {
@@ -5413,7 +5433,7 @@
     ],
     "faction_id": "chaos-space-marines",
     "ability_type": "faction",
-    "behavior": "activated",
+    "behavior": "reactive",
     "unit_ids": []
   },
   {
@@ -12174,8 +12194,26 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "objective-sticky",
-      "target": "this-unit"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "within": {
+              "of": {
+                "objective": {
+                  "controlled_by": "friendly"
+                }
+              },
+              "range": "objective-control"
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "objective-sticky",
+        "target": "this-unit"
+      }
     },
     "scope": {
       "duration": "permanent"

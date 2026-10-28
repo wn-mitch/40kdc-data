@@ -126,14 +126,25 @@ describe("a moment of an aura's recipient is the trigger's subject and proximity
       heal("that unit regains 1 lost wound")), target);
     expect(kept.trigger).toEqual({ event: "used", filter: { kind: "stratagem" } });
     expect(kept.effect.type).toBe("aura");
+  });
+
+  it("folds the aura into both moments of \"fails a Battle-shock test or is destroyed\"", () => {
     const either = "Each time a friendly ALPHA unit within 6\" of this model fails a Battle-shock test or is destroyed, this unit regains 1 lost wound.";
-    const result = compileLeaves(placed(either,
+    const leaves = (second: Record<string, unknown>) => placed(either,
       ["friendly ALPHA unit", "unit-filter", { side: "friendly", keywords: ["ALPHA"] }],
       ["within 6\" of this model", "aura-range", { inches: 6, of: "this-model" }],
       ["fails a Battle-shock test", "event", { kind: "after-roll", roll: "battle-shock", result: "failure", subject: "antecedent" }],
-      ["is destroyed", "event", { kind: "unit-destroyed" }],
-      heal("this unit regains 1 lost wound", "this-unit")), either);
-    expect(JSON.stringify(result)).not.toContain("proximity");
+      ["is destroyed", "event", second],
+      heal("this unit regains 1 lost wound", "this-unit"));
+    const proximity = { of: "this-model", range: { inches: 6 } };
+    const alpha = { owner: "friendly", all_of: ["ALPHA"] };
+    expect(compiled(leaves({ kind: "unit-destroyed" }), either).trigger).toEqual([
+      { event: "after-roll", filter: { roll: "battle-shock", result: "failure" }, subject: alpha, proximity },
+      { event: "destroyed", object: alpha, proximity },
+    ]);
+    // A destruction that names its destroyer is not the recipient's own: the aura stays unfolded.
+    const named = compileLeaves(leaves({ kind: "unit-destroyed", by: "enemy" }), either);
+    expect(JSON.stringify(named)).not.toContain("proximity");
   });
 
   it("folds a model's Channel the Warp roll the same way", () => {

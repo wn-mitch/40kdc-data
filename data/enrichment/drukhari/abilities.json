@@ -8744,7 +8744,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "unit_ids": [],
     "faction_id": "drukhari",
@@ -8757,7 +8757,7 @@
           "type": "ability-modifier",
           "target": "this-model",
           "modifier": {
-            "ability": "fear-incarnate",
+            "ability": "fear-incarnate-drukhari",
             "aspect": "range",
             "operation": "add",
             "value": 3
@@ -8771,10 +8771,34 @@
               "filter": {
                 "roll": "battle-shock",
                 "result": "failure"
+              },
+              "subject": {
+                "owner": "friendly",
+                "all_of": [
+                  "DRUKHARI"
+                ]
+              },
+              "proximity": {
+                "of": "this-model",
+                "range": {
+                  "inches": 9
+                }
               }
             },
             {
-              "event": "destroyed"
+              "event": "destroyed",
+              "proximity": {
+                "of": "this-model",
+                "range": {
+                  "inches": 9
+                }
+              },
+              "object": {
+                "owner": "friendly",
+                "all_of": [
+                  "DRUKHARI"
+                ]
+              }
             }
           ],
           "effect": {
@@ -8798,7 +8822,7 @@
     "scope": {
       "duration": "permanent"
     },
-    "behavior": "aura",
+    "behavior": "reactive",
     "source_digest": "cac74f523eaccbbc5b75f1d0979abdd202e2d8ada732d1cf8fc91b9e6502f2ea"
   },
   {
@@ -8869,10 +8893,13 @@
                   "operator": "not",
                   "operands": [
                     {
-                      "type": "eligible",
+                      "type": "happened",
                       "parameters": {
-                        "subject": "this-unit",
-                        "to": "fight"
+                        "event": "selected",
+                        "filter": {
+                          "to": "fight"
+                        },
+                        "window": "phase"
                       }
                     }
                   ]

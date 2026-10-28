@@ -154,6 +154,13 @@ describe("Semantic authoring restrictions", () => {
     expect(coreCheckErrors(root, "solo", tinkerer)).toEqual([]);
     const anyTinkerer = compiled([leaf("RESTRICTION", "bearer-eligibility", { keywords: ["TINKERER"], match: "all" }), grant()]).checks;
     expect(coreCheckErrors(root, "solo", anyTinkerer)[0]).toMatch(/core allows .*the tinkerer datasheet/u);
+    // Naming the datasheet admits it alone, whatever else carries its keyword.
+    const named = (datasheets: string[]) => compiled([leaf("RESTRICTION", "bearer-eligibility", { keywords: ["TINKERER"], match: "all", excluded_keywords: [], datasheets }), grant()]).checks;
+    expect(coreCheckErrors(root, "solo", named(["tinkerer"]))).toEqual([]);
+    expect(coreCheckErrors(root, "solo", named(["tinkerer-walker"]))[0]).toMatch(/core allows the tinkerer datasheet/u);
+    expect(coreCheckErrors(root, "solo", named(["tinkerer", "tinkerer-walker"]))[0]).toMatch(/core allows the tinkerer datasheet/u);
+    // A datasheet leaf never matches a keyword-only core group through the keyword alone.
+    expect(coreCheckErrors(root, "old-hat", named(["tinkerer"]))[0]).toMatch(/core allows/u);
   });
 
   it("compares a chapter enhancement's bearers over its parent's shared roster", () => {

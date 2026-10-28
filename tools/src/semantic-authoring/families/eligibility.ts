@@ -18,6 +18,9 @@ export const TARGETING_UNITS = ["this-unit", "this-model", "selected-unit", "eve
 /** A Stratagem's id, as its core or detachment record has it ("fire-overwatch"). */
 const STRATAGEM_ID = /^[a-z0-9][a-z0-9-]*[a-z0-9]$/u;
 
+/** A core unit (datasheet) id. */
+const DATASHEET_ID = /^[a-z0-9][a-z0-9-]*[a-z0-9]$/u;
+
 const EMBARK_WITHIN = "embark-within";
 
 /** `this-unit` is the candidate being checked; `ability-unit` is the unit that carries the ability (the Transport in "this Transport"). */
@@ -278,4 +281,23 @@ export const ELIGIBILITY_EXTENSIONS: readonly FamilyExtension[] = [
     },
   },
   printedKeywordsExtension("bearer-eligibility", 4),
+  {
+    // "Tzaangor Shaman model only" where the restriction is the datasheet itself: another datasheet
+    // carrying the same keyword (a named character) is not an eligible bearer.
+    family: "bearer-eligibility",
+    version: 6,
+    description: "As the previous version, plus datasheets: the bearer is a model of one of these datasheets, by core unit id (\"Tzaangor Shaman model only\" when the restriction names the Tzaangor Shaman datasheet, not every unit with its keyword). The keywords still record what the source prints.",
+    schema: (previous) => withProperties(previous, {
+      datasheets: optional({ type: "array", items: { type: "string", pattern: DATASHEET_ID.source }, minItems: 1, uniqueItems: true }),
+    }),
+    normalize: (input, previous) => {
+      if (!("datasheets" in input)) return previous(input);
+      const { datasheets, ...rest } = input;
+      if (!Array.isArray(datasheets) || datasheets.length === 0 || datasheets.some((id) => typeof id !== "string" || !DATASHEET_ID.test(id))) {
+        throw new TypeError("bearer-eligibility.datasheets lists core unit ids in kebab case.");
+      }
+      if (new Set(datasheets).size !== datasheets.length) throw new TypeError("bearer-eligibility.datasheets names a datasheet twice.");
+      return { ...previous(rest), datasheets: [...datasheets].sort() };
+    },
+  },
 ];

@@ -44,6 +44,9 @@ describe("Semantic authoring independent sentences", () => {
     expect(partsFor("Each time this unit shoots,", "In addition,")).toBe(2);
     expect(partsFor("Each time this unit shoots,", "Once per battle, after this unit fights,")).toBe(2);
     expect(partsFor("Each time this unit shoots,", "At the end of the phase,")).toBe(2);
+    // The usage prefix printed in parentheses with its owner still opens the moment.
+    expect(partsFor("Each time this unit shoots,", "(Once per battle, per army) When this unit fights,")).toBe(2);
+    expect(partsFor("Each time this unit shoots,", "(Once per turn) Each time this unit fights,")).toBe(2);
     expect(partsFor("Each time this unit shoots,", "When doing so,")).toBe(1);
     expect(partsFor("Each time this unit shoots,", "Each time you do,")).toBe(1);
     expect(partsFor("Each time this unit shoots,", "If it does,")).toBe(1);
@@ -226,5 +229,30 @@ describe("Semantic authoring crunch gate: effects off the damage path", () => {
     const selections = effectToBuffs({ type: "stance-selection-capacity", target: "this-unit", modifier: { ability_id: "some-menu", allocation: "choose-one-option", additional_selections: 1 } }, { kind: "ability", abilityId: "fixture", abilityKind: "unit" }, NO_CONTEXT);
     expect(selections.unsupported).toEqual([]);
     expect(selections.activatable.map((lever) => lever.capRaise)).toEqual([{ ability: "some-menu", by: 1, allocation: "choose-one-option" }]);
+  });
+});
+
+describe("a selection closed by its resolved attacks", () => {
+  const heal: [string, string, Record<string, unknown>] = ["this unit regains 1 lost wound", "regain-wounds", { subject: "this-unit", amount: "1" }];
+  it("is one attacks-resolved moment per selection, not either moment", () => {
+    const text = "Each time this model is selected to shoot or fight, after resolving its attacks, this unit regains 1 lost wound.";
+    const mechanics = mechanicsOf(placed(text,
+      ["this model is selected to shoot", "event", { kind: "selected", to: "shoot", subject: "this-model" }],
+      ["fight", "event", { kind: "selected", to: "fight" }],
+      ["after resolving its attacks", "event", { kind: "attacks-resolved", subject: "antecedent" }],
+      heal), text);
+    expect(mechanics.trigger).toEqual([
+      { event: "attacks-resolved", subject: "this-model", filter: { kind: "shoot" } },
+      { event: "attacks-resolved", subject: "this-model", filter: { kind: "fight" } },
+    ]);
+  });
+
+  it("leaves a selection and a later resolution in another clause as they are", () => {
+    const text = "Each time this model is selected to fight. After resolving its attacks, this unit regains 1 lost wound.";
+    const result = compileLeaves(placed(text,
+      ["this model is selected to fight", "event", { kind: "selected", to: "fight", subject: "this-model" }],
+      ["After resolving its attacks", "event", { kind: "attacks-resolved", subject: "antecedent" }],
+      heal), text);
+    expect(JSON.stringify(result)).not.toContain("\"kind\":\"fight\"");
   });
 });

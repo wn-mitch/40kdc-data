@@ -80,6 +80,7 @@ import { classifyLeaves } from "./compile-part-classify.js";
 import { planEffects } from "./compile-part-plan.js";
 import { bindParts } from "./compile-part-bindings.js";
 import { assemblePart } from "./compile-part-assemble.js";
+import { foldSelectedAttacks } from "./compile-selected-attacks.js";
 
 export { CompileError, type CompileLeaf } from "./compile-fragments.js";
 
@@ -287,6 +288,8 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   let conditionOf: ConditionOfPlan[] = [];
   try {
     // Reviewed "if it does" connectives are planned on the leaves as reviewed, before any fold (compile-connective-plan.ts).
+    // "Selected to fight, after resolving its attacks" is one moment before any connective is planned on it (compile-selected-attacks.ts).
+    leaves = foldSelectedAttacks(leaves, sourceText);
     conditionOf = planConditionOf(leaves, sourceText);
     // "the selected VEHICLE model" after a use of a named ability, in a record that selects nothing itself (compile-used-selection.ts).
     leaves = bindUsedSelections(foldAbilityUseRefresh(foldAbilityUseContext(leaves)));
