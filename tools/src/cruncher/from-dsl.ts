@@ -49,6 +49,7 @@ import {
 import { RECIPIENT_SNAPSHOT_UNAVAILABLE, resolveRecipientSnapshots } from "./recipient-snapshots.js";
 import { resolveNamedWeaponBindings } from "./weapon-bindings.js";
 import { conditionFactKey, conditionNeeds, type ConditionNeed } from "./condition-facts.js";
+import { quantityDistribution } from "./damage-roll.js";
 
 /** A fragment we couldn't translate. The SPA can render these as warnings. */
 export type UnsupportedFragment = {
@@ -275,6 +276,8 @@ type WalkOpts = {
   usage?: unknown;
   /** Tags the owning ability designates on the units holding it ({@link selfDesignations}). */
   selfDesignations?: ReadonlySet<string>;
+  /** Inside a part triggered by each hit or wound roll of the attack, that roll and its outcome. */
+  attackRoll?: { roll: "hit" | "wound"; outcome: "success" | "critical" | undefined };
 };
 
 function walk(
@@ -430,10 +433,12 @@ function walk(
           return;
         }
       }
+      const attackRoll = attackRollOf(currentNode.trigger);
+      const stepOpts = attackRoll ? { ...partOpts, attackRoll } : partOpts;
       if (currentNode.optional === true || currentNode.cost != null || currentNode.usage != null) {
-        translateNamedEffect(currentNode, source, partOpts, out);
+        translateNamedEffect(currentNode, source, stepOpts, out);
       } else {
-        walk(momentGate(currentNode.trigger, currentNode.effect, currentNode), source, partOpts, out);
+        walk(momentGate(currentNode.trigger, currentNode.effect, currentNode), source, stepOpts, out);
       }
       return;
     }
@@ -571,6 +576,9 @@ function walk(
       return;
     case "stance-selection-capacity":
       translateStanceCapacity(currentNode, source, opts, out);
+      return;
+    case "mortal-wounds":
+      translateMortalWounds(currentNode, source, opts, out);
       return;
     default:
       out.unsupported.push({
@@ -1755,6 +1763,53 @@ function translateNamedEffect(
 /** Rolls inside every attack: a trigger on one applies to each attack it modifies. */
 const ATTACK_STEP_ROLLS: ReadonlySet<string> = new Set(["hit", "wound", "save", "damage"]);
 
+/**
+ * The hit or wound roll a single after-roll trigger fires on, with its outcome; undefined for any
+ * other trigger. A result of "failure" is not a scoring roll, so it gives no attack roll.
+ */
+function attackRollOf(trigger: unknown): WalkOpts["attackRoll"] {
+  if (!isObject(trigger) || trigger.event !== "after-roll" || !isObject(trigger.filter)) return undefined;
+  const { roll, result } = trigger.filter;
+  if (roll !== "hit" && roll !== "wound") return undefined;
+  if (result !== undefined && result !== "success" && result !== "critical") return undefined;
+  return { roll, outcome: result };
+}
+
+/**
+ * Mortal wounds an attack's own hit or wound roll inflicts on the target. Mortal wounds outside an
+ * attack are not a buff: {@link Dataset.mortalWoundSourcesFor} reports them.
+ */
+function translateMortalWounds(node: Record<string, unknown>, source: BuffSource, opts: WalkOpts, out: EffectTranslation): void {
+  const roll = opts.attackRoll;
+  if (!roll) {
+    out.unsupported.push({ reason: "mortal-wounds: inflicted outside an attack, not a change to it", effectFragment: node });
+    return;
+  }
+  if (roll.outcome === undefined) {
+    out.unsupported.push({ reason: `mortal-wounds: the ${roll.roll} roll's outcome is not stated`, effectFragment: node });
+    return;
+  }
+  if (classifyTarget(node) !== "defender") {
+    out.unsupported.push({ reason: "mortal-wounds: the attack's rolls inflict them on a unit other than the target", effectFragment: node });
+    return;
+  }
+  if (opts.perspective !== "attacker") return;
+  const modifier = isObject(node.modifier) ? node.modifier : {};
+  const extra = Object.keys(modifier).filter((key) => key !== "count");
+  if (extra.length > 0) {
+    out.unsupported.push({ reason: `mortal-wounds: ${extra.join(", ")} on an attack roll is not modelled`, effectFragment: node });
+    return;
+  }
+  let count: number;
+  try {
+    count = quantityDistribution(modifier.count).reduce((sum, [value, probability]) => sum + value * probability, 0);
+  } catch {
+    out.unsupported.push({ reason: `mortal-wounds: count ${JSON.stringify(modifier.count)} is not a fixed or dice quantity`, effectFragment: node });
+    return;
+  }
+  out.applied.push({ source, contribution: { type: "mortal-wounds-on-roll", roll: roll.roll, outcome: roll.outcome, count } });
+}
+
 /** A trigger on a step of every attack (a hit, wound, save or damage roll, or allocating damage). */
 export function isAttackStep(trigger: unknown): boolean {
   if (!isObject(trigger)) return false;
@@ -2387,6 +2442,8 @@ function describeContribution(c: BuffContribution): string {
       return `Save improved by ${c.value} (no better than ${c.best}+)`;
     case "stat-set":
       return `${c.stat} ${c.value}`;
+    case "mortal-wounds-on-roll":
+      return `${c.count} mortal wound${c.count === 1 ? "" : "s"} per ${c.outcome === "critical" ? "critical " : ""}${c.roll}`;
   }
 }
 
@@ -2435,7 +2492,7 @@ function singleKeyword(params: Record<string, unknown> | undefined): string | un
  * Evaluate a condition against the context. A leaf the context leaves undecided takes its declared
  * answer from {@link EngineContext.conditionFacts} when the caller gave one.
  */
-function evaluateCondition(
+export function evaluateCondition(
   condition: Record<string, unknown>,
   ctx: EngineContext,
   perspective: TranslationPerspective = "attacker",
@@ -2451,7 +2508,7 @@ function evaluateCondition(
  * The leaves of an undecided condition, as {@link UnsupportedFragment.needs}. A `timing-is` leaf is
  * the activation's own moment, which the player opts into as a lever, so it is never a need.
  */
-function undecidedNeeds(
+export function undecidedNeeds(
   condition: Record<string, unknown>,
   ctx: EngineContext,
   perspective: TranslationPerspective,

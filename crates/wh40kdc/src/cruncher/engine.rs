@@ -508,6 +508,8 @@ pub fn crunch_model(
         }
         (hits, crits, detail)
     };
+    // Attacks that score a hit, before Sustained Hits adds extra hits to them.
+    let scoring_attacks = hits_raw;
     let mut hits = hits_raw;
     let sustained = find_extra_keyword(&resolved, "sustained-hits");
     if let Some(kw) = sustained {
@@ -926,12 +928,33 @@ pub fn crunch_model(
         damage_main += damage_reroll_one * (unsaved / damage_rolls);
         damage_mortal += damage_reroll_one * (mortal_wounds_stream / damage_rolls);
     }
+    // Mortal wounds the attack's own rolls inflict: one damage each, outside the save and Damage roll.
+    let roll_mortals: f64 = resolved
+        .roll_mortals
+        .iter()
+        .map(|entry| {
+            let triggers = match (entry.roll, entry.outcome) {
+                (super::buffs::AttackRoll::Hit, super::buffs::RollOutcome::Success) => {
+                    scoring_attacks
+                }
+                (super::buffs::AttackRoll::Hit, super::buffs::RollOutcome::Critical) => crit_hits,
+                (super::buffs::AttackRoll::Wound, super::buffs::RollOutcome::Success) => {
+                    total_regular_wounds + crit_wounds_from_roll
+                }
+                (super::buffs::AttackRoll::Wound, super::buffs::RollOutcome::Critical) => {
+                    crit_wounds_from_roll
+                }
+            };
+            entry.count * triggers
+        })
+        .sum();
+    damage_mortal += roll_mortals;
     let damage = damage_main + damage_mortal;
     stages.push(Stage {
         name: StageName::Damage,
         expected: damage,
         detail: format!(
-            "D {base_d}{}{}{}{} = {damage_per_hit} per hit{}; main {damage_main:.4}, mortal {damage_mortal:.4}",
+            "D {base_d}{}{}{}{} = {damage_per_hit} per hit{}; main {damage_main:.4}, mortal {damage_mortal:.4}{}",
             if melta_bonus != 0.0 {
                 format!(" + Melta {melta_bonus} (half range)")
             } else {
@@ -960,6 +983,11 @@ pub fn crunch_model(
             },
             if resolved.reroll_one.damage.is_some() {
                 format!("; re-roll one Damage roll: +{damage_reroll_one:.4}")
+            } else {
+                String::new()
+            },
+            if roll_mortals > 0.0 {
+                format!(" ({roll_mortals:.4} from abilities)")
             } else {
                 String::new()
             },

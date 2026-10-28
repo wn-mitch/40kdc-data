@@ -224,6 +224,8 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
       hitsDetail += `; re-roll one Hit roll: ${dice.toFixed(4)} dice`;
     }
   }
+  // Attacks that score a hit, before Sustained Hits adds extra hits to them.
+  const scoringAttacks = hits;
   const sustained = findKeyword(resolved, "sustained-hits");
   if (sustained) {
     hits += critHits * evalStatValue(sustained.parameters?.value);
@@ -408,11 +410,16 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
     damageMain += damageRerollOne * (unsaved / damageRolls);
     damageMortal += damageRerollOne * (mortalWoundsStream / damageRolls);
   }
+  // Mortal wounds the attack's own rolls inflict ("each time an attack scores a wound, the target
+  // suffers 1 mortal wound"): one damage each, outside the save and Damage roll.
+  const rollTriggers = { hit: { success: scoringAttacks, critical: critHits }, wound: { success: totalRegularWounds + critWoundsFromRoll, critical: critWoundsFromRoll } };
+  const rollMortals = resolved.rollMortals.reduce((sum, entry) => sum + entry.count * rollTriggers[entry.roll][entry.outcome], 0);
+  damageMortal += rollMortals;
   const damage = damageMain + damageMortal;
   stages.push({
     name: "damage",
     expected: damage,
-    detail: `D ${baseD}${meltaBonus ? ` + Melta ${meltaBonus} (half range)` : ""}${resolved.damageMod.value !== 0 ? ` ${signed(resolved.damageMod.value)} (mod)` : ""}${damageReduction > 0 ? ` -${damageReduction} (defender, min 1)` : ""}${damageReroll ? `, reroll ${damageReroll}${perAttack.rerollUsed ? "" : " (no effect)"}` : ""} = ${damagePerHit} per hit${resolved.rerollOne.damage ? `; re-roll one Damage roll: +${damageRerollOne.toFixed(4)}` : ""}${critical ? `; critical wounds ${perCritical.expected} per hit` : ""}; main ${damageMain.toFixed(4)}, mortal ${damageMortal.toFixed(4)}`,
+    detail: `D ${baseD}${meltaBonus ? ` + Melta ${meltaBonus} (half range)` : ""}${resolved.damageMod.value !== 0 ? ` ${signed(resolved.damageMod.value)} (mod)` : ""}${damageReduction > 0 ? ` -${damageReduction} (defender, min 1)` : ""}${damageReroll ? `, reroll ${damageReroll}${perAttack.rerollUsed ? "" : " (no effect)"}` : ""} = ${damagePerHit} per hit${resolved.rerollOne.damage ? `; re-roll one Damage roll: +${damageRerollOne.toFixed(4)}` : ""}${critical ? `; critical wounds ${perCritical.expected} per hit` : ""}; main ${damageMain.toFixed(4)}, mortal ${damageMortal.toFixed(4)}${rollMortals > 0 ? ` (${rollMortals.toFixed(4)} from abilities)` : ""}`,
   });
 
   // 6. FNP

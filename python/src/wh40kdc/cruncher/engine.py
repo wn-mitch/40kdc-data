@@ -316,6 +316,8 @@ def crunch_model(
             hits += dice * fresh[0]
             crit_hits += dice * fresh[1]
             hits_detail += f"; re-roll one Hit roll: {dice:.4f} dice"
+    # Attacks that score a hit, before Sustained Hits adds extra hits to them.
+    scoring_attacks = hits
     sustained = _find_keyword(resolved, "sustained-hits")
     if sustained:
         hits += crit_hits * eval_stat_value((sustained.get("parameters") or {}).get("value"))
@@ -617,6 +619,19 @@ def crunch_model(
     if damage_reroll_one > 0:
         damage_main += damage_reroll_one * (unsaved / damage_rolls)
         damage_mortal += damage_reroll_one * (mortal_wounds_stream / damage_rolls)
+    # Mortal wounds the attack's own rolls inflict ("each time an attack scores a wound, the target
+    # suffers 1 mortal wound"): one damage each, outside the save and Damage roll.
+    roll_triggers = {
+        "hit": {"success": scoring_attacks, "critical": crit_hits},
+        "wound": {
+            "success": total_regular_wounds + crit_wounds_from_roll,
+            "critical": crit_wounds_from_roll,
+        },
+    }
+    roll_mortals = 0.0
+    for entry in resolved["rollMortals"]:
+        roll_mortals += entry["count"] * roll_triggers[entry["roll"]][entry["outcome"]]
+    damage_mortal += roll_mortals
     damage = damage_main + damage_mortal
     damage_detail = f"D {base_d}"
     if melta_bonus:
@@ -635,6 +650,8 @@ def crunch_model(
     if critical is not None:
         damage_detail += f"; critical wounds {per_critical['expected']} per hit"
     damage_detail += f"; main {damage_main:.4f}, mortal {damage_mortal:.4f}"
+    if roll_mortals > 0:
+        damage_detail += f" ({roll_mortals:.4f} from abilities)"
     stages.append({"name": "damage", "expected": damage, "detail": damage_detail})
 
     # 6. FNP — an all-FNP fires on every unsaved wound; a mortal-FNP only on

@@ -164,6 +164,11 @@ class SalvoState {
   supportUnitIds = $state<string[]>([]);
   /** Declared board and game state; unset fields leave their abilities unresolved. */
   scenario = $state<Scenario>({});
+  /**
+   * Keys of the mortal-wound sources (charges, phase starts) the player counts in the combined
+   * total; off by default, since each needs its moment to happen.
+   */
+  mortalSourcesActive = $state<string[]>([]);
 
   /** Effective on/off for a lever, honouring any user override of its default. */
   isBuffEnabled(id: string, defaultEnabled: boolean): boolean {

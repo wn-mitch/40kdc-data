@@ -303,6 +303,8 @@ def resolve_buffs(buffs: list[Buff], ctx: EngineContext) -> ResolvedModifiers:
         # Summed capped Save improvements; "best" is the most restrictive (largest) cap. None
         # when none applies.
         "saveImprove": None,
+        # Mortal wounds the attack's own rolls inflict, one entry per source; they stack.
+        "rollMortals": [],
     }
 
     # Hit / wound mods: sum, then cap at ±1, with dominant source picked from
@@ -431,6 +433,15 @@ def resolve_buffs(buffs: list[Buff], ctx: EngineContext) -> ResolvedModifiers:
                 si["value"] += c["value"]
                 si["best"] = max(si["best"], c["best"])
                 si["sources"].append(source)
+        elif ctype == "mortal-wounds-on-roll":
+            out["rollMortals"].append(
+                {
+                    "roll": c["roll"],
+                    "outcome": c["outcome"],
+                    "count": c["count"],
+                    "source": source,
+                }
+            )
 
     # An ignored roll keeps only its positive modifiers.
     def kept(contribs: list[dict[str, Any]], ignored: bool) -> list[dict[str, Any]]:

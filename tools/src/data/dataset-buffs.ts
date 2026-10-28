@@ -204,7 +204,7 @@ function inputUnit(ds: Dataset, input: BuffInput): UnitView | undefined {
 }
 
 /** {@link eligibleAbilities} for a buff input; nothing is eligible when no unit is selected. */
-function inputEligibleAbilities(ds: Dataset, input: BuffInput, phase: Phase): EligibleAbility[] {
+export function inputEligibleAbilities(ds: Dataset, input: BuffInput, phase: Phase): EligibleAbility[] {
   return input.unitId === undefined ? [] : ds.eligibleAbilities({ ...input, unitId: input.unitId }, phase);
 }
 
@@ -233,39 +233,7 @@ export function collectBuffs(
     return translation.applied;
   };
 
-  const unit = inputUnit(ds, input);
-  const factionId = input.factionId ?? unit?.raw.faction_id;
-  const combined = unit ? [unit] : [];
-  for (const id of input.attachedUnitIds ?? []) {
-    const member = (factionId ? ds.units.getInFaction(id, factionId) : undefined) ?? ds.units.getAny(id);
-    if (member) combined.push(member);
-  }
-  // Explicit game-state facts win. Roles come only from actual attachment edges.
-  const keywords = combined.length > 0 ? combinedKeywordsLower(combined) : undefined;
-  const modelKeywords = combined.length > 0 ? sharedKeywordsLower(combined) : undefined;
-  const attached = (input.attachedUnitIds?.length ?? 0) > 0;
-  const ctx: EngineContext = perspective === "attacker" ? {
-    ...context,
-    attackerAttached: context.attackerAttached ?? attached,
-    attackerUnitId: context.attackerUnitId ?? input.unitId,
-    // The input's faction is the army whose rules the resolver walks, so it is the Army Faction.
-    armyFaction: context.armyFaction ?? factionId,
-    attackerAttachmentRole: context.attackerAttachmentRole ?? (input.unitId === undefined ? undefined : input.attachmentRoles?.[input.unitId]),
-    attackerKeywords: context.attackerKeywords ?? keywords,
-    attackerModelKeywords: context.attackerModelKeywords ?? modelKeywords,
-    attachmentRoles: context.attachmentRoles ?? input.attachmentRoles,
-    attackerToughness: context.attackerToughness ?? combinedToughness(combined, input.attachmentRoles),
-  } : {
-    ...context,
-    targetAttached: context.targetAttached ?? attached,
-    targetUnitId: context.targetUnitId ?? input.unitId,
-    // The input's faction is the defending army whose rules the resolver walks.
-    targetArmyFaction: context.targetArmyFaction ?? factionId,
-    targetAttachmentRole: context.targetAttachmentRole ?? (input.unitId === undefined ? undefined : input.attachmentRoles?.[input.unitId]),
-    targetKeywords: context.targetKeywords ?? keywords,
-    targetModelKeywords: context.targetModelKeywords ?? modelKeywords,
-    attachmentRoles: context.attachmentRoles ?? input.attachmentRoles,
-  };
+  const ctx = buffContext(ds, input, context, perspective);
 
   // Weapon-profile keywords are attacker-only. Faction-scoped like
   // stackableBuffsFor — first-wins here would crunch the wrong faction's stats.
@@ -303,8 +271,48 @@ export function collectBuffs(
   return out;
 }
 
+/**
+ * The engine context the buff collectors translate under: `context` with the input unit's
+ * attachment, keywords, army faction and Toughness filled in where `context` leaves them unset.
+ */
+export function buffContext(ds: Dataset, input: BuffInput, context: EngineContext, perspective: "attacker" | "target"): EngineContext {
+  const unit = inputUnit(ds, input);
+  const factionId = input.factionId ?? unit?.raw.faction_id;
+  const combined = unit ? [unit] : [];
+  for (const id of input.attachedUnitIds ?? []) {
+    const member = (factionId ? ds.units.getInFaction(id, factionId) : undefined) ?? ds.units.getAny(id);
+    if (member) combined.push(member);
+  }
+  // Explicit game-state facts win. Roles come only from actual attachment edges.
+  const keywords = combined.length > 0 ? combinedKeywordsLower(combined) : undefined;
+  const modelKeywords = combined.length > 0 ? sharedKeywordsLower(combined) : undefined;
+  const attached = (input.attachedUnitIds?.length ?? 0) > 0;
+  return perspective === "attacker" ? {
+    ...context,
+    attackerAttached: context.attackerAttached ?? attached,
+    attackerUnitId: context.attackerUnitId ?? input.unitId,
+    // The input's faction is the army whose rules the resolver walks, so it is the Army Faction.
+    armyFaction: context.armyFaction ?? factionId,
+    attackerAttachmentRole: context.attackerAttachmentRole ?? (input.unitId === undefined ? undefined : input.attachmentRoles?.[input.unitId]),
+    attackerKeywords: context.attackerKeywords ?? keywords,
+    attackerModelKeywords: context.attackerModelKeywords ?? modelKeywords,
+    attachmentRoles: context.attachmentRoles ?? input.attachmentRoles,
+    attackerToughness: context.attackerToughness ?? combinedToughness(combined, input.attachmentRoles),
+  } : {
+    ...context,
+    targetAttached: context.targetAttached ?? attached,
+    targetUnitId: context.targetUnitId ?? input.unitId,
+    // The input's faction is the defending army whose rules the resolver walks.
+    targetArmyFaction: context.targetArmyFaction ?? factionId,
+    targetAttachmentRole: context.targetAttachmentRole ?? (input.unitId === undefined ? undefined : input.attachmentRoles?.[input.unitId]),
+    targetKeywords: context.targetKeywords ?? keywords,
+    targetModelKeywords: context.targetModelKeywords ?? modelKeywords,
+    attachmentRoles: context.attachmentRoles ?? input.attachmentRoles,
+  };
+}
+
 /** Map an EligibleAbility back to the BuffSource the translator expects. */
-function bufferSourceFromEligible(entry: EligibleAbility): BuffSource {
+export function bufferSourceFromEligible(entry: EligibleAbility): BuffSource {
   const abilityId = entry.ability.id;
   switch (entry.source.kind) {
     case "army":

@@ -14,7 +14,7 @@ from typing import Any
 import pytest
 
 from wh40kdc.abilities_resolver import stratagem_can_target, stratagem_can_target_unit
-from wh40kdc.cruncher import effect_to_buffs, resolve_granted_records
+from wh40kdc.cruncher import effect_to_buffs, mortal_wound_sources, resolve_granted_records
 from wh40kdc.data.ability_refs import with_rating
 from wh40kdc.data.normalize import normalize_name
 
@@ -135,3 +135,40 @@ def test_from_dsl_corpus(dataset: Any) -> None:
 @pytest.mark.skipif(not _DIR.exists(), reason="conformance corpus not available")
 def test_defensive_from_dsl_corpus(dataset: Any) -> None:
     _run_dsl_corpus(dataset, "defensive-from-dsl.json")
+
+
+_MORTAL_CASES = (
+    json.loads((_DIR / "mortal-sources.json").read_text(encoding="utf-8"))["cases"]
+    if (_DIR / "mortal-sources.json").exists()
+    else []
+)
+
+
+@pytest.mark.skipif(not _MORTAL_CASES, reason="conformance corpus not available")
+@pytest.mark.parametrize("case", _MORTAL_CASES, ids=lambda case: case["caseId"])
+def test_mortal_wound_sources(dataset: Any, case: dict[str, Any]) -> None:
+    """Standalone mortal wounds: ids, moments, need keys and reasons match exactly, the
+    expected counts to 1e-9."""
+    faction_id = case.get("factionId")
+    if faction_id is not None:
+        record = dataset.abilities.get_in_faction(case["abilityId"], faction_id)
+        assert record is not None, f"unknown ability {case['abilityId']}"
+        ability_id, effect, trigger = record.id, record.raw.get("effect"), record.raw.get("trigger")
+    else:
+        ability_id, effect, trigger = case["abilityId"], case.get("effect"), case.get("trigger")
+    result = mortal_wound_sources(ability_id, effect, trigger, case["context"], case.get("rating"))
+    want = case["expected"]
+    got = [
+        {
+            "id": s["id"],
+            "moment": s["moment"],
+            "needKeys": [n["key"] for n in s["needs"]],
+        }
+        for s in result["sources"]
+    ]
+    assert got == [
+        {"id": s["id"], "moment": s["moment"], "needKeys": s["needKeys"]} for s in want["sources"]
+    ]
+    for found, expected in zip(result["sources"], want["sources"], strict=True):
+        assert found["expected"] == pytest.approx(expected["expected"], abs=1e-9), found["id"]
+    assert [u["reason"] for u in result["unsupported"]] == want["unsupportedReasons"]

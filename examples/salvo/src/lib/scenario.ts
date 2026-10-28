@@ -78,3 +78,35 @@ export function withConditionFact(scenario: Scenario, key: string, value: boolea
   else next.conditionFacts = facts;
   return next;
 }
+
+/** How a mortal-wound source's moment reads: `move-ended:charge` is "After a Charge move". */
+export function momentLabel(moment: string | null): string {
+  if (moment === null) return "Each time it is used";
+  return moment.split("|").map((one) => {
+    const [event, detail] = one.split(":") as [string, string | undefined];
+    switch (event) {
+      case "move-ended":
+        return detail === "charge" ? "After a Charge move" : "After a move";
+      case "phase-started":
+        return detail ? `At the start of the ${detail} phase` : "At the start of a phase";
+      case "phase-ended":
+        return detail ? `At the end of the ${detail} phase` : "At the end of a phase";
+      case "selected":
+        return detail === "shoot" ? "When selected to shoot" : detail === "fight" ? "When selected to fight" : detail === "move" ? "When selected to move" : "When selected";
+      case "attacks-resolved":
+        return detail === "shoot" ? "After shooting" : detail === "fight" ? "After fighting" : "After attacking";
+      case "after-roll":
+        return detail ? `After a ${detail.replace(/-/g, " ")} roll` : "After a roll";
+      case "before-roll":
+        return detail ? `Before a ${detail.replace(/-/g, " ")} roll` : "Before a roll";
+      case "set-up":
+        return "When set up";
+      case "destroyed":
+        return "When destroyed";
+      case "model-destroyed":
+        return "When a model is destroyed";
+      default:
+        return event.replace(/-/g, " ").replace(/^./, (c) => c.toUpperCase());
+    }
+  }).join(" or ");
+}

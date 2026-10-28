@@ -124,7 +124,13 @@ export type BuffContribution =
    * Defender-side: improve the Save characteristic by `value`, but never to better than `best`+.
    * Applies after any `save-characteristic` and before AP.
    */
-  | { type: "save-improve"; value: number; best: number };
+  | { type: "save-improve"; value: number; best: number }
+  /**
+   * Attacker-side: each hit or wound roll with this outcome inflicts `count` mortal wounds on the
+   * target in addition to any normal damage ("each time an attack scores a wound, the target
+   * suffers 1 mortal wound"). `count` is the expected number per roll. Sources stack.
+   */
+  | { type: "mortal-wounds-on-roll"; roll: "hit" | "wound"; outcome: "success" | "critical"; count: number };
 
 /** Weapon characteristics a `stat-set` contribution can set. */
 export type SetStat = "A" | "S" | "AP" | "D";
@@ -541,6 +547,8 @@ export type ResolvedModifiers = {
    * contributions; `null` when none applies.
    */
   saveImprove: { value: number; best: number; sources: BuffSource[] } | null;
+  /** Mortal wounds the attack's own rolls inflict, one entry per source; they stack. */
+  rollMortals: { roll: "hit" | "wound"; outcome: "success" | "critical"; count: number; source: BuffSource }[];
 };
 
 /** Stable ordering used to break ties when multiple buffs claim the same field. */
@@ -719,6 +727,7 @@ export function resolveBuffs(buffs: Buff[], ctx: ResolveContext): ResolvedModifi
     skillMod: { WS: { value: 0, sources: [] }, BS: { value: 0, sources: [] } },
     saveCharacteristic: null,
     saveImprove: null,
+    rollMortals: [],
   };
 
   // Hit / wound mods: sum, then cap at ±1, with dominant source picked from
@@ -871,6 +880,9 @@ export function resolveBuffs(buffs: Buff[], ctx: ResolveContext): ResolvedModifi
           out.saveImprove.best = Math.max(out.saveImprove.best, c.best);
           out.saveImprove.sources.push(b.source);
         }
+        break;
+      case "mortal-wounds-on-roll":
+        out.rollMortals.push({ roll: c.roll, outcome: c.outcome, count: c.count, source: b.source });
         break;
     }
   }

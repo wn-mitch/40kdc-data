@@ -1,0 +1,1360 @@
+{
+  "cases": [
+    {
+      "caseId": "fixed-count-on-charge",
+      "abilityId": "a",
+      "trigger": {
+        "event": "move-ended",
+        "filter": {
+          "move_types": [
+            "charge"
+          ]
+        }
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        },
+        "effect": {
+          "type": "mortal-wounds",
+          "target": "selected-unit",
+          "modifier": {
+            "count": "D3"
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "expected": {
+        "sources": [
+          {
+            "id": "a",
+            "moment": "move-ended:charge",
+            "expected": 2,
+            "needKeys": []
+          }
+        ],
+        "unsupportedReasons": []
+      }
+    },
+    {
+      "caseId": "dice-gated",
+      "abilityId": "a",
+      "trigger": {
+        "event": "move-ended",
+        "filter": {
+          "move_types": [
+            "charge"
+          ]
+        }
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        },
+        "effect": {
+          "type": "dice-gated",
+          "dice": "D6",
+          "threshold": 4,
+          "comparison": "gte",
+          "on_success": {
+            "type": "mortal-wounds",
+            "target": "selected-unit",
+            "modifier": {
+              "count": "D3"
+            }
+          },
+          "on_fail": {
+            "type": "mortal-wounds",
+            "target": "selected-unit",
+            "modifier": {
+              "count": 1
+            }
+          }
+        }
+      },
+      "context": {},
+      "expected": {
+        "sources": [
+          {
+            "id": "a",
+            "moment": "move-ended:charge",
+            "expected": 1.5,
+            "needKeys": []
+          }
+        ],
+        "unsupportedReasons": []
+      }
+    },
+    {
+      "caseId": "dice-gated-lte-2d6",
+      "abilityId": "a",
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        },
+        "effect": {
+          "type": "dice-gated",
+          "dice": "2D6",
+          "threshold": 5,
+          "comparison": "lte",
+          "on_success": {
+            "type": "mortal-wounds",
+            "target": "selected-unit",
+            "modifier": {
+              "count": 3
+            }
+          },
+          "on_fail": null
+        }
+      },
+      "context": {},
+      "expected": {
+        "sources": [
+          {
+            "id": "a",
+            "moment": null,
+            "expected": 0.8333333333333334,
+            "needKeys": []
+          }
+        ],
+        "unsupportedReasons": []
+      }
+    },
+    {
+      "caseId": "dice-table-two-dice",
+      "abilityId": "a",
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        },
+        "effect": {
+          "type": "dice-table",
+          "dice": "D6",
+          "outcomes": [
+            {
+              "results": [
+                1,
+                2
+              ],
+              "effect": {
+                "type": "no-effect"
+              }
+            },
+            {
+              "results": [
+                3,
+                4,
+                5
+              ],
+              "effect": {
+                "type": "mortal-wounds",
+                "target": "selected-unit",
+                "modifier": {
+                  "count": 1
+                }
+              }
+            },
+            {
+              "results": [
+                6
+              ],
+              "effect": {
+                "type": "mortal-wounds",
+                "target": "selected-unit",
+                "modifier": {
+                  "count": "D3+3"
+                }
+              }
+            }
+          ],
+          "count": 2
+        }
+      },
+      "context": {},
+      "expected": {
+        "sources": [
+          {
+            "id": "a",
+            "moment": null,
+            "expected": 2.6666666666666665,
+            "needKeys": []
+          }
+        ],
+        "unsupportedReasons": []
+      }
+    },
+    {
+      "caseId": "per-success-capped",
+      "abilityId": "a",
+      "trigger": {
+        "event": "move-ended",
+        "filter": {
+          "move_types": [
+            "charge"
+          ]
+        }
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        },
+        "effect": {
+          "type": "mortal-wounds",
+          "target": "selected-unit",
+          "modifier": {
+            "count": 1,
+            "per": "success",
+            "max": 2,
+            "roll": {
+              "dice": 6,
+              "threshold": 4
+            }
+          }
+        }
+      },
+      "context": {},
+      "expected": {
+        "sources": [
+          {
+            "id": "a",
+            "moment": "move-ended:charge",
+            "expected": 1.875,
+            "needKeys": []
+          }
+        ],
+        "unsupportedReasons": []
+      }
+    },
+    {
+      "caseId": "per-success-dice-count",
+      "abilityId": "a",
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        },
+        "effect": {
+          "type": "mortal-wounds",
+          "target": "selected-unit",
+          "modifier": {
+            "count": "D3",
+            "per": "success",
+            "max": 6,
+            "roll": {
+              "dice": "D3",
+              "threshold": 5
+            }
+          }
+        }
+      },
+      "context": {},
+      "expected": {
+        "sources": [
+          {
+            "id": "a",
+            "moment": null,
+            "expected": 1.326474622770919,
+            "needKeys": []
+          }
+        ],
+        "unsupportedReasons": []
+      }
+    },
+    {
+      "caseId": "per-model-own-unit",
+      "abilityId": "a",
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        },
+        "effect": {
+          "type": "mortal-wounds",
+          "target": "selected-unit",
+          "modifier": {
+            "count": 1,
+            "per": "success",
+            "roll": {
+              "dice": 1,
+              "threshold": 4,
+              "per_model": "this-unit"
+            }
+          }
+        }
+      },
+      "context": {
+        "attackerModelCount": 5
+      },
+      "expected": {
+        "sources": [
+          {
+            "id": "a",
+            "moment": null,
+            "expected": 2.5,
+            "needKeys": []
+          }
+        ],
+        "unsupportedReasons": []
+      }
+    },
+    {
+      "caseId": "per-model-own-unit-unknown",
+      "abilityId": "a",
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        },
+        "effect": {
+          "type": "mortal-wounds",
+          "target": "selected-unit",
+          "modifier": {
+            "count": 1,
+            "per": "success",
+            "roll": {
+              "dice": 1,
+              "threshold": 4,
+              "per_model": "this-unit"
+            }
+          }
+        }
+      },
+      "context": {},
+      "expected": {
+        "sources": [],
+        "unsupportedReasons": [
+          "mortal-wounds: the number of models rolling is not in the context"
+        ]
+      }
+    },
+    {
+      "caseId": "per-model-target",
+      "abilityId": "a",
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        },
+        "effect": {
+          "type": "mortal-wounds",
+          "target": "selected-unit",
+          "modifier": {
+            "count": 1,
+            "per": "success",
+            "roll": {
+              "dice": 1,
+              "threshold": 6,
+              "per_model": "selected-unit"
+            }
+          }
+        }
+      },
+      "context": {
+        "targetModelCount": 10
+      },
+      "expected": {
+        "sources": [
+          {
+            "id": "a",
+            "moment": null,
+            "expected": 1.6666666666666674,
+            "needKeys": []
+          }
+        ],
+        "unsupportedReasons": []
+      }
+    },
+    {
+      "caseId": "for-each-own-model-eligibility",
+      "abilityId": "a",
+      "trigger": {
+        "event": "move-ended",
+        "filter": {
+          "move_types": [
+            "charge"
+          ]
+        }
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        },
+        "effect": {
+          "type": "mortal-wounds",
+          "target": "selected-unit",
+          "modifier": {
+            "count": 1,
+            "per": "success",
+            "roll": {
+              "dice": 1,
+              "threshold": 2,
+              "for_each": {
+                "filter": {
+                  "owner": "friendly",
+                  "level": "model",
+                  "member_of": "this-unit"
+                },
+                "eligibility": {
+                  "type": "matches",
+                  "parameters": {
+                    "filter": {
+                      "engaged_with": "selected-unit"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "context": {
+        "attackerModelCount": 4
+      },
+      "expected": {
+        "sources": [
+          {
+            "id": "a",
+            "moment": "move-ended:charge",
+            "expected": 3.333333333333334,
+            "needKeys": [
+              "attacker:{\"parameters\":{\"filter\":{\"engaged_with\":\"selected-unit\"}},\"type\":\"matches\"}"
+            ]
+          }
+        ],
+        "unsupportedReasons": []
+      }
+    },
+    {
+      "caseId": "for-each-subset-of-models",
+      "abilityId": "a",
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        },
+        "effect": {
+          "type": "mortal-wounds",
+          "target": "selected-unit",
+          "modifier": {
+            "count": 1,
+            "per": "success",
+            "roll": {
+              "dice": 1,
+              "threshold": 4,
+              "for_each": {
+                "filter": {
+                  "owner": "friendly",
+                  "level": "model",
+                  "member_of": "this-unit",
+                  "all_of": [
+                    "TROOPS"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "context": {
+        "attackerModelCount": 4
+      },
+      "expected": {
+        "sources": [],
+        "unsupportedReasons": [
+          "mortal-wounds: dice rolled for each of a subset of models are not modelled"
+        ]
+      }
+    },
+    {
+      "caseId": "choice-options",
+      "abilityId": "a",
+      "effect": {
+        "type": "choice",
+        "options": [
+          {
+            "type": "select-units",
+            "selector": {
+              "filter": {
+                "owner": "enemy"
+              },
+              "count": {
+                "min": 1,
+                "max": 1
+              }
+            },
+            "effect": {
+              "type": "dice-table",
+              "dice": "D6",
+              "outcomes": [
+                {
+                  "results": [
+                    1,
+                    2
+                  ],
+                  "effect": {
+                    "type": "no-effect"
+                  }
+                },
+                {
+                  "results": [
+                    3,
+                    4,
+                    5
+                  ],
+                  "effect": {
+                    "type": "mortal-wounds",
+                    "target": "selected-unit",
+                    "modifier": {
+                      "count": 1
+                    }
+                  }
+                },
+                {
+                  "results": [
+                    6
+                  ],
+                  "effect": {
+                    "type": "mortal-wounds",
+                    "target": "selected-unit",
+                    "modifier": {
+                      "count": "D3+3"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "type": "select-units",
+            "selector": {
+              "filter": {
+                "owner": "enemy"
+              },
+              "count": {
+                "min": 1,
+                "max": 1
+              }
+            },
+            "effect": {
+              "type": "mortal-wounds",
+              "target": "selected-unit",
+              "modifier": {
+                "count": 2
+              }
+            }
+          }
+        ]
+      },
+      "context": {},
+      "expected": {
+        "sources": [
+          {
+            "id": "a?0",
+            "moment": null,
+            "expected": 1.3333333333333333,
+            "needKeys": []
+          },
+          {
+            "id": "a?1",
+            "moment": null,
+            "expected": 2,
+            "needKeys": []
+          }
+        ],
+        "unsupportedReasons": []
+      }
+    },
+    {
+      "caseId": "self-damage-skipped",
+      "abilityId": "a",
+      "trigger": {
+        "event": "move-ended",
+        "filter": {
+          "move_types": [
+            "charge"
+          ]
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "mortal-wounds",
+            "target": "this-unit",
+            "modifier": {
+              "count": "D3"
+            }
+          },
+          {
+            "type": "mortal-wounds",
+            "target": "this-model",
+            "modifier": {
+              "count": 1
+            }
+          }
+        ]
+      },
+      "context": {},
+      "expected": {
+        "sources": [],
+        "unsupportedReasons": []
+      }
+    },
+    {
+      "caseId": "phase-never-gates",
+      "abilityId": "a",
+      "trigger": {
+        "event": "move-ended",
+        "filter": {
+          "move_types": [
+            "charge"
+          ]
+        }
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "movement"
+              }
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "phase-is",
+                  "parameters": {
+                    "phase": "shooting"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "effect": {
+          "type": "select-units",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            }
+          },
+          "effect": {
+            "type": "mortal-wounds",
+            "target": "selected-unit",
+            "modifier": {
+              "count": 1
+            }
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "expected": {
+        "sources": [
+          {
+            "id": "a",
+            "moment": "move-ended:charge",
+            "expected": 1,
+            "needKeys": []
+          }
+        ],
+        "unsupportedReasons": []
+      }
+    },
+    {
+      "caseId": "phase-inside-not",
+      "abilityId": "a",
+      "trigger": {
+        "event": "move-ended",
+        "filter": {
+          "move_types": [
+            "charge"
+          ]
+        }
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "operator": "not",
+          "operands": [
+            {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "phase-is",
+                  "parameters": {
+                    "phase": "fight"
+                  }
+                },
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "selected-unit",
+                    "filter": {
+                      "engaged_with": "this-unit"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "effect": {
+          "type": "select-units",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            }
+          },
+          "effect": {
+            "type": "mortal-wounds",
+            "target": "selected-unit",
+            "modifier": {
+              "count": 1
+            }
+          }
+        }
+      },
+      "context": {
+        "conditionFacts": {
+          "attacker:{\"parameters\":{\"filter\":{\"engaged_with\":\"this-unit\"},\"subject\":\"selected-unit\"},\"type\":\"matches\"}": true
+        }
+      },
+      "expected": {
+        "sources": [],
+        "unsupportedReasons": []
+      }
+    },
+    {
+      "caseId": "eligibility-need",
+      "abilityId": "a",
+      "trigger": {
+        "event": "move-ended",
+        "filter": {
+          "move_types": [
+            "charge"
+          ]
+        }
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "matches",
+            "parameters": {
+              "subject": "selected-unit",
+              "filter": {
+                "engaged_with": "this-unit"
+              }
+            }
+          }
+        },
+        "effect": {
+          "type": "mortal-wounds",
+          "target": "selected-unit",
+          "modifier": {
+            "count": 1
+          }
+        }
+      },
+      "context": {},
+      "expected": {
+        "sources": [
+          {
+            "id": "a",
+            "moment": "move-ended:charge",
+            "expected": 1,
+            "needKeys": [
+              "attacker:{\"parameters\":{\"filter\":{\"engaged_with\":\"this-unit\"},\"subject\":\"selected-unit\"},\"type\":\"matches\"}"
+            ]
+          }
+        ],
+        "unsupportedReasons": []
+      }
+    },
+    {
+      "caseId": "eligibility-answered-false",
+      "abilityId": "a",
+      "trigger": {
+        "event": "move-ended",
+        "filter": {
+          "move_types": [
+            "charge"
+          ]
+        }
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "matches",
+            "parameters": {
+              "subject": "selected-unit",
+              "filter": {
+                "engaged_with": "this-unit"
+              }
+            }
+          }
+        },
+        "effect": {
+          "type": "mortal-wounds",
+          "target": "selected-unit",
+          "modifier": {
+            "count": 1
+          }
+        }
+      },
+      "context": {
+        "conditionFacts": {
+          "attacker:{\"parameters\":{\"filter\":{\"engaged_with\":\"this-unit\"},\"subject\":\"selected-unit\"},\"type\":\"matches\"}": false
+        }
+      },
+      "expected": {
+        "sources": [],
+        "unsupportedReasons": []
+      }
+    },
+    {
+      "caseId": "eligibility-answered-true",
+      "abilityId": "a",
+      "trigger": {
+        "event": "move-ended",
+        "filter": {
+          "move_types": [
+            "charge"
+          ]
+        }
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "matches",
+            "parameters": {
+              "subject": "selected-unit",
+              "filter": {
+                "engaged_with": "this-unit"
+              }
+            }
+          }
+        },
+        "effect": {
+          "type": "mortal-wounds",
+          "target": "selected-unit",
+          "modifier": {
+            "count": 1
+          }
+        }
+      },
+      "context": {
+        "conditionFacts": {
+          "attacker:{\"parameters\":{\"filter\":{\"engaged_with\":\"this-unit\"},\"subject\":\"selected-unit\"},\"type\":\"matches\"}": true
+        }
+      },
+      "expected": {
+        "sources": [
+          {
+            "id": "a",
+            "moment": "move-ended:charge",
+            "expected": 1,
+            "needKeys": []
+          }
+        ],
+        "unsupportedReasons": []
+      }
+    },
+    {
+      "caseId": "trigger-condition-and-alternatives",
+      "abilityId": "a",
+      "trigger": [
+        {
+          "event": "move-ended",
+          "filter": {
+            "move_types": [
+              "charge"
+            ]
+          }
+        },
+        {
+          "event": "phase-started",
+          "filter": {
+            "phase": "fight"
+          },
+          "subject": {
+            "owner": "enemy"
+          }
+        }
+      ],
+      "effect": {
+        "type": "mortal-wounds",
+        "target": "event-subject",
+        "modifier": {
+          "count": 1
+        }
+      },
+      "context": {},
+      "expected": {
+        "sources": [],
+        "unsupportedReasons": [
+          "mortal-wounds: cannot tell whether \"event-subject\" is the target"
+        ]
+      }
+    },
+    {
+      "caseId": "trigger-subject-enemy",
+      "abilityId": "a",
+      "trigger": {
+        "event": "move-ended",
+        "subject": {
+          "owner": "enemy"
+        },
+        "condition": {
+          "type": "matches",
+          "parameters": {
+            "subject": "selected-unit",
+            "filter": {
+              "engaged_with": "this-unit"
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "after-roll",
+          "filter": {
+            "roll": "charge"
+          }
+        },
+        "effect": {
+          "type": "mortal-wounds",
+          "target": "event-subject",
+          "modifier": {
+            "count": 2
+          }
+        }
+      },
+      "context": {},
+      "expected": {
+        "sources": [
+          {
+            "id": "a",
+            "moment": "after-roll:charge",
+            "expected": 2,
+            "needKeys": [
+              "attacker:{\"parameters\":{\"filter\":{\"engaged_with\":\"this-unit\"},\"subject\":\"selected-unit\"},\"type\":\"matches\"}"
+            ]
+          }
+        ],
+        "unsupportedReasons": []
+      }
+    },
+    {
+      "caseId": "enemy-units-in-range",
+      "abilityId": "a",
+      "trigger": {
+        "event": "phase-ended"
+      },
+      "effect": {
+        "type": "for-each-unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy",
+            "within": {
+              "range": {
+                "inches": 6
+              },
+              "of": "this-model"
+            }
+          }
+        },
+        "effect": {
+          "type": "dice-gated",
+          "dice": "D6",
+          "threshold": 4,
+          "comparison": "gte",
+          "on_success": {
+            "type": "mortal-wounds",
+            "target": "recipient",
+            "modifier": {
+              "count": "D3"
+            }
+          },
+          "on_fail": null
+        }
+      },
+      "context": {},
+      "expected": {
+        "sources": [
+          {
+            "id": "a",
+            "moment": "phase-ended",
+            "expected": 1,
+            "needKeys": [
+              "attacker:{\"parameters\":{\"filter\":{\"within\":{\"of\":\"this-model\",\"range\":{\"inches\":6}}},\"subject\":\"target\"},\"type\":\"matches\"}"
+            ]
+          }
+        ],
+        "unsupportedReasons": []
+      }
+    },
+    {
+      "caseId": "enemy-target-filter",
+      "abilityId": "a",
+      "effect": {
+        "type": "mortal-wounds",
+        "target": {
+          "owner": "enemy",
+          "within": {
+            "range": {
+              "inches": 9
+            }
+          }
+        },
+        "modifier": {
+          "count": 1
+        }
+      },
+      "context": {},
+      "expected": {
+        "sources": [
+          {
+            "id": "a",
+            "moment": null,
+            "expected": 1,
+            "needKeys": [
+              "attacker:{\"parameters\":{\"filter\":{\"within\":{\"range\":{\"inches\":9}}},\"subject\":\"target\"},\"type\":\"matches\"}"
+            ]
+          }
+        ],
+        "unsupportedReasons": []
+      }
+    },
+    {
+      "caseId": "rating-count",
+      "abilityId": "a",
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        },
+        "effect": {
+          "type": "mortal-wounds",
+          "target": "selected-unit",
+          "modifier": {
+            "count": {
+              "rating": true
+            }
+          }
+        }
+      },
+      "rating": "D3+1",
+      "context": {},
+      "expected": {
+        "sources": [
+          {
+            "id": "a",
+            "moment": null,
+            "expected": 3,
+            "needKeys": []
+          }
+        ],
+        "unsupportedReasons": []
+      }
+    },
+    {
+      "caseId": "unclear-target",
+      "abilityId": "a",
+      "effect": {
+        "type": "mortal-wounds",
+        "target": "stratagem-target",
+        "modifier": {
+          "count": 1
+        }
+      },
+      "context": {},
+      "expected": {
+        "sources": [],
+        "unsupportedReasons": [
+          "mortal-wounds: cannot tell whether \"stratagem-target\" is the target"
+        ]
+      }
+    },
+    {
+      "caseId": "unmodelled-container",
+      "abilityId": "a",
+      "effect": {
+        "type": "aura",
+        "effect": {
+          "type": "mortal-wounds",
+          "target": "enemy-within-aura",
+          "modifier": {
+            "count": 1
+          }
+        }
+      },
+      "context": {},
+      "expected": {
+        "sources": [],
+        "unsupportedReasons": [
+          "mortal-wounds inside \"aura\" are not modelled"
+        ]
+      }
+    },
+    {
+      "caseId": "count-from-roll",
+      "abilityId": "a",
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        },
+        "effect": {
+          "type": "roll",
+          "dice": "D6",
+          "roll_var": "r",
+          "effect": {
+            "type": "mortal-wounds",
+            "target": "selected-unit",
+            "modifier": {
+              "count": {
+                "roll_var": "r"
+              }
+            }
+          }
+        }
+      },
+      "context": {},
+      "expected": {
+        "sources": [],
+        "unsupportedReasons": [
+          "mortal-wounds: count {\"roll_var\":\"r\"} is not a fixed or dice quantity"
+        ]
+      }
+    },
+    {
+      "caseId": "dataset-thunderhawk-cluster-bombs",
+      "abilityId": "thunderhawk-cluster-bombs-adeptus-astartes",
+      "factionId": "adeptus-astartes",
+      "context": {
+        "phase": "shooting"
+      },
+      "expected": {
+        "sources": [
+          {
+            "id": "thunderhawk-cluster-bombs-adeptus-astartes",
+            "moment": "move-ended:normal+advance",
+            "expected": 4,
+            "needKeys": [
+              "attacker:{\"parameters\":{\"turn\":\"your-turn\"},\"type\":\"player-turn-is\"}",
+              "attacker:{\"parameters\":{\"by\":\"this-unit\",\"subject\":\"selected-unit\"},\"type\":\"moved-over\"}"
+            ]
+          }
+        ],
+        "unsupportedReasons": []
+      }
+    },
+    {
+      "caseId": "dataset-crimson-harvest",
+      "abilityId": "crimson-harvest-necrons",
+      "factionId": "necrons",
+      "context": {
+        "phase": "fight"
+      },
+      "expected": {
+        "sources": [
+          {
+            "id": "crimson-harvest-necrons",
+            "moment": "move-ended:charge",
+            "expected": 2.1666666666666665,
+            "needKeys": [
+              "attacker:{\"parameters\":{\"filter\":{\"engaged_with\":\"this-model\"},\"subject\":\"selected-unit\"},\"type\":\"matches\"}"
+            ]
+          }
+        ],
+        "unsupportedReasons": []
+      }
+    },
+    {
+      "caseId": "dataset-krushin-impetus",
+      "abilityId": "krushin-impetus-orks",
+      "factionId": "orks",
+      "context": {
+        "attackerModelCount": 10
+      },
+      "expected": {
+        "sources": [
+          {
+            "id": "krushin-impetus-orks",
+            "moment": "move-ended:charge",
+            "expected": 6.666666666666666,
+            "needKeys": [
+              "attacker:{\"parameters\":{\"filter\":{\"engaged_with\":\"this-unit\"},\"subject\":\"selected-unit\"},\"type\":\"matches\"}",
+              "attacker:{\"parameters\":{\"filter\":{\"engaged_with\":\"selected-unit\"}},\"type\":\"matches\"}"
+            ]
+          }
+        ],
+        "unsupportedReasons": []
+      }
+    },
+    {
+      "caseId": "dataset-hypertoxic-miasma",
+      "abilityId": "hypertoxic-miasma-tyranids",
+      "factionId": "tyranids",
+      "context": {},
+      "expected": {
+        "sources": [
+          {
+            "id": "hypertoxic-miasma-tyranids",
+            "moment": "phase-ended",
+            "expected": 1.5833333333333333,
+            "needKeys": [
+              "attacker:{\"parameters\":{\"turn\":\"your-turn\"},\"type\":\"player-turn-is\"}",
+              "attacker:{\"parameters\":{\"filter\":{\"within\":{\"of\":\"this-model\",\"range\":{\"inches\":6}}},\"subject\":\"target\"},\"type\":\"matches\"}"
+            ]
+          }
+        ],
+        "unsupportedReasons": []
+      }
+    },
+    {
+      "caseId": "dataset-neutronium-cascade-mine",
+      "abilityId": "neutronium-cascade-mine-adeptus-custodes",
+      "factionId": "adeptus-custodes",
+      "context": {},
+      "expected": {
+        "sources": [
+          {
+            "id": "neutronium-cascade-mine-adeptus-custodes",
+            "moment": "phase-started",
+            "expected": 5,
+            "needKeys": [
+              "attacker:{\"parameters\":{\"filter\":{\"any_of\":[\"MONSTER\",\"VEHICLE\"]},\"subject\":\"selected-unit\"},\"type\":\"matches\"}"
+            ]
+          }
+        ],
+        "unsupportedReasons": []
+      }
+    }
+  ]
+}

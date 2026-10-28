@@ -90,6 +90,7 @@ import {
   GAME_MODE_LINKED_QUERIES,
   runGameModeQuery,
 } from "./gen-conformance-game-mode-cases.js";
+import { canonicalMortalSourceCases } from "./gen-conformance-mortal-cases.js";
 import { canonicalDamageZeroingCases, DAMAGE_ZEROING_CASE_PREFIX } from "./gen-conformance-zeroing-cases.js";
 import { canonicalIgnoreModifiersCases, IGNORE_MODIFIERS_CASE_PREFIX } from "./gen-conformance-ignore-cases.js";
 import { canonicalGrantedRecordCases, GRANTED_RECORD_CASE_PREFIX, withGrantedRecords } from "./gen-conformance-granted-cases.js";
@@ -4427,6 +4428,13 @@ function genResolverDslCases(): void {
   }
 }
 
+/** The mortal-sources corpus: every row regenerated from the TS reference. */
+function genMortalSourceCases(): void {
+  const cases = canonicalMortalSourceCases(Dataset.embedded());
+  writeJson(join(CONFORMANCE, "abilities-resolver", "mortal-sources.json"), { cases });
+  console.log(`abilities-resolver/mortal-sources.json: ${cases.length} cases`);
+}
+
 /** Append fabricated direct-API cases without duplicating their stable identities on regen. */
 function genCanonicalCruncherCases(): void {
   const appended = [...canonicalRecipientCases(), ...canonicalHalfWeaponRangeCases(), ...canonicalScenarioCases(), ...canonicalGrantedRecordCases(), ...canonicalDamageZeroingCases(), ...canonicalIgnoreModifiersCases(), ...canonicalTriggerSubjectCases(), ...canonicalStratagemModelCases()];
@@ -4461,6 +4469,7 @@ genScoringTranslation();
 genEffectTranslation();
 genResolverDslCases();
 genCanonicalCruncherCases();
+genMortalSourceCases();
 genScoring();
 genTerrainResolver();
 genTerrainKeystones();

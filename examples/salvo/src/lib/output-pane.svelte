@@ -32,6 +32,9 @@
   import { scenarioContext } from "./scenario.js";
   import {
     memberLevers,
+    memberMortalSources,
+    mortalSourceLine,
+    mortalSourceStages,
     crunchLine,
     enabledLeverBuffs,
     grantedCopies,
@@ -95,6 +98,16 @@
     enhancementId: salvo.defenderEnhancementId,
     wargear: salvo.targetWargear,
   }, context));
+
+  // The ticked mortal-wound sources, after the target's Feel No Pain: a line of the combined total.
+  const mortalSources = $derived(memberMortalSources(ds, {
+    unitId: salvo.selectedUnitId,
+    factionId: salvo.selectedFactionId,
+    detachmentId: salvo.selectedDetachmentId,
+    attachedUnitIds: salvo.attachedUnitIds,
+    supportUnitIds: salvo.supportUnitIds,
+  }, { ...context, targetModelCount: salvo.manualTarget.modelCount }));
+  const mortalLine = $derived(mortalSourceLine(mortalSources.sources, new Set(salvo.mortalSourcesActive), defensive.buffs, context));
 
   /** The buffs one member attacks with: its enabled levers, the manual toggles and the target's defences. */
   function buffsOf(memberId: string): Buff[] {
@@ -232,7 +245,10 @@
   // aggregateStages for the additive vs models-killed math).
   const aggregate = $derived.by<AttributedStage[]>(() =>
     aggregateStages(
-      lineResults.filter((r) => included(r.id) && !r.error),
+      [
+        ...lineResults.filter((r) => included(r.id) && !r.error),
+        ...(mortalLine.damage > 0 ? [{ attributed: mortalSourceStages(mortalLine) }] : []),
+      ],
       salvo.manualTarget.W,
       salvo.manualTarget.modelCount,
     ),
@@ -419,6 +435,20 @@
           {/each}
         </tr>
       {/each}
+      {#if mortalLine.damage > 0}
+        <tr>
+          <td></td>
+          <td class="wname">Mortal wounds from abilities</td>
+          <td></td>
+          {#each STAGE_COLUMNS as col, idx (col.name)}
+            {@render numCell(
+              col.name === "damage" || col.name === "after-fnp" ? stageOf(mortalSourceStages(mortalLine), col.name) : undefined,
+              false,
+              idx >= 4,
+            )}
+          {/each}
+        </tr>
+      {/if}
       <tr class="total">
         <td></td>
         <td>Combined</td>

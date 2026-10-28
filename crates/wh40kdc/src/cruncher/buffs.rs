@@ -22,7 +22,8 @@ use super::gates::live_buffs;
 pub use super::resolved::{
     CappedMod, CoverState, CritThresholds, ExtraKeywordEntry, FeelNoPainState, HighestMod,
     IgnoredRolls, InvulnerableState, RerollOne, RerollOneState, RerollState, Rerolls,
-    ResolvedModifiers, SaveImproveState, SkillMods, StatSets, SummedMod, ThresholdState,
+    ResolvedModifiers, RollMortals, SaveImproveState, SkillMods, StatSets, SummedMod,
+    ThresholdState,
 };
 
 /// Which side an ability buff was sourced from. Drives stable tie-breaking
@@ -262,6 +263,22 @@ pub enum BuffContribution {
         value: f64,
         best: f64,
     },
+    /// Attacker-side: each hit or wound roll with this outcome inflicts `count` mortal wounds on
+    /// the target in addition to any normal damage. `count` is the expected number per roll.
+    /// Sources stack.
+    MortalWoundsOnRoll {
+        roll: AttackRoll,
+        outcome: RollOutcome,
+        count: f64,
+    },
+}
+
+/// The outcome of a hit or wound roll a `mortal-wounds-on-roll` contribution fires on.
+#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "kebab-case")]
+pub enum RollOutcome {
+    Success,
+    Critical,
 }
 
 /// Optional gating; the resolver drops buffs whose gate fails.
@@ -541,6 +558,16 @@ pub fn resolve_buffs(buffs: &[Buff], ctx: &EngineContext) -> ResolvedModifiers {
                     cur.sources.push(b.source.clone());
                 }
             },
+            BuffContribution::MortalWoundsOnRoll {
+                roll,
+                outcome,
+                count,
+            } => out.roll_mortals.push(RollMortals {
+                roll: *roll,
+                outcome: *outcome,
+                count: *count,
+                source: b.source.clone(),
+            }),
         }
     }
 

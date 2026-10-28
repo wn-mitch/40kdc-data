@@ -15,10 +15,11 @@
   } from "@alpaca-software/40kdc-data";
   import EmptyState from "./EmptyState.svelte";
   import { scenarioContext } from "./scenario.js";
-  import { memberLevers, unionLevers } from "./output-model.js";
+  import { memberLevers, memberMortalSources, unionLevers } from "./output-model.js";
   import { defenderNeeds } from "./defender.js";
   import { needToggles } from "./scenario.js";
   import NeedsList from "./needs-list.svelte";
+  import MortalSourcesList from "./mortal-sources-list.svelte";
 
   // EngineContext for the DSL→Buff translator. Without this the translator
   // defaults to `{ phase: "shooting" }`, so phase-gated branches misfire when
@@ -81,8 +82,21 @@
       return [];
     }
   });
-  // One toggle per undecided condition across the attacker's levers and the defender's rules.
-  const needs = $derived(needToggles([...stackable.needs, ...targetNeeds]));
+  // Mortal wounds the combined unit's abilities inflict outside its attacks.
+  const mortal = $derived(memberMortalSources(
+    ds,
+    {
+      unitId: salvo.selectedUnitId,
+      factionId: salvo.selectedFactionId,
+      detachmentId: salvo.selectedDetachmentId,
+      attachedUnitIds: salvo.attachedUnitIds,
+      supportUnitIds: salvo.supportUnitIds,
+    },
+    { ...engineContext, targetModelCount: salvo.manualTarget.modelCount },
+  ));
+  // One toggle per undecided condition across the attacker's levers, its mortal-wound sources and
+  // the defender's rules.
+  const needs = $derived(needToggles([...stackable.needs, ...mortal.needs, ...targetNeeds]));
 
   // Free-standing levers (always-on abilities, stratagems, weapon keywords).
   const ungrouped = $derived(stackable.buffs.filter((b) => !b.group));
@@ -207,6 +221,8 @@
     {/each}
   </div>
 {/if}
+
+<MortalSourcesList sources={mortal.sources} error={mortal.error} />
 
 <NeedsList toggles={needs} />
 

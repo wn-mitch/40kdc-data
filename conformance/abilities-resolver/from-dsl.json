@@ -13441,6 +13441,300 @@
       }
     },
     {
+      "caseId": "canonical/scenario/mortal-wounds-per-wound",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "after-roll",
+          "filter": {
+            "roll": "wound",
+            "result": "success"
+          }
+        },
+        "effect": {
+          "type": "mortal-wounds",
+          "target": "defender",
+          "modifier": {
+            "count": "D3"
+          }
+        }
+      },
+      "context": {
+        "phase": "fight"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "mortal-wounds-on-roll",
+            "roll": "wound",
+            "outcome": "success",
+            "count": 2
+          }
+        ],
+        "unsupportedReasons": [],
+        "needKeys": [],
+        "activatable": [],
+        "applicableWhen": [
+          null
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/scenario/mortal-wounds-per-critical-hit",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "after-roll",
+          "filter": {
+            "roll": "hit",
+            "result": "critical"
+          }
+        },
+        "effect": {
+          "type": "mortal-wounds",
+          "target": "defender",
+          "modifier": {
+            "count": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "fight"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "mortal-wounds-on-roll",
+            "roll": "hit",
+            "outcome": "critical",
+            "count": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "needKeys": [],
+        "activatable": [],
+        "applicableWhen": [
+          null
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/scenario/mortal-wounds-roll-outcome-unstated",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "after-roll",
+          "filter": {
+            "roll": "wound"
+          }
+        },
+        "effect": {
+          "type": "mortal-wounds",
+          "target": "defender",
+          "modifier": {
+            "count": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "fight"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "mortal-wounds: the wound roll's outcome is not stated"
+        ],
+        "needKeys": [],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/mortal-wounds-failed-roll",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "after-roll",
+          "filter": {
+            "roll": "save",
+            "result": "failure"
+          }
+        },
+        "effect": {
+          "type": "mortal-wounds",
+          "target": "defender",
+          "modifier": {
+            "count": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "fight"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "mortal-wounds: inflicted outside an attack, not a change to it"
+        ],
+        "needKeys": [],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/mortal-wounds-roll-on-self",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "after-roll",
+          "filter": {
+            "roll": "hit",
+            "result": "success"
+          }
+        },
+        "effect": {
+          "type": "mortal-wounds",
+          "target": "this-unit",
+          "modifier": {
+            "count": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "fight"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "mortal-wounds: the attack's rolls inflict them on a unit other than the target"
+        ],
+        "needKeys": [],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/mortal-wounds-roll-per-success",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "after-roll",
+          "filter": {
+            "roll": "wound",
+            "result": "success"
+          }
+        },
+        "effect": {
+          "type": "mortal-wounds",
+          "target": "defender",
+          "modifier": {
+            "count": 1,
+            "per": "success",
+            "roll": {
+              "dice": 1,
+              "threshold": 4
+            }
+          }
+        }
+      },
+      "context": {
+        "phase": "fight"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "mortal-wounds: per, roll on an attack roll is not modelled"
+        ],
+        "needKeys": [],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/mortal-wounds-outside-attack",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "move-ended",
+          "filter": {
+            "move_types": [
+              "charge"
+            ]
+          }
+        },
+        "effect": {
+          "type": "mortal-wounds",
+          "target": "defender",
+          "modifier": {
+            "count": "D3"
+          }
+        }
+      },
+      "context": {
+        "phase": "fight"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"happened\" against current context"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"event\":\"move-ended\",\"filter\":{\"move_types\":[\"charge\"]},\"window\":\"turn\"},\"type\":\"happened\"}"
+        ],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
       "caseId": "canonical/granted-record/own-unit",
       "abilityId": "fabricated-grantor",
       "source": {

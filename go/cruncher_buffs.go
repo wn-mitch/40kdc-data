@@ -436,6 +436,16 @@ type resolved struct {
 	// statSet holds the attacker's best set weapon characteristic per stat ("A", "S", "AP",
 	// "D"); an absent stat keeps the profile's value.
 	statSet map[string]rankedValue
+	// rollMortals holds the mortal wounds the attack's own rolls inflict, one entry per source; they stack.
+	rollMortals []rollMortal
+}
+
+// rollMortal is one mortal-wounds-on-roll contribution: count mortal wounds for each roll of
+// the given kind ("hit"/"wound") with the given outcome ("success"/"critical").
+type rollMortal struct {
+	roll, outcome string
+	count         float64
+	source        map[string]any
 }
 
 // setOr returns the stat-set value for stat when one applies, else the profile's printed value.
@@ -590,6 +600,9 @@ func resolveBuffs(buffs []any, ctx map[string]any) *resolved {
 			if sc == nil || val < sc.value || (val == sc.value && rankOf(source) < sc.rank) {
 				out.saveCharacteristic = &rankedValue{val, rankOf(source)}
 			}
+		case "mortal-wounds-on-roll":
+			count, _ := num(c["count"])
+			out.rollMortals = append(out.rollMortals, rollMortal{getStr(c, "roll"), getStr(c, "outcome"), count, source})
 		case "save-improve":
 			best, _ := num(c["best"])
 			if out.saveImprove == nil {

@@ -1471,6 +1471,43 @@
       }
     },
     {
+      "caseId": "canonical/scenario/mortal-wounds-roll-defender-perspective",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "after-roll",
+          "filter": {
+            "roll": "wound",
+            "result": "success"
+          }
+        },
+        "effect": {
+          "type": "mortal-wounds",
+          "target": "defender",
+          "modifier": {
+            "count": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "fight"
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "needKeys": [],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
       "caseId": "canonical/granted-record/defender-side",
       "abilityId": "fabricated-grantor",
       "source": {

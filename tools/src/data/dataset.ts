@@ -5,6 +5,7 @@
  *
  * @packageDocumentation
  */
+import { mortalWoundSourcesFor } from "./dataset-mortals.js";
 import { unitAbilityIds } from "./ability-refs.js";
 import type {
   AlliedRule,
@@ -592,6 +593,19 @@ export class Dataset {
     const needs: AbilityNeed[] = [];
     collectBuffs(this, input, context, "target", needs);
     return needs;
+  }
+
+  /**
+   * The mortal wounds a unit's abilities inflict on an enemy unit outside its attacks: after a
+   * Charge move, at the start of a phase, when it is selected to shoot. Each source gives the
+   * expected mortal wounds per occurrence of its moment, before Feel No Pain, assuming each of its
+   * `needs` holds (answer one false in `context.conditionFacts` to remove it). `phase-is`
+   * conditions never gate a source, so the context's phase does not filter them. Mortal wounds an
+   * attack's own rolls inflict are buffs ({@link buffsFor}), not sources; mortal wounds the unit
+   * inflicts on itself are not reported.
+   */
+  mortalWoundSourcesFor(input: EligibilityInput, context: EngineContext): ReturnType<typeof mortalWoundSourcesFor> {
+    return mortalWoundSourcesFor(this, input, context);
   }
 
   /**

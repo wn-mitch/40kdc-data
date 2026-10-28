@@ -190,7 +190,7 @@ pub(crate) fn reaches_other_units(effect: &Value) -> bool {
 impl Dataset {
     /// A unit resolved within `faction` when one is known (unit ids are shared across
     /// factions), else the first registered copy.
-    fn resolve_unit(&self, id: &str, faction: Option<&str>) -> Option<&Unit> {
+    pub(super) fn resolve_unit(&self, id: &str, faction: Option<&str>) -> Option<&Unit> {
         faction
             .and_then(|f| self.units.get_in_faction(id, f))
             .or_else(|| self.units.get_any(id))

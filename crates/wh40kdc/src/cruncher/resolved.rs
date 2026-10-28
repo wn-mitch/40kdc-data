@@ -2,7 +2,7 @@
 //! buff stack into, with provenance per field. Mirrors the `ResolvedModifiers` type in
 //! `tools/src/cruncher/buffs.ts`; re-exported from [`super::buffs`].
 
-use super::buffs::{BuffSource, RerollSubset, RollKind, WeaponKeywordRef};
+use super::buffs::{AttackRoll, BuffSource, RerollSubset, RollKind, RollOutcome, WeaponKeywordRef};
 
 /// Damage-zeroing uses a buff stack grants, summed over its sources.
 #[derive(Clone, Debug, Default)]
@@ -55,6 +55,17 @@ pub struct ResolvedModifiers {
     pub save_characteristic: Option<ThresholdState>,
     /// Summed capped Save improvements; `None` when none applies.
     pub save_improve: Option<SaveImproveState>,
+    /// Mortal wounds the attack's own rolls inflict, one entry per source; they stack.
+    pub roll_mortals: Vec<RollMortals>,
+}
+
+/// One `mortal-wounds-on-roll` contribution.
+#[derive(Clone, Debug)]
+pub struct RollMortals {
+    pub roll: AttackRoll,
+    pub outcome: RollOutcome,
+    pub count: f64,
+    pub source: BuffSource,
 }
 
 /// Summed `save-improve` contributions: the total improvement and the most restrictive (largest)

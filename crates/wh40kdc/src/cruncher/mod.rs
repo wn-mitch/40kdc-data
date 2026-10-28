@@ -44,6 +44,7 @@ pub mod from_dsl;
 pub mod from_keyword;
 mod gates;
 pub mod granted_records;
+pub mod mortal_sources;
 pub mod recipient_snapshots;
 mod resolved;
 pub mod scenario;
@@ -74,6 +75,7 @@ pub use from_dsl::{
 };
 pub use from_keyword::buffs_from_keyword;
 pub use granted_records::resolve_granted_records;
+pub use mortal_sources::{mortal_wound_sources, MortalWoundSource, MortalWoundTranslation};
 pub use recipient_snapshots::RecipientSnapshot;
 pub use scenario::{
     ActiveRule, AttachedMember, MemberRole, ModelWounds, NeighbourOwner, ObjectiveController,

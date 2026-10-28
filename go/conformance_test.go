@@ -2,6 +2,7 @@ package wh40kdc
 
 import (
 	"encoding/json"
+	"math"
 	"os"
 	"path/filepath"
 	"sort"
@@ -377,6 +378,73 @@ func TestValidatorCorpus(t *testing.T) {
 		got, want := keys(v.validateTarget(c.Target, c.Input)), keys(c.ExpectedErrors)
 		if strings.Join(got, ",") != strings.Join(want, ",") {
 			t.Errorf("%s:\n got  %v\n want %v", c.Name, got, want)
+		}
+	}
+}
+
+// TestMortalSourcesCorpus pins mortalWoundSources against conformance/abilities-resolver/
+// mortal-sources.json: ids, moments, need keys and unsupported reasons exactly, expected within 1e-9.
+func TestMortalSourcesCorpus(t *testing.T) {
+	var corpus map[string]any
+	if err := json.Unmarshal(loadCorpus(t, "abilities-resolver", "mortal-sources.json"), &corpus); err != nil {
+		t.Fatal(err)
+	}
+	cases := getList(corpus, "cases")
+	if len(cases) == 0 {
+		t.Fatal("the mortal-sources corpus is empty")
+	}
+	ds := EmbeddedDataset()
+	for _, item := range cases {
+		c, _ := asMap(item)
+		name := getStr(c, "caseId")
+		effect, trigger := c["effect"], c["trigger"]
+		if factionID := getStr(c, "factionId"); factionID != "" {
+			ability, ok := ds.Abilities.GetInFaction(getStr(c, "abilityId"), factionID)
+			if !ok {
+				t.Errorf("%s: unknown ability %q in %q", name, getStr(c, "abilityId"), factionID)
+				continue
+			}
+			effect, trigger = ability.Raw["effect"], ability.Raw["trigger"]
+		}
+		ctx, _ := getMap(c, "context")
+		got := mortalWoundSources(getStr(c, "abilityId"), effect, trigger, ctx, c["rating"])
+		expected, _ := getMap(c, "expected")
+		want := getList(expected, "sources")
+		if len(got.Sources) != len(want) {
+			t.Errorf("%s: %d sources, want %d", name, len(got.Sources), len(want))
+			continue
+		}
+		for i, wantAny := range want {
+			w, _ := asMap(wantAny)
+			g := got.Sources[i]
+			if g.ID != getStr(w, "id") {
+				t.Errorf("%s[%d] id = %q, want %q", name, i, g.ID, getStr(w, "id"))
+			}
+			var moment any
+			if g.Moment != nil {
+				moment = *g.Moment
+			}
+			if moment != w["moment"] {
+				t.Errorf("%s[%d] moment = %v, want %v", name, i, moment, w["moment"])
+			}
+			wantExpected, _ := num(w["expected"])
+			if math.Abs(g.Expected-wantExpected) > 1e-9 {
+				t.Errorf("%s[%d] expected = %v, want %v", name, i, g.Expected, wantExpected)
+			}
+			keys := []any{}
+			for _, need := range g.Needs {
+				keys = append(keys, need.(map[string]any)["key"])
+			}
+			if gotKeys, wantKeys := canon(t, keys), canon(t, orEmpty(getList(w, "needKeys"))); gotKeys != wantKeys {
+				t.Errorf("%s[%d] needKeys = %s, want %s", name, i, gotKeys, wantKeys)
+			}
+		}
+		reasons := []any{}
+		for _, u := range got.Unsupported {
+			reasons = append(reasons, u["reason"])
+		}
+		if gotReasons, wantReasons := canon(t, reasons), canon(t, orEmpty(getList(expected, "unsupportedReasons"))); gotReasons != wantReasons {
+			t.Errorf("%s unsupportedReasons = %s, want %s", name, gotReasons, wantReasons)
 		}
 	}
 }

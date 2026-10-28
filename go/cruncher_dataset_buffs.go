@@ -263,8 +263,9 @@ func (ds *Dataset) weaponFaction(input map[string]any) string {
 	return ""
 }
 
-func (ds *Dataset) collectBuffs(input, context map[string]any, perspective string) []any {
-	out := []any{}
+// buffContext is the engine context the buff collectors translate under: context with the input
+// unit's attachment, unit id and (attacker) Toughness filled in where context leaves them unset.
+func (ds *Dataset) buffContext(input, context map[string]any, perspective string) map[string]any {
 	ctx := ds.derivedContext(input, context)
 	if perspective == "attacker" && ctx["attackerUnitId"] == nil {
 		ctx["attackerUnitId"] = getStr(input, "unitId")
@@ -278,6 +279,12 @@ func (ds *Dataset) collectBuffs(input, context map[string]any, perspective strin
 	if perspective == "target" && ctx["targetUnitId"] == nil {
 		ctx["targetUnitId"] = getStr(input, "unitId")
 	}
+	return ctx
+}
+
+func (ds *Dataset) collectBuffs(input, context map[string]any, perspective string) []any {
+	out := []any{}
+	ctx := ds.buffContext(input, context, perspective)
 	if perspective == "attacker" {
 		// Weapon ids are shared across factions with divergent stats — resolve
 		// within the input unit's faction (GetAny fallback for cross-faction ids).

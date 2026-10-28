@@ -210,6 +210,9 @@ export function dslExpectation(row: DslInput) {
 export function canonicalScenarioCases() {
   const source = { kind: "ability", abilityId: "fabricated-scenario", abilityKind: "unit" } as const;
   const attached = { kind: "ability", abilityId: "fabricated-scenario", abilityKind: "attached", sourceUnitId: "leader" } as const;
+  const rollMortals = (filter: Record<string, unknown>, target: string, modifier: Record<string, unknown>) => ({
+    type: "ability-part", trigger: { event: "after-roll", filter }, effect: { type: "mortal-wounds", target, modifier },
+  });
   const gated = (condition: unknown) => ({
     type: "conditional", condition,
     effect: { type: "roll-modifier", target: "this-unit", modifier: { roll: "hit", operation: "add", value: 1 } },
@@ -418,6 +421,15 @@ export function canonicalScenarioCases() {
     { id: "condition-fact-context-wins", effect: gated(guided), context: { attackerGuided: false, conditionFacts: { [conditionFactKey(guided, "attacker")]: true } } },
     { id: "condition-fact-key-text", effect: gated(apostropheKeyword), context: { conditionFacts: { [conditionFactKey(apostropheKeyword, "attacker")]: true } } },
     { id: "condition-fact-defender", effect: defensive(engagedWith), context: { conditionFacts: { [conditionFactKey(engagedWith, "target")]: true } }, perspective: "target" },
+    // Mortal wounds an attack's own hit or wound roll inflicts on the target.
+    { id: "mortal-wounds-per-wound", effect: rollMortals({ roll: "wound", result: "success" }, "defender", { count: "D3" }), context: { phase: "fight" } },
+    { id: "mortal-wounds-per-critical-hit", effect: rollMortals({ roll: "hit", result: "critical" }, "defender", { count: 1 }), context: { phase: "fight" } },
+    { id: "mortal-wounds-roll-outcome-unstated", effect: rollMortals({ roll: "wound" }, "defender", { count: 1 }), context: { phase: "fight" } },
+    { id: "mortal-wounds-failed-roll", effect: rollMortals({ roll: "save", result: "failure" }, "defender", { count: 1 }), context: { phase: "fight" } },
+    { id: "mortal-wounds-roll-on-self", effect: rollMortals({ roll: "hit", result: "success" }, "this-unit", { count: 1 }), context: { phase: "fight" } },
+    { id: "mortal-wounds-roll-per-success", effect: rollMortals({ roll: "wound", result: "success" }, "defender", { count: 1, per: "success", roll: { dice: 1, threshold: 4 } }), context: { phase: "fight" } },
+    { id: "mortal-wounds-roll-defender-perspective", effect: rollMortals({ roll: "wound", result: "success" }, "defender", { count: 1 }), context: { phase: "fight" }, perspective: "target" },
+    { id: "mortal-wounds-outside-attack", effect: { type: "ability-part", trigger: { event: "move-ended", filter: { move_types: ["charge"] } }, effect: { type: "mortal-wounds", target: "defender", modifier: { count: "D3" } } }, context: { phase: "fight" } },
   ];
   return inputs.map((input) => withGates(dslExpectation({
     caseId: `${SCENARIO_CASE_PREFIX}${input.id}`,

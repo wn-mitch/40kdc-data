@@ -8,8 +8,10 @@ use std::collections::BTreeMap;
 use std::path::PathBuf;
 
 use serde_json::{json, Value};
+use wh40kdc::cruncher::from_dsl::strip_nulls;
 use wh40kdc::cruncher::{
-    effect_to_buffs, resolve_granted_records, BuffSource, EngineContext, TranslationPerspective,
+    effect_to_buffs, mortal_wound_sources, resolve_granted_records, BuffSource, EngineContext,
+    TranslationPerspective,
 };
 use wh40kdc::data::{with_rating, EligibilityInput};
 use wh40kdc::{Dataset, Phase};
@@ -304,4 +306,88 @@ fn stratagem_targets_match_the_resolver_goldens() {
         }
     }
     assert!(failures.is_empty(), "{failures:#?}");
+}
+
+/// The mortal-wound sources an ability inflicts outside an attack, against
+/// `mortal-sources.json`. A row with a `factionId` reads its record's effect and trigger from the
+/// embedded dataset; the others carry them inline. The context's phase never gates a source, so
+/// rows that leave it out get a placeholder.
+#[test]
+fn mortal_sources_match_the_goldens() {
+    let ds = Dataset::embedded();
+    let corpus = read(&corpus_dir().join("mortal-sources.json"));
+    let cases = corpus["cases"].as_array().expect("cases");
+    assert!(!cases.is_empty(), "the mortal-sources corpus is empty");
+    let mut failures = Vec::new();
+    for case in cases {
+        let id = case["caseId"].as_str().expect("caseId");
+        let ability_id = case["abilityId"].as_str().expect("abilityId");
+        let mut context_json = case["context"].clone();
+        context_json
+            .as_object_mut()
+            .expect("context")
+            .entry("phase")
+            .or_insert(json!("shooting"));
+        let context: EngineContext = serde_json::from_value(context_json).expect("context");
+        let (effect, trigger) = match case["factionId"].as_str() {
+            Some(faction) => {
+                let ability = ds
+                    .abilities
+                    .get_in_faction(ability_id, faction)
+                    .unwrap_or_else(|| panic!("{id}: unknown ability {ability_id}"));
+                let raw = strip_nulls(&serde_json::to_value(ability).unwrap());
+                (raw["effect"].clone(), raw["trigger"].clone())
+            }
+            None => (
+                strip_nulls(case.get("effect").unwrap_or(&Value::Null)),
+                strip_nulls(case.get("trigger").unwrap_or(&Value::Null)),
+            ),
+        };
+        let rating = case.get("rating").filter(|r| !r.is_null());
+        let got = mortal_wound_sources(ability_id, &effect, &trigger, &context, rating);
+        let want = &case["expected"];
+        let want_sources = want["sources"].as_array().expect("expected sources");
+        let mut problems = Vec::new();
+        if got.sources.len() != want_sources.len() {
+            problems.push(format!(
+                "source count: want {}, got {}",
+                want_sources.len(),
+                got.sources.len()
+            ));
+        } else {
+            for (got, want) in got.sources.iter().zip(want_sources) {
+                let keys: Vec<&str> = got.needs.iter().map(|need| need.key.as_str()).collect();
+                let want_moment = want["moment"].as_str();
+                let want_expected = want["expected"].as_f64().expect("expected number");
+                if got.id != want["id"].as_str().unwrap()
+                    || got.moment.as_deref() != want_moment
+                    || json!(keys) != want["needKeys"]
+                    || (got.expected - want_expected).abs() > 1e-9
+                {
+                    problems.push(format!(
+                        "source\n  want: {want}\n  got:  {} {:?} {} {keys:?}",
+                        got.id, got.moment, got.expected
+                    ));
+                }
+            }
+        }
+        let reasons: Vec<&str> = got.unsupported.iter().map(|u| u.reason.as_str()).collect();
+        if json!(reasons) != want["unsupportedReasons"] {
+            problems.push(format!(
+                "unsupportedReasons\n  want: {}\n  got:  {}",
+                want["unsupportedReasons"],
+                json!(reasons)
+            ));
+        }
+        if !problems.is_empty() {
+            failures.push(format!("{id}: {}", problems.join("\n")));
+        }
+    }
+    assert!(
+        failures.is_empty(),
+        "{} of {} cases differ:\n{}",
+        failures.len(),
+        cases.len(),
+        failures.join("\n")
+    );
 }

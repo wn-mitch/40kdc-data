@@ -36,6 +36,7 @@ import { compareCell, loadoutCell, type ComparePhase, type LoadoutLine } from ".
 import { attributeStages } from "../src/cruncher/attribution.js";
 import type { Phase, GameEvent, Stratagem } from "../src/generated.js";
 import { effectToBuffs } from "../src/cruncher/from-dsl.js";
+import { mortalWoundSources } from "../src/cruncher/mortal-sources.js";
 import { resolveGrantedRecords, type GrantedRecord } from "../src/cruncher/granted-records.js";
 import { encodeBase } from "../src/runner.js";
 import { stratagemCanTarget, stratagemCanTargetUnit, type EligibilityInput } from "../src/abilities-resolver/index.js";
@@ -539,6 +540,27 @@ describe("abilities-resolver conformance corpus", () => {
 
   it("defensive-from-dsl.json: target-perspective translations match", () => {
     runDslCorpus("defensive-from-dsl.json");
+  });
+
+  it("mortal-sources.json: mortal wounds outside an attack match", () => {
+    type Row = {
+      caseId: string; abilityId: string; factionId?: string; effect?: unknown; trigger?: unknown; rating?: string | number;
+      context: EngineContext;
+      expected: { sources: { id: string; moment: string | null; expected: number; needKeys: string[] }[]; unsupportedReasons: string[] };
+    };
+    const { cases } = JSON.parse(readFileSync(join(CONFORMANCE, "abilities-resolver", "mortal-sources.json"), "utf8")) as { cases: Row[] };
+    expect(cases.length).toBeGreaterThan(0);
+    const ds = Dataset.embedded();
+    for (const c of cases) {
+      const record = c.factionId === undefined ? undefined : ds.abilities.getInFaction(c.abilityId, c.factionId);
+      const result = record
+        ? mortalWoundSources(record.id, record.raw.effect, record.raw.trigger, c.context, c.rating)
+        : mortalWoundSources(c.abilityId, c.effect, c.trigger, c.context, c.rating);
+      expect(result.unsupported.map((entry) => entry.reason), c.caseId).toEqual(c.expected.unsupportedReasons);
+      expect(result.sources.map((source) => [source.id, source.moment, source.needs.map((need) => need.key)]), c.caseId)
+        .toEqual(c.expected.sources.map((source) => [source.id, source.moment, source.needKeys]));
+      result.sources.forEach((source, index) => expect(source.expected, c.caseId).toBeCloseTo(c.expected.sources[index]!.expected, 9));
+    }
   });
 });
 

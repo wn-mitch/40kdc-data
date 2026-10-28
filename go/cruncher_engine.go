@@ -304,6 +304,8 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 			critHits += dice * freshCrit
 		}
 	}
+	// Attacks that score a hit, before Sustained Hits adds extra hits to them.
+	scoringAttacks := hits
 	sustained := res.findKeyword("sustained-hits")
 	if sustained != nil {
 		sv, err := evalStatValue(paramValue(sustained, "value"))
@@ -518,6 +520,21 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 			damageMain += gain * (unsaved / damageRolls)
 			damageMortal += gain * (mortalWoundsStream / damageRolls)
 		}
+	}
+	// Mortal wounds the attack's own rolls inflict: one damage each, outside the save and Damage roll.
+	for _, entry := range res.rollMortals {
+		var triggers float64
+		switch entry.roll + "/" + entry.outcome {
+		case "hit/success":
+			triggers = scoringAttacks
+		case "hit/critical":
+			triggers = critHits
+		case "wound/success":
+			triggers = totalRegularWounds + critWoundsFromRoll
+		case "wound/critical":
+			triggers = critWoundsFromRoll
+		}
+		damageMortal += entry.count * triggers
 	}
 	damage := damageMain + damageMortal
 	stages = append(stages, stage("damage", damage))

@@ -36,6 +36,8 @@ from wh40kdc.data.entities import (
 )
 from wh40kdc.share import embedded_registry_aliases
 
+_MORTAL_PHASES = ("command", "movement", "shooting", "charge", "fight")
+
 
 def _buff_source_from_eligible(entry: dict[str, Any]) -> dict[str, Any]:
     """Map an eligible-ability entry back to the BuffSource the translator
@@ -728,6 +730,53 @@ class Dataset:
             out.append({"ability": ability, "source": entry_source, "phases": [phase]})
         return out
 
+    def mortal_wound_sources_for(
+        self, input: dict[str, Any], context: dict[str, Any]
+    ) -> dict[str, Any]:
+        """The mortal wounds a unit's abilities inflict on an enemy unit outside its attacks:
+        after a Charge move, at the start of a phase, when it is selected to shoot. Each source
+        gives the expected mortal wounds per occurrence of its moment, before Feel No Pain,
+        assuming each of its ``needs`` holds (answer one false in ``context["conditionFacts"]``
+        to remove it). ``phase-is`` conditions never gate a source, so the context's phase does
+        not filter them. Mortal wounds an attack's own rolls inflict are buffs
+        (:meth:`buffs_for`), not sources; mortal wounds the unit inflicts on itself are not
+        reported."""
+        from wh40kdc.cruncher.mortal_sources import mortal_wound_sources
+
+        ctx = self._buff_context(input, context, "attacker")
+        sources: list[dict[str, Any]] = []
+        unsupported: list[dict[str, Any]] = []
+        seen: set[str] = set()
+        # A source happens at its own moment, whatever phase the attack is made in: walk every
+        # phase.
+        eligible: list[dict[str, Any]] = []
+        if input.get("unitId") is not None:
+            for phase in _MORTAL_PHASES:
+                eligible.extend(self.eligible_abilities(input, phase))
+        for entry in eligible:
+            ability = entry["ability"]
+            if ability.id in seen:
+                continue
+            seen.add(ability.id)
+            translation = mortal_wound_sources(
+                ability.id,
+                ability.raw.get("effect"),
+                ability.raw.get("trigger"),
+                ctx,
+                entry.get("rating"),
+            )
+            source_info = entry["source"]
+            is_stratagem = source_info["kind"] == "detachment-stratagem"
+            cp = source_info.get("cpCost") if is_stratagem else None
+            for found in translation["sources"]:
+                row = {**found, "abilityId": ability.id, "label": ability.name}
+                if cp is not None:
+                    row["cp"] = cp
+                sources.append(row)
+            for fragment in translation["unsupported"]:
+                unsupported.append({**fragment, "abilityId": ability.id})
+        return {"sources": sources, "unsupported": unsupported}
+
     def buffs_for(self, input: dict[str, Any], context: dict[str, Any]) -> list[dict[str, Any]]:
         """Attacker-perspective buff stack for a (unit, phase) combination.
 
@@ -932,23 +981,18 @@ class Dataset:
             ctx["attachmentRoles"] = roles
         return ctx
 
-    def _collect_buffs(
-        self,
-        input: dict[str, Any],
-        context: dict[str, Any],
-        perspective: str,
-        needs: list[dict[str, Any]] | None = None,
-    ) -> list[dict[str, Any]]:
-        """Shared implementation for buffs_for / defensive_buffs_for. When ``needs`` is
-        given, every undecided leaf condition of the walked abilities is appended to it."""
+    def _buff_context(
+        self, input: dict[str, Any], context: dict[str, Any], perspective: str
+    ) -> dict[str, Any]:
+        """The engine context the buff collectors translate under: ``context`` with the input
+        unit's attachment, keywords, army faction and Toughness filled in where ``context``
+        leaves them unset."""
         from wh40kdc.data.lever_providers import (
-            ability_needs,
             combined_keywords_lower,
             combined_toughness,
             shared_keywords_lower,
         )
 
-        out: list[dict[str, Any]] = []
         unit = (
             self.units.get_in_faction(input["unitId"], input["factionId"])
             if input.get("factionId")
@@ -982,6 +1026,10 @@ class Dataset:
                     input.get("unitId")
                     if context.get("attackerUnitId") is None
                     else context["attackerUnitId"]
+                ),
+                # The input's faction is the army whose rules the resolver walks.
+                "armyFaction": (
+                    faction_id if context.get("armyFaction") is None else context["armyFaction"]
                 ),
                 "attackerAttachmentRole": (
                     roles.get(input.get("unitId")) if isinstance(roles, dict) else None
@@ -1022,6 +1070,12 @@ class Dataset:
                     if context.get("targetUnitId") is None
                     else context["targetUnitId"]
                 ),
+                # The input's faction is the defending army whose rules the resolver walks.
+                "targetArmyFaction": (
+                    faction_id
+                    if context.get("targetArmyFaction") is None
+                    else context["targetArmyFaction"]
+                ),
                 "targetAttachmentRole": (
                     roles.get(input.get("unitId")) if isinstance(roles, dict) else None
                 )
@@ -1043,6 +1097,21 @@ class Dataset:
                     else context["attachmentRoles"]
                 ),
             }
+        return ctx
+
+    def _collect_buffs(
+        self,
+        input: dict[str, Any],
+        context: dict[str, Any],
+        perspective: str,
+        needs: list[dict[str, Any]] | None = None,
+    ) -> list[dict[str, Any]]:
+        """Shared implementation for buffs_for / defensive_buffs_for. When ``needs`` is
+        given, every undecided leaf condition of the walked abilities is appended to it."""
+        from wh40kdc.data.lever_providers import ability_needs
+
+        out: list[dict[str, Any]] = []
+        ctx = self._buff_context(input, context, perspective)
         # Weapon-profile keywords are attacker-only. Faction-scoped like
         # stackable_buffs_for — first-wins would crunch the wrong faction's stats.
         if perspective == "attacker":

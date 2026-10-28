@@ -28,6 +28,8 @@ mod collection;
 mod dataset;
 pub mod game_mode;
 mod loadout;
+#[cfg(feature = "cruncher")]
+mod mortals;
 mod normalize;
 mod pricing;
 #[cfg(feature = "cruncher")]
@@ -59,6 +61,8 @@ pub use loadout::{
     LoadoutModel, LoadoutTier, Violation, ViolationCode, WeaponBound,
     LOADOUT_CANDIDATES_DEFAULT_LIMIT, LOADOUT_CANDIDATES_TRUNCATED,
 };
+#[cfg(feature = "cruncher")]
+pub use mortals::{AbilityMortalWounds, AbilityUnsupported, MortalWoundSources};
 pub use normalize::{normalize_name, strip_leading_the};
 pub use pricing::{base_unit_points, points_tier_missing};
 #[cfg(feature = "cruncher")]

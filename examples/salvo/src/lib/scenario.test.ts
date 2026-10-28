@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { Dataset } from "@alpaca-software/40kdc-data";
 
-import { needToggles, parseDesignations, scenarioContext, withConditionFact } from "./scenario.js";
+import { momentLabel, needToggles, parseDesignations, scenarioContext, withConditionFact } from "./scenario.js";
 
 describe("scenario", () => {
   it("parses declared designations, blank meaning none", () => {
@@ -53,5 +53,15 @@ describe("scenario", () => {
     const set = withConditionFact({ battleRound: 2 }, "attacker:{}", true);
     expect(set).toEqual({ battleRound: 2, conditionFacts: { "attacker:{}": true } });
     expect(withConditionFact(set, "attacker:{}", undefined)).toEqual({ battleRound: 2 });
+  });
+});
+
+describe("momentLabel", () => {
+  it("reads each moment family and joins alternatives", () => {
+    expect(momentLabel(null)).toBe("Each time it is used");
+    expect(momentLabel("move-ended:charge")).toBe("After a Charge move");
+    expect(momentLabel("phase-started:shooting|move-ended")).toBe("At the start of the shooting phase or After a move");
+    expect(momentLabel("before-roll:deadly-demise")).toBe("Before a deadly demise roll");
+    expect(momentLabel("objective-gained")).toBe("Objective gained");
   });
 });

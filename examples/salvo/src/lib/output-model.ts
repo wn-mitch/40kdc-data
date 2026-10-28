@@ -5,6 +5,8 @@
  */
 import {
   attributeStages,
+  resolveBuffs,
+  type AbilityMortalWounds,
   baseWargear,
   combinedWargear,
   loadoutHitModifier,
@@ -291,4 +293,78 @@ export function crunchLine(input: {
   } catch (err) {
     return { ...line, models, attributed: [], error: (err as Error).message };
   }
+}
+
+/** One mortal-wound source as Salvo toggles it, keyed by its id and moment. */
+export type MortalSourceChoice = AbilityMortalWounds & { key: string };
+
+/** The toggle key of a source: one ability can inflict mortal wounds at more than one moment. */
+export function mortalSourceKey(source: Pick<AbilityMortalWounds, "id" | "moment">): string {
+  return `${source.id}@${source.moment ?? ""}`;
+}
+
+/**
+ * The mortal wounds the combined unit's abilities inflict outside its attacks, read per member as
+ * {@link memberLevers} reads levers and kept once per key, with the needs each source raises. The
+ * combined unit's model count is the default for dice rolled per model.
+ */
+export function memberMortalSources(
+  ds: Dataset,
+  attacker: AttackerChoice,
+  context: EngineContext,
+): { sources: MortalSourceChoice[]; needs: AbilityNeed[]; error?: string } {
+  if (!attacker.unitId) return { sources: [], needs: [] };
+  const members = memberUnits(ds, attacker.factionId, [attacker.unitId, ...attacker.attachedUnitIds]);
+  const ids = members.map((member) => member.memberId);
+  const roles = memberRoles(ds, attacker.unitId, attacker.attachedUnitIds);
+  const models = members.reduce((sum, member) => sum + member.loadout.modelCount, 0);
+  const sources = new Map<string, MortalSourceChoice>();
+  const needs = new Map<string, AbilityNeed>();
+  try {
+    for (const member of members) {
+      const attached = members.length > 1;
+      const result = ds.mortalWoundSourcesFor(
+        {
+          unitId: member.memberId,
+          factionId: attacker.factionId ?? undefined,
+          detachmentId: attacker.detachmentId ?? undefined,
+          attachedUnitIds: ids.filter((id) => id !== member.memberId),
+          ...(attached ? { attachmentRoles: roles } : {}),
+        },
+        { ...context, attackerModelCount: context.attackerModelCount ?? models },
+      );
+      for (const source of result.sources) {
+        const key = mortalSourceKey(source);
+        if (!sources.has(key)) sources.set(key, { ...source, key });
+        for (const need of source.needs) needs.set(`${source.abilityId}\u0000${need.key}`, { ...need, abilityId: source.abilityId, label: source.label });
+      }
+    }
+  } catch (err) {
+    return { sources: [], needs: [], error: (err as Error).message };
+  }
+  return { sources: [...sources.values()], needs: [...needs.values()] };
+}
+
+/**
+ * The enabled sources' mortal wounds on the target: their expected total, and what is left after
+ * the target's Feel No Pain (one on every wound and one on mortal wounds roll independently).
+ */
+export function mortalSourceLine(
+  sources: readonly MortalSourceChoice[],
+  enabled: ReadonlySet<string>,
+  targetBuffs: readonly Buff[],
+  context: EngineContext,
+): { damage: number; afterFnp: number } {
+  const damage = sources.filter((source) => enabled.has(source.key)).reduce((sum, source) => sum + source.expected, 0);
+  if (damage === 0) return { damage, afterFnp: 0 };
+  const resolved = resolveBuffs([...targetBuffs], context);
+  const survive = (fnp: { threshold: number } | null) => (fnp ? Math.min(1, Math.max(0, (fnp.threshold - 1) / 6)) : 1);
+  return { damage, afterFnp: damage * survive(resolved.feelNoPain) * survive(resolved.feelNoPainMortal) };
+}
+
+/** The sources' line as stages, for the combined total: damage and after-FNP only. */
+export function mortalSourceStages(line: { damage: number; afterFnp: number }): AttributedStage[] {
+  const stage = (name: "damage" | "after-fnp", expected: number): AttributedStage =>
+    ({ name, expected, detail: "mortal wounds from abilities", baseline: expected, lifts: [], residual: 0, intrinsics: [] });
+  return [stage("damage", line.damage), stage("after-fnp", line.afterFnp)];
 }

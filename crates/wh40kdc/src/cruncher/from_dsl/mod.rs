@@ -27,6 +27,7 @@ mod gated;
 mod js;
 mod leaves;
 mod levers;
+mod roll_mortals;
 mod selection;
 
 use serde::{Deserialize, Serialize};
@@ -191,6 +192,8 @@ pub(crate) struct WalkOpts<'a> {
     /// Tags the owning ability designates on the units holding it
     /// ([`gated::self_designations`]).
     self_designations: &'a std::collections::BTreeSet<String>,
+    /// Inside a part triggered by each hit or wound roll of the attack: that roll and its outcome.
+    attack_roll: Option<roll_mortals::AttackRollRef>,
 }
 
 const STOCHASTIC_DICE_GATED: &str = "dice-gated effect: stochastic; not expressible as a buff";
@@ -287,6 +290,7 @@ pub(crate) fn effect_to_buffs_with_duration(
         usage: usage.cloned(),
         granted_holder: false,
         self_designations: &self_designations,
+        attack_roll: None,
     };
     let mut out = Out::default();
     walk(&effect, &opts, &mut out);
@@ -640,6 +644,9 @@ fn dispatch(node: &Obj, opts: &WalkOpts, out: &mut Out) {
             if let Some(usage) = present(node, "usage") {
                 part_opts.usage = Some(usage.clone());
             }
+            if let Some(roll) = roll_mortals::attack_roll_of(node.get("trigger")) {
+                part_opts.attack_roll = Some(roll);
+            }
             // A part firing on its own moment is gated like a timing-is step; one with only a
             // cost, a choice or a usage limit is an activation, as a named effect is.
             let activation = is_true(node, "optional")
@@ -685,6 +692,7 @@ fn dispatch(node: &Obj, opts: &WalkOpts, out: &mut Out) {
             node,
         ),
         Some("select-units") => walk(node.get("effect").unwrap_or(&Value::Null), opts, out),
+        Some("mortal-wounds") => roll_mortals::translate(node, opts, out),
         Some("aura") => aura(node, opts, out),
         Some("persistent-designation") => out.unsupported(
             "persistent-designation: retained selection state is not resolved by the buff engine",

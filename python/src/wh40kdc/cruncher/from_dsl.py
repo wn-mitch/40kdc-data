@@ -17,6 +17,7 @@ and unsupported-reason strings are pinned by
 
 from __future__ import annotations
 
+import json
 import math
 from typing import Any, TypeGuard
 
@@ -24,6 +25,7 @@ from wh40kdc.cruncher import from_dsl_levers as _levers
 from wh40kdc.cruncher import from_dsl_selection as _selection
 from wh40kdc.cruncher.buffs import Buff, BuffSource, EngineContext
 from wh40kdc.cruncher.condition_facts import ConditionNeed, condition_fact_key, condition_needs
+from wh40kdc.cruncher.damage_roll import quantity_distribution
 from wh40kdc.cruncher.from_dsl_shapes import (
     UNSUPPORTED_SHAPE_REASONS,
     StanceGate,
@@ -454,15 +456,17 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
             "duration": node.get("duration", opts.get("duration")),
             "usage": opts.get("usage") if node.get("usage") is None else node["usage"],
         }
+        attack_roll = _attack_roll_of(node.get("trigger"))
+        step_opts = {**part_opts, "attackRoll": attack_roll} if attack_roll else part_opts
         if (
             node.get("optional") is True
             or node.get("cost") is not None
             or node.get("usage") is not None
         ):
-            _translate_named_effect(node, source, part_opts, out)
+            _translate_named_effect(node, source, step_opts, out)
         else:
             gated = moment_gate(node.get("trigger"), node.get("effect"), node)
-            _walk(gated, source, part_opts, out)
+            _walk(gated, source, step_opts, out)
     elif node_type == "choice":
         # Player decision — each branch becomes an opt-in lever (pick one).
         _enumerate_choice(node, source, opts, out)
@@ -608,6 +612,8 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
         _walk(node.get("reward"), source, opts, out)
     elif node_type == "stance-selection-capacity":
         _translate_stance_capacity(node, source, opts, out)
+    elif node_type == "mortal-wounds":
+        _translate_mortal_wounds(node, source, opts, out)
     elif node_type == "stance-select":
         # Pick-one modal buff — each option is an opt-in lever (pick one).
         _enumerate_named_options(node, source, opts, out, f"{opts['abilityId']}?stance", 1)
@@ -2043,6 +2049,100 @@ def _translate_named_effect(
 _ATTACK_STEP_ROLLS: frozenset[str] = frozenset({"hit", "wound", "save", "damage"})
 
 
+def _attack_roll_of(trigger: Any) -> dict[str, Any] | None:
+    """The hit or wound roll a single after-roll trigger fires on, with its outcome (``None`` when
+    the trigger does not state one); ``None`` for any other trigger. A result of "failure" is not
+    a scoring roll, so it gives no attack roll."""
+    if (
+        not _is_object(trigger)
+        or trigger.get("event") != "after-roll"
+        or not _is_object(trigger.get("filter"))
+    ):
+        return None
+    roll = trigger["filter"].get("roll")
+    result = trigger["filter"].get("result")
+    if roll not in ("hit", "wound"):
+        return None
+    if result is not None and result not in ("success", "critical"):
+        return None
+    return {"roll": roll, "outcome": result}
+
+
+def _translate_mortal_wounds(
+    node: dict[str, Any], source: BuffSource, opts: dict[str, Any], out: EffectTranslation
+) -> None:
+    """Mortal wounds an attack's own hit or wound roll inflicts on the target. Mortal wounds
+    outside an attack are not a buff: ``Dataset.mortal_wound_sources_for`` reports them."""
+    roll = opts.get("attackRoll")
+    if not roll:
+        out["unsupported"].append(
+            {
+                "reason": "mortal-wounds: inflicted outside an attack, not a change to it",
+                "effectFragment": node,
+            }
+        )
+        return
+    if roll["outcome"] is None:
+        out["unsupported"].append(
+            {
+                "reason": f"mortal-wounds: the {roll['roll']} roll's outcome is not stated",
+                "effectFragment": node,
+            }
+        )
+        return
+    if _classify_target(node) != "defender":
+        out["unsupported"].append(
+            {
+                "reason": (
+                    "mortal-wounds: the attack's rolls inflict them on a unit other than the target"
+                ),
+                "effectFragment": node,
+            }
+        )
+        return
+    if opts["perspective"] != "attacker":
+        return
+    raw_modifier = node.get("modifier")
+    modifier = raw_modifier if _is_object(raw_modifier) else {}
+    extra = [key for key in modifier if key != "count"]
+    if extra:
+        out["unsupported"].append(
+            {
+                "reason": f"mortal-wounds: {', '.join(extra)} on an attack roll is not modelled",
+                "effectFragment": node,
+            }
+        )
+        return
+    try:
+        distribution = quantity_distribution(modifier.get("count"))
+        count = sum(value * probability for value, probability in distribution)
+    except ValueError:
+        shown = "undefined" if "count" not in modifier else _json_compact(modifier["count"])
+        out["unsupported"].append(
+            {
+                "reason": f"mortal-wounds: count {shown} is not a fixed or dice quantity",
+                "effectFragment": node,
+            }
+        )
+        return
+    out["applied"].append(
+        {
+            "source": source,
+            "contribution": {
+                "type": "mortal-wounds-on-roll",
+                "roll": roll["roll"],
+                "outcome": roll["outcome"],
+                "count": _intify(count),
+            },
+        }
+    )
+
+
+def _json_compact(value: Any) -> str:
+    """JS ``JSON.stringify`` for the values that flow into reason strings."""
+    return json.dumps(value, separators=(",", ":"), ensure_ascii=False)
+
+
 def is_attack_step(trigger: Any) -> bool:
     """A trigger on a step of every attack (a hit, wound, save or damage roll, or allocating
     damage)."""
@@ -2977,6 +3077,10 @@ def _describe_contribution(c: dict[str, Any]) -> str:
         return f"Save improved by {_num_str(c['value'])} (no better than {_num_str(c['best'])}+)"
     if ctype == "stat-set":
         return f"{c['stat']} {_num_str(c['value'])}"
+    if ctype == "mortal-wounds-on-roll":
+        crit = "critical " if c["outcome"] == "critical" else ""
+        plural = "" if c["count"] == 1 else "s"
+        return f"{_num_str(c['count'])} mortal wound{plural} per {crit}{c['roll']}"
     return "cover"
 
 

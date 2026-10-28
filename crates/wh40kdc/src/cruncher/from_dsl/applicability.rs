@@ -294,6 +294,20 @@ fn describe_contribution(c: &Value) -> String {
             fmt_num(js_number(Some(v))),
             fmt_num(js_number(c.get("best")))
         ),
+        "mortal-wounds-on-roll" => {
+            let count = js_number(c.get("count"));
+            format!(
+                "{} mortal wound{} per {}{}",
+                fmt_num(count),
+                if count == 1.0 { "" } else { "s" },
+                if c["outcome"] == "critical" {
+                    "critical "
+                } else {
+                    ""
+                },
+                js_string(c.get("roll"))
+            )
+        }
         "stat-set" => format!(
             "{} {}",
             js_string(c.get("stat")),

@@ -50,7 +50,14 @@ type dslOpts struct {
 	// selfDesignations holds the tags the owning ability designates on the
 	// units holding it (selfDesignations); nil outside an ability walk.
 	selfDesignations map[string]bool
+	// attackRoll is set inside a part triggered by each hit or wound roll of the attack: that
+	// roll and its outcome.
+	attackRoll *attackRollInfo
 }
+
+// attackRollInfo is the hit or wound roll a single after-roll trigger fires on; outcome is ""
+// when the trigger does not state one.
+type attackRollInfo struct{ roll, outcome string }
 
 // effectToBuffs walks an ability DSL effect tree, producing the buff stack plus
 // unsupported and activatable lists. An optional activation record preserves
@@ -365,6 +372,9 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 				return
 			}
 		}
+		if roll := attackRollOf(n["trigger"]); roll != nil {
+			partOpts.attackRoll = roll
+		}
 		// A part with its own optionality, cost or usage is an activation.
 		// Otherwise its trigger is only the moment at which its effect fires.
 		if n["optional"] == true || n["cost"] != nil || n["usage"] != nil {
@@ -498,6 +508,8 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 		enumerateNamedOptions(n, source, opts, out, opts.abilityID+"?stance", maxActivations)
 	case "stance-selection-capacity":
 		translateStanceCapacity(n, opts, out)
+	case "mortal-wounds":
+		translateMortalWounds(n, source, opts, out)
 	case "issue-orders":
 		// Officer issues one Order from the menu — each is an opt-in lever.
 		enumerateNamedOptions(n, source, opts, out, opts.abilityID+"?order", 1)
@@ -2385,6 +2397,16 @@ func describeContribution(c map[string]any) string {
 		return "Save improved by " + numStr(c["value"]) + " (no better than " + numStr(c["best"]) + "+)"
 	case "stat-set":
 		return getStr(c, "stat") + " " + numStr(c["value"])
+	case "mortal-wounds-on-roll":
+		plural := "s"
+		if n, _ := num(c["count"]); n == 1 {
+			plural = ""
+		}
+		critical := ""
+		if getStr(c, "outcome") == "critical" {
+			critical = "critical "
+		}
+		return numStr(c["count"]) + " mortal wound" + plural + " per " + critical + getStr(c, "roll")
 	}
 	return "cover"
 }
