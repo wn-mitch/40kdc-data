@@ -145,8 +145,22 @@ def translate_ability_grant(
     definition = modifier.get("definition")
     if isinstance(definition, dict):
         holders = dsl._classify_target(node)
+        target = node.get("target")
         if holders == "self":
-            dsl._walk(definition, source, opts, out)
+            if target in ("this-model", "model-in-this-unit") or (
+                isinstance(target, dict) and target.get("level") == "model"
+            ):
+                out["unsupported"].append(
+                    {
+                        "reason": (
+                            "ability-grant: model-only definition cannot be applied to the"
+                            " entire unit"
+                        ),
+                        "effectFragment": node,
+                    }
+                )
+            else:
+                dsl._walk(definition, source, {**opts, "grantedHolder": True}, out)
         elif holders == "unknown":
             out["unsupported"].append(
                 {

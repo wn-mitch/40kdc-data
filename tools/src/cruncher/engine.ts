@@ -22,6 +22,7 @@ import {
 import { Dataset } from "../data/dataset.js";
 import { isMeleeProfile } from "../data/weapon-profile.js";
 import { damageRoll, oneDamageRerollGain } from "./damage-roll.js";
+import { attackAp, hasCriticalWoundBuffs, mixDistributions, resolveCriticalWound, splitUnsaved } from "./critical-wounds.js";
 
 export type AttackProfileRef = { weapon: Weapon; profileIndex: number };
 export type TargetProfileRef = {
@@ -71,6 +72,12 @@ export type AttackModel = {
   unsaved: number;
   /** Final per-attack damage. */
   damage: Array<{ value: number; probability: number }>;
+  /**
+   * A critical wound's own save failure and Damage, present only when a buff applies only on a
+   * critical wound. A critical wound is one the wound roll scores, not a Lethal Hits wound; with
+   * Devastating Wounds it skips the save and its mortal wounds deal this Damage.
+   */
+  criticalWound?: { unsaved: number; damage: Array<{ value: number; probability: number }> };
   /** Probability each wound is lost despite Feel No Pain: on every wound, and on mortal wounds only. */
   woundLost: number;
   mortalWoundLost: number;
@@ -315,15 +322,41 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
   const pSaved = effectiveSaveTarget >= 7 ? 0 : saveProbs.pass;
   let unsaved = regularWoundsForSaves * (1 - pSaved);
   // "Re-roll one saving throw": one failed save no other permission re-rolled is rolled again.
-  const saveRerollOneDice = resolved.rerollOne.save && effectiveSaveTarget < 7 ? oneRerollDice(regularWoundsForSaves, saveProbs.open) : 0;
+  let saveRerollOneDice = resolved.rerollOne.save && effectiveSaveTarget < 7 ? oneRerollDice(regularWoundsForSaves, saveProbs.open) : 0;
   if (saveRerollOneDice > 0) {
     const fresh = checkProbabilities({ unmodifiedNeeded: effectiveSaveTarget, modifier: 0, reroll: "none", autoFailOnOne: true, autoPassOnSix: false, critThreshold: 7 });
     unsaved -= saveRerollOneDice * fresh.pass;
   }
+  // Buffs that apply only on a critical wound: those wounds take the save at their own AP.
+  const critical = hasCriticalWoundBuffs(allBuffs) ? resolveCriticalWound(allBuffs, ctx) : undefined;
+  const criticalToSaves = critical && !hasDevastating ? critWoundsFromRoll : 0;
+  let unsavedRegular = unsaved;
+  let unsavedCritical = 0;
+  let pSavedCritical = pSaved;
+  let criticalSaveTarget = effectiveSaveTarget;
+  if (critical) {
+    const criticalArmor = clamp(Sv - attackAp(critical, weaponProfile.stats.AP) - saveMod, 2, 7);
+    criticalSaveTarget = effectiveInvuln !== null ? Math.min(criticalArmor, effectiveInvuln) : criticalArmor;
+    const stream = (target: number, wounds: number) => {
+      const probs = checkProbabilities({ unmodifiedNeeded: target, modifier: 0, reroll: resolved.rerolls.save?.subset ?? "none", autoFailOnOne: true, autoPassOnSix: false, critThreshold: 7 });
+      const fresh = checkProbabilities({ unmodifiedNeeded: target, modifier: 0, reroll: "none", autoFailOnOne: true, autoPassOnSix: false, critThreshold: 7 });
+      return target >= 7 ? { wounds, saved: 0, open: 0, fresh: 0 } : { wounds, saved: probs.pass, open: probs.open, fresh: fresh.pass };
+    };
+    const regular = stream(effectiveSaveTarget, regularWoundsForSaves - criticalToSaves);
+    const crits = stream(criticalSaveTarget, criticalToSaves);
+    pSavedCritical = crits.saved;
+    const split = splitUnsaved([regular, crits], oneRerollDice, resolved.rerollOne.save !== undefined);
+    unsaved = split.unsaved;
+    saveRerollOneDice = split.dice;
+    const shareRegular = regular.wounds * (1 - regular.saved);
+    const shareCritical = crits.wounds * (1 - crits.saved);
+    unsavedRegular = shareRegular + shareCritical > 0 ? unsaved * shareRegular / (shareRegular + shareCritical) : 0;
+    unsavedCritical = unsaved - unsavedRegular;
+  }
   stages.push({
     name: "unsaved",
     expected: unsaved,
-    detail: `Sv${Sv}+${Sv0 !== unitProfile.Sv ? " (set)" : ""}${Sv !== Sv0 ? ` (improved, no better than ${saveImprove?.best}+)` : ""}, AP${signed(AP)}${apMod !== 0 ? ` (apmod ${signed(apMod)})` : ""}${saveMod !== 0 ? `, savemod ${signed(saveMod)}` : ""}${abilityInvuln !== null ? `, invuln ${abilityInvuln}+ (ability)` : ""} → effective ${effectiveSaveTarget}+ (P(save)=${pSaved.toFixed(4)})${resolved.rerollOne.save ? `; re-roll one saving throw: ${saveRerollOneDice.toFixed(4)} dice` : ""}`,
+    detail: `Sv${Sv}+${Sv0 !== unitProfile.Sv ? " (set)" : ""}${Sv !== Sv0 ? ` (improved, no better than ${saveImprove?.best}+)` : ""}, AP${signed(AP)}${apMod !== 0 ? ` (apmod ${signed(apMod)})` : ""}${saveMod !== 0 ? `, savemod ${signed(saveMod)}` : ""}${abilityInvuln !== null ? `, invuln ${abilityInvuln}+ (ability)` : ""} → effective ${effectiveSaveTarget}+ (P(save)=${pSaved.toFixed(4)})${resolved.rerollOne.save ? `; re-roll one saving throw: ${saveRerollOneDice.toFixed(4)} dice` : ""}${critical ? `; critical wounds ${criticalToSaves.toFixed(4)} at ${criticalSaveTarget}+ (P(save)=${pSavedCritical.toFixed(4)})` : ""}`,
   });
 
   // 5. Damage
@@ -346,13 +379,31 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
     ...(damageReroll ? { reroll: damageReroll } : {}),
   });
   const damagePerHit = perAttack.expected;
-  let damageMain = unsaved * damagePerHit;
-  let damageMortal = mortalWoundsStream * damagePerHit;
+  // A critical wound's Damage, for its unsaved wounds and, with Devastating Wounds, its mortal wounds.
+  const criticalDamageReroll = critical?.rerolls.damage?.subset;
+  const perCritical = critical
+    ? damageRoll({
+      stat: critical.statSet.D?.value ?? weaponProfile.stats.D,
+      bonus: meltaBonus,
+      modifier: critical.damageMod.value,
+      reduction: critical.damageReduction.value,
+      ...(criticalDamageReroll ? { reroll: criticalDamageReroll } : {}),
+    })
+    : perAttack;
+  let damageMain = critical ? unsavedRegular * damagePerHit + unsavedCritical * perCritical.expected : unsaved * damagePerHit;
+  let damageMortal = mortalWoundsStream * perCritical.expected;
   // "Re-roll one Damage roll" over every Damage roll, main and mortal streams alike, shared in
   // proportion to their rolls. A roll another permission already re-rolled cannot be re-rolled, so
-  // beside one the single die is not priced.
+  // beside one the single die is not priced. With critical-wound Damage each roll is read from the
+  // mixture of the two rolls' distributions.
   const damageRolls = unsaved + mortalWoundsStream;
-  const damageRerollOne = resolved.rerollOne.damage && !damageReroll && damageRolls > 0 ? oneDamageRerollGain(perAttack.distribution, damageRolls) : 0;
+  const damageDistribution = critical
+    ? mixDistributions([
+      { weight: unsavedRegular, distribution: perAttack.distribution },
+      { weight: unsavedCritical + mortalWoundsStream, distribution: perCritical.distribution },
+    ])
+    : perAttack.distribution;
+  const damageRerollOne = resolved.rerollOne.damage && !damageReroll && !criticalDamageReroll && damageRolls > 0 ? oneDamageRerollGain(damageDistribution, damageRolls) : 0;
   if (damageRerollOne > 0) {
     damageMain += damageRerollOne * (unsaved / damageRolls);
     damageMortal += damageRerollOne * (mortalWoundsStream / damageRolls);
@@ -361,7 +412,7 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
   stages.push({
     name: "damage",
     expected: damage,
-    detail: `D ${baseD}${meltaBonus ? ` + Melta ${meltaBonus} (half range)` : ""}${resolved.damageMod.value !== 0 ? ` ${signed(resolved.damageMod.value)} (mod)` : ""}${damageReduction > 0 ? ` -${damageReduction} (defender, min 1)` : ""}${damageReroll ? `, reroll ${damageReroll}${perAttack.rerollUsed ? "" : " (no effect)"}` : ""} = ${damagePerHit} per hit${resolved.rerollOne.damage ? `; re-roll one Damage roll: +${damageRerollOne.toFixed(4)}` : ""}; main ${damageMain.toFixed(4)}, mortal ${damageMortal.toFixed(4)}`,
+    detail: `D ${baseD}${meltaBonus ? ` + Melta ${meltaBonus} (half range)` : ""}${resolved.damageMod.value !== 0 ? ` ${signed(resolved.damageMod.value)} (mod)` : ""}${damageReduction > 0 ? ` -${damageReduction} (defender, min 1)` : ""}${damageReroll ? `, reroll ${damageReroll}${perAttack.rerollUsed ? "" : " (no effect)"}` : ""} = ${damagePerHit} per hit${resolved.rerollOne.damage ? `; re-roll one Damage roll: +${damageRerollOne.toFixed(4)}` : ""}${critical ? `; critical wounds ${perCritical.expected} per hit` : ""}; main ${damageMain.toFixed(4)}, mortal ${damageMortal.toFixed(4)}`,
   });
 
   // 6. FNP
@@ -403,6 +454,7 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
     mortalWoundLost: pSurviveAll * pSurviveMortal,
     wounds: W,
     modelCount: targetModelCount,
+    ...(critical ? { criticalWound: { unsaved: 1 - pSavedCritical, damage: perCritical.distribution } } : {}),
   };
   return { output: { stages, resolved }, model };
 }

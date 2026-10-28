@@ -5,6 +5,7 @@ import { createValidator } from "../schema-loader.js";
 import { effectToBuffs, POST_ATTACK_MOMENT, type EffectTranslation } from "../cruncher/from-dsl.js";
 import { assumeEventSubjectMatches } from "../cruncher/from-dsl-selection.js";
 import { grantedRecordIds } from "../data/lever-providers.js";
+import { resolveGrantedRecords, type GrantedRecord, type GrantedRecordLookup } from "../cruncher/granted-records.js";
 import type { ProjectionChecker } from "../mfm/apply.js";
 import type { BuffSource, EngineContext } from "../cruncher/buffs.js";
 import { tiledSources, type TiledSourceOptions } from "./leaf-view.js";
@@ -277,14 +278,19 @@ function recordGrantCounts(item: EffectTranslation["unsupported"][number], recor
 }
 
 /** Granted records resolve the way the gated ability itself does: in its faction, then its parent's. */
-function grantedRecordEffect(dataRoot: string, factionId: string): GrantedRecordEffect {
+function grantedRecord(dataRoot: string, factionId: string): GrantedRecordLookup {
   return (abilityId) => {
     try {
-      return (resolveCheckedEntity(dataRoot, factionId, abilityId).entry as { effect?: unknown }).effect;
+      return resolveCheckedEntity(dataRoot, factionId, abilityId).entry as GrantedRecord;
     } catch {
       return undefined;
     }
   };
+}
+
+function grantedRecordEffect(dataRoot: string, factionId: string): GrantedRecordEffect {
+  const lookup = grantedRecord(dataRoot, factionId);
+  return (abilityId) => lookup(abilityId)?.effect;
 }
 
 export function classifyUnsupported(
@@ -368,8 +374,10 @@ async function gateCompiledAbility(
   const source: BuffSource = { kind: "ability", abilityId, abilityKind: "unit" };
   // The record's own trigger binds `event-subject` at runtime; judge the effect as a matching unit sees it.
   const bound = assumeEventSubjectMatches(compiled.mechanics.trigger, compiled.mechanics.effect);
-  const newTranslation = effectToBuffs(bound.effect, source, CRUNCHER_CONTEXT, bound.perspective);
+  // A granted record is the holders' own ability: it is judged as the printed rule it names.
   const recordEffect = grantedRecordEffect(dataRoot, factionId);
+  const granted = resolveGrantedRecords(bound.effect, grantedRecord(dataRoot, factionId), new Set([abilityId]));
+  const newTranslation = effectToBuffs(granted, source, CRUNCHER_CONTEXT, bound.perspective);
   const { honestUnknown, outsideDamagePath, unrecognizedShape } = classifyUnsupported(newTranslation.unsupported, recordEffect);
   const crunchShapeOk = unrecognizedShape === 0;
   if (!crunchShapeOk) {

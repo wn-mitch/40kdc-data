@@ -20,6 +20,10 @@ use super::buffs::{
     resolve_buffs, Buff, EngineContext, FeelNoPainState, ResolvedModifiers, ThresholdState,
     WeaponKeywordRef,
 };
+use super::critical_wounds::{
+    attack_ap, has_critical_wound_buffs, mix_distributions, resolve_critical_wound, split_unsaved,
+    SaveStream,
+};
 use super::damage_roll::{damage_roll, one_damage_reroll_gain, DamageRollInput};
 use super::from_keyword::buffs_from_keyword;
 use crate::data::Dataset;
@@ -160,6 +164,17 @@ pub struct AttackModel {
     pub mortal_wound_lost: f64,
     pub wounds: u64,
     pub model_count: u64,
+    /// A critical wound's own save failure and Damage, present only when a buff applies only on
+    /// a critical wound. A critical wound is one the wound roll scores, not a Lethal Hits wound;
+    /// with Devastating Wounds it skips the save and its mortal wounds deal this Damage.
+    pub critical_wound: Option<CriticalWound>,
+}
+
+/// A critical wound's chance to go unsaved and its per-attack Damage, ascending by value.
+#[derive(Clone, Debug)]
+pub struct CriticalWound {
+    pub unsaved: f64,
+    pub damage: Vec<(f64, f64)>,
 }
 
 /// Failures the engine can't recover from: out-of-range profile indexes,
@@ -693,12 +708,12 @@ pub fn crunch_model(
     };
     let mut unsaved = regular_wounds_for_saves * (1.0 - p_saved);
     // "Re-roll one saving throw": one failed save no other permission re-rolled is rolled again.
-    let save_reroll_one_dice = if resolved.reroll_one.save.is_some() && effective_save_target < 7.0
-    {
-        one_reroll_dice(regular_wounds_for_saves, save_probs.open)
-    } else {
-        0.0
-    };
+    let mut save_reroll_one_dice =
+        if resolved.reroll_one.save.is_some() && effective_save_target < 7.0 {
+            one_reroll_dice(regular_wounds_for_saves, save_probs.open)
+        } else {
+            0.0
+        };
     if save_reroll_one_dice > 0.0 {
         let fresh = check_probabilities(CheckArgs {
             unmodified_needed: effective_save_target as i64,
@@ -709,6 +724,81 @@ pub fn crunch_model(
             crit_threshold: 7,
         });
         unsaved -= save_reroll_one_dice * fresh.pass;
+    }
+    // Buffs that apply only on a critical wound: those wounds take the save at their own AP.
+    let critical =
+        has_critical_wound_buffs(&all_buffs).then(|| resolve_critical_wound(&all_buffs, &ctx));
+    let critical_to_saves = if critical.is_some() && !has_devastating {
+        crit_wounds_from_roll
+    } else {
+        0.0
+    };
+    let mut unsaved_regular = unsaved;
+    let mut unsaved_critical = 0.0;
+    let mut p_saved_critical = p_saved;
+    let mut critical_save_target = effective_save_target;
+    if let Some(critical) = &critical {
+        let critical_armor = clamp(
+            sv - attack_ap(critical, weapon_profile.stats.ap as f64) - save_mod,
+            2.0,
+            7.0,
+        );
+        critical_save_target = match effective_invuln {
+            Some(inv) => critical_armor.min(inv),
+            None => critical_armor,
+        };
+        let save_reroll = resolved
+            .rerolls
+            .save
+            .as_ref()
+            .map(|r| r.subset)
+            .map_or(RerollKind::None, RerollKind::from_subset);
+        let stream = |target: f64, wounds: f64| {
+            if target >= 7.0 {
+                return SaveStream {
+                    wounds,
+                    saved: 0.0,
+                    open: 0.0,
+                    fresh: 0.0,
+                };
+            }
+            let check = |reroll| {
+                check_probabilities(CheckArgs {
+                    unmodified_needed: target as i64,
+                    modifier: 0.0,
+                    reroll,
+                    auto_fail_on_one: true,
+                    auto_pass_on_six: false,
+                    crit_threshold: 7,
+                })
+            };
+            let probs = check(save_reroll);
+            SaveStream {
+                wounds,
+                saved: probs.pass,
+                open: probs.open,
+                fresh: check(RerollKind::None).pass,
+            }
+        };
+        let regular = stream(
+            effective_save_target,
+            regular_wounds_for_saves - critical_to_saves,
+        );
+        let crits = stream(critical_save_target, critical_to_saves);
+        p_saved_critical = crits.saved;
+        let share_regular = regular.wounds * (1.0 - regular.saved);
+        let share_critical = crits.wounds * (1.0 - crits.saved);
+        (unsaved, save_reroll_one_dice) = split_unsaved(
+            &[regular, crits],
+            one_reroll_dice,
+            resolved.reroll_one.save.is_some(),
+        );
+        unsaved_regular = if share_regular + share_critical > 0.0 {
+            unsaved * share_regular / (share_regular + share_critical)
+        } else {
+            0.0
+        };
+        unsaved_critical = unsaved - unsaved_regular;
     }
     stages.push(Stage {
         name: StageName::Unsaved,
@@ -743,7 +833,13 @@ pub fn crunch_model(
             } else {
                 String::new()
             },
-        ),
+        ) + &if critical.is_some() {
+            format!(
+                "; critical wounds {critical_to_saves:.4} at {critical_save_target}+ (P(save)={p_saved_critical:.4})"
+            )
+        } else {
+            String::new()
+        },
     });
 
     // 5. Damage
@@ -774,18 +870,58 @@ pub fn crunch_model(
         reroll: damage_reroll,
     })?;
     let damage_per_hit = per_attack.expected;
-    let mut damage_main = unsaved * damage_per_hit;
-    let mut damage_mortal = mortal_wounds_stream * damage_per_hit;
+    // A critical wound's Damage, for its unsaved wounds and, with Devastating Wounds, its mortal
+    // wounds.
+    let critical_damage_reroll = critical
+        .as_ref()
+        .and_then(|c| c.rerolls.damage.as_ref().map(|r| r.subset));
+    let per_critical = match &critical {
+        Some(critical) => {
+            let set_d = critical
+                .stat_set
+                .d
+                .as_ref()
+                .map(|set| StatValue::Integer(set.value as u64));
+            damage_roll(&DamageRollInput {
+                stat: set_d.as_ref().unwrap_or(&weapon_profile.stats.d),
+                bonus: melta_bonus,
+                modifier: critical.damage_mod.value,
+                reduction: critical.damage_reduction.value,
+                reroll: critical_damage_reroll,
+            })?
+        }
+        None => per_attack.clone(),
+    };
+    let mut damage_main = if critical.is_some() {
+        unsaved_regular * damage_per_hit + unsaved_critical * per_critical.expected
+    } else {
+        unsaved * damage_per_hit
+    };
+    let mut damage_mortal = mortal_wounds_stream * per_critical.expected;
     // "Re-roll one Damage roll" over every Damage roll, main and mortal streams alike, shared in
     // proportion to their rolls. A roll another permission already re-rolled cannot be re-rolled,
     // so beside one the single die is not priced.
     let damage_rolls = unsaved + mortal_wounds_stream;
-    let damage_reroll_one =
-        if resolved.reroll_one.damage.is_some() && damage_reroll.is_none() && damage_rolls > 0.0 {
-            one_damage_reroll_gain(&per_attack.distribution, damage_rolls)
+    let damage_reroll_one = if resolved.reroll_one.damage.is_some()
+        && damage_reroll.is_none()
+        && critical_damage_reroll.is_none()
+        && damage_rolls > 0.0
+    {
+        if critical.is_some() {
+            let mixed = mix_distributions(&[
+                (unsaved_regular, &per_attack.distribution),
+                (
+                    unsaved_critical + mortal_wounds_stream,
+                    &per_critical.distribution,
+                ),
+            ]);
+            one_damage_reroll_gain(&mixed, damage_rolls)
         } else {
-            0.0
-        };
+            one_damage_reroll_gain(&per_attack.distribution, damage_rolls)
+        }
+    } else {
+        0.0
+    };
     if damage_reroll_one > 0.0 {
         damage_main += damage_reroll_one * (unsaved / damage_rolls);
         damage_mortal += damage_reroll_one * (mortal_wounds_stream / damage_rolls);
@@ -891,6 +1027,10 @@ pub fn crunch_model(
         mortal_wound_lost: p_survive_all * p_survive_mortal,
         wounds: unit_profile.w.get(),
         model_count: target_model_count,
+        critical_wound: critical.map(|_| CriticalWound {
+            unsaved: 1.0 - p_saved_critical,
+            damage: per_critical.distribution,
+        }),
     };
     Ok((EngineOutput { stages, resolved }, model))
 }

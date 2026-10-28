@@ -87,12 +87,16 @@ export type BuffContribution =
   /**
    * Defender-side: subtract `value` from each unsaved damage point (floored at
    * 1 by the engine). Multiple sources do NOT stack in 10e — the largest
-   * reduction wins. The corpus also encodes `"half"` and `"to-zero"`
-   * reductions; the buff layer only models the additive form because the
-   * other two are typically one-use ablation that doesn't fold into the
-   * expected-value math cleanly.
+   * reduction wins. A `"to-zero"` reduction is `damage-zeroing` below; a
+   * halving one is not modelled.
    */
   | { type: "damage-reduction"; value: number }
+  /**
+   * Defender-side: `uses` unsaved attacks have their Damage changed to 0 before it is rolled, from
+   * a pool the unit shares or `uses` for each model. Only the discrete allocation stage reads it;
+   * the expected-value stages ignore it.
+   */
+  | { type: "damage-zeroing"; uses: number; per: "unit" | "model" }
   /**
    * Defender-side: ability-granted invulnerable save threshold (e.g. a buff
    * that grants a 4+ invuln). Best (lowest) threshold wins; the engine then
@@ -127,6 +131,11 @@ export type SetStat = "A" | "S" | "AP" | "D";
 export type BuffApplicability = {
   phases?: Phase[];
   rollType?: "hit" | "wound" | "save" | "damage";
+  /**
+   * Only on a critical wound: the engine applies the buff's AP and Damage to the attacks that
+   * score one, and no other stage reads it.
+   */
+  onCritical?: "wound";
   /** Target must carry this keyword (case-insensitive). */
   requiresTargetKeyword?: string;
   /** Attacker must carry this keyword (case-insensitive). */
@@ -243,6 +252,13 @@ export type EngineContext = {
   /** Models in the target unit. Drives `model-count` on the defender; undefined leaves it "unknown". */
   targetModelCount?: number;
   /**
+   * How many models of each unit carry a keyword, by keyword (matched case-insensitively). Drives
+   * `model-count` with a keyword; a keyword the record omits stays "unknown" unless every model
+   * carries it.
+   */
+  attackerKeywordModels?: Readonly<Record<string, number>>;
+  targetKeywordModels?: Readonly<Record<string, number>>;
+  /**
    * The wargear the attacking models' chosen loadout includes: by wargear id, how many of those
    * models carry it. A supplied record is complete, so an id it omits is carried by no model.
    * Drives `unit-wargear` on the attacker; undefined leaves it "unknown".
@@ -321,6 +337,52 @@ export type EngineContext = {
   /** Objectives each side controls, and how many there are. Drives `controls`; undefined leaves it "unknown". */
   objectivesControlled?: { attacker: number; target: number; total: number };
   /**
+   * Every objective on the battlefield. A supplied list is complete. Drives `controls` with an
+   * objective filter and `designated` on objectives; undefined leaves them "unknown".
+   */
+  objectives?: readonly ScenarioObjective[];
+  /**
+   * How many units carry each designation the attacking (or target) unit applied. A supplied record
+   * is complete: a designation it omits is on no unit. Drives a `designated` count `by` that unit;
+   * undefined leaves it "unknown".
+   */
+  attackerDesignationsApplied?: Readonly<Record<string, number>>;
+  targetDesignationsApplied?: Readonly<Record<string, number>>;
+  /**
+   * Every move each unit made this turn (`normal`, `advance`, `fall-back`, `charge`,
+   * `remain-stationary`, `ingress`). A supplied list is complete; undefined leaves `happened`
+   * move conditions "unknown", apart from the stationary and charge flags above.
+   */
+  attackerMoves?: readonly string[];
+  targetMoves?: readonly string[];
+  /**
+   * The result of the test an ability made, by roll (`leadership`, `battle-shock`, `charge`).
+   * Drives `roll-result` for those rolls; a roll it omits stays "unknown".
+   */
+  testResults?: Readonly<Record<string, "success" | "failure">>;
+  /**
+   * Every activity each unit has been selected for this phase (`fight`, `shoot`, `move`,
+   * `observe`). A supplied list is complete; undefined leaves `happened` selection conditions
+   * "unknown".
+   */
+  attackerSelected?: readonly string[];
+  targetSelected?: readonly string[];
+  /** Enemy models and units each unit destroyed this phase. Undefined leaves `happened` kill conditions "unknown". */
+  attackerKills?: { models: number; units: number };
+  targetKills?: { models: number; units: number };
+  /** Models each unit lost this phase. Undefined leaves `happened` loss conditions "unknown". */
+  attackerLosses?: number;
+  targetLosses?: number;
+  /**
+   * Every roll each unit made this phase, and every roll made against it, with its result. A
+   * supplied list is complete; undefined leaves `happened` roll conditions "unknown". A critical
+   * result is also a success.
+   */
+  attackerRolls?: readonly ScenarioRoll[];
+  targetRolls?: readonly ScenarioRoll[];
+  attackerRolledAgainst?: readonly ScenarioRoll[];
+  targetRolledAgainst?: readonly ScenarioRoll[];
+  /**
    * Every unit of each combined unit, the unit itself included. Settles `attachment` roles and
    * `with` filters; undefined leaves those to the attachment flags above.
    */
@@ -349,12 +411,20 @@ export type EngineContext = {
   targetToughnessMin?: number;
   /** The attacking unit's Toughness (its highest model's). Caller-supplied; undefined fails comparisons that read it. */
   attackerToughness?: number;
+  /**
+   * The roll that was a critical one, for the buffs that apply only then. The engine sets it when
+   * resolving the attacks that score a critical wound; callers leave it unset.
+   */
+  criticalRoll?: "wound";
 };
 
 /** A unit against its Starting Strength; below half implies below starting. */
 export type UnitStrength = "full" | "below-starting" | "below-half";
 
 export type ModelWounds = { remaining: number; starting: number };
+
+/** One roll a unit made, or that was made against it: the roll (`hit`, `dark-pact`, …) and its result. */
+export type ScenarioRoll = { roll: string; result: "success" | "failure" | "critical" };
 
 export type UnitState = "engaged" | "battle-shocked" | "hidden";
 
@@ -381,11 +451,13 @@ export type ActiveRule = string | { ability_id: string; option_id?: string; defi
 
 /**
  * A region a unit is in: an army rule's region (by id), a terrain area, a side's territory or
- * deployment zone. `wholly` says every model of the unit is in it.
+ * deployment zone. `wholly` says every model of the unit is in it. `designations` lists every
+ * designation a terrain area carries; left out, a designated terrain area stays unknown.
  */
 export type ScenarioRegion = {
   ruleRegion?: string;
   terrainArea?: boolean;
+  designations?: readonly string[];
   territory?: "attacker" | "target" | "no-mans-land";
   deploymentZone?: "attacker" | "target";
   wholly?: boolean;
@@ -428,6 +500,8 @@ export type ResolvedModifiers = {
    * surviving reduction.
    */
   damageReduction: { value: number; dominantSource: BuffSource | null };
+  /** Damage-zeroing uses, summed over sources: a pool the unit shares and uses for each model. */
+  damageZeroing: { unit: number; model: number; sources: BuffSource[] };
   /**
    * Ability-granted invulnerable save. Best (lowest) threshold wins. `null`
    * when no ability granted one; the engine still uses the unit's printed
@@ -477,6 +551,7 @@ function applies(buff: Buff, ctx: ResolveContext): boolean {
   }
   const w = buff.applicableWhen;
   if (!w) return true;
+  if (w.onCritical !== undefined && ctx.criticalRoll !== w.onCritical) return false;
   if (w.attackerFilter && matchesUnitFilter(w.attackerFilter, ctx, "attacker", "enemy") !== true) return false;
   if (w.targetFilter && matchesUnitFilter(w.targetFilter, ctx, "target", "enemy") !== true) return false;
   if (w.phases && !w.phases.includes(ctx.phase)) return false;
@@ -617,6 +692,7 @@ export function resolveBuffs(buffs: Buff[], ctx: ResolveContext): ResolvedModifi
     apMod: { value: 0, sources: [] },
     statSet: {},
     damageReduction: { value: 0, dominantSource: null },
+    damageZeroing: { unit: 0, model: 0, sources: [] },
     invulnerable: null,
     critThresholds: {},
     ignoreModifiers: {},
@@ -727,6 +803,10 @@ export function resolveBuffs(buffs: Buff[], ctx: ResolveContext): ResolvedModifi
         ) {
           out.damageReduction = { value: c.value, dominantSource: b.source };
         }
+        break;
+      case "damage-zeroing":
+        out.damageZeroing[c.per] += c.uses;
+        out.damageZeroing.sources.push(b.source);
         break;
       case "invulnerable-save":
         // Best (lowest threshold) wins. Same tie-break by source rank.

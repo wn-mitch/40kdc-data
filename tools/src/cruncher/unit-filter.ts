@@ -147,42 +147,49 @@ function modelKeywordVerdict(predicate: KeywordPredicate, every: readonly string
  */
 function withinObjective(filter: Record<string, unknown>, objectives: readonly ScenarioObjective[] | undefined, abilitySide: Side): FilterVerdict {
   if (objectives === undefined) return "unknown";
-  const other: Side = abilitySide === "attacker" ? "target" : "attacker";
-  const sideOf = (relative: unknown): Side | undefined => relative === "friendly" ? abilitySide : relative === "enemy" ? other : undefined;
   let unknown = false;
   for (const objective of objectives) {
-    let verdict: FilterVerdict = true;
-    for (const [key, wanted] of Object.entries(filter)) {
-      let holds: FilterVerdict;
-      if (key === "controlled_by") {
-        holds = objective.controller === undefined ? "unknown"
-          : wanted === "any" ? objective.controller !== "none"
-          : sideOf(wanted) === undefined ? "unknown" : objective.controller === sideOf(wanted);
-      } else if (key === "designated" && typeof wanted === "string") {
-        holds = objective.designations === undefined ? "unknown"
-          : objective.designations.some((designation) => designation.toLowerCase() === wanted.toLowerCase());
-      } else if (key === "role") {
-        holds = objective.role === undefined ? "unknown" : objective.role === wanted;
-      } else if (key === "home_of") {
-        holds = objective.homeOf === undefined || sideOf(wanted) === undefined ? "unknown" : objective.homeOf === sideOf(wanted);
-      } else if (key === "territory") {
-        const territory = wanted === "your-territory" ? abilitySide : wanted === "enemy-territory" ? other : wanted === "no-mans-land" ? "no-mans-land" : undefined;
-        holds = objective.territory === undefined || territory === undefined ? "unknown" : objective.territory === territory;
-      } else if (key === "name") {
-        holds = objective.name === undefined ? "unknown" : objective.name === wanted;
-      } else {
-        holds = "unknown";
-      }
-      if (holds === false) {
-        verdict = false;
-        break;
-      }
-      if (holds === "unknown") verdict = "unknown";
-    }
+    const verdict = objectiveMatches(filter, objective, abilitySide);
     if (verdict === true) return true;
     if (verdict === "unknown") unknown = true;
   }
   return unknown ? "unknown" : false;
+}
+
+/**
+ * Whether one objective meets every property of an objective filter, read from the ability's side.
+ * A property the objective leaves out, or the filter states in a form the scenario cannot settle,
+ * is unknown.
+ */
+export function objectiveMatches(filter: Record<string, unknown>, objective: ScenarioObjective, abilitySide: Side): FilterVerdict {
+  const other: Side = abilitySide === "attacker" ? "target" : "attacker";
+  const sideOf = (relative: unknown): Side | undefined => relative === "friendly" ? abilitySide : relative === "enemy" ? other : undefined;
+  let verdict: FilterVerdict = true;
+  for (const [key, wanted] of Object.entries(filter)) {
+    let holds: FilterVerdict;
+    if (key === "controlled_by") {
+      holds = objective.controller === undefined ? "unknown"
+        : wanted === "any" ? objective.controller !== "none"
+        : sideOf(wanted) === undefined ? "unknown" : objective.controller === sideOf(wanted);
+    } else if (key === "designated" && typeof wanted === "string") {
+      holds = objective.designations === undefined ? "unknown"
+        : objective.designations.some((designation) => designation.toLowerCase() === wanted.toLowerCase());
+    } else if (key === "role") {
+      holds = objective.role === undefined ? "unknown" : objective.role === wanted;
+    } else if (key === "home_of") {
+      holds = objective.homeOf === undefined || sideOf(wanted) === undefined ? "unknown" : objective.homeOf === sideOf(wanted);
+    } else if (key === "territory") {
+      const territory = wanted === "your-territory" ? abilitySide : wanted === "enemy-territory" ? other : wanted === "no-mans-land" ? "no-mans-land" : undefined;
+      holds = objective.territory === undefined || territory === undefined ? "unknown" : objective.territory === territory;
+    } else if (key === "name") {
+      holds = objective.name === undefined ? "unknown" : objective.name === wanted;
+    } else {
+      holds = "unknown";
+    }
+    if (holds === false) return false;
+    if (holds === "unknown") verdict = "unknown";
+  }
+  return verdict;
 }
 
 /** A `within.of` that names other units by keyword and owner. */

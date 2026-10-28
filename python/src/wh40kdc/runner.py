@@ -709,8 +709,13 @@ def _handle_allocate(state: RunnerState, args: Any) -> Response:
     input_, error = _build_engine_input(state, args, "allocate")
     if error is not None:
         return error
+    zeroing = args.get("zeroing")
+    if zeroing is not None and not isinstance(zeroing, dict):
+        return _err("INVALID_INPUT", {"detail": "allocate.zeroing must be an object"})
     try:
-        return _ok(allocate(input_, state.dataset()))
+        return _ok(
+            allocate(input_, state.dataset(), None if zeroing is None else {"zeroing": zeroing})
+        )
     except Exception as e:
         return _err("CRUNCH_ERROR", {"detail": str(e)})
 

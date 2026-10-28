@@ -153,5 +153,176 @@
         9.5367431640625e-7
       ]
     }
+  },
+  {
+    "name": "Canonical critical wound: ap",
+    "cruncher_case": "canonical-critical-wound-ap.json",
+    "expected": {
+      "damageDealt": 5.128075358102957,
+      "modelsDestroyed": 2.5640376790514785,
+      "modelsDestroyedDistribution": [
+        0.04973502207609718,
+        0.17407257726634012,
+        0.27416430919448564,
+        0.2558866885815199,
+        0.1567305967561809,
+        0.08941080612537677
+      ]
+    }
+  },
+  {
+    "name": "Canonical critical wound: damage",
+    "cruncher_case": "canonical-critical-wound-damage.json",
+    "expected": {
+      "damageDealt": 4.418834418205261,
+      "modelsDestroyed": 2.20941720910263,
+      "modelsDestroyedDistribution": [
+        0.08101311022241219,
+        0.23146602920689185,
+        0.297599180408861,
+        0.22674223269246543,
+        0.11337111634623268,
+        0.0498083311231379
+      ]
+    }
+  },
+  {
+    "name": "Canonical critical wound: devastating-damage",
+    "cruncher_case": "canonical-critical-wound-devastating-damage.json",
+    "expected": {
+      "damageDealt": 5.474397497209788,
+      "modelsDestroyed": 2.737198748604894,
+      "modelsDestroyedDistribution": [
+        0.03861077083162306,
+        0.14850296473701174,
+        0.257024362044828,
+        0.2636147303023877,
+        0.177432991549684,
+        0.11481418053446539
+      ]
+    }
+  },
+  {
+    "name": "multi-melta x1 vs questoris knight, stationary, within half range + damage zeroing (1 use per unit)",
+    "cruncher_case": "04-multi-melta-half-range-stationary-vs-knight.json",
+    "zeroing": {
+      "uses": 1,
+      "per": "unit"
+    },
+    "expected": {
+      "damageDealt": 0.12071330589849108,
+      "modelsDestroyed": 0,
+      "modelsDestroyedDistribution": [
+        1.0000000000000002,
+        0
+      ]
+    }
+  },
+  {
+    "name": "The Wailing Doom (ranged profile) vs intercessor — dual-profile weapon, shooting phase + damage zeroing (1 use per model)",
+    "cruncher_case": "15-wailing-doom-ranged-vs-intercessor.json",
+    "zeroing": {
+      "uses": 1,
+      "per": "model"
+    },
+    "expected": {
+      "damageDealt": 0.34293552812071315,
+      "modelsDestroyed": 0.17146776406035658,
+      "modelsDestroyedDistribution": [
+        0.8553240740740741,
+        0.11788408779149517,
+        0.026791838134430708,
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  {
+    "name": "The Wailing Doom (Sweep melee profile) vs intercessor — melee profile of a ranged-typed weapon, fight phase (uses WS, does not throw) + damage zeroing (2 uses per unit)",
+    "cruncher_case": "16-wailing-doom-sweep-melee-vs-intercessor.json",
+    "zeroing": {
+      "uses": 2,
+      "per": "unit"
+    },
+    "expected": {
+      "damageDealt": 4.866543553690116,
+      "modelsDestroyed": 2.433271776845058,
+      "modelsDestroyedDistribution": [
+        0.1199297330080459,
+        0.1738192226372105,
+        0.23005485349042562,
+        0.21652221504981234,
+        0.14859367699496925,
+        0.11108029881953639
+      ]
+    }
+  },
+  {
+    "name": "devastating-wounds lascannon vs cultists with 5+ FNP all + 4+ FNP vs mortals + damage zeroing (2 uses per unit)",
+    "cruncher_case": "10-fnp-vs-mortal-devastating-lascannon-vs-cultists.json",
+    "zeroing": {
+      "uses": 2,
+      "per": "unit"
+    },
+    "expected": {
+      "damageDealt": 0.09566631102982269,
+      "modelsDestroyed": 0.09566631102982269,
+      "modelsDestroyedDistribution": [
+        0.9043336889701774,
+        0.09566631102982269,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  {
+    "name": "The Wailing Doom (Sweep melee profile) vs intercessor — melee profile of a ranged-typed weapon, fight phase (uses WS, does not throw) + damage zeroing (2 uses per unit from buffs)",
+    "cruncher_case": "16-wailing-doom-sweep-melee-vs-intercessor.json",
+    "buffs": [
+      {
+        "source": {
+          "kind": "ability",
+          "abilityId": "fabricated-plating",
+          "abilityKind": "unit"
+        },
+        "contribution": {
+          "type": "damage-zeroing",
+          "uses": 1,
+          "per": "unit"
+        }
+      },
+      {
+        "source": {
+          "kind": "ability",
+          "abilityId": "fabricated-shroud",
+          "abilityKind": "unit"
+        },
+        "contribution": {
+          "type": "damage-zeroing",
+          "uses": 1,
+          "per": "unit"
+        }
+      }
+    ],
+    "expected": {
+      "damageDealt": 4.866543553690116,
+      "modelsDestroyed": 2.433271776845058,
+      "modelsDestroyedDistribution": [
+        0.1199297330080459,
+        0.1738192226372105,
+        0.23005485349042562,
+        0.21652221504981234,
+        0.14859367699496925,
+        0.11108029881953639
+      ]
+    }
   }
 ]

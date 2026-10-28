@@ -61,7 +61,8 @@ describe("computeCoverage", () => {
     const gated = (condition: unknown) => ({ type: "conditional", condition, effect: hit });
     const belowHalf = { type: "strength", parameters: { subject: "this-unit", below: "half" } };
     const tested = { type: "roll-result", parameters: { roll: "leadership", result: "failure" } };
-    const critical = { type: "roll-result", parameters: { roll: "wound", result: "critical" } };
+    // A critical hit has no evaluator: the engine gates only critical wounds.
+    const critical = { type: "roll-result", parameters: { roll: "hit", result: "critical" } };
     const r = computeCoverage([
       {
         faction: "test",

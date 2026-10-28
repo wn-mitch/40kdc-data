@@ -14,8 +14,9 @@ use serde::Serialize;
 use serde_json::{json, Value};
 
 use wh40kdc::cruncher::{
-    allocate, attribute_stages, crunch, AttackProfileRef, AttributedStage, Buff, BuffSource,
-    EngineContext, EngineInput, StageLift, StageName, TargetProfileRef,
+    allocate_with, attribute_stages, crunch, AllocationDefences, AttackProfileRef, AttributedStage,
+    Buff, BuffSource, DamageZeroing, EngineContext, EngineInput, StageLift, StageName,
+    TargetProfileRef,
 };
 use wh40kdc::export::{export_roster_with_dataset, ExportFormat};
 use wh40kdc::import::{
@@ -1284,7 +1285,25 @@ fn handle_allocate(state: &mut RunnerState, args: &Value) -> Value {
         Ok(x) => x,
         Err(e) => return e,
     };
-    match allocate(&input, Some(ds)) {
+    let zeroing = match args.get("zeroing") {
+        None | Some(Value::Null) => None,
+        Some(value) if !value.is_object() => {
+            return err_value(
+                ErrorKind::InvalidInput,
+                Some(json!({ "detail": "allocate.zeroing must be an object" })),
+            )
+        }
+        Some(value) => match DamageZeroing::from_json(value) {
+            Ok(zeroing) => Some(zeroing),
+            Err(e) => {
+                return err_value(
+                    ErrorKind::CrunchError,
+                    Some(json!({ "detail": e.to_string() })),
+                )
+            }
+        },
+    };
+    match allocate_with(&input, Some(ds), &AllocationDefences { zeroing }) {
         Ok(out) => ok_value(serde_json::to_value(&out).unwrap_or(Value::Null)),
         Err(e) => err_value(
             ErrorKind::CrunchError,

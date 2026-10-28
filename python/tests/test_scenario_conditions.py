@@ -131,7 +131,11 @@ def test_in_region_reads_territory_from_the_ability_side_and_needs_wholly() -> N
     wholly = {"targetRegions": [{"territory": "attacker", "wholly": True}]}
     assert evaluate_in_region({**params, "models": "every"}, wholly, "target", "attacker") is True
     designated = {"region": {"terrain_area": {"designated": "ruin"}}}
-    assert evaluate_in_region(designated, {"targetRegions": []}, "target", "target") == "unknown"
+    assert evaluate_in_region(designated, {"targetRegions": []}, "target", "target") is False
+    area = {"targetRegions": [{"terrainArea": True}]}
+    assert evaluate_in_region(designated, area, "target", "target") == "unknown"
+    marked = {"targetRegions": [{"terrainArea": True, "designations": ["RUIN"]}]}
+    assert evaluate_in_region(designated, marked, "target", "target") is True
     assert evaluate_in_region(params, {}, "target", "attacker") == "unknown"
 
 

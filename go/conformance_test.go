@@ -122,6 +122,12 @@ func runDSLCorpus(t *testing.T, filename string) {
 		// gating, bundle resolution and recipient snapshots are included.
 		var result *effectTranslation
 		if rawEffect, frozen := c["effect"]; frozen {
+			// Ability records the effect grants resolve as printed definitions, the granting
+			// ability itself excluded.
+			if records, ok := getMap(c, "grantedRecords"); ok {
+				lookup := func(id string) map[string]any { record, _ := getMap(records, id); return record }
+				rawEffect = ResolveGrantedRecords(rawEffect, lookup, map[string]bool{getStr(source, "abilityId"): true})
+			}
 			rating, hasRating := c["rating"]
 			result = effectToBuffs(withRating(rawEffect, rating, hasRating), source, ctx, perspective)
 		} else {

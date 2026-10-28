@@ -9,11 +9,18 @@
 //! wounds are inflicted after all normal damage and also damage at most one
 //! model each, the rest being lost.
 //!
-//! The state is (models alive, wounds left on the damaged model). Event counts
-//! come from the exact joint distribution of normal and mortal damage events
-//! per attack, so Sustained Hits, Lethal Hits and Devastating Wounds keep
-//! their correlation within an attack. Arithmetic runs in the same order as
-//! the TS reference so the two agree to the last few ulps.
+//! The state is (models alive, wounds left on the damaged model, zeroing uses
+//! left). Event counts come from the exact joint distribution of normal and
+//! mortal damage events per attack, so Sustained Hits, Lethal Hits and
+//! Devastating Wounds keep their correlation within an attack. Arithmetic runs
+//! in the same order as the TS reference so the two agree to the last few
+//! ulps.
+//!
+//! A damage-zeroing defence changes an unsaved attack's Damage to 0 before it
+//! is rolled. Every normal damage event has the same Damage distribution, so
+//! the defender spends a use on the first event it can: for this activation no
+//! later choice does better. Mortal-wound events are not attacks with a Damage
+//! characteristic and are never zeroed.
 
 use std::fmt;
 
@@ -34,12 +41,76 @@ pub struct AllocationOutput {
     pub models_destroyed_distribution: Vec<f64>,
 }
 
-/// Failures of [`allocate`]: the crunch itself failed, or a quantity the
-/// allocation counts in whole units resolved to a fraction.
+/// Whose uses a [`DamageZeroing`] defence counts.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, serde::Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub enum ZeroingPer {
+    /// One pool shared by the unit.
+    Unit,
+    /// `uses` for each model, refilled when the next model takes the attacks.
+    Model,
+}
+
+/// A defence that changes the Damage of an attack allocated to the target to
+/// 0, `uses` times.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct DamageZeroing {
+    pub uses: usize,
+    pub per: ZeroingPer,
+}
+
+impl DamageZeroing {
+    /// Reads the wire shape `{"uses": N, "per": "unit" | "model"}`.
+    pub fn from_json(value: &serde_json::Value) -> Result<Self, AllocationError> {
+        let per = match value.get("per").and_then(serde_json::Value::as_str) {
+            Some("unit") => ZeroingPer::Unit,
+            Some("model") => ZeroingPer::Model,
+            other => {
+                return Err(AllocationError::InvalidZeroing(format!(
+                    "zeroing per must be \"unit\" or \"model\", got {}",
+                    other.unwrap_or("none")
+                )))
+            }
+        };
+        let Some(uses) = value.get("uses").and_then(serde_json::Value::as_f64) else {
+            return Err(AllocationError::InvalidZeroing(
+                "zeroing uses must be a number".into(),
+            ));
+        };
+        let uses = integral(uses, "zeroing uses")?;
+        if uses < 0 {
+            return Err(AllocationError::InvalidZeroing(format!(
+                "zeroing uses must not be negative, got {uses}"
+            )));
+        }
+        Ok(Self {
+            uses: uses as usize,
+            per,
+        })
+    }
+}
+
+/// Defender options that act on individual attacks, which only the
+/// allocation stage sees.
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+pub struct AllocationDefences {
+    pub zeroing: Option<DamageZeroing>,
+}
+
+/// The largest event table the exact computation builds, measured as attacks
+/// × table rows × table columns. Past it the allocation is refused rather
+/// than approximated.
+pub const MAX_EVENT_WORK: u64 = 1_000_000;
+
+/// Failures of [`allocate`]: the crunch itself failed, a quantity the
+/// allocation counts in whole units resolved to a fraction, or the event table
+/// would pass [`MAX_EVENT_WORK`].
 #[derive(Clone, Debug)]
 pub enum AllocationError {
     Crunch(CruncherError),
     NotWhole { what: &'static str, value: f64 },
+    TooManyAttacks { attacks: i64, work: u64 },
+    InvalidZeroing(String),
 }
 
 impl fmt::Display for AllocationError {
@@ -49,6 +120,11 @@ impl fmt::Display for AllocationError {
             Self::NotWhole { what, value } => {
                 write!(f, "allocate: {what} must be a whole number, got {value}")
             }
+            Self::InvalidZeroing(detail) => write!(f, "allocate: {detail}"),
+            Self::TooManyAttacks { attacks, work } => write!(
+                f,
+                "allocate: {attacks} attacks exceed the exact allocation bound (work {work} > {MAX_EVENT_WORK})"
+            ),
         }
     }
 }
@@ -90,6 +166,23 @@ fn convolve(left: &Joint, right: &Joint) -> Joint {
     out
 }
 
+/// `table` without trailing all-zero rows and columns; convolution skips
+/// zeros, so the nonzero values are unchanged.
+fn trim(table: Joint) -> Joint {
+    let mut rows = table.len();
+    while rows > 1 && table[rows - 1].iter().all(|&p| p == 0.0) {
+        rows -= 1;
+    }
+    let mut columns = table[0].len();
+    while columns > 1 && table[..rows].iter().all(|row| row[columns - 1] == 0.0) {
+        columns -= 1;
+    }
+    table[..rows]
+        .iter()
+        .map(|row| row[..columns].to_vec())
+        .collect()
+}
+
 fn power(base: &Joint, times: i64) -> Joint {
     let mut out: Joint = vec![vec![1.0]];
     for _ in 0..times.max(0) {
@@ -125,20 +218,21 @@ fn integral(value: f64, what: &'static str) -> Result<i64, AllocationError> {
 /// Distribution of one attack's normal and mortal damage events.
 fn per_attack(model: &AttackModel) -> Result<Joint, AllocationError> {
     let normal_wound = model.wound.pass - model.wound.crit;
+    let split = model.critical_wound.as_ref().filter(|_| !model.devastating);
     let to_main = (normal_wound
-        + if model.devastating {
+        + if model.devastating || split.is_some() {
             0.0
         } else {
             model.wound.crit
         })
         * model.unsaved;
-    let to_mortal = if model.devastating {
-        model.wound.crit
-    } else {
-        0.0
+    let to_second = match split {
+        _ if model.devastating => model.wound.crit,
+        Some(critical) => model.wound.crit * critical.unsaved,
+        None => 0.0,
     };
     let wound_roll: Joint = vec![
-        vec![1.0 - to_main - to_mortal, to_mortal],
+        vec![1.0 - to_main - to_second, to_second],
         vec![to_main, 0.0],
     ];
     let auto_wound: Joint = vec![vec![1.0 - model.unsaved], vec![model.unsaved]];
@@ -230,9 +324,9 @@ fn binomial(trials: i64, successes: i64, p: f64) -> f64 {
 
 /// Distribution of wounds one event removes before the damaged model's
 /// remaining wounds cap it: each wound is lost with probability `lost`.
-fn wounds_lost(model: &AttackModel, lost: f64) -> Result<Vec<f64>, AllocationError> {
+fn wounds_lost(damage_roll: &[(f64, f64)], lost: f64) -> Result<Vec<f64>, AllocationError> {
     let mut out: Vec<f64> = Vec::new();
-    for &(value, probability) in &model.damage {
+    for &(value, probability) in damage_roll {
         let damage = integral(value, "Damage")?;
         for removed in 0..=damage {
             let index = removed as usize;
@@ -252,12 +346,52 @@ pub fn allocate(
     input: &EngineInput,
     dataset: Option<&Dataset>,
 ) -> Result<AllocationOutput, AllocationError> {
-    let (_, model) = crunch_model(input, dataset)?;
-    allocate_model(&model)
+    allocate_with(input, dataset, &AllocationDefences::default())
+}
+
+/// [`allocate`] against the target's per-attack defences.
+///
+/// Without an explicit `defences.zeroing`, the input's `damage-zeroing` buffs
+/// supply it.
+pub fn allocate_with(
+    input: &EngineInput,
+    dataset: Option<&Dataset>,
+    defences: &AllocationDefences,
+) -> Result<AllocationOutput, AllocationError> {
+    let (output, model) = crunch_model(input, dataset)?;
+    if defences.zeroing.is_some() {
+        return allocate_model_with(&model, defences);
+    }
+    let zeroing = &output.resolved.damage_zeroing;
+    let derived = match (zeroing.unit, zeroing.model) {
+        (0, 0) => None,
+        (uses, 0) => Some(DamageZeroing {
+            uses,
+            per: ZeroingPer::Unit,
+        }),
+        (0, uses) => Some(DamageZeroing {
+            uses,
+            per: ZeroingPer::Model,
+        }),
+        _ => {
+            return Err(AllocationError::InvalidZeroing(
+                "unit-wide and per-model damage zeroing together are not modelled".into(),
+            ))
+        }
+    };
+    allocate_model_with(&model, &AllocationDefences { zeroing: derived })
 }
 
 /// [`allocate`] from an already computed [`AttackModel`].
 pub fn allocate_model(model: &AttackModel) -> Result<AllocationOutput, AllocationError> {
+    allocate_model_with(model, &AllocationDefences::default())
+}
+
+/// [`allocate_with`] from an already computed [`AttackModel`].
+pub fn allocate_model_with(
+    model: &AttackModel,
+    defences: &AllocationDefences,
+) -> Result<AllocationOutput, AllocationError> {
     let models = model.model_count as usize;
     let wounds = model.wounds as usize;
     if models == 0 || wounds == 0 {
@@ -267,17 +401,33 @@ pub fn allocate_model(model: &AttackModel) -> Result<AllocationOutput, Allocatio
             models_destroyed_distribution: vec![1.0],
         });
     }
-    let dead = models * wounds;
-    // Alive state (m, w) is (m - 1) * wounds + (w - 1); `dead` absorbs.
-    let step = |state: &[f64], removed: &[f64]| -> Vec<f64> {
+    let zeroing = defences.zeroing.unwrap_or(DamageZeroing {
+        uses: 0,
+        per: ZeroingPer::Unit,
+    });
+    let uses = zeroing.uses + 1;
+    let cells = models * wounds;
+    let dead = cells * uses;
+    // Alive state (m, w, u) is ((m - 1) * wounds + (w - 1)) * uses + u; `dead` absorbs.
+    let step = |state: &[f64], removed: &[f64], zeroable: bool| -> Vec<f64> {
         let mut out = vec![0.0; dead + 1];
         out[dead] = state[dead];
         for (id, &p) in state.iter().enumerate().take(dead) {
             if p == 0.0 {
                 continue;
             }
-            let alive = id / wounds + 1;
-            let left = id % wounds + 1;
+            let cell = id / uses;
+            let left = cell % wounds + 1;
+            let unused = id % uses;
+            if zeroable && unused > 0 {
+                out[id - 1] += p;
+                continue;
+            }
+            let alive = cell / wounds + 1;
+            let refilled = match zeroing.per {
+                ZeroingPer::Model => uses - 1,
+                ZeroingPer::Unit => unused,
+            };
             for (amount, &q) in removed.iter().enumerate() {
                 if q == 0.0 {
                     continue;
@@ -285,11 +435,11 @@ pub fn allocate_model(model: &AttackModel) -> Result<AllocationOutput, Allocatio
                 let next = if amount == 0 {
                     id
                 } else if amount < left {
-                    id - amount
+                    id - amount * uses
                 } else if alive == 1 {
                     dead
                 } else {
-                    (alive - 2) * wounds + (wounds - 1)
+                    ((alive - 2) * wounds + (wounds - 1)) * uses + refilled
                 };
                 out[next] += p * q;
             }
@@ -297,12 +447,61 @@ pub fn allocate_model(model: &AttackModel) -> Result<AllocationOutput, Allocatio
         out
     };
 
+    let per = trim(per_attack(model)?);
+    let counts = attack_counts(model)?;
+    let most = counts.0.iter().map(|(count, _)| *count).max().unwrap_or(0);
+    let span = |size: usize| most as u64 * (size as u64 - 1) + 1;
+    let work = most as u64 * span(per.len()) * span(per[0].len());
+    if work > MAX_EVENT_WORK {
+        return Err(AllocationError::TooManyAttacks {
+            attacks: most,
+            work,
+        });
+    }
+    let normal = wounds_lost(&model.damage, model.wound_lost)?;
+    let mut state = vec![0.0; dead + 1];
+    state[dead - 1] = 1.0;
+    let mut finals = vec![0.0; dead + 1];
+    if let Some(critical) = model.critical_wound.as_ref().filter(|_| !model.devastating) {
+        // Critical wounds with their own save and Damage land in attack order, so the
+        // allocation steps one attack at a time: each attack's normal wounds, then its
+        // critical ones.
+        let critical_lost = wounds_lost(&critical.damage, model.wound_lost)?;
+        for attacks in 0..=most {
+            let weight = counts.get(attacks);
+            if weight > 0.0 {
+                for (id, &q) in state.iter().enumerate() {
+                    finals[id] += weight * q;
+                }
+            }
+            if attacks == most {
+                break;
+            }
+            let mut next = vec![0.0; dead + 1];
+            let mut after_normal = state.clone();
+            for (normal_events, row) in per.iter().enumerate() {
+                if normal_events > 0 {
+                    after_normal = step(&after_normal, &normal, true);
+                }
+                let mut after = after_normal.clone();
+                for (critical_events, &p) in row.iter().enumerate() {
+                    if critical_events > 0 {
+                        after = step(&after, &critical_lost, true);
+                    }
+                    if p > 0.0 {
+                        for (id, &q) in after.iter().enumerate() {
+                            next[id] += p * q;
+                        }
+                    }
+                }
+            }
+            state = next;
+        }
+        return Ok(summarise(&finals, models, wounds, uses, cells, dead));
+    }
     let events = {
-        let per = per_attack(model)?;
         let mut total: Joint = vec![vec![0.0]];
         let mut acc: Joint = vec![vec![1.0]];
-        let counts = attack_counts(model)?;
-        let most = counts.0.iter().map(|(count, _)| *count).max().unwrap_or(0);
         for attacks in 0..=most {
             let weight = counts.get(attacks);
             if weight > 0.0 {
@@ -315,14 +514,15 @@ pub fn allocate_model(model: &AttackModel) -> Result<AllocationOutput, Allocatio
         total
     };
 
-    let normal = wounds_lost(model, model.wound_lost)?;
-    let mortal = wounds_lost(model, model.mortal_wound_lost)?;
-    let mut state = vec![0.0; dead + 1];
-    state[(models - 1) * wounds + (wounds - 1)] = 1.0;
-    let mut finals = vec![0.0; dead + 1];
+    // Devastating Wounds' mortal wounds deal a critical wound's own Damage when it has one.
+    let mortal_roll = model
+        .critical_wound
+        .as_ref()
+        .map_or(&model.damage, |critical| &critical.damage);
+    let mortal = wounds_lost(mortal_roll, model.mortal_wound_lost)?;
     for (normal_events, row) in events.iter().enumerate() {
         if normal_events > 0 {
-            state = step(&state, &normal);
+            state = step(&state, &normal, true);
         }
         if !row.iter().any(|&p| p > 0.0) {
             continue;
@@ -330,7 +530,7 @@ pub fn allocate_model(model: &AttackModel) -> Result<AllocationOutput, Allocatio
         let mut after = state.clone();
         for (mortal_events, &p) in row.iter().enumerate() {
             if mortal_events > 0 {
-                after = step(&after, &mortal);
+                after = step(&after, &mortal, false);
             }
             if p > 0.0 {
                 for (id, &q) in after.iter().enumerate() {
@@ -340,157 +540,42 @@ pub fn allocate_model(model: &AttackModel) -> Result<AllocationOutput, Allocatio
         }
     }
 
+    Ok(summarise(&finals, models, wounds, uses, cells, dead))
+}
+
+/// Expected wounds removed, expected models destroyed and their distribution.
+fn summarise(
+    finals: &[f64],
+    models: usize,
+    wounds: usize,
+    uses: usize,
+    cells: usize,
+    dead: usize,
+) -> AllocationOutput {
     let mut destroyed = vec![0.0; models + 1];
     let mut damage_dealt = 0.0;
     for (id, &p) in finals.iter().enumerate() {
-        let alive = if id == dead { 0 } else { id / wounds + 1 };
+        let cell = id / uses;
+        let alive = if id == dead { 0 } else { cell / wounds + 1 };
         let remaining = if id == dead {
             0
         } else {
-            (alive - 1) * wounds + id % wounds + 1
+            (alive - 1) * wounds + cell % wounds + 1
         };
         destroyed[models - alive] += p;
-        damage_dealt += p * (dead - remaining) as f64;
+        damage_dealt += p * (cells - remaining) as f64;
     }
     let models_destroyed = destroyed
         .iter()
         .enumerate()
         .fold(0.0, |sum, (count, &p)| sum + p * count as f64);
-    Ok(AllocationOutput {
+    AllocationOutput {
         damage_dealt,
         models_destroyed,
         models_destroyed_distribution: destroyed,
-    })
+    }
 }
 
 #[cfg(test)]
-mod tests {
-    use serde_json::{json, Value};
-
-    use super::*;
-    use crate::cruncher::engine::RollProbabilities;
-
-    /// An attack model that always hits, wounds and goes unsaved.
-    fn model() -> AttackModel {
-        AttackModel {
-            models_firing: 1,
-            attacks_stat: json!(1),
-            attacks_bonus: 0.0,
-            rapid_fire_stat: None,
-            torrent: false,
-            hit: RollProbabilities {
-                pass: 1.0,
-                crit: 0.0,
-            },
-            sustained_stat: None,
-            lethal: false,
-            wound: RollProbabilities {
-                pass: 1.0,
-                crit: 0.0,
-            },
-            devastating: false,
-            unsaved: 1.0,
-            damage: vec![(1.0, 1.0)],
-            wound_lost: 1.0,
-            mortal_wound_lost: 1.0,
-            wounds: 1,
-            model_count: 1,
-        }
-    }
-
-    fn assert_close(actual: f64, expected: f64, tolerance: f64) {
-        assert!(
-            (actual - expected).abs() < tolerance,
-            "expected {expected}, got {actual}"
-        );
-    }
-
-    #[test]
-    fn loses_damage_beyond_the_damaged_model_and_carries_a_wound_over() {
-        // Two D2 attacks into one 3-wound model: 2, then 1 more kills it and 1 is lost.
-        let out = allocate_model(&AttackModel {
-            attacks_stat: json!(2),
-            damage: vec![(2.0, 1.0)],
-            wounds: 3,
-            model_count: 2,
-            ..model()
-        })
-        .expect("whole quantities");
-        assert_close(out.damage_dealt, 3.0, 1e-12);
-        assert_close(out.models_destroyed, 1.0, 1e-12);
-        assert_eq!(out.models_destroyed_distribution, vec![0.0, 1.0, 0.0]);
-    }
-
-    #[test]
-    fn caps_at_the_unit_and_matches_the_expected_value_when_nothing_is_lost() {
-        let open = AttackModel {
-            attacks_stat: Value::String("2D6".into()),
-            hit: RollProbabilities {
-                pass: 2.0 / 3.0,
-                crit: 1.0 / 6.0,
-            },
-            wound: RollProbabilities {
-                pass: 1.0 / 2.0,
-                crit: 1.0 / 6.0,
-            },
-            unsaved: 2.0 / 3.0,
-            model_count: 40,
-            ..model()
-        };
-        // E[attacks] * P(hit) * P(wound) * P(unsaved), with no model ever close to running out.
-        let expected = 7.0 * (2.0 / 3.0) * (1.0 / 2.0) * (2.0 / 3.0);
-        assert_close(allocate_model(&open).unwrap().damage_dealt, expected, 1e-9);
-        let capped = allocate_model(&AttackModel {
-            model_count: 1,
-            ..open
-        })
-        .unwrap();
-        assert!(capped.damage_dealt <= 1.0);
-        let total: f64 = capped.models_destroyed_distribution.iter().sum();
-        assert_close(total, 1.0, 1e-12);
-    }
-
-    #[test]
-    fn inflicts_devastating_wounds_after_normal_damage_with_their_own_feel_no_pain() {
-        // A normal wound always lands before a mortal one, so a 1-model unit dies to the
-        // normal wound and the mortal wound is lost; mortal-only Feel No Pain cannot change that.
-        let out = allocate_model(&AttackModel {
-            attacks_stat: json!(2),
-            wound: RollProbabilities {
-                pass: 1.0,
-                crit: 0.5,
-            },
-            devastating: true,
-            mortal_wound_lost: 0.5,
-            ..model()
-        })
-        .unwrap();
-        // Only both attacks critting leaves the model to two mortal wounds: 1 - 0.25 * (0.5 * 0.5).
-        assert_close(out.models_destroyed, 1.0 - 0.25 * 0.25, 1e-12);
-    }
-
-    #[test]
-    fn rejects_a_fractional_quantity_instead_of_rounding_it() {
-        let err = allocate_model(&AttackModel {
-            damage: vec![(1.5, 1.0)],
-            ..model()
-        })
-        .expect_err("fractional Damage");
-        assert!(matches!(
-            err,
-            AllocationError::NotWhole { what: "Damage", .. }
-        ));
-        let err = allocate_model(&AttackModel {
-            attacks_bonus: 0.5,
-            ..model()
-        })
-        .expect_err("fractional Attacks");
-        assert!(matches!(
-            err,
-            AllocationError::NotWhole {
-                what: "Attacks",
-                ..
-            }
-        ));
-    }
-}
+#[path = "allocation_tests.rs"]
+mod tests;

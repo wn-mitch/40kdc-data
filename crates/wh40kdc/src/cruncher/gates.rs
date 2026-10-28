@@ -8,6 +8,9 @@ fn applies(buff: &Buff, ctx: &EngineContext) -> bool {
     let Some(w) = &buff.applicable_when else {
         return true;
     };
+    if w.on_critical.is_some() && w.on_critical != ctx.critical_roll {
+        return false;
+    }
     for (filter, side) in [
         (
             &w.target_filter,

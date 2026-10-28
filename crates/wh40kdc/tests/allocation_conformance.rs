@@ -14,7 +14,8 @@ use std::path::PathBuf;
 
 use serde::Deserialize;
 use wh40kdc::cruncher::{
-    allocate, AttackProfileRef, Buff, EngineContext, EngineInput, TargetProfileRef,
+    allocate_with, AllocationDefences, AttackProfileRef, Buff, DamageZeroing, EngineContext,
+    EngineInput, TargetProfileRef,
 };
 use wh40kdc::Dataset;
 
@@ -56,6 +57,11 @@ struct TargetSpec {
 struct AllocationCase {
     name: String,
     cruncher_case: String,
+    #[serde(default)]
+    zeroing: Option<serde_json::Value>,
+    /// Appended to the cruncher case's own buffs.
+    #[serde(default)]
+    buffs: Vec<Buff>,
     expected: ExpectedAllocation,
 }
 
@@ -113,13 +119,21 @@ fn allocation_corpus_matches_reference() {
                 model_count: crunch_case.target.model_count,
             },
             models_firing: crunch_case.models_firing,
-            buffs: crunch_case.buffs,
+            buffs: crunch_case
+                .buffs
+                .into_iter()
+                .chain(case.buffs.iter().cloned())
+                .collect(),
             context: crunch_case.context,
         };
 
-        let actual = allocate(&input, Some(ds))
+        let zeroing = case.zeroing.as_ref().map(|value| {
+            DamageZeroing::from_json(value)
+                .unwrap_or_else(|e| panic!("zeroing for {}: {e}", case.name))
+        });
+        let actual = allocate_with(&input, Some(ds), &AllocationDefences { zeroing })
             .unwrap_or_else(|e| panic!("allocate for {}: {e}", case.name));
-        let id = &case.cruncher_case;
+        let id = &case.name;
         let want = &case.expected;
         assert_close(id, "damageDealt", actual.damage_dealt, want.damage_dealt);
         assert_close(

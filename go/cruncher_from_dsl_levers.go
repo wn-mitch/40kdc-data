@@ -275,6 +275,11 @@ func translateAbilityGrant(node, source map[string]any, opts dslOpts, out *effec
 	if definition, ok := modifier["definition"].(map[string]any); ok {
 		switch classifyTarget(node) {
 		case "self":
+			target, _ := getMap(node, "target")
+			if t := getStr(node, "target"); t == "this-model" || t == "model-in-this-unit" || getStr(target, "level") == "model" {
+				out.unsupported = append(out.unsupported, unsup("ability-grant: model-only definition cannot be applied to the entire unit", node))
+				break
+			}
 			grantedOpts := opts
 			grantedOpts.grantedHolder = true
 			dslWalk(definition, source, grantedOpts, out)

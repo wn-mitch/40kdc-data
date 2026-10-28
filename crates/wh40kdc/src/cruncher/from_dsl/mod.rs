@@ -176,6 +176,8 @@ pub(crate) struct WalkOpts<'a> {
     ability_kind: Option<AbilityKind>,
     source_meta: &'a BuffSource,
     duration: Option<Value>,
+    /// Usage limit inherited from the owning ability or nearest ability part.
+    usage: Option<Value>,
     granted_holder: bool,
     /// Tags the owning ability designates on the units holding it
     /// ([`gated::self_designations`]).
@@ -216,7 +218,7 @@ pub fn effect_to_buffs(
     context: &EngineContext,
     perspective: TranslationPerspective,
 ) -> EffectTranslation {
-    effect_to_buffs_with_duration(effect, source, context, perspective, None)
+    effect_to_buffs_with_duration(effect, source, context, perspective, None, None)
 }
 
 /// Translate an effect while retaining the owning ability's lifetime for activation gates.
@@ -226,6 +228,7 @@ pub(crate) fn effect_to_buffs_with_duration(
     context: &EngineContext,
     perspective: TranslationPerspective,
     duration: Option<&Value>,
+    usage: Option<&Value>,
 ) -> EffectTranslation {
     let effect = strip_nulls(effect);
     let effect = if recipient_snapshot_reason(None, &effect).is_some() {
@@ -269,6 +272,7 @@ pub(crate) fn effect_to_buffs_with_duration(
         source_meta: source,
         ability_kind,
         duration: duration.cloned(),
+        usage: usage.cloned(),
         granted_holder: false,
         self_designations: &self_designations,
     };
@@ -578,6 +582,9 @@ fn dispatch(node: &Obj, opts: &WalkOpts, out: &mut Out) {
                 if let Some(duration) = present(node, "duration") {
                     part_opts.duration = Some(duration.clone());
                 }
+                if let Some(usage) = present(node, "usage") {
+                    part_opts.usage = Some(usage.clone());
+                }
                 walk(effect, &part_opts, out);
                 return;
             }
@@ -597,6 +604,9 @@ fn dispatch(node: &Obj, opts: &WalkOpts, out: &mut Out) {
             let mut part_opts = opts.clone();
             if let Some(duration) = present(node, "duration") {
                 part_opts.duration = Some(duration.clone());
+            }
+            if let Some(usage) = present(node, "usage") {
+                part_opts.usage = Some(usage.clone());
             }
             // A part firing on its own moment is gated like a timing-is step; one with only a
             // cost, a choice or a usage limit is an activation, as a named effect is.

@@ -18,13 +18,20 @@ import json
 import math
 import re
 from collections.abc import Callable
-from typing import Any, TypedDict
+from typing import Any, NotRequired, TypedDict
 
 from wh40kdc.cruncher.buffs import (
     Buff,
     EngineContext,
     ResolvedModifiers,
     resolve_buffs,
+)
+from wh40kdc.cruncher.critical_wounds import (
+    attack_ap,
+    has_critical_wound_buffs,
+    mix_distributions,
+    resolve_critical_wound,
+    split_unsaved,
 )
 from wh40kdc.cruncher.damage_roll import DamageOutcome, damage_roll, one_damage_reroll_gain
 from wh40kdc.cruncher.scenario_conditions import (
@@ -38,6 +45,13 @@ EngineOutput = dict[str, Any]
 
 #: Pass and critical probabilities of one roll.
 RollProbabilities = TypedDict("RollProbabilities", {"pass": float, "crit": float})
+
+
+class CriticalWound(TypedDict):
+    """A critical wound's chance to go unsaved and its per-attack Damage."""
+
+    unsaved: float
+    damage: list[DamageOutcome]
 
 
 class AttackModel(TypedDict):
@@ -69,6 +83,11 @@ class AttackModel(TypedDict):
     mortalWoundLost: float
     wounds: float
     modelCount: float
+    #: A critical wound's own save failure and Damage, present only when a buff applies only on a
+    #: critical wound. With Devastating Wounds it skips the save and its mortal wounds deal this
+    #: Damage.
+    criticalWound: NotRequired[CriticalWound]
+
 
 
 _DICE_RE = re.compile(r"^(\d*)D(\d+)([+-]\d+)?$", re.IGNORECASE)
@@ -457,6 +476,54 @@ def crunch_model(
             crit_threshold=7,
         )
         unsaved -= save_reroll_one_dice * fresh_save[0]
+    # Buffs that apply only on a critical wound: those wounds take the save at their own AP.
+    critical = (
+        resolve_critical_wound(all_buffs, ctx) if has_critical_wound_buffs(all_buffs) else None
+    )
+    critical_to_saves = crit_wounds_from_roll if critical is not None and not has_devastating else 0.0
+    unsaved_regular, unsaved_critical = unsaved, 0.0
+    p_saved_critical, critical_save_target = p_saved, effective_save_target
+    if critical is not None:
+        critical_armor = _clamp(sv - attack_ap(critical, stats["AP"]) - save_mod, 2, 7)
+        critical_save_target = (
+            min(critical_armor, effective_invuln) if effective_invuln is not None else critical_armor
+        )
+
+        def stream(target: float, wounds: float) -> dict[str, float]:
+            if target >= 7:
+                return {"wounds": wounds, "saved": 0.0, "open": 0.0, "fresh": 0.0}
+            probs = _check_probabilities(
+                unmodified_needed=target,
+                modifier=0,
+                reroll=(resolved["rerolls"].get("save") or {}).get("subset", "none"),
+                auto_fail_on_one=True,
+                auto_pass_on_six=False,
+                crit_threshold=7,
+            )
+            fresh = _check_probabilities(
+                unmodified_needed=target,
+                modifier=0,
+                reroll="none",
+                auto_fail_on_one=True,
+                auto_pass_on_six=False,
+                crit_threshold=7,
+            )
+            return {"wounds": wounds, "saved": probs[0], "open": probs[2], "fresh": fresh[0]}
+
+        regular = stream(effective_save_target, regular_wounds_for_saves - critical_to_saves)
+        crits = stream(critical_save_target, critical_to_saves)
+        p_saved_critical = crits["saved"]
+        unsaved, save_reroll_one_dice = split_unsaved(
+            [regular, crits], one_reroll_dice, bool(resolved["rerollOne"].get("save"))
+        )
+        share_regular = regular["wounds"] * (1 - regular["saved"])
+        share_critical = crits["wounds"] * (1 - crits["saved"])
+        unsaved_regular = (
+            unsaved * share_regular / (share_regular + share_critical)
+            if share_regular + share_critical > 0
+            else 0.0
+        )
+        unsaved_critical = unsaved - unsaved_regular
     set_text = " (set)" if sv0 != unit_profile["Sv"] else ""
     if save_improve is not None and sv != sv0:
         set_text += f" (improved, no better than {save_improve['best']}+)"
@@ -470,6 +537,11 @@ def crunch_model(
     detail_parts.append(f" → effective {effective_save_target}+ (P(save)={p_saved:.4f})")
     if resolved["rerollOne"].get("save"):
         detail_parts.append(f"; re-roll one saving throw: {save_reroll_one_dice:.4f} dice")
+    if critical is not None:
+        detail_parts.append(
+            f"; critical wounds {critical_to_saves:.4f} at {critical_save_target}+ "
+            f"(P(save)={p_saved_critical:.4f})"
+        )
     stages.append({"name": "unsaved", "expected": unsaved, "detail": "".join(detail_parts)})
 
     # 5. Damage
@@ -495,15 +567,47 @@ def crunch_model(
         reroll=damage_reroll,
     )
     damage_per_hit = per_attack["expected"]
-    damage_main = unsaved * damage_per_hit
-    damage_mortal = mortal_wounds_stream * damage_per_hit
+    # A critical wound's Damage, for its unsaved wounds and, with Devastating Wounds, its mortal
+    # wounds.
+    critical_damage_reroll = (
+        (critical["rerolls"].get("damage") or {}).get("subset") if critical is not None else None
+    )
+    per_critical = per_attack
+    if critical is not None:
+        set_critical_d = critical["statSet"].get("D")
+        per_critical = damage_roll(
+            stat=set_critical_d["value"] if set_critical_d is not None else stats.get("D"),
+            bonus=melta_bonus,
+            modifier=critical["damageMod"]["value"],
+            reduction=critical["damageReduction"]["value"],
+            reroll=critical_damage_reroll,
+        )
+        damage_main = (
+            unsaved_regular * damage_per_hit + unsaved_critical * per_critical["expected"]
+        )
+    else:
+        damage_main = unsaved * damage_per_hit
+    damage_mortal = mortal_wounds_stream * per_critical["expected"]
     # "Re-roll one Damage roll" over every Damage roll, main and mortal streams alike, shared in
     # proportion to their rolls. A roll another permission already re-rolled cannot be re-rolled,
     # so beside one the single die is not priced.
     damage_rolls = unsaved + mortal_wounds_stream
     damage_reroll_one = (
-        one_damage_reroll_gain(per_attack["distribution"], damage_rolls)
-        if resolved["rerollOne"].get("damage") and not damage_reroll and damage_rolls > 0
+        one_damage_reroll_gain(
+            mix_distributions(
+                [
+                    (unsaved_regular, per_attack["distribution"]),
+                    (unsaved_critical + mortal_wounds_stream, per_critical["distribution"]),
+                ]
+            )
+            if critical is not None
+            else per_attack["distribution"],
+            damage_rolls,
+        )
+        if resolved["rerollOne"].get("damage")
+        and not damage_reroll
+        and not critical_damage_reroll
+        and damage_rolls > 0
         else 0.0
     )
     if damage_reroll_one > 0:
@@ -524,6 +628,8 @@ def crunch_model(
     damage_detail += f" = {damage_per_hit} per hit"
     if resolved["rerollOne"].get("damage"):
         damage_detail += f"; re-roll one Damage roll: +{damage_reroll_one:.4f}"
+    if critical is not None:
+        damage_detail += f"; critical wounds {per_critical['expected']} per hit"
     damage_detail += f"; main {damage_main:.4f}, mortal {damage_mortal:.4f}"
     stages.append({"name": "damage", "expected": damage, "detail": damage_detail})
 
@@ -583,6 +689,11 @@ def crunch_model(
         "wounds": wounds_stat,
         "modelCount": target_model_count,
     }
+    if critical is not None:
+        model["criticalWound"] = {
+            "unsaved": 1 - p_saved_critical,
+            "damage": per_critical["distribution"],
+        }
     return {"stages": stages, "resolved": resolved}, model
 
 

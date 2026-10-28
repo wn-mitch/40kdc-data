@@ -250,6 +250,8 @@ func TestAllocationCorpus(t *testing.T) {
 	var cases []struct {
 		Name         string           `json:"name"`
 		CruncherCase string           `json:"cruncher_case"`
+		Zeroing      map[string]any   `json:"zeroing"`
+		Buffs        []any            `json:"buffs"`
 		Expected     AllocationOutput `json:"expected"`
 	}
 	if err := json.Unmarshal(loadCorpus(t, "allocation", "cases.json"), &cases); err != nil {
@@ -275,6 +277,14 @@ func TestAllocationCorpus(t *testing.T) {
 				args[key] = v
 			}
 		}
+		if c.Zeroing != nil {
+			args["zeroing"] = c.Zeroing
+		}
+		// A case's buffs are appended to the cruncher case's own.
+		if c.Buffs != nil {
+			own, _ := args["buffs"].([]any)
+			args["buffs"] = append(append([]any{}, own...), c.Buffs...)
+		}
 		resp := state.Dispatch(map[string]any{"op": "allocate", "args": args})
 		if resp["ok"] != true {
 			t.Errorf("%s: %v", c.Name, resp)
@@ -291,5 +301,96 @@ func TestAllocationCorpus(t *testing.T) {
 		for i, want := range c.Expected.ModelsDestroyedDistribution {
 			near(t, c.Name+" distribution", got[i].(float64), want, 5e-4)
 		}
+	}
+}
+
+func mustAllocateWith(t *testing.T, m *AttackModel, uses int, per string) AllocationOutput {
+	t.Helper()
+	out, err := AllocateModelWith(m, AllocationDefences{Zeroing: &DamageZeroing{Uses: uses, Per: per}})
+	if err != nil {
+		t.Fatalf("AllocateModelWith: %v", err)
+	}
+	return out
+}
+
+func sameDistribution(t *testing.T, what string, got, want []float64) {
+	t.Helper()
+	if len(got) != len(want) {
+		t.Fatalf("%s = %v, want %v", what, got, want)
+	}
+	for i := range want {
+		if got[i] != want[i] {
+			t.Fatalf("%s = %v, want %v", what, got, want)
+		}
+	}
+}
+
+func TestAllocateZeroesTheFirstAttacksAUnitWideDefenceCanTake(t *testing.T) {
+	// Three D3 attacks into one 3-wound model with one use: only the last two roll Damage.
+	d3 := []DamageOutcome{{1, 1.0 / 3}, {2, 1.0 / 3}, {3, 1.0 / 3}}
+	attack := allocModel(func(m *AttackModel) { m.AttacksStat, m.Damage, m.Wounds = 3.0, d3, 3 })
+	zeroed := mustAllocateWith(t, attack, 1, "unit")
+	fewer := mustAllocate(t, allocModel(func(m *AttackModel) { m.AttacksStat, m.Damage, m.Wounds = 2.0, d3, 3 }))
+	if zeroed.DamageDealt != fewer.DamageDealt || zeroed.ModelsDestroyed != fewer.ModelsDestroyed {
+		t.Errorf("zeroed = %+v, want %+v", zeroed, fewer)
+	}
+	// Two D3 rolls fall short of 3 only as 1 and 1.
+	near(t, "modelsDestroyed", zeroed.ModelsDestroyed, 8.0/9, 1e-12)
+	if all := mustAllocateWith(t, attack, 3, "unit"); all.DamageDealt != 0 {
+		t.Errorf("three uses: damageDealt = %v, want 0", all.DamageDealt)
+	}
+}
+
+func TestAllocateRefillsAPerModelDefenceButNeverZeroesMortalWounds(t *testing.T) {
+	attack := allocModel(func(m *AttackModel) {
+		m.AttacksStat, m.Damage, m.Wounds, m.ModelCount = 3.0, []DamageOutcome{{2, 1}}, 2, 2
+	})
+	sameDistribution(t, "per model", mustAllocateWith(t, attack, 1, "model").ModelsDestroyedDistribution, []float64{0, 1, 0})
+	sameDistribution(t, "per unit", mustAllocateWith(t, attack, 1, "unit").ModelsDestroyedDistribution, []float64{0, 0, 1})
+	mortal := allocModel(func(m *AttackModel) {
+		m.AttacksStat, m.WoundCrit, m.Devastating, m.ModelCount = 2.0, 1, true, 2
+	})
+	if out := mustAllocateWith(t, mortal, 2, "unit"); out.ModelsDestroyed != 2 {
+		t.Errorf("mortal wounds: modelsDestroyed = %v, want 2", out.ModelsDestroyed)
+	}
+}
+
+func TestAllocateRejectsMalformedZeroingAndTablesPastTheBound(t *testing.T) {
+	if _, err := ParseDamageZeroing(map[string]any{"uses": 1.5, "per": "unit"}); err == nil {
+		t.Error("fractional uses accepted")
+	}
+	if _, err := ParseDamageZeroing(map[string]any{"uses": 1.0, "per": "army"}); err == nil {
+		t.Error("unknown per accepted")
+	}
+	huge := allocModel(func(m *AttackModel) {
+		m.ModelsFiring, m.AttacksStat, m.HitPass, m.HitCrit, m.SustainedStat = 20, 4.0, 2.0/3, 1.0/6, 2.0
+		m.WoundPass, m.WoundCrit, m.Devastating, m.Wounds, m.ModelCount = 0.5, 1.0/6, true, 3, 20
+	})
+	if _, err := AllocateModel(huge); err == nil {
+		t.Error("event table past the bound accepted")
+	}
+	huge.Devastating = false
+	if out := mustAllocate(t, huge); len(out.ModelsDestroyedDistribution) != 21 {
+		t.Errorf("distribution length = %d, want 21", len(out.ModelsDestroyedDistribution))
+	}
+}
+
+func TestAllocateCriticalWoundsWithTheirOwnSaveAndDamage(t *testing.T) {
+	base := func(m *AttackModel) {
+		m.ModelsFiring, m.AttacksStat, m.HitPass, m.HitCrit, m.SustainedStat = 3, 2.0, 2.0/3, 1.0/6, 1.0
+		m.WoundPass, m.WoundCrit, m.Unsaved, m.Wounds, m.ModelCount = 0.5, 1.0/6, 0.5, 2, 5
+	}
+	plain := mustAllocate(t, allocModel(base))
+	same := mustAllocate(t, allocModel(func(m *AttackModel) {
+		base(m)
+		m.CriticalWound = &CriticalWound{Unsaved: 0.5, Damage: m.Damage}
+	}))
+	near(t, "same damageDealt", same.DamageDealt, plain.DamageDealt, 1e-12)
+	harder := mustAllocate(t, allocModel(func(m *AttackModel) {
+		base(m)
+		m.CriticalWound = &CriticalWound{Unsaved: 1, Damage: []DamageOutcome{{2, 1}}}
+	}))
+	if harder.DamageDealt <= plain.DamageDealt+0.05 {
+		t.Errorf("critical-wound AP and Damage: damageDealt %v, plain %v", harder.DamageDealt, plain.DamageDealt)
 	}
 }

@@ -18,8 +18,8 @@ supplied), ``attackerToughness`` (caller supplied); ``attackerNeighbours`` /
 ``targetNeighbours`` (complete lists of ``{keywords, owner, distanceInches}``, ``owner``
 relative to that unit); ``activeRules`` (complete list of rule ids or
 ``{ability_id, option_id?, definition_id?}``); ``attackerRegions`` / ``targetRegions`` (complete
-lists of ``{ruleRegion?, terrainArea?, territory?, deploymentZone?, wholly?}``);
-``objectivesControlled`` (``{attacker, target, total}``); ``attackerMembers`` /
+lists of ``{ruleRegion?, terrainArea?, designations?, territory?, deploymentZone?, wholly?}``);
+``objectivesControlled`` (``{attacker, target, total}``, else counted from ``objectives``); ``attackerMembers`` /
 ``targetMembers`` (every unit of the combined unit, ``{unitId, role, keywords}``).
 """
 
@@ -28,6 +28,7 @@ from __future__ import annotations
 from collections.abc import Callable, Iterable
 from typing import Any, TypeGuard
 
+from wh40kdc.cruncher.scenario_facts import objective_control
 from wh40kdc.scope import keyword_key
 
 Verdict = bool | str
@@ -230,7 +231,7 @@ def evaluate_rule_active(params: dict[str, Any], ctx: dict[str, Any]) -> Verdict
 
 def _region_matcher(
     region: dict[str, Any], ability_side: str
-) -> Callable[[dict[str, Any]], bool] | None:
+) -> Callable[[dict[str, Any]], Verdict] | None:
     territory = region.get("territory")
     if isinstance(territory, str):
         if territory == "your-territory":
@@ -248,10 +249,23 @@ def _region_matcher(
         return None
     terrain = region.get("terrain_area")
     if _is_object(terrain):
-        # A designated terrain area needs designations the scenario does not carry.
-        if terrain.get("designated") is None:
+        tag = terrain.get("designated")
+        if tag is None:
             return lambda entry: entry.get("terrainArea") is True
-        return None
+        if not isinstance(tag, str):
+            return None
+
+        # A designated terrain area needs the area's designations; an entry without them is
+        # unknown.
+        def designated(entry: dict[str, Any]) -> Verdict:
+            if entry.get("terrainArea") is not True:
+                return False
+            designations = entry.get("designations")
+            if designations is None:
+                return "unknown"
+            return any(d.lower() == tag.lower() for d in designations)
+
+        return designated
     rule_region = region.get("rule_region")
     if _is_object(rule_region) and isinstance(rule_region.get("region_id"), str):
         region_id = rule_region["region_id"]
@@ -275,7 +289,12 @@ def evaluate_in_region(
     matches = _region_matcher(region, ability_side)
     if matches is None:
         return "unknown"
-    return any(matches(entry) and (not wholly or entry.get("wholly") is True) for entry in regions)
+    verdicts = [
+        matches(entry) if not wholly or entry.get("wholly") is True else False for entry in regions
+    ]
+    if True in verdicts:
+        return True
+    return "unknown" if "unknown" in verdicts else False
 
 
 def _compare(left: float, comparison: Any, right: float) -> Verdict:
@@ -295,10 +314,15 @@ def _compare(left: float, comparison: Any, right: float) -> Verdict:
 def evaluate_controls(params: dict[str, Any], ctx: dict[str, Any], ability_side: str) -> Verdict:
     """``controls``: objectives the ``by`` side (friendly unless stated, relative to the ability's
     side) controls, bounded by ``count``, compared with the other side's, or as a ``proportion``
-    of every objective. Every stated clause must hold. An objective filter needs per-objective
-    state."""
+    of every objective. Every stated clause must hold. With an objective filter the clauses count
+    only the declared objectives that meet it."""
     control = ctx.get("objectivesControlled")
-    if not _is_object(control) or params.get("objective") is not None:
+    if params.get("objective") is not None or control is None:
+        objective = params.get("objective")
+        control = objective_control(
+            {} if objective is None else objective, ctx.get("objectives"), ability_side
+        )
+    if not _is_object(control):
         return "unknown"
     if not all(_is_num(control.get(key)) for key in ("attacker", "target", "total")):
         return "unknown"
@@ -370,7 +394,8 @@ def attachment_from_members(role: Any, with_filter: Any, members: Any, own: Any)
     """``attachment`` facts the combined unit's members settle. ``own`` is the unit the ability
     belongs to. Leading needs ``own`` to be a Leader with a Bodyguard; led needs another member
     that is a Leader; attached needs another member. ``with`` narrows those other members by
-    keyword (friendly units only)."""
+    keyword (friendly units only), or at ``level: "model"`` to members with a model meeting the
+    keywords."""
     if members is None or not isinstance(own, str):
         return "unknown"
     own_member = next((m for m in members if m.get("unitId") == own), None)
@@ -395,12 +420,39 @@ def attachment_from_members(role: Any, with_filter: Any, members: Any, own: Any)
         return "unknown"
     if with_filter.get("owner") == "enemy":
         return False
-    if any(key != "owner" and key not in _PREDICATE_KEYS for key in with_filter):
+    if any(key not in ("owner", "level") and key not in _PREDICATE_KEYS for key in with_filter):
+        return "unknown"
+    level = with_filter.get("level")
+    if level is not None and level not in ("unit", "model"):
         return "unknown"
     predicate = _keyword_predicate(with_filter)
     if predicate is None:
         return "unknown"
-    return any(keyword_matches_predicate(predicate, m.get("keywords") or []) for m in candidates)
+    if level != "model":
+        return any(
+            keyword_matches_predicate(predicate, m.get("keywords") or []) for m in candidates
+        )
+    verdicts = [_member_has_model(predicate, m.get("keywords") or []) for m in candidates]
+    if True in verdicts:
+        return True
+    return "unknown" if "unknown" in verdicts else False
+
+
+def _member_has_model(predicate: dict[str, list[str]], keywords: list[str]) -> Verdict:
+    """Whether a unit with ``keywords`` has a model meeting a keyword predicate. Every model
+    carries the unit's keywords, but a unit's keywords omit its models' own names: a clause needing
+    a keyword holds for every model when the unit carries it and is otherwise unknown, and a clause
+    excluding keywords fails for every model when the unit's keywords already break it."""
+    verdict: Verdict = True
+    for key, value in predicate.items():
+        holds = keyword_matches_predicate({key: value}, keywords)
+        if key in ("none_of", "not_all_of"):
+            if not holds:
+                return False
+            verdict = "unknown"
+        elif not holds:
+            verdict = "unknown"
+    return verdict
 
 
 def is_neighbour_filter(of: dict[str, Any]) -> bool:

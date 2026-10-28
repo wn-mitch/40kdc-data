@@ -952,22 +952,26 @@ describe("effectToBuffs: target perspective", () => {
     expect(result.unsupported[0].reason).toContain("against");
   });
 
-  it('damage-reduction "half" and "to-zero" route to unsupported', () => {
-    for (const reduction of ["half", "to-zero"]) {
-      const result = effectToBuffs(
-        {
-          type: "damage-reduction",
-          target: "this-unit",
-          modifier: { reduction },
-        },
-        unitRule,
-        ctxT,
-        "target",
-      );
-      expect(result.applied).toEqual([]);
-      expect(result.unsupported).toHaveLength(1);
-      expect(result.unsupported[0].reason).toContain(reduction);
-    }
+  it('damage-reduction "half" routes to unsupported', () => {
+    const result = effectToBuffs({ type: "damage-reduction", target: "this-unit", modifier: { reduction: "half" } }, unitRule, ctxT, "target");
+    expect(result.applied).toEqual([]);
+    expect(result.unsupported.map((u) => u.reason)).toEqual(["damage-reduction: halving Damage is not modelled by the buff layer"]);
+  });
+
+  it('damage-reduction "to-zero" zeroes as many attacks as its usage limit allows', () => {
+    const zeroing = { type: "damage-reduction", target: "this-unit", modifier: { reduction: "to-zero" } };
+    const contributions = (usage: unknown) => {
+      const result = effectToBuffs(zeroing, unitRule, ctxT, "target", usage === undefined ? undefined : { usage });
+      return [...result.applied, ...result.activatable.flatMap((lever) => lever.buffs)].map((b) => b.contribution);
+    };
+    expect(contributions(undefined)).toEqual([{ type: "damage-zeroing", uses: 1, per: "unit" }]);
+    expect(contributions({ frequency: "n-per-battle", count: 2, per: "unit" })).toEqual([{ type: "damage-zeroing", uses: 2, per: "unit" }]);
+    expect(contributions({ frequency: "once-per-battle-round", per: "model" })).toEqual([{ type: "damage-zeroing", uses: 1, per: "model" }]);
+    expect(contributions([{ frequency: "n-per-battle", count: 3, per: "model" }, { frequency: "once-per-turn", per: "unit" }])).toEqual([{ type: "damage-zeroing", uses: 1, per: "unit" }]);
+    // A part's own usage limit counts for the zeroing inside it.
+    const part = effectToBuffs({ type: "ability-part", usage: { frequency: "n-per-battle", count: 2, per: "unit" }, effect: zeroing }, unitRule, ctxT, "target");
+    expect([...part.applied, ...part.activatable.flatMap((lever) => lever.buffs)].map((b) => b.contribution)).toEqual([{ type: "damage-zeroing", uses: 2, per: "unit" }]);
+    expect(effectToBuffs(zeroing, unitRule, ctx, "attacker").applied).toEqual([]);
   });
 });
 

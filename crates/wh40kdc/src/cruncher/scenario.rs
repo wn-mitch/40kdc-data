@@ -110,7 +110,25 @@ pub(crate) fn within_objective(
     objectives: Option<&[ScenarioObjective]>,
     ability_side: TranslationPerspective,
 ) -> Option<bool> {
-    let objectives = objectives?;
+    let mut unknown = false;
+    for objective in objectives? {
+        match objective_matches(filter, objective, ability_side) {
+            Some(true) => return Some(true),
+            None => unknown = true,
+            Some(false) => {}
+        }
+    }
+    (!unknown).then_some(false)
+}
+
+/// Whether one objective meets every property of an objective filter, read from the ability's
+/// side; `None` is unknown. A property the objective leaves out, or the filter states in a form
+/// the scenario cannot settle, is unknown.
+pub(crate) fn objective_matches(
+    filter: &Map<String, Value>,
+    objective: &ScenarioObjective,
+    ability_side: TranslationPerspective,
+) -> Option<bool> {
     let mine = scenario_side(ability_side);
     let other = match mine {
         ScenarioSide::Attacker => ScenarioSide::Target,
@@ -129,64 +147,68 @@ pub(crate) fn within_objective(
         ScenarioSide::Attacker => ObjectiveTerritory::Attacker,
         ScenarioSide::Target => ObjectiveTerritory::Target,
     };
-    let mut unknown = false;
-    for objective in objectives {
-        let mut verdict = Some(true);
-        for (key, wanted) in filter {
-            let holds = match key.as_str() {
-                "controlled_by" => objective.controller.and_then(|controller| {
-                    if wanted.as_str() == Some("any") {
-                        Some(controller != ObjectiveController::None)
-                    } else {
-                        side_of(wanted).map(|side| controller == controller_of(side))
-                    }
-                }),
-                "designated" if wanted.is_string() => objective
-                    .designations
-                    .as_deref()
-                    .map(|list| has_designation(list, wanted.as_str().unwrap_or_default())),
-                "role" => objective
-                    .role
-                    .as_deref()
-                    .map(|role| wanted.as_str() == Some(role)),
-                "home_of" => match (objective.home_of, side_of(wanted)) {
-                    (Some(home), Some(side)) => Some(home == side),
-                    _ => None,
-                },
-                "territory" => {
-                    let territory = match wanted.as_str() {
-                        Some("your-territory") => Some(territory_of(mine)),
-                        Some("enemy-territory") => Some(territory_of(other)),
-                        Some("no-mans-land") => Some(ObjectiveTerritory::NoMansLand),
-                        _ => None,
-                    };
-                    match (objective.territory, territory) {
-                        (Some(have), Some(want)) => Some(have == want),
-                        _ => None,
-                    }
+    let mut verdict = Some(true);
+    for (key, wanted) in filter {
+        let holds = match key.as_str() {
+            "controlled_by" => objective.controller.and_then(|controller| {
+                if wanted.as_str() == Some("any") {
+                    Some(controller != ObjectiveController::None)
+                } else {
+                    side_of(wanted).map(|side| controller == controller_of(side))
                 }
-                "name" => objective
-                    .name
-                    .as_deref()
-                    .map(|name| wanted.as_str() == Some(name)),
+            }),
+            "designated" if wanted.is_string() => objective
+                .designations
+                .as_deref()
+                .map(|list| has_designation(list, wanted.as_str().unwrap_or_default())),
+            "role" => objective
+                .role
+                .as_deref()
+                .map(|role| wanted.as_str() == Some(role)),
+            "home_of" => match (objective.home_of, side_of(wanted)) {
+                (Some(home), Some(side)) => Some(home == side),
                 _ => None,
-            };
-            match holds {
-                Some(false) => {
-                    verdict = Some(false);
-                    break;
+            },
+            "territory" => {
+                let territory = match wanted.as_str() {
+                    Some("your-territory") => Some(territory_of(mine)),
+                    Some("enemy-territory") => Some(territory_of(other)),
+                    Some("no-mans-land") => Some(ObjectiveTerritory::NoMansLand),
+                    _ => None,
+                };
+                match (objective.territory, territory) {
+                    (Some(have), Some(want)) => Some(have == want),
+                    _ => None,
                 }
-                None => verdict = None,
-                Some(true) => {}
             }
-        }
-        match verdict {
-            Some(true) => return Some(true),
-            None => unknown = true,
-            Some(false) => {}
+            "name" => objective
+                .name
+                .as_deref()
+                .map(|name| wanted.as_str() == Some(name)),
+            _ => None,
+        };
+        match holds {
+            Some(false) => return Some(false),
+            None => verdict = None,
+            Some(true) => {}
         }
     }
-    (!unknown).then_some(false)
+    verdict
+}
+
+/// Enemy models and units a unit destroyed this phase.
+#[derive(Clone, Copy, Debug, PartialEq, Serialize, Deserialize)]
+pub struct UnitKills {
+    pub models: f64,
+    pub units: f64,
+}
+
+/// One roll a unit made, or that was made against it: the roll (`hit`, `dark-pact`, …) and its
+/// result (`success`, `failure` or `critical`).
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+pub struct ScenarioRoll {
+    pub roll: String,
+    pub result: String,
 }
 
 /// Whose a neighbouring unit is, relative to the unit it is near.
@@ -222,7 +244,8 @@ pub enum ActiveRule {
 }
 
 /// A region a unit is in: an army rule's region (by id), a terrain area, a side's territory or
-/// deployment zone. `wholly` says every model of the unit is in it.
+/// deployment zone. `wholly` says every model of the unit is in it. `designations` lists every
+/// designation a terrain area carries; left out, a designated terrain area stays unknown.
 #[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ScenarioRegion {
@@ -230,6 +253,8 @@ pub struct ScenarioRegion {
     pub rule_region: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub terrain_area: Option<bool>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub designations: Option<Vec<String>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub territory: Option<ObjectiveTerritory>,
     #[serde(default, skip_serializing_if = "Option::is_none")]

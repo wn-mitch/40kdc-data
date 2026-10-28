@@ -49,6 +49,9 @@ func buffApplies(buff map[string]any, ctx map[string]any) bool {
 	if !ok || len(w) == 0 {
 		return true
 	}
+	if critical := getStr(w, "onCritical"); critical != "" && getStr(ctx, "criticalRoll") != critical {
+		return false
+	}
 	if phases := getList(w, "phases"); len(phases) > 0 {
 		if !containsAny(phases, getStr(ctx, "phase")) {
 			return false
@@ -414,8 +417,11 @@ type resolved struct {
 	damageReduction              float64
 	damageReductionSet           bool
 	damageReductionRank          int
-	invulnerable                 *invState
-	invulnerableRank             int
+	// zeroingUnit and zeroingModel are the damage-zeroing uses, summed over
+	// sources: a pool the unit shares and uses for each model.
+	zeroingUnit, zeroingModel int
+	invulnerable              *invState
+	invulnerableRank          int
 	// critThresholds holds the lowest critical threshold per roll ("hit"/"wound").
 	critThresholds map[string]rankedValue
 	// ignoreModifiers holds the rank of the source per roll whose negative modifiers are ignored.
@@ -550,6 +556,13 @@ func resolveBuffs(buffs []any, ctx map[string]any) *resolved {
 				out.damageReduction = val
 				out.damageReductionSet = true
 				out.damageReductionRank = rankOf(source)
+			}
+		case "damage-zeroing":
+			uses, _ := num(c["uses"])
+			if getStr(c, "per") == "model" {
+				out.zeroingModel += int(uses)
+			} else {
+				out.zeroingUnit += int(uses)
 			}
 		case "invulnerable-save":
 			threshold, _ := num(c["threshold"])

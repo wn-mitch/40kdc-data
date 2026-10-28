@@ -9282,6 +9282,3287 @@
           }
         ]
       }
+    },
+    {
+      "caseId": "canonical/scenario/guided-true",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "guided",
+          "parameters": {}
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerGuided": true
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "hit-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": [],
+        "applicableWhen": [
+          null
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/scenario/guided-false",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "guided",
+          "parameters": {}
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerGuided": false
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/guided-undeclared",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "guided",
+          "parameters": {}
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"guided\" against current context"
+        ],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/wounds-defender-remaining",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "wounds",
+          "parameters": {
+            "subject": "defender",
+            "remaining_max": 3
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "targetWounds": {
+          "remaining": 2,
+          "starting": 6
+        }
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "hit-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": [],
+        "applicableWhen": [
+          null
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/scenario/wounds-defender-unhurt",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "wounds",
+          "parameters": {
+            "subject": "defender",
+            "remaining_max": 3
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "targetWounds": {
+          "remaining": 6,
+          "starting": 6
+        }
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/model-count-keyword-declared",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "model-count",
+          "parameters": {
+            "subject": "this-unit",
+            "keyword": "EXAMPLE CHAMPION",
+            "min": 1
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerKeywordModels": {
+          "example champion": 1
+        }
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "hit-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": [],
+        "applicableWhen": [
+          null
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/scenario/model-count-keyword-declared-none",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "model-count",
+          "parameters": {
+            "subject": "this-unit",
+            "keyword": "EXAMPLE CHAMPION",
+            "min": 1
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerKeywordModels": {
+          "EXAMPLE CHAMPION": 0
+        }
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/model-count-keyword-every-model",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "model-count",
+          "parameters": {
+            "subject": "this-unit",
+            "keyword": "EXAMPLE CHAMPION",
+            "max": 0
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerModelKeywords": [
+          "EXAMPLE CHAMPION"
+        ],
+        "attackerModelCount": 3
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/model-count-keyword-unit-only",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "model-count",
+          "parameters": {
+            "subject": "this-unit",
+            "keyword": "EXAMPLE CHAMPION",
+            "min": 1
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerKeywords": [
+          "INFANTRY"
+        ],
+        "attackerModelCount": 3
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"model-count\" against current context"
+        ],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/designated-applied-count",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "designated",
+          "parameters": {
+            "tag": "example-mark",
+            "by": "this-unit",
+            "count": {
+              "min": 2
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerDesignationsApplied": {
+          "example-mark": 2
+        }
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "hit-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": [],
+        "applicableWhen": [
+          null
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/scenario/designated-applied-below",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "designated",
+          "parameters": {
+            "tag": "example-mark",
+            "by": "this-unit",
+            "count": {
+              "min": 2
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerDesignationsApplied": {
+          "example-mark": 1,
+          "other-mark": 3
+        }
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/designated-applied-undeclared",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "designated",
+          "parameters": {
+            "tag": "example-mark",
+            "by": "this-unit",
+            "count": {
+              "min": 2
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"designated\" against current context"
+        ],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/designated-objective",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "designated",
+          "parameters": {
+            "subject": {
+              "objective": {
+                "role": "central"
+              }
+            },
+            "tag": "example-mark"
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "objectives": [
+          {
+            "role": "central",
+            "designations": [
+              "EXAMPLE-MARK"
+            ]
+          },
+          {
+            "role": "home"
+          }
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "hit-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": [],
+        "applicableWhen": [
+          null
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/scenario/designated-objective-unmarked",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "designated",
+          "parameters": {
+            "subject": {
+              "objective": {
+                "role": "central"
+              }
+            },
+            "tag": "example-mark"
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "objectives": [
+          {
+            "role": "central",
+            "designations": []
+          }
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/designated-objective-unknown",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "designated",
+          "parameters": {
+            "subject": {
+              "objective": {
+                "role": "central"
+              }
+            },
+            "tag": "example-mark"
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "objectives": [
+          {
+            "role": "central"
+          }
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"designated\" against current context"
+        ],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/controls-objective-filter",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "controls",
+          "parameters": {
+            "objective": {
+              "role": "non-home"
+            },
+            "count": {
+              "min": 2
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "objectives": [
+          {
+            "role": "non-home",
+            "controller": "attacker"
+          },
+          {
+            "role": "non-home",
+            "controller": "attacker"
+          },
+          {
+            "role": "home",
+            "controller": "attacker"
+          }
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "hit-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": [],
+        "applicableWhen": [
+          null
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/scenario/controls-objective-filter-short",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "controls",
+          "parameters": {
+            "objective": {
+              "role": "non-home"
+            },
+            "count": {
+              "min": 2
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "objectives": [
+          {
+            "role": "non-home",
+            "controller": "attacker"
+          },
+          {
+            "role": "non-home",
+            "controller": "target"
+          },
+          {
+            "role": "home",
+            "controller": "attacker"
+          }
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/controls-objective-filter-uncontrolled-unknown",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "controls",
+          "parameters": {
+            "objective": {
+              "role": "non-home"
+            },
+            "count": {
+              "min": 2
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "objectives": [
+          {
+            "role": "non-home",
+            "controller": "attacker"
+          },
+          {
+            "role": "non-home"
+          }
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"controls\" against current context"
+        ],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/controls-from-objectives",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "controls",
+          "parameters": {
+            "by": "friendly",
+            "proportion": {
+              "comparison": "gte",
+              "fraction": 0.5
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "objectives": [
+          {
+            "role": "non-home",
+            "controller": "attacker"
+          },
+          {
+            "role": "non-home",
+            "controller": "target"
+          }
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "hit-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": [],
+        "applicableWhen": [
+          null
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/scenario/in-region-designated-terrain",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "in-region",
+          "parameters": {
+            "subject": "this-unit",
+            "region": {
+              "terrain_area": {
+                "designated": "example-ruin"
+              }
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerRegions": [
+          {
+            "terrainArea": true,
+            "designations": [
+              "example-ruin"
+            ]
+          }
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "hit-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": [],
+        "applicableWhen": [
+          null
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/scenario/in-region-designated-other",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "in-region",
+          "parameters": {
+            "subject": "this-unit",
+            "region": {
+              "terrain_area": {
+                "designated": "example-ruin"
+              }
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerRegions": [
+          {
+            "terrainArea": true,
+            "designations": [
+              "other-ruin"
+            ]
+          },
+          {
+            "ruleRegion": "example-region"
+          }
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/in-region-designated-unknown",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "in-region",
+          "parameters": {
+            "subject": "this-unit",
+            "region": {
+              "terrain_area": {
+                "designated": "example-ruin"
+              }
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerRegions": [
+          {
+            "terrainArea": true
+          }
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"in-region\" against current context"
+        ],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/happened-own-move",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "happened",
+          "parameters": {
+            "event": "move-ended",
+            "filter": {
+              "move_types": [
+                "advance",
+                "fall-back"
+              ]
+            },
+            "window": "turn"
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerMoves": [
+          "fall-back"
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "hit-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": [],
+        "applicableWhen": [
+          null
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/scenario/happened-own-other-move",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "happened",
+          "parameters": {
+            "event": "move-ended",
+            "filter": {
+              "move_types": [
+                "advance",
+                "fall-back"
+              ]
+            },
+            "window": "turn"
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerMoves": [
+          "normal"
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/happened-own-move-undeclared",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "happened",
+          "parameters": {
+            "event": "move-ended",
+            "filter": {
+              "move_types": [
+                "advance",
+                "fall-back"
+              ]
+            },
+            "window": "turn"
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"happened\" against current context"
+        ],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/happened-defender-charged",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "happened",
+          "parameters": {
+            "subject": "defender",
+            "event": "move-ended",
+            "filter": {
+              "move_types": [
+                "charge"
+              ]
+            },
+            "window": "turn"
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "targetMoves": [
+          "charge"
+        ],
+        "attackerMoves": []
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "hit-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": [],
+        "applicableWhen": [
+          null
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/scenario/happened-defender-not-charged",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "happened",
+          "parameters": {
+            "subject": "defender",
+            "event": "move-ended",
+            "filter": {
+              "move_types": [
+                "charge"
+              ]
+            },
+            "window": "turn"
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "targetMoves": [
+          "normal"
+        ],
+        "attackerCharged": true
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/roll-result-declared",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "roll-result",
+          "parameters": {
+            "roll": "leadership",
+            "result": "failure"
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "testResults": {
+          "leadership": "failure"
+        }
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "hit-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": [],
+        "applicableWhen": [
+          null
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/scenario/roll-result-other",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "roll-result",
+          "parameters": {
+            "roll": "leadership",
+            "result": "failure"
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "testResults": {
+          "leadership": "success",
+          "battle-shock": "failure"
+        }
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/roll-result-undeclared",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "roll-result",
+          "parameters": {
+            "roll": "leadership",
+            "result": "failure"
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"roll-result\" against current context"
+        ],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/attachment-with-model-keyword",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "attached",
+        "sourceUnitId": "leader"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "attachment",
+          "parameters": {
+            "role": "leading",
+            "subject": "this-model",
+            "with": {
+              "level": "model",
+              "all_of": [
+                "EXAMPLE SQUAD"
+              ]
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerMembers": [
+          {
+            "unitId": "leader",
+            "role": "leader",
+            "keywords": [
+              "CHARACTER"
+            ]
+          },
+          {
+            "unitId": "squad",
+            "role": "bodyguard",
+            "keywords": [
+              "EXAMPLE SQUAD"
+            ]
+          }
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "hit-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": [],
+        "applicableWhen": [
+          null
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/scenario/attachment-with-model-name-unknown",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "attached",
+        "sourceUnitId": "leader"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "attachment",
+          "parameters": {
+            "role": "leading",
+            "subject": "this-model",
+            "with": {
+              "level": "model",
+              "all_of": [
+                "EXAMPLE SERGEANT"
+              ]
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerMembers": [
+          {
+            "unitId": "leader",
+            "role": "leader",
+            "keywords": [
+              "CHARACTER"
+            ]
+          },
+          {
+            "unitId": "squad",
+            "role": "bodyguard",
+            "keywords": [
+              "EXAMPLE SQUAD"
+            ]
+          }
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"attachment\" against current context"
+        ],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/attachment-with-model-excluded",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "attached",
+        "sourceUnitId": "leader"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "attachment",
+          "parameters": {
+            "role": "leading",
+            "subject": "this-model",
+            "with": {
+              "level": "model",
+              "none_of": [
+                "EXAMPLE SQUAD"
+              ]
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerMembers": [
+          {
+            "unitId": "leader",
+            "role": "leader",
+            "keywords": [
+              "CHARACTER"
+            ]
+          },
+          {
+            "unitId": "squad",
+            "role": "bodyguard",
+            "keywords": [
+              "EXAMPLE SQUAD"
+            ]
+          }
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/attachment-with-model-level-unit",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "attached",
+        "sourceUnitId": "leader"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "attachment",
+          "parameters": {
+            "role": "leading",
+            "subject": "this-model",
+            "with": {
+              "level": "unit",
+              "all_of": [
+                "OTHER SQUAD"
+              ]
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerMembers": [
+          {
+            "unitId": "leader",
+            "role": "leader",
+            "keywords": [
+              "CHARACTER"
+            ]
+          },
+          {
+            "unitId": "squad",
+            "role": "bodyguard",
+            "keywords": [
+              "EXAMPLE SQUAD"
+            ]
+          }
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/happened-selected-to-fight",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "happened",
+          "parameters": {
+            "window": "phase",
+            "event": "selected",
+            "filter": {
+              "to": "fight"
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "fight",
+        "attackerSelected": [
+          "fight"
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "hit-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": [],
+        "applicableWhen": [
+          null
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/scenario/happened-selected-other",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "happened",
+          "parameters": {
+            "window": "phase",
+            "event": "selected",
+            "filter": {
+              "to": "fight"
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "fight",
+        "attackerSelected": [
+          "shoot"
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/happened-selected-undeclared",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "happened",
+          "parameters": {
+            "window": "phase",
+            "event": "selected",
+            "filter": {
+              "to": "fight"
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "fight"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"happened\" against current context"
+        ],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/happened-selected-event-subject",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "happened",
+          "parameters": {
+            "window": "phase",
+            "subject": "event-subject",
+            "event": "selected",
+            "filter": {
+              "to": "fight"
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "fight",
+        "attackerSelected": [
+          "fight"
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"happened\" against current context"
+        ],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/happened-killed-model",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "happened",
+          "parameters": {
+            "window": "phase",
+            "event": "model-destroyed",
+            "object": {
+              "owner": "enemy",
+              "level": "model"
+            },
+            "filter": {
+              "by": "this-unit"
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerKills": {
+          "models": 2,
+          "units": 0
+        }
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "hit-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": [],
+        "applicableWhen": [
+          null
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/scenario/happened-killed-none",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "happened",
+          "parameters": {
+            "window": "phase",
+            "event": "model-destroyed",
+            "object": {
+              "owner": "enemy",
+              "level": "model"
+            },
+            "filter": {
+              "by": "this-unit"
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerKills": {
+          "models": 0,
+          "units": 0
+        }
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/happened-killed-by-model-unknown",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "happened",
+          "parameters": {
+            "window": "phase",
+            "event": "model-destroyed",
+            "object": {
+              "owner": "enemy",
+              "level": "model"
+            },
+            "filter": {
+              "by": "this-model"
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerKills": {
+          "models": 3,
+          "units": 1
+        }
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"happened\" against current context"
+        ],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/happened-killed-by-model-none",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "happened",
+          "parameters": {
+            "window": "phase",
+            "event": "model-destroyed",
+            "object": {
+              "owner": "enemy",
+              "level": "model"
+            },
+            "filter": {
+              "by": "this-model"
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerKills": {
+          "models": 0,
+          "units": 0
+        }
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/happened-killed-units-short",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "happened",
+          "parameters": {
+            "window": "phase",
+            "event": "destroyed",
+            "object": {
+              "owner": "enemy"
+            },
+            "filter": {
+              "by": "this-unit"
+            },
+            "count": {
+              "min": 2
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerKills": {
+          "models": 9,
+          "units": 1
+        }
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/happened-killed-units",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "happened",
+          "parameters": {
+            "window": "phase",
+            "event": "destroyed",
+            "object": {
+              "owner": "enemy"
+            },
+            "filter": {
+              "by": "this-unit"
+            },
+            "count": {
+              "min": 2
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerKills": {
+          "models": 9,
+          "units": 2
+        }
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "hit-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": [],
+        "applicableWhen": [
+          null
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/scenario/happened-killed-undeclared",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "happened",
+          "parameters": {
+            "window": "phase",
+            "event": "destroyed",
+            "object": {
+              "owner": "enemy"
+            },
+            "filter": {
+              "by": "this-unit"
+            },
+            "count": {
+              "min": 2
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"happened\" against current context"
+        ],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/happened-lost-this-model-none",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "happened",
+          "parameters": {
+            "window": "phase",
+            "event": "model-destroyed",
+            "object": "this-model",
+            "count": {
+              "min": 1
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerLosses": 0
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/happened-lost-this-model-unknown",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "happened",
+          "parameters": {
+            "window": "phase",
+            "event": "model-destroyed",
+            "object": "this-model",
+            "count": {
+              "min": 1
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerLosses": 2
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"happened\" against current context"
+        ],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/happened-lost-model",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "happened",
+          "parameters": {
+            "window": "phase",
+            "event": "model-destroyed",
+            "object": "model-in-this-unit"
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerLosses": 2
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "hit-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": [],
+        "applicableWhen": [
+          null
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/scenario/happened-rolled-critical-success",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "happened",
+          "parameters": {
+            "window": "phase",
+            "event": "after-roll",
+            "filter": {
+              "roll": "dark-pact",
+              "result": "success"
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerRolls": [
+          {
+            "roll": "dark-pact",
+            "result": "critical"
+          }
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "hit-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": [],
+        "applicableWhen": [
+          null
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/scenario/happened-rolled-failure",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "happened",
+          "parameters": {
+            "window": "phase",
+            "event": "after-roll",
+            "filter": {
+              "roll": "dark-pact",
+              "result": "success"
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerRolls": [
+          {
+            "roll": "dark-pact",
+            "result": "failure"
+          },
+          {
+            "roll": "hit",
+            "result": "success"
+          }
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/happened-rolled-undeclared",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "happened",
+          "parameters": {
+            "window": "phase",
+            "event": "after-roll",
+            "filter": {
+              "roll": "dark-pact",
+              "result": "success"
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"happened\" against current context"
+        ],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/happened-rolled-against",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "happened",
+          "parameters": {
+            "window": "phase",
+            "event": "after-roll",
+            "object": "defender",
+            "filter": {
+              "roll": "hit",
+              "result": "success"
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "targetRolledAgainst": [
+          {
+            "roll": "hit",
+            "result": "success"
+          }
+        ],
+        "attackerRolledAgainst": []
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "hit-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": [],
+        "applicableWhen": [
+          null
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/scenario/happened-rolled-against-narrowed",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "happened",
+          "parameters": {
+            "window": "phase",
+            "event": "after-roll",
+            "object": "defender",
+            "filter": {
+              "roll": "hit",
+              "result": "success",
+              "attack_type": "ranged"
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "targetRolledAgainst": [
+          {
+            "roll": "hit",
+            "result": "success"
+          }
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"happened\" against current context"
+        ],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/happened-rolled-against-none",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "happened",
+          "parameters": {
+            "window": "phase",
+            "event": "after-roll",
+            "object": "defender",
+            "filter": {
+              "roll": "hit",
+              "result": "success",
+              "attack_type": "ranged"
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "targetRolledAgainst": []
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/roll-result-critical-wound-gate",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "roll-result",
+          "parameters": {
+            "roll": "wound",
+            "result": "critical"
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "testResults": {
+          "leadership": "failure"
+        }
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "hit-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": [],
+        "applicableWhen": [
+          {
+            "onCritical": "wound"
+          }
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/scenario/roll-result-critical-hit-unknown",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "roll-result",
+          "parameters": {
+            "roll": "hit",
+            "result": "critical"
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"roll-result\" against current context"
+        ],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/granted-record/own-unit",
+      "abilityId": "fabricated-grantor",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-grantor",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "this-unit",
+        "modifier": {
+          "ability": "fabricated-war-rite"
+        }
+      },
+      "grantedRecords": {
+        "fabricated-war-rite": {
+          "effect": {
+            "type": "roll-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "operation": "add",
+              "value": 1
+            }
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "hit-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/granted-record/friendly-filter",
+      "abilityId": "fabricated-grantor",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-grantor",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": {
+          "owner": "friendly",
+          "all_of": [
+            "EXAMPLE"
+          ]
+        },
+        "modifier": {
+          "ability": "fabricated-army-rite"
+        }
+      },
+      "grantedRecords": {
+        "fabricated-army-rite": {
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "army-faction",
+              "parameters": {
+                "faction": "example"
+              }
+            },
+            "effect": {
+              "type": "roll-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "wound",
+                "operation": "add",
+                "value": 1
+              }
+            }
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "armyFaction": "example",
+        "attackerKeywords": [
+          "EXAMPLE",
+          "INFANTRY"
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "wound-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/granted-record/friendly-filter-excluded",
+      "abilityId": "fabricated-grantor",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-grantor",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": {
+          "owner": "friendly",
+          "all_of": [
+            "EXAMPLE"
+          ]
+        },
+        "modifier": {
+          "ability": "fabricated-army-rite"
+        }
+      },
+      "grantedRecords": {
+        "fabricated-army-rite": {
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "army-faction",
+              "parameters": {
+                "faction": "example"
+              }
+            },
+            "effect": {
+              "type": "roll-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "wound",
+                "operation": "add",
+                "value": 1
+              }
+            }
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "armyFaction": "example",
+        "attackerKeywords": [
+          "OTHER"
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/granted-record/army-undeclared",
+      "abilityId": "fabricated-grantor",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-grantor",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": {
+          "owner": "friendly",
+          "all_of": [
+            "EXAMPLE"
+          ]
+        },
+        "modifier": {
+          "ability": "fabricated-army-rite"
+        }
+      },
+      "grantedRecords": {
+        "fabricated-army-rite": {
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "army-faction",
+              "parameters": {
+                "faction": "example"
+              }
+            },
+            "effect": {
+              "type": "roll-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "wound",
+                "operation": "add",
+                "value": 1
+              }
+            }
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerKeywords": [
+          "EXAMPLE"
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"army-faction\" against current context"
+        ],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/granted-record/record-usage",
+      "abilityId": "fabricated-grantor",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-grantor",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "this-unit",
+        "modifier": {
+          "ability": "fabricated-once-rite"
+        }
+      },
+      "grantedRecords": {
+        "fabricated-once-rite": {
+          "effect": {
+            "type": "stat-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "stat": "AP",
+              "operation": "improve",
+              "value": 1
+            }
+          },
+          "usage": {
+            "frequency": "once-per-battle",
+            "per": "unit"
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": [
+          {
+            "id": "fabricated-grantor#AP -1",
+            "label": "AP -1",
+            "group": null,
+            "requires": [
+              {
+                "type": "ability-part",
+                "usage": {
+                  "frequency": "once-per-battle",
+                  "per": "unit"
+                }
+              }
+            ],
+            "capRaise": null,
+            "buffs": [
+              {
+                "type": "ap-mod",
+                "value": -1
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/granted-record/cycle",
+      "abilityId": "fabricated-grantor",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-grantor",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "this-unit",
+        "modifier": {
+          "ability": "fabricated-loop-a"
+        }
+      },
+      "grantedRecords": {
+        "fabricated-loop-a": {
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "ability-grant",
+                "target": "this-unit",
+                "modifier": {
+                  "ability": "fabricated-loop-b"
+                }
+              },
+              {
+                "type": "roll-modifier",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "hit",
+                  "operation": "add",
+                  "value": 1
+                }
+              }
+            ]
+          }
+        },
+        "fabricated-loop-b": {
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "ability-grant",
+                "target": "this-unit",
+                "modifier": {
+                  "ability": "fabricated-loop-a"
+                }
+              },
+              {
+                "type": "roll-modifier",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "wound",
+                  "operation": "add",
+                  "value": 1
+                }
+              }
+            ]
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "wound-mod",
+            "value": 1
+          },
+          {
+            "type": "hit-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [
+          "effect type \"ability-grant\" is not modelled by the buff layer"
+        ],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/granted-record/granting-ability-itself",
+      "abilityId": "fabricated-grantor",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-grantor",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "this-unit",
+        "modifier": {
+          "ability": "fabricated-grantor"
+        }
+      },
+      "grantedRecords": {
+        "fabricated-grantor": {
+          "effect": {
+            "type": "roll-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "operation": "add",
+              "value": 1
+            }
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "effect type \"ability-grant\" is not modelled by the buff layer"
+        ],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/granted-record/unknown-record",
+      "abilityId": "fabricated-grantor",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-grantor",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "this-unit",
+        "modifier": {
+          "ability": "fabricated-missing"
+        }
+      },
+      "grantedRecords": {},
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "effect type \"ability-grant\" is not modelled by the buff layer"
+        ],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/granted-record/model-holder",
+      "abilityId": "fabricated-grantor",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-grantor",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "this-model",
+        "modifier": {
+          "ability": "fabricated-war-rite"
+        }
+      },
+      "grantedRecords": {
+        "fabricated-war-rite": {
+          "effect": {
+            "type": "roll-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "operation": "add",
+              "value": 1
+            }
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "ability-grant: model-only definition cannot be applied to the entire unit"
+        ],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/damage-zeroing/attacker-walk",
+      "abilityId": "fabricated-plating",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-plating",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "damage-reduction",
+        "target": "this-unit",
+        "modifier": {
+          "reduction": "to-zero"
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
     }
   ]
 }

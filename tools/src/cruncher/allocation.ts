@@ -7,9 +7,14 @@
  * once for each wound that would be lost. Devastating Wounds mortal wounds are inflicted after all
  * normal damage and also damage at most one model each, the rest being lost.
  *
- * The state is (models alive, wounds left on the damaged model). Event counts come from the exact
- * joint distribution of normal and mortal damage events per attack, so Sustained Hits, Lethal
- * Hits and Devastating Wounds keep their correlation within an attack.
+ * The state is (models alive, wounds left on the damaged model, zeroing uses left). Event counts
+ * come from the exact joint distribution of normal and mortal damage events per attack, so
+ * Sustained Hits, Lethal Hits and Devastating Wounds keep their correlation within an attack.
+ *
+ * A damage-zeroing defence changes an unsaved attack's Damage to 0 before it is rolled. Every
+ * normal damage event has the same Damage distribution, so the defender spends a use on the first
+ * event it can: for this activation no later choice does better. Mortal-wound events are not
+ * attacks with a Damage characteristic and are never zeroed.
  */
 import type { Dataset } from "../data/dataset.js";
 import { quantityDistribution } from "./damage-roll.js";
@@ -22,6 +27,21 @@ export type AllocationOutput = {
   /** Probability of each number of models destroyed, from 0 to the unit's size. */
   modelsDestroyedDistribution: number[];
 };
+
+/**
+ * A defence that changes the Damage of an attack allocated to the target to 0, `uses` times: shared
+ * by the unit, or available to each model separately.
+ */
+export type DamageZeroing = { uses: number; per: "unit" | "model" };
+
+/** Defender options that act on individual attacks, which only the allocation stage sees. */
+export type AllocationDefences = { zeroing?: DamageZeroing };
+
+/**
+ * The largest event table the exact computation builds, measured as attacks × table rows × table
+ * columns. Past it the allocation is refused rather than approximated.
+ */
+export const MAX_EVENT_WORK = 1_000_000;
 
 /** Probabilities indexed [normal events][mortal events]. */
 type Joint = number[][];
@@ -41,6 +61,15 @@ function convolve(left: Joint, right: Joint): Joint {
   return out;
 }
 
+/** `joint` without trailing all-zero rows and columns; convolution skips zeros, so the nonzero values are unchanged. */
+function trim(table: Joint): Joint {
+  let rows = table.length;
+  while (rows > 1 && table[rows - 1]!.every((p) => p === 0)) rows -= 1;
+  let columns = table[0]!.length;
+  while (columns > 1 && table.slice(0, rows).every((row) => row[columns - 1] === 0)) columns -= 1;
+  return table.slice(0, rows).map((row) => row.slice(0, columns));
+}
+
 function power(base: Joint, times: number): Joint {
   let out: Joint = [[1]];
   for (let index = 0; index < times; index += 1) out = convolve(out, base);
@@ -52,12 +81,17 @@ function integral(value: number, what: string): number {
   return value;
 }
 
-/** Distribution of one attack's normal and mortal damage events. */
+/**
+ * Distribution of one attack's normal damage events and its second kind of event: mortal wounds
+ * with Devastating Wounds, otherwise unsaved critical wounds when they have their own save and
+ * Damage (`criticalWound`), else none.
+ */
 function perAttack(model: AttackModel): Joint {
   const normalWound = model.wound.pass - model.wound.crit;
-  const toMain = (normalWound + (model.devastating ? 0 : model.wound.crit)) * model.unsaved;
-  const toMortal = model.devastating ? model.wound.crit : 0;
-  const woundRoll: Joint = [[1 - toMain - toMortal, toMortal], [toMain, 0]];
+  const split = model.criticalWound !== undefined && !model.devastating;
+  const toMain = (normalWound + (model.devastating || split ? 0 : model.wound.crit)) * model.unsaved;
+  const toSecond = model.devastating ? model.wound.crit : split ? model.wound.crit * model.criticalWound!.unsaved : 0;
+  const woundRoll: Joint = [[1 - toMain - toSecond, toSecond], [toMain, 0]];
   const autoWound: Joint = [[1 - model.unsaved], [model.unsaved]];
   const normalHit = model.torrent ? 1 : model.hit.pass - model.hit.crit;
   const critHit = model.torrent ? 0 : model.hit.crit;
@@ -106,9 +140,9 @@ function binomial(trials: number, successes: number, p: number): number {
 }
 
 /** Distribution of wounds one event removes before the damaged model's remaining wounds cap it: each wound is lost with probability `lost`. */
-function woundsLost(model: AttackModel, lost: number): number[] {
+function woundsLost(damageRoll: AttackModel["damage"], lost: number): number[] {
   const out: number[] = [];
-  for (const { value, probability } of model.damage) {
+  for (const { value, probability } of damageRoll) {
     const damage = integral(value, "Damage");
     for (let removed = 0; removed <= damage; removed += 1) {
       out[removed] = (out[removed] ?? 0) + probability * binomial(damage, removed, lost);
@@ -117,40 +151,111 @@ function woundsLost(model: AttackModel, lost: number): number[] {
   return Array.from(out, (p) => p ?? 0);
 }
 
-/** Exact allocation of an attacking unit's damage into the target's models. */
-export function allocate(input: EngineInput, dataset?: Dataset): AllocationOutput {
-  return allocateModel(crunchModel(input, dataset).model);
+/**
+ * Exact allocation of an attacking unit's damage into the target's models. Without an explicit
+ * `defences.zeroing`, the input's `damage-zeroing` buffs supply it.
+ */
+export function allocate(input: EngineInput, dataset?: Dataset, defences: AllocationDefences = {}): AllocationOutput {
+  const { output, model } = crunchModel(input, dataset);
+  if (defences.zeroing !== undefined) return allocateModel(model, defences);
+  const { unit, model: perModel } = output.resolved.damageZeroing;
+  if (unit > 0 && perModel > 0) throw new Error("allocate: unit-wide and per-model damage zeroing together are not modelled");
+  if (unit > 0) return allocateModel(model, { zeroing: { uses: unit, per: "unit" } });
+  if (perModel > 0) return allocateModel(model, { zeroing: { uses: perModel, per: "model" } });
+  return allocateModel(model);
 }
 
-export function allocateModel(model: AttackModel): AllocationOutput {
+function zeroingOf(defences: AllocationDefences): DamageZeroing {
+  const zeroing = defences.zeroing ?? { uses: 0, per: "unit" };
+  if (zeroing.per !== "unit" && zeroing.per !== "model") throw new Error(`allocate: zeroing per must be "unit" or "model", got ${String(zeroing.per)}`);
+  if (integral(zeroing.uses, "zeroing uses") < 0) throw new Error(`allocate: zeroing uses must not be negative, got ${zeroing.uses}`);
+  return zeroing;
+}
+
+export function allocateModel(model: AttackModel, defences: AllocationDefences = {}): AllocationOutput {
   const models = integral(model.modelCount, "target models");
   const wounds = integral(model.wounds, "target Wounds");
+  const zeroing = zeroingOf(defences);
   if (models === 0 || wounds === 0) return { damageDealt: 0, modelsDestroyed: 0, modelsDestroyedDistribution: [1] };
-  const dead = models * wounds;
-  // Alive state (m, w) is (m - 1) * wounds + (w - 1); `dead` absorbs.
-  const step = (state: number[], removed: readonly number[]): number[] => {
+  const uses = zeroing.uses + 1;
+  const cells = models * wounds;
+  const dead = cells * uses;
+  // Alive state (m, w, u) is ((m - 1) * wounds + (w - 1)) * uses + u; `dead` absorbs.
+  const step = (state: number[], removed: readonly number[], zeroable: boolean): number[] => {
     const out = new Array<number>(dead + 1).fill(0);
     out[dead] = state[dead]!;
     for (let id = 0; id < dead; id += 1) {
       const p = state[id]!;
       if (p === 0) continue;
-      const alive = Math.floor(id / wounds) + 1;
-      const left = (id % wounds) + 1;
+      const cell = Math.floor(id / uses);
+      const left = (cell % wounds) + 1;
+      const unused = id % uses;
+      if (zeroable && unused > 0) {
+        out[id - 1]! += p;
+        continue;
+      }
+      const alive = Math.floor(cell / wounds) + 1;
+      const refilled = zeroing.per === "model" ? uses - 1 : unused;
       removed.forEach((q, amount) => {
         if (q === 0) return;
-        const next = amount === 0 ? id : amount < left ? id - amount : alive === 1 ? dead : (alive - 2) * wounds + (wounds - 1);
+        const next = amount === 0 ? id : amount < left ? id - amount * uses : alive === 1 ? dead : ((alive - 2) * wounds + (wounds - 1)) * uses + refilled;
         out[next]! += p * q;
       });
     }
     return out;
   };
 
-  const events = (() => {
-    const per = perAttack(model);
+  const per = trim(perAttack(model));
+  const counts = attackCounts(model);
+  const most = Math.max(...counts.keys());
+  const work = most * (most * (per.length - 1) + 1) * (most * (per[0]!.length - 1) + 1);
+  if (work > MAX_EVENT_WORK) throw new Error(`allocate: ${most} attacks exceed the exact allocation bound (work ${work} > ${MAX_EVENT_WORK})`);
+  const normal = woundsLost(model.damage, model.woundLost);
+  let state = new Array<number>(dead + 1).fill(0);
+  state[dead - 1] = 1;
+  const final = new Array<number>(dead + 1).fill(0);
+  if (model.criticalWound !== undefined && !model.devastating) {
+    // Critical wounds with their own save and Damage land in attack order, so the allocation steps
+    // one attack at a time: each attack's normal wounds, then its critical ones.
+    const critical = woundsLost(model.criticalWound.damage, model.woundLost);
+    for (let attacks = 0; attacks <= most; attacks += 1) {
+      const weight = counts.get(attacks) ?? 0;
+      if (weight > 0) state.forEach((q, id) => { final[id]! += weight * q; });
+      if (attacks === most) break;
+      const next = new Array<number>(dead + 1).fill(0);
+      let afterNormal = state;
+      per.forEach((row, normalEvents) => {
+        if (normalEvents > 0) afterNormal = step(afterNormal, normal, true);
+        let after = afterNormal;
+        row.forEach((p, criticalEvents) => {
+          if (criticalEvents > 0) after = step(after, critical, true);
+          if (p > 0) after.forEach((q, id) => { next[id]! += p * q; });
+        });
+      });
+      state = next;
+    }
+  } else {
+    allocateEvents();
+  }
+
+  function allocateEvents(): void {
+    const events = eventTable();
+    // Devastating Wounds' mortal wounds deal a critical wound's own Damage when it has one.
+    const mortal = woundsLost(model.criticalWound?.damage ?? model.damage, model.mortalWoundLost);
+    events.forEach((row, normalEvents) => {
+      if (normalEvents > 0) state = step(state, normal, true);
+      if (!row.some((p) => p > 0)) return;
+      let after = state;
+      row.forEach((p, mortalEvents) => {
+        if (mortalEvents > 0) after = step(after, mortal, false);
+        if (p > 0) after.forEach((q, id) => { final[id]! += p * q; });
+      });
+    });
+  }
+
+  function eventTable(): Joint {
     let total: Joint = [[0]];
     let acc: Joint = [[1]];
-    const counts = attackCounts(model);
-    const most = Math.max(...counts.keys());
     for (let attacks = 0; attacks <= most; attacks += 1) {
       const weight = counts.get(attacks) ?? 0;
       if (weight > 0) {
@@ -162,30 +267,16 @@ export function allocateModel(model: AttackModel): AllocationOutput {
       if (attacks < most) acc = convolve(acc, per);
     }
     return total;
-  })();
-
-  const normal = woundsLost(model, model.woundLost);
-  const mortal = woundsLost(model, model.mortalWoundLost);
-  let state = new Array<number>(dead + 1).fill(0);
-  state[(models - 1) * wounds + (wounds - 1)] = 1;
-  const final = new Array<number>(dead + 1).fill(0);
-  events.forEach((row, normalEvents) => {
-    if (normalEvents > 0) state = step(state, normal);
-    if (!row.some((p) => p > 0)) return;
-    let after = state;
-    row.forEach((p, mortalEvents) => {
-      if (mortalEvents > 0) after = step(after, mortal);
-      if (p > 0) after.forEach((q, id) => { final[id]! += p * q; });
-    });
-  });
+  }
 
   const destroyed = new Array<number>(models + 1).fill(0);
   let damageDealt = 0;
   final.forEach((p, id) => {
-    const alive = id === dead ? 0 : Math.floor(id / wounds) + 1;
-    const remaining = id === dead ? 0 : (alive - 1) * wounds + (id % wounds) + 1;
+    const cell = Math.floor(id / uses);
+    const alive = id === dead ? 0 : Math.floor(cell / wounds) + 1;
+    const remaining = id === dead ? 0 : (alive - 1) * wounds + (cell % wounds) + 1;
     destroyed[models - alive]! += p;
-    damageDealt += p * (dead - remaining);
+    damageDealt += p * (cells - remaining);
   });
   const modelsDestroyed = destroyed.reduce((sum, p, count) => sum + p * count, 0);
   return { damageDealt, modelsDestroyed, modelsDestroyedDistribution: destroyed };

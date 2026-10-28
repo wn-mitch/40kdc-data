@@ -38,7 +38,9 @@ export type Scenario = Pick<EngineContext,
   | "battleRound" | "attackerTurn" | "attackerStrength" | "targetStrength" | "attackerDesignations"
   | "targetDesignations" | "attackerStates" | "targetStates" | "targetClosest" | "attackerObjectives"
   | "targetObjectives" | "attackerGuided" | "attackerNeighbours" | "targetNeighbours" | "activeRules"
-  | "attackerRegions" | "targetRegions" | "objectivesControlled">;
+  | "attackerRegions" | "targetRegions" | "objectivesControlled" | "attackerWounds" | "targetWounds"
+  | "objectives" | "attackerDesignationsApplied" | "targetDesignationsApplied" | "attackerMoves" | "targetMoves"
+  | "testResults" | "attackerKeywordModels" | "targetKeywordModels">;
 
 const STRENGTHS = ["full", "below-starting", "below-half"];
 const STATES = ["engaged", "battle-shocked", "hidden"];
@@ -69,14 +71,24 @@ const REGION_FIELDS: Record<string, (value: unknown) => boolean> = {
   territory: (value) => value === "attacker" || value === "target" || value === "no-mans-land",
   deploymentZone: (value) => value === "attacker" || value === "target",
   wholly: (value) => typeof value === "boolean",
+  designations: strings,
 };
 const regions = (value: unknown) => Array.isArray(value) && value.every((region) => isRecord(region) &&
-  Object.keys(region).filter((key) => key !== "wholly").length === 1 &&
+  Object.keys(region).filter((key) => key !== "wholly").length === 1 + (region.designations === undefined ? 0 : 1) &&
+  (region.designations === undefined || region.terrainArea === true) &&
   Object.entries(region).every(([key, field]) => REGION_FIELDS[key]?.(field) === true));
 const count = (value: unknown) => Number.isInteger(value) && (value as number) >= 0;
 const control = (value: unknown) => isRecord(value) && Object.keys(value).length === 3 &&
   count(value.attacker) && count(value.target) && count(value.total) &&
   (value.attacker as number) + (value.target as number) <= (value.total as number);
+const MOVES = ["normal", "advance", "fall-back", "charge", "remain-stationary", "ingress"];
+const wounds = (value: unknown) => isRecord(value) && Object.keys(value).length === 2 &&
+  Number.isInteger(value.remaining) && Number.isInteger(value.starting) &&
+  (value.remaining as number) >= 1 && (value.remaining as number) <= (value.starting as number);
+const counts = (value: unknown) => isRecord(value) && Object.values(value).every(count);
+const moves = (value: unknown) => strings(value) && (value as string[]).every((move) => MOVES.includes(move));
+const testResults = (value: unknown) => isRecord(value) && Object.entries(value).every(([roll, result]) =>
+  ["leadership", "battle-shock", "charge"].includes(roll) && (result === "success" || result === "failure"));
 const SCENARIO_FIELDS: Record<keyof Scenario, (value: unknown) => boolean> = {
   battleRound: (value) => Number.isInteger(value) && (value as number) >= 1,
   attackerTurn: (value) => typeof value === "boolean",
@@ -96,6 +108,16 @@ const SCENARIO_FIELDS: Record<keyof Scenario, (value: unknown) => boolean> = {
   attackerRegions: regions,
   targetRegions: regions,
   objectivesControlled: control,
+  attackerWounds: wounds,
+  targetWounds: wounds,
+  objectives,
+  attackerDesignationsApplied: counts,
+  targetDesignationsApplied: counts,
+  attackerMoves: moves,
+  targetMoves: moves,
+  testResults,
+  attackerKeywordModels: counts,
+  targetKeywordModels: counts,
 };
 
 /** Parse a scenario declaration, rejecting unknown fields and malformed values. */

@@ -7,8 +7,8 @@ package wh40kdc
 // tools/src/cruncher/scenario-conditions.ts.
 //
 //	activeRules                     []string | []{ability_id, option_id?, definition_id?}
-//	attackerRegions, targetRegions  []{ruleRegion?, terrainArea?, territory?, deploymentZone?, wholly?}
-//	objectivesControlled            {attacker, target, total}
+//	attackerRegions, targetRegions  []{ruleRegion?, terrainArea?, designations?, territory?, deploymentZone?, wholly?}
+//	objectivesControlled            {attacker, target, total}, else counted from objectives
 //	attackerMembers, targetMembers  []{unitId, role: leader|bodyguard|support, keywords}
 //	attackerNeighbours, targetNeighbours  []{keywords, owner: friendly|enemy, distanceInches}
 
@@ -82,21 +82,29 @@ func evaluateInRegion(params, ctx map[string]any, side, abilitySide string) any 
 	if matches == nil {
 		return nil
 	}
+	unknown := false
 	for _, raw := range regions {
 		entry, ok := asMap(raw)
-		if !ok || entry == nil {
+		if !ok || entry == nil || (wholly && entry["wholly"] != true) {
 			continue
 		}
-		if matches(entry) && (!wholly || entry["wholly"] == true) {
+		switch matches(entry) {
+		case true:
 			return true
+		case nil:
+			unknown = true
 		}
+	}
+	if unknown {
+		return nil
 	}
 	return false
 }
 
-// regionMatcher is the scenario-region test for a condition's region, or nil
-// when the scenario cannot describe that region.
-func regionMatcher(region map[string]any, abilitySide string) func(map[string]any) bool {
+// regionMatcher is the scenario-region test for a condition's region (true,
+// false, or nil for unknown), or nil when the scenario cannot describe that
+// region.
+func regionMatcher(region map[string]any, abilitySide string) func(map[string]any) any {
 	if territory, ok := region["territory"].(string); ok {
 		field, wanted := "", ""
 		switch territory {
@@ -115,18 +123,33 @@ func regionMatcher(region map[string]any, abilitySide string) func(map[string]an
 		default:
 			return nil
 		}
-		return func(entry map[string]any) bool { return entry[field] == wanted }
+		return func(entry map[string]any) any { return entry[field] == wanted }
 	}
 	if terrain, ok := asMap(region["terrain_area"]); ok && terrain != nil {
-		// A designated terrain area needs designations the scenario does not carry.
-		if _, designated := terrain["designated"]; designated {
+		rawTag, designated := terrain["designated"]
+		if !designated {
+			return func(entry map[string]any) any { return entry["terrainArea"] == true }
+		}
+		tag, ok := rawTag.(string)
+		if !ok {
 			return nil
 		}
-		return func(entry map[string]any) bool { return entry["terrainArea"] == true }
+		// A designated terrain area needs the area's designations; an entry
+		// without them is unknown.
+		return func(entry map[string]any) any {
+			if entry["terrainArea"] != true {
+				return false
+			}
+			designations, known := asList(entry["designations"])
+			if !known {
+				return nil
+			}
+			return containsFold(designations, tag)
+		}
 	}
 	if ruleRegion, ok := asMap(region["rule_region"]); ok && ruleRegion != nil {
 		if id, ok := ruleRegion["region_id"].(string); ok {
-			return func(entry map[string]any) bool { return entry["ruleRegion"] == id }
+			return func(entry map[string]any) any { return entry["ruleRegion"] == id }
 		}
 	}
 	return nil
@@ -153,11 +176,18 @@ func compareNumbers(left float64, comparison any, right float64) any {
 // evaluateControls evaluates `controls`: objectives the `by` side (friendly
 // unless stated, relative to the ability's side) controls, bounded by `count`,
 // compared with the other side's, or as a `proportion` of every objective.
-// Every stated clause must hold. An objective filter needs per-objective state.
+// Every stated clause must hold. With an objective filter the clauses count
+// only the declared objectives that meet it.
 func evaluateControls(params, ctx map[string]any, abilitySide string) any {
 	control, known := asMap(ctx["objectivesControlled"])
-	if _, filtered := params["objective"]; !known || control == nil || filtered {
-		return nil
+	if objective, filtered := params["objective"]; filtered || !known || control == nil {
+		if !filtered {
+			objective = map[string]any{}
+		}
+		control = objectiveControl(objective, ctx["objectives"], abilitySide)
+		if control == nil {
+			return nil
+		}
 	}
 	sideOf := func(owner any, present bool) string {
 		if !present || owner == "friendly" {
@@ -240,7 +270,8 @@ func evaluateControls(params, ctx map[string]any, abilitySide string) any {
 // members settle. own is the unit the ability belongs to ("" when unknown).
 // Leading needs own to be a Leader with a Bodyguard; led needs another member
 // that is a Leader; attached needs another member. `with` narrows those other
-// members by keyword (friendly units only).
+// members by keyword (friendly units only), or at `level: "model"` to members
+// with a model meeting the keywords.
 func attachmentFromMembers(role, withFilter, rawMembers any, own string) any {
 	members, known := asList(rawMembers)
 	if !known || own == "" {
@@ -290,9 +321,13 @@ func attachmentFromMembers(role, withFilter, rawMembers any, own string) any {
 	}
 	predicate := map[string]any{}
 	for key := range with {
-		if key != "owner" && !isKeywordPredicateKey(key) {
+		if key != "owner" && key != "level" && !isKeywordPredicateKey(key) {
 			return nil
 		}
+	}
+	level, leveled := with["level"]
+	if leveled && level != "unit" && level != "model" {
+		return nil
 	}
 	for _, key := range keywordPredicateKeys {
 		value, present := with[key]
@@ -305,12 +340,53 @@ func attachmentFromMembers(role, withFilter, rawMembers any, own string) any {
 		}
 		predicate[key] = items
 	}
+	if level != "model" {
+		for _, member := range candidates {
+			if unitMatchesAppliesTo(predicate, getStrList(member, "keywords")) {
+				return true
+			}
+		}
+		return false
+	}
+	unknown := false
 	for _, member := range candidates {
-		if unitMatchesAppliesTo(predicate, getStrList(member, "keywords")) {
+		switch memberHasModel(predicate, getStrList(member, "keywords")) {
+		case true:
 			return true
+		case nil:
+			unknown = true
 		}
 	}
+	if unknown {
+		return nil
+	}
 	return false
+}
+
+// memberHasModel reports whether a unit with keywords has a model meeting a
+// keyword predicate. Every model carries the unit's keywords, but a unit's
+// keywords omit its models' own names: a clause needing a keyword holds for
+// every model when the unit carries it and is otherwise unknown, and a clause
+// excluding keywords fails for every model when the unit's keywords already
+// break it.
+func memberHasModel(predicate map[string]any, keywords []string) any {
+	var verdict any = true
+	for _, key := range keywordPredicateKeys {
+		value, present := predicate[key]
+		if !present {
+			continue
+		}
+		holds := unitMatchesAppliesTo(map[string]any{key: value}, keywords)
+		if key == "none_of" || key == "not_all_of" {
+			if !holds {
+				return false
+			}
+			verdict = nil
+		} else if !holds {
+			verdict = nil
+		}
+	}
+	return verdict
 }
 
 func membersWithRole(members []map[string]any, role string) []map[string]any {

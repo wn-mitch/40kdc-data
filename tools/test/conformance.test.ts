@@ -35,6 +35,7 @@ import { compareCell, loadoutCell, type ComparePhase, type LoadoutLine } from ".
 import { attributeStages } from "../src/cruncher/attribution.js";
 import type { Phase, GameEvent, Stratagem } from "../src/generated.js";
 import { effectToBuffs } from "../src/cruncher/from-dsl.js";
+import { resolveGrantedRecords, type GrantedRecord } from "../src/cruncher/granted-records.js";
 import { encodeBase } from "../src/runner.js";
 import { stratagemCanTarget, type EligibilityInput } from "../src/abilities-resolver/index.js";
 import {
@@ -448,6 +449,8 @@ describe("abilities-resolver conformance corpus", () => {
     rating?: string | number;
     /** Frozen DSL for a specimen whose ability left the dataset (used instead of a lookup). */
     effect?: unknown;
+    /** Ability records the effect grants, resolved as printed definitions before translation. */
+    grantedRecords?: Record<string, GrantedRecord>;
     source: { kind: "ability"; abilityId: string; abilityKind: string };
     context: EngineContext;
     perspective?: "attacker" | "target";
@@ -476,7 +479,7 @@ describe("abilities-resolver conformance corpus", () => {
           c.rating,
         )
         : effectToBuffs(
-          withRating(c.effect, c.rating),
+          withRating(c.grantedRecords ? resolveGrantedRecords(c.effect, (id) => c.grantedRecords![id], new Set([c.source.abilityId])) : c.effect, c.rating),
           c.source as never,
           c.context,
           c.perspective ?? "attacker",

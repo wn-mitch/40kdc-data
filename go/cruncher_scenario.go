@@ -227,77 +227,10 @@ func withinObjective(filter map[string]any, rawObjectives any, abilitySide strin
 	if !known {
 		return nil
 	}
-	other := otherSide(abilitySide)
-	sideOf := func(relative any) string {
-		switch relative {
-		case "friendly":
-			return abilitySide
-		case "enemy":
-			return other
-		}
-		return ""
-	}
 	unknown := false
 	for _, rawObjective := range objectives {
 		objective, _ := asMap(rawObjective)
-		var verdict any = true
-		for key, wanted := range filter {
-			var holds any
-			switch key {
-			case "controlled_by":
-				controller, present := objective["controller"]
-				switch {
-				case !present:
-					holds = nil
-				case wanted == "any":
-					holds = controller != "none"
-				case sideOf(wanted) == "":
-					holds = nil
-				default:
-					holds = controller == sideOf(wanted)
-				}
-			case "designated":
-				text, isText := wanted.(string)
-				designations, present := asList(objective["designations"])
-				if !isText || !present {
-					holds = nil
-				} else {
-					holds = containsFold(designations, text)
-				}
-			case "role":
-				holds = presentEquals(objective, "role", wanted)
-			case "home_of":
-				if sideOf(wanted) == "" {
-					holds = nil
-				} else {
-					holds = presentEquals(objective, "homeOf", sideOf(wanted))
-				}
-			case "territory":
-				territory := ""
-				switch wanted {
-				case "your-territory":
-					territory = abilitySide
-				case "enemy-territory":
-					territory = other
-				case "no-mans-land":
-					territory = "no-mans-land"
-				}
-				if territory == "" {
-					holds = nil
-				} else {
-					holds = presentEquals(objective, "territory", territory)
-				}
-			case "name":
-				holds = presentEquals(objective, "name", wanted)
-			}
-			if holds == false {
-				verdict = false
-				break
-			}
-			if holds == nil {
-				verdict = nil
-			}
-		}
+		verdict := objectiveMatches(filter, objective, abilitySide)
 		if verdict == true {
 			return true
 		}
@@ -309,6 +242,81 @@ func withinObjective(filter map[string]any, rawObjectives any, abilitySide strin
 		return nil
 	}
 	return false
+}
+
+// objectiveMatches reports whether one objective meets every property of an
+// objective filter, read from the ability's side. A property the objective
+// leaves out, or the filter states in a form the scenario cannot settle, is
+// unknown (nil).
+func objectiveMatches(filter, objective map[string]any, abilitySide string) any {
+	other := otherSide(abilitySide)
+	sideOf := func(relative any) string {
+		switch relative {
+		case "friendly":
+			return abilitySide
+		case "enemy":
+			return other
+		}
+		return ""
+	}
+	var verdict any = true
+	for key, wanted := range filter {
+		var holds any
+		switch key {
+		case "controlled_by":
+			controller, present := objective["controller"]
+			switch {
+			case !present:
+				holds = nil
+			case wanted == "any":
+				holds = controller != "none"
+			case sideOf(wanted) == "":
+				holds = nil
+			default:
+				holds = controller == sideOf(wanted)
+			}
+		case "designated":
+			text, isText := wanted.(string)
+			designations, present := asList(objective["designations"])
+			if !isText || !present {
+				holds = nil
+			} else {
+				holds = containsFold(designations, text)
+			}
+		case "role":
+			holds = presentEquals(objective, "role", wanted)
+		case "home_of":
+			if sideOf(wanted) == "" {
+				holds = nil
+			} else {
+				holds = presentEquals(objective, "homeOf", sideOf(wanted))
+			}
+		case "territory":
+			territory := ""
+			switch wanted {
+			case "your-territory":
+				territory = abilitySide
+			case "enemy-territory":
+				territory = other
+			case "no-mans-land":
+				territory = "no-mans-land"
+			}
+			if territory == "" {
+				holds = nil
+			} else {
+				holds = presentEquals(objective, "territory", territory)
+			}
+		case "name":
+			holds = presentEquals(objective, "name", wanted)
+		}
+		if holds == false {
+			return false
+		}
+		if holds == nil {
+			verdict = nil
+		}
+	}
+	return verdict
 }
 
 // presentEquals compares an objective field with a wanted value, or returns nil

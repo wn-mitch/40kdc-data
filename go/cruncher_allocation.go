@@ -1,6 +1,7 @@
 package wh40kdc
 
 import (
+	"fmt"
 	"math"
 	"strconv"
 )
@@ -15,10 +16,16 @@ import (
 // Devastating Wounds mortal wounds are inflicted after all normal damage and
 // also damage at most one model each, the rest being lost.
 //
-// The state is (models alive, wounds left on the damaged model). Event counts
-// come from the exact joint distribution of normal and mortal damage events per
-// attack, so Sustained Hits, Lethal Hits and Devastating Wounds keep their
-// correlation within an attack.
+// The state is (models alive, wounds left on the damaged model, zeroing uses
+// left). Event counts come from the exact joint distribution of normal and
+// mortal damage events per attack, so Sustained Hits, Lethal Hits and
+// Devastating Wounds keep their correlation within an attack.
+//
+// A damage-zeroing defence changes an unsaved attack's Damage to 0 before it is
+// rolled. Every normal damage event has the same Damage distribution, so the
+// defender spends a use on the first event it can: for this activation no later
+// choice does better. Mortal-wound events are not attacks with a Damage
+// characteristic and are never zeroed.
 
 // AttackModel is the per-roll parameters behind one crunch, for the discrete
 // allocation stage: every probability is the one the
@@ -47,6 +54,10 @@ type AttackModel struct {
 	WoundLost, MortalWoundLost float64
 	Wounds                     float64
 	ModelCount                 float64
+	// CriticalWound is a critical wound's own save failure and Damage, set only
+	// when a buff applies only on a critical wound. With Devastating Wounds it
+	// skips the save and its mortal wounds deal this Damage.
+	CriticalWound *CriticalWound
 }
 
 // AllocationOutput is the allocation of one crunch's attacks into the target.
@@ -57,6 +68,82 @@ type AllocationOutput struct {
 	// ModelsDestroyedDistribution is the probability of each number of models
 	// destroyed, from 0 to the unit's size.
 	ModelsDestroyedDistribution []float64 `json:"modelsDestroyedDistribution"`
+}
+
+// DamageZeroing is a defence that changes the Damage of an attack allocated to
+// the target to 0, Uses times: shared by the unit (Per "unit"), or available to
+// each model separately (Per "model").
+type DamageZeroing struct {
+	Uses int
+	Per  string
+}
+
+// AllocationDefences are the defender options that act on individual attacks,
+// which only the allocation stage sees.
+type AllocationDefences struct {
+	Zeroing *DamageZeroing
+}
+
+// MaxEventWork is the largest event table the exact computation builds,
+// measured as attacks x table rows x table columns. Past it the allocation is
+// refused rather than approximated.
+const MaxEventWork = 1_000_000
+
+// ParseDamageZeroing reads the wire shape {"uses": N, "per": "unit" | "model"}.
+func ParseDamageZeroing(value map[string]any) (*DamageZeroing, error) {
+	per, _ := value["per"].(string)
+	if per != "unit" && per != "model" {
+		return nil, &crunchError{"allocate: zeroing per must be \"unit\" or \"model\", got " + fmt.Sprint(value["per"])}
+	}
+	raw, ok := value["uses"].(float64)
+	if !ok {
+		return nil, &crunchError{"allocate: zeroing uses must be a number"}
+	}
+	uses, err := integral(raw, "zeroing uses")
+	if err != nil {
+		return nil, err
+	}
+	if uses < 0 {
+		return nil, &crunchError{"allocate: zeroing uses must not be negative, got " + strconv.Itoa(uses)}
+	}
+	return &DamageZeroing{Uses: uses, Per: per}, nil
+}
+
+// trimJoint drops trailing all-zero rows and columns; convolution skips zeros,
+// so the nonzero values are unchanged.
+func trimJoint(table joint) joint {
+	rows := len(table)
+	for rows > 1 && allZero(table[rows-1]) {
+		rows--
+	}
+	columns := len(table[0])
+	for columns > 1 {
+		empty := true
+		for _, row := range table[:rows] {
+			if row[columns-1] != 0 {
+				empty = false
+				break
+			}
+		}
+		if !empty {
+			break
+		}
+		columns--
+	}
+	out := make(joint, rows)
+	for k := range out {
+		out[k] = append([]float64(nil), table[k][:columns]...)
+	}
+	return out
+}
+
+func allZero(row []float64) bool {
+	for _, p := range row {
+		if p != 0 {
+			return false
+		}
+	}
+	return true
 }
 
 // joint holds probabilities indexed [normal events][mortal events].
@@ -131,15 +218,21 @@ func optionalQuantity(stat any) ([]DamageOutcome, error) {
 
 // perAttackEvents is the distribution of one attack's normal and mortal damage events.
 func perAttackEvents(model *AttackModel) (joint, error) {
+	// The second axis counts mortal wounds with Devastating Wounds, otherwise unsaved
+	// critical wounds when they have their own save and Damage (CriticalWound), else none.
 	normalWound := model.WoundPass - model.WoundCrit
 	critToMain := model.WoundCrit
-	toMortal := 0.0
-	if model.Devastating {
+	toSecond := 0.0
+	switch {
+	case model.Devastating:
 		critToMain = 0
-		toMortal = model.WoundCrit
+		toSecond = model.WoundCrit
+	case model.CriticalWound != nil:
+		critToMain = 0
+		toSecond = model.WoundCrit * model.CriticalWound.Unsaved
 	}
 	toMain := (normalWound + critToMain) * model.Unsaved
-	woundRoll := joint{{1 - toMain - toMortal, toMortal}, {toMain, 0}}
+	woundRoll := joint{{1 - toMain - toSecond, toSecond}, {toMain, 0}}
 	autoWound := joint{{1 - model.Unsaved}, {model.Unsaved}}
 	normalHit, critHit := model.HitPass-model.HitCrit, model.HitCrit
 	if model.Torrent {
@@ -218,9 +311,9 @@ func binomial(trials, successes int, p float64) float64 {
 
 // woundsLost is the distribution of wounds one event removes before the damaged
 // model's remaining wounds cap it: each wound is lost with probability lost.
-func woundsLost(model *AttackModel, lost float64) ([]float64, error) {
+func woundsLost(damageRoll []DamageOutcome, lost float64) ([]float64, error) {
 	var out []float64
-	for _, outcome := range model.Damage {
+	for _, outcome := range damageRoll {
 		damage, err := integral(outcome.Value, "Damage")
 		if err != nil {
 			return nil, err
@@ -238,15 +331,37 @@ func woundsLost(model *AttackModel, lost float64) ([]float64, error) {
 // Allocate is the exact allocation of an attacking unit's damage into the
 // target's models, for the same input crunch takes.
 func Allocate(input map[string]any, ds *Dataset) (AllocationOutput, error) {
-	_, _, model, err := crunchModel(input, ds)
+	return AllocateWith(input, ds, AllocationDefences{})
+}
+
+// AllocateWith is Allocate against the target's per-attack defences.
+// Without an explicit defences.Zeroing, the input's damage-zeroing buffs
+// supply it.
+func AllocateWith(input map[string]any, ds *Dataset, defences AllocationDefences) (AllocationOutput, error) {
+	_, res, model, err := crunchModel(input, ds)
 	if err != nil {
 		return AllocationOutput{}, err
 	}
-	return AllocateModel(model)
+	if defences.Zeroing == nil {
+		switch {
+		case res.zeroingUnit > 0 && res.zeroingModel > 0:
+			return AllocationOutput{}, &crunchError{"allocate: unit-wide and per-model damage zeroing together are not modelled"}
+		case res.zeroingUnit > 0:
+			defences.Zeroing = &DamageZeroing{Uses: res.zeroingUnit, Per: "unit"}
+		case res.zeroingModel > 0:
+			defences.Zeroing = &DamageZeroing{Uses: res.zeroingModel, Per: "model"}
+		}
+	}
+	return AllocateModelWith(model, defences)
 }
 
 // AllocateModel allocates the attacks one AttackModel describes.
 func AllocateModel(model *AttackModel) (AllocationOutput, error) {
+	return AllocateModelWith(model, AllocationDefences{})
+}
+
+// AllocateModelWith is AllocateModel against the target's per-attack defences.
+func AllocateModelWith(model *AttackModel, defences AllocationDefences) (AllocationOutput, error) {
 	models, err := integral(model.ModelCount, "target models")
 	if err != nil {
 		return AllocationOutput{}, err
@@ -255,12 +370,24 @@ func AllocateModel(model *AttackModel) (AllocationOutput, error) {
 	if err != nil {
 		return AllocationOutput{}, err
 	}
+	zeroing := DamageZeroing{Uses: 0, Per: "unit"}
+	if defences.Zeroing != nil {
+		zeroing = *defences.Zeroing
+	}
+	if zeroing.Per != "unit" && zeroing.Per != "model" {
+		return AllocationOutput{}, &crunchError{"allocate: zeroing per must be \"unit\" or \"model\", got " + zeroing.Per}
+	}
+	if zeroing.Uses < 0 {
+		return AllocationOutput{}, &crunchError{"allocate: zeroing uses must not be negative, got " + strconv.Itoa(zeroing.Uses)}
+	}
 	if models == 0 || wounds == 0 {
 		return AllocationOutput{0, 0, []float64{1}}, nil
 	}
-	dead := models * wounds
-	// Alive state (m, w) is (m - 1) * wounds + (w - 1); `dead` absorbs.
-	step := func(state, removed []float64) []float64 {
+	uses := zeroing.Uses + 1
+	cells := models * wounds
+	dead := cells * uses
+	// Alive state (m, w, u) is ((m - 1) * wounds + (w - 1)) * uses + u; `dead` absorbs.
+	step := func(state, removed []float64, zeroable bool) []float64 {
 		out := make([]float64, dead+1)
 		out[dead] = state[dead]
 		for id := 0; id < dead; id++ {
@@ -268,8 +395,18 @@ func AllocateModel(model *AttackModel) (AllocationOutput, error) {
 			if p == 0 {
 				continue
 			}
-			alive := id/wounds + 1
-			left := id%wounds + 1
+			cell := id / uses
+			left := cell%wounds + 1
+			unused := id % uses
+			if zeroable && unused > 0 {
+				out[id-1] += p
+				continue
+			}
+			alive := cell/wounds + 1
+			refilled := unused
+			if zeroing.Per == "model" {
+				refilled = uses - 1
+			}
 			for amount, q := range removed {
 				if q == 0 {
 					continue
@@ -278,11 +415,11 @@ func AllocateModel(model *AttackModel) (AllocationOutput, error) {
 				switch {
 				case amount == 0:
 				case amount < left:
-					next = id - amount
+					next = id - amount*uses
 				case alive == 1:
 					next = dead
 				default:
-					next = (alive-2)*wounds + (wounds - 1)
+					next = ((alive-2)*wounds+(wounds-1))*uses + refilled
 				}
 				out[next] += p * q
 			}
@@ -294,13 +431,64 @@ func AllocateModel(model *AttackModel) (AllocationOutput, error) {
 	if err != nil {
 		return AllocationOutput{}, err
 	}
+	per = trimJoint(per)
 	counts, err := attackCounts(model)
 	if err != nil {
 		return AllocationOutput{}, err
 	}
+	most := len(counts) - 1
+	work := most * (most*(len(per)-1) + 1) * (most*(len(per[0])-1) + 1)
+	if work > MaxEventWork {
+		return AllocationOutput{}, &crunchError{"allocate: " + strconv.Itoa(most) + " attacks exceed the exact allocation bound (work " + strconv.Itoa(work) + " > " + strconv.Itoa(MaxEventWork) + ")"}
+	}
+	normal, err := woundsLost(model.Damage, model.WoundLost)
+	if err != nil {
+		return AllocationOutput{}, err
+	}
+	state := make([]float64, dead+1)
+	state[dead-1] = 1
+	final := make([]float64, dead+1)
+	if model.CriticalWound != nil && !model.Devastating {
+		// Critical wounds with their own save and Damage land in attack order, so the
+		// allocation steps one attack at a time: each attack's normal wounds, then its
+		// critical ones.
+		criticalLost, err := woundsLost(model.CriticalWound.Damage, model.WoundLost)
+		if err != nil {
+			return AllocationOutput{}, err
+		}
+		for attacks := 0; attacks <= most; attacks++ {
+			if weight := counts[attacks]; weight > 0 {
+				for id, q := range state {
+					final[id] += weight * q
+				}
+			}
+			if attacks == most {
+				break
+			}
+			next := make([]float64, dead+1)
+			afterNormal := state
+			for normalEvents, row := range per {
+				if normalEvents > 0 {
+					afterNormal = step(afterNormal, normal, true)
+				}
+				after := afterNormal
+				for criticalEvents, p := range row {
+					if criticalEvents > 0 {
+						after = step(after, criticalLost, true)
+					}
+					if p > 0 {
+						for id, q := range after {
+							next[id] += p * q
+						}
+					}
+				}
+			}
+			state = next
+		}
+		return summariseAllocation(final, models, wounds, uses, cells, dead), nil
+	}
 	events := joint{{0}}
 	acc := joint{{1}}
-	most := len(counts) - 1
 	for attacks := 0; attacks <= most; attacks++ {
 		if weight := counts[attacks]; weight > 0 {
 			events = addJoint(events, acc, weight)
@@ -309,21 +497,18 @@ func AllocateModel(model *AttackModel) (AllocationOutput, error) {
 			acc = convolveJoint(acc, per)
 		}
 	}
-
-	normal, err := woundsLost(model, model.WoundLost)
+	// Devastating Wounds' mortal wounds deal a critical wound's own Damage when it has one.
+	mortalRoll := model.Damage
+	if model.CriticalWound != nil {
+		mortalRoll = model.CriticalWound.Damage
+	}
+	mortal, err := woundsLost(mortalRoll, model.MortalWoundLost)
 	if err != nil {
 		return AllocationOutput{}, err
 	}
-	mortal, err := woundsLost(model, model.MortalWoundLost)
-	if err != nil {
-		return AllocationOutput{}, err
-	}
-	state := make([]float64, dead+1)
-	state[(models-1)*wounds+(wounds-1)] = 1
-	final := make([]float64, dead+1)
 	for normalEvents, row := range events {
 		if normalEvents > 0 {
-			state = step(state, normal)
+			state = step(state, normal, true)
 		}
 		anyPositive := false
 		for _, p := range row {
@@ -338,7 +523,7 @@ func AllocateModel(model *AttackModel) (AllocationOutput, error) {
 		after := state
 		for mortalEvents, p := range row {
 			if mortalEvents > 0 {
-				after = step(after, mortal)
+				after = step(after, mortal, false)
 			}
 			if p > 0 {
 				for id, q := range after {
@@ -348,20 +533,27 @@ func AllocateModel(model *AttackModel) (AllocationOutput, error) {
 		}
 	}
 
+	return summariseAllocation(final, models, wounds, uses, cells, dead), nil
+}
+
+// summariseAllocation is the expected wounds removed, the expected models
+// destroyed and their distribution.
+func summariseAllocation(final []float64, models, wounds, uses, cells, dead int) AllocationOutput {
 	destroyed := make([]float64, models+1)
 	damageDealt := 0.0
 	for id, p := range final {
 		alive, remaining := 0, 0
 		if id != dead {
-			alive = id/wounds + 1
-			remaining = (alive-1)*wounds + id%wounds + 1
+			cell := id / uses
+			alive = cell/wounds + 1
+			remaining = (alive-1)*wounds + cell%wounds + 1
 		}
 		destroyed[models-alive] += p
-		damageDealt += p * float64(dead-remaining)
+		damageDealt += p * float64(cells-remaining)
 	}
 	modelsDestroyed := 0.0
 	for count, p := range destroyed {
 		modelsDestroyed += p * float64(count)
 	}
-	return AllocationOutput{damageDealt, modelsDestroyed, destroyed}, nil
+	return AllocationOutput{damageDealt, modelsDestroyed, destroyed}
 }

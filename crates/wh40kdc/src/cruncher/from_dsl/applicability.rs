@@ -85,6 +85,19 @@ pub(super) fn condition_to_applicability(
     let when = |v: Value| App::When(v.as_object().cloned().unwrap_or_default());
     match condition.get("type").and_then(Value::as_str) {
         Some("timing-is") => App::Gate,
+        // A critical wound is a property of the attack: the engine applies the buff to the
+        // attacks that score one. Other rolls are read from the scenario.
+        Some("roll-result") => match params {
+            Some(p)
+                if p.len() == 2
+                    && is_str(p, "roll", "wound")
+                    && is_str(p, "result", "critical")
+                    && perspective == super::TranslationPerspective::Attacker =>
+            {
+                when(json!({ "onCritical": "wound" }))
+            }
+            _ => App::Context,
+        },
         Some("phase-is") => match params.and_then(|p| p.get("phase")).and_then(Value::as_str) {
             Some(phase) => when(json!({ "phases": [phase] })),
             None => App::Context,
@@ -253,6 +266,16 @@ fn describe_contribution(c: &Value) -> String {
             }
         }
         "damage-reduction" => format!("-{} damage", fmt_num(js_number(Some(v)))),
+        "damage-zeroing" => {
+            let uses = js_number(c.get("uses"));
+            let per = if c.get("per").and_then(Value::as_str) == Some("model") {
+                " per model"
+            } else {
+                ""
+            };
+            let plural = if uses == 1.0 { "" } else { "s" };
+            format!("zero the damage of {} attack{plural}{per}", fmt_num(uses))
+        }
         "invulnerable-save" => format!("{}+ invuln", fmt_num(js_number(c.get("threshold")))),
         "crit-threshold" => format!(
             "critical {} on {}+",

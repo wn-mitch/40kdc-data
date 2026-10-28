@@ -43,6 +43,15 @@ from wh40kdc.cruncher.scenario_conditions import (
     is_neighbour_filter,
     within_neighbour,
 )
+from wh40kdc.cruncher.scenario_facts import (
+    bounds_verdict,
+    evaluate_designated,
+    evaluate_own_move,
+    evaluate_phase_event,
+    evaluate_test_result,
+    keyword_model_bounds,
+    objective_matches,
+)
 from wh40kdc.cruncher.weapon_bindings import resolve_named_weapon_bindings
 from wh40kdc.scope import unit_matches_applies_to
 
@@ -101,6 +110,7 @@ def effect_to_buffs(
         "perspective": perspective,
         "abilityId": ability_id,
         "duration": activation.get("duration") if activation else None,
+        "usage": activation.get("usage") if activation else None,
         # Tags the owning ability designates on the units holding it.
         "selfDesignations": self_designations(effect, ability_id),
     }
@@ -399,7 +409,11 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
         # lever for the attacks made while it lasts, as a stance option is.
         effect = node.get("effect")
         if isinstance(effect, dict) and effect.get("type") == "issue-orders":
-            order_opts = {**opts, "duration": node.get("duration", opts.get("duration"))}
+            order_opts = {
+                **opts,
+                "duration": node.get("duration", opts.get("duration")),
+                "usage": opts.get("usage") if node.get("usage") is None else node["usage"],
+            }
             _walk(effect, source, order_opts, out)
             return
         if node.get("trigger") is not None:
@@ -410,7 +424,11 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
             if bound is not effect:
                 _walk({**node, "effect": bound}, source, opts, out)
                 return
-        part_opts = {**opts, "duration": node.get("duration", opts.get("duration"))}
+        part_opts = {
+            **opts,
+            "duration": node.get("duration", opts.get("duration")),
+            "usage": opts.get("usage") if node.get("usage") is None else node["usage"],
+        }
         if (
             node.get("optional") is True
             or node.get("cost") is not None
@@ -1394,11 +1412,31 @@ def with_applicability(buff: Buff, applicability: dict[str, Any] | None) -> Buff
     return {**buff, "applicableWhen": applicability} if applicability else buff
 
 
+def _zeroing_uses(usage: Any) -> dict[str, Any]:
+    """How many attacks a damage-zeroing ability zeroes in one activation, from
+    its usage limit: the smallest count among its limits (a once-per limit is
+    1, an n-per-battle limit its count), shared by the unit unless every limit
+    counts per model. Without a limit, each use zeroes one attack."""
+    candidates = usage if isinstance(usage, list) else [usage]
+    limits = [limit for limit in candidates if _is_object(limit)]
+    if not limits:
+        return {"uses": 1, "per": "unit"}
+    counts = []
+    for limit in limits:
+        count = limit.get("count")
+        whole = isinstance(count, int) and not isinstance(count, bool)
+        whole = whole or (isinstance(count, float) and count.is_integer())
+        counts.append(int(count) if whole and count > 0 else 1)
+    per = "model" if all(limit.get("per") == "model" for limit in limits) else "unit"
+    return {"uses": min(counts), "per": per}
+
+
 def _translate_damage_reduction(
     node: dict[str, Any], source: BuffSource, opts: dict[str, Any], out: EffectTranslation
 ) -> None:
-    """Defender-side damage-reduction. Only the additive numeric form is
-    modelled — ``"half"`` / ``"to-zero"`` are one-use ablation effects."""
+    """Defender-side damage-reduction. A number subtracts from each Damage
+    roll; ``"to-zero"`` is a damage-zeroing defence, counted from the usage
+    limit, for the allocation stage; halving Damage is unsupported."""
     if opts["perspective"] != "target":
         return
     if not _applies_to_buffed_unit(node, "target"):
@@ -1420,13 +1458,18 @@ def _translate_damage_reduction(
             {"source": source, "contribution": {"type": "damage-reduction", "value": reduction}}
         )
         return
-    if reduction in ("half", "to-zero"):
+    if reduction == "to-zero":
+        out["applied"].append(
+            {
+                "source": source,
+                "contribution": {"type": "damage-zeroing", **_zeroing_uses(opts.get("usage"))},
+            }
+        )
+        return
+    if reduction == "half":
         out["unsupported"].append(
             {
-                "reason": (
-                    f'damage-reduction: "{reduction}" is a one-use ablation effect, '
-                    "not modelled by the expected-value engine"
-                ),
+                "reason": "damage-reduction: halving Damage is not modelled by the buff layer",
                 "effectFragment": node,
             }
         )
@@ -1562,8 +1605,8 @@ def _translate_named_region_state(
 
 
 def _is_weapon_scoped_condition(condition: dict[str, Any]) -> bool:
-    """An ``attack-is`` naming weapons, or its negation, or an ``attack-compare``: the resolver
-    gates these per attack."""
+    """An ``attack-is`` naming weapons, an ``attack-compare``, a critical ``roll-result``, or a
+    negation of one: the resolver and the engine gate these per attack."""
     if condition.get("operator") == "not":
         operands = condition.get("operands")
         if not isinstance(operands, list) or len(operands) != 1 or not _is_object(operands[0]):
@@ -1572,6 +1615,8 @@ def _is_weapon_scoped_condition(condition: dict[str, Any]) -> bool:
     if condition.get("type") == "attack-compare":
         return True
     params = condition.get("parameters")
+    if condition.get("type") == "roll-result":
+        return _is_object(params) and params.get("result") == "critical"
     return (
         condition.get("type") == "attack-is"
         and _is_object(params)
@@ -2677,6 +2722,17 @@ def _condition_to_applicability(
     ctype = condition.get("type")
     if ctype == "timing-is":
         return "gate"
+    if ctype == "roll-result":
+        # A critical wound is a property of the attack: the engine applies the buff to the attacks
+        # that score one. Other rolls are read from the scenario.
+        critical_wound = (
+            params is not None
+            and params.get("roll") == "wound"
+            and params.get("result") == "critical"
+            and len(params) == 2
+            and perspective == "attacker"
+        )
+        return {"onCritical": "wound"} if critical_wound else "context"
     if ctype == "phase-is":
         phase = params.get("phase") if params else None
         return {"phases": [phase]} if isinstance(phase, str) else "context"
@@ -2735,6 +2791,8 @@ def _combine_applicability(a: dict[str, Any], b: dict[str, Any]) -> dict[str, An
         )
     if b.get("rollType"):
         out["rollType"] = b["rollType"]
+    if b.get("onCritical"):
+        out["onCritical"] = b["onCritical"]
     if b.get("requiresTargetKeyword"):
         out["requiresTargetKeyword"] = b["requiresTargetKeyword"]
     if b.get("requiresAttackerKeyword"):
@@ -2813,6 +2871,10 @@ def _describe_contribution(c: dict[str, Any]) -> str:
         return f"feel no pain {_num_str(c['threshold'])}+"
     if ctype == "damage-reduction":
         return f"-{_num_str(c['value'])} damage"
+    if ctype == "damage-zeroing":
+        uses = c["uses"]
+        per = " per model" if c["per"] == "model" else ""
+        return f"zero the damage of {_num_str(uses)} attack{'' if uses == 1 else 's'}{per}"
     if ctype == "invulnerable-save":
         return f"{_num_str(c['threshold'])}+ invuln"
     if ctype == "crit-threshold":
@@ -3135,69 +3197,9 @@ def _within_objective(filt: dict[str, Any], objectives: Any, ability_side: str) 
     """
     if objectives is None:
         return "unknown"
-    other = "target" if ability_side == "attacker" else "attacker"
-
-    def side_of(relative: Any) -> str | None:
-        if relative == "friendly":
-            return ability_side
-        if relative == "enemy":
-            return other
-        return None
-
     unknown = False
     for objective in objectives:
-        verdict: bool | str = True
-        for key, wanted in filt.items():
-            holds: bool | str
-            if key == "controlled_by":
-                controller = objective.get("controller")
-                if controller is None:
-                    holds = "unknown"
-                elif wanted == "any":
-                    holds = controller != "none"
-                elif side_of(wanted) is None:
-                    holds = "unknown"
-                else:
-                    holds = controller == side_of(wanted)
-            elif key == "designated" and isinstance(wanted, str):
-                designations = objective.get("designations")
-                holds = (
-                    "unknown"
-                    if designations is None
-                    else any(d.lower() == wanted.lower() for d in designations)
-                )
-            elif key == "role":
-                role = objective.get("role")
-                holds = "unknown" if role is None else role == wanted
-            elif key == "home_of":
-                home_of = objective.get("homeOf")
-                holds = (
-                    "unknown"
-                    if home_of is None or side_of(wanted) is None
-                    else home_of == side_of(wanted)
-                )
-            elif key == "territory":
-                territory = (
-                    ability_side
-                    if wanted == "your-territory"
-                    else other
-                    if wanted == "enemy-territory"
-                    else "no-mans-land"
-                    if wanted == "no-mans-land"
-                    else None
-                )
-                actual = objective.get("territory")
-                holds = "unknown" if actual is None or territory is None else actual == territory
-            elif key == "name":
-                name = objective.get("name")
-                holds = "unknown" if name is None else name == wanted
-            else:
-                holds = "unknown"
-            if holds is False:
-                verdict = False
-                break
-            if holds == "unknown":
-                verdict = "unknown"
+        verdict = objective_matches(filt, objective, ability_side)
         if verdict is True:
             return True
         if verdict == "unknown":
@@ -3241,6 +3243,14 @@ def _evaluate_condition(
         return ctx["timing"] == wanted
     if ctype == "happened":
         p = params or {}
+        moved = evaluate_own_move(p, ctx, _condition_side(p.get("subject"), perspective))
+        if moved is not None:
+            return moved
+        phase_event = evaluate_phase_event(
+            p, ctx, lambda ref: _condition_side(ref, perspective)
+        )
+        if phase_event is not None:
+            return phase_event
         filt = p.get("filter")
         types = filt.get("move_types") if _is_object(filt) else None
         types = types if isinstance(types, list) else []
@@ -3298,6 +3308,14 @@ def _evaluate_condition(
         return _matches_unit_filter(
             p.get("filter"), ctx, side, "friendly" if side == own_side else "enemy"
         )
+    if ctype == "designated":
+        p = params or {}
+        by_side = None if p.get("by") is None else _condition_side(p["by"], perspective)
+        return evaluate_designated(
+            p, ctx, by_side, "attacker" if perspective == "attacker" else "target"
+        )
+    if ctype == "roll-result":
+        return evaluate_test_result(params or {}, ctx)
     if ctype == "army-faction":
         # "Your Army Faction" is the army of the side whose ability it is.
         faction = params.get("faction") if params else None
@@ -3306,12 +3324,21 @@ def _evaluate_condition(
             return "unknown"
         return army == faction
     if ctype == "model-count":
-        # "contains N or more models": min and max are inclusive. A keyword-restricted
-        # count needs per-keyword model counts the context does not carry.
+        # "contains N or more models": min and max are inclusive. A keyword-restricted count
+        # reads the declared per-keyword model counts, or every model when all of them carry it.
         p = params or {}
-        if p.get("keyword") is not None:
-            return "unknown"
         side = _condition_side(p.get("subject"), perspective)
+        if p.get("keyword") is not None:
+            if not isinstance(p["keyword"], str) or side is None:
+                return "unknown"
+            prefix = "attacker" if side == "attacker" else "target"
+            bounds = keyword_model_bounds(
+                p["keyword"],
+                ctx.get(f"{prefix}KeywordModels"),
+                ctx.get(f"{prefix}ModelKeywords"),
+                ctx.get(f"{prefix}ModelCount"),
+            )
+            return "unknown" if bounds is None else bounds_verdict(p, bounds)
         if side is None:
             return "unknown"
         count = ctx.get("attackerModelCount" if side == "attacker" else "targetModelCount")

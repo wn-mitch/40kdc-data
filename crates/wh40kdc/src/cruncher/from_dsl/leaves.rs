@@ -525,12 +525,25 @@ pub(super) fn damage_reduction(node: &Obj, opts: &WalkOpts, out: &mut Out) {
         );
         return;
     }
-    if let Some(r @ ("half" | "to-zero")) = reduction.and_then(Value::as_str) {
-        out.unsupported(
-            format!("damage-reduction: \"{r}\" is a one-use ablation effect, not modelled by the expected-value engine"),
-            node,
-        );
-        return;
+    match reduction.and_then(Value::as_str) {
+        Some("to-zero") => {
+            let (uses, per) = zeroing_uses(opts.usage.as_ref());
+            emit(
+                opts,
+                out,
+                &weapon_applicability(m),
+                json!({ "type": "damage-zeroing", "uses": uses, "per": per }),
+            );
+            return;
+        }
+        Some("half") => {
+            out.unsupported(
+                "damage-reduction: halving Damage is not modelled by the buff layer",
+                node,
+            );
+            return;
+        }
+        _ => {}
     }
     out.unsupported(
         format!(
@@ -539,6 +552,36 @@ pub(super) fn damage_reduction(node: &Obj, opts: &WalkOpts, out: &mut Out) {
         ),
         node,
     );
+}
+
+/// How many attacks a damage-zeroing ability zeroes in one activation, from its
+/// usage limit: the smallest count among its limits (a once-per limit is 1, an
+/// n-per-battle limit its count), shared by the unit unless every limit counts
+/// per model. Without a limit, each use zeroes one attack.
+fn zeroing_uses(usage: Option<&Value>) -> (u64, &'static str) {
+    let limits: Vec<&serde_json::Map<String, Value>> = match usage {
+        Some(Value::Array(items)) => items.iter().filter_map(Value::as_object).collect(),
+        Some(other) => other.as_object().into_iter().collect(),
+        None => Vec::new(),
+    };
+    if limits.is_empty() {
+        return (1, "unit");
+    }
+    let uses = limits
+        .iter()
+        .map(|limit| {
+            limit
+                .get("count")
+                .and_then(Value::as_f64)
+                .filter(|count| count.fract() == 0.0 && *count > 0.0)
+                .map_or(1, |count| count as u64)
+        })
+        .min()
+        .unwrap_or(1);
+    let per_model = limits
+        .iter()
+        .all(|limit| limit.get("per").and_then(Value::as_str) == Some("model"));
+    (uses, if per_model { "model" } else { "unit" })
 }
 
 pub(super) fn invulnerable_save(node: &Obj, opts: &WalkOpts, out: &mut Out) {

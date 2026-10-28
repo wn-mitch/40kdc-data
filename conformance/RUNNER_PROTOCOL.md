@@ -204,12 +204,17 @@ with camelCase fields).
 }}
 ```
 
-Same input envelope as `crunch`. Response value is
+Same input envelope as `crunch`, plus an optional
+`"zeroing":{"uses":1,"per":"unit"}` (`per` is `"unit"` or `"model"`) for a
+defence that changes an attack's Damage to 0; a non-object `zeroing` answers
+`INVALID_INPUT`. Without it, the `damage-zeroing` buffs in `buffs` supply the
+defence. Response value is
 `{damageDealt, modelsDestroyed, modelsDestroyedDistribution}`: the expected
 wounds removed, the expected models destroyed, and the probability of each
 number of models destroyed from `0` to the target's model count. A quantity
-the allocation needs as a whole number (Attacks, Damage, Wounds, model counts)
-that resolves to a fraction answers `CRUNCH_ERROR`. Floats compare with
+the allocation needs as a whole number (Attacks, Damage, Wounds, model counts,
+zeroing uses) that resolves to a fraction, an unknown `per`, or an event table
+past the exact bound answers `CRUNCH_ERROR`. Floats compare with
 `±5e-4` per value; the distribution's length is exact.
 
 ### `translate_scoring`

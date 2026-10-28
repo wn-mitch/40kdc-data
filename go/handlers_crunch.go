@@ -97,7 +97,19 @@ func (s *RunnerState) handleAllocate(args any) map[string]any {
 	if errR != nil {
 		return errR
 	}
-	out, err := Allocate(input, s.dataset())
+	var defences AllocationDefences
+	if raw, present := a["zeroing"]; present && raw != nil {
+		value, ok := asMap(raw)
+		if !ok {
+			return errResp("INVALID_INPUT", detail("allocate.zeroing must be an object"))
+		}
+		zeroing, err := ParseDamageZeroing(value)
+		if err != nil {
+			return errResp("CRUNCH_ERROR", detail(err.Error()))
+		}
+		defences.Zeroing = zeroing
+	}
+	out, err := AllocateWith(input, s.dataset(), defences)
 	if err != nil {
 		return errResp("CRUNCH_ERROR", detail(err.Error()))
 	}

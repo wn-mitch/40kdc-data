@@ -8,7 +8,9 @@ use std::collections::BTreeMap;
 use std::path::PathBuf;
 
 use serde_json::{json, Value};
-use wh40kdc::cruncher::{effect_to_buffs, BuffSource, EngineContext, TranslationPerspective};
+use wh40kdc::cruncher::{
+    effect_to_buffs, resolve_granted_records, BuffSource, EngineContext, TranslationPerspective,
+};
 use wh40kdc::data::{with_rating, EligibilityInput};
 use wh40kdc::{Dataset, Phase};
 
@@ -106,6 +108,17 @@ fn run_dsl_corpus(filename: &str) {
         // A rated rule reads the unit's printed rating; the case supplies it.
         let rating = case.get("rating").filter(|r| !r.is_null());
         let result = if inline {
+            // Ability records the effect grants resolve as printed definitions, the granting
+            // ability itself excluded.
+            let raw_effect = match case.get("grantedRecords").and_then(Value::as_object) {
+                Some(records) => {
+                    let lookup = |ability: &str| records.get(ability).cloned();
+                    let own = case["source"]["abilityId"].as_str().unwrap_or_default();
+                    resolve_granted_records(&raw_effect, &lookup, &[own.to_string()].into())
+                        .unwrap_or(raw_effect)
+                }
+                None => raw_effect,
+            };
             let effect = with_rating(&raw_effect, rating);
             effect_to_buffs(&effect, &source, &context, perspective)
         } else {

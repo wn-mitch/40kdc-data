@@ -36,18 +36,24 @@ mod attack_compare;
 pub mod attribution;
 pub mod buffs;
 mod context;
+mod critical_wounds;
 mod damage_roll;
 pub mod engine;
 pub mod from_dsl;
 pub mod from_keyword;
 mod gates;
+pub mod granted_records;
 pub mod recipient_snapshots;
 mod resolved;
 pub mod scenario;
 mod scenario_conditions;
+mod scenario_facts;
 mod weapon_bindings;
 
-pub use allocation::{allocate, allocate_model, AllocationError, AllocationOutput};
+pub use allocation::{
+    allocate, allocate_model, allocate_model_with, allocate_with, AllocationDefences,
+    AllocationError, AllocationOutput, DamageZeroing, ZeroingPer, MAX_EVENT_WORK,
+};
 pub use attack_compare::attack_comparison_holds;
 pub use attribution::{attribute_stages, AttributedStage, StageLift};
 pub use buffs::{
@@ -65,6 +71,7 @@ pub use from_dsl::{
     EffectTranslation, StanceOptionRef, TranslationPerspective, UnsupportedFragment,
 };
 pub use from_keyword::buffs_from_keyword;
+pub use granted_records::resolve_granted_records;
 pub use recipient_snapshots::RecipientSnapshot;
 pub use scenario::{
     ActiveRule, AttachedMember, MemberRole, ModelWounds, NeighbourOwner, ObjectiveController,

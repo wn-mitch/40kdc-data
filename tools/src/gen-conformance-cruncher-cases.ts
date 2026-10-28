@@ -1,5 +1,5 @@
 import type { Dataset } from "./data/dataset.js";
-import { crunch, type BuffSource, type EngineContext, type RecipientSnapshot, type WeaponKeywordRef } from "./cruncher/index.js";
+import { crunch, type Buff, type BuffSource, type EngineContext, type RecipientSnapshot, type WeaponKeywordRef } from "./cruncher/index.js";
 import { effectToBuffs, type ActivatableBuff } from "./cruncher/from-dsl.js";
 import type { Trigger, UnitSelector } from "./generated.js";
 
@@ -7,7 +7,7 @@ export const RECIPIENT_CASE_PREFIX = "canonical/recipient-snapshot/";
 export const HALF_WEAPON_RANGE_CASE_PREFIX = "canonical/half-weapon-range/";
 export const SCENARIO_CASE_PREFIX = "canonical/scenario/";
 
-interface DslInput {
+export interface DslInput {
   caseId: string;
   abilityId: string;
   effect: unknown;
@@ -119,7 +119,7 @@ export function canonicalHalfWeaponRangeCases() {
 }
 
 /** The from-dsl row's expectation: contributions, reasons and levers, as every port projects them. */
-function dslExpectation(row: DslInput) {
+export function dslExpectation(row: DslInput) {
   const result = effectToBuffs(row.effect, row.source, row.context, row.perspective);
   return { ...row, expected: {
     applied: result.applied.map((applied) => applied.contribution),
@@ -185,6 +185,29 @@ export function canonicalScenarioCases() {
     { unitId: "squad", role: "bodyguard" as const, keywords: bodyguard },
   ];
   const neighbour = { keywords: ["BATTLELINE", "INFANTRY"], owner: "friendly" as const, distanceInches: 5 };
+  const guided = { type: "guided", parameters: {} };
+  const defenderWounds = { type: "wounds", parameters: { subject: "defender", remaining_max: 3 } };
+  const championCount = { type: "model-count", parameters: { subject: "this-unit", keyword: "EXAMPLE CHAMPION", min: 1 } };
+  const noChampion = { type: "model-count", parameters: { subject: "this-unit", keyword: "EXAMPLE CHAMPION", max: 0 } };
+  const marksApplied = { type: "designated", parameters: { tag: "example-mark", by: "this-unit", count: { min: 2 } } };
+  const markedObjective = { type: "designated", parameters: { subject: { objective: { role: "central" } }, tag: "example-mark" } };
+  const holdsOutlying = { type: "controls", parameters: { objective: { role: "non-home" }, count: { min: 2 } } };
+  const markedTerrain = { type: "in-region", parameters: { subject: "this-unit", region: { terrain_area: { designated: "example-ruin" } } } };
+  const advanced = { type: "happened", parameters: { event: "move-ended", filter: { move_types: ["advance", "fall-back"] }, window: "turn" } };
+  const defenderCharged = { type: "happened", parameters: { subject: "defender", event: "move-ended", filter: { move_types: ["charge"] }, window: "turn" } };
+  const testFailed = { type: "roll-result", parameters: { roll: "leadership", result: "failure" } };
+  const criticalWound = { type: "roll-result", parameters: { roll: "wound", result: "critical" } };
+  const modelLed = (filter: Record<string, unknown>) => ({ type: "attachment", parameters: { role: "leading", subject: "this-model", with: { level: "model", ...filter } } });
+  const phaseEvent = (parameters: Record<string, unknown>) => ({ type: "happened", parameters: { window: "phase", ...parameters } });
+  const selectedToFight = phaseEvent({ event: "selected", filter: { to: "fight" } });
+  const killedModel = (by: string) => phaseEvent({ event: "model-destroyed", object: { owner: "enemy", level: "model" }, filter: { by } });
+  const killedUnits = phaseEvent({ event: "destroyed", object: { owner: "enemy" }, filter: { by: "this-unit" }, count: { min: 2 } });
+  const lostThisModel = phaseEvent({ event: "model-destroyed", object: "this-model", count: { min: 1 } });
+  const lostModel = phaseEvent({ event: "model-destroyed", object: "model-in-this-unit" });
+  const pactPassed = phaseEvent({ event: "after-roll", filter: { roll: "dark-pact", result: "success" } });
+  const hitByRanged = phaseEvent({ event: "after-roll", object: "defender", filter: { roll: "hit", result: "success", attack_type: "ranged" } });
+  const hitDefender = phaseEvent({ event: "after-roll", object: "defender", filter: { roll: "hit", result: "success" } });
+  const outlying = (controller: "attacker" | "target" | undefined) => controller === undefined ? { role: "non-home" as const } : { role: "non-home" as const, controller };
   const inputs: Array<{ id: string; effect: unknown; context: Partial<EngineContext>; source?: DslInput["source"]; perspective?: DslInput["perspective"] }> = [
     { id: "rule-active-option", effect: gated(doctrine), context: { activeRules: [{ ability_id: "example-doctrines", option_id: "assault" }] } },
     { id: "rule-active-other-option", effect: gated(doctrine), context: { activeRules: [{ ability_id: "example-doctrines", option_id: "tactical" }] } },
@@ -225,6 +248,66 @@ export function canonicalScenarioCases() {
     { id: "own-toughness-bound", effect: woundGated(tougherTarget), context: { phase: "fight", attackerToughness: 7 } },
     { id: "own-toughness-unbound", effect: woundGated(tougherTarget), context: { phase: "fight" } },
     { id: "own-toughness-defender-unbound", effect: defensive(enemyWeaker), context: { attackerToughness: 7 }, perspective: "target" },
+    { id: "guided-true", effect: gated(guided), context: { attackerGuided: true } },
+    { id: "guided-false", effect: gated(guided), context: { attackerGuided: false } },
+    { id: "guided-undeclared", effect: gated(guided), context: {} },
+    { id: "wounds-defender-remaining", effect: gated(defenderWounds), context: { targetWounds: { remaining: 2, starting: 6 } } },
+    { id: "wounds-defender-unhurt", effect: gated(defenderWounds), context: { targetWounds: { remaining: 6, starting: 6 } } },
+    { id: "model-count-keyword-declared", effect: gated(championCount), context: { attackerKeywordModels: { "example champion": 1 } } },
+    { id: "model-count-keyword-declared-none", effect: gated(championCount), context: { attackerKeywordModels: { "EXAMPLE CHAMPION": 0 } } },
+    { id: "model-count-keyword-every-model", effect: gated(noChampion), context: { attackerModelKeywords: ["EXAMPLE CHAMPION"], attackerModelCount: 3 } },
+    { id: "model-count-keyword-unit-only", effect: gated(championCount), context: { attackerKeywords: ["INFANTRY"], attackerModelCount: 3 } },
+    { id: "designated-applied-count", effect: gated(marksApplied), context: { attackerDesignationsApplied: { "example-mark": 2 } } },
+    { id: "designated-applied-below", effect: gated(marksApplied), context: { attackerDesignationsApplied: { "example-mark": 1, "other-mark": 3 } } },
+    { id: "designated-applied-undeclared", effect: gated(marksApplied), context: {} },
+    { id: "designated-applied-defender", effect: defensive(marksApplied), context: { attackerDesignationsApplied: { "example-mark": 2 }, targetDesignationsApplied: {} }, perspective: "target" },
+    { id: "designated-objective", effect: gated(markedObjective), context: { objectives: [{ role: "central", designations: ["EXAMPLE-MARK"] }, { role: "home" }] } },
+    { id: "designated-objective-unmarked", effect: gated(markedObjective), context: { objectives: [{ role: "central", designations: [] }] } },
+    { id: "designated-objective-unknown", effect: gated(markedObjective), context: { objectives: [{ role: "central" }] } },
+    { id: "controls-objective-filter", effect: gated(holdsOutlying), context: { objectives: [outlying("attacker"), outlying("attacker"), { role: "home", controller: "attacker" }] } },
+    { id: "controls-objective-filter-short", effect: gated(holdsOutlying), context: { objectives: [outlying("attacker"), outlying("target"), { role: "home", controller: "attacker" }] } },
+    { id: "controls-objective-filter-uncontrolled-unknown", effect: gated(holdsOutlying), context: { objectives: [outlying("attacker"), outlying(undefined)] } },
+    { id: "controls-objective-filter-defender", effect: defensive(holdsOutlying), context: { objectives: [outlying("target"), outlying("target"), outlying("attacker")] }, perspective: "target" },
+    { id: "controls-from-objectives", effect: gated(half), context: { objectives: [outlying("attacker"), outlying("target")] } },
+    { id: "in-region-designated-terrain", effect: gated(markedTerrain), context: { attackerRegions: [{ terrainArea: true, designations: ["example-ruin"] }] } },
+    { id: "in-region-designated-other", effect: gated(markedTerrain), context: { attackerRegions: [{ terrainArea: true, designations: ["other-ruin"] }, { ruleRegion: "example-region" }] } },
+    { id: "in-region-designated-unknown", effect: gated(markedTerrain), context: { attackerRegions: [{ terrainArea: true }] } },
+    { id: "happened-own-move", effect: gated(advanced), context: { attackerMoves: ["fall-back"] } },
+    { id: "happened-own-other-move", effect: gated(advanced), context: { attackerMoves: ["normal"] } },
+    { id: "happened-own-move-undeclared", effect: gated(advanced), context: {} },
+    { id: "happened-defender-charged", effect: gated(defenderCharged), context: { targetMoves: ["charge"], attackerMoves: [] } },
+    { id: "happened-defender-not-charged", effect: gated(defenderCharged), context: { targetMoves: ["normal"], attackerCharged: true } },
+    { id: "roll-result-declared", effect: gated(testFailed), context: { testResults: { leadership: "failure" } } },
+    { id: "roll-result-other", effect: gated(testFailed), context: { testResults: { leadership: "success", "battle-shock": "failure" } } },
+    { id: "roll-result-undeclared", effect: gated(testFailed), context: {} },
+    { id: "attachment-with-model-keyword", effect: gated(modelLed({ all_of: ["EXAMPLE SQUAD"] })), context: { attackerMembers: members(["EXAMPLE SQUAD"]) }, source: attached },
+    { id: "attachment-with-model-name-unknown", effect: gated(modelLed({ all_of: ["EXAMPLE SERGEANT"] })), context: { attackerMembers: members(["EXAMPLE SQUAD"]) }, source: attached },
+    { id: "attachment-with-model-excluded", effect: gated(modelLed({ none_of: ["EXAMPLE SQUAD"] })), context: { attackerMembers: members(["EXAMPLE SQUAD"]) }, source: attached },
+    { id: "attachment-with-model-level-unit", effect: gated({ type: "attachment", parameters: { role: "leading", subject: "this-model", with: { level: "unit", all_of: ["OTHER SQUAD"] } } }), context: { attackerMembers: members(["EXAMPLE SQUAD"]) }, source: attached },
+    { id: "happened-selected-to-fight", effect: gated(selectedToFight), context: { phase: "fight", attackerSelected: ["fight"] } },
+    { id: "happened-selected-other", effect: gated(selectedToFight), context: { phase: "fight", attackerSelected: ["shoot"] } },
+    { id: "happened-selected-undeclared", effect: gated(selectedToFight), context: { phase: "fight" } },
+    { id: "happened-selected-event-subject", effect: gated(phaseEvent({ subject: "event-subject", event: "selected", filter: { to: "fight" } })), context: { phase: "fight", attackerSelected: ["fight"] } },
+    { id: "happened-selected-defender", effect: defensive(selectedToFight), context: { phase: "fight", attackerSelected: [], targetSelected: ["fight"] }, perspective: "target" },
+    { id: "happened-killed-model", effect: gated(killedModel("this-unit")), context: { attackerKills: { models: 2, units: 0 } } },
+    { id: "happened-killed-none", effect: gated(killedModel("this-unit")), context: { attackerKills: { models: 0, units: 0 } } },
+    { id: "happened-killed-by-model-unknown", effect: gated(killedModel("this-model")), context: { attackerKills: { models: 3, units: 1 } } },
+    { id: "happened-killed-by-model-none", effect: gated(killedModel("this-model")), context: { attackerKills: { models: 0, units: 0 } } },
+    { id: "happened-killed-units-short", effect: gated(killedUnits), context: { attackerKills: { models: 9, units: 1 } } },
+    { id: "happened-killed-units", effect: gated(killedUnits), context: { attackerKills: { models: 9, units: 2 } } },
+    { id: "happened-killed-undeclared", effect: gated(killedUnits), context: {} },
+    { id: "happened-lost-this-model-none", effect: gated(lostThisModel), context: { attackerLosses: 0 } },
+    { id: "happened-lost-this-model-unknown", effect: gated(lostThisModel), context: { attackerLosses: 2 } },
+    { id: "happened-lost-model", effect: gated(lostModel), context: { attackerLosses: 2 } },
+    { id: "happened-rolled-critical-success", effect: gated(pactPassed), context: { attackerRolls: [{ roll: "dark-pact", result: "critical" }] } },
+    { id: "happened-rolled-failure", effect: gated(pactPassed), context: { attackerRolls: [{ roll: "dark-pact", result: "failure" }, { roll: "hit", result: "success" }] } },
+    { id: "happened-rolled-undeclared", effect: gated(pactPassed), context: {} },
+    { id: "happened-rolled-against", effect: gated(hitDefender), context: { targetRolledAgainst: [{ roll: "hit", result: "success" }], attackerRolledAgainst: [] } },
+    { id: "happened-rolled-against-narrowed", effect: gated(hitByRanged), context: { targetRolledAgainst: [{ roll: "hit", result: "success" }] } },
+    { id: "happened-rolled-against-none", effect: gated(hitByRanged), context: { targetRolledAgainst: [] } },
+    { id: "roll-result-critical-wound-gate", effect: gated(criticalWound), context: { testResults: { leadership: "failure" } } },
+    { id: "roll-result-critical-hit-unknown", effect: gated({ type: "roll-result", parameters: { roll: "hit", result: "critical" } }), context: {} },
+    { id: "roll-result-critical-wound-defender-unknown", effect: defensive(criticalWound), context: {}, perspective: "target" },
   ];
   return inputs.map((input) => withGates(dslExpectation({
     caseId: `${SCENARIO_CASE_PREFIX}${input.id}`,
@@ -279,6 +362,44 @@ export function canonicalAttackCompareCases(ds: Dataset) {
     const result = crunch({ attacker: { weapon: weapon.raw, profileIndex: 0 }, target: { unit: unit.raw, profileIndex: 0 }, modelsFiring: 5, context, buffs }, ds);
     return { filename: `canonical-attack-compare-${row.id}.json`, value: {
       name: `Canonical attack comparison: ${row.id}`,
+      attacker: { weaponId: weapon.id, profileIndex: 0 }, target: { unitId: unit.id, profileIndex: 0 },
+      modelsFiring: 5, context, buffs,
+      expected: { stages: Object.fromEntries(result.stages.map((stage) => [stage.name, Math.round(stage.expected * 1e4) / 1e4])) },
+    } };
+  });
+}
+
+/**
+ * Pin buffs that apply only on a critical wound in the damage path: those wounds take their save at
+ * their own AP and deal their own Damage, including as Devastating Wounds' mortal wounds.
+ */
+export function canonicalCriticalWoundCases(ds: Dataset) {
+  const source = { kind: "ability", abilityId: "fabricated-critical-wound", abilityKind: "unit" } as const;
+  const onCritical = (effect: unknown) => ({ type: "conditional", condition: { type: "roll-result", parameters: { roll: "wound", result: "critical" } }, effect });
+  const apImprove = onCritical({ type: "stat-modifier", target: "this-unit", modifier: { stat: "AP", operation: "improve", value: 2 } });
+  const damageAdd = onCritical({ type: "stat-modifier", target: "this-unit", modifier: { stat: "D", operation: "add", value: 1 } });
+  const devastating = { type: "weapon-ability-grant", target: "this-unit", modifier: { keywords: [{ keyword_id: "devastating-wounds" }] } };
+  const defender: Buff = { source: { kind: "ability", abilityId: "fabricated-defender", abilityKind: "unit" }, contribution: { type: "reroll-one", roll: "save" } };
+  const inputs: { id: string; effects: unknown[]; extra?: Buff[] }[] = [
+    { id: "ap", effects: [apImprove] },
+    { id: "damage", effects: [damageAdd] },
+    { id: "ap-and-damage", effects: [apImprove, damageAdd] },
+    { id: "devastating-damage", effects: [devastating, damageAdd] },
+    { id: "ap-with-save-reroll-one", effects: [apImprove], extra: [defender] },
+  ];
+  const weapon = ds.weapons.getAny("bolt-rifle");
+  const unit = ds.units.getAny("intercessor-squad");
+  if (!weapon || !unit) throw new Error("canonical critical-wound corpus requires bolt-rifle and intercessor-squad");
+  return inputs.map((row) => {
+    const context: EngineContext = { phase: "shooting", withinHalfRange: true, attackerStationary: false };
+    const buffs = [...row.effects.flatMap((effect) => {
+      const translated = effectToBuffs(effect, source, context);
+      if (translated.unsupported.length || translated.activatable.length) throw new Error(`canonical critical-wound ${row.id}: expected extracted buffs`);
+      return translated.applied;
+    }), ...(row.extra ?? [])];
+    const result = crunch({ attacker: { weapon: weapon.raw, profileIndex: 0 }, target: { unit: unit.raw, profileIndex: 0 }, modelsFiring: 5, context, buffs }, ds);
+    return { filename: `canonical-critical-wound-${row.id}.json`, value: {
+      name: `Canonical critical wound: ${row.id}`,
       attacker: { weaponId: weapon.id, profileIndex: 0 }, target: { unitId: unit.id, profileIndex: 0 },
       modelsFiring: 5, context, buffs,
       expected: { stages: Object.fromEntries(result.stages.map((stage) => [stage.name, Math.round(stage.expected * 1e4) / 1e4])) },

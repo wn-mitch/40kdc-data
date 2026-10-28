@@ -1182,6 +1182,488 @@
           }
         ]
       }
+    },
+    {
+      "caseId": "canonical/scenario/designated-applied-defender",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "designated",
+          "parameters": {
+            "tag": "example-mark",
+            "by": "this-unit",
+            "count": {
+              "min": 2
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "attacker",
+          "modifier": {
+            "roll": "hit",
+            "operation": "subtract",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerDesignationsApplied": {
+          "example-mark": 2
+        },
+        "targetDesignationsApplied": {}
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/controls-objective-filter-defender",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "controls",
+          "parameters": {
+            "objective": {
+              "role": "non-home"
+            },
+            "count": {
+              "min": 2
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "attacker",
+          "modifier": {
+            "roll": "hit",
+            "operation": "subtract",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "objectives": [
+          {
+            "role": "non-home",
+            "controller": "target"
+          },
+          {
+            "role": "non-home",
+            "controller": "target"
+          },
+          {
+            "role": "non-home",
+            "controller": "attacker"
+          }
+        ]
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [
+          {
+            "type": "hit-mod",
+            "value": -1
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": [],
+        "applicableWhen": [
+          null
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/scenario/happened-selected-defender",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "happened",
+          "parameters": {
+            "window": "phase",
+            "event": "selected",
+            "filter": {
+              "to": "fight"
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "attacker",
+          "modifier": {
+            "roll": "hit",
+            "operation": "subtract",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "fight",
+        "attackerSelected": [],
+        "targetSelected": [
+          "fight"
+        ]
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [
+          {
+            "type": "hit-mod",
+            "value": -1
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": [],
+        "applicableWhen": [
+          null
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/scenario/roll-result-critical-wound-defender-unknown",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "roll-result",
+          "parameters": {
+            "roll": "wound",
+            "result": "critical"
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "attacker",
+          "modifier": {
+            "roll": "hit",
+            "operation": "subtract",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"roll-result\" against current context"
+        ],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/granted-record/defender-side",
+      "abilityId": "fabricated-grantor",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-grantor",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "this-unit",
+        "modifier": {
+          "ability": "fabricated-ward"
+        }
+      },
+      "grantedRecords": {
+        "fabricated-ward": {
+          "effect": {
+            "type": "roll-modifier",
+            "target": "attacker",
+            "modifier": {
+              "roll": "hit",
+              "operation": "subtract",
+              "value": 1
+            }
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [
+          {
+            "type": "hit-mod",
+            "value": -1
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/damage-zeroing/unlimited",
+      "abilityId": "fabricated-plating",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-plating",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "damage-reduction",
+        "target": "this-unit",
+        "modifier": {
+          "reduction": "to-zero"
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [
+          {
+            "type": "damage-zeroing",
+            "uses": 1,
+            "per": "unit"
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/damage-zeroing/n-per-battle",
+      "abilityId": "fabricated-plating",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-plating",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "ability-part",
+        "usage": {
+          "frequency": "n-per-battle",
+          "count": 2,
+          "per": "unit"
+        },
+        "effect": {
+          "type": "damage-reduction",
+          "target": "this-unit",
+          "modifier": {
+            "reduction": "to-zero"
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": [
+          {
+            "id": "fabricated-plating#zero the damage of 2 attacks",
+            "label": "zero the damage of 2 attacks",
+            "group": null,
+            "requires": [
+              {
+                "type": "ability-part",
+                "usage": {
+                  "frequency": "n-per-battle",
+                  "count": 2,
+                  "per": "unit"
+                }
+              }
+            ],
+            "capRaise": null,
+            "buffs": [
+              {
+                "type": "damage-zeroing",
+                "uses": 2,
+                "per": "unit"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/damage-zeroing/per-model",
+      "abilityId": "fabricated-plating",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-plating",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "ability-part",
+        "usage": {
+          "frequency": "once-per-battle-round",
+          "per": "model"
+        },
+        "effect": {
+          "type": "damage-reduction",
+          "target": "this-unit",
+          "modifier": {
+            "reduction": "to-zero"
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": [
+          {
+            "id": "fabricated-plating#zero the damage of 1 attack per model",
+            "label": "zero the damage of 1 attack per model",
+            "group": null,
+            "requires": [
+              {
+                "type": "ability-part",
+                "usage": {
+                  "frequency": "once-per-battle-round",
+                  "per": "model"
+                }
+              }
+            ],
+            "capRaise": null,
+            "buffs": [
+              {
+                "type": "damage-zeroing",
+                "uses": 1,
+                "per": "model"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/damage-zeroing/tightest-limit",
+      "abilityId": "fabricated-plating",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-plating",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "ability-part",
+        "usage": [
+          {
+            "frequency": "n-per-battle",
+            "count": 3,
+            "per": "model"
+          },
+          {
+            "frequency": "once-per-turn",
+            "per": "unit"
+          }
+        ],
+        "effect": {
+          "type": "damage-reduction",
+          "target": "this-unit",
+          "modifier": {
+            "reduction": "to-zero"
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": [
+          {
+            "id": "fabricated-plating#zero the damage of 1 attack",
+            "label": "zero the damage of 1 attack",
+            "group": null,
+            "requires": [
+              {
+                "type": "ability-part",
+                "usage": [
+                  {
+                    "frequency": "n-per-battle",
+                    "count": 3,
+                    "per": "model"
+                  },
+                  {
+                    "frequency": "once-per-turn",
+                    "per": "unit"
+                  }
+                ]
+              }
+            ],
+            "capRaise": null,
+            "buffs": [
+              {
+                "type": "damage-zeroing",
+                "uses": 1,
+                "per": "unit"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/damage-zeroing/half",
+      "abilityId": "fabricated-plating",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-plating",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "damage-reduction",
+        "target": "this-unit",
+        "modifier": {
+          "reduction": "half"
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "damage-reduction: halving Damage is not modelled by the buff layer"
+        ],
+        "activatable": []
+      }
     }
   ]
 }

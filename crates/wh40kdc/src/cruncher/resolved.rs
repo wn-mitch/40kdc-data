@@ -4,6 +4,14 @@
 
 use super::buffs::{BuffSource, RerollSubset, RollKind, WeaponKeywordRef};
 
+/// Damage-zeroing uses a buff stack grants, summed over its sources.
+#[derive(Clone, Debug, Default)]
+pub struct ZeroingUses {
+    pub unit: usize,
+    pub model: usize,
+    pub sources: Vec<BuffSource>,
+}
+
 /// Read-out of a resolved buff stack, with provenance per field.
 #[derive(Clone, Debug, Default)]
 pub struct ResolvedModifiers {
@@ -30,6 +38,9 @@ pub struct ResolvedModifiers {
     /// stack in 10e); the dominant source is the one whose value matches the
     /// surviving reduction.
     pub damage_reduction: HighestMod,
+    /// Damage-zeroing uses, summed over sources: a pool the unit shares and
+    /// uses for each model.
+    pub damage_zeroing: ZeroingUses,
     /// Ability-granted invulnerable save. Best (lowest threshold) wins. `None`
     /// when no ability granted one; the engine still uses the unit's printed
     /// `invuln_sv` from the profile in that case.

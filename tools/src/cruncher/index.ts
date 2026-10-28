@@ -34,8 +34,12 @@ export {
   type AttributedStage,
   type StageLift,
 } from "./attribution.js";
+export { resolveGrantedRecords, type GrantedRecord, type GrantedRecordLookup } from "./granted-records.js";
 export {
   allocate,
   allocateModel,
+  MAX_EVENT_WORK,
+  type AllocationDefences,
   type AllocationOutput,
+  type DamageZeroing,
 } from "./allocation.js";

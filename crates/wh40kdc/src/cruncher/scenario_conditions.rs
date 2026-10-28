@@ -9,9 +9,10 @@ use serde_json::{Map, Value};
 use super::buffs::{AbilityKind, AttachmentRole, BuffSource, EngineContext};
 use super::from_dsl::TranslationPerspective;
 use super::scenario::{
-    ActiveRule, AttachedMember, MemberRole, NeighbourOwner, ObjectiveTerritory, ScenarioNeighbour,
-    ScenarioRegion, ScenarioSide,
+    has_designation, ActiveRule, AttachedMember, MemberRole, NeighbourOwner, ObjectiveTerritory,
+    ScenarioNeighbour, ScenarioRegion, ScenarioSide,
 };
+use super::scenario_facts::objective_control;
 
 type Obj = Map<String, Value>;
 
@@ -123,14 +124,21 @@ pub(crate) fn evaluate_in_region(
     let wholly = params.get("wholly") == Some(&Value::Bool(true))
         || models.and_then(Value::as_str) == Some("every");
     let matches = region_matcher(region, ability_side)?;
-    Some(
-        regions
-            .iter()
-            .any(|entry| matches(entry) && (!wholly || entry.wholly == Some(true))),
-    )
+    let mut unknown = false;
+    for entry in regions {
+        if wholly && entry.wholly != Some(true) {
+            continue;
+        }
+        match matches(entry) {
+            Some(true) => return Some(true),
+            None => unknown = true,
+            Some(false) => {}
+        }
+    }
+    (!unknown).then_some(false)
 }
 
-type RegionMatcher = Box<dyn Fn(&ScenarioRegion) -> bool>;
+type RegionMatcher = Box<dyn Fn(&ScenarioRegion) -> Option<bool>>;
 
 fn region_matcher(region: &Obj, ability_side: TranslationPerspective) -> Option<RegionMatcher> {
     let mine = scenario_side(ability_side);
@@ -142,12 +150,12 @@ fn region_matcher(region: &Obj, ability_side: TranslationPerspective) -> Option<
     if let Some(territory) = region.get("territory").and_then(Value::as_str) {
         let territory_is = |want: ObjectiveTerritory| -> Option<RegionMatcher> {
             Some(Box::new(move |entry: &ScenarioRegion| {
-                entry.territory == Some(want)
+                Some(entry.territory == Some(want))
             }))
         };
         let zone_is = |want: ScenarioSide| -> Option<RegionMatcher> {
             Some(Box::new(move |entry: &ScenarioRegion| {
-                entry.deployment_zone == Some(want)
+                Some(entry.deployment_zone == Some(want))
             }))
         };
         return match territory {
@@ -161,12 +169,22 @@ fn region_matcher(region: &Obj, ability_side: TranslationPerspective) -> Option<
         };
     }
     if let Some(area) = region.get("terrain_area").and_then(Value::as_object) {
-        // A designated terrain area needs designations the scenario does not carry.
-        if stated(area.get("designated")).is_some() {
-            return None;
-        }
-        return Some(Box::new(|entry: &ScenarioRegion| {
-            entry.terrain_area == Some(true)
+        let Some(tag) = stated(area.get("designated")) else {
+            return Some(Box::new(|entry: &ScenarioRegion| {
+                Some(entry.terrain_area == Some(true))
+            }));
+        };
+        // A designated terrain area needs the area's designations; an entry without them is
+        // unknown.
+        let tag = tag.as_str()?.to_string();
+        return Some(Box::new(move |entry: &ScenarioRegion| {
+            if entry.terrain_area != Some(true) {
+                return Some(false);
+            }
+            entry
+                .designations
+                .as_deref()
+                .map(|list| has_designation(list, &tag))
         }));
     }
     let id = region
@@ -176,7 +194,7 @@ fn region_matcher(region: &Obj, ability_side: TranslationPerspective) -> Option<
         .and_then(Value::as_str)?
         .to_string();
     Some(Box::new(move |entry: &ScenarioRegion| {
-        entry.rule_region.as_deref() == Some(id.as_str())
+        Some(entry.rule_region.as_deref() == Some(id.as_str()))
     }))
 }
 
@@ -193,16 +211,22 @@ fn compare(left: f64, comparison: Option<&Value>, right: f64) -> Option<bool> {
 
 /// `controls`: objectives the `by` side (friendly unless stated, relative to the ability's side)
 /// controls, bounded by `count`, compared with the other side's, or as a `proportion` of every
-/// objective. Every stated clause must hold. An objective filter needs per-objective state.
+/// objective. Every stated clause must hold. With an objective filter the clauses count only the
+/// declared objectives that meet it.
 pub(crate) fn evaluate_controls(
     params: &Obj,
     ctx: &EngineContext,
     ability_side: TranslationPerspective,
 ) -> Option<bool> {
-    let control = ctx.objectives_controlled?;
-    if stated(params.get("objective")).is_some() {
-        return None;
-    }
+    let objective = stated(params.get("objective"));
+    let control = match (objective, ctx.objectives_controlled) {
+        (None, Some(control)) => control,
+        _ => objective_control(
+            objective.unwrap_or(&Value::Object(Obj::new())),
+            ctx.objectives.as_deref(),
+            ability_side,
+        )?,
+    };
     let side_of = |owner: Option<&Value>| match stated(owner).map(Value::as_str) {
         None | Some(Some("friendly")) => Some(ability_side),
         Some(Some("enemy")) => Some(other(ability_side)),
@@ -340,16 +364,53 @@ pub(crate) fn attachment_from_members(
     }
     if with
         .keys()
-        .any(|key| key != "owner" && !KEYWORD_CLAUSES.contains(&key.as_str()))
+        .any(|key| key != "owner" && key != "level" && !KEYWORD_CLAUSES.contains(&key.as_str()))
     {
         return None;
     }
+    let level = stated(with.get("level"));
+    let model_level = match level.map(Value::as_str) {
+        None | Some(Some("unit")) => false,
+        Some(Some("model")) => true,
+        _ => return None,
+    };
     let predicate = keyword_predicate(with)?;
-    Some(
-        candidates
-            .iter()
-            .any(|member| keyword_predicate_holds(&predicate, &member.keywords)),
-    )
+    if !model_level {
+        return Some(
+            candidates
+                .iter()
+                .any(|member| keyword_predicate_holds(&predicate, &member.keywords)),
+        );
+    }
+    let mut unknown = false;
+    for member in &candidates {
+        match member_has_model(&predicate, &member.keywords) {
+            Some(true) => return Some(true),
+            None => unknown = true,
+            Some(false) => {}
+        }
+    }
+    (!unknown).then_some(false)
+}
+
+/// Whether a unit with `keywords` has a model meeting a keyword predicate. Every model carries
+/// the unit's keywords, but a unit's keywords omit its models' own names: a clause needing a
+/// keyword holds for every model when the unit carries it and is otherwise unknown, and a clause
+/// excluding keywords fails for every model when the unit's keywords already break it.
+fn member_has_model(predicate: &[(&str, Vec<&str>)], keywords: &[String]) -> Option<bool> {
+    let mut verdict = Some(true);
+    for (clause, list) in predicate {
+        let holds = keyword_predicate_holds(&[(clause, list.clone())], keywords);
+        if matches!(*clause, "none_of" | "not_all_of") {
+            if !holds {
+                return Some(false);
+            }
+            verdict = None;
+        } else if !holds {
+            verdict = None;
+        }
+    }
+    verdict
 }
 
 /// A `within.of` that names other units by keyword and owner.
@@ -449,8 +510,14 @@ mod tests {
             evaluate_in_region(&wholly, &ctx, Target, Target),
             Some(false)
         );
+        // The target's only region is a territory: it is in no terrain area, designated or not.
         let designated = obj(json!({ "region": { "terrain_area": { "designated": "x" } } }));
-        assert_eq!(evaluate_in_region(&designated, &ctx, Target, Target), None);
+        assert_eq!(
+            evaluate_in_region(&designated, &ctx, Target, Target),
+            Some(false)
+        );
+        let area = self::ctx(json!({ "targetRegions": [{ "terrainArea": true }] }));
+        assert_eq!(evaluate_in_region(&designated, &area, Target, Target), None);
         assert_eq!(evaluate_in_region(&enemy, &ctx, Attacker, Target), None);
     }
 

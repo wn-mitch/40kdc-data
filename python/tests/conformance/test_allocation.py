@@ -23,7 +23,11 @@ def _cases() -> list[dict[str, Any]]:
 @pytest.mark.parametrize("case", _cases(), ids=lambda c: c["name"][:50])
 def test_allocation_case(dataset: Any, case: dict[str, Any]) -> None:
     cruncher_case = json.loads((_CRUNCHER_DIR / case["cruncher_case"]).read_text(encoding="utf-8"))
-    actual = allocate(build_engine_input(dataset, cruncher_case), dataset)
+    defences = {"zeroing": case["zeroing"]} if "zeroing" in case else None
+    # A case's `buffs` are appended to the cruncher case's own.
+    if "buffs" in case:
+        cruncher_case = {**cruncher_case, "buffs": [*cruncher_case["buffs"], *case["buffs"]]}
+    actual = allocate(build_engine_input(dataset, cruncher_case), dataset, defences)
     expected = case["expected"]
     for field in ("damageDealt", "modelsDestroyed"):
         assert actual[field] == pytest.approx(expected[field], abs=TOLERANCE), field

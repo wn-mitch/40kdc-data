@@ -106,6 +106,25 @@ describe("stack damage scenario", () => {
     expect(() => parseScenario({ activeRules: [{ option_id: "assault" }] })).toThrow("activeRules is malformed");
   });
 
+  it("declares wounds, objectives, applied designations, moves, test results and keyword model counts", () => {
+    const declared = {
+      attackerWounds: { remaining: 4, starting: 12 },
+      objectives: [{ role: "non-home", controller: "attacker" }, { role: "home", controller: "target" }],
+      attackerDesignationsApplied: { "example-mark": 2 },
+      targetMoves: ["advance", "charge"],
+      testResults: { leadership: "failure" },
+      attackerKeywordModels: { "EXAMPLE CHAMPION": 1 },
+      targetRegions: [{ terrainArea: true, designations: ["example-ruin"] }],
+    };
+    expect(parseScenario(declared)).toEqual(declared);
+    expect(() => parseScenario({ targetWounds: { remaining: 13, starting: 12 } })).toThrow("targetWounds is malformed");
+    expect(() => parseScenario({ attackerWounds: { remaining: 0, starting: 12 } })).toThrow("attackerWounds is malformed");
+    expect(() => parseScenario({ attackerMoves: ["teleport"] })).toThrow("attackerMoves is malformed");
+    expect(() => parseScenario({ testResults: { hit: "critical" } })).toThrow("testResults is malformed");
+    expect(() => parseScenario({ targetDesignationsApplied: { "example-mark": -1 } })).toThrow("targetDesignationsApplied is malformed");
+    expect(() => parseScenario({ attackerRegions: [{ ruleRegion: "flow-of-magic", designations: ["x"] }] })).toThrow("attackerRegions is malformed");
+  });
+
   it("states the crunch's own facts and lets the scenario declare the rest", () => {
     const dataset = Dataset.embedded();
     const faction = resolveFactionContext(dataset, "chaos-space-marines");

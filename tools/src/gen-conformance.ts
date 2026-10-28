@@ -59,7 +59,9 @@ import { selectAdapter } from "./import/adapter.js";
 import type { ParsedRoster, Roster } from "./import/types.js";
 import { encodeBase } from "./runner.js";
 import { attributeStages } from "./cruncher/attribution.js";
-import { allocate } from "./cruncher/allocation.js";
+import { allocate, type AllocationOutput, type DamageZeroing } from "./cruncher/allocation.js";
+import type { GrantedRecord } from "./cruncher/granted-records.js";
+import type { Buff } from "./cruncher/buffs.js";
 import type { EngineInput } from "./cruncher/index.js";
 import {
   resolveLayout,
@@ -69,6 +71,7 @@ import {
 import { keystoneMeasurements, BOARD_INCHES } from "./terrain/keystones.js";
 import {
   canonicalAttackCompareCases,
+  canonicalCriticalWoundCases,
   canonicalHalfWeaponRangeCases,
   canonicalScenarioCases,
   canonicalRecipientCases,
@@ -78,6 +81,8 @@ import {
   RECIPIENT_CASE_PREFIX,
   stanceOptionFields,
 } from "./gen-conformance-cruncher-cases.js";
+import { canonicalDamageZeroingCases, DAMAGE_ZEROING_CASE_PREFIX } from "./gen-conformance-zeroing-cases.js";
+import { canonicalGrantedRecordCases, GRANTED_RECORD_CASE_PREFIX, withGrantedRecords } from "./gen-conformance-granted-cases.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = join(__dirname, "../..");
@@ -1161,14 +1166,45 @@ const ALLOCATION_CASE_FILES = [
   "16-wailing-doom-sweep-melee-vs-intercessor.json",
   "17-wailing-doom-strike-melee-vs-intercessor.json",
   "24-crit-threshold-hit-5-lethal-bolter-vs-intercessor.json",
+  // Critical wounds with their own save (AP) or Damage, and as Devastating Wounds mortal wounds.
+  "canonical-critical-wound-ap.json",
+  "canonical-critical-wound-damage.json",
+  "canonical-critical-wound-devastating-damage.json",
+];
+
+/**
+ * Allocation cases with a damage-zeroing defence: a single big model spending a unit-wide use,
+ * multi-wound models each with their own use, and Devastating Wounds whose mortal wounds the
+ * defence never zeroes.
+ */
+const ALLOCATION_ZEROING_CASES: Array<{ cruncher_case: string; label: string; zeroing?: DamageZeroing; buffs?: Buff[] }> = [
+  { cruncher_case: "04-multi-melta-half-range-stationary-vs-knight.json", label: "1 use per unit", zeroing: { uses: 1, per: "unit" } },
+  { cruncher_case: "15-wailing-doom-ranged-vs-intercessor.json", label: "1 use per model", zeroing: { uses: 1, per: "model" } },
+  { cruncher_case: "16-wailing-doom-sweep-melee-vs-intercessor.json", label: "2 uses per unit", zeroing: { uses: 2, per: "unit" } },
+  { cruncher_case: "10-fnp-vs-mortal-devastating-lascannon-vs-cultists.json", label: "2 uses per unit", zeroing: { uses: 2, per: "unit" } },
+  // The defence comes from the defender's buffs, uses from two sources adding up.
+  { cruncher_case: "16-wailing-doom-sweep-melee-vs-intercessor.json", label: "2 uses per unit from buffs", buffs: [
+    { source: { kind: "ability", abilityId: "fabricated-plating", abilityKind: "unit" }, contribution: { type: "damage-zeroing", uses: 1, per: "unit" } },
+    { source: { kind: "ability", abilityId: "fabricated-shroud", abilityKind: "unit" }, contribution: { type: "damage-zeroing", uses: 1, per: "unit" } },
+  ] },
 ];
 
 function genAllocation(): void {
   const ds = Dataset.embedded();
-  const cases = ALLOCATION_CASE_FILES.map((filename) => {
+  const cases: Array<{ name: string; cruncher_case: string; zeroing?: DamageZeroing; buffs?: Buff[]; expected: AllocationOutput }> = ALLOCATION_CASE_FILES.map((filename) => {
     const { name, input } = loadAttributionInput(ds, filename);
     return { name, cruncher_case: filename, expected: allocate(input, ds) };
   });
+  for (const { cruncher_case, label, zeroing, buffs } of ALLOCATION_ZEROING_CASES) {
+    const { name, input } = loadAttributionInput(ds, cruncher_case);
+    // `buffs` are appended to the cruncher case's own buffs.
+    const withBuffs = buffs ? { ...input, buffs: [...input.buffs, ...buffs] } : input;
+    cases.push({
+      name: `${name} + damage zeroing (${label})`, cruncher_case,
+      ...(zeroing ? { zeroing } : {}), ...(buffs ? { buffs } : {}),
+      expected: allocate(withBuffs, ds, zeroing ? { zeroing } : {}),
+    });
+  }
   writeJson(join(CONFORMANCE, "allocation", "cases.json"), cases);
   console.log(`allocation/cases.json: ${cases.length} cases`);
 }
@@ -3966,6 +4002,12 @@ function genEffectTranslation(): void {
     { caseId: "fidelity/condition-attack-is-defensive-fnp-weapons", effect: { type: "conditional", condition: { type: "attack-is", parameters: { attack_type: "ranged", weapons: { keyword: { keyword_id: "blast" } } } }, effect: { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 5 } } } },
     { caseId: "fidelity/condition-attack-is-defensive-save-and", effect: { type: "conditional", condition: { operator: "and", operands: [{ type: "matches", parameters: { filter: { within: { of: { objective: {} }, range: "objective-control" } } } }, { type: "attack-is", parameters: { attack_type: "ranged" } }] }, effect: { type: "stat-modifier", target: "this-unit", modifier: { stat: "Sv", operation: "improve", value: 1 } } } },
     { caseId: "fidelity/condition-attack-is-defensive-or-block", effect: { type: "sequence", steps: [{ type: "invulnerable-save", target: "this-unit", modifier: { invuln_sv: 6 } }, { type: "conditional", condition: { operator: "or", operands: [{ type: "attack-is", parameters: { attack_type: "psychic" } }, { type: "matches", parameters: { subject: "attacker", filter: { all_of: ["DAEMON"] } } }] }, effect: { type: "invulnerable-save", target: "this-unit", modifier: { invuln_sv: 4 } } }] } },
+    // A modifier that hinders the attacker is resolved from the attacked unit's side too; one that helps it is not.
+    { caseId: "fidelity/condition-attack-is-attacker-damage", effect: { type: "conditional", condition: { type: "attack-is", parameters: { attack_type: "ranged" } }, effect: { type: "stat-modifier", target: "attacker", modifier: { stat: "D", operation: "subtract", value: 1 } } } },
+    { caseId: "fidelity/condition-attack-is-attacker-hit-trigger", trigger: { event: "targets-selected", filter: { kind: "attack" }, subject: { owner: "enemy" }, object: { owner: "friendly", all_of: ["ALPHA"] } }, effect: { type: "conditional", condition: { type: "attack-is", parameters: { attack_type: "ranged" } }, effect: { type: "roll-modifier", target: "attacker", modifier: { roll: "hit", operation: "subtract", value: 1 } } } },
+    { caseId: "fidelity/condition-attack-is-attacker-negated", effect: { type: "conditional", condition: { operator: "not", operands: [{ type: "attack-is", parameters: { attack_type: "psychic" } }] }, effect: { type: "stat-modifier", target: "attacker", modifier: { stat: "AP", operation: "worsen", value: 1 } } } },
+    { caseId: "fidelity/condition-attack-is-attacker-reroll", effect: { type: "conditional", condition: { type: "attack-is", parameters: { attack_type: "ranged" } }, effect: { type: "re-roll", target: "attacker", modifier: { roll: "hit", subset: "ones" } } } },
+    { caseId: "fidelity/condition-attack-is-attacker-bs-subtract", effect: { type: "conditional", condition: { type: "attack-is", parameters: { attack_type: "melee" } }, effect: { type: "stat-modifier", target: "attacker", modifier: { stat: "WS", operation: "subtract", value: 1 } } } },
     { caseId: "fidelity/condition-attack-is-offensive", effect: { type: "conditional", condition: { type: "attack-is", parameters: { attack_type: "ranged" } }, effect: { type: "stat-modifier", target: "this-unit", modifier: { stat: "AP", operation: "improve", value: 1 } } } },
     // An objective selection's reach: your unit's own control, a bearer's control range, an explicit distance.
     { caseId: "fidelity/select-objective-unit-controls", effect: { type: "select-objective", selector: { filter: { controlled_by: "friendly", within: { range: "objective-control", of: "this-unit" } }, bind_as: "objective", count: { min: 1, max: 1 } }, effect: { type: "objective-sticky", target: "this-unit" } } },
@@ -4179,6 +4221,8 @@ type ResolverDslCase = {
   abilityId: string;
   rating?: string | number;
   effect?: unknown;
+  /** Ability records the effect grants, resolved as printed definitions before translation. */
+  grantedRecords?: Record<string, GrantedRecord>;
   source: BuffSource;
   context: EngineContext;
   perspective?: "attacker" | "target";
@@ -4205,7 +4249,7 @@ function genResolverDslCases(): void {
           row.rating,
         )
         : effectToBuffs(
-          withRating(row.effect, row.rating),
+          withRating(withGrantedRecords(row), row.rating),
           row.source,
           row.context,
           perspective,
@@ -4232,7 +4276,7 @@ function genResolverDslCases(): void {
 
 /** Append fabricated direct-API cases without duplicating their stable identities on regen. */
 function genCanonicalCruncherCases(): void {
-  const appended = [...canonicalRecipientCases(), ...canonicalHalfWeaponRangeCases(), ...canonicalScenarioCases()];
+  const appended = [...canonicalRecipientCases(), ...canonicalHalfWeaponRangeCases(), ...canonicalScenarioCases(), ...canonicalGrantedRecordCases(), ...canonicalDamageZeroingCases()];
   for (const [filename, perspective] of [
     ["from-dsl.json", "attacker"],
     ["defensive-from-dsl.json", "target"],
@@ -4242,13 +4286,14 @@ function genCanonicalCruncherCases(): void {
     corpus.cases = [
       ...corpus.cases.filter((row) => typeof row.caseId !== "string" ||
         (!row.caseId.startsWith(RECIPIENT_CASE_PREFIX) && !row.caseId.startsWith(HALF_WEAPON_RANGE_CASE_PREFIX) &&
-          !row.caseId.startsWith(SCENARIO_CASE_PREFIX))),
+          !row.caseId.startsWith(SCENARIO_CASE_PREFIX) && !row.caseId.startsWith(GRANTED_RECORD_CASE_PREFIX) &&
+          !row.caseId.startsWith(DAMAGE_ZEROING_CASE_PREFIX))),
       ...appended.filter((row) => row.perspective === perspective),
     ];
     writeJson(path, corpus);
     console.log(`abilities-resolver/${filename}: ${corpus.cases.length} cases`);
   }
-  for (const { filename, value } of [...canonicalWeaponScopeCases(Dataset.embedded()), ...canonicalAttackCompareCases(Dataset.embedded())]) {
+  for (const { filename, value } of [...canonicalWeaponScopeCases(Dataset.embedded()), ...canonicalAttackCompareCases(Dataset.embedded()), ...canonicalCriticalWoundCases(Dataset.embedded())]) {
     writeJson(join(CONFORMANCE, "cruncher", filename), value);
   }
 }

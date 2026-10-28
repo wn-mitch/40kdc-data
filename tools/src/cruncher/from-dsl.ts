@@ -42,7 +42,10 @@ import type {
 import type { Phase } from "../generated.js";
 import { bindEachRecipient, bindEventSubject, planSelection } from "./from-dsl-selection.js";
 import { matchesUnitFilter } from "./unit-filter.js";
-import { attachmentFromMembers, evaluateControls, evaluateInRegion, evaluateRuleActive } from "./scenario-conditions.js";
+import {
+  attachmentFromMembers, boundsVerdict, evaluateControls, evaluateDesignated, evaluateInRegion, evaluateOwnMove, evaluatePhaseEvent, evaluateRuleActive,
+  evaluateTestResult, keywordModelBounds,
+} from "./scenario-conditions.js";
 import { RECIPIENT_SNAPSHOT_UNAVAILABLE, resolveRecipientSnapshots } from "./recipient-snapshots.js";
 import { resolveNamedWeaponBindings } from "./weapon-bindings.js";
 
@@ -219,7 +222,7 @@ export function effectToBuffs(
     if (activation) activationSources.set(to, activation);
   });
   const abilityId = source.kind === "ability" ? source.abilityId : "effect";
-  walk(effect, source, { context, perspective, abilityId, duration: activation?.duration, selfDesignations: selfDesignations(effect, abilityId) }, out);
+  walk(effect, source, { context, perspective, abilityId, duration: activation?.duration, usage: activation?.usage, selfDesignations: selfDesignations(effect, abilityId) }, out);
   if (activation?.usage != null || activation?.cost != null || activation?.optional === true) {
     const { duration: _duration, ...requirement } = activation;
     const requires = [requirement];
@@ -248,6 +251,8 @@ type WalkOpts = {
   grantedHolder?: boolean;
   /** Lifetime inherited from the owning ability or nearest ability part. */
   duration?: unknown;
+  /** Usage limit inherited from the owning ability or nearest ability part. */
+  usage?: unknown;
   /** Tags the owning ability designates on the units holding it ({@link selfDesignations}). */
   selfDesignations?: ReadonlySet<string>;
 };
@@ -383,7 +388,11 @@ function walk(
       for (const step of (currentNode.steps as unknown[]) ?? []) walk(step, source, opts, out);
       return;
     case "ability-part": {
-      const partOpts = currentNode.duration === undefined ? opts : { ...opts, duration: currentNode.duration };
+      const partOpts = currentNode.duration === undefined && currentNode.usage == null ? opts : {
+        ...opts,
+        ...(currentNode.duration === undefined ? {} : { duration: currentNode.duration }),
+        ...(currentNode.usage == null ? {} : { usage: currentNode.usage }),
+      };
       // Orders are issued at their own moment and last for the part's duration: each Order is a
       // lever for the attacks made while it lasts, as a stance option is.
       if ((currentNode.effect as { type?: unknown } | undefined)?.type === "issue-orders") {
@@ -1246,14 +1255,6 @@ function translateAbilityGrant(node: Record<string, unknown>, source: BuffSource
   out.applied.push({ source, contribution });
 }
 
-/**
- * Defender-side damage-reduction (`{type: "damage-reduction", modifier:
- * {reduction: N | "half" | "to-zero"}}`). The buff layer only models the
- * additive numeric form — `"half"` and `"to-zero"` are one-use ablation
- * effects that don't fold into a deterministic expected-value crunch, so
- * they surface as `unsupported`. Attacker-perspective walks drop silently
- * (this is a defender stat).
- */
 /** Capacity references are immutable ability/option IDs, never display names. */
 function translateStanceCapacity(node: Record<string, unknown>, _source: BuffSource, opts: WalkOpts, out: EffectTranslation): void {
   const modifier = isObject(node.modifier) ? node.modifier : undefined;
@@ -1275,6 +1276,25 @@ function translateStanceCapacity(node: Record<string, unknown>, _source: BuffSou
   out.activatable.push({ id: `${opts.abilityId}#cap`, label: `${by} more ${modifier.ability_id} selections`, buffs: [], capRaise });
 }
 
+/**
+ * How many attacks a damage-zeroing ability zeroes in one activation, from its usage limit: the
+ * smallest count among its limits (a once-per limit is 1, an n-per-battle limit its count), shared
+ * by the unit unless every limit counts per model. Without a limit, each use zeroes one attack.
+ */
+function zeroingUses(usage: unknown): { uses: number; per: "unit" | "model" } {
+  const limits = (Array.isArray(usage) ? usage : [usage]).filter(isObject);
+  if (limits.length === 0) return { uses: 1, per: "unit" };
+  const counts = limits.map((limit) => (typeof limit.count === "number" && Number.isInteger(limit.count) && limit.count > 0 ? limit.count : 1));
+  return { uses: Math.min(...counts), per: limits.every((limit) => limit.per === "model") ? "model" : "unit" };
+}
+
+/**
+ * Defender-side damage-reduction (`{type: "damage-reduction", modifier:
+ * {reduction: N | "half" | "to-zero"}}`). A number subtracts from each Damage
+ * roll; `"to-zero"` is a damage-zeroing defence, counted from the usage limit,
+ * for the allocation stage; halving Damage is unsupported. Attacker-perspective
+ * walks drop silently (this is a defender stat).
+ */
 function translateDamageReduction(
   node: Record<string, unknown>,
   source: BuffSource,
@@ -1296,9 +1316,13 @@ function translateDamageReduction(
     out.applied.push({ source, contribution: { type: "damage-reduction", value: reduction } });
     return;
   }
-  if (reduction === "half" || reduction === "to-zero") {
+  if (reduction === "to-zero") {
+    out.applied.push({ source, contribution: { type: "damage-zeroing", ...zeroingUses(opts.usage) } });
+    return;
+  }
+  if (reduction === "half") {
     out.unsupported.push({
-      reason: `damage-reduction: "${reduction}" is a one-use ablation effect, not modelled by the expected-value engine`,
+      reason: "damage-reduction: halving Damage is not modelled by the buff layer",
       effectFragment: node,
     });
     return;
@@ -1376,13 +1400,17 @@ function translateNamedRegionState(
   }
 }
 
-/** An `attack-is` naming weapons, or its negation: the resolver gates these per weapon. */
+/**
+ * An `attack-is` naming weapons, an `attack-compare`, a critical `roll-result`, or a negation of one:
+ * the resolver and the engine gate these per attack.
+ */
 function isWeaponScopedCondition(condition: Record<string, unknown>): boolean {
   if (condition.operator === "not" && Array.isArray(condition.operands) && condition.operands.length === 1) {
     const operand = condition.operands[0];
     return isObject(operand) && isWeaponScopedCondition(operand) && operand.operator === undefined;
   }
   if (condition.type === "attack-compare") return true;
+  if (condition.type === "roll-result") return isObject(condition.parameters) && condition.parameters.result === "critical";
   return condition.type === "attack-is" && isObject(condition.parameters) && condition.parameters.weapons !== undefined;
 }
 
@@ -2144,6 +2172,12 @@ function conditionToApplicability(
       if (params?.subject === "attacker") return { requiresAttackerKeyword: kw };
       return isBuffedUnit(params?.subject) ? perspective === "target" ? { requiresTargetKeyword: kw } : { requiresAttackerKeyword: kw } : "context";
     }
+    case "roll-result":
+      // A critical wound is a property of the attack: the engine applies the buff to the attacks
+      // that score one. Other rolls are read from the scenario.
+      return params?.roll === "wound" && params.result === "critical" && Object.keys(params).length === 2 && perspective === "attacker"
+        ? { onCritical: "wound" }
+        : "context";
     case "attack-compare": {
       const comparison = attackComparison(params, perspective === "attacker" ? ownToughness : undefined);
       return comparison ? { attackComparisons: [comparison] } : "context";
@@ -2261,6 +2295,8 @@ function describeContribution(c: BuffContribution): string {
         : `feel no pain ${c.threshold}+`;
     case "damage-reduction":
       return `-${c.value} damage`;
+    case "damage-zeroing":
+      return `zero the damage of ${c.uses} attack${c.uses === 1 ? "" : "s"}${c.per === "model" ? " per model" : ""}`;
     case "invulnerable-save":
       return `${c.threshold}+ invuln`;
     case "cover":
@@ -2358,6 +2394,10 @@ function evaluateCondition(
     }
     case "happened": {
       const params = (condition.parameters ?? {}) as Record<string, unknown>;
+      const moved = evaluateOwnMove(params, ctx, conditionSide(params.subject, perspective));
+      if (moved !== undefined) return moved;
+      const phaseEvent = evaluatePhaseEvent(params, ctx, (ref) => conditionSide(ref, perspective));
+      if (phaseEvent !== undefined) return phaseEvent;
       const types = isObject(params.filter) && Array.isArray(params.filter.move_types) ? params.filter.move_types : [];
       const own = params.subject == null && params.object == null && params.count == null && params.window === "turn";
       if (!own || params.event !== "move-ended" || types.length !== 1 || Object.keys(params.filter as object).length !== 1) return "unknown";
@@ -2397,6 +2437,13 @@ function evaluateCondition(
       const owner = side === (perspective === "attacker" ? "attacker" : "target") ? "friendly" : "enemy";
       return side ? matchesUnitFilter(params.filter, ctx, side, owner) : "unknown";
     }
+    case "designated": {
+      const params = isObject(condition.parameters) ? condition.parameters : {};
+      const abilitySide = perspective === "attacker" ? "attacker" : "target";
+      return evaluateDesignated(params, ctx, params.by === undefined ? undefined : conditionSide(params.by, perspective), abilitySide);
+    }
+    case "roll-result":
+      return evaluateTestResult(isObject(condition.parameters) ? condition.parameters : {}, ctx);
     case "army-faction": {
       // "Your Army Faction" is the army of the side whose ability it is.
       const faction = (condition.parameters as Record<string, unknown> | undefined)?.faction;
@@ -2405,11 +2452,17 @@ function evaluateCondition(
       return army === faction;
     }
     case "model-count": {
-      // "contains N or more models": min and max are inclusive. A keyword-restricted count needs
-      // per-keyword model counts the context does not carry.
+      // "contains N or more models": min and max are inclusive. A keyword-restricted count reads
+      // the declared per-keyword model counts, or every model when all of them carry it.
       const params = isObject(condition.parameters) ? condition.parameters : {};
-      if (params.keyword !== undefined) return "unknown";
       const side = conditionSide(params.subject, perspective);
+      if (params.keyword !== undefined) {
+        if (typeof params.keyword !== "string" || side === undefined) return "unknown";
+        const bounds = side === "attacker"
+          ? keywordModelBounds(params.keyword, ctx.attackerKeywordModels, ctx.attackerModelKeywords, ctx.attackerModelCount)
+          : keywordModelBounds(params.keyword, ctx.targetKeywordModels, ctx.targetModelKeywords, ctx.targetModelCount);
+        return bounds === undefined ? "unknown" : boundsVerdict(params, bounds);
+      }
       const count = side === "attacker" ? ctx.attackerModelCount : side === "target" ? ctx.targetModelCount : undefined;
       if (count === undefined) return "unknown";
       if (typeof params.min === "number" && count < params.min) return false;

@@ -9,8 +9,8 @@ use super::applicability::{apply_applicability, combine, condition_to_applicabil
 use super::js::*;
 use super::{walk, Out, TranslationPerspective, WalkOpts};
 
-/// An `attack-is` naming weapons, an `attack-compare`, or the negation of one: the resolver
-/// gates these per attack.
+/// An `attack-is` naming weapons, an `attack-compare`, a critical `roll-result`, or the negation
+/// of one: the resolver and the engine gate these per attack.
 pub(super) fn is_weapon_scoped_condition(condition: &Obj) -> bool {
     if is_str(condition, "operator", "not") {
         return match condition
@@ -26,6 +26,10 @@ pub(super) fn is_weapon_scoped_condition(condition: &Obj) -> bool {
     }
     if is_str(condition, "type", "attack-compare") {
         return true;
+    }
+    if is_str(condition, "type", "roll-result") {
+        return object(condition.get("parameters"))
+            .is_some_and(|parameters| is_str(parameters, "result", "critical"));
     }
     is_str(condition, "type", "attack-is")
         && object(condition.get("parameters")).is_some_and(|parameters| {

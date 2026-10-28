@@ -14,7 +14,7 @@ from typing import Any
 import pytest
 
 from wh40kdc.abilities_resolver import stratagem_can_target
-from wh40kdc.cruncher import effect_to_buffs
+from wh40kdc.cruncher import effect_to_buffs, resolve_granted_records
 from wh40kdc.data.ability_refs import with_rating
 
 from ..conftest import CORPUS
@@ -58,7 +58,11 @@ def _run_dsl_corpus(dataset: Any, filename: str) -> None:
     for c in dsl["cases"]:
         perspective = c.get("perspective", "attacker")
         if "effect" in c:
-            effect = with_rating(c["effect"], c.get("rating"))
+            effect = c["effect"]
+            records = c.get("grantedRecords")
+            if records is not None:
+                effect = resolve_granted_records(effect, records.get, {c["source"]["abilityId"]})
+            effect = with_rating(effect, c.get("rating"))
             result = effect_to_buffs(effect, c["source"], c["context"], perspective)
         else:
             ability = dataset.abilities.get_any(c["abilityId"])

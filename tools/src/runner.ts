@@ -53,6 +53,7 @@ import {
   attributeStages,
   crunch,
   type Buff,
+  type DamageZeroing,
   type EngineContext,
   type EngineInput,
 } from "./cruncher/index.js";
@@ -1015,8 +1016,12 @@ function handleAllocate(state: RunnerState, args: unknown): RunnerResponse {
   }
   const built = buildEngineInput(state, args as CrunchArgs, "allocate");
   if (!built.ok) return built.response;
+  const zeroing = (args as { zeroing?: unknown }).zeroing;
+  if (zeroing !== undefined && (typeof zeroing !== "object" || zeroing === null)) {
+    return err("INVALID_INPUT", { detail: "allocate.zeroing must be an object" });
+  }
   try {
-    return ok(allocate(built.input, getDataset(state)));
+    return ok(allocate(built.input, getDataset(state), zeroing === undefined ? {} : { zeroing: zeroing as DamageZeroing }));
   } catch (e) {
     return err("CRUNCH_ERROR", { detail: (e as Error).message });
   }

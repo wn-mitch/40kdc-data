@@ -12,6 +12,10 @@ use crate::cruncher::scenario_conditions::{
     attachment_from_flags, attachment_from_members, evaluate_controls, evaluate_in_region,
     evaluate_rule_active, is_neighbour_filter, within_neighbour,
 };
+use crate::cruncher::scenario_facts::{
+    bounds_verdict, evaluate_designated, evaluate_own_move, evaluate_phase_event,
+    evaluate_test_result, keyword_model_bounds,
+};
 
 /// The buffed unit: the ability's own unit (or model), or the unit an aura is applied to.
 pub(super) fn is_buffed_unit(subject: Option<&Value>) -> bool {
@@ -99,6 +103,15 @@ pub(super) fn evaluate_condition_for_source(
             Some(ctx.timing.as_deref()? == wanted)
         }
         Some("happened") => {
+            if let Some(moved) =
+                evaluate_own_move(p, ctx, condition_side(p.get("subject"), perspective))
+            {
+                return Some(moved);
+            }
+            let side_of = |reference: Option<&Value>| condition_side(reference, perspective);
+            if let Some(verdict) = evaluate_phase_event(p, ctx, &side_of) {
+                return verdict;
+            }
             let filter = object(p.get("filter"));
             let types = list(filter.and_then(|f| f.get("move_types")));
             let own = !p.contains_key("subject")
@@ -179,6 +192,14 @@ pub(super) fn evaluate_condition_for_source(
             };
             matches_unit_filter(p.get("filter")?, ctx, side, owner)
         }
+        Some("designated") => {
+            let by = match p.get("by") {
+                None => None,
+                by => Some(condition_side(by, perspective)?),
+            };
+            evaluate_designated(p, ctx, by, perspective)
+        }
+        Some("roll-result") => evaluate_test_result(p, ctx),
         Some("army-faction") => {
             // "Your Army Faction" is the army of the side whose ability it is.
             let faction = p.get("faction").and_then(Value::as_str)?;
@@ -190,11 +211,27 @@ pub(super) fn evaluate_condition_for_source(
         }
         Some("model-count") => {
             // "contains N or more models": min and max are inclusive. A keyword-restricted count
-            // needs per-keyword model counts the context does not carry.
-            if p.get("keyword").is_some() {
-                return None;
-            }
+            // reads the declared per-keyword model counts, or every model when all of them carry
+            // it.
             let side = condition_side(p.get("subject"), perspective)?;
+            if let Some(keyword) = p.get("keyword") {
+                let keyword = keyword.as_str()?;
+                let bounds = match side {
+                    TranslationPerspective::Attacker => keyword_model_bounds(
+                        keyword,
+                        ctx.attacker_keyword_models.as_ref(),
+                        ctx.attacker_model_keywords.as_deref(),
+                        ctx.attacker_model_count,
+                    ),
+                    TranslationPerspective::Target => keyword_model_bounds(
+                        keyword,
+                        ctx.target_keyword_models.as_ref(),
+                        ctx.target_model_keywords.as_deref(),
+                        ctx.target_model_count,
+                    ),
+                }?;
+                return bounds_verdict(p, bounds);
+            }
             let count = match side {
                 TranslationPerspective::Attacker => ctx.attacker_model_count,
                 TranslationPerspective::Target => ctx.target_model_count,

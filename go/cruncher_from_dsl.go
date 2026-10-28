@@ -44,6 +44,9 @@ type dslOpts struct {
 	defaultTarget string
 	grantedHolder bool
 	duration      any
+	// usage is the usage limit inherited from the owning ability or nearest
+	// ability part.
+	usage any
 	// selfDesignations holds the tags the owning ability designates on the
 	// units holding it (selfDesignations); nil outside an ability walk.
 	selfDesignations map[string]bool
@@ -76,6 +79,7 @@ func effectToBuffs(effect any, source map[string]any, context map[string]any, pe
 	opts := dslOpts{context: context, perspective: perspective, abilityID: abilityID, selfDesignations: selfDesignations(effect, abilityID)}
 	if act != nil {
 		opts.duration = act["duration"]
+		opts.usage = act["usage"]
 	}
 	dslWalk(effect, source, opts, out)
 	if act == nil || (act["usage"] == nil && act["cost"] == nil && act["optional"] != true) {
@@ -316,6 +320,9 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 		partOpts := opts
 		if n["duration"] != nil {
 			partOpts.duration = n["duration"]
+		}
+		if n["usage"] != nil {
+			partOpts.usage = n["usage"]
 		}
 		// Orders are issued at their own moment and last for the part's duration: each Order is a
 		// lever for the attacks made while it lasts, as a stance option is.
@@ -1774,11 +1781,51 @@ func translateDamageReduction(node, source map[string]any, opts dslOpts, out *ef
 			return
 		}
 	}
-	if reduction == "half" || reduction == "to-zero" {
-		out.unsupported = append(out.unsupported, unsup("damage-reduction: \""+reduction.(string)+"\" is a one-use ablation effect, not modelled by the expected-value engine", node))
+	if reduction == "to-zero" {
+		uses, per := zeroingUses(opts.usage)
+		out.applied = append(out.applied, map[string]any{"source": source, "contribution": map[string]any{"type": "damage-zeroing", "uses": uses, "per": per}})
+		return
+	}
+	if reduction == "half" {
+		out.unsupported = append(out.unsupported, unsup("damage-reduction: halving Damage is not modelled by the buff layer", node))
 		return
 	}
 	out.unsupported = append(out.unsupported, unsup("damage-reduction: unrecognised reduction \""+jsStr(reduction)+"\"", node))
+}
+
+// zeroingUses is how many attacks a damage-zeroing ability zeroes in one
+// activation, from its usage limit: the smallest count among its limits (a
+// once-per limit is 1, an n-per-battle limit its count), shared by the unit
+// unless every limit counts per model. Without a limit, each use zeroes one
+// attack.
+func zeroingUses(usage any) (float64, string) {
+	var limits []map[string]any
+	candidates := getListValue(usage)
+	if candidates == nil {
+		candidates = []any{usage}
+	}
+	for _, raw := range candidates {
+		if limit, ok := asMap(raw); ok && limit != nil {
+			limits = append(limits, limit)
+		}
+	}
+	if len(limits) == 0 {
+		return 1, "unit"
+	}
+	uses := math.Inf(1)
+	perModel := true
+	for _, limit := range limits {
+		count := 1.0
+		if c, ok := limit["count"].(float64); ok && c > 0 && c == math.Trunc(c) {
+			count = c
+		}
+		uses = math.Min(uses, count)
+		perModel = perModel && limit["per"] == "model"
+	}
+	if perModel {
+		return uses, "model"
+	}
+	return uses, "unit"
 }
 
 func translateInvulnerableSave(node, source map[string]any, opts dslOpts, out *effectTranslation) {
@@ -1988,6 +2035,10 @@ func isWeaponScopedCondition(condition map[string]any) bool {
 	if getStr(condition, "type") == "attack-compare" {
 		return true
 	}
+	if getStr(condition, "type") == "roll-result" {
+		params, ok := getMap(condition, "parameters")
+		return ok && params["result"] == "critical"
+	}
 	if getStr(condition, "type") != "attack-is" {
 		return false
 	}
@@ -2026,6 +2077,13 @@ func conditionToApplicability(condition map[string]any, perspective string, ownT
 	switch getStr(condition, "type") {
 	case "timing-is":
 		return "gate"
+	case "roll-result":
+		// A critical wound is a property of the attack: the engine applies the buff
+		// to the attacks that score one. Other rolls are read from the scenario.
+		if len(params) == 2 && params["roll"] == "wound" && params["result"] == "critical" && perspective == "attacker" {
+			return map[string]any{"onCritical": "wound"}
+		}
+		return "context"
 	case "phase-is":
 		if phase, ok := params["phase"].(string); ok {
 			return map[string]any{"phases": []any{phase}}
@@ -2103,6 +2161,9 @@ func combineApplicability(a, b map[string]any) map[string]any {
 	}
 	if v, ok := b["rollType"]; ok && v != nil {
 		out["rollType"] = v
+	}
+	if v, ok := b["onCritical"]; ok && v != nil {
+		out["onCritical"] = v
 	}
 	if v, ok := b["requiresTargetKeyword"]; ok && v != nil {
 		out["requiresTargetKeyword"] = v
@@ -2204,6 +2265,16 @@ func describeContribution(c map[string]any) string {
 		return "feel no pain " + numStr(c["threshold"]) + "+"
 	case "damage-reduction":
 		return "-" + numStr(c["value"]) + " damage"
+	case "damage-zeroing":
+		uses, _ := num(c["uses"])
+		label := "zero the damage of " + numStr(c["uses"]) + " attack"
+		if uses != 1 {
+			label += "s"
+		}
+		if getStr(c, "per") == "model" {
+			label += " per model"
+		}
+		return label
 	case "invulnerable-save":
 		return numStr(c["threshold"]) + "+ invuln"
 	case "crit-threshold":
@@ -2667,6 +2738,13 @@ func evaluateCondition(condition, ctx map[string]any, rest ...any) any {
 		}
 		return ctx["timing"] == wanted
 	case "happened":
+		if moved, decided := evaluateOwnMove(params, ctx, conditionSide(params["subject"], perspective)); decided {
+			return moved
+		}
+		sideOf := func(reference any) string { return conditionSide(reference, perspective) }
+		if verdict, decided := evaluatePhaseEvent(params, ctx, sideOf); decided {
+			return verdict
+		}
 		filter, _ := getMap(params, "filter")
 		types, _ := asList(filter["move_types"])
 		own := params["subject"] == nil && params["object"] == nil && params["count"] == nil && params["window"] == "turn"
@@ -2722,12 +2800,20 @@ func evaluateCondition(condition, ctx map[string]any, rest ...any) any {
 		}
 		return ctx[armyKey] == faction
 	case "model-count":
-		// "contains N or more models": min and max are inclusive. A keyword-restricted count needs
-		// per-keyword model counts the context does not carry.
-		if params["keyword"] != nil {
-			return nil
-		}
+		// "contains N or more models": min and max are inclusive. A keyword-restricted count reads
+		// the declared per-keyword model counts, or every model when all of them carry it.
 		side := conditionSide(params["subject"], perspective)
+		if params["keyword"] != nil {
+			keyword, ok := params["keyword"].(string)
+			if !ok || side == "" {
+				return nil
+			}
+			low, high, known := keywordModelBounds(keyword, ctx[side+"KeywordModels"], ctx[side+"ModelKeywords"], ctx[side+"ModelCount"])
+			if !known {
+				return nil
+			}
+			return boundsVerdict(params, low, high)
+		}
 		key := map[string]string{"attacker": "attackerModelCount", "target": "targetModelCount"}[side]
 		count, ok := contextNumber(ctx[key])
 		if key == "" || !ok {
@@ -2740,6 +2826,16 @@ func evaluateCondition(condition, ctx map[string]any, rest ...any) any {
 			return false
 		}
 		return true
+	case "designated":
+		bySide := ""
+		if by, present := params["by"]; present {
+			if bySide = conditionSide(by, perspective); bySide == "" {
+				return nil
+			}
+		}
+		return evaluateDesignated(params, ctx, bySide, perspectiveSide(perspective))
+	case "roll-result":
+		return evaluateTestResult(params, ctx)
 	case "unit-wargear":
 		return evaluateUnitWargear(params, ctx, perspective)
 	case "battle-size":

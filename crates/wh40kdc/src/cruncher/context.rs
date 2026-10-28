@@ -10,7 +10,7 @@ use crate::Phase;
 use super::buffs::WeaponKeywordRef;
 use super::scenario::{
     ActiveRule, AttachedMember, ModelWounds, ObjectivesControlled, ScenarioNeighbour,
-    ScenarioObjective, ScenarioRegion, UnitState, UnitStrength,
+    ScenarioObjective, ScenarioRegion, ScenarioRoll, UnitKills, UnitState, UnitStrength,
 };
 
 /// Actual membership in an attached unit, supplied by the caller's roster state.
@@ -93,6 +93,58 @@ pub struct EngineContext {
     /// it unknown.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub objectives_controlled: Option<ObjectivesControlled>,
+    /// Every objective on the battlefield. A supplied list is complete. Drives `controls` with an
+    /// objective filter and `designated` on objectives; `None` leaves them unknown.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub objectives: Option<Vec<ScenarioObjective>>,
+    /// How many units carry each designation the attacking (or target) unit applied. A supplied
+    /// map is complete: a designation it omits is on no unit. Drives a `designated` count `by`
+    /// that unit; `None` leaves it unknown.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub attacker_designations_applied: Option<BTreeMap<String, u32>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub target_designations_applied: Option<BTreeMap<String, u32>>,
+    /// Every move each unit made this turn (`normal`, `advance`, `fall-back`, `charge`,
+    /// `remain-stationary`, `ingress`). A supplied list is complete; `None` leaves `happened`
+    /// move conditions unknown, apart from the stationary and charge flags.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub attacker_moves: Option<Vec<String>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub target_moves: Option<Vec<String>>,
+    /// The result (`success` or `failure`) of the test an ability made, by roll (`leadership`,
+    /// `battle-shock`, `charge`). Drives `roll-result` for those rolls; a roll it omits stays
+    /// unknown.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub test_results: Option<BTreeMap<String, String>>,
+    /// Every activity each unit has been selected for this phase (`fight`, `shoot`, `move`,
+    /// `observe`). A supplied list is complete; `None` leaves `happened` selection conditions
+    /// unknown.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub attacker_selected: Option<Vec<String>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub target_selected: Option<Vec<String>>,
+    /// Enemy models and units each unit destroyed this phase. `None` leaves `happened` kill
+    /// conditions unknown.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub attacker_kills: Option<UnitKills>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub target_kills: Option<UnitKills>,
+    /// Models each unit lost this phase. `None` leaves `happened` loss conditions unknown.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub attacker_losses: Option<f64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub target_losses: Option<f64>,
+    /// Every roll each unit made this phase, and every roll made against it, with its result. A
+    /// supplied list is complete; `None` leaves `happened` roll conditions unknown. A critical
+    /// result is also a success.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub attacker_rolls: Option<Vec<ScenarioRoll>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub target_rolls: Option<Vec<ScenarioRoll>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub attacker_rolled_against: Option<Vec<ScenarioRoll>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub target_rolled_against: Option<Vec<ScenarioRoll>>,
     /// Every unit of each combined unit, the unit itself included. Settles `attachment` roles
     /// and `with` filters; `None` leaves those to the attachment flags.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -114,6 +166,11 @@ pub struct EngineContext {
     /// comparisons that read it.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub attacker_toughness: Option<f64>,
+    /// The roll that was a critical one (`"wound"`), for the buffs that apply only then. The
+    /// engine sets it when resolving the attacks that score a critical wound; callers leave it
+    /// unset.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub critical_roll: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub attacker_attachment_role: Option<AttachmentRole>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -181,6 +238,13 @@ pub struct EngineContext {
     /// Models in the target unit. Drives `model-count` on the defender; `None` leaves it unknown.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub target_model_count: Option<u32>,
+    /// How many models of each unit carry a keyword, by keyword (matched case-insensitively).
+    /// Drives `model-count` with a keyword; a keyword the map omits stays unknown unless every
+    /// model carries it.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub attacker_keyword_models: Option<BTreeMap<String, u32>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub target_keyword_models: Option<BTreeMap<String, u32>>,
     /// The wargear the attacking models' chosen loadout includes: by wargear id, how many of
     /// those models carry it. A supplied map is complete, so an id it omits is carried by no
     /// model. Drives `unit-wargear` on the attacker; `None` leaves it unknown.
@@ -229,6 +293,22 @@ impl EngineContext {
             attacker_regions: None,
             target_regions: None,
             objectives_controlled: None,
+            objectives: None,
+            attacker_designations_applied: None,
+            target_designations_applied: None,
+            attacker_moves: None,
+            target_moves: None,
+            test_results: None,
+            attacker_selected: None,
+            target_selected: None,
+            attacker_kills: None,
+            target_kills: None,
+            attacker_losses: None,
+            target_losses: None,
+            attacker_rolls: None,
+            target_rolls: None,
+            attacker_rolled_against: None,
+            target_rolled_against: None,
             attacker_members: None,
             target_members: None,
             attack_strength: None,
@@ -236,6 +316,7 @@ impl EngineContext {
             target_toughness_max: None,
             target_toughness_min: None,
             attacker_toughness: None,
+            critical_roll: None,
             attacker_attachment_role: None,
             target_attachment_role: None,
             attachment_roles: None,
@@ -258,6 +339,8 @@ impl EngineContext {
             attacker_guided: None,
             attacker_model_count: None,
             target_model_count: None,
+            attacker_keyword_models: None,
+            target_keyword_models: None,
             attacker_wargear: None,
             target_wargear: None,
             weapon_names: None,

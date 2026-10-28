@@ -410,6 +410,36 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 			unsaved -= dice * freshPass
 		}
 	}
+	// Buffs that apply only on a critical wound: those wounds take the save at their own AP.
+	var critical *resolved
+	if hasCriticalWoundBuffs(allBuffs) {
+		critical = resolveCriticalWound(allBuffs, ctx)
+	}
+	unsavedRegular, unsavedCritical, pSavedCritical := unsaved, 0.0, pSaved
+	if critical != nil {
+		criticalToSaves := 0.0
+		if !hasDevastating {
+			criticalToSaves = critWoundsFromRoll
+		}
+		criticalArmor := clampF(sv-attackAp(critical, stats["AP"])-res.saveMod, 2, 7)
+		criticalSaveTarget := criticalArmor
+		if effectiveInvuln != nil {
+			criticalSaveTarget = math.Min(criticalArmor, *effectiveInvuln)
+		}
+		reroll := rerollSubset(res, "save")
+		regular := criticalSaveStream(effectiveSaveTarget, regularWoundsForSaves-criticalToSaves, reroll)
+		crits := criticalSaveStream(criticalSaveTarget, criticalToSaves, reroll)
+		pSavedCritical = crits.saved
+		_, rerollOne := res.rerollOne["save"]
+		unsaved, _ = splitUnsaved([]saveStream{regular, crits}, rerollOne)
+		shareRegular := regular.wounds * (1 - regular.saved)
+		shareCritical := crits.wounds * (1 - crits.saved)
+		unsavedRegular = 0
+		if shareRegular+shareCritical > 0 {
+			unsavedRegular = unsaved * shareRegular / (shareRegular + shareCritical)
+		}
+		unsavedCritical = unsaved - unsavedRegular
+	}
 	stages = append(stages, stage("unsaved", unsaved))
 
 	// 5. Damage
@@ -446,14 +476,45 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 		return nil, nil, nil, err
 	}
 	damagePerHit := perAttack.expected
+	// A critical wound's Damage, for its unsaved wounds and, with Devastating
+	// Wounds, its mortal wounds.
+	perCritical := perAttack
+	criticalDamageReroll := ""
+	if critical != nil {
+		if e, ok := critical.rerolls["damage"]; ok {
+			criticalDamageReroll = e.subset
+		}
+		perCritical, err = damageRoll(damageRollInput{
+			stat:      critical.setOr("D", stats["D"]),
+			bonus:     meltaBonus,
+			modifier:  critical.damageMod,
+			reduction: critical.damageReduction,
+			reroll:    criticalDamageReroll,
+		})
+		if err != nil {
+			return nil, nil, nil, err
+		}
+	}
 	damageMain := unsaved * damagePerHit
-	damageMortal := mortalWoundsStream * damagePerHit
+	if critical != nil {
+		damageMain = unsavedRegular*damagePerHit + unsavedCritical*perCritical.expected
+	}
+	damageMortal := mortalWoundsStream * perCritical.expected
 	// "Re-roll one Damage roll" over every Damage roll, main and mortal streams
 	// alike, shared in proportion to their rolls. A roll another permission
 	// already re-rolled cannot be re-rolled, so beside one the die is not priced.
+	// With critical-wound Damage each roll is read from the mixture of the two
+	// rolls' distributions.
 	damageRolls := unsaved + mortalWoundsStream
-	if _, ok := res.rerollOne["damage"]; ok && damageReroll == "" && damageRolls > 0 {
-		if gain := oneDamageRerollGain(perAttack.distribution, damageRolls); gain > 0 {
+	damageDistribution := perAttack.distribution
+	if critical != nil {
+		damageDistribution = mixDistributions(
+			[]float64{unsavedRegular, unsavedCritical + mortalWoundsStream},
+			[][]DamageOutcome{perAttack.distribution, perCritical.distribution},
+		)
+	}
+	if _, ok := res.rerollOne["damage"]; ok && damageReroll == "" && criticalDamageReroll == "" && damageRolls > 0 {
+		if gain := oneDamageRerollGain(damageDistribution, damageRolls); gain > 0 {
 			damageMain += gain * (unsaved / damageRolls)
 			damageMortal += gain * (mortalWoundsStream / damageRolls)
 		}
@@ -503,6 +564,9 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 		MortalWoundLost: pSurviveAll * pSurviveMortal,
 		Wounds:          woundsStat,
 		ModelCount:      tmc,
+	}
+	if critical != nil {
+		model.CriticalWound = &CriticalWound{Unsaved: 1 - pSavedCritical, Damage: perCritical.distribution}
 	}
 	return stages, res, model, nil
 }

@@ -213,12 +213,18 @@ pub enum BuffContribution {
     },
     /// Defender-side: subtract `value` from each unsaved damage point (floored
     /// at 1 by the engine). Multiple sources do NOT stack in 10e — the largest
-    /// reduction wins. The corpus also encodes `"half"` and `"to-zero"`
-    /// reductions; the buff layer only models the additive form because the
-    /// other two are typically one-use ablation that doesn't fold into the
-    /// expected-value math cleanly.
+    /// reduction wins. A `"to-zero"` reduction is [`Self::DamageZeroing`]; a
+    /// halving one is not modelled.
     DamageReduction {
         value: f64,
+    },
+    /// Defender-side: `uses` unsaved attacks have their Damage changed to 0
+    /// before it is rolled, from a pool the unit shares or `uses` for each
+    /// model. Only the discrete allocation stage reads it; the
+    /// expected-value stages ignore it.
+    DamageZeroing {
+        uses: usize,
+        per: super::allocation::ZeroingPer,
     },
     /// Defender-side: ability-granted invulnerable save threshold. Best
     /// (lowest) threshold wins, combined with the unit's printed invuln by
@@ -262,6 +268,10 @@ pub struct BuffApplicability {
     pub phases: Option<Vec<Phase>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub roll_type: Option<RollKind>,
+    /// Only on a critical wound (`"wound"`): the engine applies the buff's AP and Damage to the
+    /// attacks that score one, and no other stage reads it.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub on_critical: Option<String>,
     /// Target must carry this keyword (case-insensitive).
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub requires_target_keyword: Option<String>,
@@ -440,6 +450,13 @@ pub fn resolve_buffs(buffs: &[Buff], ctx: &EngineContext) -> ResolvedModifiers {
                         dominant_source: Some(b.source.clone()),
                     };
                 }
+            }
+            BuffContribution::DamageZeroing { uses, per } => {
+                match per {
+                    super::allocation::ZeroingPer::Unit => out.damage_zeroing.unit += uses,
+                    super::allocation::ZeroingPer::Model => out.damage_zeroing.model += uses,
+                }
+                out.damage_zeroing.sources.push(b.source.clone());
             }
             BuffContribution::InvulnerableSave { threshold } => {
                 let take = match &out.invulnerable {

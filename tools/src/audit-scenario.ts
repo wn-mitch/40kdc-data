@@ -40,17 +40,20 @@ function ruleRefs(node: unknown, out: ActiveRule[] = []): ActiveRule[] {
 
 const MOVES = ["normal", "advance", "fall-back", "charge", "remain-stationary", "ingress"];
 const TESTS = ["leadership", "battle-shock", "charge"];
+const SELECTED = ["fight", "shoot", "move", "observe"];
 
 /**
  * Two contexts that declare every scenario fact for `effect`, with opposite values: in the first
  * nothing is designated, moved, controlled, nearby or active and every unit is unhurt; in the
- * second all of it holds. Designation tags, rule regions, active rules and model keywords are read
- * from the effect so the second context can satisfy the conditions that name them.
+ * second all of it holds. Designation tags, rule regions, active rules, model keywords and rolls are
+ * read from the effect so the second context can satisfy the conditions that name them.
  */
 export function declaredScenarios(effect: unknown, faction: string): [Partial<EngineContext>, Partial<EngineContext>] {
   const tags = [...collect(effect, new Set(["designated", "tag"]), new Set())];
   const regionIds = [...collect(effect, new Set(["region_id"]), new Set())];
   const keywords = [...collect(effect, new Set(["keyword"]), new Set())];
+  const rolls = [...collect(effect, new Set(["roll"]), new Set())]
+    .flatMap((roll) => (["success", "failure", "critical"] as const).map((result) => ({ roll, result })));
   const counts = (count: number) => Object.fromEntries(keywords.map((keyword) => [keyword, count]));
   const applied = (count: number) => Object.fromEntries(tags.map((tag) => [tag, count]));
   const objective = (controller: ScenarioObjective["controller"], side: "attacker" | "target"): ScenarioObjective => ({
@@ -97,6 +100,16 @@ export function declaredScenarios(effect: unknown, faction: string): [Partial<En
     armyFaction: faction,
     targetArmyFaction: faction,
     distanceInches: 24,
+    attackerSelected: [],
+    targetSelected: [],
+    attackerKills: { models: 0, units: 0 },
+    targetKills: { models: 0, units: 0 },
+    attackerLosses: 0,
+    targetLosses: 0,
+    attackerRolls: [],
+    targetRolls: [],
+    attackerRolledAgainst: [],
+    targetRolledAgainst: [],
   };
   const all: Partial<EngineContext> = {
     battleRound: 5,
@@ -133,6 +146,16 @@ export function declaredScenarios(effect: unknown, faction: string): [Partial<En
     armyFaction: "",
     targetArmyFaction: "",
     distanceInches: 0,
+    attackerSelected: SELECTED,
+    targetSelected: SELECTED,
+    attackerKills: { models: 5, units: 5 },
+    targetKills: { models: 5, units: 5 },
+    attackerLosses: 5,
+    targetLosses: 5,
+    attackerRolls: rolls,
+    targetRolls: rolls,
+    attackerRolledAgainst: rolls,
+    targetRolledAgainst: rolls,
   };
   return [none, all];
 }

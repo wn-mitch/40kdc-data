@@ -149,6 +149,8 @@ def _applies(buff: Buff, ctx: EngineContext) -> bool:
     w = buff.get("applicableWhen")
     if not w:
         return True
+    if w.get("onCritical") is not None and ctx.get("criticalRoll") != w["onCritical"]:
+        return False
     phases = w.get("phases")
     if phases and ctx.get("phase") not in phases:
         return False
@@ -281,6 +283,8 @@ def resolve_buffs(buffs: list[Buff], ctx: EngineContext) -> ResolvedModifiers:
         "apMod": {"value": 0, "sources": []},
         "statSet": {},
         "damageReduction": {"value": 0, "dominantSource": None},
+        # Damage-zeroing uses, summed over sources: a pool the unit shares and uses per model.
+        "damageZeroing": {"unit": 0, "model": 0, "sources": []},
         "invulnerable": None,
         # Lowest critical threshold granted per roll; absent rolls crit on a 6.
         "critThresholds": {},
@@ -365,6 +369,9 @@ def resolve_buffs(buffs: list[Buff], ctx: EngineContext) -> ResolvedModifiers:
                 or (c["value"] == dr["value"] and _rank(source) < _rank(dr["dominantSource"]))
             ):
                 out["damageReduction"] = {"value": c["value"], "dominantSource": source}
+        elif ctype == "damage-zeroing":
+            out["damageZeroing"][c["per"]] += c["uses"]
+            out["damageZeroing"]["sources"].append(source)
         elif ctype == "invulnerable-save":
             # Best (lowest threshold) wins. Same tie-break by source rank.
             inv = out["invulnerable"]
