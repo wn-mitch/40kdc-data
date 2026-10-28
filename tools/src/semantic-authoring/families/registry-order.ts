@@ -78,4 +78,5 @@ export const REGISTRY_ORDER: readonly string[] = [
   "move-distance@4",
   "eligibility-permission@10", "duration@6",
   "choice-open@3", "ability-activate@4",
+  "ability-record-grant@4",
 ];

@@ -274,6 +274,21 @@ export const ABILITY_EXTENSIONS: readonly FamilyExtension[] = [
    * leaf. The compiler (`compile-granted.ts`) gives each body to the holder.
    */
   PRINTED_RECORD_GRANT,
+  {
+    // "That enemy unit has the ability below that matches that weapon's name: **Bubblechukka:** … **Smasha Gun:** …".
+    family: "ability-record-grant",
+    version: 4,
+    description: "As the previous version, plus matching_weapon on a printed grant of several: each printed ability is granted only while this unit's models carry a weapon whose name is that ability's name (\"the ability below that matches that weapon's name\").",
+    schema: (previous) => withProperties(previous, { matching_weapon: optional({ const: true }) }),
+    normalize: (input, previous) => {
+      if (!("matching_weapon" in input)) return previous(input);
+      const { matching_weapon: matching, ...rest } = input;
+      if (matching !== true) throw new TypeError("ability-record-grant.matching_weapon is true or omitted.");
+      const result = previous(rest);
+      if (result.printed !== "several") throw new TypeError("ability-record-grant.matching_weapon picks among several printed abilities.");
+      return { ...result, matching_weapon: true };
+    },
+  },
   printedKeywordsExtension("ability-modifier", 3),
   /**
    * Subject antecedent: the unit an earlier filter, aura or Stratagem target names ("add 3\" to

@@ -2,6 +2,7 @@ import { exactSpan } from "./contracts.js";
 import { retargetMenu } from "./compile-activation.js";
 import { FILTERED_UNITS } from "./compile-antecedent.js";
 import { checkAbilityUsedWindows, namedAbilityChecks } from "./compile-named-ability.js";
+import { selectedUnitMoments } from "./compile-selection-moment.js";
 import { nestedWhenMoments } from "./compile-when-subject.js";
 import { bandMoments } from "./compile-band-moment.js";
 import { addsAttackGate, attackTargetBinding } from "./compile-attack-backref.js";
@@ -95,7 +96,8 @@ export function classifyLeaves(given: CompileLeaf[], places: Placement[], contai
   let selectedGlobally = false;
   const triggers: Node[] = [];
   const triggerIndexes: number[] = [];
-  const nestedMoments = nestedWhenMoments(list);
+  // A Stratagem's effect moment under its WHEN moment, or a selected unit's own later moment (compile-selection-moment.ts).
+  const nestedMoments = new Set([...nestedWhenMoments(list), ...selectedUnitMoments(list)]);
   const nestedTriggers: Node[] = [];
   // A moment inside a result band is a part of that band, never a trigger of the ability (compile-band-moment.ts).
   const inBand = bandMoments(list, places);

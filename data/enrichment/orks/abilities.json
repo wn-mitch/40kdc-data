@@ -4394,18 +4394,41 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "3e13b04f7d7d1fafa026fe23c7b7caed767fbf93732146577b6f28cccb66a9d2",
+    "source_digest": "09a42059c844cb4d623f23ec1e235a7ea0159327767052277a388df87fa7ecc2",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "loadout",
-        "parameters": {
-          "model_keyword": "MEK GUNZ",
-          "uniform": "ranged"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "shooting"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
+            ]
+          },
+          {
+            "type": "loadout",
+            "parameters": {
+              "subject": "this-unit",
+              "uniform": "ranged",
+              "model_keyword": "MEK GUNZ"
+            }
+          }
+        ]
       },
       "effect": {
         "type": "select-units",
@@ -4421,13 +4444,13 @@
             "type": "happened",
             "parameters": {
               "event": "after-roll",
+              "subject": "event-subject",
               "object": "this-unit",
               "filter": {
                 "roll": "hit",
-                "result": "success",
-                "attack_type": "ranged"
+                "result": "success"
               },
-              "window": "phase"
+              "window": "event"
             }
           }
         },
@@ -4437,122 +4460,254 @@
             {
               "type": "conditional",
               "condition": {
-                "type": "happened",
+                "type": "named-weapon",
                 "parameters": {
-                  "event": "after-roll",
-                  "object": "selected-unit",
-                  "filter": {
-                    "roll": "hit",
-                    "result": "success",
-                    "attack_type": "ranged",
-                    "weapons": {
-                      "name": "Bubblechukka"
-                    }
-                  },
-                  "window": "phase"
-                }
-              },
-              "effect": {
-                "type": "conditional",
-                "condition": {
-                  "type": "same-unit",
-                  "parameters": {
-                    "subject": "attacker",
-                    "as": "selected-unit"
-                  }
-                },
-                "effect": {
-                  "type": "rule-state",
-                  "target": "defender",
-                  "modifier": {
-                    "direction": "granted",
-                    "rule_kind": "core-rule",
-                    "rule": "benefit-of-cover"
+                  "subject": "this-unit",
+                  "name": "Bubblechukka",
+                  "count": 1,
+                  "models": {
+                    "count": {
+                      "min": 1
+                    },
+                    "state": "carry"
                   }
                 }
-              }
-            },
-            {
-              "type": "conditional",
-              "condition": {
-                "type": "happened",
-                "parameters": {
-                  "event": "after-roll",
-                  "object": "selected-unit",
-                  "filter": {
-                    "roll": "hit",
-                    "result": "success",
-                    "attack_type": "ranged",
-                    "weapons": {
-                      "name": "Kustom Mega-kannon"
-                    }
-                  },
-                  "window": "phase"
-                }
               },
               "effect": {
-                "type": "stat-modifier",
+                "type": "ability-grant",
                 "target": "selected-unit",
                 "modifier": {
-                  "stat": "Ld",
-                  "operation": "subtract",
-                  "value": 1
-                }
-              }
-            },
-            {
-              "type": "conditional",
-              "condition": {
-                "type": "happened",
-                "parameters": {
-                  "event": "after-roll",
-                  "object": "selected-unit",
-                  "filter": {
-                    "roll": "hit",
-                    "result": "success",
-                    "attack_type": "ranged",
-                    "weapons": {
-                      "name": "Smasha Gun"
-                    }
+                  "ability": {
+                    "ability_id": "madcap-artillery-orks",
+                    "definition_id": "bubblechukka"
                   },
-                  "window": "phase"
-                }
-              },
-              "effect": {
-                "type": "stat-modifier",
-                "target": "selected-unit",
-                "modifier": {
-                  "stat": "M",
-                  "operation": "subtract",
-                  "value": 2
+                  "definition": {
+                    "type": "ability-part",
+                    "name": "Bubblechukka",
+                    "effect": {
+                      "type": "sequence",
+                      "steps": [
+                        {
+                          "type": "designate",
+                          "target": "this-unit",
+                          "modifier": {
+                            "tag": "wobbled"
+                          }
+                        },
+                        {
+                          "type": "conditional",
+                          "condition": {
+                            "type": "matches",
+                            "parameters": {
+                              "subject": "this-unit",
+                              "filter": {
+                                "designated": "wobbled"
+                              }
+                            }
+                          },
+                          "effect": {
+                            "type": "ability-grant",
+                            "target": "defender",
+                            "modifier": {
+                              "ability": "benefit-of-cover"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
                 }
               }
             },
             {
               "type": "conditional",
               "condition": {
-                "type": "happened",
+                "type": "named-weapon",
                 "parameters": {
-                  "event": "after-roll",
-                  "object": "selected-unit",
-                  "filter": {
-                    "roll": "hit",
-                    "result": "success",
-                    "attack_type": "ranged",
-                    "weapons": {
-                      "name": "Traktor Kannon"
-                    }
-                  },
-                  "window": "phase"
+                  "subject": "this-unit",
+                  "name": "Kustom Mega-kannon",
+                  "count": 1,
+                  "models": {
+                    "count": {
+                      "min": 1
+                    },
+                    "state": "carry"
+                  }
                 }
               },
               "effect": {
-                "type": "rule-state",
+                "type": "ability-grant",
                 "target": "selected-unit",
                 "modifier": {
-                  "direction": "suppressed",
-                  "rule_kind": "core-rule",
-                  "rule": "take-to-the-skies"
+                  "ability": {
+                    "ability_id": "madcap-artillery-orks",
+                    "definition_id": "kustom-mega-kannon"
+                  },
+                  "definition": {
+                    "type": "ability-part",
+                    "name": "Kustom Mega-kannon",
+                    "effect": {
+                      "type": "sequence",
+                      "steps": [
+                        {
+                          "type": "designate",
+                          "target": "this-unit",
+                          "modifier": {
+                            "tag": "zapped"
+                          }
+                        },
+                        {
+                          "type": "conditional",
+                          "condition": {
+                            "type": "matches",
+                            "parameters": {
+                              "subject": "this-unit",
+                              "filter": {
+                                "designated": "zapped"
+                              }
+                            }
+                          },
+                          "effect": {
+                            "type": "stat-modifier",
+                            "target": "this-unit",
+                            "modifier": {
+                              "stat": "Ld",
+                              "operation": "subtract",
+                              "value": 1
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "named-weapon",
+                "parameters": {
+                  "subject": "this-unit",
+                  "name": "Smasha Gun",
+                  "count": 1,
+                  "models": {
+                    "count": {
+                      "min": 1
+                    },
+                    "state": "carry"
+                  }
+                }
+              },
+              "effect": {
+                "type": "ability-grant",
+                "target": "selected-unit",
+                "modifier": {
+                  "ability": {
+                    "ability_id": "madcap-artillery-orks",
+                    "definition_id": "smasha-gun"
+                  },
+                  "definition": {
+                    "type": "ability-part",
+                    "name": "Smasha Gun",
+                    "effect": {
+                      "type": "sequence",
+                      "steps": [
+                        {
+                          "type": "designate",
+                          "target": "this-unit",
+                          "modifier": {
+                            "tag": "smashed"
+                          }
+                        },
+                        {
+                          "type": "conditional",
+                          "condition": {
+                            "type": "matches",
+                            "parameters": {
+                              "subject": "this-unit",
+                              "filter": {
+                                "designated": "smashed"
+                              }
+                            }
+                          },
+                          "effect": {
+                            "type": "stat-modifier",
+                            "target": "this-unit",
+                            "modifier": {
+                              "stat": "M",
+                              "operation": "subtract",
+                              "value": 2
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "named-weapon",
+                "parameters": {
+                  "subject": "this-unit",
+                  "name": "Traktor Kannon",
+                  "count": 1,
+                  "models": {
+                    "count": {
+                      "min": 1
+                    },
+                    "state": "carry"
+                  }
+                }
+              },
+              "effect": {
+                "type": "ability-grant",
+                "target": "selected-unit",
+                "modifier": {
+                  "ability": {
+                    "ability_id": "madcap-artillery-orks",
+                    "definition_id": "traktor-kannon"
+                  },
+                  "definition": {
+                    "type": "ability-part",
+                    "name": "Traktor Kannon",
+                    "effect": {
+                      "type": "sequence",
+                      "steps": [
+                        {
+                          "type": "designate",
+                          "target": "this-unit",
+                          "modifier": {
+                            "tag": "grounded"
+                          }
+                        },
+                        {
+                          "type": "conditional",
+                          "condition": {
+                            "type": "matches",
+                            "parameters": {
+                              "subject": "this-unit",
+                              "filter": {
+                                "designated": "grounded"
+                              }
+                            }
+                          },
+                          "effect": {
+                            "type": "rule-state",
+                            "target": "this-unit",
+                            "modifier": {
+                              "direction": "suppressed",
+                              "rule_kind": "core-rule",
+                              "rule": "take-to-the-skies"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
                 }
               }
             }
@@ -4572,22 +4727,8 @@
     "faction_id": "orks",
     "trigger": {
       "event": "attacks-resolved",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "your-turn"
-            }
-          }
-        ]
+      "filter": {
+        "kind": "shoot"
       }
     }
   },

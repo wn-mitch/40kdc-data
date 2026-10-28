@@ -142,8 +142,10 @@ function splitBodies(list: readonly CompileLeaf[], sourceText: string | undefine
       const wants = printed === "one" ? "exactly one" : printed === "several" ? "two or more" : "no";
       throw new CompileError(`The printed grant at byte ${header.start_byte} (${printed}) needs ${wants} granted-ability-name leaves after it; found ${markers.length}.`);
     }
-    if (markers.length && markers[0]! > at + 1) {
-      throw new CompileError(`${list[at + 1]!.family_id} at byte ${list[at + 1]!.start_byte} sits between a printed grant header and its first granted-ability-name.`);
+    // "has the ability below … until the start of your next turn:": a duration there bounds the grant itself and stays with the host.
+    const between = markers.length ? list.slice(at + 1, markers[0]!).find((leaf) => leaf.role !== "DURATION") : undefined;
+    if (between) {
+      throw new CompileError(`${between.family_id} at byte ${between.start_byte} sits between a printed grant header and its first granted-ability-name.`);
     }
     // Each body: from its marker (or the header) to its end, never past the next marker or header.
     const starts = markers.length ? markers : [at];
@@ -258,8 +260,20 @@ export function compileGranted(leaves: readonly CompileLeaf[], sourceText: strin
 export function printedGrantEffect(leaf: CompileLeaf, target: Node | string): Node {
   const granted = leaf.parameters.granted as GrantedBody[] | undefined;
   if (!granted?.length) throw new CompileError(`ability-record-grant at byte ${leaf.start_byte} prints its abilities, but no body was folded onto it.`);
-  const nodes = granted.map((body) => leaf.parameters.granted_self === true
+  const nodes = granted.map((body) => matchingWeapon(leaf, body, leaf.parameters.granted_self === true
     ? structuredClone(body.part)
-    : { type: "ability-grant", target: structuredClone(body.narrow ? narrowTarget(target, body.narrow) : target), modifier: { ...(body.ability ? { ability: body.ability } : {}), definition: structuredClone(body.part) } });
+    : { type: "ability-grant", target: structuredClone(body.narrow ? narrowTarget(target, body.narrow) : target), modifier: { ...(body.ability ? { ability: body.ability } : {}), definition: structuredClone(body.part) } }));
   return nodes.length === 1 ? nodes[0]! : { type: "sequence", steps: nodes };
+}
+
+/**
+ * "the ability below that matches that weapon's name": with matching_weapon each printed ability holds only while
+ * a model of this unit carries the weapon of that name (the record's uniform-loadout gate says which one all carry).
+ */
+function matchingWeapon(leaf: CompileLeaf, body: GrantedBody, node: Node): Node {
+  if (leaf.parameters.matching_weapon !== true) return node;
+  const name = (body.part as Node).name;
+  if (typeof name !== "string") throw new CompileError("A grant matching a weapon's name needs a named ability for each weapon.");
+  const carries = { type: "named-weapon", parameters: { subject: "this-unit", name, count: 1, models: { count: { min: 1 }, state: "carry" } } };
+  return { type: "conditional", condition: carries, effect: node };
 }

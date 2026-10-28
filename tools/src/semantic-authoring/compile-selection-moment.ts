@@ -22,6 +22,7 @@ export function refuseSelectionAcrossMoment(list: readonly CompileLeaf[]): void 
     if (selection.family_id !== "select-unit") return;
     const moment = sorted.slice(at + 1).find(isMoment);
     if (moment === undefined) return;
+    if (selectedUnitMoments(sorted).has(sorted.indexOf(moment))) return;
     const later = sorted.find((leaf) => leaf.start_byte > moment.start_byte && leaf.role !== "EVENT" && leaf.role !== "DURATION"
       && leaf.parameters.subject === "selected-unit" && leaf.start_byte >= (moment.end_byte ?? moment.start_byte));
     if (later === undefined) return;
@@ -31,4 +32,24 @@ export function refuseSelectionAcrossMoment(list: readonly CompileLeaf[]): void 
     if (sorted.some((leaf) => leaf.family_id === "select-unit" && leaf.start_byte > selection.start_byte && leaf.start_byte < later.start_byte)) return;
     throw new CompileError(`A ${later.family_id} at byte ${later.start_byte} acts on the unit an earlier selection (byte ${selection.start_byte}) picked, but a later moment (byte ${moment.start_byte}) sits between them; the selection cannot carry its effect to that moment.`);
   });
+}
+
+/**
+ * "At the start of your Movement phase, select one friendly unit. If you do, when that unit is selected to make an
+ * Advance move this turn, …": the selection is made at an earlier moment, and a later moment whose subject is the
+ * unit it picked, with no effect between them, is that unit's own. Its effects wait for it inside the selection
+ * (compile-part-classify.ts nests it as a part), never beside the opening moment as an alternative trigger. With no
+ * moment before the selection, the event is the ability's own trigger and is not nested. Positions are in `list`'s order.
+ */
+export function selectedUnitMoments(list: readonly CompileLeaf[]): Set<number> {
+  const nested = new Set<number>();
+  let opened = false;
+  let selected = false;
+  list.forEach((leaf, at) => {
+    if (selected && leaf.family_id === "event" && leaf.parameters.subject === "selected-unit") nested.add(at);
+    if (leaf.family_id === "select-unit") selected = opened;
+    else if (leaf.role === "EFFECT") selected = false;
+    if (isMoment(leaf) || leaf.family_id === "phase-window") opened = true;
+  });
+  return nested;
 }

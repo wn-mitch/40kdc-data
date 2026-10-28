@@ -16,8 +16,8 @@ dump confirmation.
 | leader-attachments | 0 | 0 | 283 | 8 |
 | enhancements | 0 | 0 | 890 | 0 |
 | detachments | 0 | 0 | 171 | 286 |
-| stratagems | 1 | 0 | 1035 | 277 |
-| abilities | 0 | 0 | 3649 | 885 |
+| stratagems | 0 | 0 | 1036 | 277 |
+| abilities | 0 | 0 | 3651 | 883 |
 | phase-mappings | 0 | 0 | 1135 | 446 |
 | resource-pools | 0 | 0 | 0 | 6 |
 
@@ -33,7 +33,7 @@ dump confirmation.
 | aeldari | 0 | 0 | 243 | 57 |
 | agents-of-the-imperium | 0 | 0 | 96 | 42 |
 | astra-militarum | 0 | 0 | 193 | 58 |
-| black-templars | 0 | 0 | 51 | 12 |
+| black-templars | 0 | 0 | 52 | 11 |
 | blood-angels | 0 | 0 | 49 | 12 |
 | chaos-daemons | 0 | 0 | 162 | 33 |
 | chaos-knights | 0 | 0 | 85 | 25 |
@@ -50,7 +50,7 @@ dump confirmation.
 | iron-hands | 0 | 0 | 9 | 2 |
 | leagues-of-votann | 0 | 0 | 127 | 28 |
 | necrons | 0 | 0 | 190 | 40 |
-| orks | 0 | 0 | 176 | 33 |
+| orks | 0 | 0 | 177 | 32 |
 | raven-guard | 0 | 0 | 10 | 1 |
 | salamanders | 0 | 0 | 6 | 5 |
 | space-wolves | 0 | 0 | 74 | 13 |
@@ -103,8 +103,8 @@ dump confirmation.
 | astra-militarum | unpublished | 26 |
 | astra-militarum | verified | 193 |
 | black-templars | digest-differs | 1 |
-| black-templars | stub | 11 |
-| black-templars | verified | 51 |
+| black-templars | stub | 10 |
+| black-templars | verified | 52 |
 | blood-angels | digest-differs | 6 |
 | blood-angels | no-source | 1 |
 | blood-angels | stub | 4 |
@@ -166,10 +166,10 @@ dump confirmation.
 | necrons | unpublished | 18 |
 | necrons | verified | 190 |
 | orks | ambiguous-source | 1 |
-| orks | digest-differs | 19 |
+| orks | digest-differs | 18 |
 | orks | stub | 7 |
 | orks | unpublished | 6 |
-| orks | verified | 176 |
+| orks | verified | 177 |
 | raven-guard | stub | 1 |
 | raven-guard | verified | 10 |
 | salamanders | digest-differs | 2 |
