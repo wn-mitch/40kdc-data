@@ -6,6 +6,7 @@
 import {
   attributeStages,
   baseWargear,
+  combinedWargear,
   loadoutHitModifier,
   loadoutWargearScoring,
   profileEngineInput,
@@ -90,11 +91,24 @@ export function memberRoles(ds: Dataset, unitId: string, attachedUnitIds: readon
 }
 
 /**
- * `context` as one member of the combined unit reads it, as the damage matrix reads each member:
- * its own unit, role (when attached), model keywords, unhurt Wounds unless the scenario states
- * them, and the wargear of its out-of-the-box loadout, which Salvo does not edit.
+ * The wargear of the combined unit's out-of-the-box loadouts, which Salvo does not edit: what its
+ * `unit-wargear` conditions read, as one unit for all rules purposes (core rule 19.01).
  */
-export function memberContext(ds: Dataset, member: MemberUnit, role: "leader" | "bodyguard" | undefined, context: EngineContext): EngineContext {
+export function unitWargear(ds: Dataset, members: readonly MemberUnit[]): Record<string, number> {
+  return combinedWargear(members.map((member) => baseWargear(ds, member.unit.raw, member.loadout.modelCount)));
+}
+
+/**
+ * `context` as one member of the combined unit reads it, as the damage matrix reads each member:
+ * its own unit, role (when attached), model keywords and unhurt Wounds unless the scenario states
+ * them, with the combined unit's `wargear` (see {@link unitWargear}).
+ */
+export function memberContext(
+  member: MemberUnit,
+  role: "leader" | "bodyguard" | undefined,
+  context: EngineContext,
+  wargear: Record<string, number>,
+): EngineContext {
   const unit = member.unit.raw;
   const wounds = unit.profiles?.[0]?.W;
   return {
@@ -103,7 +117,7 @@ export function memberContext(ds: Dataset, member: MemberUnit, role: "leader" | 
     ...(role ? { attackerAttachmentRole: role } : {}),
     attackerModelKeywords: [...new Set([...(unit.keywords ?? []), ...(unit.faction_keywords ?? [])].map((keyword) => keyword.toLowerCase()))].sort(),
     ...(context.attackerWounds === undefined && typeof wounds === "number" ? { attackerWounds: { remaining: wounds, starting: wounds } } : {}),
-    attackerWargear: baseWargear(ds, unit, member.loadout.modelCount),
+    attackerWargear: wargear,
   };
 }
 
@@ -124,9 +138,10 @@ export function memberLevers(
   const members = memberUnits(ds, attacker.factionId, [attacker.unitId, ...attacker.attachedUnitIds]);
   const ids = members.map((member) => member.memberId);
   const roles = memberRoles(ds, attacker.unitId, attacker.attachedUnitIds);
+  const wargear = unitWargear(ds, members);
   return members.map((member, index) => {
     const attached = members.length > 1;
-    const own = memberContext(ds, member, attached ? roles[member.memberId] : undefined, context);
+    const own = memberContext(member, attached ? roles[member.memberId] : undefined, context, wargear);
     try {
       return {
         memberId: member.memberId,

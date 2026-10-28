@@ -261,9 +261,11 @@ export type EngineContext = {
   attackerKeywordModels?: Readonly<Record<string, number>>;
   targetKeywordModels?: Readonly<Record<string, number>>;
   /**
-   * The wargear the attacking models' chosen loadout includes: by wargear id, how many of those
-   * models carry it. A supplied record is complete, so an id it omits is carried by no model.
-   * Drives `unit-wargear` on the attacker; undefined leaves it "unknown".
+   * The wargear the attacking unit's chosen loadout includes: by wargear id, how many of its
+   * models carry it. An attached unit is one unit (core rule 19.01), so its record sums every
+   * member's loadout, as {@link attackerModelCount} counts every member's models. A supplied record
+   * is complete, so an id it omits is carried by no model. Drives `unit-wargear` on the attacker;
+   * undefined leaves it "unknown".
    */
   attackerWargear?: Readonly<Record<string, number>>;
   /** The target's counterpart of {@link attackerWargear}. */

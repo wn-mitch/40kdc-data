@@ -245,9 +245,11 @@ pub struct EngineContext {
     pub attacker_keyword_models: Option<BTreeMap<String, u32>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub target_keyword_models: Option<BTreeMap<String, u32>>,
-    /// The wargear the attacking models' chosen loadout includes: by wargear id, how many of
-    /// those models carry it. A supplied map is complete, so an id it omits is carried by no
-    /// model. Drives `unit-wargear` on the attacker; `None` leaves it unknown.
+    /// The wargear the attacking unit's chosen loadout includes: by wargear id, how many of its
+    /// models carry it. An attached unit is one unit (core rule 19.01), so its map sums every
+    /// member's loadout, as `attacker_model_count` counts every member's models. A supplied map
+    /// is complete, so an id it omits is carried by no model. Drives `unit-wargear` on the
+    /// attacker; `None` leaves it unknown.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub attacker_wargear: Option<BTreeMap<String, u32>>,
     /// The target's counterpart of `attacker_wargear`.

@@ -202,17 +202,18 @@ describe("Salvo and the damage matrix", () => {
       const fired = new Map([...run.selection.firing].filter(([id]) => id.startsWith(`${stackMember.member.unit.id}:`)));
       expect(fired).toEqual(expected);
     }
-    // Each member reads its own role and wargear, not the combined unit's.
+    // Each member reads its own unit and role.
     expect(run.members.map(({ context }) => [context.attackerUnitId, context.attackerAttachmentRole])).toEqual([
       ["khorne-berzerkers", "bodyguard"],
       ["kharn-the-betrayer", "leader"],
     ]);
   });
 
-  it("read each attached member's own wargear", () => {
-    // A fabricated rule on the Shield-Captain: while leading, +1 to Hit for the unit while it
-    // carries a praesidium shield. The Captain's out-of-the-box loadout has one and the Custodian
-    // Guard's does not; the matrix reads each member's own, so only the Captain's attacks gain it.
+  it("read an attached unit's wargear as the combined unit's", () => {
+    // A fabricated rule on the Shield-Captain: while leading, +1 to Wound for the unit while it
+    // carries a praesidium shield (Hit rolls of 2+ cannot improve). The Captain's out-of-the-box
+    // loadout has one and the Custodian Guard's does not; the attached unit is one unit (core
+    // rule 19.01), so both tools give the Guard's attacks the bonus too.
     const ruleId = "fix-shield-uplink-adeptus-custodes";
     const fixture = new Dataset({
       ...RAW_DATA,
@@ -226,7 +227,7 @@ describe("Salvo and the damage matrix", () => {
             { type: "attachment", parameters: { subject: "this-model", role: "leading" } },
             { type: "unit-wargear", parameters: { subject: "this-unit", wargear: "praesidium-shield" } },
           ] },
-          effect: { type: "roll-modifier", target: "this-unit", modifier: { roll: "hit", operation: "add", value: 1 } },
+          effect: { type: "roll-modifier", target: "this-unit", modifier: { roll: "wound", operation: "add", value: 1 } },
         },
       }] as never,
       units: RAW_DATA.units.map((unit) => unit.id === "shield-captain" && unit.faction_id === "adeptus-custodes"
@@ -243,8 +244,11 @@ describe("Salvo and the damage matrix", () => {
     });
     const levers = (memberId: string) => run.perMember.find((entry) => entry.memberId === memberId)!.levers.buffs
       .filter((lever) => lever.source.kind === "ability" && lever.source.abilityId === ruleId).flatMap((lever) => lever.buffs.map((buff) => buff.contribution));
-    expect(levers("shield-captain")).toEqual([{ type: "hit-mod", value: 1 }]);
-    expect(levers("custodian-guard-sodality")).toEqual([]);
+    expect(levers("shield-captain")).toEqual([{ type: "wound-mod", value: 1 }]);
+    expect(levers("custodian-guard-sodality")).toEqual([{ type: "wound-mod", value: 1 }]);
+    // The matrix gives the Guard's scored loadout the bonus as well, and the totals agree.
+    const guard = run.scored.find(({ stackMember }) => stackMember.member.unit.id === "custodian-guard-sodality")!;
+    expect(fromAbility(run.session.memberBuffs(run.best.spec, guard.stackMember.member, guard.counts), ruleId)).toEqual([{ type: "wound-mod", value: 1 }]);
     expect(run.selection.total).toBeCloseTo(run.matrixTotal, 9);
   });
 });

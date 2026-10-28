@@ -115,6 +115,19 @@ export function loadoutWargear(dataset: Dataset, unit: Unit, counts: ReadonlyMap
   return wargear;
 }
 
+/**
+ * The wargear of an attached unit: each item with the models carrying it summed over its members'
+ * wargear. An attached unit is one unit for all rules purposes (core rule 19.01), so a `unit-wargear`
+ * condition on it reads this sum; what one model carries (a weapon grant to the bearer) does not.
+ */
+export function combinedWargear(members: readonly Readonly<Record<string, number>>[]): Record<string, number> {
+  const combined: Record<string, number> = {};
+  for (const wargear of members) {
+    for (const [id, count] of Object.entries(wargear)) if (count > 0) combined[id] = (combined[id] ?? 0) + count;
+  }
+  return Object.fromEntries(Object.entries(combined).sort(([left], [right]) => left.localeCompare(right)));
+}
+
 /** The wargear of a unit's out-of-the-box loadout at `modelCount` models; see {@link loadoutWargear}. */
 export function baseWargear(dataset: Dataset, unit: Unit, modelCount: number): Record<string, number> {
   const models = (dataset.unitCompositionOf(unit) as { models?: LoadoutModel[] } | undefined)?.models ?? [];

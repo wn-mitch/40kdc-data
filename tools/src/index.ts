@@ -112,6 +112,7 @@ export {
 // the way the damage matrix scores them.
 export {
   baseWargear,
+  combinedWargear,
   equippedBuffs,
   loadoutWargearScoring,
   wargearContext,

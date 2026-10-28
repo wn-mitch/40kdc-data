@@ -15,7 +15,7 @@ import type { ProfileDamage } from "./loadout-scoring.js";
 import { attributeSelectedProfile, crunchProfileScorer, unitLoadoutDamage, type DamageAttribution, type UnscoreableProfile } from "./unit-damage.js";
 import { translationWarnings } from "./translation-warnings.js";
 import { loadoutLeverBuffs, namedLoadoutWargear, surfacedByLoadout, wargearRules, wargearTranslation, type WargearRules } from "./wargear-levers.js";
-import { equippedBuffs, unequippedRules, unitWeaponGrants, wargearContext, type WeaponGrants } from "./weapon-grants.js";
+import { combinedWargear, equippedBuffs, loadoutWargear, unequippedRules, unitWeaponGrants, wargearContext, type WeaponGrants } from "./weapon-grants.js";
 import { equippedLevers, othersEquippedBuffs, othersUnequippedKey, settleMemberLoadouts, type MemberLoadouts } from "./member-loadouts.js";
 import type {
   DamageCellState,
@@ -149,7 +149,44 @@ export class DamageScoringSession {
     return legality;
   }
 
-  /** `context` with the wargear `counts` carry, so `unit-wargear` conditions read the loadout. */
+  /**
+   * The equipment counts of the attached unit `spec` forms: `counts` for `member`, each other
+   * member's `chosen` loadout, else its out-of-the-box one. An attached unit is one unit for all
+   * rules purposes (core rule 19.01), so its `unit-wargear` conditions read these.
+   */
+  private stackCounts(spec: StackSpec, chosen?: MemberLoadouts, member?: StackMember, counts?: ReadonlyMap<string, number>): Map<string, number> {
+    const sum = new Map<string, number>();
+    for (const candidate of spec.members) {
+      const own = candidate === member && counts ? counts : chosen?.get(candidate.unit.id) ?? this.scaffold(candidate.unit).base;
+      for (const [id, count] of own) sum.set(id, (sum.get(id) ?? 0) + count);
+    }
+    return sum;
+  }
+
+  /** What any member can carry, at the stack's model count: the loadouts a stack's `unit-wargear` conditions range over. */
+  private stackScaffold(spec: StackSpec): Pick<LoadoutScaffold, "base" | "options" | "modelCount"> {
+    const scaffolds = spec.members.map((member) => this.scaffold(member.unit));
+    return {
+      base: this.stackCounts(spec),
+      options: scaffolds.flatMap((scaffold) => scaffold.options),
+      modelCount: scaffolds.reduce((sum, scaffold) => sum + scaffold.modelCount, 0),
+    };
+  }
+
+  /**
+   * `context` with the wargear of the attached unit `spec` forms, its members' `chosen` loadouts
+   * (else their out-of-the-box ones): what its `unit-wargear` conditions read (core rule 19.01).
+   * The weapons a member's wargear grants its bearers read that member's loadout; see {@link weaponGrants}.
+   */
+  stackContext(spec: StackSpec, context: EngineContext, chosen?: MemberLoadouts): EngineContext {
+    return {
+      ...context,
+      attackerWargear: combinedWargear(spec.members.map((member) =>
+        loadoutWargear(this.dataset, member.unit.raw, chosen?.get(member.unit.id) ?? this.scaffold(member.unit).base))),
+    };
+  }
+
+  /** `context` with the wargear `counts` carry: one member's own loadout, which its weapon grants read. */
   loadoutContext(unit: UnitView, counts: ReadonlyMap<string, number>, context: EngineContext): EngineContext {
     return wargearContext(this.dataset, unit.raw, counts, context);
   }
@@ -308,27 +345,28 @@ export class DamageScoringSession {
     return value;
   }
 
-  /** A member's eligible rules that read `unit-wargear`, and whether its levers depend on its loadout. */
+  /** A member's eligible rules that read `unit-wargear`, and whether its levers depend on the stack's loadouts. */
   private wargearRulesOf(spec: StackSpec, member: StackMember): WargearRules {
     const key = `${this.poolKey(spec)}|${member.unit.id}`;
     let rules = this.wargearRuleCache.get(key);
     if (!rules) {
       const context = this.state.contextFor(spec, member);
       const eligible = this.detachmentPasses(spec).flatMap((detachmentId) => this.dataset.eligibleAbilities(this.eligibilityInput(spec, member, detachmentId), context.phase));
-      rules = wargearRules(eligible, context, this.scaffold(member.unit));
+      rules = wargearRules(eligible, context, this.stackScaffold(spec));
       this.wargearRuleCache.set(key, rules);
     }
     return rules;
   }
 
   /**
-   * A member's levers translated under the wargear of `counts`, or null when that wargear changes
-   * nothing its wargear-reading rules give. A later detachment's copy of a lever wins, as in {@link pool}.
+   * A member's levers translated under the stack's wargear with its loadout `counts` (and the
+   * others' `chosen` ones), or null when that wargear changes nothing its wargear-reading rules
+   * give. A later detachment's copy of a lever wins, as in {@link pool}.
    */
-  private loadoutLevers(spec: StackSpec, member: StackMember, counts: ReadonlyMap<string, number>): StackableBuff[] | null {
+  private loadoutLevers(spec: StackSpec, member: StackMember, counts: ReadonlyMap<string, number>, chosen?: MemberLoadouts): StackableBuff[] | null {
     const rules = this.wargearRulesOf(spec, member);
     if (!rules.loadoutDependent) return null;
-    const wargear = namedLoadoutWargear(counts, rules.wargearIds);
+    const wargear = namedLoadoutWargear(this.stackCounts(spec, chosen, member, counts), rules.wargearIds);
     const key = `${this.poolKey(spec)}|${member.unit.id}|${JSON.stringify(wargear)}`;
     const cached = this.loadoutLeverCache.get(key);
     if (cached !== undefined) return cached;
@@ -378,20 +416,24 @@ export class DamageScoringSession {
 
   /** How a member's buffs follow its loadout, when its rules read `unit-wargear`; `chosen` as in {@link memberBuffs}. */
   perLoadoutBuffs(spec: StackSpec, member: StackMember, chosen?: MemberLoadouts): LoadoutBuffs | undefined {
-    if (!this.wargearRulesOf(spec, member).loadoutDependent) return undefined;
-    const key = `${this.poolKey(spec)}|${[...spec.selectedLeverIds].sort().join("+")}${othersUnequippedKey(spec, member, chosen)}`;
+    const rules = this.wargearRulesOf(spec, member);
+    if (!rules.loadoutDependent) return undefined;
+    // The others' share of the stack's wargear, which the member's rules read with its own.
+    const others = namedLoadoutWargear(this.stackCounts(spec, chosen, member, new Map()), rules.wargearIds);
+    const key = `${this.poolKey(spec)}|${[...spec.selectedLeverIds].sort().join("+")}${othersUnequippedKey(spec, member, chosen)}|${JSON.stringify(others)}`;
     return { key, at: (counts) => this.memberBuffs(spec, member, counts, chosen) };
   }
 
   /**
    * The buffs a member attacks with under the spec's selected levers, with the target's defensive
    * buffs. Its loadout drops its printed rules for items it leaves out (the others' `chosen` ones
-   * theirs) and translates the levers of a member whose rules read `unit-wargear`.
+   * theirs) and, with the others' `chosen` loadouts, translates the levers of a member whose rules
+   * read `unit-wargear`.
    */
   memberBuffs(spec: StackSpec, member: StackMember, counts?: ReadonlyMap<string, number>, chosen?: MemberLoadouts): Buff[] {
     const selected = new Set(spec.selectedLeverIds);
     const pool = this.pool(spec);
-    const translated = counts ? this.loadoutLevers(spec, member, counts) : null;
+    const translated = counts ? this.loadoutLevers(spec, member, counts, chosen) : null;
     const levers = translated
       ? loadoutLeverBuffs(translated, new Set(pool.levers.map((lever) => lever.id)), selected)
       : pool.levers.filter((lever) => selected.has(lever.id)).flatMap((lever) => lever.perMember.get(member.unit.id) ?? []);
@@ -432,8 +474,9 @@ export class DamageScoringSession {
   }
 
   /**
-   * The winning stack's unsupported fragments, translated against each member's chosen loadout.
-   * Weapon grants that loadout scored, and rules printed by wargear it leaves out, are left out.
+   * The winning stack's unsupported fragments, translated against the stack's wargear under the
+   * members' chosen loadouts. Weapon grants a member's loadout scored, and rules printed by wargear
+   * it leaves out, are left out.
    */
   relevantWarnings(result: StackResult): StackBuffPool["warnings"] {
     const pool = this.pool(result.spec);
@@ -443,9 +486,10 @@ export class DamageScoringSession {
     );
     const contexts = new Map<string, EngineContext>();
     const translated: StackBuffPool["warnings"] = [];
+    const chosen: MemberLoadouts = new Map(result.members.map(({ member, loadout }) => [member.unit.id, loadout.counts]));
     for (const { member, loadout } of result.members) {
       const base = this.state.contextFor(result.spec, member);
-      const context = this.loadoutContext(member.unit, loadout.counts, base);
+      const context = this.stackContext(result.spec, base, chosen);
       contexts.set(member.unit.id, context);
       const grants = this.weaponGrants(member.unit, loadout.counts, base);
       const scored = new Set([...grants.grants, ...grants.duplicates].map((grant) => `${grant.abilityId}|${grant.weaponId}`));
@@ -483,13 +527,14 @@ export class DamageScoringSession {
     const pool = this.pool(result.spec);
     const levers = pool.levers.filter((lever) => result.spec.selectedLeverIds.includes(lever.id));
     const poolIds = new Set(pool.levers.map((lever) => lever.id));
+    const chosen: MemberLoadouts = new Map(result.members.map(({ member, loadout }) => [member.unit.id, loadout.counts]));
     for (const { member, loadout } of result.members) {
-      for (const lever of (this.loadoutLevers(result.spec, member, loadout.counts) ?? []).filter((candidate) => surfacedByLoadout(candidate, poolIds))) {
+      for (const lever of (this.loadoutLevers(result.spec, member, loadout.counts, chosen) ?? []).filter((candidate) => surfacedByLoadout(candidate, poolIds))) {
         const current = levers.find((candidate) => candidate.id === lever.id) ?? levers[levers.push({ ...lever, perMember: new Map() }) - 1];
         current.perMember.set(member.unit.id, lever.buffs);
       }
     }
-    return equippedLevers(levers, result.spec, new Map(result.members.map(({ member, loadout }) => [member.unit.id, loadout.counts])));
+    return equippedLevers(levers, result.spec, chosen);
   }
 
   keywordsFor(spec: StackSpec): string[] {

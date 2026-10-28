@@ -248,10 +248,12 @@ export function buildLedger(session: DamageScoringSession, result: StackResult):
     if (!owner || !wargear) return undefined;
     return (owner.loadout.counts.get(wargear) ?? 0) > 0 ? null : wargear;
   };
+  // Conditions read the attached unit's wargear under the winning loadouts (core rule 19.01).
+  const chosen = new Map(result.members.map((scored) => [scored.member.unit.id, scored.loadout.counts]));
   for (const scored of result.members) {
     const { member } = scored;
-    // Conditions read the winning loadout's wargear; its weapon grants were scored with it.
-    const context = session.loadoutContext(member.unit, scored.loadout.counts, state.contextFor(spec, member));
+    // Each member's weapon grants were scored with its own loadout.
+    const context = session.stackContext(spec, state.contextFor(spec, member), chosen);
     const grants = memberGrants(session, result, scored);
     for (const detachmentId of spec.detachmentIds.length > 0 ? spec.detachmentIds : [undefined]) {
       const input = session.eligibilityInput(spec, member, detachmentId);
