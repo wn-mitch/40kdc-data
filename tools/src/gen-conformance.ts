@@ -4103,6 +4103,11 @@ function genEffectTranslation(): void {
     { caseId: "fidelity/stance-select-initial-option", effect: { type: "stance-select", mode: "re-selectable", initial: "guard-stance", options: [
       { id: "guard-stance", name: "Guard Stance", effect: { type: "stat-modifier", target: "this-unit", modifier: { stat: "T", operation: "add", value: 1 } } },
       { id: "strike-stance", name: "Strike Stance", effect: { type: "stat-modifier", target: "this-unit", modifier: { stat: "A", operation: "add", value: 1 } } }] } },
+    // One enemy unit among those that lost a model to the triggering attacks takes the test.
+    { caseId: "fidelity/select-unit-that-lost-models-to-triggering-attacks", effect: { type: "ability-part", trigger: { event: "attacks-resolved", filter: { attack_type: "melee" } },
+      effect: { type: "select-units", selector: { filter: { owner: "enemy" }, count: { min: 1, max: 1 },
+        eligibility: { type: "happened", parameters: { event: "model-destroyed", object: { level: "model", member_of: "selected-unit" }, filter: { by: "this-unit" }, window: "event" } } },
+        effect: { type: "test", target: "selected-unit", modifier: { test: "battle-shock" } } } } },
     // A named region declared with nothing reading it here (a producer-only named-region-state).
     { caseId: "fidelity/named-region-producer-only", effect: { type: "conditional", condition: { type: "army-faction", parameters: { faction: "example-faction" } },
       effect: { type: "named-region-state", target: { owner: "friendly" }, modifier: {

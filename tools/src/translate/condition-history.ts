@@ -112,6 +112,11 @@ function happenedPhrase(p: P, negated: boolean): string {
       const owner = obj.owner != null ? `${str(obj.owner)} ` : "";
       const extended = Object.keys(obj).some((key) => !["all_of", "owner", "level", "designated"].includes(key));
       const objects = extended ? unitFilterPhrase({ ...obj, level: event === "model-destroyed" ? "model" : "unit" }).replace(/^an? /, "").replace(/\b(unit|model)\b/, "$1s") : `${owner}${kws}${noun}s`;
+      // "the unit lost 1+ models to the just-resolved attacks": the victims are one unit's models (a selection's candidate).
+      if (event === "model-destroyed" && obj.member_of != null && p.window === "event") {
+        const victim = obj.member_of === "selected-unit" ? "the unit" : unitRefPhrase(obj.member_of);
+        return `${neg}${victim} lost ${amount} models to the just-resolved ${f.attack_type ? `${str(f.attack_type)} ` : ""}attacks`;
+      }
       // Who destroyed them: the filter's attacker, else the event's subject.
       const killer = f.by ?? p.subject;
       if (killer != null) {

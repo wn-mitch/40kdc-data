@@ -7438,19 +7438,108 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "genestealer-cults",
     "detachment_id": "biosanctic-broodsurge",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "permission",
+          "target": "this-model",
+          "modifier": {
+            "activity": "use-stratagem",
+            "allow": true,
+            "despite": [
+              "destroyed"
+            ]
+          }
+        },
+        {
+          "type": "dice-gated",
+          "dice": "D6",
+          "threshold": 2,
+          "comparison": "gte",
+          "on_success": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "conditional",
+                "condition": {
+                  "operator": "not",
+                  "operands": [
+                    {
+                      "type": "matches",
+                      "parameters": {
+                        "subject": "this-model",
+                        "filter": {
+                          "any_of": [
+                            "ABOMINANT",
+                            "PATRIARCH"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                },
+                "effect": {
+                  "type": "mortal-wounds",
+                  "target": "event-subject",
+                  "modifier": {
+                    "count": "D3"
+                  }
+                }
+              },
+              {
+                "type": "conditional",
+                "condition": {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "this-model",
+                    "filter": {
+                      "any_of": [
+                        "ABOMINANT",
+                        "PATRIARCH"
+                      ]
+                    }
+                  }
+                },
+                "effect": {
+                  "type": "mortal-wounds",
+                  "target": "event-subject",
+                  "modifier": {
+                    "count": "2D3"
+                  }
+                }
+              }
+            ]
+          },
+          "on_fail": null
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "model-destroyed",
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "CHARACTER",
+          "GENESTEALER CULTS"
+        ],
+        "level": "model"
+      },
+      "subject": {
+        "owner": "enemy"
+      }
+    },
+    "source_digest": "7a542a2c5c44bda9f55651bfbd372f721bf4613c58191023123bbe2d7be52876"
   },
   {
     "ability_id": "serpentine-tactics-outlander-claw-genestealer-cults",

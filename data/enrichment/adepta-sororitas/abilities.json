@@ -6724,7 +6724,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "a63531324d0ab42fc3190f2e9632d5ba98b0c6a56fdbac47b1820f8d87c8d3f3",
     "version": "2025-q3",
@@ -6733,20 +6733,67 @@
     "faction_id": "adepta-sororitas",
     "detachment_id": "bringers-of-flame",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "weapon-ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "weapons": {
-          "type": "melee"
-        },
-        "keywords": [
-          {
-            "keyword_id": "lethal-hits"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "lethal-hits"
+              }
+            ],
+            "weapons": {
+              "type": "melee"
+            }
           }
-        ]
-      }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "attacks-resolved",
+            "filter": {
+              "attack_type": "melee"
+            }
+          },
+          "effect": {
+            "type": "select-units",
+            "selector": {
+              "filter": {
+                "owner": "enemy"
+              },
+              "count": {
+                "min": 1,
+                "max": 1
+              },
+              "eligibility": {
+                "type": "happened",
+                "parameters": {
+                  "event": "model-destroyed",
+                  "object": {
+                    "level": "model",
+                    "member_of": "selected-unit"
+                  },
+                  "filter": {
+                    "by": "this-unit"
+                  },
+                  "window": "event"
+                }
+              }
+            },
+            "effect": {
+              "type": "test",
+              "target": "selected-unit",
+              "modifier": {
+                "test": "battle-shock"
+              }
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "phase"

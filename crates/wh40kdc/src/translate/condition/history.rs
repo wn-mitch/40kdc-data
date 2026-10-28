@@ -407,6 +407,25 @@ fn happened_phrase(p: &P, negated: bool) -> String {
             } else {
                 format!("{owner}{kws}{noun}s")
             };
+            // "the unit lost 1+ models to the just-resolved attacks": the victims are one unit's
+            // models (a selection's candidate).
+            if event == "model-destroyed" && window.and_then(Value::as_str) == Some("event") {
+                if let Some(member) = nn(o, "member_of") {
+                    let victim = if member.as_str() == Some("selected-unit") {
+                        "the unit".to_string()
+                    } else {
+                        unit_ref_phrase(Some(member), "the unit")
+                    };
+                    let atk = if truthy(f.get("attack_type")) {
+                        format!("{} ", st(f.get("attack_type")))
+                    } else {
+                        String::new()
+                    };
+                    return format!(
+                        "{neg}{victim} lost {amount} models to the just-resolved {atk}attacks"
+                    );
+                }
+            }
             // Who destroyed them: the filter's attacker, else the event's subject.
             if let Some(by) = nn(f, "by").or_else(|| nn(p, "subject")) {
                 // A destruction by one attack type says it: "with its just-resolved melee attacks".

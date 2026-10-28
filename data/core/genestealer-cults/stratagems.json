@@ -1733,11 +1733,18 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Character"
+      ],
+      "count": "one",
+      "selects": "model",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "saintly-paroxysm-biosanctic-broodsurge-genestealer-cults",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {

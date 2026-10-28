@@ -276,6 +276,18 @@ func describeHappenedCore(p map[string]any, negated bool) string {
 				objects = strings.Replace(objects, "model", "models", 1)
 			}
 		}
+		// "the unit lost 1+ models to the just-resolved attacks": the victims are one unit's models (a selection's candidate).
+		if event == "model-destroyed" && obj["member_of"] != nil && p["window"] == "event" {
+			victim := "the unit"
+			if obj["member_of"] != "selected-unit" {
+				victim = unitRefPhrase(obj["member_of"], "the unit")
+			}
+			atk := ""
+			if jsTruthy(f["attack_type"]) {
+				atk = cstr(f["attack_type"]) + " "
+			}
+			return neg + victim + " lost " + amount + " models to the just-resolved " + atk + "attacks"
+		}
 		// Who destroyed them: the filter's attacker, else the event's subject.
 		killer := f["by"]
 		if killer == nil {

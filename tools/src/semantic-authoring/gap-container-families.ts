@@ -44,6 +44,8 @@ const OBJECTIVE_ORIGINS = ["this-model", "this-unit"] as const;
 const OBJECTIVE_CONTROLLERS = ["your-army", "opponent"] as const;
 const OBJECTIVE_CRITERIA = ["controlled-by-unit", "clear-of"] as const;
 const OBJECTIVE_CRITERION_UNITS = ["this-unit", "event-subject"] as const;
+/** Who made the attacks whose destroyed models a destroyed-model-selection picks among. */
+const DESTROYED_SELECTION_DESTROYERS = ["this-unit", "this-model", "event-subject"] as const;
 
 function keywordArray(value: unknown, label: string): string[] {
   if (!Array.isArray(value) || value.length === 0 || value.some((item) => typeof item !== "string" || !item.trim())) throw new TypeError(`${label} is a list of keywords.`);
@@ -226,6 +228,20 @@ export const GAP_CONTAINER_FAMILIES: readonly SemanticFamilyDefinition[] = [
       additionalProperties: false,
     },
   },
+  {
+    id: "destroyed-model-selection",
+    version: 1,
+    role: "CONDITION",
+    label: "A selection among the destroyed models' units",
+    description: "\"Select one of those destroyed models; that destroyed model's unit …\": the select-unit right before it takes only a unit that lost a model to the triggering attacks, which destroyer made. The selected unit is the destroyed model's unit.",
+    starter: { destroyer: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["destroyer"],
+      properties: { destroyer: { enum: DESTROYED_SELECTION_DESTROYERS } },
+      additionalProperties: false,
+    },
+  },
 ];
 
 export function normalizeGapContainerParameters(family: string, input: Record<string, unknown>, version = 1): Record<string, unknown> | null {
@@ -354,6 +370,9 @@ export function normalizeGapContainerParameters(family: string, input: Record<st
         ...("excluded_keywords" in input ? { excluded_keywords: keywordArray(input.excluded_keywords, "objective-criterion.excluded_keywords") } : {}),
       };
     }
+    case "destroyed-model-selection":
+      exactKeys(input, ["destroyer"], family);
+      return { destroyer: enumValue(input.destroyer, DESTROYED_SELECTION_DESTROYERS, "destroyed-model-selection.destroyer") };
     default:
       return null;
   }

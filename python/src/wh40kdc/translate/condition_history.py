@@ -226,6 +226,13 @@ def _describe_happened_core(p: P, negated: bool) -> str:
                 {**victim, "level": "model" if event == "model-destroyed" else "unit"}
             )
             objects = re.sub(r"\b(unit|model)\b", r"\1s", re.sub(r"^an? ", "", phrase), count=1)
+        # "the unit lost 1+ models to the just-resolved attacks": the victims are one unit's
+        # models (a selection's candidate).
+        if event == "model-destroyed" and victim.get("member_of") is not None and window == "event":
+            member = victim["member_of"]
+            who = "the unit" if member == "selected-unit" else unit_ref_phrase(member)
+            atk = f"{_str(f['attack_type'])} " if _truthy(f.get("attack_type")) else ""
+            return f"{neg}{who} lost {_str(n)}+ models to the just-resolved {atk}attacks"
         # Who destroyed them: the filter's attacker, else the event's subject.
         killer_ref = f["by"] if f.get("by") is not None else p.get("subject")
         if killer_ref is not None:

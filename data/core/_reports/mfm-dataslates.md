@@ -15,10 +15,10 @@ dump confirmation.
 | wargear-options | 0 | 0 | 1234 | 0 |
 | leader-attachments | 0 | 0 | 283 | 8 |
 | enhancements | 0 | 0 | 890 | 0 |
-| detachments | 1 | 0 | 169 | 287 |
-| stratagems | 0 | 0 | 1032 | 281 |
-| abilities | 0 | 0 | 3641 | 894 |
-| phase-mappings | 1 | 0 | 1132 | 448 |
+| detachments | 0 | 0 | 170 | 287 |
+| stratagems | 2 | 0 | 1032 | 279 |
+| abilities | 0 | 0 | 3643 | 891 |
+| phase-mappings | 0 | 0 | 1133 | 448 |
 | resource-pools | 0 | 0 | 0 | 6 |
 
 ## Abilities by faction
@@ -26,7 +26,7 @@ dump confirmation.
 | Faction | Promote | Demote | Kept | Untouched |
 |---|--:|--:|--:|--:|
 | _core | 0 | 0 | 8 | 18 |
-| adepta-sororitas | 0 | 0 | 117 | 31 |
+| adepta-sororitas | 0 | 0 | 118 | 30 |
 | adeptus-astartes | 0 | 0 | 209 | 41 |
 | adeptus-custodes | 0 | 0 | 144 | 14 |
 | adeptus-mechanicus | 0 | 0 | 138 | 29 |
@@ -43,14 +43,14 @@ dump confirmation.
 | deathwatch | 0 | 0 | 31 | 5 |
 | drukhari | 0 | 0 | 125 | 39 |
 | emperors-children | 0 | 0 | 120 | 26 |
-| genestealer-cults | 0 | 0 | 115 | 32 |
+| genestealer-cults | 0 | 0 | 116 | 31 |
 | grey-knights | 0 | 0 | 121 | 13 |
 | imperial-fists | 0 | 0 | 8 | 3 |
 | imperial-knights | 0 | 0 | 89 | 29 |
 | iron-hands | 0 | 0 | 9 | 2 |
 | leagues-of-votann | 0 | 0 | 127 | 28 |
 | necrons | 0 | 0 | 190 | 40 |
-| orks | 0 | 0 | 176 | 34 |
+| orks | 0 | 0 | 176 | 33 |
 | raven-guard | 0 | 0 | 10 | 1 |
 | salamanders | 0 | 0 | 6 | 5 |
 | space-wolves | 0 | 0 | 74 | 13 |
@@ -72,8 +72,8 @@ dump confirmation.
 | _core | verified | 8 |
 | adepta-sororitas | digest-differs | 8 |
 | adepta-sororitas | stub | 4 |
-| adepta-sororitas | unpublished | 19 |
-| adepta-sororitas | verified | 117 |
+| adepta-sororitas | unpublished | 18 |
+| adepta-sororitas | verified | 118 |
 | adeptus-astartes | ambiguous-source | 1 |
 | adeptus-astartes | digest-differs | 13 |
 | adeptus-astartes | no-source | 5 |
@@ -142,9 +142,9 @@ dump confirmation.
 | emperors-children | unpublished | 19 |
 | emperors-children | verified | 120 |
 | genestealer-cults | digest-differs | 6 |
-| genestealer-cults | stub | 14 |
+| genestealer-cults | stub | 13 |
 | genestealer-cults | unpublished | 12 |
-| genestealer-cults | verified | 115 |
+| genestealer-cults | verified | 116 |
 | grey-knights | stub | 11 |
 | grey-knights | unpublished | 2 |
 | grey-knights | verified | 121 |
@@ -167,7 +167,6 @@ dump confirmation.
 | necrons | verified | 190 |
 | orks | ambiguous-source | 1 |
 | orks | digest-differs | 19 |
-| orks | no-source | 1 |
 | orks | stub | 7 |
 | orks | unpublished | 6 |
 | orks | verified | 176 |

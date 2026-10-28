@@ -5,6 +5,7 @@ import { condition } from "./compile-conditions.js";
 import { currentFamilyVersion } from "./contracts.js";
 import type { FilterAlternative } from "./unit-filter-alternatives.js";
 import { dslUnitFilter } from "./compile-unit-filter-dsl.js";
+import { destroyedSelectionEligibility } from "./compile-destroyed-selection.js";
 
 /**
  * Wrapping leaves (`aura-range`, `leader-target`, `for-each-unit-select`, `rules-bundle-marker`)
@@ -213,12 +214,15 @@ export function selectUnit(selection: CompileLeaf, body: Node, extra: { maxCount
     : selection.parameters.up_to === true ? { min: 0, max: own ?? 1 }
       // "select one or more": a lower bound only.
       : selection.parameters.at_least === true ? { min: own ?? 1 } : { min: own ?? 1, max: own ?? 1 };
+  // "Select one of those destroyed models": only a unit that lost a model to the triggering attacks (compile-destroyed-selection.ts).
+  const among = destroyedSelectionEligibility(selection);
+  const eligibility = among && extra.eligibility ? { operator: "and", operands: [extra.eligibility, among] } : among ?? extra.eligibility;
   return {
     type: "select-units",
     selector: {
       filter: selectionFilter(selection),
       count,
-      ...(extra.eligibility ? { eligibility: extra.eligibility } : {}),
+      ...(eligibility ? { eligibility } : {}),
       ...(extra.selectionLimit ? { limit: extra.selectionLimit } : {}),
       ...(typeof selection.parameters.bind_as === "string" ? { bind_as: selection.parameters.bind_as } : {}),
     },
