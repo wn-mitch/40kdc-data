@@ -1,6 +1,7 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
+import { factionKeywordId } from "./compile-army-faction.js";
 import { expectedWindow } from "./restriction-families.js";
 import { namedAbilityProblem } from "./named-ability-checks.js";
 
@@ -121,11 +122,6 @@ function coreWargearIds(dataRoot: string): Set<string> {
 }
 
 const factionIdCache = new Map<string, Set<string>>();
-
-/** A faction keyword as an id: lower-case, apostrophes dropped, other runs of non-alphanumerics a hyphen. */
-function factionKeywordId(keyword: string): string {
-  return keyword.toLowerCase().replace(/[‘’']/gu, "").replace(/[^a-z0-9]+/gu, "-").replace(/^-+|-+$/gu, "");
-}
 
 /**
  * Every Army Faction a rule can name: each core faction id (each faction directory's factions.json)

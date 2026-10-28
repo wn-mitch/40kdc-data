@@ -8,6 +8,7 @@ import { abilityUseCondition } from "./compile-ability-use.js";
  */
 
 import { armyIncludesCondition } from "./compile-army.js";
+import { armyFactionId } from "./compile-army-faction.js";
 import { closed, CompileError, weaponScope, type CompileLeaf } from "./compile-fragments.js";
 import { isSelectionRef } from "./compile-pair-eligibility.js";
 import { dslUnitFilter } from "./compile-unit-filter-dsl.js";
@@ -586,8 +587,11 @@ export function condition(leaf: CompileLeaf): Node {
       throw new CompileError("target-is-selected only compiles with a select-unit leaf; the compiler resolves it there.");
     case "targeted":
       return targetingCondition(leaf);
-    case "army-faction":
-      return polarity(leaf, { type: "army-faction", parameters: { faction: closed(leaf, "faction") } });
+    case "army-faction": {
+      const faction = closed(leaf, "faction");
+      if (typeof faction !== "string") throw new CompileError("army-faction names no faction.");
+      return polarity(leaf, { type: "army-faction", parameters: { faction: armyFactionId(faction) } });
+    }
     case "army-includes":
       return armyIncludesCondition(leaf);
     case "battle-size":

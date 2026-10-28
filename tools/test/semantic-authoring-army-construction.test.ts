@@ -300,12 +300,29 @@ describe("army contents as a condition (sub-shape D)", () => {
   });
 
   it("negates an Army Faction", () => {
-    const text = "If your Army Faction is not ALPHA LEGION, you can include one GAMMA unit.";
+    const text = "If your Army Faction is not NECRONS, you can include one GAMMA unit.";
     const effect = effectOf(placed(text,
-      ["If your Army Faction is not ALPHA LEGION", "army-faction", { faction: "alpha-legion", negated: true }],
+      ["If your Army Faction is not NECRONS", "army-faction", { faction: "necrons", negated: true }],
       ["include one", army, { rule: "composition", max: 1, with: "following-filter" }],
       filter("GAMMA unit", { side: "friendly", keywords: ["GAMMA"] })), text);
-    expect(effect.condition).toEqual({ operator: "not", operands: [{ type: "army-faction", parameters: { faction: "alpha-legion" } }] });
+    expect(effect.condition).toEqual({ operator: "not", operands: [{ type: "army-faction", parameters: { faction: "necrons" } }] });
+  });
+
+  it("lowers an Army Faction named by its faction keyword to the faction id", () => {
+    const text = "If your Army Faction is HERETIC ASTARTES, you can include one GAMMA unit.";
+    const effect = effectOf(placed(text,
+      ["If your Army Faction is HERETIC ASTARTES", "army-faction", { faction: "heretic-astartes" }],
+      ["include one", army, { rule: "composition", max: 1, with: "following-filter" }],
+      filter("GAMMA unit", { side: "friendly", keywords: ["GAMMA"] })), text);
+    expect(effect.condition).toEqual({ type: "army-faction", parameters: { faction: "chaos-space-marines" } });
+  });
+
+  it("refuses an Army Faction no faction id can match", () => {
+    const text = "If your Army Faction is ALPHA LEGION, you can include one GAMMA unit.";
+    expect(errorsOf(placed(text,
+      ["If your Army Faction is ALPHA LEGION", "army-faction", { faction: "alpha-legion" }],
+      ["include one", army, { rule: "composition", max: 1, with: "following-filter" }],
+      filter("GAMMA unit", { side: "friendly", keywords: ["GAMMA"] })), text)).toMatch(/Army Faction "alpha-legion" names no faction/);
   });
 
   it("refuses a some-condition with no filter, and keyword or count misuse", () => {

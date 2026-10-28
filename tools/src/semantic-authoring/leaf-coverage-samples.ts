@@ -58,6 +58,18 @@ export const STRUCTURED_FILTER_ALTERNATIVE_SAMPLES = [
   [{ keywords: ["CHARACTER"] }, { states: ["battle-shocked"] }],
 ] as const;
 
+/**
+ * Fields whose valid values come from the repo's data rather than their schema's shape: an
+ * army-faction names a faction id, which the compiler checks against the core faction records.
+ */
+const DATA_SAMPLES: Record<string, Record<string, readonly unknown[]>> = {
+  "army-faction": { faction: ["necrons"] },
+};
+
+function fieldDomain(family: SemanticFamilyDefinition, name: string, schema: Schema): unknown[] {
+  return [...(DATA_SAMPLES[family.id]?.[name] ?? domain(name, schema, family.starter))];
+}
+
 const isConcrete = (value: unknown): boolean => value !== "" && value !== null && value !== undefined && !(Array.isArray(value) && value.length === 0);
 
 /**
@@ -145,7 +157,7 @@ export function familyCombinations(family: SemanticFamilyDefinition): Record<str
   for (const [name, schema] of properties) {
     // An optional parameter (`x-optional`) is also tried absent.
     sets = sets.flatMap((set) => appliesGiven(schema, set)
-      ? [...domain(name, schema, family.starter).map((value) => ({ ...set, [name]: value })), ...(schema["x-optional"] ? [set] : [])]
+      ? [...fieldDomain(family, name, schema).map((value) => ({ ...set, [name]: value })), ...(schema["x-optional"] ? [set] : [])]
       : [set]);
   }
   const valid = new Map<string, Record<string, unknown>>();
@@ -173,7 +185,7 @@ export function boundedCombinations(family: SemanticFamilyDefinition): Record<st
   const properties = Object.entries((family.parameterSchema.properties ?? {}) as Record<string, Schema>);
   properties.sort(([, left], [, right]) => Number(Boolean(left["x-only-when"])) - Number(Boolean(right["x-only-when"])));
   const schemas = new Map(properties);
-  const domains = new Map(properties.map(([name, schema]) => [name, domain(name, schema, family.starter)]));
+  const domains = new Map(properties.map(([name, schema]) => [name, fieldDomain(family, name, schema)]));
   const required = new Set((family.parameterSchema.required ?? []) as string[]);
   const valid = new Map<string, Record<string, unknown>>();
 
