@@ -8035,7 +8035,7 @@
                 "value": 1
               }
             },
-            "id": "option-1"
+            "id": "huron-s-elite"
           },
           {
             "name": "Mobile Marauders",
@@ -8066,7 +8066,7 @@
                 }
               ]
             },
-            "id": "option-2"
+            "id": "mobile-marauders"
           }
         ]
       }
@@ -9328,7 +9328,7 @@
                 }
               }
             },
-            "id": "option-1"
+            "id": "cholinergic-accelerants"
           },
           {
             "name": "Hyperadrenal Infusion",
@@ -9341,7 +9341,7 @@
                 "value": 2
               }
             },
-            "id": "option-2"
+            "id": "hyperadrenal-infusion"
           },
           {
             "name": "Paraneural Reactions",
@@ -9357,7 +9357,7 @@
                 }
               }
             },
-            "id": "option-3"
+            "id": "paraneural-reactions"
           },
           {
             "name": "Supracutaneous Chitination",
@@ -9370,7 +9370,7 @@
                 "value": 1
               }
             },
-            "id": "option-4"
+            "id": "supracutaneous-chitination"
           },
           {
             "name": "Macrotensile Sinews",
@@ -9386,7 +9386,7 @@
                 }
               }
             },
-            "id": "option-5"
+            "id": "macrotensile-sinews"
           },
           {
             "name": "Ophthalmic Enhancement",
@@ -9399,7 +9399,7 @@
                 "value": 1
               }
             },
-            "id": "option-6"
+            "id": "ophthalmic-enhancement"
           }
         ]
       }

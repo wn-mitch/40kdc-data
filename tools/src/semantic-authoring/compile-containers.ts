@@ -120,10 +120,13 @@ function namedOption(group: readonly CompileLeaf[], forRequirement: boolean, sou
       ? "A dice-pool-allocation option's named-option leaf needs a dice requirement."
       : "This option's named-option leaf carries a dice requirement, but nothing here uses one.");
   }
-  // A reviewed option_id wins; otherwise source order supplies a stable identity. Never derive
-  // this id from the display label: labels are mutable player-facing text.
+  // The option's identity is its reviewed option_id: references name it, so it is never derived
+  // from the mutable display label or from the option's position.
   const reviewedId = marker.parameters.option_id;
-  const id = typeof reviewedId === "string" && reviewedId.length > 0 ? reviewedId : `option-${sourceIndex + 1}`;
+  if (typeof reviewedId !== "string" || reviewedId.length === 0) {
+    throw new CompileError(`Option ${sourceIndex + 1}'s named-option leaf needs a reviewed option_id.`);
+  }
+  const id = reviewedId;
   const effect = effectsOf(group.slice(1));
   return { id, name: closed(marker, "label"), effect: sharedOptionSteps === null ? effect : withSharedSteps(effect, sharedOptionSteps), marker };
 }

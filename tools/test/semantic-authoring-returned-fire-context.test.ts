@@ -78,10 +78,10 @@ describe("returned attacks bind their permission", () => {
     const result = compile([
       ["turn-start", { turn: "battle-round" }],
       ["choice-open", { min_choices: 1, max_choices: 1 }],
-      ["named-option", { label: "First option" }],
+      ["named-option", { label: "First option", option_id: "first-option" }],
       ["select-unit", { scope: "enemy", distance: "any", visible: false }],
       ["weapon-ability-grant", { subject: "antecedent", keyword: "Hazardous", weapon_type: "ranged" }],
-      ["named-option", { label: "Second option" }],
+      ["named-option", { label: "Second option", option_id: "second-option" }],
       ["aura-range", { side: "friendly", inches: 6 }],
       ["characteristic-modifier", { subject: "antecedent", characteristics: ["M"], operation: "add", value: 1 }],
     ]);

@@ -7791,7 +7791,7 @@
                 "duration": "until-next-command-phase"
               }
             },
-            "id": "option-1"
+            "id": "eliminate-at-all-costs"
           },
           {
             "name": "Acquire At All Costs",
@@ -7841,7 +7841,7 @@
                 ]
               }
             },
-            "id": "option-2"
+            "id": "acquire-at-all-costs"
           }
         ]
       }
@@ -8961,7 +8961,7 @@
             "parameters": {
               "rule": {
                 "ability_id": "blessings-of-khorne-world-eaters",
-                "option_id": "option-1"
+                "option_id": "unbridled-bloodlust"
               }
             }
           },
@@ -8986,7 +8986,7 @@
       ]
     },
     "expected": {
-      "text": "You can re-roll the Charge roll.\nWhile the Option 1 option of Blessings of Khorne is active, the unit gets +1 to Charge rolls.\nApplies to: units with WORLD EATERS."
+      "text": "You can re-roll the Charge roll.\nWhile the Unbridled Bloodlust option of Blessings of Khorne is active, the unit gets +1 to Charge rolls.\nApplies to: units with WORLD EATERS."
     }
   },
   {
@@ -9355,7 +9355,7 @@
                 }
               }
             },
-            "id": "option-1"
+            "id": "panegyric-procession"
           },
           {
             "name": "Citation in Savagery",
@@ -9403,7 +9403,7 @@
                 ]
               }
             },
-            "id": "option-2"
+            "id": "citation-in-savagery"
           }
         ]
       }
@@ -10413,7 +10413,7 @@
         "max_activations": 2,
         "options": [
           {
-            "id": "option-1",
+            "id": "unbridled-bloodlust",
             "name": "Unbridled Bloodlust",
             "requirement": {
               "type": "pair",
@@ -10430,7 +10430,7 @@
             }
           },
           {
-            "id": "option-2",
+            "id": "rage-fuelled-invigoration",
             "name": "Rage-Fuelled Invigoration",
             "requirement": {
               "type": "pair",
@@ -10449,7 +10449,7 @@
             }
           },
           {
-            "id": "option-3",
+            "id": "total-carnage",
             "name": "Total Carnage",
             "requirement": {
               "type": "pair",
@@ -10495,7 +10495,7 @@
             }
           },
           {
-            "id": "option-4",
+            "id": "martial-excellence",
             "name": "Martial Excellence",
             "requirement": {
               "any_of": [
@@ -10528,7 +10528,7 @@
             }
           },
           {
-            "id": "option-5",
+            "id": "warp-blades",
             "name": "Warp Blades",
             "requirement": {
               "any_of": [
@@ -10558,7 +10558,7 @@
             }
           },
           {
-            "id": "option-6",
+            "id": "decapitating-strikes",
             "name": "Decapitating Strikes",
             "requirement": {
               "any_of": [
@@ -10646,7 +10646,7 @@
         "max_activations": 2,
         "options": [
           {
-            "id": "option-1",
+            "id": "unbridled-bloodlust",
             "name": "Unbridled Bloodlust",
             "requirement": {
               "type": "pair",
@@ -10663,7 +10663,7 @@
             }
           },
           {
-            "id": "option-2",
+            "id": "rage-fuelled-invigoration",
             "name": "Rage-Fuelled Invigoration",
             "requirement": {
               "type": "pair",
@@ -10682,7 +10682,7 @@
             }
           },
           {
-            "id": "option-3",
+            "id": "total-carnage",
             "name": "Total Carnage",
             "requirement": {
               "type": "pair",
@@ -10728,7 +10728,7 @@
             }
           },
           {
-            "id": "option-4",
+            "id": "martial-excellence",
             "name": "Martial Excellence",
             "requirement": {
               "any_of": [
@@ -10761,7 +10761,7 @@
             }
           },
           {
-            "id": "option-5",
+            "id": "warp-blades",
             "name": "Warp Blades",
             "requirement": {
               "any_of": [
@@ -10791,7 +10791,7 @@
             }
           },
           {
-            "id": "option-6",
+            "id": "decapitating-strikes",
             "name": "Decapitating Strikes",
             "requirement": {
               "any_of": [
@@ -14323,7 +14323,7 @@
                 }
               }
             },
-            "id": "option-1"
+            "id": "adrenalight"
           },
           {
             "name": "Hypex",
@@ -14336,7 +14336,7 @@
                 "value": 2
               }
             },
-            "id": "option-2"
+            "id": "hypex"
           },
           {
             "name": "Serpentin",
@@ -14352,7 +14352,7 @@
                 }
               }
             },
-            "id": "option-3"
+            "id": "serpentin"
           },
           {
             "name": "Painbringer",
@@ -14365,7 +14365,7 @@
                 "value": 1
               }
             },
-            "id": "option-4"
+            "id": "painbringer"
           },
           {
             "name": "Grave Lotus",
@@ -14381,7 +14381,7 @@
                 }
               }
             },
-            "id": "option-5"
+            "id": "grave-lotus"
           },
           {
             "name": "Splintermind",
@@ -14411,7 +14411,7 @@
                 }
               ]
             },
-            "id": "option-6"
+            "id": "splintermind"
           }
         ]
       }
@@ -15432,7 +15432,7 @@
                 }
               ]
             },
-            "id": "option-1"
+            "id": "khorne"
           },
           {
             "name": "Tzeentch",
@@ -15457,7 +15457,7 @@
                 }
               ]
             },
-            "id": "option-2"
+            "id": "tzeentch"
           },
           {
             "name": "Nurgle",
@@ -15482,7 +15482,7 @@
                 }
               ]
             },
-            "id": "option-3"
+            "id": "nurgle"
           },
           {
             "name": "Slaanesh",
@@ -15507,7 +15507,7 @@
                 }
               ]
             },
-            "id": "option-4"
+            "id": "slaanesh"
           }
         ]
       }
@@ -28099,7 +28099,7 @@
                 }
               ]
             },
-            "id": "option-1"
+            "id": "the-fiery-heart"
           },
           {
             "name": "Censer of the Sacred Rose",
@@ -28122,7 +28122,7 @@
                 "result_scope": "any-result"
               }
             },
-            "id": "option-2"
+            "id": "censer-of-the-sacred-rose"
           },
           {
             "name": "Simulacrum of the Ebon Chalice",
@@ -28147,7 +28147,7 @@
                 "value": 2
               }
             },
-            "id": "option-3"
+            "id": "simulacrum-of-the-ebon-chalice"
           },
           {
             "name": "Simulacrum of the Argent Shroud",
@@ -28173,7 +28173,7 @@
                 }
               }
             },
-            "id": "option-4"
+            "id": "simulacrum-of-the-argent-shroud"
           },
           {
             "name": "Icon of the Valorous Heart",
@@ -28195,7 +28195,7 @@
                 "threshold": 6
               }
             },
-            "id": "option-5"
+            "id": "icon-of-the-valorous-heart"
           },
           {
             "name": "Petals of the Bloody Rose",
@@ -28222,7 +28222,7 @@
                 }
               }
             },
-            "id": "option-6"
+            "id": "petals-of-the-bloody-rose"
           }
         ]
       }
@@ -32937,7 +32937,7 @@
       "mode": "re-selectable",
       "options": [
         {
-          "id": "option-1",
+          "id": "impossible-form",
           "name": "Impossible Form",
           "effect": {
             "type": "conditional",
@@ -32964,7 +32964,7 @@
           }
         },
         {
-          "id": "option-2",
+          "id": "treason-of-tzeentch",
           "name": "Treason of Tzeentch",
           "effect": {
             "type": "ability-part",
@@ -33032,7 +33032,7 @@
           }
         },
         {
-          "id": "option-3",
+          "id": "time-flux",
           "name": "Time Flux",
           "effect": {
             "type": "aura",

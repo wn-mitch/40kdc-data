@@ -45,9 +45,9 @@ const POOL_TEXT = [
 function poolLeaves(secondRequirement: Record<string, unknown>) {
   return placed(POOL_TEXT, [
     ["Roll six D6 and spend them to activate up to two Gifts", "dice-pool-allocation-open", { pool_count: 6, pool_die: "D6", max_activations: 2 }],
-    ["Gift One can be activated with any double", "named-option", { label: "Gift One", requirement_type: "pair", requirement_min_value: 1 }],
+    ["Gift One can be activated with any double", "named-option", { label: "Gift One", option_id: "gift-one", requirement_type: "pair", requirement_min_value: 1 }],
     ["This unit has +1 to charge rolls", "roll-modifier", { roll: "charge", operation: "add", value: 1 }],
-    ["Gift Two can be activated with a double 4 or higher, or any triple", "named-option", { label: "Gift Two", ...secondRequirement }],
+    ["Gift Two can be activated with a double 4 or higher, or any triple", "named-option", { label: "Gift Two", option_id: "gift-two", ...secondRequirement }],
     ["At the start of the Fight phase", "event", { kind: "phase-start", phase: "fight", turn: "either" }],
     ["this unit has +1 to hit rolls", "roll-modifier", { roll: "hit", operation: "add", value: 1 }],
   ]);
@@ -104,10 +104,10 @@ describe("container option bounds", () => {
     const { leaves } = placed(text, [
       ["Roll six D6 and spend them to activate up to two Gifts", "dice-pool-allocation-open", { pool_count: 6, pool_die: "D6", max_activations: 2 }],
       ["until the end of the battle round", "duration", { endpoint: "end-of-battle-round" }],
-      ["Gift One can be activated with any double", "named-option", { label: "Gift One", requirement_type: "pair", requirement_min_value: 1 }],
+      ["Gift One can be activated with any double", "named-option", { label: "Gift One", option_id: "gift-one", requirement_type: "pair", requirement_min_value: 1 }],
       ["Weapons equipped by models in this unit have the", "weapon-ability-grant", { subject: "this-unit", weapon_type: "all" }],
       ["LETHAL HITS", "weapon-ability-keyword", { keyword: "Lethal Hits" }],
-      ["Gift Two can be activated with any triple", "named-option", { label: "Gift Two", requirement_type: "triple", requirement_min_value: 1 }],
+      ["Gift Two can be activated with any triple", "named-option", { label: "Gift Two", option_id: "gift-two", requirement_type: "triple", requirement_min_value: 1 }],
       ["At the start of the Fight phase", "event", { kind: "phase-start", phase: "fight", turn: "either" }],
       ["this unit has +1 to hit rolls", "roll-modifier", { roll: "hit", operation: "add", value: 1 }],
     ]);

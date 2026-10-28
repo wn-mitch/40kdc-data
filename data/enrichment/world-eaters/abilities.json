@@ -32,7 +32,7 @@
         "max_activations": 2,
         "options": [
           {
-            "id": "option-1",
+            "id": "unbridled-bloodlust",
             "name": "Unbridled Bloodlust",
             "requirement": {
               "type": "pair",
@@ -49,7 +49,7 @@
             }
           },
           {
-            "id": "option-2",
+            "id": "rage-fuelled-invigoration",
             "name": "Rage-Fuelled Invigoration",
             "requirement": {
               "type": "pair",
@@ -68,7 +68,7 @@
             }
           },
           {
-            "id": "option-3",
+            "id": "total-carnage",
             "name": "Total Carnage",
             "requirement": {
               "type": "pair",
@@ -114,7 +114,7 @@
             }
           },
           {
-            "id": "option-4",
+            "id": "martial-excellence",
             "name": "Martial Excellence",
             "requirement": {
               "any_of": [
@@ -147,7 +147,7 @@
             }
           },
           {
-            "id": "option-5",
+            "id": "warp-blades",
             "name": "Warp Blades",
             "requirement": {
               "any_of": [
@@ -177,7 +177,7 @@
             }
           },
           {
-            "id": "option-6",
+            "id": "decapitating-strikes",
             "name": "Decapitating Strikes",
             "requirement": {
               "any_of": [
@@ -3254,7 +3254,7 @@
                 }
               }
             },
-            "id": "option-1"
+            "id": "the-blood-god-s-favour"
           },
           {
             "name": "Overwhelming Wrath",
@@ -3284,7 +3284,7 @@
                 }
               }
             },
-            "id": "option-2"
+            "id": "overwhelming-wrath"
           },
           {
             "name": "Driven by Ultimate Rage",
@@ -3384,7 +3384,7 @@
                 }
               ]
             },
-            "id": "option-3"
+            "id": "driven-by-ultimate-rage"
           }
         ]
       }
@@ -4749,7 +4749,7 @@
             "parameters": {
               "rule": {
                 "ability_id": "blessings-of-khorne-world-eaters",
-                "option_id": "option-1"
+                "option_id": "unbridled-bloodlust"
               }
             }
           },
@@ -9328,7 +9328,7 @@
         "max_activations": 2,
         "options": [
           {
-            "id": "option-1",
+            "id": "unbridled-bloodlust",
             "name": "Unbridled Bloodlust",
             "requirement": {
               "type": "pair",
@@ -9345,7 +9345,7 @@
             }
           },
           {
-            "id": "option-2",
+            "id": "rage-fuelled-invigoration",
             "name": "Rage-Fuelled Invigoration",
             "requirement": {
               "type": "pair",
@@ -9364,7 +9364,7 @@
             }
           },
           {
-            "id": "option-3",
+            "id": "total-carnage",
             "name": "Total Carnage",
             "requirement": {
               "type": "pair",
@@ -9410,7 +9410,7 @@
             }
           },
           {
-            "id": "option-4",
+            "id": "martial-excellence",
             "name": "Martial Excellence",
             "requirement": {
               "any_of": [
@@ -9443,7 +9443,7 @@
             }
           },
           {
-            "id": "option-5",
+            "id": "warp-blades",
             "name": "Warp Blades",
             "requirement": {
               "any_of": [
@@ -9473,7 +9473,7 @@
             }
           },
           {
-            "id": "option-6",
+            "id": "decapitating-strikes",
             "name": "Decapitating Strikes",
             "requirement": {
               "any_of": [

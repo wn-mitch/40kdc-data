@@ -5632,7 +5632,7 @@
                 "value": 2
               }
             },
-            "id": "option-1"
+            "id": "electromotive-energisation"
           },
           {
             "name": "Microactuator Bracing",
@@ -5645,7 +5645,7 @@
                 "value": 1
               }
             },
-            "id": "option-2"
+            "id": "microactuator-bracing"
           },
           {
             "name": "Predation Protocols",
@@ -5657,7 +5657,7 @@
                 "allow": true
               }
             },
-            "id": "option-3"
+            "id": "predation-protocols"
           },
           {
             "name": "Muted Servomotors",
@@ -5670,7 +5670,7 @@
                 "value": 1
               }
             },
-            "id": "option-4"
+            "id": "muted-servomotors"
           }
         ]
       }
@@ -5855,7 +5855,7 @@
                 }
               }
             },
-            "id": "option-1"
+            "id": "panegyric-procession"
           },
           {
             "name": "Citation in Savagery",
@@ -5903,7 +5903,7 @@
                 ]
               }
             },
-            "id": "option-2"
+            "id": "citation-in-savagery"
           }
         ]
       }

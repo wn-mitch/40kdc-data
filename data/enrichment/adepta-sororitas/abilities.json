@@ -1195,7 +1195,7 @@
                 }
               ]
             },
-            "id": "option-1"
+            "id": "the-fiery-heart"
           },
           {
             "name": "Censer of the Sacred Rose",
@@ -1218,7 +1218,7 @@
                 "result_scope": "any-result"
               }
             },
-            "id": "option-2"
+            "id": "censer-of-the-sacred-rose"
           },
           {
             "name": "Simulacrum of the Ebon Chalice",
@@ -1243,7 +1243,7 @@
                 "value": 2
               }
             },
-            "id": "option-3"
+            "id": "simulacrum-of-the-ebon-chalice"
           },
           {
             "name": "Simulacrum of the Argent Shroud",
@@ -1269,7 +1269,7 @@
                 }
               }
             },
-            "id": "option-4"
+            "id": "simulacrum-of-the-argent-shroud"
           },
           {
             "name": "Icon of the Valorous Heart",
@@ -1291,7 +1291,7 @@
                 "threshold": 6
               }
             },
-            "id": "option-5"
+            "id": "icon-of-the-valorous-heart"
           },
           {
             "name": "Petals of the Bloody Rose",
@@ -1318,7 +1318,7 @@
                 }
               }
             },
-            "id": "option-6"
+            "id": "petals-of-the-bloody-rose"
           }
         ]
       }

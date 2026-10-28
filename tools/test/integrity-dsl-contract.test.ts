@@ -94,6 +94,14 @@ describe("canonical DSL semantic integrity", () => {
     ]);
   });
 
+  it("rejects positional option ids, which re-point references when options are reordered", async () => {
+    const errors = await issues({ "enrichment/example/abilities.json": [menu("positional", ["option-1", "option-12", "option-one"])] });
+    expect(errors.map((error) => error.message)).toEqual([
+      'positional option id "option-1": name the option by its slug',
+      'positional option id "option-12": name the option by its slug',
+    ]);
+  });
+
   it("allows rating-agnostic selectors but requires complete catalog grants", async () => {
     const anti = { keyword_id: "anti", parameters: { target_keyword: "INFANTRY" } };
     const errors = await issues({

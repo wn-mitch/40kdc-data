@@ -267,7 +267,7 @@ describe("a reserves arrival pairs with a set-up in an earlier sentence of its o
   const text = "Choose one of these options:\n**Alpha**\nIn your Command phase, if this unit is unengaged, you can use this ability. If you do:\n- Place this unit in reserves.\n- This unit can make an ingress move in your next Movement phase (including in your first turn).\n**Beta**\nThis unit has +1 OC.";
   const pieces: Piece[] = [
     ["Choose one of these options", "choice-open", { choice_label: "options", min_choices: 1, max_choices: 1 }],
-    ["Alpha", "named-option", { label: "Alpha" }],
+    ["Alpha", "named-option", { label: "Alpha", option_id: "alpha" }],
     ["In your Command phase", "phase-window", { phase: "command", turn: "your" }],
     ["if this unit is unengaged", "unit-state", { states: ["engaged"], subject: "this-unit", negated: true }],
     ["you can use this ability", "optional-use", { who: "you" }],
@@ -275,7 +275,7 @@ describe("a reserves arrival pairs with a set-up in an earlier sentence of its o
     ["This unit can make an ingress move", "make-move", { subject: "this-unit", move_type: "ingress" }],
     ["in your next Movement phase", "phase-window", { phase: "movement", turn: "your" }],
     ["including in your first turn", "reserves-arrival", { allow_first_round: true }],
-    ["Beta", "named-option", { label: "Beta" }],
+    ["Beta", "named-option", { label: "Beta", option_id: "beta" }],
     ["This unit has +1 OC", "characteristic-modifier", stat("OC", 1)],
   ];
 

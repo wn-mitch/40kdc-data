@@ -305,11 +305,11 @@ describe("Semantic authoring grant and activation shapes from the wave-10 record
     const text = "Select one option. Furor: weapons equipped by FOO units have the Ignores Cover ability. Malleus: weapons equipped by FOO units have the Lethal Hits ability.";
     const result = compileLeaves(placed(text,
       ["Select one option.", "choice-open", { min_choices: 1, max_choices: 1 }],
-      ["Furor", "named-option", { label: "Furor" }],
+      ["Furor", "named-option", { label: "Furor", option_id: "furor" }],
       ["weapons equipped by", "weapon-ability-grant", { subject: "antecedent", weapon_type: "all" }],
       ["FOO units", "unit-filter", { side: "friendly", keywords: ["FOO"] }],
       ["Ignores Cover", "weapon-ability-keyword", { keyword: "Ignores Cover" }],
-      ["Malleus", "named-option", { label: "Malleus" }],
+      ["Malleus", "named-option", { label: "Malleus", option_id: "malleus" }],
       ["weapons equipped by", "weapon-ability-grant", { subject: "antecedent", weapon_type: "all" }],
       ["FOO units", "unit-filter", { side: "friendly", keywords: ["FOO"] }],
       ["Lethal Hits", "weapon-ability-keyword", { keyword: "Lethal Hits" }]), text);

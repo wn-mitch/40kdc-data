@@ -112,21 +112,21 @@ const CONTAINER_OPENER_FOLLOWUPS: Partial<Record<string, () => CompileLeaf[]>> =
     leafOf("EFFECT", "invulnerable-save", { subject: "this-model", threshold: 4 }, 1, "C"),
   ],
   "stance-select-open": () => [
-    leafOf("EVENT", "named-option", { label: "Conqueror Doctrine" }, 1, "B"),
+    leafOf("EVENT", "named-option", { label: "Conqueror Doctrine", option_id: "conqueror-doctrine" }, 1, "B"),
     leafOf("EFFECT", "fights-first", { subject: "this-model" }, 1, "B"),
-    leafOf("EVENT", "named-option", { label: "Ballistic Doctrine" }, 1, "C"),
+    leafOf("EVENT", "named-option", { label: "Ballistic Doctrine", option_id: "ballistic-doctrine" }, 1, "C"),
     leafOf("EFFECT", "invulnerable-save", { subject: "this-model", threshold: 4 }, 1, "C"),
   ],
   "issue-orders-open": () => [
-    leafOf("EVENT", "named-option", { label: "First Rank, Fire!" }, 1, "B"),
+    leafOf("EVENT", "named-option", { label: "First Rank, Fire!", option_id: "first-rank-fire" }, 1, "B"),
     leafOf("EFFECT", "fights-first", { subject: "this-model" }, 1, "B"),
-    leafOf("EVENT", "named-option", { label: "Take Aim!" }, 1, "C"),
+    leafOf("EVENT", "named-option", { label: "Take Aim!", option_id: "take-aim" }, 1, "C"),
     leafOf("EFFECT", "invulnerable-save", { subject: "this-model", threshold: 4 }, 1, "C"),
   ],
   "dice-pool-allocation-open": () => [
-    leafOf("EVENT", "named-option", { label: "Path of Slaughter", requirement_type: "pair", requirement_min_value: 3 }, 1, "B"),
+    leafOf("EVENT", "named-option", { label: "Path of Slaughter", option_id: "path-of-slaughter", requirement_type: "pair", requirement_min_value: 3 }, 1, "B"),
     leafOf("EFFECT", "fights-first", { subject: "this-model" }, 1, "B"),
-    leafOf("EVENT", "named-option", { label: "Path of Rage", requirement_type: "triple", requirement_min_value: 4 }, 1, "C"),
+    leafOf("EVENT", "named-option", { label: "Path of Rage", option_id: "path-of-rage", requirement_type: "triple", requirement_min_value: 4 }, 1, "C"),
     leafOf("EFFECT", "invulnerable-save", { subject: "this-model", threshold: 4 }, 1, "C"),
   ],
   "risk-reward-open": () => [

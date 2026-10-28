@@ -4438,7 +4438,7 @@
                 "duration": "until-next-command-phase"
               }
             },
-            "id": "option-1"
+            "id": "eliminate-at-all-costs"
           },
           {
             "name": "Acquire At All Costs",
@@ -4488,7 +4488,7 @@
                 ]
               }
             },
-            "id": "option-2"
+            "id": "acquire-at-all-costs"
           }
         ]
       }
@@ -4654,7 +4654,7 @@
                 ]
               }
             },
-            "id": "option-1"
+            "id": "furor-tactics"
           },
           {
             "name": "Malleus Tactics",
@@ -4669,7 +4669,7 @@
                 ]
               }
             },
-            "id": "option-2"
+            "id": "malleus-tactics"
           },
           {
             "name": "Purgatus Tactics",
@@ -4684,7 +4684,7 @@
                 ]
               }
             },
-            "id": "option-3"
+            "id": "purgatus-tactics"
           }
         ]
       }

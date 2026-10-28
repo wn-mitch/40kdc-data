@@ -481,10 +481,10 @@ describe("a menu the units of a filter hold", () => {
     ["select one of the Hexes below", "choice-open", { choice_label: "hex", min_choices: 1, max_choices: 1 }],
     ...persistent,
     ["that unit has the effect of your chosen Hex", "chosen-option-grant", { holder: "antecedent" }],
-    ["Hex of Rust", "named-option", { label: "Hex of Rust" }],
+    ["Hex of Rust", "named-option", { label: "Hex of Rust", option_id: "hex-of-rust" }],
     ["Each time a model in this unit makes a ranged attack", "attack", { direction: "makes", unit: "this-unit", attack_type: "ranged" }],
     ["enemy units have the benefit of cover against the attack", "core-ability-grant", { subject: "target", ability: "benefit-of-cover" }],
-    ["Hex of Lead", "named-option", { label: "Hex of Lead" }],
+    ["Hex of Lead", "named-option", { label: "Hex of Lead", option_id: "hex-of-lead" }],
     ["Worsen the Move characteristic of models in this unit by 1", "characteristic-modifier", { subject: "this-unit", characteristics: ["M"], operation: "worsen", value: 1, weapon_type: "all" }],
   ];
 
@@ -520,10 +520,10 @@ describe("a record with an aura and a deployment-time menu", () => {
     ["select one of the Hexes below", "choice-open", { choice_label: "hex", min_choices: 1, max_choices: 1 }],
     ...persistent,
     ["that unit has the effect of your chosen Hex", "chosen-option-grant", { holder: "antecedent" }],
-    ["Hex of Rust", "named-option", { label: "Hex of Rust" }],
+    ["Hex of Rust", "named-option", { label: "Hex of Rust", option_id: "hex-of-rust" }],
     ["Each time a model in this unit makes a ranged attack", "attack", { direction: "makes", unit: "this-unit", attack_type: "ranged" }],
     ["enemy units have the benefit of cover against the attack", "core-ability-grant", { subject: "target", ability: "benefit-of-cover" }],
-    ["Hex of Lead", "named-option", { label: "Hex of Lead" }],
+    ["Hex of Lead", "named-option", { label: "Hex of Lead", option_id: "hex-of-lead" }],
     ["Worsen the Move characteristic of models in this unit by 1", "characteristic-modifier", { subject: "this-unit", characteristics: ["M"], operation: "worsen", value: 1, weapon_type: "all" }],
   );
 

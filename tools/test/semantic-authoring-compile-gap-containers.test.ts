@@ -410,13 +410,13 @@ describe("Semantic authoring aura-emitter compiler", () => {
   it("keeps consumable option auras disjoint for Titanic's conditional radius", () => {
     const effect = compiledEffect([
       leaf("EFFECT", "stance-select-open", { scope: "army", mode: "consumable" }, "A", 1),
-      leaf("EVENT", "named-option", { label: "Rite Alpha" }, "B", 3),
+      leaf("EVENT", "named-option", { label: "Rite Alpha", option_id: "rite-alpha" }, "B", 3),
       leaf("CONDITION", "aura-emitter", { side: "friendly", keywords: ["WORLD EATERS"], any_keywords: ["MONSTER", "TITANIC"] }, "B", 1),
       leaf("CONDITION", "unit-filter", { side: "friendly", any_keywords: ["JAKHALS", "GOREMONGERS"] }, "B", 16),
       leaf("CONDITION", "aura-range", { inches: 6, conditional_range: { inches: 9, keywords: ["TITANIC"] } }, "B", 4),
       leaf("CONDITION", "unit-keyword", { keywords: ["TITANIC"], subject: "this-model" }, "B", 1),
       leaf("EFFECT", "fights-first", { subject: "this-unit" }, "B", 1),
-      leaf("EVENT", "named-option", { label: "Rite Beta" }, "C", 3),
+      leaf("EVENT", "named-option", { label: "Rite Beta", option_id: "rite-beta" }, "C", 3),
       leaf("CONDITION", "aura-emitter", { side: "friendly", keywords: ["WORLD EATERS"], any_keywords: ["MONSTER", "TITANIC"] }, "C", 1),
       leaf("CONDITION", "unit-filter", { side: "friendly", any_keywords: ["JAKHALS", "GOREMONGERS"] }, "C", 16),
       leaf("CONDITION", "aura-range", { inches: 6, conditional_range: { inches: 9, keywords: ["TITANIC"] } }, "C", 4),

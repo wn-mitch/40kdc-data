@@ -10390,7 +10390,7 @@
                   }
                 ]
               },
-              "id": "option-1"
+              "id": "counterstrategist"
             },
             {
               "name": "Decisive Command",
@@ -10404,7 +10404,7 @@
                   "value": 12
                 }
               },
-              "id": "option-2"
+              "id": "decisive-command"
             },
             {
               "name": "Inspiring Hero",
@@ -10451,7 +10451,7 @@
                   }
                 ]
               },
-              "id": "option-3"
+              "id": "inspiring-hero"
             }
           ],
           "max_choices": 1

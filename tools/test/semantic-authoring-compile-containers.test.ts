@@ -208,11 +208,23 @@ describe("Semantic authoring leading-container compiler", () => {
     ]).length).toBeGreaterThan(0);
   });
 
+  it("refuses a named option with no reviewed option_id instead of numbering it by position", () => {
+    const result = compileLeaves([
+      leaf("EFFECT", "stance-select-open", { scope: "unit", mode: "consumable" }, 1, "A"),
+      leaf("EVENT", "named-option", { label: "Conqueror Doctrine", option_id: "conqueror-doctrine" }, 3, "B"),
+      leaf("EFFECT", "fights-first", { subject: "this-model" }, 1, "B"),
+      leaf("EVENT", "named-option", { label: "Ballistic Doctrine" }, 3, "C"),
+      leaf("EFFECT", "invulnerable-save", { subject: "this-model", threshold: 4 }, 1, "C"),
+    ]);
+    expect(result.ok).toBe(false);
+    expect(JSON.stringify(result)).toMatch(/Option 2's named-option leaf needs a reviewed option_id/u);
+  });
+
   it("refuses a stance-select-open option with no leading named-option leaf", () => {
     const result = compileLeaves([
       leaf("EFFECT", "stance-select-open", { scope: "unit", mode: "consumable" }, 1, "A"),
       leaf("EFFECT", "fights-first", { subject: "this-model" }, 1, "B"),
-      leaf("EVENT", "named-option", { label: "Ballistic Doctrine" }, 1, "C"),
+      leaf("EVENT", "named-option", { label: "Ballistic Doctrine", option_id: "ballistic-doctrine" }, 1, "C"),
       leaf("EFFECT", "invulnerable-save", { subject: "this-model", threshold: 4 }, 1, "C"),
     ]);
     expect(result.ok).toBe(false);
@@ -221,22 +233,22 @@ describe("Semantic authoring leading-container compiler", () => {
   it("compiles issue-orders-open into named Orders", () => {
     expect(compiled([
       leaf("EFFECT", "issue-orders-open", { count: 1, range: 6, eligible_keyword: "INFANTRY" }, 1, "A"),
-      leaf("EVENT", "named-option", { label: "First Rank, Fire!" }, 1, "B"),
+      leaf("EVENT", "named-option", { label: "First Rank, Fire!", option_id: "first-rank-fire" }, 1, "B"),
       leaf("EFFECT", "fights-first", { subject: "this-model" }, 1, "B"),
-      leaf("EVENT", "named-option", { label: "Take Aim!" }, 1, "C"),
+      leaf("EVENT", "named-option", { label: "Take Aim!", option_id: "take-aim" }, 1, "C"),
       leaf("EFFECT", "invulnerable-save", { subject: "this-model", threshold: 4 }, 1, "C"),
     ]).mechanics.effect).toEqual({
       type: "issue-orders", count: 1, range: { inches: 6 }, eligible: { all_of: ["INFANTRY"] },
       options: [
-        { id: "option-1", name: "First Rank, Fire!", effect: { type: "ability-grant", target: "this-model", modifier: { ability: "fights-first" } } },
-        { id: "option-2", name: "Take Aim!", effect: { type: "invulnerable-save", target: "this-model", modifier: { invuln_sv: 4 } } },
+        { id: "first-rank-fire", name: "First Rank, Fire!", effect: { type: "ability-grant", target: "this-model", modifier: { ability: "fights-first" } } },
+        { id: "take-aim", name: "Take Aim!", effect: { type: "invulnerable-save", target: "this-model", modifier: { invuln_sv: 4 } } },
       ],
     });
     expect(rendered(base(), [
       leaf("EFFECT", "issue-orders-open", {}, 1, "A"),
-      leaf("EVENT", "named-option", { label: "First Rank, Fire!" }, 1, "B"),
+      leaf("EVENT", "named-option", { label: "First Rank, Fire!", option_id: "first-rank-fire" }, 1, "B"),
       leaf("EFFECT", "fights-first", { subject: "this-model" }, 1, "B"),
-      leaf("EVENT", "named-option", { label: "Take Aim!" }, 1, "C"),
+      leaf("EVENT", "named-option", { label: "Take Aim!", option_id: "take-aim" }, 1, "C"),
       leaf("EFFECT", "invulnerable-save", { subject: "this-model", threshold: 4 }, 1, "C"),
     ]).length).toBeGreaterThan(0);
   });
@@ -257,7 +269,7 @@ describe("Semantic authoring leading-container compiler", () => {
     leaf("RESTRICTION", "order-rule", { rule: "benefit", keywords: ["ASTRA MILITARUM"] }, 1, "R4"),
     leaf("EVENT", "named-option", { label: "Take Aim!", option_id: "take-aim" }, 3, "B"),
     leaf("EFFECT", "characteristic-modifier", { subject: "this-unit", characteristics: ["BS"], operation: "improve", value: 1, weapon_type: "ranged" }, 19, "B"),
-    leaf("EVENT", "named-option", { label: "Take Cover!" }, 3, "C"),
+    leaf("EVENT", "named-option", { label: "Take Cover!", option_id: "take-cover" }, 3, "C"),
     leaf("EFFECT", "characteristic-modifier", { subject: "this-unit", characteristics: ["Sv"], operation: "improve", value: 1, weapon_type: "all" }, 19, "C"),
     leaf("CONDITION", "characteristic-floor", { characteristics: ["Sv"], minimum: 3 }, 2, "C"),
   ];
@@ -274,7 +286,7 @@ describe("Semantic authoring leading-container compiler", () => {
         type: "issue-orders",
         options: [
           { id: "take-aim", name: "Take Aim!", effect: { type: "stat-modifier", target: "this-unit", modifier: { stat: "BS", operation: "improve", value: 1, weapons: { type: "ranged" } } } },
-          { id: "option-2", name: "Take Cover!", effect: { type: "stat-modifier", target: "this-unit", modifier: { stat: "Sv", operation: "improve", value: 1, minimum: 3 } } },
+          { id: "take-cover", name: "Take Cover!", effect: { type: "stat-modifier", target: "this-unit", modifier: { stat: "Sv", operation: "improve", value: 1, minimum: 3 } } },
         ],
         range: { inches: 6 },
         issuer: { all_of: ["OFFICER"] },
@@ -315,22 +327,22 @@ describe("Semantic authoring leading-container compiler", () => {
   it("compiles dice-pool-allocation-open into options gated by a dice requirement", () => {
     expect(compiled([
       leaf("EFFECT", "dice-pool-allocation-open", { pool_count: 6, pool_die: "D6", max_activations: 1 }, 1, "A"),
-      leaf("EVENT", "named-option", { label: "Path of Slaughter", requirement_type: "pair", requirement_min_value: 3 }, 1, "B"),
+      leaf("EVENT", "named-option", { label: "Path of Slaughter", option_id: "path-of-slaughter", requirement_type: "pair", requirement_min_value: 3 }, 1, "B"),
       leaf("EFFECT", "fights-first", { subject: "this-model" }, 1, "B"),
-      leaf("EVENT", "named-option", { label: "Path of Rage", requirement_type: "triple", requirement_min_value: 4 }, 1, "C"),
+      leaf("EVENT", "named-option", { label: "Path of Rage", option_id: "path-of-rage", requirement_type: "triple", requirement_min_value: 4 }, 1, "C"),
       leaf("EFFECT", "invulnerable-save", { subject: "this-model", threshold: 4 }, 1, "C"),
     ]).mechanics.effect).toEqual({
       type: "dice-pool-allocation", pool: { count: 6, die: "D6" }, max_activations: 1,
       options: [
-        { id: "option-1", name: "Path of Slaughter", requirement: { type: "pair", min_value: 3 }, effect: { type: "ability-grant", target: "this-model", modifier: { ability: "fights-first" } } },
-        { id: "option-2", name: "Path of Rage", requirement: { type: "triple", min_value: 4 }, effect: { type: "invulnerable-save", target: "this-model", modifier: { invuln_sv: 4 } } },
+        { id: "path-of-slaughter", name: "Path of Slaughter", requirement: { type: "pair", min_value: 3 }, effect: { type: "ability-grant", target: "this-model", modifier: { ability: "fights-first" } } },
+        { id: "path-of-rage", name: "Path of Rage", requirement: { type: "triple", min_value: 4 }, effect: { type: "invulnerable-save", target: "this-model", modifier: { invuln_sv: 4 } } },
       ],
     });
     expect(rendered(base(), [
       leaf("EFFECT", "dice-pool-allocation-open", { pool_count: 6, pool_die: "D6", max_activations: 1 }, 1, "A"),
-      leaf("EVENT", "named-option", { label: "Path of Slaughter", requirement_type: "pair", requirement_min_value: 3 }, 1, "B"),
+      leaf("EVENT", "named-option", { label: "Path of Slaughter", option_id: "path-of-slaughter", requirement_type: "pair", requirement_min_value: 3 }, 1, "B"),
       leaf("EFFECT", "fights-first", { subject: "this-model" }, 1, "B"),
-      leaf("EVENT", "named-option", { label: "Path of Rage", requirement_type: "triple", requirement_min_value: 4 }, 1, "C"),
+      leaf("EVENT", "named-option", { label: "Path of Rage", option_id: "path-of-rage", requirement_type: "triple", requirement_min_value: 4 }, 1, "C"),
       leaf("EFFECT", "invulnerable-save", { subject: "this-model", threshold: 4 }, 1, "C"),
     ]).length).toBeGreaterThan(0);
   });
@@ -338,9 +350,9 @@ describe("Semantic authoring leading-container compiler", () => {
   it("refuses a dice-pool-allocation option whose named-option leaf carries no requirement", () => {
     const result = compileLeaves([
       leaf("EFFECT", "dice-pool-allocation-open", { pool_count: 6, pool_die: "D6", max_activations: 1 }, 1, "A"),
-      leaf("EVENT", "named-option", { label: "Path of Slaughter" }, 1, "B"),
+      leaf("EVENT", "named-option", { label: "Path of Slaughter", option_id: "path-of-slaughter" }, 1, "B"),
       leaf("EFFECT", "fights-first", { subject: "this-model" }, 1, "B"),
-      leaf("EVENT", "named-option", { label: "Path of Rage", requirement_type: "triple", requirement_min_value: 4 }, 1, "C"),
+      leaf("EVENT", "named-option", { label: "Path of Rage", option_id: "path-of-rage", requirement_type: "triple", requirement_min_value: 4 }, 1, "C"),
       leaf("EFFECT", "invulnerable-save", { subject: "this-model", threshold: 4 }, 1, "C"),
     ]);
     expect(result.ok).toBe(false);

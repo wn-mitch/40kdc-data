@@ -688,7 +688,7 @@
               "mode": "consumable",
               "options": [
                 {
-                  "id": "option-1",
+                  "id": "abhor-the-witch-destroy-the-witch",
                   "name": "Abhor the Witch, Destroy the Witch",
                   "effect": {
                     "type": "conditional",
@@ -777,7 +777,7 @@
                   }
                 },
                 {
-                  "id": "option-2",
+                  "id": "accept-any-challenge-no-matter-the-odds",
                   "name": "Accept Any Challenge, No Matter the Odds",
                   "effect": {
                     "type": "conditional",
@@ -840,7 +840,7 @@
                   }
                 },
                 {
-                  "id": "option-3",
+                  "id": "uphold-the-honour-of-the-emperor",
                   "name": "Uphold the Honour of the Emperor",
                   "effect": {
                     "type": "ability-grant",

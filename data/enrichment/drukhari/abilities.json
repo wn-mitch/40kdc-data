@@ -1861,7 +1861,7 @@
                   "target": "this-model"
                 }
               },
-              "id": "option-1"
+              "id": "masters-of-the-shadowed-sky"
             },
             {
               "name": "Speed of the Kill",
@@ -1885,7 +1885,7 @@
                   }
                 }
               },
-              "id": "option-2"
+              "id": "speed-of-the-kill"
             },
             {
               "name": "Visions of Butchery",
@@ -1926,7 +1926,7 @@
                   }
                 ]
               },
-              "id": "option-3"
+              "id": "visions-of-butchery"
             },
             {
               "name": "Aethersails",
@@ -1971,7 +1971,7 @@
                   ]
                 }
               },
-              "id": "option-4"
+              "id": "aethersails"
             }
           ]
         }
@@ -6319,7 +6319,7 @@
                 }
               }
             },
-            "id": "option-1"
+            "id": "adrenalight"
           },
           {
             "name": "Hypex",
@@ -6332,7 +6332,7 @@
                 "value": 2
               }
             },
-            "id": "option-2"
+            "id": "hypex"
           },
           {
             "name": "Serpentin",
@@ -6348,7 +6348,7 @@
                 }
               }
             },
-            "id": "option-3"
+            "id": "serpentin"
           },
           {
             "name": "Painbringer",
@@ -6361,7 +6361,7 @@
                 "value": 1
               }
             },
-            "id": "option-4"
+            "id": "painbringer"
           },
           {
             "name": "Grave Lotus",
@@ -6377,7 +6377,7 @@
                 }
               }
             },
-            "id": "option-5"
+            "id": "grave-lotus"
           },
           {
             "name": "Splintermind",
@@ -6407,7 +6407,7 @@
                 }
               ]
             },
-            "id": "option-6"
+            "id": "splintermind"
           }
         ]
       }

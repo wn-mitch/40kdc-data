@@ -174,6 +174,8 @@ export async function checkDslContract(root: string, result: ValidationResult): 
         if (!node(option) || typeof option.id !== "string") return;
         if (seen.has(option.id)) issues.push({ path: `${path}/options/${at}/id`, message: `duplicate option id "${option.id}" within this ability` });
         seen.add(option.id);
+        // References name options by id, so a positional id re-points them when options are reordered.
+        if (/^option-\d+$/.test(option.id)) issues.push({ path: `${path}/options/${at}/id`, message: `positional option id "${option.id}": name the option by its slug` });
       });
       if (value.type === "ability-activate" && node(value.modifier)) {
         const modifier = value.modifier;

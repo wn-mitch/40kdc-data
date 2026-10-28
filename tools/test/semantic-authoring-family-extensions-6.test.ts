@@ -375,9 +375,9 @@ describe("menus and their targets", () => {
   const menu = (grant: boolean) => placed(`Select one of the following abilities.${grant ? " This model has that ability." : ""} Swift: this unit has the Feel No Pain 6+ ability. Stern: this unit has the Feel No Pain 5+ ability.`, [
     ["Select one of the following abilities", "choice-open", { min_choices: 1, max_choices: 1 }],
     ...(grant ? [["This model has that ability", "chosen-option-grant", { holder: "this-model" }] as [string, string, Record<string, unknown>]] : []),
-    ["Swift", "named-option", { label: "Swift" }],
+    ["Swift", "named-option", { label: "Swift", option_id: "swift" }],
     ["this unit has the Feel No Pain 6+ ability", "feel-no-pain", FNP(6)],
-    ["Stern", "named-option", { label: "Stern" }],
+    ["Stern", "named-option", { label: "Stern", option_id: "stern" }],
     ["this unit has the Feel No Pain 5+ ability", "feel-no-pain", FNP(5)],
   ]);
 

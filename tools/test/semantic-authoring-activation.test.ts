@@ -153,9 +153,9 @@ describe("menu holders and stance flags", () => {
     ["friendly WARDEN unit", "unit-filter", { side: "friendly", keywords: ["WARDEN"] }],
     ["Select one of the rules below", "choice-open", { min_choices: 1, max_choices: 1 }],
     ["That unit has that rule", "chosen-option-grant", { holder }],
-    ["Aegis", "named-option", { label: "Aegis" }],
+    ["Aegis", "named-option", { label: "Aegis", option_id: "aegis" }],
     ["this unit has a 5+ invulnerable save", "invulnerable-save", { subject: "this-unit", threshold: 5 }],
-    ["Zeal", "named-option", { label: "Zeal" }],
+    ["Zeal", "named-option", { label: "Zeal", option_id: "zeal" }],
     ["this unit has the Stealth ability", "core-ability-grant", { subject: "this-unit", ability: "stealth" }]);
 
   it("gives a menu's options to the unit its holder points back to", () => {
@@ -168,9 +168,9 @@ describe("menu holders and stance flags", () => {
     const text = "Select one of the abilities below. Aegis: this model has a 5+ invulnerable save. Zeal: you can select one friendly WARDEN unit; the Aegis Rite and the Zeal Rite are both active for that unit.";
     const node = effectOf(text,
       ["Select one of the abilities below", "choice-open", { min_choices: 1, max_choices: 1 }],
-      ["Aegis", "named-option", { label: "Aegis" }],
+      ["Aegis", "named-option", { label: "Aegis", option_id: "aegis" }],
       ["this model has a 5+ invulnerable save", "invulnerable-save", { subject: "this-model", threshold: 5 }],
-      ["Zeal", "named-option", { label: "Zeal" }],
+      ["Zeal", "named-option", { label: "Zeal", option_id: "zeal" }],
       ["you can", "optional-use", { who: "you" }],
       ["select one", "select-unit", { distance: "any", visible: false }],
       ["friendly WARDEN unit", "unit-filter", { side: "friendly", keywords: ["WARDEN"] }],
@@ -183,9 +183,9 @@ describe("menu holders and stance flags", () => {
     const text = "Select one Rite to be active for this unit as well as any other. Aegis. Add 1 to saves. Zeal. Add 1 to hits.";
     const node = effectOf(text,
       ["Select one Rite to be active for this unit as well as any other", "stance-select-open", { scope: "unit", mode: "re-selectable", additive: true }],
-      ["Aegis", "named-option", { label: "Aegis" }],
+      ["Aegis", "named-option", { label: "Aegis", option_id: "aegis" }],
       ["Add 1 to saves", "roll-modifier", { roll: "save", operation: "add", value: 1 }],
-      ["Zeal", "named-option", { label: "Zeal" }],
+      ["Zeal", "named-option", { label: "Zeal", option_id: "zeal" }],
       ["Add 1 to hits", "roll-modifier", { roll: "hit", operation: "add", value: 1 }]);
     expect(node.type).toBe("stance-select");
     expect(node.additive).toBe(true);

@@ -126,9 +126,9 @@ describe("Semantic authoring characteristic amounts after a recipient filter", (
     const menu = "Select one of the options below. Aegis: Raise the Zorn characteristic of this unit. Zeal: this unit is engaged.";
     const leaves = placedIn(menu,
       ["Select one of the options below", "choice-open", { min_choices: 1, max_choices: 1 }],
-      ["Aegis", "named-option", { label: "Aegis" }],
+      ["Aegis", "named-option", { label: "Aegis", option_id: "aegis" }],
       ["Raise the Zorn characteristic of", "characteristic-modifier", { subject: "this-unit", characteristics: ["OC"], operation: "improve", weapon_type: "all" }],
-      ["Zeal", "named-option", { label: "Zeal" }],
+      ["Zeal", "named-option", { label: "Zeal", option_id: "zeal" }],
       ["this unit is engaged", "unit-state", { states: ["engaged"], subject: "this-unit", negated: false }]);
     const result = compileLeaves(leaves, menu);
     expect(result.ok).toBe(false);

@@ -1462,7 +1462,7 @@
       "mode": "re-selectable",
       "options": [
         {
-          "id": "option-1",
+          "id": "impossible-form",
           "name": "Impossible Form",
           "effect": {
             "type": "conditional",
@@ -1489,7 +1489,7 @@
           }
         },
         {
-          "id": "option-2",
+          "id": "treason-of-tzeentch",
           "name": "Treason of Tzeentch",
           "effect": {
             "type": "ability-part",
@@ -1557,7 +1557,7 @@
           }
         },
         {
-          "id": "option-3",
+          "id": "time-flux",
           "name": "Time Flux",
           "effect": {
             "type": "aura",
@@ -5918,7 +5918,7 @@
                 }
               }
             },
-            "id": "option-1"
+            "id": "imbued-manifestation"
           },
           {
             "name": "Psychic Maelstrom",
@@ -5936,7 +5936,7 @@
                 }
               }
             },
-            "id": "option-2"
+            "id": "psychic-maelstrom"
           },
           {
             "name": "Wrath of the Immaterium",
@@ -5956,7 +5956,7 @@
                 ]
               }
             },
-            "id": "option-3"
+            "id": "wrath-of-the-immaterium"
           }
         ]
       }
@@ -7266,7 +7266,7 @@
           "target": "this-unit",
           "modifier": {
             "ability": "kindred-sorcery-thousand-sons",
-            "option": "option-1",
+            "option": "imbued-manifestation",
             "exclusive": true
           }
         },
@@ -7275,7 +7275,7 @@
           "target": "this-unit",
           "modifier": {
             "ability": "kindred-sorcery-thousand-sons",
-            "option": "option-2",
+            "option": "psychic-maelstrom",
             "exclusive": true
           }
         },
@@ -7284,7 +7284,7 @@
           "target": "this-unit",
           "modifier": {
             "ability": "kindred-sorcery-thousand-sons",
-            "option": "option-3",
+            "option": "wrath-of-the-immaterium",
             "exclusive": true
           }
         }

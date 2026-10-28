@@ -1473,7 +1473,7 @@
                 "incoming": true
               }
             },
-            "id": "option-1"
+            "id": "beguiling-form"
           },
           {
             "name": "Daemonic Speed",
@@ -1484,7 +1484,7 @@
                 "ability": "fights-first"
               }
             },
-            "id": "option-2"
+            "id": "daemonic-speed"
           },
           {
             "name": "Enthralling Hypnosis",
@@ -1514,7 +1514,7 @@
                 }
               }
             },
-            "id": "option-3"
+            "id": "enthralling-hypnosis"
           }
         ]
       }
