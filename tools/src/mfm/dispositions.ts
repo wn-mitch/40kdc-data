@@ -32,6 +32,16 @@ import { repoDirForFactionName, repoDirs } from "./faction-map.js";
 import type { StagedWrite } from "./apply.js";
 
 
+/**
+ * A `detachment_faction_detachment_points_cost` row. The table is empty from data version 963,
+ * so the generated contract types it as `[]`; this is the shape the reader honours if rows return.
+ */
+export interface DetachmentPointsCostOverrideRow {
+  detachmentId: string;
+  factionKeywordId: string;
+  detachmentPointsCost: number;
+}
+
 interface DetRecord {
   id: string;
   name: string;
@@ -104,14 +114,9 @@ export function buildCanon(dump: MfmDump): {
     });
   }
 
-  // Per-faction DP overrides → keyed by `${slug}@@${dir}`. The dump's override table is empty
-  // from data version 963 (its generated row type is `never`), so the rows are read untyped.
+  // Per-faction DP overrides → keyed by `${slug}@@${dir}`.
   const overrideBySlugDir = new Map<string, number>();
-  const overrides = dump.table("detachment_faction_detachment_points_cost") as unknown as Array<{
-    detachmentId: string;
-    factionKeywordId: string;
-    detachmentPointsCost: number;
-  }>;
+  const overrides: readonly DetachmentPointsCostOverrideRow[] = dump.table("detachment_faction_detachment_points_cost");
   for (const row of overrides) {
     const slug = uuidToSlug.get(row.detachmentId);
     const fkName = dump.enName(dump.byId("faction_keyword").get(row.factionKeywordId));

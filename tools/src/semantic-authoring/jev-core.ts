@@ -1,4 +1,4 @@
-import { TypeSafeClient, choice, noul, type ChoiceCriteria, type JsonValue, type Questions, type SystemOneResult } from "@typesafe-ai/sdk";
+import { TypeSafeClient, choice, noul, type ChoiceCriteria, type JsonValue, type Questions, type RequestOptions, type SystemOneRequest, type SystemOneResult } from "@typesafe-ai/sdk";
 
 import { cacheKeyFor, getCachedAnswer, putCachedAnswer, type JevCache } from "./jev-cache.js";
 
@@ -25,8 +25,13 @@ export const NONE_OF_THESE = "none-of-these";
  * over-eager value degrades gracefully rather than corrupting results. */
 export const DEFAULT_JEV_CONCURRENCY = 16;
 
-/** The `systemOne` shape this module needs — a real `TypeSafeClient` or a test double. */
-export type JevClient = { systemOne: TypeSafeClient["systemOne"] };
+/**
+ * The `systemOne` shape this module needs — a real `TypeSafeClient` or a test double. Requests
+ * are only awaited, so any thenable stands in for the SDK's `APIPromise`.
+ */
+export type JevClient = {
+  systemOne(request: SystemOneRequest<Questions>, options?: RequestOptions): PromiseLike<SystemOneResult<Questions>>;
+};
 
 export type JevRequestKind = "role" | "family" | "parameter";
 
@@ -133,7 +138,7 @@ function permanentStatus(error: unknown): number | null {
   return typeof status === "number" && status >= 400 && status < 500 && status !== 408 && status !== 429 ? status : null;
 }
 
-async function withRetry<T>(fn: () => Promise<T>): Promise<{ value: T; attempts: number } | { error: unknown; attempts: number }> {
+async function withRetry<T>(fn: () => PromiseLike<T>): Promise<{ value: T; attempts: number } | { error: unknown; attempts: number }> {
   let lastError: unknown;
   for (let attempt = 1; attempt <= RETRY_ATTEMPTS; attempt += 1) {
     try {

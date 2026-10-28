@@ -161,7 +161,7 @@ export function abilityLevers(
  */
 export function enhancementLevers(
   ds: Dataset,
-  args: { detachmentId: string | undefined; crunchedUnitId: string; bearers: readonly UnitView[]; ctx: EngineContext; factionId: string; held: Set<string> },
+  args: { detachmentId: string | undefined; crunchedUnitId: string | undefined; bearers: readonly UnitView[]; ctx: EngineContext; factionId: string; held: Set<string> },
 ): AbilityLevers {
   const out: AbilityLevers = { buffs: [], groups: [], capRaises: new Map(), optionRequirements: new Map() };
   if (!args.detachmentId) return out;

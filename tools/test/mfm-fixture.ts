@@ -14,8 +14,13 @@ export type DeepPartial<T> = T extends readonly (infer U)[]
     ? { [K in keyof T]?: DeepPartial<T[K]> }
     : T;
 
-/** A fixture row of table `N` that may omit any column. */
-export type PartialRow<N extends MfmTableName> = DeepPartial<MfmRow<N>>;
+/**
+ * A fixture row of table `N` that may omit any column. An unobserved table's row type is
+ * `never` (it has no contract columns), so its rows are records shaped by the reader under test.
+ */
+export type PartialRow<N extends MfmTableName> = [MfmRow<N>] extends [never]
+  ? Record<string, unknown>
+  : DeepPartial<MfmRow<N>>;
 
 /** Fixture tables: any subset of tables, each row any subset of its columns. */
 export type PartialTables = { [N in MfmTableName]?: PartialRow<N>[] };

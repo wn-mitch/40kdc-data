@@ -73,6 +73,12 @@ import {
 } from "../abilities-resolver/index.js";
 
 /**
+ * {@link EligibilityInput} for the buff collectors, where `unitId` is optional:
+ * with no unit selected, only the input's weapon profiles contribute.
+ */
+export type BuffInput = Omit<EligibilityInput, "unitId"> & { unitId?: string };
+
+/**
  * One toggleable buff lever for damage analysis: the contributions it adds and
  * whether it's on by default. `enabled` is `true` for buffs that always apply
  * (intrinsic keywords, unconditional abilities) and `false` for player
@@ -623,7 +629,7 @@ export class Dataset {
    * distinct from unrelated effect guards.
    */
   buffsFor(
-    input: EligibilityInput & {
+    input: BuffInput & {
       weaponProfiles?: { weaponId: string; profileIndex: number }[];
       /** Stratagem ids the caller has opted into spending CP on. */
       optedInStratagemIds?: string[];
@@ -683,7 +689,7 @@ export class Dataset {
    * resolver gates it per-target.
    */
   stackableBuffsFor(
-    input: EligibilityInput & {
+    input: BuffInput & {
       weaponProfiles?: { weaponId: string; profileIndex: number }[];
     },
     context: EngineContext,
@@ -699,9 +705,7 @@ export class Dataset {
       for (const [lever, option] of levers.optionRequirements) optionRequirements.set(lever, option);
     };
 
-    const unit =
-      (input.factionId ? this.units.getInFaction(input.unitId, input.factionId) : undefined) ??
-      this.units.getAny(input.unitId);
+    const unit = this.inputUnit(input);
     const factionId = input.factionId ?? unit?.raw.faction_id ?? "";
     const members = (input.attachedUnitIds ?? [])
       .map((id) => this.units.getInFaction(id, factionId) ?? this.units.getAny(id))
@@ -720,7 +724,7 @@ export class Dataset {
       attackerUnitId: context.attackerUnitId ?? input.unitId,
       // The input's faction is the army whose rules the resolver walks, so it is the Army Faction.
       armyFaction: context.armyFaction ?? factionId,
-      attackerAttachmentRole: context.attackerAttachmentRole ?? input.attachmentRoles?.[input.unitId],
+      attackerAttachmentRole: context.attackerAttachmentRole ?? (input.unitId === undefined ? undefined : input.attachmentRoles?.[input.unitId]),
       attachmentRoles: context.attachmentRoles ?? input.attachmentRoles,
       attackerToughness: context.attackerToughness ?? combinedToughness(combined, input.attachmentRoles),
     };
@@ -746,7 +750,7 @@ export class Dataset {
       });
     }
 
-    const eligible = this.eligibleAbilities(input, ctx.phase);
+    const eligible = this.inputEligibleAbilities(input, ctx.phase);
     // A record the unit already holds is not granted again by another ability.
     const held = new Set(eligible.filter((entry) => entry.source.kind !== "support").map((entry) => entry.ability.id));
     for (const entry of eligible) {
@@ -787,9 +791,21 @@ export class Dataset {
     return { buffs: resolved, groups };
   }
 
+  /** The input's selected unit, resolved within its faction when one is given. */
+  private inputUnit(input: BuffInput): UnitView | undefined {
+    if (input.unitId === undefined) return undefined;
+    return (input.factionId ? this.units.getInFaction(input.unitId, input.factionId) : undefined)
+      ?? this.units.getAny(input.unitId);
+  }
+
+  /** {@link eligibleAbilities} for a buff input; nothing is eligible when no unit is selected. */
+  private inputEligibleAbilities(input: BuffInput, phase: Phase): EligibleAbility[] {
+    return input.unitId === undefined ? [] : this.eligibleAbilities({ ...input, unitId: input.unitId }, phase);
+  }
+
   /** Shared implementation for buffsFor / defensiveBuffsFor. */
   private collectBuffs(
-    input: EligibilityInput & {
+    input: BuffInput & {
       weaponProfiles?: { weaponId: string; profileIndex: number }[];
       optedInStratagemIds?: string[];
     },
@@ -798,8 +814,7 @@ export class Dataset {
   ): Buff[] {
     const out: Buff[] = [];
 
-    const unit = (input.factionId ? this.units.getInFaction(input.unitId, input.factionId) : undefined)
-      ?? this.units.getAny(input.unitId);
+    const unit = this.inputUnit(input);
     const factionId = input.factionId ?? unit?.raw.faction_id;
     const combined = unit ? [unit] : [];
     for (const id of input.attachedUnitIds ?? []) {
@@ -816,7 +831,7 @@ export class Dataset {
       attackerUnitId: context.attackerUnitId ?? input.unitId,
       // The input's faction is the army whose rules the resolver walks, so it is the Army Faction.
       armyFaction: context.armyFaction ?? factionId,
-      attackerAttachmentRole: context.attackerAttachmentRole ?? input.attachmentRoles?.[input.unitId],
+      attackerAttachmentRole: context.attackerAttachmentRole ?? (input.unitId === undefined ? undefined : input.attachmentRoles?.[input.unitId]),
       attackerKeywords: context.attackerKeywords ?? keywords,
       attackerModelKeywords: context.attackerModelKeywords ?? modelKeywords,
       attachmentRoles: context.attachmentRoles ?? input.attachmentRoles,
@@ -827,7 +842,7 @@ export class Dataset {
       targetUnitId: context.targetUnitId ?? input.unitId,
       // The input's faction is the defending army whose rules the resolver walks.
       targetArmyFaction: context.targetArmyFaction ?? factionId,
-      targetAttachmentRole: context.targetAttachmentRole ?? input.attachmentRoles?.[input.unitId],
+      targetAttachmentRole: context.targetAttachmentRole ?? (input.unitId === undefined ? undefined : input.attachmentRoles?.[input.unitId]),
       targetKeywords: context.targetKeywords ?? keywords,
       targetModelKeywords: context.targetModelKeywords ?? modelKeywords,
       attachmentRoles: context.attachmentRoles ?? input.attachmentRoles,
@@ -837,7 +852,7 @@ export class Dataset {
     // stackableBuffsFor — first-wins here would crunch the wrong faction's stats.
     if (perspective === "attacker") {
       const weaponFaction =
-        input.factionId ?? this.units.getAny(input.unitId)?.raw.faction_id;
+        input.factionId ?? (input.unitId === undefined ? undefined : this.units.getAny(input.unitId))?.raw.faction_id;
       for (const ref of input.weaponProfiles ?? []) {
         const weapon =
           (weaponFaction
@@ -850,7 +865,7 @@ export class Dataset {
 
     const optedIn = new Set(input.optedInStratagemIds ?? []);
     const visited: { abilityId: string; source: BuffSource }[] = [];
-    for (const entry of this.eligibleAbilities(input, ctx.phase)) {
+    for (const entry of this.inputEligibleAbilities(input, ctx.phase)) {
       if (
         entry.source.kind === "detachment-stratagem" &&
         !optedIn.has(entry.source.stratagemId)

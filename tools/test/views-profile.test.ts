@@ -152,10 +152,8 @@ describe("AbilityView.getBuffs (M1 stub)", () => {
 });
 
 describe("Dataset.buffsFor", () => {
-  // No unit is selected: only the weapon profiles contribute. `EligibilityInput`
-  // types `unitId` as required, so the unit-less input goes through `unknown`.
-  const weaponsOnly = (weaponProfiles: { weaponId: string; profileIndex: number }[]) =>
-    ({ weaponProfiles }) as unknown as Parameters<Dataset["buffsFor"]>[0];
+  // No unit is selected: only the weapon profiles contribute.
+  const weaponsOnly = (weaponProfiles: { weaponId: string; profileIndex: number }[]) => ({ weaponProfiles });
 
   it("collects buffs from the weapon profile keywords on the input", () => {
     const buffs = ds.buffsFor(

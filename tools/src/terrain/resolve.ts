@@ -86,6 +86,8 @@ export interface Wall {
 export interface TerrainTemplate {
   id: string;
   name?: string;
+  /** Catalog or mission pack the template originates from. */
+  source?: string;
   kind: "area" | "feature";
   footprint: Footprint;
   default_height_inches?: number;
@@ -118,6 +120,8 @@ export interface LayoutPiece {
 export interface TerrainLayout {
   id: string;
   name: string;
+  /** Mission pack or source the layout originates from. */
+  source?: string;
   pieces?: LayoutPiece[];
 }
 

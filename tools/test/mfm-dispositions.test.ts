@@ -5,6 +5,7 @@ import {
   combatPatrolDetSlugs,
   dispositionIdMap,
   runDispositions,
+  type DetachmentPointsCostOverrideRow,
 } from "../src/mfm/dispositions.js";
 import { partialDump } from "./mfm-fixture.js";
 
@@ -49,11 +50,10 @@ function dump(): MfmDump {
         { detachmentId: "det-zerk", forceDispositionId: "fd-pth" },
         { detachmentId: "det-storm", forceDispositionId: "fd-tah" },
       ],
-      // The current dump's override table is empty (typed `[]`); the reader still
-      // honours a row, so the fixture supplies one through an untyped cast.
+      // The current dump's override table is empty; the reader still honours a row.
       detachment_faction_detachment_points_cost: [
-        { detachmentId: "det-storm", factionKeywordId: "fk-bt", detachmentPointsCost: 2 },
-      ] as unknown as [],
+        { detachmentId: "det-storm", factionKeywordId: "fk-bt", detachmentPointsCost: 2 } satisfies DetachmentPointsCostOverrideRow,
+      ],
     },
   });
 }
