@@ -9,22 +9,22 @@ import (
 // Condition predicates as phrases. Part of the condition describer; mirror of
 // tools/src/translate/condition.ts.
 
-func quotedList(v any) []string {
-	items := cstrList(v)
-	for i, k := range items {
-		items[i] = "\"" + k + "\""
-	}
-	return items
-}
-
 func keywordList(p map[string]any) string {
 	if p["chosen_by"] != nil {
 		return "the keyword selected for " + titleCase(cstr(p["chosen_by"]))
 	}
 	if isList(p["any_of"]) {
-		return orList(quotedList(p["any_of"]))
+		return keywordNoun(cstrList(p["any_of"]), true)
 	}
-	return andList(quotedList(p["all_of"]))
+	return keywordNoun(cstrList(p["all_of"]), false)
+}
+
+// keywordNoun names keywords as the rules do: "the X keyword", "the X and Y keywords", "the X or Y keyword".
+func keywordNoun(words []string, anyOf bool) string {
+	if anyOf || len(words) == 1 {
+		return "the " + orList(words) + " keyword"
+	}
+	return "the " + andList(words) + " keywords"
 }
 
 var eligibleToPhrases = map[string]string{
@@ -122,14 +122,14 @@ func describeMatches(p map[string]any, negated bool) string {
 			if negated {
 				verb = "has"
 			}
-			return who + " " + verb + " " + orList(quotedList(values))
+			return who + " " + verb + " " + keywordNoun(cstrList(values), true)
 		}
 		if values, ok := asList(f["not_all_of"]); ok {
 			verb := "does not have"
 			if negated {
 				verb = "has"
 			}
-			return who + " " + verb + " all of " + andList(quotedList(values))
+			return who + " " + verb + " all of " + keywordNoun(cstrList(values), false)
 		}
 		if f["owner"] != nil {
 			owner := "a unit of either player"

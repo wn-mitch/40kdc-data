@@ -15,10 +15,10 @@ dump confirmation.
 | wargear-options | 0 | 0 | 1234 | 0 |
 | leader-attachments | 0 | 0 | 283 | 8 |
 | enhancements | 0 | 0 | 890 | 0 |
-| detachments | 0 | 0 | 168 | 289 |
+| detachments | 1 | 0 | 169 | 287 |
 | stratagems | 0 | 0 | 1032 | 281 |
-| abilities | 0 | 0 | 3636 | 899 |
-| phase-mappings | 0 | 0 | 1131 | 450 |
+| abilities | 0 | 0 | 3641 | 894 |
+| phase-mappings | 1 | 0 | 1132 | 448 |
 | resource-pools | 0 | 0 | 0 | 6 |
 
 ## Abilities by faction
@@ -29,7 +29,7 @@ dump confirmation.
 | adepta-sororitas | 0 | 0 | 117 | 31 |
 | adeptus-astartes | 0 | 0 | 209 | 41 |
 | adeptus-custodes | 0 | 0 | 144 | 14 |
-| adeptus-mechanicus | 0 | 0 | 137 | 30 |
+| adeptus-mechanicus | 0 | 0 | 138 | 29 |
 | aeldari | 0 | 0 | 243 | 57 |
 | agents-of-the-imperium | 0 | 0 | 96 | 42 |
 | astra-militarum | 0 | 0 | 193 | 58 |
@@ -39,7 +39,7 @@ dump confirmation.
 | chaos-knights | 0 | 0 | 83 | 27 |
 | chaos-space-marines | 0 | 0 | 220 | 61 |
 | dark-angels | 0 | 0 | 59 | 18 |
-| death-guard | 0 | 0 | 123 | 37 |
+| death-guard | 0 | 0 | 124 | 36 |
 | deathwatch | 0 | 0 | 31 | 5 |
 | drukhari | 0 | 0 | 125 | 39 |
 | emperors-children | 0 | 0 | 120 | 26 |
@@ -50,7 +50,7 @@ dump confirmation.
 | iron-hands | 0 | 0 | 9 | 2 |
 | leagues-of-votann | 0 | 0 | 127 | 28 |
 | necrons | 0 | 0 | 190 | 40 |
-| orks | 0 | 0 | 173 | 37 |
+| orks | 0 | 0 | 176 | 34 |
 | raven-guard | 0 | 0 | 10 | 1 |
 | salamanders | 0 | 0 | 6 | 5 |
 | space-wolves | 0 | 0 | 74 | 13 |
@@ -87,8 +87,8 @@ dump confirmation.
 | adeptus-custodes | verified | 144 |
 | adeptus-mechanicus | digest-differs | 10 |
 | adeptus-mechanicus | stub | 16 |
-| adeptus-mechanicus | unpublished | 4 |
-| adeptus-mechanicus | verified | 137 |
+| adeptus-mechanicus | unpublished | 3 |
+| adeptus-mechanicus | verified | 138 |
 | aeldari | digest-differs | 8 |
 | aeldari | stub | 27 |
 | aeldari | unpublished | 22 |
@@ -125,10 +125,10 @@ dump confirmation.
 | dark-angels | no-source | 1 |
 | dark-angels | stub | 8 |
 | dark-angels | verified | 59 |
-| death-guard | digest-differs | 5 |
+| death-guard | digest-differs | 4 |
 | death-guard | stub | 18 |
 | death-guard | unpublished | 14 |
-| death-guard | verified | 123 |
+| death-guard | verified | 124 |
 | deathwatch | ambiguous-source | 1 |
 | deathwatch | digest-differs | 1 |
 | deathwatch | no-source | 1 |
@@ -166,11 +166,11 @@ dump confirmation.
 | necrons | unpublished | 18 |
 | necrons | verified | 190 |
 | orks | ambiguous-source | 1 |
-| orks | digest-differs | 21 |
+| orks | digest-differs | 19 |
 | orks | no-source | 1 |
-| orks | stub | 8 |
+| orks | stub | 7 |
 | orks | unpublished | 6 |
-| orks | verified | 173 |
+| orks | verified | 176 |
 | raven-guard | stub | 1 |
 | raven-guard | verified | 10 |
 | salamanders | digest-differs | 2 |

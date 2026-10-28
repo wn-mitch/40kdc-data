@@ -363,38 +363,129 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "6f13a15d37f299da91daba70e268e79b5c42ed34451c3da89fefeace03ed1433",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "attachment",
-        "parameters": {
-          "subject": "this-model",
-          "role": "leading"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "command"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
+            ]
+          },
+          {
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading",
+              "with": {
+                "all_of": [
+                  "KASTELAN ROBOTS"
+                ]
+              }
+            }
+          }
+        ]
       },
       "effect": {
-        "type": "stat-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "stat": "A",
-          "operation": "add",
-          "value": 2
-        }
+        "type": "stance-select",
+        "mode": "re-selectable",
+        "options": [
+          {
+            "id": "protector-protocol",
+            "name": "Protector Protocol",
+            "effect": {
+              "type": "stat-modifier",
+              "target": {
+                "level": "model",
+                "member_of": "this-unit",
+                "all_of": [
+                  "KASTELAN ROBOTS"
+                ]
+              },
+              "modifier": {
+                "stat": "A",
+                "operation": "add",
+                "value": 2,
+                "weapons": {
+                  "type": "ranged"
+                }
+              }
+            }
+          },
+          {
+            "id": "conqueror-protocol",
+            "name": "Conqueror Protocol",
+            "effect": {
+              "type": "stat-modifier",
+              "target": {
+                "level": "model",
+                "member_of": "this-unit",
+                "all_of": [
+                  "KASTELAN ROBOTS"
+                ]
+              },
+              "modifier": {
+                "stat": "A",
+                "operation": "add",
+                "value": 2,
+                "weapons": {
+                  "type": "melee"
+                }
+              }
+            }
+          },
+          {
+            "id": "aegis-protocol",
+            "name": "Aegis Protocol",
+            "effect": {
+              "type": "stat-modifier",
+              "target": {
+                "level": "model",
+                "member_of": "this-unit",
+                "all_of": [
+                  "KASTELAN ROBOTS"
+                ]
+              },
+              "modifier": {
+                "stat": "T",
+                "operation": "add",
+                "value": 1
+              }
+            }
+          }
+        ],
+        "initial": "aegis-protocol",
+        "min_choices": 1,
+        "max_choices": 1
       }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "battle"
     },
     "unit_ids": [
       "cybernetica-datasmith"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "adeptus-mechanicus"
+    "behavior": "activated",
+    "faction_id": "adeptus-mechanicus",
+    "optional": true
   },
   {
     "ability_id": "elevated-strider-adeptus-mechanicus",

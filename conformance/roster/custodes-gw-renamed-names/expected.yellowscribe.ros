@@ -19,8 +19,8 @@
               <characteristics>
                 <characteristic name="Description">After the unit resolves its attacks, you may use this ability, during the Shooting phase, in your turn, until the end of the phase:
   -&gt; Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence:
-    -&gt; If the selected unit has "PSYKER", that unit must take a Battle-shock test, applying -1 to that test.
-    -&gt; Unless the selected unit has "PSYKER", that unit must take a Battle-shock test.</characteristic>
+    -&gt; If the selected unit has the PSYKER keyword, that unit must take a Battle-shock test, applying -1 to that test.
+    -&gt; Unless the selected unit has the PSYKER keyword, that unit must take a Battle-shock test.</characteristic>
               </characteristics>
             </profile>
             <profile name="Scouts" typeName="Abilities">
@@ -241,7 +241,7 @@ All friendly ANATHEMA PSYKANA units cannot be your Warlord.</characteristic>
               <characteristics>
                 <characteristic name="Description">At the start of each phase, you may use this ability, once per battle per unit:
   -&gt; Select one enemy unit within 3" of the unit:
-    -&gt; Roll one D6: on a 2+, unless the selected unit has "MONSTER" or "VEHICLE", that unit suffers D3 mortal wounds; if the selected unit has "MONSTER" or "VEHICLE", that unit suffers 2D3 mortal wounds.</characteristic>
+    -&gt; Roll one D6: on a 2+, unless the selected unit has the MONSTER or VEHICLE keyword, that unit suffers D3 mortal wounds; if the selected unit has the MONSTER or VEHICLE keyword, that unit suffers 2D3 mortal wounds.</characteristic>
               </characteristics>
             </profile>
             <profile name="Swift Ruin (Once per phase, per army)" typeName="Abilities">

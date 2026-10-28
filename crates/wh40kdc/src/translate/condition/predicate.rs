@@ -404,10 +404,10 @@ fn describe_matches(p: &P, negated: bool) -> String {
             return format!("{who} {has} {}", keyword_list(f));
         }
         if let Some(words) = strs(f.get("none_of")) {
-            return format!("{who} {lacks} {}", or_list(&quoted(words)));
+            return format!("{who} {lacks} {}", keyword_noun(words, true));
         }
         if let Some(words) = strs(f.get("not_all_of")) {
-            return format!("{who} {lacks} all of {}", and_list(&quoted(words)));
+            return format!("{who} {lacks} all of {}", keyword_noun(words, false));
         }
         if nn(f, "owner").is_some() {
             let owner = if is(f, "owner", "enemy") {

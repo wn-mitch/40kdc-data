@@ -3608,7 +3608,7 @@
       "event": "battle-formations-declared"
     },
     "expected": {
-      "text": "When declaring Battle Formations, while this model is embarked, if the Transport this unit is embarked within has \"DEDICATED TRANSPORT\", the Transport this unit is embarked within gains the Scouts 9\" ability."
+      "text": "When declaring Battle Formations, while this model is embarked, if the Transport this unit is embarked within has the DEDICATED TRANSPORT keyword, the Transport this unit is embarked within gains the Scouts 9\" ability."
     }
   },
   {
@@ -4090,7 +4090,7 @@
       "optional": true
     },
     "expected": {
-      "text": "When the unit ends a Normal move, you may use this ability:\n  -> Select one enemy unit if the selected unit was moved over by this model during that move:\n    -> If the selected unit has \"FLY\", roll 2 D6: for each 3+, that unit suffers D3 mortal wounds.\n    -> Unless the selected unit has \"FLY\", roll 2 D6: for each 4+, that unit suffers D3 mortal wounds."
+      "text": "When the unit ends a Normal move, you may use this ability:\n  -> Select one enemy unit if the selected unit was moved over by this model during that move:\n    -> If the selected unit has the FLY keyword, roll 2 D6: for each 3+, that unit suffers D3 mortal wounds.\n    -> Unless the selected unit has the FLY keyword, roll 2 D6: for each 4+, that unit suffers D3 mortal wounds."
     }
   },
   {
@@ -4218,7 +4218,7 @@
       ]
     },
     "expected": {
-      "text": "For the rest of the battle:\n  -> All friendly TZAANGORS units gain the BATTLELINE keyword.\n  -> During the Shooting phase, in your turn, if the attacking unit has \"MUTANT\", add 6 to all enemy units' detection range characteristic.\nApplies to: units with THOUSAND SONS."
+      "text": "For the rest of the battle:\n  -> All friendly TZAANGORS units gain the BATTLELINE keyword.\n  -> During the Shooting phase, in your turn, if the attacking unit has the MUTANT keyword, add 6 to all enemy units' detection range characteristic.\nApplies to: units with THOUSAND SONS."
     }
   },
   {
@@ -7212,7 +7212,7 @@
       }
     ],
     "expected": {
-      "text": "Each time a friendly unit ends a Charge move (the triggering unit must have GRAVIS), you may use this ability or when the unit ends a Charge move, if the unit has \"GRAVIS\", you may use this ability:\n  -> Select one enemy unit if the selected unit is a unit within Engagement Range of the unit: roll one D6 for each friendly model in the unit that is a unit within Engagement Range of the selected unit: for each 3+, that unit suffers 1 mortal wound."
+      "text": "Each time a friendly unit ends a Charge move (the triggering unit must have GRAVIS), you may use this ability or when the unit ends a Charge move, if the unit has the GRAVIS keyword, you may use this ability:\n  -> Select one enemy unit if the selected unit is a unit within Engagement Range of the unit: roll one D6 for each friendly model in the unit that is a unit within Engagement Range of the selected unit: for each 3+, that unit suffers 1 mortal wound."
     }
   },
   {
@@ -8595,383 +8595,727 @@
             "event": "round-started"
           },
           "effect": {
-            "type": "resource-gain",
-            "target": "this-model",
-            "modifier": {
-              "pool": "battle-focus-pool",
-              "amount": "variable",
-              "label": "Battle Focus token"
+            "type": "conditional",
+            "condition": {
+              "type": "army-faction",
+              "parameters": {
+                "faction": "aeldari"
+              }
+            },
+            "effect": {
+              "type": "resource-gain",
+              "target": "this-model",
+              "modifier": {
+                "pool": "battle-focus-pool",
+                "amount": {
+                  "incursion": 2,
+                  "strike-force": 4,
+                  "onslaught": 6
+                },
+                "label": "Battle Focus token"
+              }
             }
           }
         },
         {
-          "type": "resource-action-menu",
-          "menu_id": "agile-manoeuvres",
-          "pool_id": "battle-focus-pool",
-          "shared_usage": {
-            "unit_max_manoeuvres_per_phase": 1,
-            "default_manoeuvre_max_per_phase": 1
-          },
-          "actions": [
-            {
-              "id": "swift-as-the-wind",
-              "label": "Swift as the Wind",
-              "when": [
-                {
-                  "event": "move-ended",
-                  "subject": {
-                    "owner": "friendly"
-                  },
-                  "filter": {
-                    "move_types": [
-                      "normal"
-                    ]
-                  }
-                },
-                {
-                  "event": "move-ended",
-                  "subject": {
-                    "owner": "friendly"
-                  },
-                  "filter": {
-                    "move_types": [
-                      "advance"
-                    ]
-                  }
-                },
-                {
-                  "event": "move-ended",
-                  "subject": {
-                    "owner": "friendly"
-                  },
-                  "filter": {
-                    "move_types": [
-                      "fall-back"
-                    ]
-                  }
-                }
-              ],
-              "cost": {
-                "pool_id": "battle-focus-pool",
-                "amount": 1,
-                "resource_label": "Battle Focus token"
-              },
-              "usage": {
-                "repeatable_if_different_unit": true
-              },
-              "duration": "phase",
-              "effect": {
-                "type": "stat-modifier",
-                "target": "this-unit",
-                "modifier": {
-                  "stat": "M",
-                  "operation": "add",
-                  "value": 2
-                }
-              }
-            },
-            {
-              "id": "flitting-shadows",
-              "label": "Flitting Shadows",
-              "when": [
-                {
-                  "event": "move-ended",
-                  "subject": {
-                    "owner": "friendly"
-                  },
-                  "filter": {
-                    "move_types": [
-                      "normal"
-                    ]
-                  }
-                },
-                {
-                  "event": "move-ended",
-                  "subject": {
-                    "owner": "friendly"
-                  },
-                  "filter": {
-                    "move_types": [
-                      "advance"
-                    ]
-                  }
-                },
-                {
-                  "event": "move-ended",
-                  "subject": {
-                    "owner": "friendly"
-                  },
-                  "filter": {
-                    "move_types": [
-                      "fall-back"
-                    ]
-                  }
-                },
-                {
-                  "event": "set-up",
-                  "subject": {
-                    "owner": "friendly"
-                  }
-                },
-                {
-                  "event": "targets-selected",
-                  "subject": {
-                    "owner": "friendly"
-                  },
-                  "filter": {
-                    "kind": "charge"
-                  }
-                }
-              ],
-              "cost": {
-                "pool_id": "battle-focus-pool",
-                "amount": 1,
-                "resource_label": "Battle Focus token"
-              },
-              "duration": "turn",
-              "effect": {
-                "type": "rule-state",
-                "target": "this-unit",
-                "modifier": {
-                  "direction": "suppressed",
-                  "rule_kind": "core-rule",
-                  "rule": "overwatch-against-bearer"
-                }
-              }
-            },
-            {
-              "id": "star-engines",
-              "label": "Star Engines",
-              "when": {
-                "event": "selected",
-                "subject": {
-                  "owner": "friendly"
-                },
-                "filter": {
-                  "to": "move",
-                  "move_types": [
-                    "advance"
-                  ]
-                }
-              },
-              "eligibility": {
-                "filter": {
-                  "all_of": [
-                    "VEHICLE"
-                  ]
-                }
-              },
-              "cost": {
-                "pool_id": "battle-focus-pool",
-                "amount": 1,
-                "resource_label": "Battle Focus token"
-              },
-              "duration": "turn",
-              "effect": {
-                "type": "weapon-ability-grant",
-                "target": "this-unit",
-                "modifier": {
-                  "weapons": {
-                    "type": "ranged"
-                  },
-                  "keywords": [
-                    {
-                      "keyword_id": "assault"
-                    }
-                  ]
-                }
-              }
-            },
-            {
-              "id": "sudden-strike",
-              "label": "Sudden Strike",
-              "when": {
-                "event": "selected",
-                "subject": {
-                  "owner": "friendly"
-                },
-                "filter": {
-                  "to": "fight"
-                }
-              },
-              "cost": {
-                "pool_id": "battle-focus-pool",
-                "amount": 1,
-                "resource_label": "Battle Focus token"
-              },
-              "duration": "phase",
-              "effect": {
-                "type": "sequence",
-                "steps": [
-                  {
-                    "type": "move",
-                    "target": "this-unit",
-                    "modifier": {
-                      "move_type": "pile-in",
-                      "distance": 6
-                    }
-                  },
-                  {
-                    "type": "move",
-                    "target": "this-unit",
-                    "modifier": {
-                      "move_type": "consolidation",
-                      "distance": 6
-                    }
-                  }
-                ]
-              }
-            },
-            {
-              "id": "opportunity-seized",
-              "label": "Opportunity Seized",
-              "when": {
-                "event": "move-ended",
-                "subject": {
-                  "owner": "enemy"
-                },
-                "filter": {
-                  "move_types": [
-                    "fall-back"
-                  ]
-                },
-                "binds_event_variable": "triggering-enemy"
-              },
-              "eligibility": {
-                "requires": [
-                  {
-                    "type": "unit-state",
-                    "parameters": {
-                      "subject": "selected-unit",
-                      "state": "engaged",
-                      "with": {
-                        "event_var": "triggering-enemy"
-                      },
-                      "at": "phase-start"
-                    }
-                  }
-                ],
-                "filter": {
-                  "none_of": [
-                    "TITANIC"
-                  ]
-                },
-                "count": {
-                  "min": 1,
-                  "max": 1
-                }
-              },
-              "cost": {
-                "pool_id": "battle-focus-pool",
-                "amount": 1,
-                "resource_label": "Battle Focus token"
-              },
-              "duration": "resolution",
-              "effect": {
-                "type": "move",
-                "target": "this-unit",
-                "modifier": {
-                  "move_type": "normal",
-                  "distance": "D6+1"
-                }
-              }
-            },
-            {
-              "id": "fade-back",
-              "label": "Fade Back",
-              "when": {
-                "event": "attacks-resolved",
-                "subject": {
-                  "owner": "enemy"
-                },
-                "filter": {
-                  "kind": "shoot"
-                },
-                "binds_event_variable": "triggering-shooter"
-              },
-              "eligibility": {
-                "requires": [
-                  {
-                    "type": "phase-is",
-                    "parameters": {
-                      "phase": "shooting"
-                    }
-                  },
-                  {
-                    "type": "player-turn-is",
-                    "parameters": {
-                      "turn": "opponent-turn"
-                    }
-                  },
-                  {
-                    "type": "happened",
-                    "parameters": {
-                      "event": "after-roll",
-                      "object": "selected-unit",
-                      "filter": {
-                        "roll": "hit",
-                        "result": "success",
-                        "by": {
-                          "event_var": "triggering-shooter"
-                        }
-                      },
-                      "window": "event"
-                    }
-                  }
-                ],
-                "filter": {
-                  "none_of": [
-                    "TITANIC"
-                  ]
-                },
-                "count": {
-                  "min": 1,
-                  "max": 1
-                }
-              },
-              "cost": {
-                "pool_id": "battle-focus-pool",
-                "amount": 1,
-                "resource_label": "Battle Focus token"
-              },
-              "duration": "resolution",
-              "effect": {
-                "type": "move",
-                "target": "this-unit",
-                "modifier": {
-                  "move_type": "normal",
-                  "distance": "D6+1"
-                }
-              }
+          "type": "conditional",
+          "condition": {
+            "type": "army-faction",
+            "parameters": {
+              "faction": "aeldari"
             }
-          ]
-        },
-        {
-          "type": "ability-part",
-          "trigger": {
-            "event": "round-ended"
           },
           "effect": {
-            "type": "resource-spend",
-            "target": "this-model",
-            "modifier": {
-              "pool": "battle-focus-pool",
-              "amount": "all",
-              "label": "Battle Focus token"
-            }
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "resource-action-menu",
+                "menu_id": "agile-manoeuvres",
+                "pool_id": "battle-focus-pool",
+                "actions": [
+                  {
+                    "id": "swift-as-the-wind",
+                    "label": "Swift as the Wind",
+                    "when": {
+                      "event": "selected",
+                      "subject": {
+                        "owner": "friendly"
+                      },
+                      "filter": {
+                        "move_types": [
+                          "normal",
+                          "advance",
+                          "fall-back"
+                        ],
+                        "to": "move"
+                      }
+                    },
+                    "cost": {
+                      "pool_id": "battle-focus-pool",
+                      "amount": 1,
+                      "resource_label": "Battle Focus token"
+                    },
+                    "effect": {
+                      "type": "stat-modifier",
+                      "target": "this-unit",
+                      "modifier": {
+                        "stat": "M",
+                        "operation": "add",
+                        "value": 2
+                      }
+                    },
+                    "duration": "phase",
+                    "usage": {
+                      "repeatable_if_different_unit": true
+                    }
+                  },
+                  {
+                    "id": "flitting-shadows",
+                    "label": "Flitting Shadows",
+                    "when": [
+                      {
+                        "event": "selected",
+                        "subject": {
+                          "owner": "friendly"
+                        },
+                        "filter": {
+                          "move_types": [
+                            "normal",
+                            "advance",
+                            "fall-back"
+                          ],
+                          "to": "move"
+                        }
+                      },
+                      {
+                        "event": "set-up",
+                        "subject": {
+                          "owner": "friendly"
+                        }
+                      },
+                      {
+                        "event": "targets-selected",
+                        "subject": {
+                          "owner": "friendly"
+                        },
+                        "filter": {
+                          "kind": "charge"
+                        }
+                      }
+                    ],
+                    "cost": {
+                      "pool_id": "battle-focus-pool",
+                      "amount": 1,
+                      "resource_label": "Battle Focus token"
+                    },
+                    "effect": {
+                      "type": "rule-state",
+                      "target": "this-unit",
+                      "modifier": {
+                        "direction": "suppressed",
+                        "rule_kind": "core-rule",
+                        "rule": "overwatch-against-bearer"
+                      }
+                    },
+                    "duration": "turn"
+                  },
+                  {
+                    "id": "star-engines",
+                    "label": "Star Engines",
+                    "when": {
+                      "event": "selected",
+                      "subject": {
+                        "owner": "friendly"
+                      },
+                      "filter": {
+                        "move_types": [
+                          "advance"
+                        ],
+                        "to": "move"
+                      }
+                    },
+                    "cost": {
+                      "pool_id": "battle-focus-pool",
+                      "amount": 1,
+                      "resource_label": "Battle Focus token"
+                    },
+                    "effect": {
+                      "type": "weapon-ability-grant",
+                      "target": "this-unit",
+                      "modifier": {
+                        "keywords": [
+                          {
+                            "keyword_id": "assault"
+                          }
+                        ],
+                        "weapons": {
+                          "type": "ranged"
+                        }
+                      }
+                    },
+                    "eligibility": {
+                      "filter": {
+                        "all_of": [
+                          "VEHICLE"
+                        ]
+                      }
+                    },
+                    "duration": "turn"
+                  },
+                  {
+                    "id": "sudden-strike",
+                    "label": "Sudden Strike",
+                    "when": {
+                      "event": "move-ended",
+                      "subject": {
+                        "owner": "friendly"
+                      },
+                      "filter": {
+                        "move_types": [
+                          "charge"
+                        ]
+                      }
+                    },
+                    "cost": {
+                      "pool_id": "battle-focus-pool",
+                      "amount": 1,
+                      "resource_label": "Battle Focus token"
+                    },
+                    "effect": {
+                      "type": "move-modifier",
+                      "target": "this-unit",
+                      "modifier": {
+                        "applies_to_moves": [
+                          "pile-in",
+                          "consolidation"
+                        ],
+                        "distance_bonus": 3
+                      }
+                    },
+                    "duration": "turn"
+                  },
+                  {
+                    "id": "opportunity-seized",
+                    "label": "Opportunity Seized",
+                    "when": {
+                      "event": "move-ended",
+                      "subject": {
+                        "owner": "enemy"
+                      },
+                      "filter": {
+                        "move_types": [
+                          "fall-back"
+                        ]
+                      },
+                      "binds_event_variable": "triggering-enemy"
+                    },
+                    "cost": {
+                      "pool_id": "battle-focus-pool",
+                      "amount": 1,
+                      "resource_label": "Battle Focus token"
+                    },
+                    "effect": {
+                      "type": "move",
+                      "target": "this-unit",
+                      "modifier": {
+                        "move_type": "normal",
+                        "distance": "D6+1"
+                      }
+                    },
+                    "eligibility": {
+                      "filter": {
+                        "none_of": [
+                          "TITANIC"
+                        ]
+                      },
+                      "count": {
+                        "min": 1,
+                        "max": 1
+                      },
+                      "requires": [
+                        {
+                          "type": "unit-state",
+                          "parameters": {
+                            "subject": "selected-unit",
+                            "state": "engaged",
+                            "with": {
+                              "event_var": "triggering-enemy"
+                            },
+                            "at": "phase-start"
+                          }
+                        }
+                      ]
+                    },
+                    "duration": "resolution"
+                  },
+                  {
+                    "id": "fade-back",
+                    "label": "Fade Back",
+                    "when": {
+                      "event": "attacks-resolved",
+                      "subject": {
+                        "owner": "enemy"
+                      },
+                      "filter": {
+                        "kind": "shoot"
+                      },
+                      "binds_event_variable": "triggering-shooter"
+                    },
+                    "cost": {
+                      "pool_id": "battle-focus-pool",
+                      "amount": 1,
+                      "resource_label": "Battle Focus token"
+                    },
+                    "effect": {
+                      "type": "move",
+                      "target": "this-unit",
+                      "modifier": {
+                        "move_type": "normal",
+                        "distance": "D6+1"
+                      }
+                    },
+                    "eligibility": {
+                      "filter": {
+                        "none_of": [
+                          "TITANIC"
+                        ]
+                      },
+                      "count": {
+                        "min": 1,
+                        "max": 1
+                      },
+                      "requires": [
+                        {
+                          "type": "phase-is",
+                          "parameters": {
+                            "phase": "shooting"
+                          }
+                        },
+                        {
+                          "type": "player-turn-is",
+                          "parameters": {
+                            "turn": "opponent-turn"
+                          }
+                        },
+                        {
+                          "type": "happened",
+                          "parameters": {
+                            "event": "after-roll",
+                            "object": "selected-unit",
+                            "filter": {
+                              "roll": "hit",
+                              "result": "success",
+                              "by": {
+                                "event_var": "triggering-shooter"
+                              }
+                            },
+                            "window": "event"
+                          }
+                        }
+                      ]
+                    },
+                    "duration": "resolution"
+                  }
+                ],
+                "shared_usage": {
+                  "unit_max_manoeuvres_per_phase": 1,
+                  "default_manoeuvre_max_per_phase": 1
+                }
+              },
+              {
+                "type": "ability-part",
+                "trigger": {
+                  "event": "round-ended"
+                },
+                "effect": {
+                  "type": "resource-spend",
+                  "target": "this-model",
+                  "modifier": {
+                    "pool": "battle-focus-pool",
+                    "amount": "all",
+                    "label": "Battle Focus token"
+                  }
+                }
+              }
+            ]
           }
         }
       ]
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "expected": {
-      "text": "For the rest of the battle:\n  -> At the start of the battle round: you gain a number of Battle Focus tokens.\n  -> Actions may be performed when their conditions are met. A unit may perform at most one action per phase; unless stated otherwise, a given action may be triggered once per phase:\n    - Swift as the Wind: each time a friendly unit ends a Normal move or each time a friendly unit ends an Advance move or each time a friendly unit Falls Back, spend 1 Battle Focus token, add 2 to the unit's Move characteristic, until the end of the phase (may be triggered more than once per phase if a different unit performs it each time).\n    - Flitting Shadows: each time a friendly unit ends a Normal move or each time a friendly unit ends an Advance move or each time a friendly unit Falls Back or when a friendly unit is set up or after a friendly unit selects targets for its charge but before it makes a Charge move, spend 1 Battle Focus token, your opponent cannot target the unit with Overwatch, until the end of the turn.\n    - Star Engines: when a friendly unit is selected to Advance (only usable by one VEHICLE unit), spend 1 Battle Focus token, ranged weapons equipped by models in this unit gain [ASSAULT], until the end of the turn.\n    - Sudden Strike: when a friendly unit is selected to fight, spend 1 Battle Focus token, the unit can Pile In up to 6\"; the unit can Consolidate up to 6\", until the end of the phase.\n    - Opportunity Seized: each time an enemy unit Falls Back (only usable by one unit (excluding TITANIC units), the selected unit was engaged with that unit at the start of the phase), spend 1 Battle Focus token, the unit can make a Normal move of up to D6+1\".\n    - Fade Back: after an enemy unit shoots (only usable by one unit (excluding TITANIC units), during the Shooting phase and in the opponent's turn and the selected unit was hit by an attack from the triggering unit during its just-finished shooting sequence), spend 1 Battle Focus token, the unit can make a Normal move of up to D6+1\".\n  -> At the end of the battle round: spend all your Battle Focus tokens."
+      "text": "-> At the start of the battle round: if your Army Faction is AELDARI, you gain 2/4/6 Battle Focus tokens (Incursion/Strike Force/Onslaught).\nIf your Army Faction is AELDARI:\n  -> Actions may be performed when their conditions are met. A unit may perform at most one action per phase; unless stated otherwise, a given action may be triggered once per phase:\n    - Swift as the Wind: when a friendly unit is selected to Normal, Advance or Fall Back, spend 1 Battle Focus token, add 2 to the unit's Move characteristic, until the end of the phase (may be triggered more than once per phase if a different unit performs it each time).\n    - Flitting Shadows: when a friendly unit is selected to Normal, Advance or Fall Back or when a friendly unit is set up or after a friendly unit selects targets for its charge but before it makes a Charge move, spend 1 Battle Focus token, your opponent cannot target the unit with Overwatch, until the end of the turn.\n    - Star Engines: when a friendly unit is selected to Advance (only usable by one VEHICLE unit), spend 1 Battle Focus token, ranged weapons equipped by models in this unit gain [ASSAULT], until the end of the turn.\n    - Sudden Strike: each time a friendly unit ends a Charge move, spend 1 Battle Focus token, add 3\" to the unit's Pile-in and Consolidation moves, until the end of the turn.\n    - Opportunity Seized: each time an enemy unit Falls Back (only usable by one unit (excluding TITANIC units), the selected unit was engaged with that unit at the start of the phase), spend 1 Battle Focus token, the unit can make a Normal move of up to D6+1\".\n    - Fade Back: after an enemy unit shoots (only usable by one unit (excluding TITANIC units), during the Shooting phase and in the opponent's turn and the selected unit was hit by an attack from the triggering unit during its just-finished shooting sequence), spend 1 Battle Focus token, the unit can make a Normal move of up to D6+1\".\n  -> At the end of the battle round: spend all your Battle Focus tokens."
     }
   },
   {
-    "caseId": "battle-lust-berzerker-warband-world-eaters#163",
+    "caseId": "battle-focus-kygharils-protectors-aeldari#163",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "round-started"
+          },
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "army-faction",
+              "parameters": {
+                "faction": "aeldari"
+              }
+            },
+            "effect": {
+              "type": "resource-gain",
+              "target": "this-model",
+              "modifier": {
+                "pool": "battle-focus-pool",
+                "amount": {
+                  "incursion": 2,
+                  "strike-force": 4,
+                  "onslaught": 6
+                },
+                "label": "Battle Focus token"
+              }
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "army-faction",
+            "parameters": {
+              "faction": "aeldari"
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "resource-action-menu",
+                "menu_id": "agile-manoeuvres",
+                "pool_id": "battle-focus-pool",
+                "actions": [
+                  {
+                    "id": "swift-as-the-wind",
+                    "label": "Swift as the Wind",
+                    "when": {
+                      "event": "selected",
+                      "subject": {
+                        "owner": "friendly"
+                      },
+                      "filter": {
+                        "move_types": [
+                          "normal",
+                          "advance",
+                          "fall-back"
+                        ],
+                        "to": "move"
+                      }
+                    },
+                    "cost": {
+                      "pool_id": "battle-focus-pool",
+                      "amount": 1,
+                      "resource_label": "Battle Focus token"
+                    },
+                    "effect": {
+                      "type": "stat-modifier",
+                      "target": "this-unit",
+                      "modifier": {
+                        "stat": "M",
+                        "operation": "add",
+                        "value": 2
+                      }
+                    },
+                    "duration": "phase",
+                    "usage": {
+                      "repeatable_if_different_unit": true
+                    }
+                  },
+                  {
+                    "id": "flitting-shadows",
+                    "label": "Flitting Shadows",
+                    "when": [
+                      {
+                        "event": "selected",
+                        "subject": {
+                          "owner": "friendly"
+                        },
+                        "filter": {
+                          "move_types": [
+                            "normal",
+                            "advance",
+                            "fall-back"
+                          ],
+                          "to": "move"
+                        }
+                      },
+                      {
+                        "event": "set-up",
+                        "subject": {
+                          "owner": "friendly"
+                        }
+                      },
+                      {
+                        "event": "targets-selected",
+                        "subject": {
+                          "owner": "friendly"
+                        },
+                        "filter": {
+                          "kind": "charge"
+                        }
+                      }
+                    ],
+                    "cost": {
+                      "pool_id": "battle-focus-pool",
+                      "amount": 1,
+                      "resource_label": "Battle Focus token"
+                    },
+                    "effect": {
+                      "type": "rule-state",
+                      "target": "this-unit",
+                      "modifier": {
+                        "direction": "suppressed",
+                        "rule_kind": "core-rule",
+                        "rule": "overwatch-against-bearer"
+                      }
+                    },
+                    "duration": "turn"
+                  },
+                  {
+                    "id": "star-engines",
+                    "label": "Star Engines",
+                    "when": {
+                      "event": "selected",
+                      "subject": {
+                        "owner": "friendly"
+                      },
+                      "filter": {
+                        "move_types": [
+                          "advance"
+                        ],
+                        "to": "move"
+                      }
+                    },
+                    "cost": {
+                      "pool_id": "battle-focus-pool",
+                      "amount": 1,
+                      "resource_label": "Battle Focus token"
+                    },
+                    "effect": {
+                      "type": "weapon-ability-grant",
+                      "target": "this-unit",
+                      "modifier": {
+                        "keywords": [
+                          {
+                            "keyword_id": "assault"
+                          }
+                        ],
+                        "weapons": {
+                          "type": "ranged"
+                        }
+                      }
+                    },
+                    "eligibility": {
+                      "filter": {
+                        "all_of": [
+                          "VEHICLE"
+                        ]
+                      }
+                    },
+                    "duration": "turn"
+                  },
+                  {
+                    "id": "sudden-strike",
+                    "label": "Sudden Strike",
+                    "when": {
+                      "event": "move-ended",
+                      "subject": {
+                        "owner": "friendly"
+                      },
+                      "filter": {
+                        "move_types": [
+                          "charge"
+                        ]
+                      }
+                    },
+                    "cost": {
+                      "pool_id": "battle-focus-pool",
+                      "amount": 1,
+                      "resource_label": "Battle Focus token"
+                    },
+                    "effect": {
+                      "type": "move-modifier",
+                      "target": "this-unit",
+                      "modifier": {
+                        "applies_to_moves": [
+                          "pile-in",
+                          "consolidation"
+                        ],
+                        "distance_bonus": 3
+                      }
+                    },
+                    "duration": "turn"
+                  },
+                  {
+                    "id": "opportunity-seized",
+                    "label": "Opportunity Seized",
+                    "when": {
+                      "event": "move-ended",
+                      "subject": {
+                        "owner": "enemy"
+                      },
+                      "filter": {
+                        "move_types": [
+                          "fall-back"
+                        ]
+                      },
+                      "binds_event_variable": "triggering-enemy"
+                    },
+                    "cost": {
+                      "pool_id": "battle-focus-pool",
+                      "amount": 1,
+                      "resource_label": "Battle Focus token"
+                    },
+                    "effect": {
+                      "type": "move",
+                      "target": "this-unit",
+                      "modifier": {
+                        "move_type": "normal",
+                        "distance": "D6+1"
+                      }
+                    },
+                    "eligibility": {
+                      "filter": {
+                        "none_of": [
+                          "TITANIC"
+                        ]
+                      },
+                      "count": {
+                        "min": 1,
+                        "max": 1
+                      },
+                      "requires": [
+                        {
+                          "type": "unit-state",
+                          "parameters": {
+                            "subject": "selected-unit",
+                            "state": "engaged",
+                            "with": {
+                              "event_var": "triggering-enemy"
+                            },
+                            "at": "phase-start"
+                          }
+                        }
+                      ]
+                    },
+                    "duration": "resolution"
+                  },
+                  {
+                    "id": "fade-back",
+                    "label": "Fade Back",
+                    "when": {
+                      "event": "attacks-resolved",
+                      "subject": {
+                        "owner": "enemy"
+                      },
+                      "filter": {
+                        "kind": "shoot"
+                      },
+                      "binds_event_variable": "triggering-shooter"
+                    },
+                    "cost": {
+                      "pool_id": "battle-focus-pool",
+                      "amount": 1,
+                      "resource_label": "Battle Focus token"
+                    },
+                    "effect": {
+                      "type": "move",
+                      "target": "this-unit",
+                      "modifier": {
+                        "move_type": "normal",
+                        "distance": "D6+1"
+                      }
+                    },
+                    "eligibility": {
+                      "filter": {
+                        "none_of": [
+                          "TITANIC"
+                        ]
+                      },
+                      "count": {
+                        "min": 1,
+                        "max": 1
+                      },
+                      "requires": [
+                        {
+                          "type": "phase-is",
+                          "parameters": {
+                            "phase": "shooting"
+                          }
+                        },
+                        {
+                          "type": "player-turn-is",
+                          "parameters": {
+                            "turn": "opponent-turn"
+                          }
+                        },
+                        {
+                          "type": "happened",
+                          "parameters": {
+                            "event": "after-roll",
+                            "object": "selected-unit",
+                            "filter": {
+                              "roll": "hit",
+                              "result": "success",
+                              "by": {
+                                "event_var": "triggering-shooter"
+                              }
+                            },
+                            "window": "event"
+                          }
+                        }
+                      ]
+                    },
+                    "duration": "resolution"
+                  }
+                ],
+                "shared_usage": {
+                  "unit_max_manoeuvres_per_phase": 1,
+                  "default_manoeuvre_max_per_phase": 1
+                }
+              },
+              {
+                "type": "ability-part",
+                "trigger": {
+                  "event": "round-ended"
+                },
+                "effect": {
+                  "type": "resource-spend",
+                  "target": "this-model",
+                  "modifier": {
+                    "pool": "battle-focus-pool",
+                    "amount": "all",
+                    "label": "Battle Focus token"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "-> At the start of the battle round: if your Army Faction is AELDARI, you gain 2/4/6 Battle Focus tokens (Incursion/Strike Force/Onslaught).\nIf your Army Faction is AELDARI:\n  -> Actions may be performed when their conditions are met. A unit may perform at most one action per phase; unless stated otherwise, a given action may be triggered once per phase:\n    - Swift as the Wind: when a friendly unit is selected to Normal, Advance or Fall Back, spend 1 Battle Focus token, add 2 to the unit's Move characteristic, until the end of the phase (may be triggered more than once per phase if a different unit performs it each time).\n    - Flitting Shadows: when a friendly unit is selected to Normal, Advance or Fall Back or when a friendly unit is set up or after a friendly unit selects targets for its charge but before it makes a Charge move, spend 1 Battle Focus token, your opponent cannot target the unit with Overwatch, until the end of the turn.\n    - Star Engines: when a friendly unit is selected to Advance (only usable by one VEHICLE unit), spend 1 Battle Focus token, ranged weapons equipped by models in this unit gain [ASSAULT], until the end of the turn.\n    - Sudden Strike: each time a friendly unit ends a Charge move, spend 1 Battle Focus token, add 3\" to the unit's Pile-in and Consolidation moves, until the end of the turn.\n    - Opportunity Seized: each time an enemy unit Falls Back (only usable by one unit (excluding TITANIC units), the selected unit was engaged with that unit at the start of the phase), spend 1 Battle Focus token, the unit can make a Normal move of up to D6+1\".\n    - Fade Back: after an enemy unit shoots (only usable by one unit (excluding TITANIC units), during the Shooting phase and in the opponent's turn and the selected unit was hit by an attack from the triggering unit during its just-finished shooting sequence), spend 1 Battle Focus token, the unit can make a Normal move of up to D6+1\".\n  -> At the end of the battle round: spend all your Battle Focus tokens."
+    }
+  },
+  {
+    "caseId": "battle-lust-berzerker-warband-world-eaters#164",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -9019,7 +9363,7 @@
     }
   },
   {
-    "caseId": "battlesuit-support-system-ghostkeel-battlesuit-tau-empire#164",
+    "caseId": "battlesuit-support-system-ghostkeel-battlesuit-tau-empire#165",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -9053,7 +9397,7 @@
     }
   },
   {
-    "caseId": "bearer-of-the-iron-chalice-valourstrike-lance-imperial-knights#165",
+    "caseId": "bearer-of-the-iron-chalice-valourstrike-lance-imperial-knights#166",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -9184,7 +9528,7 @@
     }
   },
   {
-    "caseId": "bearers-of-his-light-emissaries-imperatus-adeptus-custodes#166",
+    "caseId": "bearers-of-his-light-emissaries-imperatus-adeptus-custodes#167",
     "effect": {
       "type": "ignore-modifiers",
       "target": "this-unit",
@@ -9219,7 +9563,7 @@
     }
   },
   {
-    "caseId": "beastscent-orks#167",
+    "caseId": "beastscent-orks#168",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -9344,7 +9688,7 @@
     }
   },
   {
-    "caseId": "benedictions-of-the-omnissiah-adeptus-mechanicus#168",
+    "caseId": "benedictions-of-the-omnissiah-adeptus-mechanicus#169",
     "effect": {
       "type": "ability-part",
       "trigger": {
@@ -9445,7 +9789,7 @@
     }
   },
   {
-    "caseId": "berzerker-frenzy-world-eaters#169",
+    "caseId": "berzerker-frenzy-world-eaters#170",
     "effect": {
       "type": "dice-gated",
       "dice": "D6",
@@ -9491,7 +9835,7 @@
     }
   },
   {
-    "caseId": "bestial-aspect-infernal-lance-chaos-knights#170",
+    "caseId": "bestial-aspect-infernal-lance-chaos-knights#171",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -9567,7 +9911,7 @@
     }
   },
   {
-    "caseId": "bilious-blessing-lords-of-the-warp-chaos-daemons#171",
+    "caseId": "bilious-blessing-lords-of-the-warp-chaos-daemons#172",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -9647,7 +9991,7 @@
     }
   },
   {
-    "caseId": "binharic-offence-skitarii-hunter-cohort-adeptus-mechanicus#172",
+    "caseId": "binharic-offence-skitarii-hunter-cohort-adeptus-mechanicus#173",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -9715,7 +10059,7 @@
     }
   },
   {
-    "caseId": "bio-stimulus-tyranids#173",
+    "caseId": "bio-stimulus-tyranids#174",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -9810,7 +10154,7 @@
     }
   },
   {
-    "caseId": "biomechanical-mutation-warpforged-cabal-thousand-sons#174",
+    "caseId": "biomechanical-mutation-warpforged-cabal-thousand-sons#175",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -9883,7 +10227,7 @@
     }
   },
   {
-    "caseId": "biomechanoid-regeneration-cult-of-the-arkifane-chaos-space-marines#175",
+    "caseId": "biomechanoid-regeneration-cult-of-the-arkifane-chaos-space-marines#176",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -9949,7 +10293,7 @@
     }
   },
   {
-    "caseId": "blackstar-cluster-launcher-agents-of-the-imperium#176",
+    "caseId": "blackstar-cluster-launcher-agents-of-the-imperium#177",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -10017,7 +10361,7 @@
     }
   },
   {
-    "caseId": "blackstar-cluster-launcher-deathwatch#177",
+    "caseId": "blackstar-cluster-launcher-deathwatch#178",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -10085,7 +10429,7 @@
     }
   },
   {
-    "caseId": "blade-of-saint-ellynor-army-of-faith-adepta-sororitas#178",
+    "caseId": "blade-of-saint-ellynor-army-of-faith-adepta-sororitas#179",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -10187,7 +10531,7 @@
     }
   },
   {
-    "caseId": "blessed-icon-of-disease-death-guard#179",
+    "caseId": "blessed-icon-of-disease-death-guard#180",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -10256,7 +10600,7 @@
     }
   },
   {
-    "caseId": "blessed-transmutations-warpmeld-pact-thousand-sons#180",
+    "caseId": "blessed-transmutations-warpmeld-pact-thousand-sons#181",
     "effect": {
       "type": "return-models",
       "target": {
@@ -10285,7 +10629,7 @@
     }
   },
   {
-    "caseId": "blessing-of-burning-blood-khorne-daemonkin-world-eaters#181",
+    "caseId": "blessing-of-burning-blood-khorne-daemonkin-world-eaters#182",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -10338,7 +10682,7 @@
     }
   },
   {
-    "caseId": "blessing-of-the-omnissiah-grey-knights#182",
+    "caseId": "blessing-of-the-omnissiah-grey-knights#183",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -10424,7 +10768,7 @@
     }
   },
   {
-    "caseId": "blessings-of-khorne-frenzied-reavers-world-eaters#183",
+    "caseId": "blessings-of-khorne-frenzied-reavers-world-eaters#184",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -10657,7 +11001,7 @@
     }
   },
   {
-    "caseId": "blessings-of-khorne-world-eaters#184",
+    "caseId": "blessings-of-khorne-world-eaters#185",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -10890,7 +11234,7 @@
     }
   },
   {
-    "caseId": "blessings-of-the-omnissiah-adeptus-astartes#185",
+    "caseId": "blessings-of-the-omnissiah-adeptus-astartes#186",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -10983,7 +11327,7 @@
     }
   },
   {
-    "caseId": "blight-bombardment-death-guard#186",
+    "caseId": "blight-bombardment-death-guard#187",
     "effect": {
       "type": "designate-target",
       "designation": "blight-bombardment-target",
@@ -11135,7 +11479,7 @@
     }
   },
   {
-    "caseId": "blinding-aura-brotherhood-strike-grey-knights#187",
+    "caseId": "blinding-aura-brotherhood-strike-grey-knights#188",
     "effect": {
       "type": "targeting",
       "target": {
@@ -11170,47 +11514,6 @@
     },
     "expected": {
       "text": "When the unit is set up, if the unit is using Deep Strike, until the end of the turn, enemy units cannot target the unit with the Fire Overwatch Stratagem."
-    }
-  },
-  {
-    "caseId": "blood-forged-armour-khorne-daemonkin-world-eaters#188",
-    "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "stat-modifier",
-          "target": "this-model",
-          "modifier": {
-            "stat": "Sv",
-            "operation": "set",
-            "value": 2
-          }
-        },
-        {
-          "type": "ability-part",
-          "trigger": {
-            "event": "model-destroyed",
-            "object": "this-model",
-            "filter": {
-              "timing": "before-removal"
-            }
-          },
-          "effect": {
-            "type": "resource-gain",
-            "target": "this-model",
-            "modifier": {
-              "pool": "blood-tithe-pool",
-              "amount": 1
-            }
-          }
-        }
-      ]
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "expected": {
-      "text": "Set this model's Save characteristic to 2.\n-> Before this model is removed from play: you gain 1 Blood Tithe point."
     }
   },
   {
@@ -12038,7 +12341,7 @@
       }
     },
     "expected": {
-      "text": "When the unit becomes Battle-shocked, if the unit has \"INFANTRY\" and \"ORKS\", you may use this ability, while the unit is friendly, while the unit is an attached unit, until the end of the phase:\n  -> The unit is eligible to be targeted with Stratagems even if it is Battle-shocked.\n  -> Roll D3; then the unit suffers a number of mortal wounds equal to the result of that roll.\n  -> The unit is no longer Battle-shocked."
+      "text": "When the unit becomes Battle-shocked, if the unit has the INFANTRY and ORKS keywords, you may use this ability, while the unit is friendly, while the unit is an attached unit, until the end of the phase:\n  -> The unit is eligible to be targeted with Stratagems even if it is Battle-shocked.\n  -> Roll D3; then the unit suffers a number of mortal wounds equal to the result of that roll.\n  -> The unit is no longer Battle-shocked."
     }
   },
   {
@@ -15000,7 +15303,7 @@
       }
     },
     "expected": {
-      "text": "Each time a friendly unit ends a Normal move (the triggering unit must have CHAOS KNIGHTS and CHARACTER), if the unit was moved over by the unit this phase:\n  -> Select one enemy unit if the selected unit does not have \"MONSTER\" and the selected unit does not have \"VEHICLE\":\n    -> Roll 6 D6: for each 4+, that unit suffers 1 mortal wound.\n    -> If 1+ enemy models destroyed, that unit must take a Battle-shock test."
+      "text": "Each time a friendly unit ends a Normal move (the triggering unit must have CHAOS KNIGHTS and CHARACTER), if the unit was moved over by the unit this phase:\n  -> Select one enemy unit if the selected unit does not have the MONSTER keyword and the selected unit does not have the VEHICLE keyword:\n    -> Roll 6 D6: for each 4+, that unit suffers 1 mortal wound.\n    -> If 1+ enemy models destroyed, that unit must take a Battle-shock test."
     }
   },
   {
@@ -15122,7 +15425,92 @@
     }
   },
   {
-    "caseId": "curse-of-the-wulfen-askars-wolfpack-space-wolves#233",
+    "caseId": "cults-of-the-dark-gods-chaos-space-marines#233",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "army-faction",
+        "parameters": {
+          "faction": "chaos-space-marines"
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "army-rule",
+            "target": "this-unit",
+            "modifier": {
+              "rule": "composition",
+              "with": {
+                "owner": "friendly",
+                "any_of": [
+                  "KHORNE BERZERKERS",
+                  "NOISE MARINES",
+                  "PLAGUE MARINES",
+                  "RUBRIC MARINES"
+                ]
+              }
+            }
+          },
+          {
+            "type": "keyword-grant",
+            "target": {
+              "owner": "friendly",
+              "any_of": [
+                "KHORNE BERZERKERS",
+                "NOISE MARINES",
+                "PLAGUE MARINES",
+                "RUBRIC MARINES"
+              ]
+            },
+            "modifier": {
+              "keywords": [
+                "HERETIC ASTARTES"
+              ],
+              "replaces": [
+                "WORLD EATERS",
+                "THOUSAND SONS",
+                "DEATH GUARD",
+                "EMPEROR'S CHILDREN"
+              ]
+            }
+          },
+          {
+            "type": "army-rule",
+            "target": "this-unit",
+            "modifier": {
+              "rule": "composition",
+              "with": {
+                "owner": "friendly",
+                "any_of": [
+                  "KHORNE BERZERKERS",
+                  "NOISE MARINES",
+                  "PLAGUE MARINES",
+                  "RUBRIC MARINES"
+                ]
+              },
+              "max": {
+                "incursion": 250,
+                "strike-force": 500,
+                "onslaught": 750
+              },
+              "measure": "points"
+            }
+          }
+        ]
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "optional": true,
+    "expected": {
+      "text": "You can: If your Army Faction is CHAOS SPACE MARINES:\n  -> Your army can include friendly units with the KHORNE BERZERKERS, NOISE MARINES, PLAGUE MARINES or RUBRIC MARINES keyword.\n  -> All friendly units with the KHORNE BERZERKERS, NOISE MARINES, PLAGUE MARINES or RUBRIC MARINES keyword gain the HERETIC ASTARTES keyword, replacing their WORLD EATERS, THOUSAND SONS, DEATH GUARD and EMPEROR'S CHILDREN keywords.\n  -> Your army can include at most 250/500/750 (Incursion/Strike Force/Onslaught) points of friendly units with the KHORNE BERZERKERS, NOISE MARINES, PLAGUE MARINES or RUBRIC MARINES keyword."
+    }
+  },
+  {
+    "caseId": "curse-of-the-wulfen-askars-wolfpack-space-wolves#234",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -15263,7 +15651,7 @@
     }
   },
   {
-    "caseId": "curse-of-the-wulfen-space-wolves#234",
+    "caseId": "curse-of-the-wulfen-space-wolves#235",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -15404,7 +15792,7 @@
     }
   },
   {
-    "caseId": "da-gobshot-thunderbuss-brute-bosses-orks#235",
+    "caseId": "da-gobshot-thunderbuss-brute-bosses-orks#236",
     "effect": {
       "type": "weapon-grant",
       "target": "this-model",
@@ -15420,7 +15808,7 @@
     }
   },
   {
-    "caseId": "da-krunch-wurrband-orks#236",
+    "caseId": "da-krunch-wurrband-orks#237",
     "effect": {
       "type": "weapon-grant",
       "target": "this-model",
@@ -15436,7 +15824,7 @@
     }
   },
   {
-    "caseId": "daemonic-allegiance-soul-grinder-chaos-daemons#237",
+    "caseId": "daemonic-allegiance-soul-grinder-chaos-daemons#238",
     "effect": {
       "type": "ability-part",
       "trigger": {
@@ -15557,7 +15945,7 @@
     }
   },
   {
-    "caseId": "daemonic-patrons-callous-blades-flawless-blades-emperors-children#238",
+    "caseId": "daemonic-patrons-callous-blades-flawless-blades-emperors-children#239",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -15640,7 +16028,7 @@
     }
   },
   {
-    "caseId": "daemonic-patrons-emperors-children#239",
+    "caseId": "daemonic-patrons-emperors-children#240",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -15742,7 +16130,7 @@
     }
   },
   {
-    "caseId": "daemonkin-aranis-zarkan-chaos-space-marines#240",
+    "caseId": "daemonkin-aranis-zarkan-chaos-space-marines#241",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -15785,7 +16173,7 @@
     }
   },
   {
-    "caseId": "damaged#241",
+    "caseId": "damaged#242",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -15815,7 +16203,7 @@
     }
   },
   {
-    "caseId": "damaged-1-6-wounds-remaining-adepta-sororitas#242",
+    "caseId": "damaged-1-6-wounds-remaining-adepta-sororitas#243",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -15857,7 +16245,7 @@
     }
   },
   {
-    "caseId": "damaged-1-6-wounds-remaining-necrons#243",
+    "caseId": "damaged-1-6-wounds-remaining-necrons#244",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -15898,7 +16286,7 @@
     }
   },
   {
-    "caseId": "damaged-1-7-wounds-remaining-chaos-daemons#244",
+    "caseId": "damaged-1-7-wounds-remaining-chaos-daemons#245",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -15927,99 +16315,6 @@
     },
     "expected": {
       "text": "While the model has 7 or fewer wounds remaining, add 2 to the Attacks characteristic of melee slaughter and carnage weapons equipped by this model."
-    }
-  },
-  {
-    "caseId": "dark-pacts-chaos-space-marines#245",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "army-faction",
-        "parameters": {
-          "faction": "chaos-space-marines"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "test",
-            "target": "this-unit",
-            "modifier": {
-              "test": "leadership"
-            }
-          },
-          {
-            "type": "conditional",
-            "condition": {
-              "type": "roll-result",
-              "parameters": {
-                "roll": "leadership",
-                "result": "failure"
-              }
-            },
-            "effect": {
-              "type": "mortal-wounds",
-              "target": "event-subject",
-              "modifier": {
-                "count": "D3"
-              }
-            }
-          },
-          {
-            "type": "choice",
-            "options": [
-              {
-                "type": "weapon-ability-grant",
-                "target": "event-subject",
-                "modifier": {
-                  "keywords": [
-                    {
-                      "keyword_id": "lethal-hits"
-                    }
-                  ]
-                }
-              },
-              {
-                "type": "weapon-ability-grant",
-                "target": "event-subject",
-                "modifier": {
-                  "keywords": [
-                    {
-                      "keyword_id": "sustained-hits",
-                      "parameters": {
-                        "value": 1
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        ]
-      }
-    },
-    "scope": {
-      "duration": "phase"
-    },
-    "trigger": [
-      {
-        "event": "selected",
-        "filter": {
-          "to": "shoot"
-        },
-        "optional": true
-      },
-      {
-        "event": "selected",
-        "filter": {
-          "to": "fight"
-        },
-        "optional": true
-      }
-    ],
-    "expected": {
-      "text": "When the unit is selected to shoot, you may use this ability or when the unit is selected to fight, you may use this ability, if your Army Faction is CHAOS SPACE MARINES, until the end of the phase:\n  -> The unit must take a Leadership test.\n  -> If the triggering leadership roll was a failure, the triggering unit suffers D3 mortal wounds.\n  Select one of the following:\n    - The triggering unit's weapons gain [LETHAL HITS].\n    - The triggering unit's weapons gain [SUSTAINED HITS 1]."
     }
   },
   {
@@ -17171,7 +17466,7 @@
       "duration": "phase"
     },
     "expected": {
-      "text": "If the unit has \"LEGIONES DAEMONICA\" and \"TZEENTCH\", until the end of the phase, discard a die from your Flux tokens and use its value in place of a Advance or Hit or Wound or Damage or saving throw or Hazard roll."
+      "text": "If the unit has the LEGIONES DAEMONICA and TZEENTCH keywords, until the end of the phase, discard a die from your Flux tokens and use its value in place of a Advance or Hit or Wound or Damage or saving throw or Hazard roll."
     }
   },
   {
@@ -17360,6 +17655,9 @@
                 "type": "controls",
                 "parameters": {
                   "by": "friendly",
+                  "objective": {
+                    "territory": "no-mans-land"
+                  },
                   "proportion": {
                     "comparison": "gte",
                     "fraction": 0.5
@@ -17380,6 +17678,9 @@
                 "type": "controls",
                 "parameters": {
                   "by": "friendly",
+                  "objective": {
+                    "territory": "enemy-deployment-zone"
+                  },
                   "proportion": {
                     "comparison": "gte",
                     "fraction": 0.5
@@ -17399,6 +17700,12 @@
           "state_ref": {
             "region_id": "flow-of-magic",
             "owner_faction": "thousand-sons"
+          },
+          "beneficiary_filter": {
+            "owner": "friendly",
+            "all_of": [
+              "THOUSAND SONS"
+            ]
           },
           "membership": {
             "unit_scope": "model",
@@ -17433,8 +17740,7 @@
                   }
                 }
               },
-              "optional": false,
-              "duration": "resolution"
+              "optional": false
             }
           },
           "qualified_branch": {
@@ -17444,9 +17750,9 @@
                 "type": "roll-modifier",
                 "target": "attacker",
                 "modifier": {
+                  "roll": "wound",
                   "operation": "add",
                   "value": 1,
-                  "roll": "wound",
                   "weapons": {
                     "keyword": {
                       "keyword_id": "psychic"
@@ -17454,16 +17760,8 @@
                   }
                 }
               },
-              "optional": false,
-              "duration": "resolution"
+              "optional": false
             }
-          },
-          "beneficiary_filter": {
-            "owner": "friendly",
-            "all_of": [
-              "THOUSAND-SONS",
-              "THOUSAND SONS"
-            ]
           }
         },
         "branch_precedence": "qualified-replaces-default"
@@ -17473,7 +17771,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "Your deployment zone is within Flow of Magic. At the start of each phase, if you control at least half of the objectives, no man's land is within Flow of Magic until the end of the phase (evaluated once at that time). At the start of each phase, if you control at least half of the objectives, your opponent's deployment zone is within Flow of Magic until the end of the phase (evaluated once at that time). When resolving this use: you can re-roll a Wound roll of 1 with weapons with [PSYCHIC]. If this model is wholly within Flow of Magic, when resolving this use: all friendly THOUSAND-SONS THOUSAND SONS units get +1 to Wound rolls with weapons with [PSYCHIC] instead."
+      "text": "Your deployment zone is within Flow of Magic. At the start of each phase, if you control at least half of the objectives in no man's land, no man's land is within Flow of Magic until the end of the phase (evaluated once at that time). At the start of each phase, if you control at least half of the objectives in your opponent's deployment zone, your opponent's deployment zone is within Flow of Magic until the end of the phase (evaluated once at that time). You can re-roll a Wound roll of 1 with weapons with [PSYCHIC]. If this model is wholly within Flow of Magic, all friendly THOUSAND SONS units get +1 to Wound rolls with weapons with [PSYCHIC] instead."
     }
   },
   {
@@ -17664,213 +17962,7 @@
     }
   },
   {
-    "caseId": "gate-of-infinity-crowes-sanctifiers-grey-knights#272",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "army-faction",
-        "parameters": {
-          "faction": "grey-knights"
-        }
-      },
-      "effect": {
-        "type": "select-units",
-        "selector": {
-          "filter": {
-            "owner": "friendly"
-          },
-          "count": {
-            "min": 0,
-            "max": {
-              "incursion": 2,
-              "strike-force": 3,
-              "onslaught": 4
-            }
-          },
-          "eligibility": {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "matches",
-                "parameters": {
-                  "subject": "selected-unit",
-                  "filter": {
-                    "state": "on-battlefield"
-                  }
-                }
-              },
-              {
-                "operator": "not",
-                "operands": [
-                  {
-                    "type": "matches",
-                    "parameters": {
-                      "subject": "selected-unit",
-                      "filter": {
-                        "state": "engaged"
-                      }
-                    }
-                  }
-                ]
-              },
-              {
-                "type": "matches",
-                "parameters": {
-                  "subject": "selected-unit",
-                  "filter": {
-                    "has_ability": [
-                      "gate-of-infinity-crowes-sanctifiers-grey-knights"
-                    ]
-                  }
-                }
-              }
-            ]
-          }
-        },
-        "effect": {
-          "type": "set-up",
-          "target": "selected-unit",
-          "modifier": {
-            "to": "strategic-reserves",
-            "arrives": "next-movement-phase",
-            "allow_first_round": true
-          }
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "trigger": {
-      "event": "phase-ended",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "opponent-turn"
-            }
-          }
-        ]
-      },
-      "optional": true
-    },
-    "expected": {
-      "text": "At the end of your opponent's Fight phase, you may use this ability, if your Army Faction is GREY KNIGHTS:\n  -> Select up to 2/3/4 friendly units (Incursion/Strike Force/Onslaught) if the selected unit is on the battlefield and the selected unit is unengaged and the selected unit has the Gate of Infinity Crowes Sanctifiers ability: that unit can be placed into Strategic Reserves."
-    }
-  },
-  {
-    "caseId": "gate-of-infinity-grey-knights#273",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "army-faction",
-        "parameters": {
-          "faction": "grey-knights"
-        }
-      },
-      "effect": {
-        "type": "select-units",
-        "selector": {
-          "filter": {
-            "owner": "friendly"
-          },
-          "count": {
-            "min": 0,
-            "max": {
-              "incursion": 2,
-              "strike-force": 3,
-              "onslaught": 4
-            }
-          },
-          "eligibility": {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "matches",
-                "parameters": {
-                  "subject": "selected-unit",
-                  "filter": {
-                    "state": "on-battlefield"
-                  }
-                }
-              },
-              {
-                "operator": "not",
-                "operands": [
-                  {
-                    "type": "matches",
-                    "parameters": {
-                      "subject": "selected-unit",
-                      "filter": {
-                        "state": "engaged"
-                      }
-                    }
-                  }
-                ]
-              },
-              {
-                "type": "matches",
-                "parameters": {
-                  "subject": "selected-unit",
-                  "filter": {
-                    "has_ability": [
-                      "gate-of-infinity-crowes-sanctifiers-grey-knights"
-                    ]
-                  }
-                }
-              }
-            ]
-          }
-        },
-        "effect": {
-          "type": "set-up",
-          "target": "selected-unit",
-          "modifier": {
-            "to": "strategic-reserves",
-            "arrives": "next-movement-phase",
-            "allow_first_round": true
-          }
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "trigger": {
-      "event": "phase-ended",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "opponent-turn"
-            }
-          }
-        ]
-      },
-      "optional": true
-    },
-    "expected": {
-      "text": "At the end of your opponent's Fight phase, you may use this ability, if your Army Faction is GREY KNIGHTS:\n  -> Select up to 2/3/4 friendly units (Incursion/Strike Force/Onslaught) if the selected unit is on the battlefield and the selected unit is unengaged and the selected unit has the Gate of Infinity Crowes Sanctifiers ability: that unit can be placed into Strategic Reserves."
-    }
-  },
-  {
-    "caseId": "gift-of-change-warpmeld-pact-thousand-sons#274",
+    "caseId": "gift-of-change-warpmeld-pact-thousand-sons#272",
     "effect": {
       "type": "add-unit",
       "target": "this-unit",
@@ -17891,7 +17983,7 @@
     }
   },
   {
-    "caseId": "grot-shields-runt-swarm-orks#275",
+    "caseId": "grot-shields-runt-swarm-orks#273",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -18064,11 +18156,11 @@
       }
     },
     "expected": {
-      "text": "When an enemy unit targets this unit during your opponent's Shooting phase, while the unit is an enemy unit, while the unit is friendly, if the unit has the GRETCHIN keyword, while the unit is friendly, if the unit has \"ORKS\", if the unit has \"INFANTRY\" (excluding Gretchin units), while the unit is within 3\" of the target unit, until the end of the phase, if the target was hit by a ranged attack this phase, while the unit is on the battlefield, the attack sequence ends; the unit suffers 1 mortal wound."
+      "text": "When an enemy unit targets this unit during your opponent's Shooting phase, while the unit is an enemy unit, while the unit is friendly, if the unit has the GRETCHIN keyword, while the unit is friendly, if the unit has the ORKS keyword, if the unit has the INFANTRY keyword (excluding Gretchin units), while the unit is within 3\" of the target unit, until the end of the phase, if the target was hit by a ranged attack this phase, while the unit is on the battlefield, the attack sequence ends; the unit suffers 1 mortal wound."
     }
   },
   {
-    "caseId": "guns-blazing-chaos-space-marines#276",
+    "caseId": "guns-blazing-chaos-space-marines#274",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -18181,7 +18273,7 @@
     }
   },
   {
-    "caseId": "hallowed-ground-grey-knights#277",
+    "caseId": "hallowed-ground-grey-knights#275",
     "effect": {
       "type": "named-region-state",
       "target": {
@@ -18216,6 +18308,9 @@
                 "type": "controls",
                 "parameters": {
                   "by": "friendly",
+                  "objective": {
+                    "territory": "no-mans-land"
+                  },
                   "proportion": {
                     "comparison": "gte",
                     "fraction": 0.5
@@ -18236,6 +18331,9 @@
                 "type": "controls",
                 "parameters": {
                   "by": "friendly",
+                  "objective": {
+                    "territory": "enemy-deployment-zone"
+                  },
                   "proportion": {
                     "comparison": "gte",
                     "fraction": 0.5
@@ -18255,8 +18353,7 @@
               "filter": {
                 "owner": "friendly",
                 "all_of": [
-                  "PURIFIER SQUAD",
-                  "GREY-KNIGHTS"
+                  "PURIFIER SQUAD"
                 ]
               },
               "range": {
@@ -18270,6 +18367,12 @@
             "region_id": "hallowed-ground",
             "owner_faction": "grey-knights"
           },
+          "beneficiary_filter": {
+            "owner": "friendly",
+            "all_of": [
+              "GREY KNIGHTS"
+            ]
+          },
           "membership": {
             "unit_scope": "whole-unit",
             "relation": "wholly-within"
@@ -18280,6 +18383,7 @@
               {
                 "type": "matches",
                 "parameters": {
+                  "subject": "this-unit",
                   "filter": {
                     "all_of": [
                       "PURIFIER SQUAD"
@@ -18313,8 +18417,7 @@
                   "subset": "ones"
                 }
               },
-              "optional": false,
-              "duration": "resolution"
+              "optional": false
             }
           },
           "qualified_branch": {
@@ -18328,8 +18431,7 @@
                   "result_scope": "any-result"
                 }
               },
-              "optional": true,
-              "duration": "resolution"
+              "optional": true
             }
           },
           "attack_condition": {
@@ -18353,22 +18455,16 @@
                   {
                     "type": "matches",
                     "parameters": {
+                      "subject": "defender",
                       "filter": {
                         "visible": {
                           "to": "attacker"
                         }
-                      },
-                      "subject": "defender"
+                      }
                     }
                   }
                 ]
               }
-            ]
-          },
-          "beneficiary_filter": {
-            "owner": "friendly",
-            "all_of": [
-              "GREY KNIGHTS"
             ]
           }
         },
@@ -18379,11 +18475,11 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "Your deployment zone is within Hallowed Ground. At the start of each phase, if you control at least half of the objectives, no man's land is within Hallowed Ground until the end of the phase (evaluated once at that time). At the start of each phase, if you control at least half of the objectives, your opponent's deployment zone is within Hallowed Ground until the end of the phase (evaluated once at that time). The area within 6\" of one or more friendly PURIFIER SQUAD GREY-KNIGHTS units is within Hallowed Ground, continuously as those units move. For each qualifying attack (for melee attacks or (for ranged attacks and the target is visible to the attacking model)): When resolving this use: you can re-roll a Hit roll of 1. If the unit has \"PURIFIER SQUAD\" or every model in the unit is wholly within Hallowed Ground, you can, when resolving this use: you can re-roll the Hit roll instead."
+      "text": "Your deployment zone is within Hallowed Ground. At the start of each phase, if you control at least half of the objectives in no man's land, no man's land is within Hallowed Ground until the end of the phase (evaluated once at that time). At the start of each phase, if you control at least half of the objectives in your opponent's deployment zone, your opponent's deployment zone is within Hallowed Ground until the end of the phase (evaluated once at that time). The area within 6\" of one or more friendly PURIFIER SQUAD units is within Hallowed Ground, continuously as those units move. For each qualifying attack (for melee attacks or (for ranged attacks and the target is visible to the attacking model)): You can re-roll a Hit roll of 1. If the unit has the PURIFIER SQUAD keyword or every model in the unit is wholly within Hallowed Ground, you can re-roll the Hit roll instead."
     }
   },
   {
-    "caseId": "headhunters-space-wolves#278",
+    "caseId": "headhunters-space-wolves#276",
     "effect": {
       "type": "ability-part",
       "trigger": {
@@ -18468,7 +18564,7 @@
     }
   },
   {
-    "caseId": "headlong-destruction-chaos-space-marines#279",
+    "caseId": "headlong-destruction-chaos-space-marines#277",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -18497,7 +18593,7 @@
     }
   },
   {
-    "caseId": "heroes-of-legend-imperial-knights#280",
+    "caseId": "heroes-of-legend-imperial-knights#278",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -18589,7 +18685,7 @@
     }
   },
   {
-    "caseId": "honour-or-death-dark-angels#281",
+    "caseId": "honour-or-death-dark-angels#279",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -18669,14 +18765,14 @@
     }
   },
   {
-    "caseId": "horrors-are-pink-horrors-are-blue-where-once-there-was-one-now-there-are-two-chaos-daemons#282",
+    "caseId": "horrors-are-pink-horrors-are-blue-where-once-there-was-one-now-there-are-two-chaos-daemons#280",
     "effect": {
       "type": "conditional",
       "condition": {
         "type": "model-count",
         "parameters": {
           "subject": "this-unit",
-          "keyword": "PINK HORROR",
+          "keyword": "PINK",
           "max": 0
         }
       },
@@ -18692,18 +18788,18 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "If the unit contains at most 0 PINK HORROR models, the unit uses the Blue Horrors datasheet from now on, keeping its lost wounds and its position."
+      "text": "If the unit contains at most 0 PINK models, the unit uses the Blue Horrors datasheet from now on, keeping its lost wounds and its position."
     }
   },
   {
-    "caseId": "horrors-are-pink-horrors-are-blue-where-once-there-was-one-now-there-are-two-thousand-sons#283",
+    "caseId": "horrors-are-pink-horrors-are-blue-where-once-there-was-one-now-there-are-two-thousand-sons#281",
     "effect": {
       "type": "conditional",
       "condition": {
         "type": "model-count",
         "parameters": {
           "subject": "this-unit",
-          "keyword": "PINK HORROR",
+          "keyword": "PINK",
           "max": 0
         }
       },
@@ -18723,7 +18819,7 @@
               "type": "model-count",
               "parameters": {
                 "subject": "this-unit",
-                "keyword": "PINK HORROR",
+                "keyword": "PINK",
                 "min": 1
               }
             },
@@ -18743,7 +18839,7 @@
               "type": "model-count",
               "parameters": {
                 "subject": "this-unit",
-                "keyword": "PINK HORROR",
+                "keyword": "PINK",
                 "min": 1
               }
             },
@@ -18764,11 +18860,11 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "If the unit contains at most 0 PINK HORROR models:\n  -> The unit uses the Blue Horrors datasheet from now on, keeping its lost wounds and its position.\n  -> If the unit contains 1+ PINK HORROR models, the unit loses the Sullen Malevolence ability.\n  -> If the unit contains 1+ PINK HORROR models, the unit loses the Exploding Horrors ability."
+      "text": "If the unit contains at most 0 PINK models:\n  -> The unit uses the Blue Horrors datasheet from now on, keeping its lost wounds and its position.\n  -> If the unit contains 1+ PINK models, the unit loses the Sullen Malevolence ability.\n  -> If the unit contains 1+ PINK models, the unit loses the Exploding Horrors ability."
     }
   },
   {
-    "caseId": "hyper-adaptations-tyranids#284",
+    "caseId": "hyper-adaptations-tyranids#282",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -18908,7 +19004,7 @@
     }
   },
   {
-    "caseId": "hyperspace-hunters-necrons#285",
+    "caseId": "hyperspace-hunters-necrons#283",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -19019,7 +19115,7 @@
     }
   },
   {
-    "caseId": "icon-of-khorne-world-eaters#286",
+    "caseId": "icon-of-khorne-world-eaters#284",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -19061,7 +19157,7 @@
     }
   },
   {
-    "caseId": "idol-of-blessed-blood-khorne-lord-of-skulls-world-eaters#287",
+    "caseId": "idol-of-blessed-blood-khorne-lord-of-skulls-world-eaters#285",
     "effect": {
       "type": "resource-die",
       "target": "this-model",
@@ -19083,7 +19179,7 @@
     }
   },
   {
-    "caseId": "imposing-arrival-steel-hammer-astra-militarum#288",
+    "caseId": "imposing-arrival-steel-hammer-astra-militarum#286",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -19120,7 +19216,7 @@
     }
   },
   {
-    "caseId": "independent-power-tau-empire#289",
+    "caseId": "independent-power-tau-empire#287",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -19176,7 +19272,7 @@
     }
   },
   {
-    "caseId": "infested-war-zone-runt-swarm-orks#290",
+    "caseId": "infested-war-zone-runt-swarm-orks#288",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -19253,11 +19349,11 @@
       }
     },
     "expected": {
-      "text": "After an enemy unit shoots, if 1+ friendly units destroyed, while the unit is friendly, while the unit is an enemy unit, if the unit has \"GRETCHIN\":\n  -> Add a new unit identical to that unit to your army in Strategic Reserves.\n  -> Nothing happens.\n  -> Nothing happens."
+      "text": "After an enemy unit shoots, if 1+ friendly units destroyed, while the unit is friendly, while the unit is an enemy unit, if the unit has the GRETCHIN keyword:\n  -> Add a new unit identical to that unit to your army in Strategic Reserves.\n  -> Nothing happens.\n  -> Nothing happens."
     }
   },
   {
-    "caseId": "join-the-hunt-kroot-hunting-pack-tau-empire#291",
+    "caseId": "join-the-hunt-kroot-hunting-pack-tau-empire#289",
     "effect": {
       "type": "add-unit",
       "target": "this-unit",
@@ -19284,7 +19380,7 @@
     }
   },
   {
-    "caseId": "knightly-teachings-imperial-knights#292",
+    "caseId": "knightly-teachings-imperial-knights#290",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -19438,7 +19534,7 @@
     }
   },
   {
-    "caseId": "let-loose-the-wolves-space-wolves#293",
+    "caseId": "let-loose-the-wolves-space-wolves#291",
     "effect": {
       "type": "split-unit",
       "target": "this-unit",
@@ -19463,7 +19559,7 @@
     }
   },
   {
-    "caseId": "madcap-artillery-orks#294",
+    "caseId": "madcap-artillery-orks#292",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -19654,7 +19750,7 @@
     }
   },
   {
-    "caseId": "martial-pride-imperial-knights#295",
+    "caseId": "martial-pride-imperial-knights#293",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -19692,7 +19788,7 @@
     }
   },
   {
-    "caseId": "melancholic-miasma-chaos-daemons#296",
+    "caseId": "melancholic-miasma-chaos-daemons#294",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -19783,7 +19879,7 @@
     }
   },
   {
-    "caseId": "methodical-destruction-chaos-knights#297",
+    "caseId": "methodical-destruction-chaos-knights#295",
     "effect": {
       "type": "ability-part",
       "trigger": {
@@ -19860,7 +19956,7 @@
     }
   },
   {
-    "caseId": "neuroloids-tyranids#298",
+    "caseId": "neuroloids-tyranids#296",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -19914,7 +20010,7 @@
     }
   },
   {
-    "caseId": "nova-charge-tau-empire#299",
+    "caseId": "nova-charge-tau-empire#297",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -19987,7 +20083,7 @@
     }
   },
   {
-    "caseId": "one-man-army-astra-militarum#300",
+    "caseId": "one-man-army-astra-militarum#298",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -20100,7 +20196,7 @@
     }
   },
   {
-    "caseId": "orders-astra-militarum#301",
+    "caseId": "orders-astra-militarum#299",
     "effect": {
       "type": "issue-orders",
       "menu_from": "voice-of-command-astra-militarum",
@@ -20119,7 +20215,7 @@
     }
   },
   {
-    "caseId": "orders-cadian-castellan-astra-militarum#302",
+    "caseId": "orders-cadian-castellan-astra-militarum#300",
     "effect": {
       "type": "issue-orders",
       "menu_from": "voice-of-command-astra-militarum",
@@ -20138,7 +20234,7 @@
     }
   },
   {
-    "caseId": "orders-commissar-astra-militarum#303",
+    "caseId": "orders-commissar-astra-militarum#301",
     "effect": {
       "type": "issue-orders",
       "menu_from": "voice-of-command-astra-militarum",
@@ -20161,7 +20257,7 @@
     }
   },
   {
-    "caseId": "orders-commissar-graves-astra-militarum#304",
+    "caseId": "orders-commissar-graves-astra-militarum#302",
     "effect": {
       "type": "issue-orders",
       "menu_from": "voice-of-command-astra-militarum",
@@ -20186,7 +20282,7 @@
     }
   },
   {
-    "caseId": "orders-commissar-graves-on-foot-astra-militarum#305",
+    "caseId": "orders-commissar-graves-on-foot-astra-militarum#303",
     "effect": {
       "type": "issue-orders",
       "menu_from": "voice-of-command-astra-militarum",
@@ -20210,7 +20306,7 @@
     }
   },
   {
-    "caseId": "pain-engine-drukhari#306",
+    "caseId": "pain-engine-drukhari#304",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -20309,7 +20405,7 @@
     }
   },
   {
-    "caseId": "paragon-of-sanctity-warpbane-task-force-grey-knights#307",
+    "caseId": "paragon-of-sanctity-warpbane-task-force-grey-knights#305",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -20384,7 +20480,7 @@
     }
   },
   {
-    "caseId": "plasma-accelerator-rifle-experimental-prototype-cadre-tau-empire#308",
+    "caseId": "plasma-accelerator-rifle-experimental-prototype-cadre-tau-empire#306",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -20477,7 +20573,7 @@
     }
   },
   {
-    "caseId": "pledges-to-the-dark-prince-emperors-children#309",
+    "caseId": "pledges-to-the-dark-prince-emperors-children#307",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -20587,7 +20683,7 @@
     }
   },
   {
-    "caseId": "power-matrix-necrons#310",
+    "caseId": "power-matrix-necrons#308",
     "effect": {
       "type": "named-region-state",
       "target": {
@@ -20622,6 +20718,9 @@
                 "type": "controls",
                 "parameters": {
                   "by": "friendly",
+                  "objective": {
+                    "territory": "no-mans-land"
+                  },
                   "proportion": {
                     "comparison": "gte",
                     "fraction": 0.5
@@ -20642,6 +20741,9 @@
                 "type": "controls",
                 "parameters": {
                   "by": "friendly",
+                  "objective": {
+                    "territory": "enemy-deployment-zone"
+                  },
                   "proportion": {
                     "comparison": "gte",
                     "fraction": 0.5
@@ -20661,6 +20763,13 @@
           "state_ref": {
             "region_id": "power-matrix",
             "owner_faction": "necrons"
+          },
+          "beneficiary_filter": {
+            "owner": "friendly",
+            "any_of": [
+              "CRYPTEK",
+              "CANOPTEK"
+            ]
           },
           "membership": {
             "unit_scope": "whole-unit",
@@ -20690,8 +20799,7 @@
                   "subset": "ones"
                 }
               },
-              "optional": true,
-              "duration": "resolution"
+              "optional": false
             }
           },
           "qualified_branch": {
@@ -20705,19 +20813,8 @@
                   "result_scope": "any-result"
                 }
               },
-              "optional": true,
-              "duration": "resolution"
+              "optional": true
             }
-          },
-          "beneficiary_filter": {
-            "owner": "friendly",
-            "all_of": [
-              "NECRONS"
-            ],
-            "any_of": [
-              "CRYPTEK",
-              "CANOPTEK"
-            ]
           }
         },
         "branch_precedence": "qualified-replaces-default"
@@ -20727,11 +20824,11 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "Your deployment zone is within Power Matrix. At the start of each phase, if you control at least half of the objectives, no man's land is within Power Matrix until the end of the phase (evaluated once at that time). At the start of each phase, if you control at least half of the objectives, your opponent's deployment zone is within Power Matrix until the end of the phase (evaluated once at that time). You can, when resolving this use: you can re-roll a Hit roll of 1. If every model in the unit is wholly within Power Matrix, you can, when resolving this use: you can re-roll the Hit roll instead."
+      "text": "Your deployment zone is within Power Matrix. At the start of each phase, if you control at least half of the objectives in no man's land, no man's land is within Power Matrix until the end of the phase (evaluated once at that time). At the start of each phase, if you control at least half of the objectives in your opponent's deployment zone, your opponent's deployment zone is within Power Matrix until the end of the phase (evaluated once at that time). You can re-roll a Hit roll of 1. If every model in the unit is wholly within Power Matrix, you can re-roll the Hit roll instead."
     }
   },
   {
-    "caseId": "powers-of-da-waaagh-orks#311",
+    "caseId": "powers-of-da-waaagh-orks#309",
     "effect": {
       "type": "for-each-unit",
       "selector": {
@@ -20972,11 +21069,11 @@
       "duration": "battle"
     },
     "expected": {
-      "text": "For the rest of the battle:\n  For each friendly ORKS PSYKER model:\n    -> Add 1 to the Strength characteristic of weapons with [PSYCHIC] equipped by that model.\n    -> Add 1 to the Strength characteristic of weapons with [PSYCHIC] equipped by that model for every 5 models in or embarked within this model.\n    -> You can use Roar of Mork (Psychic level 1): during the Movement phase, in your turn, while the unit is not Battle-shocked, roll one D6: on exactly 1, that model is Battle-shocked; select one enemy unit within 12\" of this model without \"MONSTER\" and without \"VEHICLE\": that unit must take a Battle-shock test, applying -1 to that test for every 10 models in this unit.\n    -> At the start of the Fight phase, you can use Visions of Violence (Psychic level 1): while the unit is not Battle-shocked, roll one D6: on exactly 1, that model is Battle-shocked; that model gains the Fights First ability."
+      "text": "For the rest of the battle:\n  For each friendly ORKS PSYKER model:\n    -> Add 1 to the Strength characteristic of weapons with [PSYCHIC] equipped by that model.\n    -> Add 1 to the Strength characteristic of weapons with [PSYCHIC] equipped by that model for every 5 models in or embarked within this model.\n    -> You can use Roar of Mork (Psychic level 1): during the Movement phase, in your turn, while the unit is not Battle-shocked, roll one D6: on exactly 1, that model is Battle-shocked; select one enemy unit within 12\" of this model without the MONSTER keyword and without the VEHICLE keyword: that unit must take a Battle-shock test, applying -1 to that test for every 10 models in this unit.\n    -> At the start of the Fight phase, you can use Visions of Violence (Psychic level 1): while the unit is not Battle-shocked, roll one D6: on exactly 1, that model is Battle-shocked; that model gains the Fights First ability."
     }
   },
   {
-    "caseId": "praise-the-fallen-hallowed-martyrs-adepta-sororitas#312",
+    "caseId": "praise-the-fallen-hallowed-martyrs-adepta-sororitas#310",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -21041,7 +21138,7 @@
     }
   },
   {
-    "caseId": "prioritised-efficiency-leagues-of-votann#313",
+    "caseId": "prioritised-efficiency-leagues-of-votann#311",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -21468,7 +21565,7 @@
     }
   },
   {
-    "caseId": "righteous-rage-bringers-of-flame-adepta-sororitas#314",
+    "caseId": "righteous-rage-bringers-of-flame-adepta-sororitas#312",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -21524,7 +21621,7 @@
     }
   },
   {
-    "caseId": "rise-to-the-challenge-peerless-bladesmen-emperors-children#315",
+    "caseId": "rise-to-the-challenge-peerless-bladesmen-emperors-children#313",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -21584,7 +21681,7 @@
     }
   },
   {
-    "caseId": "ruthless-reinvestment-leagues-of-votann#316",
+    "caseId": "ruthless-reinvestment-leagues-of-votann#314",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -21730,7 +21827,7 @@
     }
   },
   {
-    "caseId": "savage-roar-crusher-stampede-tyranids#317",
+    "caseId": "savage-roar-crusher-stampede-tyranids#315",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -21811,7 +21908,7 @@
     }
   },
   {
-    "caseId": "servant-of-the-whispering-god-aeldari#318",
+    "caseId": "servant-of-the-whispering-god-aeldari#316",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -21873,7 +21970,7 @@
     }
   },
   {
-    "caseId": "servo-sentry-astra-militarum#319",
+    "caseId": "servo-sentry-astra-militarum#317",
     "effect": {
       "type": "permission",
       "target": {
@@ -21921,7 +22018,7 @@
     }
   },
   {
-    "caseId": "speednob-support-orks#320",
+    "caseId": "speednob-support-orks#318",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -21959,7 +22056,7 @@
     }
   },
   {
-    "caseId": "spirit-leech-tyranids#321",
+    "caseId": "spirit-leech-tyranids#319",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -22019,7 +22116,7 @@
     }
   },
   {
-    "caseId": "stalwart-defenders-adeptus-astartes#322",
+    "caseId": "stalwart-defenders-adeptus-astartes#320",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -22060,7 +22157,7 @@
     }
   },
   {
-    "caseId": "storm-swift-onslaught-white-scars#323",
+    "caseId": "storm-swift-onslaught-white-scars#321",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -22224,7 +22321,7 @@
     }
   },
   {
-    "caseId": "supernova-launcher-experimental-prototype-cadre-tau-empire#324",
+    "caseId": "supernova-launcher-experimental-prototype-cadre-tau-empire#322",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -22303,7 +22400,7 @@
     }
   },
   {
-    "caseId": "swift-demise-aeldari#325",
+    "caseId": "swift-demise-aeldari#323",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -22369,7 +22466,7 @@
     }
   },
   {
-    "caseId": "taktikal-know-wotz-orks#326",
+    "caseId": "taktikal-know-wotz-orks#324",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -22411,7 +22508,7 @@
     }
   },
   {
-    "caseId": "tempestor-prime-astra-militarum#327",
+    "caseId": "tempestor-prime-astra-militarum#325",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -22447,7 +22544,7 @@
     }
   },
   {
-    "caseId": "terror-descends-chaos-space-marines#328",
+    "caseId": "terror-descends-chaos-space-marines#326",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -22575,7 +22672,7 @@
     }
   },
   {
-    "caseId": "terror-made-manifest-chaos-space-marines#329",
+    "caseId": "terror-made-manifest-chaos-space-marines#327",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -22758,7 +22855,352 @@
     }
   },
   {
-    "caseId": "thermoneutronic-projector-experimental-prototype-cadre-tau-empire#330",
+    "caseId": "the-shadow-of-chaos-chaos-daemons#328",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "army-faction",
+            "parameters": {
+              "faction": "chaos-daemons"
+            }
+          },
+          "effect": {
+            "type": "named-region-state",
+            "target": {
+              "owner": "friendly"
+            },
+            "modifier": {
+              "region_ref": {
+                "region_id": "the-shadow-of-chaos",
+                "owner_faction": "chaos-daemons"
+              },
+              "producer": {
+                "region_ref": {
+                  "region_id": "the-shadow-of-chaos",
+                  "owner_faction": "chaos-daemons"
+                },
+                "mode": "complete",
+                "parent_ref": null,
+                "baseline": [
+                  {
+                    "region": {
+                      "territory": "your-deployment-zone"
+                    },
+                    "duration": "permanent"
+                  }
+                ],
+                "phase_extensions": [
+                  {
+                    "region": {
+                      "territory": "no-mans-land"
+                    },
+                    "condition": {
+                      "type": "controls",
+                      "parameters": {
+                        "by": "friendly",
+                        "objective": {
+                          "territory": "no-mans-land"
+                        },
+                        "proportion": {
+                          "comparison": "gte",
+                          "fraction": 0.5
+                        }
+                      }
+                    },
+                    "trigger": {
+                      "event": "phase-started"
+                    },
+                    "duration": "phase",
+                    "evaluation": "snapshot-once"
+                  },
+                  {
+                    "region": {
+                      "territory": "enemy-deployment-zone"
+                    },
+                    "condition": {
+                      "type": "controls",
+                      "parameters": {
+                        "by": "friendly",
+                        "objective": {
+                          "territory": "enemy-deployment-zone"
+                        },
+                        "proportion": {
+                          "comparison": "gte",
+                          "fraction": 0.5
+                        }
+                      }
+                    },
+                    "trigger": {
+                      "event": "phase-started"
+                    },
+                    "duration": "phase",
+                    "evaluation": "snapshot-once"
+                  }
+                ],
+                "additive_extensions": []
+              }
+            }
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "before-roll",
+            "filter": {
+              "roll": "battle-shock"
+            },
+            "subject": {
+              "owner": "friendly",
+              "all_of": [
+                "LEGIONES DAEMONICA"
+              ]
+            }
+          },
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "army-faction",
+                  "parameters": {
+                    "faction": "chaos-daemons"
+                  }
+                },
+                {
+                  "type": "in-region",
+                  "parameters": {
+                    "subject": "event-subject",
+                    "region": {
+                      "rule_region": {
+                        "region_id": "the-shadow-of-chaos",
+                        "owner_faction": "chaos-daemons"
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "roll-modifier",
+                  "target": "event-subject",
+                  "modifier": {
+                    "roll": "battle-shock",
+                    "operation": "add",
+                    "value": 1
+                  }
+                },
+                {
+                  "type": "conditional",
+                  "condition": {
+                    "operator": "and",
+                    "operands": [
+                      {
+                        "type": "roll-result",
+                        "parameters": {
+                          "roll": "battle-shock",
+                          "result": "success"
+                        }
+                      },
+                      {
+                        "operator": "not",
+                        "operands": [
+                          {
+                            "operator": "and",
+                            "operands": [
+                              {
+                                "type": "matches",
+                                "parameters": {
+                                  "subject": "event-subject",
+                                  "filter": {
+                                    "all_of": [
+                                      "BATTLELINE"
+                                    ]
+                                  }
+                                }
+                              },
+                              {
+                                "type": "roll-result",
+                                "parameters": {
+                                  "roll": "battle-shock",
+                                  "result": "success"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "effect": {
+                    "type": "heal",
+                    "target": "event-subject",
+                    "modifier": {
+                      "amount": "D3",
+                      "per": "unit"
+                    }
+                  }
+                },
+                {
+                  "type": "conditional",
+                  "condition": {
+                    "operator": "and",
+                    "operands": [
+                      {
+                        "type": "matches",
+                        "parameters": {
+                          "subject": "event-subject",
+                          "filter": {
+                            "all_of": [
+                              "BATTLELINE"
+                            ]
+                          }
+                        }
+                      },
+                      {
+                        "type": "roll-result",
+                        "parameters": {
+                          "roll": "battle-shock",
+                          "result": "success"
+                        }
+                      }
+                    ]
+                  },
+                  "effect": {
+                    "type": "return-models",
+                    "target": {
+                      "level": "model",
+                      "member_of": "event-subject",
+                      "none_of": [
+                        "CHARACTER"
+                      ]
+                    },
+                    "modifier": {
+                      "count": "D3"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "before-roll",
+            "filter": {
+              "roll": "battle-shock"
+            },
+            "subject": {
+              "owner": "enemy"
+            }
+          },
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "army-faction",
+                  "parameters": {
+                    "faction": "chaos-daemons"
+                  }
+                },
+                {
+                  "operator": "or",
+                  "operands": [
+                    {
+                      "type": "in-region",
+                      "parameters": {
+                        "subject": "event-subject",
+                        "region": {
+                          "rule_region": {
+                            "region_id": "the-shadow-of-chaos",
+                            "owner_faction": "chaos-daemons"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "type": "matches",
+                      "parameters": {
+                        "subject": "event-subject",
+                        "filter": {
+                          "within": {
+                            "of": {
+                              "owner": "friendly",
+                              "any_of": [
+                                "BLOODTHIRSTER",
+                                "GREAT UNCLEAN ONE",
+                                "KAIROS FATEWEAVER",
+                                "KEEPER OF SECRETS",
+                                "LORD OF CHANGE",
+                                "ROTIGUS",
+                                "SHALAXI HELBANE",
+                                "SKARBRAND"
+                              ]
+                            },
+                            "range": {
+                              "inches": 6
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "roll-modifier",
+                  "target": "event-subject",
+                  "modifier": {
+                    "roll": "battle-shock",
+                    "operation": "subtract",
+                    "value": 1
+                  }
+                },
+                {
+                  "type": "conditional",
+                  "condition": {
+                    "type": "roll-result",
+                    "parameters": {
+                      "roll": "battle-shock",
+                      "result": "failure"
+                    }
+                  },
+                  "effect": {
+                    "type": "mortal-wounds",
+                    "target": "event-subject",
+                    "modifier": {
+                      "count": "D3"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "If your Army Faction is CHAOS DAEMONS, your deployment zone is within The Shadow of Chaos. At the start of each phase, if you control at least half of the objectives in no man's land, no man's land is within The Shadow of Chaos until the end of the phase (evaluated once at that time). At the start of each phase, if you control at least half of the objectives in your opponent's deployment zone, your opponent's deployment zone is within The Shadow of Chaos until the end of the phase (evaluated once at that time).\n-> When a friendly unit takes a Battle-shock test (the triggering unit must have LEGIONES DAEMONICA): if your Army Faction is CHAOS DAEMONS, while the triggering unit is within The Shadow of Chaos, the triggering unit gets +1 to Battle-shock rolls; if the triggering battle shock roll succeeded, unless the triggering unit has the BATTLELINE keyword, if the triggering battle shock roll succeeded, the triggering unit regains up to D3 lost wounds; if the triggering unit has the BATTLELINE keyword, if the triggering battle shock roll succeeded, return D3 destroyed models (excluding CHARACTER models) to the triggering unit, each with its full wounds remaining.\n-> When an enemy unit takes a Battle-shock test: if your Army Faction is CHAOS DAEMONS, while the triggering unit is within The Shadow of Chaos or while the triggering unit is within 6\" of a friendly unit with the BLOODTHIRSTER, GREAT UNCLEAN ONE, KAIROS FATEWEAVER, KEEPER OF SECRETS, LORD OF CHANGE, ROTIGUS, SHALAXI HELBANE or SKARBRAND keyword, the triggering unit gets -1 to Battle-shock rolls; if the triggering battle shock roll was a failure, the triggering unit suffers D3 mortal wounds."
+    }
+  },
+  {
+    "caseId": "thermoneutronic-projector-experimental-prototype-cadre-tau-empire#329",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -22838,7 +23280,7 @@
     }
   },
   {
-    "caseId": "tidewall-defence-platform-tau-empire#331",
+    "caseId": "tidewall-defence-platform-tau-empire#330",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -22866,7 +23308,7 @@
     }
   },
   {
-    "caseId": "unleash-the-lions-lions-of-the-emperor-adeptus-custodes#332",
+    "caseId": "unleash-the-lions-lions-of-the-emperor-adeptus-custodes#331",
     "effect": {
       "type": "split-unit",
       "target": "this-unit",
@@ -22888,7 +23330,7 @@
     }
   },
   {
-    "caseId": "using-sir-hekhtur-imperial-knights#333",
+    "caseId": "using-sir-hekhtur-imperial-knights#332",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -22946,7 +23388,7 @@
     }
   },
   {
-    "caseId": "violent-fury-space-wolves#334",
+    "caseId": "violent-fury-space-wolves#333",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -22979,7 +23421,7 @@
     }
   },
   {
-    "caseId": "virulent-blessing-chaos-daemons#335",
+    "caseId": "virulent-blessing-chaos-daemons#334",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -23043,7 +23485,7 @@
     }
   },
   {
-    "caseId": "ability-grant-scouts#336",
+    "caseId": "ability-grant-scouts#335",
     "effect": {
       "type": "ability-grant",
       "target": "this-unit",
@@ -23060,7 +23502,7 @@
     }
   },
   {
-    "caseId": "permission-charge-after-disembark#337",
+    "caseId": "permission-charge-after-disembark#336",
     "effect": {
       "type": "permission",
       "target": "this-unit",
@@ -23080,7 +23522,7 @@
     }
   },
   {
-    "caseId": "permission-charge-after-fall-back#338",
+    "caseId": "permission-charge-after-fall-back#337",
     "effect": {
       "type": "permission",
       "target": "this-model",
@@ -23100,7 +23542,7 @@
     }
   },
   {
-    "caseId": "unit-state-engaged#339",
+    "caseId": "unit-state-engaged#338",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -23127,7 +23569,7 @@
     }
   },
   {
-    "caseId": "unit-state-on-battlefield#340",
+    "caseId": "unit-state-on-battlefield#339",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -23154,7 +23596,7 @@
     }
   },
   {
-    "caseId": "unit-state-embarked#341",
+    "caseId": "unit-state-embarked#340",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -23181,7 +23623,7 @@
     }
   },
   {
-    "caseId": "unit-state-unengaged#342",
+    "caseId": "unit-state-unengaged#341",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -23213,7 +23655,7 @@
     }
   },
   {
-    "caseId": "unit-state-negated#343",
+    "caseId": "unit-state-negated#342",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -23245,7 +23687,7 @@
     }
   },
   {
-    "caseId": "unit-state-in-strategic-reserves#344",
+    "caseId": "unit-state-in-strategic-reserves#343",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -23272,7 +23714,7 @@
     }
   },
   {
-    "caseId": "owned-by-enemy#345",
+    "caseId": "owned-by-enemy#344",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -23300,7 +23742,7 @@
     }
   },
   {
-    "caseId": "fights-first-cond#346",
+    "caseId": "fights-first-cond#345",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -23329,7 +23771,7 @@
     }
   },
   {
-    "caseId": "scaling-attacks-per-models#347",
+    "caseId": "scaling-attacks-per-models#346",
     "effect": {
       "type": "stat-modifier",
       "target": "this-unit",
@@ -23354,7 +23796,7 @@
     }
   },
   {
-    "caseId": "scaling-strength-wounds-lost#348",
+    "caseId": "scaling-strength-wounds-lost#347",
     "effect": {
       "type": "stat-modifier",
       "target": "this-model",
@@ -23378,7 +23820,7 @@
     }
   },
   {
-    "caseId": "dice-pool-inline-label#349",
+    "caseId": "dice-pool-inline-label#348",
     "effect": {
       "type": "choice",
       "options": [
@@ -23426,7 +23868,7 @@
     }
   },
   {
-    "caseId": "closest-eligible-within-range#350",
+    "caseId": "closest-eligible-within-range#349",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -23456,7 +23898,7 @@
     }
   },
   {
-    "caseId": "dice-pool-requirement-anyof#351",
+    "caseId": "dice-pool-requirement-anyof#350",
     "effect": {
       "type": "dice-pool-allocation",
       "pool": {
@@ -23510,7 +23952,7 @@
     }
   },
   {
-    "caseId": "rule-state-forgo-faction-rule#352",
+    "caseId": "rule-state-forgo-faction-rule#351",
     "effect": {
       "type": "ability-part",
       "cost": {
@@ -23540,7 +23982,7 @@
     }
   },
   {
-    "caseId": "rule-state-faction-rule-granted#353",
+    "caseId": "rule-state-faction-rule-granted#352",
     "effect": {
       "type": "rule-state",
       "target": "this-model",
@@ -23558,7 +24000,7 @@
     }
   },
   {
-    "caseId": "rule-state-cover-granted#354",
+    "caseId": "rule-state-cover-granted#353",
     "effect": {
       "type": "rule-state",
       "target": "this-model",
@@ -23576,7 +24018,7 @@
     }
   },
   {
-    "caseId": "permission-advance-forbidden#355",
+    "caseId": "permission-advance-forbidden#354",
     "effect": {
       "type": "permission",
       "target": "this-unit",
@@ -23593,7 +24035,7 @@
     }
   },
   {
-    "caseId": "rule-state-overwatch-against-bearer#356",
+    "caseId": "rule-state-overwatch-against-bearer#355",
     "effect": {
       "type": "rule-state",
       "target": "this-unit",
@@ -23611,7 +24053,7 @@
     }
   },
   {
-    "caseId": "rule-state-desperate-escape-granted#357",
+    "caseId": "rule-state-desperate-escape-granted#356",
     "effect": {
       "type": "rule-state",
       "target": {
@@ -23634,7 +24076,7 @@
     }
   },
   {
-    "caseId": "rule-state-desperate-escape-suppressed#358",
+    "caseId": "rule-state-desperate-escape-suppressed#357",
     "effect": {
       "type": "rule-state",
       "target": "this-model",
@@ -23652,7 +24094,7 @@
     }
   },
   {
-    "caseId": "rule-state-ability-granted#359",
+    "caseId": "rule-state-ability-granted#358",
     "effect": {
       "type": "rule-state",
       "target": "this-unit",
@@ -23670,7 +24112,7 @@
     }
   },
   {
-    "caseId": "rule-state-keyword-suppressed#360",
+    "caseId": "rule-state-keyword-suppressed#359",
     "effect": {
       "type": "rule-state",
       "target": "this-unit",
@@ -23688,7 +24130,7 @@
     }
   },
   {
-    "caseId": "rule-state-ordered-retreat-suppressed#361",
+    "caseId": "rule-state-ordered-retreat-suppressed#360",
     "effect": {
       "type": "rule-state",
       "target": {
@@ -23713,7 +24155,7 @@
     }
   },
   {
-    "caseId": "rule-state-ordered-retreat-granted#362",
+    "caseId": "rule-state-ordered-retreat-granted#361",
     "effect": {
       "type": "rule-state",
       "target": "this-unit",
@@ -23731,7 +24173,7 @@
     }
   },
   {
-    "caseId": "weapon-ability-grant-anti-titanic#363",
+    "caseId": "weapon-ability-grant-anti-titanic#362",
     "effect": {
       "type": "weapon-ability-grant",
       "target": "this-unit",
@@ -23755,7 +24197,7 @@
     }
   },
   {
-    "caseId": "weapon-ability-grant-anti-infantry#364",
+    "caseId": "weapon-ability-grant-anti-infantry#363",
     "effect": {
       "type": "weapon-ability-grant",
       "target": "this-unit",
@@ -23779,7 +24221,7 @@
     }
   },
   {
-    "caseId": "weapon-ability-grant-rated-value#365",
+    "caseId": "weapon-ability-grant-rated-value#364",
     "effect": {
       "type": "weapon-ability-grant",
       "target": "this-unit",
@@ -23802,7 +24244,7 @@
     }
   },
   {
-    "caseId": "roll-result-battle-shock-pass#366",
+    "caseId": "roll-result-battle-shock-pass#365",
     "effect": {
       "type": "roll-result",
       "target": "this-unit",
@@ -23819,7 +24261,7 @@
     }
   },
   {
-    "caseId": "roll-result-hit-six#367",
+    "caseId": "roll-result-hit-six#366",
     "effect": {
       "type": "roll-result",
       "target": "this-unit",
@@ -23836,7 +24278,7 @@
     }
   },
   {
-    "caseId": "ability-grant-firing-deck#368",
+    "caseId": "ability-grant-firing-deck#367",
     "effect": {
       "type": "ability-grant",
       "target": "this-model",
@@ -23853,7 +24295,7 @@
     }
   },
   {
-    "caseId": "permission-disembark-after-move#369",
+    "caseId": "permission-disembark-after-move#368",
     "effect": {
       "type": "permission",
       "target": "this-model",
@@ -23873,7 +24315,7 @@
     }
   },
   {
-    "caseId": "usage-once-per-turn#370",
+    "caseId": "usage-once-per-turn#369",
     "effect": {
       "type": "cp-gain",
       "target": "this-model",
@@ -23892,7 +24334,7 @@
     }
   },
   {
-    "caseId": "usage-n-per-battle-per-unit#371",
+    "caseId": "usage-n-per-battle-per-unit#370",
     "effect": {
       "type": "stat-modifier",
       "target": "this-unit",
@@ -23915,7 +24357,7 @@
     }
   },
   {
-    "caseId": "trigger-enemy-ended-move#372",
+    "caseId": "trigger-enemy-ended-move#371",
     "effect": {
       "type": "move",
       "target": "this-model",
@@ -23944,7 +24386,7 @@
     }
   },
   {
-    "caseId": "trigger-on-model-destroyed#373",
+    "caseId": "trigger-on-model-destroyed#372",
     "effect": {
       "type": "mortal-wounds",
       "target": {
@@ -23971,7 +24413,7 @@
     }
   },
   {
-    "caseId": "trigger-before-save-with-condition#374",
+    "caseId": "trigger-before-save-with-condition#373",
     "effect": {
       "type": "re-roll",
       "target": "this-unit",
@@ -24002,7 +24444,7 @@
     }
   },
   {
-    "caseId": "move-passthrough-models-terrain#375",
+    "caseId": "move-passthrough-models-terrain#374",
     "effect": {
       "type": "move-modifier",
       "target": "this-model",
@@ -24021,7 +24463,7 @@
     }
   },
   {
-    "caseId": "move-passthrough-applies#376",
+    "caseId": "move-passthrough-applies#375",
     "effect": {
       "type": "move-modifier",
       "target": "this-unit",
@@ -24044,7 +24486,7 @@
     }
   },
   {
-    "caseId": "move-ignore-vertical#377",
+    "caseId": "move-ignore-vertical#376",
     "effect": {
       "type": "move-modifier",
       "target": "this-unit",
@@ -24060,7 +24502,7 @@
     }
   },
   {
-    "caseId": "move-modifier-distance-bonus#378",
+    "caseId": "move-modifier-distance-bonus#377",
     "effect": {
       "type": "move-modifier",
       "target": "this-unit",
@@ -24081,7 +24523,7 @@
     }
   },
   {
-    "caseId": "stat-modifier-move-negative#379",
+    "caseId": "stat-modifier-move-negative#378",
     "effect": {
       "type": "stat-modifier",
       "target": "defender",
@@ -24099,7 +24541,7 @@
     }
   },
   {
-    "caseId": "roll-modifier-advance-bonus#380",
+    "caseId": "roll-modifier-advance-bonus#379",
     "effect": {
       "type": "roll-modifier",
       "target": "this-unit",
@@ -24117,7 +24559,7 @@
     }
   },
   {
-    "caseId": "move-pile-in#381",
+    "caseId": "move-pile-in#380",
     "effect": {
       "type": "move",
       "target": "this-unit",
@@ -24134,7 +24576,7 @@
     }
   },
   {
-    "caseId": "move-consolidation#382",
+    "caseId": "move-consolidation#381",
     "effect": {
       "type": "move",
       "target": "this-unit",
@@ -24151,7 +24593,7 @@
     }
   },
   {
-    "caseId": "move-surge#383",
+    "caseId": "move-surge#382",
     "effect": {
       "type": "move",
       "target": "this-unit",
@@ -24168,7 +24610,7 @@
     }
   },
   {
-    "caseId": "move-normal-after-shooting#384",
+    "caseId": "move-normal-after-shooting#383",
     "effect": {
       "type": "move",
       "target": "this-unit",
@@ -24185,7 +24627,7 @@
     }
   },
   {
-    "caseId": "set-up-reserves-max-units#385",
+    "caseId": "set-up-reserves-max-units#384",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -24213,7 +24655,7 @@
     }
   },
   {
-    "caseId": "marker-relocate#386",
+    "caseId": "marker-relocate#385",
     "effect": {
       "type": "marker",
       "target": "this-unit",
@@ -24233,7 +24675,7 @@
     }
   },
   {
-    "caseId": "set-up-redeploy-filtered#387",
+    "caseId": "set-up-redeploy-filtered#386",
     "effect": {
       "type": "set-up",
       "target": {
@@ -24256,7 +24698,7 @@
     }
   },
   {
-    "caseId": "ability-grant-infiltrators#388",
+    "caseId": "ability-grant-infiltrators#387",
     "effect": {
       "type": "ability-grant",
       "target": "this-unit",
@@ -24272,7 +24714,7 @@
     }
   },
   {
-    "caseId": "aura-range-bonus#389",
+    "caseId": "aura-range-bonus#388",
     "effect": {
       "type": "aura",
       "target": "enemy-within-aura",
@@ -24291,7 +24733,7 @@
     }
   },
   {
-    "caseId": "issue-orders-eligible-keywords#390",
+    "caseId": "issue-orders-eligible-keywords#389",
     "effect": {
       "type": "issue-orders",
       "count": 1,
@@ -24323,7 +24765,7 @@
     }
   },
   {
-    "caseId": "issue-orders-menu-from#391",
+    "caseId": "issue-orders-menu-from#390",
     "effect": {
       "type": "issue-orders",
       "count": 1,
@@ -24347,7 +24789,7 @@
     }
   },
   {
-    "caseId": "aura-army-emitter-tiered-capped#392",
+    "caseId": "aura-army-emitter-tiered-capped#391",
     "effect": {
       "type": "aura",
       "target": "enemy-within-aura",
@@ -24394,7 +24836,7 @@
     }
   },
   {
-    "caseId": "aura-any-emitter-keyword-clauses#393",
+    "caseId": "aura-any-emitter-keyword-clauses#392",
     "effect": {
       "type": "aura",
       "target": "friendly-within-aura",
@@ -24435,7 +24877,7 @@
     }
   },
   {
-    "caseId": "aura-model-emitter-keywords#394",
+    "caseId": "aura-model-emitter-keywords#393",
     "effect": {
       "type": "aura",
       "target": "friendly-within-aura",
@@ -24467,7 +24909,7 @@
     }
   },
   {
-    "caseId": "aura-unit-origin#395",
+    "caseId": "aura-unit-origin#394",
     "effect": {
       "type": "aura",
       "target": "enemy-within-aura",
@@ -24498,7 +24940,7 @@
     }
   },
   {
-    "caseId": "aura-unit-origin-emitter-keywords#396",
+    "caseId": "aura-unit-origin-emitter-keywords#395",
     "effect": {
       "type": "aura",
       "target": "friendly-within-aura",
@@ -24531,7 +24973,7 @@
     }
   },
   {
-    "caseId": "aura-tiered-effect#397",
+    "caseId": "aura-tiered-effect#396",
     "effect": {
       "type": "aura",
       "target": "enemy-within-aura",
@@ -24568,7 +25010,7 @@
     }
   },
   {
-    "caseId": "set-up-deep-strike-min-distance#398",
+    "caseId": "set-up-deep-strike-min-distance#397",
     "effect": {
       "type": "set-up",
       "target": "this-unit",
@@ -24588,7 +25030,7 @@
     }
   },
   {
-    "caseId": "move-modifier-engagement-no-end#399",
+    "caseId": "move-modifier-engagement-no-end#398",
     "effect": {
       "type": "move-modifier",
       "target": "this-model",
@@ -24607,7 +25049,7 @@
     }
   },
   {
-    "caseId": "permission-shoot-after-fall-back#400",
+    "caseId": "permission-shoot-after-fall-back#399",
     "effect": {
       "type": "permission",
       "target": "this-unit",
@@ -24627,7 +25069,7 @@
     }
   },
   {
-    "caseId": "permission-shoot-and-charge-after-fall-back#401",
+    "caseId": "permission-shoot-and-charge-after-fall-back#400",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -24663,7 +25105,7 @@
     }
   },
   {
-    "caseId": "superlative-strategist-aeldari#402",
+    "caseId": "superlative-strategist-aeldari#401",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -24716,7 +25158,7 @@
     }
   },
   {
-    "caseId": "deceptive-feint#403",
+    "caseId": "deceptive-feint#402",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -24801,7 +25243,7 @@
     }
   },
   {
-    "caseId": "heal-selected-model#404",
+    "caseId": "heal-selected-model#403",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -24854,7 +25296,7 @@
     }
   },
   {
-    "caseId": "marker-next-to-target#405",
+    "caseId": "marker-next-to-target#404",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -24903,7 +25345,7 @@
     }
   },
   {
-    "caseId": "psychic-model-bundle#406",
+    "caseId": "psychic-model-bundle#405",
     "effect": {
       "type": "for-each-unit",
       "selector": {
@@ -24982,7 +25424,7 @@
     }
   },
   {
-    "caseId": "designate-bearer-target-with-eligibility#407",
+    "caseId": "designate-bearer-target-with-eligibility#406",
     "effect": {
       "type": "ability-part",
       "trigger": {
@@ -25063,7 +25505,7 @@
     }
   },
   {
-    "caseId": "conditional-selected-to-shoot-this-phase#408",
+    "caseId": "conditional-selected-to-shoot-this-phase#407",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -25094,7 +25536,7 @@
     }
   },
   {
-    "caseId": "transport-capacity#409",
+    "caseId": "transport-capacity#408",
     "effect": {
       "type": "transport-capacity",
       "target": "this-unit",
@@ -25115,7 +25557,7 @@
     }
   },
   {
-    "caseId": "transport-grouped-single-keyword-model#410",
+    "caseId": "transport-grouped-single-keyword-model#409",
     "effect": {
       "type": "transport-capacity",
       "target": "this-model",
@@ -25136,7 +25578,7 @@
     }
   },
   {
-    "caseId": "transport-fixed-model-spaces-with-capacity-eligibility#411",
+    "caseId": "transport-fixed-model-spaces-with-capacity-eligibility#410",
     "effect": {
       "type": "transport-capacity",
       "target": "this-model",
@@ -25157,7 +25599,7 @@
     }
   },
   {
-    "caseId": "transport-fixed-model-spaces-with-embark-as#412",
+    "caseId": "transport-fixed-model-spaces-with-embark-as#411",
     "effect": {
       "type": "transport-capacity",
       "target": "this-model",
@@ -25178,7 +25620,7 @@
     }
   },
   {
-    "caseId": "transport-equivalent-model-keyword#413",
+    "caseId": "transport-equivalent-model-keyword#412",
     "effect": {
       "type": "transport-capacity",
       "target": "this-unit",
@@ -25197,7 +25639,7 @@
     }
   },
   {
-    "caseId": "transport-equivalent-model-count#414",
+    "caseId": "transport-equivalent-model-count#413",
     "effect": {
       "type": "transport-capacity",
       "target": "this-model",
@@ -25215,7 +25657,7 @@
     }
   },
   {
-    "caseId": "moved-through-tall-terrain-inline#415",
+    "caseId": "moved-through-tall-terrain-inline#414",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -25244,7 +25686,7 @@
     }
   },
   {
-    "caseId": "moved-through-tall-terrain-trigger-condition#416",
+    "caseId": "moved-through-tall-terrain-trigger-condition#415",
     "effect": {
       "type": "ability-grant",
       "target": "this-model",
@@ -25276,7 +25718,7 @@
     }
   },
   {
-    "caseId": "moved-through-tall-terrain-negated-inline#417",
+    "caseId": "moved-through-tall-terrain-negated-inline#416",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -25310,7 +25752,7 @@
     }
   },
   {
-    "caseId": "moved-through-tall-terrain-negated-trigger-condition#418",
+    "caseId": "moved-through-tall-terrain-negated-trigger-condition#417",
     "effect": {
       "type": "ability-grant",
       "target": "this-model",
@@ -25347,7 +25789,7 @@
     }
   },
   {
-    "caseId": "moved-through-tall-terrain-trigger-event#419",
+    "caseId": "moved-through-tall-terrain-trigger-event#418",
     "effect": {
       "type": "ability-grant",
       "target": "this-model",
@@ -25369,7 +25811,7 @@
     }
   },
   {
-    "caseId": "moved-through-terrain-generic#420",
+    "caseId": "moved-through-terrain-generic#419",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -25398,7 +25840,7 @@
     }
   },
   {
-    "caseId": "aura-role-filtered-effect#421",
+    "caseId": "aura-role-filtered-effect#420",
     "effect": {
       "type": "aura",
       "target": "friendly-within-aura",
@@ -25777,7 +26219,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "While making melee attacks, while the target does not have \"MONSTER\" or \"VEHICLE\", improve the unit's Armour Penetration characteristic by 1."
+      "text": "While making melee attacks, while the target does not have the MONSTER or VEHICLE keyword, improve the unit's Armour Penetration characteristic by 1."
     }
   },
   {
@@ -26390,7 +26832,7 @@
       }
     },
     "expected": {
-      "text": "After the unit resolves its attacks, during the Shooting phase, in your turn, until the start of your next turn:\n  -> Select one enemy unit if the selected unit does not have \"MONSTER\" and the selected unit does not have \"VEHICLE\" and the unit was hit by an attack made by the triggering unit during its just-finished shooting sequence:\n    -> That unit is marked as pinned.\n    -> While the selected unit is tagged pinned, subtract 2 from that unit's Move characteristic.\n    -> While the selected unit is tagged pinned, that unit gets -2 to Charge rolls."
+      "text": "After the unit resolves its attacks, during the Shooting phase, in your turn, until the start of your next turn:\n  -> Select one enemy unit if the selected unit does not have the MONSTER keyword and the selected unit does not have the VEHICLE keyword and the unit was hit by an attack made by the triggering unit during its just-finished shooting sequence:\n    -> That unit is marked as pinned.\n    -> While the selected unit is tagged pinned, subtract 2 from that unit's Move characteristic.\n    -> While the selected unit is tagged pinned, that unit gets -2 to Charge rolls."
     }
   },
   {
@@ -26838,7 +27280,7 @@
       "optional": true
     },
     "expected": {
-      "text": "When a friendly unit is selected to fight, if the unit has \"GREY KNIGHTS\", you may use this ability, until the end of the phase:\n  -> The triggering unit takes a Leadership test (2D6, passing on its current Leadership or higher); if passed, select one of the following: melee weapons with [PSYCHIC] equipped by the triggering unit gain [SUSTAINED HITS 1] / melee weapons with [PSYCHIC] equipped by the triggering unit gain [LETHAL HITS]."
+      "text": "When a friendly unit is selected to fight, if the unit has the GREY KNIGHTS keyword, you may use this ability, until the end of the phase:\n  -> The triggering unit takes a Leadership test (2D6, passing on its current Leadership or higher); if passed, select one of the following: melee weapons with [PSYCHIC] equipped by the triggering unit gain [SUSTAINED HITS 1] / melee weapons with [PSYCHIC] equipped by the triggering unit gain [LETHAL HITS]."
     }
   },
   {
@@ -27044,7 +27486,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "Your deployment zone is within Hallowed Ground. At the start of each phase, if you control at least half of the objectives in no man's land, no man's land is within Hallowed Ground until the end of the phase (evaluated once at that time). At the start of each phase, if you control at least half of the objectives in your opponent's deployment zone, your opponent's deployment zone is within Hallowed Ground until the end of the phase (evaluated once at that time). The area within 6\" of one or more friendly PURIFIER SQUAD units is within Hallowed Ground, continuously as those units move. For each qualifying attack (for melee attacks or (for ranged attacks and the target is visible to the attacking model)): You can re-roll a Hit roll of 1. If the unit has \"PURIFIER SQUAD\" or every model in the unit is wholly within Hallowed Ground, you can re-roll the Hit roll instead."
+      "text": "Your deployment zone is within Hallowed Ground. At the start of each phase, if you control at least half of the objectives in no man's land, no man's land is within Hallowed Ground until the end of the phase (evaluated once at that time). At the start of each phase, if you control at least half of the objectives in your opponent's deployment zone, your opponent's deployment zone is within Hallowed Ground until the end of the phase (evaluated once at that time). The area within 6\" of one or more friendly PURIFIER SQUAD units is within Hallowed Ground, continuously as those units move. For each qualifying attack (for melee attacks or (for ranged attacks and the target is visible to the attacking model)): You can re-roll a Hit roll of 1. If the unit has the PURIFIER SQUAD keyword or every model in the unit is wholly within Hallowed Ground, you can re-roll the Hit roll instead."
     }
   },
   {
@@ -28993,7 +29435,7 @@
       }
     },
     "expected": {
-      "text": "At the start of your Shooting phase, until the end of the phase:\n  -> Select one enemy unit if the selected unit is within 12\" of this model and the selected unit is visible to this model:\n    -> If the selected unit has \"CHAOS\", that unit must take a Battle-shock test, applying -2 to that test.\n    -> Unless the selected unit has \"CHAOS\", that unit must take a Battle-shock test.\n    -> If the triggering battle shock roll was a failure, that unit suffers 3 mortal wounds."
+      "text": "At the start of your Shooting phase, until the end of the phase:\n  -> Select one enemy unit if the selected unit is within 12\" of this model and the selected unit is visible to this model:\n    -> If the selected unit has the CHAOS keyword, that unit must take a Battle-shock test, applying -2 to that test.\n    -> Unless the selected unit has the CHAOS keyword, that unit must take a Battle-shock test.\n    -> If the triggering battle shock roll was a failure, that unit suffers 3 mortal wounds."
     }
   },
   {
@@ -30250,7 +30692,7 @@
       ]
     },
     "expected": {
-      "text": "After a friendly unit shoots (the triggering unit must have EXORCIST), until the end of the phase:\n  -> Select one enemy unit if the selected unit does not have \"MONSTER\" and the selected unit does not have \"VEHICLE\" and the unit was hit by a ranged attack made by the triggering unit during its just-finished shooting sequence (your Devastating Reprise Target). Each time a friendly unit makes an attack against it, ranged weapons equipped by models in this unit gain [DEVASTATING WOUNDS].\nApplies to: units with ADEPTA SORORITAS, INFANTRY, FLY."
+      "text": "After a friendly unit shoots (the triggering unit must have EXORCIST), until the end of the phase:\n  -> Select one enemy unit if the selected unit does not have the MONSTER keyword and the selected unit does not have the VEHICLE keyword and the unit was hit by a ranged attack made by the triggering unit during its just-finished shooting sequence (your Devastating Reprise Target). Each time a friendly unit makes an attack against it, ranged weapons equipped by models in this unit gain [DEVASTATING WOUNDS].\nApplies to: units with ADEPTA SORORITAS, INFANTRY, FLY."
     }
   },
   {
@@ -30609,7 +31051,7 @@
       ]
     },
     "expected": {
-      "text": "Each time an enemy unit ends a move, once per turn per unit, if this model has \"ADEPTUS ASTARTES\", if this model has \"PSYKER\", unless this model has \"TERMINATOR\", during the Movement phase, in the opponent's turn, while the triggering unit is within 8\" of the unit, while the unit is unengaged:\n  -> The unit can make a Normal move of up to D6\".\n  -> While the unit has the Divination Discipline ability, the unit can make a Normal move of up to 6\".\nApplies to: units with ADEPTUS ASTARTES, PSYKER (excluding TERMINATOR)."
+      "text": "Each time an enemy unit ends a move, once per turn per unit, if this model has the ADEPTUS ASTARTES keyword, if this model has the PSYKER keyword, unless this model has the TERMINATOR keyword, during the Movement phase, in the opponent's turn, while the triggering unit is within 8\" of the unit, while the unit is unengaged:\n  -> The unit can make a Normal move of up to D6\".\n  -> While the unit has the Divination Discipline ability, the unit can make a Normal move of up to 6\".\nApplies to: units with ADEPTUS ASTARTES, PSYKER (excluding TERMINATOR)."
     }
   },
   {
@@ -33871,7 +34313,7 @@
       "duration": "resolution"
     },
     "expected": {
-      "text": "When resolving this use, Your deployment zone is within Example Region. At the start of each phase, if you control at least half of the objectives in no man's land, no man's land is within Example Region until the end of the phase (evaluated once at that time). At the start of each phase, if you control at least half of the objectives in enemy territory, your opponent's deployment zone is within Example Region until the end of the phase (evaluated once at that time). You can, when resolving this use: you can re-roll up to 2 rolls. If the unit has \"EXAMPLE\", you can, when resolving this use: you can re-roll up to 2 rolls instead."
+      "text": "When resolving this use, Your deployment zone is within Example Region. At the start of each phase, if you control at least half of the objectives in no man's land, no man's land is within Example Region until the end of the phase (evaluated once at that time). At the start of each phase, if you control at least half of the objectives in enemy territory, your opponent's deployment zone is within Example Region until the end of the phase (evaluated once at that time). You can, when resolving this use: you can re-roll up to 2 rolls. If the unit has the EXAMPLE keyword, you can, when resolving this use: you can re-roll up to 2 rolls instead."
     }
   },
   {
@@ -36752,7 +37194,7 @@
       "duration": "resolution"
     },
     "expected": {
-      "text": "When resolving this use:\n  -> The unit has a 6+ invulnerable save.\n  -> Against psychic attacks or if the attacking unit has \"DAEMON\", the unit has a 4+ invulnerable save."
+      "text": "When resolving this use:\n  -> The unit has a 6+ invulnerable save.\n  -> Against psychic attacks or if the attacking unit has the DAEMON keyword, the unit has a 4+ invulnerable save."
     }
   },
   {
@@ -41184,7 +41626,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "Your opponent's deployment zone is within Fabricated Zone for the rest of the battle. At the start of the turn, if you control more than 25% of the objectives in your territory, your territory is within Fabricated Zone until the end of the turn (evaluated once at that time). The area within 4\" of one or more friendly BEACON units is within Fabricated Zone, continuously as those units move. For each qualifying attack (for ranged attacks): You can, when resolving this use: you can re-roll a Hit roll of 1. If the unit has \"ELITE\", you can, when resolving this use: you can re-roll a failed Hit roll instead."
+      "text": "Your opponent's deployment zone is within Fabricated Zone for the rest of the battle. At the start of the turn, if you control more than 25% of the objectives in your territory, your territory is within Fabricated Zone until the end of the turn (evaluated once at that time). The area within 4\" of one or more friendly BEACON units is within Fabricated Zone, continuously as those units move. For each qualifying attack (for ranged attacks): You can, when resolving this use: you can re-roll a Hit roll of 1. If the unit has the ELITE keyword, you can, when resolving this use: you can re-roll a failed Hit roll instead."
     }
   },
   {

@@ -196,7 +196,8 @@ def _destroy_models(e: Leaf, m: dict[str, Any], subj: str) -> str:
         what = (
             f"every model in {subj}"
             if count == "all"
-            # One model of a single selected model ("that model") is that model, not "1 model in that model".
+            # One model of a single selected model ("that model") is that model, not "1 model in
+            # that model".
             else subj
             if dice_case(count) == "1" and re.search(r"\bmodel$", subj)
             else f"{dice_case(count)} {'model' if dice_case(count) == '1' else 'models'} in {subj}"

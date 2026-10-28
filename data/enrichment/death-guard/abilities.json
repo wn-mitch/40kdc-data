@@ -5206,9 +5206,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "f7832d47531efa94a2bf7db3ac675b433186b56f4183592099790bc45ecc10d6",
+    "source_digest": "bbed11ebef0df2ca7199b6bd7e123ecb008bdf7df4339bf93bd0922993fca4ba",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -5217,104 +5217,103 @@
     "ability_type": "detachment",
     "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "controls"
-          },
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "all_of": [
-                  "DEATH GUARD"
-                ]
-              }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "for-each-unit",
+          "selector": {
+            "filter": {
+              "owner": "friendly",
+              "all_of": [
+                "DEATH GUARD"
+              ]
             }
           },
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "within": {
-                  "range": "objective-control",
-                  "of": {
-                    "objective": {}
-                  }
-                }
-              }
-            }
-          },
-          {
-            "operator": "not",
-            "operands": [
+          "effect": {
+            "type": "sequence",
+            "steps": [
               {
-                "type": "matches",
-                "parameters": {
-                  "filter": {
-                    "state": "battle-shocked"
-                  }
+                "type": "objective-sticky",
+                "target": "recipient"
+              },
+              {
+                "type": "designate",
+                "target": "recipient",
+                "modifier": {
+                  "subject": {
+                    "objective": {
+                      "controlled_by_unit": "recipient"
+                    }
+                  },
+                  "tag": "secured"
                 }
               }
             ]
           }
-        ]
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "objective-sticky",
-            "target": "this-model"
-          },
-          {
+        },
+        {
+          "type": "ability-part",
+          "effect": {
             "type": "for-each-unit",
             "selector": {
               "filter": {
                 "owner": "enemy"
-              },
-              "eligibility": {
+              }
+            },
+            "effect": {
+              "type": "conditional",
+              "condition": {
                 "type": "matches",
                 "parameters": {
+                  "subject": "recipient",
                   "filter": {
                     "within": {
-                      "range": "objective-control",
                       "of": {
                         "objective": {
                           "controlled_by": "friendly",
                           "designated": "secured"
                         }
-                      }
+                      },
+                      "range": "objective-control"
                     }
                   }
                 }
-              }
-            },
-            "effect": {
-              "type": "designate",
-              "target": "this-unit",
-              "modifier": {
-                "subject": "recipient",
-                "tag": "AFFLICTED"
+              },
+              "effect": {
+                "type": "designate",
+                "target": "recipient",
+                "modifier": {
+                  "tag": "afflicted"
+                }
               }
             }
-          }
-        ]
-      }
+          },
+          "duration": "control-lost"
+        }
+      ]
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
       "event": "phase-ended",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "command"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
       }
     }
   },

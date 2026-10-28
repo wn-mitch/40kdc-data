@@ -171,6 +171,15 @@ export const TARGETING_FAMILIES: readonly SemanticFamilyDefinition[] = [
     parameterSchema: { type: "object", properties: {}, additionalProperties: false },
   },
   {
+    id: "stance-initial",
+    version: 1,
+    role: "COMBINATOR",
+    label: "The stance in force from the start",
+    description: "\"At the start of the battle, … that unit enters Aegis Protocols (see below)\": the named option (option_id, as its named-option leaf gives it) of the stance-select-open after this leaf is in force from the start of the battle, before any selection.",
+    starter: { option_id: "" },
+    parameterSchema: { type: "object", required: ["option_id"], properties: { option_id: { type: "string", pattern: RULE_SLUG.source } }, additionalProperties: false },
+  },
+  {
     id: "eligibility-permission",
     version: 1,
     role: "EFFECT",
@@ -303,7 +312,12 @@ export function normalizeTargetingParameters(family: string, input: Record<strin
     case "count-by-battle-round":
       exactKeys(input, [], family);
       return {};
+    case "stance-initial":
+      exactKeys(input, ["option_id"], family);
+      if (typeof input.option_id !== "string" || !RULE_SLUG.test(input.option_id)) throw new TypeError("stance-initial.option_id is the option's kebab-case id.");
+      return { option_id: input.option_id };
     case "instead":
+    case "with-embarked-units":
       exactKeys(input, [], family);
       return {};
     case "select-unit": {

@@ -91,12 +91,21 @@ def _comparison_phrase(comparison: Any) -> str:
 # -- Predicates ---------------------------------------------------------------
 
 
+def _keyword_noun(keywords: list[Any], joiner: str) -> str:
+    """Keywords as the rules name them: "the X keyword", "the X and Y keywords",
+    "the X or Y keyword"."""
+    words = [_str(k) for k in keywords]
+    if joiner == "or" or len(words) == 1:
+        return f"the {_or_list(words)} keyword"
+    return f"the {_and_list(words)} keywords"
+
+
 def _keyword_list(p: P) -> str:
     if p.get("chosen_by") is not None:
         return f"the keyword selected for {title_case(_str(p['chosen_by']))}"
     if isinstance(p.get("any_of"), list):
-        return _or_list([f'"{_str(k)}"' for k in p["any_of"]])
-    return _and_list([f'"{_str(k)}"' for k in _list(p.get("all_of"))])
+        return _keyword_noun(p["any_of"], "or")
+    return _keyword_noun(_list(p.get("all_of")), "and")
 
 
 def _describe_matches(p: P, negated: bool) -> str:
@@ -111,11 +120,11 @@ def _describe_matches(p: P, negated: bool) -> str:
             verb = "does not have" if negated else "has"
             return f"{who} {verb} {extra}{_keyword_list(f)}"
         if isinstance(f.get("none_of"), list):
-            keywords = _or_list([f'"{_str(k)}"' for k in f["none_of"]])
+            keywords = _keyword_noun(f["none_of"], "or")
             verb = "has" if negated else "does not have"
             return f"{who} {verb} {keywords}"
         if isinstance(f.get("not_all_of"), list):
-            keywords = _and_list([f'"{_str(k)}"' for k in f["not_all_of"]])
+            keywords = _keyword_noun(f["not_all_of"], "and")
             verb = "has" if negated else "does not have"
             return f"{who} {verb} all of {keywords}"
         if f.get("owner") is not None:

@@ -319,15 +319,8 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [
-          "effect type \"resource-gain\" is not modelled by the buff layer",
-          "stat-modifier on \"M\" is outside the damage path",
-          "effect type \"rule-state\" is not modelled by the buff layer",
-          "resource-action-menu eligibility filter is unresolved",
-          "effect type \"move\" is not modelled by the buff layer",
-          "effect type \"move\" is not modelled by the buff layer",
-          "resource-action-menu eligibility filter is unresolved",
-          "resource-action-menu eligibility filter is unresolved",
-          "effect type \"resource-spend\" is not modelled by the buff layer"
+          "conditional: cannot evaluate condition \"army-faction\" against current context",
+          "conditional: cannot evaluate condition \"army-faction\" against current context"
         ],
         "activatable": []
       }

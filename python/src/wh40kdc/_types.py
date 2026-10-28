@@ -3919,6 +3919,7 @@ class StanceSelectEffect(TypedDict):
     options: list[Option2]
     min_choices: NotRequired[int]
     max_choices: NotRequired[int]
+    initial: NotRequired[str]
 
 
 class Risk(TypedDict):

@@ -7536,7 +7536,7 @@
           },
           {
             "type": "roll-result",
-            "target": "this-unit",
+            "target": "this-model",
             "modifier": {
               "roll": "deadly-demise",
               "result": "pass"

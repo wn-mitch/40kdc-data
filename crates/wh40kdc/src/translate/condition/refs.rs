@@ -698,15 +698,20 @@ pub(crate) fn used_ability_phrase(f: &P) -> Option<String> {
 
 // ── Predicates ──────────────────────────────────────────────────────────────
 
-pub(crate) fn quoted(items: Vec<String>) -> Vec<String> {
-    items.into_iter().map(|k| format!("\"{k}\"")).collect()
+/// Keywords as the rules name them: "the X keyword", "the X and Y keywords", "the X or Y keyword".
+pub(crate) fn keyword_noun(words: Vec<String>, any: bool) -> String {
+    if any || words.len() == 1 {
+        format!("the {} keyword", or_list(&words))
+    } else {
+        format!("the {} keywords", and_list(&words))
+    }
 }
 
 pub(crate) fn keyword_list(p: &P) -> String {
     if let Some(any) = strs(p.get("any_of")) {
-        return or_list(&quoted(any));
+        return keyword_noun(any, true);
     }
-    and_list(&quoted(strs(p.get("all_of")).unwrap_or_default()))
+    keyword_noun(strs(p.get("all_of")).unwrap_or_default(), false)
 }
 
 /// "your opponent's deployment zone": a deployment zone is named by whose it is; other territories by their words.

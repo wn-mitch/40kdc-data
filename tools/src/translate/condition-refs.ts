@@ -100,10 +100,17 @@ export function ruleRefPhrase(value: unknown): string {
   return idLabel(value);
 }
 
+/** Keywords as the rules name them: "the PURIFIER SQUAD keyword", "the X and Y keywords", "the X or Y keyword". */
+export function keywordNoun(keywords: unknown[], joiner: "and" | "or"): string {
+  const words = keywords.map(str);
+  if (joiner === "or" || words.length === 1) return `the ${orList(words)} keyword`;
+  return `the ${andList(words)} keywords`;
+}
+
 export function keywordList(p: P): string {
   if (p.chosen_by != null) return `the keyword selected for ${titleCase(str(p.chosen_by))}`;
-  if (Array.isArray(p.any_of)) return orList(p.any_of.map((k) => `"${str(k)}"`));
-  return andList(((p.all_of as unknown[]) ?? []).map((k) => `"${str(k)}"`));
+  if (Array.isArray(p.any_of)) return keywordNoun(p.any_of, "or");
+  return keywordNoun((p.all_of as unknown[]) ?? [], "and");
 }
 
 export const ORDINAL = ["zeroth", "first", "second", "third", "fourth", "fifth"];

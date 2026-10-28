@@ -6266,6 +6266,11 @@
         "max_choices": {
           "type": "integer",
           "minimum": 1
+        },
+        "initial": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The id of the option in force from the start of the battle, before any selection (\"At the start of the battle, that unit enters Aegis Protocol\")."
         }
       },
       "required": [

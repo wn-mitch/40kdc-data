@@ -46150,6 +46150,11 @@ pub struct StanceOptionRef {
 ///    "additive": {
 ///      "const": true
 ///    },
+///    "initial": {
+///      "description": "The id of the option in force from the start of the battle, before any selection (\"At the start of the battle, that unit enters Aegis Protocol\").",
+///      "type": "string",
+///      "minLength": 1
+///    },
 ///    "max_choices": {
 ///      "type": "integer",
 ///      "minimum": 1.0
@@ -46206,6 +46211,9 @@ pub struct StanceOptionRef {
 pub struct StanceSelectEffect {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub additive: ::std::option::Option<::serde_json::Value>,
+    ///The id of the option in force from the start of the battle, before any selection ("At the start of the battle, that unit enters Aegis Protocol").
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub initial: ::std::option::Option<StanceSelectEffectInitial>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub max_choices: ::std::option::Option<::std::num::NonZeroU64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -46214,6 +46222,79 @@ pub struct StanceSelectEffect {
     pub options: ::std::vec::Vec<StanceSelectEffectOptionsItem>,
     #[serde(rename = "type")]
     pub type_: StanceSelectEffectType,
+}
+///The id of the option in force from the start of the battle, before any selection ("At the start of the battle, that unit enters Aegis Protocol").
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "The id of the option in force from the start of the battle, before any selection (\"At the start of the battle, that unit enters Aegis Protocol\").",
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct StanceSelectEffectInitial(::std::string::String);
+impl ::std::ops::Deref for StanceSelectEffectInitial {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<StanceSelectEffectInitial> for ::std::string::String {
+    fn from(value: StanceSelectEffectInitial) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for StanceSelectEffectInitial {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for StanceSelectEffectInitial {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for StanceSelectEffectInitial {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for StanceSelectEffectInitial {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for StanceSelectEffectInitial {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
 }
 ///`StanceSelectEffectMode`
 ///

@@ -559,7 +559,8 @@ def part_head(e: Effect) -> str:
     )
     usage = usage_clause(e["usage"]) if e.get("usage") else ""
     _, trail = duration_clauses(e.get("duration"))
-    # A part's own control-lost duration leads it, with no objective marker before it for "it" to name.
+    # A part's own control-lost duration leads it, with no objective marker before it for "it"
+    # to name.
     trail = re.sub(r"control it$", "control that objective marker", trail)
     return ", ".join(p for p in (label, moment, usage, named, cost, trail) if p)
 

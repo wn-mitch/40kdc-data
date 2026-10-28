@@ -23,11 +23,11 @@ describe("canonical condition predicates", () => {
   });
 
   it("preserves keyword, state and ownership wording without retired atoms", () => {
-    expect(describeCondition(matches({ all_of: ["INFANTRY"] }))).toBe('the unit has "INFANTRY"');
+    expect(describeCondition(matches({ all_of: ["INFANTRY"] }))).toBe('the unit has the INFANTRY keyword');
     expect(conditionLeadIn(matches({ any_of: ["MONSTER", "VEHICLE"] }, "defender"))).toBe("against MONSTER or VEHICLE targets");
-    expect(describeCondition(not(matches({ all_of: ["INFANTRY"] })))).toBe('the unit does not have "INFANTRY"');
-    expect(describeCondition(matches({ none_of: ["MONSTER", "VEHICLE"] }))).toBe('the unit does not have "MONSTER" or "VEHICLE"');
-    expect(describeCondition(matches({ not_all_of: ["MONSTER", "CHARACTER"] }))).toBe('the unit does not have all of "MONSTER" and "CHARACTER"');
+    expect(describeCondition(not(matches({ all_of: ["INFANTRY"] })))).toBe('the unit does not have the INFANTRY keyword');
+    expect(describeCondition(matches({ none_of: ["MONSTER", "VEHICLE"] }))).toBe('the unit does not have the MONSTER or VEHICLE keyword');
+    expect(describeCondition(matches({ not_all_of: ["MONSTER", "CHARACTER"] }))).toBe('the unit does not have all of the MONSTER and CHARACTER keywords');
     expect(conditionLeadIn(matches({ state: "battle-shocked" }))).toBe("while the unit is Battle-shocked");
     expect(describeSelectionEligibility(not(matches({ state: "battle-shocked" })))).toBe("that is not Battle-shocked");
     expect(describeCondition(matches({ owner: "enemy" }))).toBe("the unit is an enemy unit");
@@ -113,7 +113,7 @@ describe("canonical triggers and durations", () => {
 
 it("does not flatten a negated keyword conjunction into two exclusions", () => {
   const condition = not(matches({ all_of: ["MONSTER", "CHARACTER"] }, "defender"));
-  expect(describeCondition(condition)).toBe('the target does not have all of "MONSTER" and "CHARACTER"');
+  expect(describeCondition(condition)).toBe('the target does not have all of the MONSTER and CHARACTER keywords');
   expect(conditionLeadIn(condition)).toBe("against a unit that does not have all of MONSTER and CHARACTER");
 });
 

@@ -60,6 +60,8 @@ import { foldStickyControl } from "./compile-sticky-control.js";
 import { foldSetUpLimits, foldSetUpPlacement, isPlacedLimit } from "./compile-set-up-placement.js";
 import { foldCountScales, markCountedSubjects } from "./compile-count-scale.js";
 import { foldImpliedHealCondition } from "./compile-implied-heal.js";
+import { foldWithEmbarked } from "./compile-with-embarked.js";
+import { foldStanceInitial } from "./compile-stance-initial.js";
 import { joinSegments, sentenceSegments, STRATAGEM_HEADER } from "./compile-segments.js";
 import { compileGranted } from "./compile-granted.js";
 import { compileNamedAbilityStates } from "./compile-named-ability-states.js";
@@ -249,7 +251,7 @@ function compileRecord(given: readonly CompileLeaf[], sourceText?: string, optio
   let qualified: CompileLeaf[];
   // "if this unit is controlling an objective, that objective is secured": the control test is the secured objective's own scope (compile-sticky-control.ts).
   // "has lost any wounds" before a heal of that model is what the heal already requires (compile-implied-heal.ts).
-  try { qualified = foldStickyControl(foldEngagementExclusive(foldImpliedHealCondition(given), sourceText), sourceText); } catch (error) {
+  try { qualified = foldStickyControl(foldEngagementExclusive(foldStanceInitial(foldWithEmbarked(foldImpliedHealCondition(given))), sourceText), sourceText); } catch (error) {
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature: shapeSignature(ordered(given), sourceText), errors: [error.message] };
   }

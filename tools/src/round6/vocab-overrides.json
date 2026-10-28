@@ -2416,17 +2416,6 @@
       }
     ]
   },
-  "data/enrichment/orks/abilities.json#riled-up-orks#effect/steps/2/effect": {
-    "type": "permission",
-    "target": "this-unit",
-    "modifier": {
-      "activity": "declare-charge",
-      "allow": true,
-      "after": [
-        "advance"
-      ]
-    }
-  },
   "data/enrichment/orks/abilities.json#waaagh-orks#effect/steps/0/effect": {
     "type": "permission",
     "target": "this-unit",

@@ -21,6 +21,7 @@ import { namedAbilityStateEffect } from "./compile-named-ability-states.js";
 import { oathEffect } from "./compile-oath.js";
 import { compileNamedRegionProducer } from "./compile-named-region.js";
 import { targetingEffect } from "./compile-targeting.js";
+import { withEmbarked } from "./compile-with-embarked.js";
 import { abilityUseEffect } from "./compile-ability-use.js";
 
 export { CompileError };
@@ -232,6 +233,11 @@ export function attackOwner(context: { attacker?: Node | string | null; incoming
  * allocation modifiers on the general stat path rather than widening them to unit-wide reduction.
  */
 export function effect(leaf: CompileLeaf, context: { attached: boolean; attacker?: Node | string | null; incoming: boolean; defended?: boolean; allocatedToModel?: boolean }): Node {
+  // "That unit (and any units embarked within that unit)": the same effect on the embarked units too (compile-with-embarked.ts).
+  if (leaf.parameters.with_embarked === true) {
+    const { with_embarked: _widened, ...parameters } = leaf.parameters;
+    return withEmbarked(effect({ ...leaf, parameters }, context));
+  }
   const specialized = namedAbilityStateEffect(leaf) ?? oathEffect(leaf) ?? abilityUseEffect(leaf);
   if (specialized) return specialized;
   // A count folded onto the leaf (compile-count-scale.ts) applies to the whole node it lowers to.

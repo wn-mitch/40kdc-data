@@ -20,7 +20,7 @@ export interface Condition {
 
 import { describeHappened, destroyedCount } from "./condition-history.js";
 import { namedEquipmentPhrase } from "./condition-equipment.js";
-import { andList, countPhrase, dekebab, designationPhrase, idLabel, keywordList, objectivePhrase, ord, orList, type P, placeRefPhrase, rangePhrase, rollWord, ruleRefPhrase, statePhrase, str, subjectOf, titleCase, unitFilterPhrase, unitRefPhrase, windowPhrase } from "./condition-refs.js";
+import { andList, countPhrase, dekebab, designationPhrase, idLabel, keywordList, keywordNoun, objectivePhrase, ord, orList, type P, placeRefPhrase, rangePhrase, rollWord, ruleRefPhrase, statePhrase, str, subjectOf, titleCase, unitFilterPhrase, unitRefPhrase, windowPhrase } from "./condition-refs.js";
 import { bracketKeyword, weaponNoun } from "./effect-words.js";
 
 export { dekebab, moveKinds, rangePhrase, titleCase, unitFilterPhrase, unitRefPhrase } from "./condition-refs.js";
@@ -330,8 +330,8 @@ function describeMatches(p: P, negated: boolean): string {
   const no = negated ? "not " : "";
   if (keys.length === 1) {
     if (f.all_of != null || f.any_of != null) return `${who} ${negated ? "does not have" : "has"} ${negated && Array.isArray(f.all_of) && f.all_of.length > 1 ? "all of " : ""}${keywordList(f)}`;
-    if (Array.isArray(f.none_of)) return `${who} ${negated ? "has" : "does not have"} ${orList(f.none_of.map((k) => `"${str(k)}"`))}`;
-    if (Array.isArray(f.not_all_of)) return `${who} ${negated ? "has" : "does not have"} all of ${andList(f.not_all_of.map((k) => `"${str(k)}"`))}`;
+    if (Array.isArray(f.none_of)) return `${who} ${negated ? "has" : "does not have"} ${keywordNoun(f.none_of, "or")}`;
+    if (Array.isArray(f.not_all_of)) return `${who} ${negated ? "has" : "does not have"} all of ${keywordNoun(f.not_all_of, "and")}`;
     if (f.owner != null) return `${subjectOf(p)} is ${no}${f.owner === "enemy" ? "an enemy unit" : f.owner === "friendly" ? "friendly" : "a unit of either player"}`;
     if (f.state != null) return f.state === "fights-first" ? `${who} ${negated ? "does not have" : "has"} Fights First` : `${who} is ${statePhrase(str(f.state), negated)}`;
     if (Array.isArray(f.not_states)) return f.not_states.length === 1 ? `${who} is ${statePhrase(str(f.not_states[0]), !negated)}` : `${negated ? "not (" : ""}${andList(f.not_states.map((state) => `${who} is ${statePhrase(str(state), true)}`))}${negated ? ")" : ""}`;

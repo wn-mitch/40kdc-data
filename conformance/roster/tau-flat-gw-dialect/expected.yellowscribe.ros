@@ -345,7 +345,7 @@ The unit is eligible to act as an Observer even if it Advanced this turn.</chara
             </profile>
             <profile name="Starscythe" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">While making ranged attacks, while the target does not have "MONSTER" or "VEHICLE", improve the unit's Armour Penetration characteristic by 1.</characteristic>
+                <characteristic name="Description">While making ranged attacks, while the target does not have the MONSTER or VEHICLE keyword, improve the unit's Armour Penetration characteristic by 1.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deep Strike" typeName="Abilities">

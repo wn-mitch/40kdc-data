@@ -86,7 +86,7 @@ fn negating_a_conjunction_does_not_exclude_each_keyword() {
     let condition = json!({"operator":"not","operands":[{"type":"matches","parameters":{"subject":"defender","filter":{"all_of":["MONSTER","CHARACTER"]}}}]});
     assert_eq!(
         describe_condition_value(&condition),
-        "the target does not have all of \"MONSTER\" and \"CHARACTER\""
+        "the target does not have all of the MONSTER and CHARACTER keywords"
     );
     assert_eq!(
         condition_lead_in_value(&condition),

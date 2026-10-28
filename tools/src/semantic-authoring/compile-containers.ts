@@ -1,4 +1,5 @@
 import { closed, CompileError, effect, type CompileLeaf } from "./compile-fragments.js";
+import { initialOption } from "./compile-stance-initial.js";
 import { trigger, triggerLeaves } from "./compile-triggers.js";
 import { canonicalDesignation, designationChoices, findReplacementOpeners, refuseEstablishmentCount, replacementTail, splitReplacementTail } from "./compile-redesignate.js";
 import { selectionFilter } from "./compile-wrappers.js";
@@ -163,7 +164,8 @@ function buildStanceSelect(head: CompileLeaf, groups: CompileLeaf[][]): Node {
     const { id, name, effect: optionEffect } = namedOption(group, false, index);
     return { id, name, effect: optionEffect };
   });
-  const node: Node = { type: "stance-select", mode: closed(head, "mode"), options };
+  // "At the start of the battle, that unit enters Aegis Protocols": the option in force before any selection (compile-stance-initial.ts).
+  const node: Node = { type: "stance-select", mode: closed(head, "mode"), options, ...initialOption(head, options) };
   // "in addition to any other combat doctrine": the pick joins the active options instead of replacing them.
   if (head.parameters.additive === true) node.additive = true;
   const min = head.parameters.min_choices;

@@ -2007,94 +2007,146 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "f40290560d3aa35e1a5d8012d1c967679000aef68f8faf8deeae975690d025aa",
+    "source_digest": "515094349d27d2640a02229494a4ddaf361a59b786b04da8d14075024bc9f1a0",
     "version": "2025-q3",
     "effect": {
-      "type": "rules-bundle",
+      "type": "sequence",
       "steps": [
         {
-          "type": "conditional",
-          "condition": {
-            "type": "happened",
-            "parameters": {
-              "event": "move-ended",
-              "filter": {
-                "move_types": [
-                  "advance"
-                ]
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "re-roll",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "advance",
+                "result_scope": "any-result"
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "designated": "riled-up"
+                  }
+                }
               },
-              "window": "turn"
+              "effect": {
+                "type": "invulnerable-save",
+                "target": "this-unit",
+                "modifier": {
+                  "invuln_sv": 5
+                }
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "designated": "riled-up"
+                  }
+                }
+              },
+              "effect": {
+                "type": "weapon-ability-grant",
+                "target": "this-unit",
+                "modifier": {
+                  "keywords": [
+                    {
+                      "keyword_id": "assault"
+                    }
+                  ],
+                  "weapons": {
+                    "type": "ranged"
+                  }
+                }
+              }
+            },
+            {
+              "type": "ability-part",
+              "trigger": {
+                "event": "selected",
+                "filter": {
+                  "move_types": [
+                    "advance"
+                  ],
+                  "to": "move"
+                }
+              },
+              "effect": {
+                "type": "conditional",
+                "condition": {
+                  "type": "matches",
+                  "parameters": {
+                    "filter": {
+                      "designated": "riled-up"
+                    }
+                  }
+                },
+                "effect": {
+                  "type": "permission",
+                  "target": "event-subject",
+                  "modifier": {
+                    "activity": "declare-charge",
+                    "allow": true,
+                    "despite": [
+                      "advanced"
+                    ]
+                  }
+                }
+              }
             }
+          ]
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "phase-started",
+            "condition": {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "command"
+              }
+            },
+            "optional": true
           },
+          "usage": {
+            "frequency": "n-per-battle",
+            "count": 1,
+            "per": "army"
+          },
+          "duration": "until-end-of-next-turn",
           "effect": {
-            "type": "permission",
-            "target": "this-unit",
-            "modifier": {
-              "activity": "declare-charge",
-              "allow": true,
-              "after": [
-                "advance"
+            "type": "designate",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "ORKS"
+              ],
+              "has_ability": [
+                "waaagh-orks"
               ]
+            },
+            "modifier": {
+              "tag": "riled-up"
             }
-          }
-        },
-        {
-          "type": "stat-modifier",
-          "target": "this-unit",
-          "modifier": {
-            "stat": "S",
-            "operation": "add",
-            "value": 1,
-            "weapons": {
-              "type": "melee"
-            }
-          }
-        },
-        {
-          "type": "stat-modifier",
-          "target": "this-unit",
-          "modifier": {
-            "stat": "A",
-            "operation": "add",
-            "value": 1,
-            "weapons": {
-              "type": "melee"
-            }
-          }
-        },
-        {
-          "type": "invulnerable-save",
-          "target": "this-unit",
-          "modifier": {
-            "invuln_sv": 5
           }
         }
       ]
     },
-    "trigger": {
-      "event": "phase-started",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "command"
-        }
-      },
-      "optional": true
-    },
     "scope": {
-      "duration": "until-next-command-phase"
-    },
-    "usage": {
-      "frequency": "n-per-battle",
-      "count": 1,
-      "per": "army"
+      "duration": "permanent"
     },
     "applies_to": null,
     "faction_id": "orks",
     "ability_type": "faction",
-    "behavior": "activated",
+    "behavior": "reactive",
     "unit_ids": [
       "bannernob",
       "gargantuan-squiggoth",
@@ -3639,50 +3691,100 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "eaada37e92afc8f24bbac59428291b69a8ccede7ffeed3417a5adb7f446412b3",
+    "source_digest": "25e3450591a148cf668a3466afd5444f5527e6bcece9c340e43fc2fceb7c03b8",
     "version": "2025-q3",
     "effect": {
-      "type": "select-units",
-      "selector": {
-        "filter": {
-          "owner": "friendly",
-          "all_of": [
-            "SPEED FREEKS"
-          ],
-          "within": {
-            "range": {
-              "inches": 6
-            },
-            "of": "this-model"
-          }
-        },
-        "count": {
-          "min": 1,
-          "max": 1
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
           {
-            "type": "state-change",
-            "target": "selected-unit",
-            "modifier": {
-              "state": "battle-shocked",
-              "set": false
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
             }
           },
           {
-            "type": "ability-grant",
-            "target": "selected-unit",
-            "modifier": {
-              "ability": "riled-up-orks",
-              "rules_bundle": true
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
             }
           }
         ]
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "SPEED FREEKS"
+            ],
+            "within": {
+              "range": {
+                "inches": 6
+              },
+              "of": "this-unit"
+            }
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "state-change",
+                  "target": "selected-unit",
+                  "modifier": {
+                    "state": "battle-shocked",
+                    "set": false
+                  }
+                },
+                {
+                  "type": "state-change",
+                  "target": {
+                    "owner": "friendly",
+                    "embarked_in": "selected-unit"
+                  },
+                  "modifier": {
+                    "state": "battle-shocked",
+                    "set": false
+                  }
+                }
+              ]
+            },
+            {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "designate",
+                  "target": "selected-unit",
+                  "modifier": {
+                    "tag": "riled-up"
+                  }
+                },
+                {
+                  "type": "designate",
+                  "target": {
+                    "owner": "friendly",
+                    "embarked_in": "selected-unit"
+                  },
+                  "modifier": {
+                    "tag": "riled-up"
+                  }
+                }
+              ]
+            }
+          ]
+        }
       }
     },
     "scope": {
@@ -3695,60 +3797,14 @@
     "behavior": "reactive",
     "community_notes": "community-authored from 11e source",
     "faction_id": "orks",
-    "usage": {
-      "frequency": "once-per-battle-round",
-      "per": "army"
-    },
     "trigger": [
       {
-        "event": "move-ended",
-        "filter": {
-          "move_types": [
-            "normal"
-          ]
-        },
-        "condition": {
-          "operator": "and",
-          "operands": [
-            {
-              "type": "phase-is",
-              "parameters": {
-                "phase": "movement"
-              }
-            },
-            {
-              "type": "player-turn-is",
-              "parameters": {
-                "turn": "your-turn"
-              }
-            }
-          ]
-        }
+        "event": "move-started",
+        "optional": true
       },
       {
         "event": "move-ended",
-        "filter": {
-          "move_types": [
-            "normal"
-          ]
-        },
-        "condition": {
-          "operator": "and",
-          "operands": [
-            {
-              "type": "phase-is",
-              "parameters": {
-                "phase": "movement"
-              }
-            },
-            {
-              "type": "player-turn-is",
-              "parameters": {
-                "turn": "your-turn"
-              }
-            }
-          ]
-        }
+        "optional": true
       }
     ]
   },
@@ -11741,85 +11797,6 @@
     }
   },
   {
-    "ability_id": "riled-up-orks",
-    "name": "Riled Up",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "9a5d4b551ed6c2d9d6cc3ec85cd223781a9d652e14b175d14e56ded587463050",
-    "version": "2025-q3",
-    "effect": {
-      "type": "rules-bundle",
-      "steps": [
-        {
-          "type": "weapon-ability-grant",
-          "target": "this-unit",
-          "modifier": {
-            "weapons": {
-              "type": "ranged"
-            },
-            "keywords": [
-              {
-                "keyword_id": "assault"
-              }
-            ]
-          }
-        },
-        {
-          "type": "re-roll",
-          "target": "this-unit",
-          "modifier": {
-            "roll": "advance",
-            "result_scope": "any-result"
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "happened",
-            "parameters": {
-              "event": "move-ended",
-              "filter": {
-                "move_types": [
-                  "advance"
-                ]
-              },
-              "window": "turn"
-            }
-          },
-          "effect": {
-            "type": "permission",
-            "target": "this-unit",
-            "modifier": {
-              "activity": "declare-charge",
-              "allow": true,
-              "after": [
-                "advance"
-              ]
-            }
-          }
-        },
-        {
-          "type": "invulnerable-save",
-          "target": "this-unit",
-          "modifier": {
-            "invuln_sv": 5
-          }
-        }
-      ]
-    },
-    "scope": {
-      "duration": "battle"
-    },
-    "unit_ids": [],
-    "ability_type": "faction",
-    "behavior": "passive",
-    "faction_id": "orks",
-    "community_notes": "community-authored from 11e source"
-  },
-  {
     "ability_id": "dreadherder-dread-mob-orks",
     "name": "Dreadherder",
     "authored_by": "40kdc-community",
@@ -13361,15 +13338,140 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "orks",
     "detachment_id": "ardmob",
     "ability_type": "faction",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "re-roll",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "advance",
+                "result_scope": "any-result"
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "designated": "riled-up"
+                  }
+                }
+              },
+              "effect": {
+                "type": "invulnerable-save",
+                "target": "this-unit",
+                "modifier": {
+                  "invuln_sv": 5
+                }
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "designated": "riled-up"
+                  }
+                }
+              },
+              "effect": {
+                "type": "weapon-ability-grant",
+                "target": "this-unit",
+                "modifier": {
+                  "keywords": [
+                    {
+                      "keyword_id": "assault"
+                    }
+                  ],
+                  "weapons": {
+                    "type": "ranged"
+                  }
+                }
+              }
+            },
+            {
+              "type": "ability-part",
+              "trigger": {
+                "event": "selected",
+                "filter": {
+                  "move_types": [
+                    "advance"
+                  ],
+                  "to": "move"
+                }
+              },
+              "effect": {
+                "type": "conditional",
+                "condition": {
+                  "type": "matches",
+                  "parameters": {
+                    "filter": {
+                      "designated": "riled-up"
+                    }
+                  }
+                },
+                "effect": {
+                  "type": "permission",
+                  "target": "event-subject",
+                  "modifier": {
+                    "activity": "declare-charge",
+                    "allow": true,
+                    "despite": [
+                      "advanced"
+                    ]
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "phase-started",
+            "condition": {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "command"
+              }
+            },
+            "optional": true
+          },
+          "usage": {
+            "frequency": "n-per-battle",
+            "count": 1,
+            "per": "army"
+          },
+          "duration": "until-end-of-next-turn",
+          "effect": {
+            "type": "designate",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "ORKS"
+              ],
+              "has_ability": [
+                "waaagh-orks"
+              ]
+            },
+            "modifier": {
+              "tag": "riled-up"
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -13379,7 +13481,9 @@
         "ability_ref": "waaagh-orks",
         "type": "replaces"
       }
-    ]
+    ],
+    "behavior": "reactive",
+    "source_digest": "515094349d27d2640a02229494a4ddaf361a59b786b04da8d14075024bc9f1a0"
   },
   {
     "ability_id": "crazed-rampage-dread-mob-orks",

@@ -3756,6 +3756,10 @@ export interface StanceSelectEffect {
   ];
   min_choices?: number;
   max_choices?: number;
+  /**
+   * The id of the option in force from the start of the battle, before any selection ("At the start of the battle, that unit enters Aegis Protocol").
+   */
+  initial?: string;
 }
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema

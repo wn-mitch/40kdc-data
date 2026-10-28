@@ -70,7 +70,7 @@ func TestCanonicalMatchesPredicateRendersInsteadOfFallback(t *testing.T) {
 			"filter":  map[string]any{"all_of": []any{"INFANTRY", "PSYKER"}},
 		},
 	}
-	if got, want := describeCondition(condition), `the unit has "INFANTRY" and "PSYKER"`; got != want {
+	if got, want := describeCondition(condition), `the unit has the INFANTRY and PSYKER keywords`; got != want {
 		t.Fatalf("matches render = %q, want %q", got, want)
 	}
 }

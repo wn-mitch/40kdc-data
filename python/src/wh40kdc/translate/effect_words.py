@@ -24,12 +24,12 @@ from wh40kdc.translate.condition_refs import (
     keyword_alternatives,
     place_ref_phrase,
     range_phrase,
+    territory_phrase,
     title_case,
 )
 from wh40kdc.translate.condition_refs import (
     _or_list as or_list,
 )
-from wh40kdc.translate.condition_refs import territory_phrase
 from wh40kdc.translate.designations import designation_label
 
 __all__ = ["and_list", "dekebab", "or_list", "range_phrase", "title_case"]
