@@ -121,7 +121,12 @@ function bareFilterAt(leaves: readonly CompileLeaf[], index: number): number {
   // "That unit" attacking after both stays refused: it could name either group, and no attack fold takes the filter after a select.
   const attackByThatUnit = leaves.slice(at + 1).some((other) => other.fragment === leaf.fragment && other.family_id === "attack" && other.parameters.unit === "that-unit");
   const oppositeSelect = !attackByThatUnit && before?.family_id === "select-unit" && sides.includes(before.parameters.scope as string) && sides.includes(filter.parameters.side as string) && before.parameters.scope !== filter.parameters.side;
-  const anchored = before !== undefined && before.fragment === leaf.fragment && !oppositeSelect && (FILTER_ANCHORS.has(before.family_id) || (before.family_id === "unit-filter" && !gateFilter(leaves, at - 1) && !conditionsFilter && !claimedByEmbarkedState(leaves, at, leaf.fragment)));
+  // "… destroys an" + "enemy unit": a bare filter repeating the moment's object owner names that object, not the units after it.
+  const event = leaves[at - 2];
+  const restatedObject = before?.family_id === "unit-filter" && event?.family_id === "event" && event.fragment === before.fragment
+    && event.parameters.object_filter === undefined && event.parameters.object_owner === before.parameters.side
+    && Object.keys(before.parameters).every((key) => key === "side");
+  const anchored = before !== undefined && before.fragment === leaf.fragment && !oppositeSelect && (FILTER_ANCHORS.has(before.family_id) || (before.family_id === "unit-filter" && !restatedObject && !gateFilter(leaves, at - 1) && !conditionsFilter && !claimedByEmbarkedState(leaves, at, leaf.fragment)));
   return !anchored || filter.parameters.member_of !== undefined ? at : -1;
 }
 

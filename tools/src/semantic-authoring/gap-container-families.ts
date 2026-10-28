@@ -264,6 +264,25 @@ export const GAP_CONTAINER_FAMILIES: readonly SemanticFamilyDefinition[] = [
       additionalProperties: false,
     },
   },
+  {
+    id: "opposed-designations",
+    version: 1,
+    role: "EFFECT",
+    label: "Two groups hold opposite designations",
+    description: "\"While K units are winning, J units are losing, and vice versa\": each time the record tags one group (friendly units with keywords, or with opposite_keywords) with tag or opposite_tag, the other group takes the other tag, and each group drops the tag it no longer holds.",
+    starter: { tag: "", opposite_tag: "", keywords: [], opposite_keywords: [] },
+    parameterSchema: {
+      type: "object",
+      required: ["tag", "opposite_tag", "keywords", "opposite_keywords"],
+      properties: {
+        tag: { type: "string", minLength: 1 },
+        opposite_tag: { type: "string", minLength: 1 },
+        keywords: { type: "array", items: { type: "string", minLength: 1 }, minItems: 1, uniqueItems: true },
+        opposite_keywords: { type: "array", items: { type: "string", minLength: 1 }, minItems: 1, uniqueItems: true },
+      },
+      additionalProperties: false,
+    },
+  },
 ];
 
 export function normalizeGapContainerParameters(family: string, input: Record<string, unknown>, version = 1): Record<string, unknown> | null {
@@ -410,6 +429,17 @@ export function normalizeGapContainerParameters(family: string, input: Record<st
         ...("near" in input ? { near: enumValue(input.near, ["event-subject"], "mark-objective.near") } : {}),
         ...(input.clear === true ? { clear: true } : {}),
       };
+    }
+    case "opposed-designations": {
+      exactKeys(input, ["tag", "opposite_tag", "keywords", "opposite_keywords"], family);
+      for (const key of ["tag", "opposite_tag"]) {
+        if (typeof input[key] !== "string" || !DESIGNATION_IDS.has(input[key] as string)) throw new TypeError(`opposed-designations.${key} ${JSON.stringify(input[key])} is not a registered designation.`);
+      }
+      if (input.tag === input.opposite_tag) throw new TypeError("opposed-designations names two different tags.");
+      const keywords = keywordArray(input.keywords, "opposed-designations.keywords").sort();
+      const opposite = keywordArray(input.opposite_keywords, "opposed-designations.opposite_keywords").sort();
+      if (JSON.stringify(keywords) === JSON.stringify(opposite)) throw new TypeError("opposed-designations names two different groups.");
+      return { tag: input.tag, opposite_tag: input.opposite_tag, keywords, opposite_keywords: opposite };
     }
     default:
       return null;

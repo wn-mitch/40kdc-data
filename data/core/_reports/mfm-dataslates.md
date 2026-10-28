@@ -15,10 +15,10 @@ dump confirmation.
 | wargear-options | 0 | 0 | 1234 | 0 |
 | leader-attachments | 0 | 0 | 283 | 8 |
 | enhancements | 0 | 0 | 890 | 0 |
-| detachments | 0 | 0 | 171 | 286 |
-| stratagems | 0 | 0 | 1036 | 277 |
-| abilities | 0 | 0 | 3651 | 883 |
-| phase-mappings | 0 | 0 | 1135 | 446 |
+| detachments | 1 | 0 | 171 | 285 |
+| stratagems | 1 | 0 | 1036 | 276 |
+| abilities | 0 | 0 | 3653 | 881 |
+| phase-mappings | 1 | 0 | 1135 | 445 |
 | resource-pools | 0 | 0 | 0 | 6 |
 
 ## Abilities by faction
@@ -26,7 +26,7 @@ dump confirmation.
 | Faction | Promote | Demote | Kept | Untouched |
 |---|--:|--:|--:|--:|
 | _core | 0 | 0 | 8 | 18 |
-| adepta-sororitas | 0 | 0 | 119 | 29 |
+| adepta-sororitas | 0 | 0 | 120 | 28 |
 | adeptus-astartes | 0 | 0 | 210 | 40 |
 | adeptus-custodes | 0 | 0 | 144 | 14 |
 | adeptus-mechanicus | 0 | 0 | 138 | 29 |
@@ -41,7 +41,7 @@ dump confirmation.
 | dark-angels | 0 | 0 | 59 | 18 |
 | death-guard | 0 | 0 | 124 | 36 |
 | deathwatch | 0 | 0 | 31 | 5 |
-| drukhari | 0 | 0 | 125 | 39 |
+| drukhari | 0 | 0 | 126 | 38 |
 | emperors-children | 0 | 0 | 120 | 26 |
 | genestealer-cults | 0 | 0 | 116 | 31 |
 | grey-knights | 0 | 0 | 121 | 13 |
@@ -72,8 +72,8 @@ dump confirmation.
 | _core | verified | 8 |
 | adepta-sororitas | digest-differs | 8 |
 | adepta-sororitas | stub | 4 |
-| adepta-sororitas | unpublished | 17 |
-| adepta-sororitas | verified | 119 |
+| adepta-sororitas | unpublished | 16 |
+| adepta-sororitas | verified | 120 |
 | adeptus-astartes | ambiguous-source | 1 |
 | adeptus-astartes | digest-differs | 13 |
 | adeptus-astartes | no-source | 5 |
@@ -136,8 +136,8 @@ dump confirmation.
 | deathwatch | verified | 31 |
 | drukhari | digest-differs | 9 |
 | drukhari | stub | 20 |
-| drukhari | unpublished | 10 |
-| drukhari | verified | 125 |
+| drukhari | unpublished | 9 |
+| drukhari | verified | 126 |
 | emperors-children | digest-differs | 7 |
 | emperors-children | unpublished | 19 |
 | emperors-children | verified | 120 |

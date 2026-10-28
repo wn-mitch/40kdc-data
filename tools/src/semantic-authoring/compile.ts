@@ -20,6 +20,8 @@ import { foldBoundAttacks, nameBoundAttacks } from "./compile-bound-attacks.js";
 import { bindWhenSubject } from "./compile-when-subject.js";
 import { resolveAttackBackrefs } from "./compile-attack-backref.js";
 import { compileReactionParts } from "./compile-reaction-parts.js";
+import { compileOpposedDesignations } from "./compile-opposed-designations.js";
+import { hoistResolvedSelections } from "./compile-resolved-selection.js";
 import { bindArmyAntecedents, foldArmyAttachments, foldArmyPer, foldForwardComposition, resolveArmyGroups } from "./compile-army.js";
 import { bindPrecedingRolls } from "./compile-preceding-roll.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
@@ -194,6 +196,9 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
   if (leaves.some((leaf) => leaf.fragment === NAME_FRAGMENT)) {
     return compileWithName(leaves, sourceText, options, compileLeaves, (list) => shapeSignature(ordered(list), sourceText));
   }
+  // "While K units are winning, J units are losing, and vice versa": every designation of the pair is paired (compile-opposed-designations.ts).
+  const opposed = compileOpposedDesignations(leaves, sourceText, options, compileLeaves, (list) => shapeSignature(ordered(list), sourceText));
+  if (opposed) return opposed;
   // Two for-each-unit-select passes in separate sentences: the second is a later part (compile-for-each-passes.ts).
   const passes = compileForEachPasses(leaves, sourceText, options, compileLeaves, (list) => shapeSignature(ordered(list), sourceText));
   if (passes) return passes;
@@ -381,5 +386,13 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   const plan = planEffects(frame, sourceText, options);
   const bindings = bindParts(frame, plan, sourceText, options);
   if (frame.errors.length > 0) return { ok: false, signature, errors: frame.errors };
-  return assemblePart(frame, plan, bindings, conditionOf, signature, sourceText, options);
+  const assembled = assemblePart(frame, plan, bindings, conditionOf, signature, sourceText, options);
+  if (!assembled.ok) return assembled;
+  // A selection after "those attacks" resolve is made once, outside their per-attack gate (compile-resolved-selection.ts).
+  try {
+    return { ...assembled, mechanics: { ...assembled.mechanics, effect: hoistResolvedSelections(assembled.mechanics.effect) as typeof assembled.mechanics.effect } };
+  } catch (error) {
+    if (!(error instanceof CompileError)) throw error;
+    return { ok: false, signature, errors: [error.message] };
+  }
 }

@@ -6551,7 +6551,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "ecbeaf7c5ca7f9886a3fad9529e8cd3bbcf5bd5fd8e95b049cb22ce29ccc5028",
     "version": "2025-q3",
@@ -6560,65 +6560,320 @@
     "faction_id": "drukhari",
     "detachment_id": "reapers-wager",
     "ability_type": "detachment",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "sequence",
       "steps": [
         {
-          "type": "conditional",
-          "condition": {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "designated": "winning-the-wager"
-              }
-            }
+          "type": "ability-part",
+          "trigger": {
+            "event": "battle-started"
           },
           "effect": {
-            "type": "re-roll",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "hit",
-              "subset": "ones"
-            }
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "designate",
+                "target": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "DRUKHARI"
+                  ]
+                },
+                "modifier": {
+                  "tag": "winning-the-wager"
+                }
+              },
+              {
+                "type": "designate",
+                "target": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "DRUKHARI"
+                  ]
+                },
+                "modifier": {
+                  "tag": "losing-the-wager",
+                  "clear": true
+                }
+              },
+              {
+                "type": "designate",
+                "target": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "HARLEQUINS"
+                  ]
+                },
+                "modifier": {
+                  "tag": "losing-the-wager"
+                }
+              },
+              {
+                "type": "designate",
+                "target": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "HARLEQUINS"
+                  ]
+                },
+                "modifier": {
+                  "tag": "winning-the-wager",
+                  "clear": true
+                }
+              }
+            ]
           }
         },
         {
-          "type": "conditional",
-          "condition": {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "designated": "losing-the-wager"
-              }
+          "type": "ability-part",
+          "trigger": {
+            "event": "destroyed",
+            "subject": {
+              "owner": "friendly",
+              "all_of": [
+                "DRUKHARI"
+              ]
+            },
+            "object": {
+              "owner": "enemy"
             }
           },
           "effect": {
             "type": "sequence",
             "steps": [
               {
+                "type": "designate",
+                "target": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "DRUKHARI"
+                  ]
+                },
+                "modifier": {
+                  "tag": "winning-the-wager"
+                }
+              },
+              {
+                "type": "designate",
+                "target": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "DRUKHARI"
+                  ]
+                },
+                "modifier": {
+                  "tag": "losing-the-wager",
+                  "clear": true
+                }
+              },
+              {
+                "type": "designate",
+                "target": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "HARLEQUINS"
+                  ]
+                },
+                "modifier": {
+                  "tag": "losing-the-wager"
+                }
+              },
+              {
+                "type": "designate",
+                "target": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "HARLEQUINS"
+                  ]
+                },
+                "modifier": {
+                  "tag": "winning-the-wager",
+                  "clear": true
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "destroyed",
+            "subject": {
+              "owner": "friendly",
+              "all_of": [
+                "HARLEQUINS"
+              ]
+            },
+            "object": {
+              "owner": "enemy"
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "designate",
+                "target": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "HARLEQUINS"
+                  ]
+                },
+                "modifier": {
+                  "tag": "winning-the-wager"
+                }
+              },
+              {
+                "type": "designate",
+                "target": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "HARLEQUINS"
+                  ]
+                },
+                "modifier": {
+                  "tag": "losing-the-wager",
+                  "clear": true
+                }
+              },
+              {
+                "type": "designate",
+                "target": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "DRUKHARI"
+                  ]
+                },
+                "modifier": {
+                  "tag": "losing-the-wager"
+                }
+              },
+              {
+                "type": "designate",
+                "target": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "DRUKHARI"
+                  ]
+                },
+                "modifier": {
+                  "tag": "winning-the-wager",
+                  "clear": true
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "conditional",
+              "condition": {
+                "operator": "and",
+                "operands": [
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "attacker",
+                      "filter": {
+                        "designated": "winning-the-wager"
+                      }
+                    }
+                  },
+                  {
+                    "operator": "not",
+                    "operands": [
+                      {
+                        "type": "matches",
+                        "parameters": {
+                          "subject": "attacker",
+                          "filter": {
+                            "designated": "losing-the-wager"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              "effect": {
                 "type": "re-roll",
-                "target": "this-unit",
+                "target": {
+                  "owner": "friendly",
+                  "any_of": [
+                    "DRUKHARI",
+                    "HARLEQUINS"
+                  ],
+                  "level": "model"
+                },
                 "modifier": {
                   "roll": "hit",
                   "subset": "ones"
                 }
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "attacker",
+                  "filter": {
+                    "designated": "losing-the-wager"
+                  }
+                }
               },
-              {
+              "effect": {
                 "type": "re-roll",
-                "target": "this-unit",
+                "target": {
+                  "owner": "friendly",
+                  "any_of": [
+                    "DRUKHARI",
+                    "HARLEQUINS"
+                  ],
+                  "level": "model"
+                },
+                "modifier": {
+                  "roll": "hit",
+                  "subset": "ones"
+                }
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "attacker",
+                  "filter": {
+                    "designated": "losing-the-wager"
+                  }
+                }
+              },
+              "effect": {
+                "type": "re-roll",
+                "target": {
+                  "owner": "friendly",
+                  "any_of": [
+                    "DRUKHARI",
+                    "HARLEQUINS"
+                  ],
+                  "level": "model"
+                },
                 "modifier": {
                   "roll": "wound",
                   "subset": "ones"
                 }
               }
-            ]
-          }
+            }
+          ]
         }
       ]
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "community_notes": "[APPROX] DRUKHARI units start the battle winning the wager; each time a DRUKHARI unit destroys an enemy unit DRUKHARI units are winning and HARLEQUINS units are losing, and vice versa when a HARLEQUINS unit destroys an enemy unit"
   },

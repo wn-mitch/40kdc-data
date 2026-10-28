@@ -4108,6 +4108,12 @@ function genEffectTranslation(): void {
       effect: { type: "select-units", selector: { filter: { owner: "enemy" }, count: { min: 1, max: 1 },
         eligibility: { type: "happened", parameters: { event: "model-destroyed", object: { level: "model", member_of: "selected-unit" }, filter: { by: "this-unit" }, window: "event" } } },
         effect: { type: "test", target: "selected-unit", modifier: { test: "battle-shock" } } } } },
+    // Two friendly groups hold opposite designations: tagging one group tags the other with the opposite and clears each stale tag.
+    { caseId: "fidelity/opposed-designations-on-unit-groups", effect: { type: "sequence", steps: [
+      { type: "designate", target: { owner: "friendly", all_of: ["CRIMSON"] }, modifier: { tag: "winning-the-wager" } },
+      { type: "designate", target: { owner: "friendly", all_of: ["CRIMSON"] }, modifier: { tag: "losing-the-wager", clear: true } },
+      { type: "designate", target: { owner: "friendly", all_of: ["AZURE"] }, modifier: { tag: "losing-the-wager" } },
+      { type: "designate", target: { owner: "friendly", all_of: ["AZURE"] }, modifier: { tag: "winning-the-wager", clear: true } }] } },
     // The unit's controlled markers are tagged; a reaction while tagged clears the tag from the one near the triggering unit.
     { caseId: "fidelity/tag-controlled-objective-then-clear-near-trigger", effect: { type: "sequence", steps: [
       { type: "designate", target: "this-unit", modifier: { subject: { objective: { controlled_by_unit: "this-unit" } }, tag: "snared" } },

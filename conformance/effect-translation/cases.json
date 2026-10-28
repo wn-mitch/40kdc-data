@@ -38523,6 +38523,70 @@
     }
   },
   {
+    "caseId": "fidelity/opposed-designations-on-unit-groups",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "designate",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "CRIMSON"
+            ]
+          },
+          "modifier": {
+            "tag": "winning-the-wager"
+          }
+        },
+        {
+          "type": "designate",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "CRIMSON"
+            ]
+          },
+          "modifier": {
+            "tag": "losing-the-wager",
+            "clear": true
+          }
+        },
+        {
+          "type": "designate",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "AZURE"
+            ]
+          },
+          "modifier": {
+            "tag": "losing-the-wager"
+          }
+        },
+        {
+          "type": "designate",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "AZURE"
+            ]
+          },
+          "modifier": {
+            "tag": "winning-the-wager",
+            "clear": true
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use:\n  -> All friendly CRIMSON units are marked as winning the wager.\n  -> All friendly CRIMSON units are no longer marked as losing the wager.\n  -> All friendly AZURE units are marked as losing the wager.\n  -> All friendly AZURE units are no longer marked as winning the wager."
+    }
+  },
+  {
     "caseId": "fidelity/tag-controlled-objective-then-clear-near-trigger",
     "effect": {
       "type": "sequence",
