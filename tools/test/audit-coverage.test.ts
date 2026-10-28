@@ -56,6 +56,35 @@ describe("computeCoverage", () => {
     expect(r.unsupportedReasons.some((u) => u.reason.includes("ability-grant"))).toBe(true);
   });
 
+  it("separates scenario-gated conditions from conditions the engine cannot evaluate", () => {
+    const hit = { type: "roll-modifier", target: "this-unit", modifier: { roll: "hit", operation: "add", value: 1 } };
+    const gated = (condition: unknown) => ({ type: "conditional", condition, effect: hit });
+    const belowHalf = { type: "strength", parameters: { subject: "this-unit", below: "half" } };
+    const tested = { type: "roll-result", parameters: { roll: "leadership", result: "failure" } };
+    const critical = { type: "roll-result", parameters: { roll: "wound", result: "critical" } };
+    const r = computeCoverage([
+      {
+        faction: "test",
+        abilities: [
+          { ability_id: "strength", ability_type: "unit", effect: gated(belowHalf) },
+          { ability_id: "test", ability_type: "unit", effect: gated(tested) },
+          { ability_id: "critical", ability_type: "unit", effect: gated(critical) },
+          // Decided only when the strength operand fails: the critical operand has no evaluator.
+          { ability_id: "mixed", ability_type: "unit", effect: gated({ operator: "and", operands: [belowHalf, critical] }) },
+        ],
+      },
+    ]);
+    const count = (list: { reason: string; count: number }[], type: string) =>
+      list.find((u) => u.reason === `conditional: cannot evaluate condition "${type}" against current context`)?.count ?? 0;
+    expect(count(r.scenarioGatedReasons, "strength")).toBe(1);
+    expect(count(r.unsupportedReasons, "strength")).toBe(0);
+    expect(count(r.scenarioGatedReasons, "roll-result")).toBe(1);
+    expect(count(r.unsupportedReasons, "roll-result")).toBe(1);
+    expect(count(r.unsupportedReasons, "and")).toBe(1);
+    expect(count(r.scenarioGatedReasons, "and")).toBe(0);
+    expect(r.worklist.find((entry) => entry.ability_id === "strength")?.gap).toContain('"strength"');
+  });
+
   it("flags GW-text leaks, stubs, and skipped-defensive from community_notes", () => {
     const r = computeCoverage([
       {

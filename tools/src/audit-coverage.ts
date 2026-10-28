@@ -31,6 +31,7 @@ import { fileURLToPath } from "node:url";
 import chalk from "chalk";
 import { effectToBuffs } from "./cruncher/from-dsl.js";
 import type { BuffSource, EngineContext } from "./cruncher/buffs.js";
+import { declaredScenarios } from "./audit-scenario.js";
 import type { Phase } from "./generated.js";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
@@ -91,7 +92,7 @@ export interface WorklistEntry {
   stub: boolean;
   offensive: boolean;
   defensive: boolean;
-  /** Most-informative unsupported reason from the attacker walk, if any. */
+  /** Most-informative unsupported reason from the attacker walk, if any; scenario-gated reasons come last. */
   gap: string | null;
 }
 
@@ -100,6 +101,12 @@ export interface CoverageReport {
   totals: Omit<FactionCoverage, "faction">;
   /** `unsupported.reason` (normalized) → count, descending. */
   unsupportedReasons: { reason: string; count: number }[];
+  /**
+   * Undecided conditions the engine evaluates once the scenario declares the facts they read
+   * (strength, active rules, regions, objectives, designations, moves, test results, …): reason →
+   * count, descending. They are absent from `unsupportedReasons`.
+   */
+  scenarioGatedReasons: { reason: string; count: number }[];
   /** Per-ability named gaps — the authoring worklist. */
   worklist: WorklistEntry[];
 }
@@ -150,27 +157,46 @@ function normalizeReason(reason: string): string {
   return reason.replace(/\(subset "[^"]*"\)/g, "(subset …)");
 }
 
+/** The reasons the translator gives for a condition it could not decide. */
+const UNDECIDED_CONDITION = /^(conditional: cannot evaluate condition |activation condition cannot be evaluated)/;
+
+/** The effect fragments whose condition stayed undecided in a translation. */
+function undecidedFragments(unsupported: readonly { reason: string; effectFragment: unknown }[]): Set<unknown> {
+  return new Set(unsupported.filter((u) => UNDECIDED_CONDITION.test(u.reason)).map((u) => u.effectFragment));
+}
+
 /**
  * Translate one ability under one perspective across all phases; return whether
- * it produced any buff, accumulating unsupported reasons into `reasonCounts`.
+ * it produced any buff. Unsupported reasons go into `reasonCounts`, except an
+ * undecided condition that every one of `scenarios` decides: the engine
+ * evaluates it once the scenario is declared, so it goes into `gatedCounts`.
  */
 function producesBuff(
   effect: unknown,
   source: BuffSource,
   perspective: "attacker" | "target",
   reasonCounts: Map<string, number>,
+  gatedCounts?: Map<string, number>,
+  scenarios: readonly Partial<EngineContext>[] = [],
 ): boolean {
   let produced = false;
   for (const phase of PHASES) {
-    const t = effectToBuffs(effect, source, permissiveContext(phase), perspective);
+    const context = permissiveContext(phase);
+    const t = effectToBuffs(effect, source, context, perspective);
     if (t.applied.length > 0 || t.activatable.length > 0) produced = true;
     // Only attacker-perspective reasons feed the histogram — the target pass
     // re-walks the same tree and would double-count every offensive-only branch
     // as "unsupported on defense", which is noise for the worklist.
     if (perspective === "attacker") {
+      const undecided = gatedCounts && t.unsupported.some((u) => UNDECIDED_CONDITION.test(u.reason))
+        ? scenarios.map((scenario) => undecidedFragments(effectToBuffs(effect, source, { ...context, ...scenario }, perspective).unsupported))
+        : [];
       for (const u of t.unsupported) {
         const key = normalizeReason(u.reason);
-        reasonCounts.set(key, (reasonCounts.get(key) ?? 0) + 1);
+        const gated = undecided.length > 0 && UNDECIDED_CONDITION.test(u.reason) &&
+          undecided.every((fragments) => !fragments.has(u.effectFragment));
+        const counts = gated ? gatedCounts! : reasonCounts;
+        counts.set(key, (counts.get(key) ?? 0) + 1);
       }
     }
   }
@@ -235,6 +261,7 @@ export function computeCoverage(
   input: { faction: string; abilities: AbilityEntry[] }[],
 ): CoverageReport {
   const reasonCounts = new Map<string, number>();
+  const gatedCounts = new Map<string, number>();
   const factions: FactionCoverage[] = [];
   const worklist: WorklistEntry[] = [];
 
@@ -260,10 +287,14 @@ export function computeCoverage(
       // De-dupe reasons within a single ability so a 5-phase walk doesn't count
       // the same unsupported branch five times.
       const perAbility = new Map<string, number>();
-      const off = producesBuff(a.effect, source, "attacker", perAbility);
+      const gatedPerAbility = new Map<string, number>();
+      const off = producesBuff(a.effect, source, "attacker", perAbility, gatedPerAbility, declaredScenarios(a.effect, faction));
       const def = producesBuff(a.effect, source, "target", new Map());
       for (const [reason] of perAbility) {
         reasonCounts.set(reason, (reasonCounts.get(reason) ?? 0) + 1);
+      }
+      for (const [reason] of gatedPerAbility) {
+        gatedCounts.set(reason, (gatedCounts.get(reason) ?? 0) + 1);
       }
       if (off) fc.offensive++;
       if (def) fc.defensive++;
@@ -280,7 +311,7 @@ export function computeCoverage(
         stub: isStub,
         offensive: off,
         defensive: def,
-        gap: perAbility.size > 0 ? [...perAbility.keys()][0] : null,
+        gap: [...perAbility.keys(), ...gatedPerAbility.keys()][0] ?? null,
       });
     }
     factions.push(fc);
@@ -303,11 +334,11 @@ export function computeCoverage(
     { total: 0, offensive: 0, defensive: 0, inert: 0, stub: 0, stubStructural: 0, gwTextLeak: 0, defensiveSkipped: 0 },
   );
 
-  const unsupportedReasons = [...reasonCounts.entries()]
+  const histogram = (counts: Map<string, number>) => [...counts.entries()]
     .map(([reason, count]) => ({ reason, count }))
     .sort((a, b) => b.count - a.count);
 
-  return { factions, totals, unsupportedReasons, worklist };
+  return { factions, totals, unsupportedReasons: histogram(reasonCounts), scenarioGatedReasons: histogram(gatedCounts), worklist };
 }
 
 /** Read every `data/enrichment/<faction>/abilities.json` (skips `_example`). */
@@ -386,6 +417,8 @@ function prettyReport(r: CoverageReport): string {
   for (const { reason, count } of r.unsupportedReasons.slice(0, 15)) {
     lines.push(`  ${String(count).padStart(5)}  ${chalk.gray(reason)}`);
   }
+  const gated = r.scenarioGatedReasons.reduce((sum, { count }) => sum + count, 0);
+  lines.push(chalk.gray(`${gated} undecided conditions are scenario-gated: the engine decides them once the scenario declares their facts.`));
   lines.push("");
   return lines.join("\n");
 }
@@ -413,6 +446,18 @@ function markdownReport(r: CoverageReport): string {
   lines.push("", "`stub*` = structural (empty-modifier placeholder node) — the authoring worklist. `notes-stub` = flagged in community_notes.");
   lines.push("", "## Unsupported-effect reasons (offensive walk)", "");
   for (const { reason, count } of r.unsupportedReasons) {
+    lines.push(`- \`${count}\` — ${reason}`);
+  }
+  lines.push(
+    "",
+    "## Scenario-gated conditions (offensive walk)",
+    "",
+    "Undecided under the audit's context, which declares no scenario, but decided by the engine",
+    "once a scenario declares every fact they read (two opposite declarations must both decide",
+    "them). They are not engine gaps and are absent from the list above.",
+    "",
+  );
+  for (const { reason, count } of r.scenarioGatedReasons) {
     lines.push(`- \`${count}\` — ${reason}`);
   }
   lines.push("");
