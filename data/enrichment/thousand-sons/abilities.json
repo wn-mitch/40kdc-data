@@ -6896,7 +6896,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "dd2eac3b4fe95f03146e509953684589710afca032bbeb247d0c48378e15cfdd",
     "version": "2025-q3",
@@ -6905,86 +6905,81 @@
     "faction_id": "thousand-sons",
     "detachment_id": "warpforged-cabal",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "sequence",
       "steps": [
+        {
+          "type": "designate",
+          "target": "this-unit",
+          "modifier": {
+            "subject": {
+              "objective": {
+                "controlled_by_unit": "this-unit"
+              }
+            },
+            "tag": "mutated"
+          }
+        },
         {
           "type": "objective-sticky",
           "target": "this-unit"
         },
         {
-          "type": "sequence",
-          "steps": [
-            {
-              "type": "designate",
-              "target": "this-unit",
-              "modifier": {
-                "subject": {
-                  "objective": {
-                    "controlled_by": "friendly"
-                  }
-                },
-                "tag": "mutated",
-                "clears_on": "permanent"
-              }
+          "type": "ability-part",
+          "trigger": {
+            "event": "move-ended",
+            "filter": {
+              "move_types": [
+                "normal",
+                "advance",
+                "fall-back",
+                "charge"
+              ]
             },
-            {
-              "type": "ability-part",
-              "trigger": {
-                "event": "move-ended",
-                "subject": {
-                  "owner": "enemy"
-                },
-                "filter": {
-                  "move_types": [
-                    "normal",
-                    "advance",
-                    "fall-back",
-                    "charge"
-                  ]
-                }
-              },
-              "effect": {
-                "type": "conditional",
-                "condition": {
-                  "type": "matches",
-                  "parameters": {
-                    "filter": {
-                      "within": {
-                        "range": "objective-control",
-                        "of": {
-                          "objective": {
-                            "designated": "mutated",
-                            "controlled_by": "friendly"
-                          }
+            "subject": {
+              "owner": "enemy"
+            }
+          },
+          "effect": {
+            "type": "dice-gated",
+            "dice": "D6",
+            "threshold": 4,
+            "comparison": "gte",
+            "on_success": {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "event-subject",
+                  "filter": {
+                    "within": {
+                      "of": {
+                        "objective": {
+                          "controlled_by": "friendly",
+                          "designated": "mutated"
                         }
-                      }
-                    },
-                    "subject": "event-subject"
-                  }
-                },
-                "effect": {
-                  "type": "dice-gated",
-                  "dice": "D6",
-                  "threshold": 4,
-                  "comparison": "gte",
-                  "on_success": {
-                    "type": "mortal-wounds",
-                    "target": "event-subject",
-                    "modifier": {
-                      "count": "D3"
+                      },
+                      "range": "objective-control"
                     }
                   }
                 }
+              },
+              "effect": {
+                "type": "mortal-wounds",
+                "target": "event-subject",
+                "modifier": {
+                  "count": "D3"
+                }
               }
-            }
-          ]
+            },
+            "on_fail": null
+          }
         }
       ]
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -8703,7 +8698,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "cb0f0d66358d817d9037fdf5e8d952d620cacb6896edcbf20065a6ad81c1af4e",
     "version": "2025-q3",
@@ -8712,59 +8707,89 @@
     "faction_id": "thousand-sons",
     "detachment_id": "warpforged-cabal",
     "ability_type": "enhancement",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "select-units",
-      "selector": {
-        "filter": {
-          "owner": "friendly",
-          "all_of": [
-            "THOUSAND SONS",
-            "VEHICLE"
-          ],
-          "within": {
-            "range": {
-              "inches": 6
-            },
-            "of": "this-model"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "this-model",
+          "filter": {
+            "within": {
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "THOUSAND SONS",
+                  "VEHICLE"
+                ]
+              },
+              "range": {
+                "inches": 6
+              }
+            }
           }
-        },
-        "count": {
-          "min": 1,
-          "max": 1
         }
       },
       "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "mortal-wounds",
-            "target": "selected-unit",
-            "modifier": {
-              "count": 1
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "THOUSAND SONS",
+              "VEHICLE"
+            ],
+            "within": {
+              "range": {
+                "inches": 6
+              },
+              "of": "this-model"
             }
           },
-          {
-            "type": "re-roll",
-            "target": "this-model",
-            "modifier": {
-              "roll": "psychic",
-              "result_scope": "any-result",
-              "count": 1
-            }
+          "count": {
+            "min": 1,
+            "max": 1
           }
-        ]
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "mortal-wounds",
+              "target": "selected-unit",
+              "modifier": {
+                "count": 1
+              }
+            },
+            {
+              "type": "re-roll",
+              "target": "this-model",
+              "modifier": {
+                "roll": "psychic",
+                "result_scope": "any-result",
+                "count": 1
+              }
+            }
+          ]
+        }
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
         "THOUSAND SONS"
       ]
     },
-    "community_notes": "[APPROX] While within 6\" of a friendly Thousand Sons Vehicle unit, after rolling the additional Channelling die but before checking doubles or triples, the bearer may have a selected Vehicle unit suffer 1 mortal wound to re-roll that die; encoded as an opaque grant. Full rule in raw-text store."
+    "community_notes": "[APPROX] While within 6\" of a friendly Thousand Sons Vehicle unit, after rolling the additional Channelling die but before checking doubles or triples, the bearer may have a selected Vehicle unit suffer 1 mortal wound to re-roll that die; encoded as an opaque grant. Full rule in raw-text store.",
+    "trigger": {
+      "event": "after-roll",
+      "filter": {
+        "roll": "channelling"
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "perplexing-cloak-warpforged-cabal-thousand-sons",
