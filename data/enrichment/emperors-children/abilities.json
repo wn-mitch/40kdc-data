@@ -2079,18 +2079,287 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "e728e31a1200dead8ce43937137854696474c533a18b61894309ec9f08bce3e3",
     "version": "2025-q3",
     "effect": {
-      "type": "permission",
-      "target": "this-unit",
-      "modifier": {
-        "activity": "shoot",
-        "allow": true,
-        "after": [
-          "fall-back"
+      "type": "conditional",
+      "condition": {
+        "type": "army-faction",
+        "parameters": {
+          "faction": "emperors-children"
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "weapon-ability-grant",
+                "target": "this-unit",
+                "modifier": {
+                  "keywords": [
+                    {
+                      "keyword_id": "assault"
+                    }
+                  ],
+                  "weapons": {
+                    "type": "ranged"
+                  }
+                }
+              },
+              {
+                "type": "permission",
+                "target": "this-unit",
+                "modifier": {
+                  "activity": "declare-charge",
+                  "allow": true,
+                  "after": [
+                    "advance"
+                  ]
+                }
+              },
+              {
+                "type": "permission",
+                "target": "this-unit",
+                "modifier": {
+                  "activity": "shoot",
+                  "allow": true,
+                  "after": [
+                    "fall-back"
+                  ]
+                }
+              },
+              {
+                "type": "permission",
+                "target": "this-unit",
+                "modifier": {
+                  "activity": "declare-charge",
+                  "allow": true,
+                  "after": [
+                    "fall-back"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "operator": "or",
+              "operands": [
+                {
+                  "type": "happened",
+                  "parameters": {
+                    "event": "move-ended",
+                    "subject": "this-unit",
+                    "filter": {
+                      "move_types": [
+                        "advance"
+                      ]
+                    },
+                    "window": "turn"
+                  }
+                },
+                {
+                  "type": "happened",
+                  "parameters": {
+                    "event": "move-ended",
+                    "subject": "this-unit",
+                    "filter": {
+                      "move_types": [
+                        "fall-back"
+                      ]
+                    },
+                    "window": "turn"
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "targeting",
+                  "target": "this-unit",
+                  "modifier": {
+                    "by": "this-unit",
+                    "may": "cannot-target",
+                    "kind": "shoot",
+                    "target": {
+                      "owner": "enemy"
+                    },
+                    "target_condition": {
+                      "type": "unit-state",
+                      "parameters": {
+                        "subject": "this-unit",
+                        "state": "engaged",
+                        "with": "ability-unit",
+                        "at": "turn-start"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "targeting",
+                  "target": "this-unit",
+                  "modifier": {
+                    "by": "this-unit",
+                    "may": "cannot-target",
+                    "kind": "charge",
+                    "target": {
+                      "owner": "enemy"
+                    },
+                    "target_condition": {
+                      "type": "unit-state",
+                      "parameters": {
+                        "subject": "this-unit",
+                        "state": "engaged",
+                        "with": "ability-unit",
+                        "at": "turn-start"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "operator": "or",
+              "operands": [
+                {
+                  "type": "happened",
+                  "parameters": {
+                    "event": "move-ended",
+                    "subject": "this-unit",
+                    "filter": {
+                      "move_types": [
+                        "advance"
+                      ]
+                    },
+                    "window": "turn"
+                  }
+                },
+                {
+                  "type": "happened",
+                  "parameters": {
+                    "event": "move-ended",
+                    "subject": "this-unit",
+                    "filter": {
+                      "move_types": [
+                        "fall-back"
+                      ]
+                    },
+                    "window": "turn"
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "targeting",
+                  "target": "this-unit",
+                  "modifier": {
+                    "by": "this-unit",
+                    "may": "cannot-target",
+                    "kind": "shoot",
+                    "target": {
+                      "owner": "enemy"
+                    },
+                    "target_condition": {
+                      "operator": "or",
+                      "operands": [
+                        {
+                          "type": "happened",
+                          "parameters": {
+                            "event": "targets-selected",
+                            "subject": {
+                              "owner": "any",
+                              "excluding": "ability-unit"
+                            },
+                            "object": "this-unit",
+                            "filter": {
+                              "kind": "attack"
+                            },
+                            "window": "phase"
+                          }
+                        },
+                        {
+                          "type": "happened",
+                          "parameters": {
+                            "event": "targets-selected",
+                            "subject": {
+                              "owner": "any",
+                              "excluding": "ability-unit"
+                            },
+                            "object": "this-unit",
+                            "filter": {
+                              "kind": "charge"
+                            },
+                            "window": "phase"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "type": "targeting",
+                  "target": "this-unit",
+                  "modifier": {
+                    "by": "this-unit",
+                    "may": "cannot-target",
+                    "kind": "charge",
+                    "target": {
+                      "owner": "enemy"
+                    },
+                    "target_condition": {
+                      "operator": "or",
+                      "operands": [
+                        {
+                          "type": "happened",
+                          "parameters": {
+                            "event": "targets-selected",
+                            "subject": {
+                              "owner": "any",
+                              "excluding": "ability-unit"
+                            },
+                            "object": "this-unit",
+                            "filter": {
+                              "kind": "attack"
+                            },
+                            "window": "phase"
+                          }
+                        },
+                        {
+                          "type": "happened",
+                          "parameters": {
+                            "event": "targets-selected",
+                            "subject": {
+                              "owner": "any",
+                              "excluding": "ability-unit"
+                            },
+                            "object": "this-unit",
+                            "filter": {
+                              "kind": "charge"
+                            },
+                            "window": "phase"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          }
         ]
       }
     },
@@ -3455,31 +3724,41 @@
             "filter": {
               "to": "fight"
             },
+            "condition": {
+              "type": "happened",
+              "parameters": {
+                "event": "move-ended",
+                "filter": {
+                  "move_types": [
+                    "charge"
+                  ]
+                },
+                "window": "turn"
+              }
+            },
             "optional": true
           },
           "effect": {
             "type": "sequence",
             "steps": [
               {
-                "type": "conditional",
-                "condition": {
-                  "type": "happened",
-                  "parameters": {
-                    "event": "move-ended",
-                    "filter": {
-                      "move_types": [
-                        "charge"
-                      ]
-                    },
-                    "window": "turn"
-                  }
-                },
-                "effect": {
-                  "type": "targeting",
-                  "target": "this-unit",
-                  "modifier": {
-                    "may": "cannot-target",
-                    "kind": "attack"
+                "type": "targeting",
+                "target": "this-unit",
+                "modifier": {
+                  "by": "this-unit",
+                  "may": "cannot-target",
+                  "kind": "attack",
+                  "target": {
+                    "owner": "enemy"
+                  },
+                  "target_condition": {
+                    "type": "unit-state",
+                    "parameters": {
+                      "subject": "this-unit",
+                      "state": "engaged",
+                      "with": "ability-unit",
+                      "at": "turn-start"
+                    }
                   }
                 }
               },
@@ -3487,8 +3766,27 @@
                 "type": "targeting",
                 "target": "this-unit",
                 "modifier": {
+                  "by": "this-unit",
                   "may": "cannot-target",
-                  "kind": "attack"
+                  "kind": "attack",
+                  "target": {
+                    "owner": "enemy"
+                  },
+                  "target_condition": {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "targets-selected",
+                      "subject": {
+                        "owner": "any",
+                        "excluding": "ability-unit"
+                      },
+                      "object": "this-unit",
+                      "filter": {
+                        "kind": "attack"
+                      },
+                      "window": "phase"
+                    }
+                  }
                 }
               },
               {
@@ -3521,12 +3819,13 @@
                 ]
               }
             ]
-          }
+          },
+          "duration": "phase"
         }
       ]
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },

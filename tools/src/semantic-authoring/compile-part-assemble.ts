@@ -192,9 +192,10 @@ export function assemblePart(
   let body: Node | null = steps.length === 1 ? steps[0]! : { type: "sequence", steps };
   // The first part before any wrap: a part list below keeps a wrapped first part whole (an aura's, a selection's).
   const unwrapped = body;
-  // "…. Each time …, it can use this ability. If it does, until the end of the phase: ■ A ■ B": one printed duration in a
-  // later part, after an earlier effect, lasts only that part, not the effects before its moment.
-  const laterPartDuration = !split && durations.length === 1 && durationAt.length === 1 && partOf(durationAt[0]!) > 0 ? partOf(durationAt[0]!) : 0;
+  // "X units have the following ability: … Each time …, it can use this ability. If it does, until the end of the phase: ■ A ■ B":
+  // one printed duration in a later part, after only the grant of the ability, lasts that part, not the grant.
+  const onlyGrantBefore = partStarts.length > 0 && list.every((leaf, at) => at >= partStarts[0]!.index || leaf.role !== "EFFECT" || leaf.family_id === "ability-record-grant");
+  const laterPartDuration = !split && onlyGrantBefore && durations.length === 1 && durationAt.length === 1 && partOf(durationAt[0]!) > 0 ? partOf(durationAt[0]!) : 0;
   const scopeDuration = split || laterPartDuration ? "permanent" : (durations[0] ?? "permanent");
   // "If an enemy unit within 8\" of this unit is below Starting Strength": a gate on each unit an
   // aura or a for-each reaches holds per recipient, inside the wrap, not once around it.

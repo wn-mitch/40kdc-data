@@ -1,4 +1,4 @@
-# MFM dataslates — DRY RUN
+# MFM dataslates — APPLIED
 
 Current dataslate: `11th/mfm-995`.
 
@@ -15,10 +15,10 @@ dump confirmation.
 | wargear-options | 0 | 0 | 1234 | 0 |
 | leader-attachments | 0 | 0 | 283 | 8 |
 | enhancements | 0 | 0 | 890 | 0 |
-| detachments | 0 | 0 | 163 | 294 |
-| stratagems | 0 | 0 | 1030 | 283 |
-| abilities | 0 | 1 | 3620 | 914 |
-| phase-mappings | 0 | 1 | 1126 | 454 |
+| detachments | 2 | 0 | 162 | 293 |
+| stratagems | 24 | 0 | 1006 | 283 |
+| abilities | 53 | 0 | 3569 | 913 |
+| phase-mappings | 18 | 0 | 1109 | 454 |
 | resource-pools | 0 | 0 | 0 | 6 |
 
 ## Abilities by faction
@@ -26,40 +26,40 @@ dump confirmation.
 | Faction | Promote | Demote | Kept | Untouched |
 |---|--:|--:|--:|--:|
 | _core | 0 | 0 | 8 | 18 |
-| adepta-sororitas | 0 | 0 | 117 | 31 |
-| adeptus-astartes | 0 | 0 | 208 | 42 |
-| adeptus-custodes | 0 | 0 | 138 | 20 |
-| adeptus-mechanicus | 0 | 0 | 137 | 30 |
-| aeldari | 0 | 0 | 243 | 57 |
-| agents-of-the-imperium | 0 | 0 | 96 | 42 |
-| astra-militarum | 0 | 0 | 193 | 58 |
-| black-templars | 0 | 0 | 50 | 13 |
+| adepta-sororitas | 3 | 0 | 114 | 31 |
+| adeptus-astartes | 4 | 0 | 204 | 42 |
+| adeptus-custodes | 1 | 0 | 137 | 20 |
+| adeptus-mechanicus | 2 | 0 | 135 | 30 |
+| aeldari | 4 | 0 | 239 | 57 |
+| agents-of-the-imperium | 2 | 0 | 94 | 42 |
+| astra-militarum | 4 | 0 | 189 | 58 |
+| black-templars | 1 | 0 | 49 | 13 |
 | blood-angels | 0 | 0 | 49 | 12 |
-| chaos-daemons | 0 | 0 | 161 | 34 |
-| chaos-knights | 0 | 0 | 83 | 27 |
-| chaos-space-marines | 0 | 0 | 220 | 61 |
-| dark-angels | 0 | 0 | 59 | 18 |
-| death-guard | 0 | 0 | 122 | 38 |
+| chaos-daemons | 1 | 0 | 160 | 34 |
+| chaos-knights | 1 | 0 | 82 | 27 |
+| chaos-space-marines | 4 | 0 | 216 | 61 |
+| dark-angels | 1 | 0 | 58 | 18 |
+| death-guard | 1 | 0 | 121 | 38 |
 | deathwatch | 0 | 0 | 31 | 5 |
-| drukhari | 0 | 0 | 125 | 39 |
-| emperors-children | 0 | 1 | 118 | 27 |
-| genestealer-cults | 0 | 0 | 115 | 32 |
-| grey-knights | 0 | 0 | 120 | 14 |
+| drukhari | 1 | 0 | 124 | 39 |
+| emperors-children | 3 | 0 | 117 | 26 |
+| genestealer-cults | 1 | 0 | 114 | 32 |
+| grey-knights | 2 | 0 | 118 | 14 |
 | imperial-fists | 0 | 0 | 8 | 3 |
 | imperial-knights | 0 | 0 | 89 | 29 |
 | iron-hands | 0 | 0 | 9 | 2 |
-| leagues-of-votann | 0 | 0 | 127 | 28 |
-| necrons | 0 | 0 | 189 | 41 |
-| orks | 0 | 0 | 172 | 38 |
+| leagues-of-votann | 2 | 0 | 125 | 28 |
+| necrons | 2 | 0 | 187 | 41 |
+| orks | 3 | 0 | 169 | 38 |
 | raven-guard | 0 | 0 | 10 | 1 |
 | salamanders | 0 | 0 | 6 | 5 |
 | space-wolves | 0 | 0 | 74 | 13 |
-| tau-empire | 0 | 0 | 134 | 32 |
-| thousand-sons | 0 | 0 | 120 | 38 |
-| tyranids | 0 | 0 | 150 | 36 |
+| tau-empire | 3 | 0 | 131 | 32 |
+| thousand-sons | 2 | 0 | 118 | 38 |
+| tyranids | 3 | 0 | 147 | 36 |
 | ultramarines | 0 | 0 | 10 | 1 |
 | white-scars | 0 | 0 | 11 | 0 |
-| world-eaters | 0 | 0 | 118 | 29 |
+| world-eaters | 2 | 0 | 116 | 29 |
 
 ## Ability verification outcomes
 
@@ -139,8 +139,8 @@ dump confirmation.
 | drukhari | unpublished | 10 |
 | drukhari | verified | 125 |
 | emperors-children | digest-differs | 7 |
-| emperors-children | unpublished | 21 |
-| emperors-children | verified | 118 |
+| emperors-children | unpublished | 19 |
+| emperors-children | verified | 120 |
 | genestealer-cults | digest-differs | 6 |
 | genestealer-cults | stub | 14 |
 | genestealer-cults | unpublished | 12 |
