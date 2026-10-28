@@ -74,5 +74,15 @@ describe("mortal wounds outside the attack", () => {
     // One die per model: the expectation grows with the unit's default model count.
     const more = memberMortalSources(ds, { unitId: unit!.id, factionId: unit!.raw.faction_id, detachmentId: null, attachedUnitIds: [], supportUnitIds: [] }, { ...shooting, attackerModelCount: 100 });
     expect(more.sources.find((entry) => entry.abilityId === "krushin-impetus-orks")!.expected).toBeGreaterThan(krushin!.expected);
+    expect(more.unverified).not.toContain(krushin!.label);
+  });
+
+  it("names a pre-launch record's mortal wounds without offering them as a toggle", () => {
+    const pulse = ds.abilities.getInFaction("gravitic-pulse-necrons", "necrons");
+    expect(pulse?.raw.game_version?.dataslate).toBe("pre-launch-provisional");
+    const { sources, unverified, error } = memberMortalSources(ds, { unitId: "obelisk", factionId: "necrons", detachmentId: null, attachedUnitIds: [], supportUnitIds: [] }, shooting);
+    expect(error).toBeUndefined();
+    expect(sources.some((entry) => entry.abilityId === "gravitic-pulse-necrons")).toBe(false);
+    expect(unverified).toContain(pulse!.name);
   });
 });

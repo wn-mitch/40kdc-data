@@ -3,7 +3,7 @@
   import { momentLabel } from "./scenario.js";
   import type { MortalSourceChoice } from "./output-model.js";
 
-  let { sources, error }: { sources: MortalSourceChoice[]; error?: string } = $props();
+  let { sources, unverified = [], error }: { sources: MortalSourceChoice[]; unverified?: string[]; error?: string } = $props();
 
   const active = $derived(new Set(salvo.mortalSourcesActive));
 
@@ -16,8 +16,9 @@
 
 {#if error}
   <p class="error" role="alert">Mortal wounds could not be read: {error}</p>
-{:else if sources.length > 0}
+{:else if sources.length > 0 || unverified.length > 0}
   <div class="section-label">Mortal wounds</div>
+  {#if sources.length > 0}
   <p class="hint dim">Abilities that inflict mortal wounds outside the attack. Tick the ones that happen to count them in the total.</p>
   <div class="ability-list">
     {#each sources as source (source.key)}
@@ -31,4 +32,8 @@
       </label>
     {/each}
   </div>
+  {/if}
+  {#if unverified.length > 0}
+    <p class="hint dim">Not counted until checked against the rule: {unverified.join(", ")}.</p>
+  {/if}
 {/if}

@@ -312,14 +312,15 @@ export function memberMortalSources(
   ds: Dataset,
   attacker: AttackerChoice,
   context: EngineContext,
-): { sources: MortalSourceChoice[]; needs: AbilityNeed[]; error?: string } {
-  if (!attacker.unitId) return { sources: [], needs: [] };
+): { sources: MortalSourceChoice[]; needs: AbilityNeed[]; unverified: string[]; error?: string } {
+  if (!attacker.unitId) return { sources: [], needs: [], unverified: [] };
   const members = memberUnits(ds, attacker.factionId, [attacker.unitId, ...attacker.attachedUnitIds]);
   const ids = members.map((member) => member.memberId);
   const roles = memberRoles(ds, attacker.unitId, attacker.attachedUnitIds);
   const models = members.reduce((sum, member) => sum + member.loadout.modelCount, 0);
   const sources = new Map<string, MortalSourceChoice>();
   const needs = new Map<string, AbilityNeed>();
+  const unverified = new Set<string>();
   try {
     for (const member of members) {
       const attached = members.length > 1;
@@ -334,15 +335,28 @@ export function memberMortalSources(
         { ...context, attackerModelCount: context.attackerModelCount ?? models },
       );
       for (const source of result.sources) {
+        if (isProvisional(ds, source.abilityId, attacker.factionId)) {
+          unverified.add(source.label);
+          continue;
+        }
         const key = mortalSourceKey(source);
         if (!sources.has(key)) sources.set(key, { ...source, key });
         for (const need of source.needs) needs.set(`${source.abilityId}\u0000${need.key}`, { ...need, abilityId: source.abilityId, label: source.label });
       }
     }
   } catch (err) {
-    return { sources: [], needs: [], error: (err as Error).message };
+    return { sources: [], needs: [], unverified: [], error: (err as Error).message };
   }
-  return { sources: [...sources.values()], needs: [...needs.values()] };
+  return { sources: [...sources.values()], needs: [...needs.values()], unverified: [...unverified] };
+}
+
+/**
+ * Whether an ability record still carries its pre-launch DSL, which has not been checked against
+ * the rule: its mortal wounds are named but never offered as a toggle or counted.
+ */
+function isProvisional(ds: Dataset, abilityId: string, factionId: string | null): boolean {
+  const ability = (factionId ? ds.abilities.getInFaction(abilityId, factionId) : undefined) ?? ds.abilities.getAny(abilityId);
+  return ability?.raw.game_version?.dataslate === "pre-launch-provisional";
 }
 
 /**
