@@ -181,3 +181,60 @@ def enumerate_roll_allocation(
             }
         )
     return True
+
+
+def self_designations(effect: Any, ability_id: str) -> frozenset[str]:
+    """The tags ``effect`` designates on the units holding the ability (``this-unit``,
+    ``ability-unit``, or a friendly filter naming the ability in ``has_ability``)."""
+    tags: set[str] = set()
+
+    def visit(node: Any) -> None:
+        if isinstance(node, list):
+            for item in node:
+                visit(item)
+            return
+        if not isinstance(node, dict):
+            return
+        modifier = node.get("modifier")
+        if (
+            node.get("type") == "designate"
+            and isinstance(modifier, dict)
+            and isinstance(modifier.get("tag"), str)
+            and modifier.get("clear") is not True
+        ):
+            target = node.get("target")
+            has_ability = target.get("has_ability") if isinstance(target, dict) else None
+            holders = target in ("this-unit", "ability-unit") or (
+                isinstance(target, dict)
+                and target.get("owner") == "friendly"
+                and isinstance(has_ability, list)
+                and ability_id in has_ability
+            )
+            if holders:
+                tags.add(modifier["tag"])
+        for value in node.values():
+            visit(value)
+
+    visit(effect)
+    return frozenset(tags)
+
+
+def self_designation_gate(condition: dict[str, Any], opts: dict[str, Any]) -> str | None:
+    """The tag of a ``this-unit`` designation gate the ability itself grants its holders, when the
+    context does not declare the unit's designations: the player readies the unit, so the gate is
+    the player's to open."""
+    tags = opts.get("selfDesignations")
+    if opts["context"].get("attackerDesignations") is not None or tags is None:
+        return None
+    parameters = condition.get("parameters")
+    if (
+        condition.get("type") != "matches"
+        or not isinstance(parameters, dict)
+        or parameters.get("subject") != "this-unit"
+    ):
+        return None
+    filter_ = parameters.get("filter")
+    if not isinstance(filter_, dict) or len(filter_) != 1:
+        return None
+    tag = filter_.get("designated")
+    return tag if isinstance(tag, str) and tag in tags else None

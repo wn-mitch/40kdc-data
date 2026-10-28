@@ -5,6 +5,8 @@
 //! `collectGatedBuffs`, `collectOptionBuffs`, `splitStanceOption` and `offerStanceGated` in
 //! `tools/src/cruncher/from-dsl.ts`.
 
+use std::collections::BTreeSet;
+
 use serde_json::Value;
 
 use super::applicability::{
@@ -131,6 +133,92 @@ pub(super) fn offer_stance_gated(
         requires: None,
         cap_raise: None,
         gate: Some(gate),
+    });
+}
+
+/// The tags `effect` designates on the units holding the ability (`this-unit`, `ability-unit`, or
+/// a friendly filter naming the ability in `has_ability`): Martial Katah readies every such unit.
+pub(super) fn self_designations(effect: &Value, ability_id: &str) -> BTreeSet<String> {
+    fn visit(node: &Value, ability_id: &str, tags: &mut BTreeSet<String>) {
+        match node {
+            Value::Array(items) => items.iter().for_each(|item| visit(item, ability_id, tags)),
+            Value::Object(n) => {
+                if is_str(n, "type", "designate") {
+                    if let Some(modifier) = object(n.get("modifier")) {
+                        let tag = modifier.get("tag").and_then(Value::as_str);
+                        let clear = modifier.get("clear") == Some(&Value::Bool(true));
+                        let holders = match n.get("target") {
+                            Some(Value::String(target)) => {
+                                target == "this-unit" || target == "ability-unit"
+                            }
+                            Some(Value::Object(target)) => {
+                                is_str(target, "owner", "friendly")
+                                    && target
+                                        .get("has_ability")
+                                        .and_then(Value::as_array)
+                                        .is_some_and(|ids| {
+                                            ids.iter().any(|id| id.as_str() == Some(ability_id))
+                                        })
+                            }
+                            _ => false,
+                        };
+                        if let (Some(tag), false, true) = (tag, clear, holders) {
+                            tags.insert(tag.to_owned());
+                        }
+                    }
+                }
+                n.values().for_each(|value| visit(value, ability_id, tags));
+            }
+            _ => {}
+        }
+    }
+    let mut tags = BTreeSet::new();
+    visit(effect, ability_id, &mut tags);
+    tags
+}
+
+/// The tag of a `this-unit` designation gate the ability itself grants its holders, when the
+/// context does not declare the unit's designations: the player readies the unit, so the gate is
+/// the player's to open.
+pub(super) fn self_designation_gate<'c>(condition: &'c Obj, opts: &WalkOpts) -> Option<&'c str> {
+    if opts.context.attacker_designations.is_some() || !is_str(condition, "type", "matches") {
+        return None;
+    }
+    let parameters = object(condition.get("parameters"))?;
+    if !is_str(parameters, "subject", "this-unit") {
+        return None;
+    }
+    let filter = object(parameters.get("filter"))?;
+    if filter.len() != 1 {
+        return None;
+    }
+    let tag = filter.get("designated")?.as_str()?;
+    opts.self_designations.contains(tag).then_some(tag)
+}
+
+/// What a self-designation gate opens becomes opt-in levers requiring that designation.
+pub(super) fn offer_self_designated(node: &Obj, tag: &str, opts: &WalkOpts, out: &mut Out) {
+    let mut sub = Out::default();
+    walk(node.get("effect").unwrap_or(&Value::Null), opts, &mut sub);
+    out.unsupported.extend(sub.unsupported);
+    let requirement = serde_json::json!({ "designated": tag });
+    for mut lever in sub.activatable {
+        let mut requires = vec![requirement.clone()];
+        requires.extend(lever.requires.take().unwrap_or_default());
+        lever.requires = Some(requires);
+        out.activatable.push(lever);
+    }
+    if sub.applied.is_empty() {
+        return;
+    }
+    out.activatable.push(Lever {
+        id: format!("{}#{tag}", opts.ability_id),
+        label: format!("{tag}: {}", label_for_buffs(&sub.applied)),
+        buffs: sub.applied,
+        group: None,
+        requires: Some(vec![requirement]),
+        cap_raise: None,
+        gate: None,
     });
 }
 

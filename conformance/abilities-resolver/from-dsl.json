@@ -7752,6 +7752,203 @@
       }
     },
     {
+      "caseId": "canonical/scenario/self-designation-gate",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "designate",
+            "target": {
+              "owner": "friendly",
+              "has_ability": [
+                "fabricated-scenario"
+              ]
+            },
+            "modifier": {
+              "tag": "readied"
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "this-unit",
+                "filter": {
+                  "designated": "readied"
+                }
+              }
+            },
+            "effect": {
+              "type": "roll-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "hit",
+                "operation": "add",
+                "value": 1
+              }
+            }
+          }
+        ]
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "unit-filter target: identity, state or model membership is unresolved"
+        ],
+        "activatable": [
+          {
+            "id": "fabricated-scenario#readied",
+            "label": "readied: +1 to hit",
+            "group": null,
+            "requires": [
+              {
+                "designated": "readied"
+              }
+            ],
+            "capRaise": null,
+            "buffs": [
+              {
+                "type": "hit-mod",
+                "value": 1
+              }
+            ]
+          }
+        ],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/self-designation-other-tag",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "designate",
+            "target": {
+              "owner": "friendly",
+              "has_ability": [
+                "fabricated-scenario"
+              ]
+            },
+            "modifier": {
+              "tag": "readied"
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "this-unit",
+                "filter": {
+                  "designated": "marked"
+                }
+              }
+            },
+            "effect": {
+              "type": "roll-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "hit",
+                "operation": "add",
+                "value": 1
+              }
+            }
+          }
+        ]
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "unit-filter target: identity, state or model membership is unresolved",
+          "conditional: cannot evaluate condition \"matches\" against current context"
+        ],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/self-designation-declared",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "designate",
+            "target": {
+              "owner": "friendly",
+              "has_ability": [
+                "fabricated-scenario"
+              ]
+            },
+            "modifier": {
+              "tag": "readied"
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "this-unit",
+                "filter": {
+                  "designated": "readied"
+                }
+              }
+            },
+            "effect": {
+              "type": "roll-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "hit",
+                "operation": "add",
+                "value": 1
+              }
+            }
+          }
+        ]
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerDesignations": []
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "unit-filter target: identity, state or model membership is unresolved"
+        ],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
       "caseId": "canonical/scenario/rule-active-option-both-sides",
       "abilityId": "fabricated-scenario",
       "source": {

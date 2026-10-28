@@ -29,6 +29,8 @@ from wh40kdc.cruncher.from_dsl_shapes import (
     enumerate_roll_allocation,
     roll_label,
     scaled_to_cap,
+    self_designation_gate,
+    self_designations,
     stance_gate_fields,
     unsized_value_reason,
 )
@@ -99,6 +101,8 @@ def effect_to_buffs(
         "perspective": perspective,
         "abilityId": ability_id,
         "duration": activation.get("duration") if activation else None,
+        # Tags the owning ability designates on the units holding it.
+        "selfDesignations": self_designations(effect, ability_id),
     }
     _walk(effect, source, opts, out)
     if activation and (
@@ -1677,6 +1681,10 @@ def _translate_conditional(
             {"reason": POST_ATTACK_MOMENT, "effectFragment": node["_activation_source"]}
         )
         return
+    designation = self_designation_gate(condition, opts)
+    if designation is not None:
+        _offer_self_designated(node, designation, source, opts, out)
+        return
     stance = _split_stance_option(condition) if opts["context"].get("activeRules") is None else None
     if stance is not None:
         _offer_stance_gated(node, stance, source, opts, out)
@@ -1826,6 +1834,33 @@ def _offer_stance_gated(
             **fields,
         }
     )
+
+
+def _offer_self_designated(
+    node: dict[str, Any],
+    tag: str,
+    source: BuffSource,
+    opts: dict[str, Any],
+    out: EffectTranslation,
+) -> None:
+    """What a self-designation gate opens becomes opt-in levers requiring that designation."""
+    sub: EffectTranslation = {"applied": [], "unsupported": [], "activatable": []}
+    _walk(node.get("effect"), source, opts, sub)
+    out["unsupported"].extend(sub["unsupported"])
+    requirement = {"designated": tag}
+    out["activatable"].extend(
+        {**lever, "requires": [requirement, *(lever.get("requires") or [])]}
+        for lever in sub["activatable"]
+    )
+    if sub["applied"]:
+        out["activatable"].append(
+            {
+                "id": f"{opts['abilityId']}#{tag}",
+                "label": f"{tag}: {_label_for_buffs(sub['applied'])}",
+                "buffs": sub["applied"],
+                "requires": [requirement],
+            }
+        )
 
 
 def _translate_named_effect(

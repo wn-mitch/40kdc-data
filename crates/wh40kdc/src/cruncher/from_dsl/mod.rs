@@ -177,6 +177,9 @@ pub(crate) struct WalkOpts<'a> {
     source_meta: &'a BuffSource,
     duration: Option<Value>,
     granted_holder: bool,
+    /// Tags the owning ability designates on the units holding it
+    /// ([`gated::self_designations`]).
+    self_designations: &'a std::collections::BTreeSet<String>,
 }
 
 const STOCHASTIC_DICE_GATED: &str = "dice-gated effect: stochastic; not expressible as a buff";
@@ -257,6 +260,7 @@ pub(crate) fn effect_to_buffs_with_duration(
         _ => ("effect", None),
     };
     let source_value = serde_json::to_value(source).expect("a buff source serializes");
+    let self_designations = gated::self_designations(&effect, ability_id);
     let opts = WalkOpts {
         context,
         perspective,
@@ -266,6 +270,7 @@ pub(crate) fn effect_to_buffs_with_duration(
         ability_kind,
         duration: duration.cloned(),
         granted_holder: false,
+        self_designations: &self_designations,
     };
     let mut out = Out::default();
     walk(&effect, &opts, &mut out);

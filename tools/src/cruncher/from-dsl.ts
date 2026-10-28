@@ -219,7 +219,7 @@ export function effectToBuffs(
     if (activation) activationSources.set(to, activation);
   });
   const abilityId = source.kind === "ability" ? source.abilityId : "effect";
-  walk(effect, source, { context, perspective, abilityId, duration: activation?.duration }, out);
+  walk(effect, source, { context, perspective, abilityId, duration: activation?.duration, selfDesignations: selfDesignations(effect, abilityId) }, out);
   if (activation?.usage != null || activation?.cost != null || activation?.optional === true) {
     const { duration: _duration, ...requirement } = activation;
     const requires = [requirement];
@@ -248,6 +248,8 @@ type WalkOpts = {
   grantedHolder?: boolean;
   /** Lifetime inherited from the owning ability or nearest ability part. */
   duration?: unknown;
+  /** Tags the owning ability designates on the units holding it ({@link selfDesignations}). */
+  selfDesignations?: ReadonlySet<string>;
 };
 
 function walk(
@@ -1444,6 +1446,11 @@ function translateConditional(
     out.unsupported.push({ reason: POST_ATTACK_MOMENT, effectFragment: activation.fragment });
     return;
   }
+  const designation = selfDesignationGate(condition, opts);
+  if (designation !== undefined) {
+    offerSelfDesignated(node, designation, source, opts, out);
+    return;
+  }
   const stance = opts.context.activeRules === undefined ? splitStanceOption(condition) : undefined;
   if (stance) {
     offerStanceGated(node, stance, source, opts, out);
@@ -1544,6 +1551,61 @@ function offerStanceGated(
     return;
   }
   out.activatable.push({ id, label: `${name}: ${labelForBuffs(sub.applied)}`, buffs: sub.applied, ...fields });
+}
+
+/**
+ * The tags `effect` designates on the units holding the ability (`this-unit`, `ability-unit`, or a
+ * friendly filter naming the ability in `has_ability`): Martial Katah readies every such unit.
+ */
+function selfDesignations(effect: unknown, abilityId: string): ReadonlySet<string> {
+  const tags = new Set<string>();
+  const visit = (node: unknown): void => {
+    if (Array.isArray(node)) {
+      node.forEach(visit);
+      return;
+    }
+    if (!isObject(node)) return;
+    if (node.type === "designate" && isObject(node.modifier) && typeof node.modifier.tag === "string" && node.modifier.clear !== true) {
+      const target = node.target;
+      const holders = target === "this-unit" || target === "ability-unit" ||
+        (isObject(target) && target.owner === "friendly" && Array.isArray(target.has_ability) && target.has_ability.includes(abilityId));
+      if (holders) tags.add(node.modifier.tag);
+    }
+    Object.values(node).forEach(visit);
+  };
+  visit(effect);
+  return tags;
+}
+
+/**
+ * The tag of a `this-unit` designation gate the ability itself grants its holders, when the
+ * context does not declare the unit's designations: the player readies the unit, so the gate is
+ * the player's to open.
+ */
+function selfDesignationGate(condition: Record<string, unknown>, opts: WalkOpts): string | undefined {
+  if (opts.context.attackerDesignations !== undefined || opts.selfDesignations === undefined) return undefined;
+  if (condition.type !== "matches" || !isObject(condition.parameters) || condition.parameters.subject !== "this-unit") return undefined;
+  const filter = condition.parameters.filter;
+  if (!isObject(filter) || Object.keys(filter).length !== 1 || typeof filter.designated !== "string") return undefined;
+  return opts.selfDesignations.has(filter.designated) ? filter.designated : undefined;
+}
+
+/** What a self-designation gate opens becomes opt-in levers requiring that designation. */
+function offerSelfDesignated(
+  node: Record<string, unknown>,
+  tag: string,
+  source: BuffSource,
+  opts: WalkOpts,
+  out: EffectTranslation,
+): void {
+  const sub: EffectTranslation = { applied: [], unsupported: [], activatable: [] };
+  walk(node.effect, source, opts, sub);
+  out.unsupported.push(...sub.unsupported);
+  const requirement = { designated: tag };
+  out.activatable.push(...sub.activatable.map((lever) => ({ ...lever, requires: [requirement, ...(lever.requires ?? [])] })));
+  if (sub.applied.length > 0) {
+    out.activatable.push({ id: `${opts.abilityId}#${tag}`, label: `${tag}: ${labelForBuffs(sub.applied)}`, buffs: sub.applied, requires: [requirement] });
+  }
 }
 
 /** A named rule is transparent unless using it requires an activation. */

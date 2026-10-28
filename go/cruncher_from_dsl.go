@@ -44,6 +44,9 @@ type dslOpts struct {
 	defaultTarget string
 	grantedHolder bool
 	duration      any
+	// selfDesignations holds the tags the owning ability designates on the
+	// units holding it (selfDesignations); nil outside an ability walk.
+	selfDesignations map[string]bool
 }
 
 // effectToBuffs walks an ability DSL effect tree, producing the buff stack plus
@@ -70,7 +73,7 @@ func effectToBuffs(effect any, source map[string]any, context map[string]any, pe
 	if len(activation) > 0 {
 		act = activation[0]
 	}
-	opts := dslOpts{context: context, perspective: perspective, abilityID: abilityID}
+	opts := dslOpts{context: context, perspective: perspective, abilityID: abilityID, selfDesignations: selfDesignations(effect, abilityID)}
 	if act != nil {
 		opts.duration = act["duration"]
 	}
@@ -1842,6 +1845,10 @@ func translateConditional(node, source map[string]any, opts dslOpts, out *effect
 	metadata := activationMetadata(node)
 	if metadata != nil && isPostOwnAttackMoment(metadata["trigger"]) {
 		out.unsupported = append(out.unsupported, unsup(postAttackMoment, metadata["fragment"]))
+		return
+	}
+	if tag, ok := selfDesignationGate(condition, opts); ok {
+		offerSelfDesignated(node, tag, source, opts, out)
 		return
 	}
 	if activeRulesUndeclared(opts.context) {

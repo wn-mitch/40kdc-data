@@ -1,9 +1,12 @@
 package wh40kdc
 
-// Stance-option gates: a `rule-active` condition naming one option of a
-// stance-select rule, evaluated without a declared activeRules list. Mirror of
-// splitStanceOption / offerStanceGated / collectOptionBuffs in
-// tools/src/cruncher/from-dsl.ts.
+// Player-opened gates, offered as levers when the context leaves them unknown:
+// stance-option gates (a `rule-active` condition naming one option of a
+// stance-select rule, without a declared activeRules list) and self-designation
+// gates (a `this-unit` designation the ability itself grants its holders,
+// without declared attackerDesignations). Mirror of splitStanceOption /
+// offerStanceGated / collectOptionBuffs / selfDesignations /
+// selfDesignationGate / offerSelfDesignated in tools/src/cruncher/from-dsl.ts.
 
 // stanceOptionRef is one option of a stance-select rule, as a rule-active
 // condition names it: {ability_id, option_id}.
@@ -225,4 +228,104 @@ func withStanceGate(lever map[string]any, gate *stanceGate) map[string]any {
 		lever[gate.field()] = gate.option.toMap()
 	}
 	return lever
+}
+
+// selfDesignations is the set of tags effect designates on the units holding
+// the ability (`this-unit`, `ability-unit`, or a friendly filter naming the
+// ability in `has_ability`): Martial Katah readies every such unit.
+func selfDesignations(effect any, abilityID string) map[string]bool {
+	tags := map[string]bool{}
+	var visit func(node any)
+	visit = func(node any) {
+		if list, ok := asList(node); ok {
+			for _, item := range list {
+				visit(item)
+			}
+			return
+		}
+		m, ok := asMap(node)
+		if !ok {
+			return
+		}
+		if m["type"] == "designate" {
+			if modifier, ok := asMap(m["modifier"]); ok && modifier["clear"] != true {
+				if tag, ok := modifier["tag"].(string); ok && designatesHolders(m["target"], abilityID) {
+					tags[tag] = true
+				}
+			}
+		}
+		for _, value := range m {
+			visit(value)
+		}
+	}
+	visit(effect)
+	return tags
+}
+
+// designatesHolders reports whether a designate target is the units holding
+// abilityID.
+func designatesHolders(target any, abilityID string) bool {
+	if target == "this-unit" || target == "ability-unit" {
+		return true
+	}
+	filter, ok := asMap(target)
+	if !ok || filter["owner"] != "friendly" {
+		return false
+	}
+	abilities, ok := asList(filter["has_ability"])
+	if !ok {
+		return false
+	}
+	for _, id := range abilities {
+		if id == abilityID {
+			return true
+		}
+	}
+	return false
+}
+
+// selfDesignationGate is the tag of a `this-unit` designation gate the ability
+// itself grants its holders, when the context does not declare the unit's
+// designations: the player readies the unit, so the gate is the player's to
+// open.
+func selfDesignationGate(condition map[string]any, opts dslOpts) (string, bool) {
+	if opts.context["attackerDesignations"] != nil || opts.selfDesignations == nil {
+		return "", false
+	}
+	params, ok := asMap(condition["parameters"])
+	if condition["type"] != "matches" || !ok || params["subject"] != "this-unit" {
+		return "", false
+	}
+	filter, ok := asMap(params["filter"])
+	if !ok || len(filter) != 1 {
+		return "", false
+	}
+	tag, ok := filter["designated"].(string)
+	if !ok || !opts.selfDesignations[tag] {
+		return "", false
+	}
+	return tag, true
+}
+
+// offerSelfDesignated turns what a self-designation gate opens into opt-in
+// levers requiring that designation.
+func offerSelfDesignated(node map[string]any, tag string, source map[string]any, opts dslOpts, out *effectTranslation) {
+	sub := &effectTranslation{applied: []any{}, unsupported: []any{}, activatable: []any{}}
+	dslWalk(node["effect"], source, opts, sub)
+	out.unsupported = append(out.unsupported, sub.unsupported...)
+	for _, leverAny := range sub.activatable {
+		lever, ok := asMap(leverAny)
+		if !ok {
+			continue
+		}
+		withRequirement := cloneMap(lever)
+		withRequirement["requires"] = append([]any{map[string]any{"designated": tag}}, getList(lever, "requires")...)
+		out.activatable = append(out.activatable, withRequirement)
+	}
+	if len(sub.applied) > 0 {
+		out.activatable = append(out.activatable, map[string]any{
+			"id": opts.abilityID + "#" + tag, "label": tag + ": " + labelForBuffs(sub.applied),
+			"buffs": sub.applied, "requires": []any{map[string]any{"designated": tag}},
+		})
+	}
 }
