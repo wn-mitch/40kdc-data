@@ -606,6 +606,9 @@
   {
     "id": "vigilator-squad",
     "name": "Vigilator Squad",
+    "aliases": [
+      "Vigilators"
+    ],
     "faction_id": "adeptus-custodes",
     "profiles": [
       {
@@ -685,6 +688,9 @@
   {
     "id": "witchseeker-squad",
     "name": "Witchseeker Squad",
+    "aliases": [
+      "Witchseekers"
+    ],
     "faction_id": "adeptus-custodes",
     "profiles": [
       {
@@ -1538,6 +1544,9 @@
   {
     "id": "venatari-with-verutum-lances",
     "name": "Venatari with Verutum Lances",
+    "aliases": [
+      "Venatari Custodians"
+    ],
     "faction_id": "adeptus-custodes",
     "profiles": [
       {
@@ -1870,6 +1879,9 @@
   {
     "id": "prosecutor-squad",
     "name": "Prosecutor Squad",
+    "aliases": [
+      "Prosecutors"
+    ],
     "faction_id": "adeptus-custodes",
     "profiles": [
       {

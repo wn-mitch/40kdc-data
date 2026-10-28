@@ -51,6 +51,7 @@ const DETACHMENT_SOURCE_ALIASES: Readonly<Record<string, string>> = {
   radzone: "Rad-Zone Corps",
 };
 const SOURCE_NAME_ALIASES: Readonly<Record<string, string>> = {
+  "astartes chainsword": "Chainsword",
   "exo armour grenade launcher": "Exoarmour grenade launcher",
   "kombi rokkit": "Kombi-weapon",
   "kombi shoota": "Kombi-weapon",

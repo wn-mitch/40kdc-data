@@ -54,6 +54,8 @@ mod resolve;
 mod roster_json;
 #[cfg(feature = "import")]
 mod rosterizer;
+#[cfg(feature = "import")]
+mod source_names;
 
 pub use types::{
     AttachmentRole, BattleSize, Candidate, Diagnostics, GameVersionRef, ParsedLoadoutGroup,

@@ -15305,6 +15305,9 @@
       }
     ],
     "name": "Marneus Calgar",
+    "aliases": [
+      "Marneus Calgar in Armour of Antilochus"
+    ],
     "faction_id": "adeptus-astartes",
     "role": "epic-hero",
     "profiles": [

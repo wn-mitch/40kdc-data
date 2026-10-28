@@ -29,6 +29,7 @@ ROSTER_GAME_VERSION = {"edition": "11th", "dataslate": "pre-launch-provisional"}
 
 _MAX_CANDIDATES = 5
 _SOURCE_NAME_ALIASES = {
+    "astartes chainsword": "Chainsword",
     "exo armour grenade launcher": "Exoarmour grenade launcher",
     "kombi rokkit": "Kombi-weapon",
     "kombi shoota": "Kombi-weapon",

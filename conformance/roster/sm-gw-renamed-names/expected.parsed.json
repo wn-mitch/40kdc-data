@@ -1,0 +1,50 @@
+{
+  "name": "Imported roster",
+  "generated_by": null,
+  "faction_raw_name": "Adeptus Astartes",
+  "detachment_raw_names": [
+    "Gladius Task Force"
+  ],
+  "force_disposition_raw_name": null,
+  "battle_size_raw": "Combat Patrol (500 Point limit)",
+  "declared_limit": 310,
+  "total_reported": 310,
+  "total_computed": 310,
+  "units": [
+    {
+      "raw_name": "Marneus Calgar in Armour of Antilochus",
+      "is_character": false,
+      "model_count": 1,
+      "points": 180,
+      "is_warlord": true,
+      "enhancement_raw_name": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "raw_name": "Gauntlets of Ultramar",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "raw_name": "Death Company Marines with Jump Packs",
+      "is_character": false,
+      "model_count": 1,
+      "points": 130,
+      "is_warlord": false,
+      "enhancement_raw_name": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "raw_name": "Astartes chainsword",
+          "count": 5
+        },
+        {
+          "raw_name": "Heavy bolt pistol",
+          "count": 5
+        }
+      ]
+    }
+  ],
+  "multi_force": false
+}

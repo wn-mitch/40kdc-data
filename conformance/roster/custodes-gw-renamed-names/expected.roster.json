@@ -1,0 +1,164 @@
+{
+  "name": "Imported roster",
+  "source": {
+    "format": "gw",
+    "generated_by": null
+  },
+  "faction_id": "adeptus-custodes",
+  "detachments": [
+    {
+      "ref": {
+        "id": "lions-of-the-emperor",
+        "raw_name": "Lions of the Emperor",
+        "resolved": true,
+        "candidates": []
+      },
+      "dp_cost": 1
+    }
+  ],
+  "battle_size": null,
+  "force_disposition": "disruption",
+  "points": {
+    "declared_limit": 360,
+    "detachment_cap": null,
+    "total_reported": 360,
+    "total_computed": 360
+  },
+  "units": [
+    {
+      "ref": {
+        "id": "witchseeker-squad",
+        "raw_name": "Witchseekers",
+        "resolved": true,
+        "candidates": []
+      },
+      "model_count": 1,
+      "points": 50,
+      "is_warlord": false,
+      "enhancement": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "ref": {
+            "id": "close-combat-weapon",
+            "raw_name": "Close combat weapon",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 4
+        },
+        {
+          "ref": {
+            "id": "witchseeker-flamer",
+            "raw_name": "Witchseeker flamer",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 4
+        }
+      ],
+      "leader_attachment": null
+    },
+    {
+      "ref": {
+        "id": "prosecutor-squad",
+        "raw_name": "Prosecutors",
+        "resolved": true,
+        "candidates": []
+      },
+      "model_count": 1,
+      "points": 50,
+      "is_warlord": false,
+      "enhancement": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "ref": {
+            "id": "boltgun",
+            "raw_name": "Boltgun",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 4
+        },
+        {
+          "ref": {
+            "id": "close-combat-weapon",
+            "raw_name": "Close combat weapon",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 4
+        }
+      ],
+      "leader_attachment": null
+    },
+    {
+      "ref": {
+        "id": "vigilator-squad",
+        "raw_name": "Vigilators",
+        "resolved": true,
+        "candidates": []
+      },
+      "model_count": 1,
+      "points": 100,
+      "is_warlord": false,
+      "enhancement": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "ref": {
+            "id": "executioner-greatblade",
+            "raw_name": "Executioner greatblade",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 10
+        }
+      ],
+      "leader_attachment": null
+    },
+    {
+      "ref": {
+        "id": "venatari-with-verutum-lances",
+        "raw_name": "Venatari Custodians",
+        "resolved": true,
+        "candidates": []
+      },
+      "model_count": 1,
+      "points": 160,
+      "is_warlord": false,
+      "enhancement": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "ref": {
+            "id": "venatari-lance",
+            "raw_name": "Venatari lance",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 3
+        }
+      ],
+      "leader_attachment": null
+    }
+  ],
+  "game_version": {
+    "edition": "11th",
+    "dataslate": "pre-launch-provisional"
+  },
+  "diagnostics": {
+    "resolved_units": 4,
+    "unresolved_units": 0,
+    "resolved_weapons": 6,
+    "unresolved_weapons": 0,
+    "warnings": [
+      {
+        "code": "battle-size-unmapped",
+        "message": "Battle size label could not be mapped.",
+        "raw_name": "Combat Patrol (500 Point limit)"
+      }
+    ]
+  }
+}

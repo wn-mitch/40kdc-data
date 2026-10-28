@@ -17,9 +17,13 @@ use std::collections::{BTreeMap, HashMap, HashSet};
 
 use crate::data::{
     check_unit_legality, complete_loadout, group_loadout, loadout_models, loadout_tiers,
-    normalize_name, strip_leading_the, Dataset, ViolationCode,
+    normalize_name, Dataset, ViolationCode,
 };
 
+use super::source_names::{
+    find_weapon_candidates, lookup_name_keys, name_matches, resolve_wargear_item_id,
+    scoped_weapon_id,
+};
 use super::types::{
     AttachmentRole, BattleSize, Candidate, Diagnostics, ParsedRoster, ParsedUnit, ResolvedRef,
     Roster, RosterDetachment, RosterFormat, RosterLeaderAttachment, RosterLoadoutGroup,
@@ -1268,118 +1272,6 @@ fn resolve_gear_ref(
     resolve_unit_ability_id(ds, hit, raw_name).map(|id| resolved(id, raw_name))
 }
 
-/// Resolve a weapon raw name to candidate weapons, tolerating a leading "The "
-/// mismatch in either direction (NewRecruit "The Bloody Twins" ↔ data "Bloody
-/// Twins"; GW "Fire Axe" ↔ data "The Fire Axe"). Tries the name as given, then
-/// the "The"-stripped form, then the "The"-prefixed form, returning the first
-/// non-empty match set. Mirror of the TS `findWeaponCandidates`.
-fn find_weapon_candidates<'a>(ds: &'a Dataset, raw_name: &str) -> Vec<&'a crate::Weapon> {
-    let direct = ds.weapons.find_all(raw_name);
-    if !direct.is_empty() {
-        return direct;
-    }
-    if let Some(stripped) = strip_leading_the(raw_name) {
-        let hits = ds.weapons.find_all(&stripped);
-        if !hits.is_empty() {
-            return hits;
-        }
-    }
-    ds.weapons.find_all(&format!("The {raw_name}"))
-}
-
-/// Resolve a weapon raw name to one of the RESOLVED unit's own weapon ids — its
-/// `weapon_ids` plus ids reachable through its wargear options. Per-unit stat
-/// variants share a NAME, so a name match must pick the variant the resolved
-/// unit actually fields. Matches by `normalize_name` with the same leading-"The"
-/// tolerance as `find_weapon_candidates`; returns None when the unit fields no
-/// weapon of that name (the caller falls back to the global lookup). Mirror of
-/// the TS `scopedWeaponId`.
-fn scoped_weapon_id<'a>(ds: &'a Dataset, unit: &crate::Unit, raw_name: &str) -> Option<&'a str> {
-    let mut targets = vec![
-        normalize_name(raw_name),
-        normalize_name(&format!("The {raw_name}")),
-    ];
-    if let Some(stripped) = strip_leading_the(raw_name) {
-        targets.push(normalize_name(&stripped));
-    }
-    let matches = |id: &str| -> Option<&'a str> {
-        ds.weapons
-            .get_in_faction(id, unit.faction_id.as_str())
-            .or_else(|| ds.weapons.get_any(id))
-            .filter(|w| targets.iter().any(|t| *t == normalize_name(&w.name)))
-            .map(|w| w.id.as_str())
-    };
-    for id in &unit.weapon_ids {
-        if let Some(found) = matches(id.as_str()) {
-            return Some(found);
-        }
-    }
-    for opt in ds.wargear_options_of(unit) {
-        for id in opt
-            .replaces
-            .iter()
-            .chain(&opt.replacement)
-            .chain(opt.replacement_choice.iter().flatten())
-        {
-            if let Some(found) = matches(id.as_str()) {
-                return Some(found);
-            }
-        }
-    }
-    None
-}
-
-/// Fallback for wargear ITEMS (Simulacrum Imperialis, Daemonic Icon, …) — raw
-/// names that are not weapons but do exist in the wargear collection. Runs only
-/// after BOTH weapon lookups miss, so a wargear item whose name collides with a
-/// weapon ("multi-melta", "power weapon") keeps resolving to the weapon exactly
-/// as before. Scoped-first: ids reachable through the resolved unit's wargear
-/// options, then the global collection (wargear is replicated-identical across
-/// factions, so a global first-match is safe). Same `normalize_name` +
-/// leading-"The" tolerance as the weapon lookups. Mirror of the TS
-/// `resolveWargearItemId`.
-fn resolve_wargear_item_id<'a>(
-    ds: &'a Dataset,
-    hit: Option<&crate::Unit>,
-    raw_name: &str,
-) -> Option<&'a str> {
-    let stripped = strip_leading_the(raw_name);
-    if let Some(unit) = hit {
-        let mut targets = vec![
-            normalize_name(raw_name),
-            normalize_name(&format!("The {raw_name}")),
-        ];
-        if let Some(s) = &stripped {
-            targets.push(normalize_name(s));
-        }
-        for opt in ds.wargear_options_of(unit) {
-            for id in opt
-                .replaces
-                .iter()
-                .chain(&opt.replacement)
-                .chain(opt.replacement_choice.iter().flatten())
-            {
-                if let Some(item) = ds.wargear.get_any(id.as_str()) {
-                    if targets.iter().any(|t| *t == normalize_name(&item.name)) {
-                        return Some(item.id.as_str());
-                    }
-                }
-            }
-        }
-    }
-    if let Some(item) = ds.wargear.find(raw_name) {
-        return Some(item.id.as_str());
-    }
-    if let Some(s) = &stripped {
-        if let Some(item) = ds.wargear.find(s) {
-            return Some(item.id.as_str());
-        }
-    }
-    ds.wargear
-        .find(&format!("The {raw_name}"))
-        .map(|item| item.id.as_str())
-}
-
 fn detachment_candidates(records: &[&crate::Detachment]) -> Vec<Candidate> {
     records
         .iter()
@@ -1400,21 +1292,12 @@ fn resolve_unit_ability_id<'a>(
     raw_name: &str,
 ) -> Option<&'a str> {
     let unit = hit?;
-    let mut targets = vec![
-        normalize_name(raw_name),
-        normalize_name(&format!("The {raw_name}")),
-    ];
-    if let Some(stripped) = strip_leading_the(raw_name) {
-        targets.push(normalize_name(&stripped));
-    }
+    let keys = lookup_name_keys(raw_name);
     for ability_ref in &unit.ability_ids {
         let Some(ability) = ds.abilities.get_any(ability_ref.id()) else {
             continue;
         };
-        if targets
-            .iter()
-            .any(|target| *target == normalize_name(&ability.name))
-        {
+        if name_matches(&keys, &ability.name) {
             return Some(ability.ability_id.as_str());
         }
     }

@@ -543,3 +543,56 @@ fn wtc_full_body_keeps_single_line_characters() {
         .iter()
         .any(|w| w.ref_.raw_name == "Power weapon"));
 }
+
+// --- Source-name aliases ------------------------------------------------------
+// Mirror of the TS `astartes chainsword` source-name alias. A unit whose own
+// weapon is named "Chainsword" takes the alias; a unit that fields a weapon
+// printed as "Astartes chainsword" keeps it, because the printed name is tried
+// first.
+
+fn gw_list(faction: &str, unit: &str) -> String {
+    format!(
+        "+++++++++++++++++++++++++++++++++++++++++++++++\n\
++ FACTION KEYWORD: {faction}\n\
++ TOTAL ARMY POINTS: 130pts\n\
++\n\
++ NUMBER OF UNITS: 1\n\
++++++++++++++++++++++++++++++++++++++++++++++++\n\
+\n\
+{unit} (130 pts)\n\
+\u{2022} 5x Astartes chainsword\n"
+    )
+}
+
+fn chainsword_id(roster: &Roster) -> Option<String> {
+    roster.units[0]
+        .wargear
+        .iter()
+        .find(|w| w.ref_.raw_name == "Astartes chainsword")
+        .and_then(|w| w.ref_.id.clone())
+}
+
+#[test]
+fn astartes_chainsword_aliases_to_the_units_chainsword() {
+    let text = gw_list(
+        "Imperium - Adeptus Astartes",
+        "Death Company Marines with Jump Packs",
+    );
+    let roster = wh40kdc::import::import_roster_text(&text, Dataset::embedded()).unwrap();
+    assert_eq!(
+        roster.units[0].ref_.id.as_deref(),
+        Some("death-company-marines-with-jump-packs")
+    );
+    assert_eq!(chainsword_id(&roster).as_deref(), Some("chainsword"));
+}
+
+#[test]
+fn astartes_chainsword_keeps_a_weapon_printed_with_that_name() {
+    let text = gw_list("Chaos Space Marines", "Raptors");
+    let roster = wh40kdc::import::import_roster_text(&text, Dataset::embedded()).unwrap();
+    assert_eq!(roster.units[0].ref_.id.as_deref(), Some("raptors"));
+    assert_eq!(
+        chainsword_id(&roster).as_deref(),
+        Some("astartes-chainsword")
+    );
+}
