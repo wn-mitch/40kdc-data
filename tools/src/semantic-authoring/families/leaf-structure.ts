@@ -81,7 +81,8 @@ export const DISCONTIGUOUS_LEAF_FAMILIES: SemanticFamilyDefinition[] = [
 
 /** otherwise@1 parameters: the leaf records no value, so only an empty object is accepted. */
 export function normalizeOtherwiseParameters(family: string, input: Record<string, unknown>): Record<string, unknown> | null {
-  if (family !== "otherwise") return null;
+  // Both are parameterless markers found by position.
+  if (family !== "otherwise" && family !== "condition-exclusion") return null;
   exactKeys(input, [], family);
   return {};
 }

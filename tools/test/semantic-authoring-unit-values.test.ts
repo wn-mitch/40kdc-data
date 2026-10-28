@@ -247,6 +247,11 @@ describe("condition-exclusion (a group of conditions excluded together)", () => 
     expect(JSON.stringify(without)).not.toContain('"operator":"not","operands":[{"operator":"and"');
   });
 
+  it("is a reviewable family that takes no parameters", () => {
+    expect(normalizeFingerprintParameters("condition-exclusion", {}, currentFamilyVersion("condition-exclusion"))).toEqual({});
+    expect(() => normalizeFingerprintParameters("condition-exclusion", { negated: true }, currentFamilyVersion("condition-exclusion"))).toThrow();
+  });
+
   it("refuses a marker with no condition before its group ends", () => {
     const bare = "Select one enemy unit (excluding) and roll a D6.";
     const list = placed(bare, ["Select one enemy unit", "select-unit", { scope: "enemy", distance: "any", visible: false }], ["excluding", "condition-exclusion", {}], ["roll a D6", "dice-roll", { dice: "D6" }]);
