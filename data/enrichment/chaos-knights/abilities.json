@@ -3942,7 +3942,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "a47f0a77e0e44498d62a24fc11e55e4b862b9e3a60b7a88c6321977a84c1b057",
     "version": "2025-q3",
@@ -3950,20 +3950,20 @@
     "unit_ids": [],
     "faction_id": "chaos-knights",
     "ability_type": "faction",
-    "behavior": "passive",
+    "behavior": "activated",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "matches",
+        "type": "army-includes",
         "parameters": {
           "filter": {
+            "owner": "friendly",
             "all_of": [
               "CHAOS"
-            ]
+            ],
+            "level": "model"
           },
-          "subject": {
-            "owner": "friendly"
-          }
+          "every": true
         }
       },
       "effect": {
@@ -3974,9 +3974,7 @@
             "options": [
               {
                 "type": "army-rule",
-                "target": {
-                  "owner": "friendly"
-                },
+                "target": "this-unit",
                 "modifier": {
                   "rule": "composition",
                   "with": {
@@ -3985,14 +3983,13 @@
                       "CHAOS KNIGHTS"
                     ]
                   },
-                  "max": 1
+                  "max": 1,
+                  "measure": "models"
                 }
               },
               {
                 "type": "army-rule",
-                "target": {
-                  "owner": "friendly"
-                },
+                "target": "this-unit",
                 "modifier": {
                   "rule": "composition",
                   "with": {
@@ -4000,7 +3997,8 @@
                       "WAR DOG"
                     ]
                   },
-                  "max": 3
+                  "max": 3,
+                  "measure": "models"
                 }
               }
             ]
@@ -4008,29 +4006,45 @@
           {
             "type": "army-rule",
             "target": {
-              "owner": "friendly"
+              "owner": "friendly",
+              "any_of_filters": [
+                {
+                  "all_of": [
+                    "TITANIC",
+                    "CHAOS KNIGHTS"
+                  ]
+                },
+                {
+                  "all_of": [
+                    "WAR DOG"
+                  ]
+                }
+              ]
             },
             "modifier": {
-              "rule": "warlord-forbidden",
-              "with": {
-                "all_of": [
-                  "CHAOS KNIGHTS"
-                ]
-              }
+              "rule": "warlord-forbidden"
             }
           },
           {
             "type": "army-rule",
             "target": {
-              "owner": "friendly"
+              "owner": "friendly",
+              "any_of_filters": [
+                {
+                  "all_of": [
+                    "TITANIC",
+                    "CHAOS KNIGHTS"
+                  ]
+                },
+                {
+                  "all_of": [
+                    "WAR DOG"
+                  ]
+                }
+              ]
             },
             "modifier": {
-              "rule": "enhancement-forbidden",
-              "with": {
-                "all_of": [
-                  "CHAOS KNIGHTS"
-                ]
-              }
+              "rule": "enhancement-forbidden"
             }
           }
         ]
@@ -4039,7 +4053,8 @@
     "scope": {
       "duration": "permanent"
     },
-    "community_notes": "Dreadblades: if every model in your army has the CHAOS keyword, you may include 1 TITANIC CHAOS KNIGHTS model or up to 3 WAR DOG models that lack the chosen Faction keyword. They cannot be your Warlord and cannot take Enhancements."
+    "community_notes": "Dreadblades: if every model in your army has the CHAOS keyword, you may include 1 TITANIC CHAOS KNIGHTS model or up to 3 WAR DOG models that lack the chosen Faction keyword. They cannot be your Warlord and cannot take Enhancements.",
+    "optional": true
   },
   {
     "ability_id": "tyrannical-court-chaos-knights",

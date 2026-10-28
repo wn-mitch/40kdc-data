@@ -48,10 +48,17 @@ export function resolveInstead(frame: PartFrame, planned: PlannedEffect[], bound
       const upper = Math.min(Number.POSITIVE_INFINITY, ...choiceLimits.filter((index) => index > combinator));
       const markers = combinators.filter((index) => choices.has(index) && index > lower && index < upper);
       for (const index of markers) handledChoices.add(index);
+      // An "or" inside a sentence ("include either 1 X model or up to 3 Y models.") picks between that sentence's
+      // effects: the options end with it, so a later sentence ("None of these models …") is not part of the last one.
+      const last = markers.at(-1)!;
+      const inline = last > 0 && places[last - 1]!.sentence === places[last]!.sentence;
+      const sentenceEnd = inline ? list.findIndex((_, at) => at > last && places[at]!.sentence !== places[last]!.sentence) : -1;
+      const end = sentenceEnd > last && sentenceEnd < upper ? sentenceEnd : upper;
+      const limits = end < upper ? [...choiceLimits, end] : choiceLimits;
       // A bound duration would sit inside the choice's options, which the choice does not carry (no split form yet).
-      if (planned.some((item) => item.index > lower && item.index < upper && boundDuration.has(item.index))) errors.push(CONFLICTING_DURATIONS);
+      if (planned.some((item) => item.index > lower && item.index < end && boundDuration.has(item.index))) errors.push(CONFLICTING_DURATIONS);
       else {
-        const problem = chooseBetweenGroups(planned, markers, choiceLimits);
+        const problem = chooseBetweenGroups(planned, markers, limits);
         if (problem) errors.push(problem);
       }
       continue;

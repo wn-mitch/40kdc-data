@@ -175,19 +175,41 @@ function compositionGroup(leaf: CompileLeaf): Node | null {
   return keywords?.length ? { owner: "friendly", all_of: [...keywords] } : null;
 }
 
+const isChoiceMarker = (leaf: CompileLeaf | undefined) => leaf?.role === "COMBINATOR" && leaf.parameters.choice === true;
+
+/**
+ * The composition rules an antecedent points back to: the nearest earlier one, and with it every
+ * composition rule it is a player's pick against ("include either 1 X model or up to 3 Y models"),
+ * since "these models" are whichever of them the player took.
+ */
+function pointedCompositions(leaves: readonly CompileLeaf[], index: number): CompileLeaf[] {
+  let at = leaves.slice(0, index).map((other, position) => (isArmy(other, "composition") ? position : -1)).filter((position) => position >= 0).at(-1)!;
+  const picked = [leaves[at]!];
+  while (isChoiceMarker(leaves[at - 1]) && isArmy(leaves[at - 2], "composition") && leaves[at - 2]!.fragment === leaves[at]!.fragment) {
+    at -= 2;
+    picked.unshift(leaves[at]!);
+  }
+  return picked;
+}
+
 /**
  * After unit-filters fold: each bound antecedent becomes the rule's `group_filter`, the composition
- * group it points back to or the filter folded onto it.
+ * group it points back to (the union of a pick's groups, as `any_of_filters`) or the filter folded onto it.
  */
 export function resolveArmyGroups(leaves: readonly CompileLeaf[]): CompileLeaf[] {
   return leaves.map((leaf, index) => {
     if (!isArmy(leaf)) return leaf;
     const { subject, subject_filter: filter, ...rest } = leaf.parameters;
     if (subject === COMPOSITION_GROUP) {
-      const source = leaves.slice(0, index).reverse().find((other) => isArmy(other, "composition"))!;
-      const group = compositionGroup(source);
-      if (group === null) throw new CompileError(`army-construction at byte ${leaf.start_byte} points back to a composition rule that names no group of units.`);
-      return { ...leaf, parameters: { ...rest, group_filter: group } };
+      const groups = pointedCompositions(leaves, index).map(compositionGroup);
+      if (groups.some((group) => group === null)) throw new CompileError(`army-construction at byte ${leaf.start_byte} points back to a composition rule that names no group of units.`);
+      if (groups.length === 1) return { ...leaf, parameters: { ...rest, group_filter: groups[0]! } };
+      if (groups.some((group) => group!.owner !== "friendly")) throw new CompileError(`army-construction at byte ${leaf.start_byte} points back to a pick between groups that are not all units of your army.`);
+      const alternatives = groups.map((group) => {
+        const { owner: _owner, ...own } = group!;
+        return own;
+      });
+      return { ...leaf, parameters: { ...rest, group_filter: { owner: "friendly", any_of_filters: alternatives } } };
     }
     if (subject === FILTERED_UNITS) {
       if (filter === undefined) throw new CompileError(`army-construction at byte ${leaf.start_byte} points back to the unit-filter right before it, but that filter belongs to another leaf.`);

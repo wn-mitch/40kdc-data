@@ -5307,19 +5307,117 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "imperial-knights",
     "detachment_id": null,
     "ability_type": "faction",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "army-includes",
+        "parameters": {
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "IMPERIUM"
+            ],
+            "level": "model"
+          },
+          "every": true
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "choice",
+            "options": [
+              {
+                "type": "army-rule",
+                "target": "this-unit",
+                "modifier": {
+                  "rule": "composition",
+                  "with": {
+                    "all_of": [
+                      "TITANIC",
+                      "IMPERIAL KNIGHTS"
+                    ]
+                  },
+                  "max": 1,
+                  "measure": "models"
+                }
+              },
+              {
+                "type": "army-rule",
+                "target": "this-unit",
+                "modifier": {
+                  "rule": "composition",
+                  "with": {
+                    "all_of": [
+                      "ARMIGER"
+                    ]
+                  },
+                  "max": 3,
+                  "measure": "models"
+                }
+              }
+            ]
+          },
+          {
+            "type": "army-rule",
+            "target": {
+              "owner": "friendly",
+              "any_of_filters": [
+                {
+                  "all_of": [
+                    "TITANIC",
+                    "IMPERIAL KNIGHTS"
+                  ]
+                },
+                {
+                  "all_of": [
+                    "ARMIGER"
+                  ]
+                }
+              ]
+            },
+            "modifier": {
+              "rule": "warlord-forbidden"
+            }
+          },
+          {
+            "type": "army-rule",
+            "target": {
+              "owner": "friendly",
+              "any_of_filters": [
+                {
+                  "all_of": [
+                    "TITANIC",
+                    "IMPERIAL KNIGHTS"
+                  ]
+                },
+                {
+                  "all_of": [
+                    "ARMIGER"
+                  ]
+                }
+              ]
+            },
+            "modifier": {
+              "rule": "enhancement-forbidden"
+            }
+          }
+        ]
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "activated",
+    "optional": true,
+    "source_digest": "d98099fb63ef1eccf928448bc36ea7a953f4ae9afce324f1a99e9b6cd511d3e5"
   },
   {
     "ability_id": "full-tilt-valourstrike-lance-imperial-knights",

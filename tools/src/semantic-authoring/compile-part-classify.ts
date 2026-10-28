@@ -212,10 +212,10 @@ export function classifyLeaves(given: CompileLeaf[], places: Placement[], contai
       } else if (node !== "selected" && node.type === "__roll-result") {
         for (const bandClause of bandRunClauses(list, places, sourceText, index)) clauseGates.set(bandClause, [...(clauseGates.get(bandClause) ?? []), node]);
       // An "If …" sentence before an "Or:" player's pick ("If A, X. Or: If B, Y.") gates only its own option. A
-      // condition inside a sentence ("…, if this unit is …"), a trigger, or a scope heading ("This unit's melee attacks:")
-      // still gates the whole ability.
+      // condition inside a sentence ("…, if this unit is …"), a trigger, a scope heading ("This unit's melee attacks:"),
+      // or an "If …" whose own sentence holds the pick ("If A, you can include X or Y") still gates the whole ability.
       } else if (node !== "selected" && leading && sourceText !== undefined && opensIfSentence(sourceText, list[index]!)
-        && list.some((other, at) => at > index && other.role === "COMBINATOR" && other.parameters.choice === true && places[at]!.clause !== clause)) {
+        && list.some((other, at) => at > index && other.role === "COMBINATOR" && other.parameters.choice === true && places[at]!.clause !== clause && places[at]!.sentence !== sentence)) {
         clauseGates.set(clause, [...(clauseGates.get(clause) ?? []), node]);
       } else if (!effectSentences.has(sentence) || (sentence === firstSentence && leading)) {
         if (node === "selected") selectedGlobally = true;

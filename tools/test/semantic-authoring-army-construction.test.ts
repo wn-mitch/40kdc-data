@@ -119,6 +119,25 @@ describe("army-construction groups (sub-shape A)", () => {
     expect(rules[1]).toEqual({ type: "army-rule", target: { owner: "friendly", any_of: ["ALPHA", "BETA"] }, modifier: { rule: "warlord-forbidden" } });
   });
 
+  it("gates a pick between composition rules as a whole, and binds \"these models\" to either group", () => {
+    const text = "If every model in your army has the GAMMA keyword, you can include either 1 ALPHA model or up to 3 BETA models in your army. None of these models can be your Warlord.";
+    const effect = effectOf(placed(text,
+      ["If every model in your army has the GAMMA keyword", "army-includes", { quantifier: "every", keywords: ["GAMMA"], level: "model" }],
+      ["you can", "optional-use", { who: "you" }],
+      ["include either 1 ALPHA model", army, { rule: "composition", with_keywords: ["ALPHA"], max: 1, measure: "models" }],
+      ["or", "instead", { choice: true }],
+      ["up to 3 BETA models in your army", army, { rule: "composition", with_keywords: ["BETA"], max: 3, measure: "models" }],
+      ["None of these models can be your Warlord", army, { rule: "warlord-forbidden", subject: "antecedent" }]), text);
+    // The condition gates the whole pick and the later sentence, not only the first option.
+    expect(effect.type).toBe("conditional");
+    expect(effect.condition.type).toBe("army-includes");
+    const steps = effect.effect.steps;
+    expect(steps.map((step: any) => step.type)).toEqual(["choice", "army-rule"]);
+    expect(steps[0].options.map((option: any) => option.modifier.with)).toEqual([{ all_of: ["ALPHA"] }, { all_of: ["BETA"] }]);
+    // "These models" are whichever group the player took.
+    expect(steps[1]).toEqual({ type: "army-rule", target: { owner: "friendly", any_of_filters: [{ all_of: ["ALPHA"] }, { all_of: ["BETA"] }] }, modifier: { rule: "warlord-forbidden" } });
+  });
+
   it("keeps a sentence that points back to a composition rule in that rule's part", () => {
     const text = "Each time this unit is selected to fight, add 1 to the Hit roll. You can include up to 2 ALPHA units. None of these models can be your Warlord.";
     const leaves = placed(text,
