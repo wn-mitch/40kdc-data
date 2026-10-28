@@ -1,23 +1,18 @@
 import type { Buff, BuffSource, EngineContext } from "../cruncher/index.js";
 import type { Dataset, StackableBuffGroup } from "../data/dataset.js";
-import { isLegalLeverSelection } from "../data/lever-selection.js";
 import { baseLoadout, optionCap, type LoadoutModel, type LoadoutTier } from "../data/loadout.js";
 import { reachesOtherUnits, replacedArmyRuleIds } from "../abilities-resolver/resolver.js";
 import type { EligibilityInput, EligibleAbility } from "../abilities-resolver/index.js";
 import type { UnitView } from "../data/entities.js";
 import type { MatrixConfig } from "./config.js";
 import { DamageCellCache } from "./cache.js";
-import {
-  assessEnhancementAssignment,
-  validateCandidateLoadout,
-  type CandidateLoadoutLegality,
-  type LocalStackMember,
-} from "./legality.js";
+import { validateCandidateLoadout, type CandidateLoadoutLegality, type LocalStackMember } from "./legality.js";
+import { isLegalStackLevers } from "./lever-legality.js";
 import { searchLevers, type LeverSpace } from "./lever-search.js";
 import { searchLoadout, type LoadoutScaffold, type LoadoutSpace } from "./loadout-search.js";
 import type { ProfileDamage } from "./loadout-scoring.js";
 import { attributeSelectedProfile, crunchProfileScorer, unitLoadoutDamage, type DamageAttribution } from "./unit-damage.js";
-import { loadoutWargear, unequippedRules, unitWeaponGrants, WEAPON_GRANT_REASON, type WeaponGrants } from "./weapon-grants.js";
+import { equippedBuffs, unequippedRules, unitWeaponGrants, wargearContext, WEAPON_GRANT_REASON, type WeaponGrants } from "./weapon-grants.js";
 import type {
   DamageCellState,
   PoolLever,
@@ -58,13 +53,6 @@ function buffKey(buffs: readonly Buff[]): string {
   return buffs.map((buff) => JSON.stringify({ source: buff.source, contribution: buff.contribution, when: buff.applicableWhen ?? null })).join("|");
 }
 
-/** `buffs` without those of the unit's own printed wargear rules whose item `counts` leaves out. */
-function equippedBuffs(unit: UnitView, counts: ReadonlyMap<string, number>, buffs: Buff[]): Buff[] {
-  const unequipped = unequippedRules(unit.raw, counts);
-  if (unequipped.size === 0) return buffs;
-  return buffs.filter((buff) => buff.source.kind !== "ability" || buff.source.abilityKind !== "unit" || !unequipped.has(buff.source.abilityId));
-}
-
 function memberKeywords(members: readonly StackMember[]): string[] {
   const keywords = new Set<string>();
   for (const member of members) {
@@ -75,13 +63,6 @@ function memberKeywords(members: readonly StackMember[]): string[] {
 
 function attachmentRoles(members: readonly StackMember[]): Record<string, "leader" | "bodyguard"> {
   return Object.fromEntries(members.map((member) => [member.unit.id, member.role === "bodyguard" ? "bodyguard" : "leader"]));
-}
-
-function enhancementIdentity(leverId: string): { enhancementId: string; bearerId: string } | null {
-  if (!leverId.startsWith("enhancement:")) return null;
-  const split = leverId.indexOf("@");
-  if (split < 0) return null;
-  return { enhancementId: leverId.slice("enhancement:".length, split), bearerId: leverId.slice(split + 1) };
 }
 
 export class DamageScoringSession {
@@ -176,7 +157,7 @@ export class DamageScoringSession {
 
   /** `context` with the wargear `counts` carry, so `unit-wargear` conditions read the loadout. */
   loadoutContext(unit: UnitView, counts: ReadonlyMap<string, number>, context: EngineContext): EngineContext {
-    return { ...context, attackerWargear: loadoutWargear(this.dataset, unit.raw, counts) };
+    return wargearContext(this.dataset, unit.raw, counts, context);
   }
 
   /** The weapons the wargear in `counts` equips, under `context` with that loadout. */
@@ -196,7 +177,7 @@ export class DamageScoringSession {
    * translated without a loadout.
    */
   private scoreCounts(unit: UnitView, counts: ReadonlyMap<string, number>, allBuffs: Buff[], context: EngineContext): UnitLoadoutResult {
-    const buffs = equippedBuffs(unit, counts, allBuffs);
+    const buffs = equippedBuffs(unit.raw, counts, allBuffs);
     const scaffold = this.scaffold(unit);
     const target = { unit: this.state.target.unitRaw, modelCount: this.state.target.modelCount };
     const crunchProfile = crunchProfileScorer(this.dataset, target, buffs);
@@ -358,36 +339,7 @@ export class DamageScoringSession {
   }
 
   legalLeverSelection(spec: StackSpec, selectedIds: readonly string[]): boolean {
-    const pool = this.pool(spec);
-    const selected = new Set(selectedIds);
-    if (!isLegalLeverSelection(pool.levers, pool.groups, selected)) return false;
-    if (pool.levers.filter((lever) => selected.has(lever.id) && lever.cost?.cp !== undefined).length > 1) return false;
-    const enhancementByBearer = new Map<string, string>();
-    const usedEnhancements = new Set<string>();
-    for (const lever of pool.levers) {
-      if (!selected.has(lever.id) || lever.cost?.points === undefined) continue;
-      const identity = enhancementIdentity(lever.id);
-      if (!identity) continue;
-      if (usedEnhancements.has(identity.enhancementId) || enhancementByBearer.has(identity.bearerId)) return false;
-      usedEnhancements.add(identity.enhancementId);
-      enhancementByBearer.set(identity.bearerId, identity.enhancementId);
-    }
-    const localMembers = this.localMembersForLegality(spec, enhancementByBearer);
-    for (const [bearerId, enhancementId] of enhancementByBearer) {
-      const enhancement = this.dataset.enhancements.get(enhancementId);
-      const bearerIndex = spec.members.findIndex((member) => member.unit.id === bearerId);
-      if (!enhancement || bearerIndex < 0) return false;
-      const assessed = assessEnhancementAssignment({
-        dataset: this.dataset,
-        factionId: spec.factionId,
-        detachmentIds: spec.detachmentIds,
-        members: localMembers,
-        bearerIndex,
-        enhancement,
-      });
-      if (assessed.status === "illegal") return false;
-    }
-    return true;
+    return isLegalStackLevers(this.dataset, spec, this.pool(spec), selectedIds, (byBearer) => this.localMembersForLegality(spec, byBearer));
   }
 
   scoreStack(spec: StackSpec): StackResult {
@@ -414,7 +366,7 @@ export class DamageScoringSession {
       ...this.pool(spec).levers.filter((lever) => selected.has(lever.id)).flatMap((lever) => lever.perMember.get(member.unit.id) ?? []),
       ...this.defensiveBuffs,
     ];
-    return counts ? equippedBuffs(member.unit, counts, buffs) : buffs;
+    return counts ? equippedBuffs(member.unit.raw, counts, buffs) : buffs;
   }
 
   /** Leave-one-out attribution of one of a member's selected profiles in a scored stack with `counts`. */

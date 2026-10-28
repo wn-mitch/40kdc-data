@@ -108,6 +108,17 @@ export {
   type DamageAttribution,
   type UnitLoadoutDamageInput,
 } from "./stack-damage/unit-damage.js";
+// The weapons a loadout's wargear grants and the printed wargear rules it leaves out, scored
+// the way the damage matrix scores them.
+export {
+  equippedBuffs,
+  loadoutWargearScoring,
+  wargearContext,
+  withGrantedWeapons,
+  type LoadoutWargearScoring,
+  type WeaponGrant,
+  type WeaponGrants,
+} from "./stack-damage/weapon-grants.js";
 
 // Roster-highlighting scope: resolve which units an ability's curated
 // `applies_to` keyword filter benefits. Mirrors `wh40kdc::scope` (Rust) and

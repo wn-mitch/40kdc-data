@@ -9,7 +9,7 @@
  * grants: the item's printed rule when the unit lists one, else the lowest ability id. An item's
  * printed rule applies only while the loadout includes the item.
  */
-import type { BuffSource, EngineContext } from "../cruncher/index.js";
+import type { Buff, BuffSource, EngineContext } from "../cruncher/index.js";
 import type { Dataset } from "../data/dataset.js";
 import { abilityRefId, abilityRefWargear } from "../data/ability-refs.js";
 import type { AbilityView } from "../data/entities.js";
@@ -177,6 +177,50 @@ export function unitWeaponGrants(dataset: Dataset, unit: Unit, factionId: string
     else result.duplicates.push({ ...grant, ownerAbilityId: owner });
   }
   return result;
+}
+
+/** `context` with the wargear of the loadout `counts`, so `unit-wargear` conditions read the loadout. */
+export function wargearContext(dataset: Dataset, unit: Unit, counts: ReadonlyMap<string, number>, context: EngineContext): EngineContext {
+  return { ...context, attackerWargear: loadoutWargear(dataset, unit, counts) };
+}
+
+/** `buffs` without those of the unit's own printed wargear rules whose item `counts` leaves out. */
+export function equippedBuffs(unit: Unit, counts: ReadonlyMap<string, number>, buffs: readonly Buff[]): Buff[] {
+  const unequipped = unequippedRules(unit, counts);
+  if (unequipped.size === 0) return [...buffs];
+  return buffs.filter((buff) => buff.source.kind !== "ability" || buff.source.abilityKind !== "unit" || !unequipped.has(buff.source.abilityId));
+}
+
+/** What a loadout's wargear changes about scoring it; see {@link loadoutWargearScoring}. */
+export interface LoadoutWargearScoring {
+  /** The caller's context with the loadout's wargear. */
+  context: EngineContext;
+  /** The weapons the wargear grants under {@link context}; pass `grants.grants` to `unitLoadoutDamage`. */
+  grants: WeaponGrants;
+  /** The shared buffs without the unit's printed rules for items the loadout leaves out. */
+  buffs: Buff[];
+}
+
+/**
+ * The wargear inputs to scoring one loadout, the way the damage matrix scores it: the weapons
+ * the loadout's wargear grants and the shared `buffs` less the printed rules of items it leaves
+ * out. The profiles still crunch under the caller's `context`, as the buffs were translated
+ * without a loadout.
+ */
+export function loadoutWargearScoring(input: {
+  dataset: Dataset;
+  unit: Unit;
+  factionId: string;
+  counts: ReadonlyMap<string, number>;
+  buffs: readonly Buff[];
+  context: EngineContext;
+}): LoadoutWargearScoring {
+  const context = wargearContext(input.dataset, input.unit, input.counts, input.context);
+  return {
+    context,
+    grants: unitWeaponGrants(input.dataset, input.unit, input.factionId, context),
+    buffs: equippedBuffs(input.unit, input.counts, input.buffs),
+  };
 }
 
 /** Equipment counts with each grant's weapons added for the carriers of its wargear. */

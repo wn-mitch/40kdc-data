@@ -33,7 +33,9 @@
     attackerLevers,
     crunchLine,
     enabledLeverBuffs,
+    grantedCopies,
     memberUnits as resolveMembers,
+    memberWargear,
     synthTarget,
     targetDefences,
   } from "./output-model.js";
@@ -91,17 +93,8 @@
 
   const allBuffs = $derived<Buff[]>([...datasetBuffs, ...manualBuffs, ...defensive.buffs]);
 
-  // The combined unit declares all its attacks at once: one line per profile of
-  // every phase-eligible weapon across the selected unit AND its attached
-  // members.
+  // The selected unit and its attached members.
   const memberUnits = $derived(resolveMembers(ds, salvo.selectedFactionId, [salvo.selectedUnitId, ...salvo.attachedUnitIds]));
-
-  const weaponLines = $derived<WeaponLine[]>(
-    buildWeaponLines(
-      memberUnits.map(({ memberId, unit }) => ({ memberId, name: unit.name, weapons: unit.weapons.map((w) => w.raw) })),
-      weaponTypeForPhase(salvo.phase),
-    ),
-  );
 
   // Per-weapon model count (how many of a member's models carry it), read with
   // a default from an override map — no $effect seeds it, so lines appearing
@@ -115,11 +108,48 @@
     const loadout = memberUnits.find((member) => member.memberId === memberId)?.loadout;
     return loadout ? defaultWeaponCount(loadout, weaponId) : 0;
   }
-  const carried = (line: WeaponLine) => carriedBy(line.ownerMemberId, line.weaponId);
+
+  // Each member's equipment counts and what its wargear changes: the weapons it grants (a
+  // drone's carbine) and the printed rules of wargear the loadout leaves out, as the matrix
+  // scores them.
+  const counts = $derived(memberUnits.map(({ memberId, unit, loadout }) =>
+    memberCounts(loadout, unit.weapons.map((w) => w.id), (weaponId) => carriedBy(memberId, weaponId))));
+  const wargear = $derived(memberUnits.map((member, index) =>
+    memberWargear({ ds, factionId: salvo.selectedFactionId, member, counts: counts[index], buffs: allBuffs, context })));
+  const wargearOf = (memberId: string) => {
+    const index = memberUnits.findIndex((member) => member.memberId === memberId);
+    return index < 0 ? undefined : { counts: counts[index], wargear: wargear[index] };
+  };
+
+  // The combined unit declares all its attacks at once: one line per profile of every
+  // phase-eligible weapon across the selected unit, its attached members and their granted
+  // weapons.
+  const weaponLines = $derived<WeaponLine[]>(
+    buildWeaponLines(
+      memberUnits.map(({ memberId, unit }, index) => ({
+        memberId,
+        name: unit.name,
+        weapons: [...unit.weapons.map((w) => w.raw), ...wargear[index].granted],
+      })),
+      weaponTypeForPhase(salvo.phase),
+    ),
+  );
+
+  /** Models carrying a weapon: its granted copies for a granted weapon, else the carried count. */
+  function shownCount(memberId: string, weaponId: string): number {
+    const member = wargearOf(memberId);
+    if (member?.wargear.granted.some((weapon) => weapon.id === weaponId)) {
+      return grantedCopies(member.wargear.grants, member.counts, weaponId);
+    }
+    return carriedBy(memberId, weaponId);
+  }
+  const carried = (line: WeaponLine) => shownCount(line.ownerMemberId, line.weaponId);
   // Clamp the requested count into this weapon's valid range so an invalid
   // wargear config is unreachable (e.g. plasma pistols can't exceed 3 on a
   // 10-model Berzerker squad). Weapons with no bound keep a "≥0" floor.
+  // A granted weapon's count follows its wargear, so it is not edited.
   function setCarried(line: WeaponLine, n: number): void {
+    if (wargearOf(line.ownerMemberId)?.wargear.granted.some((weapon) => weapon.id === line.weaponId)) return;
     const bounds = memberUnits.find((member) => member.memberId === line.ownerMemberId)?.loadout.bounds;
     const count = bounds?.has(line.weaponId)
       ? clampWeaponCount(bounds, line.weaponId, n)
@@ -137,10 +167,12 @@
       return {
         value: selectLines({
           ds,
-          members: memberUnits.map(({ memberId, unit, loadout }) => ({
+          members: memberUnits.map(({ memberId, loadout }, index) => ({
             memberId,
             loadout,
-            counts: memberCounts(loadout, unit.weapons.map((w) => w.id), (weaponId) => carriedBy(memberId, weaponId)),
+            counts: counts[index],
+            grants: wargear[index].grants,
+            buffs: wargear[index].buffs,
           })),
           target: { unit: target, modelCount: salvo.manualTarget.modelCount },
           buffs: allBuffs,
@@ -173,7 +205,7 @@
         owner: memberUnits.find((member) => member.memberId === line.ownerMemberId)?.unit.raw,
         models: selection.value?.firing.get(line.id) ?? carried(line),
         target: { unit: target, modelCount: salvo.manualTarget.modelCount },
-        buffs: allBuffs,
+        buffs: wargearOf(line.ownerMemberId)?.wargear.buffs ?? allBuffs,
         context,
       }))
     : []);
@@ -281,7 +313,7 @@
 {#snippet usage(r: { id: string; models: number; ownerMemberId: string; weaponId: string })}
   {#if !selection.value?.firing.has(r.id)}
     <span class="usage dim" title="The loadout scoring uses another profile or weapon for these models">not used</span>
-  {:else if r.models !== carriedBy(r.ownerMemberId, r.weaponId)}
+  {:else if r.models !== shownCount(r.ownerMemberId, r.weaponId)}
     <span class="usage dim" title="Models that use this line; the rest use another weapon">{r.models} fire</span>
   {/if}
 {/snippet}
@@ -296,6 +328,12 @@
   {/if}
   {#if defensive.error}
     <p class="error" role="alert">Target abilities could not be read: {defensive.error}</p>
+  {/if}
+  {#each wargear.filter((item) => item.error) as item, index (index)}
+    <p class="error" role="alert">Wargear could not be read: {item.error}</p>
+  {/each}
+  {#if projection && "error" in projection}
+    <p class="error" role="alert">Projection failed: {projection.error}</p>
   {/if}
   {#if selection.error}
     <p class="error" role="alert">Loadout scoring failed: {selection.error}</p>
@@ -339,13 +377,16 @@
               aria-label={`Include ${r.label} in combined total`}
             />
           </td>
-          <td class="wname">{r.label}</td>
+          <td class="wname">
+            {r.label}
+            {#if r.error}<span class="usage line-error" role="alert">{r.error}</span>{/if}
+          </td>
           <td class="value">
             <input
               type="number"
               min="0"
               class="models-input"
-              value={carriedBy(r.ownerMemberId, r.weaponId)}
+              value={shownCount(r.ownerMemberId, r.weaponId)}
               oninput={(e) => setCarried(r, Number((e.currentTarget as HTMLInputElement).value))}
               aria-label={`Models carrying ${r.label}`}
             />
@@ -416,6 +457,7 @@
     text-align: right;
     font-family: var(--font-mono);
   }
+  .line-error { color: var(--danger); white-space: normal; }
   .usage {
     display: block;
     font-size: var(--text-xs);

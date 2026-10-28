@@ -44,19 +44,26 @@
       : [],
   );
 
-  const matrix = $derived.by(() => {
+  const matrixResult = $derived.by<{ value: ReturnType<typeof buildMatrix>; error?: string }>(() => {
     if (!salvo.compareFactionId || attackers.length === 0 || targets.length === 0) {
-      return [];
+      return { value: [] };
     }
-    return buildMatrix(
-      ds,
-      attackers,
-      targets,
-      salvo.compareDistance,
-      salvo.comparePhase,
-      "best-weapon",
-    );
+    try {
+      return {
+        value: buildMatrix(
+          ds,
+          attackers,
+          targets,
+          salvo.compareDistance,
+          salvo.comparePhase,
+          "best-weapon",
+        ),
+      };
+    } catch (err) {
+      return { value: [], error: (err as Error).message };
+    }
   });
+  const matrix = $derived(matrixResult.value);
 
   // --- Loadouts sub-mode -------------------------------------------------
   const loadoutResult = $derived.by<{ value: ReturnType<typeof enumerateLoadouts> | null; error?: string }>(() => {
@@ -71,16 +78,23 @@
   });
   const loadoutEnum = $derived(loadoutResult.value);
 
-  const loadoutRankings = $derived.by<LoadoutRanking[]>(() => {
-    if (!loadoutEnum || loadoutEnum.configs.length === 0 || targets.length === 0) return [];
-    return rankLoadouts(
-      ds,
-      loadoutEnum.configs,
-      targets,
-      salvo.compareDistance,
-      salvo.comparePhase,
-    );
+  const rankingResult = $derived.by<{ value: LoadoutRanking[]; error?: string }>(() => {
+    if (!loadoutEnum || loadoutEnum.configs.length === 0 || targets.length === 0) return { value: [] };
+    try {
+      return {
+        value: rankLoadouts(
+          ds,
+          loadoutEnum.configs,
+          targets,
+          salvo.compareDistance,
+          salvo.comparePhase,
+        ),
+      };
+    } catch (err) {
+      return { value: [], error: (err as Error).message };
+    }
   });
+  const loadoutRankings = $derived(rankingResult.value);
 
   function toggleProfile(id: string): void {
     const set = new Set(salvo.compareTargetIds);
@@ -89,16 +103,17 @@
     salvo.compareTargetIds = [...set];
   }
 
-  let copied = $state(false);
+  let copyState = $state<"idle" | "copied" | "failed">("idle");
   async function exportMarkdown(): Promise<void> {
     const md = matrixToMarkdown(matrix, targets, "best-weapon");
     try {
       await navigator.clipboard.writeText(md);
-      copied = true;
-      setTimeout(() => (copied = false), 1500);
+      copyState = "copied";
     } catch {
-      // Clipboard blocked (e.g. insecure context) — no-op; the table is on screen.
+      // Clipboard blocked (e.g. insecure context): say so; the table is still on screen.
+      copyState = "failed";
     }
+    setTimeout(() => (copyState = "idle"), 1500);
   }
 </script>
 
@@ -126,6 +141,12 @@
     </select>
   </div>
 
+  {#if matrixResult.error}
+    <p class="error" role="alert">The matrix could not be built: {matrixResult.error}</p>
+  {/if}
+  {#if rankingResult.error}
+    <p class="error" role="alert">Loadouts could not be ranked: {rankingResult.error}</p>
+  {/if}
   {#if loadoutResult.error}
     <p class="error" role="alert">Loadouts could not be enumerated: {loadoutResult.error}</p>
   {/if}
@@ -195,7 +216,7 @@
         Expected models killed per model firing each unit's best {salvo.comparePhase} weapon at
         {salvo.compareDistance}". Bold ≥ 1.0.
       </span>
-      <button onclick={exportMarkdown}>{copied ? "Copied!" : "Export markdown"}</button>
+      <button onclick={exportMarkdown}>{copyState === "copied" ? "Copied!" : copyState === "failed" ? "Copy blocked" : "Export markdown"}</button>
     </div>
     <div class="table-wrap">
       <table>

@@ -6,7 +6,10 @@
 import {
   attributeStages,
   loadoutHitModifier,
+  loadoutWargearScoring,
   profileEngineInput,
+  resolveUnitWeapon,
+  withGrantedWeapons,
   type AttributedStage,
   type Buff,
   type Dataset,
@@ -15,6 +18,8 @@ import {
   type StackableBuffGroup,
   type Unit,
   type UnitView,
+  type Weapon,
+  type WeaponGrant,
 } from "@alpaca-software/40kdc-data";
 
 import { activeSupport, defenderBuffs, type DefenderBuild } from "./defender.js";
@@ -26,6 +31,13 @@ export type LeverSelection = { buffs: StackableBuff[]; groups: StackableBuffGrou
 export type MemberUnit = { memberId: string; unit: UnitView; loadout: MemberLoadout };
 
 export type LineResult = WeaponLine & { models: number; attributed: AttributedStage[]; error?: string };
+
+/**
+ * What a member's loadout wargear changes about scoring it: the weapons that wargear grants (e.g. a
+ * drone's carbine), those weapons' records for their lines, and the shared buffs less the member's
+ * printed rules for wargear it leaves out.
+ */
+export type MemberWargear = { grants: WeaponGrant[]; granted: Weapon[]; buffs: Buff[]; error?: string };
 
 /** A unit carrying the manual target's stat block. */
 export function synthTarget(t: ManualTarget): Unit {
@@ -119,6 +131,46 @@ export function memberUnits(ds: Dataset, factionId: string | null, memberIds: re
     const unit = (factionId && ds.units.getInFaction(memberId, factionId)) || ds.units.getAny(memberId);
     return unit ? [{ memberId, unit, loadout: memberLoadout(ds, unit.raw) }] : [];
   });
+}
+
+/**
+ * A member's loadout wargear, scored the way the damage matrix scores it (the package's
+ * `loadoutWargearScoring`). Granted weapons the member already lists get no extra line.
+ */
+export function memberWargear(input: {
+  ds: Dataset;
+  factionId: string | null;
+  member: MemberUnit;
+  counts: ReadonlyMap<string, number>;
+  buffs: readonly Buff[];
+  context: EngineContext;
+}): MemberWargear {
+  const unit = input.member.unit.raw;
+  try {
+    const scoring = loadoutWargearScoring({
+      dataset: input.ds,
+      unit,
+      factionId: input.factionId ?? unit.faction_id,
+      counts: input.counts,
+      buffs: input.buffs,
+      context: input.context,
+    });
+    const listed = new Set(input.member.unit.weapons.map((weapon) => weapon.id));
+    const granted: Weapon[] = [];
+    for (const grant of scoring.grants.grants) {
+      if (listed.has(grant.weaponId) || granted.some((weapon) => weapon.id === grant.weaponId)) continue;
+      const weapon = resolveUnitWeapon(input.ds, unit, grant.weaponId);
+      if (weapon) granted.push(weapon);
+    }
+    return { grants: scoring.grants.grants, granted, buffs: scoring.buffs };
+  } catch (err) {
+    return { grants: [], granted: [], buffs: [...input.buffs], error: (err as Error).message };
+  }
+}
+
+/** How many copies of `weaponId` the member's wargear grants across its models. */
+export function grantedCopies(grants: readonly WeaponGrant[], counts: ReadonlyMap<string, number>, weaponId: string): number {
+  return (withGrantedWeapons(counts, grants).get(weaponId) ?? 0) - (counts.get(weaponId) ?? 0);
 }
 
 /**

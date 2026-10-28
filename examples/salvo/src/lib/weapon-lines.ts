@@ -19,6 +19,7 @@ import {
   type WargearOption,
   type Weapon,
   type WeaponBound,
+  type WeaponGrant,
 } from "@alpaca-software/40kdc-data";
 
 export type MemberLoadout = {
@@ -127,11 +128,18 @@ export function weaponLines(
 
 /**
  * Which lines each member fires and with how many models, given the weapon counts its models
- * carry.
+ * carry. A member's `grants` add the weapons its wargear equips, and its `buffs` replace the
+ * shared ones (the shared buffs less its printed rules for wargear it leaves out).
  */
 export function selectLines(input: {
   ds: Dataset;
-  members: readonly { memberId: string; loadout: MemberLoadout; counts: ReadonlyMap<string, number> }[];
+  members: readonly {
+    memberId: string;
+    loadout: MemberLoadout;
+    counts: ReadonlyMap<string, number>;
+    grants?: readonly WeaponGrant[];
+    buffs?: readonly Buff[];
+  }[];
   target: { unit: Unit; modelCount: number };
   buffs: readonly Buff[];
   context: EngineContext;
@@ -151,9 +159,10 @@ export function selectLines(input: {
       modelCount: member.loadout.modelCount,
       counts: member.counts,
       target: input.target,
-      buffs: input.buffs,
+      buffs: member.buffs ?? input.buffs,
       context: input.context,
       groups: legality.groups,
+      grants: member.grants,
     });
     for (const selected of scored.selected) {
       const id = lineId(member.memberId, selected.weaponId, selected.profileIndex);
