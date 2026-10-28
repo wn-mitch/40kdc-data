@@ -37798,6 +37798,62 @@
     }
   },
   {
+    "caseId": "fidelity/targeting-target-condition-attack-or-charge-target",
+    "effect": {
+      "type": "targeting",
+      "target": "this-unit",
+      "modifier": {
+        "by": "this-unit",
+        "may": "cannot-target",
+        "kind": "attack",
+        "target": {
+          "owner": "enemy"
+        },
+        "target_condition": {
+          "operator": "or",
+          "operands": [
+            {
+              "type": "happened",
+              "parameters": {
+                "event": "targets-selected",
+                "subject": {
+                  "owner": "any",
+                  "excluding": "ability-unit"
+                },
+                "object": "this-unit",
+                "filter": {
+                  "kind": "attack"
+                },
+                "window": "phase"
+              }
+            },
+            {
+              "type": "happened",
+              "parameters": {
+                "event": "targets-selected",
+                "subject": {
+                  "owner": "any",
+                  "excluding": "ability-unit"
+                },
+                "object": "this-unit",
+                "filter": {
+                  "kind": "charge"
+                },
+                "window": "phase"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, the unit cannot target enemy units with attacks if a unit other than this unit has selected the target unit as a target this phase or a unit other than this unit has selected the target unit as a charge target this phase."
+    }
+  },
+  {
     "caseId": "fidelity/named-region-producer-only",
     "effect": {
       "type": "conditional",

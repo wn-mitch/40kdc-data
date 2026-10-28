@@ -105,12 +105,17 @@ def _describe_happened_core(p: P, negated: bool) -> str:
             )
         # Only ranged (or melee, psychic) attacks: "as a target of its ranged attacks".
         atk = _str(f.get("attack_type")) if _truthy(f.get("attack_type")) else ""
+        # A charge's targets: "selected the unit as a charge target", apart from an attack's.
+        charge = _str(f.get("kind")) == "charge"
         if p.get("object") is not None:
-            what = f"{unit_ref_phrase(p['object'])} as a target" + (
+            noun = "a charge target" if charge else "a target"
+            what = f"{unit_ref_phrase(p['object'])} as {noun}" + (
                 f" of its {atk} attacks" if atk else ""
             )
         else:
-            what = "targets" + (f" for its {atk} attacks" if atk else "")
+            what = ("charge targets" if charge else "targets") + (
+                f" for its {atk} attacks" if atk else ""
+            )
         return _with_window(f"{who} {has} selected {what}", window)
     if event == "disembarked":
         transport = f.get("transport")

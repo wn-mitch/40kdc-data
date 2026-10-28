@@ -61,7 +61,9 @@ function happenedPhrase(p: P, negated: boolean): string {
       }
       // Only ranged (or melee, psychic) attacks: "as a target of its ranged attacks".
       const atk = f.attack_type ? str(f.attack_type) : "";
-      const what = p.object != null ? `${unitRefPhrase(p.object)} as a target${atk ? ` of its ${atk} attacks` : ""}` : `targets${atk ? ` for its ${atk} attacks` : ""}`;
+      // A charge's targets: "selected the unit as a charge target", apart from an attack's.
+      const noun = f.kind === "charge" ? "a charge target" : "a target";
+      const what = p.object != null ? `${unitRefPhrase(p.object)} as ${noun}${atk ? ` of its ${atk} attacks` : ""}` : `${f.kind === "charge" ? "charge targets" : "targets"}${atk ? ` for its ${atk} attacks` : ""}`;
       return withWindow(`${who} ${negated ? "has not" : "has"} selected ${what}`, p.window);
     }
     case "disembarked": {

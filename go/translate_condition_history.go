@@ -113,12 +113,17 @@ func describeHappenedCore(p map[string]any, negated bool) string {
 		if truthy(f["attack_type"]) {
 			atk = cstr(f["attack_type"])
 		}
-		what := "targets"
+		// A charge's targets: "selected the unit as a charge target", apart from an attack's.
+		noun, plural := "a target", "targets"
+		if f["kind"] == "charge" {
+			noun, plural = "a charge target", "charge targets"
+		}
+		what := plural
 		if atk != "" {
 			what += " for its " + atk + " attacks"
 		}
 		if p["object"] != nil {
-			what = unitRefPhrase(p["object"], "the unit") + " as a target"
+			what = unitRefPhrase(p["object"], "the unit") + " as " + noun
 			if atk != "" {
 				what += " of its " + atk + " attacks"
 			}

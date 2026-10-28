@@ -4081,6 +4081,11 @@ function genEffectTranslation(): void {
       target_condition: { type: "unit-state", parameters: { subject: "this-unit", state: "engaged", with: "ability-unit", at: "turn-start" } } } } },
     { caseId: "fidelity/targeting-target-condition-targeted-by-another", effect: { type: "targeting", target: "this-unit", modifier: { by: "this-unit", may: "cannot-target", kind: "attack", target: { owner: "enemy" },
       target_condition: { type: "happened", parameters: { event: "targets-selected", subject: { owner: "any", excluding: "ability-unit" }, object: "this-unit", filter: { kind: "attack" }, window: "phase" } } } } },
+    // Targeted by another unit's attack or by its charge: the two histories read apart.
+    { caseId: "fidelity/targeting-target-condition-attack-or-charge-target", effect: { type: "targeting", target: "this-unit", modifier: { by: "this-unit", may: "cannot-target", kind: "attack", target: { owner: "enemy" },
+      target_condition: { operator: "or", operands: [
+        { type: "happened", parameters: { event: "targets-selected", subject: { owner: "any", excluding: "ability-unit" }, object: "this-unit", filter: { kind: "attack" }, window: "phase" } },
+        { type: "happened", parameters: { event: "targets-selected", subject: { owner: "any", excluding: "ability-unit" }, object: "this-unit", filter: { kind: "charge" }, window: "phase" } }] } } } },
     // A named region declared with nothing reading it here (a producer-only named-region-state).
     { caseId: "fidelity/named-region-producer-only", effect: { type: "conditional", condition: { type: "army-faction", parameters: { faction: "example-faction" } },
       effect: { type: "named-region-state", target: { owner: "friendly" }, modifier: {

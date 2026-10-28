@@ -179,16 +179,22 @@ fn happened_phrase(p: &P, negated: bool) -> String {
             } else {
                 String::new()
             };
+            // A charge's targets: "selected the unit as a charge target", apart from an attack's.
+            let (noun, plural) = if st(f.get("kind")) == "charge" {
+                ("a charge target", "charge targets")
+            } else {
+                ("a target", "targets")
+            };
             let what = match nn(p, "object") {
                 Some(o) if atk.is_empty() => {
-                    format!("{} as a target", unit_ref_phrase(Some(o), "the unit"))
+                    format!("{} as {noun}", unit_ref_phrase(Some(o), "the unit"))
                 }
                 Some(o) => format!(
-                    "{} as a target of its {atk} attacks",
+                    "{} as {noun} of its {atk} attacks",
                     unit_ref_phrase(Some(o), "the unit")
                 ),
-                None if atk.is_empty() => "targets".to_string(),
-                None => format!("targets for its {atk} attacks"),
+                None if atk.is_empty() => plural.to_string(),
+                None => format!("{plural} for its {atk} attacks"),
             };
             with_window(
                 &format!(
