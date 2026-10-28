@@ -192,6 +192,7 @@
     "scope": {
       "duration": "permanent"
     },
+    "optional": true,
     "expected": {
       "text": "You can re-roll the Charge roll."
     }
@@ -12679,8 +12680,9 @@
       "count": 1,
       "per": "unit"
     },
+    "optional": true,
     "expected": {
-      "text": "Once per battle per unit:\n  -> The Command Re Roll Stratagem that targets the unit costs 0CP.\n  -> The unit's Command Re Roll ability has no limit on its number of uses, and this use does not count toward that ability's limit for other units.\n  -> Place a Cherub marker."
+      "text": "You can: Once per battle per unit:\n  -> The Command Re Roll Stratagem that targets the unit costs 0CP.\n  -> The unit's Command Re Roll ability has no limit on its number of uses, and this use does not count toward that ability's limit for other units.\n  -> Place a Cherub marker."
     }
   },
   {
@@ -16851,7 +16853,50 @@
     }
   },
   {
-    "caseId": "fables-of-nightmare-spearhead-at-arms-imperial-knights#261",
+    "caseId": "exemplar-of-the-montka-montka-tau-empire#261",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "battle-round",
+          "parameters": {
+            "min": 4,
+            "max": 4
+          }
+        },
+        "effect": {
+          "type": "rule-state",
+          "target": "this-unit",
+          "modifier": {
+            "direction": "granted",
+            "rule_kind": "ability",
+            "rule": "killing-blow-tau-empire"
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "all_of": [
+        "T’AU EMPIRE"
+      ]
+    },
+    "expected": {
+      "text": "While this model is leading a unit, during the fourth battle round, the unit gains the Killing Blow ability.\nApplies to: units with T’AU EMPIRE."
+    }
+  },
+  {
+    "caseId": "fables-of-nightmare-spearhead-at-arms-imperial-knights#262",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -16894,7 +16939,7 @@
     }
   },
   {
-    "caseId": "fated-hero-aeldari#262",
+    "caseId": "fated-hero-aeldari#263",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -16934,7 +16979,7 @@
     }
   },
   {
-    "caseId": "fates-in-flux-chaos-daemons#263",
+    "caseId": "fates-in-flux-chaos-daemons#264",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -16974,7 +17019,7 @@
     }
   },
   {
-    "caseId": "ferocious-show-off-green-tide-orks#264",
+    "caseId": "ferocious-show-off-green-tide-orks#265",
     "effect": {
       "type": "choice",
       "options": [
@@ -17022,7 +17067,7 @@
     }
   },
   {
-    "caseId": "fire-and-fury-bringers-of-flame-adepta-sororitas#265",
+    "caseId": "fire-and-fury-bringers-of-flame-adepta-sororitas#266",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -17082,7 +17127,7 @@
     }
   },
   {
-    "caseId": "fires-of-damnation-sanctuary-guardians-adepta-sororitas#266",
+    "caseId": "fires-of-damnation-sanctuary-guardians-adepta-sororitas#267",
     "effect": {
       "type": "rules-bundle",
       "steps": [
@@ -17124,7 +17169,7 @@
     }
   },
   {
-    "caseId": "flow-of-magic-thousand-sons#267",
+    "caseId": "flow-of-magic-thousand-sons#268",
     "effect": {
       "type": "named-region-state",
       "target": {
@@ -17276,7 +17321,7 @@
     }
   },
   {
-    "caseId": "forward-assault-warsuit-adeptus-astartes#268",
+    "caseId": "forward-assault-warsuit-adeptus-astartes#269",
     "effect": {
       "type": "ability-part",
       "trigger": {
@@ -17354,7 +17399,7 @@
     }
   },
   {
-    "caseId": "gate-of-infinity-crowes-sanctifiers-grey-knights#269",
+    "caseId": "gate-of-infinity-crowes-sanctifiers-grey-knights#270",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -17457,7 +17502,7 @@
     }
   },
   {
-    "caseId": "gate-of-infinity-grey-knights#270",
+    "caseId": "gate-of-infinity-grey-knights#271",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -17560,7 +17605,7 @@
     }
   },
   {
-    "caseId": "gift-of-change-warpmeld-pact-thousand-sons#271",
+    "caseId": "gift-of-change-warpmeld-pact-thousand-sons#272",
     "effect": {
       "type": "add-unit",
       "target": "this-unit",
@@ -17581,7 +17626,7 @@
     }
   },
   {
-    "caseId": "grot-shields-runt-swarm-orks#272",
+    "caseId": "grot-shields-runt-swarm-orks#273",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -17758,7 +17803,7 @@
     }
   },
   {
-    "caseId": "guns-blazing-chaos-space-marines#273",
+    "caseId": "guns-blazing-chaos-space-marines#274",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -17871,7 +17916,7 @@
     }
   },
   {
-    "caseId": "hallowed-ground-grey-knights#274",
+    "caseId": "hallowed-ground-grey-knights#275",
     "effect": {
       "type": "named-region-state",
       "target": {
@@ -18073,7 +18118,7 @@
     }
   },
   {
-    "caseId": "headhunters-space-wolves#275",
+    "caseId": "headhunters-space-wolves#276",
     "effect": {
       "type": "ability-part",
       "trigger": {
@@ -18158,7 +18203,7 @@
     }
   },
   {
-    "caseId": "headlong-destruction-chaos-space-marines#276",
+    "caseId": "headlong-destruction-chaos-space-marines#277",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -18187,7 +18232,7 @@
     }
   },
   {
-    "caseId": "heroes-of-legend-imperial-knights#277",
+    "caseId": "heroes-of-legend-imperial-knights#278",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -18279,7 +18324,7 @@
     }
   },
   {
-    "caseId": "honour-or-death-dark-angels#278",
+    "caseId": "honour-or-death-dark-angels#279",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -18359,7 +18404,7 @@
     }
   },
   {
-    "caseId": "horrors-are-pink-horrors-are-blue-where-once-there-was-one-now-there-are-two-chaos-daemons#279",
+    "caseId": "horrors-are-pink-horrors-are-blue-where-once-there-was-one-now-there-are-two-chaos-daemons#280",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -18386,7 +18431,7 @@
     }
   },
   {
-    "caseId": "horrors-are-pink-horrors-are-blue-where-once-there-was-one-now-there-are-two-thousand-sons#280",
+    "caseId": "horrors-are-pink-horrors-are-blue-where-once-there-was-one-now-there-are-two-thousand-sons#281",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -18458,7 +18503,7 @@
     }
   },
   {
-    "caseId": "hyper-adaptations-tyranids#281",
+    "caseId": "hyper-adaptations-tyranids#282",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -18598,7 +18643,7 @@
     }
   },
   {
-    "caseId": "hyperspace-hunters-necrons#282",
+    "caseId": "hyperspace-hunters-necrons#283",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -18709,7 +18754,7 @@
     }
   },
   {
-    "caseId": "icon-of-khorne-world-eaters#283",
+    "caseId": "icon-of-khorne-world-eaters#284",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -18751,7 +18796,7 @@
     }
   },
   {
-    "caseId": "idol-of-blessed-blood-khorne-lord-of-skulls-world-eaters#284",
+    "caseId": "idol-of-blessed-blood-khorne-lord-of-skulls-world-eaters#285",
     "effect": {
       "type": "resource-die",
       "target": "this-model",
@@ -18773,7 +18818,7 @@
     }
   },
   {
-    "caseId": "imposing-arrival-steel-hammer-astra-militarum#285",
+    "caseId": "imposing-arrival-steel-hammer-astra-militarum#286",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -18810,7 +18855,7 @@
     }
   },
   {
-    "caseId": "independent-power-tau-empire#286",
+    "caseId": "independent-power-tau-empire#287",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -18866,7 +18911,7 @@
     }
   },
   {
-    "caseId": "infested-war-zone-runt-swarm-orks#287",
+    "caseId": "infested-war-zone-runt-swarm-orks#288",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -18947,7 +18992,7 @@
     }
   },
   {
-    "caseId": "join-the-hunt-kroot-hunting-pack-tau-empire#288",
+    "caseId": "join-the-hunt-kroot-hunting-pack-tau-empire#289",
     "effect": {
       "type": "add-unit",
       "target": "this-unit",
@@ -18971,79 +19016,6 @@
     },
     "expected": {
       "text": "Once per battle per army, for the rest of the battle, add a new unit identical to the unit to your army in Strategic Reserves.\nApplies to: units with KROOT."
-    }
-  },
-  {
-    "caseId": "killing-blow-tau-empire#289",
-    "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "battle-round",
-            "parameters": {
-              "max": 3
-            }
-          },
-          "effect": {
-            "type": "weapon-ability-grant",
-            "target": "this-unit",
-            "modifier": {
-              "weapons": {
-                "type": "ranged"
-              },
-              "keywords": [
-                {
-                  "keyword_id": "assault"
-                }
-              ]
-            }
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "battle-round",
-                "parameters": {
-                  "max": 3
-                }
-              },
-              {
-                "type": "matches",
-                "parameters": {
-                  "filter": {
-                    "designated": "GUIDED"
-                  }
-                }
-              }
-            ]
-          },
-          "effect": {
-            "type": "weapon-ability-grant",
-            "target": "this-unit",
-            "modifier": {
-              "weapons": {
-                "type": "ranged"
-              },
-              "keywords": [
-                {
-                  "keyword_id": "lethal-hits"
-                }
-              ]
-            }
-          }
-        }
-      ]
-    },
-    "scope": {
-      "duration": "battle-round"
-    },
-    "expected": {
-      "text": "Until the end of the battle round:\n  -> During the first 3 battle rounds, ranged weapons equipped by models in this unit gain [ASSAULT].\n  -> During the first 3 battle rounds, while the unit is GUIDED, ranged weapons equipped by models in this unit gain [LETHAL HITS]."
     }
   },
   {
@@ -29088,8 +29060,9 @@
     "scope": {
       "duration": "permanent"
     },
+    "optional": true,
     "expected": {
-      "text": "The unit is eligible to be targeted with the Heroic Intervention Stratagem even if it has already been targeted with that Stratagem this phase.\nReduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).\nThe unit's Heroic Intervention ability has no limit on its number of uses, and this use does not count toward that ability's limit for other units."
+      "text": "You can: The unit is eligible to be targeted with the Heroic Intervention Stratagem even if it has already been targeted with that Stratagem this phase.\nReduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).\nThe unit's Heroic Intervention ability has no limit on its number of uses, and this use does not count toward that ability's limit for other units."
     }
   },
   {
