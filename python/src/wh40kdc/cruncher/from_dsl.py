@@ -23,6 +23,7 @@ from typing import Any, TypeGuard
 from wh40kdc.cruncher import from_dsl_levers as _levers
 from wh40kdc.cruncher import from_dsl_selection as _selection
 from wh40kdc.cruncher.buffs import Buff, BuffSource, EngineContext
+from wh40kdc.cruncher.condition_facts import ConditionNeed, condition_fact_key, condition_needs
 from wh40kdc.cruncher.from_dsl_shapes import (
     UNSUPPORTED_SHAPE_REASONS,
     StanceGate,
@@ -1851,6 +1852,12 @@ def _translate_conditional(
                         f'"{_js_str(condition_name)}" against current context'
                     ),
                     "effectFragment": node.get("_activation_source", node),
+                    "needs": _undecided_needs(
+                        evaluated,
+                        opts["context"],
+                        opts["perspective"],
+                        None if opts.get("grantedHolder") else source,
+                    ),
                 }
             )
         return
@@ -2645,7 +2652,13 @@ def _collect_gated_buffs(
                         "reason": (
                             "activation condition cannot be evaluated against current context"
                         ),
-                        "effectFragment": node,
+                        "effectFragment": node.get("_activation_source", node),
+                        "needs": _undecided_needs(
+                            condition,
+                            opts["context"],
+                            opts["perspective"],
+                            None if opts.get("grantedHolder") else source,
+                        ),
                     }
                 )
             return
@@ -3296,6 +3309,39 @@ def _within_objective(filt: dict[str, Any], objectives: Any, ability_side: str) 
 
 
 def _evaluate_condition(
+    condition: dict[str, Any],
+    ctx: EngineContext,
+    perspective: str = "attacker",
+    source: BuffSource | None = None,
+) -> Any:
+    """Evaluate a condition against the context. A leaf the context leaves undecided takes its
+    declared answer from ``ctx["conditionFacts"]`` when the caller gave one."""
+    verdict = _evaluate_condition_from_context(condition, ctx, perspective, source)
+    facts = ctx.get("conditionFacts")
+    if verdict != "unknown" or facts is None or isinstance(condition.get("operator"), str):
+        return verdict
+    answer = facts.get(condition_fact_key(condition, perspective))
+    return answer if isinstance(answer, bool) else "unknown"
+
+
+def _undecided_needs(
+    condition: dict[str, Any],
+    ctx: EngineContext,
+    perspective: str,
+    source: BuffSource | None,
+) -> list[ConditionNeed]:
+    """The leaves of an undecided condition, as an unsupported entry's ``needs``. A
+    ``timing-is`` leaf is the activation's own moment, which the player opts into as a lever, so
+    it is never a need."""
+    needs = condition_needs(
+        condition,
+        perspective,
+        lambda node: _evaluate_condition(node, ctx, perspective, source),
+    )
+    return [need for need in needs if need["condition"].get("type") != "timing-is"]
+
+
+def _evaluate_condition_from_context(
     condition: dict[str, Any],
     ctx: EngineContext,
     perspective: str = "attacker",

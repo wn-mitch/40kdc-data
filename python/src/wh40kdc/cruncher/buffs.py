@@ -54,6 +54,11 @@ ResolvedModifiers = dict[str, Any]
 #: ``attacker`` / ``target`` (plus ``none`` / ``no-mans-land``)). The attack's characteristics,
 #: neighbours, active rules, regions, objective counts and combined-unit members are listed in
 #: :mod:`wh40kdc.cruncher.scenario_conditions`.
+#:
+#: ``conditionFacts`` holds declared answers for leaf conditions the rest of the context leaves
+#: undecided, keyed by :func:`wh40kdc.cruncher.condition_facts.condition_fact_key`. The translator
+#: reports each undecided leaf as a need (an unsupported entry's ``needs``); a caller that answers
+#: it here decides the leaf. A key that is absent leaves the leaf undecided.
 EngineContext = dict[str, Any]
 
 #: Stable ordering used to break ties when multiple buffs claim the same field.

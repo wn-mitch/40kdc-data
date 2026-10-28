@@ -275,6 +275,14 @@ pub struct EngineContext {
     /// Printed keyword references, preserving ratings for canonical weapon selectors.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub weapon_keyword_refs: Option<Vec<WeaponKeywordRef>>,
+    /// Declared answers for leaf conditions the rest of the context leaves undecided, keyed by
+    /// [`condition_fact_key`](super::condition_facts::condition_fact_key). The translator
+    /// reports each undecided leaf as a need ([`UnsupportedFragment::needs`]); a caller that
+    /// answers it here decides the leaf. A key that is absent leaves the leaf undecided.
+    ///
+    /// [`UnsupportedFragment::needs`]: super::from_dsl::UnsupportedFragment::needs
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub condition_facts: Option<BTreeMap<String, bool>>,
 }
 
 impl EngineContext {
@@ -359,6 +367,7 @@ impl EngineContext {
             weapon_names: None,
             weapon_keywords: None,
             weapon_keyword_refs: None,
+            condition_facts: None,
         }
     }
 }

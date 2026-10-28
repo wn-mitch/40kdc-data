@@ -90,6 +90,8 @@ def _run_dsl_corpus(dataset: Any, filename: str) -> None:
         assert applied_contribs == c["expected"]["applied"], message
         reasons = [u["reason"] for u in result["unsupported"]]
         assert reasons == c["expected"]["unsupportedReasons"], message
+        need_keys = [n["key"] for u in result["unsupported"] for n in u.get("needs", [])]
+        assert need_keys == c["expected"].get("needKeys", []), f"need keys for {message}"
         # Each applied buff's gate (None when ungated), pinned on the rows that carry it.
         if c["expected"].get("applicableWhen") is not None:
             gates = [b.get("applicableWhen") for b in result["applied"]]

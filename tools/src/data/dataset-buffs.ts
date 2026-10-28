@@ -13,7 +13,7 @@ import type { Phase } from "../generated.js";
 import type { EligibleAbility } from "../abilities-resolver/index.js";
 import type { Dataset } from "./dataset.js";
 import type { EligibilityInput } from "../abilities-resolver/index.js";
-import type { UnitView } from "./entities.js";
+import type { AbilityView, UnitView } from "./entities.js";
 import { historicalSnapshotAbilities } from "./recipient-snapshots.js";
 import {
   abilityLevers,
@@ -25,6 +25,8 @@ import {
   resolveOptionRequirements,
   stanceOptionName,
   type AbilityLevers,
+  type AbilityNeed,
+  abilityNeeds,
   type OptionGate,
   type CapacityRaise,
   type LeverCost,
@@ -94,9 +96,10 @@ export function stackableBuffsFor(
     weaponProfiles?: { weaponId: string; profileIndex: number }[];
   },
   context: EngineContext,
-): { buffs: StackableBuff[]; groups: StackableBuffGroup[] } {
+): { buffs: StackableBuff[]; groups: StackableBuffGroup[]; needs: AbilityNeed[] } {
   const buffs: StackableBuff[] = [];
   const groups: StackableBuffGroup[] = [];
+  const needs: AbilityNeed[] = [];
   const capRaises = new Map<StackableBuff, CapacityRaise>();
   const optionRequirements = new Map<StackableBuff, OptionGate>();
   const take = (levers: AbilityLevers) => {
@@ -104,6 +107,7 @@ export function stackableBuffsFor(
     for (const group of levers.groups) if (!groups.some((g) => g.id === group.id)) groups.push(group);
     for (const [lever, raise] of levers.capRaises) capRaises.set(lever, raise);
     for (const [lever, option] of levers.optionRequirements) optionRequirements.set(lever, option);
+    for (const need of levers.needs) if (!needs.some((n) => n.key === need.key && n.abilityId === need.abilityId)) needs.push(need);
   };
 
   const unit = inputUnit(ds, input);
@@ -189,7 +193,7 @@ export function stackableBuffsFor(
     stanceOptionName((ds.abilities.getInFaction(option.ability_id, factionId) ?? ds.abilities.getAny(option.ability_id))?.raw.effect, option.option_id)
       ?? option.option_id;
   const resolved = resolveOptionRequirements(resolveCapRaises(buffs, capRaises, groups), optionRequirements, groups, optionName);
-  return { buffs: resolved, groups };
+  return { buffs: resolved, groups, needs };
 }
 
 /** The input's selected unit, resolved within its faction when one is given. */
@@ -204,7 +208,10 @@ function inputEligibleAbilities(ds: Dataset, input: BuffInput, phase: Phase): El
   return input.unitId === undefined ? [] : ds.eligibleAbilities({ ...input, unitId: input.unitId }, phase);
 }
 
-/** Shared implementation of {@link Dataset.buffsFor} / {@link Dataset.defensiveBuffsFor}. */
+/**
+ * Shared implementation of {@link Dataset.buffsFor} / {@link Dataset.defensiveBuffsFor}. When
+ * `needs` is given, every undecided leaf condition of the walked abilities is pushed onto it.
+ */
 export function collectBuffs(
   ds: Dataset,
   input: BuffInput & {
@@ -213,8 +220,18 @@ export function collectBuffs(
   },
   context: EngineContext,
   perspective: "attacker" | "target",
+  needs?: AbilityNeed[],
 ): Buff[] {
   const out: Buff[] = [];
+  const translate = (ability: AbilityView, source: BuffSource, rating?: string | number) => {
+    const translation = ability.describeBuffs(source, ctx, perspective, rating);
+    if (needs) {
+      for (const need of abilityNeeds(translation.unsupported, ability.id, ability.name)) {
+        if (!needs.some((n) => n.key === need.key && n.abilityId === need.abilityId)) needs.push(need);
+      }
+    }
+    return translation.applied;
+  };
 
   const unit = inputUnit(ds, input);
   const factionId = input.factionId ?? unit?.raw.faction_id;
@@ -276,11 +293,11 @@ export function collectBuffs(
     }
     const source = bufferSourceFromEligible(entry);
     visited.push({ abilityId: entry.ability.id, source });
-    out.push(...entry.ability.getBuffs(source, ctx, perspective, entry.rating));
+    out.push(...translate(entry.ability, source, entry.rating));
   }
   for (const entry of historicalSnapshotAbilities(ds, input, ctx, perspective)) {
     if (visited.some((current) => current.abilityId === entry.ability.id && sameSnapshotValue(current.source, entry.source))) continue;
-    out.push(...entry.ability.getBuffs(entry.source, ctx, perspective));
+    out.push(...translate(entry.ability, entry.source));
   }
 
   return out;

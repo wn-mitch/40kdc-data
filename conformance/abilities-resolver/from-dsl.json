@@ -22,6 +22,7 @@
           "effect type \"permission\" is not modelled by the buff layer",
           "effect type \"permission\" is not modelled by the buff layer"
         ],
+        "needKeys": [],
         "activatable": [
           {
             "id": "combat-doctrines-assault-force-adeptus-astartes#devastator-doctrine",
@@ -88,6 +89,12 @@
           "effect type \"army-rule\" is not modelled by the buff layer",
           "effect type \"army-rule\" is not modelled by the buff layer"
         ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"filter\":{\"all_of\":[\"ADEPTUS ASTARTES\"],\"owner\":\"friendly\"},\"subject\":\"attacker\"},\"type\":\"matches\"}",
+          "attacker:{\"parameters\":{\"filter\":{\"all_of\":[\"PSYKER\"]},\"subject\":\"defender\"},\"type\":\"matches\"}",
+          "attacker:{\"parameters\":{\"filter\":{\"all_of\":[\"ADEPTUS ASTARTES\"],\"owner\":\"friendly\"},\"subject\":\"attacker\"},\"type\":\"matches\"}",
+          "attacker:{\"parameters\":{\"comparison\":\"gt\",\"left\":{\"of\":\"defender\",\"stat\":\"T\"},\"right\":{\"of\":\"attacker\",\"stat\":\"S\"}},\"type\":\"attack-compare\"}"
+        ],
         "activatable": []
       }
     },
@@ -104,6 +111,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -121,6 +129,9 @@
         "applied": [],
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"army-faction\" against current context"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"faction\":\"world-eaters\"},\"type\":\"army-faction\"}"
         ],
         "activatable": []
       }
@@ -141,6 +152,7 @@
         "unsupportedReasons": [
           "effect type \"keyword-grant\" is not modelled by the buff layer"
         ],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -161,6 +173,7 @@
         "unsupportedReasons": [
           "model-scoped effect from an attached model: applies to that model only (core rule 19.04)"
         ],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -188,6 +201,7 @@
         "unsupportedReasons": [
           "model-in-this-unit: individual model identity is unresolved"
         ],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -216,6 +230,7 @@
         "unsupportedReasons": [
           "model-scoped effect from an attached model: applies to that model only (core rule 19.04)"
         ],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -278,6 +293,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [
           {
             "id": "the-imperiums-sword-1st-company-task-force-adeptus-astartes#+1 attacks",
@@ -324,6 +340,10 @@
           "conditional: cannot evaluate condition \"army-faction\" against current context",
           "conditional: cannot evaluate condition \"army-faction\" against current context"
         ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"faction\":\"aeldari\"},\"type\":\"army-faction\"}",
+          "attacker:{\"parameters\":{\"faction\":\"aeldari\"},\"type\":\"army-faction\"}"
+        ],
         "activatable": []
       }
     },
@@ -341,6 +361,9 @@
         "applied": [],
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"and\" against current context"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"turn\":\"your-turn\"},\"type\":\"player-turn-is\"}"
         ],
         "activatable": []
       }
@@ -410,6 +433,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [
           {
             "id": "example-quarry-designation#example-quarry",
@@ -521,6 +545,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -572,6 +597,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -624,6 +650,7 @@
         "unsupportedReasons": [
           "unit-filter target: identity, state or model membership is unresolved"
         ],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -657,6 +684,7 @@
         "unsupportedReasons": [
           "weapon-ability-removal: the cruncher does not model removing a weapon ability (\"Heavy\")"
         ],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -697,6 +725,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -728,6 +757,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -755,6 +785,7 @@
         "unsupportedReasons": [
           "roll-result on \"hit\": only a critical threshold on hit or wound rolls is modelled"
         ],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -782,6 +813,7 @@
         "unsupportedReasons": [
           "roll-result on \"advance\" is outside the damage path"
         ],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -839,6 +871,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -904,6 +937,7 @@
         "unsupportedReasons": [
           "stat-modifier BS: operation \"set\" not supported"
         ],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -958,6 +992,7 @@
         "unsupportedReasons": [
           "stat-modifier on \"Range\" is outside the damage path"
         ],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -1027,6 +1062,7 @@
           "stat-modifier on \"M\" is outside the damage path",
           "effect type \"ability-grant\" is not modelled by the buff layer"
         ],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -1066,6 +1102,7 @@
         "unsupportedReasons": [
           "unit-filter target: identity, state or model membership is unresolved"
         ],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -1100,6 +1137,7 @@
         "unsupportedReasons": [
           "ability-grant: the units holding the granted ability are not resolved"
         ],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -1175,6 +1213,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [
           {
             "id": "fabricated-pick-rule#selected",
@@ -1310,6 +1349,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -1385,6 +1425,7 @@
         "unsupportedReasons": [
           "effect type \"designate\" is not modelled by the buff layer"
         ],
+        "needKeys": [],
         "activatable": [
           {
             "id": "fabricated-bomb-rule#selected",
@@ -1494,6 +1535,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -1528,6 +1570,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [
           {
             "id": "fabricated-cap-rule#at-cap",
@@ -1573,6 +1616,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [
           {
             "id": "fabricated-more-rule#cap",
@@ -1605,6 +1649,9 @@
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"model-count\" against current context"
         ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"min\":6,\"subject\":\"defender\"},\"type\":\"model-count\"}"
+        ],
         "activatable": []
       }
     },
@@ -1623,6 +1670,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -1651,6 +1699,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -1679,6 +1728,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -1707,6 +1757,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -1732,6 +1783,7 @@
         "unsupportedReasons": [
           "roll-modifier on \"leadership\" is outside the damage path"
         ],
+        "needKeys": [],
         "activatable": [
           {
             "id": "debt-to-the-soul-forge-chaos-space-marines@used:dark-pact",
@@ -1791,6 +1843,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -1811,6 +1864,7 @@
           "target \"event-subject\" is not resolved by the buff engine",
           "target \"event-subject\" is not resolved by the buff engine"
         ],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -1847,6 +1901,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [
           {
             "id": "event-subject-part@selected:shoot",
@@ -1900,6 +1955,7 @@
         "unsupportedReasons": [
           "target \"event-object\" is not resolved by the buff engine"
         ],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -1922,6 +1978,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [
           {
             "id": "emp-grenades-kroot-hunting-pack-tau-empire@selected:shoot",
@@ -1991,6 +2048,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -2012,6 +2070,7 @@
           "target \"event-subject\" is not resolved by the buff engine",
           "target \"event-subject\" is not resolved by the buff engine"
         ],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -2035,6 +2094,7 @@
         "unsupportedReasons": [
           "post-attack moment: applies only to attacks made after the triggering unit's"
         ],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -2070,6 +2130,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [
           {
             "id": "post-enemy-attack@attacks-resolved",
@@ -2129,6 +2190,7 @@
         "unsupportedReasons": [
           "post-attack moment: applies only to attacks made after the triggering unit's"
         ],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -2174,6 +2236,9 @@
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"not\" against current context"
         ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"filter\":{\"state\":\"battle-shocked\"},\"subject\":\"attacker\"},\"type\":\"matches\"}"
+        ],
         "activatable": []
       }
     },
@@ -2194,6 +2259,9 @@
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"and\" against current context"
         ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"filter\":{\"has_ability\":[\"stealth\"]},\"subject\":\"this-unit\"},\"type\":\"matches\"}"
+        ],
         "activatable": []
       }
     },
@@ -2213,6 +2281,9 @@
         "applied": [],
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"and\" against current context"
+        ],
+        "needKeys": [
+          "target:{\"parameters\":{\"filter\":{\"has_ability\":[\"stealth\"]},\"subject\":\"this-unit\"},\"type\":\"matches\"}"
         ],
         "activatable": []
       }
@@ -2246,6 +2317,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -2273,6 +2345,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -2316,6 +2389,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -2354,6 +2428,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -2392,6 +2467,9 @@
         "applied": [],
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"battle-round\" against current context"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"max\":5,\"min\":3},\"type\":\"battle-round\"}"
         ],
         "activatable": []
       }
@@ -2435,6 +2513,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -2472,6 +2551,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -2509,6 +2589,9 @@
         "applied": [],
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"player-turn-is\" against current context"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"turn\":\"your-turn\"},\"type\":\"player-turn-is\"}"
         ],
         "activatable": []
       }
@@ -2553,6 +2636,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -2591,6 +2675,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -2634,6 +2719,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -2672,6 +2758,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -2710,6 +2797,9 @@
         "applied": [],
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"strength\" against current context"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"below\":\"starting\",\"subject\":\"defender\"},\"type\":\"strength\"}"
         ],
         "activatable": []
       }
@@ -2757,6 +2847,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -2798,6 +2889,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -2839,6 +2931,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -2882,6 +2975,9 @@
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"wounds\" against current context"
         ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"damaged\":true,\"subject\":\"this-model\"},\"type\":\"wounds\"}"
+        ],
         "activatable": []
       }
     },
@@ -2920,6 +3016,9 @@
         "applied": [],
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"wounds\" against current context"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"remaining_max\":5,\"subject\":\"this-model\"},\"type\":\"wounds\"}"
         ],
         "activatable": []
       }
@@ -2965,6 +3064,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -3004,6 +3104,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -3046,6 +3147,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -3085,6 +3187,9 @@
         "applied": [],
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"closest\" against current context"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"among\":\"eligible-targets\",\"subject\":\"defender\",\"to\":\"attacker\"},\"type\":\"closest\"}"
         ],
         "activatable": []
       }
@@ -3134,6 +3239,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -3175,6 +3281,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -3216,6 +3323,9 @@
         "applied": [],
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"matches\" against current context"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"filter\":{\"designated\":\"SPOTTED\",\"owner\":\"enemy\"},\"subject\":\"defender\"},\"type\":\"matches\"}"
         ],
         "activatable": []
       }
@@ -3265,6 +3375,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -3308,6 +3419,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -3349,6 +3461,9 @@
         "applied": [],
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"matches\" against current context"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"filter\":{\"owner\":\"enemy\",\"state\":\"battle-shocked\"},\"subject\":\"defender\"},\"type\":\"matches\"}"
         ],
         "activatable": []
       }
@@ -3395,6 +3510,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -3435,6 +3551,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -3491,6 +3608,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -3542,6 +3660,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -3593,6 +3712,9 @@
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"matches\" against current context"
         ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"filter\":{\"within\":{\"of\":{\"objective\":{\"controlled_by\":\"friendly\"}},\"range\":\"objective-control\"}},\"subject\":\"this-unit\"},\"type\":\"matches\"}"
+        ],
         "activatable": []
       }
     },
@@ -3640,6 +3762,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -3699,6 +3822,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -3750,6 +3874,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -3796,6 +3921,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -3843,6 +3969,9 @@
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"matches\" against current context"
         ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"filter\":{\"owner\":\"enemy\",\"within\":{\"of\":\"this-unit\",\"range\":{\"inches\":12}}},\"subject\":\"defender\"},\"type\":\"matches\"}"
+        ],
         "activatable": []
       }
     },
@@ -3888,6 +4017,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -3938,6 +4068,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -3981,6 +4112,9 @@
         "applied": [],
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"not\" against current context"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"weapons\":{\"name\":\"Plague spewer\"}},\"type\":\"attack-is\"}"
         ],
         "activatable": []
       }
@@ -4029,6 +4163,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -4072,6 +4207,7 @@
         "unsupportedReasons": [
           "unit-filter target: identity, state or model membership is unresolved"
         ],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -4113,6 +4249,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -4156,6 +4293,7 @@
         "unsupportedReasons": [
           "unit-filter target: identity, state or model membership is unresolved"
         ],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -4195,6 +4333,7 @@
         "unsupportedReasons": [
           "unit-filter target: identity, state or model membership is unresolved"
         ],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -4250,6 +4389,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -4305,6 +4445,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [
           {
             "id": "fabricated-designation#fabricated-target",
@@ -4394,6 +4535,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [
           {
             "id": "fabricated-designation#fabricated-target",
@@ -4476,6 +4618,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -4515,6 +4658,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -4552,6 +4696,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -4589,6 +4734,9 @@
         "applied": [],
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"unit-wargear\" against current context"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"subject\":\"this-unit\",\"wargear\":\"fab-gun-pod\"},\"type\":\"unit-wargear\"}"
         ],
         "activatable": []
       }
@@ -4630,6 +4778,9 @@
         "applied": [],
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"unit-wargear\" against current context"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"subject\":\"defender\",\"wargear\":\"fab-gun-pod\"},\"type\":\"unit-wargear\"}"
         ],
         "activatable": []
       }
@@ -4677,6 +4828,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -4722,6 +4874,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -4774,6 +4927,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -4819,6 +4973,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -4871,6 +5026,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -4917,6 +5073,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -4963,6 +5120,9 @@
         "applied": [],
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"unit-wargear\" against current context"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"models\":{\"count\":{\"min\":1},\"state\":\"lack\"},\"subject\":\"this-unit\",\"wargear\":\"fab-gun-pod\"},\"type\":\"unit-wargear\"}"
         ],
         "activatable": []
       }
@@ -5011,6 +5171,9 @@
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"unit-wargear\" against current context"
         ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"models\":{\"count\":{\"min\":\"D3\"},\"state\":\"carry\"},\"subject\":\"this-unit\",\"wargear\":\"fab-gun-pod\"},\"type\":\"unit-wargear\"}"
+        ],
         "activatable": []
       }
     },
@@ -5031,6 +5194,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [
           {
             "id": "plasma-accelerator-rifle-experimental-prototype-cadre-tau-empire@battle-formations-declared",
@@ -5085,6 +5249,7 @@
           "select-weapon: a bound weapon is not resolved by the buff engine",
           "weapon-ability-grant: unresolved weapons.ref"
         ],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -5122,6 +5287,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -5175,6 +5341,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -5206,6 +5373,7 @@
         "unsupportedReasons": [
           "stat-modifier D: setting the Damage of incoming attacks is not modelled"
         ],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -5236,6 +5404,7 @@
         "unsupportedReasons": [
           "stat-modifier T: setting the Toughness characteristic is not modelled"
         ],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -5350,6 +5519,7 @@
         "unsupportedReasons": [
           "stat-modifier T: defender-side stat; applies when the buffed unit is the target"
         ],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -5428,6 +5598,7 @@
         "unsupportedReasons": [
           "trigger-time recipient snapshot is unavailable; current membership cannot establish historical recipients"
         ],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -5537,6 +5708,7 @@
         "unsupportedReasons": [
           "trigger-time recipient snapshot is unavailable; current membership cannot establish historical recipients"
         ],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -5646,6 +5818,7 @@
         "unsupportedReasons": [
           "trigger-time recipient snapshot is unavailable; current membership cannot establish historical recipients"
         ],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -5785,6 +5958,7 @@
         "unsupportedReasons": [
           "conflicting trigger-time recipient snapshots"
         ],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -5892,6 +6066,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -6001,6 +6176,7 @@
         "unsupportedReasons": [
           "trigger-time recipient snapshot is unavailable; current membership cannot establish historical recipients"
         ],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -6110,6 +6286,7 @@
         "unsupportedReasons": [
           "trigger-time recipient snapshot is unavailable; current membership cannot establish historical recipients"
         ],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -6212,6 +6389,7 @@
         "unsupportedReasons": [
           "trigger-time recipient snapshot is unavailable; current membership cannot establish historical recipients"
         ],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -6321,6 +6499,7 @@
         "unsupportedReasons": [
           "trigger-time recipient snapshot is unavailable; current membership cannot establish historical recipients"
         ],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -6430,6 +6609,7 @@
         "unsupportedReasons": [
           "trigger-time recipient snapshot is unavailable; current membership cannot establish historical recipients"
         ],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -6544,6 +6724,7 @@
         "unsupportedReasons": [
           "stat-modifier T: defender-side stat; applies when the buffed unit is the target"
         ],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -6663,6 +6844,7 @@
         "unsupportedReasons": [
           "stat-modifier T: defender-side stat; applies when the buffed unit is the target"
         ],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -6791,6 +6973,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -6841,6 +7024,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -6886,6 +7070,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -6931,6 +7116,9 @@
         "applied": [],
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"matches\" against current context"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"filter\":{\"level\":\"unit\",\"owner\":\"enemy\",\"within\":{\"of\":\"attacker\",\"range\":\"half-weapon\"}},\"subject\":\"defender\"},\"type\":\"matches\"}"
         ],
         "activatable": []
       }
@@ -6980,6 +7168,9 @@
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"matches\" against current context"
         ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"filter\":{\"level\":\"unit\",\"owner\":\"enemy\",\"within\":{\"of\":\"attacker\",\"range\":\"half-weapon\",\"wholly\":true}},\"subject\":\"defender\"},\"type\":\"matches\"}"
+        ],
         "activatable": []
       }
     },
@@ -7026,6 +7217,9 @@
         "applied": [],
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"matches\" against current context"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"filter\":{\"level\":\"unit\",\"owner\":\"enemy\",\"within\":{\"of\":\"defender\",\"range\":\"half-weapon\"}},\"subject\":\"defender\"},\"type\":\"matches\"}"
         ],
         "activatable": []
       }
@@ -7077,6 +7271,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": [
           null
@@ -7125,6 +7320,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": []
       }
@@ -7173,6 +7369,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": [
           null
@@ -7214,6 +7411,9 @@
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"rule-active\" against current context"
         ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"rule\":\"example-rule\"},\"type\":\"rule-active\"}"
+        ],
         "activatable": [],
         "applicableWhen": []
       }
@@ -7254,6 +7454,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [
           {
             "id": "fabricated-scenario#assault",
@@ -7323,6 +7524,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [
           {
             "id": "fabricated-scenario#assault",
@@ -7392,6 +7594,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": []
       }
@@ -7458,6 +7661,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [
           {
             "id": "fabricated-scenario#assault",
@@ -7560,6 +7764,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [
           {
             "id": "fabricated-scenario?0",
@@ -7662,6 +7867,7 @@
         "unsupportedReasons": [
           "activation mixes stance-gated buffs with other buffs"
         ],
+        "needKeys": [],
         "activatable": [
           {
             "id": "fabricated-scenario?0",
@@ -7724,6 +7930,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [
           {
             "id": "fabricated-scenario#not-assault",
@@ -7801,6 +8008,7 @@
         "unsupportedReasons": [
           "unit-filter target: identity, state or model membership is unresolved"
         ],
+        "needKeys": [],
         "activatable": [
           {
             "id": "fabricated-scenario#readied",
@@ -7879,6 +8087,9 @@
           "unit-filter target: identity, state or model membership is unresolved",
           "conditional: cannot evaluate condition \"matches\" against current context"
         ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"filter\":{\"designated\":\"marked\"},\"subject\":\"this-unit\"},\"type\":\"matches\"}"
+        ],
         "activatable": [],
         "applicableWhen": []
       }
@@ -7939,6 +8150,7 @@
         "unsupportedReasons": [
           "unit-filter target: identity, state or model membership is unresolved"
         ],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": []
       }
@@ -8021,6 +8233,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [
           {
             "id": "fabricated-scenario#not-assault",
@@ -8109,6 +8322,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": [
           null
@@ -8159,6 +8373,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": []
       }
@@ -8205,6 +8420,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": []
       }
@@ -8257,6 +8473,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": [
           null
@@ -8310,6 +8527,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": [
           null
@@ -8358,6 +8576,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": []
       }
@@ -8403,6 +8622,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": []
       }
@@ -8468,6 +8688,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": [
           null
@@ -8530,6 +8751,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": []
       }
@@ -8579,6 +8801,9 @@
         "applied": [],
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"attachment\" against current context"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"role\":\"leading\",\"subject\":\"this-model\",\"with\":{\"all_of\":[\"EXAMPLE SQUAD\"]}},\"type\":\"attachment\"}"
         ],
         "activatable": [],
         "applicableWhen": []
@@ -8642,6 +8867,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": [
           null
@@ -8709,6 +8935,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": [
           null
@@ -8773,6 +9000,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": [
           null
@@ -8840,6 +9068,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [
           {
             "id": "fabricated-scenario#example-protocol",
@@ -8951,6 +9180,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [
           {
             "id": "fabricated-scenario#example-protocol",
@@ -9062,6 +9292,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": []
       }
@@ -9108,6 +9339,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": [
           null
@@ -9150,6 +9382,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": []
       }
@@ -9193,6 +9426,7 @@
         "unsupportedReasons": [
           "unit-filter target: identity, state or model membership is unresolved"
         ],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": []
       }
@@ -9237,6 +9471,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": []
       }
@@ -9301,6 +9536,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": [
           null
@@ -9362,6 +9598,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": []
       }
@@ -9412,6 +9649,9 @@
         "applied": [],
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"matches\" against current context"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"filter\":{\"within\":{\"of\":{\"all_of\":[\"BATTLELINE\"],\"owner\":\"friendly\"},\"range\":{\"inches\":6}}}},\"type\":\"matches\"}"
         ],
         "activatable": [],
         "applicableWhen": []
@@ -9468,6 +9708,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": [
           {
@@ -9524,6 +9765,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": []
       }
@@ -9593,6 +9835,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": [
           {
@@ -9667,6 +9910,10 @@
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"and\" against current context"
         ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"rule\":\"example-rule\"},\"type\":\"rule-active\"}",
+          "attacker:{\"parameters\":{\"comparison\":\"gt\",\"left\":{\"of\":\"attacker\",\"stat\":\"S\"},\"right\":{\"of\":\"defender\",\"stat\":\"T\"}},\"type\":\"attack-compare\"}"
+        ],
         "activatable": [],
         "applicableWhen": []
       }
@@ -9712,6 +9959,9 @@
         "applied": [],
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"attack-compare\" against current context"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"comparison\":\"gt\",\"left\":{\"of\":\"attacker\",\"stat\":\"A\"},\"right\":{\"value\":3}},\"type\":\"attack-compare\"}"
         ],
         "activatable": [],
         "applicableWhen": []
@@ -9775,6 +10025,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": [
           {
@@ -9851,6 +10102,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": [
           {
@@ -9908,6 +10160,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": [
           null
@@ -9946,6 +10199,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": []
       }
@@ -9982,6 +10236,9 @@
         "applied": [],
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"guided\" against current context"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{},\"type\":\"guided\"}"
         ],
         "activatable": [],
         "applicableWhen": []
@@ -10030,6 +10287,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": [
           null
@@ -10074,6 +10332,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": []
       }
@@ -10121,6 +10380,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": [
           null
@@ -10165,6 +10425,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": []
       }
@@ -10208,6 +10469,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": []
       }
@@ -10252,6 +10514,9 @@
         "applied": [],
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"model-count\" against current context"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"keyword\":\"EXAMPLE CHAMPION\",\"min\":1,\"subject\":\"this-unit\"},\"type\":\"model-count\"}"
         ],
         "activatable": [],
         "applicableWhen": []
@@ -10302,6 +10567,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": [
           null
@@ -10349,6 +10615,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": []
       }
@@ -10391,6 +10658,9 @@
         "applied": [],
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"designated\" against current context"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"by\":\"this-unit\",\"count\":{\"min\":2},\"tag\":\"example-mark\"},\"type\":\"designated\"}"
         ],
         "activatable": [],
         "applicableWhen": []
@@ -10450,6 +10720,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": [
           null
@@ -10500,6 +10771,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": []
       }
@@ -10548,6 +10820,9 @@
         "applied": [],
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"designated\" against current context"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"subject\":{\"objective\":{\"role\":\"central\"}},\"tag\":\"example-mark\"},\"type\":\"designated\"}"
         ],
         "activatable": [],
         "applicableWhen": []
@@ -10610,6 +10885,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": [
           null
@@ -10668,6 +10944,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": []
       }
@@ -10720,6 +10997,9 @@
         "applied": [],
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"controls\" against current context"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"count\":{\"min\":2},\"objective\":{\"role\":\"non-home\"}},\"type\":\"controls\"}"
         ],
         "activatable": [],
         "applicableWhen": []
@@ -10777,6 +11057,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": [
           null
@@ -10834,6 +11115,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": [
           null
@@ -10889,6 +11171,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": []
       }
@@ -10937,6 +11220,9 @@
         "applied": [],
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"in-region\" against current context"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"region\":{\"terrain_area\":{\"designated\":\"example-ruin\"}},\"subject\":\"this-unit\"},\"type\":\"in-region\"}"
         ],
         "activatable": [],
         "applicableWhen": []
@@ -10990,6 +11276,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": [
           null
@@ -11039,6 +11326,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": []
       }
@@ -11084,6 +11372,9 @@
         "applied": [],
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"happened\" against current context"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"event\":\"move-ended\",\"filter\":{\"move_types\":[\"advance\",\"fall-back\"]},\"window\":\"turn\"},\"type\":\"happened\"}"
         ],
         "activatable": [],
         "applicableWhen": []
@@ -11138,6 +11429,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": [
           null
@@ -11188,6 +11480,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": []
       }
@@ -11234,6 +11527,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": [
           null
@@ -11278,6 +11572,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": []
       }
@@ -11317,6 +11612,9 @@
         "applied": [],
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"roll-result\" against current context"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"result\":\"failure\",\"roll\":\"leadership\"},\"type\":\"roll-result\"}"
         ],
         "activatable": [],
         "applicableWhen": []
@@ -11384,6 +11682,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": [
           null
@@ -11449,6 +11748,9 @@
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"attachment\" against current context"
         ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"role\":\"leading\",\"subject\":\"this-model\",\"with\":{\"all_of\":[\"EXAMPLE SERGEANT\"],\"level\":\"model\"}},\"type\":\"attachment\"}"
+        ],
         "activatable": [],
         "applicableWhen": []
       }
@@ -11510,6 +11812,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": []
       }
@@ -11571,6 +11874,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": []
       }
@@ -11620,6 +11924,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": [
           null
@@ -11666,6 +11971,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": []
       }
@@ -11708,6 +12014,9 @@
         "applied": [],
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"happened\" against current context"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"event\":\"selected\",\"filter\":{\"to\":\"fight\"},\"window\":\"phase\"},\"type\":\"happened\"}"
         ],
         "activatable": [],
         "applicableWhen": []
@@ -11755,6 +12064,9 @@
         "applied": [],
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"happened\" against current context"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"event\":\"selected\",\"filter\":{\"to\":\"fight\"},\"subject\":\"event-subject\",\"window\":\"phase\"},\"type\":\"happened\"}"
         ],
         "activatable": [],
         "applicableWhen": []
@@ -11810,6 +12122,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": [
           null
@@ -11861,6 +12174,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": []
       }
@@ -11912,6 +12226,9 @@
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"happened\" against current context"
         ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"event\":\"model-destroyed\",\"filter\":{\"by\":\"this-model\"},\"object\":{\"level\":\"model\",\"owner\":\"enemy\"},\"window\":\"phase\"},\"type\":\"happened\"}"
+        ],
         "activatable": [],
         "applicableWhen": []
       }
@@ -11961,6 +12278,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": []
       }
@@ -12012,6 +12330,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": []
       }
@@ -12068,6 +12387,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": [
           null
@@ -12119,6 +12439,9 @@
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"happened\" against current context"
         ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"count\":{\"min\":2},\"event\":\"destroyed\",\"filter\":{\"by\":\"this-unit\"},\"object\":{\"owner\":\"enemy\"},\"window\":\"phase\"},\"type\":\"happened\"}"
+        ],
         "activatable": [],
         "applicableWhen": []
       }
@@ -12162,6 +12485,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": []
       }
@@ -12206,6 +12530,9 @@
         "applied": [],
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"happened\" against current context"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"count\":{\"min\":1},\"event\":\"model-destroyed\",\"object\":\"this-model\",\"window\":\"phase\"},\"type\":\"happened\"}"
         ],
         "activatable": [],
         "applicableWhen": []
@@ -12252,6 +12579,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": [
           null
@@ -12307,6 +12635,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": [
           null
@@ -12361,6 +12690,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": []
       }
@@ -12404,6 +12734,9 @@
         "applied": [],
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"happened\" against current context"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"event\":\"after-roll\",\"filter\":{\"result\":\"success\",\"roll\":\"dark-pact\"},\"window\":\"phase\"},\"type\":\"happened\"}"
         ],
         "activatable": [],
         "applicableWhen": []
@@ -12460,6 +12793,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": [
           null
@@ -12514,6 +12848,9 @@
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"happened\" against current context"
         ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"event\":\"after-roll\",\"filter\":{\"attack_type\":\"ranged\",\"result\":\"success\",\"roll\":\"hit\"},\"object\":\"defender\",\"window\":\"phase\"},\"type\":\"happened\"}"
+        ],
         "activatable": [],
         "applicableWhen": []
       }
@@ -12559,6 +12896,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": []
       }
@@ -12605,6 +12943,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": [
           {
@@ -12649,8 +12988,456 @@
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"roll-result\" against current context"
         ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"result\":\"critical\",\"roll\":\"hit\"},\"type\":\"roll-result\"}"
+        ],
         "activatable": [],
         "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/condition-fact-undeclared",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "matches",
+          "parameters": {
+            "subject": "event-subject",
+            "filter": {
+              "engaged_with": "this-unit"
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"matches\" against current context"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"filter\":{\"engaged_with\":\"this-unit\"},\"subject\":\"event-subject\"},\"type\":\"matches\"}"
+        ],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/condition-fact-true",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "matches",
+          "parameters": {
+            "subject": "event-subject",
+            "filter": {
+              "engaged_with": "this-unit"
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "conditionFacts": {
+          "attacker:{\"parameters\":{\"filter\":{\"engaged_with\":\"this-unit\"},\"subject\":\"event-subject\"},\"type\":\"matches\"}": true
+        }
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "hit-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "needKeys": [],
+        "activatable": [],
+        "applicableWhen": [
+          null
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/scenario/condition-fact-false",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "matches",
+          "parameters": {
+            "subject": "event-subject",
+            "filter": {
+              "engaged_with": "this-unit"
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "conditionFacts": {
+          "attacker:{\"parameters\":{\"filter\":{\"engaged_with\":\"this-unit\"},\"subject\":\"event-subject\"},\"type\":\"matches\"}": false
+        }
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "needKeys": [],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/condition-fact-other-perspective",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "matches",
+          "parameters": {
+            "subject": "event-subject",
+            "filter": {
+              "engaged_with": "this-unit"
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "conditionFacts": {
+          "target:{\"parameters\":{\"filter\":{\"engaged_with\":\"this-unit\"},\"subject\":\"event-subject\"},\"type\":\"matches\"}": true
+        }
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"matches\" against current context"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"filter\":{\"engaged_with\":\"this-unit\"},\"subject\":\"event-subject\"},\"type\":\"matches\"}"
+        ],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/condition-fact-under-not",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "operator": "not",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "subject": "event-subject",
+                "filter": {
+                  "engaged_with": "this-unit"
+                }
+              }
+            }
+          ]
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "conditionFacts": {
+          "attacker:{\"parameters\":{\"filter\":{\"engaged_with\":\"this-unit\"},\"subject\":\"event-subject\"},\"type\":\"matches\"}": true
+        }
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "needKeys": [],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/condition-fact-one-of-two",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "subject": "event-subject",
+                "filter": {
+                  "engaged_with": "this-unit"
+                }
+              }
+            },
+            {
+              "type": "happened",
+              "parameters": {
+                "event": "disembarked",
+                "window": "turn"
+              }
+            }
+          ]
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "conditionFacts": {
+          "attacker:{\"parameters\":{\"filter\":{\"engaged_with\":\"this-unit\"},\"subject\":\"event-subject\"},\"type\":\"matches\"}": true
+        }
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"and\" against current context"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"event\":\"disembarked\",\"window\":\"turn\"},\"type\":\"happened\"}"
+        ],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/condition-fact-decided-and",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "fight"
+              }
+            },
+            {
+              "type": "matches",
+              "parameters": {
+                "subject": "event-subject",
+                "filter": {
+                  "engaged_with": "this-unit"
+                }
+              }
+            }
+          ]
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "needKeys": [],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/condition-fact-context-wins",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "guided",
+          "parameters": {}
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerGuided": false,
+        "conditionFacts": {
+          "attacker:{\"parameters\":{},\"type\":\"guided\"}": true
+        }
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "needKeys": [],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/condition-fact-key-text",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "matches",
+          "parameters": {
+            "subject": "selected-unit",
+            "filter": {
+              "none_of": [
+                "EXAMPLE’S HOST"
+              ],
+              "all_of": [
+                "VEHICLE"
+              ]
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "conditionFacts": {
+          "attacker:{\"parameters\":{\"filter\":{\"all_of\":[\"VEHICLE\"],\"none_of\":[\"EXAMPLE’S HOST\"]},\"subject\":\"selected-unit\"},\"type\":\"matches\"}": true
+        }
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "hit-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "needKeys": [],
+        "activatable": [],
+        "applicableWhen": [
+          null
+        ]
       }
     },
     {
@@ -12693,6 +13480,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -12755,6 +13543,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -12811,6 +13600,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -12868,6 +13658,9 @@
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"army-faction\" against current context"
         ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"faction\":\"example\"},\"type\":\"army-faction\"}"
+        ],
         "activatable": []
       }
     },
@@ -12910,6 +13703,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [
           {
             "id": "fabricated-grantor#AP -1",
@@ -13016,6 +13810,7 @@
         "unsupportedReasons": [
           "effect type \"ability-grant\" is not modelled by the buff layer"
         ],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -13056,6 +13851,7 @@
         "unsupportedReasons": [
           "effect type \"ability-grant\" is not modelled by the buff layer"
         ],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -13084,6 +13880,7 @@
         "unsupportedReasons": [
           "effect type \"ability-grant\" is not modelled by the buff layer"
         ],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -13124,6 +13921,7 @@
         "unsupportedReasons": [
           "ability-grant: model-only definition cannot be applied to the entire unit"
         ],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -13149,6 +13947,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -13189,6 +13988,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -13226,6 +14026,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -13259,6 +14060,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -13292,6 +14094,7 @@
         "unsupportedReasons": [
           "ignore-modifiers: only hit and wound rolls and WS/BS are modelled"
         ],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -13322,6 +14125,7 @@
         "unsupportedReasons": [
           "ignore-modifiers: only hit and wound rolls and WS/BS are modelled"
         ],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -13363,6 +14167,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [
           {
             "id": "trigger-subject-example@selected:shoot",
@@ -13438,6 +14243,7 @@
         "unsupportedReasons": [
           "target \"event-subject\" is not resolved by the buff engine"
         ],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -13472,6 +14278,7 @@
         "unsupportedReasons": [
           "model-only target"
         ],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -13505,6 +14312,7 @@
         "unsupportedReasons": [
           "model-only target"
         ],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -13542,6 +14350,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -13578,6 +14387,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     }

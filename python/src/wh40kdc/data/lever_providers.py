@@ -49,12 +49,26 @@ class AbilityLevers:
         self.groups: list[dict[str, Any]] = []
         self.cap_raises: dict[int, tuple[Lever, dict[str, Any]]] = {}
         self.option_requirements: dict[int, tuple[Lever, OptionGate]] = {}
+        #: Leaf conditions the context leaves undecided, with the ability that raised each.
+        self.needs: list[dict[str, Any]] = []
 
     def raise_cap(self, lever: Lever, raise_: dict[str, Any]) -> None:
         self.cap_raises[id(lever)] = (lever, raise_)
 
     def require_option(self, lever: Lever, gate: OptionGate) -> None:
         self.option_requirements[id(lever)] = (lever, gate)
+
+
+def ability_needs(
+    unsupported: list[dict[str, Any]], ability_id: str, label: str
+) -> list[dict[str, Any]]:
+    """Each need an ability's translation reports (``{key, condition, perspective}``), tagged
+    with that ability's ``abilityId`` and ``label``."""
+    return [
+        {**need, "abilityId": ability_id, "label": label}
+        for item in unsupported
+        for need in item.get("needs") or []
+    ]
 
 
 def combined_unit(
@@ -172,6 +186,7 @@ def ability_levers(
     """
     out = AbilityLevers()
     translation = ability.describe_buffs(source, ctx, "attacker", rating)
+    out.needs.extend(ability_needs(translation["unsupported"], ability.id, label))
     grants = [g for g in granted_record_ids(translation) if g["abilityId"] not in held]
     levers: list[Lever] = []
     requires_lever = id_base if gate else None
@@ -215,6 +230,7 @@ def ability_levers(
         out.groups.extend(granted["groups"])
         out.cap_raises.update(granted["capRaises"])
         out.option_requirements.update(granted["optionRequirements"])
+        out.needs.extend(granted["needs"])
 
     if gate:
         if translation["applied"] or levers:
@@ -306,6 +322,7 @@ def enhancement_levers(
             out.groups.extend(levers.groups)
             out.cap_raises.update(levers.cap_raises)
             out.option_requirements.update(levers.option_requirements)
+            out.needs.extend(levers.needs)
         if len(out.buffs) > before:
             out.groups.append(
                 {"id": group, "label": f"Enhancement on {bearer.name}", "maxActivations": 1}
@@ -428,6 +445,7 @@ def granted_record_levers(
         "groups": list(groups.values()),
         "capRaises": cap_raises,
         "optionRequirements": option_requirements,
+        "needs": ability_needs(translation["unsupported"], record.id, record.name),
     }
 
 

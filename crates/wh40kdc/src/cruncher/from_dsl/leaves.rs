@@ -455,6 +455,7 @@ pub(super) fn keyword_grant(node: &Obj, opts: &WalkOpts, out: &mut Out) {
                 "weapon-ability-removal: the cruncher does not model removing a weapon ability (\"{label}\")"
             ),
             json!({ "removes": [keyword] }),
+            None,
         ));
     }
     if m.get("if_present").is_some_and(|value| !value.is_null()) {
@@ -478,6 +479,7 @@ pub(super) fn keyword_grant(node: &Obj, opts: &WalkOpts, out: &mut Out) {
             out.unsupported.push((
                 "weapon-ability-grant: keyword rating quantity is unresolved".into(),
                 raw.clone(),
+                None,
             ));
             continue;
         }
@@ -487,6 +489,7 @@ pub(super) fn keyword_grant(node: &Obj, opts: &WalkOpts, out: &mut Out) {
             out.unsupported.push((
                 "weapon-ability-grant: malformed catalog keyword reference".into(),
                 raw.clone(),
+                None,
             ));
             continue;
         };

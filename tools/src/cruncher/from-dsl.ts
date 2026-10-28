@@ -48,11 +48,17 @@ import {
 } from "./scenario-conditions.js";
 import { RECIPIENT_SNAPSHOT_UNAVAILABLE, resolveRecipientSnapshots } from "./recipient-snapshots.js";
 import { resolveNamedWeaponBindings } from "./weapon-bindings.js";
+import { conditionFactKey, conditionNeeds, type ConditionNeed } from "./condition-facts.js";
 
 /** A fragment we couldn't translate. The SPA can render these as warnings. */
 export type UnsupportedFragment = {
   reason: string;
   effectFragment: unknown;
+  /**
+   * For an undecided condition: the leaves that leave it undecided. Answering each in
+   * {@link EngineContext.conditionFacts} decides the condition.
+   */
+  needs?: ConditionNeed[];
 };
 
 const stochasticDiceGatedReason = "dice-gated effect: stochastic; not expressible as a buff";
@@ -1572,6 +1578,7 @@ function translateConditional(
       out.unsupported.push({
         reason: `conditional: cannot evaluate condition "${String(condition.type ?? condition.operator)}" against current context`,
         effectFragment: activationSources.get(node)?.fragment ?? node,
+        needs: undecidedNeeds(evaluated, opts.context, opts.perspective, opts.grantedHolder ? undefined : source),
       });
     }
     return;
@@ -2116,7 +2123,11 @@ function collectGatedBuffs(
         const verdict = evaluateCondition(condition, opts.context, opts.perspective, opts.grantedHolder ? undefined : source);
         if (verdict === true) {
           collectGatedBuffs(node.effect, source, opts, applicability, outBuffs, diagnostics, stance);
-        } else if (verdict === "unknown") diagnostics?.push({ reason: "activation condition cannot be evaluated against current context", effectFragment: activationSources.get(node)?.fragment ?? node });
+        } else if (verdict === "unknown") diagnostics?.push({
+          reason: "activation condition cannot be evaluated against current context",
+          effectFragment: activationSources.get(node)?.fragment ?? node,
+          needs: undecidedNeeds(condition, opts.context, opts.perspective, opts.grantedHolder ? undefined : source),
+        });
         return;
       }
       collectGatedBuffs(node.effect, source, opts, combineApplicability(applicability, app), outBuffs, diagnostics, stance);
@@ -2420,7 +2431,37 @@ function singleKeyword(params: Record<string, unknown> | undefined): string | un
   return all[0];
 }
 
+/**
+ * Evaluate a condition against the context. A leaf the context leaves undecided takes its declared
+ * answer from {@link EngineContext.conditionFacts} when the caller gave one.
+ */
 function evaluateCondition(
+  condition: Record<string, unknown>,
+  ctx: EngineContext,
+  perspective: TranslationPerspective = "attacker",
+  source?: BuffSource,
+): boolean | "unknown" {
+  const verdict = evaluateConditionFromContext(condition, ctx, perspective, source);
+  if (verdict !== "unknown" || ctx.conditionFacts === undefined || typeof condition.operator === "string") return verdict;
+  const answer: unknown = ctx.conditionFacts[conditionFactKey(condition, perspective)];
+  return typeof answer === "boolean" ? answer : "unknown";
+}
+
+/**
+ * The leaves of an undecided condition, as {@link UnsupportedFragment.needs}. A `timing-is` leaf is
+ * the activation's own moment, which the player opts into as a lever, so it is never a need.
+ */
+function undecidedNeeds(
+  condition: Record<string, unknown>,
+  ctx: EngineContext,
+  perspective: TranslationPerspective,
+  source?: BuffSource,
+): ConditionNeed[] {
+  return conditionNeeds(condition, perspective, (node) => evaluateCondition(node, ctx, perspective, source))
+    .filter((need) => need.condition.type !== "timing-is");
+}
+
+function evaluateConditionFromContext(
   condition: Record<string, unknown>,
   ctx: EngineContext,
   perspective: TranslationPerspective = "attacker",

@@ -33,6 +33,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::{json, Map, Value};
 
 use super::buffs::{AbilityKind, Buff, BuffSource, EngineContext};
+use super::condition_facts::ConditionNeed;
 use js::*;
 
 pub use levers::{
@@ -53,6 +54,10 @@ pub(crate) fn bind_snapshot_recipient(node: &Obj, target: &Value) -> Option<Valu
 pub struct UnsupportedFragment {
     pub reason: String,
     pub effect_fragment: Value,
+    /// For an undecided condition: the leaves that leave it undecided. Answering each in
+    /// [`EngineContext::condition_facts`] decides the condition.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub needs: Option<Vec<ConditionNeed>>,
 }
 
 /// A mutually-limited pool of [`ActivatableBuff`] levers: at most `max_activations` of the
@@ -155,14 +160,18 @@ pub(crate) struct Lever {
 #[derive(Default)]
 pub(crate) struct Out {
     applied: Vec<Value>,
-    unsupported: Vec<(String, Value)>,
+    unsupported: Vec<Diagnostic>,
     activatable: Vec<Lever>,
 }
+
+/// An unsupported fragment as the walker collects it: reason, fragment, and the needs of an
+/// undecided condition.
+pub(crate) type Diagnostic = (String, Value, Option<Vec<ConditionNeed>>);
 
 impl Out {
     fn unsupported(&mut self, reason: impl Into<String>, fragment: &Obj) {
         self.unsupported
-            .push((reason.into(), Value::Object(fragment.clone())));
+            .push((reason.into(), Value::Object(fragment.clone()), None));
     }
 }
 
@@ -247,6 +256,7 @@ pub(crate) fn effect_to_buffs_with_duration(
                     unsupported: vec![UnsupportedFragment {
                         reason: reason.into(),
                         effect_fragment: effect,
+                        needs: None,
                     }],
                     ..Default::default()
                 }
@@ -295,9 +305,10 @@ fn finish(out: Out) -> EffectTranslation {
         unsupported: out
             .unsupported
             .into_iter()
-            .map(|(reason, effect_fragment)| UnsupportedFragment {
+            .map(|(reason, effect_fragment, needs)| UnsupportedFragment {
                 reason,
                 effect_fragment,
+                needs,
             })
             .collect(),
         activatable: out

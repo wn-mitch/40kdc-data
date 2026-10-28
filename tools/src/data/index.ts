@@ -96,6 +96,8 @@ export type {
   UnsupportedFragment,
 } from "../cruncher/from-dsl.js";
 
+export type { AbilityNeed } from "./lever-providers.js";
+
 // The eligible-abilities resolver (also reachable as Dataset.eligibleAbilities).
 export * from "../abilities-resolver/index.js";
 

@@ -21,6 +21,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       },
       "_comment": "Feel No Pain is one core record whose threshold reads the unit's printed rating ({rating: true}); rating is that value (a unit printing Feel No Pain 5+)."
@@ -40,6 +41,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -61,6 +63,7 @@
           "effect type \"permission\" is not modelled by the buff layer",
           "effect type \"permission\" is not modelled by the buff layer"
         ],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -84,6 +87,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -105,6 +109,7 @@
         "unsupportedReasons": [
           "model-scoped effect from an attached model: applies to that model only (core rule 19.04)"
         ],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -132,6 +137,7 @@
         "unsupportedReasons": [
           "model-in-this-unit: individual model identity is unresolved"
         ],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -160,6 +166,7 @@
         "unsupportedReasons": [
           "model-scoped effect from an attached model: applies to that model only (core rule 19.04)"
         ],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -204,6 +211,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -286,6 +294,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -344,6 +353,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -376,6 +386,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -408,6 +419,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -440,6 +452,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -472,6 +485,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -507,6 +521,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -544,6 +559,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -586,6 +602,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -629,6 +646,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -685,6 +703,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -735,6 +754,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -779,6 +799,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -824,6 +845,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -862,6 +884,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -903,6 +926,9 @@
         "applied": [],
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"unit-wargear\" against current context"
+        ],
+        "needKeys": [
+          "target:{\"parameters\":{\"subject\":\"this-unit\",\"wargear\":\"fab-guard-pod\"},\"type\":\"unit-wargear\"}"
         ],
         "activatable": []
       }
@@ -1016,6 +1042,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -1064,6 +1091,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": [
           null
@@ -1112,6 +1140,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": []
       }
@@ -1163,6 +1192,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": [
           {
@@ -1224,6 +1254,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": []
       }
@@ -1285,6 +1316,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": [
           null
@@ -1337,6 +1369,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [],
         "applicableWhen": [
           null
@@ -1379,8 +1412,62 @@
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"roll-result\" against current context"
         ],
+        "needKeys": [
+          "target:{\"parameters\":{\"result\":\"critical\",\"roll\":\"wound\"},\"type\":\"roll-result\"}"
+        ],
         "activatable": [],
         "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/condition-fact-defender",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "matches",
+          "parameters": {
+            "subject": "event-subject",
+            "filter": {
+              "engaged_with": "this-unit"
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "attacker",
+          "modifier": {
+            "roll": "hit",
+            "operation": "subtract",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "conditionFacts": {
+          "target:{\"parameters\":{\"filter\":{\"engaged_with\":\"this-unit\"},\"subject\":\"event-subject\"},\"type\":\"matches\"}": true
+        }
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [
+          {
+            "type": "hit-mod",
+            "value": -1
+          }
+        ],
+        "unsupportedReasons": [],
+        "needKeys": [],
+        "activatable": [],
+        "applicableWhen": [
+          null
+        ]
       }
     },
     {
@@ -1423,6 +1510,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -1454,6 +1542,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -1487,6 +1576,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [
           {
             "id": "fabricated-plating#zero the damage of 2 attacks",
@@ -1543,6 +1633,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [
           {
             "id": "fabricated-plating#zero the damage of 1 attack per model",
@@ -1605,6 +1696,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": [
           {
             "id": "fabricated-plating#zero the damage of 1 attack",
@@ -1662,6 +1754,7 @@
         "unsupportedReasons": [
           "damage-reduction: halving Damage is not modelled by the buff layer"
         ],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -1693,6 +1786,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -1724,6 +1818,7 @@
         "unsupportedReasons": [
           "model-only target"
         ],
+        "needKeys": [],
         "activatable": []
       }
     }

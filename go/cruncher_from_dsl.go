@@ -1245,7 +1245,9 @@ func collectGatedBuffs(node any, source map[string]any, opts dslOpts, applicabil
 				if verdict == true {
 					collectGatedBuffs(n["effect"], source, opts, applicability, outBuffs, diagnostics, stance)
 				} else if verdict == nil && diagnostics != nil {
-					*diagnostics = append(*diagnostics, unsup("activation condition cannot be evaluated against current context", activationFragment(n)))
+					entry := unsup("activation condition cannot be evaluated against current context", activationFragment(n))
+					entry["needs"] = undecidedNeeds(condition, opts.context, opts.perspective, evalSource)
+					*diagnostics = append(*diagnostics, entry)
 				}
 				return
 			}
@@ -2028,10 +2030,12 @@ func translateConditional(node, source map[string]any, opts dslOpts, out *effect
 			if conditionName == nil {
 				conditionName = condition["operator"]
 			}
-			out.unsupported = append(out.unsupported, unsup(
+			entry := unsup(
 				"conditional: cannot evaluate condition \""+jsStr(conditionName)+"\" against current context",
 				activationFragment(node),
-			))
+			)
+			entry["needs"] = undecidedNeeds(evaluated, opts.context, opts.perspective, evalSource)
+			out.unsupported = append(out.unsupported, entry)
 		}
 		return
 	}
@@ -2797,7 +2801,31 @@ func filterNumber(value any) (float64, bool) {
 	return reflect.ValueOf(value).Convert(reflect.TypeOf(float64(0))).Float(), true
 }
 
+// evaluateCondition evaluates a condition against the context. A leaf the context leaves
+// undecided takes its declared answer from the context's "conditionFacts" when the caller gave
+// one.
 func evaluateCondition(condition, ctx map[string]any, rest ...any) any {
+	verdict := evaluateConditionFromContext(condition, ctx, rest...)
+	facts, ok := ctx["conditionFacts"].(map[string]any)
+	if verdict != nil || !ok {
+		return verdict
+	}
+	if _, isOp := condition["operator"].(string); isOp {
+		return nil
+	}
+	perspective := "attacker"
+	if len(rest) > 0 {
+		if value, ok := rest[0].(string); ok && value != "" {
+			perspective = value
+		}
+	}
+	if fact, ok := facts[conditionFactKey(condition, perspective)].(bool); ok {
+		return fact
+	}
+	return nil
+}
+
+func evaluateConditionFromContext(condition, ctx map[string]any, rest ...any) any {
 	perspective := "attacker"
 	var source map[string]any
 	if len(rest) > 0 {

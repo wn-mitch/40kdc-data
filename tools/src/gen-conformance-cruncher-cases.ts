@@ -1,6 +1,12 @@
 import type { Dataset } from "./data/dataset.js";
 import { crunch, type Buff, type BuffSource, type EngineContext, type RecipientSnapshot, type WeaponKeywordRef } from "./cruncher/index.js";
-import { effectToBuffs, type ActivatableBuff } from "./cruncher/from-dsl.js";
+import { effectToBuffs, type ActivatableBuff, type EffectTranslation } from "./cruncher/from-dsl.js";
+import { conditionFactKey } from "./cruncher/condition-facts.js";
+
+/** The keys of every need a translation reports, in order. */
+export function needKeys(result: EffectTranslation): string[] {
+  return result.unsupported.flatMap((item) => (item.needs ?? []).map((need) => need.key));
+}
 import type { Trigger, UnitSelector } from "./generated.js";
 
 export const RECIPIENT_CASE_PREFIX = "canonical/recipient-snapshot/";
@@ -62,6 +68,7 @@ export function canonicalRecipientCases() {
     return { ...row, expected: {
       applied: result.applied.map((buff) => buff.contribution),
       unsupportedReasons: result.unsupported.map((item) => item.reason),
+    needKeys: needKeys(result),
       activatable: result.activatable.map((lever) => ({
         id: lever.id, label: lever.label, group: lever.group ?? null,
         requires: lever.requires ?? null, capRaise: lever.capRaise ?? null,
@@ -88,6 +95,7 @@ export function canonicalTriggerSubjectCases() {
     return { ...row, expected: {
       applied: result.applied.map((buff) => buff.contribution),
       unsupportedReasons: result.unsupported.map((item) => item.reason),
+    needKeys: needKeys(result),
       activatable: result.activatable.map((lever) => ({
         id: lever.id, label: lever.label, group: lever.group ?? null,
         requires: lever.requires ?? null, capRaise: lever.capRaise ?? null,
@@ -119,6 +127,7 @@ export function canonicalStratagemModelCases() {
     return { caseId: `${STRATAGEM_MODEL_CASE_PREFIX}${id}`, abilityId: row.source.abilityId, ...row, expected: {
       applied: result.applied.map((buff) => buff.contribution),
       unsupportedReasons: result.unsupported.map((item) => item.reason),
+    needKeys: needKeys(result),
       activatable: result.activatable.map((lever) => ({
         id: lever.id, label: lever.label, group: lever.group ?? null,
         requires: lever.requires ?? null, capRaise: lever.capRaise ?? null,
@@ -167,6 +176,7 @@ export function canonicalHalfWeaponRangeCases() {
     return { ...row, expected: {
       applied: result.applied.map((applied) => applied.contribution),
       unsupportedReasons: result.unsupported.map((item) => item.reason),
+    needKeys: needKeys(result),
       activatable: result.activatable.map((lever) => ({
         id: lever.id, label: lever.label, group: lever.group ?? null,
         requires: lever.requires ?? null, capRaise: lever.capRaise ?? null,
@@ -183,6 +193,7 @@ export function dslExpectation(row: DslInput) {
   return { ...row, expected: {
     applied: result.applied.map((applied) => applied.contribution),
     unsupportedReasons: result.unsupported.map((item) => item.reason),
+    needKeys: needKeys(result),
     activatable: result.activatable.map((lever) => ({
       id: lever.id, label: lever.label, group: lever.group ?? null,
       requires: lever.requires ?? null, capRaise: lever.capRaise ?? null,
@@ -280,6 +291,11 @@ export function canonicalScenarioCases() {
   const pactPassed = phaseEvent({ event: "after-roll", filter: { roll: "dark-pact", result: "success" } });
   const hitByRanged = phaseEvent({ event: "after-roll", object: "defender", filter: { roll: "hit", result: "success", attack_type: "ranged" } });
   const hitDefender = phaseEvent({ event: "after-roll", object: "defender", filter: { roll: "hit", result: "success" } });
+  // Leaves no context field decides: an engagement with this unit, a disembark this turn, and a
+  // filter whose keys are out of order and whose keyword carries a typographic apostrophe.
+  const engagedWith = { type: "matches", parameters: { subject: "event-subject", filter: { engaged_with: "this-unit" } } };
+  const disembarked = { type: "happened", parameters: { event: "disembarked", window: "turn" } };
+  const apostropheKeyword = { type: "matches", parameters: { subject: "selected-unit", filter: { none_of: ["EXAMPLE’S HOST"], all_of: ["VEHICLE"] } } };
   const outlying = (controller: "attacker" | "target" | undefined) => controller === undefined ? { role: "non-home" as const } : { role: "non-home" as const, controller };
   const inputs: Array<{ id: string; effect: unknown; context: Partial<EngineContext>; source?: DslInput["source"]; perspective?: DslInput["perspective"] }> = [
     { id: "rule-active-option", effect: gated(doctrine), context: { activeRules: [{ ability_id: "example-doctrines", option_id: "assault" }] } },
@@ -391,6 +407,17 @@ export function canonicalScenarioCases() {
     { id: "roll-result-critical-wound-gate", effect: gated(criticalWound), context: { testResults: { leadership: "failure" } } },
     { id: "roll-result-critical-hit-unknown", effect: gated({ type: "roll-result", parameters: { roll: "hit", result: "critical" } }), context: {} },
     { id: "roll-result-critical-wound-defender-unknown", effect: defensive(criticalWound), context: {}, perspective: "target" },
+    // Declared answers for leaves the rest of the context leaves undecided.
+    { id: "condition-fact-undeclared", effect: gated(engagedWith), context: {} },
+    { id: "condition-fact-true", effect: gated(engagedWith), context: { conditionFacts: { [conditionFactKey(engagedWith, "attacker")]: true } } },
+    { id: "condition-fact-false", effect: gated(engagedWith), context: { conditionFacts: { [conditionFactKey(engagedWith, "attacker")]: false } } },
+    { id: "condition-fact-other-perspective", effect: gated(engagedWith), context: { conditionFacts: { [conditionFactKey(engagedWith, "target")]: true } } },
+    { id: "condition-fact-under-not", effect: gated({ operator: "not", operands: [engagedWith] }), context: { conditionFacts: { [conditionFactKey(engagedWith, "attacker")]: true } } },
+    { id: "condition-fact-one-of-two", effect: gated({ operator: "and", operands: [engagedWith, disembarked] }), context: { conditionFacts: { [conditionFactKey(engagedWith, "attacker")]: true } } },
+    { id: "condition-fact-decided-and", effect: gated({ operator: "and", operands: [{ type: "phase-is", parameters: { phase: "fight" } }, engagedWith] }), context: {} },
+    { id: "condition-fact-context-wins", effect: gated(guided), context: { attackerGuided: false, conditionFacts: { [conditionFactKey(guided, "attacker")]: true } } },
+    { id: "condition-fact-key-text", effect: gated(apostropheKeyword), context: { conditionFacts: { [conditionFactKey(apostropheKeyword, "attacker")]: true } } },
+    { id: "condition-fact-defender", effect: defensive(engagedWith), context: { conditionFacts: { [conditionFactKey(engagedWith, "target")]: true } }, perspective: "target" },
   ];
   return inputs.map((input) => withGates(dslExpectation({
     caseId: `${SCENARIO_CASE_PREFIX}${input.id}`,

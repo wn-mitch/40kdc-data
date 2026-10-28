@@ -58,6 +58,7 @@ import { RAW_DATA } from "./bundle.generated.js";
 import { SHARE_REGISTRY } from "../share/registry.generated.js";
 import { resolveLayout, type ResolvedPiece } from "../terrain/resolve.js";
 import type { Buff, EngineContext } from "../cruncher/buffs.js";
+import type { AbilityNeed } from "./lever-providers.js";
 import {
   resolveEligibleAbilities,
   type EligibilityInput,
@@ -580,6 +581,20 @@ export class Dataset {
   }
 
   /**
+   * The leaf conditions {@link defensiveBuffsFor} leaves undecided for the
+   * defending unit, each with the ability that raised it. Answering one in
+   * `context.conditionFacts` under its `key` decides it.
+   */
+  defensiveNeedsFor(
+    input: EligibilityInput & { optedInStratagemIds?: string[] },
+    context: EngineContext,
+  ): AbilityNeed[] {
+    const needs: AbilityNeed[] = [];
+    collectBuffs(this, input, context, "target", needs);
+    return needs;
+  }
+
+  /**
    * Enumerate every attacker-side buff a unit could stack in `context` as a
    * list of toggleable levers, plus the activation groups that limit them.
    *
@@ -600,13 +615,17 @@ export class Dataset {
    * Target/phase conditions a lever still carries (e.g. "vs Infantry") ride on
    * each buff's `applicableWhen`, so toggling it on is always safe — the
    * resolver gates it per-target.
+   *
+   * `needs` lists the leaf conditions the context leaves undecided, each with
+   * the ability that raised it. Answering one in `context.conditionFacts` under
+   * its `key` decides it on the next call.
    */
   stackableBuffsFor(
     input: BuffInput & {
       weaponProfiles?: { weaponId: string; profileIndex: number }[];
     },
     context: EngineContext,
-  ): { buffs: StackableBuff[]; groups: StackableBuffGroup[] } {
+  ): { buffs: StackableBuff[]; groups: StackableBuffGroup[]; needs: AbilityNeed[] } {
     return stackableBuffsFor(this, input, context);
   }
 

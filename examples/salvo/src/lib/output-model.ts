@@ -12,6 +12,7 @@ import {
   profileEngineInput,
   resolveUnitWeapon,
   withGrantedWeapons,
+  type AbilityNeed,
   type AttributedStage,
   type Buff,
   type Dataset,
@@ -28,7 +29,7 @@ import { activeSupport, defenderBuffs, type DefenderBuild } from "./defender.js"
 import type { ManualTarget } from "./store.svelte.js";
 import { memberLoadout, type MemberLoadout, type WeaponLine } from "./weapon-lines.js";
 
-export type LeverSelection = { buffs: StackableBuff[]; groups: StackableBuffGroup[]; error?: string };
+export type LeverSelection = { buffs: StackableBuff[]; groups: StackableBuffGroup[]; needs: AbilityNeed[]; error?: string };
 
 export type MemberUnit = { memberId: string; unit: UnitView; loadout: MemberLoadout };
 
@@ -163,7 +164,7 @@ export function memberLevers(
         ),
       };
     } catch (err) {
-      return { memberId: member.memberId, context: own, levers: { buffs: [], groups: [], error: (err as Error).message } };
+      return { memberId: member.memberId, context: own, levers: { buffs: [], groups: [], needs: [], error: (err as Error).message } };
     }
   });
 }
@@ -172,12 +173,14 @@ export function memberLevers(
 export function unionLevers(perMember: readonly MemberLevers[]): LeverSelection {
   const buffs = new Map<string, StackableBuff>();
   const groups = new Map<string, StackableBuffGroup>();
+  const needs = new Map<string, AbilityNeed>();
   for (const { levers } of perMember) {
     for (const lever of levers.buffs) if (!buffs.has(lever.id)) buffs.set(lever.id, lever);
     for (const group of levers.groups) if (!groups.has(group.id)) groups.set(group.id, group);
+    for (const need of levers.needs) needs.set(`${need.abilityId}\u0000${need.key}`, need);
   }
   const error = perMember.find(({ levers }) => levers.error)?.levers.error;
-  return { buffs: [...buffs.values()], groups: [...groups.values()], ...(error ? { error } : {}) };
+  return { buffs: [...buffs.values()], groups: [...groups.values()], needs: [...needs.values()], ...(error ? { error } : {}) };
 }
 
 /** The buffs of the enabled levers, leaving out weapon-keyword levers, which the engine injects per line. */

@@ -84,6 +84,7 @@ import {
   SCENARIO_CASE_PREFIX,
   RECIPIENT_CASE_PREFIX,
   stanceOptionFields,
+  needKeys,
 } from "./gen-conformance-cruncher-cases.js";
 import {
   GAME_MODE_LINKED_QUERIES,
@@ -4379,6 +4380,7 @@ type ResolverDslCase = {
   expected?: {
     applied: unknown[];
     unsupportedReasons: string[];
+    needKeys?: string[];
     activatable?: unknown[];
   };
 };
@@ -4408,6 +4410,7 @@ function genResolverDslCases(): void {
       row.expected = {
         applied: result.applied.map((buff) => buff.contribution),
         unsupportedReasons: result.unsupported.map((entry) => entry.reason),
+        needKeys: needKeys(result),
         activatable: result.activatable.map((lever) => ({
           id: lever.id,
           label: lever.label,

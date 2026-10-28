@@ -35,6 +35,7 @@ pub mod allocation;
 mod attack_compare;
 pub mod attribution;
 pub mod buffs;
+pub mod condition_facts;
 mod context;
 mod critical_wounds;
 mod damage_roll;
@@ -62,6 +63,7 @@ pub use buffs::{
     WeaponKeywordRef,
 };
 pub use buffs::{AttackComparison, AttackOperand, AttackSide, AttackStatOperand, Comparison};
+pub use condition_facts::{canonical_json, condition_fact_key, condition_needs, ConditionNeed};
 pub use engine::{
     crunch, crunch_model, AttackModel, AttackProfileRef, CruncherError, EngineInput, EngineOutput,
     RollProbabilities, Stage, StageName, TargetProfileRef,

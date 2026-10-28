@@ -159,6 +159,20 @@ func runDSLCorpus(t *testing.T, filename string) {
 			t.Errorf("%s (%s) unsupportedReasons = %s, want %s", abilityID, perspective, got, want)
 		}
 
+		// Need keys in order across every unsupported entry; a case without them expects none.
+		var needKeys []any
+		for _, u := range result.unsupported {
+			um, _ := asMap(u)
+			for _, need := range getList(um, "needs") {
+				nm, _ := asMap(need)
+				needKeys = append(needKeys, nm["key"])
+			}
+		}
+		wantNeeds, _ := asList(expected["needKeys"])
+		if got, want := canon(t, orEmpty(needKeys)), canon(t, orEmpty(wantNeeds)); got != want {
+			t.Errorf("%s (%s) needKeys = %s, want %s", abilityID, perspective, got, want)
+		}
+
 		// Each applied buff's gate (null when ungated), pinned on the rows that carry it.
 		if expected["applicableWhen"] != nil {
 			var gates []any

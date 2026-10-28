@@ -14,6 +14,7 @@ use super::gated::{
 };
 use super::js::*;
 use super::{walk, Lever, Out, WalkOpts, STOCHASTIC_DICE_GATED};
+use crate::cruncher::condition_facts::{condition_needs, ConditionNeed};
 
 mod options;
 
@@ -31,6 +32,20 @@ pub(super) fn evaluate_condition(condition: &Obj, opts: &WalkOpts) -> Option<boo
         (!opts.granted_holder).then_some(opts.source_meta),
     )
 }
+
+/// The leaves of an undecided condition, as [`UnsupportedFragment::needs`]. A `timing-is` leaf
+/// is the activation's own moment, which the player opts into as a lever, so it is never a need.
+///
+/// [`UnsupportedFragment::needs`]: super::UnsupportedFragment::needs
+pub(super) fn undecided_needs(condition: &Obj, opts: &WalkOpts) -> Vec<ConditionNeed> {
+    condition_needs(condition, opts.perspective, |node| {
+        evaluate_condition(node, opts)
+    })
+    .into_iter()
+    .filter(|need| !is_str(&need.condition, "type", "timing-is"))
+    .collect()
+}
+
 fn attack_step_roll(roll: &str) -> bool {
     matches!(roll, "hit" | "wound" | "save" | "damage")
 }
@@ -423,7 +438,7 @@ pub(super) fn conditional(node: &Obj, opts: &WalkOpts, out: &mut Out) {
             if condition_mentions_timing(condition) {
                 enumerate_timing_gate(node, opts, out);
             } else {
-                out.unsupported(
+                out.unsupported.push((
                     format!(
                         "conditional: cannot evaluate condition \"{}\" against current context",
                         js_string(
@@ -433,8 +448,9 @@ pub(super) fn conditional(node: &Obj, opts: &WalkOpts, out: &mut Out) {
                                 .or_else(|| condition.get("operator"))
                         )
                     ),
-                    activation_fragment(node).unwrap_or(node),
-                );
+                    Value::Object(activation_fragment(node).unwrap_or(node).clone()),
+                    Some(undecided_needs(evaluated, opts)),
+                ));
             }
         }
         Some(true) => walk(node.get("effect").unwrap_or(&Value::Null), opts, out),
@@ -513,7 +529,7 @@ fn enumerate_timing_gate(node: &Obj, opts: &WalkOpts, out: &mut Out) {
     walk(effect, opts, &mut sub);
     // A stochastic branch contributes nothing to a timing activation.
     out.unsupported
-        .extend(sub.unsupported.into_iter().filter(|(reason, fragment)| {
+        .extend(sub.unsupported.into_iter().filter(|(reason, fragment, _)| {
             reason != STOCHASTIC_DICE_GATED
                 || !fragment
                     .as_object()

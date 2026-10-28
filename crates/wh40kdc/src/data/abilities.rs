@@ -439,6 +439,7 @@ impl Dataset {
                         unsupported: vec![crate::cruncher::from_dsl::UnsupportedFragment {
                             reason: reason.into(),
                             effect_fragment: resolved,
+                            needs: None,
                         }],
                         ..Default::default()
                     }

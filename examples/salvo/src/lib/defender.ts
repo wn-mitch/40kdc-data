@@ -12,6 +12,7 @@ import {
   type BuffSource,
   type Dataset,
   type Detachment,
+  type AbilityNeed,
   type EngineContext,
   type Enhancement,
   type Phase,
@@ -82,6 +83,32 @@ export function defenderBuffs(ds: Dataset, unit: UnitView, build: DefenderBuild,
   const targetWargear = build.wargear ?? defaultTargetWargear(ds, unit);
   const context: EngineContext = { ...baseContext, targetWargear };
   return equippedBuffs(unit.raw, new Map(Object.entries(targetWargear)), buildBuffs(ds, unit, build, context));
+}
+
+/**
+ * The defending unit's undecided leaf conditions, for the abilities {@link defenderBuffs} walks.
+ * The build's Enhancement is read the same way, as a target-perspective ability.
+ */
+export function defenderNeeds(ds: Dataset, unit: UnitView, build: DefenderBuild, baseContext: EngineContext): AbilityNeed[] {
+  const context: EngineContext = { ...baseContext, targetWargear: build.wargear ?? defaultTargetWargear(ds, unit) };
+  const detachmentId = build.detachmentId && ds.detachments.getInFaction(build.detachmentId, unit.factionId)
+    ? build.detachmentId
+    : undefined;
+  const needs = ds.defensiveNeedsFor(
+    { unitId: unit.id, factionId: unit.factionId, detachmentId, optedInStratagemIds: [...build.stratagemIds] },
+    context,
+  );
+  const enhancement = detachmentId && build.enhancementId
+    ? defenderEnhancements(ds, unit, detachmentId).find((item) => item.id === build.enhancementId)
+    : undefined;
+  const ability = enhancement?.ability_id
+    ? ds.abilities.getInFaction(enhancement.ability_id, unit.factionId) ?? ds.abilities.getAny(enhancement.ability_id)
+    : undefined;
+  if (!ability) return needs;
+  const keywords = [...unit.keywords, ...unit.factionKeywords].map((keyword) => keyword.toLowerCase());
+  const targetContext: EngineContext = { ...context, targetUnitId: context.targetUnitId ?? unit.id, targetKeywords: context.targetKeywords ?? keywords };
+  const { unsupported } = ability.describeBuffs({ kind: "ability", abilityId: ability.id, abilityKind: "unit" }, targetContext, "target");
+  return [...needs, ...unsupported.flatMap((item) => (item.needs ?? []).map((need) => ({ ...need, abilityId: ability.id, label: ability.name })))];
 }
 
 function buildBuffs(ds: Dataset, unit: UnitView, build: DefenderBuild, context: EngineContext): Buff[] {

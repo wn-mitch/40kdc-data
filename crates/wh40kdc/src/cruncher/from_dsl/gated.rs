@@ -13,8 +13,10 @@ use super::applicability::{
     apply_applicability, combine, condition_to_applicability, label_for_buffs, App,
 };
 use super::js::*;
-use super::levers::{activation_fragment, evaluate_condition, moment_gate_with_source};
-use super::{walk, Lever, Out, StanceOptionRef, WalkOpts};
+use super::levers::{
+    activation_fragment, evaluate_condition, moment_gate_with_source, undecided_needs,
+};
+use super::{walk, Diagnostic, Lever, Out, StanceOptionRef, WalkOpts};
 
 const MIXED_STANCE_REASON: &str = "activation mixes stance-gated buffs with other buffs";
 
@@ -272,7 +274,7 @@ pub(super) fn gated(node: &Value, opts: &WalkOpts) -> Vec<Value> {
 pub(super) fn collect_option_buffs(
     node: &Value,
     opts: &WalkOpts,
-    diagnostics: &mut Vec<(String, Value)>,
+    diagnostics: &mut Vec<Diagnostic>,
 ) -> (Vec<Value>, Option<StanceGate>) {
     let mut buffs = Vec::new();
     let mut stance = StanceGated::default();
@@ -290,7 +292,7 @@ pub(super) fn collect_option_buffs(
     if buffs.is_empty() && single {
         return (stance.buffs, Some(gate));
     }
-    diagnostics.push((MIXED_STANCE_REASON.into(), node.clone()));
+    diagnostics.push((MIXED_STANCE_REASON.into(), node.clone(), None));
     (buffs, None)
 }
 
@@ -301,7 +303,7 @@ fn collect(
     opts: &WalkOpts,
     app: &Obj,
     sink: &mut Sink,
-    diagnostics: &mut Vec<(String, Value)>,
+    diagnostics: &mut Vec<Diagnostic>,
 ) {
     let Some(n) = node.as_object() else {
         return;
@@ -344,6 +346,7 @@ fn collect(
                     None => diagnostics.push((
                         "activation condition cannot be evaluated against current context".into(),
                         Value::Object(activation_fragment(n).unwrap_or(n).clone()),
+                        Some(undecided_needs(condition, opts)),
                     )),
                     Some(false) => {}
                 },

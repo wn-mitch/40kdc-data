@@ -154,6 +154,20 @@ fn run_dsl_corpus(filename: &str) {
                 json!(reasons)
             ));
         }
+        // Each undecided condition's need keys, in order across every unsupported entry.
+        let need_keys: Vec<&str> = result
+            .unsupported
+            .iter()
+            .flat_map(|u| u.needs.iter().flatten())
+            .map(|need| need.key.as_str())
+            .collect();
+        let want_keys = expected.get("needKeys").cloned().unwrap_or(json!([]));
+        if json!(need_keys) != want_keys {
+            failures.push(format!(
+                "{label} needKeys\n  want: {want_keys}\n  got:  {}",
+                json!(need_keys)
+            ));
+        }
         // Each applied buff's gate (null when ungated), pinned on the rows that carry it.
         if let Some(want) = expected.get("applicableWhen") {
             let got: Vec<Value> = result

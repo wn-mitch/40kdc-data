@@ -747,6 +747,16 @@ class Dataset:
         penalties). ``weaponProfiles`` are ignored under target perspective."""
         return self._collect_buffs(input, context, "target")
 
+    def defensive_needs_for(
+        self, input: dict[str, Any], context: dict[str, Any]
+    ) -> list[dict[str, Any]]:
+        """The leaf conditions :meth:`defensive_buffs_for` leaves undecided for the
+        defending unit, each with the ability that raised it (``abilityId``, ``label``).
+        Answering one in ``context["conditionFacts"]`` under its ``key`` decides it."""
+        needs: list[dict[str, Any]] = []
+        self._collect_buffs(input, context, "target", needs)
+        return needs
+
     def stackable_buffs_for(self, input: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
         """Enumerate every attacker-side buff a unit could stack in
         ``context`` as toggleable levers plus their activation groups.
@@ -755,7 +765,10 @@ class Dataset:
         auto-apply — this surfaces the *player decisions* too: stratagems and
         the activatable gates the DSL models as dice-pool options, ``choice``
         branches, or timing-gated activations. Returns
-        ``{"buffs": [StackableBuff], "groups": [StackableBuffGroup]}``.
+        ``{"buffs": [StackableBuff], "groups": [StackableBuffGroup], "needs": [AbilityNeed]}``.
+        ``needs`` lists the leaf conditions the context leaves undecided, each with the ability
+        that raised it; answering one in ``context["conditionFacts"]`` under its ``key`` decides
+        it on the next call.
 
         A lever may also carry ``cost`` (``{"cp"}`` for a Stratagem, ``{"points"}`` for an
         Enhancement), ``requires`` (DSL fragments the player vouches for), ``requiresLever`` (the
@@ -781,6 +794,7 @@ class Dataset:
         groups: list[dict[str, Any]] = []
         cap_raises: dict[int, Any] = {}
         option_requirements: dict[int, Any] = {}
+        needs: list[dict[str, Any]] = []
 
         def take(levers: AbilityLevers) -> None:
             buffs.extend(levers.buffs)
@@ -789,6 +803,11 @@ class Dataset:
                     groups.append(group)
             cap_raises.update(levers.cap_raises)
             option_requirements.update(levers.option_requirements)
+            for need in levers.needs:
+                if not any(
+                    n["key"] == need["key"] and n["abilityId"] == need["abilityId"] for n in needs
+                ):
+                    needs.append(need)
 
         unit_id = input.get("unitId") or ""
         unit, faction_id, combined = combined_unit(self, input)
@@ -887,7 +906,7 @@ class Dataset:
         resolved = resolve_option_requirements(
             resolve_cap_raises(buffs, cap_raises, groups), option_requirements, groups, option_name
         )
-        return {"buffs": resolved, "groups": groups}
+        return {"buffs": resolved, "groups": groups, "needs": needs}
 
     def _weapon_faction(self, input: dict[str, Any]) -> str | None:
         """The faction to scope ``weaponProfiles`` lookups by: the explicit
@@ -914,10 +933,16 @@ class Dataset:
         return ctx
 
     def _collect_buffs(
-        self, input: dict[str, Any], context: dict[str, Any], perspective: str
+        self,
+        input: dict[str, Any],
+        context: dict[str, Any],
+        perspective: str,
+        needs: list[dict[str, Any]] | None = None,
     ) -> list[dict[str, Any]]:
-        """Shared implementation for buffs_for / defensive_buffs_for."""
+        """Shared implementation for buffs_for / defensive_buffs_for. When ``needs`` is
+        given, every undecided leaf condition of the walked abilities is appended to it."""
         from wh40kdc.data.lever_providers import (
+            ability_needs,
             combined_keywords_lower,
             combined_toughness,
             shared_keywords_lower,
@@ -1043,7 +1068,16 @@ class Dataset:
             ):
                 continue
             source = _buff_source_from_eligible(entry)
-            out.extend(entry["ability"].get_buffs(source, ctx, perspective, entry.get("rating")))
+            ability = entry["ability"]
+            translation = ability.describe_buffs(source, ctx, perspective, entry.get("rating"))
+            if needs is not None:
+                for need in ability_needs(translation["unsupported"], ability.id, ability.name):
+                    if not any(
+                        n["key"] == need["key"] and n["abilityId"] == need["abilityId"]
+                        for n in needs
+                    ):
+                        needs.append(need)
+            out.extend(translation["applied"])
 
         return out
 

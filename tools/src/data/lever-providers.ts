@@ -5,6 +5,7 @@
  */
 import type { BuffSource, EngineContext } from "../cruncher/buffs.js";
 import type { ActivatableBuff, EffectTranslation, StanceOptionRef, UnsupportedFragment } from "../cruncher/from-dsl.js";
+import type { ConditionNeed } from "../cruncher/condition-facts.js";
 import type { Enhancement } from "../generated.js";
 import type { Dataset, StackableBuff, StackableBuffGroup } from "./dataset.js";
 import { meetsEnhancementGroups } from "./enhancement-eligibility.js";
@@ -73,7 +74,17 @@ export type AbilityLevers = {
   capRaises: Map<StackableBuff, CapacityRaise>;
   /** Levers gated on a stance option, for {@link resolveOptionRequirements}. */
   optionRequirements: Map<StackableBuff, OptionGate>;
+  /** Leaf conditions the context leaves undecided, with the ability that raised each. */
+  needs: AbilityNeed[];
 };
+
+/** A {@link ConditionNeed} with the ability whose condition raised it. */
+export type AbilityNeed = ConditionNeed & { abilityId: string; label: string };
+
+/** Each need an ability's translation reports, tagged with that ability. */
+export function abilityNeeds(unsupported: readonly UnsupportedFragment[], abilityId: string, label: string): AbilityNeed[] {
+  return unsupported.flatMap((item) => (item.needs ?? []).map((need) => ({ ...need, abilityId, label })));
+}
 
 /** The stance option a lever applies under, or does not apply under. */
 export type OptionGate = Pick<ActivatableBuff, "requiresOption" | "excludesOption">;
@@ -114,8 +125,9 @@ export function abilityLevers(
   },
 ): AbilityLevers {
   const { ability, source, ctx, idBase, label, gate } = args;
-  const out: AbilityLevers = { buffs: [], groups: [], capRaises: new Map(), optionRequirements: new Map() };
+  const out: AbilityLevers = { buffs: [], groups: [], capRaises: new Map(), optionRequirements: new Map(), needs: [] };
   const translation = ability.describeBuffs(source, ctx, "attacker", args.rating);
+  out.needs.push(...abilityNeeds(translation.unsupported, ability.id, label));
   const grants = grantedRecordIds(translation).filter(({ abilityId }) => !args.held.has(abilityId));
   const levers: StackableBuff[] = [];
   const requiresLever = gate ? idBase : undefined;
@@ -140,6 +152,7 @@ export function abilityLevers(
     out.groups.push(...granted.groups);
     for (const [lever, raise] of granted.capRaises) out.capRaises.set(lever, raise);
     for (const [lever, option] of granted.optionRequirements) out.optionRequirements.set(lever, option);
+    out.needs.push(...granted.needs);
   }
 
   if (gate) {
@@ -163,7 +176,7 @@ export function enhancementLevers(
   ds: Dataset,
   args: { detachmentId: string | undefined; crunchedUnitId: string | undefined; bearers: readonly UnitView[]; ctx: EngineContext; factionId: string; held: Set<string> },
 ): AbilityLevers {
-  const out: AbilityLevers = { buffs: [], groups: [], capRaises: new Map(), optionRequirements: new Map() };
+  const out: AbilityLevers = { buffs: [], groups: [], capRaises: new Map(), optionRequirements: new Map(), needs: [] };
   if (!args.detachmentId) return out;
   const seen = new Set<string>();
   // Every game mode: the detachment is already chosen (possibly a Combat Patrol
@@ -192,6 +205,7 @@ export function enhancementLevers(
       out.groups.push(...levers.groups);
       for (const [lever, raise] of levers.capRaises) out.capRaises.set(lever, raise);
       for (const [lever, option] of levers.optionRequirements) out.optionRequirements.set(lever, option);
+      out.needs.push(...levers.needs);
     }
     if (out.buffs.length > before) out.groups.push({ id: group, label: `Enhancement on ${bearer.name}`, maxActivations: 1 });
   }
@@ -256,7 +270,7 @@ export function grantedRecordLevers(
   if (!record) return undefined;
   // The granted ability is held by the crunched unit: its "this unit" is the crunched unit.
   const held: BuffSource = { kind: "ability", abilityId: record.id, abilityKind: "unit" };
-  const { applied, activatable } = record.describeBuffs(held, ctx, "attacker");
+  const { applied, activatable, unsupported } = record.describeBuffs(held, ctx, "attacker");
   const buffs: StackableBuff[] = [];
   const groups = new Map<string, StackableBuffGroup>();
   const capRaises = new Map<StackableBuff, CapacityRaise>();
@@ -285,7 +299,7 @@ export function grantedRecordLevers(
     const gated = optionGate(act);
     if (gated) optionRequirements.set(grantedLever, gated);
   }
-  return { buffs, groups: [...groups.values()], capRaises, optionRequirements };
+  return { buffs, groups: [...groups.values()], capRaises, optionRequirements, needs: abilityNeeds(unsupported, record.id, record.name) };
 }
 
 /**

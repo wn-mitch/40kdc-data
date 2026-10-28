@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { resolveBuffs, type Buff, type BuffSource, type EngineContext } from "../src/cruncher/index.js";
+import { conditionFactKey, resolveBuffs, type Buff, type BuffSource, type EngineContext } from "../src/cruncher/index.js";
 import { effectToBuffs, momentGate } from "../src/cruncher/from-dsl.js";
 import { Dataset, emptyRawData } from "../src/data/index.js";
 
@@ -51,7 +51,12 @@ describe("activation diagnostics", () => {
     const part = { type: "ability-part", name: "Example activation", trigger, effect };
     // No phase or battle state is known: the activation gate must report itself unevaluable.
     const result = effectToBuffs({ type: "choice", options: [momentGate(trigger, effect, part)] }, own, {} as EngineContext);
-    expect(result.unsupported).toEqual([{ reason: "activation condition cannot be evaluated against current context", effectFragment: part }]);
+    // The undecided attachment leaf is the one need; the internal moment gate is not.
+    expect(result.unsupported).toEqual([{
+      reason: "activation condition cannot be evaluated against current context",
+      effectFragment: part,
+      needs: [{ key: conditionFactKey(trigger.condition, "attacker"), condition: trigger.condition, perspective: "attacker" }],
+    }]);
     expect(JSON.stringify(result.unsupported)).not.toContain("timing-is");
   });
 });

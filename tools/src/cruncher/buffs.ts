@@ -429,6 +429,13 @@ export type EngineContext = {
    * resolving the attacks that score a critical wound; callers leave it unset.
    */
   criticalRoll?: "wound";
+  /**
+   * Declared answers for leaf conditions the rest of the context leaves undecided, keyed by
+   * {@link conditionFactKey}. The translator reports each undecided leaf as a need
+   * ({@link UnsupportedFragment.needs}); a caller that answers it here decides the leaf. A key
+   * that is absent leaves the leaf undecided.
+   */
+  conditionFacts?: Readonly<Record<string, boolean>>;
 };
 
 /** A unit against its Starting Strength; below half implies below starting. */

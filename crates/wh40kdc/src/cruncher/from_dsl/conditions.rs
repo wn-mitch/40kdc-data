@@ -7,6 +7,7 @@ use serde_json::Value;
 use super::js::*;
 use super::TranslationPerspective;
 use crate::cruncher::buffs::{AbilityKind, BuffSource, EngineContext};
+use crate::cruncher::condition_facts::condition_fact_key;
 use crate::cruncher::scenario::{has_designation, within_objective, UnitStrength};
 use crate::cruncher::scenario_conditions::{
     attachment_from_flags, attachment_from_members, evaluate_controls, evaluate_in_region,
@@ -68,7 +69,25 @@ pub(crate) fn evaluate_condition(
     evaluate_condition_for_source(condition, ctx, perspective, None)
 }
 
+/// Evaluate a condition against the context. A leaf the context leaves undecided takes its
+/// declared answer from [`EngineContext::condition_facts`] when the caller gave one.
 pub(super) fn evaluate_condition_for_source(
+    condition: &Obj,
+    ctx: &EngineContext,
+    perspective: TranslationPerspective,
+    source: Option<&BuffSource>,
+) -> Option<bool> {
+    let verdict = evaluate_condition_from_context(condition, ctx, perspective, source);
+    if verdict.is_some() || condition.get("operator").is_some_and(Value::is_string) {
+        return verdict;
+    }
+    ctx.condition_facts
+        .as_ref()?
+        .get(&condition_fact_key(condition, perspective))
+        .copied()
+}
+
+fn evaluate_condition_from_context(
     condition: &Obj,
     ctx: &EngineContext,
     perspective: TranslationPerspective,

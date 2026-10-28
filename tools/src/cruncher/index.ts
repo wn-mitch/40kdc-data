@@ -16,6 +16,7 @@ export {
   type ResolvedModifiers,
   type WeaponKeywordRef,
 } from "./buffs.js";
+export { canonicalJson, conditionFactKey, conditionNeeds, type ConditionNeed } from "./condition-facts.js";
 export { buffsFromKeyword } from "./from-keyword.js";
 export { getBuffs, type HasBuffs } from "./get-buffs.js";
 export {

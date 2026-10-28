@@ -8,6 +8,7 @@
   import { isLegalLeverSelection } from "@alpaca-software/40kdc-data";
   import type {
     Buff,
+    AbilityNeed,
     EngineContext,
     StackableBuff,
     StackableBuffGroup,
@@ -15,6 +16,9 @@
   import EmptyState from "./EmptyState.svelte";
   import { scenarioContext } from "./scenario.js";
   import { memberLevers, unionLevers } from "./output-model.js";
+  import { defenderNeeds } from "./defender.js";
+  import { needToggles } from "./scenario.js";
+  import NeedsList from "./needs-list.svelte";
 
   // EngineContext for the DSL→Buff translator. Without this the translator
   // defaults to `{ phase: "shooting" }`, so phase-gated branches misfire when
@@ -47,7 +51,7 @@
   // Every buff the attacker could stack, as toggleable levers. The package
   // does the DSL walk once and hands back (buff, enabled) pairs plus the
   // activation groups (dice-pool / choice) that cap how many fire at once.
-  const stackable = $derived.by<{ buffs: StackableBuff[]; groups: StackableBuffGroup[]; error?: string }>(() =>
+  const stackable = $derived.by<{ buffs: StackableBuff[]; groups: StackableBuffGroup[]; needs: AbilityNeed[]; error?: string }>(() =>
     unionLevers(memberLevers(
       ds,
       {
@@ -60,6 +64,25 @@
       engineContext,
       salvo.selectedWeaponId ? [{ weaponId: salvo.selectedWeaponId, profileIndex: salvo.selectedProfileIndex }] : [],
     )));
+
+  // The defending unit's undecided conditions, read with the same build the projection uses.
+  const targetNeeds = $derived.by<AbilityNeed[]>(() => {
+    const unit = salvo.targetUnitId ? ds.units.getAny(salvo.targetUnitId) : undefined;
+    if (!unit) return [];
+    try {
+      return defenderNeeds(ds, unit, {
+        detachmentId: salvo.defenderDetachmentId,
+        stratagemIds: salvo.defenderStratagemIds,
+        enhancementId: salvo.defenderEnhancementId,
+        wargear: salvo.targetWargear,
+      }, engineContext);
+    } catch {
+      // The projection pane reports a defender build that fails; here it only hides its needs.
+      return [];
+    }
+  });
+  // One toggle per undecided condition across the attacker's levers and the defender's rules.
+  const needs = $derived(needToggles([...stackable.needs, ...targetNeeds]));
 
   // Free-standing levers (always-on abilities, stratagems, weapon keywords).
   const ungrouped = $derived(stackable.buffs.filter((b) => !b.group));
@@ -184,6 +207,8 @@
     {/each}
   </div>
 {/if}
+
+<NeedsList toggles={needs} />
 
 <hr />
 

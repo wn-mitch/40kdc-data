@@ -16,6 +16,12 @@ from wh40kdc.cruncher.buffs import (
     ResolvedModifiers,
     resolve_buffs,
 )
+from wh40kdc.cruncher.condition_facts import (
+    ConditionNeed,
+    canonical_json,
+    condition_fact_key,
+    condition_needs,
+)
 from wh40kdc.cruncher.engine import (
     AttackModel,
     EngineInput,
@@ -36,6 +42,7 @@ __all__ = [
     "AttackModel",
     "Buff",
     "BuffSource",
+    "ConditionNeed",
     "DamageZeroing",
     "EffectTranslation",
     "EngineContext",
@@ -47,6 +54,9 @@ __all__ = [
     "allocate_model",
     "attribute_stages",
     "buffs_from_keyword",
+    "canonical_json",
+    "condition_fact_key",
+    "condition_needs",
     "crunch",
     "crunch_model",
     "effect_to_buffs",
