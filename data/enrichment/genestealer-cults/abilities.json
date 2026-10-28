@@ -6629,6 +6629,7 @@
     "behavior": "reactive",
     "trigger": {
       "event": "selected",
+      "subject": "recipient",
       "filter": {
         "to": "shoot"
       },
