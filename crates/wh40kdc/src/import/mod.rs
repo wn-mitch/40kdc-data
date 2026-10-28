@@ -31,6 +31,8 @@ mod types;
 #[cfg(feature = "import")]
 mod adapter;
 #[cfg(feature = "import")]
+mod attached_groups;
+#[cfg(feature = "import")]
 mod decode;
 #[cfg(feature = "import")]
 mod gw;

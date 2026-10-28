@@ -1,0 +1,56 @@
+Attached Groups Test (395 points)
+
+Space Marines
+Gladius Task Force
+
+Attached Units
+Attached Unit 1
+
+Captain (90 points)
+• Attached as: Leader (Character)
+  • Warlord
+  • 1x Heavy Bolt Pistol
+    1x Master-crafted bolter
+    1x Master-crafted power weapon
+
+Intercessor Squad (85 points)
+• Attached as: Bodyguard
+  • 1x Intercessor Sergeant
+    • 1x Bolt Pistol
+      1x Bolt Rifle
+      1x Knives and Fists
+  • 4x Intercessor
+    • 4x Bolt Pistol
+      4x Bolt Rifle
+      4x Knives and Fists
+
+Attached Unit 2
+
+Assault Intercessor Squad (85 points)
+• Attached as: Bodyguard
+  • 1x Assault Intercessor Sergeant
+    • 1x Chainsword
+      1x Heavy Bolt Pistol
+  • 4x Assault Intercessor
+    • 4x Chainsword
+      4x Heavy Bolt Pistol
+
+Lieutenant (50 points)
+• Attached as: Leader (Character)
+  • 1x Bolt Pistol
+    1x Ceramite Fists
+    1x Master-crafted bolter
+
+BATTLELINE
+
+Intercessor Squad (85 points)
+  • 1x Intercessor Sergeant
+    • 1x Bolt Pistol
+      1x Bolt Rifle
+      1x Knives and Fists
+  • 4x Intercessor
+    • 4x Bolt Pistol
+      4x Bolt Rifle
+      4x Knives and Fists
+
+Exported with App Version: v2.0.5 (128), Data Version: v995

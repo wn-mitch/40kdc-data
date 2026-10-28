@@ -52,11 +52,16 @@ use regex::Regex;
 use serde_json::Value;
 
 use super::adapter::{FormatAdapter, ParseError};
+use super::attached_groups::{
+    attached_as_role, attached_unit_number, is_attached_as_support, is_attached_section,
+    pair_attached_groups, AttachedAs, GroupMember,
+};
 use super::newrecruit_text::infer_battle_size_raw;
 use super::types::{ParsedRoster, ParsedUnit, ParsedWargear, RosterFormat};
 
 const CHARACTERS_SECTION: &str = "CHARACTERS";
 const ALLIED_SECTION: &str = "ALLIED UNITS";
+const ATTACHED_SECTION: &str = "ATTACHED UNITS";
 const CHARACTER_SUFFIX: &str = " Character";
 const WARLORD_MARKER: &str = "Warlord";
 
@@ -304,6 +309,11 @@ struct Bullet {
     bulleted: bool,
     is_attachment: bool,
     sets_character: bool,
+    /// Role from an `Attached as: …` annotation, when present.
+    attachment_role: Option<AttachedAs>,
+    /// A keyword the source explicitly grants the unit (`… Keyword: Character`,
+    /// `This Datasheet also has the X keyword`, `Mark of Chaos: X`).
+    keyword_override: Option<String>,
 }
 
 struct UnitAcc {
@@ -311,12 +321,22 @@ struct UnitAcc {
     displayed_pts: Option<u64>,
     is_character_section: bool,
     bullets: Vec<Bullet>,
+    /// The `Attached Unit N` group this unit sits in, if any.
+    attachment_group: Option<u64>,
+    /// The unit's role in that group (first `Attached as:` bullet, or a
+    /// preceding `Attached as Support:` line).
+    attachment_role: Option<AttachedAs>,
 }
 
 fn parse_bullet(indent: usize, body: &str, bulleted: bool) -> Bullet {
     let plain = body.trim();
     if let Some(c) = RE_ATTACHMENT.captures(plain) {
         let sets_character = is_attached_as(&c[1]) && RE_CHARACTER_ROLE.is_match(&c[2]);
+        let attachment_role = if is_attached_as(&c[1]) {
+            attached_as_role(&c[2])
+        } else {
+            None
+        };
         return Bullet {
             indent,
             count: None,
@@ -327,6 +347,8 @@ fn parse_bullet(indent: usize, body: &str, bulleted: bool) -> Bullet {
             bulleted,
             is_attachment: true,
             sets_character,
+            attachment_role,
+            keyword_override: None,
         };
     }
     if RE_CHARACTER_ANNOTATION.is_match(plain) {
@@ -339,6 +361,8 @@ fn parse_bullet(indent: usize, body: &str, bulleted: bool) -> Bullet {
             enhancement: None,
             bulleted,
             is_attachment: false,
+            attachment_role: None,
+            keyword_override: Some("Character".to_string()),
             sets_character: true,
         };
     }
@@ -352,6 +376,8 @@ fn parse_bullet(indent: usize, body: &str, bulleted: bool) -> Bullet {
             enhancement: Some((c[1].trim().to_string(), None)),
             bulleted,
             is_attachment: false,
+            attachment_role: None,
+            keyword_override: None,
             sets_character: false,
         };
     }
@@ -373,6 +399,8 @@ fn parse_bullet(indent: usize, body: &str, bulleted: bool) -> Bullet {
             enhancement: Some((c[1].trim().to_string(), points)),
             bulleted,
             is_attachment: false,
+            attachment_role: None,
+            keyword_override: None,
             sets_character: false,
         };
     }
@@ -386,6 +414,8 @@ fn parse_bullet(indent: usize, body: &str, bulleted: bool) -> Bullet {
             enhancement: None,
             bulleted,
             is_attachment: false,
+            attachment_role: None,
+            keyword_override: None,
             sets_character: false,
         };
     }
@@ -396,7 +426,10 @@ fn parse_bullet(indent: usize, body: &str, bulleted: bool) -> Bullet {
         }
     }
     let sets_character = RE_CHARACTER_ANNOTATION.is_match(&rest);
-    if sets_character || RE_KEYWORD_ANNOTATION.is_match(&rest) {
+    let explicit_keyword = RE_KEYWORD_ANNOTATION
+        .captures(&rest)
+        .map(|c| c[1].trim().to_string());
+    if sets_character || explicit_keyword.is_some() {
         return Bullet {
             indent,
             count: None,
@@ -406,10 +439,13 @@ fn parse_bullet(indent: usize, body: &str, bulleted: bool) -> Bullet {
             enhancement: None,
             bulleted,
             is_attachment: false,
+            attachment_role: None,
+            keyword_override: Some(explicit_keyword.unwrap_or_else(|| "Character".to_string())),
             sets_character,
         };
     }
     if RE_COLON_ANNOTATION.is_match(&rest) {
+        let keyword = rest[rest.find(':').map_or(rest.len(), |i| i + 1)..].trim();
         return Bullet {
             indent,
             count: None,
@@ -419,6 +455,8 @@ fn parse_bullet(indent: usize, body: &str, bulleted: bool) -> Bullet {
             enhancement: None,
             bulleted,
             is_attachment: false,
+            attachment_role: None,
+            keyword_override: (!keyword.is_empty()).then(|| keyword.to_string()),
             sets_character: false,
         };
     }
@@ -434,6 +472,8 @@ fn parse_bullet(indent: usize, body: &str, bulleted: bool) -> Bullet {
             enhancement: None,
             bulleted,
             is_attachment: false,
+            attachment_role: None,
+            keyword_override: None,
             sets_character: false,
         };
     }
@@ -446,11 +486,25 @@ fn parse_bullet(indent: usize, body: &str, bulleted: bool) -> Bullet {
         enhancement: None,
         bulleted,
         is_attachment: false,
+        attachment_role: None,
+        keyword_override: None,
         sets_character: false,
     }
 }
 
 fn finish_unit(acc: UnitAcc) -> ParsedUnit {
+    // Keywords the source grants explicitly, in first-seen order.
+    let mut keyword_overrides: Vec<String> = Vec::new();
+    for keyword in acc
+        .bullets
+        .iter()
+        .filter_map(|b| b.keyword_override.as_ref())
+    {
+        if !keyword_overrides.contains(keyword) {
+            keyword_overrides.push(keyword.clone());
+        }
+    }
+
     // Models live at the shallowest *bulleted* indent that isn't an attachment,
     // enhancement, or colon-wargear line. The GW v2.0.5 export prefixes each
     // unit with an `Attached as:` bullet shallower than the models, so a plain
@@ -577,8 +631,7 @@ fn finish_unit(acc: UnitAcc) -> ParsedUnit {
     ParsedUnit {
         raw_name: acc.raw_name,
         is_character,
-        keyword_overrides: (is_character && !acc.is_character_section)
-            .then(|| vec!["Character".to_string()]),
+        keyword_overrides: (!keyword_overrides.is_empty()).then_some(keyword_overrides),
         model_count,
         points,
         is_warlord,
@@ -626,8 +679,18 @@ impl FormatAdapter for GwHeaderlessAdapter {
         let mut preamble_lines: Vec<String> = Vec::new();
         let mut faction_raw_name: Option<String> = None;
         let mut detachment_raw_names: Vec<String> = Vec::new();
-        let flush = |current: &mut Option<UnitAcc>, units: &mut Vec<ParsedUnit>| {
+        let mut attachment_members: Vec<GroupMember> = Vec::new();
+        let mut attachment_group: Option<u64> = None;
+        let mut pending_support = false;
+        let mut flush = |current: &mut Option<UnitAcc>, units: &mut Vec<ParsedUnit>| {
             if let Some(u) = current.take() {
+                if let (Some(group), Some(role)) = (u.attachment_group, u.attachment_role) {
+                    attachment_members.push(GroupMember {
+                        unit_index: units.len(),
+                        group,
+                        role,
+                    });
+                }
                 units.push(finish_unit(u));
             }
         };
@@ -643,8 +706,11 @@ impl FormatAdapter for GwHeaderlessAdapter {
             if let Some(c) = RE_BULLET.captures(raw) {
                 if let Some(unit) = current.as_mut() {
                     let marker_depth = (c[2].as_bytes() == "◦".as_bytes()) as usize;
-                    unit.bullets
-                        .push(parse_bullet(c[1].len() + marker_depth, &c[3], true));
+                    let bullet = parse_bullet(c[1].len() + marker_depth, &c[3], true);
+                    if unit.attachment_role.is_none() {
+                        unit.attachment_role = bullet.attachment_role;
+                    }
+                    unit.bullets.push(bullet);
                 }
                 continue;
             }
@@ -778,7 +844,34 @@ impl FormatAdapter for GwHeaderlessAdapter {
                     displayed_pts: pts,
                     is_character_section: in_chars,
                     bullets: Vec::new(),
+                    attachment_group,
+                    attachment_role: pending_support.then_some(AttachedAs::Support),
                 });
+                pending_support = false;
+                continue;
+            }
+
+            if let Some(group) = attached_unit_number(line) {
+                preamble_open = false;
+                flush(&mut current, &mut units);
+                section = Some(ATTACHED_SECTION.to_string());
+                attachment_group = Some(group);
+                continue;
+            }
+
+            if is_attached_as_support(line) {
+                preamble_open = false;
+                flush(&mut current, &mut units);
+                pending_support = true;
+                continue;
+            }
+
+            // `Attached Units` is a body section even when it isn't uppercased.
+            if is_attached_section(line) {
+                preamble_open = false;
+                flush(&mut current, &mut units);
+                section = Some(ATTACHED_SECTION.to_string());
+                attachment_group = None;
                 continue;
             }
 
@@ -786,6 +879,7 @@ impl FormatAdapter for GwHeaderlessAdapter {
                 preamble_open = false;
                 flush(&mut current, &mut units);
                 section = Some(line.trim_end_matches(':').trim().to_string());
+                attachment_group = None;
                 continue;
             }
 
@@ -810,7 +904,7 @@ impl FormatAdapter for GwHeaderlessAdapter {
                 GENERIC_FACTION_BREADCRUMBS
                     .iter()
                     .any(|breadcrumb| name.eq_ignore_ascii_case(breadcrumb))
-            }) && !parts.is_empty()
+            }) && parts.len() > 1
             {
                 faction_raw_name = Some(parts.remove(0));
             }
@@ -824,6 +918,7 @@ impl FormatAdapter for GwHeaderlessAdapter {
             }
         }
         flush(&mut current, &mut units);
+        pair_attached_groups(&mut units, &attachment_members);
 
         let total_computed: u64 = units
             .iter()

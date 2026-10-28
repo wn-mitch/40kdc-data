@@ -1,0 +1,456 @@
+{
+  "name": "Attached Groups Test",
+  "source": {
+    "format": "gw",
+    "generated_by": null
+  },
+  "faction_id": "adeptus-astartes",
+  "detachments": [
+    {
+      "ref": {
+        "id": "gladius-task-force",
+        "raw_name": "Gladius Task Force",
+        "resolved": true,
+        "candidates": []
+      },
+      "dp_cost": 3
+    }
+  ],
+  "battle_size": null,
+  "force_disposition": "priority-assets",
+  "points": {
+    "declared_limit": 395,
+    "detachment_cap": null,
+    "total_reported": 395,
+    "total_computed": 395
+  },
+  "units": [
+    {
+      "ref": {
+        "id": "captain",
+        "raw_name": "Captain",
+        "resolved": true,
+        "candidates": []
+      },
+      "model_count": 1,
+      "points": 90,
+      "is_warlord": true,
+      "enhancement": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "ref": {
+            "id": "heavy-bolt-pistol-captain",
+            "raw_name": "Heavy Bolt Pistol",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        },
+        {
+          "ref": {
+            "id": "master-crafted-bolter",
+            "raw_name": "Master-crafted bolter",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        },
+        {
+          "ref": {
+            "id": "master-crafted-power-weapon-captain",
+            "raw_name": "Master-crafted power weapon",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        }
+      ],
+      "leader_attachment": {
+        "bodyguard_ref": {
+          "id": "intercessor-squad",
+          "raw_name": "Intercessor Squad",
+          "resolved": true,
+          "candidates": []
+        },
+        "role": "leader",
+        "provisional": false
+      }
+    },
+    {
+      "ref": {
+        "id": "intercessor-squad",
+        "raw_name": "Intercessor Squad",
+        "resolved": true,
+        "candidates": []
+      },
+      "model_count": 5,
+      "points": 85,
+      "is_warlord": false,
+      "enhancement": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "ref": {
+            "id": "bolt-pistol-intercessor-squad",
+            "raw_name": "Bolt Pistol",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 5
+        },
+        {
+          "ref": {
+            "id": "bolt-rifle-intercessor-squad",
+            "raw_name": "Bolt Rifle",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 5
+        },
+        {
+          "ref": {
+            "id": "knives-and-fists",
+            "raw_name": "Knives and Fists",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 5
+        }
+      ],
+      "loadout_groups": [
+        {
+          "model_name": "Intercessor Sergeant",
+          "count": 1,
+          "wargear": [
+            {
+              "ref": {
+                "id": "bolt-pistol-intercessor-squad",
+                "raw_name": "Bolt Pistol",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            },
+            {
+              "ref": {
+                "id": "bolt-rifle-intercessor-squad",
+                "raw_name": "Bolt Rifle",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            },
+            {
+              "ref": {
+                "id": "knives-and-fists",
+                "raw_name": "Knives and Fists",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model_name": "Intercessor",
+          "count": 4,
+          "wargear": [
+            {
+              "ref": {
+                "id": "bolt-pistol-intercessor-squad",
+                "raw_name": "Bolt Pistol",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            },
+            {
+              "ref": {
+                "id": "bolt-rifle-intercessor-squad",
+                "raw_name": "Bolt Rifle",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            },
+            {
+              "ref": {
+                "id": "knives-and-fists",
+                "raw_name": "Knives and Fists",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "leader_attachment": null
+    },
+    {
+      "ref": {
+        "id": "assault-intercessor-squad",
+        "raw_name": "Assault Intercessor Squad",
+        "resolved": true,
+        "candidates": []
+      },
+      "model_count": 5,
+      "points": 85,
+      "is_warlord": false,
+      "enhancement": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "ref": {
+            "id": "chainsword",
+            "raw_name": "Chainsword",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 5
+        },
+        {
+          "ref": {
+            "id": "heavy-bolt-pistol-assault-intercessor-squad",
+            "raw_name": "Heavy Bolt Pistol",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 5
+        }
+      ],
+      "loadout_groups": [
+        {
+          "model_name": "Assault Intercessor Sergeant",
+          "count": 1,
+          "wargear": [
+            {
+              "ref": {
+                "id": "chainsword",
+                "raw_name": "Chainsword",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            },
+            {
+              "ref": {
+                "id": "heavy-bolt-pistol-assault-intercessor-squad",
+                "raw_name": "Heavy Bolt Pistol",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model_name": "Assault Intercessor",
+          "count": 4,
+          "wargear": [
+            {
+              "ref": {
+                "id": "chainsword",
+                "raw_name": "Chainsword",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            },
+            {
+              "ref": {
+                "id": "heavy-bolt-pistol-assault-intercessor-squad",
+                "raw_name": "Heavy Bolt Pistol",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "leader_attachment": null
+    },
+    {
+      "ref": {
+        "id": "lieutenant",
+        "raw_name": "Lieutenant",
+        "resolved": true,
+        "candidates": []
+      },
+      "model_count": 1,
+      "points": 50,
+      "is_warlord": false,
+      "enhancement": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "ref": {
+            "id": "bolt-pistol-lieutenant",
+            "raw_name": "Bolt Pistol",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        },
+        {
+          "ref": {
+            "id": "ceramite-fists-lieutenant",
+            "raw_name": "Ceramite Fists",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        },
+        {
+          "ref": {
+            "id": "master-crafted-bolter-lieutenant",
+            "raw_name": "Master-crafted bolter",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        }
+      ],
+      "leader_attachment": {
+        "bodyguard_ref": {
+          "id": "assault-intercessor-squad",
+          "raw_name": "Assault Intercessor Squad",
+          "resolved": true,
+          "candidates": []
+        },
+        "role": "leader",
+        "provisional": false
+      }
+    },
+    {
+      "ref": {
+        "id": "intercessor-squad",
+        "raw_name": "Intercessor Squad",
+        "resolved": true,
+        "candidates": []
+      },
+      "model_count": 5,
+      "points": 85,
+      "is_warlord": false,
+      "enhancement": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "ref": {
+            "id": "bolt-pistol-intercessor-squad",
+            "raw_name": "Bolt Pistol",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 5
+        },
+        {
+          "ref": {
+            "id": "bolt-rifle-intercessor-squad",
+            "raw_name": "Bolt Rifle",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 5
+        },
+        {
+          "ref": {
+            "id": "knives-and-fists",
+            "raw_name": "Knives and Fists",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 5
+        }
+      ],
+      "loadout_groups": [
+        {
+          "model_name": "Intercessor Sergeant",
+          "count": 1,
+          "wargear": [
+            {
+              "ref": {
+                "id": "bolt-pistol-intercessor-squad",
+                "raw_name": "Bolt Pistol",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            },
+            {
+              "ref": {
+                "id": "bolt-rifle-intercessor-squad",
+                "raw_name": "Bolt Rifle",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            },
+            {
+              "ref": {
+                "id": "knives-and-fists",
+                "raw_name": "Knives and Fists",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model_name": "Intercessor",
+          "count": 4,
+          "wargear": [
+            {
+              "ref": {
+                "id": "bolt-pistol-intercessor-squad",
+                "raw_name": "Bolt Pistol",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            },
+            {
+              "ref": {
+                "id": "bolt-rifle-intercessor-squad",
+                "raw_name": "Bolt Rifle",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            },
+            {
+              "ref": {
+                "id": "knives-and-fists",
+                "raw_name": "Knives and Fists",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "leader_attachment": null
+    }
+  ],
+  "game_version": {
+    "edition": "11th",
+    "dataslate": "pre-launch-provisional"
+  },
+  "diagnostics": {
+    "resolved_units": 5,
+    "unresolved_units": 0,
+    "resolved_weapons": 14,
+    "unresolved_weapons": 0,
+    "warnings": [
+      {
+        "code": "battle-size-unmapped",
+        "message": "Battle size label could not be mapped.",
+        "raw_name": "Combat Patrol (500 Point limit)"
+      }
+    ]
+  }
+}

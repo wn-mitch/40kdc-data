@@ -31,6 +31,7 @@ use regex::Regex;
 use serde_json::Value;
 
 use super::adapter::{FormatAdapter, ParseError};
+use super::attached_groups::{attached_as_role, AttachedAs};
 use super::newrecruit_text::{faction_from_keyword, infer_battle_size_raw, strip_parenthetical};
 use super::types::{
     AttachmentRole, ParsedLeaderAttachment, ParsedRoster, ParsedUnit, ParsedWargear, RosterFormat,
@@ -195,14 +196,6 @@ struct UnitAcc {
     bullets: Vec<Bullet>,
 }
 
-/// Role from an `Attached as:` annotation inside an `Attached Unit N` group.
-#[derive(Clone, Copy, PartialEq)]
-enum AttachedAs {
-    Leader,
-    Support,
-    Bodyguard,
-}
-
 /// Build the parsed unit plus its `Attached as:` role, if any.
 fn finish_unit(acc: UnitAcc) -> (ParsedUnit, Option<AttachedAs>) {
     let top_indent = acc.bullets.iter().map(|b| b.indent).min().unwrap_or(0);
@@ -247,12 +240,10 @@ fn finish_unit(acc: UnitAcc) -> (ParsedUnit, Option<AttachedAs>) {
                 }
                 continue;
             }
-            if let Some(c) = RE_ATTACHED_AS.captures(&b.text) {
-                let role = match c[1].to_ascii_lowercase().as_str() {
-                    "leader" => AttachedAs::Leader,
-                    "support" => AttachedAs::Support,
-                    _ => AttachedAs::Bodyguard,
-                };
+            if let Some(role) = RE_ATTACHED_AS
+                .captures(&b.text)
+                .and_then(|c| attached_as_role(&c[1]))
+            {
                 if role != AttachedAs::Bodyguard {
                     is_character = true;
                 }

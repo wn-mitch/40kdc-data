@@ -183,6 +183,9 @@ type gwhBullet struct {
 	isAttachment bool
 	// setsCharacter: an `Attached as: … (Character)` annotation flags the unit.
 	setsCharacter bool
+	// attachmentRole is the role named by an `Attached as: …` annotation
+	// ("leader", "support", "bodyguard"), or "".
+	attachmentRole string
 	// keywordOverride is an explicitly selected/granted keyword annotation.
 	keywordOverride any
 }
@@ -192,6 +195,11 @@ type gwhUnit struct {
 	displayedPts       any // float64 or nil
 	isCharacterSection bool
 	bullets            []gwhBullet
+	// attachmentGroup is the `Attached Unit N` group number, or 0 outside one.
+	attachmentGroup int
+	// attachmentRole is the unit's role in that group (first `Attached as:`
+	// bullet, or a preceding `Attached as Support:` line).
+	attachmentRole string
 }
 
 func gwhParseBullet(indent int, body string, bulleted bool) gwhBullet {
@@ -199,6 +207,11 @@ func gwhParseBullet(indent int, body string, bulleted bool) gwhBullet {
 	// before the generic colon split: otherwise `Leader: Character Name`
 	// becomes an inline model and inflates the bodyguard's model count by one.
 	if m := gwhAttachment.FindStringSubmatch(body); m != nil {
+		isAttachedAs := strings.EqualFold(strings.Join(strings.Fields(m[1]), " "), "attached as")
+		attachedRole := ""
+		if isAttachedAs {
+			attachedRole = attachedAsRole(m[2])
+		}
 		return gwhBullet{
 			indent:       indent,
 			count:        nil,
@@ -206,8 +219,9 @@ func gwhParseBullet(indent int, body string, bulleted bool) gwhBullet {
 			isAnnotation: true,
 			bulleted:     bulleted,
 			isAttachment: true,
-			setsCharacter: strings.EqualFold(strings.Join(strings.Fields(m[1]), " "), "attached as") &&
+			setsCharacter: isAttachedAs &&
 				gwhCharacterRole.MatchString(m[2]),
+			attachmentRole: attachedRole,
 		}
 	}
 
@@ -471,6 +485,8 @@ var gwHeaderlessAdapter = formatAdapter{
 
 		name := "Imported roster"
 		var declaredLimit any
+		// totalReported is the army total printed on the roster title line.
+		var totalReported any
 		var battleSizeRaw any
 		var units []map[string]any
 		var current *gwhUnit
@@ -484,8 +500,16 @@ var gwHeaderlessAdapter = formatAdapter{
 		var factionRawName any
 		detachmentRawNames := []any{}
 
+		var attachmentMembers []attachedGroupMember
+		attachmentGroup := 0
+		pendingSupport := false
 		flush := func() {
 			if current != nil {
+				if current.attachmentGroup != 0 && current.attachmentRole != "" {
+					attachmentMembers = append(attachmentMembers, attachedGroupMember{
+						unitIndex: len(units), group: current.attachmentGroup, role: current.attachmentRole,
+					})
+				}
 				units = append(units, finishGwhUnit(current))
 				current = nil
 			}
@@ -501,7 +525,11 @@ var gwHeaderlessAdapter = formatAdapter{
 			// Bullets attach to the open unit.
 			if bm := gwhBulletLine.FindStringSubmatch(raw); bm != nil {
 				if current != nil {
-					current.bullets = append(current.bullets, gwhParseBullet(len(bm[1]), bm[2], true))
+					bullet := gwhParseBullet(len(bm[1]), bm[2], true)
+					if current.attachmentRole == "" {
+						current.attachmentRole = bullet.attachmentRole
+					}
+					current.bullets = append(current.bullets, bullet)
 				}
 				continue
 			}
@@ -541,6 +569,7 @@ var gwHeaderlessAdapter = formatAdapter{
 					consumedTitle = true
 					name = headerName
 					declaredLimit = points
+					totalReported = points
 					continue
 				}
 				// Some event exports prepend participant/team/faction lines
@@ -551,6 +580,7 @@ var gwHeaderlessAdapter = formatAdapter{
 					len(detachmentRawNames) == 1 && hasPoints && pointValue >= 1000 {
 					name = headerName
 					declaredLimit = points
+					totalReported = points
 					factionRawName = detachmentRawNames[0]
 					detachmentRawNames = detachmentRawNames[:0]
 					continue
@@ -573,7 +603,35 @@ var gwHeaderlessAdapter = formatAdapter{
 					rawName:            headerName,
 					displayedPts:       points,
 					isCharacterSection: inChars,
+					attachmentGroup:    attachmentGroup,
 				}
+				if pendingSupport {
+					current.attachmentRole = "support"
+				}
+				pendingSupport = false
+				continue
+			}
+
+			if group, ok := attachedUnitNumber(line); ok {
+				flush()
+				section = "ATTACHED UNITS"
+				haveSection = true
+				attachmentGroup = group
+				continue
+			}
+
+			if attachedAsSupportRe.MatchString(line) {
+				flush()
+				pendingSupport = true
+				continue
+			}
+
+			// `Attached Units` is a body section even when it isn't uppercased.
+			if attachedSectionRe.MatchString(line) {
+				flush()
+				section = "ATTACHED UNITS"
+				haveSection = true
+				attachmentGroup = 0
 				continue
 			}
 
@@ -582,6 +640,7 @@ var gwHeaderlessAdapter = formatAdapter{
 				flush()
 				section = strings.TrimSpace(strings.TrimRight(line, ":"))
 				haveSection = true
+				attachmentGroup = 0
 				continue
 			}
 
@@ -603,6 +662,7 @@ var gwHeaderlessAdapter = formatAdapter{
 			}
 		}
 		flush()
+		pairAttachedGroups(units, attachmentMembers)
 
 		totalComputed := 0.0
 		for _, u := range units {
@@ -624,11 +684,14 @@ var gwHeaderlessAdapter = formatAdapter{
 			"faction_raw_name":     factionRawName,
 			"detachment_raw_names": detachmentRawNames,
 			"battle_size_raw":      battleSizeRaw,
-			"declared_limit":       declaredLimit,
-			"total_reported":       nil,
-			"total_computed":       totalComputed,
-			"units":                mapsToAny(units),
-			"multi_force":          allied > 0,
+			// Always present (null here), as in TS: resolve only infers a
+			// detachment's sole disposition when the key is present and null.
+			"force_disposition_raw_name": nil,
+			"declared_limit":             declaredLimit,
+			"total_reported":             totalReported,
+			"total_computed":             totalComputed,
+			"units":                      mapsToAny(units),
+			"multi_force":                allied > 0,
 		}, nil
 	},
 }
