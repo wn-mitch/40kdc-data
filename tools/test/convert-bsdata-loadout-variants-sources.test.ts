@@ -146,7 +146,7 @@ describe("BSData variant sources", () => {
       const compositions = [{ unit_id: "troopers", models: [{ name: "Trooper", max: 9, default_weapon_ids: ["gun", "knife"], loadout_variants: stale }] }];
       const units = [{ id: "troopers", external_refs: [{ namespace: "bsdata", id: "source" }] }];
       const projection = prepareFactionProjection(units, compositions, [gun], new Map([["source", { id: "source" }]]), []);
-      expect(projection.compositions[0].models[0]).not.toHaveProperty("loadout_variants");
+      expect((projection.compositions[0].models as unknown[])[0]).not.toHaveProperty("loadout_variants");
       expect(projection.notes.join()).toContain("committed variants dropped: no variant holds the MFM default loadout");
       // Its items stay reachable through the defaults, so the weapon list is untouched.
       expect(projection.units).toBeUndefined();

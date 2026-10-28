@@ -65,6 +65,7 @@ describe("Semantic authoring named-region-state compiler", () => {
     const effect = result.mechanics.effect as unknown as NamedRegionStateEffect;
     const { modifier } = effect;
     const { producer, consumer } = modifier;
+    if (!consumer) throw new Error("expected a consumer");
     expect(producer.baseline).toEqual([{ region: { territory: "your-deployment-zone" }, duration: "permanent" }]);
     expect(producer.phase_extensions).toEqual([
       { region: { territory: "no-mans-land" }, condition: { type: "controls", parameters: { by: "friendly", objective: { territory: "no-mans-land" }, proportion: { comparison: "gte", fraction: 0.5 } } }, trigger: { event: "phase-started" }, duration: "phase", evaluation: "snapshot-once" },
@@ -93,6 +94,7 @@ describe("Semantic authoring named-region-state compiler", () => {
     });
     const effect = result.mechanics.effect as unknown as NamedRegionStateEffect;
     const { producer, consumer } = effect.modifier;
+    if (!consumer) throw new Error("expected a consumer");
     expect(producer.additive_extensions).toEqual([
       { kind: "unit-proximity", filter: { owner: "friendly", all_of: ["PURIFIER SQUAD"] }, range: { inches: 6 } },
     ]);
@@ -232,7 +234,7 @@ describe("named-region-producer", () => {
     const result = compileLeaves([producerLeaf({ region_id: "custom-region", owner_faction: "custom-faction" })]);
     expect(result.ok).toBe(true);
     if (!result.ok) return;
-    const effect = result.mechanics.effect as NamedRegionStateEffect;
+    const effect = result.mechanics.effect as unknown as NamedRegionStateEffect;
     expect(effect.type).toBe("named-region-state");
     expect(effect.modifier).not.toHaveProperty("consumer");
     expect(effect.modifier).not.toHaveProperty("branch_precedence");
