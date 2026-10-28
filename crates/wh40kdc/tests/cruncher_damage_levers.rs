@@ -15,6 +15,7 @@ fn source() -> BuffSource {
         ability_id: "fabricated".into(),
         ability_kind: AbilityKind::Unit,
         source_unit_id: None,
+        selects_model: None,
     }
 }
 

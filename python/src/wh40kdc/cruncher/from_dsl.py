@@ -239,6 +239,27 @@ def _aura_filter_keywords(
     return True
 
 
+#: Diagnostic emitted for a model-scoped effect of a Stratagem that targets one model.
+_STRATAGEM_MODEL_REASON = "model-only target"
+
+
+def _is_model_scoped_from_stratagem(
+    node: dict[str, Any], source: BuffSource, opts: dict[str, Any]
+) -> bool:
+    """Is this node a model-scoped effect of a Stratagem that targets one model (``selectsModel``)?
+
+    It reaches that model alone, so it is a buff on the buffed unit only when the unit is that
+    one model; an unknown model count is not assumed to be one. Mirrors TS
+    ``isModelScopedFromStratagem``."""
+    if source.get("kind") != "ability" or source.get("selectsModel") is not True:
+        return False
+    target = node.get("target")
+    if not (isinstance(target, str) and target in _MODEL_TARGETS):
+        return False
+    key = "attackerModelCount" if opts["perspective"] == "attacker" else "targetModelCount"
+    return opts["context"].get(key) != 1
+
+
 def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTranslation) -> None:
     if not _is_object(node):
         return
@@ -248,6 +269,9 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
     # do — so this can never swallow a subtree holding unit-scoped effects too.
     if _is_model_scoped_from_attached_member(node, source):
         out["unsupported"].append({"reason": _MODEL_SCOPED_REASON, "effectFragment": node})
+        return
+    if _is_model_scoped_from_stratagem(node, source, opts):
+        out["unsupported"].append({"reason": _STRATAGEM_MODEL_REASON, "effectFragment": node})
         return
     if node.get("target") == "model-in-this-unit":
         out["unsupported"].append(

@@ -1,6 +1,7 @@
 import type { Buff, EngineContext } from "../cruncher/index.js";
 import type { Dataset, StackableBuff, StackableBuffGroup } from "../data/dataset.js";
-import { baseLoadout, optionCap, type LoadoutModel, type LoadoutTier } from "../data/loadout.js";
+import { baseLoadout, optionCap, type LoadoutModel } from "../data/loadout.js";
+import { fullModelCount } from "./factions.js";
 import { reachesOtherUnits, replacedArmyRuleIds } from "../abilities-resolver/resolver.js";
 import type { EligibilityInput } from "../abilities-resolver/index.js";
 import type { UnitView } from "../data/entities.js";
@@ -113,13 +114,9 @@ export class DamageScoringSession {
   private scaffold(unit: UnitView): LoadoutScaffold {
     const cached = this.scaffoldCache.get(unit.id);
     if (cached) return cached;
-    const composition = this.dataset.unitCompositionOf(unit.raw) as { models?: LoadoutModel[]; tiers?: LoadoutTier[] } | undefined;
+    const composition = this.dataset.unitCompositionOf(unit.raw) as { models?: LoadoutModel[] } | undefined;
     const models = composition?.models ?? [];
-    let modelCount = unit.raw.model_count?.max ?? unit.raw.model_count?.min ?? 1;
-    for (const tier of composition?.tiers ?? []) {
-      const count = tier.models.reduce((sum, model) => sum + (model.max ?? model.min), 0);
-      modelCount = Math.max(modelCount, count);
-    }
+    const modelCount = fullModelCount(this.dataset, unit.raw);
     const authored = this.dataset.wargearOptionsOf(unit.raw);
     const options = this.config.perFiveSensitivity
       ? authored.map((option) => option.replaces && (option.model_constraint as { any_number?: boolean } | undefined)?.any_number

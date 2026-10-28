@@ -187,6 +187,8 @@ pub(crate) struct WalkOpts<'a> {
 const STOCHASTIC_DICE_GATED: &str = "dice-gated effect: stochastic; not expressible as a buff";
 const MODEL_SCOPED_REASON: &str =
     "model-scoped effect from an attached model: applies to that model only (core rule 19.04)";
+/// Diagnostic emitted for a model-scoped effect of a Stratagem that targets one model.
+const STRATAGEM_MODEL_REASON: &str = "model-only target";
 const FIDELITY_BINDING_REASON: &str =
     "selection/history/model/attack predicates are not resolved by the buff engine";
 const ALTERNATIVES_REASON: &str =
@@ -427,6 +429,25 @@ pub(crate) fn walk(node: &Value, opts: &WalkOpts, out: &mut Out) {
         )
     {
         out.unsupported(MODEL_SCOPED_REASON, current);
+        return;
+    }
+    // A Stratagem that targets one model reaches that model alone: a buff on the buffed unit only
+    // when the unit is that one model. An unknown model count is not assumed to be one.
+    if matches!(
+        opts.source_meta,
+        BuffSource::Ability {
+            selects_model: Some(true),
+            ..
+        }
+    ) && matches!(
+        current.get("target").and_then(Value::as_str),
+        Some("this-model" | "model-in-this-unit")
+    ) && match opts.perspective {
+        TranslationPerspective::Attacker => opts.context.attacker_model_count,
+        TranslationPerspective::Target => opts.context.target_model_count,
+    } != Some(1)
+    {
+        out.unsupported(STRATAGEM_MODEL_REASON, current);
         return;
     }
     if is_str(current, "target", "model-in-this-unit") {

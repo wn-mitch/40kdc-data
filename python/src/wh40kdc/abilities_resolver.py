@@ -155,6 +155,7 @@ def resolve_eligible_abilities(
                             "kind": "detachment-stratagem",
                             "stratagemId": stratagem["id"],
                             "cpCost": stratagem["cp_cost"],
+                            **({"selectsModel": True} if _selects_model(stratagem) else {}),
                         },
                         # The stratagem's printed phase governs eligibility.
                         "phases": [phase],
@@ -272,6 +273,15 @@ def _is_aura_scope(range_: Any) -> bool:
         )
     return isinstance(range_, str) and (
         range_.startswith("aura-") or range_ in ("any-on-battlefield", "any-visible")
+    )
+
+
+def _selects_model(stratagem: dict[str, Any]) -> bool:
+    """Whether a stratagem's friendly target is one model rather than a unit."""
+    raw = stratagem.get("target_restrictions")
+    targets = raw if isinstance(raw, list) else [raw] if raw else []
+    return any(
+        target.get("side") != "enemy" and target.get("selects") == "model" for target in targets
     )
 
 

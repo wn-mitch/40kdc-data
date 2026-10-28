@@ -7,6 +7,7 @@ export const RECIPIENT_CASE_PREFIX = "canonical/recipient-snapshot/";
 export const HALF_WEAPON_RANGE_CASE_PREFIX = "canonical/half-weapon-range/";
 export const SCENARIO_CASE_PREFIX = "canonical/scenario/";
 export const TRIGGER_SUBJECT_CASE_PREFIX = "canonical/trigger-subject/";
+export const STRATAGEM_MODEL_CASE_PREFIX = "canonical/stratagem-model/";
 
 export interface DslInput {
   caseId: string;
@@ -85,6 +86,37 @@ export function canonicalTriggerSubjectCases() {
   return cases.map((row) => {
     const result = effectToBuffs(row.effect, row.source, row.context, row.perspective);
     return { ...row, expected: {
+      applied: result.applied.map((buff) => buff.contribution),
+      unsupportedReasons: result.unsupported.map((item) => item.reason),
+      activatable: result.activatable.map((lever) => ({
+        id: lever.id, label: lever.label, group: lever.group ?? null,
+        requires: lever.requires ?? null, capRaise: lever.capRaise ?? null,
+        ...stanceOptionFields(lever),
+        buffs: lever.buffs.map((buff) => buff.contribution),
+      })),
+    } };
+  });
+}
+
+/**
+ * Fabricated Stratagem effects on `this-model`. A Stratagem that targets one model (`selectsModel`)
+ * buffs the unit only when the unit is that one model; a multi-model or uncounted unit gets nothing.
+ */
+export function canonicalStratagemModelCases() {
+  const selecting = { kind: "ability", abilityId: "stratagem-model-example", abilityKind: "detachment-stratagem", selectsModel: true } as const;
+  const unitWide = { kind: "ability", abilityId: "stratagem-model-example", abilityKind: "detachment-stratagem" } as const;
+  const attacks = { type: "stat-modifier", target: "this-model", modifier: { stat: "A", operation: "add", value: 1, weapons: { type: "melee" } } };
+  const toughness = { type: "stat-modifier", target: "this-model", modifier: { stat: "T", operation: "add", value: 1 } };
+  const rows: Array<Omit<DslInput, "abilityId" | "caseId"> & { id: string }> = [
+    { id: "multi-model-unit", source: selecting, effect: attacks, context: { phase: "fight", attackerModelCount: 6 }, perspective: "attacker" },
+    { id: "uncounted-unit", source: selecting, effect: attacks, context: { phase: "fight" }, perspective: "attacker" },
+    { id: "one-model-unit", source: selecting, effect: attacks, context: { phase: "fight", attackerModelCount: 1 }, perspective: "attacker" },
+    { id: "unit-target-stratagem", source: unitWide, effect: attacks, context: { phase: "fight", attackerModelCount: 6 }, perspective: "attacker" },
+    { id: "multi-model-defender", source: selecting, effect: toughness, context: { phase: "shooting", targetModelCount: 6 }, perspective: "target" },
+  ];
+  return rows.map(({ id, ...row }) => {
+    const result = effectToBuffs(row.effect, row.source, row.context, row.perspective);
+    return { caseId: `${STRATAGEM_MODEL_CASE_PREFIX}${id}`, abilityId: row.source.abilityId, ...row, expected: {
       applied: result.applied.map((buff) => buff.contribution),
       unsupportedReasons: result.unsupported.map((item) => item.reason),
       activatable: result.activatable.map((lever) => ({

@@ -13,7 +13,7 @@ export function sourceFor(entry: EligibleAbility): BuffSource {
     case "detachment":
       return { kind: "ability", abilityId: entry.ability.id, abilityKind: "detachment" };
     case "detachment-stratagem":
-      return { kind: "ability", abilityId: entry.ability.id, abilityKind: "detachment-stratagem" };
+      return { kind: "ability", abilityId: entry.ability.id, abilityKind: "detachment-stratagem", ...(entry.source.selectsModel ? { selectsModel: true } : {}) };
     case "unit":
       return { kind: "ability", abilityId: entry.ability.id, abilityKind: "unit" };
     case "attached":

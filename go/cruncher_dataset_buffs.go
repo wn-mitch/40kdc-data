@@ -219,11 +219,14 @@ func buffSourceFromEligible(entry map[string]any) map[string]any {
 	if kind == "support" {
 		return map[string]any{"kind": "ability", "abilityId": ability.ID(), "abilityKind": "support", "sourceUnitId": source["sourceUnitId"]}
 	}
-	abilityKind := kind
 	if kind == "detachment-stratagem" {
-		abilityKind = "detachment-stratagem"
+		out := map[string]any{"kind": "ability", "abilityId": ability.ID(), "abilityKind": "detachment-stratagem"}
+		if source["selectsModel"] == true {
+			out["selectsModel"] = true
+		}
+		return out
 	}
-	return map[string]any{"kind": "ability", "abilityId": ability.ID(), "abilityKind": abilityKind}
+	return map[string]any{"kind": "ability", "abilityId": ability.ID(), "abilityKind": kind}
 }
 
 func (ds *Dataset) eligibleAbilities(input map[string]any, phase string) []map[string]any {

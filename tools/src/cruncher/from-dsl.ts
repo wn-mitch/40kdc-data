@@ -187,6 +187,20 @@ function isModelScopedFromAttachedMember(
   return typeof node.target === "string" && MODEL_TARGETS.has(node.target);
 }
 
+/** Diagnostic emitted for a model-scoped effect of a Stratagem that targets one model. */
+const STRATAGEM_MODEL_REASON = "model-only target";
+
+/**
+ * Is this node a model-scoped effect of a Stratagem that targets one model (`selectsModel`)? It
+ * reaches that model alone, so it is a buff on the buffed unit only when the unit is that one
+ * model; an unknown model count is not assumed to be one.
+ */
+function isModelScopedFromStratagem(node: Record<string, unknown>, source: BuffSource, opts: WalkOpts): boolean {
+  if (source.kind !== "ability" || source.selectsModel !== true) return false;
+  if (typeof node.target !== "string" || !MODEL_TARGETS.has(node.target)) return false;
+  return (opts.perspective === "attacker" ? opts.context.attackerModelCount : opts.context.targetModelCount) !== 1;
+}
+
 /** Unit-refs that name a unit the buff layer cannot identify with the buffed unit. */
 const UNRESOLVED_TARGETS = new Set(["event-subject", "event-object", "stratagem-target", "bearer-transport"]);
 
@@ -270,6 +284,10 @@ function walk(
   // cannot swallow a subtree containing unit-scoped effects.
   if (isModelScopedFromAttachedMember(currentNode, source)) {
     out.unsupported.push({ reason: MODEL_SCOPED_REASON, effectFragment: currentNode });
+    return;
+  }
+  if (isModelScopedFromStratagem(currentNode, source, opts)) {
+    out.unsupported.push({ reason: STRATAGEM_MODEL_REASON, effectFragment: currentNode });
     return;
   }
   if (currentNode.target === "model-in-this-unit") {

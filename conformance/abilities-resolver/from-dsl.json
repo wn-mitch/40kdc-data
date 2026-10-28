@@ -12845,6 +12845,146 @@
         ],
         "activatable": []
       }
+    },
+    {
+      "caseId": "canonical/stratagem-model/multi-model-unit",
+      "abilityId": "stratagem-model-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "stratagem-model-example",
+        "abilityKind": "detachment-stratagem",
+        "selectsModel": true
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "A",
+          "operation": "add",
+          "value": 1,
+          "weapons": {
+            "type": "melee"
+          }
+        }
+      },
+      "context": {
+        "phase": "fight",
+        "attackerModelCount": 6
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "model-only target"
+        ],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/stratagem-model/uncounted-unit",
+      "abilityId": "stratagem-model-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "stratagem-model-example",
+        "abilityKind": "detachment-stratagem",
+        "selectsModel": true
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "A",
+          "operation": "add",
+          "value": 1,
+          "weapons": {
+            "type": "melee"
+          }
+        }
+      },
+      "context": {
+        "phase": "fight"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "model-only target"
+        ],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/stratagem-model/one-model-unit",
+      "abilityId": "stratagem-model-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "stratagem-model-example",
+        "abilityKind": "detachment-stratagem",
+        "selectsModel": true
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "A",
+          "operation": "add",
+          "value": 1,
+          "weapons": {
+            "type": "melee"
+          }
+        }
+      },
+      "context": {
+        "phase": "fight",
+        "attackerModelCount": 1
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "attacks-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/stratagem-model/unit-target-stratagem",
+      "abilityId": "stratagem-model-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "stratagem-model-example",
+        "abilityKind": "detachment-stratagem"
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "A",
+          "operation": "add",
+          "value": 1,
+          "weapons": {
+            "type": "melee"
+          }
+        }
+      },
+      "context": {
+        "phase": "fight",
+        "attackerModelCount": 6
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "attacks-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
     }
   ]
 }

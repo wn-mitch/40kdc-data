@@ -1695,6 +1695,37 @@
         "unsupportedReasons": [],
         "activatable": []
       }
+    },
+    {
+      "caseId": "canonical/stratagem-model/multi-model-defender",
+      "abilityId": "stratagem-model-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "stratagem-model-example",
+        "abilityKind": "detachment-stratagem",
+        "selectsModel": true
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "T",
+          "operation": "add",
+          "value": 1
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "targetModelCount": 6
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "model-only target"
+        ],
+        "activatable": []
+      }
     }
   ]
 }

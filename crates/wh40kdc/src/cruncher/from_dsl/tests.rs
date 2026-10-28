@@ -8,6 +8,7 @@ fn src() -> BuffSource {
         ability_id: "x".into(),
         ability_kind: AbilityKind::Unit,
         source_unit_id: None,
+        selects_model: None,
     }
 }
 
@@ -99,6 +100,7 @@ fn the_ability_unit_is_the_buffed_unit_and_attached_models_stay_on_their_model()
             ability_id: "x".into(),
             ability_kind: AbilityKind::Attached,
             source_unit_id: None,
+            selects_model: None,
         },
         &EngineContext::new(Phase::Shooting),
         TranslationPerspective::Target,
@@ -595,6 +597,7 @@ fn attachment_conditions_use_the_exact_source_role_witness() {
         ability_id: "x".into(),
         ability_kind: AbilityKind::Attached,
         source_unit_id: Some("source-leader".into()),
+        selects_model: None,
     };
     let mut context = EngineContext::new(Phase::Shooting);
     context.attacker_attachment_role = Some(crate::cruncher::AttachmentRole::Bodyguard);

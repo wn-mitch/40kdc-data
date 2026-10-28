@@ -76,6 +76,8 @@ import {
   canonicalScenarioCases,
   canonicalTriggerSubjectCases,
   TRIGGER_SUBJECT_CASE_PREFIX,
+  canonicalStratagemModelCases,
+  STRATAGEM_MODEL_CASE_PREFIX,
   canonicalRecipientCases,
   canonicalWeaponScopeCases,
   HALF_WEAPON_RANGE_CASE_PREFIX,
@@ -4415,7 +4417,7 @@ function genResolverDslCases(): void {
 
 /** Append fabricated direct-API cases without duplicating their stable identities on regen. */
 function genCanonicalCruncherCases(): void {
-  const appended = [...canonicalRecipientCases(), ...canonicalHalfWeaponRangeCases(), ...canonicalScenarioCases(), ...canonicalGrantedRecordCases(), ...canonicalDamageZeroingCases(), ...canonicalIgnoreModifiersCases(), ...canonicalTriggerSubjectCases()];
+  const appended = [...canonicalRecipientCases(), ...canonicalHalfWeaponRangeCases(), ...canonicalScenarioCases(), ...canonicalGrantedRecordCases(), ...canonicalDamageZeroingCases(), ...canonicalIgnoreModifiersCases(), ...canonicalTriggerSubjectCases(), ...canonicalStratagemModelCases()];
   for (const [filename, perspective] of [
     ["from-dsl.json", "attacker"],
     ["defensive-from-dsl.json", "target"],
@@ -4427,7 +4429,7 @@ function genCanonicalCruncherCases(): void {
         (!row.caseId.startsWith(RECIPIENT_CASE_PREFIX) && !row.caseId.startsWith(HALF_WEAPON_RANGE_CASE_PREFIX) &&
           !row.caseId.startsWith(SCENARIO_CASE_PREFIX) && !row.caseId.startsWith(GRANTED_RECORD_CASE_PREFIX) &&
           !row.caseId.startsWith(DAMAGE_ZEROING_CASE_PREFIX) && !row.caseId.startsWith(IGNORE_MODIFIERS_CASE_PREFIX) &&
-          !row.caseId.startsWith(TRIGGER_SUBJECT_CASE_PREFIX))),
+          !row.caseId.startsWith(TRIGGER_SUBJECT_CASE_PREFIX) && !row.caseId.startsWith(STRATAGEM_MODEL_CASE_PREFIX))),
       ...appended.filter((row) => row.perspective === perspective),
     ];
     writeJson(path, corpus);

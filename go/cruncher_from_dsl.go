@@ -157,6 +157,29 @@ func isModelScopedFromAttachedMember(node map[string]any, source map[string]any)
 	return modelTargets[getStr(node, "target")]
 }
 
+// stratagemModelReason is the diagnostic for a model-scoped effect of a Stratagem that
+// targets one model.
+const stratagemModelReason = "model-only target"
+
+// isModelScopedFromStratagem reports whether this node is a model-scoped effect of a
+// Stratagem that targets one model (selectsModel). It reaches that model alone, so it is
+// a buff on the buffed unit only when the unit is that one model; an unknown model count
+// is not assumed to be one. Mirrors TS isModelScopedFromStratagem.
+func isModelScopedFromStratagem(node map[string]any, source map[string]any, opts dslOpts) bool {
+	if getStr(source, "kind") != "ability" || source["selectsModel"] != true {
+		return false
+	}
+	if !modelTargets[getStr(node, "target")] {
+		return false
+	}
+	key := "targetModelCount"
+	if opts.perspective == "attacker" {
+		key = "attackerModelCount"
+	}
+	count, ok := contextNumber(opts.context[key])
+	return !ok || count != 1
+}
+
 // unresolvedTargets are the unit-refs that name a unit the buff layer cannot
 // identify with the buffed unit.
 var unresolvedTargets = map[string]bool{"event-subject": true, "event-object": true, "stratagem-target": true, "bearer-transport": true}
@@ -177,6 +200,10 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 	// Core rule 19.04 gate, applied before leaf translation on both perspectives.
 	if isModelScopedFromAttachedMember(n, source) {
 		out.unsupported = append(out.unsupported, unsup(modelScopedReason, n))
+		return
+	}
+	if isModelScopedFromStratagem(n, source, opts) {
+		out.unsupported = append(out.unsupported, unsup(stratagemModelReason, n))
 		return
 	}
 	if n["target"] == "model-in-this-unit" {

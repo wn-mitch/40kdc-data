@@ -1006,6 +1006,7 @@ function bufferSourceFromEligible(entry: EligibleAbility): BuffSource {
         kind: "ability",
         abilityId,
         abilityKind: "detachment-stratagem",
+        ...(entry.source.selectsModel ? { selectsModel: true } : {}),
       };
     case "unit":
       return { kind: "ability", abilityId, abilityKind: "unit" };

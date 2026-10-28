@@ -159,6 +159,8 @@ function sourceOf(entry: EligibleAbility): BuffSource {
       return { kind: "ability", abilityId: ability.id, abilityKind: "attached", sourceUnitId: source.unitId };
     case "support":
       return { kind: "ability", abilityId: ability.id, abilityKind: "support", sourceUnitId: source.sourceUnitId };
+    case "detachment-stratagem":
+      return { kind: "ability", abilityId: ability.id, abilityKind: "detachment-stratagem", ...(source.selectsModel ? { selectsModel: true } : {}) };
     default:
       return { kind: "ability", abilityId: ability.id, abilityKind: source.kind };
   }

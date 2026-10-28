@@ -1,11 +1,11 @@
 import type { Dataset } from "../data/dataset.js";
-import { baseLoadout, type LoadoutModel, type LoadoutTier } from "../data/loadout.js";
+import { baseLoadout, type LoadoutModel } from "../data/loadout.js";
 import type { Detachment, Unit, UnitComposition } from "../generated.js";
 import type { EngineContext } from "../cruncher/index.js";
 import type { ResolvedTarget, ComparePhase } from "../compare.js";
 import { assessDetachmentSelection, summarizeSupportCosts, type LegalityIssue } from "./legality.js";
 import type { MatrixConfig, Scenario } from "./config.js";
-import { preferFactionCopies, type FactionContext, unitInFaction } from "./factions.js";
+import { fullModelCount, preferFactionCopies, type FactionContext, unitInFaction } from "./factions.js";
 import { DamageScoringSession, type DamageScoringInvariants } from "./scoring.js";
 import { isCombatPatrolDetachment } from "../abilities-resolver/resolver.js";
 import { buildLedger, unscoreableEntries } from "./ledger.js";
@@ -56,7 +56,7 @@ function attackerToughness(spec: StackSpec): { attackerToughness?: number } {
  * The engine context of one stack member in a cell. The crunch fires every model at a full-strength
  * target in the attacker's own turn, so those facts are stated; the scenario declares the rest.
  */
-function contextForCell(factionId: string, target: ResolvedTarget, phase: ComparePhase, scenario: Scenario, targetWargear: Record<string, number>) {
+function contextForCell(dataset: Dataset, factionId: string, target: ResolvedTarget, phase: ComparePhase, scenario: Scenario, targetWargear: Record<string, number>) {
   const targetKeywords = [...(target.unitRaw.keywords ?? []), ...(target.unitRaw.faction_keywords ?? [])].map((keyword) => keyword.toLowerCase());
   const targetWounds = freshWounds(target.unitRaw);
   return (spec: StackSpec, member?: StackMember): EngineContext => ({
@@ -74,6 +74,8 @@ function contextForCell(factionId: string, target: ResolvedTarget, phase: Compar
     distanceInches: 1,
     armyFaction: factionId,
     attackerAttached: spec.members.length > 1,
+    // Every member at full strength, as the crunch fires them.
+    ...(spec.members.length > 0 ? { attackerModelCount: spec.members.reduce((sum, candidate) => sum + fullModelCount(dataset, candidate.unit.raw), 0) } : {}),
     attackerKeywords: unitKeywords(spec.members),
     // The member's own models make its attacks; without a member, only keywords every member shares.
     attackerModelKeywords: member ? unitKeywords([member]) : sharedKeywords(spec.members),
@@ -247,9 +249,7 @@ function winnerReport(dataset: Dataset, faction: FactionContext, session: Damage
     if (!unit) return [];
     const composition = dataset.unitCompositionOf(unit.raw) as UnitComposition | undefined;
     const models = (composition?.models ?? []) as LoadoutModel[];
-    const tiers = (composition?.tiers ?? []) as LoadoutTier[];
-    let modelCount = unit.raw.model_count?.max ?? unit.raw.model_count?.min ?? 1;
-    for (const tier of tiers) modelCount = Math.max(modelCount, tier.models.reduce((sum, model) => sum + (model.max ?? model.min), 0));
+    const modelCount = fullModelCount(dataset, unit.raw);
     const options = dataset.wargearOptionsOf(unit.raw);
     return [{ unit: unit.raw, modelCount, loadout: baseLoadout(unit.raw, modelCount, options, models).counts }];
   });
@@ -333,7 +333,7 @@ export function damageScoringSession(input: {
     factionId: input.faction.id,
     target: input.target,
     phase: input.phase,
-    contextFor: contextForCell(input.faction.id, input.target, input.phase, input.config.scenario,
+    contextFor: contextForCell(input.dataset, input.faction.id, input.target, input.phase, input.config.scenario,
       input.targetWargear ?? baseWargear(input.dataset, input.target.unitRaw, input.target.modelCount)),
   };
   return new DamageScoringSession(input.dataset, state, input.config, input.faction.units, input.invariants);

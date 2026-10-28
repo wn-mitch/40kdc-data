@@ -36,6 +36,7 @@ impl Dataset {
                 ability_id,
                 ability_kind,
                 source_unit_id,
+                ..
             } = &snapshot.source
             else {
                 continue;

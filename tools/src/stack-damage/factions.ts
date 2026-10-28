@@ -70,3 +70,11 @@ export function resolveFactionContext(dataset: Dataset, factionId: string): Fact
 export function unitInFaction(context: FactionContext, unitId: string): UnitView | undefined {
   return context.units.find((unit) => unit.id === unitId);
 }
+
+/** A unit's full-strength model count: its largest composition tier, else its printed maximum. */
+export function fullModelCount(dataset: Dataset, unit: Unit): number {
+  const composition = dataset.unitCompositionOf(unit) as { tiers?: { models: { min: number; max?: number }[] }[] } | undefined;
+  let count = unit.model_count?.max ?? unit.model_count?.min ?? 1;
+  for (const tier of composition?.tiers ?? []) count = Math.max(count, tier.models.reduce((sum, model) => sum + (model.max ?? model.min), 0));
+  return count;
+}

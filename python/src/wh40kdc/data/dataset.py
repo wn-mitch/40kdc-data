@@ -43,10 +43,15 @@ def _buff_source_from_eligible(entry: dict[str, Any]) -> dict[str, Any]:
             "sourceUnitId": entry["source"]["sourceUnitId"],
         }
     if kind == "detachment-stratagem":
-        ability_kind = "detachment-stratagem"
-    else:
-        ability_kind = kind  # army / detachment / unit
-    return {"kind": "ability", "abilityId": ability_id, "abilityKind": ability_kind}
+        source: dict[str, Any] = {
+            "kind": "ability",
+            "abilityId": ability_id,
+            "abilityKind": "detachment-stratagem",
+        }
+        if entry["source"].get("selectsModel"):
+            source["selectsModel"] = True
+        return source
+    return {"kind": "ability", "abilityId": ability_id, "abilityKind": kind}
 
 
 class ReactiveTrigger(TypedDict):

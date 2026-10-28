@@ -15,6 +15,7 @@ fn own() -> BuffSource {
         ability_id: "fabricated".into(),
         ability_kind: AbilityKind::Unit,
         source_unit_id: None,
+        selects_model: None,
     }
 }
 
@@ -23,6 +24,7 @@ fn provided() -> BuffSource {
         ability_id: "fabricated".into(),
         ability_kind: AbilityKind::Support,
         source_unit_id: Some("fabricated-lord".into()),
+        selects_model: None,
     }
 }
 

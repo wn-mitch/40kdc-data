@@ -35,6 +35,8 @@ export type BuffSource =
        * for `"support"`, the other unit that provides it. Absent for other kinds.
        */
       sourceUnitId?: string;
+      /** For `abilityKind: "detachment-stratagem"`, set when the Stratagem targets one model of the unit. */
+      selectsModel?: true;
     }
   | { kind: "manual"; label: string };
 

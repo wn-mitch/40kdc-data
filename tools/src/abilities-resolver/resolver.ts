@@ -36,7 +36,8 @@ import type { AbilityView } from "../data/entities.js";
 export type EligibleAbilitySource =
   | { kind: "army" }
   | { kind: "detachment"; detachmentId: string }
-  | { kind: "detachment-stratagem"; stratagemId: string; cpCost: number }
+  /** `selectsModel`: the Stratagem targets one model of the unit (`target_restrictions.selects: "model"`). */
+  | { kind: "detachment-stratagem"; stratagemId: string; cpCost: number; selectsModel?: true }
   | { kind: "unit"; unitId: string }
   | { kind: "attached"; unitId: string }
   | { kind: "support"; sourceUnitId: string };
@@ -143,6 +144,7 @@ export function resolveEligibleAbilities(
             kind: "detachment-stratagem",
             stratagemId: stratagem.id,
             cpCost: stratagem.cp_cost,
+            ...(stratagemSelectsModel(stratagem) ? { selectsModel: true as const } : {}),
           },
           phases: [phase], // the stratagem's printed phase governs eligibility.
         });
@@ -270,6 +272,12 @@ export function stratagemCanTarget(stratagem: Stratagem, keywords: ReadonlySet<s
     && (target.required_keywords ?? []).every(has)
     && ((target.required_keywords_any ?? []).length === 0 || target.required_keywords_any!.some(has))
     && !(target.excluded_keywords ?? []).some(has));
+}
+
+/** Whether a Stratagem's friendly target is one model rather than a unit. */
+function stratagemSelectsModel(stratagem: Stratagem): boolean {
+  const raw = stratagem.target_restrictions as (TargetRestriction & { selects?: string }) | (TargetRestriction & { selects?: string })[] | null | undefined;
+  return (Array.isArray(raw) ? raw : raw ? [raw] : []).some((target) => target.side !== "enemy" && target.selects === "model");
 }
 
 function intersect(phases: Phase[], phase: Phase): Phase[] {

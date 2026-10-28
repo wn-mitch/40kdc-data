@@ -144,13 +144,17 @@ func resolveEligibleAbilities(ds *Dataset, input map[string]any, phase string) [
 				if !ok {
 					continue
 				}
+				stratagemSource := map[string]any{
+					"kind": "detachment-stratagem", "stratagemId": getStr(stratagem, "id"),
+					"cpCost": stratagem["cp_cost"],
+				}
+				if stratagemSelectsModel(stratagem) {
+					stratagemSource["selectsModel"] = true
+				}
 				pushUnique(map[string]any{
 					"ability": stratAbility,
-					"source": map[string]any{
-						"kind": "detachment-stratagem", "stratagemId": getStr(stratagem, "id"),
-						"cpCost": stratagem["cp_cost"],
-					},
-					"phases": []string{phase},
+					"source":  stratagemSource,
+					"phases":  []string{phase},
 				})
 			}
 		}
@@ -248,6 +252,24 @@ func isAuraScope(rng any) bool {
 // resolver does not know which model is the Warlord, so a Warlord target only needs a unit that
 // could contain it: one with CHARACTER, the keyword every Warlord carries. Mirrors TS
 // stratagemCanTarget.
+// stratagemSelectsModel reports whether a stratagem's friendly target is one model rather
+// than a unit.
+func stratagemSelectsModel(stratagem map[string]any) bool {
+	var targets []any
+	switch raw := stratagem["target_restrictions"].(type) {
+	case map[string]any:
+		targets = []any{raw}
+	case []any:
+		targets = raw
+	}
+	for _, item := range targets {
+		if target, ok := item.(map[string]any); ok && getStr(target, "side") != "enemy" && getStr(target, "selects") == "model" {
+			return true
+		}
+	}
+	return false
+}
+
 func stratagemCanTarget(stratagem map[string]any, keywords map[string]bool) bool {
 	var targets []map[string]any
 	switch raw := stratagem["target_restrictions"].(type) {

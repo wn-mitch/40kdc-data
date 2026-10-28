@@ -63,6 +63,10 @@ pub enum BuffSource {
         /// Absent for other kinds.
         #[serde(default, skip_serializing_if = "Option::is_none")]
         source_unit_id: Option<String>,
+        /// For `ability_kind = DetachmentStratagem`, set when the Stratagem targets one model of
+        /// the unit. Absent otherwise.
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        selects_model: Option<bool>,
     },
     Manual {
         label: String,

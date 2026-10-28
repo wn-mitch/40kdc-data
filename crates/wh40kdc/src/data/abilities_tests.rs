@@ -10,6 +10,7 @@ fn source(id: &str, kind: AbilityKind) -> BuffSource {
         ability_id: id.to_string(),
         ability_kind: kind,
         source_unit_id: None,
+        selects_model: None,
     }
 }
 
