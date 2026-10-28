@@ -161,6 +161,22 @@ describe("Semantic authoring batch-3 families: targeting, eligibility and unit-s
     }
   });
 
+  it("compiles ignore-modifiers@4 rolls left out of an \"any roll\" list, on the rolls kind only", () => {
+    const params = { subject: "this-unit", what: ["characteristics", "rolls"], rolls: ["all"], except_rolls: ["save"] };
+    expect(compiled([leaf("EFFECT", "ignore-modifiers", params, 4)]).mechanics.effect).toEqual({
+      type: "sequence",
+      steps: [
+        { type: "ignore-modifiers", target: "this-unit", modifier: { what: "characteristics" } },
+        { type: "ignore-modifiers", target: "this-unit", modifier: { what: "rolls", rolls: ["all"], except_rolls: ["save"] } },
+      ],
+    });
+    expect(rendered(base(), [leaf("EFFECT", "ignore-modifiers", params, 4)])).toMatch(/except saving throw rolls/u);
+    const normalize = (input: Record<string, unknown>) => normalizeFingerprintParameters("ignore-modifiers", input, 4);
+    // Leaving a roll out only means something against "any roll".
+    expect(() => normalize({ subject: "this-unit", what: ["rolls"], rolls: ["hit"], except_rolls: ["save"] })).toThrow(/rolls must be all or any/u);
+    expect(() => normalize({ subject: "this-unit", what: ["rolls"], rolls: ["all"], except_rolls: ["all"] })).toThrow();
+  });
+
   it("round-trips leaf parameters to readable describer English", () => {
     const previews: Array<[string, Record<string, unknown>, number, RegExp]> = [
       ["eligibility-permission", { subject: "this-unit", activity: "fall-back", allow: true }, 1, /eligible to fall back/iu],

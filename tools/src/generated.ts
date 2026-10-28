@@ -3249,6 +3249,12 @@ export interface IgnoreModifiersEffect {
      * @minItems 1
      */
     rolls?: [RollSelector, ...RollSelector[]];
+    /**
+     * Rolls left out of an "any roll" list (rolls ["all"]): their modifiers still apply ("excluding modifiers to saving throws").
+     *
+     * @minItems 1
+     */
+    except_rolls?: [RollKind, ...RollKind[]];
     only?: "worsening" | "improving";
     incoming?: true;
     weapons?: WeaponScope;

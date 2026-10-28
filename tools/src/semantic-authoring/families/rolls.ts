@@ -3,7 +3,7 @@ import { ENTITY_ID } from "../buff-families.js";
 import type { SemanticFamilyDefinition } from "../contracts.js";
 import { ROLL_KINDS } from "../dice-families.js";
 import { EVENT_SUBJECT, type FamilyExtension, optional, properties, type Schema, standIn, widenedEnum, withProperties } from "../family-extension-helpers.js";
-import { enumValue, exactKeys } from "../family-validation.js";
+import { enumSet, enumValue, exactKeys } from "../family-validation.js";
 import { NAMED_ID, antecedentSubject, namedId, refuseWith, weaponName, weaponNameList } from "./shared.js";
 
 /**
@@ -20,6 +20,9 @@ const TEST_ROLLS = ["hazard", "psychic", "desperate-escape"] as const;
 const WEAPON_ROLLS = new Set(["hit", "wound", "damage"]);
 
 const WEAPON_TYPES = ["all", "melee", "ranged"] as const;
+
+/** The rolls an "any roll" ignore-modifiers can leave out: any named roll kind. */
+const EXCEPTABLE_ROLLS = ROLL_KINDS.filter((roll) => roll !== "all" && roll !== "any");
 
 function weaponType(input: Record<string, unknown>, rolls: readonly unknown[], label: string): Record<string, unknown> {
   if (!("weapon_type" in input)) return {};
@@ -371,4 +374,20 @@ export const ROLL_EXTENSIONS: readonly FamilyExtension[] = [
     },
   },
   antecedentSubject("ignore-modifiers", 3, "\"Friendly X units can ignore modifiers to …\": the units a unit-filter right before it matches, or a selected unit"),
+  {
+    family: "ignore-modifiers",
+    version: 4,
+    description: "As the previous version, plus except_rolls: the rolls an \"any roll\" list leaves out, whose modifiers still apply (\"any roll or test made for it (excluding modifiers to saving throws)\"). Only with rolls all or any.",
+    schema: (previous) => withProperties(previous, {
+      except_rolls: optional({ type: "array", items: { enum: EXCEPTABLE_ROLLS }, minItems: 1, uniqueItems: true }),
+    }),
+    normalize: (input, previous) => {
+      const { except_rolls: except, ...rest } = input;
+      const result = previous(rest);
+      if (except === undefined) return result;
+      const rolls = Array.isArray(result.rolls) ? result.rolls : [];
+      if (!rolls.some((roll) => roll === "all" || roll === "any")) throw new TypeError("ignore-modifiers.except_rolls leaves rolls out of an \"any roll\" list: rolls must be all or any.");
+      return { ...result, except_rolls: enumSet(except, EXCEPTABLE_ROLLS, "ignore-modifiers.except_rolls") };
+    },
+  },
 ];

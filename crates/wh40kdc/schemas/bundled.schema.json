@@ -7722,6 +7722,15 @@
                   "minItems": 1,
                   "uniqueItems": true
                 },
+                "except_rolls": {
+                  "description": "Rolls left out of an \"any roll\" list (rolls [\"all\"]): their modifiers still apply (\"excluding modifiers to saving throws\").",
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/roll-kind"
+                  },
+                  "minItems": 1,
+                  "uniqueItems": true
+                },
                 "only": {
                   "enum": [
                     "worsening",

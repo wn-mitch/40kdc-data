@@ -36,6 +36,8 @@ var designationTerms = map[string]struct{ adjective, noun string }{
 	"overlapping-fire":           {adjective: "caught in overlapping fire"},
 	"poisoned":                   {adjective: "poisoned"},
 	"riven":                      {adjective: "riven"},
+	"rotted":                     {adjective: "rotted"},
+	"defence-stance":             {adjective: "in defence stance"},
 	"scanned":                    {adjective: "scanned"},
 	"scattered":                  {adjective: "scattered"},
 	"shaken":                     {adjective: "shaken"},

@@ -6800,7 +6800,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "a09e43e51dad39c866f52eb527a100501a274b4807eb7a57601a39d2ae303cdf",
     "version": "2025-q3",
@@ -6814,20 +6814,64 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "ignore-modifiers",
+          "type": "designate",
           "target": "this-unit",
           "modifier": {
-            "what": "characteristics"
+            "tag": "malevolent"
           }
         },
         {
-          "type": "ignore-modifiers",
-          "target": "this-unit",
-          "modifier": {
-            "what": "rolls",
-            "rolls": [
-              "any"
-            ]
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-unit",
+              "filter": {
+                "designated": "malevolent"
+              }
+            }
+          },
+          "effect": {
+            "type": "ignore-modifiers",
+            "target": "this-unit",
+            "modifier": {
+              "what": "characteristics",
+              "stats": [
+                "M",
+                "T",
+                "Sv",
+                "W",
+                "Ld",
+                "OC",
+                "WS",
+                "BS"
+              ]
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-unit",
+              "filter": {
+                "designated": "malevolent"
+              }
+            }
+          },
+          "effect": {
+            "type": "ignore-modifiers",
+            "target": "this-unit",
+            "modifier": {
+              "what": "rolls",
+              "rolls": [
+                "all"
+              ],
+              "except_rolls": [
+                "save"
+              ]
+            }
           }
         }
       ]

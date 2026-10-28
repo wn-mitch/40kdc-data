@@ -72,5 +72,5 @@ export const REGISTRY_ORDER: readonly string[] = [
   "move-distance@3", "core-ability-grant@6", "characteristic-floor@2", "eligibility-permission@9", "event@35",
   "ability-modifier@7",
   "counts-as-moved@2", "targeting-restriction@5", "return-models@6",
-  "bearer-eligibility@6", "event@36", "regain-wounds@5",
+  "bearer-eligibility@6", "event@36", "regain-wounds@5", "ignore-modifiers@4",
 ];

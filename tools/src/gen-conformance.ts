@@ -4017,6 +4017,10 @@ function genEffectTranslation(): void {
     { caseId: "fidelity/select-objective-within-inches", effect: { type: "select-objective", selector: { filter: { within: { range: { inches: 18 }, of: "this-model" } }, bind_as: "objective", count: { min: 1, max: 1 } }, effect: { type: "objective-sticky", target: "this-unit" } } },
     // An Advance with no roll that adds 8" instead of the core 6".
     { caseId: "fidelity/move-modifier-advance-fixed-8", effect: { type: "move-modifier", target: "this-unit", modifier: { advance: "fixed-8" } } },
+    // Modifiers to every roll but the listed ones are ignored ("excluding modifiers to saving throws").
+    { caseId: "fidelity/ignore-modifiers-rolls-except-save", effect: { type: "ignore-modifiers", target: "this-unit", modifier: { what: "rolls", rolls: ["all"], except_rolls: ["save"] } } },
+    // Registered designations print their own term ("is in defence stance", "is rotted").
+    ...["defence-stance", "rotted"].map((tag) => ({ caseId: `fidelity/designate-${tag}`, effect: { type: "designate", target: "this-unit", modifier: { tag } } })),
     // A used Stratagem's object filter names the unit it targets; a role reads "the unit".
     ...[
       ["any", { kind: "stratagem" }, undefined],

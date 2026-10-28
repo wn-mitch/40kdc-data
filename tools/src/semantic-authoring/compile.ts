@@ -160,8 +160,8 @@ function nestedPart(group: readonly CompileLeaf[], sourceText: string | undefine
 function splitIgnoreModifiers(list: readonly CompileLeaf[]): CompileLeaf[] {
   return list.flatMap((leaf) => {
     if (leaf.family_id !== "ignore-modifiers" || !Array.isArray(leaf.parameters.what)) return [leaf];
-    const { what, stats, rolls, ...rest } = leaf.parameters as Record<string, unknown> & { what: string[] };
-    return what.map((kind) => ({ ...leaf, parameters: { ...rest, what: kind, ...(kind === "characteristics" ? (stats === undefined ? {} : { stats }) : { rolls }) } }));
+    const { what, stats, rolls, except_rolls: except, ...rest } = leaf.parameters as Record<string, unknown> & { what: string[] };
+    return what.map((kind) => ({ ...leaf, parameters: { ...rest, what: kind, ...(kind === "characteristics" ? (stats === undefined ? {} : { stats }) : { rolls, ...(except === undefined ? {} : { except_rolls: except }) }) } }));
   });
 }
 

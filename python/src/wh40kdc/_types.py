@@ -1803,6 +1803,7 @@ class Modifier1(TypedDict):
     what: Literal["characteristics", "rolls"]
     stats: NotRequired[list[Stat]]
     rolls: NotRequired[list[RollSelector]]
+    except_rolls: NotRequired[list[RollKind]]
     only: NotRequired[Literal["worsening", "improving"]]
     incoming: NotRequired[Literal[True]]
     weapons: NotRequired[WeaponScope]

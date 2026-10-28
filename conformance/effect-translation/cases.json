@@ -36864,6 +36864,60 @@
     }
   },
   {
+    "caseId": "fidelity/ignore-modifiers-rolls-except-save",
+    "effect": {
+      "type": "ignore-modifiers",
+      "target": "this-unit",
+      "modifier": {
+        "what": "rolls",
+        "rolls": [
+          "all"
+        ],
+        "except_rolls": [
+          "save"
+        ]
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, the unit ignores any modifiers to its rolls (except saving throw rolls)."
+    }
+  },
+  {
+    "caseId": "fidelity/designate-defence-stance",
+    "effect": {
+      "type": "designate",
+      "target": "this-unit",
+      "modifier": {
+        "tag": "defence-stance"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, the unit is in defence stance."
+    }
+  },
+  {
+    "caseId": "fidelity/designate-rotted",
+    "effect": {
+      "type": "designate",
+      "target": "this-unit",
+      "modifier": {
+        "tag": "rotted"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, the unit is rotted."
+    }
+  },
+  {
     "caseId": "fidelity/used-stratagem-object-filter-any",
     "trigger": {
       "event": "used",

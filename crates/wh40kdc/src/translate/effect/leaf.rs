@@ -190,14 +190,21 @@ fn ignore_modifiers(m: &P, subj: &str) -> String {
             None => "characteristics".to_string(),
         }
     };
+    // "any roll (excluding modifiers to saving throws)": the rolls whose modifiers still apply.
+    let except = match map_arr(m, "except_rolls", |r| roll_name(Some(r))) {
+        Some(names) if sv(m, "what") == Some("rolls") && !names.is_empty() => {
+            format!(" (except {} rolls)", and_list(&names))
+        }
+        _ => String::new(),
+    };
     if is_true(m, "incoming") {
         return format!(
-            "{}ignore any {kind}modifiers to that attack's {things}",
+            "{}ignore any {kind}modifiers to that attack's {things}{except}",
             incoming_lead(m, subj)
         );
     }
     format!(
-        "{subj} {} any {kind}modifiers to {} {things}{}",
+        "{subj} {} any {kind}modifiers to {} {things}{except}{}",
         v(subj, "ignores"),
         pronoun(subj),
         weapon_roll_scope(m)

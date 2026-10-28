@@ -148,10 +148,19 @@ func ignoreModifiersLeaf(m map[string]any, subj string) string {
 			things = andList(names) + " characteristics"
 		}
 	}
-	if m["incoming"] == true {
-		return incomingLead(m, subj) + "ignore any " + kind + "modifiers to that attack's " + things
+	// "any roll (excluding modifiers to saving throws)": the rolls whose modifiers still apply.
+	except := ""
+	if exceptRolls, ok := asList(m["except_rolls"]); ok && m["what"] == "rolls" && len(exceptRolls) > 0 {
+		names := make([]string, len(exceptRolls))
+		for i, r := range exceptRolls {
+			names[i] = rollName(r)
+		}
+		except = " (except " + andList(names) + " rolls)"
 	}
-	return subj + " " + ev(subj, "ignores") + " any " + kind + "modifiers to " + pronoun(subj) + " " + things + weaponRollScope(m)
+	if m["incoming"] == true {
+		return incomingLead(m, subj) + "ignore any " + kind + "modifiers to that attack's " + things + except
+	}
+	return subj + " " + ev(subj, "ignores") + " any " + kind + "modifiers to " + pronoun(subj) + " " + things + except + weaponRollScope(m)
 }
 
 func rollModifierLeaf(m map[string]any, subj string) string {

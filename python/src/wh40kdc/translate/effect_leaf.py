@@ -199,11 +199,18 @@ def _ignore_modifiers(m: dict[str, Any], subj: str) -> str:
             if isinstance(stats, list)
             else "characteristics"
         )
+    # "any roll (excluding modifiers to saving throws)": the rolls whose modifiers still apply.
+    except_rolls = m.get("except_rolls")
+    exc = (
+        f" (except {and_list([roll_name(r) for r in except_rolls])} rolls)"
+        if m.get("what") == "rolls" and isinstance(except_rolls, list) and except_rolls
+        else ""
+    )
     if m.get("incoming") is True:
-        return f"{_incoming_lead(m, subj)}ignore any {kind}modifiers to that attack's {things}"
+        return f"{_incoming_lead(m, subj)}ignore any {kind}modifiers to that attack's {things}{exc}"
     return (
         f"{subj} {v(subj, 'ignores')} any {kind}modifiers to {pronoun(subj)} "
-        f"{things}{weapon_roll_scope(m)}"
+        f"{things}{exc}{weapon_roll_scope(m)}"
     )
 
 

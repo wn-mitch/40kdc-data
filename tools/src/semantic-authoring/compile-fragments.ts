@@ -286,8 +286,8 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
       // Version 2 lists kinds; compileLeaves splits a two-kind leaf first, so only a lone leaf
       // (a preview) reaches here with both, and it reads as one effect per kind.
       if (Array.isArray(leaf.parameters.what)) {
-        const { what: kinds, stats, rolls, ...rest } = leaf.parameters as Record<string, unknown> & { what: string[] };
-        const steps = kinds.map((kind) => effect({ ...leaf, parameters: { ...rest, what: kind, ...(kind === "characteristics" ? (stats === undefined ? {} : { stats }) : { rolls }) } }, context));
+        const { what: kinds, stats, rolls, except_rolls: except, ...rest } = leaf.parameters as Record<string, unknown> & { what: string[] };
+        const steps = kinds.map((kind) => effect({ ...leaf, parameters: { ...rest, what: kind, ...(kind === "characteristics" ? (stats === undefined ? {} : { stats }) : { rolls, ...(except === undefined ? {} : { except_rolls: except }) }) } }, context));
         return steps.length === 1 ? steps[0]! : { type: "sequence", steps };
       }
       const what = closed(leaf, "what");
@@ -298,6 +298,9 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
       } else {
         const rolls = leaf.parameters.rolls as string[] | undefined;
         if (rolls) modifier.rolls = rolls;
+        // "(excluding modifiers to saving throws)": rolls whose modifiers still apply.
+        const except = leaf.parameters.except_rolls as string[] | undefined;
+        if (except) modifier.except_rolls = except;
       }
       const only = leaf.parameters.only === undefined ? undefined : closed(leaf, "only");
       if (only) modifier.only = only;

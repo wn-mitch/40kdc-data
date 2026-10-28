@@ -20870,6 +20870,15 @@ impl<'de> ::serde::Deserialize<'de> for HullShapeName {
 ///    "what"
 ///  ],
 ///  "properties": {
+///    "except_rolls": {
+///      "description": "Rolls left out of an \"any roll\" list (rolls [\"all\"]): their modifiers still apply (\"excluding modifiers to saving throws\").",
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/roll-kind"
+///      },
+///      "minItems": 1,
+///      "uniqueItems": true
+///    },
 ///    "incoming": {
 ///      "const": true
 ///    },
@@ -20912,6 +20921,9 @@ impl<'de> ::serde::Deserialize<'de> for HullShapeName {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct IgnoreModifiersEffectModifier {
+    ///Rolls left out of an "any roll" list (rolls ["all"]): their modifiers still apply ("excluding modifiers to saving throws").
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub except_rolls: ::std::option::Option<Vec<RollKind>>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub incoming: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]

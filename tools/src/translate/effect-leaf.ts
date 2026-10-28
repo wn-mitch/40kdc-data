@@ -87,8 +87,10 @@ function ignoreModifiers(m: Record<string, unknown>, subj: string): string {
     m.what === "rolls"
       ? Array.isArray(m.rolls) && !m.rolls.some((r) => r === "all" || r === "any") ? `${andList((m.rolls as unknown[]).map(rollName))} rolls` : "rolls"
       : Array.isArray(m.stats) ? `${andList((m.stats as unknown[]).map(statName))} characteristics` : "characteristics";
-  if (m.incoming === true) return `${incomingLead(m, subj)}ignore any ${kind}modifiers to that attack's ${things}`;
-  return `${subj} ${v(subj, "ignores")} any ${kind}modifiers to ${pronoun(subj)} ${things}${weaponRollScope(m)}`;
+  // "any roll (excluding modifiers to saving throws)": the rolls whose modifiers still apply.
+  const except = m.what === "rolls" && Array.isArray(m.except_rolls) && m.except_rolls.length ? ` (except ${andList((m.except_rolls as unknown[]).map(rollName))} rolls)` : "";
+  if (m.incoming === true) return `${incomingLead(m, subj)}ignore any ${kind}modifiers to that attack's ${things}${except}`;
+  return `${subj} ${v(subj, "ignores")} any ${kind}modifiers to ${pronoun(subj)} ${things}${except}${weaponRollScope(m)}`;
 }
 
 function rollModifier(m: Record<string, unknown>, subj: string): string {

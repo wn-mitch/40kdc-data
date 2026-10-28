@@ -3494,19 +3494,97 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "dark-angels",
     "detachment_id": "the-vengeful-brethren",
     "ability_type": "detachment",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": "recipient",
+              "filter": {
+                "engaged_with": "event-subject"
+              }
+            }
+          },
+          "effect": {
+            "type": "designate",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "VENGEFUL BRETHREN"
+              ]
+            },
+            "modifier": {
+              "tag": "defence-stance"
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "defender",
+                  "filter": {
+                    "designated": "defence-stance"
+                  }
+                }
+              },
+              {
+                "type": "attack-compare",
+                "parameters": {
+                  "left": {
+                    "of": "attacker",
+                    "stat": "S"
+                  },
+                  "comparison": "gt",
+                  "right": {
+                    "of": "defender",
+                    "stat": "T"
+                  }
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "roll-modifier",
+            "target": "attacker",
+            "modifier": {
+              "roll": "wound",
+              "operation": "subtract",
+              "value": 1
+            }
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "turn"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "charge"
+        ]
+      },
+      "subject": {
+        "owner": "enemy"
+      }
+    },
+    "source_digest": "ffc13d2a2ed130946acee45af57cc987f3e56b01af77797c8fd37722eaaead26"
   },
   {
     "ability_id": "oath-of-moment-dark-angels",
