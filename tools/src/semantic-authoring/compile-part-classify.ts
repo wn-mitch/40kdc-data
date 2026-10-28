@@ -202,8 +202,8 @@ export function classifyLeaves(given: CompileLeaf[], places: Placement[], contai
     if (moment === undefined || rawOf[moment] !== rawOf[index] || !anyEffectBefore(moment)) return [];
     // An attack moment between ("… each time a model makes a melee attack") owns the condition instead.
     if (list.slice(moment + 1, index).some((leaf) => leaf.role === "EFFECT" || leaf.role === "EVENT")) return [];
-    // The part's effects run to the next moment; when they all share the condition's sentence its sentence gate already covers them.
-    const next = list.findIndex((leaf, at) => at > index && leaf.role === "EVENT");
+    // The part's effects run to the next moment (a roll or a selection is not one); when they all share the condition's sentence its sentence gate already covers them.
+    const next = list.findIndex((leaf, at) => at > index && leaf.role === "EVENT" && leaf.family_id === "event");
     const effects = list.flatMap((leaf, at) => at > index && (next === -1 || at < next) && leaf.role === "EFFECT" ? [at] : []);
     if (effects.every((at) => places[at]!.sentence === places[index]!.sentence)) return [];
     return triggerIndexes.flatMap((at, position) => at === moment ? [position] : []);

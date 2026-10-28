@@ -17,7 +17,8 @@ type Node = Record<string, unknown>;
 /** The pick an optionless opener makes, held on the activation from here on. */
 const PICKED = "picked";
 
-type Pick = { by: "player" | "roll"; count: number };
+/** ignore_consumed: the pick may take an option a once-per-battle selection already used. */
+type Pick = { by: "player" | "roll"; count: number; ignore_consumed?: true };
 
 /** Openers that are an activation's earlier pick when no named option follows them. */
 const PICK_OPENERS = new Set(["choice-open", "dice-pool-allocation-open"]);
@@ -53,7 +54,7 @@ function pickOf(opener: CompileLeaf): Pick {
   const min = opener.parameters.min_choices;
   const max = opener.parameters.max_choices;
   if (min !== undefined && max !== undefined && min !== max) throw new CompileError("An activation's earlier pick must name one number of options (min_choices equal to max_choices).");
-  return { by: "player", count: Number(max ?? min ?? 1) };
+  return { by: "player", count: Number(max ?? min ?? 1), ...(opener.parameters.ignore_consumed === true ? { ignore_consumed: true as const } : {}) };
 }
 
 /**
@@ -77,7 +78,8 @@ export function foldActivationPicks(list: readonly CompileLeaf[]): CompileLeaf[]
       throw new CompileError(`ability-activate choose is the player's pick of ${choose.count} option(s), but the ${list[at]!.family_id} before it picks ${pick.count} by ${pick.by}.`);
     }
     dropped.add(at);
-    return choose ? leaf : { ...leaf, parameters: { ...leaf.parameters, [PICKED]: pick } };
+    if (choose && pick.ignore_consumed === undefined) return leaf;
+    return { ...leaf, parameters: { ...leaf.parameters, [PICKED]: pick } };
   });
   return out.filter((_leaf, index) => !dropped.has(index));
 }
@@ -103,6 +105,7 @@ export function activationModifier(leaf: CompileLeaf): Node {
   const hasOptions = p.option !== undefined || p.options !== undefined || pick !== undefined;
   const exclusive = leaf.family_version === 1 ? p.exclusive === true : hasOptions && p.additive !== true;
   if (exclusive) modifier.exclusive = true;
+  if (picked?.ignore_consumed === true || p.ignore_consumed === true) modifier.ignore_consumed = true;
   return modifier;
 }
 

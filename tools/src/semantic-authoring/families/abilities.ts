@@ -250,6 +250,21 @@ export const ABILITY_EXTENSIONS: readonly FamilyExtension[] = [
     schema: (previous) => withProperties(previous, { subject: widenedEnum(previous, "subject", [FILTERED_UNITS]) }),
     normalize: (input, previous) => input.subject === FILTERED_UNITS ? standIn(input, "subject", "this-unit", previous) : previous(input),
   },
+  {
+    // "that Vow is active for the bearer's unit …, even if you have already selected that Vow this battle".
+    family: "ability-activate",
+    version: 4,
+    description: "As the previous version, plus ignore_consumed: the option picked earlier may be one a once-per-battle selection already used (\"even if you have already selected that Vow this battle\"). It goes with chosen; a pick that says so itself is a choice-open's ignore_consumed.",
+    schema: (previous) => withProperties(previous, { ignore_consumed: optional({ const: true }) }),
+    normalize: (input, previous) => {
+      if (!("ignore_consumed" in input)) return previous(input);
+      const { ignore_consumed: ignore, ...rest } = input;
+      if (ignore !== true) throw new TypeError("ability-activate.ignore_consumed is true or omitted.");
+      const result = previous(rest);
+      if (result.chosen !== true) throw new TypeError("ability-activate.ignore_consumed goes with chosen: the option picked earlier.");
+      return { ...result, ignore_consumed: true };
+    },
+  },
   STANCE_SELECT_ADDITIVE,
   CHOSEN_OPTION_HOLDER_ANTECEDENT,
   STANCE_CAPACITY_SHARED_OPTIONS,

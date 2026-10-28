@@ -38523,6 +38523,86 @@
     }
   },
   {
+    "caseId": "fidelity/tag-controlled-objective-then-clear-near-trigger",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "designate",
+          "target": "this-unit",
+          "modifier": {
+            "subject": {
+              "objective": {
+                "controlled_by_unit": "this-unit"
+              }
+            },
+            "tag": "snared"
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "move-ended",
+            "subject": {
+              "owner": "enemy"
+            },
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "event-subject",
+                "filter": {
+                  "within": {
+                    "of": {
+                      "objective": {
+                        "designated": "snared"
+                      }
+                    },
+                    "range": "objective-control"
+                  }
+                }
+              }
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "mortal-wounds",
+                "target": "event-subject",
+                "modifier": {
+                  "count": "D3"
+                }
+              },
+              {
+                "type": "designate",
+                "target": "this-unit",
+                "modifier": {
+                  "subject": {
+                    "objective": {
+                      "designated": "snared",
+                      "within": {
+                        "range": "objective-control",
+                        "of": "event-subject"
+                      }
+                    }
+                  },
+                  "tag": "snared",
+                  "clear": true
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use:\n  -> The objective that the unit was controlling when the rule was triggered is snared.\n  -> Each time an enemy unit ends a move, if the triggering unit is within range of an objective marker tagged snared:\n    -> The triggering unit suffers D3 mortal wounds.\n    -> The objective tagged snared within range of the triggering unit is no longer snared."
+    }
+  },
+  {
     "caseId": "fidelity/named-region-producer-only",
     "effect": {
       "type": "conditional",

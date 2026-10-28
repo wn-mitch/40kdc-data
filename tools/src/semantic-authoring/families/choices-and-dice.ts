@@ -84,6 +84,21 @@ export const CHOICE_AND_DICE_EXTENSIONS: readonly FamilyExtension[] = [
     },
   },
   {
+    // "Select one Synaptic Imperative, even if you have already selected that imperative this battle".
+    family: "choice-open",
+    version: 3,
+    description: "As the previous version, and ignore_consumed: the pick may take an option a once-per-battle selection already used (\"even if you have already selected that imperative this battle\"). Only an optionless pick an ability-activate names takes it.",
+    schema: (previous) => withProperties(previous, { ignore_consumed: optional({ const: true }) }),
+    normalize: (input, previous) => {
+      if (!("ignore_consumed" in input)) return previous(input);
+      const { ignore_consumed: ignore, ...rest } = input;
+      if (ignore !== true) throw new TypeError("choice-open.ignore_consumed is true or omitted.");
+      const result = previous(rest);
+      if (result.or_random !== undefined) throw new TypeError("choice-open.ignore_consumed is a pick by the player, not a random one.");
+      return { ...result, ignore_consumed: true };
+    },
+  },
+  {
     // "a double 4 or higher, or any triple": the option activates if any one requirement is met.
     family: "named-option",
     version: 2,

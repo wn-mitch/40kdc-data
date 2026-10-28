@@ -146,6 +146,16 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
       }
       return { type: "designate", target: unitOf(leaf, "subject"), modifier };
     }
+    case "mark-objective": {
+      // The markers this unit controls when the rule resolves, or the ones already tagged (the
+      // one within range of the moment's unit, with near).
+      const objective: Node = leaf.parameters.objective === "controlled-by-unit"
+        ? { controlled_by_unit: "this-unit" }
+        : { designated: closed(leaf, "tag"), ...(leaf.parameters.near === "event-subject" ? { within: { range: "objective-control", of: "event-subject" } } : {}) };
+      const modifier: Node = { subject: { objective }, tag: closed(leaf, "tag") };
+      if (leaf.parameters.clear === true) modifier.clear = true;
+      return { type: "designate", target: "this-unit", modifier };
+    }
     case "army-construction":
       return armyRuleEffect(leaf);
     case "return-models": {

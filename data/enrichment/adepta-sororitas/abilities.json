@@ -8160,7 +8160,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "1a39903aa641ea32104a5d8baa5db3a6fb5d7369c92bbcb980fd1a0bd818cdde",
     "version": "2025-q3",
@@ -8169,30 +8169,35 @@
     "faction_id": "adepta-sororitas",
     "detachment_id": "penitent-host",
     "ability_type": "enhancement",
-    "behavior": "activated",
+    "behavior": "reactive",
     "usage": {
       "frequency": "n-per-battle",
       "count": 1,
-      "per": "unit"
+      "per": "model"
     },
     "effect": {
-      "type": "rule-state",
+      "type": "ability-activate",
       "target": "this-unit",
       "modifier": {
-        "direction": "granted",
-        "rule_kind": "ability",
-        "rule": "desperate-for-redemption-adepta-sororitas"
+        "ability": "desperate-for-redemption-adepta-sororitas",
+        "select": {
+          "by": "player"
+        },
+        "ignore_consumed": true
       }
     },
     "scope": {
-      "duration": "battle-round"
+      "duration": "until-next-battle-round"
     },
     "applies_to": {
       "all_of": [
         "PENITENT"
       ]
     },
-    "community_notes": "Once per battle, at the start of the battle round, select one Vow of Atonement (see the Desperate for Redemption detachment rule): until the start of the next battle round it is active for the bearer's unit in addition to any active for your army, even if already selected this battle."
+    "community_notes": "Once per battle, at the start of the battle round, select one Vow of Atonement (see the Desperate for Redemption detachment rule): until the start of the next battle round it is active for the bearer's unit in addition to any active for your army, even if already selected this battle.",
+    "trigger": {
+      "event": "round-started"
+    }
   },
   {
     "ability_id": "refrain-of-enduring-faith-penitent-host-adepta-sororitas",

@@ -1,3 +1,4 @@
+import { DESIGNATION_IDS } from "../translate/designations.js";
 import type { SemanticFamilyDefinition } from "./contracts.js";
 import { boundedInteger, enumSet, enumValue, exactKeys } from "./family-validation.js";
 
@@ -46,6 +47,8 @@ const OBJECTIVE_CRITERIA = ["controlled-by-unit", "clear-of"] as const;
 const OBJECTIVE_CRITERION_UNITS = ["this-unit", "event-subject"] as const;
 /** Who made the attacks whose destroyed models a destroyed-model-selection picks among. */
 const DESTROYED_SELECTION_DESTROYERS = ["this-unit", "this-model", "event-subject"] as const;
+/** Which objective markers a mark-objective tags: those this unit controls, or those already carrying the tag. */
+const MARKED_OBJECTIVES = ["controlled-by-unit", "tagged"] as const;
 
 function keywordArray(value: unknown, label: string): string[] {
   if (!Array.isArray(value) || value.length === 0 || value.some((item) => typeof item !== "string" || !item.trim())) throw new TypeError(`${label} is a list of keywords.`);
@@ -242,6 +245,25 @@ export const GAP_CONTAINER_FAMILIES: readonly SemanticFamilyDefinition[] = [
       additionalProperties: false,
     },
   },
+  {
+    id: "mark-objective",
+    version: 1,
+    role: "EFFECT",
+    label: "Tag (or untag) objective markers",
+    description: "\"If your unit is controlling an objective, that objective is snared\": objective controlled-by-unit tags each marker this unit controls. \"That objective is no longer snared\": objective tagged with clear true removes the tag; near event-subject keeps only the tagged marker within range of the moment's unit.",
+    starter: { tag: "", objective: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["tag", "objective"],
+      properties: {
+        tag: { type: "string", minLength: 1 },
+        objective: { enum: MARKED_OBJECTIVES },
+        near: { enum: ["event-subject"], "x-only-when": { objective: ["tagged"] }, "x-optional": true },
+        clear: { const: true, "x-optional": true },
+      },
+      additionalProperties: false,
+    },
+  },
 ];
 
 export function normalizeGapContainerParameters(family: string, input: Record<string, unknown>, version = 1): Record<string, unknown> | null {
@@ -373,6 +395,22 @@ export function normalizeGapContainerParameters(family: string, input: Record<st
     case "destroyed-model-selection":
       exactKeys(input, ["destroyer"], family);
       return { destroyer: enumValue(input.destroyer, DESTROYED_SELECTION_DESTROYERS, "destroyed-model-selection.destroyer") };
+    case "mark-objective": {
+      const optional = ["near", "clear"].filter((key) => key in input);
+      exactKeys(input, ["tag", "objective", ...optional], family);
+      if (typeof input.tag !== "string" || !DESIGNATION_IDS.has(input.tag)) throw new TypeError(`mark-objective.tag ${JSON.stringify(input.tag)} is not a registered designation.`);
+      const objective = enumValue(input.objective, MARKED_OBJECTIVES, "mark-objective.objective");
+      if ("near" in input && objective !== "tagged") throw new TypeError("mark-objective.near narrows the tagged markers; it needs objective tagged.");
+      if ("clear" in input && input.clear !== true) throw new TypeError("mark-objective.clear is true or absent.");
+      // Tagging the markers that already carry the tag changes nothing: only a clear reads them.
+      if (objective === "tagged" && input.clear !== true) throw new TypeError("mark-objective with objective tagged only clears the tag; set clear true.");
+      return {
+        tag: input.tag,
+        objective,
+        ...("near" in input ? { near: enumValue(input.near, ["event-subject"], "mark-objective.near") } : {}),
+        ...(input.clear === true ? { clear: true } : {}),
+      };
+    }
     default:
       return null;
   }

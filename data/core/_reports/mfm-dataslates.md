@@ -15,10 +15,10 @@ dump confirmation.
 | wargear-options | 0 | 0 | 1234 | 0 |
 | leader-attachments | 0 | 0 | 283 | 8 |
 | enhancements | 0 | 0 | 890 | 0 |
-| detachments | 0 | 0 | 170 | 287 |
-| stratagems | 2 | 0 | 1032 | 279 |
-| abilities | 0 | 0 | 3643 | 891 |
-| phase-mappings | 0 | 0 | 1133 | 448 |
+| detachments | 0 | 0 | 171 | 286 |
+| stratagems | 0 | 0 | 1035 | 278 |
+| abilities | 0 | 0 | 3648 | 886 |
+| phase-mappings | 0 | 0 | 1135 | 446 |
 | resource-pools | 0 | 0 | 0 | 6 |
 
 ## Abilities by faction
@@ -26,7 +26,7 @@ dump confirmation.
 | Faction | Promote | Demote | Kept | Untouched |
 |---|--:|--:|--:|--:|
 | _core | 0 | 0 | 8 | 18 |
-| adepta-sororitas | 0 | 0 | 118 | 30 |
+| adepta-sororitas | 0 | 0 | 119 | 29 |
 | adeptus-astartes | 0 | 0 | 209 | 41 |
 | adeptus-custodes | 0 | 0 | 144 | 14 |
 | adeptus-mechanicus | 0 | 0 | 138 | 29 |
@@ -36,7 +36,7 @@ dump confirmation.
 | black-templars | 0 | 0 | 51 | 12 |
 | blood-angels | 0 | 0 | 49 | 12 |
 | chaos-daemons | 0 | 0 | 162 | 33 |
-| chaos-knights | 0 | 0 | 83 | 27 |
+| chaos-knights | 0 | 0 | 85 | 25 |
 | chaos-space-marines | 0 | 0 | 220 | 61 |
 | dark-angels | 0 | 0 | 59 | 18 |
 | death-guard | 0 | 0 | 124 | 36 |
@@ -56,7 +56,7 @@ dump confirmation.
 | space-wolves | 0 | 0 | 74 | 13 |
 | tau-empire | 0 | 0 | 134 | 32 |
 | thousand-sons | 0 | 0 | 121 | 37 |
-| tyranids | 0 | 0 | 150 | 36 |
+| tyranids | 0 | 0 | 152 | 34 |
 | ultramarines | 0 | 0 | 10 | 1 |
 | white-scars | 0 | 0 | 11 | 0 |
 | world-eaters | 0 | 0 | 118 | 29 |
@@ -72,8 +72,8 @@ dump confirmation.
 | _core | verified | 8 |
 | adepta-sororitas | digest-differs | 8 |
 | adepta-sororitas | stub | 4 |
-| adepta-sororitas | unpublished | 18 |
-| adepta-sororitas | verified | 118 |
+| adepta-sororitas | unpublished | 17 |
+| adepta-sororitas | verified | 119 |
 | adeptus-astartes | ambiguous-source | 1 |
 | adeptus-astartes | digest-differs | 13 |
 | adeptus-astartes | no-source | 5 |
@@ -115,8 +115,8 @@ dump confirmation.
 | chaos-daemons | unpublished | 13 |
 | chaos-daemons | verified | 162 |
 | chaos-knights | digest-differs | 5 |
-| chaos-knights | unpublished | 22 |
-| chaos-knights | verified | 83 |
+| chaos-knights | unpublished | 20 |
+| chaos-knights | verified | 85 |
 | chaos-space-marines | digest-differs | 18 |
 | chaos-space-marines | stub | 24 |
 | chaos-space-marines | unpublished | 19 |
@@ -188,9 +188,9 @@ dump confirmation.
 | thousand-sons | unpublished | 27 |
 | thousand-sons | verified | 121 |
 | tyranids | digest-differs | 5 |
-| tyranids | stub | 19 |
-| tyranids | unpublished | 12 |
-| tyranids | verified | 150 |
+| tyranids | stub | 18 |
+| tyranids | unpublished | 11 |
+| tyranids | verified | 152 |
 | ultramarines | stub | 1 |
 | ultramarines | verified | 10 |
 | white-scars | verified | 11 |

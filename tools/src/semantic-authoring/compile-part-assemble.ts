@@ -12,7 +12,7 @@ import { boundAttackDesignation, designation, selectUnit, wrapAura, wrapForEachU
 import { destroyedFilterObject, wrapModelAura } from "./compile-model-level.js";
 import { auraPart, namesUnboundRecipient } from "./compile-aura-parts.js";
 import { isForbiddenSetUp } from "./compile-set-up-placement.js";
-import { momentsUnderUse } from "./compile-nested-moment.js";
+import { momentsUnderUse, momentsWhileMarked } from "./compile-nested-moment.js";
 import { gatedMoment } from "./compile-usability-gate.js";
 import { resolveEntry } from "./compile-target-refs.js";
 import { optionalTargetGroup, severalTargets } from "./compile-target-groups.js";
@@ -387,6 +387,9 @@ export function assemblePart(
     // A moment under the use the first moment offers ("If you do: … When …") nests in the entry part for the phase.
     const under = entryTrigger ? new Set([...momentsUnderUse(list, triggerIndexes, partStarts, firstEffectIndex, sourceText, durations.length), ...afterDestruction]) : new Set<number>();
     under.delete(usagePart);
+    // A moment while an objective carries the tag the entry put on it nests in the entry part for as long as the tag lasts.
+    const whileMarked = entryTrigger ? momentsWhileMarked(list, partStarts, firstEffectIndex, sourceText) : new Set<number>();
+    whileMarked.delete(usagePart);
     const nestedSteps: Node[] = [];
     // "In addition, … if such an enemy unit is …, it must …": a later part about the aura's recipient holds for each unit in the aura.
     const rawEffects: Node[] = partStarts.map((_, position) => {
@@ -408,7 +411,8 @@ export function assemblePart(
         ...(partPeriods[position] ? { duration: partPeriods[position] } : {}),
         ...(laterPartDuration === position + 1 ? { duration: durations[0] } : {}),
       };
-      if (under.has(position)) nestedSteps.push({ ...node, duration: "phase" });
+      if (whileMarked.has(position)) nestedSteps.push(node);
+      else if (under.has(position)) nestedSteps.push({ ...node, duration: "phase" });
       else partSteps.push(node);
     });
     if (nestedSteps.length) {

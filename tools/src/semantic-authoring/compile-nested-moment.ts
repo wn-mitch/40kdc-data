@@ -73,3 +73,35 @@ export function momentsAfterDestruction(
   });
   return nested;
 }
+
+/** "While an objective is snared, when …": the later moment opens under the tag an earlier effect put on objective markers. */
+const WHILE_MARKED = /\bwhile an? objective(?: marker)? is ([a-z][a-z-]*)\b/iu;
+
+/**
+ * The later moments that react while an objective marker carries a tag the entry's own effect put
+ * on it ("If your unit is controlling an objective, that objective is snared. While an objective
+ * is snared, when an enemy unit ends a move …"). The reaction exists only once the entry has
+ * tagged a marker, and lasts while the tag does, so it nests in the entry part with no duration
+ * of its own instead of being a sibling that holds for the whole battle. Returns the positions (in
+ * `partStarts`) of those moments: the text between the moment's part and the leaf before it reads
+ * "While an objective is <tag>", and a mark-objective before the moment, not clearing, applies that tag.
+ */
+export function momentsWhileMarked(
+  list: readonly CompileLeaf[],
+  partStarts: ReadonlyArray<{ index: number; moments: number[] }>,
+  firstEffectIndex: number,
+  sourceText: string | undefined,
+): Set<number> {
+  const nested = new Set<number>();
+  if (sourceText === undefined || firstEffectIndex === -1) return nested;
+  const bytes = Buffer.from(sourceText, "utf8");
+  partStarts.forEach((part, position) => {
+    const moment = list[part.index]!;
+    const before = list[part.index - 1];
+    if (before?.end_byte === undefined || moment.start_byte === undefined || before.end_byte > moment.start_byte) return;
+    const tag = WHILE_MARKED.exec(bytes.subarray(before.end_byte, moment.start_byte).toString("utf8").replace(/\*/gu, ""))?.[1]?.toLowerCase();
+    const marks = list.slice(firstEffectIndex, part.index).some((leaf) => leaf.family_id === "mark-objective" && leaf.parameters.tag === tag && leaf.parameters.clear !== true);
+    if (tag !== undefined && marks) nested.add(position);
+  });
+  return nested;
+}

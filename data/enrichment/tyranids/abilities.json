@@ -3388,42 +3388,67 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "3f86b944e4b5d0b44256c99222c7c581ed6e9e16758b8178b9ca2b0925570c4c",
     "version": "2025-q3",
     "effect": {
-      "type": "select-units",
-      "selector": {
-        "filter": {
-          "owner": "friendly",
-          "all_of": [
-            "TYRANIDS"
-          ],
-          "within": {
-            "range": {
-              "inches": 18
-            },
-            "of": "this-unit"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
           }
-        },
-        "count": {
-          "min": 0,
-          "max": 2
-        }
+        ]
       },
       "effect": {
-        "type": "counts-as",
-        "target": "selected-unit",
-        "modifier": {
-          "within": {
-            "aura_of": "synapse-tyranids"
-          },
-          "of": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
             "owner": "friendly",
             "all_of": [
-              "SYNAPSE"
+              "TYRANIDS"
             ]
+          },
+          "count": {
+            "min": 0,
+            "max": 2
+          },
+          "eligibility": {
+            "type": "matches",
+            "parameters": {
+              "subject": "selected-unit",
+              "filter": {
+                "within": {
+                  "of": "this-unit",
+                  "range": {
+                    "inches": 18
+                  }
+                }
+              }
+            }
+          }
+        },
+        "effect": {
+          "type": "counts-as",
+          "target": "selected-unit",
+          "modifier": {
+            "within": {
+              "aura_of": "synapse-tyranids"
+            },
+            "of": {
+              "owner": "friendly"
+            }
           }
         }
       }
@@ -3435,17 +3460,9 @@
       "neurotyrant"
     ],
     "ability_type": "unit",
-    "behavior": "reactive",
-    "trigger": {
-      "event": "phase-started",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "command"
-        }
-      }
-    },
-    "faction_id": "tyranids"
+    "behavior": "activated",
+    "faction_id": "tyranids",
+    "optional": true
   },
   {
     "ability_id": "skulking-horrors-tyranids",
@@ -8055,19 +8072,29 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "tyranids",
     "detachment_id": "synaptic-nexus",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "ability-activate",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "synaptic-imperatives-tyranids",
+        "select": {
+          "by": "player"
+        },
+        "exclusive": true,
+        "ignore_consumed": true
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "until-next-command-phase"
+    },
+    "behavior": "activated",
+    "source_digest": "a7a4407be0c62e1c461d98cc4028f6f35c9711e08631424997a7b6f85ba0770e"
   },
   {
     "ability_id": "instinctive-defence-assimilation-swarm-tyranids",

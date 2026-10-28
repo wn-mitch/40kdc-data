@@ -4108,6 +4108,14 @@ function genEffectTranslation(): void {
       effect: { type: "select-units", selector: { filter: { owner: "enemy" }, count: { min: 1, max: 1 },
         eligibility: { type: "happened", parameters: { event: "model-destroyed", object: { level: "model", member_of: "selected-unit" }, filter: { by: "this-unit" }, window: "event" } } },
         effect: { type: "test", target: "selected-unit", modifier: { test: "battle-shock" } } } } },
+    // The unit's controlled markers are tagged; a reaction while tagged clears the tag from the one near the triggering unit.
+    { caseId: "fidelity/tag-controlled-objective-then-clear-near-trigger", effect: { type: "sequence", steps: [
+      { type: "designate", target: "this-unit", modifier: { subject: { objective: { controlled_by_unit: "this-unit" } }, tag: "snared" } },
+      { type: "ability-part", trigger: { event: "move-ended", subject: { owner: "enemy" },
+        condition: { type: "matches", parameters: { subject: "event-subject", filter: { within: { of: { objective: { designated: "snared" } }, range: "objective-control" } } } } },
+      effect: { type: "sequence", steps: [
+        { type: "mortal-wounds", target: "event-subject", modifier: { count: "D3" } },
+        { type: "designate", target: "this-unit", modifier: { subject: { objective: { designated: "snared", within: { range: "objective-control", of: "event-subject" } } }, tag: "snared", clear: true } }] } }] } },
     // A named region declared with nothing reading it here (a producer-only named-region-state).
     { caseId: "fidelity/named-region-producer-only", effect: { type: "conditional", condition: { type: "army-faction", parameters: { faction: "example-faction" } },
       effect: { type: "named-region-state", target: { owner: "friendly" }, modifier: {

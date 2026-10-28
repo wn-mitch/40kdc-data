@@ -133,6 +133,7 @@ function namedOption(group: readonly CompileLeaf[], forRequirement: boolean, sou
 }
 
 function buildChoice(head: CompileLeaf, groups: CompileLeaf[][]): Node {
+  if (head.parameters.ignore_consumed === true) throw new CompileError("choice-open ignore_consumed is a pick an activation names; a menu of options takes none.");
   // A DSL choice's options carry no names, so a named-option heading adds nothing to its option.
   const options = groups.map((group) => effectsOf(group[0]?.family_id === "named-option" ? group.slice(1) : group));
   const node: Node = { type: "choice", options };
@@ -449,7 +450,10 @@ function planContainerNodes(list: readonly CompileLeaf[], sentenceOf: readonly n
     // option, however many sentences it holds, and a container that opens inside a bullet ("Select one
     // objective marker. …") is part of that option rather than the end of the choice.
     const byBullet = !byMarker && leaf.family_id === "choice-open" && bullets[index + 1] === true;
-    for (let cursor = index + 1; cursor < list.length && (replacement !== undefined || byBullet || !LEADING_CONTAINERS.has(list[cursor]!.family_id)); cursor += 1) {
+    // A choice-open inside a named option ("Unnatural Fortitude: … select one of the following: ■ … ■ …")
+    // is that option's own: it and its options run on to the next named-option marker.
+    const nestedChoice = (cursor: number) => byMarker && !menu && current[0]?.family_id === optionMarker && list[cursor]!.family_id === "choice-open";
+    for (let cursor = index + 1; cursor < list.length && (replacement !== undefined || byBullet || !LEADING_CONTAINERS.has(list[cursor]!.family_id) || nestedChoice(cursor)); cursor += 1) {
       const sentence = sentenceOf[cursor]!;
       const bulletStarts = leaf.family_id === "choice-open" && bullets[cursor] === true;
       // A bulleted choice ends at a later choice of its own kind, or at a line after the last bullet;

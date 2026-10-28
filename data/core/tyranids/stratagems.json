@@ -837,11 +837,46 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Tyranids"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": {
+                    "owner": "friendly"
+                  },
+                  "range": {
+                    "aura_of": "synapse-tyranids"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "imperative-dominance-synaptic-nexus-tyranids",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
