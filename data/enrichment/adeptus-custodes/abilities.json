@@ -2877,7 +2877,7 @@
     },
     "applies_to": {
       "all_of": [
-        "VIGILATORS"
+        "VIGILATOR SQUAD"
       ]
     },
     "community_notes": "Wound re-rolls also apply against Battle-shocked targets (not encoded).",
@@ -2976,7 +2976,7 @@
     },
     "applies_to": {
       "all_of": [
-        "PROSECUTORS"
+        "PROSECUTOR SQUAD"
       ]
     },
     "community_notes": "Only Anathema Psykana models improve their AP against the prosecuted unit. While a Psyker or Battle-shocked unit is prosecuted, its models also subtract 1 from their Hit rolls (not encoded).",
@@ -3098,7 +3098,7 @@
     },
     "applies_to": {
       "all_of": [
-        "WITCHSEEKERS"
+        "WITCHSEEKER SQUAD"
       ]
     },
     "community_notes": "If a Torrent weapon targets a Psyker or Battle-shocked unit this phase, add 2 to its Attacks characteristic instead (escalation not encoded).",

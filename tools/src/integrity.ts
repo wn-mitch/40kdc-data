@@ -7,6 +7,7 @@ import { checkModelNames } from "./integrity-model-names.js";
 import { checkTargetProfiles } from "./integrity-target-profiles.js";
 import { checkWeaponGrantRefs } from "./integrity-weapon-grant.js";
 import { checkOfAbilityRollRefs } from "./integrity-of-ability-roll.js";
+import { checkStratagemTargetKeywords, checkTargetingAndAppliesToRefs } from "./integrity-targeting-refs.js";
 import { checkDslShapes } from "./integrity-shapes.js";
 import { checkDslContract } from "./integrity-dsl-contract.js";
 import { checkAuraRangeRefs } from "./integrity-aura-ranges.js";
@@ -733,6 +734,9 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
   }
   // A roll a named ability makes (of_ability) must name one of these ids.
   await checkOfAbilityRollRefs(root, result, new Set([...abilityRecordIds, ...coreAbilities]));
+  // A targeting effect's ability/stratagem must resolve too, and applies_to must name real keywords.
+  await checkTargetingAndAppliesToRefs(root, result, new Set([...abilityRecordIds, ...coreAbilities]));
+  await checkStratagemTargetKeywords(root, result);
   const coreAbilityById = new Map<string, AbilityLike & { id?: string; effect?: unknown }>();
   try {
     for (const ability of readArray<AbilityLike & { id?: string; effect?: unknown }>(

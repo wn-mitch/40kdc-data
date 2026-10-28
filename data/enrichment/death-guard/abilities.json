@@ -4487,7 +4487,7 @@
     },
     "applies_to": {
       "all_of": [
-        "Contagion Engine"
+        "Contagion Engines"
       ]
     },
     "trigger": {
@@ -4829,7 +4829,7 @@
     },
     "applies_to": {
       "all_of": [
-        "Contagion Engine"
+        "Contagion Engines"
       ]
     },
     "trigger": {
@@ -4888,7 +4888,7 @@
     },
     "applies_to": {
       "all_of": [
-        "Contagion Engine"
+        "Contagion Engines"
       ]
     },
     "trigger": {
