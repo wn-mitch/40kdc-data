@@ -9,6 +9,7 @@ import { preferFactionCopies, type FactionContext, unitInFaction } from "./facti
 import { DamageScoringSession, type DamageScoringInvariants } from "./scoring.js";
 import { isCombatPatrolDetachment } from "../abilities-resolver/resolver.js";
 import { buildLedger } from "./ledger.js";
+import { baseWargear } from "./weapon-grants.js";
 import type { DamageCellState, StackMember, StackResult, StackSpec } from "./model.js";
 import { damageCellKey, type DamageCellReport, type LeverReport, type WinnerReport } from "./report.js";
 
@@ -55,7 +56,7 @@ function attackerToughness(spec: StackSpec): { attackerToughness?: number } {
  * The engine context of one stack member in a cell. The crunch fires every model at a full-strength
  * target in the attacker's own turn, so those facts are stated; the scenario declares the rest.
  */
-function contextForCell(factionId: string, target: ResolvedTarget, phase: ComparePhase, scenario: Scenario) {
+function contextForCell(factionId: string, target: ResolvedTarget, phase: ComparePhase, scenario: Scenario, targetWargear: Record<string, number>) {
   const targetKeywords = [...(target.unitRaw.keywords ?? []), ...(target.unitRaw.faction_keywords ?? [])].map((keyword) => keyword.toLowerCase());
   const targetWounds = freshWounds(target.unitRaw);
   return (spec: StackSpec, member?: StackMember): EngineContext => ({
@@ -84,6 +85,7 @@ function contextForCell(factionId: string, target: ResolvedTarget, phase: Compar
     targetModelKeywords: targetKeywords,
     targetUnitId: target.unitRaw.id,
     targetModelCount: target.modelCount,
+    targetWargear,
     targetAttached: false,
   });
 }
@@ -323,12 +325,15 @@ export function damageScoringSession(input: {
   target: ResolvedTarget;
   phase: ComparePhase;
   invariants?: DamageScoringInvariants;
+  /** The target's wargear; its out-of-the-box loadout's when omitted. */
+  targetWargear?: Record<string, number>;
 }): DamageScoringSession {
   const state: DamageCellState = {
     factionId: input.faction.id,
     target: input.target,
     phase: input.phase,
-    contextFor: contextForCell(input.faction.id, input.target, input.phase, input.config.scenario),
+    contextFor: contextForCell(input.faction.id, input.target, input.phase, input.config.scenario,
+      input.targetWargear ?? baseWargear(input.dataset, input.target.unitRaw, input.target.modelCount)),
   };
   return new DamageScoringSession(input.dataset, state, input.config, input.faction.units, input.invariants);
 }

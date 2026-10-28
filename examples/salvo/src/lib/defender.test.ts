@@ -8,6 +8,7 @@ import {
   defenderEnhancements,
   defenderStratagems,
   supportProviders,
+  targetWargearChoices,
 } from "./defender.js";
 
 const ds = Dataset.embedded();
@@ -70,5 +71,26 @@ describe("support providers", () => {
     const added = ds.stackableBuffsFor({ ...input, supportingUnitIds: chosen }, context).buffs.filter((lever) => !before.has(lever.id));
     // Another unit's ability reaches this one only where the player places it, so it starts off.
     expect(added.map((lever) => lever.enabled)).toEqual([false]);
+  });
+});
+
+describe("the target's wargear", () => {
+  const strikeTeam = ds.units.getInFaction("strike-team", "tau-empire")!;
+  const fromAbility = (buffs: Buff[], abilityId: string) =>
+    buffs.filter((buff) => buff.source.kind === "ability" && buff.source.abilityId === abilityId).map((buff) => buff.contribution);
+
+  it("offers the drones the target can take", () => {
+    expect(targetWargearChoices(ds, strikeTeam).map((item) => item.id)).toEqual(expect.arrayContaining(["guardian-drone", "shield-drone"]));
+  });
+
+  it("applies the Guardian Drone's Wound roll penalty only while the target carries one", () => {
+    const guarded = defenderBuffs(ds, strikeTeam, { ...none, wargear: { "guardian-drone": 1 } }, context);
+    expect(fromAbility(guarded, "drones-tau-empire")).toEqual([{ type: "wound-mod", value: -1 }]);
+    // The out-of-the-box Strike Team carries no drone: neither the army rule nor the drone's own rule applies.
+    for (const build of [none, { ...none, wargear: {} }]) {
+      const bare = defenderBuffs(ds, strikeTeam, build, context);
+      expect(fromAbility(bare, "drones-tau-empire")).toEqual([]);
+      expect(fromAbility(bare, "guardian-drone-tau-empire")).toEqual([]);
+    }
   });
 });

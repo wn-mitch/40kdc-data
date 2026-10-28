@@ -1,6 +1,12 @@
 <script lang="ts">
   import { salvo, ds } from "./store.svelte.js";
-  import { defenderDetachments, defenderEnhancements, defenderStratagems } from "./defender.js";
+  import {
+    defaultTargetWargear,
+    defenderDetachments,
+    defenderEnhancements,
+    defenderStratagems,
+    targetWargearChoices,
+  } from "./defender.js";
 
   const unit = $derived(salvo.targetUnitId ? ds.units.getAny(salvo.targetUnitId) : undefined);
   const detachments = $derived(unit ? defenderDetachments(ds, unit.factionId) : []);
@@ -13,12 +19,38 @@
   const stratagems = $derived(unit && detachmentId ? defenderStratagems(ds, unit, detachmentId, salvo.phase) : []);
   const enhancements = $derived(unit && detachmentId ? defenderEnhancements(ds, unit, detachmentId) : []);
 
+  const wargearChoices = $derived(unit ? targetWargearChoices(ds, unit) : []);
+  const wargear = $derived(unit ? salvo.targetWargear ?? defaultTargetWargear(ds, unit) : {});
+  // A chosen item is carried by one model, or by as many as the default loadout gives it.
+  function toggleWargear(id: string, on: boolean): void {
+    if (!unit) return;
+    const next = { ...wargear };
+    if (on) next[id] = defaultTargetWargear(ds, unit)[id] ?? 1;
+    else delete next[id];
+    salvo.defenderWargear = { unitId: unit.id, wargear: next };
+  }
+
   function toggleStratagem(id: string, on: boolean): void {
     const rest = salvo.defenderStratagemIds.filter((item) => item !== id);
     salvo.defenderStratagemIds = on ? [...rest, id] : rest;
   }
 </script>
 
+{#if unit && wargearChoices.length > 0}
+  <div class="section-label">Target's wargear</div>
+  <div class="ability-list">
+    {#each wargearChoices as item (item.id)}
+      <label class="ability-row" class:active={(wargear[item.id] ?? 0) > 0}>
+        <input
+          type="checkbox"
+          checked={(wargear[item.id] ?? 0) > 0}
+          onchange={(e) => toggleWargear(item.id, (e.currentTarget as HTMLInputElement).checked)}
+        />
+        <span class="name">{item.name}{(wargear[item.id] ?? 0) > 1 ? ` ×${wargear[item.id]}` : ""}</span>
+      </label>
+    {/each}
+  </div>
+{/if}
 {#if unit}
   <div class="section-label">Defender's army</div>
   <div class="row">

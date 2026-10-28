@@ -89,6 +89,7 @@
     detachmentId: salvo.defenderDetachmentId,
     stratagemIds: salvo.defenderStratagemIds,
     enhancementId: salvo.defenderEnhancementId,
+    wargear: salvo.targetWargear,
   }, context));
 
   const allBuffs = $derived<Buff[]>([...datasetBuffs, ...manualBuffs, ...defensive.buffs]);

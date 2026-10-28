@@ -1,8 +1,8 @@
-import type { Buff, BuffSource, EngineContext } from "../cruncher/index.js";
-import type { Dataset, StackableBuffGroup } from "../data/dataset.js";
+import type { Buff, EngineContext } from "../cruncher/index.js";
+import type { Dataset, StackableBuff, StackableBuffGroup } from "../data/dataset.js";
 import { baseLoadout, optionCap, type LoadoutModel, type LoadoutTier } from "../data/loadout.js";
 import { reachesOtherUnits, replacedArmyRuleIds } from "../abilities-resolver/resolver.js";
-import type { EligibilityInput, EligibleAbility } from "../abilities-resolver/index.js";
+import type { EligibilityInput } from "../abilities-resolver/index.js";
 import type { UnitView } from "../data/entities.js";
 import type { MatrixConfig } from "./config.js";
 import { DamageCellCache } from "./cache.js";
@@ -12,7 +12,9 @@ import { searchLevers, type LeverSpace } from "./lever-search.js";
 import { searchLoadout, type LoadoutScaffold, type LoadoutSpace } from "./loadout-search.js";
 import type { ProfileDamage } from "./loadout-scoring.js";
 import { attributeSelectedProfile, crunchProfileScorer, unitLoadoutDamage, type DamageAttribution } from "./unit-damage.js";
-import { equippedBuffs, unequippedRules, unitWeaponGrants, wargearContext, WEAPON_GRANT_REASON, type WeaponGrants } from "./weapon-grants.js";
+import { translationWarnings } from "./translation-warnings.js";
+import { loadoutLeverBuffs, namedLoadoutWargear, surfacedByLoadout, wargearRules, wargearTranslation, type WargearRules } from "./wargear-levers.js";
+import { equippedBuffs, unequippedRules, unitWeaponGrants, wargearContext, type WeaponGrants } from "./weapon-grants.js";
 import type {
   DamageCellState,
   PoolLever,
@@ -24,29 +26,18 @@ import type {
   UnitLoadoutResult,
 } from "./model.js";
 
+/** Buffs that depend on the loadout scored; `key` names what else they depend on, for caching. */
+export interface LoadoutBuffs {
+  key: string;
+  at(counts: ReadonlyMap<string, number>): Buff[];
+}
+
 export interface DamageScoringInvariants {
   loadoutLegality: Map<string, CandidateLoadoutLegality>;
 }
 
 interface StackEligibilityInput extends EligibilityInput {
   weaponProfiles: [];
-}
-
-function sourceFor(entry: EligibleAbility): BuffSource {
-  switch (entry.source.kind) {
-    case "army":
-      return { kind: "ability", abilityId: entry.ability.id, abilityKind: "army" };
-    case "detachment":
-      return { kind: "ability", abilityId: entry.ability.id, abilityKind: "detachment" };
-    case "detachment-stratagem":
-      return { kind: "ability", abilityId: entry.ability.id, abilityKind: "detachment-stratagem" };
-    case "unit":
-      return { kind: "ability", abilityId: entry.ability.id, abilityKind: "unit" };
-    case "attached":
-      return { kind: "ability", abilityId: entry.ability.id, abilityKind: "attached", sourceUnitId: entry.source.unitId };
-    case "support":
-      return { kind: "ability", abilityId: entry.ability.id, abilityKind: "support", sourceUnitId: entry.source.sourceUnitId };
-  }
 }
 
 function buffKey(buffs: readonly Buff[]): string {
@@ -79,6 +70,8 @@ export class DamageScoringSession {
   private readonly scaffoldCache = new Map<string, LoadoutScaffold>();
   private readonly grantCache = new Map<string, WeaponGrants>();
   private readonly loadoutLegalityCache: Map<string, CandidateLoadoutLegality>;
+  private readonly wargearRuleCache = new Map<string, WargearRules>();
+  private readonly loadoutLeverCache = new Map<string, StackableBuff[] | null>();
 
   constructor(
     readonly dataset: Dataset,
@@ -102,10 +95,11 @@ export class DamageScoringSession {
       selectedLeverIds: [],
       detachmentIssues: [],
     });
-    this.defensiveBuffs = dataset.defensiveBuffsFor(
-      { unitId: state.target.unitRaw.id, factionId: state.target.unitRaw.faction_id },
-      targetContext,
-    );
+    // The target's printed rules for wargear it does not carry do not apply.
+    const defensive = dataset.defensiveBuffsFor({ unitId: state.target.unitRaw.id, factionId: state.target.unitRaw.faction_id }, targetContext);
+    this.defensiveBuffs = targetContext.targetWargear
+      ? equippedBuffs(state.target.unitRaw, new Map(Object.entries(targetContext.targetWargear)), defensive)
+      : defensive;
     this.defensiveWarnings = this.translationWarnings(
       { unitId: state.target.unitRaw.id, factionId: state.target.unitRaw.faction_id },
       targetContext,
@@ -211,18 +205,21 @@ export class DamageScoringSession {
     };
   }
 
-  /** The unit's wargear choices under `buffs`, for {@link searchLoadout} and the exhaustive oracle. */
-  loadoutSpace(unit: UnitView, buffs: Buff[], context: EngineContext): LoadoutSpace<UnitLoadoutResult> {
+  /**
+   * The unit's wargear choices under `buffs`, for {@link searchLoadout} and the exhaustive oracle.
+   * With `perLoadout`, each loadout is scored with the buffs it gives instead.
+   */
+  loadoutSpace(unit: UnitView, buffs: Buff[], context: EngineContext, perLoadout?: LoadoutBuffs): LoadoutSpace<UnitLoadoutResult> {
     const scaffold = this.scaffold(unit);
     return {
       scaffold,
       legal: (counts) => this.loadoutLegality(unit, scaffold, counts).legal,
-      score: (counts) => this.scoreCounts(unit, counts, buffs, context),
+      score: (counts) => this.scoreCounts(unit, counts, perLoadout ? perLoadout.at(counts) : buffs, context),
     };
   }
 
-  bestLoadout(unit: UnitView, buffs: Buff[], context: EngineContext): UnitLoadoutResult {
-    const cacheKey = `${unit.id}|${buffKey(buffs)}|${JSON.stringify(context)}`;
+  bestLoadout(unit: UnitView, buffs: Buff[], context: EngineContext, perLoadout?: LoadoutBuffs): UnitLoadoutResult {
+    const cacheKey = `${unit.id}|${buffKey(buffs)}|${JSON.stringify(context)}|${perLoadout?.key ?? ""}`;
     const cached = this.loadoutCache.get(cacheKey);
     if (cached) return cached;
     const scaffold = this.scaffold(unit);
@@ -233,7 +230,7 @@ export class DamageScoringSession {
       this.loadoutCache.set(cacheKey, invalid);
       return invalid;
     }
-    const best = searchLoadout(this.loadoutSpace(unit, buffs, context), () => { this.illegalLoadoutsRejected += 1; });
+    const best = searchLoadout(this.loadoutSpace(unit, buffs, context, perLoadout), () => { this.illegalLoadoutsRejected += 1; });
     this.loadoutCache.set(cacheKey, best);
     return best;
   }
@@ -257,32 +254,7 @@ export class DamageScoringSession {
     scoredGrants: ReadonlySet<string> = new Set(),
     replaced: ReadonlySet<string> = new Set(),
   ): StackBuffPool["warnings"] {
-    const warnings: StackBuffPool["warnings"] = [];
-    for (const entry of this.dataset.eligibleAbilities(input, context.phase)) {
-      if (this.config.droppedArmyRules.includes(entry.ability.id)) continue;
-      if (entry.source.kind === "army" && replaced.has(entry.ability.id)) continue;
-      const translated = entry.ability.describeBuffs(sourceFor(entry), context, perspective, entry.rating);
-      for (const fragment of translated.unsupported) {
-        const weaponId = (fragment.effectFragment as { modifier?: { weapon_id?: unknown } } | null)?.modifier?.weapon_id;
-        if (fragment.reason === WEAPON_GRANT_REASON && scoredGrants.has(`${entry.ability.id}|${String(weaponId)}`)) continue;
-        warnings.push({
-          sourceAbilityId: entry.ability.id,
-          ...(entry.source.kind === "support" ? { sourceUnitId: entry.source.sourceUnitId } : {}),
-          perspective,
-          sourceKind: entry.source.kind,
-          reason: fragment.reason ?? "unsupported DSL fragment",
-        });
-      }
-      if (perspective === "target" && translated.activatable.length > 0) {
-        warnings.push({
-          sourceAbilityId: entry.ability.id,
-          perspective,
-          sourceKind: entry.source.kind,
-          reason: "defensive activatable choice is not selected by the attacker benchmark",
-        });
-      }
-    }
-    return warnings;
+    return translationWarnings(this.dataset, this.config, input, context, perspective, scoredGrants, replaced);
   }
 
   /**
@@ -293,8 +265,23 @@ export class DamageScoringSession {
     return replacedArmyRuleIds(this.dataset, spec.factionId, spec.detachmentIds);
   }
 
+  private poolKey(spec: StackSpec): string {
+    return `${spec.members.map((member) => `${member.unit.id}:${member.role}`).join("+")}|${spec.detachmentIds.join("+")}`;
+  }
+
+  /** Each detachment resolves on its own; a spec without one resolves once. */
+  private detachmentPasses(spec: StackSpec): (string | undefined)[] {
+    return spec.detachmentIds.length > 0 ? spec.detachmentIds : [undefined];
+  }
+
+  /** `levers` without dropped army rules and those another detachment's Combat Patrol rule replaces. */
+  private keptLevers(levers: readonly StackableBuff[], replaced: ReadonlySet<string>): StackableBuff[] {
+    return levers.filter((lever) => lever.source.kind !== "ability" || (!this.config.droppedArmyRules.includes(lever.source.abilityId) &&
+      !(lever.source.abilityKind === "army" && replaced.has(lever.source.abilityId))));
+  }
+
   pool(spec: StackSpec): StackBuffPool {
-    const key = `${spec.members.map((member) => `${member.unit.id}:${member.role}`).join("+")}|${spec.detachmentIds.join("+")}`;
+    const key = this.poolKey(spec);
     const cached = this.poolCache.get(key);
     if (cached) return cached;
     const levers = new Map<string, PoolLever>();
@@ -303,14 +290,11 @@ export class DamageScoringSession {
     const replaced = this.replacedArmyRules(spec);
     for (const member of spec.members) {
       const context = this.state.contextFor(spec, member);
-      for (const detachmentId of spec.detachmentIds.length > 0 ? spec.detachmentIds : [undefined]) {
+      for (const detachmentId of this.detachmentPasses(spec)) {
         const input = this.eligibilityInput(spec, member, detachmentId);
         const selection = this.dataset.stackableBuffsFor(input, context);
         for (const group of selection.groups) if (!groups.has(group.id)) groups.set(group.id, group);
-        for (const lever of selection.buffs) {
-          if (lever.source.kind === "ability" && this.config.droppedArmyRules.includes(lever.source.abilityId)) continue;
-          // Another selected detachment's Combat Patrol army rule replaces this army rule.
-          if (lever.source.kind === "ability" && lever.source.abilityKind === "army" && replaced.has(lever.source.abilityId)) continue;
+        for (const lever of this.keptLevers(selection.buffs, replaced)) {
           const current = levers.get(lever.id) ?? { ...lever, perMember: new Map<string, Buff[]>() };
           current.perMember.set(member.unit.id, lever.buffs);
           levers.set(lever.id, current);
@@ -321,6 +305,44 @@ export class DamageScoringSession {
     const uniqueWarnings = [...new Map(warnings.map((warning) => [JSON.stringify(warning), warning])).values()];
     const value = { levers: [...levers.values()], groups: [...groups.values()], warnings: uniqueWarnings };
     this.poolCache.set(key, value);
+    return value;
+  }
+
+  /** A member's eligible rules that read `unit-wargear`, and whether its levers depend on its loadout. */
+  private wargearRulesOf(spec: StackSpec, member: StackMember): WargearRules {
+    const key = `${this.poolKey(spec)}|${member.unit.id}`;
+    let rules = this.wargearRuleCache.get(key);
+    if (!rules) {
+      const context = this.state.contextFor(spec, member);
+      const eligible = this.detachmentPasses(spec).flatMap((detachmentId) => this.dataset.eligibleAbilities(this.eligibilityInput(spec, member, detachmentId), context.phase));
+      rules = wargearRules(eligible, context, this.scaffold(member.unit));
+      this.wargearRuleCache.set(key, rules);
+    }
+    return rules;
+  }
+
+  /**
+   * A member's levers translated under the wargear of `counts`, or null when that wargear changes
+   * nothing its wargear-reading rules give. A later detachment's copy of a lever wins, as in {@link pool}.
+   */
+  private loadoutLevers(spec: StackSpec, member: StackMember, counts: ReadonlyMap<string, number>): StackableBuff[] | null {
+    const rules = this.wargearRulesOf(spec, member);
+    if (!rules.loadoutDependent) return null;
+    const wargear = namedLoadoutWargear(counts, rules.wargearIds);
+    const key = `${this.poolKey(spec)}|${member.unit.id}|${JSON.stringify(wargear)}`;
+    const cached = this.loadoutLeverCache.get(key);
+    if (cached !== undefined) return cached;
+    const context = { ...this.state.contextFor(spec, member), attackerWargear: wargear };
+    let value: StackableBuff[] | null = null;
+    if (wargearTranslation(rules.entries, context) !== rules.unloaded) {
+      const replaced = this.replacedArmyRules(spec);
+      const levers = new Map<string, StackableBuff>();
+      for (const detachmentId of this.detachmentPasses(spec)) {
+        for (const lever of this.keptLevers(this.dataset.stackableBuffsFor(this.eligibilityInput(spec, member, detachmentId), context).buffs, replaced)) levers.set(lever.id, lever);
+      }
+      value = [...levers.values()];
+    }
+    this.loadoutLeverCache.set(key, value);
     return value;
   }
 
@@ -349,23 +371,32 @@ export class DamageScoringSession {
     this.stackEvaluations += 1;
     const members = spec.members.map((member) => ({
       member,
-      loadout: this.bestLoadout(member.unit, this.memberBuffs(spec, member), this.state.contextFor(spec, member)),
+      loadout: this.bestLoadout(member.unit, this.memberBuffs(spec, member), this.state.contextFor(spec, member), this.perLoadoutBuffs(spec, member)),
     }));
     const result = { spec, total: members.reduce((sum, member) => sum + member.loadout.total, 0), members };
     this.stackCache.set(key, result);
     return result;
   }
 
+  /** How a member's buffs follow its loadout, when its rules read `unit-wargear`. */
+  perLoadoutBuffs(spec: StackSpec, member: StackMember): LoadoutBuffs | undefined {
+    if (!this.wargearRulesOf(spec, member).loadoutDependent) return undefined;
+    return { key: `${this.poolKey(spec)}|${[...spec.selectedLeverIds].sort().join("+")}`, at: (counts) => this.memberBuffs(spec, member, counts) };
+  }
+
   /**
    * The buffs a member attacks with under the spec's selected levers, with the target's defensive
-   * buffs. Given its loadout, the unit's printed rules for items it leaves out are dropped.
+   * buffs. Given its loadout, the unit's printed rules for items it leaves out are dropped, and a
+   * member whose rules read `unit-wargear` has its levers translated under that loadout.
    */
   memberBuffs(spec: StackSpec, member: StackMember, counts?: ReadonlyMap<string, number>): Buff[] {
     const selected = new Set(spec.selectedLeverIds);
-    const buffs = [
-      ...this.pool(spec).levers.filter((lever) => selected.has(lever.id)).flatMap((lever) => lever.perMember.get(member.unit.id) ?? []),
-      ...this.defensiveBuffs,
-    ];
+    const pool = this.pool(spec);
+    const translated = counts ? this.loadoutLevers(spec, member, counts) : null;
+    const levers = translated
+      ? loadoutLeverBuffs(translated, new Set(pool.levers.map((lever) => lever.id)), selected)
+      : pool.levers.filter((lever) => selected.has(lever.id)).flatMap((lever) => lever.perMember.get(member.unit.id) ?? []);
+    const buffs = [...levers, ...this.defensiveBuffs];
     return counts ? equippedBuffs(member.unit.raw, counts, buffs) : buffs;
   }
 
@@ -448,8 +479,18 @@ export class DamageScoringSession {
     return [...new Map(warnings.map((warning) => [JSON.stringify(warning), warning])).values()];
   }
 
+  /** The selected levers, with the levers each member's winning loadout alone surfaces. */
   selectedPoolLevers(result: StackResult): PoolLever[] {
-    return this.pool(result.spec).levers.filter((lever) => result.spec.selectedLeverIds.includes(lever.id));
+    const pool = this.pool(result.spec);
+    const levers = pool.levers.filter((lever) => result.spec.selectedLeverIds.includes(lever.id));
+    const poolIds = new Set(pool.levers.map((lever) => lever.id));
+    for (const { member, loadout } of result.members) {
+      for (const lever of (this.loadoutLevers(result.spec, member, loadout.counts) ?? []).filter((candidate) => surfacedByLoadout(candidate, poolIds))) {
+        const current = levers.find((candidate) => candidate.id === lever.id) ?? levers[levers.push({ ...lever, perMember: new Map() }) - 1];
+        current.perMember.set(member.unit.id, lever.buffs);
+      }
+    }
+    return levers;
   }
 
   keywordsFor(spec: StackSpec): string[] {

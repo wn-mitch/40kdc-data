@@ -111,6 +111,7 @@ export {
 // The weapons a loadout's wargear grants and the printed wargear rules it leaves out, scored
 // the way the damage matrix scores them.
 export {
+  baseWargear,
   equippedBuffs,
   loadoutWargearScoring,
   wargearContext,

@@ -197,6 +197,8 @@ class SalvoState {
   defenderDetachmentId = $state<string | null>(null);
   defenderStratagemIds = $state<string[]>([]);
   defenderEnhancementId = $state<string | null>(null);
+  /** The target's wargear, with the unit it was chosen for. */
+  defenderWargear = $state<{ unitId: string; wargear: Record<string, number> } | null>(null);
 
   // Fleet comparison (the "Compare" view).
   compareFactionId = $state<string | null>("world-eaters");
@@ -214,6 +216,11 @@ class SalvoState {
     if (this.targetMode === "dataset") return this.datasetTargetUnitId;
     if (this.targetMode === "roster") return this.targetRoster?.units[this.rosterTargetUnitIndex ?? -1]?.ref.id ?? null;
     return null;
+  }
+
+  /** The wargear chosen for the current target; null (its out-of-the-box loadout) once the target changes. */
+  get targetWargear(): Record<string, number> | null {
+    return this.defenderWargear && this.defenderWargear.unitId === this.targetUnitId ? this.defenderWargear.wargear : null;
   }
 
   /** Apply a target-profile preset: point the dataset target at its unit. */

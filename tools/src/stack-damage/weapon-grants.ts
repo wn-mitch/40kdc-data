@@ -12,6 +12,7 @@
 import type { Buff, BuffSource, EngineContext } from "../cruncher/index.js";
 import type { Dataset } from "../data/dataset.js";
 import { abilityRefId, abilityRefWargear } from "../data/ability-refs.js";
+import { baseLoadout, type LoadoutModel } from "../data/loadout.js";
 import type { AbilityView } from "../data/entities.js";
 import type { Unit } from "../generated.js";
 import { resolveUnitWeapon } from "./unit-damage.js";
@@ -114,6 +115,12 @@ export function loadoutWargear(dataset: Dataset, unit: Unit, counts: ReadonlyMap
   return wargear;
 }
 
+/** The wargear of a unit's out-of-the-box loadout at `modelCount` models; see {@link loadoutWargear}. */
+export function baseWargear(dataset: Dataset, unit: Unit, modelCount: number): Record<string, number> {
+  const models = (dataset.unitCompositionOf(unit) as { models?: LoadoutModel[] } | undefined)?.models ?? [];
+  return loadoutWargear(dataset, unit, baseLoadout(unit, modelCount, dataset.wargearOptionsOf(unit), models).counts);
+}
+
 /**
  * The live weapon grants of one translated ability. A grant is live when the translator reaches
  * it under `context`; its bearers are the carriers of the wargear its conditions require, or of
@@ -184,11 +191,17 @@ export function wargearContext(dataset: Dataset, unit: Unit, counts: ReadonlyMap
   return { ...context, attackerWargear: loadoutWargear(dataset, unit, counts) };
 }
 
-/** `buffs` without those of the unit's own printed wargear rules whose item `counts` leaves out. */
+/**
+ * `buffs` without those of the unit's own printed wargear rules whose item `counts` leaves out,
+ * whether the rule reaches it as its own (`unit`) or back through its attached leader (`attached`
+ * from this unit).
+ */
 export function equippedBuffs(unit: Unit, counts: ReadonlyMap<string, number>, buffs: readonly Buff[]): Buff[] {
   const unequipped = unequippedRules(unit, counts);
   if (unequipped.size === 0) return [...buffs];
-  return buffs.filter((buff) => buff.source.kind !== "ability" || buff.source.abilityKind !== "unit" || !unequipped.has(buff.source.abilityId));
+  const own = (source: BuffSource): boolean => source.kind === "ability"
+    && (source.abilityKind === "unit" || (source.abilityKind === "attached" && source.sourceUnitId === unit.id));
+  return buffs.filter((buff) => !own(buff.source) || !unequipped.has((buff.source as { abilityId: string }).abilityId));
 }
 
 /** What a loadout's wargear changes about scoring it; see {@link loadoutWargearScoring}. */

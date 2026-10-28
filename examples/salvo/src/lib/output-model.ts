@@ -5,6 +5,7 @@
  */
 import {
   attributeStages,
+  baseWargear,
   loadoutHitModifier,
   loadoutWargearScoring,
   profileEngineInput,
@@ -65,8 +66,20 @@ export function synthTarget(t: ManualTarget): Unit {
 }
 
 /**
- * The combined unit's ability, army, detachment, attached and support levers. These are
- * weapon-independent and shared by every weapon line, so no weapon profiles are passed: crunch
+ * `context` with the combined unit's wargear: each member's out-of-the-box loadout, which Salvo
+ * does not edit, summed. Rules gated on the unit's wargear read it, as the damage matrix's do.
+ */
+export function withUnitWargear(ds: Dataset, factionId: string | null, memberIds: readonly (string | null)[], context: EngineContext): EngineContext {
+  const wargear: Record<string, number> = {};
+  for (const { unit, loadout } of memberUnits(ds, factionId, memberIds)) {
+    for (const [id, count] of Object.entries(baseWargear(ds, unit.raw, loadout.modelCount))) wargear[id] = (wargear[id] ?? 0) + count;
+  }
+  return { ...context, attackerWargear: wargear };
+}
+
+/**
+ * The combined unit's ability, army, detachment, attached and support levers, read with the
+ * unit's wargear. These are weapon-independent and shared by every weapon line, so no weapon profiles are passed: crunch
  * injects each line's own weapon keywords, and passing them here too would double-count additive
  * keyword effects.
  */
@@ -92,7 +105,7 @@ export function attackerLevers(
         supportingUnitIds: activeSupport(ds, attacker.factionId, [attacker.unitId, ...attacker.attachedUnitIds], attacker.supportUnitIds),
         weaponProfiles: [],
       },
-      context,
+      withUnitWargear(ds, attacker.factionId, [attacker.unitId, ...attacker.attachedUnitIds], context),
     );
   } catch (err) {
     return { buffs: [], groups: [], error: (err as Error).message };

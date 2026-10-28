@@ -4,7 +4,9 @@
  * under target perspective with the same eligibility walk the attacker's levers use.
  */
 import {
+  baseWargear,
   canTakeEnhancement,
+  equippedBuffs,
   reachesOtherUnits,
   type Buff,
   type BuffSource,
@@ -20,7 +22,25 @@ export type DefenderBuild = {
   detachmentId: string | null;
   stratagemIds: readonly string[];
   enhancementId: string | null;
+  /** The target's wargear by id, with how many models carry each; its out-of-the-box loadout's when null. */
+  wargear?: Readonly<Record<string, number>> | null;
 };
+
+/** The wargear the target's out-of-the-box loadout carries, at its minimum model count. */
+export function defaultTargetWargear(ds: Dataset, unit: UnitView): Record<string, number> {
+  return baseWargear(ds, unit.raw, unit.raw.model_count?.min ?? 1);
+}
+
+/** Wargear records the target can carry: its out-of-the-box items and its options' replacements. */
+export function targetWargearChoices(ds: Dataset, unit: UnitView): { id: string; name: string }[] {
+  const ids = new Set(Object.keys(defaultTargetWargear(ds, unit)));
+  for (const option of ds.wargearOptionsOf(unit.raw)) {
+    for (const id of [...(option.replacement ?? []), ...(option.replacement_choice ?? []).flat()]) {
+      if (ds.wargear.has(id)) ids.add(id);
+    }
+  }
+  return [...ids].map((id) => ({ id, name: ds.wargear.get(id)?.name ?? id })).sort((a, b) => a.name.localeCompare(b.name));
+}
 
 export type StratagemChoice = { id: string; name: string; cpCost: number };
 
@@ -54,10 +74,17 @@ export function defenderEnhancements(ds: Dataset, unit: UnitView, detachmentId: 
 
 /**
  * The target's defensive buffs: its army, detachment and own abilities, the opted-in Stratagems
- * and its Enhancement. A choice that no longer fits the unit (another detachment, an ineligible
- * bearer) contributes nothing.
+ * and its Enhancement, read with the target's wargear, as the damage matrix reads them. Its
+ * printed rules for wargear it does not carry do not apply. A choice that no longer fits the unit
+ * (another detachment, an ineligible bearer) contributes nothing.
  */
-export function defenderBuffs(ds: Dataset, unit: UnitView, build: DefenderBuild, context: EngineContext): Buff[] {
+export function defenderBuffs(ds: Dataset, unit: UnitView, build: DefenderBuild, baseContext: EngineContext): Buff[] {
+  const targetWargear = build.wargear ?? defaultTargetWargear(ds, unit);
+  const context: EngineContext = { ...baseContext, targetWargear };
+  return equippedBuffs(unit.raw, new Map(Object.entries(targetWargear)), buildBuffs(ds, unit, build, context));
+}
+
+function buildBuffs(ds: Dataset, unit: UnitView, build: DefenderBuild, context: EngineContext): Buff[] {
   // Another faction's detachment rule never reaches the unit.
   const detachmentId = build.detachmentId && ds.detachments.getInFaction(build.detachmentId, unit.factionId)
     ? build.detachmentId

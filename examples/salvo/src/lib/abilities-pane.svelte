@@ -15,6 +15,7 @@
   import EmptyState from "./EmptyState.svelte";
   import { activeSupport } from "./defender.js";
   import { scenarioContext } from "./scenario.js";
+  import { withUnitWargear } from "./output-model.js";
 
   // EngineContext for the DSL→Buff translator. Without this the translator
   // defaults to `{ phase: "shooting" }`, so phase-gated branches misfire when
@@ -61,7 +62,7 @@
             ? [{ weaponId: salvo.selectedWeaponId, profileIndex: salvo.selectedProfileIndex }]
             : [],
         },
-        engineContext,
+        withUnitWargear(ds, salvo.selectedFactionId, [salvo.selectedUnitId, ...salvo.attachedUnitIds], engineContext),
       );
     } catch (err) {
       return { buffs: [], groups: [], error: (err as Error).message };
