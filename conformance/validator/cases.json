@@ -1059,5 +1059,62 @@
         "code": "REQUIRED_MISSING"
       }
     ]
+  },
+  {
+    "name": "wargear id that is not kebab-case (only a pattern rejects it)",
+    "target": "wargear",
+    "input": {
+      "id": "Icon_Of_Khorne",
+      "name": "Icon of Khorne",
+      "category": "icon",
+      "game_version": {
+        "edition": "10th",
+        "dataslate": "2025-q3"
+      }
+    },
+    "expected_errors": [
+      {
+        "path": "/id",
+        "code": "PATTERN_MISMATCH"
+      }
+    ]
+  },
+  {
+    "name": "wargear edition that is not a number (only a pattern rejects it)",
+    "target": "wargear",
+    "input": {
+      "id": "icon-of-khorne",
+      "name": "Icon of Khorne",
+      "category": "icon",
+      "game_version": {
+        "edition": "tenth",
+        "dataslate": "2025-q3"
+      }
+    },
+    "expected_errors": [
+      {
+        "path": "/game_version/edition",
+        "code": "PATTERN_MISMATCH"
+      }
+    ]
+  },
+  {
+    "name": "wargear dataslate that is neither a quarter tag nor a slug (only a pattern rejects it)",
+    "target": "wargear",
+    "input": {
+      "id": "icon-of-khorne",
+      "name": "Icon of Khorne",
+      "category": "icon",
+      "game_version": {
+        "edition": "10th",
+        "dataslate": "2025 Q3"
+      }
+    },
+    "expected_errors": [
+      {
+        "path": "/game_version/dataslate",
+        "code": "PATTERN_MISMATCH"
+      }
+    ]
   }
 ]

@@ -45,8 +45,8 @@ cruncher = ["bundled-data"]
 # serde, no dataset, deflate, or regex.
 share = ["dep:base64"]
 # Hand-rolled schema validator emitting the closed-enum (path, code) errors over
-# the embedded VALIDATION_SCHEMA. Self-contained — needs only serde_json.
-validate = []
+# the embedded VALIDATION_SCHEMA. Needs serde_json plus regex for `pattern`.
+validate = ["dep:regex"]
 
 # The conformance runner drives every area, so it builds only with every feature on.
 [[bin]]

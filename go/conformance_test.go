@@ -307,3 +307,36 @@ func TestStratagemTargetsCorpus(t *testing.T) {
 		}
 	}
 }
+
+// TestValidatorCorpus pins the schema validator's closed-enum (path, code)
+// errors against conformance/validator, order-insensitively.
+func TestValidatorCorpus(t *testing.T) {
+	var cases []struct {
+		Name           string           `json:"name"`
+		Target         string           `json:"target"`
+		Input          any              `json:"input"`
+		ExpectedErrors []map[string]any `json:"expected_errors"`
+	}
+	if err := json.Unmarshal(loadCorpus(t, "validator", "cases.json"), &cases); err != nil {
+		t.Fatal(err)
+	}
+	keys := func(errs []map[string]any) []string {
+		out := make([]string, 0, len(errs))
+		for _, e := range errs {
+			out = append(out, cstr(e["path"])+"|"+cstr(e["code"]))
+		}
+		sort.Strings(out)
+		return out
+	}
+	v := NewSchemaValidator()
+	for _, c := range cases {
+		if _, ok := validatorTargets[c.Target]; !ok {
+			t.Errorf("%s: unknown target %q", c.Name, c.Target)
+			continue
+		}
+		got, want := keys(v.validateTarget(c.Target, c.Input)), keys(c.ExpectedErrors)
+		if strings.Join(got, ",") != strings.Join(want, ",") {
+			t.Errorf("%s:\n got  %v\n want %v", c.Name, got, want)
+		}
+	}
+}

@@ -4,7 +4,7 @@
 //! [`crate::VALIDATION_SCHEMA`] document — every entity schema lives under its
 //! `$defs`, and bundling rewrote all `$ref`s to local `#/$defs/...` pointers, so
 //! no cross-file resolution is needed. Every keyword that document uses is
-//! either evaluated here or listed in [`UNENFORCED_KEYWORDS`]; a test fails on
+//! either evaluated here or listed as unenforced (`format`); a test fails on
 //! any other. Maps validation failures
 //! onto the closed `(path, code)` enum pinned by `conformance/validator`
 //! (`REQUIRED_MISSING`, `TYPE_MISMATCH`, `ENUM_VIOLATION`, `PATTERN_MISMATCH`,
@@ -12,17 +12,35 @@
 //! implementation's prerogative — only the codes cross the wire.
 //!
 //! Rust mirror of `python/src/wh40kdc/validator.py` (the closed-enum mapping)
-//! and the Go `validator.go`. Pattern/format checks are treated as always-valid
-//! (no corpus case exercises a pattern failure, and the `regex` dep stays
-//! scoped to the importer) — adding one would be a `SPEC_VERSION` bump anyway.
+//! and the Go `validator.go`. `pattern` is matched with ASCII-only classes
+//! (`\d` is `[0-9]`), as AJV and Go's RE2 match it; `format` is treated as
+//! always-valid, as Go and Python's jsonschema treat it.
 
-/// Assertion keywords the schemas use that this validator does not evaluate.
-pub(crate) const UNENFORCED_KEYWORDS: &[&str] = &["pattern", "format"];
+use std::collections::{HashMap, HashSet};
+use std::sync::{Mutex, OnceLock};
 
-use std::collections::HashSet;
-use std::sync::OnceLock;
+use regex::{Regex, RegexBuilder};
 
 use serde_json::Value;
+
+/// Compile a schema `pattern` once per process. ASCII mode keeps `\d`, `\w` and
+/// `\s` to their ASCII meaning; a pattern that only compiles with Unicode
+/// semantics (one whose `.` could match a partial character) falls back to them.
+fn pattern(source: &str) -> Option<Regex> {
+    static CACHE: OnceLock<Mutex<HashMap<String, Option<Regex>>>> = OnceLock::new();
+    let cache = CACHE.get_or_init(|| Mutex::new(HashMap::new()));
+    let mut cache = cache.lock().unwrap_or_else(|e| e.into_inner());
+    cache
+        .entry(source.to_string())
+        .or_insert_with(|| {
+            RegexBuilder::new(source)
+                .unicode(false)
+                .build()
+                .or_else(|_| Regex::new(source))
+                .ok()
+        })
+        .clone()
+}
 
 /// The wire validator targets — each is a key under the bundled schema's
 /// `$defs`.
@@ -270,7 +288,12 @@ fn check_object(
                     push(out, path, "maxLength");
                 }
             }
-            // pattern / format intentionally treated as always-valid.
+            if let Some(Value::String(p)) = schema.get("pattern") {
+                if pattern(p).is_some_and(|re| !re.is_match(s)) {
+                    push(out, path, "pattern");
+                }
+            }
+            // format intentionally treated as always-valid.
         }
         Value::Number(n) => {
             let x = n.as_f64().unwrap_or(f64::NAN);
@@ -411,6 +434,7 @@ mod tests {
         "minContains",
         "maxContains",
         "uniqueItems",
+        "pattern",
         "minLength",
         "maxLength",
         "minimum",
@@ -425,6 +449,8 @@ mod tests {
         "then",
         "else",
     ];
+    /// Assertion keywords the schemas use that this validator does not evaluate.
+    const UNENFORCED_KEYWORDS: &[&str] = &["format"];
     /// Keywords that assert nothing.
     const ANNOTATIONS: &[&str] = &[
         "$schema",
@@ -478,6 +504,36 @@ mod tests {
             unknown.is_empty(),
             "unsupported schema keywords: {unknown:?}"
         );
+    }
+
+    /// A pattern that fails to compile would be skipped, so every schema pattern must compile.
+    #[test]
+    fn every_schema_pattern_compiles() {
+        fn walk(n: &Value, bad: &mut Vec<String>) {
+            match n {
+                Value::Object(m) => {
+                    if let Some(Value::String(p)) = m.get("pattern") {
+                        if pattern(p).is_none() {
+                            bad.push(p.clone());
+                        }
+                    }
+                    m.values().for_each(|v| walk(v, bad));
+                }
+                Value::Array(a) => a.iter().for_each(|v| walk(v, bad)),
+                _ => {}
+            }
+        }
+        let mut bad = Vec::new();
+        walk(bundled(), &mut bad);
+        assert!(bad.is_empty(), "uncompilable patterns: {bad:?}");
+    }
+
+    /// `\d` is ASCII, as in AJV and Go: an Arabic-Indic digit is not a digit.
+    #[test]
+    fn pattern_digits_are_ascii() {
+        let re = pattern(r"^\d{1,2}(th)?$").expect("compiles");
+        assert!(re.is_match("11th"));
+        assert!(!re.is_match("\u{0661}\u{0661}th"));
     }
 
     /// The validation schema carries the conditionals the codegen bundle strips.
