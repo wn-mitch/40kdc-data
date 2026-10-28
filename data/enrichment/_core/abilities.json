@@ -179,27 +179,73 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "1d594e074ac98350add4be6c6dc1232514a542c9adee982278db1962bf2cad9c",
+    "source_digest": "56abc872fb1afc36ae29742385a6b1cfefbf50661987dbc3bb7650578efb52bd",
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 4,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": "stratagem-target",
-        "modifier": {
-          "count": 1
-        }
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "friendly",
+          "any_of": [
+            "EXPLOSIVES",
+            "GRENADES"
+          ],
+          "level": "model",
+          "member_of": "stratagem-target"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "bind_as": "outer"
       },
-      "on_fail": null
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy",
+            "not_states": [
+              "engaged"
+            ],
+            "within": {
+              "range": {
+                "inches": 8
+              },
+              "of": {
+                "selection_var": "outer"
+              }
+            },
+            "visible": {
+              "to": {
+                "selection_var": "outer"
+              }
+            }
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "bind_as": "inner"
+        },
+        "effect": {
+          "type": "mortal-wounds",
+          "target": "selected-unit",
+          "modifier": {
+            "count": 1,
+            "per": "success",
+            "roll": {
+              "dice": 6,
+              "threshold": 4
+            }
+          }
+        }
+      }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "community_notes": "One unengaged Explosives/Grenades unit that is eligible to shoot and did not Advance: select one such model and one unengaged enemy unit within 8\" and visible to it, then roll six D6 — each 4+ inflicts 1 mortal wound"
   },

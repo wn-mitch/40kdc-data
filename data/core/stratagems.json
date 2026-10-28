@@ -127,15 +127,64 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": {
-      "required_keywords_any": [
-        "Explosives",
-        "Grenades"
-      ]
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "EXPLOSIVES",
+                  "GRENADES"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "not_states": [
+                  "engaged"
+                ]
+              }
+            }
+          },
+          {
+            "type": "eligible",
+            "parameters": {
+              "subject": "this-unit",
+              "to": "shoot"
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "move-ended",
+                  "filter": {
+                    "move_types": [
+                      "advance"
+                    ]
+                  },
+                  "window": "turn"
+                }
+              }
+            ]
+          }
+        ]
+      }
     },
     "ability_id": "explosives",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {

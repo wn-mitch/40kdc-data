@@ -5,15 +5,82 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "c37a6f74d68cf5a54822255ca67b450e530ef09f87279211976a4bd4a8585ae1",
     "version": "2025-q3",
     "effect": {
-      "type": "mortal-wounds",
-      "target": "defender",
-      "modifier": {
-        "count": "D3"
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "subject": "selected-unit",
+            "filter": {
+              "engaged_with": "this-unit"
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "mortal-wounds",
+            "target": "selected-unit",
+            "modifier": {
+              "count": "D3",
+              "per": "success",
+              "roll": {
+                "dice": 1,
+                "threshold": 4,
+                "for_each": {
+                  "filter": {
+                    "owner": "friendly",
+                    "level": "model",
+                    "member_of": "this-unit"
+                  },
+                  "eligibility": {
+                    "type": "matches",
+                    "parameters": {
+                      "filter": {
+                        "engaged_with": "selected-unit"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "happened",
+              "parameters": {
+                "event": "model-destroyed",
+                "object": {
+                  "owner": "enemy",
+                  "level": "model"
+                },
+                "window": "event"
+              }
+            },
+            "effect": {
+              "type": "test",
+              "target": "selected-unit",
+              "modifier": {
+                "test": "battle-shock"
+              }
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -23,8 +90,16 @@
       "krootox-rampagers"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "tau-empire"
+    "behavior": "reactive",
+    "faction_id": "tau-empire",
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "charge"
+        ]
+      }
+    }
   },
   {
     "ability_id": "aggressive-deployment-tau-empire",

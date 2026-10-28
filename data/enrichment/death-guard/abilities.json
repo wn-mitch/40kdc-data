@@ -3155,15 +3155,84 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "23762adee3e8d31edc349c040cb7fd361c88d65696e6397b64ce61222168c736",
     "version": "2025-q3",
     "effect": {
-      "type": "mortal-wounds",
-      "target": "defender",
-      "modifier": {
-        "count": "D3"
+      "type": "for-each-unit",
+      "selector": {
+        "filter": {
+          "owner": "enemy",
+          "within": {
+            "range": {
+              "inches": 6
+            },
+            "of": "this-model"
+          }
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "recipient",
+                "filter": {
+                  "designated": "afflicted"
+                }
+              }
+            },
+            "effect": {
+              "type": "dice-gated",
+              "dice": "D6+1",
+              "threshold": 3,
+              "comparison": "gte",
+              "on_success": {
+                "type": "mortal-wounds",
+                "target": "recipient",
+                "modifier": {
+                  "count": "D3"
+                }
+              },
+              "on_fail": null
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "recipient",
+                    "filter": {
+                      "designated": "afflicted"
+                    }
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "dice-gated",
+              "dice": "D6",
+              "threshold": 3,
+              "comparison": "gte",
+              "on_success": {
+                "type": "mortal-wounds",
+                "target": "recipient",
+                "modifier": {
+                  "count": "D3"
+                }
+              },
+              "on_fail": null
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -3173,8 +3242,28 @@
       "mortarion"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "death-guard"
+    "behavior": "reactive",
+    "faction_id": "death-guard",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "supreme-commander-death-guard",

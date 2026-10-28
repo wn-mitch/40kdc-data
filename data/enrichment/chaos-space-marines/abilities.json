@@ -1847,23 +1847,98 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "2564635a2978b4085e2b6cc74bc89b874d98630124f3222ed41fa00c804f706a",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
+        "type": "model-count",
         "parameters": {
-          "phase": "fight"
+          "subject": "this-unit",
+          "keyword": "DARK DISCIPLE",
+          "min": 1
         }
       },
       "effect": {
-        "type": "mortal-wounds",
-        "target": "defender",
-        "modifier": {
-          "count": 1
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "matches",
+            "parameters": {
+              "subject": "selected-unit",
+              "filter": {
+                "engaged_with": "this-unit"
+              }
+            }
+          }
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "dice-table",
+              "dice": "D6",
+              "outcomes": [
+                {
+                  "results": [
+                    1
+                  ],
+                  "effect": {
+                    "type": "no-effect"
+                  }
+                },
+                {
+                  "results": [
+                    2,
+                    3,
+                    4,
+                    5
+                  ],
+                  "effect": {
+                    "type": "mortal-wounds",
+                    "target": "selected-unit",
+                    "modifier": {
+                      "count": 1
+                    }
+                  }
+                },
+                {
+                  "results": [
+                    6
+                  ],
+                  "effect": {
+                    "type": "mortal-wounds",
+                    "target": "selected-unit",
+                    "modifier": {
+                      "count": "D3"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "destroy-models",
+              "target": {
+                "level": "model",
+                "member_of": "this-unit",
+                "all_of": [
+                  "DARK DISCIPLE"
+                ]
+              },
+              "modifier": {
+                "count": 1
+              }
+            }
+          ]
         }
       }
     },
@@ -1874,8 +1949,18 @@
       "dark-apostle"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "chaos-space-marines"
+    "behavior": "reactive",
+    "faction_id": "chaos-space-marines",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "mind-breaking-mutations-chaos-space-marines",

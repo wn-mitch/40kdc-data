@@ -1582,15 +1582,98 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "7ca1fe15323ee623f2d97e41d9c954e408e188b57245461bdd9d98a06b9bd952",
     "version": "2025-q3",
     "effect": {
-      "type": "mortal-wounds",
-      "target": "defender",
-      "modifier": {
-        "count": "D3"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "this-model",
+          "filter": {
+            "within": {
+              "of": {
+                "owner": "enemy"
+              },
+              "range": {
+                "inches": 3
+              }
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy",
+            "within": {
+              "range": {
+                "inches": 3
+              },
+              "of": "this-model"
+            }
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "destroy-models",
+              "target": "this-model",
+              "modifier": {
+                "count": 1
+              }
+            },
+            {
+              "type": "dice-table",
+              "dice": "D6",
+              "outcomes": [
+                {
+                  "results": [
+                    1
+                  ],
+                  "effect": {
+                    "type": "no-effect"
+                  }
+                },
+                {
+                  "results": [
+                    2,
+                    3,
+                    4,
+                    5
+                  ],
+                  "effect": {
+                    "type": "mortal-wounds",
+                    "target": "selected-unit",
+                    "modifier": {
+                      "count": "D3"
+                    }
+                  }
+                },
+                {
+                  "results": [
+                    6
+                  ],
+                  "effect": {
+                    "type": "mortal-wounds",
+                    "target": "selected-unit",
+                    "modifier": {
+                      "count": "D6"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
       }
     },
     "scope": {
@@ -1600,8 +1683,20 @@
       "cyclops-demolition-vehicle"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "astra-militarum"
+    "behavior": "reactive",
+    "faction_id": "astra-militarum",
+    "trigger": [
+      {
+        "event": "move-ended",
+        "subject": "this-model"
+      },
+      {
+        "event": "move-ended",
+        "subject": {
+          "owner": "enemy"
+        }
+      }
+    ]
   },
   {
     "ability_id": "unstable-payload-astra-militarum",
