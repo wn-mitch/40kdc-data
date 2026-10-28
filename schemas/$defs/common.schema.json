@@ -1119,7 +1119,9 @@
           "enum": [
             "your-territory",
             "enemy-territory",
-            "no-mans-land"
+            "no-mans-land",
+            "your-deployment-zone",
+            "enemy-deployment-zone"
           ]
         },
         "controlled_by": {
@@ -1633,9 +1635,10 @@
         "tactical",
         "combat",
         "emergency",
-        "assault"
+        "assault",
+        "shock"
       ],
-      "description": "A move type's named mode: a Fall Back's ordered retreat or desperate escape, a rapid, combat, assault or emergency disembarkation."
+      "description": "A move type's named mode: a Fall Back's ordered retreat or desperate escape, a rapid, combat, assault, emergency or shock disembarkation."
     },
     "ability-roll": {
       "type": "object",

@@ -3071,7 +3071,7 @@
           "duration": "phase",
           "effect": {
             "type": "move-modifier",
-            "target": "this-unit",
+            "target": "event-subject",
             "modifier": {
               "advance": "fixed-6"
             }
@@ -3082,7 +3082,7 @@
           "duration": "turn",
           "effect": {
             "type": "weapon-ability-grant",
-            "target": "this-unit",
+            "target": "event-subject",
             "modifier": {
               "keywords": [
                 {

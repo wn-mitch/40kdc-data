@@ -12,6 +12,7 @@ import {
   weaponRollScope, type Ctx,
   isRatingRef,
 } from "./effect-words.js";
+import { describeCondition, type Condition } from "./condition.js";
 import type { P } from "./condition-refs.js";
 import { selectionBinding, selectUnitsSubject } from "./effect-bind.js";
 import { expiryTrail } from "./expiry.js";
@@ -403,7 +404,20 @@ function targeting(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
     return `${what}${m.by != null ? ` made by ${who}` : ""} that target ${one} must target ${to} instead${m.if_eligible === true ? `, if ${to} is an eligible target` : ""}`;
   }
   const except = m.except === "core-stratagems" ? " (Core Stratagems can still target it)" : "";
+  // "cannot target enemy units … if the target unit was engaged with this unit at the start of the turn".
+  if (m.target_condition != null) {
+    const condition = describeCondition(asTargetCandidate(m.target_condition) as Condition);
+    return `${who} ${verb} ${whom.replace(/^all /, "")}${kind}${range}${unless}${except} if ${condition}`;
+  }
   return `${who} ${verb} ${whom}${kind}${range}${unless}${except}`;
+}
+
+/** A target_condition's this-unit is the unit checked as a target: it reads as the target unit (defender). */
+function asTargetCandidate(node: unknown): unknown {
+  if (node === "this-unit") return "defender";
+  if (Array.isArray(node)) return node.map(asTargetCandidate);
+  if (node === null || typeof node !== "object") return node;
+  return Object.fromEntries(Object.entries(node as Record<string, unknown>).map(([key, value]) => [key, asTargetCandidate(value)]));
 }
 
 function countsAs(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
@@ -437,7 +451,8 @@ function ruleState(m: Record<string, unknown>, subj: string): string {
   }
   const granted = m.direction === "granted";
   const rule = jstr(m.rule);
-  if (m.rule_kind === "faction-rule") return granted ? `${subj} ${v(subj, "gains")} ${abilityLabel(m.rule)}` : `${subj} cannot use ${abilityLabel(m.rule)}`;
+  // any_army_faction: the granted faction rule works whatever the army's faction is.
+  if (m.rule_kind === "faction-rule") return granted ? `${subj} ${v(subj, "gains")} ${abilityLabel(m.rule)}${m.any_army_faction === true ? ", whatever your Army Faction is" : ""}` : `${subj} cannot use ${abilityLabel(m.rule)}`;
   if (rule === "overwatch-against-bearer") return `your opponent ${granted ? "can" : "cannot"} target ${subj} with Overwatch`;
   // The attacks of a bound shooting event never count against Hidden (schema: suppressed only).
   if (m.attacks != null && rule === "attacking-ends-hidden") return `those attacks do not stop ${subj} from being hidden`;

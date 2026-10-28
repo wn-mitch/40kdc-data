@@ -1,4 +1,4 @@
-# MFM dataslates — APPLIED
+# MFM dataslates — DRY RUN
 
 Current dataslate: `11th/mfm-995`.
 
@@ -15,10 +15,10 @@ dump confirmation.
 | wargear-options | 0 | 0 | 1234 | 0 |
 | leader-attachments | 0 | 0 | 283 | 8 |
 | enhancements | 0 | 0 | 890 | 0 |
-| detachments | 0 | 0 | 162 | 295 |
-| stratagems | 0 | 0 | 1029 | 284 |
-| abilities | 0 | 0 | 3616 | 919 |
-| phase-mappings | 0 | 0 | 1126 | 455 |
+| detachments | 0 | 0 | 163 | 294 |
+| stratagems | 0 | 0 | 1030 | 283 |
+| abilities | 0 | 1 | 3620 | 914 |
+| phase-mappings | 0 | 1 | 1126 | 454 |
 | resource-pools | 0 | 0 | 0 | 6 |
 
 ## Abilities by faction
@@ -30,22 +30,22 @@ dump confirmation.
 | adeptus-astartes | 0 | 0 | 208 | 42 |
 | adeptus-custodes | 0 | 0 | 138 | 20 |
 | adeptus-mechanicus | 0 | 0 | 137 | 30 |
-| aeldari | 0 | 0 | 241 | 59 |
+| aeldari | 0 | 0 | 243 | 57 |
 | agents-of-the-imperium | 0 | 0 | 96 | 42 |
 | astra-militarum | 0 | 0 | 193 | 58 |
 | black-templars | 0 | 0 | 50 | 13 |
 | blood-angels | 0 | 0 | 49 | 12 |
-| chaos-daemons | 0 | 0 | 160 | 35 |
+| chaos-daemons | 0 | 0 | 161 | 34 |
 | chaos-knights | 0 | 0 | 83 | 27 |
 | chaos-space-marines | 0 | 0 | 220 | 61 |
 | dark-angels | 0 | 0 | 59 | 18 |
 | death-guard | 0 | 0 | 122 | 38 |
 | deathwatch | 0 | 0 | 31 | 5 |
 | drukhari | 0 | 0 | 125 | 39 |
-| emperors-children | 0 | 0 | 119 | 27 |
+| emperors-children | 0 | 1 | 118 | 27 |
 | genestealer-cults | 0 | 0 | 115 | 32 |
 | grey-knights | 0 | 0 | 120 | 14 |
-| imperial-fists | 0 | 0 | 7 | 4 |
+| imperial-fists | 0 | 0 | 8 | 3 |
 | imperial-knights | 0 | 0 | 89 | 29 |
 | iron-hands | 0 | 0 | 9 | 2 |
 | leagues-of-votann | 0 | 0 | 127 | 28 |
@@ -55,7 +55,7 @@ dump confirmation.
 | salamanders | 0 | 0 | 6 | 5 |
 | space-wolves | 0 | 0 | 74 | 13 |
 | tau-empire | 0 | 0 | 134 | 32 |
-| thousand-sons | 0 | 0 | 119 | 39 |
+| thousand-sons | 0 | 0 | 120 | 38 |
 | tyranids | 0 | 0 | 150 | 36 |
 | ultramarines | 0 | 0 | 10 | 1 |
 | white-scars | 0 | 0 | 11 | 0 |
@@ -89,10 +89,10 @@ dump confirmation.
 | adeptus-mechanicus | stub | 16 |
 | adeptus-mechanicus | unpublished | 4 |
 | adeptus-mechanicus | verified | 137 |
-| aeldari | digest-differs | 9 |
-| aeldari | stub | 28 |
+| aeldari | digest-differs | 8 |
+| aeldari | stub | 27 |
 | aeldari | unpublished | 22 |
-| aeldari | verified | 241 |
+| aeldari | verified | 243 |
 | agents-of-the-imperium | ambiguous-source | 1 |
 | agents-of-the-imperium | digest-differs | 11 |
 | agents-of-the-imperium | stub | 18 |
@@ -110,10 +110,10 @@ dump confirmation.
 | blood-angels | stub | 4 |
 | blood-angels | unpublished | 1 |
 | blood-angels | verified | 49 |
-| chaos-daemons | digest-differs | 4 |
+| chaos-daemons | digest-differs | 3 |
 | chaos-daemons | stub | 17 |
 | chaos-daemons | unpublished | 14 |
-| chaos-daemons | verified | 160 |
+| chaos-daemons | verified | 161 |
 | chaos-knights | digest-differs | 5 |
 | chaos-knights | unpublished | 22 |
 | chaos-knights | verified | 83 |
@@ -139,8 +139,8 @@ dump confirmation.
 | drukhari | unpublished | 10 |
 | drukhari | verified | 125 |
 | emperors-children | digest-differs | 7 |
-| emperors-children | unpublished | 20 |
-| emperors-children | verified | 119 |
+| emperors-children | unpublished | 21 |
+| emperors-children | verified | 118 |
 | genestealer-cults | digest-differs | 6 |
 | genestealer-cults | stub | 14 |
 | genestealer-cults | unpublished | 12 |
@@ -149,8 +149,7 @@ dump confirmation.
 | grey-knights | unpublished | 3 |
 | grey-knights | verified | 120 |
 | imperial-fists | digest-differs | 3 |
-| imperial-fists | stub | 1 |
-| imperial-fists | verified | 7 |
+| imperial-fists | verified | 8 |
 | imperial-knights | digest-differs | 6 |
 | imperial-knights | stub | 13 |
 | imperial-knights | unpublished | 10 |
@@ -186,9 +185,9 @@ dump confirmation.
 | tau-empire | unpublished | 24 |
 | tau-empire | verified | 134 |
 | thousand-sons | digest-differs | 8 |
-| thousand-sons | stub | 4 |
+| thousand-sons | stub | 3 |
 | thousand-sons | unpublished | 27 |
-| thousand-sons | verified | 119 |
+| thousand-sons | verified | 120 |
 | tyranids | digest-differs | 5 |
 | tyranids | stub | 19 |
 | tyranids | unpublished | 12 |

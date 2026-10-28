@@ -598,8 +598,10 @@ def _rule_state(m: dict[str, Any], subj: str) -> str:
     granted = direction == "granted"
     rule = jstr(rule)
     if m.get("rule_kind") == "faction-rule":
+        # any_army_faction: the granted faction rule works whatever the army's faction is.
+        any_faction = ", whatever your Army Faction is" if m.get("any_army_faction") is True else ""
         return (
-            f"{subj} {v(subj, 'gains')} {ability_label(m.get('rule'))}"
+            f"{subj} {v(subj, 'gains')} {ability_label(m.get('rule'))}{any_faction}"
             if granted
             else f"{subj} cannot use {ability_label(m.get('rule'))}"
         )

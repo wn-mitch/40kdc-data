@@ -148,3 +148,28 @@ describe("a resource order across a labelled income paragraph", () => {
     expect(JSON.stringify(steps.slice(1))).not.toContain('"resource-gain"');
   });
 });
+
+describe("a condition and a duration in a later part of a compound ability", () => {
+  const text = "**FIXTURE** units from your army have the following ability:\n**Fixture Show:** Each time this unit is picked to fight, if this unit charged this turn, it can use this ability. If it does, until the end of the phase:\n■ This unit gets a fixture edge.\n■ Improve the Strength of this unit’s melee weapons by 1.";
+  const leaves = () => placed(text,
+    ["FIXTURE** units from your army", "unit-filter", { side: "friendly", keywords: ["FIXTURE"] }],
+    ["the following ability", "ability-record-grant", { subject: "antecedent", ability: "fixture-show" }],
+    ["Each time this unit is picked to fight", "event", { kind: "selected", to: "fight" }],
+    ["if this unit charged this turn", "unit-activity", { activities: ["charged-this-turn"], subject: "this-unit", negated: false }],
+    ["it can use this ability", "optional-use", { who: "this-unit" }],
+    ["until the end of the phase", "duration", { endpoint: "end-of-phase" }],
+    ["This unit gets a fixture edge", "characteristic-modifier", { subject: "this-unit", characteristics: ["AP"], operation: "improve", value: 1, weapon_type: "melee" }],
+    ["Improve the Strength of this unit’s melee weapons by 1", "characteristic-modifier", { subject: "this-unit", characteristics: ["S"], operation: "improve", value: 1, weapon_type: "melee" }],
+  );
+
+  it("gates the part's moment, not only its first bullet, and lasts only that part, not the grant before it", () => {
+    const result = mechanics(text, leaves(), "fixture-show");
+    expect(result.scope).toEqual({ duration: "permanent" });
+    const [part] = parts(result.effect);
+    expect(part!.trigger.condition).toEqual({ type: "happened", parameters: { event: "move-ended", filter: { move_types: ["charge"] }, window: "turn" } });
+    expect(part!.duration).toBe("phase");
+    // Both bullets sit in the part bare: no conditional wraps only the first.
+    expect(part!.effect.steps.map((step: Record<string, unknown>) => step.type)).toEqual(["stat-modifier", "stat-modifier"]);
+    expect(result.effect.steps[0].type).toBe("ability-grant");
+  });
+});

@@ -579,7 +579,7 @@ export type AbilityDSLCondition1 = SimpleCondition | CompoundCondition;
  */
 export type RollSelector = ("any" | "all") | RollKind;
 /**
- * A move type's named mode: a Fall Back's ordered retreat or desperate escape, a rapid, combat, assault or emergency disembarkation.
+ * A move type's named mode: a Fall Back's ordered retreat or desperate escape, a rapid, combat, assault, emergency or shock disembarkation.
  *
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "move-mode".
@@ -594,7 +594,8 @@ export type MoveMode =
   | "tactical"
   | "combat"
   | "emergency"
-  | "assault";
+  | "assault"
+  | "shock";
 /**
  * Which player a unit, objective or resource belongs to.
  *
@@ -932,6 +933,10 @@ export type AbilityDSLCondition5 = SimpleCondition | CompoundCondition;
  */
 export type AbilityDSLCondition6 = SimpleCondition | CompoundCondition;
 /**
+ * A predicate, or and/or/not over predicates. Every predicate sits on one axis (clock, army, identity, composition, state, history, position, board, attack, visibility, designation, resource) and names the unit it tests with `subject` (a unit-ref, default this-unit). Negation is only the `not` operator.
+ */
+export type AbilityDSLCondition7 = SimpleCondition | CompoundCondition;
+/**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "transport-occupancy-subject-kind".
  */
@@ -950,7 +955,7 @@ export type TransportEligibility1 = {
 /**
  * A predicate, or and/or/not over predicates. Every predicate sits on one axis (clock, army, identity, composition, state, history, position, board, attack, visibility, designation, resource) and names the unit it tests with `subject` (a unit-ref, default this-unit). Negation is only the `not` operator.
  */
-export type AbilityDSLCondition7 = SimpleCondition | CompoundCondition;
+export type AbilityDSLCondition8 = SimpleCondition | CompoundCondition;
 /**
  * AND set: the target must carry every keyword listed here.
  */
@@ -962,7 +967,7 @@ export type KeywordList10 = Keyword[];
 /**
  * A predicate, or and/or/not over predicates. Every predicate sits on one axis (clock, army, identity, composition, state, history, position, board, attack, visibility, designation, resource) and names the unit it tests with `subject` (a unit-ref, default this-unit). Negation is only the `not` operator.
  */
-export type AbilityDSLCondition8 = SimpleCondition | CompoundCondition;
+export type AbilityDSLCondition9 = SimpleCondition | CompoundCondition;
 /**
  * Game modes this stratagem is legal or authored for; absent implies matched-play.
  *
@@ -1044,7 +1049,7 @@ export type AbilityUsage = AbilityUsageLimit | [AbilityUsageLimit, AbilityUsageL
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "condition".
  */
-export type AbilityDSLCondition9 = SimpleCondition | CompoundCondition;
+export type AbilityDSLCondition10 = SimpleCondition | CompoundCondition;
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "rule-state-core-rule-slug".
@@ -1522,7 +1527,7 @@ export interface ObjectiveFilter {
    * The friendly or the enemy home objective.
    */
   home_of?: "friendly" | "enemy";
-  territory?: "your-territory" | "enemy-territory" | "no-mans-land";
+  territory?: "your-territory" | "enemy-territory" | "no-mans-land" | "your-deployment-zone" | "enemy-deployment-zone";
   controlled_by?: Owner;
   designated?: DesignationId;
   /**
@@ -1934,7 +1939,8 @@ export interface EventFilter {
     | "tactical"
     | "combat"
     | "emergency"
-    | "assault";
+    | "assault"
+    | "shock";
   roll?: RollKind;
   result?: RollOutcome;
   from?: "strategic-reserves" | "deep-strike" | "cult-ambush" | "transport";
@@ -3103,7 +3109,7 @@ export interface SecondaryCard {
       use_limit_scope?: "per-turn" | "per-game";
       completes?: AbilityDSLCondition3;
       effect?: AbilityEffect;
-      restrictions?: AbilityDSLCondition7;
+      restrictions?: AbilityDSLCondition8;
     },
     ...{
       /**
@@ -3137,7 +3143,7 @@ export interface SecondaryCard {
       use_limit_scope?: "per-turn" | "per-game";
       completes?: AbilityDSLCondition3;
       effect?: AbilityEffect;
-      restrictions?: AbilityDSLCondition7;
+      restrictions?: AbilityDSLCondition8;
     }[]
   ];
   /**
@@ -4613,6 +4619,7 @@ export interface TargetingEffect {
      */
     except?: "core-stratagems";
     weapons?: WeaponScope;
+    target_condition?: AbilityDSLCondition5;
   };
   scaling?: Scaling;
 }
@@ -4973,7 +4980,7 @@ export interface MoveEffect {
       of?: PlaceRef;
       wholly?: true;
     };
-    ends_when?: AbilityDSLCondition5;
+    ends_when?: AbilityDSLCondition6;
     keeps_eligible?: true;
     ends_nearest?: EndsNearest1;
   };
@@ -5101,11 +5108,18 @@ export interface MoveModifierEffect {
     advance?: "fixed-6" | "fixed-8";
     end_on_terrain?: true;
     ends_nearest?: EndsNearest2;
-    ends_when?: AbilityDSLCondition6;
+    ends_when?: AbilityDSLCondition7;
     /**
      * Only with ends_when: the ends_when condition replaces the usual end threshold ("instead of more than 8\"") rather than adding to it. Without this flag the condition adds to the usual rules.
      */
     ends_when_replaces?: true;
+    /**
+     * The unit can select a mode of its move (applies_to_moves) it otherwise could not: modes "any" is every mode of that move, a list names the modes. ignore_before_moving: the selection disregards the move's Before Moving restrictions ("regardless of that consolidation move's Before Moving restrictions").
+     */
+    mode_choice?: {
+      modes: "any" | [MoveMode, ...MoveMode[]];
+      ignore_before_moving?: true;
+    };
   };
   scaling?: Scaling;
 }
@@ -6366,7 +6380,7 @@ export interface StratagemTargetRestriction {
    * The target is not freely chosen: it is the unit the WHEN moment names ("that unit"), or the unit the triggering enemy attacked.
    */
   bound_to?: "triggering-unit" | "attacked-unit";
-  eligibility?: AbilityDSLCondition8;
+  eligibility?: AbilityDSLCondition9;
   notes?: string;
   /**
    * The exclusive target mode this target belongs to. Targets with the same mode are chosen together; a and b are alternatives. Set on every target when the Stratagem has modes (see target_restrictions).

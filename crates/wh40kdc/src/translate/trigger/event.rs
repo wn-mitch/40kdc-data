@@ -363,8 +363,9 @@ pub(crate) fn event_phrase(t: &P) -> String {
             }
             if is(f, "to", "move") && f.get("move_types").is_some_and(Value::is_array) {
                 return format!(
-                    "when {who} is selected to {}",
-                    move_kinds(f.get("move_types"))
+                    "when {who} is selected to {}{}",
+                    move_kinds(f.get("move_types")),
+                    selected_mode(f)
                 );
             }
             let to = if is(f, "to", "attack") {
@@ -738,4 +739,21 @@ pub(crate) fn collapse_trailing_unit(s: String) -> String {
         }
     }
     s
+}
+
+/// " using the Tactical Disembarkation rules": the named mode of the move a unit is selected to make.
+fn selected_mode(f: &P) -> String {
+    let Some(mode) = nn(f, "mode") else {
+        return String::new();
+    };
+    let mode = title_case(&st(Some(mode)));
+    let disembark = f
+        .get("move_types")
+        .and_then(Value::as_array)
+        .is_some_and(|l| l.iter().any(|x| x.as_str() == Some("disembark")));
+    if disembark {
+        format!(" using the {mode} Disembarkation rules")
+    } else {
+        format!(" using the {mode} rules")
+    }
 }

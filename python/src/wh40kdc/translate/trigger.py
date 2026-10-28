@@ -291,7 +291,7 @@ def _event_phrase(t: AbilityTrigger) -> str:
         if to == "observe":
             return f"each time {who} is selected as an Observer unit"
         if to == "move" and isinstance(f.get("move_types"), list):
-            return f"when {who} is selected to {move_kinds(f['move_types'])}"
+            return f"when {who} is selected to {move_kinds(f['move_types'])}{_selected_mode(f)}"
         verb = "shoot or fight" if to == "attack" else dekebab(_str(to))
         return f"when {who} is selected to {verb}"
     if event == "targets-selected":
@@ -686,3 +686,13 @@ def describe_trigger(t: AbilityTrigger) -> str:
     if _truthy(t.get("optional")):
         s += ", you may use this ability"
     return s
+
+
+def _selected_mode(f: dict[str, Any]) -> str:
+    """' using the Tactical Disembarkation rules': the named mode of the move a unit is selected to
+    make."""
+    if f.get("mode") is None:
+        return ""
+    mode = title_case(_str(f["mode"]))
+    named = f"{mode} Disembarkation" if "disembark" in f["move_types"] else mode
+    return f" using the {named} rules"

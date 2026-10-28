@@ -24501,13 +24501,13 @@ for MoveEffectModifierPassthroughItemVariant1Kind {
         value.parse()
     }
 }
-///A move type's named mode: a Fall Back's ordered retreat or desperate escape, a rapid, combat, assault or emergency disembarkation.
+///A move type's named mode: a Fall Back's ordered retreat or desperate escape, a rapid, combat, assault, emergency or shock disembarkation.
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "A move type's named mode: a Fall Back's ordered retreat or desperate escape, a rapid, combat, assault or emergency disembarkation.",
+///  "description": "A move type's named mode: a Fall Back's ordered retreat or desperate escape, a rapid, combat, assault, emergency or shock disembarkation.",
 ///  "enum": [
 ///    "ordered-retreat",
 ///    "desperate-escape",
@@ -24518,7 +24518,8 @@ for MoveEffectModifierPassthroughItemVariant1Kind {
 ///    "tactical",
 ///    "combat",
 ///    "emergency",
-///    "assault"
+///    "assault",
+///    "shock"
 ///  ]
 ///}
 /// ```
@@ -24556,6 +24557,8 @@ pub enum MoveMode {
     Emergency,
     #[serde(rename = "assault")]
     Assault,
+    #[serde(rename = "shock")]
+    Shock,
 }
 impl ::std::fmt::Display for MoveMode {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
@@ -24570,6 +24573,7 @@ impl ::std::fmt::Display for MoveMode {
             Self::Combat => f.write_str("combat"),
             Self::Emergency => f.write_str("emergency"),
             Self::Assault => f.write_str("assault"),
+            Self::Shock => f.write_str("shock"),
         }
     }
 }
@@ -24589,6 +24593,7 @@ impl ::std::str::FromStr for MoveMode {
             "combat" => Ok(Self::Combat),
             "emergency" => Ok(Self::Emergency),
             "assault" => Ok(Self::Assault),
+            "shock" => Ok(Self::Shock),
             _ => Err("invalid value".into()),
         }
     }
@@ -24678,6 +24683,34 @@ impl ::std::convert::TryFrom<::std::string::String> for MoveMode {
 ///    "maximum": {
 ///      "description": "The selected Advance has no maximum distance. This is an explicit distance-ceiling override, not an additional move.",
 ///      "const": "unlimited"
+///    },
+///    "mode_choice": {
+///      "description": "The unit can select a mode of its move (applies_to_moves) it otherwise could not: modes \"any\" is every mode of that move, a list names the modes. ignore_before_moving: the selection disregards the move's Before Moving restrictions (\"regardless of that consolidation move's Before Moving restrictions\").",
+///      "type": "object",
+///      "required": [
+///        "modes"
+///      ],
+///      "properties": {
+///        "ignore_before_moving": {
+///          "const": true
+///        },
+///        "modes": {
+///          "oneOf": [
+///            {
+///              "const": "any"
+///            },
+///            {
+///              "type": "array",
+///              "items": {
+///                "$ref": "#/$defs/move-mode"
+///              },
+///              "minItems": 1,
+///              "uniqueItems": true
+///            }
+///          ]
+///        }
+///      },
+///      "additionalProperties": false
 ///    },
 ///    "no_end_in_engagement": {
 ///      "const": true
@@ -24774,6 +24807,8 @@ pub struct MoveModifierEffectModifier {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub maximum: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub mode_choice: ::std::option::Option<MoveModifierEffectModifierModeChoice>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub no_end_in_engagement: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub passthrough: ::std::option::Option<
@@ -24792,6 +24827,7 @@ impl ::std::default::Default for MoveModifierEffectModifier {
             ends_when_replaces: Default::default(),
             ignore_vertical: Default::default(),
             maximum: Default::default(),
+            mode_choice: Default::default(),
             no_end_in_engagement: Default::default(),
             passthrough: Default::default(),
         }
@@ -25042,6 +25078,87 @@ impl ::std::convert::From<Quantity> for MoveModifierEffectModifierDistanceBonus 
 impl ::std::convert::From<i64> for MoveModifierEffectModifierDistanceBonus {
     fn from(value: i64) -> Self {
         Self::Integer(value)
+    }
+}
+///The unit can select a mode of its move (applies_to_moves) it otherwise could not: modes "any" is every mode of that move, a list names the modes. ignore_before_moving: the selection disregards the move's Before Moving restrictions ("regardless of that consolidation move's Before Moving restrictions").
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "The unit can select a mode of its move (applies_to_moves) it otherwise could not: modes \"any\" is every mode of that move, a list names the modes. ignore_before_moving: the selection disregards the move's Before Moving restrictions (\"regardless of that consolidation move's Before Moving restrictions\").",
+///  "type": "object",
+///  "required": [
+///    "modes"
+///  ],
+///  "properties": {
+///    "ignore_before_moving": {
+///      "const": true
+///    },
+///    "modes": {
+///      "oneOf": [
+///        {
+///          "const": "any"
+///        },
+///        {
+///          "type": "array",
+///          "items": {
+///            "$ref": "#/$defs/move-mode"
+///          },
+///          "minItems": 1,
+///          "uniqueItems": true
+///        }
+///      ]
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct MoveModifierEffectModifierModeChoice {
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub ignore_before_moving: ::std::option::Option<::serde_json::Value>,
+    pub modes: MoveModifierEffectModifierModeChoiceModes,
+}
+///`MoveModifierEffectModifierModeChoiceModes`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "oneOf": [
+///    {
+///      "const": "any"
+///    },
+///    {
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/move-mode"
+///      },
+///      "minItems": 1,
+///      "uniqueItems": true
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(untagged)]
+pub enum MoveModifierEffectModifierModeChoiceModes {
+    Variant0(::serde_json::Value),
+    Variant1(Vec<MoveMode>),
+}
+impl ::std::convert::From<::serde_json::Value>
+for MoveModifierEffectModifierModeChoiceModes {
+    fn from(value: ::serde_json::Value) -> Self {
+        Self::Variant0(value)
+    }
+}
+impl ::std::convert::From<Vec<MoveMode>> for MoveModifierEffectModifierModeChoiceModes {
+    fn from(value: Vec<MoveMode>) -> Self {
+        Self::Variant1(value)
     }
 }
 ///`MoveModifierEffectModifierPassthroughItem`
@@ -27551,7 +27668,9 @@ pub struct OathStateConditionParameters {
 ///      "enum": [
 ///        "your-territory",
 ///        "enemy-territory",
-///        "no-mans-land"
+///        "no-mans-land",
+///        "your-deployment-zone",
+///        "enemy-deployment-zone"
 ///      ]
 ///    },
 ///    "within": {
@@ -27855,7 +27974,9 @@ impl<'de> ::serde::Deserialize<'de> for ObjectiveFilterSelectionVar {
 ///  "enum": [
 ///    "your-territory",
 ///    "enemy-territory",
-///    "no-mans-land"
+///    "no-mans-land",
+///    "your-deployment-zone",
+///    "enemy-deployment-zone"
 ///  ]
 ///}
 /// ```
@@ -27879,6 +28000,10 @@ pub enum ObjectiveFilterTerritory {
     EnemyTerritory,
     #[serde(rename = "no-mans-land")]
     NoMansLand,
+    #[serde(rename = "your-deployment-zone")]
+    YourDeploymentZone,
+    #[serde(rename = "enemy-deployment-zone")]
+    EnemyDeploymentZone,
 }
 impl ::std::fmt::Display for ObjectiveFilterTerritory {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
@@ -27886,6 +28011,8 @@ impl ::std::fmt::Display for ObjectiveFilterTerritory {
             Self::YourTerritory => f.write_str("your-territory"),
             Self::EnemyTerritory => f.write_str("enemy-territory"),
             Self::NoMansLand => f.write_str("no-mans-land"),
+            Self::YourDeploymentZone => f.write_str("your-deployment-zone"),
+            Self::EnemyDeploymentZone => f.write_str("enemy-deployment-zone"),
         }
     }
 }
@@ -27898,6 +28025,8 @@ impl ::std::str::FromStr for ObjectiveFilterTerritory {
             "your-territory" => Ok(Self::YourTerritory),
             "enemy-territory" => Ok(Self::EnemyTerritory),
             "no-mans-land" => Ok(Self::NoMansLand),
+            "your-deployment-zone" => Ok(Self::YourDeploymentZone),
+            "enemy-deployment-zone" => Ok(Self::EnemyDeploymentZone),
             _ => Err("invalid value".into()),
         }
     }
@@ -49284,6 +49413,10 @@ impl<'de> ::serde::Deserialize<'de> for TargetProfileName {
 ///        }
 ///      ]
 ///    },
+///    "target_condition": {
+///      "description": "The restriction covers only targets that meet this condition (\"a unit it was within Engagement Range of at the start of the turn\"). this-unit is the unit being checked as a target; ability-unit is the unit with the ability.",
+///      "$ref": "#/$defs/condition"
+///    },
 ///    "to": {
 ///      "description": "redirect: attacks (or Stratagems) that target `target` must target this unit instead.",
 ///      "$ref": "#/$defs/unit-ref"
@@ -49321,6 +49454,9 @@ pub struct TargetingEffectModifier {
     pub stratagem: ::std::option::Option<EntityId>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub target: ::std::option::Option<TargetingEffectModifierTarget>,
+    ///The restriction covers only targets that meet this condition ("a unit it was within Engagement Range of at the start of the turn"). this-unit is the unit being checked as a target; ability-unit is the unit with the ability.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub target_condition: ::std::option::Option<Condition>,
     ///redirect: attacks (or Stratagems) that target `target` must target this unit instead.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub to: ::std::option::Option<UnitRef>,

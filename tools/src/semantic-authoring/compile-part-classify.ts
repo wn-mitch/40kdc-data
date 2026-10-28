@@ -158,7 +158,7 @@ export function classifyLeaves(given: CompileLeaf[], places: Placement[], contai
   const pairs = pairIndexes(list);
   const pairCandidates = pairs ? candidateIndexes(list, pairs.inner, sameSentence) : [];
   if (pairs) {
-    const bound = bindPairEligibility(list, pairs, pairCandidates);
+    const bound = bindPairEligibility(list, pairs, pairCandidates, sourceText);
     if (bound.refusal) errors.push(bound.refusal);
     list = bound.leaves;
   }
@@ -188,6 +188,15 @@ export function classifyLeaves(given: CompileLeaf[], places: Placement[], contai
   // bonus in the same clause, which is available regardless.
   const endClauses = new Set(list.flatMap((leaf, at) => leaf.family_id === "move-end-nearest" || leaf.family_id === "move-end-waiver" ? [places[at]!.clause] : []));
   const perRecipient = !list.some((leaf) => leaf.family_id === "aura-range" || leaf.family_id === "for-each-unit-select");
+  // The triggers of the moment a condition follows in its own source sentence, with no effect between, when an
+  // effect comes before that moment: the moment opens a later part (compile-part-bindings.ts partStarts).
+  const anyEffectBefore = (index: number) => list.slice(0, index).some((leaf) => leaf.role === "EFFECT");
+  const partMomentsBefore = (index: number): number[] => {
+    const moment = [...triggerIndexes].reverse().find((at) => at < index);
+    if (moment === undefined || rawOf[moment] !== rawOf[index] || !anyEffectBefore(moment)) return [];
+    if (list.slice(moment + 1, index).some((leaf) => leaf.role === "EFFECT")) return [];
+    return triggerIndexes.flatMap((at, position) => at === moment ? [position] : []);
+  };
   list.forEach((leaf, index) => {
     if (trailingTestCondition(list, index, sourceText) === "attach") {
       attachedAt.add(index + 1);
@@ -220,6 +229,13 @@ export function classifyLeaves(given: CompileLeaf[], places: Placement[], contai
       } else if (node !== "selected" && leading && sourceText !== undefined && opensIfSentence(sourceText, list[index]!)
         && list.some((other, at) => at > index && other.role === "COMBINATOR" && other.parameters.choice === true && places[at]!.clause !== clause && places[at]!.sentence !== sentence)) {
         clauseGates.set(clause, [...(clauseGates.get(clause) ?? []), node]);
+      // "…: Each time this unit is selected to fight, if it charged this turn, it can use this ability. If it does, ■ A ■ B":
+      // a condition right after a moment that opens a later part decides that moment, so every effect of its part.
+      } else if (node !== "selected" && leading && partMomentsBefore(index).length) {
+        for (const at of partMomentsBefore(index)) {
+          const own = triggers[at]!.condition as Node | undefined;
+          triggers[at] = { ...triggers[at]!, condition: own ? { operator: "and", operands: [own, node] } : node };
+        }
       } else if (!effectSentences.has(sentence) || (sentence === firstSentence && leading)) {
         if (node === "selected") selectedGlobally = true;
         else global.push(node);

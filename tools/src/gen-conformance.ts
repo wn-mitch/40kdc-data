@@ -4055,9 +4055,46 @@ function genEffectTranslation(): void {
     })),
     { caseId: "fidelity/trigger-phase-filter-destroyed", trigger: { event: "destroyed", subject: "this-unit", object: { owner: "enemy" }, filter: { phase: "fight" } },
       effect: { type: "cp-gain", target: "this-model", modifier: { amount: 1 } } },
+    // A faction rule granted whatever the army's faction is.
+    { caseId: "fidelity/rule-state-faction-rule-any-army-faction", effect: { type: "rule-state", target: "this-unit", modifier: { direction: "granted", rule_kind: "faction-rule", rule: "example-pact-rule", any_army_faction: true } } },
     // A destruction resolved once the attacking unit has finished its attacks.
     { caseId: "fidelity/trigger-model-destroyed-after-attacks", trigger: { event: "model-destroyed", object: { owner: "friendly", all_of: ["FABLED SPRITE"], level: "model", member_of: "this-unit" }, filter: { timing: "after-attacks" } },
       effect: { type: "cp-gain", target: "this-model", modifier: { amount: 1 } } },
+    // One or more of this unit's own models selected after an enemy unit: a roll per model, and wounds on the bound enemy unit.
+    { caseId: "fidelity/own-models-after-unit-selection", effect: { type: "select-units",
+      selector: { filter: { owner: "enemy" }, count: { min: 1, max: 1 }, eligibility: { type: "matches", parameters: { subject: "selected-unit", filter: { engaged_with: "this-unit" } } }, bind_as: "enemy" },
+      effect: { type: "select-units", selector: { filter: { owner: "friendly", all_of: ["EMBER SPRITE"], level: "model", member_of: "this-unit" }, count: { min: 1 }, bind_as: "sprites" },
+        effect: { type: "dice-gated", dice: "D6", threshold: 4, comparison: "gte", on_fail: null, on_success: { type: "sequence", steps: [
+          { type: "destroy-models", target: "selected-unit", modifier: { count: 1 } },
+          { type: "mortal-wounds", target: { selection_var: "enemy" }, modifier: { count: 1 } },
+        ] } } } } },
+    // A consolidation mode the unit could not otherwise select, regardless of the move's Before Moving restrictions.
+    { caseId: "fidelity/move-modifier-mode-choice-any", effect: { type: "move-modifier", target: "this-unit", modifier: { applies_to_moves: ["consolidation"], mode_choice: { modes: "any", ignore_before_moving: true } } } },
+    // A targeting restriction that covers only targets meeting a condition (this-unit is the checked target).
+    { caseId: "fidelity/targeting-target-condition-engaged-at-turn-start", effect: { type: "targeting", target: "this-unit", modifier: { by: "this-unit", may: "cannot-target", kind: "attack", target: { owner: "enemy" },
+      target_condition: { type: "unit-state", parameters: { subject: "this-unit", state: "engaged", with: "ability-unit", at: "turn-start" } } } } },
+    { caseId: "fidelity/targeting-target-condition-targeted-by-another", effect: { type: "targeting", target: "this-unit", modifier: { by: "this-unit", may: "cannot-target", kind: "attack", target: { owner: "enemy" },
+      target_condition: { type: "happened", parameters: { event: "targets-selected", subject: { owner: "any", excluding: "ability-unit" }, object: "this-unit", filter: { kind: "attack" }, window: "phase" } } } } },
+    // A named region declared with nothing reading it here (a producer-only named-region-state).
+    { caseId: "fidelity/named-region-producer-only", effect: { type: "conditional", condition: { type: "army-faction", parameters: { faction: "example-faction" } },
+      effect: { type: "named-region-state", target: { owner: "friendly" }, modifier: {
+        region_ref: { region_id: "the-fabled-glade", owner_faction: "example-faction" },
+        producer: { region_ref: { region_id: "the-fabled-glade", owner_faction: "example-faction" }, mode: "complete", parent_ref: null,
+          baseline: [{ region: { territory: "your-deployment-zone" }, duration: "permanent" }],
+          phase_extensions: [{ region: { territory: "no-mans-land" }, condition: { type: "controls", parameters: { by: "friendly", objective: { territory: "no-mans-land" }, proportion: { comparison: "gte", fraction: 0.5 } } },
+            trigger: { event: "phase-started" }, duration: "phase", evaluation: "snapshot-once" }],
+          additive_extensions: [] } } } } },
+    // Half the objective markers in the opponent's deployment zone, and those in your own.
+    { caseId: "fidelity/controls-objectives-in-deployment-zones", effect: { type: "conditional",
+      condition: { operator: "and", operands: [
+        { type: "controls", parameters: { by: "friendly", objective: { territory: "enemy-deployment-zone" }, proportion: { comparison: "gte", fraction: 0.5 } } },
+        { type: "controls", parameters: { by: "friendly", objective: { territory: "your-deployment-zone" }, count: { min: 1 } } },
+      ] },
+      effect: { type: "cp-gain", target: "this-model", modifier: { amount: 1 } } } },
+    // A unit selected to make a disembark move of a named mode.
+    { caseId: "fidelity/trigger-selected-disembark-mode", trigger: { event: "selected", subject: { owner: "friendly", all_of: ["FABLED SPRITE"], embarked_in: "this-unit" }, filter: { to: "move", move_types: ["disembark"], mode: "tactical" } },
+      effect: { type: "cp-gain", target: "this-model", modifier: { amount: 1 } } },
+    { caseId: "fidelity/move-modifier-mode-choice-named-beside-clause", effect: { type: "move-modifier", target: "this-unit", modifier: { applies_to_moves: ["consolidation"], no_end_in_engagement: true, mode_choice: { modes: ["objective"], ignore_before_moving: true } } } },
   ];
   for (const example of fidelityBoundaryCases) {
     const scope = { duration: "resolution" };

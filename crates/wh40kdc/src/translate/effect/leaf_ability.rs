@@ -5,7 +5,9 @@ use serde_json::Value;
 
 use super::leaf::incoming_lead;
 use super::words::*;
-use crate::translate::condition::{and_list, article, nn, obj, or_list, range_phrase, P};
+use crate::translate::condition::{
+    and_list, article, describe_condition_value, nn, obj, or_list, range_phrase, P,
+};
 use crate::translate::dekebab;
 
 /// A grant that prints the ability it gives (`modifier.definition`).
@@ -602,7 +604,27 @@ pub(super) fn targeting(m: &P, subj: &str, ctx: &Ctx) -> String {
     } else {
         ""
     };
+    // "cannot target enemy units … if the target unit was engaged with this unit at the start of the turn".
+    if let Some(c) = nn(m, "target_condition") {
+        let condition = describe_condition_value(&as_target_candidate(c));
+        let target = whom.strip_prefix("all ").unwrap_or(&whom);
+        return format!("{who} {verb} {target}{kind}{range}{unless}{except} if {condition}");
+    }
     format!("{who} {verb} {whom}{kind}{range}{unless}{except}")
+}
+
+/// A target_condition's this-unit is the unit checked as a target: it reads as the target unit (defender).
+fn as_target_candidate(node: &Value) -> Value {
+    match node {
+        Value::String(s) if s == "this-unit" => Value::String("defender".to_string()),
+        Value::Array(items) => Value::Array(items.iter().map(as_target_candidate).collect()),
+        Value::Object(map) => Value::Object(
+            map.iter()
+                .map(|(key, value)| (key.clone(), as_target_candidate(value)))
+                .collect(),
+        ),
+        other => other.clone(),
+    }
 }
 
 pub(super) fn counts_as(m: &P, subj: &str, ctx: &Ctx) -> String {
@@ -676,9 +698,15 @@ pub(super) fn rule_state(m: &P, subj: &str) -> String {
     let rule = jstr(m.get("rule"));
     let kind = sv(m, "rule_kind");
     if kind == Some("faction-rule") {
+        // any_army_faction: the granted faction rule works whatever the army's faction is.
+        let any_faction = if m.get("any_army_faction") == Some(&Value::Bool(true)) {
+            ", whatever your Army Faction is"
+        } else {
+            ""
+        };
         return if granted {
             format!(
-                "{subj} {} {}",
+                "{subj} {} {}{any_faction}",
                 v(subj, "gains"),
                 ability_label(m.get("rule"))
             )

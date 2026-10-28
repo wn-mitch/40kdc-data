@@ -10278,9 +10278,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "blue-horrors"
     ],
@@ -10288,11 +10287,84 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "subject": "selected-unit",
+            "filter": {
+              "engaged_with": "this-unit"
+            }
+          }
+        },
+        "bind_as": "enemy"
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "BRIMSTONE"
+            ],
+            "level": "model",
+            "member_of": "this-unit"
+          },
+          "count": {
+            "min": 1
+          },
+          "bind_as": "horrors"
+        },
+        "effect": {
+          "type": "dice-gated",
+          "dice": "D6",
+          "threshold": 4,
+          "comparison": "gte",
+          "on_success": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "destroy-models",
+                "target": "selected-unit",
+                "modifier": {
+                  "count": 1
+                }
+              },
+              {
+                "type": "mortal-wounds",
+                "target": {
+                  "selection_var": "enemy"
+                },
+                "modifier": {
+                  "count": 1
+                }
+              }
+            ]
+          },
+          "on_fail": null
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "fight"
+      },
+      "optional": true
+    },
+    "source_digest": "ddb4862deb8f7f0915e75a6de1011a638d494cf0d73c25b47f97a968e7bdb712"
   },
   {
     "ability_id": "horrors-are-pink-horrors-are-blue-where-once-there-was-one-now-there-are-two-thousand-sons",
@@ -10314,7 +10386,7 @@
         "type": "model-count",
         "parameters": {
           "subject": "this-unit",
-          "keyword": "PINK HORROR",
+          "keyword": "PINK",
           "max": 0
         }
       },
@@ -10334,7 +10406,7 @@
               "type": "model-count",
               "parameters": {
                 "subject": "this-unit",
-                "keyword": "PINK HORROR",
+                "keyword": "PINK",
                 "min": 1
               }
             },
@@ -10354,7 +10426,7 @@
               "type": "model-count",
               "parameters": {
                 "subject": "this-unit",
-                "keyword": "PINK HORROR",
+                "keyword": "PINK",
                 "min": 1
               }
             },
@@ -10809,8 +10881,8 @@
       "object": {
         "owner": "friendly",
         "any_of": [
-          "BLUE HORROR",
-          "PINK HORROR"
+          "BLUE",
+          "PINK"
         ],
         "level": "model",
         "member_of": "this-unit"
@@ -10871,7 +10943,7 @@
       "object": {
         "owner": "friendly",
         "all_of": [
-          "BLUE HORROR"
+          "BLUE"
         ],
         "level": "model",
         "member_of": "this-unit"
@@ -10902,7 +10974,7 @@
         "type": "model-count",
         "parameters": {
           "subject": "this-unit",
-          "keyword": "BLUE HORROR",
+          "keyword": "BLUE",
           "min": 1
         }
       },

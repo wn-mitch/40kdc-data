@@ -244,4 +244,23 @@ export const SELECTION_EXTENSIONS: readonly FamilyExtension[] = [
       return { ...previous({ ...rest, counts: "following-filter" }), counts: MODELS_EQUIPPED_WITH, wargear };
     },
   },
+  /**
+   * "select one or more X models": at least that many, with no upper bound.
+   */
+  {
+    family: "select-unit",
+    version: 7,
+    description: "As the previous version, plus at_least: at least count (1 without a count) are selected and there is no upper bound (\"select one or more X models\"). Not with up_to.",
+    schema: (previous) => withProperties(previous, { at_least: optional({ const: true }) }),
+    normalize: (input, previous) => {
+      const { at_least: atLeast, ...rest } = input;
+      if (atLeast === undefined) return previous(input);
+      if (atLeast !== true) throw new TypeError("select-unit.at_least is true or absent.");
+      if (rest.up_to !== undefined) throw new TypeError("select-unit.at_least is a lower bound; up_to is an upper one, so they cannot be combined.");
+      // "one or more": count 1 is the default, which the earlier versions refuse to have written out.
+      const { count, ...uncounted } = rest;
+      if (count === 1) return { ...previous(uncounted), at_least: true };
+      return { ...previous(rest), at_least: true };
+    },
+  },
 ];

@@ -1381,7 +1381,12 @@ function translateNamedRegionState(
 ): void {
   if (opts.perspective !== "attacker") return;
   const modifier = isObject(node.modifier) ? node.modifier : {};
-  const consumer = isObject(modifier.consumer) ? modifier.consumer : {};
+  // A producer-only state (a region declaration) gives no unit anything to apply.
+  if (!isObject(modifier.consumer)) {
+    out.unsupported.push({ reason: "named-region-state without a consumer declares a region only; it is not modelled by the buff layer", effectFragment: node });
+    return;
+  }
+  const consumer = modifier.consumer;
   const eligible = matchesUnitFilter(consumer.beneficiary_filter, opts.context, "attacker");
   if (eligible === "unknown") {
     out.unsupported.push({ reason: "named-region-state beneficiary filter cannot be evaluated against current attacker facts", effectFragment: node });

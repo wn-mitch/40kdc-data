@@ -1853,7 +1853,12 @@ func translateNamedRegionState(node, source map[string]any, opts dslOpts, out *e
 		return
 	}
 	modifier, _ := getMap(node, "modifier")
-	consumer, _ := getMap(modifier, "consumer")
+	consumer, ok := getMap(modifier, "consumer")
+	// A producer-only state (a region declaration) gives no unit anything to apply.
+	if !ok {
+		out.unsupported = append(out.unsupported, unsup("named-region-state without a consumer declares a region only; it is not modelled by the buff layer", node))
+		return
+	}
 	beneficiary, _ := getMap(consumer, "beneficiary_filter")
 	matches, reason := auraRecipientFilterMatches(beneficiary, opts.context, opts.perspective)
 	if reason != "" {

@@ -14,8 +14,8 @@ const BAR = { target: "this-unit", may: "cannot-target", kind: "ability", weapon
 const normalize = (parameters: Record<string, unknown>) => normalizeFingerprintParameters(FAMILY, parameters, currentFamilyVersion(FAMILY));
 
 describe("targeting-restriction version 5: kind ability", () => {
-  it("is version 5 and accepts a named ability on the target form, and kind ability alone", () => {
-    expect(currentFamilyVersion(FAMILY)).toBe(5);
+  it("is version 5 or later and accepts a named ability on the target form, and kind ability alone", () => {
+    expect(currentFamilyVersion(FAMILY)).toBeGreaterThanOrEqual(5);
     expect(normalize(BAR)).toEqual(BAR);
     const { ability: _ability, ...bare } = BAR;
     expect(normalize(bare)).toEqual(bare);

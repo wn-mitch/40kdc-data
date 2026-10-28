@@ -324,7 +324,7 @@ func triggerEventPhrase(t map[string]any) string {
 			return "each time " + who + " is selected as an Observer unit"
 		}
 		if f["to"] == "move" && isList(f["move_types"]) {
-			return "when " + who + " is selected to " + moveKinds(f["move_types"])
+			return "when " + who + " is selected to " + moveKinds(f["move_types"]) + selectedMode(f)
 		}
 		to := dekebab(cstr(f["to"]))
 		if f["to"] == "attack" {
@@ -874,4 +874,21 @@ func describeReactiveTrigger(t map[string]any) string {
 		s += ", you may use this ability"
 	}
 	return s
+}
+
+// selectedMode: " using the Tactical Disembarkation rules", the named mode of the move a unit is selected to make.
+func selectedMode(f map[string]any) string {
+	if f["mode"] == nil {
+		return ""
+	}
+	mode := titleCase(cstr(f["mode"]))
+	if l, ok := asList(f["move_types"]); ok {
+		for _, x := range l {
+			if x == "disembark" {
+				mode += " Disembarkation"
+				break
+			}
+		}
+	}
+	return " using the " + mode + " rules"
 }

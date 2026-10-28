@@ -3946,155 +3946,164 @@
           },
           "duration": "battle",
           "effect": {
-            "type": "sequence",
-            "steps": [
-              {
-                "type": "choice",
-                "options": [
-                  {
-                    "type": "sequence",
-                    "steps": [
-                      {
-                        "type": "conditional",
-                        "condition": {
-                          "operator": "and",
-                          "operands": [
-                            {
-                              "type": "attack-is",
-                              "parameters": {
-                                "attack_type": "ranged"
+            "type": "conditional",
+            "condition": {
+              "type": "army-faction",
+              "parameters": {
+                "faction": "death-guard"
+              }
+            },
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "choice",
+                  "options": [
+                    {
+                      "type": "sequence",
+                      "steps": [
+                        {
+                          "type": "conditional",
+                          "condition": {
+                            "operator": "and",
+                            "operands": [
+                              {
+                                "type": "attack-is",
+                                "parameters": {
+                                  "attack_type": "ranged"
+                                }
+                              },
+                              {
+                                "type": "matches",
+                                "parameters": {
+                                  "filter": {
+                                    "owner": "enemy",
+                                    "designated": "afflicted"
+                                  },
+                                  "subject": "attacker"
+                                }
                               }
-                            },
-                            {
-                              "type": "matches",
-                              "parameters": {
-                                "filter": {
-                                  "owner": "enemy",
-                                  "designated": "afflicted"
-                                },
-                                "subject": "attacker"
-                              }
+                            ]
+                          },
+                          "effect": {
+                            "type": "ability-grant",
+                            "target": "defender",
+                            "modifier": {
+                              "ability": "benefit-of-cover"
                             }
-                          ]
+                          }
                         },
-                        "effect": {
-                          "type": "ability-grant",
-                          "target": "defender",
-                          "modifier": {
-                            "ability": "benefit-of-cover"
+                        {
+                          "type": "conditional",
+                          "condition": {
+                            "operator": "and",
+                            "operands": [
+                              {
+                                "type": "attack-is",
+                                "parameters": {
+                                  "attack_type": "melee"
+                                }
+                              },
+                              {
+                                "type": "matches",
+                                "parameters": {
+                                  "filter": {
+                                    "owner": "enemy",
+                                    "designated": "afflicted"
+                                  },
+                                  "subject": "attacker"
+                                }
+                              }
+                            ]
+                          },
+                          "effect": {
+                            "type": "roll-modifier",
+                            "target": {
+                              "owner": "enemy",
+                              "designated": "afflicted"
+                            },
+                            "modifier": {
+                              "roll": "hit",
+                              "operation": "subtract",
+                              "value": 1
+                            }
                           }
                         }
+                      ]
+                    },
+                    {
+                      "type": "stat-modifier",
+                      "target": {
+                        "owner": "enemy",
+                        "designated": "afflicted"
                       },
-                      {
-                        "type": "conditional",
-                        "condition": {
-                          "operator": "and",
-                          "operands": [
-                            {
-                              "type": "attack-is",
-                              "parameters": {
-                                "attack_type": "melee"
-                              }
-                            },
-                            {
-                              "type": "matches",
-                              "parameters": {
-                                "filter": {
-                                  "owner": "enemy",
-                                  "designated": "afflicted"
-                                },
-                                "subject": "attacker"
-                              }
-                            }
-                          ]
-                        },
-                        "effect": {
-                          "type": "roll-modifier",
+                      "modifier": {
+                        "stat": "Sv",
+                        "operation": "worsen",
+                        "value": 1
+                      }
+                    },
+                    {
+                      "type": "sequence",
+                      "steps": [
+                        {
+                          "type": "stat-modifier",
                           "target": {
                             "owner": "enemy",
                             "designated": "afflicted"
                           },
                           "modifier": {
-                            "roll": "hit",
-                            "operation": "subtract",
+                            "stat": "M",
+                            "operation": "worsen",
                             "value": 1
                           }
+                        },
+                        {
+                          "type": "stat-modifier",
+                          "target": {
+                            "owner": "enemy",
+                            "designated": "afflicted"
+                          },
+                          "modifier": {
+                            "stat": "Ld",
+                            "operation": "worsen",
+                            "value": 1
+                          }
+                        },
+                        {
+                          "type": "stat-modifier",
+                          "target": {
+                            "owner": "enemy",
+                            "designated": "afflicted"
+                          },
+                          "modifier": {
+                            "stat": "OC",
+                            "operation": "worsen",
+                            "value": 1,
+                            "minimum": 1
+                          }
                         }
-                      }
-                    ]
-                  },
-                  {
-                    "type": "stat-modifier",
-                    "target": {
-                      "owner": "enemy",
-                      "designated": "afflicted"
-                    },
-                    "modifier": {
-                      "stat": "Sv",
-                      "operation": "worsen",
-                      "value": 1
+                      ]
                     }
-                  },
-                  {
-                    "type": "sequence",
-                    "steps": [
-                      {
-                        "type": "stat-modifier",
-                        "target": {
-                          "owner": "enemy",
-                          "designated": "afflicted"
-                        },
-                        "modifier": {
-                          "stat": "M",
-                          "operation": "worsen",
-                          "value": 1
-                        }
-                      },
-                      {
-                        "type": "stat-modifier",
-                        "target": {
-                          "owner": "enemy",
-                          "designated": "afflicted"
-                        },
-                        "modifier": {
-                          "stat": "Ld",
-                          "operation": "worsen",
-                          "value": 1
-                        }
-                      },
-                      {
-                        "type": "stat-modifier",
-                        "target": {
-                          "owner": "enemy",
-                          "designated": "afflicted"
-                        },
-                        "modifier": {
-                          "stat": "OC",
-                          "operation": "worsen",
-                          "value": 1,
-                          "minimum": 1
-                        }
-                      }
-                    ]
-                  }
-                ],
-                "choice_label": "plague",
-                "min_choices": 1,
-                "max_choices": 1
-              },
-              {
-                "type": "stat-modifier",
-                "target": {
-                  "owner": "enemy",
-                  "designated": "afflicted"
+                  ],
+                  "choice_label": "plague",
+                  "min_choices": 1,
+                  "max_choices": 1
                 },
-                "modifier": {
-                  "stat": "T",
-                  "operation": "subtract",
-                  "value": 1
+                {
+                  "type": "stat-modifier",
+                  "target": {
+                    "owner": "enemy",
+                    "designated": "afflicted"
+                  },
+                  "modifier": {
+                    "stat": "T",
+                    "operation": "subtract",
+                    "value": 1
+                  }
                 }
-              }
-            ]
+              ]
+            }
           }
         }
       ]
@@ -7455,155 +7464,164 @@
           },
           "duration": "battle",
           "effect": {
-            "type": "sequence",
-            "steps": [
-              {
-                "type": "choice",
-                "options": [
-                  {
-                    "type": "sequence",
-                    "steps": [
-                      {
-                        "type": "conditional",
-                        "condition": {
-                          "operator": "and",
-                          "operands": [
-                            {
-                              "type": "attack-is",
-                              "parameters": {
-                                "attack_type": "ranged"
+            "type": "conditional",
+            "condition": {
+              "type": "army-faction",
+              "parameters": {
+                "faction": "death-guard"
+              }
+            },
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "choice",
+                  "options": [
+                    {
+                      "type": "sequence",
+                      "steps": [
+                        {
+                          "type": "conditional",
+                          "condition": {
+                            "operator": "and",
+                            "operands": [
+                              {
+                                "type": "attack-is",
+                                "parameters": {
+                                  "attack_type": "ranged"
+                                }
+                              },
+                              {
+                                "type": "matches",
+                                "parameters": {
+                                  "filter": {
+                                    "owner": "enemy",
+                                    "designated": "afflicted"
+                                  },
+                                  "subject": "attacker"
+                                }
                               }
-                            },
-                            {
-                              "type": "matches",
-                              "parameters": {
-                                "filter": {
-                                  "owner": "enemy",
-                                  "designated": "afflicted"
-                                },
-                                "subject": "attacker"
-                              }
+                            ]
+                          },
+                          "effect": {
+                            "type": "ability-grant",
+                            "target": "defender",
+                            "modifier": {
+                              "ability": "benefit-of-cover"
                             }
-                          ]
+                          }
                         },
-                        "effect": {
-                          "type": "ability-grant",
-                          "target": "defender",
-                          "modifier": {
-                            "ability": "benefit-of-cover"
+                        {
+                          "type": "conditional",
+                          "condition": {
+                            "operator": "and",
+                            "operands": [
+                              {
+                                "type": "attack-is",
+                                "parameters": {
+                                  "attack_type": "melee"
+                                }
+                              },
+                              {
+                                "type": "matches",
+                                "parameters": {
+                                  "filter": {
+                                    "owner": "enemy",
+                                    "designated": "afflicted"
+                                  },
+                                  "subject": "attacker"
+                                }
+                              }
+                            ]
+                          },
+                          "effect": {
+                            "type": "roll-modifier",
+                            "target": {
+                              "owner": "enemy",
+                              "designated": "afflicted"
+                            },
+                            "modifier": {
+                              "roll": "hit",
+                              "operation": "subtract",
+                              "value": 1
+                            }
                           }
                         }
+                      ]
+                    },
+                    {
+                      "type": "stat-modifier",
+                      "target": {
+                        "owner": "enemy",
+                        "designated": "afflicted"
                       },
-                      {
-                        "type": "conditional",
-                        "condition": {
-                          "operator": "and",
-                          "operands": [
-                            {
-                              "type": "attack-is",
-                              "parameters": {
-                                "attack_type": "melee"
-                              }
-                            },
-                            {
-                              "type": "matches",
-                              "parameters": {
-                                "filter": {
-                                  "owner": "enemy",
-                                  "designated": "afflicted"
-                                },
-                                "subject": "attacker"
-                              }
-                            }
-                          ]
-                        },
-                        "effect": {
-                          "type": "roll-modifier",
+                      "modifier": {
+                        "stat": "Sv",
+                        "operation": "worsen",
+                        "value": 1
+                      }
+                    },
+                    {
+                      "type": "sequence",
+                      "steps": [
+                        {
+                          "type": "stat-modifier",
                           "target": {
                             "owner": "enemy",
                             "designated": "afflicted"
                           },
                           "modifier": {
-                            "roll": "hit",
-                            "operation": "subtract",
+                            "stat": "M",
+                            "operation": "worsen",
                             "value": 1
                           }
+                        },
+                        {
+                          "type": "stat-modifier",
+                          "target": {
+                            "owner": "enemy",
+                            "designated": "afflicted"
+                          },
+                          "modifier": {
+                            "stat": "Ld",
+                            "operation": "worsen",
+                            "value": 1
+                          }
+                        },
+                        {
+                          "type": "stat-modifier",
+                          "target": {
+                            "owner": "enemy",
+                            "designated": "afflicted"
+                          },
+                          "modifier": {
+                            "stat": "OC",
+                            "operation": "worsen",
+                            "value": 1,
+                            "minimum": 1
+                          }
                         }
-                      }
-                    ]
-                  },
-                  {
-                    "type": "stat-modifier",
-                    "target": {
-                      "owner": "enemy",
-                      "designated": "afflicted"
-                    },
-                    "modifier": {
-                      "stat": "Sv",
-                      "operation": "worsen",
-                      "value": 1
+                      ]
                     }
-                  },
-                  {
-                    "type": "sequence",
-                    "steps": [
-                      {
-                        "type": "stat-modifier",
-                        "target": {
-                          "owner": "enemy",
-                          "designated": "afflicted"
-                        },
-                        "modifier": {
-                          "stat": "M",
-                          "operation": "worsen",
-                          "value": 1
-                        }
-                      },
-                      {
-                        "type": "stat-modifier",
-                        "target": {
-                          "owner": "enemy",
-                          "designated": "afflicted"
-                        },
-                        "modifier": {
-                          "stat": "Ld",
-                          "operation": "worsen",
-                          "value": 1
-                        }
-                      },
-                      {
-                        "type": "stat-modifier",
-                        "target": {
-                          "owner": "enemy",
-                          "designated": "afflicted"
-                        },
-                        "modifier": {
-                          "stat": "OC",
-                          "operation": "worsen",
-                          "value": 1,
-                          "minimum": 1
-                        }
-                      }
-                    ]
-                  }
-                ],
-                "choice_label": "plague",
-                "min_choices": 1,
-                "max_choices": 1
-              },
-              {
-                "type": "stat-modifier",
-                "target": {
-                  "owner": "enemy",
-                  "designated": "afflicted"
+                  ],
+                  "choice_label": "plague",
+                  "min_choices": 1,
+                  "max_choices": 1
                 },
-                "modifier": {
-                  "stat": "T",
-                  "operation": "subtract",
-                  "value": 1
+                {
+                  "type": "stat-modifier",
+                  "target": {
+                    "owner": "enemy",
+                    "designated": "afflicted"
+                  },
+                  "modifier": {
+                    "stat": "T",
+                    "operation": "subtract",
+                    "value": 1
+                  }
                 }
-              }
-            ]
+              ]
+            }
           }
         }
       ]

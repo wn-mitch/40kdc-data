@@ -105,6 +105,8 @@ export function normalizeMovePassthroughUsedParameters(family: string, input: Re
 
 /** The disembark modes the DSL names; the move's modifier carries one as `mode`. */
 export const DISEMBARK_MODES = ["rapid", "tactical", "combat", "emergency", "assault"] as const;
+/** make-move version 7 adds the shock disembark mode. */
+const DISEMBARK_MODES_V7 = [...DISEMBARK_MODES, "shock"] as const;
 
 /** "Do not make an Advance roll for it" under a move-ended trigger: the unit the event names. */
 const NO_ADVANCE_ROLL_EVENT_SUBJECT: FamilyExtension = {
@@ -406,6 +408,19 @@ export const MOVE_EXTENSIONS: readonly FamilyExtension[] = [
       const staged = { ...input, ...(input.subject === ANTECEDENT ? { subject: "this-unit" } : {}), ...(shortened ? { bonus: -(input.bonus as number) } : {}) };
       const result = previous(staged);
       return { ...result, ...(input.subject === ANTECEDENT ? { subject: ANTECEDENT } : {}), ...(shortened ? { bonus: -(result.bonus as number) } : {}) };
+    },
+  },
+  {
+    // "units embarked within this unit can make a shock disembark move".
+    family: "make-move",
+    version: 7,
+    description: "As the previous version, and mode can be shock (\"a shock disembark move\"). Mode needs move_type disembark.",
+    schema: (previous) => withProperties(previous, { mode: optional({ enum: [...DISEMBARK_MODES_V7], "x-only-when": { move_type: ["disembark"] } }) }),
+    normalize: (input, previous) => {
+      if (input.mode !== "shock") return previous(input);
+      if (input.move_type !== "disembark") throw new TypeError("make-move.mode names a disembark mode, so it needs move_type disembark.");
+      const { mode, ...rest } = input;
+      return { ...previous(rest), mode };
     },
   },
 ];

@@ -1963,6 +1963,7 @@
             "condition": {
               "type": "matches",
               "parameters": {
+                "subject": "event-subject",
                 "filter": {
                   "state": "battle-shocked"
                 }
@@ -1985,6 +1986,7 @@
                 {
                   "type": "matches",
                   "parameters": {
+                    "subject": "event-subject",
                     "filter": {
                       "state": "battle-shocked"
                     }

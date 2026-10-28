@@ -1,6 +1,10 @@
 package wh40kdc
 
-import "strings"
+import (
+	"strings"
+	"unicode"
+	"unicode/utf8"
+)
 
 // The named-region-state container: a rule-defined battlefield region, its
 // producers and the consumer branches it gates. Mirror of the named-region half
@@ -88,6 +92,11 @@ func namedRegionBranchText(m map[string]any, wholeUnit, qualified, conditional b
 }
 
 func describeNamedRegionState(m map[string]any, ctx effCtx) string {
+	// A producer-only state declares the region and nothing reads it here: its sentences, as one
+	// clause the caller finishes ("If …, your deployment zone is within …").
+	if m["consumer"] == nil {
+		return declaredRegion(namedRegionPrefix(m))
+	}
 	consumer := mapOr(m["consumer"])
 	membership := mapOr(consumer["membership"])
 	wholeUnit := membership["unit_scope"] == "whole-unit"
@@ -116,4 +125,14 @@ func describeNamedRegionConditional(m map[string]any, condition map[string]any, 
 		return namedRegionPrefix(m) + " Unless " + predicate + ", " + defaultText + ". If " + predicate + ", " + qualifiedText + "."
 	}
 	return namedRegionPrefix(m) + " When " + predicate + ", " + qualifiedText + ". Otherwise, " + defaultText + "."
+}
+
+// declaredRegion: the region's sentences as one clause, the first letter lowered and the last full stop left to the caller.
+func declaredRegion(sentences string) string {
+	clause := strings.TrimSuffix(sentences, ".")
+	if clause == "" {
+		return clause
+	}
+	r, size := utf8.DecodeRuneInString(clause)
+	return string(unicode.ToLower(r)) + clause[size:]
 }

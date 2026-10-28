@@ -457,7 +457,7 @@ def _objective_phrase(f: Any, plural: bool = False, noun: str = "objective") -> 
     if f.get("name") is not None:
         s += f" ({dekebab(_str(f['name']))})"
     if f.get("territory") is not None:
-        s += f" in {dekebab(_str(f['territory']))}"
+        s += f" in {_territory_phrase(_str(f['territory']))}"
     if role_v == "non-home":
         s += " (excluding home)"
     within = _obj(f.get("within"))
@@ -635,3 +635,15 @@ def used_ability_phrase(f: P) -> str | None:
 
         base += f" that can be used {usage_clause(usage)}"
     return base
+
+
+# "your opponent's deployment zone": a deployment zone is named by whose it is; other territories
+# by their words.
+_TERRITORY_PHRASES = {
+    "your-deployment-zone": "your deployment zone",
+    "enemy-deployment-zone": "your opponent's deployment zone",
+}
+
+
+def _territory_phrase(territory: str) -> str:
+    return _TERRITORY_PHRASES.get(territory, dekebab(territory))

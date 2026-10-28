@@ -1,6 +1,9 @@
 import type { FamilyExtension } from "../family-extension-helpers.js";
 import { optional, withProperties } from "../family-extension-helpers.js";
 import { enumValue } from "../family-validation.js";
+
+/** The disembark modes a unit can be selected to make a disembark move with. */
+const SELECTED_DISEMBARK_MODES = ["rapid", "tactical", "combat", "emergency", "assault", "shock"] as const;
 import { FILTERED_UNITS, NAMED_ID, namedId } from "./shared.js";
 
 /** The units an Order (or other used rule) can be aimed at: this unit or this model. */
@@ -54,6 +57,22 @@ export const EVENT_USED_OBJECT_EXTENSIONS: readonly FamilyExtension[] = [
       const list = ids.map((id) => namedId(id, "event.ids"));
       if (new Set(list).size !== list.length) throw new TypeError("event.ids names a rule twice.");
       return { ...normalized, ids: list };
+    },
+  },
+  {
+    // "when a friendly X unit is selected to make a tactical disembark move from this unit".
+    family: "event",
+    version: 37,
+    description: "As the previous version, plus mode on a selected event whose move_types is [disembark]: the disembark mode the unit is selected to move with (rapid, tactical, combat, emergency, assault, shock).",
+    schema: (previous) => withProperties(previous, { mode: optional({ enum: [...SELECTED_DISEMBARK_MODES], "x-only-when": { kind: ["selected"] } }) }),
+    normalize: (input, previous) => {
+      if (input.mode === undefined) return previous(input);
+      const { mode, ...rest } = input;
+      const moves = rest.move_types;
+      if (rest.kind !== "selected" || !Array.isArray(moves) || moves.length !== 1 || moves[0] !== "disembark") {
+        throw new TypeError("event.mode names a disembark mode, so it needs kind selected with move_types [disembark].");
+      }
+      return { ...previous(rest), mode: enumValue(mode, SELECTED_DISEMBARK_MODES, "event.mode") };
     },
   },
 ];

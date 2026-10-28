@@ -374,7 +374,10 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx) -> str:
         return "nothing happens"
     if t == "conditional":
         inner = _obj(e.get("effect"))
-        if inner.get("type") == "named-region-state":
+        if (
+            inner.get("type") == "named-region-state"
+            and _obj(inner.get("modifier")).get("consumer") is not None
+        ):
             return describe_named_region_conditional(
                 _obj(inner.get("modifier")), _obj(e.get("condition")), ctx, inline
             )

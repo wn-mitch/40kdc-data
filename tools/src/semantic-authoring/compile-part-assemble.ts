@@ -98,7 +98,7 @@ export function assemblePart(
 ): Compiled {
   const {
     list, places, errors, attempt, consumedByContainer, designationOptional, global, triggers, triggerIndexes, nestedMoments, nestedTriggers,
-    bandTriggers, durations, selections, rolls, usages, usageIndexes, usabilityNodes, optionalSpend, checks, targetParts, auraLeaf, leaderLeaf,
+    bandTriggers, durations, durationAt, selections, rolls, usages, usageIndexes, usabilityNodes, optionalSpend, checks, targetParts, auraLeaf, leaderLeaf,
     forEachLeaf, rulesBundle, rawOf, eligibilityIndexes, pairCandidates, battleSizeCount, roundCount,
   } = frame;
   let { optional, optionalSentence } = frame;
@@ -192,7 +192,10 @@ export function assemblePart(
   let body: Node | null = steps.length === 1 ? steps[0]! : { type: "sequence", steps };
   // The first part before any wrap: a part list below keeps a wrapped first part whole (an aura's, a selection's).
   const unwrapped = body;
-  const scopeDuration = split ? "permanent" : (durations[0] ?? "permanent");
+  // "…. Each time …, it can use this ability. If it does, until the end of the phase: ■ A ■ B": one printed duration in a
+  // later part, after an earlier effect, lasts only that part, not the effects before its moment.
+  const laterPartDuration = !split && durations.length === 1 && durationAt.length === 1 && partOf(durationAt[0]!) > 0 ? partOf(durationAt[0]!) : 0;
+  const scopeDuration = split || laterPartDuration ? "permanent" : (durations[0] ?? "permanent");
   // "If an enemy unit within 8\" of this unit is below Starting Strength": a gate on each unit an
   // aura or a for-each reaches holds per recipient, inside the wrap, not once around it.
   if (auraLeaf || forEachLeaf) {
@@ -402,6 +405,7 @@ export function assemblePart(
         ...(position === usagePart ? { usage: usages[0] } : {}),
         ...(connective.optionalParts.has(position + 1) ? { optional: true } : {}),
         ...(partPeriods[position] ? { duration: partPeriods[position] } : {}),
+        ...(laterPartDuration === position + 1 ? { duration: durations[0] } : {}),
       };
       if (under.has(position)) nestedSteps.push({ ...node, duration: "phase" });
       else partSteps.push(node);

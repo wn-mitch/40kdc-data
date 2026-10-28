@@ -186,7 +186,7 @@ function eventPhrase(t: AbilityTrigger): string {
     case "selected": {
       if (f.to == null) return `when ${who} is selected`;
       if (f.to === "observe") return `each time ${who} is selected as an Observer unit`;
-      if (f.to === "move" && Array.isArray(f.move_types)) return `when ${who} is selected to ${moveKinds(f.move_types)}`;
+      if (f.to === "move" && Array.isArray(f.move_types)) return `when ${who} is selected to ${moveKinds(f.move_types)}${selectedMode(f)}`;
       return `when ${who} is selected to ${f.to === "attack" ? "shoot or fight" : dekebab(str(f.to))}`;
     }
     case "targets-selected": {
@@ -417,4 +417,11 @@ export function describeTrigger(t: AbilityTrigger): string {
   if (t.binds_selected_die_variable) s += ` (binding one chosen die used in that Act of Faith as ${dekebab(t.binds_selected_die_variable.replace(/_/g, "-"))})`;
   if (t.optional) s += ", you may use this ability";
   return s;
+}
+
+/** " using the Tactical Disembarkation rules": the named mode of the move a unit is selected to make. */
+function selectedMode(f: Record<string, unknown>): string {
+  if (f.mode == null) return "";
+  const mode = titleCase(str(f.mode));
+  return ` using the ${(f.move_types as unknown[]).includes("disembark") ? `${mode} Disembarkation` : mode} rules`;
 }

@@ -3,6 +3,8 @@ import { describe, expect, it } from "vitest";
 import { bindAntecedents } from "../src/semantic-authoring/compile-antecedent.js";
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { currentFamilyVersion, familyRole } from "../src/semantic-authoring/contracts.js";
+import { refuseSelectionAcrossMoment } from "../src/semantic-authoring/compile-selection-moment.js";
+import { trailingTestCondition } from "../src/semantic-authoring/compile-preceding-roll.js";
 
 type Item = [string, string, Record<string, unknown>];
 
@@ -331,5 +333,49 @@ describe("Semantic authoring select-objective: every sentence after the opener i
       .toMatch(/needs exactly one sentence after it/u);
     expect(withLater("Until the end of the turn, this model has Fights First.", ["Until the end of the turn", "duration", { endpoint: "end-of-turn" }], ["this model has Fights First", "fights-first", { subject: "this-model" }]))
       .toMatch(/needs exactly one sentence after it/u);
+  });
+});
+
+describe("Semantic authoring selection across a moment", () => {
+  const text = "Select one unit. Later, when an enemy unit has shot, select one unit that was hit by those attacks.";
+  const leaves = (reselect: boolean) => placed(text,
+    ["Select one unit", "select-unit", { scope: "friendly", distance: "any", visible: false }],
+    ["when an enemy unit has shot", "event", { kind: "attacks-resolved", owner: "enemy", action_kind: "shoot" }],
+    ...(reselect ? [["select one unit", "select-unit", { scope: "friendly", distance: "any", visible: false }] as Item] : []),
+    ["that was hit by those attacks", "hit-by-attacks", { subject: "selected-unit" }]);
+
+  it("refuses a selected-unit leaf past a moment when only the earlier selection names it", () => {
+    expect(() => refuseSelectionAcrossMoment(leaves(false))).toThrow(/later moment/u);
+  });
+
+  it("lets a selection made after the moment name the unit instead", () => {
+    expect(() => refuseSelectionAcrossMoment(leaves(true))).not.toThrow();
+  });
+});
+
+describe("Semantic authoring \"that unit\" after a moment a unit-filter names", () => {
+  it("binds \"that unit\" after the moment to the moment's unit, not the record's own unit", () => {
+    const text = "While a friendly ZEALOT unit is within 6\" of this model, each time that unit makes a battle-shock roll, one model in that unit heals D3 wounds.";
+    const bound = bindAntecedents(placed(text,
+      ["friendly ZEALOT unit", "unit-filter", { side: "friendly", keywords: ["ZEALOT"] }],
+      ["is within 6\" of this model", "unit-position", { kind: "within", inches: 6, of: "this-model", subject: "antecedent", negated: false }],
+      ["each time that unit makes a battle-shock roll", "event", { kind: "before-roll", roll: "battle-shock" }],
+      ["one model in that unit heals D3 wounds", "regain-wounds", { subject: "antecedent", amount: "D3", per: "unit" }]), undefined, text);
+    expect(bound[3]!.parameters.subject).toBe("event-subject");
+  });
+
+  it("reads a condition after \"and,\" as the next clause's, not a condition on the change to the test", () => {
+    const text = "That unit must take a Battle-shock test, adding 1 to that test and, if that test is passed, it heals 1 wound.";
+    const leaves = placed(text,
+      ["That unit must take a Battle-shock test", "test", { target: "this-unit", test: "battle-shock" }],
+      ["adding 1 to that test", "roll-modifier", { roll: "battle-shock", operation: "add", value: 1 }],
+      ["if that test is passed", "roll-outcome", { roll: "battle-shock", result: "success" }],
+      ["it heals 1 wound", "regain-wounds", { subject: "this-unit", amount: "1" }]);
+    expect(trailingTestCondition(leaves, 1, text)).toBeNull();
+    const comma = "That unit must take a Battle-shock test, adding 1 to that test, if that test is passed, it heals 1 wound.";
+    expect(trailingTestCondition(placed(comma,
+      ["That unit must take a Battle-shock test", "test", { target: "this-unit", test: "battle-shock" }],
+      ["adding 1 to that test", "roll-modifier", { roll: "battle-shock", operation: "add", value: 1 }],
+      ["if that test is passed", "roll-outcome", { roll: "battle-shock", result: "success" }]), 1, comma)).toBe("refuse");
   });
 });

@@ -10,6 +10,7 @@ from __future__ import annotations
 import re
 from typing import Any
 
+from wh40kdc.translate.condition import describe_condition
 from wh40kdc.translate.effect_leaf_shapes import redirect_targeting
 from wh40kdc.translate.effect_quantity import moved_phrase
 from wh40kdc.translate.effect_words import (
@@ -232,4 +233,22 @@ def targeting(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
     except_ = (
         " (Core Stratagems can still target it)" if m.get("except") == "core-stratagems" else ""
     )
+    # "cannot target enemy units … if the target unit was engaged with this unit at the start of
+    # the turn".
+    if m.get("target_condition") is not None:
+        condition = describe_condition(_as_target_candidate(m["target_condition"]))
+        target = whom[len("all ") :] if whom.startswith("all ") else whom
+        return f"{who} {verb} {target}{kind}{rng}{unless}{except_} if {condition}"
     return f"{who} {verb} {whom}{kind}{rng}{unless}{except_}"
+
+
+def _as_target_candidate(node: Any) -> Any:
+    """A target_condition's this-unit is the unit checked as a target: it reads as the target unit
+    (defender)."""
+    if node == "this-unit":
+        return "defender"
+    if isinstance(node, list):
+        return [_as_target_candidate(item) for item in node]
+    if isinstance(node, dict):
+        return {key: _as_target_candidate(value) for key, value in node.items()}
+    return node

@@ -1054,7 +1054,9 @@
           "enum": [
             "your-territory",
             "enemy-territory",
-            "no-mans-land"
+            "no-mans-land",
+            "your-deployment-zone",
+            "enemy-deployment-zone"
           ]
         },
         "controlled_by": {
@@ -1527,9 +1529,10 @@
         "tactical",
         "combat",
         "emergency",
-        "assault"
+        "assault",
+        "shock"
       ],
-      "description": "A move type's named mode: a Fall Back's ordered retreat or desperate escape, a rapid, combat, assault or emergency disembarkation."
+      "description": "A move type's named mode: a Fall Back's ordered retreat or desperate escape, a rapid, combat, assault, emergency or shock disembarkation."
     },
     "ability-roll": {
       "type": "object",
@@ -8762,6 +8765,10 @@
                 },
                 "weapons": {
                   "$ref": "#/$defs/weapon-scope"
+                },
+                "target_condition": {
+                  "$ref": "#/$defs/condition",
+                  "description": "The restriction covers only targets that meet this condition (\"a unit it was within Engagement Range of at the start of the turn\"). this-unit is the unit being checked as a target; ability-unit is the unit with the ability."
                 }
               },
               "required": [
@@ -9981,6 +9988,34 @@
                 "ends_when_replaces": {
                   "const": true,
                   "description": "Only with ends_when: the ends_when condition replaces the usual end threshold (\"instead of more than 8\\\"\") rather than adding to it. Without this flag the condition adds to the usual rules."
+                },
+                "mode_choice": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "modes"
+                  ],
+                  "description": "The unit can select a mode of its move (applies_to_moves) it otherwise could not: modes \"any\" is every mode of that move, a list names the modes. ignore_before_moving: the selection disregards the move's Before Moving restrictions (\"regardless of that consolidation move's Before Moving restrictions\").",
+                  "properties": {
+                    "modes": {
+                      "oneOf": [
+                        {
+                          "const": "any"
+                        },
+                        {
+                          "type": "array",
+                          "minItems": 1,
+                          "uniqueItems": true,
+                          "items": {
+                            "$ref": "#/$defs/move-mode"
+                          }
+                        }
+                      ]
+                    },
+                    "ignore_before_moving": {
+                      "const": true
+                    }
+                  }
                 }
               },
               "minProperties": 1

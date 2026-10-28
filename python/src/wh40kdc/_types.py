@@ -370,6 +370,7 @@ MoveMode: TypeAlias = Literal[
     "combat",
     "emergency",
     "assault",
+    "shock",
 ]
 
 
@@ -1297,6 +1298,11 @@ class Passthrough(TypedDict):
     height: NotRequired[Literal["up-to-4", "over-4"]]
 
 
+class ModeChoice(TypedDict):
+    modes: Literal["any"] | list[MoveMode]
+    ignore_before_moving: NotRequired[Literal[True]]
+
+
 class MarkerRange(TypedDict):
     range: RangeRef
     wholly: NotRequired[Literal[True]]
@@ -2002,7 +2008,15 @@ class Within1(TypedDict):
 class ObjectiveFilter(TypedDict):
     role: NotRequired[Literal["central", "expansion", "home", "non-home"]]
     home_of: NotRequired[Literal["friendly", "enemy"]]
-    territory: NotRequired[Literal["your-territory", "enemy-territory", "no-mans-land"]]
+    territory: NotRequired[
+        Literal[
+            "your-territory",
+            "enemy-territory",
+            "no-mans-land",
+            "your-deployment-zone",
+            "enemy-deployment-zone",
+        ]
+    ]
     controlled_by: NotRequired[Owner]
     designated: NotRequired[DesignationId]
     name: NotRequired[EntityId]
@@ -3049,6 +3063,7 @@ Modifier17 = TypedDict(
         "if_eligible": NotRequired[Literal[True]],
         "except": NotRequired[Literal["core-stratagems"]],
         "weapons": NotRequired[WeaponScope],
+        "target_condition": NotRequired[Condition],
     },
 )
 
@@ -3409,6 +3424,7 @@ class Modifier35(TypedDict):
     ends_nearest: NotRequired[EndsNearest]
     ends_when: NotRequired[Condition]
     ends_when_replaces: NotRequired[Literal[True]]
+    mode_choice: NotRequired[ModeChoice]
 
 
 class SingleEffect29(TypedDict):

@@ -5,7 +5,9 @@ use serde_json::Value;
 
 use super::placement::{place_phrase, placement_limits, placement_phrase};
 use super::words::*;
-use crate::translate::condition::{and_list, describe_condition_value, nn, obj, range_phrase, P};
+use crate::translate::condition::{
+    and_list, describe_condition_value, nn, obj, or_list, range_phrase, P,
+};
 use crate::translate::dekebab;
 
 /// "its full wounds", "half of its starting number of wounds", "3 wounds", "D3 wounds": what a
@@ -345,12 +347,38 @@ pub(super) fn move_modifier(m: &P, subj: &str, ctx: &Ctx) -> String {
         ));
     }
     let s = clauses.join("; ");
-    match kinds {
-        Some(k) if nn(m, "distance_bonus").is_none() => {
+    let choice = nn(m, "mode_choice");
+    // A mode choice names its own move; the other clauses keep the ", during …" scope.
+    let scoped = match &kinds {
+        Some(k) if nn(m, "distance_bonus").is_none() && (!s.is_empty() || choice.is_none()) => {
             format!("{s}, during {} {k} moves", pronoun(subj))
         }
         _ => s,
+    };
+    let Some(c) = choice else { return scoped };
+    let phrase = mode_choice(obj(Some(c)), subj, kinds.as_deref().unwrap_or("move"));
+    if scoped.is_empty() {
+        phrase
+    } else {
+        format!("{scoped}; {phrase}")
     }
+}
+
+/// "can select any consolidation mode for that consolidation move, regardless of its Before Moving restrictions".
+fn mode_choice(c: &P, subj: &str, kinds: &str) -> String {
+    let modes = match map_arr(c, "modes", |x| dekebab(&jv(x))) {
+        Some(names) => format!("the {}", or_list(&names)),
+        None => "any".to_string(),
+    };
+    let waiver = if is_true(c, "ignore_before_moving") {
+        format!(", ignoring that {kinds} move's Before Moving restrictions")
+    } else {
+        String::new()
+    };
+    format!(
+        "{subj} can select {modes} {kinds} mode for {} {kinds} moves{waiver}",
+        pronoun(subj)
+    )
 }
 
 pub(super) const ORD: &[&str] = &["", "first", "second", "third", "fourth", "fifth"];

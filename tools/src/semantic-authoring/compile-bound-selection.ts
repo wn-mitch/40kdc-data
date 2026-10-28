@@ -3,11 +3,24 @@ import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 /**
  * Two selections in one ability, where the second is measured from or visible to the first:
  * "select one friendly X model" (bind_as) then "select one enemy unit within 8\" of that model"
- * (within_of). The first selection wraps the second, and the effects name the second, the
+ * (within_of), or a selection of the ability's own models after a unit selection
+ * (ownModelsAfter). The first selection wraps the second, and the effects name the second, the
  * selection the ability's wording makes its unit. Any other pair of selections has no reading.
  */
 
 const refersTo = (leaf: CompileLeaf) => leaf.parameters.within_of !== undefined || leaf.parameters.visible_to !== undefined;
+
+/**
+ * "Select one enemy unit …, then select one or more X models in this unit": a selection of the
+ * ability's own models after a selection of a unit. The models are chosen for the unit already
+ * selected, so the first selection wraps the second, as a measured pair does; the effects take
+ * each selected model, and name the unit only by the first selection's bound name.
+ */
+export function ownModelsAfter(outer: CompileLeaf, inner: CompileLeaf): boolean {
+  const filter = (inner.parameters.filter ?? {}) as Record<string, unknown>;
+  return inner.parameters.target_kind === "model" && filter.member_of === "this-unit" && outer.parameters.target_kind !== "model"
+    && outer.start_byte < inner.start_byte;
+}
 
 /**
  * The outer and inner selection of a bound pair, or null when the selections are not such a pair
@@ -21,9 +34,11 @@ export function boundSelectionPair(selections: readonly CompileLeaf[]): { outer:
   }
   if (selections.length !== 2) return null;
   const [outer, inner] = selections as [CompileLeaf, CompileLeaf];
-  if (!refersTo(inner)) return null;
+  if (!refersTo(inner) && !ownModelsAfter(outer, inner)) return null;
   const name = outer.parameters.bind_as;
-  if (typeof name !== "string") throw new CompileError("A selection measured from or visible to another needs the earlier selection bound by a name (bind_as).");
+  if (typeof name !== "string") throw new CompileError(refersTo(inner)
+    ? "A selection measured from or visible to another needs the earlier selection bound by a name (bind_as)."
+    : "A selection of this unit's own models after a unit selection needs the unit selection bound by a name (bind_as).");
   for (const reference of [inner.parameters.within_of, inner.parameters.visible_to]) {
     if (reference !== undefined && reference !== name) throw new CompileError(`The selection refers to "${String(reference)}", which this ability does not bind.`);
   }
@@ -47,7 +62,7 @@ export function independentSelectionPair(selections: readonly CompileLeaf[]): { 
   const pair = { friendly: friendly[0]!, enemy: enemy[0]! };
   for (const leaf of selections) {
     if (leaf.parameters.target_kind === "model") throw new CompileError("An independent pair of selections selects units; a model selection beside a unit selection has no reading yet.");
-    if (leaf.parameters.quantity !== undefined || leaf.parameters.count !== undefined || leaf.parameters.up_to !== undefined) throw new CompileError("An independent pair of selections takes one unit each; a selection with its own count has no reading yet.");
+    if (leaf.parameters.quantity !== undefined || leaf.parameters.count !== undefined || leaf.parameters.up_to !== undefined || leaf.parameters.at_least !== undefined) throw new CompileError("An independent pair of selections takes one unit each; a selection with its own count has no reading yet.");
   }
   const names = [pair.friendly.parameters.bind_as, pair.enemy.parameters.bind_as];
   // Selections that bind no names are not an independent pair: the caller's two-selections refusal stands.

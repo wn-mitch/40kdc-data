@@ -9972,6 +9972,7 @@
             "condition": {
               "type": "matches",
               "parameters": {
+                "subject": "event-subject",
                 "filter": {
                   "state": "battle-shocked"
                 }
@@ -9979,7 +9980,7 @@
             },
             "effect": {
               "type": "test",
-              "target": "this-unit",
+              "target": "event-subject",
               "modifier": {
                 "test": "desperate-escape",
                 "modifier": -1
@@ -9994,6 +9995,7 @@
                 {
                   "type": "matches",
                   "parameters": {
+                    "subject": "event-subject",
                     "filter": {
                       "state": "battle-shocked"
                     }
@@ -10003,7 +10005,7 @@
             },
             "effect": {
               "type": "test",
-              "target": "this-unit",
+              "target": "event-subject",
               "modifier": {
                 "test": "desperate-escape"
               }

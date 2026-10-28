@@ -78,9 +78,10 @@ describe("bound durations on the stored records", () => {
     expect(mechanics.scope.duration).toBe("permanent");
   });
 
-  it("3746 with its stored leaves (move-ended, antecedent subject) refuses: the +6 is on another unit than the no-roll", () => {
+  it("3746 with its first stored leaves (move-ended, no-roll on this unit, +6 on the antecedent) refuses: the +6 is on another unit than the no-roll", () => {
     const { leaves, source_text } = fixture(3746);
-    const stored = leaves.map((leaf) => (leaf.family_id === "event" ? { ...leaf, parameters: { ...leaf.parameters, kind: "move-ended" } } : leaf));
+    const stored = leaves.map((leaf) => (leaf.family_id === "event" ? { ...leaf, parameters: { ...leaf.parameters, kind: "move-ended" } }
+      : leaf.family_id === "no-advance-roll" ? { ...leaf, parameters: { subject: "this-unit" } } : leaf));
     const result = compileLeaves(stored, source_text, { name: FIXTURE_RULE_NAME });
     expect(result.ok).toBe(false);
     expect(result.ok ? [] : result.errors).toContain(NO_ROLL_PLUS_SIX);
@@ -351,8 +352,8 @@ describe("a bound duration renders as its own clause", () => {
   it("3746: the folded phase part and the turn part each name their lifetime in the describer", () => {
     const mechanics = mechanicsOf(3746);
     const text = describeAbility({ effect: mechanics.effect, scope: mechanics.scope, trigger: mechanics.trigger } as never);
-    expect(text).toContain("-> Until the end of the phase: the unit does not make an Advance roll; add 6\" to its Move characteristic instead.");
+    expect(text).toContain("-> Until the end of the phase: the triggering unit does not make an Advance roll; add 6\" to its Move characteristic instead.");
     expect(text).not.toContain("Move characteristic.");
-    expect(text).toContain("Until the end of the turn: ranged weapons equipped by models in this unit gain [ASSAULT].");
+    expect(text).toContain("Until the end of the turn: ranged weapons equipped by the triggering unit gain [ASSAULT].");
   });
 });

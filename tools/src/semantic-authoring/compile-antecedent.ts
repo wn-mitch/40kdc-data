@@ -35,6 +35,9 @@ export function momentNamesUnit(leaves: readonly CompileLeaf[], index: number): 
   if (leaf.family_id !== "event") return false;
   const kind = String(leaf.parameters.kind);
   if (UNIT_EVENT_KINDS.has(kind)) return true;
+  // "While a friendly X unit is within …, each time that unit makes a battle-shock roll": a unit-filter
+  // before the moment (past its conditions) names the moment's unit (compile-unit-filters.ts folds it on).
+  if (leaves.some((other, at) => at < index && other.family_id === "unit-filter" && momentOfFilter(leaves, at) === index)) return true;
   if (kind !== "used" || leaf.parameters.owner !== undefined) return false;
   if (leaf.parameters.subject !== undefined || leaf.parameters.subject_filter !== undefined) return true;
   let at = index - 1;
@@ -571,6 +574,7 @@ const ANY_UNIT_KEYS: Readonly<Record<string, readonly string[]>> = {
   "act-after-move": ["subject"],
   // "-2\" from that pile-in move" of an enemy unit an earlier unit-filter names.
   "move-distance": ["subject"],
+  "move-mode-choice": ["subject"],
 };
 const ANY_UNIT_CONDITION_KEYS: Readonly<Record<string, readonly string[]>> = {
   "unit-state": ["subject", "with"], "unit-activity": ["subject"], "unit-position": ["subject", "of"], "unit-keyword": ["subject"], "hit-by-attacks": ["subject"],

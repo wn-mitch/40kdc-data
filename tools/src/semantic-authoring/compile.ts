@@ -26,6 +26,7 @@ import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { withDesignationExpiry } from "./compile-designation-expiry.js";
 import { bindDesignationSubjects, foldHitFilters } from "./compile-conditions.js";
 import { foldDestructionAfterAttacks } from "./compile-destruction-after-attacks.js";
+import { foldSelectedModelRolls } from "./compile-selected-model-roll.js";
 import { bindBareFilterHits, bindBeforeFormHits, foldDestroyFilters, foldLeadingHitFilters, refuseBeforeFormAnaphors } from "./compile-weapon-qualified.js";
 import { refuseUnmovedEventSubject } from "./compile-moved-subject.js";
 import { refuseSuchFilters } from "./compile-such-filter.js";
@@ -308,7 +309,8 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     refuseDestinationMismatch(bound, sourceText);
     const scoped = bindWeaponStatAntecedents(foldWeaponScopes(foldModelState(foldReturnedModelExclusions(foldFightNext(foldCountsAsMoved(foldPassthroughUsed(foldAsIfPhases(foldHitFilters(foldLeadingHitFilters(foldDestroyFilters(bindEquippedCounts(bound), sourceText), sourceText), sourceText), sourceText)), sourceText), sourceText), sourceText)), sourceText));
     const filtered = resolveArmyGroups(foldWeaponAlreadyHas(bindScopeAttacks(foldUnitFilters(foldArmyPer(foldWeaponKeywords(foldAttackProperties(bindMatchedPools(scoped), sourceText), sourceText), sourceText), sourceText))));
-    list = withDesignationExpiry([...foldSetUpLimits(foldActivationPicks(foldAlternativeConditions(foldConditionExclusions(bindTargetedTarget(filtered), sourceText), sourceText)))]);
+    // "For each X model you select, roll one D6": a plain roll inside the model selection (compile-selected-model-roll.ts).
+    list = foldSelectedModelRolls(withDesignationExpiry([...foldSetUpLimits(foldActivationPicks(foldAlternativeConditions(foldConditionExclusions(bindTargetedTarget(filtered), sourceText), sourceText)))]));
     // A moment a reviewed "if" makes a condition is a history condition from here on (compile-connective-history.ts).
     list = lowerHistoryMoments(list, conditionOf.flatMap((plan) => plan.kind === "history" ? [plan] : []));
     refuseUnboundWeaponScope(list);

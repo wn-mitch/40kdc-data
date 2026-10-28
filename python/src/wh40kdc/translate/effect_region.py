@@ -125,6 +125,10 @@ def _branch(
 
 
 def describe_named_region_state(m: dict[str, Any], ctx: Ctx, inline: Inline) -> str:
+    # A producer-only state declares the region and nothing reads it here: its sentences, as one
+    # clause the caller finishes ("If …, your deployment zone is within …").
+    if m.get("consumer") is None:
+        return _declared_region(_prefix(m))
     consumer = _rec(m.get("consumer"))
     whole_unit = _rec(consumer.get("membership")).get("unit_scope") == "whole-unit"
     attack = consumer.get("attack_condition")
@@ -252,3 +256,10 @@ def shared_usage_clause(su: Any) -> str:
             f"{jstr(default_max)} times per phase"
         )
     return "; ".join(parts)
+
+
+def _declared_region(sentences: str) -> str:
+    """The region's sentences as one clause: the first letter lowered, the last full stop left to
+    the caller."""
+    clause = sentences[:-1] if sentences.endswith(".") else sentences
+    return clause[:1].lower() + clause[1:]

@@ -388,7 +388,9 @@ fn inline_base(e: &P, ctx: &Ctx) -> String {
         "no-effect" => "nothing happens".to_string(),
         "conditional" => {
             let inner = obj(Some(child(e, "effect")));
-            if ty(inner) == "named-region-state" {
+            if ty(inner) == "named-region-state"
+                && nn(obj(inner.get("modifier")), "consumer").is_some()
+            {
                 return describe_named_region_conditional(
                     obj(inner.get("modifier")),
                     child(e, "condition"),

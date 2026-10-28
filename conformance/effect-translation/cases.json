@@ -21464,7 +21464,7 @@
       "duration": "battle"
     },
     "expected": {
-      "text": "If your Army Faction is LEAGUES OF VOTANN, for the rest of the battle:\n  -> At the start of the battle:\n    -> Until the start of your next Command phase: all friendly LEAGUES OF VOTANN units gain the Hostile Acquisition ability (while the target is within range of an objective marker, the unit gets +1 to Hit rolls; you can: you can re-roll the Charge roll; you can re-roll the Advance roll).\n  -> At the end of each phase:\n    During the Command phase:\n      -> :\n        -> If you control 1+ home objectives in your territory, you gain 1 YP.\n        From the second battle round onward:\n          -> If you control 1+ objectives (excluding home), you gain 1 YP.\n          -> If you control 2+ objectives (excluding home), you gain 1 YP.\n          -> If you hold more objectives than the opponent, you gain 1 YP.\n    During the Command phase, in your turn:\n      -> While the unit has at most 6 yp pool, until the start of your next Command phase: all friendly LEAGUES OF VOTANN units gain the Hostile Acquisition (Prioritised Efficiency) ability.\n    During the Command phase, in your turn:\n      -> While the unit has 7+ yp pool, until the start of your next Command phase: all friendly LEAGUES OF VOTANN units gain the Fortify Takeover ability (while the unit is within range of an objective marker you control, the unit gets +1 to Hit rolls; when the attack's S is more than the target's T, unless the unit has the VEHICLE keyword, the attacking unit gets -1 to Wound rolls)."
+      "text": "If your Army Faction is LEAGUES OF VOTANN, for the rest of the battle:\n  -> At the start of the battle:\n    -> Until the start of your next Command phase: all friendly LEAGUES OF VOTANN units gain the Hostile Acquisition ability (while the target is within range of an objective marker, the unit gets +1 to Hit rolls; you can: you can re-roll the Charge roll; you can re-roll the Advance roll).\n  -> At the end of each phase:\n    During the Command phase:\n      -> If you control 1+ home objectives in your territory, you gain 1 YP.\n      From the second battle round onward:\n        -> If you control 1+ objectives (excluding home), you gain 1 YP.\n        -> If you control 2+ objectives (excluding home), you gain 1 YP.\n        -> If you hold more objectives than the opponent, you gain 1 YP.\n    During the Command phase, in your turn:\n      -> While the unit has at most 6 yp pool, until the start of your next Command phase: all friendly LEAGUES OF VOTANN units gain the Hostile Acquisition (Prioritised Efficiency) ability.\n    During the Command phase, in your turn:\n      -> While the unit has 7+ yp pool, until the start of your next Command phase: all friendly LEAGUES OF VOTANN units gain the Fortify Takeover ability (while the unit is within range of an objective marker you control, the unit gets +1 to Hit rolls; when the attack's S is more than the target's T, unless the unit has the VEHICLE keyword, the attacking unit gets -1 to Wound rolls)."
     }
   },
   {
@@ -32381,7 +32381,7 @@
       "duration": "battle"
     },
     "expected": {
-      "text": "If your Army Faction is LEAGUES OF VOTANN, for the rest of the battle:\n  -> At the start of the battle:\n    -> Until the start of your next Command phase: all friendly LEAGUES OF VOTANN units gain the Hostile Acquisition ability (while the target is within range of an objective marker, the unit gets +1 to Hit rolls; you can: you can re-roll the Charge roll; you can re-roll the Advance roll).\n  -> At the end of each phase:\n    During the Command phase:\n      -> :\n        -> If you control 1+ home objectives in your territory, you gain 1 YP.\n        From the second battle round onward:\n          -> If you control 1+ objectives (excluding home), you gain 1 YP.\n          -> If you control 2+ objectives (excluding home), you gain 1 YP.\n          -> If you hold more objectives than the opponent, you gain 1 YP.\n    During the Command phase, in your turn:\n      -> While the unit has at most 6 yp pool, until the start of your next Command phase: all friendly LEAGUES OF VOTANN units gain the Hostile Acquisition (Prioritised Efficiency) ability.\n    During the Command phase, in your turn:\n      -> While the unit has 7+ yp pool, until the start of your next Command phase: all friendly LEAGUES OF VOTANN units gain the Fortify Takeover ability (while the unit is within range of an objective marker you control, the unit gets +1 to Hit rolls; when the attack's S is more than the target's T, unless the unit has the VEHICLE keyword, the attacking unit gets -1 to Wound rolls)."
+      "text": "If your Army Faction is LEAGUES OF VOTANN, for the rest of the battle:\n  -> At the start of the battle:\n    -> Until the start of your next Command phase: all friendly LEAGUES OF VOTANN units gain the Hostile Acquisition ability (while the target is within range of an objective marker, the unit gets +1 to Hit rolls; you can: you can re-roll the Charge roll; you can re-roll the Advance roll).\n  -> At the end of each phase:\n    During the Command phase:\n      -> If you control 1+ home objectives in your territory, you gain 1 YP.\n      From the second battle round onward:\n        -> If you control 1+ objectives (excluding home), you gain 1 YP.\n        -> If you control 2+ objectives (excluding home), you gain 1 YP.\n        -> If you hold more objectives than the opponent, you gain 1 YP.\n    During the Command phase, in your turn:\n      -> While the unit has at most 6 yp pool, until the start of your next Command phase: all friendly LEAGUES OF VOTANN units gain the Hostile Acquisition (Prioritised Efficiency) ability.\n    During the Command phase, in your turn:\n      -> While the unit has 7+ yp pool, until the start of your next Command phase: all friendly LEAGUES OF VOTANN units gain the Fortify Takeover ability (while the unit is within range of an objective marker you control, the unit gets +1 to Hit rolls; when the attack's S is more than the target's T, unless the unit has the VEHICLE keyword, the attacking unit gets -1 to Wound rolls)."
     }
   },
   {
@@ -37529,6 +37529,25 @@
     }
   },
   {
+    "caseId": "fidelity/rule-state-faction-rule-any-army-faction",
+    "effect": {
+      "type": "rule-state",
+      "target": "this-unit",
+      "modifier": {
+        "direction": "granted",
+        "rule_kind": "faction-rule",
+        "rule": "example-pact-rule",
+        "any_army_faction": true
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, the unit gains Example Pact Rule, whatever your Army Faction is."
+    }
+  },
+  {
     "caseId": "fidelity/trigger-model-destroyed-after-attacks",
     "trigger": {
       "event": "model-destroyed",
@@ -37556,6 +37575,349 @@
     },
     "expected": {
       "text": "When a friendly FABLED SPRITE model in the unit is destroyed, after the attacking unit has resolved its attacks, when resolving this use, you gain 1CP."
+    }
+  },
+  {
+    "caseId": "fidelity/own-models-after-unit-selection",
+    "effect": {
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "subject": "selected-unit",
+            "filter": {
+              "engaged_with": "this-unit"
+            }
+          }
+        },
+        "bind_as": "enemy"
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "EMBER SPRITE"
+            ],
+            "level": "model",
+            "member_of": "this-unit"
+          },
+          "count": {
+            "min": 1
+          },
+          "bind_as": "sprites"
+        },
+        "effect": {
+          "type": "dice-gated",
+          "dice": "D6",
+          "threshold": 4,
+          "comparison": "gte",
+          "on_fail": null,
+          "on_success": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "destroy-models",
+                "target": "selected-unit",
+                "modifier": {
+                  "count": 1
+                }
+              },
+              {
+                "type": "mortal-wounds",
+                "target": {
+                  "selection_var": "enemy"
+                },
+                "modifier": {
+                  "count": 1
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use:\n  -> Select one enemy unit if the selected unit is a unit within Engagement Range of the unit, binding it as enemy:\n    -> Select at least one friendly EMBER SPRITE models in the unit, binding them as sprites:\n      -> For each selected model:\n        -> Roll one D6: on a 4+, destroy 1 model in that model; the bound enemy suffers 1 mortal wound."
+    }
+  },
+  {
+    "caseId": "fidelity/move-modifier-mode-choice-any",
+    "effect": {
+      "type": "move-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "applies_to_moves": [
+          "consolidation"
+        ],
+        "mode_choice": {
+          "modes": "any",
+          "ignore_before_moving": true
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, the unit can select any Consolidation mode for its Consolidation moves, ignoring that Consolidation move's Before Moving restrictions."
+    }
+  },
+  {
+    "caseId": "fidelity/targeting-target-condition-engaged-at-turn-start",
+    "effect": {
+      "type": "targeting",
+      "target": "this-unit",
+      "modifier": {
+        "by": "this-unit",
+        "may": "cannot-target",
+        "kind": "attack",
+        "target": {
+          "owner": "enemy"
+        },
+        "target_condition": {
+          "type": "unit-state",
+          "parameters": {
+            "subject": "this-unit",
+            "state": "engaged",
+            "with": "ability-unit",
+            "at": "turn-start"
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, the unit cannot target enemy units with attacks if the target unit was engaged with this unit at the start of the turn."
+    }
+  },
+  {
+    "caseId": "fidelity/targeting-target-condition-targeted-by-another",
+    "effect": {
+      "type": "targeting",
+      "target": "this-unit",
+      "modifier": {
+        "by": "this-unit",
+        "may": "cannot-target",
+        "kind": "attack",
+        "target": {
+          "owner": "enemy"
+        },
+        "target_condition": {
+          "type": "happened",
+          "parameters": {
+            "event": "targets-selected",
+            "subject": {
+              "owner": "any",
+              "excluding": "ability-unit"
+            },
+            "object": "this-unit",
+            "filter": {
+              "kind": "attack"
+            },
+            "window": "phase"
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, the unit cannot target enemy units with attacks if a unit other than this unit has selected the target unit as a target this phase."
+    }
+  },
+  {
+    "caseId": "fidelity/named-region-producer-only",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "army-faction",
+        "parameters": {
+          "faction": "example-faction"
+        }
+      },
+      "effect": {
+        "type": "named-region-state",
+        "target": {
+          "owner": "friendly"
+        },
+        "modifier": {
+          "region_ref": {
+            "region_id": "the-fabled-glade",
+            "owner_faction": "example-faction"
+          },
+          "producer": {
+            "region_ref": {
+              "region_id": "the-fabled-glade",
+              "owner_faction": "example-faction"
+            },
+            "mode": "complete",
+            "parent_ref": null,
+            "baseline": [
+              {
+                "region": {
+                  "territory": "your-deployment-zone"
+                },
+                "duration": "permanent"
+              }
+            ],
+            "phase_extensions": [
+              {
+                "region": {
+                  "territory": "no-mans-land"
+                },
+                "condition": {
+                  "type": "controls",
+                  "parameters": {
+                    "by": "friendly",
+                    "objective": {
+                      "territory": "no-mans-land"
+                    },
+                    "proportion": {
+                      "comparison": "gte",
+                      "fraction": 0.5
+                    }
+                  }
+                },
+                "trigger": {
+                  "event": "phase-started"
+                },
+                "duration": "phase",
+                "evaluation": "snapshot-once"
+              }
+            ],
+            "additive_extensions": []
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "If your Army Faction is EXAMPLE FACTION, when resolving this use, your deployment zone is within The Fabled Glade. At the start of each phase, if you control at least half of the objectives in no mans land, no mans land is within The Fabled Glade until the end of the phase (evaluated once at that time)."
+    }
+  },
+  {
+    "caseId": "fidelity/controls-objectives-in-deployment-zones",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "controls",
+            "parameters": {
+              "by": "friendly",
+              "objective": {
+                "territory": "enemy-deployment-zone"
+              },
+              "proportion": {
+                "comparison": "gte",
+                "fraction": 0.5
+              }
+            }
+          },
+          {
+            "type": "controls",
+            "parameters": {
+              "by": "friendly",
+              "objective": {
+                "territory": "your-deployment-zone"
+              },
+              "count": {
+                "min": 1
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "cp-gain",
+        "target": "this-model",
+        "modifier": {
+          "amount": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "If you control at least half of the objectives in your opponent's deployment zone, if you control 1+ objectives in your deployment zone, when resolving this use, you gain 1CP."
+    }
+  },
+  {
+    "caseId": "fidelity/trigger-selected-disembark-mode",
+    "trigger": {
+      "event": "selected",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "FABLED SPRITE"
+        ],
+        "embarked_in": "this-unit"
+      },
+      "filter": {
+        "to": "move",
+        "move_types": [
+          "disembark"
+        ],
+        "mode": "tactical"
+      }
+    },
+    "effect": {
+      "type": "cp-gain",
+      "target": "this-model",
+      "modifier": {
+        "amount": 1
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When a friendly FABLED SPRITE unit embarked within the unit is selected to Disembark using the Tactical Disembarkation rules, when resolving this use, you gain 1CP."
+    }
+  },
+  {
+    "caseId": "fidelity/move-modifier-mode-choice-named-beside-clause",
+    "effect": {
+      "type": "move-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "applies_to_moves": [
+          "consolidation"
+        ],
+        "no_end_in_engagement": true,
+        "mode_choice": {
+          "modes": [
+            "objective"
+          ],
+          "ignore_before_moving": true
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, the unit cannot end a move within Engagement Range of any enemy unit, during its Consolidation moves; the unit can select the objective Consolidation mode for its Consolidation moves, ignoring that Consolidation move's Before Moving restrictions."
     }
   },
   {

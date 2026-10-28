@@ -124,6 +124,8 @@ export function adjacentCondition(leaves: readonly CompileLeaf[], change: number
   const first = leaves[change + 1]!;
   const between = text(leaves[change]!.end_byte ?? leaves[change]!.start_byte, first.start_byte);
   if (/[.:;]/u.test(between)) return null;
+  // "+1 to that roll and, if that roll is successful, …": after "and" the condition opens the next clause.
+  if (/^\s*and\s*,/iu.test(between)) return null;
   if (/,/u.test(between)) return "refuse";
   const second = leaves[change + 2];
   if (isClauseCondition(second, leaves[change]!) && !/[.:;]/u.test(text(first.end_byte ?? first.start_byte, second!.start_byte))) return "refuse";

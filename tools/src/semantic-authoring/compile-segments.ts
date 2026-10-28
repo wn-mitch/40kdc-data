@@ -34,6 +34,8 @@ const IN_ADDITION = /^in addition\b/iu;
 // "such an enemy unit" always points back, wherever it sits in the sentence.
 const SUCH = /\bsuch (?:an? )?(?:\w+ )?(?:units?|models?|weapons?|attacks?)\b/iu;
 const REFERS_BACK = /\b(?:that|those|such(?: an?)?) (?:units?|models?|weapons?|attacks?)\b/iu;
+/** The leaves that begin a menu's options: a named option, or a resource-action menu's action. */
+const OPTION_MARKERS = new Set(["named-option", "menu-action"]);
 /** Leaves that make an ability a Stratagem, used once as a whole. */
 export const STRATAGEM_HEADER = new Set(["stratagem-target", "use-window", "stratagem-cost"]);
 // Header leaves that would be counted once per part if they were copied into each.
@@ -187,10 +189,11 @@ export function sentenceSegments(leaves: readonly CompileLeaf[], sourceText: str
     if (!sentences[position]!.some((leaf) => isContainerOpener(leaf.family_id))) return false;
     const options: CompileLeaf[][] = [];
     for (const leaf of sentences.slice(position + 1).flat()) {
-      if (leaf.family_id === "named-option") options.push([]);
+      if (OPTION_MARKERS.has(leaf.family_id)) options.push([]);
       options.at(-1)?.push(leaf);
     }
-    return options.length > 1 && options.every((option) => option.some((leaf) => leaf.role === "EVENT" || leaf.family_id === "phase-window"));
+    // A resource-action menu's actions (menu-action markers) are each triggered on their own, however many there are.
+    return (options.length > 1 || options.some((option) => option[0]!.family_id === "menu-action")) && options.every((option) => option.some((leaf) => leaf.role === "EVENT" || leaf.family_id === "phase-window"));
   };
   const parts: CompileLeaf[][] = [[]];
   sentences.forEach((sentence, position) => {
@@ -198,7 +201,10 @@ export function sentenceSegments(leaves: readonly CompileLeaf[], sourceText: str
     // A standing grant after a part with a moment of its own is not that moment's: the moment cannot trigger it.
     const standing = standingGrant(sentence) && parts.at(-1)!.some((leaf) => leaf.role === "EVENT" && leaf.family_id !== "select-unit" && leaf.family_id !== "dice-roll");
     // A menu whose options begin at named-option markers holds every sentence after its opener: "Each time …" there is one option's moment.
-    const inMenu = parts.at(-1)!.some((leaf) => isContainerOpener(leaf.family_id)) && parts.at(-1)!.some((leaf) => leaf.family_id === "named-option");
+    // A resource-action menu holds every sentence after its opener the same way, even before its first action: a
+    // sentence between them ("At the end of the battle round, …") is given back by the container plan.
+    const inMenu = (parts.at(-1)!.some((leaf) => isContainerOpener(leaf.family_id)) && parts.at(-1)!.some((leaf) => OPTION_MARKERS.has(leaf.family_id)))
+      || parts.at(-1)!.some((leaf) => leaf.family_id === "resource-action-menu-open");
     // "While …: this model has K. In your Shooting phase, you can select …": an item of the list the header's colon
     // introduces that holds its own selection or phase is a rule of its own under the header's condition, so neither
     // reaches a sibling item.
@@ -243,6 +249,9 @@ export function sentenceSegments(leaves: readonly CompileLeaf[], sourceText: str
     const position = sentences.findIndex((sentence) => sentence.includes(part[0]!));
     return position !== -1 && IN_ADDITION.test(sentenceWords(leaves, starts[position]!, sentences[position]!, sourceText));
   };
+  // "If your Army Faction is X, at the start of …, …. Each time …": an army-faction condition that leads the first
+  // sentence decides whether the record applies at all, so every later part holds it too.
+  const factionFrame = firstSentence.slice(0, firstEffectAt).filter((leaf) => leaf.family_id === "army-faction");
   const frame = leadingFrame(leaves, parts[0]!);
   // A later part holds the frame the record opens with: the "While" frame, or the leading-unit frame a part naming "that unit" is about.
   const frameFor = (part: CompileLeaf[], at: number, byThatUnit: boolean): CompileLeaf[] => {
@@ -251,9 +260,10 @@ export function sentenceSegments(leaves: readonly CompileLeaf[], sourceText: str
     if (whileFrame.length > 0 && !opensInAddition(part) && !part.some((leaf) => leaf.family_id === "leading-unit") && partSaysThatUnit(part)) return whileFrame;
     return byThatUnit && frame !== null && namesFrameUnit(part, frame, sourceText) ? [frame] : [];
   };
+  const factionFor = (part: CompileLeaf[], at: number) => at > 0 && !part.some((leaf) => leaf.family_id === "army-faction") ? factionFrame : [];
   return parts.map((part, at) => armyOnly(part) ? part
-    : (attackFrame || labelled.has(part[0]!)) && at > 0 ? [...frameFor(part, at, false), ...part]
-    : [...header, ...frameFor(part, at, true), ...part]);
+    : (attackFrame || labelled.has(part[0]!)) && at > 0 ? [...factionFor(part, at), ...frameFor(part, at, false), ...part]
+    : [...header, ...factionFor(part, at), ...frameFor(part, at, true), ...part]);
 }
 
 /**

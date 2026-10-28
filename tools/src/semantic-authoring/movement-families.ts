@@ -13,6 +13,9 @@ import {
  * buff subjects do, since a move is made by a physical body, so the family's own value is kept. */
 export const MOVE_SUBJECTS = ["this-unit", "this-model", "selected-unit"] as const;
 const MOVE_ACTOR_SUBJECTS = ["this-unit", "this-model"] as const;
+const MODE_CHOICE_SUBJECTS = ["this-unit", "this-model", "antecedent"] as const;
+/** The DSL's move-mode: a move type's named modes (a Fall Back's desperate escape, a consolidation's objective mode, a disembark's). */
+const MOVE_MODES = ["ordered-retreat", "desperate-escape", "ongoing", "engaging", "objective", "rapid", "tactical", "combat", "emergency", "assault"] as const;
 
 export const MOVE_TYPES = [
   "normal", "advance", "fall-back", "charge", "pile-in", "consolidation", "surge", "scout", "ingress", "disembark", "embark", "pulse-jet",
@@ -269,6 +272,25 @@ export const MOVEMENT_FAMILIES: readonly SemanticFamilyDefinition[] = [
       additionalProperties: false,
     },
   },
+  {
+    id: "move-mode-choice",
+    version: 1,
+    role: "EFFECT",
+    label: "Select a move's mode regardless of its restrictions",
+    description: "\"You can select any consolidation mode for that consolidation move, regardless of that consolidation move's Before Moving restrictions\": the unit may pick a mode of the named move it otherwise could not. modes is \"any\" (every mode of that move) or the modes named (\"the objective consolidation mode\" is [objective]); ignore_before_moving is the \"regardless of … Before Moving restrictions\" clause.",
+    starter: { subject: "this-unit", move_types: [], modes: "any", ignore_before_moving: true },
+    parameterSchema: {
+      type: "object",
+      required: ["subject", "move_types", "modes"],
+      properties: {
+        subject: { enum: MODE_CHOICE_SUBJECTS },
+        move_types: { type: "array", items: { enum: MOVE_TYPES }, minItems: 1, uniqueItems: true },
+        modes: { anyOf: [{ const: "any" }, { type: "array", items: { enum: MOVE_MODES }, minItems: 1, uniqueItems: true }] },
+        ignore_before_moving: { const: true, "x-optional": true },
+      },
+      additionalProperties: false,
+    },
+  },
 ];
 
 export function normalizeMovementParameters(family: string, input: Record<string, unknown>, version = 1): Record<string, unknown> | null {
@@ -280,6 +302,16 @@ export function normalizeMovementParameters(family: string, input: Record<string
         subject: enumValue(input.subject, ["this-unit", "this-model"], "move-distance.subject"),
         move_types: enumSet(input.move_types, MOVE_TYPES, "move-distance.move_types"),
         bonus: boundedInteger(input.bonus, 1, 24, "move-distance.bonus"),
+      };
+    }
+    case "move-mode-choice": {
+      keySet(input, ["subject", "move_types", "modes"], ["ignore_before_moving"], family);
+      if (input.ignore_before_moving !== undefined && input.ignore_before_moving !== true) throw new TypeError("move-mode-choice.ignore_before_moving is true or absent.");
+      return {
+        subject: enumValue(input.subject, MODE_CHOICE_SUBJECTS, "move-mode-choice.subject"),
+        move_types: enumSet(input.move_types, MOVE_TYPES, "move-mode-choice.move_types"),
+        modes: input.modes === "any" ? "any" : enumSet(input.modes, MOVE_MODES, "move-mode-choice.modes"),
+        ...(input.ignore_before_moving === true ? { ignore_before_moving: true } : {}),
       };
     }
     case "reserves-arrival": {

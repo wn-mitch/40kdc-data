@@ -105,6 +105,7 @@ export function replacementTail(tail: readonly CompileLeaf[], replacement: Compi
       if (leaf.parameters.scope !== undefined && leaf.parameters.scope !== "enemy") throw new CompileError("A persistent designation's replacement selects an enemy unit.");
       if (leaf.parameters.distance !== undefined && leaf.parameters.distance !== "any") throw new CompileError("A persistent designation's replacement selection has no designation form for its distance.");
       if (leaf.parameters.visible === true) throw new CompileError("A persistent designation's replacement selection has no designation form for visibility.");
+      if (leaf.parameters.at_least === true) throw new CompileError("A persistent designation's replacement selects one unit; one or more has no designation form.");
       if (leaf.parameters.up_to === true) optional = true;
       refuseSelectionFilter(leaf);
     } else if (leaf.role === "CONDITION" && leaf.family_id === "unit-filter") {
@@ -148,7 +149,7 @@ export function designationChoices(list: readonly CompileLeaf[], sentenceOf: rea
 export function refuseEstablishmentCount(list: readonly CompileLeaf[], sentenceOf: readonly number[], opener: number): void {
   for (let at = opener - 1; at >= 0 && sentenceOf[at] === sentenceOf[opener] && list[at]!.role !== "EFFECT"; at -= 1) {
     const leaf = list[at]!;
-    if (leaf.family_id === "select-unit" && leaf.parameters.count !== undefined && leaf.parameters.count !== 1) {
+    if (leaf.family_id === "select-unit" && ((leaf.parameters.count !== undefined && leaf.parameters.count !== 1) || leaf.parameters.at_least === true)) {
       throw new CompileError("A designated unit is one unit; a selection of several has no designation form.");
     }
   }

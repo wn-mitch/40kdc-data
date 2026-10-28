@@ -326,7 +326,7 @@ func describeEffectInlineBase(e map[string]any, ctx effCtx) string {
 		return "nothing happens"
 	case "conditional":
 		inner := mapOr(e["effect"])
-		if inner["type"] == "named-region-state" {
+		if inner["type"] == "named-region-state" && mod(inner)["consumer"] != nil {
 			return describeNamedRegionConditional(mod(inner), mapOr(e["condition"]), ctx)
 		}
 		return conditionLeadInFor(mapOr(e["condition"]), isDefensiveEffect(inner)) + ", " + describeEffectInline(inner, ctx)
@@ -567,8 +567,13 @@ func describeEffect(e map[string]any, depth int, ctx effCtx) string {
 		return strings.Join(parts, "\n")
 	case "ability-part":
 		inner := mapOr(e["effect"])
+		// A part with nothing to head it (a printed grant's body) lists its container's steps in its place.
 		if containerTypes[ejstrType(inner)] {
-			return indent + "-> " + capitalize(partHead(e)) + ":\n" + describeEffect(inner, depth+1, ctx)
+			head := partHead(e)
+			if head == "" {
+				return describeEffect(inner, depth, ctx)
+			}
+			return indent + "-> " + capitalize(head) + ":\n" + describeEffect(inner, depth+1, ctx)
 		}
 		return indent + "-> " + capitalize(partInline(e, ctx)) + "."
 	case "ability-grant":

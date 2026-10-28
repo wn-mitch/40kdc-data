@@ -27,6 +27,8 @@ export function refuseSelectionAcrossMoment(list: readonly CompileLeaf[]): void 
     if (later === undefined) return;
     const scoped = sorted.some((leaf) => leaf.family_id === "target-is-selected" && leaf.start_byte > selection.start_byte && leaf.start_byte < later.start_byte);
     if (scoped) return;
+    // A later selection before that leaf is the unit it names ("One eligible unit … that was hit"), not this one.
+    if (sorted.some((leaf) => leaf.family_id === "select-unit" && leaf.start_byte > selection.start_byte && leaf.start_byte < later.start_byte)) return;
     throw new CompileError(`A ${later.family_id} at byte ${later.start_byte} acts on the unit an earlier selection (byte ${selection.start_byte}) picked, but a later moment (byte ${moment.start_byte}) sits between them; the selection cannot carry its effect to that moment.`);
   });
 }

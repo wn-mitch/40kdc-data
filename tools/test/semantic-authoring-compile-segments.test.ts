@@ -256,3 +256,39 @@ describe("a selection closed by its resolved attacks", () => {
     expect(JSON.stringify(result)).not.toContain("\"kind\":\"fight\"");
   });
 });
+
+describe("Semantic authoring record-wide frames and standing menus", () => {
+  it("gates every part with the army-faction condition that leads the first sentence", () => {
+    const text = "If your Army Faction is ZEALOTS, at the start of your Command phase, add 1 to the Hit roll. Each time this unit fights, add 1 to the Wound roll.";
+    const list = placed(text,
+      ["If your Army Faction is ZEALOTS", "army-faction", { faction: "adepta-sororitas" }],
+      ["at the start of your Command phase", "event", { kind: "phase-start", phase: "command", turn: "your" }],
+      ["add 1 to the Hit roll", "roll-modifier", { roll: "hit", operation: "add", value: 1 }],
+      ["Each time this unit fights", "event", { kind: "selected", owner: "friendly", to: "fight" }],
+      ["add 1 to the Wound roll", "roll-modifier", { roll: "wound", operation: "add", value: 1 }]);
+    const parts = sentenceSegments(list, text)!;
+    expect(parts).toHaveLength(2);
+    expect(parts.every((part) => part.some((leaf) => leaf.family_id === "army-faction"))).toBe(true);
+  });
+
+  it("keeps a resource-action menu's later sentences with its opener and out of an earlier moment's part", () => {
+    const text = "At the start of the battle round, you gain 2 tokens. You can spend tokens on the manoeuvres below. At the end of the battle round, all tokens are lost.\n**Quick Step**\nWhen a unit from your army is selected to move.\nAdd 2 to its Move characteristic.";
+    const list = placed(text,
+      ["At the start of the battle round", "turn-start", { turn: "battle-round" }],
+      ["you gain 2 tokens", "resource-gain", { pool: "battle-focus-pool", amount: 2 }],
+      ["You can spend tokens on the manoeuvres below", "resource-action-menu-open", { menu_id: "m", pool_id: "battle-focus-pool" }],
+      ["At the end of the battle round", "event", { kind: "round-ended" }],
+      ["all tokens are lost", "resource-spend", { pool: "battle-focus-pool", amount: "all" }],
+      ["Quick Step", "menu-action", { action_id: "quick-step", label: "Quick Step", cost_amount: 1 }],
+      ["When a unit from your army is selected to move", "event", { kind: "selected", owner: "friendly", to: "move" }],
+      ["Add 2 to its Move characteristic", "characteristic-modifier", { subject: "this-unit", characteristics: ["M"], operation: "add", value: 2, weapon_type: "all" }]);
+    const parts = sentenceSegments(list, text)!;
+    expect(parts.map((part) => part.map((leaf) => leaf.family_id))).toEqual([
+      ["turn-start", "resource-gain"],
+      ["resource-action-menu-open", "event", "resource-spend", "menu-action", "event", "characteristic-modifier"],
+    ]);
+    const steps = mechanicsOf(list, text).effect.steps as Array<Record<string, any>>;
+    expect(steps.map((step) => step.type)).toEqual(["ability-part", "sequence"]);
+    expect(steps[1]!.steps.map((step: Record<string, any>) => step.type === "ability-part" ? step.trigger.event : step.type)).toEqual(["resource-action-menu", "round-ended"]);
+  });
+});

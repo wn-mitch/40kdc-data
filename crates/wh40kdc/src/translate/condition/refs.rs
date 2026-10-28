@@ -467,7 +467,7 @@ pub(crate) fn objective_phrase(f: &P, plural: bool, noun: &str) -> String {
         s.push_str(&format!(" ({})", dekebab(&st(Some(name)))));
     }
     if let Some(t) = nn(f, "territory") {
-        s.push_str(&format!(" in {}", dekebab(&st(Some(t)))));
+        s.push_str(&format!(" in {}", territory_phrase(&st(Some(t)))));
     }
     if is(f, "role", "non-home") {
         s.push_str(" (excluding home)");
@@ -673,4 +673,13 @@ pub(crate) fn keyword_list(p: &P) -> String {
         return or_list(&quoted(any));
     }
     and_list(&quoted(strs(p.get("all_of")).unwrap_or_default()))
+}
+
+/// "your opponent's deployment zone": a deployment zone is named by whose it is; other territories by their words.
+fn territory_phrase(territory: &str) -> String {
+    match territory {
+        "your-deployment-zone" => "your deployment zone".to_string(),
+        "enemy-deployment-zone" => "your opponent's deployment zone".to_string(),
+        _ => dekebab(territory),
+    }
 }

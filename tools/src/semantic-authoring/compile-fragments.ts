@@ -15,12 +15,12 @@ import { testEffect } from "./compile-test-effects.js";
 import { WEAPON_CHARACTERISTICS } from "./effect-families.js";
 import { isTargetRef } from "./compile-target-refs.js";
 import { namedRange } from "./named-ranges.js";
-import { matchedPoolOf } from "./compile-matched-set.js";
 import { CompileError } from "./compile-error.js";
 import type { KeywordOption } from "./compile-keyword-menu.js";
 import { namedAbilityStateEffect } from "./compile-named-ability-states.js";
 import { oathEffect } from "./compile-oath.js";
 import { compileNamedRegionProducer } from "./compile-named-region.js";
+import { targetingEffect } from "./compile-targeting.js";
 import { abilityUseEffect } from "./compile-ability-use.js";
 
 export { CompileError };
@@ -526,7 +526,10 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
       // Version 5: "(to a maximum of 6 mortal wounds)" caps the total.
       const cap = leaf.parameters.max === undefined ? {} : { max: closed(leaf, "max") };
       // "that enemy unit" under a later moment: the unit the Stratagem's WHEN moment bound (compile-when-subject.ts).
-      const target = typeof leaf.parameters.recipient_var === "string" ? { event_var: leaf.parameters.recipient_var } : MORTAL_TARGETS[String(closed(leaf, "recipient"))];
+      // "that enemy unit" after a selection of this unit's models: the unit selection's name (compile-pair-eligibility.ts).
+      const target = typeof leaf.parameters.recipient_var === "string" ? { event_var: leaf.parameters.recipient_var }
+        : typeof leaf.parameters.recipient_selection === "string" ? { selection_var: leaf.parameters.recipient_selection }
+          : MORTAL_TARGETS[String(closed(leaf, "recipient"))];
       return { type: "mortal-wounds", target, modifier: { count: /^\d+$/u.test(count) ? Number(count) : count, ...cap } };
     }
     case "fight-on-death": {
@@ -643,31 +646,8 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
         },
       };
     }
-    case "targeting-restriction": {
-      // enemy-units / friendly-units are every unit of that side, as a DSL unit-filter.
-      // "those X units": the set an earlier unit-position of matching-unit introduced (compile-matched-set.ts).
-      const unit = (value: unknown) => value === "matched-units" ? matchedPoolOf(leaf) : value === "enemy-units" ? { owner: "enemy" } : value === "friendly-units" ? { owner: "friendly" } : target(value);
-      const range = leaf.parameters.range;
-      const modifier: Node = {
-        may: closed(leaf, "may"), kind: closed(leaf, "kind"),
-        ...weaponScope(leaf),
-        ...(range != null ? { range: { inches: range } } : {}),
-      };
-      // Version 3 names both sides: the effect sits on the unit that targets when the leaf says
-      // which, else on the unit being targeted.
-      if (leaf.parameters.target !== undefined) {
-        const targeted = unit(closed(leaf, "target"));
-        const by = leaf.parameters.by === undefined ? undefined : unit(closed(leaf, "by"));
-        const named: Node = {
-          ...(leaf.parameters.stratagem !== undefined ? { stratagem: closed(leaf, "stratagem") } : {}),
-          // kind ability: the one ability whose selection this limits (families/targeting-ability.ts).
-          ...(leaf.parameters.ability !== undefined ? { ability: closed(leaf, "ability") } : {}),
-          ...(leaf.parameters.except !== undefined ? { except: closed(leaf, "except") } : {}),
-        };
-        return { type: "targeting", target: structuredClone(by ?? targeted), modifier: { ...(by !== undefined ? { by } : {}), ...modifier, target: targeted, ...named } };
-      }
-      return { type: "targeting", target: unit(closed(leaf, "subject")), modifier };
-    }
+    case "targeting-restriction":
+      return targetingEffect(leaf, target);
     case "counts-as": {
       // A region grant (counts-as@2, families/regions.ts) names the army rule's region instead of a range;
       // a named-range grant (counts-as@3) names the range and whose units it is measured to.

@@ -252,7 +252,36 @@ func targetingLeaf(m map[string]any, subj string, ctx effCtx) string {
 	if m["except"] == "core-stratagems" {
 		except = " (Core Stratagems can still target it)"
 	}
+	// "cannot target enemy units … if the target unit was engaged with this unit at the start of the turn".
+	if cond, ok := asMap(m["target_condition"]); ok && cond != nil {
+		condition := describeCondition(asTargetCandidate(cond).(map[string]any))
+		return who + " " + verb + " " + strings.TrimPrefix(whom, "all ") + kind + rng + unless + except + " if " + condition
+	}
 	return who + " " + verb + " " + whom + kind + rng + unless + except
+}
+
+// asTargetCandidate: a target_condition's this-unit is the unit checked as a target, so it reads as the target unit (defender).
+func asTargetCandidate(node any) any {
+	switch value := node.(type) {
+	case string:
+		if value == "this-unit" {
+			return "defender"
+		}
+		return value
+	case []any:
+		out := make([]any, len(value))
+		for i, item := range value {
+			out[i] = asTargetCandidate(item)
+		}
+		return out
+	case map[string]any:
+		out := make(map[string]any, len(value))
+		for key, item := range value {
+			out[key] = asTargetCandidate(item)
+		}
+		return out
+	}
+	return node
 }
 
 var leadingAVowelRe = regexp.MustCompile(`(?i)^a ([aeiou])`)

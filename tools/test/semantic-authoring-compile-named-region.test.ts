@@ -69,7 +69,7 @@ describe("Semantic authoring named-region-state compiler", () => {
     expect(producer.baseline).toEqual([{ region: { territory: "your-deployment-zone" }, duration: "permanent" }]);
     expect(producer.phase_extensions).toEqual([
       { region: { territory: "no-mans-land" }, condition: { type: "controls", parameters: { by: "friendly", objective: { territory: "no-mans-land" }, proportion: { comparison: "gte", fraction: 0.5 } } }, trigger: { event: "phase-started" }, duration: "phase", evaluation: "snapshot-once" },
-      { region: { territory: "enemy-deployment-zone" }, condition: { type: "controls", parameters: { by: "friendly", objective: { territory: "enemy-territory" }, proportion: { comparison: "gte", fraction: 0.5 } } }, trigger: { event: "phase-started" }, duration: "phase", evaluation: "snapshot-once" },
+      { region: { territory: "enemy-deployment-zone" }, condition: { type: "controls", parameters: { by: "friendly", objective: { territory: "enemy-deployment-zone" }, proportion: { comparison: "gte", fraction: 0.5 } } }, trigger: { event: "phase-started" }, duration: "phase", evaluation: "snapshot-once" },
     ]);
     expect(consumer.beneficiary_filter).toEqual({ owner: "friendly", all_of: ["THOUSAND SONS"] });
     expect(consumer).not.toHaveProperty("eligibility");
@@ -243,6 +243,9 @@ describe("named-region-producer", () => {
       baseline: [{ region: { territory: "your-deployment-zone" }, duration: "permanent" }], additive_extensions: [],
     });
     expect(effect.modifier.producer.phase_extensions.map((item) => item.region)).toEqual([{ territory: "no-mans-land" }, { territory: "enemy-deployment-zone" }]);
+    // Each extension counts the objective markers within the zone it extends into, not a whole territory.
+    expect(effect.modifier.producer.phase_extensions.map((item) => (item.condition as { parameters: { objective: unknown } }).parameters.objective))
+      .toEqual([{ territory: "no-mans-land" }, { territory: "enemy-deployment-zone" }]);
     expect(effectOk(effect)).toBe(true);
   });
 

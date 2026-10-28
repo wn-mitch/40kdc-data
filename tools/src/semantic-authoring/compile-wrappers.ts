@@ -208,8 +208,11 @@ export function selectUnit(selection: CompileLeaf, body: Node, extra: { maxCount
   if (selection.parameters.within_origin !== undefined && selection.parameters.distance !== "within") throw new CompileError("A selection measured from its bearer's Transport needs a within distance.");
   const own = selection.parameters.count as number | undefined;
   if (own !== undefined && extra.maxCount) throw new CompileError("A selection that names its own count cannot also take one by battle size or battle round.");
+  if (selection.parameters.at_least === true && extra.maxCount) throw new CompileError("A selection of one or more cannot also take an upper count by battle size or battle round.");
   const count = extra.maxCount ? { min: 0, max: extra.maxCount }
-    : selection.parameters.up_to === true ? { min: 0, max: own ?? 1 } : { min: own ?? 1, max: own ?? 1 };
+    : selection.parameters.up_to === true ? { min: 0, max: own ?? 1 }
+      // "select one or more": a lower bound only.
+      : selection.parameters.at_least === true ? { min: own ?? 1 } : { min: own ?? 1, max: own ?? 1 };
   return {
     type: "select-units",
     selector: {

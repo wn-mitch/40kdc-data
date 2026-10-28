@@ -228,7 +228,17 @@ function moveModifier(m: Record<string, unknown>, subj: string, ctx: Ctx): strin
   if (m.end_on_terrain === true) clauses.push(`${subj} can end ${pronoun(subj)} moves on top of terrain features`);
   if (m.ignore_vertical === true) clauses.push(`${subj} ${v(subj, "ignores")} vertical distances when ${pronoun(subj) === "their" ? "they move" : "it moves"}`);
   const s = clauses.join("; ");
-  return kinds && m.distance_bonus == null ? `${s}, during ${pronoun(subj)} ${kinds} moves` : s;
+  // A mode choice names its own move; the other clauses keep the ", during …" scope.
+  const scoped = kinds && m.distance_bonus == null && (s !== "" || m.mode_choice == null) ? `${s}, during ${pronoun(subj)} ${kinds} moves` : s;
+  const choice = m.mode_choice != null ? modeChoice(m.mode_choice as P, subj, kinds ?? "move") : "";
+  return [scoped, choice].filter((part) => part !== "").join("; ");
+}
+
+/** "can select any consolidation mode for that consolidation move, regardless of its Before Moving restrictions". */
+function modeChoice(c: P, subj: string, kinds: string): string {
+  const modes = c.modes === "any" ? "any" : `the ${orList((c.modes as unknown[]).map((x) => dekebab(jstr(x))))}`;
+  const waiver = c.ignore_before_moving === true ? `, ignoring that ${kinds} move's Before Moving restrictions` : "";
+  return `${subj} can select ${modes} ${kinds} mode for ${pronoun(subj)} ${kinds} moves${waiver}`;
 }
 
 const ORD = ["", "first", "second", "third", "fourth", "fifth"];

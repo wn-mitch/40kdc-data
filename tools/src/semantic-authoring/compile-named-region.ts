@@ -25,12 +25,13 @@ type Node = Record<string, unknown>;
  */
 
 function controlGate(territory: string, fraction: number): AbilityDSLCondition {
-  const objectiveTerritory = territory === "no-mans-land" ? "no-mans-land" : "enemy-territory";
   return {
     type: "controls",
     parameters: {
       by: "friendly",
-      objective: { territory: objectiveTerritory },
+      // "at least half of the objective markers within your opponent's deployment zone": the zone itself, not the
+      // opponent's whole territory.
+      objective: { territory } as Node,
       proportion: { comparison: "gte", fraction },
     },
   };

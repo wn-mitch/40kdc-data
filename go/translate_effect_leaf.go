@@ -729,8 +729,13 @@ func ruleStateLeaf(m map[string]any, subj string) string {
 		return subj + " " + ev(subj, "loses") + " the " + abilityReferenceLabel(m["rule"]) + " ability and cannot gain it except from this ability"
 	}
 	if m["rule_kind"] == "faction-rule" {
+		// any_army_faction: the granted faction rule works whatever the army's faction is.
 		if granted {
-			return subj + " " + ev(subj, "gains") + " " + abilityReferenceLabel(m["rule"])
+			anyFaction := ""
+			if m["any_army_faction"] == true {
+				anyFaction = ", whatever your Army Faction is"
+			}
+			return subj + " " + ev(subj, "gains") + " " + abilityReferenceLabel(m["rule"]) + anyFaction
 		}
 		return subj + " cannot use " + abilityReferenceLabel(m["rule"])
 	}

@@ -236,7 +236,7 @@ export function objectivePhrase(f: P, plural = false, noun = "objective"): strin
   if (f.home_of === "enemy") s += " (opponent home)";
   if (f.home_of === "friendly") s += " (your home)";
   if (f.name != null) s += ` (${dekebab(str(f.name))})`;
-  if (f.territory != null) s += ` in ${dekebab(str(f.territory))}`;
+  if (f.territory != null) s += ` in ${territoryPhrase(str(f.territory))}`;
   if (f.role === "non-home") s += " (excluding home)";
   const within = f.within as P | undefined;
   // Your control, within this unit's own range of it: the unit itself is controlling it.
@@ -337,4 +337,10 @@ export function usedAbilityPhrase(f: P): string | undefined {
   if (Array.isArray(f.source)) phrase += ` from ${orList(f.source.map((source) => source === "unit" ? "its datasheet" : source === "enhancement" ? "an Enhancement" : dekebab(str(source))))}`;
   if (f.usage != null && typeof f.usage === "object") phrase += ` that can be used ${usageClause(f.usage as AbilityUsage)}`;
   return phrase;
+}
+
+/** "your opponent's deployment zone": a deployment zone is named by whose it is; other territories by their words. */
+const TERRITORY_PHRASES: Record<string, string> = { "your-deployment-zone": "your deployment zone", "enemy-deployment-zone": "your opponent's deployment zone" };
+function territoryPhrase(territory: string): string {
+  return TERRITORY_PHRASES[territory] ?? dekebab(territory);
 }

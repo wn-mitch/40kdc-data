@@ -120,4 +120,20 @@ export const CHOICE_AND_DICE_EXTENSIONS: readonly FamilyExtension[] = [
     schema: (previous) => withProperties(previous, { amount: widenedEnum(previous, "amount", ["all"]) }),
     normalize: (input, previous) => input.amount === "all" ? standIn(input, "amount", "1", previous) : previous(input),
   },
+  /**
+   * "For each X model you select, roll one D6": one roll per model of the model selection the roll
+   * sits in, which already applies its effect to each selected model.
+   */
+  {
+    family: "dice-roll",
+    version: 7,
+    description: "As the previous version, plus per_model selected: one die for each model the enclosing model selection selects (\"for each X model you select, roll one D6\"). It needs a select-unit of models before it, and takes no count.",
+    schema: (previous) => withProperties(previous, { per_model: widenedEnum(previous, "per_model", ["selected"]) }),
+    normalize: (input, previous) => {
+      if (input.per_model !== "selected") return previous(input);
+      const { per_model: _perModel, ...rest } = input;
+      if (rest.count !== undefined) throw new TypeError("dice-roll.per_model selected rolls one die per selected model; it takes no count.");
+      return { ...previous(rest), per_model: "selected" };
+    },
+  },
 ];

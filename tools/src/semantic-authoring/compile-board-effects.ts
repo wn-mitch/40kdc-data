@@ -31,6 +31,11 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
       else modifier.distance_bonus = closed(leaf, "bonus");
       return { type: "move-modifier", target: unitOf(leaf, "subject"), modifier };
     }
+    case "move-mode-choice": {
+      const modes = leaf.parameters.modes === "any" ? "any" : closed(leaf, "modes");
+      const modeChoice: Node = { modes, ...(leaf.parameters.ignore_before_moving === true ? { ignore_before_moving: true } : {}) };
+      return { type: "move-modifier", target: unitOf(leaf, "subject"), modifier: { applies_to_moves: closed(leaf, "move_types"), mode_choice: modeChoice } };
+    }
     case "move-through": {
       // A pair of listed tokens (move-through@4, families/moves.ts) is one list.
       const modifier: Node = { passthrough: Array.isArray(leaf.parameters.passthrough) ? [...leaf.parameters.passthrough] : [closed(leaf, "passthrough")] };

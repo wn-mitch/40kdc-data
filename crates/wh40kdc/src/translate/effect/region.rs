@@ -133,6 +133,11 @@ fn whole_unit(m: &P) -> bool {
 
 /// A `named-region-state` on its own.
 pub(crate) fn describe_named_region_state(m: &P, ctx: &Ctx) -> String {
+    // A producer-only state declares the region and nothing reads it here: its sentences, as one
+    // clause the caller finishes ("If …, your deployment zone is within …").
+    if nn(m, "consumer").is_none() {
+        return declared_region(&prefix(m));
+    }
     let consumer = obj(m.get("consumer"));
     let whole = whole_unit(m);
     let gate = match consumer.get("attack_condition") {
@@ -172,4 +177,14 @@ pub(crate) fn describe_named_region_conditional(m: &P, condition: &Value, ctx: &
         "{} When {predicate}, {qualified_text}. Otherwise, {default_text}.",
         prefix(m)
     )
+}
+
+/// The region's sentences as one clause: the first letter lowered, the last full stop left to the caller.
+fn declared_region(sentences: &str) -> String {
+    let clause = sentences.strip_suffix('.').unwrap_or(sentences);
+    let mut chars = clause.chars();
+    match chars.next() {
+        Some(first) => first.to_lowercase().chain(chars).collect(),
+        None => String::new(),
+    }
 }

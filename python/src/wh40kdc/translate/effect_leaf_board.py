@@ -546,11 +546,34 @@ def _move_modifier(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
         moves_verb = "they move" if pronoun(subj) == "their" else "it moves"
         clauses.append(f"{subj} {v(subj, 'ignores')} vertical distances when {moves_verb}")
     s = "; ".join(clauses)
-    return (
+    # A mode choice names its own move; the other clauses keep the ", during …" scope.
+    scoped = (
         f"{s}, during {pronoun(subj)} {kinds} moves"
-        if kinds and m.get("distance_bonus") is None
+        if kinds and m.get("distance_bonus") is None and (s != "" or m.get("mode_choice") is None)
         else s
     )
+    choice = (
+        _mode_choice(m["mode_choice"], subj, kinds or "move")
+        if m.get("mode_choice") is not None
+        else ""
+    )
+    return "; ".join(part for part in (scoped, choice) if part != "")
+
+
+def _mode_choice(c: dict[str, Any], subj: str, kinds: str) -> str:
+    """'can select any consolidation mode for that consolidation move, regardless of its Before
+    Moving restrictions'."""
+    modes = (
+        "any"
+        if c.get("modes") == "any"
+        else f"the {or_list([dekebab(jstr(x)) for x in c['modes']])}"
+    )
+    waiver = (
+        f", ignoring that {kinds} move's Before Moving restrictions"
+        if c.get("ignore_before_moving") is True
+        else ""
+    )
+    return f"{subj} can select {modes} {kinds} mode for {pronoun(subj)} {kinds} moves{waiver}"
 
 
 _ORD = ["", "first", "second", "third", "fourth", "fifth"]

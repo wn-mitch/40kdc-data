@@ -454,7 +454,7 @@ func objectivePhrase(f map[string]any, plural bool, noun string) string {
 		s += " (" + dekebab(cstr(f["name"])) + ")"
 	}
 	if f["territory"] != nil {
-		s += " in " + dekebab(cstr(f["territory"]))
+		s += " in " + territoryPhrase(cstr(f["territory"]))
 	}
 	if f["role"] == "non-home" {
 		s += " (excluding home)"
@@ -707,4 +707,15 @@ func candidateClause(c map[string]any) (string, bool) {
 		}
 	}
 	return "", false
+}
+
+// territoryPhrase: "your opponent's deployment zone"; a deployment zone is named by whose it is, other territories by their words.
+func territoryPhrase(territory string) string {
+	switch territory {
+	case "your-deployment-zone":
+		return "your deployment zone"
+	case "enemy-deployment-zone":
+		return "your opponent's deployment zone"
+	}
+	return dekebab(territory)
 }

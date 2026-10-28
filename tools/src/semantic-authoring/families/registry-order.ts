@@ -73,4 +73,6 @@ export const REGISTRY_ORDER: readonly string[] = [
   "ability-modifier@7",
   "counts-as-moved@2", "targeting-restriction@5", "return-models@6",
   "bearer-eligibility@6", "event@36", "regain-wounds@5", "ignore-modifiers@4", "rule-state@4", "roll-auto-result@5",
+  "select-unit@7", "dice-roll@7", "targeting-restriction@6",
+  "make-move@7", "event@37",
 ];

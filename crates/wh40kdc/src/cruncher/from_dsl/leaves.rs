@@ -622,7 +622,14 @@ pub(super) fn named_region_state(node: &Obj, opts: &WalkOpts, out: &mut Out) {
     }
     let empty = Obj::new();
     let modifier = object(node.get("modifier")).unwrap_or(&empty);
-    let consumer = object(modifier.get("consumer")).unwrap_or(&empty);
+    // A producer-only state (a region declaration) gives no unit anything to apply.
+    let Some(consumer) = object(modifier.get("consumer")) else {
+        out.unsupported(
+            "named-region-state without a consumer declares a region only; it is not modelled by the buff layer",
+            node,
+        );
+        return;
+    };
     let Some(filter) = consumer.get("beneficiary_filter") else {
         out.unsupported("named-region-state beneficiary filter is missing", node);
         return;

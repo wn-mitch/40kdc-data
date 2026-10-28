@@ -192,6 +192,8 @@ function ownedEventTrigger(leaf: CompileLeaf): Node {
   if (leaf.parameters.subject !== undefined && leaf.parameters.subject !== "this-unit") node.subject = closed(leaf, "subject");
   const filter: Node = {};
   if (leaf.parameters.move_types !== undefined) filter.move_types = closed(leaf, "move_types");
+  // Version 37: the disembark mode a unit is selected to move with.
+  if (leaf.parameters.mode !== undefined) filter.mode = closed(leaf, "mode");
   // "But if it does, after it has moved": the move passed through the named terrain (compile-passthrough-used.ts).
   if (leaf.parameters.through !== undefined) filter.through = closed(leaf, "through");
   // Selected "to charge" is selected to declare a charge, which the DSL spells declare-charge.

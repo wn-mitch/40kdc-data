@@ -396,10 +396,39 @@ func moveModifierLeaf(m map[string]any, subj string, ctx effCtx) string {
 		clauses = append(clauses, subj+" "+ev(subj, "ignores")+" vertical distances when "+moves)
 	}
 	s := strings.Join(clauses, "; ")
-	if kinds != "" && m["distance_bonus"] == nil {
-		return s + ", during " + pronoun(subj) + " " + kinds + " moves"
+	// A mode choice names its own move; the other clauses keep the ", during …" scope.
+	if kinds != "" && m["distance_bonus"] == nil && (s != "" || m["mode_choice"] == nil) {
+		s += ", during " + pronoun(subj) + " " + kinds + " moves"
 	}
-	return s
+	choice, ok := asMap(m["mode_choice"])
+	if !ok || choice == nil {
+		return s
+	}
+	noun := kinds
+	if noun == "" {
+		noun = "move"
+	}
+	if s == "" {
+		return modeChoicePhrase(choice, subj, noun)
+	}
+	return s + "; " + modeChoicePhrase(choice, subj, noun)
+}
+
+// modeChoicePhrase: "can select any consolidation mode for that consolidation move, regardless of its Before Moving restrictions".
+func modeChoicePhrase(c map[string]any, subj, kinds string) string {
+	modes := "any"
+	if l, ok := asList(c["modes"]); ok {
+		names := make([]string, len(l))
+		for i, x := range l {
+			names[i] = dekebab(ejstr(x))
+		}
+		modes = "the " + orList(names)
+	}
+	waiver := ""
+	if c["ignore_before_moving"] == true {
+		waiver = ", ignoring that " + kinds + " move's Before Moving restrictions"
+	}
+	return subj + " can select " + modes + " " + kinds + " mode for " + pronoun(subj) + " " + kinds + " moves" + waiver
 }
 
 var setUpOrdinals = []string{"", "first", "second", "third", "fourth", "fifth"}

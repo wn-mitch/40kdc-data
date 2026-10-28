@@ -1527,9 +1527,19 @@ def _translate_named_region_state(
     if _is_object(modifier_raw):
         modifier = modifier_raw
     consumer_raw = modifier.get("consumer")
-    consumer: dict[str, Any] = {}
-    if _is_object(consumer_raw):
-        consumer = consumer_raw
+    # A producer-only state (a region declaration) gives no unit anything to apply.
+    if not _is_object(consumer_raw):
+        out["unsupported"].append(
+            {
+                "reason": (
+                    "named-region-state without a consumer declares a region only; "
+                    "it is not modelled by the buff layer"
+                ),
+                "effectFragment": node,
+            }
+        )
+        return
+    consumer: dict[str, Any] = consumer_raw
     gate_raw = consumer.get("beneficiary_filter")
     gate = gate_raw if _is_object(gate_raw) else {}
     allowed = {"owner", "level", "all_of", "any_of", "none_of", "not_all_of"}

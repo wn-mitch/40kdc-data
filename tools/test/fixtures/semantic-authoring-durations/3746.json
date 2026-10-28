@@ -35,9 +35,9 @@
   {
    "role": "EFFECT",
    "family_id": "no-advance-roll",
-   "family_version": 3,
+   "family_version": 4,
    "parameters": {
-    "subject": "this-unit"
+    "subject": "antecedent"
    },
    "start_byte": 67,
    "end_byte": 101,
@@ -87,7 +87,7 @@
    "family_id": "weapon-ability-grant",
    "family_version": 9,
    "parameters": {
-    "subject": "this-unit",
+    "subject": "antecedent",
     "keyword": "Assault",
     "weapon_type": "ranged"
    },
@@ -96,5 +96,5 @@
    "fragment": "RAW_TEXT"
   }
  ],
- "edits": "C2: move-ended -> move-started (leaf 1)"
+ "edits": "C2: move-ended -> move-started (leaf 1); \"it\" and \"that unit\" bind to the advancing unit (antecedent), not this unit"
 }

@@ -1,5 +1,6 @@
-import { boundSelectionPair } from "./compile-bound-selection.js";
+import { boundSelectionPair, ownModelsAfter } from "./compile-bound-selection.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
+import { exactSpan } from "./contracts.js";
 
 /**
  * The eligibility of a bound selection pair (compile-bound-selection.ts): "select one friendly X
@@ -9,6 +10,10 @@ import { CompileError, type CompileLeaf } from "./compile-fragments.js";
  * positional `selected-unit` names the inner unit, so references to the outer are rewritten to
  * `{ selection_var: <outer name> }` here. The inner selection's candidate conditions become its
  * eligibility, and an embark permission's destination `selection` becomes `{ selection_var: <inner name> }`.
+ * In a pair whose inner selection takes this unit's own models ("select one enemy unit …, then
+ * select one or more X models in this unit"), "that model" is the inner model and "that unit" can
+ * only be the outer unit, so a mortal-wounds leaf worded "that [enemy] unit …" takes the outer
+ * unit as `recipient_selection`.
  */
 
 export type SelectionRef = { selection_var: string };
@@ -50,7 +55,7 @@ export function candidateIndexes(list: readonly CompileLeaf[], inner: number, sa
  * refusal message when a leaf cannot be bound: a permission after the inner select that does not
  * name the outer unit, or an `into: selection` with no inner name.
  */
-export function bindPairEligibility(list: readonly CompileLeaf[], pair: { outer: number; inner: number }, candidates: readonly number[]): { leaves: CompileLeaf[]; refusal: string | null } {
+export function bindPairEligibility(list: readonly CompileLeaf[], pair: { outer: number; inner: number }, candidates: readonly number[], sourceText?: string): { leaves: CompileLeaf[]; refusal: string | null } {
   const outerName = list[pair.outer]!.parameters.bind_as;
   const innerName = list[pair.inner]!.parameters.bind_as;
   if (typeof outerName !== "string") return { leaves: [...list], refusal: "A selection measured from or visible to another needs the earlier selection bound by a name (bind_as)." };
@@ -59,6 +64,10 @@ export function bindPairEligibility(list: readonly CompileLeaf[], pair: { outer:
     if (candidates.includes(at)) return { ...leaf, parameters: rewriteRefs(leaf.parameters, outer) };
     return leaf;
   });
+  if (ownModelsAfter(list[pair.outer]!, list[pair.inner]!)) {
+    const refusal = bindOuterUnitEffects(list, leaves, pair, outerName, sourceText);
+    if (refusal) return { leaves: [...list], refusal };
+  }
   for (let at = pair.inner + 1; at < list.length; at += 1) {
     const leaf = list[at]!;
     if (leaf.family_id !== "eligibility-permission") continue;
@@ -72,6 +81,29 @@ export function bindPairEligibility(list: readonly CompileLeaf[], pair: { outer:
     }
   }
   return { leaves, refusal: null };
+}
+
+const OUTER_UNIT_WORDING = /^that\s+(?:(enemy|friendly)\s+)?unit\b/iu;
+
+/**
+ * The effects after the inner select of an own-models pair that name "that unit": a mortal-wounds
+ * leaf worded "that [enemy] unit …", whose side (if worded) is the outer selection's, takes the outer
+ * unit. Any other effect naming "that unit" has no reading in the pair. Writes into `leaves`; returns
+ * the refusal or null.
+ */
+function bindOuterUnitEffects(list: readonly CompileLeaf[], leaves: CompileLeaf[], pair: { outer: number; inner: number }, outerName: string, sourceText: string | undefined): string | null {
+  for (let at = pair.inner + 1; at < list.length; at += 1) {
+    const leaf = list[at]!;
+    if (leaf.role !== "EFFECT" || !Object.values(leaf.parameters).includes("that-unit")) continue;
+    const wording = sourceText === undefined || leaf.end_byte === undefined ? "" : exactSpan(sourceText, leaf.start_byte, leaf.end_byte).replace(/\*/gu, "");
+    const named = OUTER_UNIT_WORDING.exec(wording);
+    const side = named?.[1]?.toLowerCase();
+    if (leaf.family_id !== "mortal-wounds" || leaf.parameters.recipient !== "that-unit" || named === null || (side !== undefined && side !== list[pair.outer]!.parameters.scope)) {
+      return "In a selection of this unit's models after a unit selection, only mortal wounds worded \"that unit\" name the selected unit.";
+    }
+    leaves[at] = { ...leaf, parameters: { ...leaf.parameters, recipient_selection: outerName } };
+  }
+  return null;
 }
 
 function rewriteRefs(parameters: Record<string, unknown>, outer: SelectionRef): Record<string, unknown> {

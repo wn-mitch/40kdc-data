@@ -571,7 +571,7 @@ function describeEffectInlineBase(e: Effect, ctx: Ctx = {}): string {
       return "nothing happens";
     // Container types — inline forms.
     case "conditional":
-      if (e.effect?.type === "named-region-state")
+      if (e.effect?.type === "named-region-state" && e.effect.modifier?.consumer != null)
         return describeNamedRegionConditional(e.effect.modifier ?? {}, e.condition ?? {}, ctx);
       return `${conditionLeadIn(e.condition ?? {}, isDefensiveEffect(e.effect))}, ${describeEffectInline(e.effect ?? {}, ctx)}`;
     case "rules-bundle":
@@ -773,11 +773,20 @@ function namedRegionBranchText(
 }
 
 function describeNamedRegionState(m: Record<string, unknown>, ctx: Ctx = {}): string {
+  // A producer-only state declares the region and nothing reads it here: its sentences, as one
+  // clause the caller finishes ("If …, your deployment zone is within …").
+  if (m.consumer == null) return declaredRegion(namedRegionPrefix(m));
   const consumer = namedRegionRecord(m.consumer);
   const membership = namedRegionRecord(consumer.membership);
   const wholeUnit = membership.unit_scope === "whole-unit";
   const attackGate = consumer.attack_condition ? `For each qualifying attack (${describeCondition(consumer.attack_condition as Condition)}): ` : "";
   return `${namedRegionPrefix(m)} ${attackGate}${namedRegionBranchText(m, wholeUnit, false, false, ctx)} ${namedRegionBranchText(m, wholeUnit, true, false, ctx)}`;
+}
+
+/** The region's sentences as one clause: the first letter lowered, the last full stop left to the caller. */
+function declaredRegion(sentences: string): string {
+  const clause = sentences.replace(/\.$/u, "");
+  return clause.charAt(0).toLowerCase() + clause.slice(1);
 }
 
 function describeNamedRegionConditional(m: Record<string, unknown>, condition: Condition, ctx: Ctx = {}): string {
@@ -840,7 +849,11 @@ export function describeEffect(e: Effect, depth: number = 0, ctx: Ctx = {}): str
     case "ability-part": {
       // A part is always a bullet of its ability, even at the top level.
       const inner = e.effect ?? {};
-      if (CONTAINER_TYPES.has(inner.type ?? "")) return `${indent}-> ${capitalize(partHead(e))}:\n` + describeEffect(inner, depth + 1, ctx);
+      // A part with nothing to head it (a printed grant's body) lists its container's steps in its place.
+      if (CONTAINER_TYPES.has(inner.type ?? "")) {
+        const head = partHead(e);
+        return head ? `${indent}-> ${capitalize(head)}:\n` + describeEffect(inner, depth + 1, ctx) : describeEffect(inner, depth, ctx);
+      }
       return `${indent}-> ${capitalize(partInline(e, ctx))}.`;
     }
     case "ability-grant":

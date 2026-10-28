@@ -166,10 +166,13 @@ def describe_effect(e: Effect, depth: int = 0, ctx: Ctx | None = None) -> str:
     if t == "ability-part":
         # A part is always a bullet of its ability, even at the top level.
         inner = _obj(e.get("effect"))
+        # A part with nothing to head it (a printed grant's body) lists its container's steps in
+        # its place.
         if _is_container(inner):
-            return f"{indent}-> {capitalize(part_head(e))}:\n" + describe_effect(
-                inner, depth + 1, ctx
-            )
+            head = part_head(e)
+            if not head:
+                return describe_effect(inner, depth, ctx)
+            return f"{indent}-> {capitalize(head)}:\n" + describe_effect(inner, depth + 1, ctx)
         return f"{indent}-> {capitalize(part_inline(e, ctx))}."
     if t == "ability-grant" and is_defined_grant(e):
         # A grant printed with its ability: the holder and name, then the ability one level deeper.
