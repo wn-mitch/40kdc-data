@@ -1374,7 +1374,9 @@ func completionLowerBounds(options []any, models []any, explicitCounts map[strin
 // repeated in at least two multi-item branches, and never a pick on its own,
 // is mechanically determined by those primary selections, so the pass may
 // derive its count rather than requiring the duplicated aggregate. Defaults
-// are never relaxed.
+// are never relaxed. A branch is read net of the option's own replaces: an
+// item a branch hands back is kept, not picked (a whole-menu option re-adds
+// the boltgun a champion keeps).
 func repeatedCoItems(options []any, models []any) map[string]bool {
 	defaultIDs := map[string]bool{}
 	for _, modelAny := range models {
@@ -1387,8 +1389,9 @@ func repeatedCoItems(options []any, models []any) map[string]bool {
 	for _, optionAny := range options {
 		option, _ := asMap(optionAny)
 		occurrences := map[string]int{}
+		replaces := getStrList(option, "replaces")
 		for _, branchAny := range getList(option, "replacement_choice") {
-			branch := toStrList(branchAny)
+			branch := netOfReplaces(toStrList(branchAny), replaces)
 			if len(branch) < 2 {
 				continue
 			}
@@ -1412,11 +1415,30 @@ func repeatedCoItems(options []any, models []any) map[string]bool {
 		if replacement := getList(option, "replacement"); len(replacement) > 0 {
 			branches = []any{replacement}
 		}
+		replaces := getStrList(option, "replaces")
 		for _, branchAny := range branches {
-			if branch := toStrList(branchAny); len(branch) == 1 {
+			if branch := netOfReplaces(toStrList(branchAny), replaces); len(branch) == 1 {
 				delete(out, branch[0])
 			}
 		}
+	}
+	return out
+}
+
+// netOfReplaces is branch without one copy of each id in replaces (the items
+// it keeps).
+func netOfReplaces(branch []string, replaces []string) []string {
+	kept := map[string]int{}
+	for _, id := range replaces {
+		kept[id]++
+	}
+	out := []string{}
+	for _, id := range branch {
+		if kept[id] > 0 {
+			kept[id]--
+			continue
+		}
+		out = append(out, id)
 	}
 	return out
 }
@@ -2178,7 +2200,8 @@ func tierModels(tier map[string]any, base []any) []any {
 // whose total range [Σmin, Σmax] contains it and run validateLoadout against each
 // tier's allocation; the unit is legal iff some containing tier validates clean.
 // Deterministic reporting: the empty result of the first clean tier (in tier
-// order), else the violations of the first containing tier; an
+// order), else the violations of the containing tier with the fewest (the first
+// in tier order on a tie), the size the selection comes nearest; an
 // invalid-model-count violation when the size matches no tier. With no tiers it
 // falls back to a plain validateLoadout. Mirror of the TS reference.
 func checkUnitLegality(unit map[string]any, modelCount int, options []any, counts map[string]int, models []any, tiers []any) []map[string]string {
@@ -2207,17 +2230,17 @@ func checkUnitLegality(unit map[string]any, modelCount int, options []any, count
 			"message": uid + ": " + itoa(modelCount) + " models matches no composition tier",
 		}}
 	}
-	var first []map[string]string
+	var nearest []map[string]string
 	for _, tm := range candidates {
 		violations := validateLoadout(unit, modelCount, options, counts, tm)
 		if len(violations) == 0 {
 			return []map[string]string{}
 		}
-		if first == nil {
-			first = violations
+		if nearest == nil || len(violations) < len(nearest) {
+			nearest = violations
 		}
 	}
-	return first
+	return nearest
 }
 
 func joinStrings(parts []string, sep string) string {

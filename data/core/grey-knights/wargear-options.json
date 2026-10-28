@@ -677,6 +677,10 @@
       ],
       [
         "ancients-banner",
+        "storm-bolter-paladin-squad"
+      ],
+      [
+        "ancients-banner",
         "psycannon"
       ],
       [
@@ -691,23 +695,6 @@
   },
   {
     "id": "paladin-squad-wgo-mfm-2",
-    "unit_id": "paladin-squad",
-    "faction_id": "grey-knights",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-995"
-    },
-    "is_free": true,
-    "replacement": [
-      "ancients-banner"
-    ],
-    "model_constraint": {
-      "model_name": "Paladin Ancient",
-      "any_number": true
-    }
-  },
-  {
-    "id": "paladin-squad-wgo-mfm-3",
     "unit_id": "paladin-squad",
     "faction_id": "grey-knights",
     "game_version": {
@@ -834,6 +821,10 @@
         "ancients-banner"
       ],
       [
+        "ancients-banner",
+        "storm-bolter-brotherhood-terminator-squad"
+      ],
+      [
         "psilencer-brotherhood-terminator-squad",
         "ancients-banner"
       ],
@@ -841,23 +832,6 @@
         "ancients-banner",
         "psycannon-brotherhood-terminator-squad"
       ]
-    ],
-    "model_constraint": {
-      "model_name": "Ancient",
-      "any_number": true
-    }
-  },
-  {
-    "id": "brotherhood-terminator-squad-wgo-mfm-3",
-    "unit_id": "brotherhood-terminator-squad",
-    "faction_id": "grey-knights",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-995"
-    },
-    "is_free": true,
-    "replacement": [
-      "ancients-banner"
     ],
     "model_constraint": {
       "model_name": "Ancient",

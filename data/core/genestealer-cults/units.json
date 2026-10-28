@@ -1447,6 +1447,13 @@
     "wargear_budgets": [
       {
         "items": [
+          "heavy-mining-tool"
+        ],
+        "count": 6,
+        "per_models": 10
+      },
+      {
+        "items": [
           "cult-icon"
         ],
         "count": 1,

@@ -257,7 +257,16 @@
         "blaster"
       ],
       [
+        "power-sword",
+        "shuriken-pistol",
+        "faolchu"
+      ],
+      [
         "shuriken-rifle"
+      ],
+      [
+        "fusion-pistol",
+        "shuriken-pistol"
       ]
     ],
     "model_constraint": {
@@ -288,43 +297,6 @@
   },
   {
     "id": "corsair-voidscarred-wgo-mfm-4",
-    "unit_id": "corsair-voidscarred",
-    "faction_id": "aeldari",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-995"
-    },
-    "is_free": true,
-    "replacement": [
-      "faolchu"
-    ],
-    "model_constraint": {
-      "model_name": "Corsair Voidscarred",
-      "any_number": true
-    }
-  },
-  {
-    "id": "corsair-voidscarred-wgo-mfm-5",
-    "unit_id": "corsair-voidscarred",
-    "faction_id": "aeldari",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-995"
-    },
-    "is_free": true,
-    "replaces": [
-      "power-sword"
-    ],
-    "replacement": [
-      "fusion-pistol"
-    ],
-    "model_constraint": {
-      "model_name": "Corsair Voidscarred",
-      "any_number": true
-    }
-  },
-  {
-    "id": "corsair-voidscarred-wgo-mfm-6",
     "unit_id": "corsair-voidscarred",
     "faction_id": "aeldari",
     "game_version": {
@@ -497,14 +469,16 @@
     },
     "is_free": true,
     "replaces": [
-      "close-combat-weapon"
+      "close-combat-weapon",
+      "shuriken-pistol"
     ],
     "replacement": [
+      "shuriken-pistol",
       "power-sword-storm-guardians"
     ],
     "model_constraint": {
       "model_name": "Storm Guardian",
-      "max_count": 2
+      "any_number": true
     }
   },
   {
@@ -517,9 +491,11 @@
     },
     "is_free": true,
     "replaces": [
+      "close-combat-weapon",
       "shuriken-pistol"
     ],
     "replacement": [
+      "close-combat-weapon",
       "fusion-gun"
     ],
     "model_constraint": {
@@ -537,9 +513,11 @@
     },
     "is_free": true,
     "replaces": [
+      "close-combat-weapon",
       "shuriken-pistol"
     ],
     "replacement": [
+      "close-combat-weapon",
       "flamer"
     ],
     "model_constraint": {
@@ -687,217 +665,141 @@
     },
     "is_free": true,
     "replaces": [
-      "d-bombard"
-    ],
-    "replacement_choice": [
-      [
-        "phantom-starcannon",
-        "phantom-starcannon",
-        "wraith-glaive"
-      ],
-      [
-        "pulse-laser",
-        "pulse-laser",
-        "wraith-glaive"
-      ],
-      [
-        "phantom-pulsar"
-      ],
-      [
-        "phantom-starcannon",
-        "pulse-laser",
-        "wraith-glaive"
-      ]
-    ],
-    "model_constraint": {
-      "any_number": true
-    }
-  },
-  {
-    "id": "phantom-titan-wgo-mfm-2",
-    "unit_id": "phantom-titan",
-    "faction_id": "aeldari",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-995"
-    },
-    "is_free": true,
-    "replaces": [
-      "d-bombard",
-      "phantom-pulsar"
-    ],
-    "replacement_choice": [
-      [
-        "wraith-glaive",
-        "wraith-glaive",
-        "phantom-starcannon",
-        "phantom-starcannon",
-        "pulse-laser",
-        "pulse-laser"
-      ],
-      [
-        "wraith-glaive",
-        "wraith-glaive",
-        "pulse-laser",
-        "pulse-laser",
-        "pulse-laser",
-        "pulse-laser"
-      ],
-      [
-        "phantom-starcannon",
-        "phantom-starcannon",
-        "phantom-starcannon",
-        "wraith-glaive",
-        "wraith-glaive",
-        "pulse-laser"
-      ],
-      [
-        "phantom-starcannon",
-        "phantom-starcannon",
-        "phantom-starcannon",
-        "phantom-starcannon",
-        "wraith-glaive",
-        "wraith-glaive"
-      ],
-      [
-        "wraith-glaive",
-        "wraith-glaive",
-        "phantom-starcannon",
-        "pulse-laser",
-        "pulse-laser",
-        "pulse-laser"
-      ]
-    ],
-    "model_constraint": {
-      "any_number": true
-    }
-  },
-  {
-    "id": "phantom-titan-wgo-mfm-3",
-    "unit_id": "phantom-titan",
-    "faction_id": "aeldari",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-995"
-    },
-    "is_free": true,
-    "replaces": [
       "d-bombard",
       "phantom-pulsar",
       "phantom-starcannon"
     ],
-    "replacement": [
-      "pulse-laser",
-      "pulse-laser",
-      "pulse-laser",
-      "pulse-laser",
-      "pulse-laser",
-      "wraith-glaive",
-      "wraith-glaive"
-    ],
-    "model_constraint": {
-      "any_number": true
-    }
-  },
-  {
-    "id": "phantom-titan-wgo-mfm-4",
-    "unit_id": "phantom-titan",
-    "faction_id": "aeldari",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-995"
-    },
-    "is_free": true,
-    "replaces": [
-      "phantom-pulsar",
-      "phantom-starcannon"
-    ],
-    "replacement": [
-      "wraith-glaive",
-      "pulse-laser",
-      "pulse-laser"
-    ],
-    "model_constraint": {
-      "any_number": true
-    }
-  },
-  {
-    "id": "phantom-titan-wgo-mfm-5",
-    "unit_id": "phantom-titan",
-    "faction_id": "aeldari",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-995"
-    },
-    "is_free": true,
-    "replaces": [
-      "phantom-pulsar"
-    ],
     "replacement_choice": [
       [
+        "phantom-pulsar",
+        "phantom-starcannon",
         "phantom-starcannon",
         "phantom-starcannon",
         "wraith-glaive"
       ],
       [
+        "wraith-glaive",
+        "wraith-glaive",
+        "phantom-starcannon",
+        "phantom-starcannon",
+        "phantom-starcannon",
+        "pulse-laser",
+        "pulse-laser"
+      ],
+      [
+        "pulse-laser",
+        "pulse-laser",
+        "phantom-starcannon",
+        "phantom-pulsar",
+        "wraith-glaive"
+      ],
+      [
+        "pulse-laser",
+        "pulse-laser",
+        "pulse-laser",
+        "pulse-laser",
+        "pulse-laser",
+        "wraith-glaive",
+        "wraith-glaive"
+      ],
+      [
+        "d-bombard",
+        "wraith-glaive",
+        "pulse-laser",
+        "pulse-laser"
+      ],
+      [
+        "phantom-pulsar",
+        "phantom-pulsar",
+        "phantom-starcannon"
+      ],
+      [
+        "d-bombard",
+        "phantom-starcannon",
+        "phantom-starcannon",
+        "phantom-starcannon",
+        "wraith-glaive"
+      ],
+      [
+        "wraith-glaive",
+        "wraith-glaive",
+        "pulse-laser",
+        "pulse-laser",
+        "pulse-laser",
+        "pulse-laser",
+        "phantom-starcannon"
+      ],
+      [
+        "phantom-starcannon",
+        "phantom-starcannon",
+        "phantom-starcannon",
+        "phantom-starcannon",
+        "wraith-glaive",
+        "wraith-glaive",
+        "pulse-laser"
+      ],
+      [
+        "phantom-starcannon",
+        "d-bombard",
+        "d-bombard"
+      ],
+      [
+        "phantom-starcannon",
+        "phantom-starcannon",
+        "phantom-starcannon",
+        "phantom-starcannon",
+        "phantom-starcannon",
+        "wraith-glaive",
+        "wraith-glaive"
+      ],
+      [
+        "pulse-laser",
+        "pulse-laser",
+        "d-bombard",
+        "phantom-starcannon",
+        "wraith-glaive"
+      ],
+      [
+        "wraith-glaive",
+        "wraith-glaive",
+        "phantom-starcannon",
+        "phantom-starcannon",
+        "pulse-laser",
+        "pulse-laser",
+        "pulse-laser"
+      ],
+      [
+        "d-bombard",
+        "wraith-glaive",
+        "pulse-laser",
+        "phantom-starcannon",
+        "phantom-starcannon"
+      ],
+      [
+        "phantom-starcannon",
+        "phantom-starcannon",
+        "pulse-laser",
+        "phantom-pulsar",
+        "wraith-glaive"
+      ],
+      [
+        "pulse-laser",
+        "phantom-pulsar",
         "d-bombard"
       ],
       [
         "pulse-laser",
         "pulse-laser",
+        "pulse-laser",
+        "phantom-pulsar",
         "wraith-glaive"
       ],
       [
-        "wraith-glaive",
-        "pulse-laser",
-        "phantom-starcannon"
-      ],
-      [
+        "phantom-starcannon",
+        "d-bombard",
         "wraith-glaive",
         "pulse-laser"
       ]
-    ],
-    "model_constraint": {
-      "any_number": true
-    }
-  },
-  {
-    "id": "phantom-titan-wgo-mfm-6",
-    "unit_id": "phantom-titan",
-    "faction_id": "aeldari",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-995"
-    },
-    "is_free": true,
-    "replaces": [
-      "phantom-starcannon"
-    ],
-    "replacement": [
-      "pulse-laser"
-    ],
-    "model_constraint": {
-      "any_number": true
-    }
-  },
-  {
-    "id": "phantom-titan-wgo-mfm-7",
-    "unit_id": "phantom-titan",
-    "faction_id": "aeldari",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-995"
-    },
-    "is_free": true,
-    "replaces": [
-      "d-bombard",
-      "phantom-starcannon"
-    ],
-    "replacement": [
-      "pulse-laser",
-      "pulse-laser",
-      "pulse-laser",
-      "wraith-glaive"
     ],
     "model_constraint": {
       "any_number": true
@@ -1873,6 +1775,10 @@
         "shuriken-pistol"
       ],
       [
+        "avenger-shuriken-catapult",
+        "avenger-shuriken-catapult"
+      ],
+      [
         "shuriken-pistol",
         "power-glaive",
         "diresword",
@@ -1906,23 +1812,6 @@
   },
   {
     "id": "dire-avengers-wgo-mfm-2",
-    "unit_id": "dire-avengers",
-    "faction_id": "aeldari",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-995"
-    },
-    "is_free": true,
-    "replacement": [
-      "avenger-shuriken-catapult"
-    ],
-    "model_constraint": {
-      "model_name": "Dire Avenger Exarch",
-      "any_number": true
-    }
-  },
-  {
-    "id": "dire-avengers-wgo-mfm-3",
     "unit_id": "dire-avengers",
     "faction_id": "aeldari",
     "game_version": {

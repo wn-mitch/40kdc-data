@@ -383,44 +383,34 @@
       "dataslate": "mfm-995"
     },
     "is_free": true,
-    "replacement_choice": [
-      [
-        "combi-bolter"
-      ],
-      [
-        "havoc-launcher",
-        "combi-weapon"
-      ],
-      [
-        "havoc-launcher",
-        "combi-bolter"
-      ],
-      [
-        "havoc-launcher"
-      ],
-      [
-        "combi-weapon"
-      ]
-    ],
-    "model_constraint": {
-      "any_number": true
-    }
-  },
-  {
-    "id": "chaos-rhino-wgo-mfm-2",
-    "unit_id": "chaos-rhino",
-    "faction_id": "emperors-children",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-995"
-    },
-    "is_free": true,
     "replaces": [
       "combi-bolter"
     ],
     "replacement_choice": [
       [
+        "combi-bolter",
+        "combi-bolter"
+      ],
+      [
+        "havoc-launcher",
+        "combi-bolter",
+        "combi-weapon"
+      ],
+      [
+        "havoc-launcher",
+        "combi-bolter",
+        "combi-bolter"
+      ],
+      [
+        "combi-bolter",
         "havoc-launcher"
+      ],
+      [
+        "havoc-launcher"
+      ],
+      [
+        "combi-bolter",
+        "combi-weapon"
       ],
       [
         "combi-weapon",

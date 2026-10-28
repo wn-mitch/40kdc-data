@@ -848,13 +848,16 @@ def _repeated_co_items(options: list[WargearOption], models: list[LoadoutModel])
     repeated in at least two multi-item branches, and never a pick on its own,
     is mechanically determined by those primary selections, so the pass may
     derive its count rather than requiring the duplicated aggregate. Defaults
-    are never relaxed.
+    are never relaxed. A branch is read net of the option's own ``replaces``:
+    an item a branch hands back is kept, not picked (a whole-menu option
+    re-adds the boltgun a champion keeps).
     """
     default_ids = {id_ for model in models for id_ in (model.get("default_weapon_ids") or [])}
     out: set[str] = set()
     for option in options:
         occurrences: dict[str, int] = {}
         for branch in option.get("replacement_choice") or []:
+            branch = _net_of_replaces(branch, option.get("replaces") or [])
             if len(branch) < 2:
                 continue
             for id_ in dict.fromkeys(branch):
@@ -866,8 +869,23 @@ def _repeated_co_items(options: list[WargearOption], models: list[LoadoutModel])
         replacement = option.get("replacement")
         branches = [replacement] if replacement else (option.get("replacement_choice") or [])
         for branch in branches:
+            branch = _net_of_replaces(branch, option.get("replaces") or [])
             if len(branch) == 1:
                 out.discard(branch[0])
+    return out
+
+
+def _net_of_replaces(branch: list[str], replaces: list[str]) -> list[str]:
+    """``branch`` without one copy of each id in ``replaces`` (the items it keeps)."""
+    kept: dict[str, int] = {}
+    for id_ in replaces:
+        kept[id_] = kept.get(id_, 0) + 1
+    out: list[str] = []
+    for id_ in branch:
+        if kept.get(id_, 0) > 0:
+            kept[id_] -= 1
+        else:
+            out.append(id_)
     return out
 
 
@@ -1520,8 +1538,9 @@ def check_unit_legality(
     total range ``[Σmin, Σmax]`` contains it and run :func:`validate_loadout`
     against each tier's allocation; the unit is legal iff **some** containing tier
     validates clean. Deterministic reporting: the empty result of the first clean
-    tier (in tier order), else the violations of the first containing tier; an
-    ``invalid-model-count`` violation when the size matches no tier. With no tiers
+    tier (in tier order), else the violations of the containing tier with the
+    fewest (the first in tier order on a tie), the size the selection comes
+    nearest; an ``invalid-model-count`` violation when the size matches no tier. With no tiers
     it falls back to a plain :func:`validate_loadout`. Mirror of the TS reference.
     """
     if not tiers:
@@ -1543,14 +1562,14 @@ def check_unit_legality(
                 "message": f"{uid}: {model_count} models matches no composition tier",
             }
         ]
-    first: list[dict[str, str]] | None = None
+    nearest: list[dict[str, str]] | None = None
     for tm in candidates:
         violations = validate_loadout(unit, model_count, options, counts, tm)
         if not violations:
             return []
-        if first is None:
-            first = violations
-    return first or []
+        if nearest is None or len(violations) < len(nearest):
+            nearest = violations
+    return nearest or []
 
 
 def _encode_candidate(witness: list[str], counts: dict[str, int]) -> str:

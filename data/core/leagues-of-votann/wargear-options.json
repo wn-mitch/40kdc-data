@@ -531,8 +531,15 @@
     "replaces": [
       "heavy-plasma-axe"
     ],
-    "replacement": [
-      "twin-concussion-gauntlet"
+    "replacement_choice": [
+      [
+        "mole-grenade-launcher",
+        "heavy-plasma-axe"
+      ],
+      [
+        "mole-grenade-launcher",
+        "concussion-maul"
+      ]
     ],
     "model_constraint": {
       "per_n_models": 5
@@ -551,24 +558,7 @@
       "heavy-plasma-axe"
     ],
     "replacement": [
-      "mole-grenade-launcher",
-      "concussion-maul"
-    ],
-    "model_constraint": {
-      "per_n_models": 5
-    }
-  },
-  {
-    "id": "cthonian-beserks-wgo-mfm-4",
-    "unit_id": "cthonian-beserks",
-    "faction_id": "leagues-of-votann",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-995"
-    },
-    "is_free": true,
-    "replacement": [
-      "mole-grenade-launcher"
+      "twin-concussion-gauntlet"
     ],
     "model_constraint": {
       "per_n_models": 5

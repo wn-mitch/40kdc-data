@@ -1103,6 +1103,20 @@
     "wargear_budgets": [
       {
         "items": [
+          "deathwatch-shotgun"
+        ],
+        "count": 2,
+        "per_models": 5
+      },
+      {
+        "items": [
+          "heavy-thunder-hammer"
+        ],
+        "count": 2,
+        "per_models": 5
+      },
+      {
+        "items": [
           "storm-shield"
         ],
         "count": 2,

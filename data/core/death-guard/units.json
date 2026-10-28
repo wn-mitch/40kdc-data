@@ -1012,6 +1012,13 @@
       },
       {
         "items": [
+          "heavy-plague-weapon"
+        ],
+        "count": 4,
+        "per_models": 10
+      },
+      {
+        "items": [
           "meltagun",
           "plague-belcher"
         ],

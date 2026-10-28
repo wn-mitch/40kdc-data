@@ -346,8 +346,12 @@
       "dataslate": "mfm-995"
     },
     "is_free": true,
+    "replaces": [
+      "farstalker-firearm"
+    ],
     "replacement": [
-      "pechra"
+      "pechra",
+      "farstalker-firearm"
     ],
     "model_constraint": {
       "model_name": "Kroot Farstalker",
@@ -492,25 +496,12 @@
         "rail-rifle"
       ],
       [
+        "pulse-carbine",
+        "semi-automatic-grenade-launcher"
+      ],
+      [
         "ion-rifle"
       ]
-    ],
-    "model_constraint": {
-      "model_name": "Pathfinder",
-      "max_count": 3
-    }
-  },
-  {
-    "id": "pathfinder-team-wgo-mfm-3",
-    "unit_id": "pathfinder-team",
-    "faction_id": "tau-empire",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-995"
-    },
-    "is_free": true,
-    "replacement": [
-      "semi-automatic-grenade-launcher"
     ],
     "model_constraint": {
       "model_name": "Pathfinder",
@@ -518,7 +509,7 @@
     }
   },
   {
-    "id": "pathfinder-team-wgo-mfm-4",
+    "id": "pathfinder-team-wgo-mfm-3",
     "unit_id": "pathfinder-team",
     "faction_id": "tau-empire",
     "game_version": {
@@ -535,7 +526,7 @@
     }
   },
   {
-    "id": "pathfinder-team-wgo-mfm-5",
+    "id": "pathfinder-team-wgo-mfm-4",
     "unit_id": "pathfinder-team",
     "faction_id": "tau-empire",
     "game_version": {

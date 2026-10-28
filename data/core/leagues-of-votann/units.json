@@ -1678,15 +1678,6 @@
         "required_detachment_id": "delve-assault-shift"
       }
     ],
-    "wargear_budgets": [
-      {
-        "items": [
-          "mole-grenade-launcher"
-        ],
-        "count": 1,
-        "per_models": 5
-      }
-    ],
     "external_refs": [
       {
         "namespace": "bsdata",

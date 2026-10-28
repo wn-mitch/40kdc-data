@@ -1254,7 +1254,9 @@ function completionLowerBounds(
  * primary selections are still exact). A weapon repeated in at least two
  * multi-item branches, and never a pick on its own, is mechanically determined
  * by those primary selections, so the pass may derive its count rather than
- * requiring the duplicated aggregate. Defaults are never relaxed.
+ * requiring the duplicated aggregate. Defaults are never relaxed. A branch is
+ * read net of the option's own `replaces`: an item a branch hands back is kept,
+ * not picked (a whole-menu option re-adds the boltgun a champion keeps).
  */
 function repeatedCoItems(
   options: readonly WargearOption[],
@@ -1263,10 +1265,23 @@ function repeatedCoItems(
   const defaultIds = new Set(
     models.flatMap((model) => model.default_weapon_ids ?? []),
   );
+  const netBranches = (option: WargearOption): string[][] => {
+    const branches = option.replacement ? [option.replacement] : (option.replacement_choice ?? []);
+    return branches.map((branch) => {
+      const kept = toMultiset(option.replaces ?? []);
+      return branch.filter((id) => {
+        const left = kept.get(id) ?? 0;
+        if (left === 0) return true;
+        kept.set(id, left - 1);
+        return false;
+      });
+    });
+  };
   const out = new Set<string>();
   for (const option of options) {
+    if (!option.replacement_choice) continue;
     const occurrences = new Map<string, number>();
-    for (const branch of option.replacement_choice ?? []) {
+    for (const branch of netBranches(option)) {
       if (branch.length < 2) continue;
       for (const id of new Set(branch)) {
         occurrences.set(id, (occurrences.get(id) ?? 0) + 1);
@@ -1277,8 +1292,7 @@ function repeatedCoItems(
     }
   }
   for (const option of options) {
-    const branches = option.replacement ? [option.replacement] : (option.replacement_choice ?? []);
-    for (const branch of branches) if (branch.length === 1) out.delete(branch[0]);
+    for (const branch of netBranches(option)) if (branch.length === 1) out.delete(branch[0]);
   }
   return out;
 }
@@ -1686,8 +1700,10 @@ function tierModels(
  * Nodebeasts at 22 models, which the single-envelope allocation cannot.
  *
  * Deterministic reporting (stable for cross-impl conformance): return the empty
- * result of the first clean tier (in tier order); else the violations of the first
- * containing tier. When `modelCount` falls in no tier, a single
+ * result of the first clean tier (in tier order); else the violations of the
+ * containing tier the selection comes nearest, the one with the fewest violations
+ * (the first in tier order on a tie), so the bounds reported are those of a size
+ * the list could mean. When `modelCount` falls in no tier, a single
  * `invalid-model-count` violation. When no `tiers` are supplied, falls back to a
  * plain {@link validateLoadout} (no size check) — preserving behaviour for units
  * the tier ingest didn't populate. Mirror of `crates/wh40kdc/src/data/loadout.rs`.
@@ -1720,13 +1736,13 @@ export function checkUnitLegality(
       },
     ];
   }
-  let firstViolations: Violation[] | null = null;
+  let nearest: Violation[] | null = null;
   for (const tm of candidates) {
     const violations = validateLoadout(unit, modelCount, options, counts, tm);
     if (violations.length === 0) return [];
-    if (firstViolations === null) firstViolations = violations;
+    if (nearest === null || violations.length < nearest.length) nearest = violations;
   }
-  return firstViolations ?? [];
+  return nearest ?? [];
 }
 
 /**

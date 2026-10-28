@@ -3037,6 +3037,22 @@
         "namespace": "mfm",
         "id": "75865686-56e2-40e7-b0cd-4d749c9b4ed0"
       }
+    ],
+    "wargear_budgets": [
+      {
+        "items": [
+          "plasma-pistol-death-company-marines-with-jump-packs"
+        ],
+        "count": 2,
+        "per_models": 5
+      },
+      {
+        "items": [
+          "power-weapon"
+        ],
+        "count": 2,
+        "per_models": 5
+      }
     ]
   },
   {
@@ -4753,7 +4769,21 @@
     "wargear_budgets": [
       {
         "items": [
+          "deathwatch-shotgun"
+        ],
+        "count": 2,
+        "per_models": 5
+      },
+      {
+        "items": [
           "storm-shield"
+        ],
+        "count": 2,
+        "per_models": 5
+      },
+      {
+        "items": [
+          "heavy-thunder-hammer"
         ],
         "count": 2,
         "per_models": 5

@@ -118,13 +118,26 @@
       "dataslate": "mfm-995"
     },
     "is_free": true,
+    "replaces": [
+      "hellglaive"
+    ],
     "replacement_choice": [
+      [
+        "splinter-pistol",
+        "power-weapon",
+        "hellglaive"
+      ],
+      [
+        "stunclaw",
+        "splinter-pistol"
+      ],
       [
         "splinter-pistol",
         "power-weapon"
       ],
       [
         "splinter-pistol",
+        "hellglaive",
         "stunclaw"
       ]
     ],
@@ -135,33 +148,6 @@
   },
   {
     "id": "hellions-wgo-mfm-2",
-    "unit_id": "hellions",
-    "faction_id": "drukhari",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-995"
-    },
-    "is_free": true,
-    "replaces": [
-      "hellglaive"
-    ],
-    "replacement_choice": [
-      [
-        "stunclaw",
-        "splinter-pistol"
-      ],
-      [
-        "splinter-pistol",
-        "power-weapon"
-      ]
-    ],
-    "model_constraint": {
-      "model_name": "Helliarch",
-      "any_number": true
-    }
-  },
-  {
-    "id": "hellions-wgo-mfm-3",
     "unit_id": "hellions",
     "faction_id": "drukhari",
     "game_version": {
@@ -863,6 +849,10 @@
       ],
       [
         "dark-lance"
+      ],
+      [
+        "stimm-needler",
+        "splinter-rifle"
       ]
     ],
     "model_constraint": {
@@ -872,23 +862,6 @@
   },
   {
     "id": "hand-of-the-archon-wgo-mfm-2",
-    "unit_id": "hand-of-the-archon",
-    "faction_id": "drukhari",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-995"
-    },
-    "is_free": true,
-    "replacement": [
-      "stimm-needler"
-    ],
-    "model_constraint": {
-      "model_name": "Kabalite Agents",
-      "any_number": true
-    }
-  },
-  {
-    "id": "hand-of-the-archon-wgo-mfm-3",
     "unit_id": "hand-of-the-archon",
     "faction_id": "drukhari",
     "game_version": {
@@ -913,7 +886,7 @@
     }
   },
   {
-    "id": "hand-of-the-archon-wgo-mfm-4",
+    "id": "hand-of-the-archon-wgo-mfm-3",
     "unit_id": "hand-of-the-archon",
     "faction_id": "drukhari",
     "game_version": {
@@ -933,7 +906,7 @@
     }
   },
   {
-    "id": "hand-of-the-archon-wgo-mfm-5",
+    "id": "hand-of-the-archon-wgo-mfm-4",
     "unit_id": "hand-of-the-archon",
     "faction_id": "drukhari",
     "game_version": {

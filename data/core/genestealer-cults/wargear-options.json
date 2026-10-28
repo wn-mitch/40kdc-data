@@ -73,7 +73,11 @@
       "dataslate": "mfm-995"
     },
     "is_free": true,
+    "replaces": [
+      "hybrid-firearm"
+    ],
     "replacement": [
+      "hybrid-firearm",
       "cult-icon"
     ],
     "model_constraint": {

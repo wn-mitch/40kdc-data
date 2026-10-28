@@ -341,48 +341,38 @@
       "dataslate": "mfm-995"
     },
     "is_free": true,
-    "replacement_choice": [
-      [
-        "inferno-combi-weapon"
-      ],
-      [
-        "havoc-launcher"
-      ],
-      [
-        "havoc-launcher",
-        "inferno-combi-bolter"
-      ],
-      [
-        "inferno-combi-weapon",
-        "havoc-launcher"
-      ],
-      [
-        "inferno-combi-bolter"
-      ]
-    ],
-    "model_constraint": {
-      "any_number": true
-    }
-  },
-  {
-    "id": "chaos-rhino-wgo-mfm-2",
-    "unit_id": "chaos-rhino",
-    "faction_id": "thousand-sons",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-995"
-    },
-    "is_free": true,
     "replaces": [
       "inferno-combi-bolter"
     ],
     "replacement_choice": [
       [
+        "inferno-combi-weapon",
+        "inferno-combi-bolter"
+      ],
+      [
         "havoc-launcher",
         "inferno-combi-weapon"
       ],
       [
+        "havoc-launcher",
+        "inferno-combi-bolter"
+      ],
+      [
         "havoc-launcher"
+      ],
+      [
+        "havoc-launcher",
+        "inferno-combi-bolter",
+        "inferno-combi-bolter"
+      ],
+      [
+        "inferno-combi-bolter",
+        "inferno-combi-weapon",
+        "havoc-launcher"
+      ],
+      [
+        "inferno-combi-bolter",
+        "inferno-combi-bolter"
       ]
     ],
     "model_constraint": {
@@ -680,40 +670,25 @@
     },
     "is_free": true,
     "replaces": [
-      "heavy-missile-launcher"
-    ],
-    "replacement_choice": [
-      [
-        "electroscourge"
-      ],
-      [
-        "heavy-reaper-autocannon"
-      ],
-      [
-        "hades-lascannon"
-      ]
-    ],
-    "model_constraint": {
-      "any_number": true
-    }
-  },
-  {
-    "id": "defiler-wgo-mfm-4",
-    "unit_id": "defiler",
-    "faction_id": "thousand-sons",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-995"
-    },
-    "is_free": true,
-    "replaces": [
       "heavy-missile-launcher",
       "heavy-baleflamer"
     ],
     "replacement_choice": [
       [
+        "electroscourge",
+        "heavy-baleflamer"
+      ],
+      [
+        "heavy-baleflamer",
+        "heavy-reaper-autocannon"
+      ],
+      [
         "hades-lascannon",
         "heavy-reaper-autocannon"
+      ],
+      [
+        "hades-lascannon",
+        "heavy-missile-launcher"
       ],
       [
         "heavy-reaper-autocannon",
@@ -728,34 +703,19 @@
         "electroscourge"
       ],
       [
-        "heavy-reaper-autocannon",
-        "electroscourge"
-      ]
-    ],
-    "model_constraint": {
-      "any_number": true
-    }
-  },
-  {
-    "id": "defiler-wgo-mfm-5",
-    "unit_id": "defiler",
-    "faction_id": "thousand-sons",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-995"
-    },
-    "is_free": true,
-    "replaces": [
-      "heavy-baleflamer"
-    ],
-    "replacement_choice": [
-      [
+        "heavy-baleflamer",
         "hades-lascannon"
       ],
       [
+        "heavy-reaper-autocannon",
         "electroscourge"
       ],
       [
+        "heavy-missile-launcher",
+        "electroscourge"
+      ],
+      [
+        "heavy-missile-launcher",
         "heavy-reaper-autocannon"
       ]
     ],
@@ -817,10 +777,16 @@
     "replaces": [
       "tzaangor-blades"
     ],
-    "replacement": [
-      "autopistol",
-      "chainsword-tzaangors",
-      "brayhorn"
+    "replacement_choice": [
+      [
+        "herd-banner",
+        "tzaangor-blades"
+      ],
+      [
+        "chainsword-tzaangors",
+        "herd-banner",
+        "autopistol"
+      ]
     ],
     "model_constraint": {
       "model_name": "Tzaangor",
@@ -839,44 +805,16 @@
     "replaces": [
       "tzaangor-blades"
     ],
-    "replacement": [
-      "chainsword-tzaangors",
-      "herd-banner",
-      "autopistol"
-    ],
-    "model_constraint": {
-      "model_name": "Tzaangor",
-      "max_count": 1
-    }
-  },
-  {
-    "id": "tzaangors-wgo-mfm-5",
-    "unit_id": "tzaangors",
-    "faction_id": "thousand-sons",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-995"
-    },
-    "is_free": true,
-    "replacement": [
-      "herd-banner"
-    ],
-    "model_constraint": {
-      "model_name": "Tzaangor",
-      "max_count": 1
-    }
-  },
-  {
-    "id": "tzaangors-wgo-mfm-6",
-    "unit_id": "tzaangors",
-    "faction_id": "thousand-sons",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-995"
-    },
-    "is_free": true,
-    "replacement": [
-      "brayhorn"
+    "replacement_choice": [
+      [
+        "autopistol",
+        "chainsword-tzaangors",
+        "brayhorn"
+      ],
+      [
+        "tzaangor-blades",
+        "brayhorn"
+      ]
     ],
     "model_constraint": {
       "model_name": "Tzaangor",

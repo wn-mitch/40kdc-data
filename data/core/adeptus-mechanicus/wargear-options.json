@@ -71,23 +71,11 @@
       [
         "icarus-array",
         "daedalus-missile-launcher"
+      ],
+      [
+        "cognis-heavy-stubber",
+        "eradication-beamer"
       ]
-    ],
-    "model_constraint": {
-      "any_number": true
-    }
-  },
-  {
-    "id": "onager-dunecrawler-wgo-mfm-3",
-    "unit_id": "onager-dunecrawler",
-    "faction_id": "adeptus-mechanicus",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-995"
-    },
-    "is_free": true,
-    "replacement": [
-      "cognis-heavy-stubber"
     ],
     "model_constraint": {
       "any_number": true
@@ -321,11 +309,16 @@
       "dataslate": "mfm-995"
     },
     "is_free": true,
+    "replaces": [
+      "radium-carbine"
+    ],
     "replacement_choice": [
       [
+        "radium-carbine",
         "enhanced-data-tether"
       ],
       [
+        "radium-carbine",
         "omnispex"
       ]
     ],
@@ -677,11 +670,16 @@
       "dataslate": "mfm-995"
     },
     "is_free": true,
+    "replaces": [
+      "galvanic-rifle"
+    ],
     "replacement_choice": [
       [
+        "galvanic-rifle",
         "omnispex"
       ],
       [
+        "galvanic-rifle",
         "enhanced-data-tether"
       ]
     ],

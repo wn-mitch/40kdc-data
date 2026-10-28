@@ -92,35 +92,29 @@
       "dataslate": "mfm-995"
     },
     "is_free": true,
-    "replacement_choice": [
-      [
-        "heavy-stubber"
-      ],
-      [
-        "storm-bolter"
-      ]
-    ],
-    "model_constraint": {
-      "any_number": true
-    }
-  },
-  {
-    "id": "inquisitorial-chimera-wgo-mfm-3",
-    "unit_id": "inquisitorial-chimera",
-    "faction_id": "agents-of-the-imperium",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-995"
-    },
-    "is_free": true,
     "replaces": [
       "multi-laser",
       "heavy-bolter"
     ],
     "replacement_choice": [
       [
+        "multi-laser",
+        "heavy-bolter",
+        "heavy-stubber"
+      ],
+      [
+        "multi-laser",
+        "storm-bolter",
+        "heavy-bolter"
+      ],
+      [
         "storm-bolter",
         "heavy-flamer",
+        "heavy-flamer"
+      ],
+      [
+        "multi-laser",
+        "heavy-stubber",
         "heavy-flamer"
       ],
       [
@@ -134,69 +128,36 @@
       ],
       [
         "storm-bolter"
-      ]
-    ],
-    "model_constraint": {
-      "any_number": true
-    }
-  },
-  {
-    "id": "inquisitorial-chimera-wgo-mfm-4",
-    "unit_id": "inquisitorial-chimera",
-    "faction_id": "agents-of-the-imperium",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-995"
-    },
-    "is_free": true,
-    "replaces": [
-      "heavy-bolter"
-    ],
-    "replacement_choice": [
+      ],
       [
+        "heavy-bolter",
         "heavy-stubber",
         "heavy-flamer"
       ],
       [
-        "heavy-flamer"
-      ]
-    ],
-    "model_constraint": {
-      "any_number": true
-    }
-  },
-  {
-    "id": "inquisitorial-chimera-wgo-mfm-5",
-    "unit_id": "inquisitorial-chimera",
-    "faction_id": "agents-of-the-imperium",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-995"
-    },
-    "is_free": true,
-    "replaces": [
-      "multi-laser"
-    ],
-    "replacement_choice": [
-      [
-        "heavy-stubber",
-        "heavy-flamer"
-      ],
-      [
+        "heavy-bolter",
         "heavy-bolter"
       ],
       [
-        "storm-bolter",
+        "multi-laser",
         "heavy-flamer"
       ],
       [
         "storm-bolter",
+        "heavy-flamer",
         "heavy-bolter"
       ],
       [
-        "heavy-flamer"
+        "storm-bolter",
+        "heavy-bolter",
+        "heavy-bolter"
       ],
       [
+        "heavy-flamer",
+        "heavy-bolter"
+      ],
+      [
+        "heavy-bolter",
         "heavy-bolter",
         "heavy-stubber"
       ]
@@ -468,25 +429,12 @@
         "psycannon"
       ],
       [
+        "ancients-banner",
+        "storm-bolter-grey-knights-terminator-squad"
+      ],
+      [
         "incinerator"
       ]
-    ],
-    "model_constraint": {
-      "model_name": "Grey Knights Terminators",
-      "any_number": true
-    }
-  },
-  {
-    "id": "grey-knights-terminator-squad-wgo-mfm-2",
-    "unit_id": "grey-knights-terminator-squad",
-    "faction_id": "agents-of-the-imperium",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-995"
-    },
-    "is_free": true,
-    "replacement": [
-      "ancients-banner"
     ],
     "model_constraint": {
       "model_name": "Grey Knights Terminators",
@@ -637,52 +585,20 @@
         "black-shield-blades"
       ],
       [
+        "boltgun",
+        "storm-shield"
+      ],
+      [
+        "power-weapon",
+        "storm-shield"
+      ],
+      [
         "knives-and-fists",
         "deathwatch-shotgun"
       ],
       [
         "heavy-thunder-hammer"
       ]
-    ],
-    "model_constraint": {
-      "model_name": "Deathwatch Veteran",
-      "any_number": true
-    }
-  },
-  {
-    "id": "deathwatch-kill-team-wgo-mfm-7",
-    "unit_id": "deathwatch-kill-team",
-    "faction_id": "agents-of-the-imperium",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-995"
-    },
-    "is_free": true,
-    "replaces": [
-      "power-weapon"
-    ],
-    "replacement": [
-      "storm-shield"
-    ],
-    "model_constraint": {
-      "model_name": "Deathwatch Veteran",
-      "any_number": true
-    }
-  },
-  {
-    "id": "deathwatch-kill-team-wgo-mfm-8",
-    "unit_id": "deathwatch-kill-team",
-    "faction_id": "agents-of-the-imperium",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-995"
-    },
-    "is_free": true,
-    "replaces": [
-      "boltgun"
-    ],
-    "replacement": [
-      "storm-shield"
     ],
     "model_constraint": {
       "model_name": "Deathwatch Veteran",
@@ -798,7 +714,11 @@
       "dataslate": "mfm-995"
     },
     "is_free": true,
+    "replaces": [
+      "arbites-combat-shotgun"
+    ],
     "replacement": [
+      "arbites-combat-shotgun",
       "soulguilt-scanner"
     ],
     "model_constraint": {
@@ -808,40 +728,6 @@
   },
   {
     "id": "exaction-squad-wgo-mfm-3",
-    "unit_id": "exaction-squad",
-    "faction_id": "agents-of-the-imperium",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-995"
-    },
-    "is_free": true,
-    "replacement": [
-      "excruciator-maul"
-    ],
-    "model_constraint": {
-      "model_name": "Exaction Vigilant",
-      "max_count": 1
-    }
-  },
-  {
-    "id": "exaction-squad-wgo-mfm-4",
-    "unit_id": "exaction-squad",
-    "faction_id": "agents-of-the-imperium",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-995"
-    },
-    "is_free": true,
-    "replacement": [
-      "arbites-medi-kit"
-    ],
-    "model_constraint": {
-      "model_name": "Exaction Vigilant",
-      "max_count": 1
-    }
-  },
-  {
-    "id": "exaction-squad-wgo-mfm-5",
     "unit_id": "exaction-squad",
     "faction_id": "agents-of-the-imperium",
     "game_version": {
@@ -869,6 +755,48 @@
     "model_constraint": {
       "model_name": "Exaction Vigilant",
       "max_count": 2
+    }
+  },
+  {
+    "id": "exaction-squad-wgo-mfm-4",
+    "unit_id": "exaction-squad",
+    "faction_id": "agents-of-the-imperium",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "arbites-combat-shotgun"
+    ],
+    "replacement": [
+      "excruciator-maul",
+      "arbites-combat-shotgun"
+    ],
+    "model_constraint": {
+      "model_name": "Exaction Vigilant",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "exaction-squad-wgo-mfm-5",
+    "unit_id": "exaction-squad",
+    "faction_id": "agents-of-the-imperium",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "arbites-combat-shotgun"
+    ],
+    "replacement": [
+      "arbites-medi-kit",
+      "arbites-combat-shotgun"
+    ],
+    "model_constraint": {
+      "model_name": "Exaction Vigilant",
+      "max_count": 1
     }
   },
   {
@@ -1123,6 +1051,10 @@
         "ministorum-heavy-flamer"
       ],
       [
+        "simulacrum-imperialis",
+        "boltgun-sisters-of-battle-squad"
+      ],
+      [
         "artificer-crafted-storm-bolter"
       ],
       [
@@ -1134,28 +1066,11 @@
     ],
     "model_constraint": {
       "model_name": "Battle Sister",
-      "max_count": 2
-    }
-  },
-  {
-    "id": "sisters-of-battle-squad-wgo-mfm-2",
-    "unit_id": "sisters-of-battle-squad",
-    "faction_id": "agents-of-the-imperium",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-995"
-    },
-    "is_free": true,
-    "replacement": [
-      "simulacrum-imperialis"
-    ],
-    "model_constraint": {
-      "model_name": "Battle Sister",
       "any_number": true
     }
   },
   {
-    "id": "sisters-of-battle-squad-wgo-mfm-3",
+    "id": "sisters-of-battle-squad-wgo-mfm-2",
     "unit_id": "sisters-of-battle-squad",
     "faction_id": "agents-of-the-imperium",
     "game_version": {
@@ -1192,7 +1107,7 @@
     }
   },
   {
-    "id": "sisters-of-battle-squad-wgo-mfm-4",
+    "id": "sisters-of-battle-squad-wgo-mfm-3",
     "unit_id": "sisters-of-battle-squad",
     "faction_id": "agents-of-the-imperium",
     "game_version": {

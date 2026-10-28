@@ -322,64 +322,18 @@
     },
     "is_free": true,
     "replaces": [
-      "heavy-baleflamer"
-    ],
-    "replacement_choice": [
-      [
-        "electroscourge"
-      ],
-      [
-        "heavy-reaper-autocannon"
-      ],
-      [
-        "hades-lascannon"
-      ]
-    ],
-    "model_constraint": {
-      "any_number": true
-    }
-  },
-  {
-    "id": "defiler-wgo-mfm-4",
-    "unit_id": "defiler",
-    "faction_id": "world-eaters",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-995"
-    },
-    "is_free": true,
-    "replaces": [
+      "heavy-baleflamer",
       "heavy-missile-launcher"
     ],
     "replacement_choice": [
       [
-        "hades-lascannon"
-      ],
-      [
+        "heavy-missile-launcher",
         "electroscourge"
       ],
       [
-        "heavy-reaper-autocannon"
-      ]
-    ],
-    "model_constraint": {
-      "any_number": true
-    }
-  },
-  {
-    "id": "defiler-wgo-mfm-5",
-    "unit_id": "defiler",
-    "faction_id": "world-eaters",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-995"
-    },
-    "is_free": true,
-    "replaces": [
-      "heavy-missile-launcher",
-      "heavy-baleflamer"
-    ],
-    "replacement_choice": [
+        "heavy-baleflamer",
+        "hades-lascannon"
+      ],
       [
         "hades-lascannon",
         "electroscourge"
@@ -393,12 +347,28 @@
         "heavy-reaper-autocannon"
       ],
       [
+        "heavy-missile-launcher",
+        "heavy-reaper-autocannon"
+      ],
+      [
         "heavy-reaper-autocannon",
         "hades-lascannon"
       ],
       [
         "hades-lascannon",
         "hades-lascannon"
+      ],
+      [
+        "hades-lascannon",
+        "heavy-missile-launcher"
+      ],
+      [
+        "electroscourge",
+        "heavy-baleflamer"
+      ],
+      [
+        "heavy-reaper-autocannon",
+        "heavy-baleflamer"
       ]
     ],
     "model_constraint": {
@@ -433,47 +403,37 @@
       "dataslate": "mfm-995"
     },
     "is_free": true,
-    "replacement_choice": [
-      [
-        "combi-weapon",
-        "havoc-launcher"
-      ],
-      [
-        "combi-bolter"
-      ],
-      [
-        "havoc-launcher"
-      ],
-      [
-        "combi-bolter",
-        "havoc-launcher"
-      ],
-      [
-        "combi-weapon"
-      ]
-    ],
-    "model_constraint": {
-      "any_number": true
-    }
-  },
-  {
-    "id": "chaos-rhino-wgo-mfm-2",
-    "unit_id": "chaos-rhino",
-    "faction_id": "world-eaters",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-995"
-    },
-    "is_free": true,
     "replaces": [
       "combi-bolter"
     ],
     "replacement_choice": [
       [
+        "combi-weapon",
+        "havoc-launcher",
+        "combi-bolter"
+      ],
+      [
+        "combi-bolter",
+        "combi-bolter"
+      ],
+      [
         "havoc-launcher",
         "combi-weapon"
       ],
       [
+        "havoc-launcher",
+        "combi-bolter"
+      ],
+      [
+        "combi-bolter",
+        "combi-bolter",
+        "havoc-launcher"
+      ],
+      [
+        "combi-weapon"
+      ],
+      [
+        "combi-bolter",
         "combi-weapon"
       ],
       [

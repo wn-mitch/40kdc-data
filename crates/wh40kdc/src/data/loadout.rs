@@ -1946,7 +1946,9 @@ fn completion_lower_bounds(
 /// primary selections are still exact). A weapon repeated in at least two
 /// multi-item branches, and never a pick on its own, is mechanically determined
 /// by those primary selections, so the pass may derive its count rather than
-/// requiring the duplicated aggregate. Defaults are never relaxed.
+/// requiring the duplicated aggregate. Defaults are never relaxed. A branch is
+/// read net of the option's own `replaces`: an item a branch hands back is kept,
+/// not picked (a whole-menu option re-adds the boltgun a champion keeps).
 fn repeated_co_items(options: &[&WargearOption], models: &[LoadoutModel]) -> HashSet<String> {
     let default_ids: HashSet<String> = models
         .iter()
@@ -1956,10 +1958,11 @@ fn repeated_co_items(options: &[&WargearOption], models: &[LoadoutModel]) -> Has
     for option in options {
         let mut occurrences: HashMap<String, u64> = HashMap::new();
         for branch in &option.replacement_choice {
+            let branch = net_of_replaces(branch, &option.replaces);
             if branch.len() < 2 {
                 continue;
             }
-            let unique: HashSet<&str> = branch.iter().map(|id| id.as_str()).collect();
+            let unique: HashSet<&str> = branch.iter().copied().collect();
             for id in unique {
                 *occurrences.entry(id.to_owned()).or_insert(0) += 1;
             }
@@ -1971,16 +1974,38 @@ fn repeated_co_items(options: &[&WargearOption], models: &[LoadoutModel]) -> Has
         }
     }
     for option in options {
-        if option.replacement.len() == 1 {
-            out.remove(option.replacement[0].as_str());
-        }
-        for branch in &option.replacement_choice {
+        let branches: Vec<&Vec<EntityId>> = if option.replacement.is_empty() {
+            option.replacement_choice.iter().collect()
+        } else {
+            vec![&option.replacement]
+        };
+        for branch in branches {
+            let branch = net_of_replaces(branch, &option.replaces);
             if branch.len() == 1 {
-                out.remove(branch[0].as_str());
+                out.remove(branch[0]);
             }
         }
     }
     out
+}
+
+/// `branch` without one copy of each id in `replaces` (the items it keeps).
+fn net_of_replaces<'a>(branch: &'a [EntityId], replaces: &[EntityId]) -> Vec<&'a str> {
+    let mut kept: HashMap<&str, usize> = HashMap::new();
+    for id in replaces {
+        *kept.entry(id.as_str()).or_insert(0) += 1;
+    }
+    branch
+        .iter()
+        .map(|id| id.as_str())
+        .filter(|id| match kept.get_mut(id) {
+            Some(left) if *left > 0 => {
+                *left -= 1;
+                false
+            }
+            _ => true,
+        })
+        .collect()
 }
 
 /// [`complete_loadout`] with one variant cap token (see `row_candidates`) lifted, or none.
@@ -2605,8 +2630,9 @@ fn tier_models(tier: &LoadoutTier, base: &[LoadoutModel]) -> Vec<LoadoutModel> {
 /// total range `[Σmin, Σmax]` contains it and run [`validate_loadout`] against
 /// each tier's allocation. The unit is legal iff **some** containing tier
 /// validates clean. Deterministic reporting: the empty result of the first clean
-/// tier (in tier order), else the violations of the first containing tier; an
-/// `invalid-model-count` violation when the size matches no tier. With no tiers it
+/// tier (in tier order), else the violations of the containing tier with the
+/// fewest (the first in tier order on a tie), the size the selection comes
+/// nearest; an `invalid-model-count` violation when the size matches no tier. With no tiers it
 /// falls back to a plain [`validate_loadout`]. Mirror of `tools/src/data/loadout.ts`.
 pub fn check_unit_legality(
     unit: &Unit,
@@ -2638,17 +2664,20 @@ pub fn check_unit_legality(
             id,
         }];
     }
-    let mut first: Option<Vec<Violation>> = None;
+    let mut nearest: Option<Vec<Violation>> = None;
     for tm in &candidates {
         let violations = validate_loadout(unit, model_count, options, counts, Some(tm));
         if violations.is_empty() {
             return Vec::new();
         }
-        if first.is_none() {
-            first = Some(violations);
+        if nearest
+            .as_ref()
+            .is_none_or(|current| violations.len() < current.len())
+        {
+            nearest = Some(violations);
         }
     }
-    first.unwrap_or_default()
+    nearest.unwrap_or_default()
 }
 
 /// Swap-conservation violations the independent per-id [`weapon_bounds`] can't

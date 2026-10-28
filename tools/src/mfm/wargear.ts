@@ -1084,8 +1084,14 @@ function sourcedLimitedSetBudgets(
     const sorted = [...items].sort();
     const splitAllowance =
       items.size === 1 && s.miniatureId != null && grantingRecords(sorted[0]) >= 2;
+    // A k-per-N ratio with no exact `per_n_models` form (Deathwatch storm
+    // shields: 2 per 5) never reaches a per-option cap (see
+    // miniScopedSingleCaps), so its swap stays any_number and only a budget
+    // can carry the allowance.
+    const inexpressibleRatio =
+      ratioCount != null && ratioPer != null && !Number.isInteger(ratioPer / ratioCount);
     if (ratioCount != null && ratioPer != null) {
-      if (items.size >= 2 || s.miniatureId == null || splitAllowance) {
+      if (items.size >= 2 || s.miniatureId == null || splitAllowance || inexpressibleRatio) {
         // Shared ratio allowances (≥2 items) AND datasheet-wide single-weapon ratio
         // sets become summed budgets: the dump scopes these to the whole unit, so the
         // squad-wide sum is the correct cap. A flat baseline that is looser than the
@@ -1239,6 +1245,60 @@ function factorCrossProduct(
 }
 
 /**
+ * Guard a single-pick menu's removed-key grouping against stacking. The groups
+ * become independent options, and a model may take one option per disjoint
+ * slot, so two groups whose `removed` sets do not overlap combine on one model.
+ * The menu is one pick, so a combination is legal only when the dump enumerates
+ * it as its own branch (Legionaries' Aspiring Champion lists 19 pairs for its
+ * boltgun and bolt pistol but never two plasma pistols). When some combination
+ * of mutually disjoint groups is not a branch, every branch becomes one choice
+ * of a single option that replaces the union of the removed items; a branch
+ * that keeps one of those items re-adds it. Returns `groups` unchanged when
+ * every stack is enumerated.
+ */
+function guardUnsanctionedStacking(
+  groups: Map<string, { removed: string[]; added: string[][] }>,
+  branches: string[][],
+  baseSet: string[],
+): Map<string, { removed: string[]; added: string[][] }> {
+  const list = [...groups.values()].filter((g) => g.added.length > 0);
+  if (list.length < 2) return groups;
+  const key = (ids: string[]) => [...ids].sort().join("|");
+  const branchKeys = new Set(branches.map(key));
+  const disjoint = (a: string[], b: string[]) => a.every((id) => !b.includes(id));
+  // Every combination of ≥2 mutually disjoint groups, one added bundle each.
+  let unsanctioned = false;
+  const visit = (start: number, removed: string[], added: string[], depth: number): void => {
+    if (unsanctioned) return;
+    if (depth >= 2 && !branchKeys.has(key([...multisetDiff(baseSet, removed), ...added]))) {
+      unsanctioned = true;
+      return;
+    }
+    for (let i = start; i < list.length && !unsanctioned; i++) {
+      if (!disjoint(list[i].removed, removed)) continue;
+      for (const bundle of list[i].added) visit(i + 1, [...removed, ...list[i].removed], [...added, ...bundle], depth + 1);
+    }
+  };
+  visit(0, [], [], 0);
+  if (!unsanctioned) return groups;
+
+  const removed: string[] = [];
+  for (const g of list) for (const id of multisetDiff(g.removed, removed)) removed.push(id);
+  const kept = multisetDiff(baseSet, removed);
+  const added: string[][] = [];
+  const seen = new Set<string>();
+  for (const b of branches) {
+    const bundle = multisetDiff(b, kept);
+    if (bundle.length === 0 || sameMultiset(bundle, removed)) continue;
+    const k = key(bundle);
+    if (seen.has(k)) continue;
+    seen.add(k);
+    added.push(bundle);
+  }
+  return new Map([[key(removed), { removed, added }]]);
+}
+
+/**
  * Derive defaults + wargear-options for one datasheet. Pure over the dump + a
  * faction-scoped name resolver; the caller persists.
  */
@@ -1386,7 +1446,7 @@ export function deriveWargear(
         `cross-product loadout set ${set.id.slice(0, 8)} factored into ${factored.size} independent slot swap${factored.size === 1 ? "" : "s"} (${mini ?? "all"})`,
       );
     }
-    const groups = factored ?? new Map<string, { removed: string[]; added: string[][] }>();
+    let groups = factored ?? new Map<string, { removed: string[]; added: string[][] }>();
     const seenAdded = new Set<string>();
     if (!factored)
       for (const b of branches) {
@@ -1403,6 +1463,13 @@ export function deriveWargear(
         if (added.length > 0) g.added.push(added);
         groups.set(rKey, g);
       }
+    if (!factored && setLimit === 1 && !allowDup && set.miniatureId) {
+      const guarded = guardUnsanctionedStacking(groups, branches, baseSet);
+      if (guarded !== groups && first) {
+        notes.push(`loadout set ${set.id.slice(0, 8)} kept as one menu: its swaps do not stack freely (${mini ?? "all"})`);
+      }
+      groups = guarded;
+    }
 
     for (const { removed, added } of groups.values()) {
       if (added.length === 0) continue;

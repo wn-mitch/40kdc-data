@@ -95,23 +95,11 @@
       ],
       [
         "castellan-axe"
+      ],
+      [
+        "guardian-spear-allarus-custodians",
+        "vexilla"
       ]
-    ],
-    "model_constraint": {
-      "any_number": true
-    }
-  },
-  {
-    "id": "allarus-custodians-wgo-mfm-2",
-    "unit_id": "allarus-custodians",
-    "faction_id": "adeptus-custodes",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "mfm-995"
-    },
-    "is_free": true,
-    "replacement": [
-      "vexilla"
     ],
     "model_constraint": {
       "any_number": true
