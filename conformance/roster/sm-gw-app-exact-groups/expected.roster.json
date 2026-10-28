@@ -19,10 +19,10 @@
   "battle_size": null,
   "force_disposition": "priority-assets",
   "points": {
-    "declared_limit": 170,
+    "declared_limit": 500,
     "detachment_cap": null,
-    "total_reported": 170,
-    "total_computed": 170
+    "total_reported": 500,
+    "total_computed": 500
   },
   "units": [
     {
@@ -186,6 +186,195 @@
         }
       ],
       "leader_attachment": null
+    },
+    {
+      "ref": {
+        "id": "intercessor-squad",
+        "raw_name": "Intercessor Squad",
+        "resolved": true,
+        "candidates": []
+      },
+      "model_count": 5,
+      "points": 85,
+      "is_warlord": false,
+      "enhancement": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "ref": {
+            "id": "bolt-pistol-intercessor-squad",
+            "raw_name": "Bolt Pistol",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 5
+        },
+        {
+          "ref": {
+            "id": "bolt-rifle-intercessor-squad",
+            "raw_name": "Bolt Rifle",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 5
+        },
+        {
+          "ref": {
+            "id": "knives-and-fists",
+            "raw_name": "Knives and Fists",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 5
+        }
+      ],
+      "loadout_groups": [
+        {
+          "model_name": "Intercessor Sergeant",
+          "count": 1,
+          "wargear": [
+            {
+              "ref": {
+                "id": "bolt-pistol-intercessor-squad",
+                "raw_name": "Bolt Pistol",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            },
+            {
+              "ref": {
+                "id": "bolt-rifle-intercessor-squad",
+                "raw_name": "Bolt Rifle",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            },
+            {
+              "ref": {
+                "id": "knives-and-fists",
+                "raw_name": "Knives and Fists",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model_name": "Intercessor",
+          "count": 4,
+          "wargear": [
+            {
+              "ref": {
+                "id": "bolt-pistol-intercessor-squad",
+                "raw_name": "Bolt Pistol",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            },
+            {
+              "ref": {
+                "id": "bolt-rifle-intercessor-squad",
+                "raw_name": "Bolt Rifle",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            },
+            {
+              "ref": {
+                "id": "knives-and-fists",
+                "raw_name": "Knives and Fists",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "leader_attachment": null
+    },
+    {
+      "ref": {
+        "id": "land-raider",
+        "raw_name": "Land Raider",
+        "resolved": true,
+        "candidates": []
+      },
+      "model_count": 1,
+      "points": 245,
+      "is_warlord": false,
+      "enhancement": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "ref": {
+            "id": "armoured-tracks",
+            "raw_name": "Armoured tracks",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        },
+        {
+          "ref": {
+            "id": "godhammer-lascannon",
+            "raw_name": "Godhammer lascannon",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 2
+        },
+        {
+          "ref": {
+            "id": "twin-heavy-bolter-land-raider",
+            "raw_name": "Twin Heavy Bolter",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        }
+      ],
+      "loadout_groups": [
+        {
+          "model_name": "Land Raider",
+          "count": 1,
+          "wargear": [
+            {
+              "ref": {
+                "id": "armoured-tracks",
+                "raw_name": "Armoured tracks",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            },
+            {
+              "ref": {
+                "id": "godhammer-lascannon",
+                "raw_name": "Godhammer lascannon",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 2
+            },
+            {
+              "ref": {
+                "id": "twin-heavy-bolter-land-raider",
+                "raw_name": "Twin Heavy Bolter",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "leader_attachment": null
     }
   ],
   "game_version": {
@@ -193,9 +382,9 @@
     "dataslate": "pre-launch-provisional"
   },
   "diagnostics": {
-    "resolved_units": 2,
+    "resolved_units": 4,
     "unresolved_units": 0,
-    "resolved_weapons": 5,
+    "resolved_weapons": 11,
     "unresolved_weapons": 0,
     "warnings": [
       {

@@ -9,7 +9,7 @@
       {
         "name": "pts",
         "typeId": "pts-type",
-        "value": 170
+        "value": 500
       }
     ],
     "forces": [
@@ -197,6 +197,180 @@
                     "name": "Heavy Bolt Pistol",
                     "type": "upgrade",
                     "number": 4,
+                    "categories": [
+                      {
+                        "name": "Ranged Weapon",
+                        "primary": false
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "u-2",
+            "name": "Intercessor Squad",
+            "type": "unit",
+            "number": 1,
+            "categories": [
+              {
+                "name": "Faction: Adeptus Astartes",
+                "primary": false
+              }
+            ],
+            "costs": [
+              {
+                "name": "pts",
+                "typeId": "pts-type",
+                "value": 85
+              }
+            ],
+            "selections": [
+              {
+                "id": "u2-model-0",
+                "name": "Intercessor Sergeant",
+                "type": "model",
+                "number": 1,
+                "selections": [
+                  {
+                    "id": "w-0",
+                    "name": "Bolt Pistol",
+                    "type": "upgrade",
+                    "number": 1,
+                    "categories": [
+                      {
+                        "name": "Ranged Weapon",
+                        "primary": false
+                      }
+                    ]
+                  },
+                  {
+                    "id": "w-1",
+                    "name": "Bolt Rifle",
+                    "type": "upgrade",
+                    "number": 1,
+                    "categories": [
+                      {
+                        "name": "Ranged Weapon",
+                        "primary": false
+                      }
+                    ]
+                  },
+                  {
+                    "id": "w-2",
+                    "name": "Knives and Fists",
+                    "type": "upgrade",
+                    "number": 1,
+                    "categories": [
+                      {
+                        "name": "Ranged Weapon",
+                        "primary": false
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "u2-model-1",
+                "name": "Intercessor",
+                "type": "model",
+                "number": 4,
+                "selections": [
+                  {
+                    "id": "w-0",
+                    "name": "Bolt Pistol",
+                    "type": "upgrade",
+                    "number": 4,
+                    "categories": [
+                      {
+                        "name": "Ranged Weapon",
+                        "primary": false
+                      }
+                    ]
+                  },
+                  {
+                    "id": "w-1",
+                    "name": "Bolt Rifle",
+                    "type": "upgrade",
+                    "number": 4,
+                    "categories": [
+                      {
+                        "name": "Ranged Weapon",
+                        "primary": false
+                      }
+                    ]
+                  },
+                  {
+                    "id": "w-2",
+                    "name": "Knives and Fists",
+                    "type": "upgrade",
+                    "number": 4,
+                    "categories": [
+                      {
+                        "name": "Ranged Weapon",
+                        "primary": false
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "u-3",
+            "name": "Land Raider",
+            "type": "unit",
+            "number": 1,
+            "categories": [
+              {
+                "name": "Faction: Adeptus Astartes",
+                "primary": false
+              }
+            ],
+            "costs": [
+              {
+                "name": "pts",
+                "typeId": "pts-type",
+                "value": 245
+              }
+            ],
+            "selections": [
+              {
+                "id": "u3-model-0",
+                "name": "Land Raider",
+                "type": "model",
+                "number": 1,
+                "selections": [
+                  {
+                    "id": "w-0",
+                    "name": "Armoured tracks",
+                    "type": "upgrade",
+                    "number": 1,
+                    "categories": [
+                      {
+                        "name": "Ranged Weapon",
+                        "primary": false
+                      }
+                    ]
+                  },
+                  {
+                    "id": "w-1",
+                    "name": "Godhammer lascannon",
+                    "type": "upgrade",
+                    "number": 2,
+                    "categories": [
+                      {
+                        "name": "Ranged Weapon",
+                        "primary": false
+                      }
+                    ]
+                  },
+                  {
+                    "id": "w-2",
+                    "name": "Twin Heavy Bolter",
+                    "type": "upgrade",
+                    "number": 1,
                     "categories": [
                       {
                         "name": "Ranged Weapon",

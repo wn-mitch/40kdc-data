@@ -1,4 +1,4 @@
-Exact Groups Test (170 points)
+Exact Groups Test (500 points)
 
 Space Marines
 Gladius Task Force
@@ -15,5 +15,12 @@ Assault Intercessor Squad (85 points)
   • 5x Assault Intercessor
     • 5x Chainsword
       4x Heavy Bolt Pistol
+
+Intercessor Squad (85 points) • 5x Intercessor ◦ 5x Bolt Pistol 5x Bolt Rifle 5x Knives and Fists
+
+OTHER DATASHEETS
+
+Land Raider (245 points)
+  • Land Raider: Armoured tracks, 2x Godhammer lascannon, Twin Heavy Bolter
 
 Exported with App Version: v2.0.5 (128), Data Version: v995

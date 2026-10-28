@@ -30,7 +30,7 @@ var gwhCapsSection = regexp.MustCompile(`^[A-Z][A-Z0-9 \-/&]+$`)
 var gwhColonSection = regexp.MustCompile(`^([A-Za-z][\w /&-]*):\s*$`)
 
 // Bullet line: leading indent, a `•` or `◦` marker, then the body.
-var gwhBulletLine = regexp.MustCompile(`^([\t ]*)[•◦]\s*(.+?)\s*$`)
+var gwhBulletLine = regexp.MustCompile(`^([\t ]*)([•◦])\s*(.+?)\s*$`)
 
 var gwhNxPrefix = regexp.MustCompile(`(?i)^(\d+)x\s+(.+)$`)
 
@@ -325,14 +325,14 @@ func finishGwhUnit(acc *gwhUnit) map[string]any {
 		if b.colonWargear != nil {
 			n := gwhBulletCount(b)
 			modelCount += n
-			group := gwhLoadoutGroup{modelName: b.name, count: n, wargear: newOrderedCounter()}
-			for _, item := range strings.Split(b.colonWargear.(string), ",") {
-				if s := strings.TrimSpace(item); s != "" {
-					wargear.add(s, n)
-					group.wargear.add(s, 1)
-				}
+			// Items carry their own per-model `Nx` count; markers such as
+			// `Warlord` are not wargear.
+			classified := classifyWargearList(splitWargearList(b.colonWargear.(string)))
+			for _, itemAny := range classified.wargear {
+				item, _ := itemAny.(map[string]any)
+				wargear.add(getStr(item, "raw_name"), asInt(item["count"])*n)
 			}
-			candidateGroups = append(candidateGroups, group)
+			candidateGroups = append(candidateGroups, gwhLoadoutGroup{modelName: b.name, count: n, wargear: classified.wargear})
 			continue
 		}
 
@@ -464,7 +464,7 @@ var gwHeaderlessAdapter = formatAdapter{
 			}
 		}
 
-		for _, rawLine := range strings.Split(text, "\n") {
+		for _, rawLine := range gwhExpandDenseLines(text) {
 			raw := strings.TrimRight(rawLine, "\r")
 			line := strings.TrimSpace(raw)
 			if line == "" {
@@ -474,7 +474,12 @@ var gwHeaderlessAdapter = formatAdapter{
 			// Bullets attach to the open unit.
 			if bm := gwhBulletLine.FindStringSubmatch(raw); bm != nil {
 				if current != nil {
-					bullet := gwhParseBullet(len(bm[1]), bm[2], true)
+					// A hollow `◦` is one level deeper than a `•` at the same indent.
+					markerDepth := 0
+					if bm[2] == "◦" {
+						markerDepth = 1
+					}
+					bullet := gwhParseBullet(len(bm[1])+markerDepth, bm[3], true)
 					if current.attachmentRole == "" {
 						current.attachmentRole = bullet.attachmentRole
 					}

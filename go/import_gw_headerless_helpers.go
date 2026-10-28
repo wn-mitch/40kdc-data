@@ -4,6 +4,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"unicode"
 )
 
 // Helpers for the headerless plain-text adapter (import_gw_headerless.go):
@@ -74,11 +75,12 @@ func gwhStripBcpSummary(text string) string {
 }
 
 // gwhLoadoutGroup is one model group as the source lists it: the model name,
-// how many models carry it, and each item's count per model.
+// how many models carry it, and its items ({raw_name, count per model}) in
+// source order. A repeated name stays a separate item, as in TS.
 type gwhLoadoutGroup struct {
 	modelName string
 	count     int
-	wargear   *orderedCounter
+	wargear   []any
 }
 
 // gwhModelGroupLoadout reads the per-model loadout of the model group bullet
@@ -86,7 +88,7 @@ type gwhLoadoutGroup struct {
 // must divide evenly by n. Returns false when any child is an annotation or
 // does not divide, or when the group has no wargear.
 func gwhModelGroupLoadout(bullets []gwhBullet, i, n int) (gwhLoadoutGroup, bool) {
-	group := gwhLoadoutGroup{modelName: bullets[i].name, count: n, wargear: newOrderedCounter()}
+	group := gwhLoadoutGroup{modelName: bullets[i].name, count: n, wargear: []any{}}
 	exact := true
 	for _, child := range bullets[i+1:] {
 		if child.indent <= bullets[i].indent {
@@ -98,9 +100,9 @@ func gwhModelGroupLoadout(bullets []gwhBullet, i, n int) (gwhLoadoutGroup, bool)
 			exact = false
 			continue
 		}
-		group.wargear.add(child.name, total/n)
+		group.wargear = append(group.wargear, map[string]any{"raw_name": child.name, "count": float64(total / n)})
 	}
-	return group, exact && !group.wargear.empty()
+	return group, exact && len(group.wargear) > 0
 }
 
 // gwhExactLoadoutGroups returns the candidate groups as parsed loadout_groups
@@ -111,8 +113,9 @@ func gwhExactLoadoutGroups(candidates []gwhLoadoutGroup, modelCount int, wargear
 	grouped := map[string]int{}
 	for _, g := range candidates {
 		groupedModels += g.count
-		for _, name := range g.wargear.keys {
-			grouped[name] += g.wargear.m[name] * g.count
+		for _, itemAny := range g.wargear {
+			item, _ := itemAny.(map[string]any)
+			grouped[getStr(item, "raw_name")] += asInt(item["count"]) * g.count
 		}
 	}
 	if groupedModels != modelCount || len(grouped) != len(wargear.keys) {
@@ -128,8 +131,75 @@ func gwhExactLoadoutGroups(candidates []gwhLoadoutGroup, modelCount int, wargear
 		out = append(out, map[string]any{
 			"model_name": g.modelName,
 			"count":      float64(g.count),
-			"wargear":    g.wargear.pairs(),
+			"wargear":    g.wargear,
 		})
 	}
 	return out, true
+}
+
+var (
+	gwhDenseAttachedHeadings = regexp.MustCompile(`(?i)^(Attached Units)\s+(Attached Unit\s+\d+)$`)
+	gwhDenseMetadata         = regexp.MustCompile(`(?i)^(.+?\(\s*\d+\s+Detachment Points?\s*\))\s+(Disruption|Priority Assets|Purge the Foe|Reconnaissance|Take and Hold)\s+((?:Combat Patrol|Incursion|Strike Force|Onslaught)\s*\(.+\))$`)
+	gwhDenseCountStart       = regexp.MustCompile(`^\d+[x×]\s`)
+	gwhDenseLeadingBullet    = regexp.MustCompile(`^[•◦]\s*(.+)$`)
+)
+
+// gwhSplitBeforeRuns splits s at each run of tab/space/NBSP whose preceding
+// rune passes before and whose remainder passes after, dropping the run.
+// Mirror of the TS lookbehind/lookahead splits in expandDenseLines.
+func gwhSplitBeforeRuns(s string, before func(rune) bool, after func(string) bool) []string {
+	runes := []rune(s)
+	isRun := func(r rune) bool { return r == ' ' || r == '\t' || r == ' ' }
+	var parts []string
+	start := 0
+	for i := 0; i < len(runes); {
+		if !isRun(runes[i]) || i == 0 {
+			i++
+			continue
+		}
+		end := i
+		for end < len(runes) && isRun(runes[end]) {
+			end++
+		}
+		if !unicode.IsSpace(runes[i-1]) && before(runes[i-1]) && after(string(runes[end:])) {
+			parts = append(parts, string(runes[start:i]))
+			start = end
+		}
+		i = end
+	}
+	return append(parts, string(runes[start:]))
+}
+
+// gwhExpandDenseLines recovers line breaks that spreadsheet/copy-paste
+// pipelines strip: a `•`/`◦` bullet or an `Nx ` count after other text on the
+// same line starts a new logical line. A count right after "," or ":" stays
+// in its `Model: a, 2x b` list. Mirror of TS expandDenseLines.
+func gwhExpandDenseLines(text string) []string {
+	var out []string
+	for _, rawLine := range splitLines(text) {
+		bulletParts := gwhSplitBeforeRuns(rawLine,
+			func(rune) bool { return true },
+			func(rest string) bool { return strings.HasPrefix(rest, "•") || strings.HasPrefix(rest, "◦") })
+		for _, bulletPart := range bulletParts {
+			trimmed := strings.TrimSpace(bulletPart)
+			if m := gwhDenseAttachedHeadings.FindStringSubmatch(trimmed); m != nil {
+				out = append(out, m[1], m[2])
+				continue
+			}
+			if m := gwhDenseMetadata.FindStringSubmatch(trimmed); m != nil {
+				out = append(out, m[1], m[2], m[3])
+				continue
+			}
+			countParts := gwhSplitBeforeRuns(bulletPart,
+				func(r rune) bool { return !strings.ContainsRune("•◦*,:", r) },
+				gwhDenseCountStart.MatchString)
+			for _, part := range countParts {
+				if m := gwhDenseLeadingBullet.FindStringSubmatch(strings.TrimSpace(part)); m != nil && gwhPtsLine.MatchString(m[1]) {
+					part = m[1]
+				}
+				out = append(out, part)
+			}
+		}
+	}
+	return out
 }

@@ -179,7 +179,9 @@ def _expand_dense_lines(text: str) -> list[str]:
             if metadata:
                 out.extend(metadata.groups())
                 continue
-            for part in re.split(r"(?<=[^\s•◦*])[\t \u00a0]+(?=\d+[x×]\s)", bullet_part):
+            # A count after a "," or ":" is an item inside one `Model: a, 2x b`
+            # list, not the start of a collapsed line, so it never splits.
+            for part in re.split(r"(?<=[^\s•◦*,:])[\t \u00a0]+(?=\d+[x×]\s)", bullet_part):
                 leading_bullet = re.match(r"^[•◦]\s*(.+)$", part.strip())
                 out.append(
                     leading_bullet.group(1)

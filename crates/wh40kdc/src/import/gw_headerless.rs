@@ -57,7 +57,7 @@ use super::attached_groups::{
     pair_attached_groups, AttachedAs, GroupMember,
 };
 use super::loadout_candidates::exact_loadout_groups;
-use super::newrecruit_text::infer_battle_size_raw;
+use super::newrecruit_text::{classify_wargear_list, infer_battle_size_raw, split_wargear_list};
 use super::types::{ParsedLoadoutGroup, ParsedRoster, ParsedUnit, ParsedWargear, RosterFormat};
 
 const CHARACTERS_SECTION: &str = "CHARACTERS";
@@ -244,6 +244,11 @@ fn expand_dense_lines(text: &str) -> Vec<String> {
                 }
                 let prefix = part[count_start..index].trim();
                 if prefix.is_empty() || prefix.chars().all(|ch| matches!(ch, '•' | '◦' | '*')) {
+                    continue;
+                }
+                // A count after a "," or ":" is an item inside one
+                // `Model: a, 2x b` list, not the start of a collapsed line.
+                if prefix.ends_with([',', ':']) {
                     continue;
                 }
                 let suffix = &part[index..];
@@ -584,21 +589,16 @@ fn finish_unit(acc: UnitAcc) -> ParsedUnit {
         if let Some(csv) = &b.colon_wargear {
             let n = b.count.unwrap_or(1);
             model_count += n;
-            let mut group_wargear: Vec<ParsedWargear> = Vec::new();
-            for item in csv.split(',').map(str::trim).filter(|s| !s.is_empty()) {
-                add_wargear(item, n);
-                match group_wargear.iter_mut().find(|w| w.raw_name == item) {
-                    Some(w) => w.count += 1,
-                    None => group_wargear.push(ParsedWargear {
-                        raw_name: item.to_string(),
-                        count: 1,
-                    }),
-                }
+            // Items carry their own per-model `Nx` count; markers such as
+            // `Warlord` are not wargear.
+            let classified = classify_wargear_list(&split_wargear_list(csv));
+            for item in &classified.wargear {
+                add_wargear(&item.raw_name, item.count * n);
             }
             candidate_groups.push(ParsedLoadoutGroup {
                 model_name: Some(b.name.clone()),
                 count: n,
-                wargear: group_wargear,
+                wargear: classified.wargear,
             });
             continue;
         }
