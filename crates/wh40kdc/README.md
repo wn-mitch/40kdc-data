@@ -78,10 +78,11 @@ let units: Vec<Unit> = serde_json::from_str(&units_json)?;
 let weapons: Vec<Weapon> = serde_json::from_str(&weapons_json)?;
 ```
 
-The bundled schema is available as a string for downstream validation:
+The full schema, conditional rules included, is available as a string for
+downstream validation (`BUNDLED_SCHEMA` is the codegen copy without them):
 
 ```rust
-let schema: serde_json::Value = serde_json::from_str(wh40kdc::BUNDLED_SCHEMA)?;
+let schema: serde_json::Value = serde_json::from_str(wh40kdc::VALIDATION_SCHEMA)?;
 ```
 
 ## Damage projection

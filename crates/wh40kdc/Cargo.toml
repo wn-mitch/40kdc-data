@@ -13,8 +13,8 @@ homepage.workspace = true
 rust-version.workspace = true
 authors.workspace = true
 # Keep the published tarball lean: tests/ aren't useful to downstream crates.
-# (schemas/bundled.schema.json must stay in — lib.rs embeds it via include_str!
-# as the public `BUNDLED_SCHEMA` constant.)
+# (schemas/bundled.schema.json and schemas/validation.schema.json must stay in —
+# lib.rs embeds them via include_str! as `BUNDLED_SCHEMA` / `VALIDATION_SCHEMA`.)
 exclude = ["tests/**"]
 
 [package.metadata.docs.rs]
@@ -45,7 +45,7 @@ cruncher = ["bundled-data"]
 # serde, no dataset, deflate, or regex.
 share = ["dep:base64"]
 # Hand-rolled schema validator emitting the closed-enum (path, code) errors over
-# the embedded BUNDLED_SCHEMA. Self-contained — needs only serde_json.
+# the embedded VALIDATION_SCHEMA. Self-contained — needs only serde_json.
 validate = []
 
 # The conformance runner drives every area, so it builds only with every feature on.

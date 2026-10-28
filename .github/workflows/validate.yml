@@ -73,7 +73,7 @@ jobs:
       - run: cargo run -p xtask -- codegen
       - run: cargo run -p xtask -- bundle-data
       - name: Check generated artifacts are up to date
-        run: git diff --exit-code crates/wh40kdc/schemas/bundled.schema.json crates/wh40kdc/src/generated.rs crates/wh40kdc/src/data/bundle.generated.json
+        run: git diff --exit-code crates/wh40kdc/schemas/bundled.schema.json crates/wh40kdc/schemas/validation.schema.json crates/wh40kdc/src/generated.rs crates/wh40kdc/src/data/bundle.generated.json
       - run: cargo fmt --all -- --check
       - run: cargo build --workspace
       - run: cargo test --workspace

@@ -20,7 +20,7 @@ set shell := ["bash", "-uc"]
 
 # The exact generated-artifact paths CI guards with `git diff --exit-code`.
 ARTIFACTS := "tools/src/generated.ts \
-crates/wh40kdc/schemas/bundled.schema.json crates/wh40kdc/src/generated.rs crates/wh40kdc/src/data/bundle.generated.json \
+crates/wh40kdc/schemas/bundled.schema.json crates/wh40kdc/schemas/validation.schema.json crates/wh40kdc/src/generated.rs crates/wh40kdc/src/data/bundle.generated.json \
 python/src/wh40kdc/_bundle.json python/src/wh40kdc/_spec.py python/src/wh40kdc/_types.py python/src/wh40kdc/schemas \
 go/bundle.json go/share_registry.json go/schemas go/spec.go data/_audit/external-refs.json \
 conformance"

@@ -173,13 +173,19 @@ pub use scoring::{
 };
 
 /// The bundled, self-contained JSON Schema (draft 2020-12) these types were
-/// generated from. Consumers can feed this to a JSON Schema validator to check
-/// data before deserializing; the canonical validation CLI lives in the
-/// `@alpaca-software/40kdc-data` npm package.
+/// generated from. Its `if`/`then`/`else` conditionals are stripped (the types
+/// cannot model them), so validate data against [`VALIDATION_SCHEMA`] instead;
+/// the canonical validation CLI lives in the `@alpaca-software/40kdc-data` npm
+/// package.
 pub const BUNDLED_SCHEMA: &str = include_str!("../schemas/bundled.schema.json");
 
+/// The same self-contained JSON Schema (draft 2020-12) with every conditional
+/// rule kept: the document to feed a JSON Schema validator to check data
+/// before deserializing.
+pub const VALIDATION_SCHEMA: &str = include_str!("../schemas/validation.schema.json");
+
 /// Hand-rolled schema validator emitting the closed cross-implementation
-/// `(path, code)` enum over [`BUNDLED_SCHEMA`]; pinned by `conformance/validator`.
+/// `(path, code)` enum over [`VALIDATION_SCHEMA`]; pinned by `conformance/validator`.
 #[cfg(feature = "validate")]
 pub mod validator;
 

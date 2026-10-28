@@ -910,5 +910,154 @@
       }
     },
     "expected_errors": []
+  },
+  {
+    "name": "stratagem: up to N targets without the N (only an if/then rule rejects it)",
+    "target": "stratagem",
+    "input": {
+      "id": "fabricated-ploy",
+      "name": "Fabricated Ploy",
+      "category": "core",
+      "type": "strategic-ploy",
+      "cp_cost": 1,
+      "phases": [
+        "movement"
+      ],
+      "player_turn": "your-turn",
+      "timing": "once-per-phase",
+      "game_version": {
+        "edition": "11th",
+        "dataslate": "pre-launch-provisional"
+      },
+      "target_restrictions": {
+        "count": "up-to",
+        "side": "your-army",
+        "selects": "unit"
+      }
+    },
+    "expected_errors": [
+      {
+        "path": "/target_restrictions",
+        "code": "TYPE_MISMATCH"
+      },
+      {
+        "path": "/target_restrictions/count_max",
+        "code": "REQUIRED_MISSING"
+      }
+    ]
+  },
+  {
+    "name": "stratagem: a target mode cost without a mode (only an if/then rule rejects it)",
+    "target": "stratagem",
+    "input": {
+      "id": "fabricated-ploy",
+      "name": "Fabricated Ploy",
+      "category": "core",
+      "type": "strategic-ploy",
+      "cp_cost": 1,
+      "phases": [
+        "movement"
+      ],
+      "player_turn": "your-turn",
+      "timing": "once-per-phase",
+      "game_version": {
+        "edition": "11th",
+        "dataslate": "pre-launch-provisional"
+      },
+      "target_restrictions": {
+        "count": "one",
+        "side": "your-army",
+        "selects": "unit",
+        "mode_cost": {
+          "label": "yp-pool",
+          "amount": 2
+        }
+      }
+    },
+    "expected_errors": [
+      {
+        "path": "/target_restrictions",
+        "code": "TYPE_MISMATCH"
+      },
+      {
+        "path": "/target_restrictions/mode",
+        "code": "REQUIRED_MISSING"
+      }
+    ]
+  },
+  {
+    "name": "stratagem: targets in modes a and b and one without a mode (only an if/then rule rejects it)",
+    "target": "stratagem",
+    "input": {
+      "id": "fabricated-ploy",
+      "name": "Fabricated Ploy",
+      "category": "core",
+      "type": "strategic-ploy",
+      "cp_cost": 1,
+      "phases": [
+        "movement"
+      ],
+      "player_turn": "your-turn",
+      "timing": "once-per-phase",
+      "game_version": {
+        "edition": "11th",
+        "dataslate": "pre-launch-provisional"
+      },
+      "target_restrictions": [
+        {
+          "name": "first",
+          "mode": "a",
+          "count": "one",
+          "side": "your-army",
+          "selects": "unit"
+        },
+        {
+          "name": "second",
+          "mode": "b",
+          "count": "one",
+          "side": "your-army",
+          "selects": "unit"
+        },
+        {
+          "name": "third",
+          "count": "one",
+          "side": "your-army",
+          "selects": "unit"
+        }
+      ]
+    },
+    "expected_errors": [
+      {
+        "path": "/target_restrictions",
+        "code": "TYPE_MISMATCH"
+      },
+      {
+        "path": "/target_restrictions/2/mode",
+        "code": "REQUIRED_MISSING"
+      }
+    ]
+  },
+  {
+    "name": "wargear-option with neither a replacement nor a replacement choice (only an if/then rule rejects it)",
+    "target": "wargear-option",
+    "input": {
+      "id": "bad-no-replacement",
+      "unit_id": "khorne-berzerkers",
+      "faction_id": "world-eaters",
+      "replaces": [
+        "chainblade"
+      ],
+      "is_free": true,
+      "game_version": {
+        "edition": "10th",
+        "dataslate": "2025-q3"
+      }
+    },
+    "expected_errors": [
+      {
+        "path": "/replacement_choice",
+        "code": "REQUIRED_MISSING"
+      }
+    ]
   }
 ]
