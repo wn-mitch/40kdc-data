@@ -253,7 +253,8 @@ describe("Grey Knights canonical fidelity", () => {
     const m = ability("hallowed-ground-grey-knights").effect.modifier;
     expect(m.producer.additive_extensions[0]).toMatchObject({
       kind: "unit-proximity",
-      filter: { owner: "friendly", all_of: ["PURIFIER SQUAD", "GREY-KNIGHTS"] },
+      // The rule prints "PURIFIER SQUAD units from your army": no faction keyword on the proximity units.
+      filter: { owner: "friendly", all_of: ["PURIFIER SQUAD"] },
       range: { inches: 6 },
     });
     expect(m.consumer.attack_condition.operator).toBe("or");
