@@ -4044,6 +4044,15 @@ function genEffectTranslation(): void {
       caseId: `fidelity/happened-phase-filter-${name as string}`,
       effect: { type: "conditional", condition: { type: "happened", parameters }, effect: { type: "cp-gain", target: "this-model", modifier: { amount: 1 } } },
     })),
+    // A destruction's subject names who destroyed the units when the filter names no attacker.
+    ...[
+      ["subject-phase", { type: "happened", parameters: { event: "destroyed", subject: "this-unit", object: { owner: "enemy" }, filter: { phase: "fight" }, window: "battle" } }],
+      ["subject-phase-negated", { operator: "not", operands: [{ type: "happened", parameters: { event: "destroyed", subject: "this-unit", object: { owner: "enemy" }, filter: { phase: "fight" }, window: "battle" } }] }],
+      ["subject-event-window", { type: "happened", parameters: { event: "destroyed", subject: "this-model", object: { owner: "enemy" }, window: "event" } }],
+    ].map(([name, condition]) => ({
+      caseId: `fidelity/happened-destroyed-${name as string}`,
+      effect: { type: "conditional", condition, effect: { type: "cp-gain", target: "this-model", modifier: { amount: 1 } } },
+    })),
     { caseId: "fidelity/trigger-phase-filter-destroyed", trigger: { event: "destroyed", subject: "this-unit", object: { owner: "enemy" }, filter: { phase: "fight" } },
       effect: { type: "cp-gain", target: "this-model", modifier: { amount: 1 } } },
   ];

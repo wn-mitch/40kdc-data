@@ -271,7 +271,12 @@ func describeHappenedCore(p map[string]any, negated bool) string {
 				objects = strings.Replace(objects, "model", "models", 1)
 			}
 		}
-		if f["by"] != nil {
+		// Who destroyed them: the filter's attacker, else the event's subject.
+		killer := f["by"]
+		if killer == nil {
+			killer = p["subject"]
+		}
+		if killer != nil {
 			// A destruction by one attack type says it: "with its just-resolved melee attacks", "with melee attacks this phase".
 			atk := ""
 			if jsTruthy(f["attack_type"]) {
@@ -283,7 +288,7 @@ func describeHappenedCore(p map[string]any, negated bool) string {
 			} else if atk != "" {
 				when = "with " + atk + "attacks " + windowPhrase(p["window"])
 			}
-			return trimEnd(neg + unitRefPhrase(f["by"], "the unit") + " has destroyed " + amount + " " + objects + " " + when)
+			return trimEnd(neg + unitRefPhrase(killer, "the unit") + " has destroyed " + amount + " " + objects + " " + when)
 		}
 		tagged := ""
 		if !extended && obj["designated"] != nil {

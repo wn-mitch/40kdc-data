@@ -401,7 +401,8 @@ fn happened_phrase(p: &P, negated: bool) -> String {
             } else {
                 format!("{owner}{kws}{noun}s")
             };
-            if let Some(by) = nn(f, "by") {
+            // Who destroyed them: the filter's attacker, else the event's subject.
+            if let Some(by) = nn(f, "by").or_else(|| nn(p, "subject")) {
                 // A destruction by one attack type says it: "with its just-resolved melee attacks".
                 let atk = if truthy(f.get("attack_type")) {
                     format!("{} ", st(f.get("attack_type")))

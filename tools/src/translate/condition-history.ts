@@ -110,11 +110,13 @@ function happenedPhrase(p: P, negated: boolean): string {
       const owner = obj.owner != null ? `${str(obj.owner)} ` : "";
       const extended = Object.keys(obj).some((key) => !["all_of", "owner", "level", "designated"].includes(key));
       const objects = extended ? unitFilterPhrase({ ...obj, level: event === "model-destroyed" ? "model" : "unit" }).replace(/^an? /, "").replace(/\b(unit|model)\b/, "$1s") : `${owner}${kws}${noun}s`;
-      if (f.by != null) {
+      // Who destroyed them: the filter's attacker, else the event's subject.
+      const killer = f.by ?? p.subject;
+      if (killer != null) {
         // A destruction by one attack type says it: "with its just-resolved melee attacks", "with melee attacks this phase".
         const atk = f.attack_type ? `${str(f.attack_type)} ` : "";
         const when = p.window === "event" ? `with its just-resolved ${atk}attacks` : `${atk ? `with ${atk}attacks ` : ""}${windowPhrase(p.window)}`;
-        return `${neg}${unitRefPhrase(f.by)} has destroyed ${amount} ${objects} ${when}`.trimEnd();
+        return `${neg}${unitRefPhrase(killer)} has destroyed ${amount} ${objects} ${when}`.trimEnd();
       }
       const tagged = !extended && obj.designated != null ? ` ${designationPhrase(str(obj.designated))}` : "";
       return `${neg}${withWindow(`${amount} ${objects}${tagged} destroyed`, p.window)}`;

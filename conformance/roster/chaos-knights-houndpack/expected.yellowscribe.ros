@@ -210,7 +210,7 @@ You can re-roll the Advance roll.</characteristic>
             <profile name="Executioner" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">While the target unit is below half strength, the unit gets +1 to Hit rolls.
-If 1+ enemy units destroyed, enemy units within 3" of that unit must take a Battle-shock test.</characteristic>
+If this model has destroyed 1+ enemy units with its just-resolved attacks, enemy units within 3" of that unit must take a Battle-shock test.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">

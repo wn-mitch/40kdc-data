@@ -7617,24 +7617,24 @@
   {
     "caseId": "asset-manipulator-mercenary-oathband-leagues-of-votann#145",
     "effect": {
-      "type": "aura",
-      "target": "enemy-within-aura",
-      "modifier": {
-        "range": {
-          "inches": 3
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "resource-spend",
+          "target": "this-model",
+          "modifier": {
+            "pool": "yp-pool",
+            "amount": 3
+          }
         },
-        "effect": {
-          "type": "sequence",
-          "steps": [
-            {
-              "type": "resource-spend",
-              "target": "this-model",
-              "modifier": {
-                "pool": "yp-pool",
-                "amount": 3
-              }
+        {
+          "type": "aura",
+          "target": "enemy-within-aura",
+          "modifier": {
+            "range": {
+              "inches": 3
             },
-            {
+            "effect": {
               "type": "stat-modifier",
               "target": "recipient",
               "modifier": {
@@ -7642,13 +7642,13 @@
                 "operation": "subtract",
                 "value": 1
               }
+            },
+            "eligible": {
+              "owner": "enemy"
             }
-          ]
-        },
-        "eligible": {
-          "owner": "enemy"
+          }
         }
-      }
+      ]
     },
     "scope": {
       "duration": "turn"
@@ -7664,7 +7664,7 @@
       "optional": true
     },
     "expected": {
-      "text": "At the start of the Command phase, you may use this ability, until the end of the turn, while an enemy unit is within 3\" of this model, spend 3 YP; subtract 1 from that unit's Objective Control characteristic."
+      "text": "At the start of the Command phase, you may use this ability, until the end of the turn:\n  -> Spend 3 YP.\n  -> While an enemy unit is within 3\" of this model, subtract 1 from that unit's Objective Control characteristic."
     }
   },
   {
@@ -19463,43 +19463,7 @@
     }
   },
   {
-    "caseId": "light-of-the-emperor-army-of-faith-adepta-sororitas#294",
-    "effect": {
-      "type": "rules-bundle",
-      "steps": [
-        {
-          "type": "ignore-modifiers",
-          "target": "this-unit",
-          "modifier": {
-            "what": "characteristics"
-          }
-        },
-        {
-          "type": "ignore-modifiers",
-          "target": "this-unit",
-          "modifier": {
-            "what": "rolls",
-            "rolls": [
-              "any"
-            ]
-          }
-        }
-      ]
-    },
-    "scope": {
-      "duration": "turn"
-    },
-    "applies_to": {
-      "all_of": [
-        "ADEPTA SORORITAS"
-      ]
-    },
-    "expected": {
-      "text": "Until the end of the turn:\n  -> The unit ignores any modifiers to its characteristics.\n  -> The unit ignores any modifiers to its rolls.\nApplies to: units with ADEPTA SORORITAS."
-    }
-  },
-  {
-    "caseId": "madcap-artillery-orks#295",
+    "caseId": "madcap-artillery-orks#294",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -19690,7 +19654,7 @@
     }
   },
   {
-    "caseId": "martial-pride-imperial-knights#296",
+    "caseId": "martial-pride-imperial-knights#295",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -19728,7 +19692,7 @@
     }
   },
   {
-    "caseId": "melancholic-miasma-chaos-daemons#297",
+    "caseId": "melancholic-miasma-chaos-daemons#296",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -19819,7 +19783,7 @@
     }
   },
   {
-    "caseId": "methodical-destruction-chaos-knights#298",
+    "caseId": "methodical-destruction-chaos-knights#297",
     "effect": {
       "type": "ability-part",
       "trigger": {
@@ -19896,7 +19860,7 @@
     }
   },
   {
-    "caseId": "neuroloids-tyranids#299",
+    "caseId": "neuroloids-tyranids#298",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -19950,7 +19914,7 @@
     }
   },
   {
-    "caseId": "nova-charge-tau-empire#300",
+    "caseId": "nova-charge-tau-empire#299",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -20023,7 +19987,7 @@
     }
   },
   {
-    "caseId": "one-man-army-astra-militarum#301",
+    "caseId": "one-man-army-astra-militarum#300",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -20136,7 +20100,7 @@
     }
   },
   {
-    "caseId": "orders-astra-militarum#302",
+    "caseId": "orders-astra-militarum#301",
     "effect": {
       "type": "issue-orders",
       "menu_from": "voice-of-command-astra-militarum",
@@ -20155,7 +20119,7 @@
     }
   },
   {
-    "caseId": "orders-cadian-castellan-astra-militarum#303",
+    "caseId": "orders-cadian-castellan-astra-militarum#302",
     "effect": {
       "type": "issue-orders",
       "menu_from": "voice-of-command-astra-militarum",
@@ -20174,7 +20138,7 @@
     }
   },
   {
-    "caseId": "orders-commissar-astra-militarum#304",
+    "caseId": "orders-commissar-astra-militarum#303",
     "effect": {
       "type": "issue-orders",
       "menu_from": "voice-of-command-astra-militarum",
@@ -20197,7 +20161,7 @@
     }
   },
   {
-    "caseId": "orders-commissar-graves-astra-militarum#305",
+    "caseId": "orders-commissar-graves-astra-militarum#304",
     "effect": {
       "type": "issue-orders",
       "menu_from": "voice-of-command-astra-militarum",
@@ -20222,7 +20186,7 @@
     }
   },
   {
-    "caseId": "orders-commissar-graves-on-foot-astra-militarum#306",
+    "caseId": "orders-commissar-graves-on-foot-astra-militarum#305",
     "effect": {
       "type": "issue-orders",
       "menu_from": "voice-of-command-astra-militarum",
@@ -20246,7 +20210,7 @@
     }
   },
   {
-    "caseId": "pain-engine-drukhari#307",
+    "caseId": "pain-engine-drukhari#306",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -20345,7 +20309,7 @@
     }
   },
   {
-    "caseId": "paragon-of-sanctity-warpbane-task-force-grey-knights#308",
+    "caseId": "paragon-of-sanctity-warpbane-task-force-grey-knights#307",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -20420,7 +20384,7 @@
     }
   },
   {
-    "caseId": "plasma-accelerator-rifle-experimental-prototype-cadre-tau-empire#309",
+    "caseId": "plasma-accelerator-rifle-experimental-prototype-cadre-tau-empire#308",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -20513,7 +20477,7 @@
     }
   },
   {
-    "caseId": "pledges-to-the-dark-prince-emperors-children#310",
+    "caseId": "pledges-to-the-dark-prince-emperors-children#309",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -20623,7 +20587,7 @@
     }
   },
   {
-    "caseId": "power-matrix-necrons#311",
+    "caseId": "power-matrix-necrons#310",
     "effect": {
       "type": "named-region-state",
       "target": {
@@ -20767,7 +20731,7 @@
     }
   },
   {
-    "caseId": "powers-of-da-waaagh-orks#312",
+    "caseId": "powers-of-da-waaagh-orks#311",
     "effect": {
       "type": "for-each-unit",
       "selector": {
@@ -21012,7 +20976,7 @@
     }
   },
   {
-    "caseId": "praise-the-fallen-hallowed-martyrs-adepta-sororitas#313",
+    "caseId": "praise-the-fallen-hallowed-martyrs-adepta-sororitas#312",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -21077,7 +21041,7 @@
     }
   },
   {
-    "caseId": "prioritised-efficiency-leagues-of-votann#314",
+    "caseId": "prioritised-efficiency-leagues-of-votann#313",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -21501,6 +21465,62 @@
     },
     "expected": {
       "text": "If your Army Faction is LEAGUES OF VOTANN, for the rest of the battle:\n  -> At the start of the battle:\n    -> Until the start of your next Command phase: all friendly LEAGUES OF VOTANN units gain the Hostile Acquisition ability (while the target is within range of an objective marker, the unit gets +1 to Hit rolls; you can: you can re-roll the Charge roll; you can re-roll the Advance roll).\n  -> At the end of each phase:\n    During the Command phase:\n      -> :\n        -> If you control 1+ home objectives in your territory, you gain 1 YP.\n        From the second battle round onward:\n          -> If you control 1+ objectives (excluding home), you gain 1 YP.\n          -> If you control 2+ objectives (excluding home), you gain 1 YP.\n          -> If you hold more objectives than the opponent, you gain 1 YP.\n    During the Command phase, in your turn:\n      -> While the unit has at most 6 yp pool, until the start of your next Command phase: all friendly LEAGUES OF VOTANN units gain the Hostile Acquisition (Prioritised Efficiency) ability.\n    During the Command phase, in your turn:\n      -> While the unit has 7+ yp pool, until the start of your next Command phase: all friendly LEAGUES OF VOTANN units gain the Fortify Takeover ability (while the unit is within range of an objective marker you control, the unit gets +1 to Hit rolls; when the attack's S is more than the target's T, unless the unit has the VEHICLE keyword, the attacking unit gets -1 to Wound rolls)."
+    }
+  },
+  {
+    "caseId": "righteous-rage-bringers-of-flame-adepta-sororitas#314",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "resource-spend",
+          "target": "this-model",
+          "modifier": {
+            "pool": "miracle-dice-pool",
+            "amount": 1
+          }
+        },
+        {
+          "type": "rules-bundle",
+          "steps": [
+            {
+              "type": "stat-modifier",
+              "target": "this-model",
+              "modifier": {
+                "stat": "A",
+                "operation": "add",
+                "value": 1,
+                "weapons": {
+                  "type": "melee"
+                }
+              }
+            },
+            {
+              "type": "stat-modifier",
+              "target": "this-model",
+              "modifier": {
+                "stat": "S",
+                "operation": "add",
+                "value": 1,
+                "weapons": {
+                  "type": "melee"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "applies_to": {
+      "all_of": [
+        "ADEPTA SORORITAS"
+      ]
+    },
+    "expected": {
+      "text": "Until the end of the phase:\n  -> Spend 1 Miracle die.\n  -> Add 1 to the Attacks characteristic of melee weapons equipped by this model.\n  -> Add 1 to the Strength characteristic of melee weapons equipped by this model.\nApplies to: units with ADEPTA SORORITAS."
     }
   },
   {
@@ -37379,6 +37399,107 @@
     },
     "expected": {
       "text": "If the unit disembarked from a Transport in the Movement phase this turn, when resolving this use, you gain 1CP."
+    }
+  },
+  {
+    "caseId": "fidelity/happened-destroyed-subject-phase",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "destroyed",
+          "subject": "this-unit",
+          "object": {
+            "owner": "enemy"
+          },
+          "filter": {
+            "phase": "fight"
+          },
+          "window": "battle"
+        }
+      },
+      "effect": {
+        "type": "cp-gain",
+        "target": "this-model",
+        "modifier": {
+          "amount": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "If the unit has destroyed 1+ enemy units in the Fight phase this battle, when resolving this use, you gain 1CP."
+    }
+  },
+  {
+    "caseId": "fidelity/happened-destroyed-subject-phase-negated",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "destroyed",
+              "subject": "this-unit",
+              "object": {
+                "owner": "enemy"
+              },
+              "filter": {
+                "phase": "fight"
+              },
+              "window": "battle"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "cp-gain",
+        "target": "this-model",
+        "modifier": {
+          "amount": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "Unless the unit has destroyed 1+ enemy units in the Fight phase this battle, when resolving this use, you gain 1CP."
+    }
+  },
+  {
+    "caseId": "fidelity/happened-destroyed-subject-event-window",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "destroyed",
+          "subject": "this-model",
+          "object": {
+            "owner": "enemy"
+          },
+          "window": "event"
+        }
+      },
+      "effect": {
+        "type": "cp-gain",
+        "target": "this-model",
+        "modifier": {
+          "amount": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "If this model has destroyed 1+ enemy units with its just-resolved attacks, when resolving this use, you gain 1CP."
     }
   },
   {
