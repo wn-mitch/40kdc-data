@@ -9,6 +9,7 @@ import { checkWeaponGrantRefs } from "./integrity-weapon-grant.js";
 import { checkOfAbilityRollRefs } from "./integrity-of-ability-roll.js";
 import { checkStratagemTargetKeywords, checkTargetingAndAppliesToRefs } from "./integrity-targeting-refs.js";
 import { checkArmyFactionRefs } from "./integrity-army-faction.js";
+import { checkLeaderKeywordClauses } from "./integrity-leader-keywords.js";
 import { checkDslShapes } from "./integrity-shapes.js";
 import { checkDslContract } from "./integrity-dsl-contract.js";
 import { checkAuraRangeRefs } from "./integrity-aura-ranges.js";
@@ -740,6 +741,7 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
   await checkStratagemTargetKeywords(root, result);
   // An army-faction condition must name a faction id, the value the engine compares.
   await checkArmyFactionRefs(root, result);
+  await checkLeaderKeywordClauses(root, result);
   const coreAbilityById = new Map<string, AbilityLike & { id?: string; effect?: unknown }>();
   try {
     for (const ability of readArray<AbilityLike & { id?: string; effect?: unknown }>(

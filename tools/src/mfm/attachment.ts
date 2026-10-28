@@ -50,6 +50,8 @@ import type { StagedWrite } from "./apply.js";
 interface UnitRecord {
   id: string;
   attachment_role?: "leader" | "support" | null;
+  keywords?: string[];
+  faction_keywords?: string[];
   [k: string]: unknown;
 }
 interface LeaderAttachmentRecord {
@@ -66,6 +68,26 @@ interface LeaderAttachmentRecord {
 function isCombatPatrolDatasheet(dump: MfmDump, ds: DatasheetRow): boolean {
   const pub = dump.byId("publication").get(ds.publicationId);
   return !!pub?.isCombatPatrol;
+}
+
+
+/**
+ * The record's `eligible_bodyguard_keywords` from a leader's keyword groups. The field holds one
+ * clause whose keywords a unit must all carry, so a single keyword group becomes that clause.
+ * Several keyword groups are alternatives ("can lead an X or a Y unit"), which one clause cannot
+ * say: each group's clause is resolved to the units in this faction that meet it, added to
+ * `eligible`, and no clause is kept.
+ */
+export function keywordEligibility(clauses: readonly string[][], units: readonly UnitRecord[], eligible: Set<string>): string[] | undefined {
+  if (clauses.length === 0) return undefined;
+  if (clauses.length === 1) return clauses[0];
+  for (const clause of clauses) {
+    for (const unit of units) {
+      const own = new Set([...(unit.keywords ?? []), ...(unit.faction_keywords ?? [])].map((keyword) => keyword.toLowerCase()));
+      if (clause.every((keyword) => own.has(keyword.toLowerCase()))) eligible.add(unit.id);
+    }
+  }
+  return undefined;
 }
 
 export interface DirAttachmentResult {
@@ -180,7 +202,8 @@ export function runAttachmentRoles(dump: MfmDump, onlyDir?: string): AttachmentR
       // an Inquisitor leading any IMPERIUM BATTLELINE INFANTRY unit). Dump-edge order
       // is GW's canonical keyword order, so the insertion-ordered Set preserves it —
       // no sort, which would spuriously reorder the authored value.
-      const keywords = new Set<string>();
+      // Each group is one alternative; within a group, its keywords all apply.
+      const clauses: string[][] = [];
       for (const g of groups) {
         for (const j of eligByGroup.get(g.id) ?? []) {
           const bgName = dump.enName(dsById.get(j.datasheetId));
@@ -194,18 +217,21 @@ export function runAttachmentRoles(dump: MfmDump, onlyDir?: string): AttachmentR
           if (unitIds.has(bgId)) eligible.add(bgId);
           else unresolved.push(bgName);
         }
+        const clause = new Set<string>();
         for (const kw of keywordsByGroup.get(g.id) ?? []) {
           const label = keywordLabel(dump, kw.keywordId);
-          if (label) keywords.add(label);
+          if (label) clause.add(label);
         }
+        if (clause.size) clauses.push([...clause]);
       }
+      const keywords = keywordEligibility(clauses, units, eligible);
       if (eligible.size) {
         // eligible_bodyguard_keywords is additive to the required ids (schema mandates
         // ≥1 id); a keyword-only leader cannot be represented, so it rides an id record.
         dumpLa.set(id, {
           leader_id: id,
           eligible_bodyguard_ids: [...eligible].sort(),
-          ...(keywords.size ? { eligible_bodyguard_keywords: [...keywords] } : {}),
+          ...(keywords ? { eligible_bodyguard_keywords: keywords } : {}),
           game_version: { ...confirmed },
         });
       } else if (unresolved.length) {
