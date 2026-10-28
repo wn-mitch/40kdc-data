@@ -1254,7 +1254,11 @@
           "excruciator-cannon",
           "heavy-missile-launcher",
           "heavy-baleflamer"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 160
+        }
       }
     ],
     "game_version": {
@@ -1493,7 +1497,11 @@
         "default_weapon_ids": [
           "coruscating-blue-flames",
           "blue-claws"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        }
       }
     ],
     "game_version": {
@@ -1523,7 +1531,11 @@
         "default_weapon_ids": [
           "flickering-flames",
           "flamer-mouths"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       },
       {
         "name": "Flamer",
@@ -1532,7 +1544,11 @@
         "default_weapon_ids": [
           "flickering-flames",
           "flamer-mouths"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "tiers": [
@@ -1581,7 +1597,11 @@
         "default_weapon_ids": [
           "infernal-gateway",
           "staff-of-tomorrow"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 100
+        }
       }
     ],
     "game_version": {
@@ -1611,7 +1631,11 @@
         "default_weapon_ids": [
           "coruscating-pink-flames",
           "pink-claws"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -1679,7 +1703,11 @@
         "default_weapon_ids": [
           "bolt-of-change",
           "staff-of-tzeentch"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 100
+        }
       }
     ],
     "game_version": {

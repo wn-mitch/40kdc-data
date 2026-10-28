@@ -380,8 +380,8 @@
     ],
     "base_size_mm": {
       "shape": "oval",
-      "width": 170,
-      "length": 109
+      "width": 150,
+      "length": 95
     },
     "model_count": {
       "min": 1,
@@ -1826,8 +1826,8 @@
     ],
     "base_size_mm": {
       "shape": "oval",
-      "width": 170,
-      "length": 109
+      "width": 150,
+      "length": 95
     },
     "model_count": {
       "min": 1,

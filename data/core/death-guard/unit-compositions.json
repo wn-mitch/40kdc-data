@@ -1423,7 +1423,11 @@
           "excruciator-cannon",
           "heavy-missile-launcher",
           "heavy-baleflamer"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 160
+        }
       }
     ],
     "game_version": {
@@ -1485,6 +1489,10 @@
         "min": 1,
         "max": 1,
         "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
         "default_weapon_ids": [
           "manreaper-maggot-lords-deathshroud-terminators",
           "plaguespurt-gauntlet-maggot-lords-deathshroud-terminators"
@@ -1497,7 +1505,11 @@
         "default_weapon_ids": [
           "manreaper-maggot-lords-deathshroud-terminators",
           "plaguespurt-gauntlet-maggot-lords-deathshroud-terminators"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -1534,6 +1546,10 @@
         "min": 1,
         "max": 1,
         "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
         "default_weapon_ids": [
           "plasma-pistol-maggot-lords-plague-marines",
           "power-fist"
@@ -1547,7 +1563,11 @@
         "default_weapon_ids": [
           "blight-launcher-maggot-lords-plague-marines",
           "plague-knives-maggot-lords-plague-marines"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       },
       {
         "name": "Plague Marine with Plague Spewer",
@@ -1557,7 +1577,11 @@
         "default_weapon_ids": [
           "plague-knives-maggot-lords-plague-marines",
           "plague-spewer"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       },
       {
         "name": "Plague Marine",
@@ -1567,7 +1591,11 @@
         "default_weapon_ids": [
           "boltgun",
           "plague-knives-maggot-lords-plague-marines"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -1615,7 +1643,11 @@
         "default_weapon_ids": [
           "numerological-artefacts",
           "plasma-pistol-septimol-fulg-maggot-lords-tallyman"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -1648,7 +1680,11 @@
         "default_weapon_ids": [
           "power-fist-sholgor-the-putrid",
           "twin-plague-spewer"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 50
+        }
       }
     ],
     "game_version": {
@@ -1680,7 +1716,11 @@
         "max": 2,
         "default_weapon_ids": [
           "putrid-appendages"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 60
+        }
       }
     ],
     "tiers": [
@@ -1718,7 +1758,11 @@
         "max": 6,
         "default_weapon_ids": [
           "diseased-claws-and-teeth"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "tiers": [
@@ -1816,7 +1860,11 @@
         "max": 1,
         "default_weapon_ids": [
           "plaguesword"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       },
       {
         "name": "Plaguebearer",
@@ -1824,7 +1872,11 @@
         "max": 9,
         "default_weapon_ids": [
           "plaguesword"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -1859,7 +1911,11 @@
         "default_weapon_ids": [
           "streams-of-brackish-filth",
           "gnarlrod"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 130
+        }
       }
     ],
     "game_version": {
@@ -1890,7 +1946,11 @@
           "plague-flail",
           "putrid-vomit",
           "bilesword"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 130
+        }
       }
     ],
     "game_version": {

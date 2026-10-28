@@ -381,7 +381,7 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32
+          "diameter": 25
         },
         "loadout_variants": [
           {
@@ -1705,7 +1705,11 @@
           "hastarii-arc-blaster",
           "eradication-caster",
           "power-weapon-hastarii-exterminators"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       },
       {
         "name": "Hastarii Exterminator",
@@ -1715,7 +1719,11 @@
           "hastarii-arc-blaster",
           "eradication-caster",
           "close-combat-weapon-hastarii-exterminators"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -1751,7 +1759,11 @@
           "neutron-fusil",
           "hastarii-phosphor-blaster",
           "power-weapon-hastarii-fusiliers"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       },
       {
         "name": "Hastarii Fusilier",
@@ -1761,7 +1773,11 @@
           "neutron-fusil",
           "hastarii-phosphor-blaster",
           "close-combat-weapon-hastarii-fusiliers"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -1796,7 +1812,11 @@
         "default_weapon_ids": [
           "jericho-class-conversion-resonator",
           "rod-of-the-war-forge"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 80
+        }
       }
     ],
     "game_version": {
@@ -1826,7 +1846,11 @@
         "default_weapon_ids": [
           "omnissian-staff",
           "transonic-cannon-manipulus-skand"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 50
+        }
       }
     ],
     "game_version": {
@@ -1857,6 +1881,10 @@
         "min": 1,
         "max": 1,
         "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
         "default_weapon_ids": [
           "flechette-blaster-purge-corps-pteraxii-sterylizors",
           "taser-goad-purge-corps-pteraxii-sterylizors"
@@ -1869,7 +1897,11 @@
         "default_weapon_ids": [
           "phosphor-torch",
           "talons"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -1905,6 +1937,10 @@
         "min": 1,
         "max": 1,
         "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        },
         "default_weapon_ids": [
           "alphas-combat-artefact",
           "mechanicus-pistol-purge-corps-skitarii-vanguard"
@@ -1917,7 +1953,11 @@
         "default_weapon_ids": [
           "arc-rifle",
           "gun-stocks"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        }
       },
       {
         "name": "Skitarii Vanguard with Plasma Caliver",
@@ -1927,7 +1967,11 @@
         "default_weapon_ids": [
           "gun-stocks",
           "plasma-caliver"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        }
       },
       {
         "name": "Skitarii Vanguard",
@@ -1936,7 +1980,11 @@
         "default_weapon_ids": [
           "gun-stocks",
           "radium-carbine"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        }
       }
     ],
     "game_version": {
@@ -1982,6 +2030,11 @@
         "min": 1,
         "max": 1,
         "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 60,
+          "length": 35.5
+        },
         "default_weapon_ids": [
           "clawed-limbs",
           "phosphor-blast-carbine-purge-corps-serberys-sulphurhounds",
@@ -1993,6 +2046,11 @@
         "min": 1,
         "max": 1,
         "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 60,
+          "length": 35.5
+        },
         "default_weapon_ids": [
           "cavalry-arc-maul",
           "clawed-limbs",
@@ -2005,6 +2063,11 @@
         "min": 1,
         "max": 1,
         "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 60,
+          "length": 35.5
+        },
         "default_weapon_ids": [
           "clawed-limbs",
           "phosphor-pistol-purge-corps-serberys-sulphurhounds",

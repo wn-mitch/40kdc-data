@@ -444,6 +444,10 @@ LSP rename for a local React helper reported no language server, so callsites re
 
 omp config list rejects --config, so an isolation overlay can only be verified by a live model call's token count; the Round 5C OMP driver was probed that way.
 
+## 2026-09-26T12:09:56Z — deepseek-v4-flash
+
+Running just preflight from a second jj workspace fails test-python: the homebrew editable wh40kdc install points its .pth at the primary workspace's python/src, so pytest imports that tree's code (whose share registry is a different version) and 74 share-token conformance tests mismatch. Run the gate with PYTHONPATH=<workspace>/python/src, or re-point the editable install per workspace.
+
 ## 2026-09-27T14:08:46Z — claude-opus-5-5
 
 tooling/parity/differ.py defaults to the prebuilt, gitignored go/wh40kdc-runner binary, which goes stale after Go edits; a local parity run silently tests old Go code unless --go-cmd 'go run -C go ./cmd/wh40kdc-runner' is passed.

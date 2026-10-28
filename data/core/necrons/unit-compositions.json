@@ -1365,7 +1365,7 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 40
+          "diameter": 90
         },
         "default_weapon_ids": [
           "gaze-of-death",

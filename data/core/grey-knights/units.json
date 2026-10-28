@@ -1230,7 +1230,7 @@
     ],
     "base_size_mm": {
       "shape": "round",
-      "diameter": 32
+      "diameter": 40
     },
     "model_count": {
       "min": 1,

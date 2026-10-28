@@ -3590,7 +3590,7 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 25
+          "diameter": 32
         },
         "default_weapon_ids": [
           "shadow-field",
@@ -3956,11 +3956,9 @@
         "max": 2,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "flying-base",
-          "size": "large",
-          "draft": true,
-          "width": 120,
-          "length": 92
+          "shape": "oval",
+          "width": 105,
+          "length": 70
         },
         "default_weapon_ids": [
           "shuriken-cannon-vyper",

@@ -324,7 +324,7 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32
+          "diameter": 40
         },
         "default_weapon_ids": [
           "force-weapon",
@@ -2772,7 +2772,7 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 40
+          "diameter": 32
         }
       }
     ],
@@ -2858,7 +2858,7 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32
+          "diameter": 50
         },
         "default_weapon_ids": [
           "tyrants-claw-and-exalted-power-weapon",
@@ -3124,7 +3124,11 @@
           "combi-bolter-kravek-morne",
           "last-argument-and-power-fist",
           "servo-harness"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 50
+        }
       }
     ],
     "game_version": {
@@ -3158,7 +3162,11 @@
           "excruciator-cannon",
           "heavy-missile-launcher",
           "heavy-baleflamer"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 160
+        }
       }
     ],
     "game_version": {

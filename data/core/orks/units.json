@@ -459,7 +459,7 @@
     ],
     "base_size_mm": {
       "shape": "round",
-      "diameter": 40
+      "diameter": 50
     },
     "model_count": {
       "min": 1,
@@ -639,9 +639,8 @@
       "Orks"
     ],
     "base_size_mm": {
-      "shape": "oval",
-      "width": 75,
-      "length": 42
+      "shape": "round",
+      "diameter": 75
     },
     "model_count": {
       "min": 3,
@@ -1150,8 +1149,8 @@
     ],
     "base_size_mm": {
       "shape": "oval",
-      "width": 150,
-      "length": 95
+      "width": 120,
+      "length": 92
     },
     "model_count": {
       "min": 1,
@@ -2685,9 +2684,8 @@
       "Orks"
     ],
     "base_size_mm": {
-      "shape": "oval",
-      "width": 120,
-      "length": 92
+      "shape": "round",
+      "diameter": 120
     },
     "model_count": {
       "min": 1,
@@ -2921,9 +2919,8 @@
       "Orks"
     ],
     "base_size_mm": {
-      "shape": "oval",
-      "width": 120,
-      "length": 92
+      "shape": "round",
+      "diameter": 120
     },
     "model_count": {
       "min": 1,
@@ -3770,7 +3767,7 @@
     ],
     "base_size_mm": {
       "shape": "round",
-      "diameter": 32
+      "diameter": 40
     },
     "model_count": {
       "min": 5,
@@ -4058,9 +4055,8 @@
       "Orks"
     ],
     "base_size_mm": {
-      "shape": "oval",
-      "width": 120,
-      "length": 92
+      "shape": "round",
+      "diameter": 120
     },
     "model_count": {
       "min": 1,
@@ -4244,7 +4240,7 @@
     ],
     "base_size_mm": {
       "shape": "round",
-      "diameter": 40
+      "diameter": 50
     },
     "model_count": {
       "min": 1,

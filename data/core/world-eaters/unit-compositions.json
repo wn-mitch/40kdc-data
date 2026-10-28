@@ -1256,7 +1256,11 @@
         "default_weapon_ids": [
           "bolt-pistol-frenzied-reavers-khorne-berzerkers",
           "chainblade"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       },
       {
         "name": "Khorne Berzerker Champion",
@@ -1266,7 +1270,11 @@
           "chainblade",
           "plasma-pistol-frenzied-reavers-khorne-berzerkers"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       },
       {
         "name": "Khorne Berzerker with Plasma Pistol and Chainblade",
@@ -1275,7 +1283,11 @@
         "default_weapon_ids": [
           "chainblade",
           "plasma-pistol-frenzied-reavers-khorne-berzerkers"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       },
       {
         "name": "Khorne Berzerker with Bolt Pistol and Khornate Eviscerator",
@@ -1284,7 +1296,11 @@
         "default_weapon_ids": [
           "bolt-pistol-frenzied-reavers-khorne-berzerkers",
           "khornate-eviscerator"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -1333,7 +1349,11 @@
           "bolt-pistol-frenzied-reavers-master-of-executions",
           "axe-of-dismemberment"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -1366,7 +1386,11 @@
         "default_weapon_ids": [
           "hellforged-weapons-vorrakh-lord-of-the-frenzied-reavers",
           "infernal-cannon"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 60
+        }
       }
     ],
     "game_version": {
@@ -1399,7 +1423,12 @@
         "default_weapon_ids": [
           "hellblade",
           "juggernauts-bladed-horn"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 90,
+          "length": 52.5
+        }
       },
       {
         "name": "Bloodcrusher",
@@ -1408,7 +1437,12 @@
         "default_weapon_ids": [
           "hellblade",
           "juggernauts-bladed-horn"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 90,
+          "length": 52.5
+        }
       }
     ],
     "tiers": [
@@ -1456,7 +1490,11 @@
         "max": 1,
         "default_weapon_ids": [
           "hellblade"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       },
       {
         "name": "Bloodletter",
@@ -1464,7 +1502,11 @@
         "max": 9,
         "default_weapon_ids": [
           "hellblade"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -1500,7 +1542,12 @@
           "burning-roar",
           "gore-drenched-fangs",
           "collar-of-khorne"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 60,
+          "length": 35.5
+        }
       },
       {
         "name": "Flesh Hound",
@@ -1509,7 +1556,12 @@
         "default_weapon_ids": [
           "gore-drenched-fangs",
           "collar-of-khorne"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 60,
+          "length": 35.5
+        }
       }
     ],
     "tiers": [
@@ -1558,7 +1610,11 @@
         "default_weapon_ids": [
           "bellow-of-endless-fury",
           "slaughter-and-carnage"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 100
+        }
       }
     ],
     "game_version": {
@@ -1588,7 +1644,12 @@
         "default_weapon_ids": [
           "hellfire-breath",
           "great-axe-of-khorne"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 120,
+          "length": 92
+        }
       }
     ],
     "game_version": {

@@ -2715,7 +2715,7 @@
         "is_leader_model": true,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32
+          "diameter": 25
         }
       },
       {
@@ -3774,7 +3774,11 @@
         "default_weapon_ids": [
           "close-combat-weapon-cadian-recon-squad",
           "lasgun-cadian-recon-squad"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28
+        }
       },
       {
         "name": "Recon Trooper",
@@ -3784,6 +3788,10 @@
           "close-combat-weapon-cadian-recon-squad",
           "lasgun-cadian-recon-squad"
         ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28
+        },
         "loadout_variants": [
           {
             "name": "Recon Trooper w/ Lasgun",
@@ -3983,7 +3991,11 @@
         "default_weapon_ids": [
           "bolt-pistol-commissar-graves-on-foot",
           "power-sword-and-manus-mortis"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -4016,7 +4028,11 @@
           "bale-eye",
           "power-klaw",
           "power-sword"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {

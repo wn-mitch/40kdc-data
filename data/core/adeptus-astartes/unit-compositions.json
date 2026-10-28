@@ -1141,7 +1141,7 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 50
+          "diameter": 40
         },
         "default_weapon_ids": [
           "the-axe-mortalis",
@@ -3342,7 +3342,7 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 40
+          "diameter": 50
         },
         "default_weapon_ids": [
           "fist-of-dorn"
@@ -3661,7 +3661,7 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 50
+          "diameter": 40
         },
         "default_weapon_ids": [
           "relic-weapon-captain-in-terminator-armour",
@@ -3873,7 +3873,7 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32
+          "diameter": 40
         },
         "default_weapon_ids": [
           "bolt-pistol-vulkan-hestan",
@@ -4848,7 +4848,7 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 40
+          "diameter": 50
         },
         "default_weapon_ids": [
           "crozius-arcanum-chaplain-in-terminator-armour",
@@ -5431,7 +5431,7 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32
+          "diameter": 40
         },
         "default_weapon_ids": [
           "absolvor-bolt-pistol-chaplain-with-jump-pack",
@@ -7179,7 +7179,11 @@
           "bolt-pistol-eradicator-squad-with-heavy-bolters",
           "ceramite-fists-eradicator-squad-with-heavy-bolters",
           "heavy-bolter-eradicator-squad-with-heavy-bolters"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       },
       {
         "name": "Eradicator",
@@ -7189,7 +7193,11 @@
           "bolt-pistol-eradicator-squad-with-heavy-bolters",
           "ceramite-fists-eradicator-squad-with-heavy-bolters",
           "heavy-bolter-eradicator-squad-with-heavy-bolters"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -7240,7 +7248,12 @@
           "multi-melta-land-speeder",
           "onslaught-gatling-cannon",
           "stormfury-missile-launcher"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 105,
+          "length": 70
+        }
       }
     ],
     "game_version": {
@@ -7270,7 +7283,11 @@
         "default_weapon_ids": [
           "master-crafted-bolt-carbine",
           "master-crafted-power-weapon-victrix-honour-guard"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       },
       {
         "name": "Chapter Champion",
@@ -7278,7 +7295,11 @@
         "max": 1,
         "default_weapon_ids": [
           "blades-of-honour"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       },
       {
         "name": "Chapter Ancient",
@@ -7288,7 +7309,11 @@
           "banner-of-macragge",
           "master-crafted-bolt-carbine",
           "master-crafted-power-weapon-victrix-honour-guard"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "tiers": [
@@ -7421,7 +7446,11 @@
         "default_weapon_ids": [
           "heavy-bolt-pistol-kaius-konorius",
           "severance-and-rebuke"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -7452,7 +7481,12 @@
           "heavy-bolt-pistol-captain-on-bike",
           "master-crafted-power-weapon-captain-on-bike",
           "twin-bolt-rifle-captain-on-bike"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 90,
+          "length": 52.5
+        }
       }
     ],
     "game_version": {
@@ -7480,6 +7514,10 @@
         "min": 3,
         "max": 3,
         "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
         "default_weapon_ids": [
           "bolt-pistol-assault-force-intercessor-squad",
           "bolt-rifle-assault-force-intercessor-squad",
@@ -7491,6 +7529,10 @@
         "min": 1,
         "max": 1,
         "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
         "default_weapon_ids": [
           "bolt-pistol-assault-force-intercessor-squad",
           "bolt-rifle-assault-force-intercessor-squad",
@@ -7503,6 +7545,10 @@
         "min": 1,
         "max": 1,
         "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
         "default_weapon_ids": [
           "bolt-pistol-assault-force-intercessor-squad",
           "bolt-rifle-assault-force-intercessor-squad",
@@ -7549,6 +7595,10 @@
         "min": 1,
         "max": 1,
         "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
         "default_weapon_ids": [
           "heavy-bolt-pistol-assault-force-captain",
           "master-crafted-power-weapon-assault-force-captain"
@@ -7583,6 +7633,10 @@
         "min": 1,
         "max": 1,
         "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
         "default_weapon_ids": [
           "heavy-bolt-pistol-assault-force-vanguard-veteran-squad-with-jump-packs",
           "master-crafted-power-weapon-assault-force-vanguard-veteran-squad-with-jump-packs"
@@ -7593,6 +7647,10 @@
         "min": 1,
         "max": 1,
         "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
         "default_weapon_ids": [
           "master-crafted-power-weapon-assault-force-vanguard-veteran-squad-with-jump-packs",
           "plasma-pistol-assault-force-vanguard-veteran-squad-with-jump-packs"
@@ -7603,6 +7661,10 @@
         "min": 3,
         "max": 3,
         "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
         "default_weapon_ids": [
           "heavy-bolt-pistol-assault-force-vanguard-veteran-squad-with-jump-packs",
           "master-crafted-power-weapon-assault-force-vanguard-veteran-squad-with-jump-packs"
@@ -7647,6 +7709,10 @@
         "min": 1,
         "max": 1,
         "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
         "default_weapon_ids": [
           "force-weapon-assault-force-librarian",
           "fulmination",
@@ -7682,6 +7748,11 @@
         "min": 1,
         "max": 1,
         "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 105,
+          "length": 70
+        },
         "default_weapon_ids": [
           "armoured-impact-assault-force-land-speeder",
           "multi-melta-assault-force-land-speeder",
@@ -7718,6 +7789,10 @@
         "min": 1,
         "max": 1,
         "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
         "default_weapon_ids": [
           "bolt-pistol",
           "ceramite-fists",
@@ -7729,6 +7804,10 @@
         "min": 2,
         "max": 5,
         "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
         "default_weapon_ids": [
           "bolt-pistol",
           "ceramite-fists",
@@ -7780,6 +7859,10 @@
         "min": 1,
         "max": 1,
         "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 50
+        },
         "default_weapon_ids": [
           "gauntlets-of-ultramar"
         ]
@@ -7852,6 +7935,10 @@
         "min": 1,
         "max": 1,
         "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
         "default_weapon_ids": [
           "angelus-boltgun",
           "encarmine-blade"
@@ -7862,6 +7949,10 @@
         "min": 2,
         "max": 2,
         "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
         "default_weapon_ids": [
           "angelus-boltgun",
           "encarmine-spear"
@@ -7901,6 +7992,10 @@
         "min": 1,
         "max": 1,
         "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
         "default_weapon_ids": [
           "bolt-pistol-vengeful-brethren-intercessor-squad",
           "bolt-rifle-vengeful-brethren-intercessor-squad",
@@ -7912,6 +8007,10 @@
         "min": 9,
         "max": 9,
         "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
         "default_weapon_ids": [
           "bolt-pistol-vengeful-brethren-intercessor-squad",
           "bolt-rifle-vengeful-brethren-intercessor-squad",
@@ -7952,6 +8051,10 @@
         "min": 1,
         "max": 1,
         "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
         "default_weapon_ids": [
           "relic-greataxe-askars-wolfpack-wolf-guard-terminators"
         ]
@@ -7961,6 +8064,10 @@
         "min": 1,
         "max": 1,
         "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
         "default_weapon_ids": [
           "assault-cannon-askars-wolfpack-wolf-guard-terminators",
           "power-fist"
@@ -7971,6 +8078,10 @@
         "min": 3,
         "max": 3,
         "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
         "default_weapon_ids": [
           "master-crafted-power-weapon-askars-wolfpack-wolf-guard-terminators",
           "storm-bolter-askars-wolfpack-wolf-guard-terminators"
@@ -8015,6 +8126,10 @@
         "min": 1,
         "max": 1,
         "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
         "default_weapon_ids": [
           "chainsword-sanguinary-spearhead-assault-intercessor-squad",
           "plasma-pistol-sanguinary-spearhead-assault-intercessor-squad"
@@ -8025,6 +8140,10 @@
         "min": 9,
         "max": 9,
         "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
         "default_weapon_ids": [
           "chainsword-sanguinary-spearhead-assault-intercessor-squad",
           "heavy-bolt-pistol-sanguinary-spearhead-assault-intercessor-squad"
@@ -8064,6 +8183,10 @@
         "min": 1,
         "max": 1,
         "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
         "default_weapon_ids": [
           "master-crafted-power-weapon-fyrri-askar"
         ]
@@ -8097,6 +8220,10 @@
         "min": 1,
         "max": 1,
         "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
         "default_weapon_ids": [
           "boltstorm-gauntlet-master-zacharial",
           "power-fist-master-zacharial",
@@ -8132,6 +8259,10 @@
         "min": 1,
         "max": 1,
         "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
         "default_weapon_ids": [
           "bolt-pistol-vengeful-brethren-hellblaster-squad",
           "knives-and-fists-vengeful-brethren-hellblaster-squad",
@@ -8143,6 +8274,10 @@
         "min": 4,
         "max": 4,
         "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
         "default_weapon_ids": [
           "bolt-pistol-vengeful-brethren-hellblaster-squad",
           "knives-and-fists-vengeful-brethren-hellblaster-squad",
@@ -8183,6 +8318,10 @@
         "min": 1,
         "max": 1,
         "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
         "default_weapon_ids": [
           "plasma-pistol-vow-sworn-sword-brethren-squad",
           "master-crafted-power-weapon-vow-sworn-sword-brethren-squad"
@@ -8193,6 +8332,10 @@
         "min": 1,
         "max": 1,
         "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
         "default_weapon_ids": [
           "pyre-pistol",
           "master-crafted-power-weapon-vow-sworn-sword-brethren-squad"
@@ -8203,6 +8346,10 @@
         "min": 1,
         "max": 1,
         "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
         "default_weapon_ids": [
           "twin-lightning-claws"
         ]
@@ -8212,6 +8359,10 @@
         "min": 1,
         "max": 1,
         "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
         "default_weapon_ids": [
           "chainsword-vow-sworn-sword-brethren-squad",
           "heavy-bolt-pistol-vow-sworn-sword-brethren-squad"
@@ -8222,6 +8373,10 @@
         "min": 1,
         "max": 1,
         "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
         "default_weapon_ids": [
           "combi-weapon-vow-sworn-sword-brethren-squad",
           "master-crafted-power-weapon-vow-sworn-sword-brethren-squad"
@@ -8276,6 +8431,10 @@
         "min": 1,
         "max": 1,
         "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
         "default_weapon_ids": [
           "inferno-pistol-captain-raldeo",
           "master-crafted-chainsword-captain-raldeo"
@@ -8421,6 +8580,10 @@
         "min": 1,
         "max": 1,
         "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
         "default_weapon_ids": [
           "black-sword-emperors-champion-vedrenn",
           "bolt-pistol-emperors-champion-vedrenn"
@@ -8455,6 +8618,10 @@
         "min": 1,
         "max": 1,
         "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
         "default_weapon_ids": [
           "plasma-pistol-askars-wolfpack-blood-claws",
           "power-weapon"
@@ -8465,6 +8632,10 @@
         "min": 9,
         "max": 9,
         "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
         "default_weapon_ids": [
           "bolt-pistol-askars-wolfpack-blood-claws",
           "chainsword-askars-wolfpack-blood-claws"
@@ -8504,6 +8675,10 @@
         "min": 1,
         "max": 1,
         "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
         "default_weapon_ids": [
           "master-crafted-power-weapon-vow-sworn-bladeguard-veteran-squad",
           "neo-volkite-pistol"
@@ -8514,6 +8689,10 @@
         "min": 2,
         "max": 2,
         "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
         "default_weapon_ids": [
           "heavy-bolt-pistol-vow-sworn-bladeguard-veteran-squad",
           "master-crafted-power-weapon-vow-sworn-bladeguard-veteran-squad"
@@ -8553,6 +8732,10 @@
         "min": 3,
         "max": 3,
         "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
         "default_weapon_ids": [
           "frost-blades-and-feral-claws"
         ]
@@ -8562,6 +8745,10 @@
         "min": 2,
         "max": 2,
         "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
         "default_weapon_ids": [
           "frost-blades-and-feral-claws",
           "stormfrag-auto-launcher-askars-wolfpack-wulfen"
@@ -8601,6 +8788,10 @@
         "min": 2,
         "max": 2,
         "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
         "default_weapon_ids": [
           "heavy-bolt-pistol-vengeful-brethren-bladeguard-veteran-squad",
           "master-crafted-power-weapon-vengeful-brethren-bladeguard-veteran-squad"
@@ -8611,6 +8802,10 @@
         "min": 1,
         "max": 1,
         "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
         "default_weapon_ids": [
           "heavy-bolt-pistol-vengeful-brethren-bladeguard-veteran-squad",
           "master-crafted-power-weapon-vengeful-brethren-bladeguard-veteran-squad"

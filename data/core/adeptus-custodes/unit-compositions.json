@@ -151,8 +151,8 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "oval",
-          "width": 170,
-          "length": 109
+          "width": 150,
+          "length": 95
         },
         "default_weapon_ids": [
           "armoured-hull",
@@ -835,8 +835,8 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "oval",
-          "width": 170,
-          "length": 109
+          "width": 150,
+          "length": 95
         },
         "default_weapon_ids": [
           "twin-lastrum-bolt-cannon",
@@ -1170,6 +1170,10 @@
         "min": 3,
         "max": 3,
         "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
         "default_weapon_ids": [
           "kinetic-destroyer",
           "tarsis-buckler"
@@ -1201,6 +1205,10 @@
         "min": 3,
         "max": 3,
         "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 50
+        },
         "default_weapon_ids": [
           "lastrum-storm-bolter",
           "solerite-power-talon"
@@ -1232,6 +1240,10 @@
         "min": 2,
         "max": 2,
         "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
         "default_weapon_ids": [
           "sentinel-blade-aquilan-wing-sentinel-guard-sodality"
         ]
@@ -1241,6 +1253,10 @@
         "min": 1,
         "max": 1,
         "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
         "default_weapon_ids": [
           "vexilla",
           "sentinel-blade-aquilan-wing-sentinel-guard-sodality"
@@ -1280,6 +1296,10 @@
         "min": 1,
         "max": 1,
         "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 60
+        },
         "default_weapon_ids": [
           "dreadspear",
           "lastrum-storm-bolter"
@@ -1314,6 +1334,10 @@
         "min": 3,
         "max": 3,
         "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
         "default_weapon_ids": [
           "kinetic-destroyer",
           "tarsis-buckler"
@@ -1348,6 +1372,10 @@
         "min": 3,
         "max": 3,
         "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
         "default_weapon_ids": [
           "sentinel-blade-aquilan-talon-sentinel-guard-sodality"
         ]
@@ -1381,6 +1409,10 @@
         "min": 1,
         "max": 1,
         "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
         "default_weapon_ids": [
           "eternity-pattern-paragon-blade"
         ]
@@ -1413,7 +1445,11 @@
         "name": "Shield-Captain",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -1444,6 +1480,10 @@
         "min": 3,
         "max": 3,
         "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
         "default_weapon_ids": [
           "praesidium-shield",
           "sentinel-blade-sentinel-guard-sodality"
@@ -1475,6 +1515,11 @@
         "min": 1,
         "max": 1,
         "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 150,
+          "length": 95
+        },
         "default_weapon_ids": [
           "arachnus-blaze-carronade",
           "armoured-hull",

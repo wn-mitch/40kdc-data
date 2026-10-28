@@ -76,9 +76,8 @@
         ],
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "oval",
-          "width": 60,
-          "length": 35.5
+          "shape": "round",
+          "diameter": 60
         }
       }
     ],

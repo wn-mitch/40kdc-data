@@ -1793,7 +1793,11 @@
           "melta-missile-array",
           "mace-of-saint-praxedes",
           "throne-of-blame"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 60
+        }
       }
     ],
     "game_version": {
@@ -1821,6 +1825,10 @@
         "min": 1,
         "max": 1,
         "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
         "default_weapon_ids": [
           "bolt-pistol-sanctuary-guardians-celestian-sacresants",
           "hallowed-mace"
@@ -1831,6 +1839,10 @@
         "min": 4,
         "max": 4,
         "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
         "default_weapon_ids": [
           "bolt-pistol-sanctuary-guardians-celestian-sacresants",
           "hallowed-mace"
@@ -1870,6 +1882,10 @@
         "min": 10,
         "max": 10,
         "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        },
         "default_weapon_ids": [
           "arco-flails"
         ]
@@ -1903,6 +1919,10 @@
         "min": 1,
         "max": 1,
         "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
         "default_weapon_ids": [
           "condemnor-boltgun-sanctuary-canoness-adalya",
           "hallowed-chainsword"
@@ -1937,6 +1957,10 @@
         "min": 1,
         "max": 1,
         "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
         "default_weapon_ids": [
           "boltgun",
           "bolt-pistol",
@@ -1949,6 +1973,10 @@
         "min": 1,
         "max": 1,
         "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
         "default_weapon_ids": [
           "bolt-pistol",
           "ministorum-flamer",
@@ -1960,6 +1988,10 @@
         "min": 6,
         "max": 6,
         "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
         "default_weapon_ids": [
           "boltgun",
           "bolt-pistol",
@@ -1981,6 +2013,10 @@
         "min": 1,
         "max": 1,
         "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
         "default_weapon_ids": [
           "ministorum-heavy-flamer",
           "bolt-pistol",
@@ -1992,6 +2028,10 @@
         "min": 1,
         "max": 1,
         "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
         "default_weapon_ids": [
           "bolt-pistol",
           "combi-weapon",
