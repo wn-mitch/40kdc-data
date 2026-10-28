@@ -199,9 +199,8 @@ export function wargearContext(dataset: Dataset, unit: Unit, counts: ReadonlyMap
 export function equippedBuffs(unit: Unit, counts: ReadonlyMap<string, number>, buffs: readonly Buff[]): Buff[] {
   const unequipped = unequippedRules(unit, counts);
   if (unequipped.size === 0) return [...buffs];
-  const own = (source: BuffSource): boolean => source.kind === "ability"
-    && (source.abilityKind === "unit" || (source.abilityKind === "attached" && source.sourceUnitId === unit.id));
-  return buffs.filter((buff) => !own(buff.source) || !unequipped.has((buff.source as { abilityId: string }).abilityId));
+  return buffs.filter(({ source }) => !(source.kind === "ability" && unequipped.has(source.abilityId)
+    && (source.abilityKind === "unit" || (source.abilityKind === "attached" && source.sourceUnitId === unit.id))));
 }
 
 /** What a loadout's wargear changes about scoring it; see {@link loadoutWargearScoring}. */

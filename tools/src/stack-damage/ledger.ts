@@ -237,12 +237,19 @@ export function buildLedger(session: DamageScoringSession, result: StackResult):
 
   // A rule a selected detachment's Combat Patrol army rule replaces is not eligible in any pass.
   const replaced = session.replacedArmyRules(spec);
+  const scoredBy = new Map(result.members.map((scored) => [scored.member.unit.id, scored]));
+  /** The wargear `unitId`'s winning loadout lacks for its printed rule `abilityId`; null when carried, undefined when no item prints it. */
+  const unequippedOf = (abilityId: string, unitId: string | undefined): string | null | undefined => {
+    const owner = unitId === undefined ? undefined : scoredBy.get(unitId);
+    const wargear = owner && printedWargear(owner.member.unit.raw).get(abilityId);
+    if (!owner || !wargear) return undefined;
+    return (owner.loadout.counts.get(wargear) ?? 0) > 0 ? null : wargear;
+  };
   for (const scored of result.members) {
     const { member } = scored;
     // Conditions read the winning loadout's wargear; its weapon grants were scored with it.
     const context = session.loadoutContext(member.unit, scored.loadout.counts, state.contextFor(spec, member));
     const grants = memberGrants(session, result, scored);
-    const printedBy = printedWargear(member.unit.raw);
     for (const detachmentId of spec.detachmentIds.length > 0 ? spec.detachmentIds : [undefined]) {
       const input = session.eligibilityInput(spec, member, detachmentId);
       for (const eligible of dataset.eligibleAbilities(input, context.phase)) {
@@ -257,8 +264,9 @@ export function buildLedger(session: DamageScoringSession, result: StackResult):
           { translation, source, context, perspective: "attacker", grantNotes: grants.notes },
           selectedSources.has(`${eligible.ability.id}|${source.kind === "ability" ? source.sourceUnitId ?? "" : ""}`)
             || (sourceUnitId === undefined && grants.fired.has(eligible.ability.id)),
-          eligible.source.kind === "unit" && printedBy.has(eligible.ability.id)
-            ? (scored.loadout.counts.get(printedBy.get(eligible.ability.id)!) ?? 0) > 0 ? null : printedBy.get(eligible.ability.id)
+          // A rule reaching through an attachment needs the wargear of the member that prints it.
+          eligible.source.kind === "unit" ? unequippedOf(eligible.ability.id, member.unit.id)
+            : eligible.source.kind === "attached" ? unequippedOf(eligible.ability.id, sourceUnitId)
             : undefined,
         );
         for (const { abilityId } of grantedRecordIds(translation)) {

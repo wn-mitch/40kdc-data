@@ -15,14 +15,14 @@
   "headline": {
     "lists": 478,
     "parse_failures": 16,
-    "lists_with_violations": 100,
-    "violating_units": 303,
+    "lists_with_violations": 95,
+    "violating_units": 295,
     "warnings_by_code": {
       "weapon-unresolved": 271,
-      "unit-unresolved": 147,
       "detachment-unresolved": 129,
       "enhancement-unresolved": 114,
-      "loadout-illegal": 106,
+      "loadout-illegal": 97,
+      "unit-unresolved": 47,
       "points-mismatch": 36,
       "detachment-points-exceeded": 31,
       "battle-size-unmapped": 19,
@@ -31,19 +31,18 @@
       "faction-unresolved": 1
     },
     "violations_by_code": {
-      "exceeds-max": 154,
-      "invalid-model-count": 116,
-      "below-min": 85,
-      "swap-conflict": 9,
-      "exceeds-allowance": 8
+      "exceeds-max": 136,
+      "invalid-model-count": 117,
+      "below-min": 77,
+      "swap-conflict": 9
     },
     "grouping_by_outcome": {
-      "grouped": 3181,
-      "unit-unresolved": 47,
-      "wargear-unresolved": 155,
-      "single-model": 3502,
+      "grouped": 3216,
+      "unit-unresolved": 35,
+      "wargear-unresolved": 156,
+      "single-model": 3513,
       "no-recorded-defaults": 0,
-      "solver-null": 226
+      "solver-null": 191
     },
     "composition_drift_units": 52
   },
@@ -159,15 +158,7 @@
       "count": 33
     },
     {
-      "key": "exceeds-max:death-company-marines-with-jump-packs",
-      "count": 30
-    },
-    {
       "key": "below-min:scout-squad",
-      "count": 20
-    },
-    {
-      "key": "below-min:victrix-honour-guard",
       "count": 20
     },
     {
@@ -187,16 +178,20 @@
       "count": 17
     },
     {
+      "key": "exceeds-max:death-company-marines-with-jump-packs",
+      "count": 15
+    },
+    {
       "key": "invalid-model-count:allarus-custodians",
       "count": 13
     },
     {
-      "key": "invalid-model-count:ghazghkull-thraka",
-      "count": 11
+      "key": "below-min:victrix-honour-guard",
+      "count": 12
     },
     {
-      "key": "exceeds-allowance:tempestus-scions",
-      "count": 8
+      "key": "invalid-model-count:ghazghkull-thraka",
+      "count": 11
     },
     {
       "key": "exceeds-max:impulsor",
@@ -220,14 +215,10 @@
     },
     {
       "key": "exceeds-max:fortis-kill-team",
-      "count": 4
-    },
-    {
-      "key": "exceeds-max:jakhals",
       "count": 3
     },
     {
-      "key": "exceeds-max:sword-brethren-squad",
+      "key": "exceeds-max:jakhals",
       "count": 3
     },
     {
@@ -271,6 +262,10 @@
       "count": 1
     },
     {
+      "key": "exceeds-max:sword-brethren-squad",
+      "count": 1
+    },
+    {
       "key": "exceeds-max:warlock-conclave",
       "count": 1
     },
@@ -280,6 +275,10 @@
     },
     {
       "key": "invalid-model-count:tankbustas",
+      "count": 1
+    },
+    {
+      "key": "invalid-model-count:venatari-with-verutum-lances",
       "count": 1
     }
   ],
@@ -978,10 +977,6 @@
         "count": 15
       },
       {
-        "key": "Tempestus Scions",
-        "count": 8
-      },
-      {
         "key": "Impulsor",
         "count": 7
       },
@@ -1014,10 +1009,6 @@
         "count": 2
       },
       {
-        "key": "Sword Brethren Squad",
-        "count": 2
-      },
-      {
         "key": "Crusader Squad",
         "count": 1
       },
@@ -1030,31 +1021,15 @@
         "count": 1
       },
       {
+        "key": "Sword Brethren Squad",
+        "count": 1
+      },
+      {
         "key": "Warlock Conclave",
         "count": 1
       }
     ],
     "unit-unresolved": [
-      {
-        "key": "Witchseekers",
-        "count": 34
-      },
-      {
-        "key": "Venatari Custodians",
-        "count": 24
-      },
-      {
-        "key": "Prosecutors",
-        "count": 23
-      },
-      {
-        "key": "Marneus Calgar in Armour of Antilochus",
-        "count": 12
-      },
-      {
-        "key": "Vigilators",
-        "count": 7
-      },
       {
         "key": "Lootas",
         "count": 5
@@ -1429,10 +1404,6 @@
   },
   "solver_null_units": [
     {
-      "key": "assault-intercessors-with-jump-packs",
-      "count": 26
-    },
-    {
       "key": "incursor-squad",
       "count": 23
     },
@@ -1467,10 +1438,6 @@
     {
       "key": "scout-squad",
       "count": 10
-    },
-    {
-      "key": "tempestus-scions",
-      "count": 8
     },
     {
       "key": "company-heroes",
@@ -1526,10 +1493,6 @@
     },
     {
       "key": "crusader-squad",
-      "count": 1
-    },
-    {
-      "key": "death-company-marines",
       "count": 1
     },
     {

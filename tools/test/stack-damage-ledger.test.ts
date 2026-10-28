@@ -4,7 +4,11 @@ import { resolveTarget } from "../src/compare.js";
 import { Dataset } from "../src/data/dataset.js";
 import { parseMatrixConfig } from "../src/stack-damage/config.js";
 import { resolveFactionContext } from "../src/stack-damage/factions.js";
-import { runDamageCell } from "../src/stack-damage/search.js";
+import { buildLedger } from "../src/stack-damage/ledger.js";
+import { damageScoringSession, emptySpec, runDamageCell } from "../src/stack-damage/search.js";
+import { equippedBuffs } from "../src/stack-damage/weapon-grants.js";
+import type { Buff } from "../src/cruncher/index.js";
+import type { Unit } from "../src/generated.js";
 
 const dataset = Dataset.embedded();
 const faction = resolveFactionContext(dataset, "tau-empire");
@@ -127,5 +131,39 @@ describe("stack damage ledger", () => {
       relevant: false,
       reasons: ["dropped by configuration"],
     });
+  });
+
+  it("judges a wargear rule reaching through an attachment by its bearer's loadout", () => {
+    // Kroot Farstalkers print Pech'ra; led, it reaches the stack both as theirs and as attached.
+    const ctan = resolveTarget(dataset, dataset.targetProfiles.get("ctan-shard")!)!;
+    const config = parseMatrixConfig(
+      { HC_FACTIONS: "tau-empire", HC_TARGETS: "ctan-shard", HC_PHASES: "fight", HC_OUTPUT: "ledger.json" },
+      { factionIds: new Set(["tau-empire"]), targetIds: ["ctan-shard"] },
+    );
+    const session = damageScoringSession({ dataset, config, faction, target: ctan, phase: "fight" });
+    const unit = (id: string) => faction.units.find((candidate) => candidate.id === id)!;
+    const result = session.optimiseLevers(emptySpec("tau-empire", [
+      { unit: unit("kroot-farstalkers"), role: "bodyguard" },
+      { unit: unit("kroot-war-shaper"), role: "leader" },
+    ]));
+    const bearer = result.members.find((scored) => scored.member.unit.id === "kroot-farstalkers")!;
+    const carried = (bearer.loadout.counts.get("pechra") ?? 0) > 0;
+    const pechra = buildLedger(session, result).filter((candidate) => candidate.abilityId === "pechra-tau-empire");
+    expect(pechra.map((candidate) => candidate.sourceKind).sort()).toEqual(["attached", "unit"]);
+    for (const candidate of pechra) {
+      expect(candidate.reasons.includes("the chosen loadout does not include pechra, whose rule this is")).toBe(!carried);
+    }
+  });
+});
+
+describe("equipped buffs", () => {
+  const unit = { id: "bearers", ability_ids: [{ id: "item-rule", wargear: "item" }] } as unknown as Unit;
+  const buff = (abilityKind: "unit" | "attached", sourceUnitId?: string) =>
+    ({ source: { kind: "ability", abilityId: "item-rule", abilityKind, ...(sourceUnitId ? { sourceUnitId } : {}) } }) as unknown as Buff;
+
+  it("drops the unit's own item rule however it reaches the unit", () => {
+    const buffs = [buff("unit"), buff("attached", "bearers"), buff("attached", "leader")];
+    expect(equippedBuffs(unit, new Map(), buffs)).toEqual([buff("attached", "leader")]);
+    expect(equippedBuffs(unit, new Map([["item", 1]]), buffs)).toEqual(buffs);
   });
 });

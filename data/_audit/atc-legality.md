@@ -17,7 +17,7 @@ rejects.
 - `examples/atc-viewer/src/data/atc-2026.json`: 248 lists (0 without text skipped)
 - `examples/atc-viewer/src/data/atc-5s.json`: 230 lists (2 without text skipped)
 - **Lists**: 478, parse failures: 16
-- **Legality**: 303 violating units across 100 lists
+- **Legality**: 295 violating units across 95 lists
 - **Composition drift**: 52 dataset units
 
 ### Warnings by code
@@ -25,10 +25,10 @@ rejects.
 | code | count |
 |---|--:|
 | `weapon-unresolved` | 271 |
-| `unit-unresolved` | 147 |
 | `detachment-unresolved` | 129 |
 | `enhancement-unresolved` | 114 |
-| `loadout-illegal` | 106 |
+| `loadout-illegal` | 97 |
+| `unit-unresolved` | 47 |
 | `points-mismatch` | 36 |
 | `detachment-points-exceeded` | 31 |
 | `battle-size-unmapped` | 19 |
@@ -40,12 +40,12 @@ rejects.
 
 | outcome | count |
 |---|--:|
-| `grouped` | 3181 |
-| `unit-unresolved` | 47 |
-| `wargear-unresolved` | 155 |
-| `single-model` | 3502 |
+| `grouped` | 3216 |
+| `unit-unresolved` | 35 |
+| `wargear-unresolved` | 156 |
+| `single-model` | 3513 |
 | `no-recorded-defaults` | 0 |
-| `solver-null` | 226 |
+| `solver-null` | 191 |
 
 ## Legality violations (ranked `code:unitId`)
 
@@ -54,24 +54,22 @@ rejects.
 | `exceeds-max:boyz` | 66 |
 | `invalid-model-count:custodian-guard-sodality` | 35 |
 | `invalid-model-count:gretchin` | 33 |
-| `exceeds-max:death-company-marines-with-jump-packs` | 30 |
 | `below-min:scout-squad` | 20 |
-| `below-min:victrix-honour-guard` | 20 |
 | `invalid-model-count:custodian-wardens` | 20 |
 | `below-min:boyz` | 19 |
 | `below-min:kommandos` | 17 |
 | `exceeds-max:storm-speeder-hammerstrike` | 17 |
+| `exceeds-max:death-company-marines-with-jump-packs` | 15 |
 | `invalid-model-count:allarus-custodians` | 13 |
+| `below-min:victrix-honour-guard` | 12 |
 | `invalid-model-count:ghazghkull-thraka` | 11 |
-| `exceeds-allowance:tempestus-scions` | 8 |
 | `exceeds-max:impulsor` | 7 |
 | `swap-conflict:impulsor` | 7 |
 | `below-min:company-heroes` | 6 |
 | `exceeds-max:spectrus-kill-team` | 6 |
 | `exceeds-max:reiver-squad` | 5 |
-| `exceeds-max:fortis-kill-team` | 4 |
+| `exceeds-max:fortis-kill-team` | 3 |
 | `exceeds-max:jakhals` | 3 |
-| `exceeds-max:sword-brethren-squad` | 3 |
 | `exceeds-max:telemon-heavy-dreadnought` | 3 |
 | `below-min:grey-hunters` | 2 |
 | `exceeds-max:crusader-squad` | 2 |
@@ -82,9 +80,11 @@ rejects.
 | `swap-conflict:grey-hunters` | 2 |
 | `below-min:hyperadapted-raveners` | 1 |
 | `exceeds-max:prince-yriel` | 1 |
+| `exceeds-max:sword-brethren-squad` | 1 |
 | `exceeds-max:warlock-conclave` | 1 |
 | `invalid-model-count:inquisitorial-agents` | 1 |
 | `invalid-model-count:tankbustas` | 1 |
+| `invalid-model-count:venatari-with-verutum-lances` | 1 |
 
 ## `solver-null` grouping failures (ranked unit)
 
@@ -93,7 +93,6 @@ partition solver could not decompose — bad `replaces` data or genuinely illega
 
 | unit | count |
 |---|--:|
-| `assault-intercessors-with-jump-packs` | 26 |
 | `incursor-squad` | 23 |
 | `boyz` | 19 |
 | `intercessor-squad` | 18 |
@@ -103,7 +102,6 @@ partition solver could not decompose — bad `replaces` data or genuinely illega
 | `death-company-marines-with-jump-packs` | 15 |
 | `ghazghkull-thraka` | 11 |
 | `scout-squad` | 10 |
-| `tempestus-scions` | 8 |
 | `company-heroes` | 6 |
 | `nobz` | 6 |
 | `deffkoptas` | 3 |
@@ -118,7 +116,6 @@ partition solver could not decompose — bad `replaces` data or genuinely illega
 | `tankbustas` | 2 |
 | `allarus-custodians` | 1 |
 | `crusader-squad` | 1 |
-| `death-company-marines` | 1 |
 | `deathwatch-kill-team` | 1 |
 | `fortis-kill-team` | 1 |
 | `gretchin` | 1 |
@@ -289,7 +286,6 @@ partition solver could not decompose — bad `replaces` data or genuinely illega
 | `Boyz` | 37 |
 | `Storm Speeder Hammerstrike` | 17 |
 | `Death Company Marines with Jump Packs` | 15 |
-| `Tempestus Scions` | 8 |
 | `Impulsor` | 7 |
 | `Jakhals` | 3 |
 | `Telemon Heavy Dreadnought` | 3 |
@@ -298,21 +294,16 @@ partition solver could not decompose — bad `replaces` data or genuinely illega
 | `Khorne Berzerkers` | 2 |
 | `Rhino` | 2 |
 | `Spectrus Kill Team` | 2 |
-| `Sword Brethren Squad` | 2 |
 | `Crusader Squad` | 1 |
 | `Fortis Kill Team` | 1 |
 | `Prince Yriel` | 1 |
+| `Sword Brethren Squad` | 1 |
 | `Warlock Conclave` | 1 |
 
 ## Unresolved names: `unit-unresolved`
 
 | raw name | count |
 |---|--:|
-| `Witchseekers` | 34 |
-| `Venatari Custodians` | 24 |
-| `Prosecutors` | 23 |
-| `Marneus Calgar in Armour of Antilochus` | 12 |
-| `Vigilators` | 7 |
 | `Lootas` | 5 |
 | `Uriel Ventris` | 3 |
 | `Venerable Contemptor Dreadnought` | 3 |

@@ -156,7 +156,7 @@
       }
     },
     "expected": [
-      "exceeds-max:incinerator"
+      "exceeds-allowance:incinerator+psilencer-brotherhood-terminator-squad+psycannon-brotherhood-terminator-squad"
     ]
   },
   {
@@ -182,7 +182,7 @@
       }
     },
     "expected": [
-      "exceeds-max:psycannon"
+      "exceeds-allowance:incinerator+psilencer+psycannon"
     ]
   },
   {
@@ -459,7 +459,8 @@
         "long-las": 1,
         "missile-launcher-cadian-recon-squad": 1,
         "plasma-gun": 1,
-        "vox-caster": 1
+        "vox-caster": 1,
+        "vox-relay-beacon": 1
       }
     },
     "expected": []
@@ -2020,6 +2021,128 @@
     },
     "expected": [
       "exceeds-allowance:astartes-chainsword+flamer+havoc-autocannon-legionaries+heavy-bolter+lascannon-legionaries+meltagun+missile-launcher+plasma-gun+plasma-pistol+reaper-chaincannon"
+    ]
+  },
+  {
+    "name": "legionaries-champion-plasma-pistol-plus-pistol-chainsword-legal",
+    "args": {
+      "unitId": "legionaries",
+      "factionId": "chaos-space-marines",
+      "modelCount": 5,
+      "counts": {
+        "plasma-pistol": 2,
+        "astartes-chainsword": 1,
+        "bolt-pistol-legionaries": 4,
+        "boltgun-legionaries": 4
+      }
+    },
+    "expected": []
+  },
+  {
+    "name": "legionaries-champion-two-accursed-weapons-legal",
+    "args": {
+      "unitId": "legionaries",
+      "factionId": "chaos-space-marines",
+      "modelCount": 5,
+      "counts": {
+        "accursed-weapon": 2,
+        "bolt-pistol-legionaries": 4,
+        "boltgun-legionaries": 4
+      }
+    },
+    "expected": []
+  },
+  {
+    "name": "legionaries-champion-two-plasma-pistols-conflict",
+    "args": {
+      "unitId": "legionaries",
+      "factionId": "chaos-space-marines",
+      "modelCount": 5,
+      "counts": {
+        "plasma-pistol": 2,
+        "bolt-pistol-legionaries": 4,
+        "boltgun-legionaries": 4
+      }
+    },
+    "expected": [
+      "swap-conflict:legionaries"
+    ]
+  },
+  {
+    "name": "legionaries-four-plasma-pistols-at-ten-over",
+    "args": {
+      "unitId": "legionaries",
+      "factionId": "chaos-space-marines",
+      "modelCount": 10,
+      "counts": {
+        "plasma-pistol": 4,
+        "astartes-chainsword": 2
+      }
+    },
+    "expected": [
+      "exceeds-max:plasma-pistol"
+    ]
+  },
+  {
+    "name": "tempestus-scions-four-specials-at-ten-legal",
+    "args": {
+      "unitId": "tempestus-scions",
+      "factionId": "astra-militarum",
+      "modelCount": 10,
+      "counts": {
+        "plasma-gun-tempestus-scions": 2,
+        "meltagun-tempestus-scions": 2
+      }
+    },
+    "expected": []
+  },
+  {
+    "name": "tempestus-scions-three-specials-at-five-over",
+    "args": {
+      "unitId": "tempestus-scions",
+      "factionId": "astra-militarum",
+      "modelCount": 5,
+      "counts": {
+        "plasma-gun-tempestus-scions": 1,
+        "meltagun-tempestus-scions": 1,
+        "flamer": 1
+      }
+    },
+    "expected": [
+      "exceeds-allowance:flamer+grenade-launcher-tempestus-scions+hot-shot-volley-gun+meltagun-tempestus-scions+plasma-gun-tempestus-scions"
+    ]
+  },
+  {
+    "name": "tempestus-scions-five-specials-at-ten-over",
+    "args": {
+      "unitId": "tempestus-scions",
+      "factionId": "astra-militarum",
+      "modelCount": 10,
+      "counts": {
+        "plasma-gun-tempestus-scions": 2,
+        "meltagun-tempestus-scions": 2,
+        "flamer": 1
+      }
+    },
+    "expected": [
+      "exceeds-allowance:flamer+grenade-launcher-tempestus-scions+hot-shot-volley-gun+meltagun-tempestus-scions+plasma-gun-tempestus-scions"
+    ]
+  },
+  {
+    "name": "victrix-honour-guard-champion-and-ancient-short-a-carbine",
+    "args": {
+      "unitId": "victrix-honour-guard",
+      "factionId": "adeptus-astartes",
+      "modelCount": 6,
+      "counts": {
+        "banner-of-macragge": 1,
+        "blades-of-honour": 1,
+        "master-crafted-bolt-carbine": 4,
+        "master-crafted-power-weapon-victrix-honour-guard": 5
+      }
+    },
+    "expected": [
+      "below-min:master-crafted-bolt-carbine"
     ]
   }
 ]
