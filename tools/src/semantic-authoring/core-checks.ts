@@ -35,21 +35,34 @@ const unitCache = new Map<string, Array<{ id: string; labels: Set<string> }>>();
 
 /**
  * A faction's units, each with every label a restriction can name it by: its keywords, its
- * faction keywords and its name (a datasheet-scoped core group names the datasheet).
+ * faction keywords and its name (a datasheet-scoped core group names the datasheet). A chapter
+ * without units of its own (Iron Hands) fields its parent's shared roster.
  */
 function factionUnits(dataRoot: string, faction: string): Array<{ id: string; labels: Set<string> }> {
   const key = `${dataRoot}\u0000${faction}`;
   const cached = unitCache.get(key);
   if (cached) return cached;
-  const path = join(dataRoot, "core", faction, "units.json");
-  const units = existsSync(path)
-    ? (JSON.parse(readFileSync(path, "utf8")) as Array<{ id: string; name?: string; keywords?: string[]; faction_keywords?: string[] }>).map((unit) => ({
-      id: unit.id,
-      labels: new Set([...(unit.keywords ?? []), ...(unit.faction_keywords ?? []), ...(unit.name ? [unit.name] : [])].map(upper)),
-    }))
-    : [];
+  const read = (dir: string) => {
+    const path = join(dataRoot, "core", dir, "units.json");
+    return existsSync(path)
+      ? (JSON.parse(readFileSync(path, "utf8")) as Array<{ id: string; name?: string; keywords?: string[]; faction_keywords?: string[] }>).map((unit) => ({
+        id: unit.id,
+        labels: new Set([...(unit.keywords ?? []), ...(unit.faction_keywords ?? []), ...(unit.name ? [unit.name] : [])].map(upper)),
+      }))
+      : [];
+  };
+  const parent = parentFaction(dataRoot, faction);
+  const units = [...read(faction), ...(parent !== undefined && parent !== faction ? read(parent) : [])];
   unitCache.set(key, units);
   return units;
+}
+
+/** The faction's parent_faction_id (a chapter's shared roster), if its core faction record names one. */
+function parentFaction(dataRoot: string, faction: string): string | undefined {
+  const path = join(dataRoot, "core", faction, "factions.json");
+  if (!existsSync(path)) return undefined;
+  const records = JSON.parse(readFileSync(path, "utf8")) as Array<{ id?: string; parent_faction_id?: string | null }>;
+  return records.find((record) => record.id === faction)?.parent_faction_id ?? undefined;
 }
 
 /**

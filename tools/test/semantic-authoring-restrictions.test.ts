@@ -156,6 +156,28 @@ describe("Semantic authoring restrictions", () => {
     expect(coreCheckErrors(root, "solo", anyTinkerer)[0]).toMatch(/core allows .*the tinkerer datasheet/u);
   });
 
+  it("compares a chapter enhancement's bearers over its parent's shared roster", () => {
+    const bearers = (keywords: string[]) => compiled([leaf("RESTRICTION", "bearer-eligibility", { keywords, match: "all" }), grant()]).checks;
+    const root = dataRoot([], []);
+    for (const [dir, files] of Object.entries({
+      parent: { "factions.json": [{ id: "parent", parent_faction_id: null }], "units.json": [
+        { id: "smith", name: "Smith", keywords: ["Character", "Infantry", "Smith"], faction_keywords: ["Hive Faction"] },
+        { id: "smith-walker", name: "Smith Walker", keywords: ["Character", "Vehicle", "Smith"], faction_keywords: ["Hive Faction"] },
+      ] },
+      chapter: { "factions.json": [{ id: "chapter", parent_faction_id: "parent" }], "enhancements.json": [
+        { id: "relic", ability_id: "relic", keyword_restrictions: ["Smith"], datasheet_restriction_groups: [{ unit_id: "smith" }, { unit_id: "smith-walker" }] },
+        { id: "narrow", ability_id: "narrow", datasheet_restriction_groups: [{ unit_id: "smith" }] },
+      ] },
+    })) {
+      mkdirSync(join(root, "core", dir), { recursive: true });
+      for (const [file, records] of Object.entries(files)) writeFileSync(join(root, "core", dir, file), JSON.stringify(records));
+    }
+    // The chapter has no units of its own; both readings admit the same parent units.
+    expect(coreCheckErrors(root, "relic", bearers(["SMITH"]))).toEqual([]);
+    // A keyword the walker also carries still differs from a one-datasheet group.
+    expect(coreCheckErrors(root, "narrow", bearers(["SMITH"]))[0]).toMatch(/core allows the smith datasheet/u);
+  });
+
   it("turns stratagem moments into their trigger events", () => {
     const trigger = (kind: string) => compiled([leaf("EVENT", "event", { kind }), grant()]).mechanics.trigger;
     expect(trigger("enemy-selected-targets")).toEqual({ event: "targets-selected", filter: { kind: "attack" }, subject: { owner: "enemy" }, object: "this-unit" });
