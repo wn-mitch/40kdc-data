@@ -651,7 +651,13 @@ def _classify_target(node: dict[str, Any]) -> str:
     # A unit filter reaches every unit it matches: friendly ones are the buffed side,
     # enemy ones the other.
     if _is_object(target) and "event_var" not in target and "selection_var" not in target:
-        if target.get("owner") == "friendly":
+        if target.get("member_of") in ("attacker", "defender"):
+            return target["member_of"]
+        if isinstance(target.get("unit_ids"), list) and target.get("owner") in (None, "any"):
+            return "self"
+        if target.get("owner") == "friendly" or (
+            target.get("owner") is None and target.get("member_of") == "this-unit"
+        ):
             return "self"
         if target.get("owner") == "enemy":
             return "defender"
@@ -1739,12 +1745,47 @@ def _walk_gated(
     out["unsupported"].extend(sub["unsupported"])
 
 
+# Timing conditions that, around a stance or order choice, say when the choice is made.
+_SELECTION_WINDOW = frozenset({"phase-is", "player-turn-is", "battle-round"})
+
+
+def _without_selection_window(condition: dict[str, Any], effect: Any) -> dict[str, Any] | None:
+    """A stance or order choice's guard without its selection window. The phase, player turn
+    and battle round operands time the choice, and the chosen option lasts past them, so they do
+    not gate its effect; other operands still do. Returns the guard unchanged when there is
+    nothing to drop, and None when only the window was there. Mirrors TS
+    ``withoutSelectionWindow``."""
+    if not _is_object(effect) or effect.get("type") not in ("stance-select", "issue-orders"):
+        return condition
+
+    def operands(node: dict[str, Any]) -> list[dict[str, Any]]:
+        if node.get("operator") == "and" and isinstance(node.get("operands"), list):
+            items = [item for item in node["operands"] if _is_object(item)]
+            return [leaf for item in items for leaf in operands(item)]
+        return [node]
+
+    every = operands(condition)
+    kept = [operand for operand in every if operand.get("type") not in _SELECTION_WINDOW]
+    if len(kept) == len(every):
+        return condition
+    if not kept:
+        return None
+    return kept[0] if len(kept) == 1 else {"operator": "and", "operands": kept}
+
+
 def _translate_conditional(
     node: dict[str, Any], source: BuffSource, opts: dict[str, Any], out: EffectTranslation
 ) -> None:
     condition = node.get("condition")
     effect = node.get("effect")
     if not _is_object(condition):
+        return
+    guard = _without_selection_window(condition, effect)
+    if guard is None:
+        _walk(effect, source, opts, out)
+        return
+    if guard is not condition:
+        _translate_conditional({**node, "condition": guard}, source, opts, out)
         return
     if _is_weapon_scoped_condition(condition):
         applicability = _condition_to_applicability(
@@ -3182,7 +3223,16 @@ def _matches_unit_filter(
                 unknown = True
             elif role != value:
                 return False
-        elif key == "member_of" and member_side and filt.get("attachment_role") is not None:
+        elif (
+            key == "member_of"
+            and member_side
+            and (
+                filt.get("attachment_role") is not None
+                or (filt.get("level") == "model" and every_model_matches)
+            )
+        ):
+            # The unit is a member of the combined unit, and its role or its every model's
+            # keywords place it among the selected models.
             continue
         else:
             unknown = True

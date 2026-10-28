@@ -311,6 +311,24 @@ describe("Stratagems that target one model", () => {
   });
 });
 
+describe("a Support unit leading its bodyguard (core rule 19.01)", () => {
+  it("opens the Datasmith's Battle Protocols for the Kastelan Robots it leads", () => {
+    const factionId = "adeptus-mechanicus";
+    const admech = resolveFactionContext(dataset, factionId);
+    const config = parseMatrixConfig({ HC_FACTIONS: factionId, HC_TARGETS: "geq-guardsmen", HC_PHASES: "fight", HC_OUTPUT: "ledger.json" },
+      { factionIds: new Set([factionId]), targetIds: ["geq-guardsmen"] });
+    const session = damageScoringSession({ dataset, config, faction: admech, target, phase: "fight" });
+    const robots = admech.units.find((unit) => unit.id === "kastelan-robots")!;
+    const datasmith = admech.units.find((unit) => unit.id === "cybernetica-datasmith")!;
+    expect(datasmith.raw.attachment_role).toBe("support");
+    const spec = legalDetachmentSpec(session, factionId, [{ unit: robots, role: "bodyguard" }, { unit: datasmith, role: "support" }],
+      [dataset.detachments.getAny("cohort-cybernetica")!])!;
+    // The protocol is chosen in the Command phase and lasts into the Fight phase.
+    expect(session.selectedPoolLevers(session.optimiseLevers(spec)).map((lever) => lever.id))
+      .toContain("battle-protocols-adeptus-mechanicus#conqueror-protocol");
+  });
+});
+
 describe("equipped buffs", () => {
   const unit = { id: "bearers", ability_ids: [{ id: "item-rule", wargear: "item" }] } as unknown as Unit;
   const buff = (abilityKind: "unit" | "attached", sourceUnitId?: string) =>

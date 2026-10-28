@@ -186,8 +186,8 @@ export function evaluateDesignated(params: Record<string, unknown>, ctx: EngineC
 
 /**
  * `attachment` facts the combined unit's members settle. `own` is the unit the ability belongs to.
- * Leading needs `own` to be a Leader with a Bodyguard; led needs another member that is a Leader;
- * attached needs another member. `with` narrows those other members by keyword (friendly units
+ * Leading needs `own` to be a Leader or Support unit with a Bodyguard (both lead, core rule
+ * 19.01); led needs another member that is a Leader or Support unit; attached needs another member. `with` narrows those other members by keyword (friendly units
  * only), or at `level: "model"` to members with a model meeting the keywords.
  */
 export function attachmentFromMembers(
@@ -200,8 +200,9 @@ export function attachmentFromMembers(
   const self = members.find((member) => member.unitId === own);
   if (self === undefined) return false;
   const others = members.filter((member) => member.unitId !== own);
-  const candidates = role === "leading" ? (self.role === "leader" ? others.filter((member) => member.role === "bodyguard") : [])
-    : role === "led" ? others.filter((member) => member.role === "leader")
+  const leads = (member: AttachedMember) => member.role === "leader" || member.role === "support";
+  const candidates = role === "leading" ? (leads(self) ? others.filter((member) => member.role === "bodyguard") : [])
+    : role === "led" ? others.filter(leads)
     : role === "attached" ? others
     : undefined;
   if (candidates === undefined) return "unknown";

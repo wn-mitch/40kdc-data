@@ -604,10 +604,12 @@ fn evaluate_filter(
                 if value.as_str() == Some("model")
                     && f.contains_key("attachment_role")
                     && pool_member => {}
+            // The unit is a member of the combined unit, and its role or its every model's
+            // keywords place it among the selected models.
             "member_of"
                 if pool_member
-                    && f.contains_key("attachment_role")
-                    && is_str(f, "level", "model") => {}
+                    && is_str(f, "level", "model")
+                    && (f.contains_key("attachment_role") || every_model_matches) => {}
             "attachment_role" if is_str(f, "level", "model") && pool_member => {
                 let role = context.and_then(|(ctx, side)| {
                     if side == TranslationPerspective::Attacker {

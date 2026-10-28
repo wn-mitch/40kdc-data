@@ -1296,19 +1296,21 @@ func unsup(reason string, fragment any) map[string]any {
 
 func classifyTarget(node map[string]any) string {
 	// A unit filter reaches every unit it matches: friendly ones are the buffed side, enemy ones the other.
-	if f, ok := asMap(node["target"]); ok && f != nil {
-		if _, present := f["unit_ids"]; present {
-			return "self"
-		}
-	}
 	if f, isMap := asMap(node["target"]); isMap && f != nil {
 		_, ev := f["event_var"]
 		_, sv := f["selection_var"]
 		if !ev && !sv {
-			switch f["owner"] {
-			case "friendly":
+			if member, _ := f["member_of"].(string); member == "attacker" || member == "defender" {
+				return member
+			}
+			owner, hasOwner := f["owner"]
+			if _, listed := f["unit_ids"].([]any); listed && (!hasOwner || owner == "any") {
 				return "self"
-			case "enemy":
+			}
+			if owner == "friendly" || (!hasOwner && f["member_of"] == "this-unit") {
+				return "self"
+			}
+			if owner == "enemy" {
 				return "defender"
 			}
 			return "unknown"
@@ -1909,9 +1911,67 @@ func translateNamedRegionState(node, source map[string]any, opts dslOpts, out *e
 	}
 }
 
+// selectionWindow lists the timing conditions that, around a stance or order choice, say when
+// the choice is made.
+var selectionWindow = map[string]bool{"phase-is": true, "player-turn-is": true, "battle-round": true}
+
+// withoutSelectionWindow is a stance or order choice's guard without its selection window. The
+// phase, player turn and battle round operands time the choice, and the chosen option lasts past
+// them, so they do not gate its effect; other operands still do. changed is false when there is
+// nothing to drop; a nil guard means only the window was there. Mirrors TS withoutSelectionWindow.
+func withoutSelectionWindow(condition map[string]any, effect any) (guard map[string]any, changed bool) {
+	inner, ok := effect.(map[string]any)
+	if !ok || (inner["type"] != "stance-select" && inner["type"] != "issue-orders") {
+		return condition, false
+	}
+	var operands func(node map[string]any) []map[string]any
+	operands = func(node map[string]any) []map[string]any {
+		items, isList := node["operands"].([]any)
+		if node["operator"] != "and" || !isList {
+			return []map[string]any{node}
+		}
+		var leaves []map[string]any
+		for _, item := range items {
+			if child, ok := item.(map[string]any); ok {
+				leaves = append(leaves, operands(child)...)
+			}
+		}
+		return leaves
+	}
+	every := operands(condition)
+	var kept []any
+	for _, operand := range every {
+		if kind, _ := operand["type"].(string); !selectionWindow[kind] {
+			kept = append(kept, operand)
+		}
+	}
+	switch {
+	case len(kept) == len(every):
+		return condition, false
+	case len(kept) == 0:
+		return nil, true
+	case len(kept) == 1:
+		return kept[0].(map[string]any), true
+	}
+	return map[string]any{"operator": "and", "operands": kept}, true
+}
+
 func translateConditional(node, source map[string]any, opts dslOpts, out *effectTranslation) {
 	condition, ok := getMap(node, "condition")
 	if !ok {
+		return
+	}
+	if guard, changed := withoutSelectionWindow(condition, node["effect"]); changed {
+		if guard == nil {
+			dslWalk(node["effect"], source, opts, out)
+			return
+		}
+		narrowed := make(map[string]any, len(node))
+		for key, value := range node {
+			narrowed[key] = value
+		}
+		narrowed["condition"] = guard
+		translateConditional(narrowed, source, opts, out)
 		return
 	}
 	if isWeaponScopedCondition(condition) {
@@ -2706,7 +2766,9 @@ func matchesUnitFilter(filter, ctx map[string]any, side, owner string) any {
 				unknown = true
 			}
 		case "member_of":
-			if !memberSide || filter["attachment_role"] == nil {
+			// The unit is a member of the combined unit, and its role or its every model's
+			// keywords place it among the selected models.
+			if !memberSide || (filter["attachment_role"] == nil && !(filter["level"] == "model" && everyModelMatches)) {
 				unknown = true
 			}
 		default:

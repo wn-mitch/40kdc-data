@@ -82,7 +82,9 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [
-          "conditional: cannot evaluate condition \"battle-round\" against current context",
+          "activation condition cannot be evaluated against current context",
+          "activation condition cannot be evaluated against current context",
+          "unit-filter target: identity, state or model membership is unresolved",
           "effect type \"army-rule\" is not modelled by the buff layer",
           "effect type \"army-rule\" is not modelled by the buff layer"
         ],
@@ -8644,6 +8646,512 @@
         "applicableWhen": [
           null
         ]
+      }
+    },
+    {
+      "caseId": "canonical/scenario/attachment-support-leading-with",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "attached",
+        "sourceUnitId": "leader"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "attachment",
+          "parameters": {
+            "role": "leading",
+            "subject": "this-model",
+            "with": {
+              "all_of": [
+                "EXAMPLE SQUAD"
+              ]
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerMembers": [
+          {
+            "unitId": "leader",
+            "role": "support",
+            "keywords": [
+              "CHARACTER"
+            ]
+          },
+          {
+            "unitId": "squad",
+            "role": "bodyguard",
+            "keywords": [
+              "EXAMPLE SQUAD"
+            ]
+          }
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "hit-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": [],
+        "applicableWhen": [
+          null
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/scenario/attachment-led-by-support",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "attachment",
+          "parameters": {
+            "role": "led",
+            "with": {
+              "all_of": [
+                "CHARACTER"
+              ]
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerUnitId": "squad",
+        "attackerMembers": [
+          {
+            "unitId": "leader",
+            "role": "support",
+            "keywords": [
+              "CHARACTER"
+            ]
+          },
+          {
+            "unitId": "squad",
+            "role": "bodyguard",
+            "keywords": []
+          }
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "hit-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": [],
+        "applicableWhen": [
+          null
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/scenario/stance-selection-window",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "phase-is",
+                  "parameters": {
+                    "phase": "command"
+                  }
+                },
+                {
+                  "type": "player-turn-is",
+                  "parameters": {
+                    "turn": "your-turn"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "effect": {
+          "type": "stance-select",
+          "mode": "re-selectable",
+          "options": [
+            {
+              "id": "example-protocol",
+              "name": "Example Protocol",
+              "effect": {
+                "type": "roll-modifier",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "hit",
+                  "operation": "add",
+                  "value": 1
+                }
+              }
+            }
+          ],
+          "min_choices": 1,
+          "max_choices": 1
+        }
+      },
+      "context": {
+        "phase": "fight"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": [
+          {
+            "id": "fabricated-scenario#example-protocol",
+            "label": "Example Protocol",
+            "group": {
+              "id": "fabricated-scenario?stance",
+              "maxActivations": 1
+            },
+            "requires": null,
+            "capRaise": null,
+            "buffs": [
+              {
+                "type": "hit-mod",
+                "value": 1
+              }
+            ]
+          }
+        ],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/stance-selection-window-leading",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "attached",
+        "sourceUnitId": "leader"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "phase-is",
+                  "parameters": {
+                    "phase": "command"
+                  }
+                },
+                {
+                  "type": "player-turn-is",
+                  "parameters": {
+                    "turn": "your-turn"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "attachment",
+              "parameters": {
+                "role": "leading",
+                "subject": "this-model",
+                "with": {
+                  "all_of": [
+                    "EXAMPLE SQUAD"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "effect": {
+          "type": "stance-select",
+          "mode": "re-selectable",
+          "options": [
+            {
+              "id": "example-protocol",
+              "name": "Example Protocol",
+              "effect": {
+                "type": "roll-modifier",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "hit",
+                  "operation": "add",
+                  "value": 1
+                }
+              }
+            }
+          ],
+          "min_choices": 1,
+          "max_choices": 1
+        }
+      },
+      "context": {
+        "phase": "fight",
+        "attackerMembers": [
+          {
+            "unitId": "leader",
+            "role": "support",
+            "keywords": [
+              "CHARACTER"
+            ]
+          },
+          {
+            "unitId": "squad",
+            "role": "bodyguard",
+            "keywords": [
+              "EXAMPLE SQUAD"
+            ]
+          }
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": [
+          {
+            "id": "fabricated-scenario#example-protocol",
+            "label": "Example Protocol",
+            "group": {
+              "id": "fabricated-scenario?stance",
+              "maxActivations": 1
+            },
+            "requires": null,
+            "capRaise": null,
+            "buffs": [
+              {
+                "type": "hit-mod",
+                "value": 1
+              }
+            ]
+          }
+        ],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/stance-selection-window-not-leading",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "attached",
+        "sourceUnitId": "leader"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "phase-is",
+                  "parameters": {
+                    "phase": "command"
+                  }
+                },
+                {
+                  "type": "player-turn-is",
+                  "parameters": {
+                    "turn": "your-turn"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "attachment",
+              "parameters": {
+                "role": "leading",
+                "subject": "this-model",
+                "with": {
+                  "all_of": [
+                    "EXAMPLE SQUAD"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "effect": {
+          "type": "stance-select",
+          "mode": "re-selectable",
+          "options": [
+            {
+              "id": "example-protocol",
+              "name": "Example Protocol",
+              "effect": {
+                "type": "roll-modifier",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "hit",
+                  "operation": "add",
+                  "value": 1
+                }
+              }
+            }
+          ],
+          "min_choices": 1,
+          "max_choices": 1
+        }
+      },
+      "context": {
+        "phase": "fight",
+        "attackerMembers": [
+          {
+            "unitId": "leader",
+            "role": "support",
+            "keywords": [
+              "CHARACTER"
+            ]
+          },
+          {
+            "unitId": "squad",
+            "role": "bodyguard",
+            "keywords": [
+              "OTHER SQUAD"
+            ]
+          }
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/member-of-every-model",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": {
+          "level": "model",
+          "member_of": "this-unit",
+          "all_of": [
+            "EXAMPLE SQUAD"
+          ]
+        },
+        "modifier": {
+          "roll": "hit",
+          "operation": "add",
+          "value": 1
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerKeywords": [
+          "EXAMPLE SQUAD",
+          "CHARACTER"
+        ],
+        "attackerModelKeywords": [
+          "EXAMPLE SQUAD"
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "hit-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": [],
+        "applicableWhen": [
+          null
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/scenario/member-of-no-model",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": {
+          "level": "model",
+          "member_of": "this-unit",
+          "all_of": [
+            "EXAMPLE SQUAD"
+          ]
+        },
+        "modifier": {
+          "roll": "hit",
+          "operation": "add",
+          "value": 1
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerKeywords": [
+          "CHARACTER"
+        ],
+        "attackerModelKeywords": [
+          "CHARACTER"
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": [],
+        "applicableWhen": []
       }
     },
     {

@@ -113,7 +113,9 @@ export function matchesUnitFilter(filter: unknown, context: EngineContext, side:
       const role = side === "attacker" ? context.attackerAttachmentRole : context.targetAttachmentRole;
       if (role === undefined) unknown = true;
       else if (role !== value) return false;
-    } else if (key === "member_of" && memberSide && filter.attachment_role !== undefined) {
+    } else if (key === "member_of" && memberSide && (filter.attachment_role !== undefined || (filter.level === "model" && everyModelMatches))) {
+      // The unit is a member of the combined unit, and its role or its every model's keywords
+      // place it among the selected models.
       continue;
     } else {
       unknown = true;

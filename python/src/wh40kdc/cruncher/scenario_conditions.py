@@ -391,12 +391,16 @@ def _keyword_predicate(filt: dict[str, Any]) -> dict[str, list[str]] | None:
     return predicate
 
 
+# Leader and Support units both lead their combined unit (core rule 19.01).
+_LEADS = ("leader", "support")
+
+
 def attachment_from_members(role: Any, with_filter: Any, members: Any, own: Any) -> Verdict:
     """``attachment`` facts the combined unit's members settle. ``own`` is the unit the ability
-    belongs to. Leading needs ``own`` to be a Leader with a Bodyguard; led needs another member
-    that is a Leader; attached needs another member. ``with`` narrows those other members by
-    keyword (friendly units only), or at ``level: "model"`` to members with a model meeting the
-    keywords."""
+    belongs to. Leading needs ``own`` to be a Leader or Support unit with a Bodyguard; led needs
+    another member that is a Leader or Support unit; attached needs another member. ``with``
+    narrows those other members by keyword (friendly units only), or at ``level: "model"`` to
+    members with a model meeting the keywords."""
     if members is None or not isinstance(own, str):
         return "unknown"
     own_member = next((m for m in members if m.get("unitId") == own), None)
@@ -406,11 +410,11 @@ def attachment_from_members(role: Any, with_filter: Any, members: Any, own: Any)
     if role == "leading":
         candidates = (
             [m for m in others if m.get("role") == "bodyguard"]
-            if own_member.get("role") == "leader"
+            if own_member.get("role") in _LEADS
             else []
         )
     elif role == "led":
-        candidates = [m for m in others if m.get("role") == "leader"]
+        candidates = [m for m in others if m.get("role") in _LEADS]
     elif role == "attached":
         candidates = others
     else:

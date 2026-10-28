@@ -329,9 +329,14 @@ pub(crate) fn attachment_from_flags(
     }
 }
 
+/// Whether a member leads its combined unit: Leader and Support units both lead (core rule 19.01).
+fn leads(member: &AttachedMember) -> bool {
+    matches!(member.role, MemberRole::Leader | MemberRole::Support)
+}
+
 /// `attachment` facts the combined unit's members settle. `own` is the unit the ability belongs
-/// to. Leading needs `own` to be a Leader with a Bodyguard; led needs another member that is a
-/// Leader; attached needs another member. `with` narrows those other members by keyword
+/// to. Leading needs `own` to be a Leader or Support unit with a Bodyguard; led needs another
+/// member that is a Leader or Support unit; attached needs another member. `with` narrows those other members by keyword
 /// (friendly units only).
 pub(crate) fn attachment_from_members(
     role: Option<&Value>,
@@ -345,13 +350,11 @@ pub(crate) fn attachment_from_members(
     };
     let others = members.iter().filter(|member| member.unit_id != own);
     let candidates: Vec<&AttachedMember> = match role.and_then(Value::as_str) {
-        Some("leading") if own_member.role == MemberRole::Leader => others
+        Some("leading") if leads(own_member) => others
             .filter(|member| member.role == MemberRole::Bodyguard)
             .collect(),
         Some("leading") => Vec::new(),
-        Some("led") => others
-            .filter(|member| member.role == MemberRole::Leader)
-            .collect(),
+        Some("led") => others.filter(|member| leads(member)).collect(),
         Some("attached") => others.collect(),
         _ => return None,
     };

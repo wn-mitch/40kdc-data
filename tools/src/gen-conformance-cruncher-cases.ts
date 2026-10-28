@@ -243,6 +243,20 @@ export function canonicalScenarioCases() {
     { unitId: "leader", role: "leader" as const, keywords: ["CHARACTER"] },
     { unitId: "squad", role: "bodyguard" as const, keywords: bodyguard },
   ];
+  // A Support unit leads its bodyguard as a Leader does (core rule 19.01).
+  const supported = (bodyguard: string[]) => [
+    { unitId: "leader", role: "support" as const, keywords: ["CHARACTER"] },
+    { unitId: "squad", role: "bodyguard" as const, keywords: bodyguard },
+  ];
+  // "In your Command phase, while leading, select one protocol": the phase and turn time the
+  // choice; leading still gates it; the option lasts into the Fight phase.
+  const protocols = (gate: unknown[]) => ({
+    type: "conditional",
+    condition: { operator: "and", operands: [{ operator: "and", operands: [{ type: "phase-is", parameters: { phase: "command" } }, { type: "player-turn-is", parameters: { turn: "your-turn" } }] }, ...gate] },
+    effect: { type: "stance-select", mode: "re-selectable", options: [{ id: "example-protocol", name: "Example Protocol", effect: hitPlus }], min_choices: 1, max_choices: 1 },
+  });
+  // "+1 to Hit for the EXAMPLE SQUAD models in this unit."
+  const squadModels = { type: "roll-modifier", target: { level: "model", member_of: "this-unit", all_of: ["EXAMPLE SQUAD"] }, modifier: { roll: "hit", operation: "add", value: 1 } };
   const neighbour = { keywords: ["BATTLELINE", "INFANTRY"], owner: "friendly" as const, distanceInches: 5 };
   const guided = { type: "guided", parameters: {} };
   const defenderWounds = { type: "wounds", parameters: { subject: "defender", remaining_max: 3 } };
@@ -296,6 +310,13 @@ export function canonicalScenarioCases() {
     { id: "attachment-leading-other", effect: gated(leadingWith), context: { attackerMembers: members(["OTHER SQUAD"]) }, source: attached },
     { id: "attachment-with-flags-only", effect: gated(leadingWith), context: { attackerAttached: true, attachmentRoles: { leader: "leader" } }, source: attached },
     { id: "attachment-led-by", effect: gated(ledBy), context: { attackerUnitId: "squad", attackerMembers: members([]) } },
+    { id: "attachment-support-leading-with", effect: gated(leadingWith), context: { attackerMembers: supported(["EXAMPLE SQUAD"]) }, source: attached },
+    { id: "attachment-led-by-support", effect: gated(ledBy), context: { attackerUnitId: "squad", attackerMembers: supported([]) } },
+    { id: "stance-selection-window", effect: protocols([]), context: { phase: "fight" } },
+    { id: "stance-selection-window-leading", effect: protocols([leadingWith]), context: { phase: "fight", attackerMembers: supported(["EXAMPLE SQUAD"]) }, source: attached },
+    { id: "stance-selection-window-not-leading", effect: protocols([leadingWith]), context: { phase: "fight", attackerMembers: supported(["OTHER SQUAD"]) }, source: attached },
+    { id: "member-of-every-model", effect: squadModels, context: { attackerKeywords: ["EXAMPLE SQUAD", "CHARACTER"], attackerModelKeywords: ["EXAMPLE SQUAD"] } },
+    { id: "member-of-no-model", effect: squadModels, context: { attackerKeywords: ["CHARACTER"], attackerModelKeywords: ["CHARACTER"] } },
     { id: "neighbour-in-range", effect: gated(near), context: { attackerNeighbours: [neighbour] } },
     { id: "neighbour-out-of-range", effect: gated(near), context: { attackerNeighbours: [{ ...neighbour, distanceInches: 7 }] } },
     { id: "neighbour-undeclared", effect: gated(near), context: {} },

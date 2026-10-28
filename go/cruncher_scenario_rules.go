@@ -268,8 +268,9 @@ func evaluateControls(params, ctx map[string]any, abilitySide string) any {
 
 // attachmentFromMembers evaluates the `attachment` facts the combined unit's
 // members settle. own is the unit the ability belongs to ("" when unknown).
-// Leading needs own to be a Leader with a Bodyguard; led needs another member
-// that is a Leader; attached needs another member. `with` narrows those other
+// Leading needs own to be a Leader or Support unit with a Bodyguard (both lead,
+// core rule 19.01); led needs another member that is a Leader or Support unit;
+// attached needs another member. `with` narrows those other
 // members by keyword (friendly units only), or at `level: "model"` to members
 // with a model meeting the keywords.
 func attachmentFromMembers(role, withFilter, rawMembers any, own string) any {
@@ -299,11 +300,15 @@ func attachmentFromMembers(role, withFilter, rawMembers any, own string) any {
 	switch role {
 	case "leading":
 		candidates = []map[string]any{}
-		if self["role"] == "leader" {
+		if self["role"] == "leader" || self["role"] == "support" {
 			candidates = membersWithRole(others, "bodyguard")
 		}
 	case "led":
-		candidates = membersWithRole(others, "leader")
+		for _, member := range others {
+			if member["role"] == "leader" || member["role"] == "support" {
+				candidates = append(candidates, member)
+			}
+		}
 	case "attached":
 		candidates = others
 	default:

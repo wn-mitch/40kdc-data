@@ -290,10 +290,67 @@ pub(crate) fn moment_gate_with_source(
     Some(gated)
 }
 
+/// Timing conditions that, around a stance or order choice, say when the choice is made.
+const SELECTION_WINDOW: [&str; 3] = ["phase-is", "player-turn-is", "battle-round"];
+
+/// A stance or order choice's guard without its selection window. The phase, player turn and
+/// battle round operands time the choice, and the chosen option lasts past them, so they do not
+/// gate its effect; other operands still do. `None` when there is nothing to drop; `Some(None)`
+/// when only the window was there. Mirrors TS `withoutSelectionWindow`.
+fn without_selection_window(condition: &Obj, effect: Option<&Value>) -> Option<Option<Value>> {
+    let kind = effect.and_then(|e| e.get("type")).and_then(Value::as_str);
+    if !matches!(kind, Some("stance-select" | "issue-orders")) {
+        return None;
+    }
+    fn operands(node: &Obj) -> Vec<&Obj> {
+        match (
+            node.get("operator").and_then(Value::as_str),
+            node.get("operands").and_then(Value::as_array),
+        ) {
+            (Some("and"), Some(items)) => items
+                .iter()
+                .filter_map(Value::as_object)
+                .flat_map(operands)
+                .collect(),
+            _ => vec![node],
+        }
+    }
+    let every = operands(condition);
+    let kept: Vec<Value> = every
+        .iter()
+        .filter(|operand| {
+            !operand
+                .get("type")
+                .and_then(Value::as_str)
+                .is_some_and(|kind| SELECTION_WINDOW.contains(&kind))
+        })
+        .map(|operand| Value::Object((*operand).clone()))
+        .collect();
+    if kept.len() == every.len() {
+        return None;
+    }
+    Some(match kept.len() {
+        0 => None,
+        1 => kept.into_iter().next(),
+        _ => Some(json!({ "operator": "and", "operands": kept })),
+    })
+}
+
 pub(super) fn conditional(node: &Obj, opts: &WalkOpts, out: &mut Out) {
     let Some(condition) = object(node.get("condition")) else {
         return;
     };
+    if let Some(guard) = without_selection_window(condition, node.get("effect")) {
+        match guard {
+            None => walk(node.get("effect").unwrap_or(&Value::Null), opts, out),
+            Some(guard) => {
+                let mut narrowed = node.clone();
+                narrowed.insert("condition".to_string(), guard);
+                conditional(&narrowed, opts, out);
+            }
+        }
+        return;
+    }
     if is_weapon_scoped_condition(condition) {
         if let App::When(applicability) =
             condition_to_applicability(condition, opts.perspective, opts.context.attacker_toughness)

@@ -1479,6 +1479,27 @@ function splitAttackScoped(
   return { applicability, rest: rest.length === 1 && isObject(rest[0]) ? rest[0] : { operator: "and", operands: rest } };
 }
 
+/** Timing conditions that, around a stance or order choice, say when the choice is made. */
+const SELECTION_WINDOW = new Set(["phase-is", "player-turn-is", "battle-round"]);
+
+/**
+ * A stance or order choice's guard without its selection window. "In your Command phase, select
+ * one protocol" picks the option then, and the option lasts past that phase, so the phase, player
+ * turn and battle round operands of the guard time the choice and do not gate its effect. Other
+ * operands ("while this model is leading") still gate it. Returns the guard unchanged when there
+ * is nothing to drop, and null when only the window was there.
+ */
+function withoutSelectionWindow(condition: Record<string, unknown>, effect: unknown): Record<string, unknown> | null {
+  if (!isObject(effect) || (effect.type !== "stance-select" && effect.type !== "issue-orders")) return condition;
+  const operands = (node: Record<string, unknown>): Record<string, unknown>[] =>
+    node.operator === "and" && Array.isArray(node.operands) ? node.operands.filter(isObject).flatMap(operands) : [node];
+  const all = operands(condition);
+  const kept = all.filter((operand) => !(typeof operand.type === "string" && SELECTION_WINDOW.has(operand.type)));
+  if (kept.length === all.length) return condition;
+  if (kept.length === 0) return null;
+  return kept.length === 1 ? kept[0]! : { operator: "and", operands: kept };
+}
+
 function translateConditional(
   node: Record<string, unknown>,
   source: BuffSource,
@@ -1488,6 +1509,18 @@ function translateConditional(
   const condition = node.condition;
   const effect = node.effect;
   if (!isObject(condition)) return;
+  const guard = withoutSelectionWindow(condition, effect);
+  if (guard === null) {
+    walk(effect, source, opts, out);
+    return;
+  }
+  if (guard !== condition) {
+    const narrowed = { ...node, condition: guard };
+    const activation = activationSources.get(node);
+    if (activation) activationSources.set(narrowed, activation);
+    translateConditional(narrowed, source, opts, out);
+    return;
+  }
   if (isWeaponScopedCondition(condition)) {
     const applicability = conditionToApplicability(condition, opts.perspective, opts.context.attackerToughness);
     if (typeof applicability !== "string") {

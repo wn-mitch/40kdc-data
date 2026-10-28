@@ -858,15 +858,19 @@ pub(crate) fn classify_target(node: &Obj) -> Side {
         Some(Value::Object(t))
             if !t.contains_key("event_var") && !t.contains_key("selection_var") =>
         {
+            if is_str(t, "member_of", "attacker") {
+                return Side::Attacker;
+            }
+            if is_str(t, "member_of", "defender") {
+                return Side::Defender;
+            }
             match t.get("owner").and_then(Value::as_str) {
-                Some("friendly") => Side::Buffed,
-                Some("enemy") => Side::Defender,
-                None | Some("any") if is_str(t, "level", "unit") && t.contains_key("unit_ids") => {
+                None | Some("any") if t.get("unit_ids").is_some_and(Value::is_array) => {
                     Side::Buffed
                 }
+                Some("friendly") => Side::Buffed,
                 None if is_str(t, "member_of", "this-unit") => Side::Buffed,
-                None if is_str(t, "member_of", "attacker") => Side::Attacker,
-                None if is_str(t, "member_of", "defender") => Side::Defender,
+                Some("enemy") => Side::Defender,
                 _ => Side::Unknown,
             }
         }
