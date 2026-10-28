@@ -401,6 +401,8 @@ export function describeTrigger(t: AbilityTrigger): string {
   }
   s += eventRelationPhrase(f);
   if (f.phase != null) s += ` in the ${capWord(str(f.phase))} phase`;
+  // A destruction resolved once its attacker is done: "…, after the attacking unit has resolved its attacks".
+  if (f.timing === "after-attacks") s += ", after the attacking unit has resolved its attacks";
   if (t.proximity?.range != null) {
     const of = t.proximity.of == null || t.proximity.of === "this-unit" ? "this unit" : placeRefPhrase(t.proximity.of);
     s += ` within ${rangePhrase(t.proximity.range)} of ${of}`;

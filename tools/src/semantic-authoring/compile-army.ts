@@ -348,3 +348,29 @@ export function armyCoreChecks(leaves: readonly CompileLeaf[]): Array<{ kind: "d
     ...(factions.length ? [{ kind: "army-factions" as const, parameters: { ids: [...new Set(factions)].sort() } }] : []),
   ];
 }
+
+/**
+ * "You can include any of the following units in your army, and when you do so their Faction keywords
+ * are replaced with X:" + the list: a composition rule, then a keyword grant on "their" units, then the
+ * unit-filter of the list. The list is the rule's group and the units whose keywords change, so it folds
+ * onto both before antecedents bind (the grant points forward, which the general binding cannot read).
+ * Only that exact run in one fragment folds; anything else is left to the usual folds.
+ */
+export function foldForwardComposition(leaves: readonly CompileLeaf[]): CompileLeaf[] {
+  const out: CompileLeaf[] = [];
+  for (let index = 0; index < leaves.length; index += 1) {
+    const rule = leaves[index]!;
+    const grant = leaves[index + 1];
+    const filter = leaves[index + 2];
+    const run = isArmy(rule, "composition") && rule.parameters.with === FOLLOWING_FILTER
+      && grant?.family_id === "keyword-grant" && grant.parameters.subject === ANTECEDENT
+      && filter?.family_id === "unit-filter" && filter.parameters.side === "friendly"
+      && grant.fragment === rule.fragment && filter.fragment === rule.fragment;
+    if (!run) { out.push(rule); continue; }
+    const group = dslUnitFilter(filter!);
+    out.push({ ...rule, parameters: { ...rule.parameters, following_filter: group } });
+    out.push({ ...grant!, parameters: { ...grant!.parameters, subject: FILTERED_UNITS, subject_filter: structuredClone(group) } });
+    index += 2;
+  }
+  return out;
+}

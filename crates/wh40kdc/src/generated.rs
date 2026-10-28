@@ -16380,9 +16380,10 @@ impl<'de> ::serde::Deserialize<'de> for EventBoundReferenceEventVar {
 ///      ]
 ///    },
 ///    "timing": {
-///      "description": "destroyed: resolve before the model is removed.",
+///      "description": "destroyed: resolve before the model is removed (before-removal), or after the attacking unit has finished making its attacks (after-attacks).",
 ///      "enum": [
-///        "before-removal"
+///        "before-removal",
+///        "after-attacks"
 ///      ]
 ///    },
 ///    "to": {
@@ -16485,7 +16486,7 @@ pub struct EventFilter {
     pub tag: ::std::option::Option<DesignationId>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub through: ::std::option::Option<EventFilterThrough>,
-    ///destroyed: resolve before the model is removed.
+    ///destroyed: resolve before the model is removed (before-removal), or after the attacking unit has finished making its attacks (after-attacks).
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub timing: ::std::option::Option<EventFilterTiming>,
     ///selected: what the unit was selected to do. attack means shoot or fight.
@@ -17498,15 +17499,16 @@ impl ::std::convert::TryFrom<::std::string::String> for EventFilterThrough {
         value.parse()
     }
 }
-///destroyed: resolve before the model is removed.
+///destroyed: resolve before the model is removed (before-removal), or after the attacking unit has finished making its attacks (after-attacks).
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "destroyed: resolve before the model is removed.",
+///  "description": "destroyed: resolve before the model is removed (before-removal), or after the attacking unit has finished making its attacks (after-attacks).",
 ///  "enum": [
-///    "before-removal"
+///    "before-removal",
+///    "after-attacks"
 ///  ]
 ///}
 /// ```
@@ -17526,11 +17528,14 @@ impl ::std::convert::TryFrom<::std::string::String> for EventFilterThrough {
 pub enum EventFilterTiming {
     #[serde(rename = "before-removal")]
     BeforeRemoval,
+    #[serde(rename = "after-attacks")]
+    AfterAttacks,
 }
 impl ::std::fmt::Display for EventFilterTiming {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match *self {
             Self::BeforeRemoval => f.write_str("before-removal"),
+            Self::AfterAttacks => f.write_str("after-attacks"),
         }
     }
 }
@@ -17541,6 +17546,7 @@ impl ::std::str::FromStr for EventFilterTiming {
     ) -> ::std::result::Result<Self, self::error::ConversionError> {
         match value {
             "before-removal" => Ok(Self::BeforeRemoval),
+            "after-attacks" => Ok(Self::AfterAttacks),
             _ => Err("invalid value".into()),
         }
     }
@@ -38091,6 +38097,10 @@ impl ::std::convert::TryFrom<::std::string::String> for RuleStateCoreRuleSlug {
 ///    "rule_kind"
 ///  ],
 ///  "properties": {
+///    "any_army_faction": {
+///      "description": "A granted faction rule the holder can use whatever your Army Faction is (\"even though your Army Faction is not X\"): the rule's own Army Faction requirement does not apply to it.",
+///      "const": true
+///    },
 ///    "attacks": {
 ///      "description": "Only the attacks of the event a trigger bound with binds_event_variable: the attacks a shooting selection goes on to make, or the attacks of a shooting just resolved. With attacking-ends-hidden suppressed, those attacks never count toward the Hidden rule's ranged-attack clause; the effect's duration does not limit this.",
 ///      "$ref": "#/$defs/event-bound-reference"
@@ -38138,6 +38148,9 @@ impl ::std::convert::TryFrom<::std::string::String> for RuleStateCoreRuleSlug {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct RuleStateEffectModifier {
+    ///A granted faction rule the holder can use whatever your Army Faction is ("even though your Army Faction is not X"): the rule's own Army Faction requirement does not apply to it.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub any_army_faction: ::std::option::Option<::serde_json::Value>,
     ///Only the attacks of the event a trigger bound with binds_event_variable: the attacks a shooting selection goes on to make, or the attacks of a shooting just resolved. With attacking-ends-hidden suppressed, those attacks never count toward the Hidden rule's ranged-attack clause; the effect's duration does not limit this.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub attacks: ::std::option::Option<EventBoundReference>,

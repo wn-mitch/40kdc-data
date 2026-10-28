@@ -841,6 +841,10 @@ func describeReactiveTrigger(t map[string]any) string {
 	if f["phase"] != nil {
 		s += " in the " + capWord(cstr(f["phase"])) + " phase"
 	}
+	// A destruction resolved once its attacker is done.
+	if f["timing"] == "after-attacks" {
+		s += ", after the attacking unit has resolved its attacks"
+	}
 	if prox, ok := asMap(t["proximity"]); ok && prox != nil && prox["range"] != nil {
 		of := "this unit"
 		if prox["of"] == "this-model" {

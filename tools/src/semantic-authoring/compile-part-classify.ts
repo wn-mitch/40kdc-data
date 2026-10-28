@@ -26,6 +26,7 @@ import { checkOptionalCosts, flatLeaves, isSpendRead, optionalSpendLeaves } from
 import { inheritRollGates } from "./compile-roll-gates.js";
 import { conditionedInsteadAfter, ifGatedConditions, sentenceIfGates } from "./compile-instead-scope.js";
 import type { Placement } from "./compile-placement.js";
+import { siblingClauseConditions } from "./compile-sibling-conditions.js";
 
 type Node = Record<string, unknown>;
 
@@ -76,6 +77,8 @@ export function classifyLeaves(given: CompileLeaf[], places: Placement[], contai
   // "If A, do X. If B, do Y instead.": the instead sentence has its own condition, so an "if" condition of the first
   // sentence gates that sentence only; as an ability-wide gate it would also guard the replacement (compile-instead-scope.ts).
   const ownGates = conditionedInsteadAfter(list, places, firstSentence) ? ifGatedConditions(list, places, firstSentence, sourceText) : sentenceIfGates(list, places, rawSentences(list, sourceText), firstSentence, sourceText);
+  // "If A, X, and if B, Y": each leading condition with an "and if" sibling gates only its clause.
+  const siblingScoped = siblingClauseConditions(list, places, sourceText);
   const firstEffect = (sentence: number) => list.findIndex((leaf, index) => leaf.role === "EFFECT" && places[index]!.sentence === sentence);
   const attached = list.some((leaf) => leaf.family_id === "leading-unit");
   const global: Node[] = [];
@@ -264,6 +267,9 @@ export function classifyLeaves(given: CompileLeaf[], places: Placement[], contai
       // is about the units of its own sentence's effect, so it gates only that sentence.
       else if (leaf.role === "CONDITION" && perRecipient && effectSentences.has(sentence) && Object.values(leaf.parameters).includes("recipient")) {
         sentenceGates.set(sentence, [...(sentenceGates.get(sentence) ?? []), condition(leaf)]);
+      }
+      else if (siblingScoped.has(index)) {
+        clauseGates.set(clause, [...(clauseGates.get(clause) ?? []), condition(leaf)]);
       }
       else if (ownGates.has(index)) {
         sentenceGates.set(sentence, [...(sentenceGates.get(sentence) ?? []), condition(leaf)]);

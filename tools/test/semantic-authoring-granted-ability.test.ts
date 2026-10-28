@@ -498,6 +498,21 @@ describe("Semantic authoring printed grants: a units-only section narrows its bo
   });
 });
 
+describe("Semantic authoring printed grants: a heading printed on a line of its own", () => {
+  it("takes the lines after the heading, up to the next heading, as that ability's body", () => {
+    const text = "Friendly GLOOM WARDENS units have the following abilities:\n**Shade Ward**\nGLOOM HOUND units only. This unit has a 5+ invulnerable save.\n**Dusk Step**\nThis unit has a 4+ invulnerable save.";
+    const list = placed(text, WARDENS, header("have the following abilities", "several"), label("Shade Ward", "Shade Ward"),
+      ["GLOOM HOUND units only", "unit-filter", { side: "friendly", keywords: ["GLOOM HOUND"] }],
+      ["This unit has a 5+ invulnerable save", "invulnerable-save", { subject: "this-unit", threshold: 5 }],
+      label("Dusk Step", "Dusk Step"),
+      ["This unit has a 4+ invulnerable save", "invulnerable-save", { subject: "this-unit", threshold: 4 }]);
+    const effect = JSON.stringify(compiled(list, text).mechanics.effect);
+    expect(effect).toContain('"target":{"owner":"friendly","all_of":["GLOOM WARDENS","GLOOM HOUND"]}');
+    expect(effect).toContain('"invuln_sv":5');
+    expect(effect).toContain('"invuln_sv":4');
+  });
+});
+
 describe("Semantic authoring printed grants: a self-grant gives only the own-ability bodies", () => {
   it("keeps a grant to other units plain when the header is not the record's own ability", () => {
     const text = "Friendly GLOOM WARDENS units have the following ability:\n**Shade Ward:** This unit has a 5+ invulnerable save.\nFriendly MONSTER units benefit from the Shade Ward rule.";

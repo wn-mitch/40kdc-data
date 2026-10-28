@@ -7843,7 +7843,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "b576c914c3f3d00865e1d6698c008a1a05e6c2aaa988ba9a64f08a1a62e627de",
     "version": "2025-q3",
@@ -7854,222 +7854,287 @@
     "ability_type": "detachment",
     "behavior": "passive",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "all_of": [
-                  "KHORNE"
-                ]
-              }
-            }
-          },
-          "effect": {
-            "type": "sequence",
-            "steps": [
-              {
-                "type": "weapon-ability-grant",
-                "target": "this-unit",
-                "modifier": {
-                  "weapons": {
-                    "type": "ranged"
-                  },
-                  "keywords": [
+      "type": "conditional",
+      "condition": {
+        "type": "army-faction",
+        "parameters": {
+          "faction": "chaos-daemons"
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "ability-grant",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "KHORNE",
+                "SHADOW LEGION"
+              ]
+            },
+            "modifier": {
+              "ability": {
+                "ability_id": "first-prince-of-chaos-chaos-daemons",
+                "definition_id": "murderers-cowl"
+              },
+              "definition": {
+                "type": "ability-part",
+                "name": "Murderer’s Cowl",
+                "effect": {
+                  "type": "sequence",
+                  "steps": [
                     {
-                      "keyword_id": "assault"
+                      "type": "weapon-ability-grant",
+                      "target": "this-unit",
+                      "modifier": {
+                        "keywords": [
+                          {
+                            "keyword_id": "assault"
+                          }
+                        ],
+                        "weapons": {
+                          "type": "ranged"
+                        }
+                      }
+                    },
+                    {
+                      "type": "permission",
+                      "target": "this-unit",
+                      "modifier": {
+                        "activity": "declare-charge",
+                        "allow": true,
+                        "after": [
+                          "advance"
+                        ]
+                      }
                     }
                   ]
                 }
+              }
+            }
+          },
+          {
+            "type": "ability-grant",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "SHADOW LEGION",
+                "TZEENTCH"
+              ]
+            },
+            "modifier": {
+              "ability": {
+                "ability_id": "first-prince-of-chaos-chaos-daemons",
+                "definition_id": "penumbral-puppetry"
               },
-              {
-                "type": "permission",
-                "target": "this-unit",
-                "modifier": {
-                  "activity": "declare-charge",
-                  "allow": true,
-                  "after": [
-                    "advance"
+              "definition": {
+                "type": "ability-part",
+                "name": "Penumbral Puppetry",
+                "effect": {
+                  "type": "sequence",
+                  "steps": [
+                    {
+                      "type": "ability-grant",
+                      "target": "this-unit",
+                      "modifier": {
+                        "ability": "stealth"
+                      }
+                    },
+                    {
+                      "type": "conditional",
+                      "condition": {
+                        "type": "attack-is",
+                        "parameters": {
+                          "attack_type": "melee"
+                        }
+                      },
+                      "effect": {
+                        "type": "roll-modifier",
+                        "target": "attacker",
+                        "modifier": {
+                          "roll": "hit",
+                          "operation": "subtract",
+                          "value": 1
+                        }
+                      }
+                    }
                   ]
                 }
               }
-            ]
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "all_of": [
-                  "TZEENTCH"
-                ]
-              }
             }
           },
-          "effect": {
-            "type": "sequence",
-            "steps": [
-              {
-                "type": "keyword-grant",
-                "target": "this-unit",
-                "modifier": {
-                  "keywords": [
-                    "STEALTH"
-                  ]
-                }
-              },
-              {
-                "type": "conditional",
-                "condition": {
-                  "type": "attack-is",
-                  "parameters": {
-                    "attack_type": "melee"
-                  }
-                },
-                "effect": {
-                  "type": "roll-modifier",
-                  "target": "attacker",
-                  "modifier": {
-                    "roll": "hit",
-                    "operation": "subtract",
-                    "value": 1
-                  }
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "all_of": [
-                  "NURGLE"
-                ]
-              }
-            }
-          },
-          "effect": {
-            "type": "conditional",
-            "condition": {
-              "type": "attack-compare",
-              "parameters": {
-                "left": {
-                  "of": "attacker",
-                  "stat": "S"
-                },
-                "comparison": "gt",
-                "right": {
-                  "of": "defender",
-                  "stat": "T"
-                }
-              }
+          {
+            "type": "ability-grant",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "NURGLE",
+                "SHADOW LEGION"
+              ]
             },
-            "effect": {
-              "type": "roll-modifier",
-              "target": "attacker",
-              "modifier": {
-                "roll": "wound",
-                "operation": "subtract",
-                "value": 1
-              }
-            }
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "all_of": [
-                  "SLAANESH"
-                ]
-              }
-            }
-          },
-          "effect": {
-            "type": "conditional",
-            "condition": {
-              "type": "attack-is",
-              "parameters": {
-                "shooting_type": "snap"
-              }
-            },
-            "effect": {
-              "type": "targeting",
-              "target": {
-                "owner": "enemy"
+            "modifier": {
+              "ability": {
+                "ability_id": "first-prince-of-chaos-chaos-daemons",
+                "definition_id": "gloam-rot"
               },
-              "modifier": {
-                "may": "cannot-target",
-                "target": "this-unit",
-                "kind": "shoot"
-              }
-            }
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "all_of": [
-                  "UNDIVIDED"
-                ]
-              }
-            }
-          },
-          "effect": {
-            "type": "sequence",
-            "steps": [
-              {
-                "type": "ability-grant",
-                "target": "this-unit",
-                "modifier": {
-                  "ability": "dark-pacts-chaos-space-marines"
-                }
-              },
-              {
-                "type": "conditional",
-                "condition": {
-                  "type": "attachment",
-                  "parameters": {
-                    "subject": "this-model",
-                    "role": "leading"
-                  }
-                },
+              "definition": {
+                "type": "ability-part",
+                "name": "Gloam Rot",
                 "effect": {
-                  "type": "roll-result",
+                  "type": "conditional",
+                  "condition": {
+                    "type": "attack-compare",
+                    "parameters": {
+                      "left": {
+                        "of": "attacker",
+                        "stat": "S"
+                      },
+                      "comparison": "gt",
+                      "right": {
+                        "of": "defender",
+                        "stat": "T"
+                      }
+                    }
+                  },
+                  "effect": {
+                    "type": "roll-modifier",
+                    "target": "attacker",
+                    "modifier": {
+                      "roll": "wound",
+                      "operation": "subtract",
+                      "value": 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "ability-grant",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "SHADOW LEGION",
+                "SLAANESH"
+              ]
+            },
+            "modifier": {
+              "ability": {
+                "ability_id": "first-prince-of-chaos-chaos-daemons",
+                "definition_id": "shadows-caress"
+              },
+              "definition": {
+                "type": "ability-part",
+                "name": "Shadow’s Caress",
+                "effect": {
+                  "type": "rule-state",
                   "target": "this-unit",
                   "modifier": {
-                    "roll": "leadership",
-                    "result": "pass"
+                    "direction": "suppressed",
+                    "rule_kind": "core-rule",
+                    "rule": "overwatch-against-bearer"
                   }
                 }
+              }
+            }
+          },
+          {
+            "type": "ability-grant",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "SHADOW LEGION",
+                "UNDIVIDED"
+              ]
+            },
+            "modifier": {
+              "ability": {
+                "ability_id": "first-prince-of-chaos-chaos-daemons",
+                "definition_id": "disciples-of-belakor"
               },
-              {
-                "type": "ability-grant",
-                "target": "this-unit",
-                "modifier": {
-                  "ability": "deep-strike"
+              "definition": {
+                "type": "ability-part",
+                "name": "Disciples of Be’lakor",
+                "effect": {
+                  "type": "sequence",
+                  "steps": [
+                    {
+                      "type": "rule-state",
+                      "target": "this-unit",
+                      "modifier": {
+                        "direction": "granted",
+                        "rule_kind": "faction-rule",
+                        "rule": "dark-pacts-chaos-space-marines",
+                        "any_army_faction": true
+                      }
+                    },
+                    {
+                      "type": "conditional",
+                      "condition": {
+                        "type": "matches",
+                        "parameters": {
+                          "filter": {
+                            "all_of": [
+                              "BE'LAKOR"
+                            ]
+                          }
+                        }
+                      },
+                      "effect": {
+                        "type": "roll-result",
+                        "target": "this-unit",
+                        "modifier": {
+                          "roll": "dark-pact",
+                          "result": "pass"
+                        }
+                      }
+                    },
+                    {
+                      "type": "conditional",
+                      "condition": {
+                        "operator": "and",
+                        "operands": [
+                          {
+                            "type": "matches",
+                            "parameters": {
+                              "filter": {
+                                "all_of": [
+                                  "SHADOW LEGION"
+                                ]
+                              }
+                            }
+                          },
+                          {
+                            "type": "matches",
+                            "parameters": {
+                              "filter": {
+                                "all_of": [
+                                  "HERETIC ASTARTES"
+                                ]
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "effect": {
+                        "type": "ability-grant",
+                        "target": "this-unit",
+                        "modifier": {
+                          "ability": "deep-strike"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
-            ]
+            }
           }
-        }
-      ]
+        ]
+      }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },

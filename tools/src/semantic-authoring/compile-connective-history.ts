@@ -129,8 +129,9 @@ export function lowerHistoryMoments(list: readonly CompileLeaf[], plans: readonl
     happened.window = window;
     out[index] = { ...leaf, role: "CONDITION", family_id: "__happened", family_version: 1, parameters: { happened } };
     // "destroys one or more enemy units in the Fight phase": a phase right after the moment says when it happened.
+    // Over the triggering event the phase is the current one, a clock condition the phase-window leaf already is.
     const next = out[index + 1];
-    if (next !== undefined && phaseOfMoment(leaf, next)) {
+    if (window !== "event" && next !== undefined && phaseOfMoment(leaf, next)) {
       happened.filter = { ...(happened.filter as Record<string, unknown> | undefined), phase: next.parameters.phase };
       out.splice(index + 1, 1);
     }

@@ -684,6 +684,7 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
           direction: closed(leaf, "direction"), rule_kind: closed(leaf, "rule_kind"), rule: closed(leaf, "rule"),
           // The attacks a shooting moment bound ("those attacks"), folded by compile-bound-attacks.ts.
           ...(leaf.parameters.attacks_var !== undefined ? { attacks: { event_var: closed(leaf, "attacks_var") } } : {}),
+          ...(leaf.parameters.any_army_faction === true ? { any_army_faction: true } : {}),
         },
       };
     case "damage-reduction": {

@@ -384,4 +384,19 @@ export const UNIT_STATE_EXTENSIONS: readonly FamilyExtension[] = [
   },
   printedKeywordsExtension("model-count", 2),
   printedKeywordsExtension("loadout", 2),
+  {
+    // "This unit has the Dark Pacts army rule, and can use it …, even though your Army Faction is not X".
+    family: "rule-state",
+    version: 4,
+    description: "As the previous version, plus any_army_faction: a granted faction rule the subject can use whatever your Army Faction is (\"even though your Army Faction is not X\").",
+    schema: (previous) => withProperties(previous, { any_army_faction: optional({ const: true }) }),
+    normalize: (input, previous) => {
+      const { any_army_faction: any, ...rest } = input;
+      const result = previous(rest);
+      if (any === undefined) return result;
+      if (any !== true) throw new TypeError("rule-state.any_army_faction is true or omitted.");
+      if (result.direction !== "granted" || result.rule_kind !== "faction-rule") throw new TypeError("rule-state.any_army_faction goes with a granted faction rule.");
+      return { ...result, any_army_faction: true };
+    },
+  },
 ];

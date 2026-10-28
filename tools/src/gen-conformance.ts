@@ -4055,6 +4055,9 @@ function genEffectTranslation(): void {
     })),
     { caseId: "fidelity/trigger-phase-filter-destroyed", trigger: { event: "destroyed", subject: "this-unit", object: { owner: "enemy" }, filter: { phase: "fight" } },
       effect: { type: "cp-gain", target: "this-model", modifier: { amount: 1 } } },
+    // A destruction resolved once the attacking unit has finished its attacks.
+    { caseId: "fidelity/trigger-model-destroyed-after-attacks", trigger: { event: "model-destroyed", object: { owner: "friendly", all_of: ["FABLED SPRITE"], level: "model", member_of: "this-unit" }, filter: { timing: "after-attacks" } },
+      effect: { type: "cp-gain", target: "this-model", modifier: { amount: 1 } } },
   ];
   for (const example of fidelityBoundaryCases) {
     const scope = { duration: "resolution" };

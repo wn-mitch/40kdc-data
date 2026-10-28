@@ -1363,9 +1363,10 @@
         },
         "timing": {
           "enum": [
-            "before-removal"
+            "before-removal",
+            "after-attacks"
           ],
-          "description": "destroyed: resolve before the model is removed."
+          "description": "destroyed: resolve before the model is removed (before-removal), or after the attacking unit has finished making its attacks (after-attacks)."
         },
         "phase": {
           "$ref": "#/$defs/phase",
@@ -9891,6 +9892,10 @@
                 "except_from": {
                   "const": "this-ability"
                 },
+                "any_army_faction": {
+                  "const": true,
+                  "description": "A granted faction rule the holder can use whatever your Army Faction is (\"even though your Army Faction is not X\"): the rule's own Army Faction requirement does not apply to it."
+                },
                 "attacks": {
                   "$ref": "#/$defs/event-bound-reference",
                   "description": "Only the attacks of the event a trigger bound with binds_event_variable: the attacks a shooting selection goes on to make, or the attacks of a shooting just resolved. With attacking-ends-hidden suppressed, those attacks never count toward the Hidden rule's ranged-attack clause; the effect's duration does not limit this."
@@ -9976,6 +9981,23 @@
                     "properties": {
                       "direction": {
                         "const": "suppressed"
+                      }
+                    }
+                  }
+                },
+                {
+                  "if": {
+                    "required": [
+                      "any_army_faction"
+                    ]
+                  },
+                  "then": {
+                    "properties": {
+                      "direction": {
+                        "const": "granted"
+                      },
+                      "rule_kind": {
+                        "const": "faction-rule"
                       }
                     }
                   }

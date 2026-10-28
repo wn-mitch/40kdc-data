@@ -302,6 +302,10 @@ pub fn describe_trigger_value(trigger: &Value) -> String {
     if let Some(phase) = nn(f, "phase") {
         s.push_str(&format!(" in the {} phase", cap_word(&st(Some(phase)))));
     }
+    // A destruction resolved once its attacker is done.
+    if is(f, "timing", "after-attacks") {
+        s.push_str(", after the attacking unit has resolved its attacks");
+    }
     let proximity = obj(t.get("proximity"));
     if let Some(range) = nn(proximity, "range") {
         let of = if nn(proximity, "of").is_none() || is(proximity, "of", "this-unit") {

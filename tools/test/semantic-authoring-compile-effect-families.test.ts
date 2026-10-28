@@ -177,6 +177,17 @@ describe("Semantic authoring batch-3 families: targeting, eligibility and unit-s
     expect(() => normalize({ subject: "this-unit", what: ["rolls"], rolls: ["all"], except_rolls: ["all"] })).toThrow();
   });
 
+  it("compiles a faction rule granted whatever the Army Faction (rule-state@4) and the Dark Pact test's auto-pass (roll-auto-result@5)", () => {
+    const grant = { subject: "this-unit", direction: "granted", rule_kind: "faction-rule", rule: "dark-pacts", any_army_faction: true };
+    expect(compiled([leaf("EFFECT", "rule-state", grant, 4)]).mechanics.effect).toEqual({
+      type: "rule-state", target: "this-unit", modifier: { direction: "granted", rule_kind: "faction-rule", rule: "dark-pacts", any_army_faction: true },
+    });
+    expect(() => normalizeFingerprintParameters("rule-state", { ...grant, direction: "suppressed" }, 4)).toThrow(/granted faction rule/u);
+    expect(compiled([leaf("EFFECT", "roll-auto-result", { roll: "dark-pact", outcome: "auto-pass" }, 5)]).mechanics.effect)
+      .toMatchObject({ type: "roll-result", modifier: { roll: "dark-pact", result: "pass" } });
+    expect(() => normalizeFingerprintParameters("roll-auto-result", { roll: "dark-pact", outcome: "counts-as-6" }, 5)).toThrow(/automatic pass/u);
+  });
+
   it("round-trips leaf parameters to readable describer English", () => {
     const previews: Array<[string, Record<string, unknown>, number, RegExp]> = [
       ["eligibility-permission", { subject: "this-unit", activity: "fall-back", allow: true }, 1, /eligible to fall back/iu],

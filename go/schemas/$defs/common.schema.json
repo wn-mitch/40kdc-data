@@ -1362,9 +1362,10 @@
         },
         "timing": {
           "enum": [
-            "before-removal"
+            "before-removal",
+            "after-attacks"
           ],
-          "description": "destroyed: resolve before the model is removed."
+          "description": "destroyed: resolve before the model is removed (before-removal), or after the attacking unit has finished making its attacks (after-attacks)."
         },
         "phase": {
           "$ref": "#/$defs/phase",

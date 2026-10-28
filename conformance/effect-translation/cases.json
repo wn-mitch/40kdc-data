@@ -37529,6 +37529,36 @@
     }
   },
   {
+    "caseId": "fidelity/trigger-model-destroyed-after-attacks",
+    "trigger": {
+      "event": "model-destroyed",
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "FABLED SPRITE"
+        ],
+        "level": "model",
+        "member_of": "this-unit"
+      },
+      "filter": {
+        "timing": "after-attacks"
+      }
+    },
+    "effect": {
+      "type": "cp-gain",
+      "target": "this-model",
+      "modifier": {
+        "amount": 1
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When a friendly FABLED SPRITE model in the unit is destroyed, after the attacking unit has resolved its attacks, when resolving this use, you gain 1CP."
+    }
+  },
+  {
     "caseId": "fidelity/duration-while-leading",
     "effect": {
       "type": "feel-no-pain",

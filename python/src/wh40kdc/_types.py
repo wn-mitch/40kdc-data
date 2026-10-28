@@ -1256,6 +1256,7 @@ class Modifier20(TypedDict):
     rule: str | NamedAbilityRef | StanceOptionRef
     exchange_with: NotRequired[NamedAbilityRef]
     except_from: NotRequired[Literal["this-ability"]]
+    any_army_faction: NotRequired[Literal[True]]
     attacks: NotRequired[EventBoundReference]
 
 
@@ -2064,7 +2065,7 @@ EventFilter = TypedDict(
         "attack_type": NotRequired[Literal["ranged", "melee", "psychic", "mortal"]],
         "weapons": NotRequired[WeaponScope],
         "by": NotRequired[UnitRef],
-        "timing": NotRequired[Literal["before-removal"]],
+        "timing": NotRequired[Literal["before-removal", "after-attacks"]],
         "phase": NotRequired[Phase],
         "first": NotRequired[Literal[True]],
         "step": NotRequired[Literal["battle-shock", "reinforcements"]],

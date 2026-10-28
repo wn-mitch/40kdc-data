@@ -5442,68 +5442,93 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "da133493f6131f95c8666080fb524ee394efcc38706a895336bf83a3c9dd9db3",
     "version": "2025-q3",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "army-rule",
-          "target": {
-            "owner": "friendly",
-            "any_of": [
-              "KHORNE BERZERKERS",
-              "RUBRIC MARINES",
-              "PLAGUE MARINES",
-              "NOISE MARINES"
-            ]
+      "type": "conditional",
+      "condition": {
+        "type": "army-faction",
+        "parameters": {
+          "faction": "chaos-space-marines"
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "army-rule",
+            "target": "this-unit",
+            "modifier": {
+              "rule": "composition",
+              "with": {
+                "owner": "friendly",
+                "any_of": [
+                  "KHORNE BERZERKERS",
+                  "NOISE MARINES",
+                  "PLAGUE MARINES",
+                  "RUBRIC MARINES"
+                ]
+              }
+            }
           },
-          "modifier": {
-            "rule": "composition",
-            "with": {
+          {
+            "type": "keyword-grant",
+            "target": {
+              "owner": "friendly",
               "any_of": [
                 "KHORNE BERZERKERS",
-                "RUBRIC MARINES",
+                "NOISE MARINES",
                 "PLAGUE MARINES",
-                "NOISE MARINES"
+                "RUBRIC MARINES"
+              ]
+            },
+            "modifier": {
+              "keywords": [
+                "HERETIC ASTARTES"
+              ],
+              "replaces": [
+                "WORLD EATERS",
+                "THOUSAND SONS",
+                "DEATH GUARD",
+                "EMPEROR'S CHILDREN"
               ]
             }
-          }
-        },
-        {
-          "type": "keyword-grant",
-          "target": {
-            "owner": "friendly",
-            "any_of": [
-              "KHORNE BERZERKERS",
-              "RUBRIC MARINES",
-              "PLAGUE MARINES",
-              "NOISE MARINES"
-            ]
           },
-          "modifier": {
-            "keywords": [
-              "HERETIC ASTARTES"
-            ],
-            "replaces": [
-              "WORLD EATERS",
-              "THOUSAND SONS",
-              "DEATH GUARD",
-              "EMPEROR'S CHILDREN"
-            ]
+          {
+            "type": "army-rule",
+            "target": "this-unit",
+            "modifier": {
+              "rule": "composition",
+              "with": {
+                "owner": "friendly",
+                "any_of": [
+                  "KHORNE BERZERKERS",
+                  "NOISE MARINES",
+                  "PLAGUE MARINES",
+                  "RUBRIC MARINES"
+                ]
+              },
+              "max": {
+                "incursion": 250,
+                "strike-force": 500,
+                "onslaught": 750
+              },
+              "measure": "points"
+            }
           }
-        }
-      ]
+        ]
+      }
     },
     "scope": {
       "duration": "permanent"
     },
     "faction_id": "chaos-space-marines",
     "ability_type": "faction",
-    "behavior": "passive",
-    "unit_ids": []
+    "behavior": "activated",
+    "unit_ids": [],
+    "optional": true
   },
   {
     "ability_id": "empyric-wellspring-chaos-space-marines",

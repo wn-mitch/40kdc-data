@@ -1974,9 +1974,9 @@ export interface EventFilter {
         stratagem_target: EntityId;
       };
   /**
-   * destroyed: resolve before the model is removed.
+   * destroyed: resolve before the model is removed (before-removal), or after the attacking unit has finished making its attacks (after-attacks).
    */
-  timing?: "before-removal";
+  timing?: "before-removal" | "after-attacks";
   /**
    * The five official game phases. Unchanged between 10th and 11th edition — 11e reorders Pile In timing within the Fight phase but adds no top-level phase.
    */
@@ -4637,6 +4637,10 @@ export interface RuleStateEffect {
     rule: string | NamedAbilityRef | StanceOptionRef;
     exchange_with?: NamedAbilityRef;
     except_from?: "this-ability";
+    /**
+     * A granted faction rule the holder can use whatever your Army Faction is ("even though your Army Faction is not X"): the rule's own Army Faction requirement does not apply to it.
+     */
+    any_army_faction?: true;
     attacks?: EventBoundReference3;
   };
   scaling?: Scaling;

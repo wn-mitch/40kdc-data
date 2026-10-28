@@ -1297,9 +1297,10 @@
         },
         "timing": {
           "enum": [
-            "before-removal"
+            "before-removal",
+            "after-attacks"
           ],
-          "description": "destroyed: resolve before the model is removed."
+          "description": "destroyed: resolve before the model is removed (before-removal), or after the attacking unit has finished making its attacks (after-attacks)."
         },
         "phase": {
           "$ref": "#/$defs/phase",
@@ -8876,6 +8877,10 @@
                 },
                 "except_from": {
                   "const": "this-ability"
+                },
+                "any_army_faction": {
+                  "const": true,
+                  "description": "A granted faction rule the holder can use whatever your Army Faction is (\"even though your Army Faction is not X\"): the rule's own Army Faction requirement does not apply to it."
                 },
                 "attacks": {
                   "$ref": "#/$defs/event-bound-reference",

@@ -150,7 +150,11 @@ function splitBodies(list: readonly CompileLeaf[], sourceText: string | undefine
     starts.forEach((start, index) => {
       const opener = list[start]!;
       const limit = starts[index + 1] ?? next;
-      const end = orEnd(spans, Buffer.from(sourceText, "utf8"), paragraphEnd(spans, opener.start_byte));
+      const bytes = Buffer.from(sourceText, "utf8");
+      const ownEnd = paragraphEnd(spans, opener.start_byte);
+      // A heading printed on a line of its own ("**Name**" then the body's lines): the body runs to the next heading.
+      const headingOnly = markers.length > 0 && Number.isFinite(ownEnd) && /^[\s*:]*$/u.test(bytes.subarray(opener.end_byte ?? opener.start_byte, ownEnd).toString("utf8"));
+      const end = headingOnly ? (limit < list.length ? list[limit]!.start_byte : Number.POSITIVE_INFINITY) : orEnd(spans, bytes, ownEnd);
       const leaves: CompileLeaf[] = [];
       let cursor = start + 1;
       while (cursor < limit && list[cursor]!.start_byte < end && list[cursor]!.fragment === opener.fragment) leaves.push(list[cursor++]!);

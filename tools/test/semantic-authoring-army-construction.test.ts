@@ -182,6 +182,21 @@ describe("army-construction groups (sub-shape A)", () => {
   });
 });
 
+describe("a composition rule whose units are listed after a keyword grant on them", () => {
+  it("takes the list as the rule's group and as the units whose keywords change", () => {
+    const text = "You can include any of the following units in your army, and when you do so their Faction keywords are replaced with GAMMA: ALPHA or BETA units.";
+    const effect = effectOf(placed(text,
+      ["You can", "optional-use", { who: "you" }],
+      ["include any of the following units in your army", army, { rule: "composition", with: "following-filter" }],
+      ["when you do so their Faction keywords are replaced with GAMMA", "keyword-grant", { subject: "antecedent", keywords: ["GAMMA"], replaces: ["DELTA"] }],
+      filter("ALPHA or BETA units", { side: "friendly", any_keywords: ["ALPHA", "BETA"] })), text);
+    const group = { owner: "friendly", any_of: ["ALPHA", "BETA"] };
+    expect(armyRules(effect)[0].modifier.with).toEqual(group);
+    const steps = effect.type === "sequence" ? effect.steps : [effect];
+    expect(steps.find((step: any) => step.type === "keyword-grant")).toEqual({ type: "keyword-grant", target: group, modifier: { keywords: ["GAMMA"], replaces: ["DELTA"] } });
+  });
+});
+
 describe("army-construction refusals", () => {
   it("refuses a following-filter rule with no filter after it", () => {
     const text = "Your army cannot include any of them.";

@@ -373,6 +373,18 @@ export const ROLL_EXTENSIONS: readonly FamilyExtension[] = [
       return { roll: { ability: namedId((input.roll as { ability: unknown }).ability, "roll-prohibition.roll.ability") } };
     },
   },
+  {
+    // "it automatically passes the Leadership test required for Dark Pacts": the Dark Pact test, not every Leadership test.
+    family: "roll-auto-result",
+    version: 5,
+    description: "As the previous version, and roll can be dark-pact: the Leadership test a Dark Pact requires.",
+    schema: (previous) => withProperties(previous, { roll: widenedEnum(previous, "roll", ["dark-pact"]) }),
+    normalize: (input, previous) => {
+      if (input.roll !== "dark-pact") return previous(input);
+      if (input.outcome !== "auto-pass") throw new TypeError("roll-auto-result dark-pact is an automatic pass of that test.");
+      return standIn(input, "roll", "leadership", previous);
+    },
+  },
   antecedentSubject("ignore-modifiers", 3, "\"Friendly X units can ignore modifiers to …\": the units a unit-filter right before it matches, or a selected unit"),
   {
     family: "ignore-modifiers",

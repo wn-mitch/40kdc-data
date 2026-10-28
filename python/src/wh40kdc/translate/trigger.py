@@ -661,6 +661,9 @@ def describe_trigger(t: AbilityTrigger) -> str:
     s += event_relation_phrase(f)
     if f.get("phase") is not None:
         s += f" in the {_cap_word(_str(f['phase']))} phase"
+    # A destruction resolved once its attacker is done.
+    if f.get("timing") == "after-attacks":
+        s += ", after the attacking unit has resolved its attacks"
     prox = t.get("proximity")
     if isinstance(prox, dict) and prox.get("range") is not None:
         of = "this model" if prox.get("of") == "this-model" else "this unit"
