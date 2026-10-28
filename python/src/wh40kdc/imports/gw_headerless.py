@@ -378,7 +378,8 @@ def _finish_unit(acc: dict[str, Any]) -> dict[str, Any]:
         )
 
     wargear: dict[str, int] = {}
-    keyword_overrides: set[str] = set()
+    # Insertion-ordered set: overrides keep source order, as in TS.
+    keyword_overrides: dict[str, None] = {}
     loadout_groups: list[dict[str, Any]] = []
 
     def add_wargear(raw_name: str, count: int) -> None:
@@ -394,7 +395,7 @@ def _finish_unit(acc: dict[str, Any]) -> dict[str, Any]:
 
     for i, b in enumerate(bullets):
         if b.get("keyword_override"):
-            keyword_overrides.add(b["keyword_override"])
+            keyword_overrides.setdefault(b["keyword_override"], None)
         if b["sets_character"]:
             is_character = True
             continue
@@ -503,7 +504,7 @@ def _parse(decoded: Any) -> dict[str, Any]:
     text = _headerless_text(decoded)
     if text is None:
         raise ValueError("gw-headerless: not a headerless plain-text list")
-    summary_warlord_match = _RE_BCP_WARLORD.search(text)
+    summary_warlord_match = _RE_BCP_WARLORD.search(decoded)
     summary_warlord = (
         summary_warlord_match.group(1).strip() if summary_warlord_match is not None else None
     )

@@ -1,0 +1,170 @@
+{
+  "slug": "",
+  "key": "",
+  "visible": "hidden",
+  "locked": false,
+  "rulebook": {
+    "name": "40kdc",
+    "game": "Warhammer 40,000",
+    "publisher": "Alpaca Software",
+    "url": "https://40kdc.dev",
+    "genre": "wargame"
+  },
+  "snapshot": {
+    "item": "Roster§Roster",
+    "name": "Preamble Sweep",
+    "quantity": 1,
+    "stats": {
+      "Points": {
+        "value": 425
+      }
+    },
+    "assets": {
+      "included": [
+        {
+          "item": "Faction§Adeptus Astartes",
+          "name": "Adeptus Astartes",
+          "quantity": 1
+        },
+        {
+          "item": "Detachment§Gladius Task Force",
+          "name": "Gladius Task Force",
+          "quantity": 1
+        },
+        {
+          "item": "Force Disposition§Take And Hold",
+          "name": "Take And Hold",
+          "quantity": 1
+        },
+        {
+          "item": "Battle Size§Strike Force (2000 Point limit)",
+          "name": "Strike Force (2000 Point limit)",
+          "quantity": 1
+        },
+        {
+          "item": "Unit§Captain",
+          "name": "Captain",
+          "quantity": 1,
+          "stats": {
+            "Points": {
+              "value": 110
+            }
+          },
+          "assets": {
+            "included": [
+              {
+                "item": "Enhancement§Artificer Armour",
+                "name": "Artificer Armour",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Master-crafted power weapon",
+                "name": "Master-crafted power weapon",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Heavy bolt pistol",
+                "name": "Heavy bolt pistol",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Master-crafted bolter",
+                "name": "Master-crafted bolter",
+                "quantity": 1
+              }
+            ]
+          }
+        },
+        {
+          "item": "Unit§Lieutenant",
+          "name": "Lieutenant",
+          "quantity": 1,
+          "stats": {
+            "Points": {
+              "value": 50
+            }
+          },
+          "assets": {
+            "included": [
+              {
+                "item": "Enhancement§Adept of the Codex",
+                "name": "Adept of the Codex",
+                "quantity": 1,
+                "stats": {
+                  "Points": {
+                    "value": 20
+                  }
+                }
+              },
+              {
+                "item": "Weapon§Master-crafted power weapon",
+                "name": "Master-crafted power weapon",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Bolt pistol",
+                "name": "Bolt pistol",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Ceramite Fists",
+                "name": "Ceramite Fists",
+                "quantity": 1
+              }
+            ],
+            "traits": [
+              {
+                "item": "Trait§Warlord",
+                "name": "Warlord",
+                "quantity": 1
+              },
+              {
+                "item": "40kdc Keyword§Adeptus Astartes",
+                "name": "Adeptus Astartes",
+                "quantity": 1
+              }
+            ]
+          }
+        },
+        {
+          "item": "Unit§Land Raider",
+          "name": "Land Raider",
+          "quantity": 1,
+          "stats": {
+            "Points": {
+              "value": 245
+            }
+          },
+          "assets": {
+            "included": [
+              {
+                "item": "Model§Land Raider",
+                "name": "Land Raider",
+                "quantity": 1,
+                "assets": {
+                  "included": [
+                    {
+                      "item": "Weapon§Armoured tracks",
+                      "name": "Armoured tracks",
+                      "quantity": 1
+                    },
+                    {
+                      "item": "Weapon§Godhammer lascannon",
+                      "name": "Godhammer lascannon",
+                      "quantity": 2
+                    },
+                    {
+                      "item": "Weapon§Twin Heavy Bolter",
+                      "name": "Twin Heavy Bolter",
+                      "quantity": 1
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="utf-8"?>
+<roster id="roster0" name="Preamble Sweep" gameSystemId="sys-352e-adc2-7639-d6a9" gameSystemName="Warhammer 40,000">
+  <forces>
+    <force id="force0" name="Adeptus Astartes" catalogueName="Adeptus Astartes">
+      <selections>
+        <selection id="unit0" name="Captain" type="unit" number="1">
+          <profiles>
+            <profile name="Captain" typeName="Unit">
+              <characteristics>
+                <characteristic name="M">6"</characteristic>
+                <characteristic name="T">5</characteristic>
+                <characteristic name="SV">3+</characteristic>
+                <characteristic name="W">5</characteristic>
+                <characteristic name="LD">6+</characteristic>
+                <characteristic name="OC">1</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Invulnerable Save" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">4+ invulnerable save</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Leader" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">The unit gains the Leader ability.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Finest Hour" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">When the unit is selected to fight, you may use this ability, during the Fight phase, until the end of the phase:
+  -&gt; Improve the Attacks characteristic of melee weapons equipped by this model by 3.
+  -&gt; Melee weapons equipped by this model gain [DEVASTATING WOUNDS].</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Relic Shield" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Add 1 to this model's Wounds characteristic.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Strategic Acumen" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">You can: During the Command phase, in your turn, until the start of your next Command phase, select one option of Combat Doctrines for the unit, in place of any already active.</characteristic>
+              </characteristics>
+            </profile>
+          </profiles>
+          <categories>
+            <category name="Faction: Adeptus Astartes"/>
+            <category name="Infantry"/>
+            <category name="Character"/>
+            <category name="Explosives"/>
+            <category name="Imperium"/>
+            <category name="Tacticus"/>
+            <category name="Captain"/>
+          </categories>
+          <selections>
+            <selection id="unit0-m0" name="Captain" type="model" number="1">
+              <selections>
+                <selection id="unit0-m0-w0" name="Master-crafted power weapon" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Master-crafted Power Weapon" typeName="Melee Weapons">
+                      <characteristics>
+                        <characteristic name="Range">Melee</characteristic>
+                        <characteristic name="A">6</characteristic>
+                        <characteristic name="WS">2+</characteristic>
+                        <characteristic name="S">6</characteristic>
+                        <characteristic name="AP">-2</characteristic>
+                        <characteristic name="D">2</characteristic>
+                        <characteristic name="Keywords"></characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+                <selection id="unit0-m0-w1" name="Heavy Bolt Pistol" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Heavy Bolt Pistol" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">18"</characteristic>
+                        <characteristic name="A">1</characteristic>
+                        <characteristic name="BS">2+</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">-1</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords">Close-quarters</characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+                <selection id="unit0-m0-w2" name="Master-crafted bolter" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Master-crafted Bolter" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">24"</characteristic>
+                        <characteristic name="A">2</characteristic>
+                        <characteristic name="BS">2+</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">-1</characteristic>
+                        <characteristic name="D">2</characteristic>
+                        <characteristic name="Keywords">Assault, Rapid Fire 1</characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+              </selections>
+            </selection>
+          </selections>
+        </selection>
+        <selection id="unit1" name="Lieutenant" type="unit" number="1">
+          <profiles>
+            <profile name="Lieutenant" typeName="Unit">
+              <characteristics>
+                <characteristic name="M">6"</characteristic>
+                <characteristic name="T">5</characteristic>
+                <characteristic name="SV">3+</characteristic>
+                <characteristic name="W">4</characteristic>
+                <characteristic name="LD">6+</characteristic>
+                <characteristic name="OC">1</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Tactical Precision" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Against a unit that is not a MONSTER or VEHICLE, the unit's weapons gain [LETHAL HITS].</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Storm Shield" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">This model has a 4+ invulnerable save.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Support" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Nothing happens.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Demi-company Commander (Once per turn, per unit)" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Nothing happens.</characteristic>
+              </characteristics>
+            </profile>
+          </profiles>
+          <categories>
+            <category name="Faction: Adeptus Astartes"/>
+            <category name="Infantry"/>
+            <category name="Character"/>
+            <category name="Imperium"/>
+            <category name="Tacticus"/>
+            <category name="Lieutenant"/>
+            <category name="Explosives"/>
+          </categories>
+          <selections>
+            <selection id="unit1-m0" name="Lieutenant" type="model" number="1">
+              <selections>
+                <selection id="unit1-m0-w0" name="Master-crafted power weapon" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Master-crafted Power Weapon" typeName="Melee Weapons">
+                      <characteristics>
+                        <characteristic name="Range">Melee</characteristic>
+                        <characteristic name="A">5</characteristic>
+                        <characteristic name="WS">2+</characteristic>
+                        <characteristic name="S">6</characteristic>
+                        <characteristic name="AP">-2</characteristic>
+                        <characteristic name="D">2</characteristic>
+                        <characteristic name="Keywords"></characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+                <selection id="unit1-m0-w1" name="Bolt Pistol" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Bolt Pistol" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">12"</characteristic>
+                        <characteristic name="A">1</characteristic>
+                        <characteristic name="BS">2+</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">-1</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords">Close-quarters</characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+                <selection id="unit1-m0-w2" name="Ceramite Fists" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Ceramite Fists" typeName="Melee Weapons">
+                      <characteristics>
+                        <characteristic name="Range">Melee</characteristic>
+                        <characteristic name="A">5</characteristic>
+                        <characteristic name="WS">2+</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">0</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords"></characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+              </selections>
+            </selection>
+          </selections>
+        </selection>
+        <selection id="unit2" name="Land Raider" type="unit" number="1">
+          <profiles>
+            <profile name="Land Raider" typeName="Unit">
+              <characteristics>
+                <characteristic name="M">10"</characteristic>
+                <characteristic name="T">12</characteristic>
+                <characteristic name="SV">2+</characteristic>
+                <characteristic name="W">16</characteristic>
+                <characteristic name="LD">6+</characteristic>
+                <characteristic name="OC">5</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Assault Ramp" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">When the unit ends a Normal move, during the Movement phase, in your turn, friendly units embarked within the unit can disembark using the Assault Disembarkation rules.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Deadly Demise" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Before this model is removed from play:
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Damaged" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Power Of The Machine Spirit" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">After an enemy unit shoots, until the end of the phase, the unit is eligible to shoot as if it were your Shooting phase.</characteristic>
+              </characteristics>
+            </profile>
+          </profiles>
+          <categories>
+            <category name="Faction: Adeptus Astartes"/>
+            <category name="Vehicle"/>
+            <category name="Smoke"/>
+            <category name="Transport"/>
+            <category name="Imperium"/>
+            <category name="Land Raider"/>
+            <category name="Frame"/>
+          </categories>
+          <selections>
+            <selection id="unit2-m0" name="Land Raider" type="model" number="1">
+              <selections>
+                <selection id="unit2-m0-w0" name="Armoured tracks" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Armoured tracks" typeName="Melee Weapons">
+                      <characteristics>
+                        <characteristic name="Range">Melee</characteristic>
+                        <characteristic name="A">6</characteristic>
+                        <characteristic name="WS">4+</characteristic>
+                        <characteristic name="S">8</characteristic>
+                        <characteristic name="AP">0</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords"></characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+                <selection id="unit2-m0-w1" name="Godhammer lascannon" type="upgrade" number="2">
+                  <profiles>
+                    <profile name="Godhammer Lascannon" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">48"</characteristic>
+                        <characteristic name="A">2</characteristic>
+                        <characteristic name="BS">3+</characteristic>
+                        <characteristic name="S">12</characteristic>
+                        <characteristic name="AP">-3</characteristic>
+                        <characteristic name="D">D3+3</characteristic>
+                        <characteristic name="Keywords"></characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+                <selection id="unit2-m0-w2" name="Twin Heavy Bolter" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Twin Heavy Bolter" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">36"</characteristic>
+                        <characteristic name="A">3</characteristic>
+                        <characteristic name="BS">3+</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">-1</characteristic>
+                        <characteristic name="D">2</characteristic>
+                        <characteristic name="Keywords">Rapid Fire 2, Sustained Hits 1, Twin-linked</characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+              </selections>
+            </selection>
+          </selections>
+        </selection>
+      </selections>
+    </force>
+  </forces>
+</roster>

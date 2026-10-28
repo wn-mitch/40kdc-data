@@ -39,6 +39,8 @@ mod gw;
 #[cfg(feature = "import")]
 mod gw_headerless;
 #[cfg(feature = "import")]
+mod gw_headerless_preamble;
+#[cfg(feature = "import")]
 mod listforge;
 #[cfg(feature = "import")]
 mod listforge_text;

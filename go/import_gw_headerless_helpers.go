@@ -16,7 +16,10 @@ import (
 var gwhPlusFence = regexp.MustCompile(`^\++$`)
 
 // A line inside that block identifying it as BCP's (not GW's own `+ …` fence).
-var gwhBcpSummaryMarker = regexp.MustCompile(`(?im)^\s*(?:Player Name|Team Name|Factions Used|Army Points)\s*:`)
+var gwhBcpSummaryMarker = regexp.MustCompile(`(?im)^\s*\+?\s*(?:Player Name|Team Name|Factions? Used|Army Points)\s*:`)
+
+// The BCP summary's `WARLORD:` line, which names the warlord unit by prefix.
+var gwhBcpWarlord = regexp.MustCompile(`(?im)^\s*\+?\s*WARLORD:\s*(.+?)\s*$`)
 
 // Battle-size labels that look like unit headers (`Strike Force (2,000 Points)`)
 // but are army metadata, not datasheets.
@@ -25,10 +28,33 @@ var gwhBattleSizeNames = map[string]bool{
 	"incursion":     true,
 	"strike force":  true,
 	"onslaught":     true,
+	"strikeforce":   true,
 }
 
+// Force dispositions printed as a bare preamble line.
+var gwhForceDispositionNames = map[string]bool{
+	"disruption":      true,
+	"priority assets": true,
+	"purge the foe":   true,
+	"reconnaissance":  true,
+	"recon":           true,
+	"take and hold":   true,
+}
+
+// Super-faction breadcrumbs the GW app prints before the real faction.
+var gwhGenericFactionBreadcrumbs = map[string]bool{
+	"chaos":         true,
+	"imperium":      true,
+	"space marines": true,
+	"xenos":         true,
+}
+
+var gwhNonDigits = regexp.MustCompile(`\D`)
+
+// gwhParsePts reads the digits of a points string ("2,000", "1.995", "2 000"),
+// ignoring every separator; nil when there are none.
 func gwhParsePts(raw string) any {
-	n, err := strconv.Atoi(strings.ReplaceAll(raw, ",", ""))
+	n, err := strconv.Atoi(gwhNonDigits.ReplaceAllString(raw, ""))
 	if err != nil {
 		return nil
 	}
@@ -45,19 +71,40 @@ func gwhIndent(raw string) int {
 	return utf8.RuneCountInString(raw) - utf8.RuneCountInString(strings.TrimLeftFunc(raw, unicode.IsSpace))
 }
 
-// gwhStripBcpSummary drops a leading `++…++`-fenced BCP summary block
-// (`Player Name:` / `Factions Used:` / `Army Points: N` / …). It is BCP
-// metadata, not part of the pasted roster, and would otherwise be consumed as
-// the roster title, turning the real title line into a phantom unit. Only a
-// block whose fence pair wraps a BCP marker is removed, so a framed GW export's
-// own `+ FACTION KEYWORD:` fence is left intact.
+// gwhJoinFinalAnd rewrites the ` and ` after the last comma of a wargear list
+// to `, ` (`a, b and c` → `a, b, c`); a list without a comma is only trimmed.
+// Mirror of TS `replace(/\s+and\s+(?=[^,]+$)/i, ", ")`.
+func gwhJoinFinalAnd(list string) string {
+	lastComma := strings.LastIndex(list, ",")
+	if lastComma < 0 {
+		return strings.TrimSpace(list)
+	}
+	tail := list[lastComma+1:]
+	for _, loc := range gwhAndBeforeLast.FindAllStringIndex(tail, -1) {
+		if loc[1] < len(tail) {
+			return strings.TrimSpace(list[:lastComma+1] + tail[:loc[0]] + ", " + tail[loc[1]:])
+		}
+	}
+	return strings.TrimSpace(list)
+}
+
+// gwhStripBcpSummary drops a `++…++`-fenced BCP summary block (`Player Name:` /
+// `Factions Used:` / `Army Points: N` / …), keeping the lines around it. It is
+// BCP metadata, not part of the pasted roster, and would otherwise be consumed
+// as the roster title, turning the real title line into a phantom unit. Only
+// the first fence pair is considered, and only when it wraps a BCP marker or
+// the text after it carries the GW app's battle-size line, so a framed GW
+// export's own `+ FACTION KEYWORD:` fence is left intact.
 func gwhStripBcpSummary(text string) string {
 	lines := splitLines(text)
-	open := 0
-	for open < len(lines) && strings.TrimSpace(lines[open]) == "" {
-		open++
+	open := -1
+	for i, line := range lines {
+		if gwhPlusFence.MatchString(strings.TrimSpace(line)) {
+			open = i
+			break
+		}
 	}
-	if open >= len(lines) || !gwhPlusFence.MatchString(strings.TrimSpace(lines[open])) {
+	if open < 0 {
 		return text
 	}
 	closeIdx := -1
@@ -71,10 +118,12 @@ func gwhStripBcpSummary(text string) string {
 		return text
 	}
 	block := strings.Join(lines[open+1:closeIdx], "\n")
-	if !gwhBcpSummaryMarker.MatchString(block) {
+	remainder := strings.Join(lines[closeIdx+1:], "\n")
+	if !gwhBcpSummaryMarker.MatchString(block) && !gwEmbeddedAppBattleSize.MatchString(remainder) {
 		return text
 	}
-	return strings.Join(lines[closeIdx+1:], "\n")
+	kept := append(append([]string{}, lines[:open]...), lines[closeIdx+1:]...)
+	return strings.Join(kept, "\n")
 }
 
 // gwhLoadoutGroup is one model group as the source lists it: the model name,
