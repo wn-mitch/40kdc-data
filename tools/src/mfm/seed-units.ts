@@ -226,6 +226,12 @@ export function siblingKeywordOf(
   );
 }
 
+/** Whether the datasheet prints `dir`'s home faction keyword (FACTION_HOME_KEYWORD): the faction's own datasheet. */
+export function carriesHomeKeyword(dump: MfmDump, datasheetId: string, dir: string): boolean {
+  const home = FACTION_HOME_KEYWORD[dir];
+  return home !== undefined && datasheetFactionKeywords(dump, datasheetId).includes(home);
+}
+
 /**
  * faction_keywords. For the single-token Chaos factions in FACTION_HOME_KEYWORD,
  * the integrity check requires the set to be exactly `{home}` (shared-template
@@ -458,10 +464,11 @@ export function runSeedUnits(
       } catch {
         continue;
       }
-      // Matched, or a shared-roster dup — except a daemon cult-legion view, which is
-      // the host faction's own datasheet even though chaos-daemons has the name.
+      // Matched, or a shared-roster dup — except the host faction's own datasheet: a daemon
+      // cult-legion view (chaos-daemons has the name) or one carrying the faction's home
+      // keyword (Codex: Emperor's Children's Defiler, though chaos-space-marines has one).
       if (effIds.has(id)) continue;
-      if (sharedIds.has(id) && !siblingKeywordOf(dump, ds.id!, effDir)) continue;
+      if (sharedIds.has(id) && !siblingKeywordOf(dump, ds.id!, effDir) && !carriesHomeKeyword(dump, ds.id!, effDir)) continue;
       const cp = pub.get(ds.publicationId)?.isCombatPatrol ?? false;
       const prev = bySlug.get(id);
       if (

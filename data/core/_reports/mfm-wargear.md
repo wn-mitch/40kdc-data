@@ -1,14 +1,14 @@
-# MFM wargear — DRY RUN
+# MFM wargear — APPLIED
 
 Dump-primary `default_weapon_ids` + wargear-options. BSData retained only for
 dump-absent (repo-only) units. Unresolved weapon names are triaged, never guessed.
 
 | Dir | Matched | Options | Defaults Δ | Weapon ids Δ | Weapon names Δ | Weapons + | Wargear + | Synth | Unresolved | Fuzzy | Notes | New-in-dump | Repo-only (fallback) |
 |---|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|
-| adepta-sororitas | 37 | 51 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 | 0 | 0 |
-| adeptus-astartes | 177 | 184 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 | 16 | 0 | 0 |
-| adeptus-custodes | 39 | 20 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 | 1 | 0 | 0 |
-| adeptus-mechanicus | 38 | 37 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 | 0 | 0 |
+| adepta-sororitas | 37 | 51 | 0 | 4 | 0 | 0 | 0 | 0 | 0 | 0 | 4 | 0 | 0 |
+| adeptus-astartes | 177 | 184 | 0 | 23 | 0 | 0 | 0 | 0 | 0 | 6 | 16 | 0 | 0 |
+| adeptus-custodes | 39 | 20 | 0 | 9 | 0 | 0 | 0 | 0 | 0 | 3 | 1 | 0 | 0 |
+| adeptus-mechanicus | 38 | 37 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 3 | 0 | 0 |
 | aeldari | 80 | 97 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 5 | 0 | 0 |
 | agents-of-the-imperium | 33 | 48 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 10 | 0 | 0 |
 | astra-militarum | 75 | 155 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 25 | 0 | 0 |
@@ -17,18 +17,18 @@ dump-absent (repo-only) units. Unresolved weapon names are triaged, never guesse
 | chaos-space-marines | 58 | 80 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 11 | 99 | 0 |
 | death-guard | 41 | 37 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 | 0 | 0 |
 | drukhari | 27 | 41 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 2 | 0 | 0 |
-| emperors-children | 25 | 29 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 | 1 | 0 |
+| emperors-children | 26 | 32 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 5 | 0 | 0 |
 | genestealer-cults | 28 | 19 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 |
 | grey-knights | 30 | 42 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 3 | 0 | 0 |
 | imperial-knights | 23 | 29 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 0 | 0 |
 | leagues-of-votann | 26 | 36 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 0 | 0 |
 | necrons | 57 | 28 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| orks | 60 | 52 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 | 0 | 0 | 0 |
+| orks | 60 | 52 | 0 | 2 | 0 | 0 | 0 | 0 | 0 | 4 | 0 | 0 | 0 |
 | tau-empire | 47 | 103 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 0 | 0 |
 | thousand-sons | 38 | 43 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 | 0 | 0 |
 | tyranids | 57 | 20 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
 | world-eaters | 34 | 42 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 0 | 0 |
-| **TOTAL** | **1103** | **1234** | **0** | **0** | **0** | **0** | **0** | **0** | **0** | **22** | **100** | **192** | **0** |
+| **TOTAL** | **1104** | **1237** | **0** | **40** | **0** | **0** | **0** | **0** | **0** | **22** | **101** | **191** | **0** |
 
 ## adepta-sororitas
 
@@ -184,6 +184,7 @@ dump-absent (repo-only) units. Unresolved weapon names are triaged, never guesse
 - chaos-terminators: alternate loadout_choice_set ce82b2b8 (Chaos Terminator) — review
 - chaos-terminators: alternate loadout_choice_set dc056a28 (Terminator Champion) — review
 - noise-marines: Noise Marine: non-uniform default count — base_miniature_loadout fallback
+- defiler: loadout set fe8e2ddb kept as one menu: its swaps do not stack freely (Defiler)
 - chaos-rhino: loadout set 91b72180 kept as one menu: its swaps do not stack freely (Chaos Rhino)
 
 ## genestealer-cults

@@ -1160,5 +1160,342 @@
     "game_modes": [
       "combat-patrol"
     ]
+  },
+  {
+    "unit_id": "venatari-with-kinetic-destroyers",
+    "faction_id": "adeptus-custodes",
+    "models": [
+      {
+        "name": "Venatari",
+        "min": 3,
+        "max": 3,
+        "is_leader_model": false,
+        "default_weapon_ids": [
+          "kinetic-destroyer",
+          "tarsis-buckler"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Venatari",
+            "min": 3,
+            "max": 3
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "aquilon-terminators-with-solarite-power-talons",
+    "faction_id": "adeptus-custodes",
+    "models": [
+      {
+        "name": "Aquilon Custodians",
+        "min": 3,
+        "max": 3,
+        "is_leader_model": false,
+        "default_weapon_ids": [
+          "lastrum-storm-bolter",
+          "solerite-power-talon"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Aquilon Custodians",
+            "min": 3,
+            "max": 3
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "aquilan-wing-sentinel-guard-sodality",
+    "faction_id": "adeptus-custodes",
+    "models": [
+      {
+        "name": "Sentinel Guard",
+        "min": 2,
+        "max": 2,
+        "is_leader_model": false,
+        "default_weapon_ids": [
+          "sentinel-blade-aquilan-wing-sentinel-guard-sodality"
+        ]
+      },
+      {
+        "name": "Sentinel Guard with Vexilla",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": true,
+        "default_weapon_ids": [
+          "vexilla",
+          "sentinel-blade-aquilan-wing-sentinel-guard-sodality"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "game_modes": [
+      "combat-patrol"
+    ],
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Sentinel Guard",
+            "min": 2,
+            "max": 2
+          },
+          {
+            "name": "Sentinel Guard with Vexilla",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "aquilan-talon-contemptor-achillus-dreadnought",
+    "faction_id": "adeptus-custodes",
+    "models": [
+      {
+        "name": "Contemptor-Achillus Dreadnought",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "default_weapon_ids": [
+          "dreadspear",
+          "lastrum-storm-bolter"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "game_modes": [
+      "combat-patrol"
+    ],
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Contemptor-Achillus Dreadnought",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "aquilan-wing-venatari-with-kinetic-destroyers",
+    "faction_id": "adeptus-custodes",
+    "models": [
+      {
+        "name": "Venatari",
+        "min": 3,
+        "max": 3,
+        "is_leader_model": false,
+        "default_weapon_ids": [
+          "kinetic-destroyer",
+          "tarsis-buckler"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "game_modes": [
+      "combat-patrol"
+    ],
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Venatari",
+            "min": 3,
+            "max": 3
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "aquilan-talon-sentinel-guard-sodality",
+    "faction_id": "adeptus-custodes",
+    "models": [
+      {
+        "name": "Sentinel Guard",
+        "min": 3,
+        "max": 3,
+        "is_leader_model": false,
+        "default_weapon_ids": [
+          "sentinel-blade-aquilan-talon-sentinel-guard-sodality"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "game_modes": [
+      "combat-patrol"
+    ],
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Sentinel Guard",
+            "min": 3,
+            "max": 3
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "aquilan-talon-shield-captain",
+    "faction_id": "adeptus-custodes",
+    "models": [
+      {
+        "name": "Shield-Captain",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "default_weapon_ids": [
+          "eternity-pattern-paragon-blade"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "game_modes": [
+      "combat-patrol"
+    ],
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Shield-Captain",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "aquilan-wing-shield-captain",
+    "faction_id": "adeptus-custodes",
+    "models": [
+      {
+        "name": "Shield-Captain",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "game_modes": [
+      "combat-patrol"
+    ],
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Shield-Captain",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "sentinel-guard-sodality",
+    "faction_id": "adeptus-custodes",
+    "models": [
+      {
+        "name": "Custodian Guard",
+        "min": 3,
+        "max": 3,
+        "is_leader_model": false,
+        "default_weapon_ids": [
+          "praesidium-shield",
+          "sentinel-blade-sentinel-guard-sodality"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Custodian Guard",
+            "min": 3,
+            "max": 3
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "caladius-annihilator-grav-tank",
+    "faction_id": "adeptus-custodes",
+    "models": [
+      {
+        "name": "Caladius Annihilator Grav Tank",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "default_weapon_ids": [
+          "arachnus-blaze-carronade",
+          "armoured-hull",
+          "twin-lastrum-bolt-cannon"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Caladius Annihilator Grav Tank",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
   }
 ]

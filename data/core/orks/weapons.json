@@ -7559,12 +7559,21 @@
         },
         "keywords": [
           {
-            "keyword_id": "assault"
-          },
-          {
             "keyword_id": "sustained-hits",
             "parameters": {
               "value": 1
+            }
+          },
+          {
+            "keyword_id": "assault"
+          },
+          {
+            "keyword_id": "lethal-hits",
+            "parameters": {
+              "excluded_target_keywords": [
+                "Monster",
+                "Vehicle"
+              ]
             }
           }
         ]
@@ -7572,7 +7581,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -11204,6 +11213,86 @@
             "keyword_id": "rapid-fire",
             "parameters": {
               "value": 6
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    }
+  },
+  {
+    "id": "crushin-bulk-gunwagon",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "a4ff364f-c84e-49c5-b70d-b346c17a4d77"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b1fcf701-d3b4-4d6e-8623-ebad7b66656d"
+      }
+    ],
+    "name": "Crushin’ Bulk",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Crushin’ Bulk",
+        "range": "Melee",
+        "stats": {
+          "A": 6,
+          "S": 8,
+          "AP": -2,
+          "D": 2,
+          "WS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "cleave",
+            "parameters": {
+              "value": 2
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    }
+  },
+  {
+    "id": "spiked-ram-warbuggies",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "06efdfae-29a1-4432-89c7-48b671a33bdc"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d8a9b501-afef-4413-8e0c-9dc3eabb37f4"
+      }
+    ],
+    "name": "Spiked Ram",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Spiked Ram",
+        "range": "Melee",
+        "stats": {
+          "A": 4,
+          "S": 7,
+          "AP": -1,
+          "D": 2,
+          "WS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "cleave",
+            "parameters": {
+              "value": 1
             }
           }
         ]

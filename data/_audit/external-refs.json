@@ -14,17 +14,17 @@
       }
     },
     "unit": {
-      "entities": 1103,
-      "with_external_refs": 1100,
+      "entities": 1104,
+      "with_external_refs": 1101,
       "covered_entities_by_namespace": {
         "bsdata": 955,
         "game-datacards": 961,
-        "mfm": 1100
+        "mfm": 1101
       },
       "references_by_namespace": {
         "bsdata": 1018,
         "game-datacards": 961,
-        "mfm": 1113
+        "mfm": 1114
       }
     },
     "detachment": {
@@ -62,15 +62,15 @@
       }
     },
     "weapon": {
-      "entities": 3536,
-      "with_external_refs": 3450,
+      "entities": 3615,
+      "with_external_refs": 3529,
       "covered_entities_by_namespace": {
-        "bsdata": 2850,
-        "mfm": 3437
+        "bsdata": 2904,
+        "mfm": 3516
       },
       "references_by_namespace": {
-        "bsdata": 3576,
-        "mfm": 4698
+        "bsdata": 3747,
+        "mfm": 5178
       }
     },
     "wargear": {
@@ -209,6 +209,52 @@
     },
     {
       "namespace": "bsdata",
+      "id": "1633-f85a-264a-9591",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-askars-wolfpack-blood-claws",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-assault-force-librarian",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-emperors-champion-vedrenn",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vengeful-brethren-hellblaster-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vengeful-brethren-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "bsdata",
       "id": "18aa-edc7-646c-296",
       "targets": [
         {
@@ -240,6 +286,52 @@
           "entity_type": "weapon",
           "id": "plasma-pistol-tallyman",
           "faction_id": "death-guard"
+        }
+      ]
+    },
+    {
+      "namespace": "bsdata",
+      "id": "18b0-8c2-173f-5",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-askars-wolfpack-blood-claws",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-assault-force-librarian",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-emperors-champion-vedrenn",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vengeful-brethren-hellblaster-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vengeful-brethren-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -334,6 +426,22 @@
           "entity_type": "weapon",
           "id": "baleful-devolution-kaaskrek",
           "faction_id": "thousand-sons"
+        }
+      ]
+    },
+    {
+      "namespace": "bsdata",
+      "id": "1ac-33a5-48e0-8ee3",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "phosphor-blast-carbine",
+          "faction_id": "adeptus-mechanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "phosphor-blast-carbine-purge-corps-serberys-sulphurhounds",
+          "faction_id": "adeptus-mechanicus"
         }
       ]
     },
@@ -471,6 +579,22 @@
     },
     {
       "namespace": "bsdata",
+      "id": "2091-913a-2894-0d9f",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "power-fist",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "power-fist-master-zacharial",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "bsdata",
       "id": "2119-f4d4-2ece-31d9",
       "targets": [
         {
@@ -535,6 +659,22 @@
           "entity_type": "weapon",
           "id": "grenade-launcher-draydens-lance-kasrkin",
           "faction_id": "astra-militarum"
+        }
+      ]
+    },
+    {
+      "namespace": "bsdata",
+      "id": "242a-5001-f4ff-cd49",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "combi-weapon",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "combi-weapon-vow-sworn-sword-brethren-squad",
+          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -607,6 +747,16 @@
         },
         {
           "entity_type": "weapon",
+          "id": "plasma-pistol-askars-wolfpack-blood-claws",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "plasma-pistol-assault-force-vanguard-veteran-squad-with-jump-packs",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "plasma-pistol-assault-intercessor-squad",
           "faction_id": "adeptus-astartes"
         },
@@ -662,12 +812,22 @@
         },
         {
           "entity_type": "weapon",
+          "id": "plasma-pistol-sanguinary-spearhead-assault-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "plasma-pistol-sword-brethren-squad",
           "faction_id": "adeptus-astartes"
         },
         {
           "entity_type": "weapon",
           "id": "plasma-pistol-vanguard-veteran-squad-with-jump-packs",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "plasma-pistol-vow-sworn-sword-brethren-squad",
           "faction_id": "adeptus-astartes"
         },
         {
@@ -741,6 +901,22 @@
           "entity_type": "weapon",
           "id": "lasgun-cadian-recon-squad",
           "faction_id": "astra-militarum"
+        }
+      ]
+    },
+    {
+      "namespace": "bsdata",
+      "id": "2737-cb80-0c3a-3dfa",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "pyreblaster",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "pyreblaster-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -839,6 +1015,11 @@
         },
         {
           "entity_type": "weapon",
+          "id": "assault-cannon-askars-wolfpack-wolf-guard-terminators",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "assault-cannon-deathwatch-terminator-squad",
           "faction_id": "adeptus-astartes"
         },
@@ -886,6 +1067,11 @@
         },
         {
           "entity_type": "weapon",
+          "id": "mechanicus-pistol-purge-corps-serberys-sulphurhounds",
+          "faction_id": "adeptus-mechanicus"
+        },
+        {
+          "entity_type": "weapon",
           "id": "mechanicus-pistol-purge-corps-skitarii-vanguard",
           "faction_id": "adeptus-mechanicus"
         },
@@ -908,6 +1094,38 @@
           "entity_type": "weapon",
           "id": "mechanicus-pistol-skitarii-vanguard",
           "faction_id": "adeptus-mechanicus"
+        }
+      ]
+    },
+    {
+      "namespace": "bsdata",
+      "id": "2b70-55e9-caf0-c94d",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "stormfrag-auto-launcher",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "stormfrag-auto-launcher-askars-wolfpack-wulfen",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "bsdata",
+      "id": "2c13-8cdd-f66b-bcae",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "combi-weapon",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "combi-weapon-vow-sworn-sword-brethren-squad",
+          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -939,6 +1157,11 @@
         {
           "entity_type": "weapon",
           "id": "assault-cannon",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "assault-cannon-askars-wolfpack-wolf-guard-terminators",
           "faction_id": "adeptus-astartes"
         },
         {
@@ -1023,6 +1246,11 @@
         {
           "entity_type": "weapon",
           "id": "storm-bolter",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "storm-bolter-askars-wolfpack-wolf-guard-terminators",
           "faction_id": "adeptus-astartes"
         },
         {
@@ -1179,6 +1407,11 @@
           "entity_type": "weapon",
           "id": "twin-bolt-rifle-captain-on-bike",
           "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "twin-bolt-rifle-invader-atvs",
+          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -1289,6 +1522,52 @@
     },
     {
       "namespace": "bsdata",
+      "id": "384-dc5f-6b8c-626b",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-askars-wolfpack-blood-claws",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-assault-force-librarian",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-emperors-champion-vedrenn",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vengeful-brethren-hellblaster-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vengeful-brethren-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "bsdata",
       "id": "3854-44a6-5746-d602",
       "targets": [
         {
@@ -1315,6 +1594,22 @@
           "entity_type": "weapon",
           "id": "close-combat-weapon-raptors",
           "faction_id": "chaos-space-marines"
+        }
+      ]
+    },
+    {
+      "namespace": "bsdata",
+      "id": "386c-b933-68ce-5e31",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "plasma-incinerator",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "plasma-incinerator-vengeful-brethren-hellblaster-squad",
+          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -1371,12 +1666,63 @@
         },
         {
           "entity_type": "weapon",
+          "id": "multi-melta-assault-force-land-speeder",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "multi-melta-eradicator-squad-with-melta-rifles",
           "faction_id": "adeptus-astartes"
         },
         {
           "entity_type": "weapon",
           "id": "multi-melta-invader-atvs",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "bsdata",
+      "id": "3977-665d-ed2-21c9",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-askars-wolfpack-blood-claws",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-assault-force-librarian",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-emperors-champion-vedrenn",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vengeful-brethren-hellblaster-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vengeful-brethren-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vow-sworn-crusader-squad",
           "faction_id": "adeptus-astartes"
         }
       ]
@@ -1452,6 +1798,22 @@
     },
     {
       "namespace": "bsdata",
+      "id": "3b0-59b8-806b-654",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "boltstorm-gauntlet",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "boltstorm-gauntlet-master-zacharial",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "bsdata",
       "id": "3b38-fa2c-6bc7-f457",
       "targets": [
         {
@@ -1498,12 +1860,47 @@
         },
         {
           "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-assault-force-captain",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-assault-force-vanguard-veteran-squad-with-jump-packs",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "heavy-bolt-pistol-captain-with-jump-pack",
           "faction_id": "adeptus-astartes"
         },
         {
           "entity_type": "weapon",
           "id": "heavy-bolt-pistol-kaius-konorius",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-sanguinary-spearhead-assault-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vengeful-brethren-bladeguard-veteran-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vow-sworn-bladeguard-veteran-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vow-sworn-sword-brethren-squad",
           "faction_id": "adeptus-astartes"
         }
       ]
@@ -1899,12 +2296,32 @@
         },
         {
           "entity_type": "weapon",
+          "id": "plasma-pistol-askars-wolfpack-blood-claws",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "plasma-pistol-assault-force-vanguard-veteran-squad-with-jump-packs",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "plasma-pistol-chief-librarian-mephiston",
           "faction_id": "adeptus-astartes"
         },
         {
           "entity_type": "weapon",
           "id": "plasma-pistol-death-company-captain-with-jump-pack",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "plasma-pistol-sanguinary-spearhead-assault-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "plasma-pistol-vow-sworn-sword-brethren-squad",
           "faction_id": "adeptus-astartes"
         }
       ]
@@ -2010,7 +2427,22 @@
         },
         {
           "entity_type": "weapon",
+          "id": "bolt-rifle-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "bolt-rifle-brutalis-dreadnought",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-rifle-vengeful-brethren-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-rifle-vow-sworn-crusader-squad",
           "faction_id": "adeptus-astartes"
         }
       ]
@@ -2033,6 +2465,22 @@
           "entity_type": "weapon",
           "id": "grenade-launcher-tempestus-scions",
           "faction_id": "astra-militarum"
+        }
+      ]
+    },
+    {
+      "namespace": "bsdata",
+      "id": "4ef1-dc81-763b-3ac3",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "power-weapon",
+          "faction_id": "adepta-sororitas"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "power-weapon-sanctuary-guardians-battle-sisters-squad",
+          "faction_id": "adepta-sororitas"
         }
       ]
     },
@@ -2128,6 +2576,11 @@
         {
           "entity_type": "weapon",
           "id": "assault-cannon",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "assault-cannon-askars-wolfpack-wolf-guard-terminators",
           "faction_id": "adeptus-astartes"
         },
         {
@@ -2375,6 +2828,22 @@
     },
     {
       "namespace": "bsdata",
+      "id": "5ae0-0712-b3f5-6492",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "stormfury-missile-launcher",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "stormfury-missile-launcher-assault-force-land-speeder",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "bsdata",
       "id": "5b0b-9cc5-4b5-3f9c",
       "targets": [
         {
@@ -2384,7 +2853,47 @@
         },
         {
           "entity_type": "weapon",
+          "id": "master-crafted-power-weapon-askars-wolfpack-wolf-guard-terminators",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "master-crafted-power-weapon-assault-force-captain",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "master-crafted-power-weapon-assault-force-vanguard-veteran-squad-with-jump-packs",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "master-crafted-power-weapon-fyrri-askar",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "master-crafted-power-weapon-marshal",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "master-crafted-power-weapon-vengeful-brethren-bladeguard-veteran-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "master-crafted-power-weapon-vow-sworn-bladeguard-veteran-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "master-crafted-power-weapon-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "master-crafted-power-weapon-vow-sworn-sword-brethren-squad",
           "faction_id": "adeptus-astartes"
         }
       ]
@@ -2625,7 +3134,22 @@
         },
         {
           "entity_type": "weapon",
+          "id": "bolt-rifle-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "bolt-rifle-brutalis-dreadnought",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-rifle-vengeful-brethren-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-rifle-vow-sworn-crusader-squad",
           "faction_id": "adeptus-astartes"
         }
       ]
@@ -2784,7 +3308,22 @@
         },
         {
           "entity_type": "weapon",
+          "id": "bolt-rifle-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "bolt-rifle-brutalis-dreadnought",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-rifle-vengeful-brethren-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-rifle-vow-sworn-crusader-squad",
           "faction_id": "adeptus-astartes"
         }
       ]
@@ -2970,6 +3509,22 @@
     },
     {
       "namespace": "bsdata",
+      "id": "6f4d-ecbf-e3e2-4252",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "relic-chainsword",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "relic-chainsword-master-zacharial",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "bsdata",
       "id": "6feb-277f-7f31-504a",
       "targets": [
         {
@@ -3032,7 +3587,42 @@
         },
         {
           "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-assault-force-captain",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-assault-force-vanguard-veteran-squad-with-jump-packs",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "heavy-bolt-pistol-kaius-konorius",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-sanguinary-spearhead-assault-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vengeful-brethren-bladeguard-veteran-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vow-sworn-bladeguard-veteran-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vow-sworn-sword-brethren-squad",
           "faction_id": "adeptus-astartes"
         }
       ]
@@ -3138,12 +3728,32 @@
         },
         {
           "entity_type": "weapon",
+          "id": "plasma-pistol-askars-wolfpack-blood-claws",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "plasma-pistol-assault-force-vanguard-veteran-squad-with-jump-packs",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "plasma-pistol-chief-librarian-mephiston",
           "faction_id": "adeptus-astartes"
         },
         {
           "entity_type": "weapon",
           "id": "plasma-pistol-death-company-captain-with-jump-pack",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "plasma-pistol-sanguinary-spearhead-assault-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "plasma-pistol-vow-sworn-sword-brethren-squad",
           "faction_id": "adeptus-astartes"
         }
       ]
@@ -3381,6 +3991,11 @@
         },
         {
           "entity_type": "weapon",
+          "id": "storm-bolter-askars-wolfpack-wolf-guard-terminators",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "storm-bolter-astraeus",
           "faction_id": "adeptus-astartes"
         },
@@ -3592,7 +4207,42 @@
         },
         {
           "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-assault-force-captain",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-assault-force-vanguard-veteran-squad-with-jump-packs",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "heavy-bolt-pistol-kaius-konorius",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-sanguinary-spearhead-assault-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vengeful-brethren-bladeguard-veteran-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vow-sworn-bladeguard-veteran-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vow-sworn-sword-brethren-squad",
           "faction_id": "adeptus-astartes"
         }
       ]
@@ -3640,6 +4290,11 @@
         },
         {
           "entity_type": "weapon",
+          "id": "master-crafted-chainsword-captain-raldeo",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "master-crafted-chainsword-death-company-captain",
           "faction_id": "adeptus-astartes"
         }
@@ -3677,7 +4332,42 @@
         },
         {
           "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-assault-force-captain",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-assault-force-vanguard-veteran-squad-with-jump-packs",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "heavy-bolt-pistol-kaius-konorius",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-sanguinary-spearhead-assault-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vengeful-brethren-bladeguard-veteran-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vow-sworn-bladeguard-veteran-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vow-sworn-sword-brethren-squad",
           "faction_id": "adeptus-astartes"
         }
       ]
@@ -3877,7 +4567,42 @@
         },
         {
           "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-assault-force-captain",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-assault-force-vanguard-veteran-squad-with-jump-packs",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "heavy-bolt-pistol-kaius-konorius",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-sanguinary-spearhead-assault-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vengeful-brethren-bladeguard-veteran-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vow-sworn-bladeguard-veteran-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vow-sworn-sword-brethren-squad",
           "faction_id": "adeptus-astartes"
         }
       ]
@@ -3978,6 +4703,22 @@
         {
           "entity_type": "weapon",
           "id": "thunder-hammer-sword-brethren-squad",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "bsdata",
+      "id": "905d-bd38-f44c-9eef",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "force-weapon",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "force-weapon-assault-force-librarian",
           "faction_id": "adeptus-astartes"
         }
       ]
@@ -4194,6 +4935,22 @@
     },
     {
       "namespace": "bsdata",
+      "id": "9b84-fb40-64b2-6738",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "black-sword",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "black-sword-emperors-champion-vedrenn",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "bsdata",
       "id": "9b98-dff-2d9a-33cc",
       "targets": [
         {
@@ -4320,12 +5077,32 @@
         },
         {
           "entity_type": "weapon",
+          "id": "plasma-pistol-askars-wolfpack-blood-claws",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "plasma-pistol-assault-force-vanguard-veteran-squad-with-jump-packs",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "plasma-pistol-chief-librarian-mephiston",
           "faction_id": "adeptus-astartes"
         },
         {
           "entity_type": "weapon",
           "id": "plasma-pistol-death-company-captain-with-jump-pack",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "plasma-pistol-sanguinary-spearhead-assault-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "plasma-pistol-vow-sworn-sword-brethren-squad",
           "faction_id": "adeptus-astartes"
         }
       ]
@@ -4468,7 +5245,42 @@
         },
         {
           "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-assault-force-captain",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-assault-force-vanguard-veteran-squad-with-jump-packs",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "heavy-bolt-pistol-kaius-konorius",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-sanguinary-spearhead-assault-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vengeful-brethren-bladeguard-veteran-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vow-sworn-bladeguard-veteran-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vow-sworn-sword-brethren-squad",
           "faction_id": "adeptus-astartes"
         }
       ]
@@ -4549,6 +5361,22 @@
           "entity_type": "weapon",
           "id": "plasma-pistol-inquisitors-hand-inquisitorial-agents",
           "faction_id": "agents-of-the-imperium"
+        }
+      ]
+    },
+    {
+      "namespace": "bsdata",
+      "id": "a6c2-1352-a3b1-8819",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "sulphur-breath",
+          "faction_id": "adeptus-mechanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "sulphur-breath-purge-corps-serberys-sulphurhounds",
+          "faction_id": "adeptus-mechanicus"
         }
       ]
     },
@@ -4717,6 +5545,52 @@
     },
     {
       "namespace": "bsdata",
+      "id": "ad62-9b44-f968-ec50",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-askars-wolfpack-blood-claws",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-assault-force-librarian",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-emperors-champion-vedrenn",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vengeful-brethren-hellblaster-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vengeful-brethren-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "bsdata",
       "id": "adf0-d7bf-2033-6303",
       "targets": [
         {
@@ -4738,6 +5612,11 @@
         {
           "entity_type": "weapon",
           "id": "storm-bolter",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "storm-bolter-askars-wolfpack-wolf-guard-terminators",
           "faction_id": "adeptus-astartes"
         },
         {
@@ -4861,6 +5740,11 @@
         },
         {
           "entity_type": "weapon",
+          "id": "storm-bolter-askars-wolfpack-wolf-guard-terminators",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "storm-bolter-astraeus",
           "faction_id": "adeptus-astartes"
         },
@@ -4908,6 +5792,11 @@
         {
           "entity_type": "weapon",
           "id": "assault-cannon",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "assault-cannon-askars-wolfpack-wolf-guard-terminators",
           "faction_id": "adeptus-astartes"
         },
         {
@@ -5206,6 +6095,22 @@
     },
     {
       "namespace": "bsdata",
+      "id": "bb24-ed3f-7468-4f61",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "plasma-incinerator",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "plasma-incinerator-vengeful-brethren-hellblaster-squad",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "bsdata",
       "id": "bc73-389d-4684-51f",
       "targets": [
         {
@@ -5376,6 +6281,11 @@
         },
         {
           "entity_type": "weapon",
+          "id": "assault-cannon-askars-wolfpack-wolf-guard-terminators",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "assault-cannon-deathwatch-terminator-squad",
           "faction_id": "adeptus-astartes"
         },
@@ -5414,6 +6324,38 @@
     },
     {
       "namespace": "bsdata",
+      "id": "bef-1df5-dd8b-93fe",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "power-fist",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "power-fist-master-zacharial",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "bsdata",
+      "id": "c0b5-25a6-c928-1143",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "condemnor-boltgun",
+          "faction_id": "adepta-sororitas"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "condemnor-boltgun-sanctuary-canoness-adalya",
+          "faction_id": "adepta-sororitas"
+        }
+      ]
+    },
+    {
+      "namespace": "bsdata",
       "id": "c1a6-3a75-d0fb-ed95",
       "targets": [
         {
@@ -5441,6 +6383,32 @@
           "entity_type": "weapon",
           "id": "autopistol-shanus-daskovian",
           "faction_id": "genestealer-cults"
+        }
+      ]
+    },
+    {
+      "namespace": "bsdata",
+      "id": "c24c-78c1-8221-eae",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "sentinel-blade",
+          "faction_id": "adeptus-custodes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "sentinel-blade-aquilan-talon-sentinel-guard-sodality",
+          "faction_id": "adeptus-custodes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "sentinel-blade-aquilan-wing-sentinel-guard-sodality",
+          "faction_id": "adeptus-custodes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "sentinel-blade-sentinel-guard-sodality",
+          "faction_id": "adeptus-custodes"
         }
       ]
     },
@@ -5572,6 +6540,22 @@
           "entity_type": "weapon",
           "id": "inferno-bolt-pistol-prism-of-zadophon-rubric-marines",
           "faction_id": "thousand-sons"
+        }
+      ]
+    },
+    {
+      "namespace": "bsdata",
+      "id": "c716-bdaf-a92a-4093",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "power-fist",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "power-fist-master-zacharial",
+          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -5734,6 +6718,22 @@
     },
     {
       "namespace": "bsdata",
+      "id": "cdb6-c922-0ad3-1a9e",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "power-weapon",
+          "faction_id": "adepta-sororitas"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "power-weapon-sanctuary-guardians-battle-sisters-squad",
+          "faction_id": "adepta-sororitas"
+        }
+      ]
+    },
+    {
+      "namespace": "bsdata",
       "id": "ce7c-2f31-957b-e430",
       "targets": [
         {
@@ -5848,6 +6848,11 @@
         },
         {
           "entity_type": "weapon",
+          "id": "master-crafted-chainsword-captain-raldeo",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "master-crafted-chainsword-death-company-captain",
           "faction_id": "adeptus-astartes"
         }
@@ -5908,6 +6913,52 @@
           "entity_type": "weapon",
           "id": "power-fist-lord-kaphrael-of-the-callous-blades",
           "faction_id": "emperors-children"
+        }
+      ]
+    },
+    {
+      "namespace": "bsdata",
+      "id": "d330-eb86-bcd1-fdc4",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-askars-wolfpack-blood-claws",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-assault-force-librarian",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-emperors-champion-vedrenn",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vengeful-brethren-hellblaster-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vengeful-brethren-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -6006,6 +7057,11 @@
         },
         {
           "entity_type": "weapon",
+          "id": "inferno-pistol-captain-raldeo",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "inferno-pistol-sanguinary-guard",
           "faction_id": "adeptus-astartes"
         }
@@ -6043,12 +7099,32 @@
         },
         {
           "entity_type": "weapon",
+          "id": "plasma-pistol-askars-wolfpack-blood-claws",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "plasma-pistol-assault-force-vanguard-veteran-squad-with-jump-packs",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "plasma-pistol-chief-librarian-mephiston",
           "faction_id": "adeptus-astartes"
         },
         {
           "entity_type": "weapon",
           "id": "plasma-pistol-death-company-captain-with-jump-pack",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "plasma-pistol-sanguinary-spearhead-assault-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "plasma-pistol-vow-sworn-sword-brethren-squad",
           "faction_id": "adeptus-astartes"
         }
       ]
@@ -6250,6 +7326,22 @@
     },
     {
       "namespace": "bsdata",
+      "id": "e74a-59f4-483d-d1fe",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol",
+          "faction_id": "adepta-sororitas"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-sanctuary-guardians-celestian-sacresants",
+          "faction_id": "adepta-sororitas"
+        }
+      ]
+    },
+    {
+      "namespace": "bsdata",
       "id": "e77d-2117-f780-9f73",
       "targets": [
         {
@@ -6313,6 +7405,11 @@
         {
           "entity_type": "weapon",
           "id": "storm-bolter",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "storm-bolter-askars-wolfpack-wolf-guard-terminators",
           "faction_id": "adeptus-astartes"
         },
         {
@@ -6421,6 +7518,11 @@
         },
         {
           "entity_type": "weapon",
+          "id": "storm-bolter-askars-wolfpack-wolf-guard-terminators",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "storm-bolter-astraeus",
           "faction_id": "adeptus-astartes"
         },
@@ -6467,6 +7569,22 @@
         {
           "entity_type": "weapon",
           "id": "storm-bolter-wulfen-dreadnought",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "bsdata",
+      "id": "eb70-5918-e9a-5a3f",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "power-fist",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "power-fist-master-zacharial",
           "faction_id": "adeptus-astartes"
         }
       ]
@@ -6928,6 +8046,22 @@
     },
     {
       "namespace": "bsdata",
+      "id": "f8d8-7e77-4b71-faac",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "power-fist",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "power-fist-master-zacharial",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "bsdata",
       "id": "f906-23b-58ce-a3df",
       "targets": [
         {
@@ -7040,6 +8174,68 @@
           "entity_type": "weapon",
           "id": "nemesis-force-weapon-paladin-squad",
           "faction_id": "grey-knights"
+        }
+      ]
+    },
+    {
+      "namespace": "bsdata",
+      "id": "fec0-bee1-3d8a-53c6",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-askars-wolfpack-blood-claws",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-assault-force-librarian",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-emperors-champion-vedrenn",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vengeful-brethren-hellblaster-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vengeful-brethren-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "bsdata",
+      "id": "ffb8-5ade-9772-59a7",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "power-fist",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "power-fist-master-zacharial",
+          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -7712,11 +8908,37 @@
     },
     {
       "namespace": "mfm",
+      "id": "009604c5-af47-43cd-80c7-a62bb4658dd9",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "twin-bolt-rifle-invader-atvs",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "twin-bolt-rifle-outrider-squad",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "00b2d39e-4732-426a-a037-b05743d74e33",
       "targets": [
         {
           "entity_type": "weapon",
           "id": "plasma-pistol",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "plasma-pistol-askars-wolfpack-blood-claws",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "plasma-pistol-assault-force-vanguard-veteran-squad-with-jump-packs",
           "faction_id": "adeptus-astartes"
         },
         {
@@ -7727,6 +8949,16 @@
         {
           "entity_type": "weapon",
           "id": "plasma-pistol-death-company-captain-with-jump-pack",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "plasma-pistol-sanguinary-spearhead-assault-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "plasma-pistol-vow-sworn-sword-brethren-squad",
           "faction_id": "adeptus-astartes"
         }
       ]
@@ -7749,6 +8981,53 @@
           "entity_type": "weapon",
           "id": "twin-assault-cannon",
           "faction_id": "grey-knights"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "01c9c15b-0e9d-483f-9ad2-c262902e1354",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "stormfury-missile-launcher",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "stormfury-missile-launcher-assault-force-land-speeder",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "02cd8e54-8d43-49e9-80b7-7fb182199ee7",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "knives-and-fists",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "knives-and-fists-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "knives-and-fists-vengeful-brethren-hellblaster-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "knives-and-fists-vengeful-brethren-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "knives-and-fists-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -8005,6 +9284,68 @@
     },
     {
       "namespace": "mfm",
+      "id": "06665d17-2339-4c72-a9c2-ba1e97066660",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-askars-wolfpack-blood-claws",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-assault-force-librarian",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-emperors-champion-vedrenn",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vengeful-brethren-hellblaster-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vengeful-brethren-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "068a3202-65f1-447c-bad0-62ef1a5e27dd",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "power-fist",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "power-fist-master-zacharial",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "069ed322-b137-479f-b40c-638d849161ab",
       "targets": [
         {
@@ -8016,6 +9357,22 @@
           "entity_type": "weapon",
           "id": "flamer-mouths-flamers",
           "faction_id": "chaos-daemons"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "06efdfae-29a1-4432-89c7-48b671a33bdc",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "spiked-ram",
+          "faction_id": "orks"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "spiked-ram-warbuggies",
+          "faction_id": "orks"
         }
       ]
     },
@@ -8634,6 +9991,21 @@
         },
         {
           "entity_type": "weapon",
+          "id": "bolt-pistol-askars-wolfpack-blood-claws",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-assault-force-librarian",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "bolt-pistol-callous-blades-infractors",
           "faction_id": "emperors-children"
         },
@@ -8656,6 +10028,11 @@
           "entity_type": "weapon",
           "id": "bolt-pistol-draydens-lance-command-squad",
           "faction_id": "astra-militarum"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-emperors-champion-vedrenn",
+          "faction_id": "adeptus-astartes"
         },
         {
           "entity_type": "weapon",
@@ -8709,6 +10086,11 @@
         },
         {
           "entity_type": "weapon",
+          "id": "bolt-pistol-sanctuary-guardians-celestian-sacresants",
+          "faction_id": "adepta-sororitas"
+        },
+        {
+          "entity_type": "weapon",
           "id": "bolt-pistol-sorcerer",
           "faction_id": "chaos-space-marines"
         },
@@ -8716,6 +10098,21 @@
           "entity_type": "weapon",
           "id": "bolt-pistol-sorcerer",
           "faction_id": "emperors-children"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vengeful-brethren-hellblaster-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vengeful-brethren-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
         },
         {
           "entity_type": "weapon",
@@ -8795,6 +10192,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "0e501fb1-dad4-48ae-953b-79edeefa04b6",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "plasma-incinerator",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "plasma-incinerator-vengeful-brethren-hellblaster-squad",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "0e795010-4e6e-40fe-8809-50bffa9ed7ac",
       "targets": [
         {
@@ -8816,6 +10229,52 @@
           "entity_type": "weapon",
           "id": "kustom-shoota-wartrakks",
           "faction_id": "orks"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "0f3544de-dde8-4d4b-b2bd-ce302dc77165",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-askars-wolfpack-blood-claws",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-assault-force-librarian",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-emperors-champion-vedrenn",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vengeful-brethren-hellblaster-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vengeful-brethren-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -8888,7 +10347,22 @@
         },
         {
           "entity_type": "weapon",
+          "id": "bolt-rifle-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "bolt-rifle-brutalis-dreadnought",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-rifle-vengeful-brethren-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-rifle-vow-sworn-crusader-squad",
           "faction_id": "adeptus-astartes"
         }
       ]
@@ -8906,6 +10380,22 @@
           "entity_type": "weapon",
           "id": "guardian-spear-shield-captain-in-allarus-terminator-armour",
           "faction_id": "adeptus-custodes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "110169b1-0932-42c8-92ff-0065da40f6eb",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "pyreblaster",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "pyreblaster-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -9181,6 +10671,11 @@
         },
         {
           "entity_type": "weapon",
+          "id": "storm-bolter-askars-wolfpack-wolf-guard-terminators",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "storm-bolter-astraeus",
           "faction_id": "adeptus-astartes"
         },
@@ -9334,6 +10829,11 @@
           "entity_type": "weapon",
           "id": "power-fist-lord-kaphrael-of-the-callous-blades",
           "faction_id": "emperors-children"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "power-fist-master-zacharial",
+          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -9474,6 +10974,53 @@
     },
     {
       "namespace": "mfm",
+      "id": "17737cb6-4b73-465d-924b-2b731b63e124",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "excruciator-cannon",
+          "faction_id": "chaos-space-marines"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "excruciator-cannon",
+          "faction_id": "emperors-children"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "1795e27d-6ae6-43db-9159-f02bc7be750b",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "knives-and-fists",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "knives-and-fists-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "knives-and-fists-vengeful-brethren-hellblaster-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "knives-and-fists-vengeful-brethren-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "knives-and-fists-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "1837f519-61d6-4bb0-bdfc-22b36e2339d4",
       "targets": [
         {
@@ -9519,7 +11066,42 @@
         },
         {
           "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-assault-force-captain",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-assault-force-vanguard-veteran-squad-with-jump-packs",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "heavy-bolt-pistol-kaius-konorius",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-sanguinary-spearhead-assault-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vengeful-brethren-bladeguard-veteran-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vow-sworn-bladeguard-veteran-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vow-sworn-sword-brethren-squad",
           "faction_id": "adeptus-astartes"
         }
       ]
@@ -9652,6 +11234,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "1b0bc096-0a9a-431f-8c74-36a3aec37f1b",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "magma-cutters-defiler",
+          "faction_id": "chaos-space-marines"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "magma-cutters-defiler",
+          "faction_id": "emperors-children"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "1b6d2907-3eb6-4895-abdc-80ff5639e859",
       "targets": [
         {
@@ -9684,6 +11282,11 @@
           "entity_type": "weapon",
           "id": "magma-cutters-defiler",
           "faction_id": "chaos-space-marines"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "magma-cutters-defiler",
+          "faction_id": "emperors-children"
         }
       ]
     },
@@ -9789,6 +11392,22 @@
           "entity_type": "weapon",
           "id": "boltgun-red-corsairs-raiders",
           "faction_id": "chaos-space-marines"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "1f277735-a3c3-4a02-b41e-e8deb2485827",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "grenade-launcher",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "grenade-launcher-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -9934,6 +11553,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "208df04b-3f8a-4f76-a432-568eafa9062b",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "power-fist",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "power-fist-master-zacharial",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "20a1dfd6-8a4e-4f5a-9156-f95c600128c3",
       "targets": [
         {
@@ -9960,6 +11595,27 @@
         {
           "entity_type": "weapon",
           "id": "monomolecular-combat-blades-lieutenant-in-phobos-armour",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "20c32cac-b6be-4419-a477-958c9d3aa506",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "armoured-impact",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "armoured-impact-assault-force-land-speeder",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "armoured-impact-invader-atvs",
           "faction_id": "adeptus-astartes"
         }
       ]
@@ -9997,6 +11653,22 @@
           "entity_type": "weapon",
           "id": "plasma-gun-tempestus-scions",
           "faction_id": "astra-militarum"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "20fad1dd-aa30-424d-b8f1-4c48e921f2af",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "hades-battle-cannon",
+          "faction_id": "emperors-children"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "hades-battle-cannon",
+          "faction_id": "thousand-sons"
         }
       ]
     },
@@ -10280,6 +11952,11 @@
         },
         {
           "entity_type": "weapon",
+          "id": "mechanicus-pistol-purge-corps-serberys-sulphurhounds",
+          "faction_id": "adeptus-mechanicus"
+        },
+        {
+          "entity_type": "weapon",
           "id": "mechanicus-pistol-purge-corps-skitarii-vanguard",
           "faction_id": "adeptus-mechanicus"
         }
@@ -10425,7 +12102,104 @@
         },
         {
           "entity_type": "weapon",
+          "id": "grenade-launcher-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "grenade-launcher-death-company-marines",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "28c813e6-d045-4fe4-803a-80fc8f60dff8",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-assault-force-captain",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-assault-force-vanguard-veteran-squad-with-jump-packs",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-sanguinary-spearhead-assault-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vengeful-brethren-bladeguard-veteran-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vow-sworn-bladeguard-veteran-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vow-sworn-sword-brethren-squad",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "292ad93b-a2f3-4506-b410-e9794989dd23",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-askars-wolfpack-blood-claws",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-assault-force-librarian",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-emperors-champion-vedrenn",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vengeful-brethren-hellblaster-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vengeful-brethren-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vow-sworn-crusader-squad",
           "faction_id": "adeptus-astartes"
         }
       ]
@@ -10540,6 +12314,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "2a0c9b69-1a46-4a14-8ff1-43b9de106914",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol",
+          "faction_id": "adepta-sororitas"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-sanctuary-guardians-celestian-sacresants",
+          "faction_id": "adepta-sororitas"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "2aa5eb61-30da-4c8f-9191-ec40f0e78da0",
       "targets": [
         {
@@ -10618,6 +12408,59 @@
           "entity_type": "weapon",
           "id": "inferno-bolt-pistol-infernal-master",
           "faction_id": "thousand-sons"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "2b66ff0c-759d-457f-86c4-8bde0f6cad32",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "relic-chainsword",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "relic-chainsword-master-zacharial",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "2be22fe3-b7f7-49d8-8879-ed4a268dcc70",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "armoured-impact",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "armoured-impact-assault-force-land-speeder",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "armoured-impact-invader-atvs",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "2c04ea76-f294-4894-a378-44c844a2f371",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "black-sword",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "black-sword-emperors-champion-vedrenn",
+          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -11007,6 +12850,11 @@
           "entity_type": "weapon",
           "id": "twin-bolt-rifle-captain-on-bike",
           "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "twin-bolt-rifle-invader-atvs",
+          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -11059,6 +12907,37 @@
     },
     {
       "namespace": "mfm",
+      "id": "3066b049-18d0-436d-8478-6808c6c2e5be",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "plasma-pistol",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "plasma-pistol-askars-wolfpack-blood-claws",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "plasma-pistol-assault-force-vanguard-veteran-squad-with-jump-packs",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "plasma-pistol-sanguinary-spearhead-assault-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "plasma-pistol-vow-sworn-sword-brethren-squad",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "30775894-4f69-44a9-927d-d225696790e1",
       "targets": [
         {
@@ -11086,6 +12965,22 @@
           "entity_type": "weapon",
           "id": "armoured-hull-sudden-dawn-cadre-devilfish",
           "faction_id": "tau-empire"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "313d65e2-4f85-4c71-8a23-ba2ddb03fb85",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "plasma-incinerator",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "plasma-incinerator-vengeful-brethren-hellblaster-squad",
+          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -11570,6 +13465,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "36e0da98-7fbb-4c15-af27-b51383871e87",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "combi-weapon",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "combi-weapon-vow-sworn-sword-brethren-squad",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "36ee62a8-3b0e-486c-a941-10c7682f0d0f",
       "targets": [
         {
@@ -11621,6 +13532,68 @@
           "entity_type": "weapon",
           "id": "bolt-pistol-krieg-command-squad",
           "faction_id": "astra-militarum"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "36fdf11b-a32c-4339-8bee-918aa28d476e",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "chainsword",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "chainsword-askars-wolfpack-blood-claws",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "chainsword-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "chainsword-sanguinary-spearhead-assault-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "chainsword-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "chainsword-vow-sworn-sword-brethren-squad",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "37266675-c970-4e30-b207-1caab3f27358",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "sentinel-blade",
+          "faction_id": "adeptus-custodes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "sentinel-blade-aquilan-talon-sentinel-guard-sodality",
+          "faction_id": "adeptus-custodes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "sentinel-blade-aquilan-wing-sentinel-guard-sodality",
+          "faction_id": "adeptus-custodes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "sentinel-blade-sentinel-guard-sodality",
+          "faction_id": "adeptus-custodes"
         }
       ]
     },
@@ -11679,6 +13652,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "38e98edd-827d-4c41-ba75-b773d0f5c24e",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "pyreblaster",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "pyreblaster-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "39fb91ab-fd96-4fe9-b445-a47f0e67845d",
       "targets": [
         {
@@ -11724,6 +13713,22 @@
         {
           "entity_type": "weapon",
           "id": "heavy-bolt-pistol-suboden-khan",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "3a37fdbe-039a-455c-907b-960b32c48df5",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "relic-greataxe",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "relic-greataxe-askars-wolfpack-wolf-guard-terminators",
           "faction_id": "adeptus-astartes"
         }
       ]
@@ -11939,7 +13944,47 @@
         },
         {
           "entity_type": "weapon",
+          "id": "master-crafted-power-weapon-askars-wolfpack-wolf-guard-terminators",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "master-crafted-power-weapon-assault-force-captain",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "master-crafted-power-weapon-assault-force-vanguard-veteran-squad-with-jump-packs",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "master-crafted-power-weapon-fyrri-askar",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "master-crafted-power-weapon-marshal",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "master-crafted-power-weapon-vengeful-brethren-bladeguard-veteran-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "master-crafted-power-weapon-vow-sworn-bladeguard-veteran-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "master-crafted-power-weapon-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "master-crafted-power-weapon-vow-sworn-sword-brethren-squad",
           "faction_id": "adeptus-astartes"
         }
       ]
@@ -12167,6 +14212,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "3ff433ad-a4a8-453f-8dfd-16fda24f4bff",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "power-fist",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "power-fist-master-zacharial",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "404aa3f4-304b-4561-ab94-848a84d75d05",
       "targets": [
         {
@@ -12363,6 +14424,52 @@
     },
     {
       "namespace": "mfm",
+      "id": "42513ed0-0086-4450-9c45-5909fbccccb3",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-askars-wolfpack-blood-claws",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-assault-force-librarian",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-emperors-champion-vedrenn",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vengeful-brethren-hellblaster-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vengeful-brethren-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "4302c8a3-32e7-4312-991a-74e5c3caf194",
       "targets": [
         {
@@ -12373,6 +14480,52 @@
         {
           "entity_type": "weapon",
           "id": "power-weapon-decimus-kill-team",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "4342a7c2-8432-42be-896a-54ae2bdd3436",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-askars-wolfpack-blood-claws",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-assault-force-librarian",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-emperors-champion-vedrenn",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vengeful-brethren-hellblaster-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vengeful-brethren-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vow-sworn-crusader-squad",
           "faction_id": "adeptus-astartes"
         }
       ]
@@ -12455,6 +14608,52 @@
           "entity_type": "weapon",
           "id": "storm-bolter-venerable-dreadnought",
           "faction_id": "grey-knights"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "44c05557-501f-44f2-977c-d980654da9de",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-assault-force-captain",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-assault-force-vanguard-veteran-squad-with-jump-packs",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-sanguinary-spearhead-assault-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vengeful-brethren-bladeguard-veteran-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vow-sworn-bladeguard-veteran-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vow-sworn-sword-brethren-squad",
+          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -12571,6 +14770,52 @@
     },
     {
       "namespace": "mfm",
+      "id": "477ab733-466f-4be9-94a5-a6ec6b289f9c",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-assault-force-captain",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-assault-force-vanguard-veteran-squad-with-jump-packs",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-sanguinary-spearhead-assault-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vengeful-brethren-bladeguard-veteran-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vow-sworn-bladeguard-veteran-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vow-sworn-sword-brethren-squad",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "47a82dd5-7ac6-4b82-a6a5-0bfc7918d889",
       "targets": [
         {
@@ -12592,6 +14837,98 @@
     },
     {
       "namespace": "mfm",
+      "id": "47ba1cce-3240-416b-b5da-bbfdc59005d0",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-assault-force-captain",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-assault-force-vanguard-veteran-squad-with-jump-packs",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-sanguinary-spearhead-assault-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vengeful-brethren-bladeguard-veteran-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vow-sworn-bladeguard-veteran-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vow-sworn-sword-brethren-squad",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "47d9c9f0-5a4c-4719-87a4-2f25e080473b",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-askars-wolfpack-blood-claws",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-assault-force-librarian",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-emperors-champion-vedrenn",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vengeful-brethren-hellblaster-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vengeful-brethren-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "4817ea2f-6712-4063-a53d-e69c8c3d611b",
       "targets": [
         {
@@ -12603,6 +14940,22 @@
           "entity_type": "weapon",
           "id": "reaper-chainfist",
           "faction_id": "imperial-knights"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "485de977-421c-4481-84d2-5c62924109ad",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "pyreblaster",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "pyreblaster-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -12687,6 +15040,83 @@
     },
     {
       "namespace": "mfm",
+      "id": "4ad9158a-8659-40ee-b443-e16e1d7d5360",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-askars-wolfpack-blood-claws",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-assault-force-librarian",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-emperors-champion-vedrenn",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vengeful-brethren-hellblaster-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vengeful-brethren-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "4aefd56f-533e-4b1c-9eab-1c32828fae7e",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "plasma-pistol",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "plasma-pistol-askars-wolfpack-blood-claws",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "plasma-pistol-assault-force-vanguard-veteran-squad-with-jump-packs",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "plasma-pistol-sanguinary-spearhead-assault-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "plasma-pistol-vow-sworn-sword-brethren-squad",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "4afbaee4-46c1-426f-ae46-1380d246ae8c",
       "targets": [
         {
@@ -12724,6 +15154,22 @@
           "entity_type": "weapon",
           "id": "castellan-axe-gilded-blades-custodian-wardens",
           "faction_id": "adeptus-custodes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "4b51b372-f6ee-4cea-b494-364d50b1f095",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "power-fist",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "power-fist-master-zacharial",
+          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -12795,6 +15241,11 @@
         },
         {
           "entity_type": "weapon",
+          "id": "master-crafted-chainsword-captain-raldeo",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "master-crafted-chainsword-death-company-captain",
           "faction_id": "adeptus-astartes"
         }
@@ -12850,6 +15301,59 @@
           "entity_type": "weapon",
           "id": "scavenged-shivs-mek-gunz",
           "faction_id": "orks"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "4d94d36a-b047-4e11-a78f-74061b3e63ef",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "phosphor-blast-carbine",
+          "faction_id": "adeptus-mechanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "phosphor-blast-carbine-purge-corps-serberys-sulphurhounds",
+          "faction_id": "adeptus-mechanicus"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "4ea87dad-5075-4698-bae6-df062a932a0d",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "armoured-impact",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "armoured-impact-assault-force-land-speeder",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "armoured-impact-invader-atvs",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "4f83171d-0ab2-43a9-8c24-f8a05bc82224",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "power-fist",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "power-fist-master-zacharial",
+          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -12932,6 +15436,37 @@
           "entity_type": "weapon",
           "id": "armoured-tracks-chaos-rhino",
           "faction_id": "world-eaters"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "515cceb5-7bca-45db-b384-c5b27ddb805f",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "knives-and-fists",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "knives-and-fists-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "knives-and-fists-vengeful-brethren-hellblaster-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "knives-and-fists-vengeful-brethren-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "knives-and-fists-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -13021,6 +15556,42 @@
     },
     {
       "namespace": "mfm",
+      "id": "52e10068-476d-42d2-8934-95c22bbdafc9",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "chainsword",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "chainsword-askars-wolfpack-blood-claws",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "chainsword-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "chainsword-sanguinary-spearhead-assault-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "chainsword-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "chainsword-vow-sworn-sword-brethren-squad",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "534673d1-2546-4273-86cc-2574f12a7254",
       "targets": [
         {
@@ -13083,6 +15654,37 @@
     },
     {
       "namespace": "mfm",
+      "id": "539a6e04-205f-4843-9de3-eefa5bc2e1fb",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "knives-and-fists",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "knives-and-fists-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "knives-and-fists-vengeful-brethren-hellblaster-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "knives-and-fists-vengeful-brethren-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "knives-and-fists-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "543a5de1-cf53-4119-a488-bd73ee2d68fd",
       "targets": [
         {
@@ -13104,6 +15706,16 @@
         {
           "entity_type": "weapon",
           "id": "chainsword",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "chainsword-askars-wolfpack-blood-claws",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "chainsword-assault-force-intercessor-squad",
           "faction_id": "adeptus-astartes"
         },
         {
@@ -13133,6 +15745,11 @@
         },
         {
           "entity_type": "weapon",
+          "id": "chainsword-sanguinary-spearhead-assault-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "chainsword-scout-squad",
           "faction_id": "adeptus-astartes"
         },
@@ -13144,6 +15761,16 @@
         {
           "entity_type": "weapon",
           "id": "chainsword-sword-brethren-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "chainsword-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "chainsword-vow-sworn-sword-brethren-squad",
           "faction_id": "adeptus-astartes"
         }
       ]
@@ -13346,6 +15973,37 @@
           "entity_type": "weapon",
           "id": "psycannon-strike-squad",
           "faction_id": "grey-knights"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "56c65acf-df57-43bb-a34a-25356a0952f7",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "plasma-pistol",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "plasma-pistol-askars-wolfpack-blood-claws",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "plasma-pistol-assault-force-vanguard-veteran-squad-with-jump-packs",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "plasma-pistol-sanguinary-spearhead-assault-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "plasma-pistol-vow-sworn-sword-brethren-squad",
+          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -13641,6 +16299,11 @@
         {
           "entity_type": "weapon",
           "id": "master-crafted-chainsword",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "master-crafted-chainsword-captain-raldeo",
           "faction_id": "adeptus-astartes"
         },
         {
@@ -14039,6 +16702,11 @@
           "entity_type": "weapon",
           "id": "plasma-incinerator",
           "faction_id": "agents-of-the-imperium"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "plasma-incinerator-vengeful-brethren-hellblaster-squad",
+          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -14070,6 +16738,54 @@
     },
     {
       "namespace": "mfm",
+      "id": "69ff7700-1deb-4910-b32d-8ffaa9e82e13",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "heavy-reaper-autocannon",
+          "faction_id": "chaos-space-marines"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-reaper-autocannon",
+          "faction_id": "emperors-children"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "6a5203dc-acc6-4fe2-a758-2cf13c82ae52",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "plasma-pistol-assault-force-vanguard-veteran-squad-with-jump-packs",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "plasma-pistol-maggot-lords",
+          "faction_id": "death-guard"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "6a6e76e6-6d85-43c1-8b71-f9ce96754a05",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "master-crafted-power-weapon-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "master-crafted-power-weapon-vow-sworn-sword-brethren-squad",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "6aadf3ad-1566-445f-8cbc-f7d3117f10ac",
       "targets": [
         {
@@ -14091,6 +16807,32 @@
           "entity_type": "weapon",
           "id": "kustom-choppa-wartrakks",
           "faction_id": "orks"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "6bad4683-676a-4109-9a55-bc1ddda551f7",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "plasma-pistol-askars-wolfpack-blood-claws",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "plasma-pistol-assault-force-vanguard-veteran-squad-with-jump-packs",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "plasma-pistol-sanguinary-spearhead-assault-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "plasma-pistol-vow-sworn-sword-brethren-squad",
+          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -14142,6 +16884,11 @@
         },
         {
           "entity_type": "weapon",
+          "id": "assault-cannon-askars-wolfpack-wolf-guard-terminators",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "assault-cannon-deathwatch-terminator-squad",
           "faction_id": "adeptus-astartes"
         },
@@ -14179,6 +16926,42 @@
         {
           "entity_type": "weapon",
           "id": "twin-heavy-bolter-thunderhawk-gunship",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "6d579185-b4ab-40b9-8419-80c77498a2d9",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "chainsword",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "chainsword-askars-wolfpack-blood-claws",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "chainsword-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "chainsword-sanguinary-spearhead-assault-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "chainsword-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "chainsword-vow-sworn-sword-brethren-squad",
           "faction_id": "adeptus-astartes"
         }
       ]
@@ -14228,6 +17011,22 @@
           "entity_type": "weapon",
           "id": "multi-laser",
           "faction_id": "astra-militarum"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "6e282c0c-5cac-4b28-9727-49cae414560e",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "black-sword",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "black-sword-emperors-champion-vedrenn",
+          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -14421,6 +17220,11 @@
           "entity_type": "weapon",
           "id": "hades-lascannon",
           "faction_id": "chaos-space-marines"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "hades-lascannon",
+          "faction_id": "emperors-children"
         },
         {
           "entity_type": "weapon",
@@ -14656,6 +17460,16 @@
         },
         {
           "entity_type": "weapon",
+          "id": "plasma-pistol-askars-wolfpack-blood-claws",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "plasma-pistol-assault-force-vanguard-veteran-squad-with-jump-packs",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "plasma-pistol-canoness",
           "faction_id": "adepta-sororitas"
         },
@@ -14691,8 +17505,18 @@
         },
         {
           "entity_type": "weapon",
+          "id": "plasma-pistol-sanguinary-spearhead-assault-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "plasma-pistol-septimol-fulg-maggot-lords-tallyman",
           "faction_id": "death-guard"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "plasma-pistol-vow-sworn-sword-brethren-squad",
+          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -14714,6 +17538,11 @@
           "entity_type": "weapon",
           "id": "inferno-pistol",
           "faction_id": "agents-of-the-imperium"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "inferno-pistol-captain-raldeo",
+          "faction_id": "adeptus-astartes"
         },
         {
           "entity_type": "weapon",
@@ -14785,6 +17614,16 @@
         },
         {
           "entity_type": "weapon",
+          "id": "chainsword-askars-wolfpack-blood-claws",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "chainsword-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "chainsword-captain-with-jump-pack",
           "faction_id": "adeptus-astartes"
         },
@@ -14810,6 +17649,11 @@
         },
         {
           "entity_type": "weapon",
+          "id": "chainsword-sanguinary-spearhead-assault-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "chainsword-scout-squad",
           "faction_id": "adeptus-astartes"
         },
@@ -14821,6 +17665,16 @@
         {
           "entity_type": "weapon",
           "id": "chainsword-sword-brethren-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "chainsword-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "chainsword-vow-sworn-sword-brethren-squad",
           "faction_id": "adeptus-astartes"
         }
       ]
@@ -14849,6 +17703,11 @@
           "entity_type": "weapon",
           "id": "heavy-missile-launcher",
           "faction_id": "chaos-space-marines"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-missile-launcher",
+          "faction_id": "emperors-children"
         },
         {
           "entity_type": "weapon",
@@ -14968,6 +17827,22 @@
           "entity_type": "weapon",
           "id": "deaths-heads",
           "faction_id": "death-guard"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "7e2b9d51-0b8c-4136-aa3c-201e2b780bcb",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "relic-greataxe",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "relic-greataxe-askars-wolfpack-wolf-guard-terminators",
+          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -15150,7 +18025,93 @@
         },
         {
           "entity_type": "weapon",
+          "id": "master-crafted-power-weapon-askars-wolfpack-wolf-guard-terminators",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "master-crafted-power-weapon-assault-force-captain",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "master-crafted-power-weapon-assault-force-vanguard-veteran-squad-with-jump-packs",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "master-crafted-power-weapon-fyrri-askar",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "master-crafted-power-weapon-marshal",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "master-crafted-power-weapon-vengeful-brethren-bladeguard-veteran-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "master-crafted-power-weapon-vow-sworn-bladeguard-veteran-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "master-crafted-power-weapon-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "master-crafted-power-weapon-vow-sworn-sword-brethren-squad",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "80652b31-602b-4c96-bacd-4b4406dccc93",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-askars-wolfpack-blood-claws",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-assault-force-librarian",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-emperors-champion-vedrenn",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vengeful-brethren-hellblaster-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vengeful-brethren-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vow-sworn-crusader-squad",
           "faction_id": "adeptus-astartes"
         }
       ]
@@ -15293,6 +18254,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "84151eb1-d578-4f1b-be00-4e94fc6e15ed",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "combi-weapon",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "combi-weapon-vow-sworn-sword-brethren-squad",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "84882d36-1512-4d91-b04c-1160f6b32772",
       "targets": [
         {
@@ -15304,6 +18281,52 @@
           "entity_type": "weapon",
           "id": "blast-pistol-ynnari-kabalite-warriors",
           "faction_id": "aeldari"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "85ddded2-dd5e-45b8-8c41-ce88b34de5f3",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-askars-wolfpack-blood-claws",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-assault-force-librarian",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-emperors-champion-vedrenn",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vengeful-brethren-hellblaster-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vengeful-brethren-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -15341,6 +18364,98 @@
     },
     {
       "namespace": "mfm",
+      "id": "8714c03b-a7b7-4ea1-9784-6d0505cad68d",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-askars-wolfpack-blood-claws",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-assault-force-librarian",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-emperors-champion-vedrenn",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vengeful-brethren-hellblaster-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vengeful-brethren-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "87364801-1d1b-485f-9880-de44aa052e2d",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-assault-force-captain",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-assault-force-vanguard-veteran-squad-with-jump-packs",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-sanguinary-spearhead-assault-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vengeful-brethren-bladeguard-veteran-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vow-sworn-bladeguard-veteran-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vow-sworn-sword-brethren-squad",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "88700154-eec4-47a7-8b4a-990422ac618b",
       "targets": [
         {
@@ -15352,6 +18467,38 @@
           "entity_type": "weapon",
           "id": "havoc-launcher-maggot-lords-chaos-rhino",
           "faction_id": "death-guard"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "89cccca8-2639-4549-a084-f358b05c05f5",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "power-fist",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "power-fist-master-zacharial",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "89d41b57-01a2-4ee3-84b3-3b846b6d7867",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "sulphur-breath",
+          "faction_id": "adeptus-mechanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "sulphur-breath-purge-corps-serberys-sulphurhounds",
+          "faction_id": "adeptus-mechanicus"
         }
       ]
     },
@@ -15548,6 +18695,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "8e008828-b4fc-4595-80c6-7b02189c6d20",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "relic-chainsword",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "relic-chainsword-master-zacharial",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "8e3b693e-d6cf-457f-a023-23d9cffe2d94",
       "targets": [
         {
@@ -15627,6 +18790,37 @@
     },
     {
       "namespace": "mfm",
+      "id": "8fc56520-bedb-47be-9e4d-cc62677c718e",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "knives-and-fists",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "knives-and-fists-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "knives-and-fists-vengeful-brethren-hellblaster-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "knives-and-fists-vengeful-brethren-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "knives-and-fists-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "8fc91102-6b84-44af-b973-bb68dc4d1083",
       "targets": [
         {
@@ -15638,6 +18832,58 @@
           "entity_type": "weapon",
           "id": "hot-shot-laspistol-draydens-lance-kasrkin",
           "faction_id": "astra-militarum"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "907f5e53-3aea-4588-b1c6-1abeff95a84d",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "chainsword",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "chainsword-askars-wolfpack-blood-claws",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "chainsword-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "chainsword-sanguinary-spearhead-assault-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "chainsword-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "chainsword-vow-sworn-sword-brethren-squad",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "9081a8d3-52e0-425e-8065-4f8c27a17940",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "boltstorm-gauntlet",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "boltstorm-gauntlet-master-zacharial",
+          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -15759,6 +19005,43 @@
     },
     {
       "namespace": "mfm",
+      "id": "92d381cc-379a-4848-9a02-5f8c83f3a207",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "relic-chainsword",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "relic-chainsword-master-zacharial",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "931c5cbf-29f1-466d-beeb-08581ca2f0d4",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "sentinel-blade-aquilan-talon-sentinel-guard-sodality",
+          "faction_id": "adeptus-custodes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "sentinel-blade-aquilan-wing-sentinel-guard-sodality",
+          "faction_id": "adeptus-custodes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "sentinel-blade-sentinel-guard-sodality",
+          "faction_id": "adeptus-custodes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "93ec44f2-aec3-4fe2-aa34-dd54a6b34fbf",
       "targets": [
         {
@@ -15769,6 +19052,11 @@
         {
           "entity_type": "weapon",
           "id": "twin-bolt-rifle-captain-on-bike",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "twin-bolt-rifle-invader-atvs",
           "faction_id": "adeptus-astartes"
         }
       ]
@@ -15797,6 +19085,11 @@
           "entity_type": "weapon",
           "id": "ectoplasma-destructor",
           "faction_id": "chaos-space-marines"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "ectoplasma-destructor",
+          "faction_id": "emperors-children"
         },
         {
           "entity_type": "weapon",
@@ -15834,6 +19127,32 @@
           "entity_type": "weapon",
           "id": "special-issue-bolt-pistol-lieutenant-in-phobos-armour",
           "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "965baf19-1d7f-476e-b50e-0f6ab9cbd90a",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "sentinel-blade",
+          "faction_id": "adeptus-custodes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "sentinel-blade-aquilan-talon-sentinel-guard-sodality",
+          "faction_id": "adeptus-custodes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "sentinel-blade-aquilan-wing-sentinel-guard-sodality",
+          "faction_id": "adeptus-custodes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "sentinel-blade-sentinel-guard-sodality",
+          "faction_id": "adeptus-custodes"
         }
       ]
     },
@@ -15898,6 +19217,11 @@
           "entity_type": "weapon",
           "id": "electroscourge",
           "faction_id": "death-guard"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "electroscourge",
+          "faction_id": "emperors-children"
         },
         {
           "entity_type": "weapon",
@@ -16021,6 +19345,22 @@
           "entity_type": "weapon",
           "id": "lasher-tendrils",
           "faction_id": "world-eaters"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "988cf3a0-5765-4fa8-a17d-bb54850d1296",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "chainsword-askars-wolfpack-blood-claws",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "chainsword-sanguinary-spearhead-assault-intercessor-squad",
+          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -16167,6 +19507,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "9bfb3f87-0341-4405-a6b6-7848b40357d6",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "boltstorm-gauntlet",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "boltstorm-gauntlet-master-zacharial",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "9c7c835e-2ad9-4c5f-a6fb-52f832398352",
       "targets": [
         {
@@ -16178,6 +19534,11 @@
           "entity_type": "weapon",
           "id": "combi-weapon-chaos-lord-in-terminator-armour",
           "faction_id": "chaos-space-marines"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "combi-weapon-vow-sworn-sword-brethren-squad",
+          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -16420,6 +19781,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "a4ff364f-c84e-49c5-b70d-b346c17a4d77",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "crushin-bulk",
+          "faction_id": "orks"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "crushin-bulk-gunwagon",
+          "faction_id": "orks"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "a5059e04-fb48-4047-80bf-792a99c32c43",
       "targets": [
         {
@@ -16619,7 +19996,38 @@
         },
         {
           "entity_type": "weapon",
+          "id": "bolt-rifle-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "bolt-rifle-brutalis-dreadnought",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-rifle-vengeful-brethren-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-rifle-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "a7f54f0e-5c29-4ab3-8c5b-f9461b00af66",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "stormfrag-auto-launcher",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "stormfrag-auto-launcher-askars-wolfpack-wulfen",
           "faction_id": "adeptus-astartes"
         }
       ]
@@ -16637,6 +20045,52 @@
           "entity_type": "weapon",
           "id": "taser-goad-purge-corps-pteraxii-sterylizors",
           "faction_id": "adeptus-mechanicus"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "a84e6c1d-769b-4533-a106-4ecf06af7eb8",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-askars-wolfpack-blood-claws",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-assault-force-librarian",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-emperors-champion-vedrenn",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vengeful-brethren-hellblaster-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vengeful-brethren-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -16779,6 +20233,37 @@
     },
     {
       "namespace": "mfm",
+      "id": "ab8eee48-6283-49c6-af30-06f50bd3ce3c",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "knives-and-fists",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "knives-and-fists-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "knives-and-fists-vengeful-brethren-hellblaster-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "knives-and-fists-vengeful-brethren-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "knives-and-fists-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "abdd7c12-0634-4caf-b560-ecac561b9a24",
       "targets": [
         {
@@ -16800,6 +20285,27 @@
           "entity_type": "weapon",
           "id": "power-fist-traitor-enforcer",
           "faction_id": "chaos-space-marines"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "ac57de76-fbab-4743-83bc-bb81f69a9e5a",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "armoured-impact",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "armoured-impact-assault-force-land-speeder",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "armoured-impact-invader-atvs",
+          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -16863,6 +20369,22 @@
           "entity_type": "weapon",
           "id": "phantasmagoria",
           "faction_id": "emperors-children"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "ac9af46e-f32c-4bc7-bee3-b80981baeddf",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "grenade-launcher",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "grenade-launcher-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -16992,6 +20514,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "adce185b-28fd-41c1-8883-fac68c3f00c2",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "stormfury-missile-launcher",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "stormfury-missile-launcher-assault-force-land-speeder",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "ae31d1ec-66ab-4123-a950-a00062822255",
       "targets": [
         {
@@ -17053,6 +20591,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "ae61c7a1-2214-4ddc-9c34-8f66cd92816c",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "grenade-launcher",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "grenade-launcher-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "af6284ae-10b8-43d5-95c0-efd08748c205",
       "targets": [
         {
@@ -17096,6 +20650,11 @@
           "entity_type": "weapon",
           "id": "condemnor-boltgun",
           "faction_id": "agents-of-the-imperium"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "condemnor-boltgun-sanctuary-canoness-adalya",
+          "faction_id": "adepta-sororitas"
         }
       ]
     },
@@ -17153,6 +20712,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "b1fcf701-d3b4-4d6e-8623-ebad7b66656d",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "crushin-bulk",
+          "faction_id": "orks"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "crushin-bulk-gunwagon",
+          "faction_id": "orks"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "b2105be9-41d1-4aec-bf0d-ccbcbb01166a",
       "targets": [
         {
@@ -17180,6 +20755,22 @@
           "entity_type": "weapon",
           "id": "ministorum-hand-flamer",
           "faction_id": "agents-of-the-imperium"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "b2898983-5316-47f8-b756-88b12c871a71",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "power-fist",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "power-fist-master-zacharial",
+          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -17381,6 +20972,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "b59aede2-9e4c-404c-baab-e5cca4af4e7b",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "power-fist",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "power-fist-master-zacharial",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "b68ff0b2-0876-4ff8-8e4b-277ae72ef230",
       "targets": [
         {
@@ -17466,6 +21073,53 @@
           "entity_type": "weapon",
           "id": "burning-roar",
           "faction_id": "world-eaters"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "b79c0b9d-9fee-4233-aeb3-efb6c0229dea",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "stormfrag-auto-launcher",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "stormfrag-auto-launcher-askars-wolfpack-wulfen",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "b7b3ceb8-8197-4d60-b363-544da7a225ed",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "knives-and-fists",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "knives-and-fists-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "knives-and-fists-vengeful-brethren-hellblaster-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "knives-and-fists-vengeful-brethren-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "knives-and-fists-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -17778,6 +21432,52 @@
     },
     {
       "namespace": "mfm",
+      "id": "bc9f1251-41a6-42e5-9eb7-adcb19967bb5",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-askars-wolfpack-blood-claws",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-assault-force-librarian",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-emperors-champion-vedrenn",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vengeful-brethren-hellblaster-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vengeful-brethren-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "bd06b2c7-893a-45fa-a8c6-36c25ef876b0",
       "targets": [
         {
@@ -17826,6 +21526,22 @@
           "entity_type": "weapon",
           "id": "artificer-crafted-storm-bolter-battle-sisters-squad",
           "faction_id": "adepta-sororitas"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "be10e9b4-8332-4008-bc1e-076d86c5aae1",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "stormfrag-auto-launcher",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "stormfrag-auto-launcher-askars-wolfpack-wulfen",
+          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -17978,6 +21694,47 @@
           "entity_type": "weapon",
           "id": "plasma-incinerator",
           "faction_id": "agents-of-the-imperium"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "plasma-incinerator-vengeful-brethren-hellblaster-squad",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "c14b389b-80d8-48e9-a3e6-6133d23d06c1",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "chainsword",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "chainsword-askars-wolfpack-blood-claws",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "chainsword-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "chainsword-sanguinary-spearhead-assault-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "chainsword-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "chainsword-vow-sworn-sword-brethren-squad",
+          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -18158,6 +21915,11 @@
         },
         {
           "entity_type": "weapon",
+          "id": "grenade-launcher-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "grenade-launcher-death-company-marines",
           "faction_id": "adeptus-astartes"
         }
@@ -18232,6 +21994,68 @@
     },
     {
       "namespace": "mfm",
+      "id": "c4b49548-6fdf-4f02-a9f3-c4e869b060ae",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "phosphor-blast-carbine",
+          "faction_id": "adeptus-mechanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "phosphor-blast-carbine-purge-corps-serberys-sulphurhounds",
+          "faction_id": "adeptus-mechanicus"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "c4e17dda-55fb-4bed-9e34-7a60067fb8cf",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-assault-force-captain",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-assault-force-vanguard-veteran-squad-with-jump-packs",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-sanguinary-spearhead-assault-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vengeful-brethren-bladeguard-veteran-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vow-sworn-bladeguard-veteran-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vow-sworn-sword-brethren-squad",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "c52850e6-dffe-46fd-ae33-44e909210cfc",
       "targets": [
         {
@@ -18251,8 +22075,157 @@
         },
         {
           "entity_type": "weapon",
+          "id": "force-weapon-assault-force-librarian",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "force-weapon-prism-of-zadophon-rubric-marines",
           "faction_id": "thousand-sons"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "c54fa7d0-7a89-4d32-9e51-1816e933a059",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "bolt-rifle",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-rifle-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-rifle-vengeful-brethren-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-rifle-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "c5c22cc0-ed09-487c-8b4a-2d6bcf85abad",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "chainsword",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "chainsword-askars-wolfpack-blood-claws",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "chainsword-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "chainsword-sanguinary-spearhead-assault-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "chainsword-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "chainsword-vow-sworn-sword-brethren-squad",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "c5dbc437-6283-42aa-926d-c33be5afd392",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-assault-force-captain",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-assault-force-vanguard-veteran-squad-with-jump-packs",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-sanguinary-spearhead-assault-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vengeful-brethren-bladeguard-veteran-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vow-sworn-bladeguard-veteran-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vow-sworn-sword-brethren-squad",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "c6349205-0e6e-42d6-98e9-bd6a047a763d",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-askars-wolfpack-blood-claws",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-assault-force-librarian",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vengeful-brethren-hellblaster-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vengeful-brethren-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -18527,6 +22500,38 @@
           "entity_type": "weapon",
           "id": "close-combat-weapon-voidsmen-at-arms",
           "faction_id": "agents-of-the-imperium"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "cc383735-ef5c-4353-9c36-99da0a6b55cb",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "stormfrag-auto-launcher",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "stormfrag-auto-launcher-askars-wolfpack-wulfen",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "ccb77935-3571-4ac1-a4a8-b293e2d8d3a3",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "force-weapon",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "force-weapon-assault-force-librarian",
+          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -19022,6 +23027,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "d5bcbf02-45b0-49d5-bafe-12d075f1b194",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "force-weapon",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "force-weapon-assault-force-librarian",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "d5eb74d3-7679-4079-9c3e-8175da1069eb",
       "targets": [
         {
@@ -19068,6 +23089,11 @@
         },
         {
           "entity_type": "weapon",
+          "id": "master-crafted-chainsword-captain-raldeo",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "master-crafted-chainsword-death-company-captain",
           "faction_id": "adeptus-astartes"
         }
@@ -19107,6 +23133,22 @@
           "entity_type": "weapon",
           "id": "pulse-pistol-sudden-dawn-cadre-pathfinder-team",
           "faction_id": "tau-empire"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "d8a9b501-afef-4413-8e0c-9dc3eabb37f4",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "spiked-ram",
+          "faction_id": "orks"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "spiked-ram-warbuggies",
+          "faction_id": "orks"
         }
       ]
     },
@@ -19202,6 +23244,22 @@
           "entity_type": "weapon",
           "id": "gun-stock-knight-centura",
           "faction_id": "adeptus-custodes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "db2b169a-c6aa-48f4-98fb-6c0326911d54",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "power-fist",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "power-fist-master-zacharial",
+          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -19396,6 +23454,52 @@
     },
     {
       "namespace": "mfm",
+      "id": "dbe7c4a9-3810-4c80-a58d-189f31cbce06",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-askars-wolfpack-blood-claws",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-assault-force-librarian",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-emperors-champion-vedrenn",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vengeful-brethren-hellblaster-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vengeful-brethren-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "dc3d0741-18a1-4fea-9836-c121c5070a35",
       "targets": [
         {
@@ -19512,6 +23616,11 @@
         {
           "entity_type": "weapon",
           "id": "heavy-baleflamer",
+          "faction_id": "emperors-children"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-baleflamer",
           "faction_id": "thousand-sons"
         },
         {
@@ -19539,6 +23648,22 @@
           "entity_type": "weapon",
           "id": "rokkit-launcha-trukk",
           "faction_id": "orks"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "dfa9f17c-06a2-4a75-bcb7-338b96ff1c40",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "combi-weapon",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "combi-weapon-vow-sworn-sword-brethren-squad",
+          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -19784,6 +23909,42 @@
     },
     {
       "namespace": "mfm",
+      "id": "e3641daa-426c-446c-a136-37bac3075200",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "chainsword",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "chainsword-askars-wolfpack-blood-claws",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "chainsword-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "chainsword-sanguinary-spearhead-assault-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "chainsword-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "chainsword-vow-sworn-sword-brethren-squad",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "e3768a8d-6fef-4fa2-9a73-d0b5b8088abb",
       "targets": [
         {
@@ -19805,6 +23966,42 @@
     },
     {
       "namespace": "mfm",
+      "id": "e3a819ec-b4db-4c0f-a4bf-c49569e095b7",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-assault-force-vanguard-veteran-squad-with-jump-packs",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-sanguinary-spearhead-assault-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vengeful-brethren-bladeguard-veteran-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vow-sworn-bladeguard-veteran-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vow-sworn-sword-brethren-squad",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "e42f3f78-3226-4335-bf1f-4a67f7e3767d",
       "targets": [
         {
@@ -19821,6 +24018,52 @@
     },
     {
       "namespace": "mfm",
+      "id": "e47016f3-afa3-48cd-b047-3a4a752afe61",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-askars-wolfpack-blood-claws",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-assault-force-librarian",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-emperors-champion-vedrenn",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vengeful-brethren-hellblaster-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vengeful-brethren-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "e49d420b-b603-4421-8013-eeb1efba2352",
       "targets": [
         {
@@ -19831,6 +24074,27 @@
         {
           "entity_type": "weapon",
           "id": "crozius-arcanum-execrator",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "e4bedca7-d092-48c0-ba30-bacb56eb48e1",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "master-crafted-power-weapon-askars-wolfpack-wolf-guard-terminators",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "master-crafted-power-weapon-vengeful-brethren-bladeguard-veteran-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "master-crafted-power-weapon-vow-sworn-bladeguard-veteran-squad",
           "faction_id": "adeptus-astartes"
         }
       ]
@@ -19895,6 +24159,42 @@
           "entity_type": "weapon",
           "id": "drone-burst-cannon-drone",
           "faction_id": "tau-empire"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "e6620576-5f82-4aa5-8bdd-a9b24f76984b",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "chainsword",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "chainsword-askars-wolfpack-blood-claws",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "chainsword-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "chainsword-sanguinary-spearhead-assault-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "chainsword-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "chainsword-vow-sworn-sword-brethren-squad",
+          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -20058,6 +24358,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "e8b5a501-8690-4b0b-89f2-495fab3bc4e2",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "relic-greataxe",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "relic-greataxe-askars-wolfpack-wolf-guard-terminators",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "e8c0d15b-5f23-402b-b8c3-e8258c2a2445",
       "targets": [
         {
@@ -20109,7 +24425,22 @@
         },
         {
           "entity_type": "weapon",
+          "id": "bolt-rifle-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "bolt-rifle-brutalis-dreadnought",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-rifle-vengeful-brethren-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-rifle-vow-sworn-crusader-squad",
           "faction_id": "adeptus-astartes"
         }
       ]
@@ -20132,6 +24463,37 @@
           "entity_type": "weapon",
           "id": "demolisher-cannon",
           "faction_id": "thousand-sons"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "ec4eb5f1-3d6d-4005-bf0a-ee6246142206",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "knives-and-fists",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "knives-and-fists-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "knives-and-fists-vengeful-brethren-hellblaster-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "knives-and-fists-vengeful-brethren-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "knives-and-fists-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -20177,6 +24539,11 @@
         },
         {
           "entity_type": "weapon",
+          "id": "multi-melta-assault-force-land-speeder",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "multi-melta-eradicator-squad-with-melta-rifles",
           "faction_id": "adeptus-astartes"
         },
@@ -20210,6 +24577,27 @@
     },
     {
       "namespace": "mfm",
+      "id": "ee597ac3-4ad2-4d38-8299-c6cef42a2065",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "armoured-impact",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "armoured-impact-assault-force-land-speeder",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "armoured-impact-invader-atvs",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "ee81855f-58c7-4fb9-9679-3855e80b02c3",
       "targets": [
         {
@@ -20237,6 +24625,52 @@
           "entity_type": "weapon",
           "id": "karacnos-mortar-battery",
           "faction_id": "imperial-knights"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "eec1068e-7e9b-46b0-80df-548fd3f960d9",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-askars-wolfpack-blood-claws",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-assault-force-librarian",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-emperors-champion-vedrenn",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vengeful-brethren-hellblaster-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vengeful-brethren-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -20367,6 +24801,22 @@
         {
           "entity_type": "weapon",
           "id": "heavy-bolt-pistol-kaius-konorius",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "f16f73ae-9ece-4a41-ab74-b17656ddf189",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "power-fist",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "power-fist-master-zacharial",
           "faction_id": "adeptus-astartes"
         }
       ]
@@ -20590,6 +25040,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "f70b8fc9-e225-49a3-b557-0d494aec9798",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "black-sword",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "black-sword-emperors-champion-vedrenn",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "f70cbcdd-a635-498b-adaa-93e64a15ebe5",
       "targets": [
         {
@@ -20622,6 +25088,22 @@
           "entity_type": "weapon",
           "id": "rokkit-launcha-trukk",
           "faction_id": "orks"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "f7546268-92ef-4bff-9227-f051e0161f2b",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "power-weapon",
+          "faction_id": "adepta-sororitas"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "power-weapon-sanctuary-guardians-battle-sisters-squad",
+          "faction_id": "adepta-sororitas"
         }
       ]
     },
@@ -20717,6 +25199,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "f82bd842-1698-4e1c-b36d-cd71ae282f6d",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "grenade-launcher",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "grenade-launcher-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "f874696a-31d3-4c06-97b7-354ce44a82de",
       "targets": [
         {
@@ -20795,7 +25293,28 @@
         },
         {
           "entity_type": "weapon",
+          "id": "inferno-pistol-captain-raldeo",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "inferno-pistol-sanguinary-guard",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "fa8b0ba8-f825-494f-84f1-d846866f0879",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "pyreblaster",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "pyreblaster-vow-sworn-crusader-squad",
           "faction_id": "adeptus-astartes"
         }
       ]
@@ -20880,7 +25399,22 @@
         },
         {
           "entity_type": "weapon",
+          "id": "bolt-rifle-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "bolt-rifle-brutalis-dreadnought",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-rifle-vengeful-brethren-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-rifle-vow-sworn-crusader-squad",
           "faction_id": "adeptus-astartes"
         }
       ]
@@ -21028,7 +25562,42 @@
         },
         {
           "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-assault-force-captain",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-assault-force-vanguard-veteran-squad-with-jump-packs",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "heavy-bolt-pistol-kaius-konorius",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-sanguinary-spearhead-assault-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vengeful-brethren-bladeguard-veteran-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vow-sworn-bladeguard-veteran-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vow-sworn-crusader-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-bolt-pistol-vow-sworn-sword-brethren-squad",
           "faction_id": "adeptus-astartes"
         }
       ]
@@ -21111,7 +25680,22 @@
         },
         {
           "entity_type": "weapon",
+          "id": "bolt-rifle-assault-force-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "bolt-rifle-brutalis-dreadnought",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-rifle-vengeful-brethren-intercessor-squad",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-rifle-vow-sworn-crusader-squad",
           "faction_id": "adeptus-astartes"
         }
       ]
@@ -21184,6 +25768,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "fe243ee3-5e41-4791-93ba-e8ad22a6201d",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "inferno-pistol",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "inferno-pistol-captain-raldeo",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "fe300211-d17c-4023-9c57-876ffc44b5f1",
       "targets": [
         {
@@ -21227,6 +25827,22 @@
           "entity_type": "weapon",
           "id": "power-sword-infractors",
           "faction_id": "emperors-children"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "ff275c5e-c35f-4049-86e0-6dd6ae146f69",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "force-weapon",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "force-weapon-assault-force-librarian",
+          "faction_id": "adeptus-astartes"
         }
       ]
     },

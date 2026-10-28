@@ -3005,6 +3005,10 @@
     "ability_ids": [
       "divine-guidance-adepta-sororitas",
       "null-rod-sanctuary-canoness-adalya-adepta-sororitas"
+    ],
+    "weapon_ids": [
+      "condemnor-boltgun-sanctuary-canoness-adalya",
+      "hallowed-chainsword"
     ]
   },
   {
@@ -3064,6 +3068,9 @@
     ],
     "ability_ids": [
       "extremis-trigger-word-sanctuary-guardians-arco-flagellants-adepta-sororitas"
+    ],
+    "weapon_ids": [
+      "arco-flails"
     ]
   },
   {
@@ -3131,6 +3138,15 @@
         "id": "simulacrum-imperialis-wargear-adepta-sororitas",
         "wargear": "simulacrum-imperialis"
       }
+    ],
+    "weapon_ids": [
+      "boltgun",
+      "bolt-pistol",
+      "stocks-and-fists",
+      "ministorum-flamer",
+      "ministorum-heavy-flamer",
+      "combi-weapon",
+      "power-weapon-sanctuary-guardians-battle-sisters-squad"
     ]
   },
   {
@@ -3190,6 +3206,10 @@
     ],
     "ability_ids": [
       "sworn-protectors-sanctuary-guardians-celestian-sacresants-adepta-sororitas"
+    ],
+    "weapon_ids": [
+      "bolt-pistol-sanctuary-guardians-celestian-sacresants",
+      "hallowed-mace"
     ]
   }
 ]

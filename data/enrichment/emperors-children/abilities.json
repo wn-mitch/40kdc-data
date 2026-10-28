@@ -9948,5 +9948,131 @@
     "behavior": "activated",
     "source_digest": "797298065f482b920541722874f1f141f9e56444dbfd88c13d7fd3d44f98d1a4",
     "optional": true
+  },
+  {
+    "ability_id": "scuttling-walker-emperors-children",
+    "name": "Scuttling Walker",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "version": "2025-q3",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "move-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "passthrough": [
+              "non-titanic-models"
+            ]
+          }
+        },
+        {
+          "type": "move-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "passthrough": [
+              "all-terrain"
+            ]
+          }
+        },
+        {
+          "type": "permission",
+          "target": "event-subject",
+          "modifier": {
+            "activity": "move",
+            "allow": true,
+            "despite": [
+              "engaged"
+            ]
+          }
+        },
+        {
+          "type": "move-modifier",
+          "target": "event-subject",
+          "modifier": {
+            "no_end_in_engagement": true,
+            "applies_to_moves": [
+              "normal",
+              "advance",
+              "fall-back"
+            ]
+          }
+        },
+        {
+          "type": "roll-result",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "desperate-escape",
+            "result": "pass"
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "defiler"
+    ],
+    "ability_type": "unit",
+    "behavior": "reactive",
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "normal",
+          "advance",
+          "fall-back"
+        ]
+      }
+    },
+    "source_digest": "f45098adfa15d78d190b764e864e32657d0935ef4df9b50bf877d3560cc21a4c"
+  },
+  {
+    "ability_id": "revel-in-desecration-emperors-children",
+    "name": "Revel in Desecration",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "strength",
+            "parameters": {
+              "subject": "defender",
+              "below": "half"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "this-model",
+        "modifier": {
+          "roll": "hit",
+          "operation": "add",
+          "value": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "defiler"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "source_digest": "32a08652638a00f20a4d6cea9cb82c5965d4a494b68f291239a10076efc4759a"
   }
 ]

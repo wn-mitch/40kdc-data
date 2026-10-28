@@ -1972,5 +1972,74 @@
     "game_modes": [
       "combat-patrol"
     ]
+  },
+  {
+    "unit_id": "purge-corps-serberys-sulphurhounds",
+    "faction_id": "adeptus-mechanicus",
+    "models": [
+      {
+        "name": "Serberys Sulphurhound",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "default_weapon_ids": [
+          "clawed-limbs",
+          "phosphor-blast-carbine-purge-corps-serberys-sulphurhounds",
+          "sulphur-breath-purge-corps-serberys-sulphurhounds"
+        ]
+      },
+      {
+        "name": "Serberys Sulphurhound Alpha",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "default_weapon_ids": [
+          "cavalry-arc-maul",
+          "clawed-limbs",
+          "mechanicus-pistol-purge-corps-serberys-sulphurhounds",
+          "sulphur-breath-purge-corps-serberys-sulphurhounds"
+        ]
+      },
+      {
+        "name": "Serberys Sulphurhound with Phosphor Pistols",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "default_weapon_ids": [
+          "clawed-limbs",
+          "phosphor-pistol-purge-corps-serberys-sulphurhounds",
+          "phosphor-pistol-purge-corps-serberys-sulphurhounds",
+          "sulphur-breath-purge-corps-serberys-sulphurhounds"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "game_modes": [
+      "combat-patrol"
+    ],
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Serberys Sulphurhound",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Serberys Sulphurhound Alpha",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Serberys Sulphurhound with Phosphor Pistols",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
   }
 ]

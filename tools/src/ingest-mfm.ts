@@ -1308,7 +1308,7 @@ async function runCompositionNamesCmd(
     report.dirs.reduce((a, d) => a + f(d), 0);
   console.log(
     `Composition names — matched ${sum((d) => d.matched)}, rows renamed ${sum((d) => d.rowsRenamed)}, ` +
-      `units rebuilt from dump ${sum((d) => d.unitsRebuilt)}, skipped (kill-team shape) ${report.skipped.length}.`,
+      `units rebuilt from dump ${sum((d) => d.unitsRebuilt)}, created ${sum((d) => d.unitsCreated)}, skipped (kill-team shape) ${report.skipped.length}.`,
   );
   for (const n of report.notes)
     console.log(`  note [${n.dir}/${n.id}] ${n.note}`);

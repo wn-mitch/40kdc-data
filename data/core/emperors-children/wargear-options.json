@@ -608,5 +608,108 @@
       "model_name": "Seeker",
       "max_count": 1
     }
+  },
+  {
+    "id": "defiler-wgo-mfm-1",
+    "unit_id": "defiler",
+    "faction_id": "emperors-children",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "hades-battle-cannon"
+    ],
+    "replacement": [
+      "ectoplasma-destructor"
+    ],
+    "model_constraint": {
+      "any_number": true
+    }
+  },
+  {
+    "id": "defiler-wgo-mfm-2",
+    "unit_id": "defiler",
+    "faction_id": "emperors-children",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "excruciator-cannon",
+      "excruciator-cannon"
+    ],
+    "replacement": [
+      "magma-cutters-defiler",
+      "magma-cutters-defiler"
+    ],
+    "model_constraint": {
+      "any_number": true
+    }
+  },
+  {
+    "id": "defiler-wgo-mfm-3",
+    "unit_id": "defiler",
+    "faction_id": "emperors-children",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "heavy-missile-launcher",
+      "heavy-baleflamer"
+    ],
+    "replacement_choice": [
+      [
+        "heavy-reaper-autocannon",
+        "heavy-reaper-autocannon"
+      ],
+      [
+        "electroscourge",
+        "heavy-baleflamer"
+      ],
+      [
+        "heavy-baleflamer",
+        "heavy-reaper-autocannon"
+      ],
+      [
+        "electroscourge",
+        "heavy-missile-launcher"
+      ],
+      [
+        "hades-lascannon",
+        "heavy-reaper-autocannon"
+      ],
+      [
+        "hades-lascannon",
+        "heavy-missile-launcher"
+      ],
+      [
+        "hades-lascannon",
+        "hades-lascannon"
+      ],
+      [
+        "heavy-missile-launcher",
+        "heavy-reaper-autocannon"
+      ],
+      [
+        "hades-lascannon",
+        "electroscourge"
+      ],
+      [
+        "hades-lascannon",
+        "heavy-baleflamer"
+      ],
+      [
+        "electroscourge",
+        "heavy-reaper-autocannon"
+      ]
+    ],
+    "model_constraint": {
+      "any_number": true
+    }
   }
 ]

@@ -24339,7 +24339,10 @@
         },
         "keywords": [
           {
-            "keyword_id": "blast"
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 2
+            }
           },
           {
             "keyword_id": "psychic"
@@ -24349,7 +24352,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -28382,6 +28385,4220 @@
       {
         "namespace": "mfm",
         "id": "923bd142-ac7f-4278-8190-4606a0fed662"
+      }
+    ]
+  },
+  {
+    "id": "armoured-impact-assault-force-land-speeder",
+    "name": "Armoured Impact",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Armoured Impact",
+        "range": "Melee",
+        "stats": {
+          "A": 4,
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "WS": 3
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "20c32cac-b6be-4419-a477-958c9d3aa506"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2be22fe3-b7f7-49d8-8879-ed4a268dcc70"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4ea87dad-5075-4698-bae6-df062a932a0d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ac57de76-fbab-4743-83bc-bb81f69a9e5a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ee597ac3-4ad2-4d38-8299-c6cef42a2065"
+      }
+    ]
+  },
+  {
+    "id": "armoured-impact-invader-atvs",
+    "name": "Armoured Impact",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Armoured Impact",
+        "range": "Melee",
+        "stats": {
+          "A": 4,
+          "S": 5,
+          "AP": 0,
+          "D": 1,
+          "WS": 3
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "20c32cac-b6be-4419-a477-958c9d3aa506"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2be22fe3-b7f7-49d8-8879-ed4a268dcc70"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4ea87dad-5075-4698-bae6-df062a932a0d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "881c7c33-deed-4396-af80-204a2c8fdd55"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ac57de76-fbab-4743-83bc-bb81f69a9e5a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ee597ac3-4ad2-4d38-8299-c6cef42a2065"
+      }
+    ]
+  },
+  {
+    "id": "assault-cannon-askars-wolfpack-wolf-guard-terminators",
+    "name": "Assault Cannon",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Assault Cannon",
+        "range": 24,
+        "stats": {
+          "A": 6,
+          "S": 6,
+          "AP": 0,
+          "D": 1,
+          "BS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "devastating-wounds"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "2a13-19b0-3227-4bcf"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "2de6-ff2-dc37-b20d"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "5197-a7eb-3b4d-d93e"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "b1c7-f5b7-e77d-94eb"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "be34-7406-10cd-c6e2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1f2ea54d-cbf2-44eb-88f2-15fbe777c14e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6c4bbc4b-aaf6-46a8-ba0c-b60087ecac1b"
+      }
+    ]
+  },
+  {
+    "id": "black-sword-emperors-champion-vedrenn",
+    "name": "Black Sword",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Strike",
+        "range": "Melee",
+        "stats": {
+          "A": 6,
+          "S": 8,
+          "AP": -3,
+          "D": 3,
+          "WS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "precision"
+          },
+          {
+            "keyword_id": "anti",
+            "parameters": {
+              "target_keyword": "Character",
+              "threshold": 5
+            }
+          }
+        ]
+      },
+      {
+        "name": "Sweep",
+        "range": "Melee",
+        "stats": {
+          "A": 10,
+          "S": 6,
+          "AP": -2,
+          "D": 1,
+          "WS": 2
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "9b84-fb40-64b2-6738"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2c04ea76-f294-4894-a378-44c844a2f371"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6e282c0c-5cac-4b28-9727-49cae414560e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f70b8fc9-e225-49a3-b557-0d494aec9798"
+      }
+    ]
+  },
+  {
+    "id": "bolt-pistol-askars-wolfpack-blood-claws",
+    "name": "Bolt pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Bolt Pistol",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "1633-f85a-264a-9591"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "18b0-8c2-173f-5"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "384-dc5f-6b8c-626b"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "3977-665d-ed2-21c9"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "ad62-9b44-f968-ec50"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "d330-eb86-bcd1-fdc4"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "fec0-bee1-3d8a-53c6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "06665d17-2339-4c72-a9c2-ba1e97066660"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0d67204a-bec8-4df0-aa83-ef83d01537c6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0f3544de-dde8-4d4b-b2bd-ce302dc77165"
+      },
+      {
+        "namespace": "mfm",
+        "id": "292ad93b-a2f3-4506-b410-e9794989dd23"
+      },
+      {
+        "namespace": "mfm",
+        "id": "42513ed0-0086-4450-9c45-5909fbccccb3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4342a7c2-8432-42be-896a-54ae2bdd3436"
+      },
+      {
+        "namespace": "mfm",
+        "id": "47d9c9f0-5a4c-4719-87a4-2f25e080473b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4ad9158a-8659-40ee-b443-e16e1d7d5360"
+      },
+      {
+        "namespace": "mfm",
+        "id": "80652b31-602b-4c96-bacd-4b4406dccc93"
+      },
+      {
+        "namespace": "mfm",
+        "id": "85ddded2-dd5e-45b8-8c41-ce88b34de5f3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8714c03b-a7b7-4ea1-9784-6d0505cad68d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a84e6c1d-769b-4533-a106-4ecf06af7eb8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "bc9f1251-41a6-42e5-9eb7-adcb19967bb5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c6349205-0e6e-42d6-98e9-bd6a047a763d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "dbe7c4a9-3810-4c80-a58d-189f31cbce06"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e47016f3-afa3-48cd-b047-3a4a752afe61"
+      },
+      {
+        "namespace": "mfm",
+        "id": "eec1068e-7e9b-46b0-80df-548fd3f960d9"
+      }
+    ]
+  },
+  {
+    "id": "bolt-pistol-assault-force-intercessor-squad",
+    "name": "Bolt pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Bolt Pistol",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "1633-f85a-264a-9591"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "18b0-8c2-173f-5"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "384-dc5f-6b8c-626b"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "3977-665d-ed2-21c9"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "ad62-9b44-f968-ec50"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "d330-eb86-bcd1-fdc4"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "fec0-bee1-3d8a-53c6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "06665d17-2339-4c72-a9c2-ba1e97066660"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0d67204a-bec8-4df0-aa83-ef83d01537c6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0f3544de-dde8-4d4b-b2bd-ce302dc77165"
+      },
+      {
+        "namespace": "mfm",
+        "id": "14948c2c-743a-4926-ad27-185f3c36844d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "292ad93b-a2f3-4506-b410-e9794989dd23"
+      },
+      {
+        "namespace": "mfm",
+        "id": "42513ed0-0086-4450-9c45-5909fbccccb3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4342a7c2-8432-42be-896a-54ae2bdd3436"
+      },
+      {
+        "namespace": "mfm",
+        "id": "47d9c9f0-5a4c-4719-87a4-2f25e080473b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4ad9158a-8659-40ee-b443-e16e1d7d5360"
+      },
+      {
+        "namespace": "mfm",
+        "id": "80652b31-602b-4c96-bacd-4b4406dccc93"
+      },
+      {
+        "namespace": "mfm",
+        "id": "85ddded2-dd5e-45b8-8c41-ce88b34de5f3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8714c03b-a7b7-4ea1-9784-6d0505cad68d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a84e6c1d-769b-4533-a106-4ecf06af7eb8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "bc9f1251-41a6-42e5-9eb7-adcb19967bb5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c6349205-0e6e-42d6-98e9-bd6a047a763d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "dbe7c4a9-3810-4c80-a58d-189f31cbce06"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e47016f3-afa3-48cd-b047-3a4a752afe61"
+      },
+      {
+        "namespace": "mfm",
+        "id": "eec1068e-7e9b-46b0-80df-548fd3f960d9"
+      }
+    ]
+  },
+  {
+    "id": "bolt-pistol-assault-force-librarian",
+    "name": "Bolt pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Bolt Pistol",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "1633-f85a-264a-9591"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "18b0-8c2-173f-5"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "384-dc5f-6b8c-626b"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "3977-665d-ed2-21c9"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "ad62-9b44-f968-ec50"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "d330-eb86-bcd1-fdc4"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "fec0-bee1-3d8a-53c6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "06665d17-2339-4c72-a9c2-ba1e97066660"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0d67204a-bec8-4df0-aa83-ef83d01537c6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0f3544de-dde8-4d4b-b2bd-ce302dc77165"
+      },
+      {
+        "namespace": "mfm",
+        "id": "292ad93b-a2f3-4506-b410-e9794989dd23"
+      },
+      {
+        "namespace": "mfm",
+        "id": "42513ed0-0086-4450-9c45-5909fbccccb3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4342a7c2-8432-42be-896a-54ae2bdd3436"
+      },
+      {
+        "namespace": "mfm",
+        "id": "47d9c9f0-5a4c-4719-87a4-2f25e080473b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4ad9158a-8659-40ee-b443-e16e1d7d5360"
+      },
+      {
+        "namespace": "mfm",
+        "id": "80652b31-602b-4c96-bacd-4b4406dccc93"
+      },
+      {
+        "namespace": "mfm",
+        "id": "85ddded2-dd5e-45b8-8c41-ce88b34de5f3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8714c03b-a7b7-4ea1-9784-6d0505cad68d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a84e6c1d-769b-4533-a106-4ecf06af7eb8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "bc9f1251-41a6-42e5-9eb7-adcb19967bb5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c6349205-0e6e-42d6-98e9-bd6a047a763d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "dbe7c4a9-3810-4c80-a58d-189f31cbce06"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e47016f3-afa3-48cd-b047-3a4a752afe61"
+      },
+      {
+        "namespace": "mfm",
+        "id": "eec1068e-7e9b-46b0-80df-548fd3f960d9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fe3ea5a6-56df-49a4-b8c8-77a6b1533599"
+      }
+    ]
+  },
+  {
+    "id": "bolt-pistol-vengeful-brethren-hellblaster-squad",
+    "name": "Bolt pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Bolt Pistol",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "1633-f85a-264a-9591"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "18b0-8c2-173f-5"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "384-dc5f-6b8c-626b"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "3977-665d-ed2-21c9"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "ad62-9b44-f968-ec50"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "d330-eb86-bcd1-fdc4"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "fec0-bee1-3d8a-53c6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "06665d17-2339-4c72-a9c2-ba1e97066660"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0d67204a-bec8-4df0-aa83-ef83d01537c6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0f3544de-dde8-4d4b-b2bd-ce302dc77165"
+      },
+      {
+        "namespace": "mfm",
+        "id": "292ad93b-a2f3-4506-b410-e9794989dd23"
+      },
+      {
+        "namespace": "mfm",
+        "id": "42513ed0-0086-4450-9c45-5909fbccccb3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4342a7c2-8432-42be-896a-54ae2bdd3436"
+      },
+      {
+        "namespace": "mfm",
+        "id": "47d9c9f0-5a4c-4719-87a4-2f25e080473b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4ad9158a-8659-40ee-b443-e16e1d7d5360"
+      },
+      {
+        "namespace": "mfm",
+        "id": "80652b31-602b-4c96-bacd-4b4406dccc93"
+      },
+      {
+        "namespace": "mfm",
+        "id": "85ddded2-dd5e-45b8-8c41-ce88b34de5f3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8714c03b-a7b7-4ea1-9784-6d0505cad68d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8b0d23f4-4047-4a75-8f3c-fd1a3935ae53"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a84e6c1d-769b-4533-a106-4ecf06af7eb8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "bc9f1251-41a6-42e5-9eb7-adcb19967bb5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c6349205-0e6e-42d6-98e9-bd6a047a763d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "dbe7c4a9-3810-4c80-a58d-189f31cbce06"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e47016f3-afa3-48cd-b047-3a4a752afe61"
+      },
+      {
+        "namespace": "mfm",
+        "id": "eec1068e-7e9b-46b0-80df-548fd3f960d9"
+      }
+    ]
+  },
+  {
+    "id": "bolt-pistol-vengeful-brethren-intercessor-squad",
+    "name": "Bolt pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Bolt Pistol",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "1633-f85a-264a-9591"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "18b0-8c2-173f-5"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "384-dc5f-6b8c-626b"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "3977-665d-ed2-21c9"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "ad62-9b44-f968-ec50"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "d330-eb86-bcd1-fdc4"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "fec0-bee1-3d8a-53c6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "06665d17-2339-4c72-a9c2-ba1e97066660"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0d67204a-bec8-4df0-aa83-ef83d01537c6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0f3544de-dde8-4d4b-b2bd-ce302dc77165"
+      },
+      {
+        "namespace": "mfm",
+        "id": "292ad93b-a2f3-4506-b410-e9794989dd23"
+      },
+      {
+        "namespace": "mfm",
+        "id": "42513ed0-0086-4450-9c45-5909fbccccb3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4342a7c2-8432-42be-896a-54ae2bdd3436"
+      },
+      {
+        "namespace": "mfm",
+        "id": "47d9c9f0-5a4c-4719-87a4-2f25e080473b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4ad9158a-8659-40ee-b443-e16e1d7d5360"
+      },
+      {
+        "namespace": "mfm",
+        "id": "80652b31-602b-4c96-bacd-4b4406dccc93"
+      },
+      {
+        "namespace": "mfm",
+        "id": "85ddded2-dd5e-45b8-8c41-ce88b34de5f3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8714c03b-a7b7-4ea1-9784-6d0505cad68d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a84e6c1d-769b-4533-a106-4ecf06af7eb8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b2837576-03e7-4930-bca1-15745c7b0334"
+      },
+      {
+        "namespace": "mfm",
+        "id": "bc9f1251-41a6-42e5-9eb7-adcb19967bb5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c6349205-0e6e-42d6-98e9-bd6a047a763d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "dbe7c4a9-3810-4c80-a58d-189f31cbce06"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e47016f3-afa3-48cd-b047-3a4a752afe61"
+      },
+      {
+        "namespace": "mfm",
+        "id": "eec1068e-7e9b-46b0-80df-548fd3f960d9"
+      }
+    ]
+  },
+  {
+    "id": "bolt-pistol-vow-sworn-crusader-squad",
+    "name": "Bolt pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Bolt Pistol",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "1633-f85a-264a-9591"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "18b0-8c2-173f-5"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "384-dc5f-6b8c-626b"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "3977-665d-ed2-21c9"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "ad62-9b44-f968-ec50"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "d330-eb86-bcd1-fdc4"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "fec0-bee1-3d8a-53c6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "06665d17-2339-4c72-a9c2-ba1e97066660"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0ae9e3bc-8bdf-4f21-8caa-932d4d1243b2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0d67204a-bec8-4df0-aa83-ef83d01537c6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0f3544de-dde8-4d4b-b2bd-ce302dc77165"
+      },
+      {
+        "namespace": "mfm",
+        "id": "292ad93b-a2f3-4506-b410-e9794989dd23"
+      },
+      {
+        "namespace": "mfm",
+        "id": "42513ed0-0086-4450-9c45-5909fbccccb3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4342a7c2-8432-42be-896a-54ae2bdd3436"
+      },
+      {
+        "namespace": "mfm",
+        "id": "47d9c9f0-5a4c-4719-87a4-2f25e080473b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4ad9158a-8659-40ee-b443-e16e1d7d5360"
+      },
+      {
+        "namespace": "mfm",
+        "id": "80652b31-602b-4c96-bacd-4b4406dccc93"
+      },
+      {
+        "namespace": "mfm",
+        "id": "85ddded2-dd5e-45b8-8c41-ce88b34de5f3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8714c03b-a7b7-4ea1-9784-6d0505cad68d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a84e6c1d-769b-4533-a106-4ecf06af7eb8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "bc9f1251-41a6-42e5-9eb7-adcb19967bb5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c6349205-0e6e-42d6-98e9-bd6a047a763d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "dbe7c4a9-3810-4c80-a58d-189f31cbce06"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e47016f3-afa3-48cd-b047-3a4a752afe61"
+      },
+      {
+        "namespace": "mfm",
+        "id": "eec1068e-7e9b-46b0-80df-548fd3f960d9"
+      }
+    ]
+  },
+  {
+    "id": "bolt-pistol-emperors-champion-vedrenn",
+    "name": "Bolt pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Bolt Pistol",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "BS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "1633-f85a-264a-9591"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "18b0-8c2-173f-5"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "384-dc5f-6b8c-626b"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "3977-665d-ed2-21c9"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "ad62-9b44-f968-ec50"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "d330-eb86-bcd1-fdc4"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "fec0-bee1-3d8a-53c6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "06665d17-2339-4c72-a9c2-ba1e97066660"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0d67204a-bec8-4df0-aa83-ef83d01537c6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0f3544de-dde8-4d4b-b2bd-ce302dc77165"
+      },
+      {
+        "namespace": "mfm",
+        "id": "292ad93b-a2f3-4506-b410-e9794989dd23"
+      },
+      {
+        "namespace": "mfm",
+        "id": "42513ed0-0086-4450-9c45-5909fbccccb3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4342a7c2-8432-42be-896a-54ae2bdd3436"
+      },
+      {
+        "namespace": "mfm",
+        "id": "47d9c9f0-5a4c-4719-87a4-2f25e080473b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4ad9158a-8659-40ee-b443-e16e1d7d5360"
+      },
+      {
+        "namespace": "mfm",
+        "id": "80652b31-602b-4c96-bacd-4b4406dccc93"
+      },
+      {
+        "namespace": "mfm",
+        "id": "85ddded2-dd5e-45b8-8c41-ce88b34de5f3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8714c03b-a7b7-4ea1-9784-6d0505cad68d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a84e6c1d-769b-4533-a106-4ecf06af7eb8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "bc9f1251-41a6-42e5-9eb7-adcb19967bb5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "dbe7c4a9-3810-4c80-a58d-189f31cbce06"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e47016f3-afa3-48cd-b047-3a4a752afe61"
+      },
+      {
+        "namespace": "mfm",
+        "id": "eb3296f9-30e5-4299-950f-b3da89a4fdf3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "eec1068e-7e9b-46b0-80df-548fd3f960d9"
+      }
+    ]
+  },
+  {
+    "id": "bolt-rifle-assault-force-intercessor-squad",
+    "name": "Bolt Rifles",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Bolt Rifle",
+        "range": 24,
+        "stats": {
+          "A": 2,
+          "S": 4,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "assault"
+          },
+          {
+            "keyword_id": "heavy"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "4c87-32d4-eca9-677f"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "6155-c404-a228-cb72"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "67f5-4121-ff19-9540"
+      },
+      {
+        "namespace": "mfm",
+        "id": "10085022-f157-4ff4-8c42-a6fa828b5173"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a7683bef-ff40-4dbe-ac13-437045ed3ece"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c54fa7d0-7a89-4d32-9e51-1816e933a059"
+      },
+      {
+        "namespace": "mfm",
+        "id": "eabdd0e3-ad5d-438d-8cbe-345fa3dfc8c2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fc1d9062-9591-4253-9eee-a5185f101dbd"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fdfe1315-43f1-458d-b736-b07eca383b90"
+      }
+    ]
+  },
+  {
+    "id": "bolt-rifle-vengeful-brethren-intercessor-squad",
+    "name": "Bolt Rifles",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Bolt Rifle",
+        "range": 24,
+        "stats": {
+          "A": 2,
+          "S": 4,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "assault"
+          },
+          {
+            "keyword_id": "heavy"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "4c87-32d4-eca9-677f"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "6155-c404-a228-cb72"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "67f5-4121-ff19-9540"
+      },
+      {
+        "namespace": "mfm",
+        "id": "10085022-f157-4ff4-8c42-a6fa828b5173"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a7683bef-ff40-4dbe-ac13-437045ed3ece"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c54fa7d0-7a89-4d32-9e51-1816e933a059"
+      },
+      {
+        "namespace": "mfm",
+        "id": "eabdd0e3-ad5d-438d-8cbe-345fa3dfc8c2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fc1d9062-9591-4253-9eee-a5185f101dbd"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fdfe1315-43f1-458d-b736-b07eca383b90"
+      }
+    ]
+  },
+  {
+    "id": "bolt-rifle-vow-sworn-crusader-squad",
+    "name": "Bolt Rifles",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Bolt Rifle",
+        "range": 24,
+        "stats": {
+          "A": 2,
+          "S": 4,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "assault"
+          },
+          {
+            "keyword_id": "heavy"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "4c87-32d4-eca9-677f"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "6155-c404-a228-cb72"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "67f5-4121-ff19-9540"
+      },
+      {
+        "namespace": "mfm",
+        "id": "10085022-f157-4ff4-8c42-a6fa828b5173"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a7683bef-ff40-4dbe-ac13-437045ed3ece"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c54fa7d0-7a89-4d32-9e51-1816e933a059"
+      },
+      {
+        "namespace": "mfm",
+        "id": "eabdd0e3-ad5d-438d-8cbe-345fa3dfc8c2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fc1d9062-9591-4253-9eee-a5185f101dbd"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fdfe1315-43f1-458d-b736-b07eca383b90"
+      }
+    ]
+  },
+  {
+    "id": "boltstorm-gauntlet-master-zacharial",
+    "name": "Boltstorm gauntlet",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Boltstorm Gauntlet",
+        "range": 12,
+        "stats": {
+          "A": 3,
+          "S": 4,
+          "AP": -1,
+          "D": 1,
+          "BS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "3b0-59b8-806b-654"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4879278f-d870-4a0a-bc05-489dff585079"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9081a8d3-52e0-425e-8065-4f8c27a17940"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9bfb3f87-0341-4405-a6b6-7848b40357d6"
+      }
+    ]
+  },
+  {
+    "id": "chainsword-askars-wolfpack-blood-claws",
+    "name": "Chainsword",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Chainsword",
+        "range": "Melee",
+        "stats": {
+          "A": 4,
+          "S": 4,
+          "AP": -1,
+          "D": 1,
+          "WS": 3
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "36fdf11b-a32c-4339-8bee-918aa28d476e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "52e10068-476d-42d2-8934-95c22bbdafc9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "54533b13-8232-4eb3-9820-34881ab4fea2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6d579185-b4ab-40b9-8419-80c77498a2d9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7c42fe18-2233-4ae4-bf34-504232a1b61e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "907f5e53-3aea-4588-b1c6-1abeff95a84d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "988cf3a0-5765-4fa8-a17d-bb54850d1296"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c14b389b-80d8-48e9-a3e6-6133d23d06c1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c5c22cc0-ed09-487c-8b4a-2d6bcf85abad"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e3641daa-426c-446c-a136-37bac3075200"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e6620576-5f82-4aa5-8bdd-a9b24f76984b"
+      }
+    ]
+  },
+  {
+    "id": "chainsword-sanguinary-spearhead-assault-intercessor-squad",
+    "name": "Chainsword",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Chainsword",
+        "range": "Melee",
+        "stats": {
+          "A": 4,
+          "S": 4,
+          "AP": -1,
+          "D": 1,
+          "WS": 3
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "36fdf11b-a32c-4339-8bee-918aa28d476e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "52e10068-476d-42d2-8934-95c22bbdafc9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "54533b13-8232-4eb3-9820-34881ab4fea2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6d579185-b4ab-40b9-8419-80c77498a2d9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7c42fe18-2233-4ae4-bf34-504232a1b61e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "907f5e53-3aea-4588-b1c6-1abeff95a84d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "988cf3a0-5765-4fa8-a17d-bb54850d1296"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c14b389b-80d8-48e9-a3e6-6133d23d06c1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c5c22cc0-ed09-487c-8b4a-2d6bcf85abad"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e3641daa-426c-446c-a136-37bac3075200"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e6620576-5f82-4aa5-8bdd-a9b24f76984b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ed4be000-44a7-438d-8f05-6a32e2e001fc"
+      }
+    ]
+  },
+  {
+    "id": "chainsword-assault-force-intercessor-squad",
+    "name": "Chainsword",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Chainsword",
+        "range": "Melee",
+        "stats": {
+          "A": 5,
+          "S": 4,
+          "AP": -1,
+          "D": 1,
+          "WS": 3
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "36fdf11b-a32c-4339-8bee-918aa28d476e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "52e10068-476d-42d2-8934-95c22bbdafc9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "54533b13-8232-4eb3-9820-34881ab4fea2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6d579185-b4ab-40b9-8419-80c77498a2d9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7c42fe18-2233-4ae4-bf34-504232a1b61e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "907f5e53-3aea-4588-b1c6-1abeff95a84d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c14b389b-80d8-48e9-a3e6-6133d23d06c1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c5c22cc0-ed09-487c-8b4a-2d6bcf85abad"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e3641daa-426c-446c-a136-37bac3075200"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e6620576-5f82-4aa5-8bdd-a9b24f76984b"
+      }
+    ]
+  },
+  {
+    "id": "chainsword-vow-sworn-crusader-squad",
+    "name": "Chainsword",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Chainsword",
+        "range": "Melee",
+        "stats": {
+          "A": 4,
+          "S": 4,
+          "AP": -1,
+          "D": 1,
+          "WS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "sustained-hits",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "36fdf11b-a32c-4339-8bee-918aa28d476e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "52e10068-476d-42d2-8934-95c22bbdafc9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "54533b13-8232-4eb3-9820-34881ab4fea2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6d579185-b4ab-40b9-8419-80c77498a2d9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6f45dd64-9b46-4146-960e-f2ecae010096"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7c42fe18-2233-4ae4-bf34-504232a1b61e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "907f5e53-3aea-4588-b1c6-1abeff95a84d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c14b389b-80d8-48e9-a3e6-6133d23d06c1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c5c22cc0-ed09-487c-8b4a-2d6bcf85abad"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e3641daa-426c-446c-a136-37bac3075200"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e6620576-5f82-4aa5-8bdd-a9b24f76984b"
+      }
+    ]
+  },
+  {
+    "id": "chainsword-vow-sworn-sword-brethren-squad",
+    "name": "Chainsword",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Chainsword",
+        "range": "Melee",
+        "stats": {
+          "A": 6,
+          "S": 4,
+          "AP": -1,
+          "D": 1,
+          "WS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "sustained-hits",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "36fdf11b-a32c-4339-8bee-918aa28d476e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "52e10068-476d-42d2-8934-95c22bbdafc9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "54533b13-8232-4eb3-9820-34881ab4fea2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6d579185-b4ab-40b9-8419-80c77498a2d9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7c42fe18-2233-4ae4-bf34-504232a1b61e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "907f5e53-3aea-4588-b1c6-1abeff95a84d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c14b389b-80d8-48e9-a3e6-6133d23d06c1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c5c22cc0-ed09-487c-8b4a-2d6bcf85abad"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cb32e666-6cc4-42ef-98ff-24ebb84a330a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e3641daa-426c-446c-a136-37bac3075200"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e6620576-5f82-4aa5-8bdd-a9b24f76984b"
+      }
+    ]
+  },
+  {
+    "id": "combi-weapon-vow-sworn-sword-brethren-squad",
+    "name": "Combi-weapon",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Combi-Weapon",
+        "range": 24,
+        "stats": {
+          "A": 1,
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "anti",
+            "parameters": {
+              "target_keyword": "Infantry",
+              "threshold": 4
+            }
+          },
+          {
+            "keyword_id": "devastating-wounds"
+          },
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "242a-5001-f4ff-cd49"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "2c13-8cdd-f66b-bcae"
+      },
+      {
+        "namespace": "mfm",
+        "id": "36e0da98-7fbb-4c15-af27-b51383871e87"
+      },
+      {
+        "namespace": "mfm",
+        "id": "84151eb1-d578-4f1b-be00-4e94fc6e15ed"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9c7c835e-2ad9-4c5f-a6fb-52f832398352"
+      },
+      {
+        "namespace": "mfm",
+        "id": "dfa9f17c-06a2-4a75-bcb7-338b96ff1c40"
+      }
+    ]
+  },
+  {
+    "id": "force-weapon-assault-force-librarian",
+    "name": "Force weapon",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Force Weapon",
+        "range": "Melee",
+        "stats": {
+          "A": 4,
+          "S": 6,
+          "AP": -1,
+          "D": 2,
+          "WS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "psychic"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "905d-bd38-f44c-9eef"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4dc5e82a-46c7-419c-91b8-bfbc3f0bf27f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c52850e6-dffe-46fd-ae33-44e909210cfc"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ccb77935-3571-4ac1-a4a8-b293e2d8d3a3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d5bcbf02-45b0-49d5-bafe-12d075f1b194"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ff275c5e-c35f-4049-86e0-6dd6ae146f69"
+      }
+    ]
+  },
+  {
+    "id": "grenade-launcher-assault-force-intercessor-squad",
+    "name": "Grenade Launcher",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Frag",
+        "range": 24,
+        "stats": {
+          "A": 2,
+          "S": 4,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
+      },
+      {
+        "name": "Krak",
+        "range": 24,
+        "stats": {
+          "A": 2,
+          "S": 5,
+          "AP": -2,
+          "D": 3,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "anti",
+            "parameters": {
+              "target_keyword": "Monster",
+              "threshold": 4
+            }
+          },
+          {
+            "keyword_id": "anti",
+            "parameters": {
+              "target_keyword": "Vehicle",
+              "threshold": 4
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "1f277735-a3c3-4a02-b41e-e8deb2485827"
+      },
+      {
+        "namespace": "mfm",
+        "id": "282ddb27-2b35-4d4d-b585-16b8742247a4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ac9af46e-f32c-4bc7-bee3-b80981baeddf"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ae61c7a1-2214-4ddc-9c34-8f66cd92816c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c36e2b08-4b87-49f1-ab2b-531c94a85aac"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f82bd842-1698-4e1c-b36d-cd71ae282f6d"
+      }
+    ]
+  },
+  {
+    "id": "heavy-bolt-pistol-assault-force-vanguard-veteran-squad-with-jump-packs",
+    "name": "Heavy bolt pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Heavy Bolt Pistol",
+        "range": 18,
+        "stats": {
+          "A": 1,
+          "S": 4,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "3b8f-1cb7-3c6e-4455"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "713c-b312-58f3-5bdf"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "83a1-feb8-d495-aa28"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "874f-5923-626a-cc1c"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "8efc-6055-f8c9-3433"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "a3b1-a4d1-6857-384c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "18ebb932-9fb6-4642-a660-5e87335f67e8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "28c813e6-d045-4fe4-803a-80fc8f60dff8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "44c05557-501f-44f2-977c-d980654da9de"
+      },
+      {
+        "namespace": "mfm",
+        "id": "477ab733-466f-4be9-94a5-a6ec6b289f9c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "47ba1cce-3240-416b-b5da-bbfdc59005d0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "87364801-1d1b-485f-9880-de44aa052e2d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c4e17dda-55fb-4bed-9e34-7a60067fb8cf"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c5dbc437-6283-42aa-926d-c33be5afd392"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e3a819ec-b4db-4c0f-a4bf-c49569e095b7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fd072cab-e876-4236-8f50-17e2d6a21133"
+      }
+    ]
+  },
+  {
+    "id": "heavy-bolt-pistol-sanguinary-spearhead-assault-intercessor-squad",
+    "name": "Heavy bolt pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Heavy Bolt Pistol",
+        "range": 18,
+        "stats": {
+          "A": 1,
+          "S": 4,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "3b8f-1cb7-3c6e-4455"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "713c-b312-58f3-5bdf"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "83a1-feb8-d495-aa28"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "874f-5923-626a-cc1c"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "8efc-6055-f8c9-3433"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "a3b1-a4d1-6857-384c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "18ebb932-9fb6-4642-a660-5e87335f67e8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "28c813e6-d045-4fe4-803a-80fc8f60dff8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "44c05557-501f-44f2-977c-d980654da9de"
+      },
+      {
+        "namespace": "mfm",
+        "id": "477ab733-466f-4be9-94a5-a6ec6b289f9c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "47ba1cce-3240-416b-b5da-bbfdc59005d0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "60a67500-a1f3-496d-892c-a3eecc16cbba"
+      },
+      {
+        "namespace": "mfm",
+        "id": "87364801-1d1b-485f-9880-de44aa052e2d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c4e17dda-55fb-4bed-9e34-7a60067fb8cf"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c5dbc437-6283-42aa-926d-c33be5afd392"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e3a819ec-b4db-4c0f-a4bf-c49569e095b7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fd072cab-e876-4236-8f50-17e2d6a21133"
+      }
+    ]
+  },
+  {
+    "id": "heavy-bolt-pistol-vengeful-brethren-bladeguard-veteran-squad",
+    "name": "Heavy bolt pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Heavy Bolt Pistol",
+        "range": 18,
+        "stats": {
+          "A": 1,
+          "S": 4,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "3b8f-1cb7-3c6e-4455"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "713c-b312-58f3-5bdf"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "83a1-feb8-d495-aa28"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "874f-5923-626a-cc1c"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "8efc-6055-f8c9-3433"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "a3b1-a4d1-6857-384c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "18ebb932-9fb6-4642-a660-5e87335f67e8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "28c813e6-d045-4fe4-803a-80fc8f60dff8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "44c05557-501f-44f2-977c-d980654da9de"
+      },
+      {
+        "namespace": "mfm",
+        "id": "477ab733-466f-4be9-94a5-a6ec6b289f9c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "47ba1cce-3240-416b-b5da-bbfdc59005d0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "87364801-1d1b-485f-9880-de44aa052e2d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c4e17dda-55fb-4bed-9e34-7a60067fb8cf"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c5dbc437-6283-42aa-926d-c33be5afd392"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e3a819ec-b4db-4c0f-a4bf-c49569e095b7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ee293dd9-bedc-4d3c-81a9-c4662b4e67c4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fd072cab-e876-4236-8f50-17e2d6a21133"
+      }
+    ]
+  },
+  {
+    "id": "heavy-bolt-pistol-vow-sworn-bladeguard-veteran-squad",
+    "name": "Heavy bolt pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Heavy Bolt Pistol",
+        "range": 18,
+        "stats": {
+          "A": 1,
+          "S": 4,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "3b8f-1cb7-3c6e-4455"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "713c-b312-58f3-5bdf"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "83a1-feb8-d495-aa28"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "874f-5923-626a-cc1c"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "8efc-6055-f8c9-3433"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "a3b1-a4d1-6857-384c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "18ebb932-9fb6-4642-a660-5e87335f67e8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "221c5ddf-b413-4db4-b0a1-fedc9c8a3a05"
+      },
+      {
+        "namespace": "mfm",
+        "id": "28c813e6-d045-4fe4-803a-80fc8f60dff8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "44c05557-501f-44f2-977c-d980654da9de"
+      },
+      {
+        "namespace": "mfm",
+        "id": "477ab733-466f-4be9-94a5-a6ec6b289f9c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "47ba1cce-3240-416b-b5da-bbfdc59005d0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "87364801-1d1b-485f-9880-de44aa052e2d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c4e17dda-55fb-4bed-9e34-7a60067fb8cf"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c5dbc437-6283-42aa-926d-c33be5afd392"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e3a819ec-b4db-4c0f-a4bf-c49569e095b7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fd072cab-e876-4236-8f50-17e2d6a21133"
+      }
+    ]
+  },
+  {
+    "id": "heavy-bolt-pistol-vow-sworn-crusader-squad",
+    "name": "Heavy bolt pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Heavy Bolt Pistol",
+        "range": 18,
+        "stats": {
+          "A": 1,
+          "S": 4,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "3b8f-1cb7-3c6e-4455"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "713c-b312-58f3-5bdf"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "83a1-feb8-d495-aa28"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "874f-5923-626a-cc1c"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "8efc-6055-f8c9-3433"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "a3b1-a4d1-6857-384c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "18ebb932-9fb6-4642-a660-5e87335f67e8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "28c813e6-d045-4fe4-803a-80fc8f60dff8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "44c05557-501f-44f2-977c-d980654da9de"
+      },
+      {
+        "namespace": "mfm",
+        "id": "477ab733-466f-4be9-94a5-a6ec6b289f9c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "47ba1cce-3240-416b-b5da-bbfdc59005d0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6c73329b-3c6b-4400-b058-f147a579fba9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "87364801-1d1b-485f-9880-de44aa052e2d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c4e17dda-55fb-4bed-9e34-7a60067fb8cf"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c5dbc437-6283-42aa-926d-c33be5afd392"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e3a819ec-b4db-4c0f-a4bf-c49569e095b7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fd072cab-e876-4236-8f50-17e2d6a21133"
+      }
+    ]
+  },
+  {
+    "id": "heavy-bolt-pistol-vow-sworn-sword-brethren-squad",
+    "name": "Heavy bolt pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Heavy Bolt Pistol",
+        "range": 18,
+        "stats": {
+          "A": 1,
+          "S": 4,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "3b8f-1cb7-3c6e-4455"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "713c-b312-58f3-5bdf"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "83a1-feb8-d495-aa28"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "874f-5923-626a-cc1c"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "8efc-6055-f8c9-3433"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "a3b1-a4d1-6857-384c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "18ebb932-9fb6-4642-a660-5e87335f67e8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "28c813e6-d045-4fe4-803a-80fc8f60dff8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3c41463a-c904-472b-b516-897cca09d966"
+      },
+      {
+        "namespace": "mfm",
+        "id": "44c05557-501f-44f2-977c-d980654da9de"
+      },
+      {
+        "namespace": "mfm",
+        "id": "477ab733-466f-4be9-94a5-a6ec6b289f9c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "47ba1cce-3240-416b-b5da-bbfdc59005d0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "87364801-1d1b-485f-9880-de44aa052e2d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c4e17dda-55fb-4bed-9e34-7a60067fb8cf"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c5dbc437-6283-42aa-926d-c33be5afd392"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e3a819ec-b4db-4c0f-a4bf-c49569e095b7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fd072cab-e876-4236-8f50-17e2d6a21133"
+      }
+    ]
+  },
+  {
+    "id": "heavy-bolt-pistol-assault-force-captain",
+    "name": "Heavy bolt pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Heavy Bolt Pistol",
+        "range": 18,
+        "stats": {
+          "A": 1,
+          "S": 4,
+          "AP": -1,
+          "D": 1,
+          "BS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "3b8f-1cb7-3c6e-4455"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "713c-b312-58f3-5bdf"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "83a1-feb8-d495-aa28"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "874f-5923-626a-cc1c"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "8efc-6055-f8c9-3433"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "a3b1-a4d1-6857-384c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "18ebb932-9fb6-4642-a660-5e87335f67e8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "28c813e6-d045-4fe4-803a-80fc8f60dff8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "44c05557-501f-44f2-977c-d980654da9de"
+      },
+      {
+        "namespace": "mfm",
+        "id": "477ab733-466f-4be9-94a5-a6ec6b289f9c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "47ba1cce-3240-416b-b5da-bbfdc59005d0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "87364801-1d1b-485f-9880-de44aa052e2d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "aa12af9d-5414-495c-9494-c27f052efa43"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c4e17dda-55fb-4bed-9e34-7a60067fb8cf"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c5dbc437-6283-42aa-926d-c33be5afd392"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fd072cab-e876-4236-8f50-17e2d6a21133"
+      }
+    ]
+  },
+  {
+    "id": "inferno-pistol-captain-raldeo",
+    "name": "Inferno pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Inferno Pistol",
+        "range": 6,
+        "stats": {
+          "A": 1,
+          "S": 8,
+          "AP": -4,
+          "D": "D3",
+          "BS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "melta",
+            "parameters": {
+              "value": 2
+            }
+          },
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "d8bf-e17f-d6fa-b7e8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2d05222e-1a7a-4a72-a17d-ce63da86cb3b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7a23b089-1d37-4c2f-9f17-45b4e5a38ec5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fa229b5a-f90f-4675-9e2d-6b5bcfc2aa7b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fe243ee3-5e41-4791-93ba-e8ad22a6201d"
+      }
+    ]
+  },
+  {
+    "id": "knives-and-fists-assault-force-intercessor-squad",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "02cd8e54-8d43-49e9-80b7-7fb182199ee7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1795e27d-6ae6-43db-9159-f02bc7be750b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "515cceb5-7bca-45db-b384-c5b27ddb805f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "539a6e04-205f-4843-9de3-eefa5bc2e1fb"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8fc56520-bedb-47be-9e4d-cc62677c718e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ab8eee48-6283-49c6-af30-06f50bd3ce3c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b7b3ceb8-8197-4d60-b363-544da7a225ed"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ec4eb5f1-3d6d-4005-bf0a-ee6246142206"
+      }
+    ],
+    "name": "Knives and Fists",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Knives and Fists",
+        "range": "Melee",
+        "stats": {
+          "A": 3,
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "WS": 3
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    }
+  },
+  {
+    "id": "knives-and-fists-vengeful-brethren-hellblaster-squad",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "02cd8e54-8d43-49e9-80b7-7fb182199ee7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1795e27d-6ae6-43db-9159-f02bc7be750b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "515cceb5-7bca-45db-b384-c5b27ddb805f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "539a6e04-205f-4843-9de3-eefa5bc2e1fb"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8fc56520-bedb-47be-9e4d-cc62677c718e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ab8eee48-6283-49c6-af30-06f50bd3ce3c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b7b3ceb8-8197-4d60-b363-544da7a225ed"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ec4eb5f1-3d6d-4005-bf0a-ee6246142206"
+      }
+    ],
+    "name": "Knives and Fists",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Knives and Fists",
+        "range": "Melee",
+        "stats": {
+          "A": 3,
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "WS": 3
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    }
+  },
+  {
+    "id": "knives-and-fists-vengeful-brethren-intercessor-squad",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "02cd8e54-8d43-49e9-80b7-7fb182199ee7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1795e27d-6ae6-43db-9159-f02bc7be750b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "515cceb5-7bca-45db-b384-c5b27ddb805f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "539a6e04-205f-4843-9de3-eefa5bc2e1fb"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8fc56520-bedb-47be-9e4d-cc62677c718e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ab8eee48-6283-49c6-af30-06f50bd3ce3c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b7b3ceb8-8197-4d60-b363-544da7a225ed"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ec4eb5f1-3d6d-4005-bf0a-ee6246142206"
+      }
+    ],
+    "name": "Knives and Fists",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Knives and Fists",
+        "range": "Melee",
+        "stats": {
+          "A": 3,
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "WS": 3
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    }
+  },
+  {
+    "id": "knives-and-fists-vow-sworn-crusader-squad",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "02cd8e54-8d43-49e9-80b7-7fb182199ee7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1795e27d-6ae6-43db-9159-f02bc7be750b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "515cceb5-7bca-45db-b384-c5b27ddb805f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "539a6e04-205f-4843-9de3-eefa5bc2e1fb"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8fc56520-bedb-47be-9e4d-cc62677c718e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ab8eee48-6283-49c6-af30-06f50bd3ce3c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b7b3ceb8-8197-4d60-b363-544da7a225ed"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ec4eb5f1-3d6d-4005-bf0a-ee6246142206"
+      }
+    ],
+    "name": "Knives and Fists",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Knives and Fists",
+        "range": "Melee",
+        "stats": {
+          "A": 3,
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "WS": 3
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    }
+  },
+  {
+    "id": "master-crafted-chainsword-captain-raldeo",
+    "name": "Master‐crafted chainsword",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Master-crafted Chainsword",
+        "range": "Melee",
+        "stats": {
+          "A": 7,
+          "S": 4,
+          "AP": -1,
+          "D": 2,
+          "WS": 2
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "8684-4762-7c7a-028e"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "d0e5-641b-1c3d-b6be"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4caf7eca-35b6-4ef7-a369-6527b2e81615"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5f7325bb-a652-4d18-a605-1c88254d5ed7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d64c31bf-bcee-4fd2-859e-387048df5de4"
+      }
+    ]
+  },
+  {
+    "id": "master-crafted-power-weapon-askars-wolfpack-wolf-guard-terminators",
+    "name": "Master-crafted power weapon",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Master-crafted Power Weapon",
+        "range": "Melee",
+        "stats": {
+          "A": 4,
+          "S": 5,
+          "AP": -2,
+          "D": 2,
+          "WS": 3
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "5b0b-9cc5-4b5-3f9c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3dd28b39-7a6b-4ba0-a394-b9005c6a89f2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7ff2de7f-8f98-4179-ac34-47ccebd19279"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e4bedca7-d092-48c0-ba30-bacb56eb48e1"
+      }
+    ]
+  },
+  {
+    "id": "master-crafted-power-weapon-vengeful-brethren-bladeguard-veteran-squad",
+    "name": "Master-crafted power weapon",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Master-crafted Power Weapon",
+        "range": "Melee",
+        "stats": {
+          "A": 4,
+          "S": 5,
+          "AP": -2,
+          "D": 2,
+          "WS": 3
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "5b0b-9cc5-4b5-3f9c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3dd28b39-7a6b-4ba0-a394-b9005c6a89f2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7ff2de7f-8f98-4179-ac34-47ccebd19279"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8d5352d8-e328-4088-9436-526483878a2f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e4bedca7-d092-48c0-ba30-bacb56eb48e1"
+      }
+    ]
+  },
+  {
+    "id": "master-crafted-power-weapon-vow-sworn-bladeguard-veteran-squad",
+    "name": "Master-crafted power weapon",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Master-crafted Power Weapon",
+        "range": "Melee",
+        "stats": {
+          "A": 4,
+          "S": 5,
+          "AP": -2,
+          "D": 2,
+          "WS": 3
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "5b0b-9cc5-4b5-3f9c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3dd28b39-7a6b-4ba0-a394-b9005c6a89f2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7ff2de7f-8f98-4179-ac34-47ccebd19279"
+      },
+      {
+        "namespace": "mfm",
+        "id": "98817cf8-b502-421f-a04b-dcdf84f1afaa"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e4bedca7-d092-48c0-ba30-bacb56eb48e1"
+      }
+    ]
+  },
+  {
+    "id": "master-crafted-power-weapon-vow-sworn-crusader-squad",
+    "name": "Master-crafted power weapon",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Master-crafted Power Weapon",
+        "range": "Melee",
+        "stats": {
+          "A": 3,
+          "S": 5,
+          "AP": -2,
+          "D": 2,
+          "WS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "lethal-hits"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "5b0b-9cc5-4b5-3f9c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3dd28b39-7a6b-4ba0-a394-b9005c6a89f2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6a6e76e6-6d85-43c1-8b71-f9ce96754a05"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7ff2de7f-8f98-4179-ac34-47ccebd19279"
+      }
+    ]
+  },
+  {
+    "id": "master-crafted-power-weapon-vow-sworn-sword-brethren-squad",
+    "name": "Master-crafted power weapon",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Master-crafted Power Weapon",
+        "range": "Melee",
+        "stats": {
+          "A": 3,
+          "S": 5,
+          "AP": -2,
+          "D": 2,
+          "WS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "lethal-hits"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "5b0b-9cc5-4b5-3f9c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1e8bf103-d89b-4271-95fc-1a39ab9eb647"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3dd28b39-7a6b-4ba0-a394-b9005c6a89f2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6a6e76e6-6d85-43c1-8b71-f9ce96754a05"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7ff2de7f-8f98-4179-ac34-47ccebd19279"
+      }
+    ]
+  },
+  {
+    "id": "master-crafted-power-weapon-assault-force-captain",
+    "name": "Master-crafted power weapon",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Master-crafted Power Weapon",
+        "range": "Melee",
+        "stats": {
+          "A": 6,
+          "S": 5,
+          "AP": -2,
+          "D": 2,
+          "WS": 2
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "5b0b-9cc5-4b5-3f9c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3dd28b39-7a6b-4ba0-a394-b9005c6a89f2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7ff2de7f-8f98-4179-ac34-47ccebd19279"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c182099b-42c5-490a-b335-0476d7160e19"
+      }
+    ]
+  },
+  {
+    "id": "master-crafted-power-weapon-assault-force-vanguard-veteran-squad-with-jump-packs",
+    "name": "Master-crafted power weapon",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Master-crafted Power Weapon",
+        "range": "Melee",
+        "stats": {
+          "A": 3,
+          "S": 5,
+          "AP": -2,
+          "D": 2,
+          "WS": 3
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "5b0b-9cc5-4b5-3f9c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3dd28b39-7a6b-4ba0-a394-b9005c6a89f2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7ff2de7f-8f98-4179-ac34-47ccebd19279"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c6f17e16-ac9d-483d-b979-469aea3a97eb"
+      }
+    ]
+  },
+  {
+    "id": "master-crafted-power-weapon-fyrri-askar",
+    "name": "Master-crafted power weapon",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Master-crafted Power Weapon",
+        "range": "Melee",
+        "stats": {
+          "A": 7,
+          "S": 5,
+          "AP": -2,
+          "D": 2,
+          "WS": 2
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "5b0b-9cc5-4b5-3f9c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "22c4eb08-eb18-46be-9939-0430d2b2c264"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3dd28b39-7a6b-4ba0-a394-b9005c6a89f2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7ff2de7f-8f98-4179-ac34-47ccebd19279"
+      }
+    ]
+  },
+  {
+    "id": "multi-melta-assault-force-land-speeder",
+    "name": "Multi-melta",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Multi-melta",
+        "range": 18,
+        "stats": {
+          "A": 2,
+          "S": 10,
+          "AP": -4,
+          "D": "D6",
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "melta",
+            "parameters": {
+              "value": 2
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "395-4b75-b9b2-7a5c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d8dc1e1b-7709-4d78-8cfd-f8ebd4eeb672"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ed2590a9-b050-488f-a467-442bae1eea53"
+      }
+    ]
+  },
+  {
+    "id": "plasma-incinerator-vengeful-brethren-hellblaster-squad",
+    "name": "Plasma incinerator",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Standard",
+        "range": 24,
+        "stats": {
+          "A": 2,
+          "S": 7,
+          "AP": -2,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "assault"
+          },
+          {
+            "keyword_id": "heavy"
+          }
+        ]
+      },
+      {
+        "name": "Supercharge",
+        "range": 24,
+        "stats": {
+          "A": 2,
+          "S": 8,
+          "AP": -3,
+          "D": 2,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "heavy"
+          },
+          {
+            "keyword_id": "hazardous"
+          },
+          {
+            "keyword_id": "assault"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "386c-b933-68ce-5e31"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "bb24-ed3f-7468-4f61"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0e501fb1-dad4-48ae-953b-79edeefa04b6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "313d65e2-4f85-4c71-8a23-ba2ddb03fb85"
+      },
+      {
+        "namespace": "mfm",
+        "id": "694341b5-fef0-4c57-b933-048229108bcd"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c0fd2834-64b4-458b-94d7-17f7bcd3b299"
+      }
+    ]
+  },
+  {
+    "id": "plasma-pistol-askars-wolfpack-blood-claws",
+    "name": "Plasma pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Standard",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 7,
+          "AP": -2,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      },
+      {
+        "name": "Supercharge",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 8,
+          "AP": -3,
+          "D": 2,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "hazardous"
+          },
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "25c2-104f-fa0c-809e"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "46b8-4c51-85a1-29a0"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "72c9-4b92-5aed-2fbe"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "9ffe-ab57-8e84-55aa"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "db9c-4473-424a-a0a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "00b2d39e-4732-426a-a037-b05743d74e33"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3066b049-18d0-436d-8478-6808c6c2e5be"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4aefd56f-533e-4b1c-9eab-1c32828fae7e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "56c65acf-df57-43bb-a34a-25356a0952f7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6bad4683-676a-4109-9a55-bc1ddda551f7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "79adf34c-bccb-4320-9db4-34c42b0dd669"
+      }
+    ]
+  },
+  {
+    "id": "plasma-pistol-assault-force-vanguard-veteran-squad-with-jump-packs",
+    "name": "Plasma pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Standard",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 7,
+          "AP": -2,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      },
+      {
+        "name": "Supercharge",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 8,
+          "AP": -3,
+          "D": 2,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "hazardous"
+          },
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "25c2-104f-fa0c-809e"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "46b8-4c51-85a1-29a0"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "72c9-4b92-5aed-2fbe"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "9ffe-ab57-8e84-55aa"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "db9c-4473-424a-a0a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "00b2d39e-4732-426a-a037-b05743d74e33"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3066b049-18d0-436d-8478-6808c6c2e5be"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4aefd56f-533e-4b1c-9eab-1c32828fae7e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "56c65acf-df57-43bb-a34a-25356a0952f7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6a5203dc-acc6-4fe2-a758-2cf13c82ae52"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6bad4683-676a-4109-9a55-bc1ddda551f7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "79adf34c-bccb-4320-9db4-34c42b0dd669"
+      }
+    ]
+  },
+  {
+    "id": "plasma-pistol-sanguinary-spearhead-assault-intercessor-squad",
+    "name": "Plasma pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Standard",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 7,
+          "AP": -2,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      },
+      {
+        "name": "Supercharge",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 8,
+          "AP": -3,
+          "D": 2,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "hazardous"
+          },
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "25c2-104f-fa0c-809e"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "46b8-4c51-85a1-29a0"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "72c9-4b92-5aed-2fbe"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "9ffe-ab57-8e84-55aa"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "db9c-4473-424a-a0a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "00b2d39e-4732-426a-a037-b05743d74e33"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3066b049-18d0-436d-8478-6808c6c2e5be"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4aefd56f-533e-4b1c-9eab-1c32828fae7e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "56c65acf-df57-43bb-a34a-25356a0952f7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6bad4683-676a-4109-9a55-bc1ddda551f7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "79adf34c-bccb-4320-9db4-34c42b0dd669"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9d1a909c-9cc4-4a5b-adda-761208dcc0f8"
+      }
+    ]
+  },
+  {
+    "id": "plasma-pistol-vow-sworn-sword-brethren-squad",
+    "name": "Plasma pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Standard",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 7,
+          "AP": -2,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      },
+      {
+        "name": "Supercharge",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 8,
+          "AP": -3,
+          "D": 2,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "hazardous"
+          },
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "25c2-104f-fa0c-809e"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "46b8-4c51-85a1-29a0"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "72c9-4b92-5aed-2fbe"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "9ffe-ab57-8e84-55aa"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "db9c-4473-424a-a0a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "00b2d39e-4732-426a-a037-b05743d74e33"
+      },
+      {
+        "namespace": "mfm",
+        "id": "06e60511-f145-4f4f-b71e-84399861cf7f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3066b049-18d0-436d-8478-6808c6c2e5be"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4aefd56f-533e-4b1c-9eab-1c32828fae7e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "56c65acf-df57-43bb-a34a-25356a0952f7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6bad4683-676a-4109-9a55-bc1ddda551f7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "79adf34c-bccb-4320-9db4-34c42b0dd669"
+      }
+    ]
+  },
+  {
+    "id": "power-fist-master-zacharial",
+    "name": "Power fist",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Power Fist",
+        "range": "Melee",
+        "stats": {
+          "A": 5,
+          "S": 8,
+          "AP": -2,
+          "D": 2,
+          "WS": 2
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "2091-913a-2894-0d9f"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "bef-1df5-dd8b-93fe"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "c716-bdaf-a92a-4093"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "eb70-5918-e9a-5a3f"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "f8d8-7e77-4b71-faac"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "ffb8-5ade-9772-59a7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "068a3202-65f1-447c-bad0-62ef1a5e27dd"
+      },
+      {
+        "namespace": "mfm",
+        "id": "165a6981-874b-4916-bdee-844ab9eb39fd"
+      },
+      {
+        "namespace": "mfm",
+        "id": "208df04b-3f8a-4f76-a432-568eafa9062b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "374c4e44-0c84-46f9-850e-c4b37f0d2c2f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3ff433ad-a4a8-453f-8dfd-16fda24f4bff"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4b51b372-f6ee-4cea-b494-364d50b1f095"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4f83171d-0ab2-43a9-8c24-f8a05bc82224"
+      },
+      {
+        "namespace": "mfm",
+        "id": "89cccca8-2639-4549-a084-f358b05c05f5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b2898983-5316-47f8-b756-88b12c871a71"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b59aede2-9e4c-404c-baab-e5cca4af4e7b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "db2b169a-c6aa-48f4-98fb-6c0326911d54"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f16f73ae-9ece-4a41-ab74-b17656ddf189"
+      }
+    ]
+  },
+  {
+    "id": "pyreblaster-vow-sworn-crusader-squad",
+    "name": "Pyreblaster",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Pyreblaster",
+        "range": 12,
+        "stats": {
+          "A": "D6",
+          "S": 5,
+          "AP": 0,
+          "D": 1,
+          "BS": null
+        },
+        "keywords": [
+          {
+            "keyword_id": "ignores-cover"
+          },
+          {
+            "keyword_id": "torrent"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "2737-cb80-0c3a-3dfa"
+      },
+      {
+        "namespace": "mfm",
+        "id": "110169b1-0932-42c8-92ff-0065da40f6eb"
+      },
+      {
+        "namespace": "mfm",
+        "id": "38e98edd-827d-4c41-ba75-b773d0f5c24e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "485de977-421c-4481-84d2-5c62924109ad"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fa8b0ba8-f825-494f-84f1-d846866f0879"
+      }
+    ]
+  },
+  {
+    "id": "relic-chainsword-master-zacharial",
+    "name": "Relic chainsword",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Relic Chainsword",
+        "range": "Melee",
+        "stats": {
+          "A": 3,
+          "S": 4,
+          "AP": -1,
+          "D": 2,
+          "WS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "extra-attacks"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "6f4d-ecbf-e3e2-4252"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2b66ff0c-759d-457f-86c4-8bde0f6cad32"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8e008828-b4fc-4595-80c6-7b02189c6d20"
+      },
+      {
+        "namespace": "mfm",
+        "id": "92d381cc-379a-4848-9a02-5f8c83f3a207"
+      }
+    ]
+  },
+  {
+    "id": "relic-greataxe-askars-wolfpack-wolf-guard-terminators",
+    "name": "Relic greataxe",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Relic Greataxe",
+        "range": "Melee",
+        "stats": {
+          "A": 3,
+          "S": 7,
+          "AP": -2,
+          "D": 3,
+          "WS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "devastating-wounds"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "3a37fdbe-039a-455c-907b-960b32c48df5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7e2b9d51-0b8c-4136-aa3c-201e2b780bcb"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e8b5a501-8690-4b0b-89f2-495fab3bc4e2"
+      }
+    ]
+  },
+  {
+    "id": "storm-bolter-askars-wolfpack-wolf-guard-terminators",
+    "name": "Storm Bolters",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Storm Bolter",
+        "range": 24,
+        "stats": {
+          "A": 2,
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "BS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 2
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "2fb0-97d5-262d-b992"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "7eb4-c21c-d0a2-39df"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "b020-937c-7e52-775a"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "b178-215e-97e7-c81d"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "e93d-de1f-b759-4c0b"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "eb61-5cd0-5242-74cc"
+      },
+      {
+        "namespace": "mfm",
+        "id": "15cb7b56-d9d4-42c7-b6d0-d1864bb1539a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2e4fac68-0bff-4c61-85e4-ba97c85426b2"
+      }
+    ]
+  },
+  {
+    "id": "stormfrag-auto-launcher-askars-wolfpack-wulfen",
+    "name": "Stormfrag auto-launcher",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Stormfrag Auto-launcher",
+        "range": 12,
+        "stats": {
+          "A": "D3",
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "BS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 1
+            }
+          },
+          {
+            "keyword_id": "assault"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "2b70-55e9-caf0-c94d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a7f54f0e-5c29-4ab3-8c5b-f9461b00af66"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b79c0b9d-9fee-4233-aeb3-efb6c0229dea"
+      },
+      {
+        "namespace": "mfm",
+        "id": "be10e9b4-8332-4008-bc1e-076d86c5aae1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cc383735-ef5c-4353-9c36-99da0a6b55cb"
+      }
+    ]
+  },
+  {
+    "id": "stormfury-missile-launcher-assault-force-land-speeder",
+    "name": "Stormfury missile launcher",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Stormfury Missile Launcher",
+        "range": 48,
+        "stats": {
+          "A": 1,
+          "S": 10,
+          "AP": -3,
+          "D": 4,
+          "BS": 3
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "5ae0-0712-b3f5-6492"
+      },
+      {
+        "namespace": "mfm",
+        "id": "01c9c15b-0e9d-483f-9ad2-c262902e1354"
+      },
+      {
+        "namespace": "mfm",
+        "id": "adce185b-28fd-41c1-8883-fac68c3f00c2"
+      }
+    ]
+  },
+  {
+    "id": "twin-bolt-rifle-invader-atvs",
+    "name": "Twin bolt rifle",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Twin Bolt Rifle",
+        "range": 24,
+        "stats": {
+          "A": 2,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "assault"
+          },
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 2
+            }
+          },
+          {
+            "keyword_id": "twin-linked"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "3451-a59-ad9d-cc65"
+      },
+      {
+        "namespace": "mfm",
+        "id": "009604c5-af47-43cd-80c7-a62bb4658dd9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2fe4a90b-bb54-42c8-bdf0-14ba8daa6cc7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "93ec44f2-aec3-4fe2-aa34-dd54a6b34fbf"
       }
     ]
   }

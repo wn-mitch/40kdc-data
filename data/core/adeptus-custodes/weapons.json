@@ -1988,18 +1988,21 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Kinetic destroyer",
-        "range": 12,
+        "name": "Kinetic Destroyer",
+        "range": 18,
         "stats": {
-          "A": 2,
+          "A": 4,
           "S": 6,
-          "AP": -1,
+          "AP": -2,
           "D": 1,
           "BS": 2
         },
         "keywords": [
           {
-            "keyword_id": "pistol"
+            "keyword_id": "assault"
+          },
+          {
+            "keyword_id": "close-quarters"
           },
           {
             "keyword_id": "sustained-hits",
@@ -2022,6 +2025,14 @@
       {
         "namespace": "mfm",
         "id": "51a534aa-70c3-43d1-bb73-9b78b049027b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "91e83d4b-e141-4c72-a511-5a5e8175c386"
+      },
+      {
+        "namespace": "mfm",
+        "id": "95e188f6-14be-4d1a-8bfb-1b639fa026af"
       }
     ]
   },
@@ -2118,13 +2129,20 @@
         "name": "Solarite Power Talon",
         "range": "Melee",
         "stats": {
-          "A": 7,
-          "S": 7,
+          "A": 6,
+          "S": 6,
           "AP": -2,
           "D": 1,
           "WS": 2
         },
-        "keywords": []
+        "keywords": [
+          {
+            "keyword_id": "sustained-hits",
+            "parameters": {
+              "value": 2
+            }
+          }
+        ]
       }
     ],
     "game_version": {
@@ -2135,6 +2153,10 @@
       {
         "namespace": "bsdata",
         "id": "8ec2-b211-8106-228a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "273b7f4c-9574-42d0-befb-26a787c22586"
       },
       {
         "namespace": "mfm",
@@ -3295,12 +3317,23 @@
           "AP": -3,
           "D": "D6+2",
           "BS": 2
-        }
+        },
+        "keywords": [
+          {
+            "keyword_id": "lethal-hits",
+            "parameters": {
+              "required_target_keywords_any": [
+                "Monster",
+                "Vehicle"
+              ]
+            }
+          }
+        ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -4422,5 +4455,193 @@
       "edition": "11th",
       "dataslate": "mfm-995"
     }
+  },
+  {
+    "id": "sentinel-blade-aquilan-talon-sentinel-guard-sodality",
+    "name": "Sentinel blade",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Sentinel Blade",
+        "range": 12,
+        "stats": {
+          "A": 4,
+          "S": 5,
+          "AP": -1,
+          "D": 2,
+          "BS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "assault"
+          },
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      },
+      {
+        "name": "Sentinel Blade",
+        "range": "Melee",
+        "stats": {
+          "A": 5,
+          "S": 6,
+          "AP": -2,
+          "D": 2,
+          "WS": 2
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "c24c-78c1-8221-eae"
+      },
+      {
+        "namespace": "mfm",
+        "id": "37266675-c970-4e30-b207-1caab3f27358"
+      },
+      {
+        "namespace": "mfm",
+        "id": "931c5cbf-29f1-466d-beeb-08581ca2f0d4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "965baf19-1d7f-476e-b50e-0f6ab9cbd90a"
+      }
+    ]
+  },
+  {
+    "id": "sentinel-blade-aquilan-wing-sentinel-guard-sodality",
+    "name": "Sentinel blade",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Sentinel Blade",
+        "range": 12,
+        "stats": {
+          "A": 4,
+          "S": 5,
+          "AP": -1,
+          "D": 2,
+          "BS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "assault"
+          },
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      },
+      {
+        "name": "Sentinel Blade",
+        "range": "Melee",
+        "stats": {
+          "A": 5,
+          "S": 6,
+          "AP": -2,
+          "D": 2,
+          "WS": 2
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "c24c-78c1-8221-eae"
+      },
+      {
+        "namespace": "mfm",
+        "id": "37266675-c970-4e30-b207-1caab3f27358"
+      },
+      {
+        "namespace": "mfm",
+        "id": "931c5cbf-29f1-466d-beeb-08581ca2f0d4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "965baf19-1d7f-476e-b50e-0f6ab9cbd90a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "eddf7611-a528-4385-bc6b-f0e421f76db5"
+      }
+    ]
+  },
+  {
+    "id": "sentinel-blade-sentinel-guard-sodality",
+    "name": "Sentinel blade",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Sentinel Blade",
+        "range": 12,
+        "stats": {
+          "A": 4,
+          "S": 5,
+          "AP": -1,
+          "D": 2,
+          "BS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "assault"
+          },
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      },
+      {
+        "name": "Sentinel Blade",
+        "range": "Melee",
+        "stats": {
+          "A": 5,
+          "S": 6,
+          "AP": -2,
+          "D": 2,
+          "WS": 2
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "c24c-78c1-8221-eae"
+      },
+      {
+        "namespace": "mfm",
+        "id": "37266675-c970-4e30-b207-1caab3f27358"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3922821e-dcb8-42f5-84e8-92ffe3d4b80b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "931c5cbf-29f1-466d-beeb-08581ca2f0d4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "965baf19-1d7f-476e-b50e-0f6ab9cbd90a"
+      }
+    ]
   }
 ]

@@ -2068,5 +2068,101 @@
       "monarch-of-the-hunt-emperors-children",
       "no-prey-can-evade-emperors-children"
     ]
+  },
+  {
+    "id": "defiler",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "7f8b3a16-ae4a-4955-ab14-ad95402c4baf"
+      }
+    ],
+    "name": "Defiler",
+    "faction_id": "emperors-children",
+    "profiles": [
+      {
+        "name": "Defiler",
+        "M": 12,
+        "T": 11,
+        "W": 18,
+        "Sv": 3,
+        "invuln_sv": null,
+        "Ld": 6,
+        "OC": 5
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 300,
+        "unit_count_min": 1,
+        "unit_count_max": 1
+      },
+      {
+        "models": 1,
+        "cost": 350,
+        "unit_count_min": 2,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Vehicle",
+      "Walker",
+      "Chaos",
+      "Slaanesh",
+      "Daemon",
+      "Defiler"
+    ],
+    "faction_keywords": [
+      "Emperor’s Children"
+    ],
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "weapon_ids": [
+      "hades-battle-cannon",
+      "ectoplasma-destructor",
+      "excruciator-cannon",
+      "magma-cutters-defiler",
+      "heavy-missile-launcher",
+      "heavy-baleflamer",
+      "heavy-reaper-autocannon",
+      "electroscourge",
+      "hades-lascannon",
+      "shearing-claws"
+    ],
+    "ability_ids": [
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "revel-in-desecration-emperors-children",
+      "scuttling-walker-emperors-children",
+      {
+        "id": "damaged",
+        "value": 6
+      }
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 160
+    },
+    "wargear_costs": [
+      {
+        "item_id": "hades-lascannon",
+        "cost": 15
+      },
+      {
+        "item_id": "heavy-reaper-autocannon",
+        "cost": 15
+      }
+    ]
   }
 ]

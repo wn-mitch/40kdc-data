@@ -17,7 +17,7 @@ Ambiguous units (multiple same-size base comps) are preserved, not overwritten.
 | chaos-space-marines | 58 | 0 | 0 | 0 | 0 |
 | death-guard | 41 | 0 | 0 | 0 | 0 |
 | drukhari | 27 | 0 | 0 | 0 | 0 |
-| emperors-children | 25 | 0 | 0 | 0 | 0 |
+| emperors-children | 26 | 0 | 0 | 0 | 0 |
 | genestealer-cults | 28 | 0 | 0 | 0 | 0 |
 | grey-knights | 30 | 0 | 0 | 0 | 0 |
 | imperial-knights | 23 | 0 | 0 | 0 | 0 |
@@ -28,14 +28,14 @@ Ambiguous units (multiple same-size base comps) are preserved, not overwritten.
 | thousand-sons | 38 | 0 | 0 | 0 | 0 |
 | tyranids | 57 | 0 | 0 | 0 | 0 |
 | world-eaters | 34 | 0 | 0 | 0 | 0 |
-| **TOTAL** | **1103** | **0** | **0** | **1** | **0** |
+| **TOTAL** | **1104** | **0** | **0** | **1** | **0** |
 
 ## adeptus-astartes
 
 **Ambiguous (multiple same-size base comps — kept repo value):**
 - wolf-guard-headtakers
 
-## New units in dump (no repo entity — author in a follow-up): 16
+## New units in dump (no repo entity — author in a follow-up): 15
 
 - black-templars/gladiator-lancer
 - black-templars/repulsor-executioner
@@ -43,7 +43,6 @@ Ambiguous units (multiple same-size base comps) are preserved, not overwritten.
 - black-templars/gladiator-reaper
 - astra-militarum/draydens-lance-attilan-rough-riders
 - emperors-children/callous-blades-flawless-blades
-- emperors-children/defiler
 - black-templars/gladiator-valiant
 - genestealer-cults/claw-of-ascension-hybrid-metamorphs
 - black-templars/impulsor

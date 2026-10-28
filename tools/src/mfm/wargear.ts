@@ -2689,7 +2689,7 @@ export function runWargearCosts(dump: MfmDump, onlyDir?: string): WargearCostsRe
 }
 
 export interface CompNamesReport {
-  dirs: { dir: string; matched: number; rowsRenamed: number; unitsRebuilt: number }[];
+  dirs: { dir: string; matched: number; rowsRenamed: number; unitsRebuilt: number; unitsCreated: number }[];
   skipped: { dir: string; id: string; reason: string }[];
   notes: { dir: string; id: string; note: string }[];
   staged: StagedWrite[];
@@ -2789,6 +2789,7 @@ export function runCompositionNames(dump: MfmDump, onlyDir?: string): CompNamesR
     let matched = 0;
     let rowsRenamed = 0;
     let unitsRebuilt = 0;
+    let unitsCreated = 0;
     let changed = false;
     let unitsFileChanged = false;
     for (const ds of dsList) {
@@ -2800,7 +2801,8 @@ export function runCompositionNames(dump: MfmDump, onlyDir?: string): CompNamesR
       } catch {
         continue;
       }
-      if (matchedRepoIds.has(id) || !compsByUnit.has(id)) continue;
+      // A unit with no composition yet (a freshly seeded datasheet) gets one built below.
+      if (matchedRepoIds.has(id) || (!compsByUnit.has(id) && !unitById.has(id))) continue;
       matchedRepoIds.add(id);
       matched++;
       // Per-model Enhancement eligibility (miniature.excludedFromEnhancements),
@@ -2844,6 +2846,33 @@ export function runCompositionNames(dump: MfmDump, onlyDir?: string): CompNamesR
         if (!ids?.length) return add.length ? [...add] : ids;
         return [...ids, ...add.filter((x) => !ids.includes(x))];
       };
+      if (!compsByUnit.has(id)) {
+        // **Create** — the unit exists but no composition does: build one from the dump
+        // view as a rebuild would, counts from the all-tiers envelope (composition-tiers
+        // then adds the tiers), carrying the unit's faction and game modes.
+        const unit = unitById.get(id)!;
+        const models: CompModel[] = view.map((d) => {
+          const env = agg.envelope.get(d.name);
+          const row: CompModel = { name: d.name, min: env?.min ?? d.min, max: env?.max ?? d.max };
+          row.is_leader_model = view.length > 1 && d.max === 1 && view.some((x) => x.name !== d.name && x.max > 1);
+          const def = withManual(d.name, defaultsByModel.get(d.name));
+          if (def?.length) row.default_weapon_ids = def;
+          if (excludedNames.has(d.name)) row.excluded_from_enhancements = true;
+          return row;
+        });
+        const modes = (unit as { game_modes?: string[] }).game_modes;
+        comps.push({
+          unit_id: id,
+          faction_id: (unit as { faction_id?: string }).faction_id ?? dir,
+          models,
+          game_version: { ...currentGameVersion(dump) },
+          ...(modes?.length ? { game_modes: [...modes] } : {}),
+        });
+        compsByUnit.set(id, []);
+        unitsCreated++;
+        changed = true;
+        continue;
+      }
       for (const comp of compsByUnit.get(id) ?? []) {
         // Names map cleanly onto the dump view (identical, or drifting only by
         // pluralisation/punctuation) → rename + refresh defaults, leaving the
@@ -2995,7 +3024,7 @@ export function runCompositionNames(dump: MfmDump, onlyDir?: string): CompNamesR
     }
     if (changed) staged.push({ path: cpath, value: comps });
     if (unitsFileChanged) staged.push({ path: upath, value: units });
-    reportDirs.push({ dir, matched, rowsRenamed, unitsRebuilt });
+    reportDirs.push({ dir, matched, rowsRenamed, unitsRebuilt, unitsCreated });
   }
   return { dirs: reportDirs, skipped, notes, staged };
 }

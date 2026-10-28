@@ -3152,7 +3152,12 @@
       }
     ],
     "weapon_ids": [
-      "phosphor-pistol-purge-corps-serberys-sulphurhounds"
+      "phosphor-pistol-purge-corps-serberys-sulphurhounds",
+      "clawed-limbs",
+      "phosphor-blast-carbine-purge-corps-serberys-sulphurhounds",
+      "sulphur-breath-purge-corps-serberys-sulphurhounds",
+      "cavalry-arc-maul",
+      "mechanicus-pistol-purge-corps-serberys-sulphurhounds"
     ],
     "external_refs": [
       {

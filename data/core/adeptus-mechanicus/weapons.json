@@ -4873,5 +4873,143 @@
         "id": "f99351e0-3d3f-47b9-abd1-4035629d5bf5"
       }
     ]
+  },
+  {
+    "id": "mechanicus-pistol-purge-corps-serberys-sulphurhounds",
+    "name": "Mechanicus pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Mechanicus Pistol",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 6,
+          "AP": -1,
+          "D": 1,
+          "BS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "devastating-wounds"
+          },
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "2b1f-798d-9bca-4ad9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "266d545d-ff04-43aa-87d6-e6f7e2b9082f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7f9aa92a-30d7-413e-a28b-095c7a941144"
+      }
+    ]
+  },
+  {
+    "id": "phosphor-blast-carbine-purge-corps-serberys-sulphurhounds",
+    "name": "Phosphor blast carbine",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Phosphor Blast Carbine",
+        "range": 18,
+        "stats": {
+          "A": "D6",
+          "S": 6,
+          "AP": 0,
+          "D": 1,
+          "BS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 1
+            }
+          },
+          {
+            "keyword_id": "ignores-cover"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "1ac-33a5-48e0-8ee3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4d94d36a-b047-4e11-a78f-74061b3e63ef"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c4b49548-6fdf-4f02-a9f3-c4e869b060ae"
+      }
+    ]
+  },
+  {
+    "id": "sulphur-breath-purge-corps-serberys-sulphurhounds",
+    "name": "Sulphur breath",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Sulphur breath",
+        "range": 9,
+        "stats": {
+          "A": "D6",
+          "S": 3,
+          "AP": -1,
+          "D": 1,
+          "BS": null
+        },
+        "keywords": [
+          {
+            "keyword_id": "torrent"
+          },
+          {
+            "keyword_id": "close-quarters"
+          },
+          {
+            "keyword_id": "ignores-cover"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "a6c2-1352-a3b1-8819"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5c9e51ae-bbc4-4e49-bd63-5a95bdb8055e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "89d41b57-01a2-4ee3-84b3-3b846b6d7867"
+      }
+    ]
   }
 ]

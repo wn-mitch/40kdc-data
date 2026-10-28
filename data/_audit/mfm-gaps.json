@@ -10,58 +10,6 @@
         "beacon-angelis-deathwatch-support-deathwatch"
       ]
     },
-    "unit_compositions": {
-      "adepta-sororitas": [
-        "sanctuary-canoness-adalya",
-        "sanctuary-guardians-arco-flagellants",
-        "sanctuary-guardians-battle-sisters-squad",
-        "sanctuary-guardians-celestian-sacresants"
-      ],
-      "adeptus-astartes": [
-        "askars-wolfpack-blood-claws",
-        "askars-wolfpack-wolf-guard-terminators",
-        "askars-wolfpack-wulfen",
-        "assault-force-captain",
-        "assault-force-intercessor-squad",
-        "assault-force-land-speeder",
-        "assault-force-librarian",
-        "assault-force-vanguard-veteran-squad-with-jump-packs",
-        "captain-raldeo",
-        "emperors-champion-vedrenn",
-        "eradicator-squad-with-melta-rifles",
-        "fyrri-askar",
-        "invader-atvs",
-        "marneus-calgar",
-        "master-zacharial",
-        "sanguinary-spearhead-assault-intercessor-squad",
-        "sanguinary-spearhead-sanguinary-guard",
-        "vengeful-brethren-bladeguard-veteran-squad",
-        "vengeful-brethren-hellblaster-squad",
-        "vengeful-brethren-intercessor-squad",
-        "vow-sworn-bladeguard-veteran-squad",
-        "vow-sworn-crusader-squad",
-        "vow-sworn-sword-brethren-squad"
-      ],
-      "adeptus-custodes": [
-        "aquilan-talon-contemptor-achillus-dreadnought",
-        "aquilan-talon-sentinel-guard-sodality",
-        "aquilan-talon-shield-captain",
-        "aquilan-wing-sentinel-guard-sodality",
-        "aquilan-wing-shield-captain",
-        "aquilan-wing-venatari-with-kinetic-destroyers",
-        "aquilon-terminators-with-solarite-power-talons",
-        "caladius-annihilator-grav-tank",
-        "sentinel-guard-sodality",
-        "venatari-with-kinetic-destroyers"
-      ],
-      "adeptus-mechanicus": [
-        "purge-corps-serberys-sulphurhounds"
-      ],
-      "orks": [
-        "gunwagon",
-        "warbuggies"
-      ]
-    },
     "units": {
       "black-templars": [
         "castellan",
@@ -136,9 +84,6 @@
         "talonstrike-kill-team",
         "watch-captain-artemis",
         "watch-master"
-      ],
-      "emperors-children": [
-        "defiler"
       ],
       "space-wolves": [
         "arjac-rockfist",
@@ -374,47 +319,6 @@
   },
   "data_version": 995,
   "modes": {
-    "unit_compositions": {
-      "adepta-sororitas": {
-        "sanctuary-canoness-adalya": "combat-patrol",
-        "sanctuary-guardians-arco-flagellants": "combat-patrol",
-        "sanctuary-guardians-battle-sisters-squad": "combat-patrol",
-        "sanctuary-guardians-celestian-sacresants": "combat-patrol"
-      },
-      "adeptus-astartes": {
-        "askars-wolfpack-blood-claws": "combat-patrol",
-        "askars-wolfpack-wolf-guard-terminators": "combat-patrol",
-        "askars-wolfpack-wulfen": "combat-patrol",
-        "assault-force-captain": "combat-patrol",
-        "assault-force-intercessor-squad": "combat-patrol",
-        "assault-force-land-speeder": "combat-patrol",
-        "assault-force-librarian": "combat-patrol",
-        "assault-force-vanguard-veteran-squad-with-jump-packs": "combat-patrol",
-        "captain-raldeo": "combat-patrol",
-        "emperors-champion-vedrenn": "combat-patrol",
-        "fyrri-askar": "combat-patrol",
-        "master-zacharial": "combat-patrol",
-        "sanguinary-spearhead-assault-intercessor-squad": "combat-patrol",
-        "sanguinary-spearhead-sanguinary-guard": "combat-patrol",
-        "vengeful-brethren-bladeguard-veteran-squad": "combat-patrol",
-        "vengeful-brethren-hellblaster-squad": "combat-patrol",
-        "vengeful-brethren-intercessor-squad": "combat-patrol",
-        "vow-sworn-bladeguard-veteran-squad": "combat-patrol",
-        "vow-sworn-crusader-squad": "combat-patrol",
-        "vow-sworn-sword-brethren-squad": "combat-patrol"
-      },
-      "adeptus-custodes": {
-        "aquilan-talon-contemptor-achillus-dreadnought": "combat-patrol",
-        "aquilan-talon-sentinel-guard-sodality": "combat-patrol",
-        "aquilan-talon-shield-captain": "combat-patrol",
-        "aquilan-wing-sentinel-guard-sodality": "combat-patrol",
-        "aquilan-wing-shield-captain": "combat-patrol",
-        "aquilan-wing-venatari-with-kinetic-destroyers": "combat-patrol"
-      },
-      "adeptus-mechanicus": {
-        "purge-corps-serberys-sulphurhounds": "combat-patrol"
-      }
-    },
     "units": {
       "black-templars": {
         "emperors-champion-vedrenn": "combat-patrol",

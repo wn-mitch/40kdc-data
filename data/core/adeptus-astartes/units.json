@@ -13827,6 +13827,10 @@
         "namespace": "mfm",
         "id": "4a70c609-1728-4ccb-99be-b609ef18575c"
       }
+    ],
+    "weapon_ids": [
+      "heavy-bolt-pistol-assault-force-captain",
+      "master-crafted-power-weapon-assault-force-captain"
     ]
   },
   {
@@ -13889,6 +13893,13 @@
         "namespace": "mfm",
         "id": "0080dcbd-c2de-4b82-a7a7-e94c47fd54f4"
       }
+    ],
+    "weapon_ids": [
+      "bolt-pistol-assault-force-intercessor-squad",
+      "bolt-rifle-assault-force-intercessor-squad",
+      "knives-and-fists-assault-force-intercessor-squad",
+      "chainsword-assault-force-intercessor-squad",
+      "grenade-launcher-assault-force-intercessor-squad"
     ]
   },
   {
@@ -13946,6 +13957,12 @@
         "namespace": "mfm",
         "id": "e46bda3b-7f50-4bd0-a7a4-d661e3814485"
       }
+    ],
+    "weapon_ids": [
+      "armoured-impact-assault-force-land-speeder",
+      "multi-melta-assault-force-land-speeder",
+      "heavy-flamer",
+      "stormfury-missile-launcher-assault-force-land-speeder"
     ]
   },
   {
@@ -14009,6 +14026,11 @@
         "namespace": "mfm",
         "id": "e45bd259-44a9-4d11-b3f7-b7c60acd1c48"
       }
+    ],
+    "weapon_ids": [
+      "force-weapon-assault-force-librarian",
+      "fulmination",
+      "bolt-pistol-assault-force-librarian"
     ]
   },
   {
@@ -14071,6 +14093,11 @@
         "namespace": "mfm",
         "id": "9a248fbd-de4c-497f-8e05-0252056811c0"
       }
+    ],
+    "weapon_ids": [
+      "heavy-bolt-pistol-assault-force-vanguard-veteran-squad-with-jump-packs",
+      "master-crafted-power-weapon-assault-force-vanguard-veteran-squad-with-jump-packs",
+      "plasma-pistol-assault-force-vanguard-veteran-squad-with-jump-packs"
     ]
   },
   {
@@ -14135,6 +14162,10 @@
     ],
     "ability_ids": [
       "deft-riposte-black-templars"
+    ],
+    "weapon_ids": [
+      "black-sword-emperors-champion-vedrenn",
+      "bolt-pistol-emperors-champion-vedrenn"
     ]
   },
   {
@@ -14196,6 +14227,11 @@
     ],
     "ability_ids": [
       "bladeguard-black-templars"
+    ],
+    "weapon_ids": [
+      "master-crafted-power-weapon-vow-sworn-bladeguard-veteran-squad",
+      "neo-volkite-pistol",
+      "heavy-bolt-pistol-vow-sworn-bladeguard-veteran-squad"
     ]
   },
   {
@@ -14265,6 +14301,16 @@
     ],
     "ability_ids": [
       "righteous-zeal-vow-sworn-crusader-squad-black-templars"
+    ],
+    "weapon_ids": [
+      "heavy-bolt-pistol-vow-sworn-crusader-squad",
+      "chainsword-vow-sworn-crusader-squad",
+      "bolt-pistol-vow-sworn-crusader-squad",
+      "bolt-rifle-vow-sworn-crusader-squad",
+      "knives-and-fists-vow-sworn-crusader-squad",
+      "master-crafted-power-weapon-vow-sworn-crusader-squad",
+      "pyreblaster-vow-sworn-crusader-squad",
+      "neophyte-firearm"
     ]
   },
   {
@@ -14326,6 +14372,15 @@
     ],
     "ability_ids": [
       "exploit-their-cowardice-vow-sworn-sword-brethren-squad-black-templars"
+    ],
+    "weapon_ids": [
+      "plasma-pistol-vow-sworn-sword-brethren-squad",
+      "master-crafted-power-weapon-vow-sworn-sword-brethren-squad",
+      "pyre-pistol",
+      "twin-lightning-claws",
+      "chainsword-vow-sworn-sword-brethren-squad",
+      "heavy-bolt-pistol-vow-sworn-sword-brethren-squad",
+      "combi-weapon-vow-sworn-sword-brethren-squad"
     ]
   },
   {
@@ -14390,6 +14445,10 @@
         "namespace": "mfm",
         "id": "553fb477-1c74-4f86-a96f-f630a56fcdad"
       }
+    ],
+    "weapon_ids": [
+      "inferno-pistol-captain-raldeo",
+      "master-crafted-chainsword-captain-raldeo"
     ]
   },
   {
@@ -14453,6 +14512,11 @@
         "namespace": "mfm",
         "id": "27968cc7-61ae-4baa-a05a-f9f77088e9c4"
       }
+    ],
+    "weapon_ids": [
+      "chainsword-sanguinary-spearhead-assault-intercessor-squad",
+      "plasma-pistol-sanguinary-spearhead-assault-intercessor-squad",
+      "heavy-bolt-pistol-sanguinary-spearhead-assault-intercessor-squad"
     ]
   },
   {
@@ -14510,6 +14574,11 @@
     },
     "ability_ids": [
       "born-to-fight-blood-angels"
+    ],
+    "weapon_ids": [
+      "angelus-boltgun",
+      "encarmine-blade",
+      "encarmine-spear"
     ]
   },
   {
@@ -14573,6 +14642,11 @@
     ],
     "ability_ids": [
       "gravis-protection-dark-angels"
+    ],
+    "weapon_ids": [
+      "boltstorm-gauntlet-master-zacharial",
+      "power-fist-master-zacharial",
+      "relic-chainsword-master-zacharial"
     ]
   },
   {
@@ -14644,6 +14718,10 @@
     ],
     "ability_ids": [
       "bladeguard-dark-angels"
+    ],
+    "weapon_ids": [
+      "heavy-bolt-pistol-vengeful-brethren-bladeguard-veteran-squad",
+      "master-crafted-power-weapon-vengeful-brethren-bladeguard-veteran-squad"
     ]
   },
   {
@@ -14705,6 +14783,11 @@
     ],
     "ability_ids": [
       "punishing-volley-dark-angels"
+    ],
+    "weapon_ids": [
+      "bolt-pistol-vengeful-brethren-hellblaster-squad",
+      "knives-and-fists-vengeful-brethren-hellblaster-squad",
+      "plasma-incinerator-vengeful-brethren-hellblaster-squad"
     ]
   },
   {
@@ -14768,6 +14851,11 @@
     ],
     "ability_ids": [
       "objective-secured-dark-angels"
+    ],
+    "weapon_ids": [
+      "bolt-pistol-vengeful-brethren-intercessor-squad",
+      "bolt-rifle-vengeful-brethren-intercessor-squad",
+      "knives-and-fists-vengeful-brethren-intercessor-squad"
     ]
   },
   {
@@ -14831,6 +14919,12 @@
     ],
     "ability_ids": [
       "berserk-charge-askars-wolfpack-blood-claws-space-wolves"
+    ],
+    "weapon_ids": [
+      "plasma-pistol-askars-wolfpack-blood-claws",
+      "power-weapon",
+      "bolt-pistol-askars-wolfpack-blood-claws",
+      "chainsword-askars-wolfpack-blood-claws"
     ]
   },
   {
@@ -14892,6 +14986,13 @@
     ],
     "ability_ids": [
       "rugged-resilience-askars-wolfpack-wolf-guard-terminators-space-wolves"
+    ],
+    "weapon_ids": [
+      "relic-greataxe-askars-wolfpack-wolf-guard-terminators",
+      "assault-cannon-askars-wolfpack-wolf-guard-terminators",
+      "power-fist",
+      "master-crafted-power-weapon-askars-wolfpack-wolf-guard-terminators",
+      "storm-bolter-askars-wolfpack-wolf-guard-terminators"
     ]
   },
   {
@@ -14952,6 +15053,10 @@
     "ability_ids": [
       "death-totem-askars-wolfpack-wulfen-space-wolves",
       "savage-frenzy-askars-wolfpack-wulfen-space-wolves"
+    ],
+    "weapon_ids": [
+      "frost-blades-and-feral-claws",
+      "stormfrag-auto-launcher-askars-wolfpack-wulfen"
     ]
   },
   {
@@ -15017,6 +15122,9 @@
     "ability_ids": [
       "heroic-last-stand-fyrri-askar-space-wolves",
       "storm-shield-fyrri-askar-space-wolves"
+    ],
+    "weapon_ids": [
+      "master-crafted-power-weapon-fyrri-askar"
     ]
   },
   {
@@ -15231,7 +15339,9 @@
     },
     "weapon_ids": [
       "melta-rifle",
-      "multi-melta-eradicator-squad-with-melta-rifles"
+      "multi-melta-eradicator-squad-with-melta-rifles",
+      "bolt-pistol",
+      "ceramite-fists"
     ],
     "ability_ids": [
       "total-obliteration-adeptus-astartes"
@@ -15307,7 +15417,10 @@
     "points_provisional": false,
     "weapon_ids": [
       "onslaught-gatling-cannon",
-      "multi-melta-invader-atvs"
+      "multi-melta-invader-atvs",
+      "armoured-impact-invader-atvs",
+      "bolt-pistol",
+      "twin-bolt-rifle-invader-atvs"
     ],
     "wargear_costs": [
       {
@@ -15391,6 +15504,9 @@
       "leader",
       "master-tactician-adeptus-astartes",
       "thunderhawk-insertion-adeptus-astartes"
+    ],
+    "weapon_ids": [
+      "gauntlets-of-ultramar"
     ]
   }
 ]

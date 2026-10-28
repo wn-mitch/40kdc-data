@@ -4655,7 +4655,8 @@
       "big-shoota",
       "grabbin-klaw",
       "lobba",
-      "wreckin-ball"
+      "wreckin-ball",
+      "crushin-bulk-gunwagon"
     ],
     "wargear_costs": [
       {
@@ -4939,7 +4940,9 @@
     },
     "weapon_ids": [
       "mek-speshul",
-      "rivet-kannon"
+      "rivet-kannon",
+      "extra-dakka",
+      "spiked-ram-warbuggies"
     ],
     "ability_ids": [
       {

@@ -1,4 +1,4 @@
-# MFM attachment-role — DRY RUN
+# MFM attachment-role — APPLIED
 
 Dump-primary `attachment_role` + `leader-attachments.json` from
 `datasheet_bodyguard_group`. Leader-wins for mixed leader/support datasheets;

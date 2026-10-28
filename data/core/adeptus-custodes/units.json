@@ -2461,7 +2461,11 @@
     "base_size_mm": {
       "shape": "round",
       "diameter": 60
-    }
+    },
+    "weapon_ids": [
+      "dreadspear",
+      "lastrum-storm-bolter"
+    ]
   },
   {
     "id": "aquilan-talon-sentinel-guard-sodality",
@@ -2524,7 +2528,10 @@
     "base_size_mm": {
       "shape": "round",
       "diameter": 40
-    }
+    },
+    "weapon_ids": [
+      "sentinel-blade-aquilan-talon-sentinel-guard-sodality"
+    ]
   },
   {
     "id": "aquilan-talon-shield-captain",
@@ -2587,7 +2594,10 @@
     "base_size_mm": {
       "shape": "round",
       "diameter": 40
-    }
+    },
+    "weapon_ids": [
+      "eternity-pattern-paragon-blade"
+    ]
   },
   {
     "id": "aquilan-wing-sentinel-guard-sodality",
@@ -2654,7 +2664,10 @@
     "base_size_mm": {
       "shape": "round",
       "diameter": 40
-    }
+    },
+    "weapon_ids": [
+      "sentinel-blade-aquilan-wing-sentinel-guard-sodality"
+    ]
   },
   {
     "id": "aquilan-wing-shield-captain",
@@ -2780,7 +2793,10 @@
     "base_size_mm": {
       "shape": "round",
       "diameter": 40
-    }
+    },
+    "weapon_ids": [
+      "kinetic-destroyer"
+    ]
   },
   {
     "id": "aquilon-terminators-with-solarite-power-talons",
@@ -2847,7 +2863,8 @@
     },
     "weapon_ids": [
       "lastrum-storm-bolter",
-      "infernus-firepike"
+      "infernus-firepike",
+      "solerite-power-talon"
     ]
   },
   {
@@ -2927,7 +2944,9 @@
     },
     "weapon_ids": [
       "twin-lastrum-bolt-cannon",
-      "twin-neutronium-cascade-projectors"
+      "twin-neutronium-cascade-projectors",
+      "arachnus-blaze-carronade",
+      "armoured-hull"
     ]
   },
   {
@@ -3002,7 +3021,10 @@
     "base_size_mm": {
       "shape": "round",
       "diameter": 40
-    }
+    },
+    "weapon_ids": [
+      "sentinel-blade-sentinel-guard-sodality"
+    ]
   },
   {
     "id": "venatari-with-kinetic-destroyers",
@@ -3070,6 +3092,9 @@
     "base_size_mm": {
       "shape": "round",
       "diameter": 40
-    }
+    },
+    "weapon_ids": [
+      "kinetic-destroyer"
+    ]
   }
 ]

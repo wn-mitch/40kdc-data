@@ -1,4 +1,4 @@
-# MFM dataslates — DRY RUN
+# MFM dataslates — APPLIED
 
 Current dataslate: `11th/mfm-995`.
 
@@ -8,16 +8,16 @@ dump confirmation.
 
 | Entity | Promote | Demote | Kept | Untouched |
 |---|--:|--:|--:|--:|
-| units | 0 | 0 | 1097 | 6 |
-| weapons | 0 | 0 | 3413 | 123 |
+| units | 0 | 0 | 1098 | 6 |
+| weapons | 3 | 0 | 3492 | 120 |
 | wargear | 0 | 0 | 165 | 87 |
-| unit-compositions | 0 | 0 | 1063 | 0 |
-| wargear-options | 0 | 0 | 1234 | 0 |
+| unit-compositions | 0 | 0 | 1104 | 0 |
+| wargear-options | 0 | 0 | 1237 | 0 |
 | leader-attachments | 0 | 0 | 283 | 8 |
 | enhancements | 0 | 0 | 890 | 0 |
 | detachments | 0 | 0 | 172 | 285 |
 | stratagems | 0 | 0 | 1039 | 274 |
-| abilities | 0 | 0 | 3656 | 878 |
+| abilities | 0 | 0 | 3658 | 878 |
 | phase-mappings | 0 | 0 | 1136 | 445 |
 | resource-pools | 0 | 0 | 0 | 6 |
 
@@ -42,7 +42,7 @@ dump confirmation.
 | death-guard | 0 | 0 | 124 | 36 |
 | deathwatch | 0 | 0 | 31 | 5 |
 | drukhari | 0 | 0 | 126 | 38 |
-| emperors-children | 0 | 0 | 120 | 26 |
+| emperors-children | 0 | 0 | 122 | 26 |
 | genestealer-cults | 0 | 0 | 116 | 31 |
 | grey-knights | 0 | 0 | 121 | 13 |
 | imperial-fists | 0 | 0 | 8 | 3 |
@@ -140,7 +140,7 @@ dump confirmation.
 | drukhari | verified | 126 |
 | emperors-children | digest-differs | 7 |
 | emperors-children | unpublished | 19 |
-| emperors-children | verified | 120 |
+| emperors-children | verified | 122 |
 | genestealer-cults | digest-differs | 6 |
 | genestealer-cults | stub | 13 |
 | genestealer-cults | unpublished | 12 |
@@ -204,7 +204,7 @@ dump confirmation.
 | Outcome | Records |
 |---|--:|
 | dangling-ref | 4 |
-| differs | 18 |
+| differs | 15 |
 | no-ref | 99 |
 | unmapped-keyword | 2 |
-| verified | 3413 |
+| verified | 3495 |
