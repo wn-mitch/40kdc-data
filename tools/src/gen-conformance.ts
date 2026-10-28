@@ -861,9 +861,9 @@ const LINKED_API_QUERIES: LinkedApiQuery[] = [
     comparison: "ordered",
   },
   {
-    name: "loadout_candidates crusader-squad @10 enumerates legal allocations",
+    name: "loadout_candidates scarab-occult-terminators @10 enumerates allocations under a pooled heavy budget",
     query: "loadout_candidates",
-    args: { unitId: "crusader-squad", modelCount: "10" },
+    args: { unitId: "scarab-occult-terminators", factionId: "thousand-sons", modelCount: "10" },
     comparison: "ordered",
   },
   {
