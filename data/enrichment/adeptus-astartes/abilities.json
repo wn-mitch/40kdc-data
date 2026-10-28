@@ -10684,19 +10684,118 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-astartes",
     "detachment_id": "phobos-shadow-force",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "ability-part",
+      "trigger": {
+        "event": "phase-ended",
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "movement"
+              }
+            },
+            {
+              "type": "player-turn-is",
+              "parameters": {
+                "turn": "your-turn"
+              }
+            }
+          ]
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "designate",
+            "target": "this-unit",
+            "modifier": {
+              "subject": {
+                "objective": {
+                  "controlled_by_unit": "this-unit"
+                }
+              },
+              "tag": "snared"
+            }
+          },
+          {
+            "type": "ability-part",
+            "trigger": {
+              "event": "move-ended",
+              "subject": {
+                "owner": "enemy"
+              },
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "event-subject",
+                  "filter": {
+                    "within": {
+                      "of": {
+                        "objective": {
+                          "designated": "snared"
+                        }
+                      },
+                      "range": "objective-control"
+                    }
+                  }
+                }
+              }
+            },
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "dice-gated",
+                  "dice": "D6",
+                  "threshold": 2,
+                  "comparison": "gte",
+                  "on_success": {
+                    "type": "mortal-wounds",
+                    "target": "event-subject",
+                    "modifier": {
+                      "count": "D6"
+                    }
+                  },
+                  "on_fail": null
+                },
+                {
+                  "type": "designate",
+                  "target": "this-unit",
+                  "modifier": {
+                    "subject": {
+                      "objective": {
+                        "designated": "snared",
+                        "within": {
+                          "range": "objective-control",
+                          "of": "event-subject"
+                        }
+                      }
+                    },
+                    "tag": "snared",
+                    "clear": true
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "source_digest": "e38238d9d48600c8ae29f68b253cbe9f78b33d6c7c5f0907891cf7daf29d3c0a"
   },
   {
     "ability_id": "never-shall-the-standard-fall-adeptus-astartes",

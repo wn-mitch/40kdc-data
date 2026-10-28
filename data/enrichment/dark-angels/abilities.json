@@ -2554,6 +2554,24 @@
             "subject": "selected-unit",
             "filter": {
               "to": "move"
+            },
+            "condition": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "happened",
+                  "parameters": {
+                    "subject": "event-subject",
+                    "event": "move-ended",
+                    "filter": {
+                      "move_types": [
+                        "remain-stationary"
+                      ]
+                    },
+                    "window": "turn"
+                  }
+                }
+              ]
             }
           },
           "effect": {
@@ -2600,24 +2618,6 @@
                                 }
                               }
                             ]
-                          },
-                          {
-                            "operator": "not",
-                            "operands": [
-                              {
-                                "type": "happened",
-                                "parameters": {
-                                  "subject": "event-subject",
-                                  "event": "move-ended",
-                                  "filter": {
-                                    "move_types": [
-                                      "remain-stationary"
-                                    ]
-                                  },
-                                  "window": "turn"
-                                }
-                              }
-                            ]
                           }
                         ]
                       },
@@ -2656,24 +2656,6 @@
                                 "type": "player-turn-is",
                                 "parameters": {
                                   "turn": "opponent-turn"
-                                }
-                              }
-                            ]
-                          },
-                          {
-                            "operator": "not",
-                            "operands": [
-                              {
-                                "type": "happened",
-                                "parameters": {
-                                  "subject": "event-subject",
-                                  "event": "move-ended",
-                                  "filter": {
-                                    "move_types": [
-                                      "remain-stationary"
-                                    ]
-                                  },
-                                  "window": "turn"
                                 }
                               }
                             ]
@@ -2731,24 +2713,6 @@
                                 }
                               }
                             ]
-                          },
-                          {
-                            "operator": "not",
-                            "operands": [
-                              {
-                                "type": "happened",
-                                "parameters": {
-                                  "subject": "event-subject",
-                                  "event": "move-ended",
-                                  "filter": {
-                                    "move_types": [
-                                      "remain-stationary"
-                                    ]
-                                  },
-                                  "window": "turn"
-                                }
-                              }
-                            ]
                           }
                         ]
                       },
@@ -2787,24 +2751,6 @@
                                 "type": "player-turn-is",
                                 "parameters": {
                                   "turn": "opponent-turn"
-                                }
-                              }
-                            ]
-                          },
-                          {
-                            "operator": "not",
-                            "operands": [
-                              {
-                                "type": "happened",
-                                "parameters": {
-                                  "subject": "event-subject",
-                                  "event": "move-ended",
-                                  "filter": {
-                                    "move_types": [
-                                      "remain-stationary"
-                                    ]
-                                  },
-                                  "window": "turn"
                                 }
                               }
                             ]
