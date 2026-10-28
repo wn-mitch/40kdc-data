@@ -9363,7 +9363,126 @@
     }
   },
   {
-    "caseId": "battlesuit-support-system-ghostkeel-battlesuit-tau-empire#165",
+    "caseId": "battle-protocols-adeptus-mechanicus#165",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "command"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
+            ]
+          },
+          {
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading",
+              "with": {
+                "all_of": [
+                  "KASTELAN ROBOTS"
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "stance-select",
+        "mode": "re-selectable",
+        "options": [
+          {
+            "id": "protector-protocol",
+            "name": "Protector Protocol",
+            "effect": {
+              "type": "stat-modifier",
+              "target": {
+                "level": "model",
+                "member_of": "this-unit",
+                "all_of": [
+                  "KASTELAN ROBOTS"
+                ]
+              },
+              "modifier": {
+                "stat": "A",
+                "operation": "add",
+                "value": 2,
+                "weapons": {
+                  "type": "ranged"
+                }
+              }
+            }
+          },
+          {
+            "id": "conqueror-protocol",
+            "name": "Conqueror Protocol",
+            "effect": {
+              "type": "stat-modifier",
+              "target": {
+                "level": "model",
+                "member_of": "this-unit",
+                "all_of": [
+                  "KASTELAN ROBOTS"
+                ]
+              },
+              "modifier": {
+                "stat": "A",
+                "operation": "add",
+                "value": 2,
+                "weapons": {
+                  "type": "melee"
+                }
+              }
+            }
+          },
+          {
+            "id": "aegis-protocol",
+            "name": "Aegis Protocol",
+            "effect": {
+              "type": "stat-modifier",
+              "target": {
+                "level": "model",
+                "member_of": "this-unit",
+                "all_of": [
+                  "KASTELAN ROBOTS"
+                ]
+              },
+              "modifier": {
+                "stat": "T",
+                "operation": "add",
+                "value": 1
+              }
+            }
+          }
+        ],
+        "initial": "aegis-protocol",
+        "min_choices": 1,
+        "max_choices": 1
+      }
+    },
+    "scope": {
+      "duration": "battle"
+    },
+    "optional": true,
+    "expected": {
+      "text": "You can: During the Command phase, in your turn, while this model is leading a KASTELAN ROBOTS unit, for the rest of the battle:\n  -> At the start of the battle, Aegis Protocol is active.\n  -> Select one:\n    - Protector Protocol: add 2 to the Attacks characteristic of ranged weapons equipped by KASTELAN ROBOTS models in the unit.\n    - Conqueror Protocol: add 2 to the Attacks characteristic of melee weapons equipped by KASTELAN ROBOTS models in the unit.\n    - Aegis Protocol: add 1 to KASTELAN ROBOTS models in the unit's Toughness characteristic."
+    }
+  },
+  {
+    "caseId": "battlesuit-support-system-ghostkeel-battlesuit-tau-empire#166",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -9397,7 +9516,7 @@
     }
   },
   {
-    "caseId": "bearer-of-the-iron-chalice-valourstrike-lance-imperial-knights#166",
+    "caseId": "bearer-of-the-iron-chalice-valourstrike-lance-imperial-knights#167",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -9528,7 +9647,7 @@
     }
   },
   {
-    "caseId": "bearers-of-his-light-emissaries-imperatus-adeptus-custodes#167",
+    "caseId": "bearers-of-his-light-emissaries-imperatus-adeptus-custodes#168",
     "effect": {
       "type": "ignore-modifiers",
       "target": "this-unit",
@@ -9563,7 +9682,7 @@
     }
   },
   {
-    "caseId": "beastscent-orks#168",
+    "caseId": "beastscent-orks#169",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -9688,7 +9807,7 @@
     }
   },
   {
-    "caseId": "benedictions-of-the-omnissiah-adeptus-mechanicus#169",
+    "caseId": "benedictions-of-the-omnissiah-adeptus-mechanicus#170",
     "effect": {
       "type": "ability-part",
       "trigger": {
@@ -9789,7 +9908,7 @@
     }
   },
   {
-    "caseId": "berzerker-frenzy-world-eaters#170",
+    "caseId": "berzerker-frenzy-world-eaters#171",
     "effect": {
       "type": "dice-gated",
       "dice": "D6",
@@ -9835,7 +9954,7 @@
     }
   },
   {
-    "caseId": "bestial-aspect-infernal-lance-chaos-knights#171",
+    "caseId": "bestial-aspect-infernal-lance-chaos-knights#172",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -9911,7 +10030,7 @@
     }
   },
   {
-    "caseId": "bilious-blessing-lords-of-the-warp-chaos-daemons#172",
+    "caseId": "bilious-blessing-lords-of-the-warp-chaos-daemons#173",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -9991,7 +10110,7 @@
     }
   },
   {
-    "caseId": "binharic-offence-skitarii-hunter-cohort-adeptus-mechanicus#173",
+    "caseId": "binharic-offence-skitarii-hunter-cohort-adeptus-mechanicus#174",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -10059,7 +10178,7 @@
     }
   },
   {
-    "caseId": "bio-stimulus-tyranids#174",
+    "caseId": "bio-stimulus-tyranids#175",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -10154,7 +10273,7 @@
     }
   },
   {
-    "caseId": "biomechanical-mutation-warpforged-cabal-thousand-sons#175",
+    "caseId": "biomechanical-mutation-warpforged-cabal-thousand-sons#176",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -10227,7 +10346,7 @@
     }
   },
   {
-    "caseId": "biomechanoid-regeneration-cult-of-the-arkifane-chaos-space-marines#176",
+    "caseId": "biomechanoid-regeneration-cult-of-the-arkifane-chaos-space-marines#177",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -10293,7 +10412,7 @@
     }
   },
   {
-    "caseId": "blackstar-cluster-launcher-agents-of-the-imperium#177",
+    "caseId": "blackstar-cluster-launcher-agents-of-the-imperium#178",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -10361,7 +10480,7 @@
     }
   },
   {
-    "caseId": "blackstar-cluster-launcher-deathwatch#178",
+    "caseId": "blackstar-cluster-launcher-deathwatch#179",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -10429,7 +10548,7 @@
     }
   },
   {
-    "caseId": "blade-of-saint-ellynor-army-of-faith-adepta-sororitas#179",
+    "caseId": "blade-of-saint-ellynor-army-of-faith-adepta-sororitas#180",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -10531,7 +10650,7 @@
     }
   },
   {
-    "caseId": "blessed-icon-of-disease-death-guard#180",
+    "caseId": "blessed-icon-of-disease-death-guard#181",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -10600,7 +10719,7 @@
     }
   },
   {
-    "caseId": "blessed-transmutations-warpmeld-pact-thousand-sons#181",
+    "caseId": "blessed-transmutations-warpmeld-pact-thousand-sons#182",
     "effect": {
       "type": "return-models",
       "target": {
@@ -10629,7 +10748,7 @@
     }
   },
   {
-    "caseId": "blessing-of-burning-blood-khorne-daemonkin-world-eaters#182",
+    "caseId": "blessing-of-burning-blood-khorne-daemonkin-world-eaters#183",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -10682,7 +10801,7 @@
     }
   },
   {
-    "caseId": "blessing-of-the-omnissiah-grey-knights#183",
+    "caseId": "blessing-of-the-omnissiah-grey-knights#184",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -10768,7 +10887,7 @@
     }
   },
   {
-    "caseId": "blessings-of-khorne-frenzied-reavers-world-eaters#184",
+    "caseId": "blessings-of-khorne-frenzied-reavers-world-eaters#185",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -11001,7 +11120,7 @@
     }
   },
   {
-    "caseId": "blessings-of-khorne-world-eaters#185",
+    "caseId": "blessings-of-khorne-world-eaters#186",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -11234,7 +11353,7 @@
     }
   },
   {
-    "caseId": "blessings-of-the-omnissiah-adeptus-astartes#186",
+    "caseId": "blessings-of-the-omnissiah-adeptus-astartes#187",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -11327,7 +11446,7 @@
     }
   },
   {
-    "caseId": "blight-bombardment-death-guard#187",
+    "caseId": "blight-bombardment-death-guard#188",
     "effect": {
       "type": "designate-target",
       "designation": "blight-bombardment-target",
@@ -11479,7 +11598,7 @@
     }
   },
   {
-    "caseId": "blinding-aura-brotherhood-strike-grey-knights#188",
+    "caseId": "blinding-aura-brotherhood-strike-grey-knights#189",
     "effect": {
       "type": "targeting",
       "target": {
@@ -11517,7 +11636,7 @@
     }
   },
   {
-    "caseId": "blood-offering-berzerker-warband-world-eaters#189",
+    "caseId": "blood-offering-berzerker-warband-world-eaters#190",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -11545,7 +11664,7 @@
     }
   },
   {
-    "caseId": "blood-tithe-world-eaters#190",
+    "caseId": "blood-tithe-world-eaters#191",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -11710,7 +11829,7 @@
     }
   },
   {
-    "caseId": "bloodied-terror-world-eaters#191",
+    "caseId": "bloodied-terror-world-eaters#192",
     "effect": {
       "type": "for-each-unit",
       "selector": {
@@ -11782,7 +11901,7 @@
     }
   },
   {
-    "caseId": "bloody-dance-ghosts-of-the-webway-aeldari#192",
+    "caseId": "bloody-dance-ghosts-of-the-webway-aeldari#193",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -11858,7 +11977,7 @@
     }
   },
   {
-    "caseId": "bloody-fury-world-eaters#193",
+    "caseId": "bloody-fury-world-eaters#194",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -11930,7 +12049,7 @@
     }
   },
   {
-    "caseId": "bloody-spectacle-drukhari#194",
+    "caseId": "bloody-spectacle-drukhari#195",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -12011,7 +12130,7 @@
     }
   },
   {
-    "caseId": "bloody-stampede-world-eaters#195",
+    "caseId": "bloody-stampede-world-eaters#196",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -12101,7 +12220,7 @@
     }
   },
   {
-    "caseId": "bomb-squig-orks#196",
+    "caseId": "bomb-squig-orks#197",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -12179,7 +12298,7 @@
     }
   },
   {
-    "caseId": "bomb-squigs-orks#197",
+    "caseId": "bomb-squigs-orks#198",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -12257,7 +12376,7 @@
     }
   },
   {
-    "caseId": "breakin-heads-war-horde-orks#198",
+    "caseId": "breakin-heads-war-horde-orks#199",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -12345,7 +12464,7 @@
     }
   },
   {
-    "caseId": "broad-spectrum-data-tether-adeptus-mechanicus#199",
+    "caseId": "broad-spectrum-data-tether-adeptus-mechanicus#200",
     "effect": {
       "type": "dice-gated",
       "dice": "D6",
@@ -12375,7 +12494,7 @@
     }
   },
   {
-    "caseId": "brutal-disciplinarian-astra-militarum#200",
+    "caseId": "brutal-disciplinarian-astra-militarum#201",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -12480,7 +12599,7 @@
     }
   },
   {
-    "caseId": "brutal-disciplinarian-commissar-graves-on-foot-astra-militarum#201",
+    "caseId": "brutal-disciplinarian-commissar-graves-on-foot-astra-militarum#202",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -12574,7 +12693,7 @@
     }
   },
   {
-    "caseId": "canoptek-swarm-necrons#202",
+    "caseId": "canoptek-swarm-necrons#203",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -12622,7 +12741,7 @@
     }
   },
   {
-    "caseId": "captivating-performance-twilight-flickers-aeldari#203",
+    "caseId": "captivating-performance-twilight-flickers-aeldari#204",
     "effect": {
       "type": "select-objective",
       "selector": {
@@ -12672,7 +12791,7 @@
     }
   },
   {
-    "caseId": "carry-forth-the-faithful-bringers-of-flame-adepta-sororitas#204",
+    "caseId": "carry-forth-the-faithful-bringers-of-flame-adepta-sororitas#205",
     "effect": {
       "type": "rules-bundle",
       "steps": [
@@ -12737,7 +12856,7 @@
     }
   },
   {
-    "caseId": "castigators-duty-imperial-knights#205",
+    "caseId": "castigators-duty-imperial-knights#206",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -12789,7 +12908,7 @@
     }
   },
   {
-    "caseId": "chainbreaker-imperial-knights#206",
+    "caseId": "chainbreaker-imperial-knights#207",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -12858,7 +12977,7 @@
     }
   },
   {
-    "caseId": "chaplet-of-sacrifice-hallowed-martyrs-adepta-sororitas#207",
+    "caseId": "chaplet-of-sacrifice-hallowed-martyrs-adepta-sororitas#208",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -12959,7 +13078,7 @@
     }
   },
   {
-    "caseId": "cherub-agents-of-the-imperium#208",
+    "caseId": "cherub-agents-of-the-imperium#209",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -13009,7 +13128,7 @@
     }
   },
   {
-    "caseId": "chief-librarian-adeptus-astartes#209",
+    "caseId": "chief-librarian-adeptus-astartes#210",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -13260,7 +13379,7 @@
     }
   },
   {
-    "caseId": "chief-librarian-blood-angels#210",
+    "caseId": "chief-librarian-blood-angels#211",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -13546,7 +13665,7 @@
     }
   },
   {
-    "caseId": "chief-librarian-dark-angels#211",
+    "caseId": "chief-librarian-dark-angels#212",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -13788,7 +13907,7 @@
     }
   },
   {
-    "caseId": "close-range-killers-chaos-knights#212",
+    "caseId": "close-range-killers-chaos-knights#213",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -13829,7 +13948,7 @@
     }
   },
   {
-    "caseId": "close-range-titan-killer-astra-militarum#213",
+    "caseId": "close-range-titan-killer-astra-militarum#214",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -13872,7 +13991,7 @@
     }
   },
   {
-    "caseId": "code-chivalric-imperial-knights#214",
+    "caseId": "code-chivalric-imperial-knights#215",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -14113,7 +14232,7 @@
     }
   },
   {
-    "caseId": "codex-fire-patterns-adeptus-astartes#215",
+    "caseId": "codex-fire-patterns-adeptus-astartes#216",
     "effect": {
       "type": "weapon-ability-range",
       "target": {
@@ -14137,7 +14256,7 @@
     }
   },
   {
-    "caseId": "cold-and-calculating-adeptus-astartes#216",
+    "caseId": "cold-and-calculating-adeptus-astartes#217",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -14367,7 +14486,7 @@
     }
   },
   {
-    "caseId": "combat-doctrines-adeptus-astartes#217",
+    "caseId": "combat-doctrines-adeptus-astartes#218",
     "effect": {
       "type": "stance-select",
       "mode": "consumable",
@@ -14493,7 +14612,7 @@
     }
   },
   {
-    "caseId": "combat-doctrines-assault-force-adeptus-astartes#218",
+    "caseId": "combat-doctrines-assault-force-adeptus-astartes#219",
     "effect": {
       "type": "stance-select",
       "mode": "consumable",
@@ -14616,148 +14735,6 @@
     },
     "expected": {
       "text": "At the start of your Command phase, you may use this ability, until the start of your next Command phase:\n  -> Select one (each may be chosen once per battle):\n    - Assault Doctrine: when the unit is selected to Advance: the unit is eligible to declare a charge even if it Advanced this turn.\n    - Devastator Doctrine: ranged weapons equipped by models in this unit gain [ASSAULT].\n    - Tactical Doctrine: when the unit is selected to Fall Back: the unit is eligible to shoot even if it Fell Back this turn; the unit is eligible to declare a charge even if it Fell Back this turn."
-    }
-  },
-  {
-    "caseId": "combat-drugs-drukhari#219",
-    "effect": {
-      "type": "ability-part",
-      "trigger": {
-        "event": "phase-started",
-        "condition": {
-          "operator": "and",
-          "operands": [
-            {
-              "type": "phase-is",
-              "parameters": {
-                "phase": "command"
-              }
-            },
-            {
-              "type": "player-turn-is",
-              "parameters": {
-                "turn": "your-turn"
-              }
-            }
-          ]
-        }
-      },
-      "effect": {
-        "type": "stance-select",
-        "mode": "re-selectable",
-        "options": [
-          {
-            "name": "Adrenalight",
-            "effect": {
-              "type": "stat-modifier",
-              "target": "this-unit",
-              "modifier": {
-                "stat": "A",
-                "operation": "add",
-                "value": 1,
-                "weapons": {
-                  "type": "melee"
-                }
-              }
-            },
-            "id": "adrenalight"
-          },
-          {
-            "name": "Hypex",
-            "effect": {
-              "type": "stat-modifier",
-              "target": "this-unit",
-              "modifier": {
-                "stat": "M",
-                "operation": "add",
-                "value": 2
-              }
-            },
-            "id": "hypex"
-          },
-          {
-            "name": "Serpentin",
-            "effect": {
-              "type": "stat-modifier",
-              "target": "this-unit",
-              "modifier": {
-                "stat": "WS",
-                "operation": "subtract",
-                "value": 1,
-                "weapons": {
-                  "type": "melee"
-                }
-              }
-            },
-            "id": "serpentin"
-          },
-          {
-            "name": "Painbringer",
-            "effect": {
-              "type": "stat-modifier",
-              "target": "this-unit",
-              "modifier": {
-                "stat": "T",
-                "operation": "add",
-                "value": 1
-              }
-            },
-            "id": "painbringer"
-          },
-          {
-            "name": "Grave Lotus",
-            "effect": {
-              "type": "stat-modifier",
-              "target": "this-unit",
-              "modifier": {
-                "stat": "S",
-                "operation": "add",
-                "value": 1,
-                "weapons": {
-                  "type": "melee"
-                }
-              }
-            },
-            "id": "grave-lotus"
-          },
-          {
-            "name": "Splintermind",
-            "effect": {
-              "type": "sequence",
-              "steps": [
-                {
-                  "type": "roll-modifier",
-                  "target": "this-unit",
-                  "modifier": {
-                    "roll": "battle-shock",
-                    "operation": "subtract",
-                    "value": 1
-                  }
-                },
-                {
-                  "type": "stat-modifier",
-                  "target": "this-unit",
-                  "modifier": {
-                    "stat": "BS",
-                    "operation": "subtract",
-                    "value": 1,
-                    "weapons": {
-                      "type": "ranged"
-                    }
-                  }
-                }
-              ]
-            },
-            "id": "splintermind"
-          }
-        ]
-      }
-    },
-    "scope": {
-      "duration": "until-next-command-phase"
-    },
-    "expected": {
-      "text": "Until the start of your next Command phase:\n  -> At the start of your Command phase:\n    -> Select one:\n      - Adrenalight: add 1 to the Attacks characteristic of melee weapons equipped by models in this unit.\n      - Hypex: add 2 to the unit's Move characteristic.\n      - Serpentin: subtract 1 from the Weapon Skill characteristic of melee weapons equipped by models in this unit.\n      - Painbringer: add 1 to the unit's Toughness characteristic.\n      - Grave Lotus: add 1 to the Strength characteristic of melee weapons equipped by models in this unit.\n      - Splintermind: the unit gets -1 to Battle-shock rolls; subtract 1 from the Ballistic Skill characteristic of ranged weapons equipped by models in this unit."
     }
   },
   {
@@ -19563,11 +19540,34 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "loadout",
-        "parameters": {
-          "model_keyword": "MEK GUNZ",
-          "uniform": "ranged"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "shooting"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
+            ]
+          },
+          {
+            "type": "loadout",
+            "parameters": {
+              "subject": "this-unit",
+              "uniform": "ranged",
+              "model_keyword": "MEK GUNZ"
+            }
+          }
+        ]
       },
       "effect": {
         "type": "select-units",
@@ -19583,13 +19583,13 @@
             "type": "happened",
             "parameters": {
               "event": "after-roll",
+              "subject": "event-subject",
               "object": "this-unit",
               "filter": {
                 "roll": "hit",
-                "result": "success",
-                "attack_type": "ranged"
+                "result": "success"
               },
-              "window": "phase"
+              "window": "event"
             }
           }
         },
@@ -19599,122 +19599,254 @@
             {
               "type": "conditional",
               "condition": {
-                "type": "happened",
+                "type": "named-weapon",
                 "parameters": {
-                  "event": "after-roll",
-                  "object": "selected-unit",
-                  "filter": {
-                    "roll": "hit",
-                    "result": "success",
-                    "attack_type": "ranged",
-                    "weapons": {
-                      "name": "Bubblechukka"
-                    }
-                  },
-                  "window": "phase"
-                }
-              },
-              "effect": {
-                "type": "conditional",
-                "condition": {
-                  "type": "same-unit",
-                  "parameters": {
-                    "subject": "attacker",
-                    "as": "selected-unit"
-                  }
-                },
-                "effect": {
-                  "type": "rule-state",
-                  "target": "defender",
-                  "modifier": {
-                    "direction": "granted",
-                    "rule_kind": "core-rule",
-                    "rule": "benefit-of-cover"
+                  "subject": "this-unit",
+                  "name": "Bubblechukka",
+                  "count": 1,
+                  "models": {
+                    "count": {
+                      "min": 1
+                    },
+                    "state": "carry"
                   }
                 }
-              }
-            },
-            {
-              "type": "conditional",
-              "condition": {
-                "type": "happened",
-                "parameters": {
-                  "event": "after-roll",
-                  "object": "selected-unit",
-                  "filter": {
-                    "roll": "hit",
-                    "result": "success",
-                    "attack_type": "ranged",
-                    "weapons": {
-                      "name": "Kustom Mega-kannon"
-                    }
-                  },
-                  "window": "phase"
-                }
               },
               "effect": {
-                "type": "stat-modifier",
+                "type": "ability-grant",
                 "target": "selected-unit",
                 "modifier": {
-                  "stat": "Ld",
-                  "operation": "subtract",
-                  "value": 1
-                }
-              }
-            },
-            {
-              "type": "conditional",
-              "condition": {
-                "type": "happened",
-                "parameters": {
-                  "event": "after-roll",
-                  "object": "selected-unit",
-                  "filter": {
-                    "roll": "hit",
-                    "result": "success",
-                    "attack_type": "ranged",
-                    "weapons": {
-                      "name": "Smasha Gun"
-                    }
+                  "ability": {
+                    "ability_id": "madcap-artillery-orks",
+                    "definition_id": "bubblechukka"
                   },
-                  "window": "phase"
-                }
-              },
-              "effect": {
-                "type": "stat-modifier",
-                "target": "selected-unit",
-                "modifier": {
-                  "stat": "M",
-                  "operation": "subtract",
-                  "value": 2
+                  "definition": {
+                    "type": "ability-part",
+                    "name": "Bubblechukka",
+                    "effect": {
+                      "type": "sequence",
+                      "steps": [
+                        {
+                          "type": "designate",
+                          "target": "this-unit",
+                          "modifier": {
+                            "tag": "wobbled"
+                          }
+                        },
+                        {
+                          "type": "conditional",
+                          "condition": {
+                            "type": "matches",
+                            "parameters": {
+                              "subject": "this-unit",
+                              "filter": {
+                                "designated": "wobbled"
+                              }
+                            }
+                          },
+                          "effect": {
+                            "type": "ability-grant",
+                            "target": "defender",
+                            "modifier": {
+                              "ability": "benefit-of-cover"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
                 }
               }
             },
             {
               "type": "conditional",
               "condition": {
-                "type": "happened",
+                "type": "named-weapon",
                 "parameters": {
-                  "event": "after-roll",
-                  "object": "selected-unit",
-                  "filter": {
-                    "roll": "hit",
-                    "result": "success",
-                    "attack_type": "ranged",
-                    "weapons": {
-                      "name": "Traktor Kannon"
-                    }
-                  },
-                  "window": "phase"
+                  "subject": "this-unit",
+                  "name": "Kustom Mega-kannon",
+                  "count": 1,
+                  "models": {
+                    "count": {
+                      "min": 1
+                    },
+                    "state": "carry"
+                  }
                 }
               },
               "effect": {
-                "type": "rule-state",
+                "type": "ability-grant",
                 "target": "selected-unit",
                 "modifier": {
-                  "direction": "suppressed",
-                  "rule_kind": "core-rule",
-                  "rule": "take-to-the-skies"
+                  "ability": {
+                    "ability_id": "madcap-artillery-orks",
+                    "definition_id": "kustom-mega-kannon"
+                  },
+                  "definition": {
+                    "type": "ability-part",
+                    "name": "Kustom Mega-kannon",
+                    "effect": {
+                      "type": "sequence",
+                      "steps": [
+                        {
+                          "type": "designate",
+                          "target": "this-unit",
+                          "modifier": {
+                            "tag": "zapped"
+                          }
+                        },
+                        {
+                          "type": "conditional",
+                          "condition": {
+                            "type": "matches",
+                            "parameters": {
+                              "subject": "this-unit",
+                              "filter": {
+                                "designated": "zapped"
+                              }
+                            }
+                          },
+                          "effect": {
+                            "type": "stat-modifier",
+                            "target": "this-unit",
+                            "modifier": {
+                              "stat": "Ld",
+                              "operation": "subtract",
+                              "value": 1
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "named-weapon",
+                "parameters": {
+                  "subject": "this-unit",
+                  "name": "Smasha Gun",
+                  "count": 1,
+                  "models": {
+                    "count": {
+                      "min": 1
+                    },
+                    "state": "carry"
+                  }
+                }
+              },
+              "effect": {
+                "type": "ability-grant",
+                "target": "selected-unit",
+                "modifier": {
+                  "ability": {
+                    "ability_id": "madcap-artillery-orks",
+                    "definition_id": "smasha-gun"
+                  },
+                  "definition": {
+                    "type": "ability-part",
+                    "name": "Smasha Gun",
+                    "effect": {
+                      "type": "sequence",
+                      "steps": [
+                        {
+                          "type": "designate",
+                          "target": "this-unit",
+                          "modifier": {
+                            "tag": "smashed"
+                          }
+                        },
+                        {
+                          "type": "conditional",
+                          "condition": {
+                            "type": "matches",
+                            "parameters": {
+                              "subject": "this-unit",
+                              "filter": {
+                                "designated": "smashed"
+                              }
+                            }
+                          },
+                          "effect": {
+                            "type": "stat-modifier",
+                            "target": "this-unit",
+                            "modifier": {
+                              "stat": "M",
+                              "operation": "subtract",
+                              "value": 2
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "named-weapon",
+                "parameters": {
+                  "subject": "this-unit",
+                  "name": "Traktor Kannon",
+                  "count": 1,
+                  "models": {
+                    "count": {
+                      "min": 1
+                    },
+                    "state": "carry"
+                  }
+                }
+              },
+              "effect": {
+                "type": "ability-grant",
+                "target": "selected-unit",
+                "modifier": {
+                  "ability": {
+                    "ability_id": "madcap-artillery-orks",
+                    "definition_id": "traktor-kannon"
+                  },
+                  "definition": {
+                    "type": "ability-part",
+                    "name": "Traktor Kannon",
+                    "effect": {
+                      "type": "sequence",
+                      "steps": [
+                        {
+                          "type": "designate",
+                          "target": "this-unit",
+                          "modifier": {
+                            "tag": "grounded"
+                          }
+                        },
+                        {
+                          "type": "conditional",
+                          "condition": {
+                            "type": "matches",
+                            "parameters": {
+                              "subject": "this-unit",
+                              "filter": {
+                                "designated": "grounded"
+                              }
+                            }
+                          },
+                          "effect": {
+                            "type": "rule-state",
+                            "target": "this-unit",
+                            "modifier": {
+                              "direction": "suppressed",
+                              "rule_kind": "core-rule",
+                              "rule": "take-to-the-skies"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
                 }
               }
             }
@@ -19727,26 +19859,12 @@
     },
     "trigger": {
       "event": "attacks-resolved",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "your-turn"
-            }
-          }
-        ]
+      "filter": {
+        "kind": "shoot"
       }
     },
     "expected": {
-      "text": "After the unit resolves its attacks during your Shooting phase, if all ranged weapons equipped by each MEK GUNZ model in the unit are the same, until the start of your next turn:\n  -> Select one enemy unit that was hit by a ranged attack this phase:\n    -> If the selected unit was hit by a ranged attack by Bubblechukka this phase, if the attacking unit is the same unit as the selected unit, the target has the Benefit of Cover.\n    -> If the selected unit was hit by a ranged attack by Kustom Mega-kannon this phase, subtract 1 from that unit's Leadership characteristic.\n    -> If the selected unit was hit by a ranged attack by Smasha Gun this phase, subtract 2 from that unit's Move characteristic.\n    -> If the selected unit was hit by a ranged attack by Traktor Kannon this phase, that unit loses the Take to the Skies rule."
+      "text": "After the unit resolves its attacks, during the Shooting phase, in your turn, if all ranged weapons equipped by each MEK GUNZ model in the unit are the same, until the start of your next turn:\n  -> Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence:\n    -> If one or more models in this unit are each equipped with one weapon named \"Bubblechukka\", that unit gains the Bubblechukka ability (this unit is wobbled; while the unit is wobbled, the target has the Benefit of Cover).\n    -> If one or more models in this unit are each equipped with one weapon named \"Kustom Mega-kannon\", that unit gains the Kustom Mega-kannon ability (this unit is zapped; while the unit is zapped, subtract 1 from this unit's Leadership characteristic).\n    -> If one or more models in this unit are each equipped with one weapon named \"Smasha Gun\", that unit gains the Smasha Gun ability (this unit is smashed; while the unit is smashed, subtract 2 from this unit's Move characteristic).\n    -> If one or more models in this unit are each equipped with one weapon named \"Traktor Kannon\", that unit gains the Traktor Kannon ability (this unit is grounded; while the unit is grounded, this unit loses the Take to the Skies rule)."
     }
   },
   {
@@ -19958,37 +20076,62 @@
   {
     "caseId": "neuroloids-tyranids#296",
     "effect": {
-      "type": "select-units",
-      "selector": {
-        "filter": {
-          "owner": "friendly",
-          "all_of": [
-            "TYRANIDS"
-          ],
-          "within": {
-            "range": {
-              "inches": 18
-            },
-            "of": "this-unit"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
           }
-        },
-        "count": {
-          "min": 0,
-          "max": 2
-        }
+        ]
       },
       "effect": {
-        "type": "counts-as",
-        "target": "selected-unit",
-        "modifier": {
-          "within": {
-            "aura_of": "synapse-tyranids"
-          },
-          "of": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
             "owner": "friendly",
             "all_of": [
-              "SYNAPSE"
+              "TYRANIDS"
             ]
+          },
+          "count": {
+            "min": 0,
+            "max": 2
+          },
+          "eligibility": {
+            "type": "matches",
+            "parameters": {
+              "subject": "selected-unit",
+              "filter": {
+                "within": {
+                  "of": "this-unit",
+                  "range": {
+                    "inches": 18
+                  }
+                }
+              }
+            }
+          }
+        },
+        "effect": {
+          "type": "counts-as",
+          "target": "selected-unit",
+          "modifier": {
+            "within": {
+              "aura_of": "synapse-tyranids"
+            },
+            "of": {
+              "owner": "friendly"
+            }
           }
         }
       }
@@ -19996,17 +20139,9 @@
     "scope": {
       "duration": "until-next-command-phase"
     },
-    "trigger": {
-      "event": "phase-started",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "command"
-        }
-      }
-    },
+    "optional": true,
     "expected": {
-      "text": "At the start of the Command phase, until the start of your next Command phase:\n  -> Select up to 2 friendly TYRANIDS units within 18\" of the unit: that unit counts as being within Synapse Range of all friendly SYNAPSE units."
+      "text": "You can: During the Command phase, in your turn, until the start of your next Command phase:\n  -> Select up to 2 friendly TYRANIDS units if the selected unit is within 18\" of the unit: that unit counts as being within Synapse Range of all friendly units."
     }
   },
   {

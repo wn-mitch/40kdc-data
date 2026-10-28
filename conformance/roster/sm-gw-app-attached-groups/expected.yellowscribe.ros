@@ -389,7 +389,7 @@
             </profile>
             <profile name="Demi-company Commander (Once per turn, per unit)" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Nothing happens.</characteristic>
+                <characteristic name="Description">Each time a friendly unit uses Strategic Acumen (the triggering unit must have CAPTAIN), you may use this ability, until the start of your next Command phase, the Combat Doctrines option the triggering use selected is active for the unit (and no other option is).</characteristic>
               </characteristics>
             </profile>
           </profiles>
