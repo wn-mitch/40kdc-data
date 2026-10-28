@@ -79,6 +79,8 @@ function contextForCell(dataset: Dataset, factionId: string, target: ResolvedTar
     attackerKeywords: unitKeywords(spec.members),
     // The member's own models make its attacks; without a member, only keywords every member shares.
     attackerModelKeywords: member ? unitKeywords([member]) : sharedKeywords(spec.members),
+    // A member's models carry only its own keywords, not the other members' (core rule 19.01).
+    ...(member ? { attackerMemberKeywords: unitKeywords([member]) } : {}),
     attackerUnitId: member?.unit.id,
     attackerAttachmentRole: member ? (member.role === "bodyguard" ? "bodyguard" as const : "leader" as const) : undefined,
     attackerMembers: spec.members.map((candidate) => ({ unitId: candidate.unit.id, role: candidate.role, keywords: unitKeywords([candidate]) })),

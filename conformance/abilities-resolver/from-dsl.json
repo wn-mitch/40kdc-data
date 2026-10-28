@@ -9155,6 +9155,93 @@
       }
     },
     {
+      "caseId": "canonical/scenario/member-of-combined-keywords-unbounded",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": {
+          "level": "model",
+          "member_of": "this-unit",
+          "all_of": [
+            "EXAMPLE SQUAD"
+          ]
+        },
+        "modifier": {
+          "roll": "hit",
+          "operation": "add",
+          "value": 1
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerKeywords": [
+          "EXAMPLE SQUAD",
+          "CHARACTER"
+        ],
+        "attackerModelKeywords": [
+          "CHARACTER"
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "unit-filter target: identity, state or model membership is unresolved"
+        ],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/member-of-member-keywords",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": {
+          "level": "model",
+          "member_of": "this-unit",
+          "all_of": [
+            "EXAMPLE SQUAD"
+          ]
+        },
+        "modifier": {
+          "roll": "hit",
+          "operation": "add",
+          "value": 1
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerKeywords": [
+          "EXAMPLE SQUAD",
+          "CHARACTER"
+        ],
+        "attackerModelKeywords": [
+          "CHARACTER"
+        ],
+        "attackerMemberKeywords": [
+          "CHARACTER"
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
       "caseId": "canonical/scenario/neighbour-in-range",
       "abilityId": "fabricated-scenario",
       "source": {

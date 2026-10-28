@@ -317,6 +317,9 @@ export function canonicalScenarioCases() {
     { id: "stance-selection-window-not-leading", effect: protocols([leadingWith]), context: { phase: "fight", attackerMembers: supported(["OTHER SQUAD"]) }, source: attached },
     { id: "member-of-every-model", effect: squadModels, context: { attackerKeywords: ["EXAMPLE SQUAD", "CHARACTER"], attackerModelKeywords: ["EXAMPLE SQUAD"] } },
     { id: "member-of-no-model", effect: squadModels, context: { attackerKeywords: ["CHARACTER"], attackerModelKeywords: ["CHARACTER"] } },
+    // The leader attacks: the combined unit has EXAMPLE SQUAD, but the leader's models can't carry it.
+    { id: "member-of-combined-keywords-unbounded", effect: squadModels, context: { attackerKeywords: ["EXAMPLE SQUAD", "CHARACTER"], attackerModelKeywords: ["CHARACTER"] } },
+    { id: "member-of-member-keywords", effect: squadModels, context: { attackerKeywords: ["EXAMPLE SQUAD", "CHARACTER"], attackerModelKeywords: ["CHARACTER"], attackerMemberKeywords: ["CHARACTER"] } },
     { id: "neighbour-in-range", effect: gated(near), context: { attackerNeighbours: [neighbour] } },
     { id: "neighbour-out-of-range", effect: gated(near), context: { attackerNeighbours: [{ ...neighbour, distanceInches: 7 }] } },
     { id: "neighbour-undeclared", effect: gated(near), context: {} },

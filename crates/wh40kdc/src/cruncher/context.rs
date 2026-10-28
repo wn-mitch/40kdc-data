@@ -210,6 +210,15 @@ pub struct EngineContext {
     /// Keywords every model of the target carries, lower-cased.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub target_model_keywords: Option<Vec<String>>,
+    /// Keywords any model making the attack can carry, lower-cased: the attacking member's own
+    /// datasheet keywords when one member of a combined unit attacks. A model does not gain another
+    /// member's keywords (core rule 19.01), so this bounds model-level keyword filters; absent,
+    /// `attacker_keywords` bounds them.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub attacker_member_keywords: Option<Vec<String>>,
+    /// The target-side counterpart of `attacker_member_keywords`.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub target_member_keywords: Option<Vec<String>>,
     /// Sub-phase timing flag consumed by the `timing-is` condition.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub timing: Option<String>,
@@ -332,6 +341,8 @@ impl EngineContext {
             target_keywords: None,
             attacker_model_keywords: None,
             target_model_keywords: None,
+            attacker_member_keywords: None,
+            target_member_keywords: None,
             timing: None,
             attacker_attached: None,
             target_attached: None,

@@ -2532,7 +2532,16 @@ func matchesUnitFilter(filter, ctx map[string]any, side, owner string) any {
 			modelKeywordsKey = "attackerModelKeywords"
 		}
 		every, everyKnown := contextKeywordList(ctx[modelKeywordsKey])
-		most, mostKnown := contextKeywordList(ctx[keywordsKey])
+		// A combined unit's member bounds what its models can carry (core rule 19.01).
+		memberKey := "targetMemberKeywords"
+		if side == "attacker" {
+			memberKey = "attackerMemberKeywords"
+		}
+		mostKey := keywordsKey
+		if _, present := ctx[memberKey]; present {
+			mostKey = memberKey
+		}
+		most, mostKnown := contextKeywordList(ctx[mostKey])
 		switch verdict := modelKeywordVerdict(predicates, every, everyKnown, most, mostKnown); verdict {
 		case false:
 			return false

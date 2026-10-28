@@ -537,12 +537,19 @@ fn evaluate_filter(
         && KEYWORD_CLAUSES.iter().any(|clause| f.contains_key(*clause));
     let mut every_model_matches = false;
     if let Some((ctx, side)) = context.filter(|_| model_predicate) {
-        let every = if side == TranslationPerspective::Attacker {
-            ctx.attacker_model_keywords.as_deref()
+        let (every, member) = if side == TranslationPerspective::Attacker {
+            (
+                ctx.attacker_model_keywords.as_deref(),
+                ctx.attacker_member_keywords.as_deref(),
+            )
         } else {
-            ctx.target_model_keywords.as_deref()
+            (
+                ctx.target_model_keywords.as_deref(),
+                ctx.target_member_keywords.as_deref(),
+            )
         };
-        match model_keyword_verdict(f, every, keywords)? {
+        // A combined unit's member bounds what its models can carry (core rule 19.01).
+        match model_keyword_verdict(f, every, member.or(keywords))? {
             Some(false) => return Some(false),
             None => unknown = true,
             Some(true) => every_model_matches = true,

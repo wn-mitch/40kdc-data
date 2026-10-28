@@ -35,7 +35,8 @@ export function matchesUnitFilter(filter: unknown, context: EngineContext, side:
   const modelPredicate = filter.level === "model" && Object.keys(predicate).length > 0;
   let everyModelMatches = false;
   if (modelPredicate) {
-    const verdict = modelKeywordVerdict(predicate, side === "attacker" ? context.attackerModelKeywords : context.targetModelKeywords, keywords);
+    const member = side === "attacker" ? context.attackerMemberKeywords : context.targetMemberKeywords;
+    const verdict = modelKeywordVerdict(predicate, side === "attacker" ? context.attackerModelKeywords : context.targetModelKeywords, member ?? keywords);
     if (verdict === false) return false;
     if (verdict === "unknown") unknown = true;
     everyModelMatches = verdict === true;

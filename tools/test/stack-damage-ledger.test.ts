@@ -328,8 +328,13 @@ describe("a Support unit leading its bodyguard (core rule 19.01)", () => {
     const spec = legalDetachmentSpec(session, factionId, [{ unit: robots, role: "bodyguard" }, { unit: datasmith, role: "support" }],
       [dataset.detachments.getAny("cohort-cybernetica")!])!;
     // The protocol is chosen in the Command phase and lasts into the Fight phase.
-    expect(session.selectedPoolLevers(session.optimiseLevers(spec)).map((lever) => lever.id))
+    const result = session.optimiseLevers(spec);
+    expect(session.selectedPoolLevers(result).map((lever) => lever.id))
       .toContain("battle-protocols-adeptus-mechanicus#conqueror-protocol");
+    // The Datasmith's own models are no KASTELAN ROBOTS, so its attacks settle the rule's model
+    // target as not theirs instead of leaving it unresolved.
+    expect(buildLedger(session, result).filter((entry) => entry.abilityId === "battle-protocols-adeptus-mechanicus")
+      .flatMap((entry) => entry.reasons ?? [])).not.toContain("unit-filter target: identity, state or model membership is unresolved");
   });
 });
 

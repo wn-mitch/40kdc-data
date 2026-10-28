@@ -111,11 +111,14 @@ export function memberContext(
 ): EngineContext {
   const unit = member.unit.raw;
   const wounds = unit.profiles?.[0]?.W;
+  const own = [...new Set([...(unit.keywords ?? []), ...(unit.faction_keywords ?? [])].map((keyword) => keyword.toLowerCase()))].sort();
   return {
     ...context,
     attackerUnitId: unit.id,
     ...(role ? { attackerAttachmentRole: role } : {}),
-    attackerModelKeywords: [...new Set([...(unit.keywords ?? []), ...(unit.faction_keywords ?? [])].map((keyword) => keyword.toLowerCase()))].sort(),
+    // The member's models carry its own keywords, every one of them, and no other member's.
+    attackerModelKeywords: own,
+    attackerMemberKeywords: own,
     ...(context.attackerWounds === undefined && typeof wounds === "number" ? { attackerWounds: { remaining: wounds, starting: wounds } } : {}),
     attackerWargear: wargear,
   };

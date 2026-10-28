@@ -3061,7 +3061,11 @@ def _matches_unit_filter(
             _context_keywords(
                 ctx.get("attackerModelKeywords" if side == "attacker" else "targetModelKeywords")
             ),
-            _context_keywords(keywords),
+            # A combined unit's member bounds what its models can carry (core rule 19.01).
+            _context_keywords(
+                ctx.get("attackerMemberKeywords" if side == "attacker" else "targetMemberKeywords")
+                or keywords
+            ),
         )
         if verdict is False:
             return False
