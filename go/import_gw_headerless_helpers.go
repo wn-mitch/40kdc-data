@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"strings"
 	"unicode"
+	"unicode/utf8"
 )
 
 // Helpers for the headerless plain-text adapter (import_gw_headerless.go):
@@ -38,8 +39,10 @@ func gwhIsBattleSize(name string) bool {
 	return gwhBattleSizeNames[strings.ToLower(strings.TrimSpace(name))]
 }
 
+// gwhIndent counts leading whitespace characters (not bytes), as TS's
+// `raw.length - raw.trimStart().length` does for a non-breaking space.
 func gwhIndent(raw string) int {
-	return len(raw) - len(strings.TrimLeft(raw, " \t"))
+	return utf8.RuneCountInString(raw) - utf8.RuneCountInString(strings.TrimLeftFunc(raw, unicode.IsSpace))
 }
 
 // gwhStripBcpSummary drops a leading `++…++`-fenced BCP summary block

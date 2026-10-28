@@ -5,6 +5,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"unicode/utf8"
 )
 
 // Headerless plain-text adapter: the GW 40K app's *exported* list (no
@@ -30,7 +31,7 @@ var gwhCapsSection = regexp.MustCompile(`^[A-Z][A-Z0-9 \-/&]+$`)
 var gwhColonSection = regexp.MustCompile(`^([A-Za-z][\w /&-]*):\s*$`)
 
 // Bullet line: leading indent, a `•` or `◦` marker, then the body.
-var gwhBulletLine = regexp.MustCompile(`^([\t ]*)([•◦])\s*(.+?)\s*$`)
+var gwhBulletLine = regexp.MustCompile(`^([\t \x{00a0}]*)([•◦*])\s*(.+?)\s*$`)
 
 var gwhNxPrefix = regexp.MustCompile(`(?i)^(\d+)x\s+(.+)$`)
 
@@ -48,7 +49,7 @@ var gwhCharacterRole = regexp.MustCompile(`(?i)\(\s*Character\s*\)`)
 var gwhCharacterAnnotation = regexp.MustCompile(`(?i)^(?:.+\s+keywords?\s*:\s*character|subterranean\s+assault\s+character)$`)
 var gwhKeywordAnnotation = regexp.MustCompile(`(?i)^(?:40kdc\s+)?(?:detachment\s+)?keywords?\s*:\s*(.+)$`)
 
-var gwhBulletAnywhere = regexp.MustCompile(`(?m)^[\t ]*[•◦]`)
+var gwhBulletAnywhere = regexp.MustCompile(`(?m)^[\t \x{00a0}]*[•◦*]`)
 var gwhDetachmentPtsSuffix = regexp.MustCompile(`(?i)\s*\(\s*\d*\s*(?:Detachment Points?|Detachementpoints?|DP|PD)\s*\)\s*$`)
 
 // gwhHeaderlessText accepts bullet-bearing plain text that no framed adapter
@@ -479,7 +480,7 @@ var gwHeaderlessAdapter = formatAdapter{
 					if bm[2] == "◦" {
 						markerDepth = 1
 					}
-					bullet := gwhParseBullet(len(bm[1])+markerDepth, bm[3], true)
+					bullet := gwhParseBullet(utf8.RuneCountInString(bm[1])+markerDepth, bm[3], true)
 					if current.attachmentRole == "" {
 						current.attachmentRole = bullet.attachmentRole
 					}

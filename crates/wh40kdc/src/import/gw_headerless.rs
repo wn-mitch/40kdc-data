@@ -756,7 +756,7 @@ impl FormatAdapter for GwHeaderlessAdapter {
             if let Some(c) = RE_BULLET.captures(raw) {
                 if let Some(unit) = current.as_mut() {
                     let marker_depth = (c[2].as_bytes() == "◦".as_bytes()) as usize;
-                    let bullet = parse_bullet(c[1].len() + marker_depth, &c[3], true);
+                    let bullet = parse_bullet(c[1].chars().count() + marker_depth, &c[3], true);
                     if unit.attachment_role.is_none() {
                         unit.attachment_role = bullet.attachment_role;
                     }
@@ -834,7 +834,8 @@ impl FormatAdapter for GwHeaderlessAdapter {
             // handled just below.
             if RE_NX_PREFIX.is_match(line) && !RE_PTS_LINE.is_match(line) {
                 if let Some(unit) = current.as_mut() {
-                    let indent = raw.len() - raw.trim_start().len();
+                    // Characters, not bytes: a non-breaking space is one column.
+                    let indent = raw.chars().count() - raw.trim_start().chars().count();
                     unit.bullets.push(parse_bullet(indent, line, false));
                     continue;
                 }

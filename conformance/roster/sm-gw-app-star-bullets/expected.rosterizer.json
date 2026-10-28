@@ -1,0 +1,104 @@
+{
+  "slug": "",
+  "key": "",
+  "visible": "hidden",
+  "locked": false,
+  "rulebook": {
+    "name": "40kdc",
+    "game": "Warhammer 40,000",
+    "publisher": "Alpaca Software",
+    "url": "https://40kdc.dev",
+    "genre": "wargame"
+  },
+  "snapshot": {
+    "item": "Roster§Roster",
+    "name": "Star Bullets Test",
+    "quantity": 1,
+    "stats": {
+      "Points": {
+        "value": 85
+      }
+    },
+    "assets": {
+      "included": [
+        {
+          "item": "Faction§Adeptus Astartes",
+          "name": "Adeptus Astartes",
+          "quantity": 1
+        },
+        {
+          "item": "Detachment§Gladius Task Force",
+          "name": "Gladius Task Force",
+          "quantity": 1
+        },
+        {
+          "item": "Force Disposition§Priority Assets",
+          "name": "Priority Assets",
+          "quantity": 1
+        },
+        {
+          "item": "Unit§Intercessor Squad",
+          "name": "Intercessor Squad",
+          "quantity": 5,
+          "stats": {
+            "Points": {
+              "value": 85
+            }
+          },
+          "assets": {
+            "included": [
+              {
+                "item": "Model§Intercessor Sergeant",
+                "name": "Intercessor Sergeant",
+                "quantity": 1,
+                "assets": {
+                  "included": [
+                    {
+                      "item": "Weapon§Bolt Pistol",
+                      "name": "Bolt Pistol",
+                      "quantity": 1
+                    },
+                    {
+                      "item": "Weapon§Bolt Rifle",
+                      "name": "Bolt Rifle",
+                      "quantity": 1
+                    },
+                    {
+                      "item": "Weapon§Knives and Fists",
+                      "name": "Knives and Fists",
+                      "quantity": 1
+                    }
+                  ]
+                }
+              },
+              {
+                "item": "Model§Intercessor",
+                "name": "Intercessor",
+                "quantity": 4,
+                "assets": {
+                  "included": [
+                    {
+                      "item": "Weapon§Bolt Pistol",
+                      "name": "Bolt Pistol",
+                      "quantity": 4
+                    },
+                    {
+                      "item": "Weapon§Bolt Rifle",
+                      "name": "Bolt Rifle",
+                      "quantity": 4
+                    },
+                    {
+                      "item": "Weapon§Knives and Fists",
+                      "name": "Knives and Fists",
+                      "quantity": 4
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
