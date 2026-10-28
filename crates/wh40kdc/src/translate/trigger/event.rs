@@ -172,6 +172,14 @@ pub(crate) fn object_phrase(r: Option<&Value>) -> String {
     }
 }
 
+/// The unit a used Stratagem targets: "the unit" for the holder's own role, else the object filter.
+fn stratagem_target(r: Option<&Value>) -> String {
+    match r {
+        Some(Value::Object(_)) => object_phrase(r),
+        _ => "the unit".to_string(),
+    }
+}
+
 pub(crate) fn roll_noun(roll: &str) -> String {
     match roll {
         "hit" => "Hit roll".to_string(),
@@ -606,9 +614,15 @@ pub(crate) fn event_phrase(t: &P) -> String {
                 };
                 if is(f, "kind", "stratagem") && nn(t, "object").is_some() {
                     return if opponent {
-                        format!("each time your opponent targets the unit with {named}")
+                        format!(
+                            "each time your opponent targets {} with {named}",
+                            stratagem_target(nn(t, "object"))
+                        )
                     } else {
-                        format!("when you target the unit with {named}")
+                        format!(
+                            "when you target {} with {named}",
+                            stratagem_target(nn(t, "object"))
+                        )
                     };
                 }
                 if opponent {
@@ -624,9 +638,15 @@ pub(crate) fn event_phrase(t: &P) -> String {
             // "When its unit is targeted with a Stratagem": the object is the unit the Stratagem is aimed at.
             if is(f, "kind", "stratagem") && nn(t, "object").is_some() {
                 return if opponent {
-                    "each time your opponent targets the unit with a Stratagem".to_string()
+                    format!(
+                        "each time your opponent targets {} with a Stratagem",
+                        stratagem_target(nn(t, "object"))
+                    )
                 } else {
-                    "each time you target the unit with a Stratagem".to_string()
+                    format!(
+                        "each time you target {} with a Stratagem",
+                        stratagem_target(nn(t, "object"))
+                    )
                 };
             }
             if is(f, "kind", "stratagem") {

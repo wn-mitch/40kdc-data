@@ -135,6 +135,15 @@ func actorKeywords(ref any) string {
 	return s
 }
 
+// stratagemTarget renders the unit a used Stratagem targets: "the unit" for the holder's own
+// role, else the object filter.
+func stratagemTarget(ref any) string {
+	if _, ok := ref.(map[string]any); ok {
+		return triggerObjectPhrase(ref)
+	}
+	return "the unit"
+}
+
 // triggerObjectPhrase renders an object phrase: "this unit", "an enemy unit".
 func triggerObjectPhrase(ref any) string {
 	switch r := ref.(type) {
@@ -493,9 +502,9 @@ func triggerEventPhrase(t map[string]any) string {
 			}
 			if f["kind"] == "stratagem" && object != nil {
 				if opponent {
-					return "each time your opponent targets the unit with " + named
+					return "each time your opponent targets " + stratagemTarget(object) + " with " + named
 				}
-				return "when you target the unit with " + named
+				return "when you target " + stratagemTarget(object) + " with " + named
 			}
 			if opponent {
 				return "each time your opponent " + verb + " " + named
@@ -508,9 +517,9 @@ func triggerEventPhrase(t map[string]any) string {
 		switch {
 		// "When its unit is targeted with a Stratagem": the object is the unit the Stratagem is aimed at.
 		case f["kind"] == "stratagem" && object != nil && opponent:
-			return "each time your opponent targets the unit with a Stratagem"
+			return "each time your opponent targets " + stratagemTarget(object) + " with a Stratagem"
 		case f["kind"] == "stratagem" && object != nil:
-			return "each time you target the unit with a Stratagem"
+			return "each time you target " + stratagemTarget(object) + " with a Stratagem"
 		case f["kind"] == "stratagem" && opponent:
 			return "each time your opponent uses a Stratagem"
 		case f["kind"] == "stratagem":

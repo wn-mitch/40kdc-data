@@ -33,7 +33,7 @@
             </profile>
             <profile name="Direct the Slaughter" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Each time you use a Stratagem (the triggering unit must have WORLD EATERS), you may use this ability, once per battle round per army, while the unit is friendly, while the triggering unit is within 12" of this model, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).</characteristic>
+                <characteristic name="Description">Each time you target a friendly WORLD EATERS unit within 12" of this model with a Stratagem, you may use this ability, once per battle round per army, while the unit is friendly, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).</characteristic>
               </characteristics>
             </profile>
             <profile name="Lord of Murder" typeName="Abilities">

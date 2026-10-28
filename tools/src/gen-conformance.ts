@@ -4015,6 +4015,17 @@ function genEffectTranslation(): void {
     { caseId: "fidelity/select-objective-within-inches", effect: { type: "select-objective", selector: { filter: { within: { range: { inches: 18 }, of: "this-model" } }, bind_as: "objective", count: { min: 1, max: 1 } }, effect: { type: "objective-sticky", target: "this-unit" } } },
     // An Advance with no roll that adds 8" instead of the core 6".
     { caseId: "fidelity/move-modifier-advance-fixed-8", effect: { type: "move-modifier", target: "this-unit", modifier: { advance: "fixed-8" } } },
+    // A used Stratagem's object filter names the unit it targets; a role reads "the unit".
+    ...[
+      ["any", { kind: "stratagem" }, undefined],
+      ["named", { kind: "stratagem", id: "example-gambit" }, undefined],
+      ["opponent", { kind: "stratagem" }, { owner: "enemy" }],
+      ["opponent-named", { kind: "stratagem", id: "example-gambit" }, { owner: "enemy" }],
+    ].map(([name, filter, subject]) => ({
+      caseId: `fidelity/used-stratagem-object-filter-${name as string}`,
+      trigger: { event: "used", filter, ...(subject ? { subject } : {}), object: { owner: "friendly", all_of: ["EXAMPLE HOST"], within: { of: "this-model", range: { inches: 12 } } }, optional: true },
+      effect: { type: "cp-gain", target: "this-model", modifier: { amount: 1 } },
+    })),
   ];
   for (const example of fidelityBoundaryCases) {
     const scope = { duration: "resolution" };

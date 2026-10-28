@@ -113,6 +113,11 @@ def _actor(ref: Any) -> str:
     return dekebab(_str(ref))
 
 
+def _stratagem_target(ref: Any) -> str:
+    """The unit a used Stratagem targets: "the unit" for the holder's own role, else the object filter."""
+    return _object_phrase(ref) if isinstance(ref, dict) else "the unit"
+
+
 def _actor_keywords(ref: Any) -> str:
     """Keyword requirements on a filter actor: " (the triggering unit must have A and B)"."""
     if not isinstance(ref, dict):
@@ -408,8 +413,8 @@ def _event_phrase(t: AbilityTrigger) -> str:
             verb = "performs" if kind == "manoeuvre" else "uses"
             if kind == "stratagem" and obj is not None:
                 if opponent:
-                    return f"each time your opponent targets the unit with {named}"
-                return f"when you target the unit with {named}"
+                    return f"each time your opponent targets {_stratagem_target(obj)} with {named}"
+                return f"when you target {_stratagem_target(obj)} with {named}"
             if opponent:
                 return f"each time your opponent {verb} {named}"
             if t.get("subject") is None and kind in ("ability", "stratagem"):
@@ -418,8 +423,8 @@ def _event_phrase(t: AbilityTrigger) -> str:
         # "When its unit is targeted with a Stratagem": the object is the unit it is aimed at.
         if kind == "stratagem" and obj is not None:
             if opponent:
-                return "each time your opponent targets the unit with a Stratagem"
-            return "each time you target the unit with a Stratagem"
+                return f"each time your opponent targets {_stratagem_target(obj)} with a Stratagem"
+            return f"each time you target {_stratagem_target(obj)} with a Stratagem"
         if kind == "stratagem":
             if opponent:
                 return "each time your opponent uses a Stratagem"
