@@ -25,10 +25,12 @@ corpus compares ability-id sets per source kind.
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from typing import Any
 
 from wh40kdc.data.dataset import Dataset
 from wh40kdc.data.entities import AbilityView, UnitView
+from wh40kdc.data.normalize import normalize_name
 
 
 def resolve_eligible_abilities(
@@ -118,27 +120,28 @@ def resolve_eligible_abilities(
             detachment_id, faction_id or ""
         ) or dataset.detachments.get_any(detachment_id)
         if detachment is not None:
-            # The combined unit's keywords: every member's, as one unit.
-            keywords: set[str] = set()
+            # Each member's keywords; a unit target reads them as one combined unit.
             members = [unit] + [
                 resolve_unit(member_id, faction_id)
                 for member_id in input.get("attachedUnitIds") or []
             ]
-            for member in members:
-                if member is None:
-                    continue
-                for keyword in (member.raw.get("keywords") or []) + (
-                    member.raw.get("faction_keywords") or []
-                ):
-                    keywords.add(keyword.lower())
+            member_keywords = [
+                {
+                    keyword.lower()
+                    for keyword in (member.raw.get("keywords") or [])
+                    + (member.raw.get("faction_keywords") or [])
+                }
+                if member is not None
+                else set()
+                for member in members
+            ]
+            printed = _printed_keyword(dataset)
             for strat_id in detachment.get("stratagem_ids") or []:
                 stratagem = dataset.stratagems.get(strat_id)
                 if stratagem is None:
                     continue
                 strat_phases = stratagem.get("phases")
                 if not strat_phases or phase not in strat_phases:
-                    continue
-                if not stratagem_can_target(stratagem, keywords):
                     continue
                 ability_id = stratagem.get("ability_id")
                 # Ability ids are unique: one record per stratagem, wherever its
@@ -147,6 +150,10 @@ def resolve_eligible_abilities(
                     dataset.abilities.get(ability_id) if ability_id is not None else None
                 )
                 if strat_ability is None:
+                    continue
+                trigger = strat_ability.raw.get("trigger")
+                subject = trigger.get("subject") if isinstance(trigger, dict) else None
+                if not stratagem_can_target_unit(stratagem, member_keywords, subject, printed):
                     continue
                 push_unique(
                     {
@@ -294,6 +301,25 @@ def stratagem_can_target(stratagem: dict[str, Any], keywords: set[str]) -> bool:
     a unit that could contain it: one with CHARACTER, the keyword every Warlord carries.
     Mirrors TS ``stratagemCanTarget``.
     """
+    return stratagem_can_target_unit(stratagem, [keywords])
+
+
+def stratagem_can_target_unit(
+    stratagem: dict[str, Any],
+    members: list[set[str]],
+    trigger_subject: Any = None,
+    printed: Callable[[str], bool] = lambda _keyword: True,
+) -> bool:
+    """Whether a unit of ``members`` (each member's keywords: a unit and the units attached to
+    it) can be a stratagem's friendly target, as ``stratagem_can_target``.
+
+    A target that selects a model needs one member that meets it alone; a unit target reads
+    every member as one combined unit. A target bound to the triggering unit is also held to
+    the keyword lists of the ``trigger_subject`` (its ability's ``trigger.subject``). A keyword
+    that subject requires and no datasheet prints (``printed`` says which do) is gained in play,
+    so it is not held against a unit. Keywords compare by ``normalize_name``. Mirrors TS
+    ``stratagemCanTargetUnit``.
+    """
     raw = stratagem.get("target_restrictions")
     if not raw:
         return True
@@ -301,17 +327,73 @@ def stratagem_can_target(stratagem: dict[str, Any], keywords: set[str]) -> bool:
     friendly = [target for target in targets if target.get("side") != "enemy"]
     if not friendly:
         return True
+    normalized = [{normalize_name(keyword) for keyword in member} for member in members]
+    combined: set[str] = set().union(*normalized)
+    subject = _friendly_subject(trigger_subject)
 
-    def lower(target: dict[str, Any], key: str) -> list[str]:
-        return [keyword.lower() for keyword in target.get(key) or []]
+    def meets(target: dict[str, Any], keywords: set[str]) -> bool:
+        def has(keyword: str) -> bool:
+            return normalize_name(keyword) in keywords
+
+        def gained(keyword: str) -> bool:
+            return has(keyword) or not printed(keyword)
+
+        return (
+            (target.get("warlord") is not True or has("character"))
+            and _keyword_lists_hold(target, has, has)
+            and (
+                target.get("bound_to") != "triggering-unit"
+                or subject is None
+                or _keyword_lists_hold(subject, gained, has)
+            )
+        )
 
     return any(
-        (target.get("warlord") is not True or "character" in keywords)
-        and all(k in keywords for k in lower(target, "required_keywords"))
-        and (
-            not lower(target, "required_keywords_any")
-            or any(k in keywords for k in lower(target, "required_keywords_any"))
-        )
-        and not any(k in keywords for k in lower(target, "excluded_keywords"))
+        meets(target, keywords)
         for target in friendly
+        for keywords in (normalized if target.get("selects") == "model" else [combined])
     )
+
+
+def _friendly_subject(subject: Any) -> dict[str, Any] | None:
+    """A trigger subject's keyword lists when it names a friendly unit, else None."""
+    if not isinstance(subject, dict):
+        return None
+    owner = subject.get("owner")
+    if owner is not None and owner != "friendly":
+        return None
+    return {
+        "required_keywords": subject.get("all_of") or [],
+        "required_keywords_any": subject.get("any_of") or [],
+        "excluded_keywords": subject.get("none_of") or [],
+    }
+
+
+def _keyword_lists_hold(
+    target: dict[str, Any], required: Callable[[str], bool], excluded: Callable[[str], bool]
+) -> bool:
+    """Whether the required lists hold by ``required`` and no excluded keyword by ``excluded``."""
+    any_of = target.get("required_keywords_any") or []
+    return (
+        all(required(k) for k in target.get("required_keywords") or [])
+        and (not any_of or any(required(k) for k in any_of))
+        and not any(excluded(k) for k in target.get("excluded_keywords") or [])
+    )
+
+
+def _printed_keyword(dataset: Dataset) -> Callable[[str], bool]:
+    """Whether some datasheet prints a keyword (unit or faction keyword), memoised per lookup."""
+    seen: dict[str, bool] = {}
+
+    def printed(keyword: str) -> bool:
+        key = normalize_name(keyword)
+        if key not in seen:
+            seen[key] = any(
+                normalize_name(own) == key
+                for unit in dataset.units
+                for own in (unit.raw.get("keywords") or [])
+                + (unit.raw.get("faction_keywords") or [])
+            )
+        return seen[key]
+
+    return printed

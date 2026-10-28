@@ -32,6 +32,7 @@
 import type { Phase, Stratagem } from "../generated.js";
 import type { Dataset } from "../data/dataset.js";
 import type { AbilityView } from "../data/entities.js";
+import { normalizeName } from "../data/normalize.js";
 
 export type EligibleAbilitySource =
   | { kind: "army" }
@@ -122,22 +123,22 @@ export function resolveEligibleAbilities(
       dataset.detachments.getInFaction(input.detachmentId, factionId) ??
       dataset.detachments.getAny(input.detachmentId);
     if (detachment) {
-      // The combined unit's keywords: every member's, as one unit.
-      const keywords = new Set<string>();
-      for (const member of [unit, ...(input.attachedUnitIds ?? []).map((id) => resolveUnit(id, factionId))]) {
-        for (const keyword of [...(member?.keywords ?? []), ...(member?.factionKeywords ?? [])]) keywords.add(keyword.toLowerCase());
-      }
+      // Each member's keywords (lower-cased); a unit target reads them as one combined unit.
+      const members = [unit, ...(input.attachedUnitIds ?? []).map((id) => resolveUnit(id, factionId))]
+        .map((member) => new Set([...(member?.keywords ?? []), ...(member?.factionKeywords ?? [])].map((keyword) => keyword.toLowerCase())));
+      const printed = printedKeyword(dataset);
       for (const stratId of detachment.stratagem_ids ?? []) {
         const stratagem = dataset.stratagems.get(stratId);
         if (!stratagem) continue;
         if (!stratagemPhaseMatches(stratagem, phase)) continue;
-        if (!stratagemCanTarget(stratagem, keywords)) continue;
         const ability =
           stratagem.ability_id !== null && stratagem.ability_id !== undefined
             ? // Ability ids are unique: one record per stratagem, wherever its detachment is replicated.
               dataset.abilities.get(stratagem.ability_id)
             : undefined;
         if (!ability) continue;
+        const trigger = ability.raw.trigger as { subject?: unknown } | null | undefined;
+        if (!stratagemCanTargetUnit(stratagem, members, trigger?.subject, printed)) continue;
         pushUnique(out, seen, {
           ability,
           source: {
@@ -253,7 +254,11 @@ function stratagemPhaseMatches(stratagem: Stratagem, phase: Phase): boolean {
   return (stratagem.phases as Phase[]).includes(phase);
 }
 
-type TargetRestriction = { side?: string; warlord?: true; required_keywords?: string[]; required_keywords_any?: string[]; excluded_keywords?: string[] };
+type TargetRestriction = {
+  side?: string; selects?: string; bound_to?: string; warlord?: true;
+  required_keywords?: string[]; required_keywords_any?: string[]; excluded_keywords?: string[];
+};
+type TriggerSubject = { owner?: string; all_of?: string[]; any_of?: string[]; none_of?: string[] };
 
 /**
  * Whether a unit with `keywords` (lower-cased) can be a stratagem's friendly target. A stratagem
@@ -263,20 +268,73 @@ type TargetRestriction = { side?: string; warlord?: true; required_keywords?: st
  * CHARACTER, the keyword every Warlord carries.
  */
 export function stratagemCanTarget(stratagem: Stratagem, keywords: ReadonlySet<string>): boolean {
+  return stratagemCanTargetUnit(stratagem, [keywords]);
+}
+
+/**
+ * Whether a unit of `members` (each member's keywords: a unit and the units attached to it) can
+ * be a stratagem's friendly target, as `stratagemCanTarget`. A target that selects a model needs
+ * one member that meets it alone; a unit target reads every member as one combined unit. A target
+ * bound to the triggering unit is also held to the keyword lists of the `triggerSubject` (the
+ * stratagem's WHEN, its ability's `trigger.subject`), which say which friendly units can trigger
+ * it. A keyword the WHEN requires that no datasheet prints (`printed` says which do) is one the
+ * army gains in play, such as a detachment's designation, so it is not held against a unit.
+ * Keywords compare by `normalizeName` (case, diacritics and apostrophe variants aside).
+ */
+export function stratagemCanTargetUnit(
+  stratagem: Stratagem,
+  members: readonly ReadonlySet<string>[],
+  triggerSubject?: unknown,
+  printed: (keyword: string) => boolean = () => true,
+): boolean {
   const raw = stratagem.target_restrictions as TargetRestriction | TargetRestriction[] | null | undefined;
   if (!raw) return true;
   const friendly = (Array.isArray(raw) ? raw : [raw]).filter((target) => target.side !== "enemy");
   if (friendly.length === 0) return true;
-  const has = (keyword: string) => keywords.has(keyword.toLowerCase());
-  return friendly.some((target) => (target.warlord !== true || has("character"))
-    && (target.required_keywords ?? []).every(has)
-    && ((target.required_keywords_any ?? []).length === 0 || target.required_keywords_any!.some(has))
-    && !(target.excluded_keywords ?? []).some(has));
+  const normalized = members.map((member) => new Set([...member].map(normalizeName)));
+  const combined = new Set(normalized.flatMap((member) => [...member]));
+  const subject = friendlySubject(triggerSubject);
+  return friendly.some((target) => (target.selects === "model" ? normalized : [combined]).some((keywords) => {
+    const has = (keyword: string) => keywords.has(normalizeName(keyword));
+    const gained = (keyword: string) => has(keyword) || !printed(keyword);
+    return (target.warlord !== true || has("character"))
+      && keywordListsHold(target, has, has)
+      && (target.bound_to !== "triggering-unit" || subject === null || keywordListsHold(subject, gained, has));
+  }));
+}
+
+/** Whether some datasheet prints a keyword (unit or faction keyword), memoised per lookup. */
+function printedKeyword(dataset: Dataset): (keyword: string) => boolean {
+  const seen = new Map<string, boolean>();
+  return (keyword) => {
+    const key = normalizeName(keyword);
+    let found = seen.get(key);
+    if (found === undefined) {
+      found = [...dataset.units].some((unit) => [...(unit.keywords ?? []), ...(unit.factionKeywords ?? [])].some((own) => normalizeName(own) === key));
+      seen.set(key, found);
+    }
+    return found;
+  };
+}
+
+/** A trigger subject's keyword lists when it names a friendly unit, else null. */
+function friendlySubject(subject: unknown): TargetRestriction | null {
+  if (subject === null || typeof subject !== "object" || Array.isArray(subject)) return null;
+  const { owner, all_of: all, any_of: any, none_of: none } = subject as TriggerSubject;
+  if (owner !== undefined && owner !== "friendly") return null;
+  return { required_keywords: all ?? [], required_keywords_any: any ?? [], excluded_keywords: none ?? [] };
+}
+
+/** Whether the required lists hold by `required` and no excluded keyword holds by `excluded`. */
+function keywordListsHold(target: TargetRestriction, required: (keyword: string) => boolean, excluded: (keyword: string) => boolean): boolean {
+  return (target.required_keywords ?? []).every(required)
+    && ((target.required_keywords_any ?? []).length === 0 || target.required_keywords_any!.some(required))
+    && !(target.excluded_keywords ?? []).some(excluded);
 }
 
 /** Whether a Stratagem's friendly target is one model rather than a unit. */
 function stratagemSelectsModel(stratagem: Stratagem): boolean {
-  const raw = stratagem.target_restrictions as (TargetRestriction & { selects?: string }) | (TargetRestriction & { selects?: string })[] | null | undefined;
+  const raw = stratagem.target_restrictions as TargetRestriction | TargetRestriction[] | null | undefined;
   return (Array.isArray(raw) ? raw : raw ? [raw] : []).some((target) => target.side !== "enemy" && target.selects === "model");
 }
 

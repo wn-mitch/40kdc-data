@@ -13,15 +13,16 @@ from typing import Any
 
 import pytest
 
-from wh40kdc.abilities_resolver import stratagem_can_target
+from wh40kdc.abilities_resolver import stratagem_can_target, stratagem_can_target_unit
 from wh40kdc.cruncher import effect_to_buffs, resolve_granted_records
 from wh40kdc.data.ability_refs import with_rating
+from wh40kdc.data.normalize import normalize_name
 
 from ..conftest import CORPUS
 
 _DIR = CORPUS / "abilities-resolver"
 _RESOLVER_CASES = (
-    sorted(p.name for p in _DIR.glob("0*.json"))
+    sorted(p.name for p in _DIR.glob("[0-9]*.json"))
     if _DIR.exists()
     else []
 )
@@ -50,7 +51,18 @@ _TARGET_CASES = (
 @pytest.mark.parametrize("case", _TARGET_CASES, ids=lambda case: case["name"])
 def test_stratagem_can_target(case: dict[str, Any]) -> None:
     stratagem = {"target_restrictions": case["target_restrictions"]}
-    assert stratagem_can_target(stratagem, set(case["keywords"])) is case["expected"]
+    if "members" not in case:
+        assert stratagem_can_target(stratagem, set(case["keywords"])) is case["expected"]
+        return
+    listed = case.get("printed")
+    printed = {normalize_name(k) for k in listed} if listed is not None else None
+    got = stratagem_can_target_unit(
+        stratagem,
+        [set(member) for member in case["members"]],
+        case.get("trigger_subject"),
+        lambda keyword: printed is None or normalize_name(keyword) in printed,
+    )
+    assert got is case["expected"]
 
 
 def _run_dsl_corpus(dataset: Any, filename: str) -> None:

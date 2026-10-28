@@ -1,5 +1,5 @@
 //! The abilities resolver and the DSL→buff translator against the shared goldens in
-//! `conformance/abilities-resolver/`: `0*.json` pins the eligible ability ids per source kind
+//! `conformance/abilities-resolver/`: `[0-9]*.json` (numbered cases) pins the eligible ability ids per source kind
 //! (as sorted sets, per CONFORMANCE.md), and `from-dsl.json` / `defensive-from-dsl.json` pin
 //! each ability effect's applied buffs, unsupported reasons and opt-in levers, in order (a
 //! case's `rating` stands in for the unit's printed rating of a rated rule).
@@ -42,7 +42,7 @@ fn eligible_abilities_match_the_resolver_goldens() {
         .filter_map(|e| e.ok().map(|e| e.path()))
         .filter(|p| {
             let name = p.file_name().and_then(|n| n.to_str()).unwrap_or("");
-            name.starts_with('0') && name.ends_with(".json")
+            name.starts_with(|c: char| c.is_ascii_digit()) && name.ends_with(".json")
         })
         .collect();
     files.sort();
@@ -254,14 +254,37 @@ fn stratagem_targets_match_the_resolver_goldens() {
             "target_restrictions": case["target_restrictions"],
         }))
         .expect("stratagem");
-        let keywords: std::collections::HashSet<String> = case["keywords"]
-            .as_array()
-            .expect("keywords")
-            .iter()
-            .filter_map(Value::as_str)
-            .map(str::to_string)
-            .collect();
-        let got = wh40kdc::data::stratagem_can_target(&stratagem, &keywords);
+        let set = |list: &Value| -> std::collections::HashSet<String> {
+            list.as_array()
+                .expect("keyword list")
+                .iter()
+                .filter_map(Value::as_str)
+                .map(str::to_string)
+                .collect()
+        };
+        let got = match case.get("members").and_then(Value::as_array) {
+            None => wh40kdc::data::stratagem_can_target(&stratagem, &set(&case["keywords"])),
+            Some(members) => {
+                let members: Vec<_> = members.iter().map(set).collect();
+                let printed = case.get("printed").map(|list| {
+                    set(list)
+                        .iter()
+                        .map(|k| wh40kdc::data::normalize_name(k))
+                        .collect::<std::collections::HashSet<_>>()
+                });
+                let is_printed = |keyword: &str| {
+                    printed
+                        .as_ref()
+                        .is_none_or(|known| known.contains(&wh40kdc::data::normalize_name(keyword)))
+                };
+                wh40kdc::data::stratagem_can_target_unit(
+                    &stratagem,
+                    &members,
+                    case.get("trigger_subject"),
+                    &is_printed,
+                )
+            }
+        };
         if Value::Bool(got) != case["expected"] {
             failures.push(format!("{}: got {got}", case["name"]));
         }

@@ -10,6 +10,7 @@ export {
   replacedArmyRuleIds,
   resolveEligibleAbilities,
   stratagemCanTarget,
+  stratagemCanTargetUnit,
   type EligibilityInput,
   type EligibleAbility,
   type EligibleAbilitySource,

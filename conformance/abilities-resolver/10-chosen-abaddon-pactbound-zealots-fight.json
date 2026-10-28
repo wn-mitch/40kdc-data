@@ -1,0 +1,33 @@
+{
+  "name": "Chosen led by Abaddon the Despoiler (chaos-space-marines) in Pactbound Zealots, fight: Eye of the Gods selects one CHARACTER HERETIC ASTARTES model that is not an EPIC HERO (its WHEN's subject), so no member qualifies on its own: the Chosen have no CHARACTER and Abaddon is an EPIC HERO",
+  "input": {
+    "unitId": "chosen",
+    "factionId": "chaos-space-marines",
+    "detachmentId": "pactbound-zealots",
+    "attachedUnitIds": [
+      "abaddon-the-despoiler"
+    ]
+  },
+  "phase": "fight",
+  "expected": {
+    "army": [
+      "cults-of-the-dark-gods-chaos-space-marines",
+      "dark-pacts-chaos-space-marines"
+    ],
+    "detachment": [
+      "marks-of-chaos-chaos-space-marines"
+    ],
+    "detachment-stratagem": [
+      "eternal-hate-pactbound-zealots-chaos-space-marines",
+      "profane-zeal-pactbound-zealots-chaos-space-marines"
+    ],
+    "unit": [
+      "chaos-icon-chaos-space-marines"
+    ],
+    "attached": [
+      "dark-destiny-chaos-space-marines",
+      "leader",
+      "supreme-commander-chaos-space-marines"
+    ]
+  }
+}

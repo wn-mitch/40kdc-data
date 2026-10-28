@@ -1,44 +1,355 @@
 {
-  "description": "stratagemCanTarget(stratagem, keywords): whether a unit with these lower-cased keywords (the combined unit's, as the resolver collects them) can be the stratagem's friendly target. A Warlord target needs a unit that could contain the Warlord: one with CHARACTER.",
+  "description": "stratagemCanTarget(stratagem, keywords): whether a unit with these lower-cased keywords (the combined unit's, as the resolver collects them) can be the stratagem's friendly target. A Warlord target needs a unit that could contain the Warlord: one with CHARACTER. A case with members calls stratagemCanTargetUnit(stratagem, members, trigger_subject, printed): each member's keywords; a target that selects a model needs one member that meets it alone, a unit target reads the members combined; a target bound to the triggering unit also meets the friendly trigger_subject's all_of/any_of/none_of; a required trigger keyword outside printed (when given) is gained in play and counts as held. Keywords compare by normalizeName.",
   "cases": [
     {
       "name": "warlord target: a CHARACTER unit with the required keyword qualifies",
-      "target_restrictions": { "count": "one", "side": "your-army", "selects": "model", "warlord": true, "required_keywords": ["Death Guard"] },
-      "keywords": ["death guard", "character", "infantry"],
+      "target_restrictions": {
+        "count": "one",
+        "side": "your-army",
+        "selects": "model",
+        "warlord": true,
+        "required_keywords": [
+          "Death Guard"
+        ]
+      },
+      "keywords": [
+        "death guard",
+        "character",
+        "infantry"
+      ],
       "expected": true
     },
     {
       "name": "warlord target: a unit with no CHARACTER cannot contain the Warlord",
-      "target_restrictions": { "count": "one", "side": "your-army", "selects": "model", "warlord": true, "required_keywords": ["Death Guard"] },
-      "keywords": ["death guard", "infantry"],
+      "target_restrictions": {
+        "count": "one",
+        "side": "your-army",
+        "selects": "model",
+        "warlord": true,
+        "required_keywords": [
+          "Death Guard"
+        ]
+      },
+      "keywords": [
+        "death guard",
+        "infantry"
+      ],
       "expected": false
     },
     {
       "name": "warlord target: the keyword lists still apply to the Warlord's unit",
-      "target_restrictions": { "count": "one", "side": "your-army", "selects": "model", "warlord": true, "required_keywords": ["Death Guard"] },
-      "keywords": ["heretic astartes", "character", "infantry"],
+      "target_restrictions": {
+        "count": "one",
+        "side": "your-army",
+        "selects": "model",
+        "warlord": true,
+        "required_keywords": [
+          "Death Guard"
+        ]
+      },
+      "keywords": [
+        "heretic astartes",
+        "character",
+        "infantry"
+      ],
       "expected": false
     },
     {
       "name": "warlord target with no keywords: any CHARACTER unit",
-      "target_restrictions": { "count": "one", "side": "your-army", "selects": "unit", "warlord": true },
-      "keywords": ["character"],
+      "target_restrictions": {
+        "count": "one",
+        "side": "your-army",
+        "selects": "unit",
+        "warlord": true
+      },
+      "keywords": [
+        "character"
+      ],
       "expected": true
     },
     {
       "name": "several targets: the non-Warlord target admits a unit the Warlord target refuses",
       "target_restrictions": [
-        { "name": "leader", "count": "one", "side": "your-army", "selects": "model", "warlord": true },
-        { "name": "escort", "count": "one", "side": "your-army", "selects": "unit", "required_keywords": ["Infantry"] }
+        {
+          "name": "leader",
+          "count": "one",
+          "side": "your-army",
+          "selects": "model",
+          "warlord": true
+        },
+        {
+          "name": "escort",
+          "count": "one",
+          "side": "your-army",
+          "selects": "unit",
+          "required_keywords": [
+            "Infantry"
+          ]
+        }
       ],
-      "keywords": ["infantry"],
+      "keywords": [
+        "infantry"
+      ],
       "expected": true
     },
     {
       "name": "no Warlord requirement: a unit with no CHARACTER qualifies",
-      "target_restrictions": { "count": "one", "side": "your-army", "selects": "unit", "required_keywords": ["Death Guard"] },
-      "keywords": ["death guard", "infantry"],
+      "target_restrictions": {
+        "count": "one",
+        "side": "your-army",
+        "selects": "unit",
+        "required_keywords": [
+          "Death Guard"
+        ]
+      },
+      "keywords": [
+        "death guard",
+        "infantry"
+      ],
       "expected": true
+    },
+    {
+      "name": "model target bound to the triggering unit: an EPIC HERO leader the WHEN excludes and a bodyguard with no CHARACTER leave no member that qualifies alone",
+      "target_restrictions": {
+        "count": "one",
+        "side": "your-army",
+        "selects": "model",
+        "bound_to": "triggering-unit",
+        "required_keywords": [
+          "Character",
+          "Heretic Astartes"
+        ]
+      },
+      "members": [
+        [
+          "chaos",
+          "infantry",
+          "heretic astartes"
+        ],
+        [
+          "character",
+          "epic hero",
+          "heretic astartes",
+          "infantry"
+        ]
+      ],
+      "trigger_subject": {
+        "owner": "friendly",
+        "all_of": [
+          "CHARACTER",
+          "HERETIC ASTARTES"
+        ],
+        "none_of": [
+          "DAEMON",
+          "DAMNED",
+          "EPIC HERO"
+        ]
+      },
+      "expected": false
+    },
+    {
+      "name": "model target: one member qualifies alone although the combined unit carries an excluded keyword",
+      "target_restrictions": {
+        "count": "one",
+        "side": "your-army",
+        "selects": "model",
+        "bound_to": "triggering-unit",
+        "required_keywords": [
+          "Character",
+          "Heretic Astartes"
+        ]
+      },
+      "members": [
+        [
+          "character",
+          "heretic astartes",
+          "infantry"
+        ],
+        [
+          "character",
+          "epic hero",
+          "heretic astartes"
+        ]
+      ],
+      "trigger_subject": {
+        "owner": "friendly",
+        "all_of": [
+          "CHARACTER",
+          "HERETIC ASTARTES"
+        ],
+        "none_of": [
+          "DAEMON",
+          "DAMNED",
+          "EPIC HERO"
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "unit target bound to the triggering unit: the WHEN's none_of excludes the combined unit",
+      "target_restrictions": {
+        "count": "one",
+        "selects": "unit",
+        "bound_to": "triggering-unit"
+      },
+      "members": [
+        [
+          "heretic astartes",
+          "monster"
+        ]
+      ],
+      "trigger_subject": {
+        "owner": "friendly",
+        "none_of": [
+          "MONSTER",
+          "VEHICLE"
+        ]
+      },
+      "expected": false
+    },
+    {
+      "name": "unit target: the WHEN's any_of needs one of its keywords on the combined unit",
+      "target_restrictions": {
+        "count": "one",
+        "selects": "unit",
+        "bound_to": "triggering-unit"
+      },
+      "members": [
+        [
+          "adeptus astartes",
+          "infantry"
+        ],
+        [
+          "adeptus astartes",
+          "mounted"
+        ]
+      ],
+      "trigger_subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS ASTARTES"
+        ],
+        "any_of": [
+          "MOUNTED",
+          "SPEEDER"
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "an enemy trigger subject does not restrict the friendly target",
+      "target_restrictions": {
+        "count": "one",
+        "selects": "unit",
+        "bound_to": "triggering-unit"
+      },
+      "members": [
+        [
+          "orks",
+          "monster"
+        ]
+      ],
+      "trigger_subject": {
+        "owner": "enemy",
+        "none_of": [
+          "MONSTER"
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "a target not bound to the triggering unit ignores the WHEN's subject",
+      "target_restrictions": {
+        "count": "one",
+        "side": "your-army",
+        "selects": "unit"
+      },
+      "members": [
+        [
+          "orks",
+          "monster"
+        ]
+      ],
+      "trigger_subject": {
+        "owner": "friendly",
+        "none_of": [
+          "MONSTER"
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "keywords compare without apostrophe variants: a straight-apostrophe WHEN keyword matches a curly-apostrophe datasheet keyword",
+      "target_restrictions": {
+        "count": "one",
+        "selects": "unit",
+        "bound_to": "triggering-unit"
+      },
+      "members": [
+        [
+          "emperor’s children",
+          "battleline"
+        ]
+      ],
+      "trigger_subject": {
+        "owner": "friendly",
+        "all_of": [
+          "BATTLELINE",
+          "EMPEROR'S CHILDREN"
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "a WHEN keyword no datasheet prints (a designation gained in play) is not held against the unit",
+      "target_restrictions": {
+        "count": "one",
+        "selects": "unit",
+        "bound_to": "triggering-unit"
+      },
+      "members": [
+        [
+          "genestealer cults",
+          "infantry"
+        ]
+      ],
+      "trigger_subject": {
+        "owner": "friendly",
+        "all_of": [
+          "KILLER"
+        ]
+      },
+      "printed": [
+        "genestealer cults",
+        "infantry"
+      ],
+      "expected": true
+    },
+    {
+      "name": "a printed WHEN keyword the unit lacks excludes it",
+      "target_restrictions": {
+        "count": "one",
+        "selects": "unit",
+        "bound_to": "triggering-unit"
+      },
+      "members": [
+        [
+          "genestealer cults",
+          "infantry"
+        ]
+      ],
+      "trigger_subject": {
+        "owner": "friendly",
+        "all_of": [
+          "VEHICLE"
+        ]
+      },
+      "printed": [
+        "genestealer cults",
+        "infantry",
+        "vehicle"
+      ],
+      "expected": false
     }
   ]
 }

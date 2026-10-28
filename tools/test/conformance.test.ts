@@ -37,7 +37,7 @@ import type { Phase, GameEvent, Stratagem } from "../src/generated.js";
 import { effectToBuffs } from "../src/cruncher/from-dsl.js";
 import { resolveGrantedRecords, type GrantedRecord } from "../src/cruncher/granted-records.js";
 import { encodeBase } from "../src/runner.js";
-import { stratagemCanTarget, type EligibilityInput } from "../src/abilities-resolver/index.js";
+import { stratagemCanTarget, stratagemCanTargetUnit, type EligibilityInput } from "../src/abilities-resolver/index.js";
 import {
   resolveLayout,
   type TerrainTemplate as ResolverTemplate,
@@ -415,7 +415,7 @@ describe("abilities-resolver conformance corpus", () => {
   const ds = Dataset.embedded();
   const dir = join(CONFORMANCE, "abilities-resolver");
   const files = readdirSync(dir)
-    .filter((n) => n.startsWith("0") && n.endsWith(".json"))
+    .filter((n) => /^[0-9]/.test(n) && n.endsWith(".json"))
     .sort();
 
   it("the resolver corpus is non-empty", () => {
@@ -434,12 +434,21 @@ describe("abilities-resolver conformance corpus", () => {
     });
   }
 
-  type TargetCase = { name: string; target_restrictions: unknown; keywords: string[]; expected: boolean };
+  type TargetCase = {
+    name: string; target_restrictions: unknown; expected: boolean;
+    keywords?: string[]; members?: string[][]; trigger_subject?: unknown; printed?: string[];
+  };
   const targets = readJson(join(dir, "stratagem-targets.json")) as { cases: TargetCase[] };
   for (const c of targets.cases) {
     it(`abilities-resolver/stratagem-targets.json: ${c.name}`, () => {
       const stratagem = { target_restrictions: c.target_restrictions } as unknown as Stratagem;
-      expect(stratagemCanTarget(stratagem, new Set(c.keywords))).toBe(c.expected);
+      if (!c.members) {
+        expect(stratagemCanTarget(stratagem, new Set(c.keywords))).toBe(c.expected);
+        return;
+      }
+      const printed = c.printed ? new Set(c.printed.map(normalizeName)) : null;
+      const isPrinted = (keyword: string) => printed === null || printed.has(normalizeName(keyword));
+      expect(stratagemCanTargetUnit(stratagem, c.members.map((member) => new Set(member)), c.trigger_subject, isPrinted)).toBe(c.expected);
     });
   }
 

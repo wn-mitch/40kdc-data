@@ -280,23 +280,34 @@ describe("inert selected levers", () => {
 });
 
 describe("Stratagems that target one model", () => {
-  it("count the stack's models and keep a one-model Stratagem effect off a multi-model stack", () => {
-    const factionId = "chaos-space-marines";
+  const factionId = "chaos-space-marines";
+  const eye = "eye-of-the-gods-pactbound-zealots-chaos-space-marines";
+  const ledgerFor = (leaderId: string) => {
     const csm = resolveFactionContext(dataset, factionId);
     const config = parseMatrixConfig({ HC_FACTIONS: factionId, HC_TARGETS: "geq-guardsmen", HC_PHASES: "fight", HC_OUTPUT: "ledger.json" },
       { factionIds: new Set([factionId]), targetIds: ["geq-guardsmen"] });
     const session = damageScoringSession({ dataset, config, faction: csm, target, phase: "fight" });
     const chosen = csm.units.find((unit) => unit.id === "chosen")!;
-    const abaddon = csm.units.find((unit) => unit.id === "abaddon-the-despoiler")!;
-    const spec = legalDetachmentSpec(session, factionId, [{ unit: chosen, role: "bodyguard" }, { unit: abaddon, role: "leader" }],
+    const leader = csm.units.find((unit) => unit.id === leaderId)!;
+    const spec = legalDetachmentSpec(session, factionId, [{ unit: chosen, role: "bodyguard" }, { unit: leader, role: "leader" }],
       [dataset.detachments.getAny("pactbound-zealots")!])!;
-    // Ten Chosen and Abaddon, every member at full strength.
-    expect(session.state.contextFor(spec, spec.members[0]).attackerModelCount).toBe(11);
     const result = session.optimiseLevers(spec);
+    return { session, spec, result, ledger: buildLedger(session, result).filter((entry) => entry.abilityId === eye) };
+  };
+
+  it("count the stack's models and keep a one-model Stratagem effect off a multi-model stack", () => {
+    const { session, spec, result, ledger } = ledgerFor("chaos-lord");
+    // Ten Chosen and the Chaos Lord, every member at full strength.
+    expect(session.state.contextFor(spec, spec.members[0]).attackerModelCount).toBe(11);
     expect(session.selectedPoolLevers(result).filter((lever) => lever.id.includes("eye-of-the-gods"))).toEqual([]);
-    expect(buildLedger(session, result).filter((entry) => entry.abilityId === "eye-of-the-gods-pactbound-zealots-chaos-space-marines"))
-      // A kill triggers it, for the attacks after, so it is also encounter-layer.
-      .toEqual([expect.objectContaining({ status: "unresolved", reasons: ["encounter-layer", "model-only target"] })]);
+    // The Chaos Lord can be its target, but its effect is one model's. A kill triggers it, for the
+    // attacks after, so it is also encounter-layer.
+    expect(ledger).toEqual([expect.objectContaining({ status: "unresolved", reasons: ["encounter-layer", "model-only target"] })]);
+  });
+
+  it("is not offered when no member qualifies on its own", () => {
+    // Abaddon is an EPIC HERO, which its WHEN excludes, and the Chosen have no CHARACTER.
+    expect(ledgerFor("abaddon-the-despoiler").ledger).toEqual([]);
   });
 });
 

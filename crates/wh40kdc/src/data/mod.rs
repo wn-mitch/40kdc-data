@@ -44,8 +44,8 @@ pub mod roster;
 
 #[cfg(feature = "cruncher")]
 pub use abilities::{
-    aura_inches, stratagem_can_target, trigger_gated, EligibilityInput, EligibleAbility,
-    EligibleAbilitySource,
+    aura_inches, stratagem_can_target, stratagem_can_target_unit, trigger_gated, EligibilityInput,
+    EligibleAbility, EligibleAbilitySource,
 };
 pub use ability_refs::{printed_wargear_ids, rating_of, unit_ability_ids, with_rating};
 pub use collection::Collection;

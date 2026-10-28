@@ -108,19 +108,22 @@ func resolveEligibleAbilities(ds *Dataset, input map[string]any, phase string) [
 			detAny, ok = ds.Detachments.GetAny(detachmentID)
 		}
 		if ok {
-			// The combined unit's keywords: every member's, as one unit.
-			keywords := map[string]bool{}
+			// Each member's keywords; a unit target reads them as one combined unit.
 			members := []*UnitView{unit}
 			for _, memberID := range getStrList(input, "attachedUnitIds") {
 				if member, ok := ds.resolveUnitScoped(memberID, factionID); ok {
 					members = append(members, member)
 				}
 			}
+			memberKeywords := make([]map[string]bool, 0, len(members))
 			for _, member := range members {
+				keywords := map[string]bool{}
 				for _, keyword := range append(getStrList(member.Raw, "keywords"), getStrList(member.Raw, "faction_keywords")...) {
 					keywords[strings.ToLower(keyword)] = true
 				}
+				memberKeywords = append(memberKeywords, keywords)
 			}
+			printed := ds.printedKeyword()
 			det := detAny.(map[string]any)
 			for _, stratID := range getStrList(det, "stratagem_ids") {
 				stratAny, ok := ds.Stratagems.Get(stratID)
@@ -132,9 +135,6 @@ func resolveEligibleAbilities(ds *Dataset, input map[string]any, phase string) [
 				if len(stratPhases) == 0 || !contains(stratPhases, phase) {
 					continue
 				}
-				if !stratagemCanTarget(stratagem, keywords) {
-					continue
-				}
 				abilityID, ok := stratagem["ability_id"].(string)
 				if !ok {
 					continue
@@ -142,6 +142,10 @@ func resolveEligibleAbilities(ds *Dataset, input map[string]any, phase string) [
 				// Ability ids are unique: one record per stratagem, wherever its detachment is replicated.
 				stratAbility, ok := ds.Abilities.Get(abilityID)
 				if !ok {
+					continue
+				}
+				trigger, _ := stratAbility.Raw["trigger"].(map[string]any)
+				if !stratagemCanTargetUnit(stratagem, memberKeywords, trigger["subject"], printed) {
 					continue
 				}
 				stratagemSource := map[string]any{
@@ -246,31 +250,19 @@ func isAuraScope(rng any) bool {
 	return len(s) >= 5 && s[:5] == "aura-" || s == "any-on-battlefield" || s == "any-visible"
 }
 
-// stratagemCanTarget reports whether a unit with keywords (lower-cased) can be a stratagem's
-// friendly target. A stratagem with no friendly target (none printed, or only enemy targets) does
-// not restrict its user here; with several friendly targets, matching any one is enough. The
-// resolver does not know which model is the Warlord, so a Warlord target only needs a unit that
-// could contain it: one with CHARACTER, the keyword every Warlord carries. Mirrors TS
-// stratagemCanTarget.
 // stratagemSelectsModel reports whether a stratagem's friendly target is one model rather
 // than a unit.
 func stratagemSelectsModel(stratagem map[string]any) bool {
-	var targets []any
-	switch raw := stratagem["target_restrictions"].(type) {
-	case map[string]any:
-		targets = []any{raw}
-	case []any:
-		targets = raw
-	}
-	for _, item := range targets {
-		if target, ok := item.(map[string]any); ok && getStr(target, "side") != "enemy" && getStr(target, "selects") == "model" {
+	for _, target := range stratagemTargets(stratagem) {
+		if getStr(target, "side") != "enemy" && getStr(target, "selects") == "model" {
 			return true
 		}
 	}
 	return false
 }
 
-func stratagemCanTarget(stratagem map[string]any, keywords map[string]bool) bool {
+// stratagemTargets is a stratagem's target_restrictions as a list (one object or several).
+func stratagemTargets(stratagem map[string]any) []map[string]any {
 	var targets []map[string]any
 	switch raw := stratagem["target_restrictions"].(type) {
 	case map[string]any:
@@ -281,38 +273,137 @@ func stratagemCanTarget(stratagem map[string]any, keywords map[string]bool) bool
 				targets = append(targets, target)
 			}
 		}
-	default:
+	}
+	return targets
+}
+
+// stratagemCanTarget reports whether a unit with keywords (lower-cased) can be a stratagem's
+// friendly target. A stratagem with no friendly target (none printed, or only enemy targets) does
+// not restrict its user here; with several friendly targets, matching any one is enough. The
+// resolver does not know which model is the Warlord, so a Warlord target only needs a unit that
+// could contain it: one with CHARACTER, the keyword every Warlord carries. Mirrors TS
+// stratagemCanTarget.
+func stratagemCanTarget(stratagem map[string]any, keywords map[string]bool) bool {
+	return stratagemCanTargetUnit(stratagem, []map[string]bool{keywords}, nil, nil)
+}
+
+// stratagemCanTargetUnit reports whether a unit of members (each member's keywords: a unit and
+// the units attached to it) can be a stratagem's friendly target, as stratagemCanTarget. A target
+// that selects a model needs one member that meets it alone; a unit target reads every member as
+// one combined unit. A target bound to the triggering unit is also held to the keyword lists of
+// triggerSubject (its ability's trigger.subject). A keyword that subject requires and no datasheet
+// prints (printed says which do; nil means every keyword is printed) is gained in play, so it is
+// not held against a unit. Keywords compare by NormalizeName. Mirrors TS stratagemCanTargetUnit.
+func stratagemCanTargetUnit(stratagem map[string]any, members []map[string]bool, triggerSubject any, printed func(string) bool) bool {
+	targets := stratagemTargets(stratagem)
+	var friendly []map[string]any
+	for _, target := range targets {
+		if getStr(target, "side") != "enemy" {
+			friendly = append(friendly, target)
+		}
+	}
+	if len(friendly) == 0 {
 		return true
 	}
-	has := func(keyword string) bool { return keywords[strings.ToLower(keyword)] }
-	friendly := 0
-	for _, target := range targets {
-		if getStr(target, "side") == "enemy" {
-			continue
+	normalized := make([]map[string]bool, 0, len(members))
+	combined := map[string]bool{}
+	for _, member := range members {
+		own := map[string]bool{}
+		for keyword := range member {
+			own[NormalizeName(keyword)] = true
+			combined[NormalizeName(keyword)] = true
 		}
-		friendly++
-		ok := true
-		if warlord, _ := target["warlord"].(bool); warlord {
-			ok = has("character")
+		normalized = append(normalized, own)
+	}
+	subject := friendlySubject(triggerSubject)
+	for _, target := range friendly {
+		candidates := []map[string]bool{combined}
+		if getStr(target, "selects") == "model" {
+			candidates = normalized
 		}
-		for _, keyword := range getStrList(target, "required_keywords") {
-			ok = ok && has(keyword)
-		}
-		if anyOf := getStrList(target, "required_keywords_any"); len(anyOf) > 0 {
-			matched := false
-			for _, keyword := range anyOf {
-				matched = matched || has(keyword)
+		for _, keywords := range candidates {
+			has := func(keyword string) bool { return keywords[NormalizeName(keyword)] }
+			gained := func(keyword string) bool { return has(keyword) || (printed != nil && !printed(keyword)) }
+			if warlord, _ := target["warlord"].(bool); warlord && !has("character") {
+				continue
 			}
-			ok = ok && matched
-		}
-		for _, keyword := range getStrList(target, "excluded_keywords") {
-			ok = ok && !has(keyword)
-		}
-		if ok {
+			if !keywordListsHold(target, has, has) {
+				continue
+			}
+			if getStr(target, "bound_to") == "triggering-unit" && subject != nil && !keywordListsHold(subject, gained, has) {
+				continue
+			}
 			return true
 		}
 	}
-	return friendly == 0
+	return false
+}
+
+// friendlySubject is a trigger subject's keyword lists when it names a friendly unit, else nil.
+func friendlySubject(subject any) map[string]any {
+	raw, ok := subject.(map[string]any)
+	if !ok {
+		return nil
+	}
+	if owner, present := raw["owner"]; present && owner != "friendly" {
+		return nil
+	}
+	return map[string]any{
+		"required_keywords":     raw["all_of"],
+		"required_keywords_any": raw["any_of"],
+		"excluded_keywords":     raw["none_of"],
+	}
+}
+
+// keywordListsHold reports whether a target's required lists hold by required and none of its
+// excluded keywords holds by excluded.
+func keywordListsHold(target map[string]any, required, excluded func(string) bool) bool {
+	for _, keyword := range getStrList(target, "required_keywords") {
+		if !required(keyword) {
+			return false
+		}
+	}
+	if anyOf := getStrList(target, "required_keywords_any"); len(anyOf) > 0 {
+		matched := false
+		for _, keyword := range anyOf {
+			matched = matched || required(keyword)
+		}
+		if !matched {
+			return false
+		}
+	}
+	for _, keyword := range getStrList(target, "excluded_keywords") {
+		if excluded(keyword) {
+			return false
+		}
+	}
+	return true
+}
+
+// printedKeyword reports whether some datasheet prints a keyword (unit or faction keyword),
+// memoised per lookup.
+func (ds *Dataset) printedKeyword() func(string) bool {
+	seen := map[string]bool{}
+	return func(keyword string) bool {
+		key := NormalizeName(keyword)
+		if found, ok := seen[key]; ok {
+			return found
+		}
+		found := false
+		for _, unit := range ds.Units.All() {
+			for _, own := range append(getStrList(unit.Raw, "keywords"), getStrList(unit.Raw, "faction_keywords")...) {
+				if NormalizeName(own) == key {
+					found = true
+					break
+				}
+			}
+			if found {
+				break
+			}
+		}
+		seen[key] = found
+		return found
+	}
 }
 
 // combatPatrolDetachment is the detachment detachmentID names (resolved within factionID first)

@@ -72,7 +72,7 @@ func TestWeaponKeywordsCorpus(t *testing.T) {
 }
 
 func TestEligibleAbilitiesCorpus(t *testing.T) {
-	matches, _ := filepath.Glob(filepath.Join(corpusDir, "abilities-resolver", "0*.json"))
+	matches, _ := filepath.Glob(filepath.Join(corpusDir, "abilities-resolver", "[0-9]*.json"))
 	if len(matches) == 0 {
 		t.Skip("conformance corpus not available")
 	}
@@ -307,7 +307,27 @@ func TestStratagemTargetsCorpus(t *testing.T) {
 		for _, keyword := range getStrList(c, "keywords") {
 			keywords[keyword] = true
 		}
-		got := stratagemCanTarget(map[string]any{"target_restrictions": c["target_restrictions"]}, keywords)
+		stratagem := map[string]any{"target_restrictions": c["target_restrictions"]}
+		got := stratagemCanTarget(stratagem, keywords)
+		if rawMembers, ok := c["members"].([]any); ok {
+			members := []map[string]bool{}
+			for _, rawMember := range rawMembers {
+				member := map[string]bool{}
+				for _, keyword := range rawMember.([]any) {
+					member[keyword.(string)] = true
+				}
+				members = append(members, member)
+			}
+			var printed func(string) bool
+			if _, listed := c["printed"]; listed {
+				known := map[string]bool{}
+				for _, keyword := range getStrList(c, "printed") {
+					known[NormalizeName(keyword)] = true
+				}
+				printed = func(keyword string) bool { return known[NormalizeName(keyword)] }
+			}
+			got = stratagemCanTargetUnit(stratagem, members, c["trigger_subject"], printed)
+		}
 		if want, _ := c["expected"].(bool); got != want {
 			t.Errorf("%s: got %v, want %v", getStr(c, "name"), got, want)
 		}
