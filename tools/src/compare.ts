@@ -415,7 +415,10 @@ export function enumerateLoadouts(
 ): EnumeratedLoadouts {
   const unit = ds.units.getInFaction(unitId, factionId);
   if (!unit) throw new Error(`unit ${unitId} not found in faction ${factionId}`);
-  const weaponIds = new Set(ds.weapons.all.map((w) => w.raw.id));
+  // Every game mode: this resolves a reference to a weapon id, a lookup.
+  const weaponIds = new Set(
+    ds.forGameMode("all").weapons.all.map((w) => w.raw.id),
+  );
   const isRanged = (wid: string): boolean =>
     (ds.weapons.getInFaction(wid, factionId) ?? ds.weapons.getAny(wid))?.raw.type === "ranged";
   const baseRanged = [

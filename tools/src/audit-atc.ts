@@ -166,7 +166,8 @@ function classifyGrouping(unit: RosterUnit, roster: Roster, ds: Dataset): Groupi
  * reach from the unit's `weapon_ids` or any wargear-option grant. */
 function auditCompositionDrift(ds: Dataset): CompositionDrift[] {
   const out: CompositionDrift[] = [];
-  for (const unit of ds.units.all) {
+  // Every game mode: drift is a data defect wherever the unit is legal.
+  for (const unit of ds.forGameMode("all").units.all) {
     const comp = ds.unitCompositionOf(unit.raw);
     if (!comp?.models?.length) continue;
     const reachable = new Set<string>(unit.raw.weapon_ids ?? []);

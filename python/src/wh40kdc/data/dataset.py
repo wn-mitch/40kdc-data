@@ -3,6 +3,13 @@
 It owns every :class:`~wh40kdc.data.collection.Collection`, builds the
 cross-entity indexes once, and is the hub the linked views resolve against.
 
+A ``Dataset`` is a view with a game mode (:data:`GameModeView`). Listings of
+the game-mode scoped record types (units, weapons, detachments, enhancements,
+stratagems, wargear options, unit compositions) and the reverse listings over
+them show only records in that mode; id lookups resolve every record in every
+view. :meth:`Dataset.for_game_mode` returns a view over the same records and
+indexes; entity views reached from it link back into it.
+
 Python mirror of ``tools/src/data/dataset.ts``.
 """
 
@@ -12,7 +19,14 @@ from typing import Any, TypedDict
 
 from wh40kdc.data.ability_refs import unit_ability_ids
 from wh40kdc.data.bundle import RawData, empty_raw_data, raw_data
-from wh40kdc.data.collection import Collection, id_collection
+from wh40kdc.data.collection import (
+    DEFAULT_GAME_MODE,
+    Collection,
+    GameModeView,
+    check_game_mode,
+    id_collection,
+    in_game_mode,
+)
 from wh40kdc.data.entities import (
     AbilityView,
     FactionView,
@@ -70,6 +84,11 @@ class ReactiveTrigger(TypedDict):
     trigger: dict[str, Any]
 
 
+def _game_modes_of(record: dict[str, Any]) -> list[str] | None:
+    """A game-mode scoped record's authored ``game_modes`` (``None`` when omitted)."""
+    return record.get("game_modes")
+
+
 def _matches_bodyguard_keywords(la: dict[str, Any], unit: dict[str, Any]) -> bool:
     """Whether ``unit`` satisfies an attachment entry's optional keyword eligibility.
 
@@ -88,9 +107,18 @@ def _matches_bodyguard_keywords(la: dict[str, Any], unit: dict[str, Any]) -> boo
 class Dataset:
     """The whole dataset, with linked accessors over every entity collection."""
 
-    def __init__(self, raw: RawData | None = None) -> None:
+    def __init__(self, raw: RawData | None = None, game_mode: str = DEFAULT_GAME_MODE) -> None:
+        """Index ``raw`` (empty when ``None``) as the ``game_mode`` view.
+
+        Raises ``ValueError`` for an unknown ``game_mode``.
+        """
+        mode = check_game_mode(game_mode)
         if raw is None:
             raw = empty_raw_data()
+        self._game_mode: GameModeView = mode
+        # Every view of this data, by mode; one dict shared by all of them so
+        # for_game_mode on any view reuses its siblings.
+        self._views: dict[GameModeView, Dataset] = {mode: self}
 
         # Richly-linked collections.
         self.units: Collection[dict[str, Any], UnitView] = Collection(
@@ -109,6 +137,8 @@ class Dataset:
             # mirror of the TS guard.
             guard_unscoped=True,
             entity_label="unit",
+            game_modes_of=_game_modes_of,
+            game_mode=mode,
             wrap=lambda u: UnitView(u, self),
         )
         self.weapons: Collection[dict[str, Any], WeaponView] = Collection(
@@ -127,6 +157,8 @@ class Dataset:
             # faction context opt out via get_any.
             guard_unscoped=True,
             entity_label="weapon",
+            game_modes_of=_game_modes_of,
+            game_mode=mode,
             wrap=lambda w: WeaponView(w, self),
         )
         self.weapon_keywords: Collection[dict[str, Any], WeaponKeywordView] = Collection(
@@ -176,13 +208,21 @@ class Dataset:
             # as units.
             guard_unscoped=True,
             entity_label="detachment",
+            game_modes_of=_game_modes_of,
+            game_mode=mode,
             wrap=lambda d: d,
         )
         # Allied rules aren't owned by one faction; allies_for matches on army_keywords_any.
         self.allied_rules = id_collection(raw["allied_rules"])
-        self.enhancements = id_collection(raw["enhancements"])
-        self.stratagems = id_collection(raw["stratagems"])
-        self.wargear_options = id_collection(raw["wargear_options"])
+        self.enhancements = id_collection(
+            raw["enhancements"], game_modes_of=_game_modes_of
+        ).with_game_mode(mode)
+        self.stratagems = id_collection(
+            raw["stratagems"], game_modes_of=_game_modes_of
+        ).with_game_mode(mode)
+        self.wargear_options = id_collection(
+            raw["wargear_options"], game_modes_of=_game_modes_of
+        ).with_game_mode(mode)
         self.wargear = id_collection(raw["wargear"])
         self.missions = id_collection(raw["missions"])
         self.mission_matchups = id_collection(raw["mission_matchups"])
@@ -196,7 +236,10 @@ class Dataset:
 
         # Id-less collections, exposed as plain lists.
         self.leader_attachments: list[dict[str, Any]] = raw["leader_attachments"]
-        self.unit_compositions: list[dict[str, Any]] = raw["unit_compositions"]
+        # Every unit composition whatever its mode; unit_compositions lists this
+        # view's mode.
+        self._all_unit_compositions: list[dict[str, Any]] = raw["unit_compositions"]
+        self.unit_compositions: list[dict[str, Any]] = self._compositions_in(mode)
         self.game_versions: list[dict[str, Any]] = raw["game_versions"]
         self.interaction_flags: list[dict[str, Any]] = raw["interaction_flags"]
         self.phase_mappings: list[dict[str, Any]] = raw["phase_mappings"]
@@ -204,7 +247,7 @@ class Dataset:
         # (unit id, faction id) → its composition row; first-wins on duplicates, as
         # the linear search it replaces returned the first hit.
         self._composition_by_unit: dict[tuple[Any, Any], dict[str, Any]] = {}
-        for c in self.unit_compositions:
+        for c in self._all_unit_compositions:
             self._composition_by_unit.setdefault((c.get("unit_id"), c.get("faction_id")), c)
 
         # `source_type:source_id` → unioned phases.
@@ -224,8 +267,52 @@ class Dataset:
 
     @staticmethod
     def embedded() -> Dataset:
-        """The dataset built from the package's embedded data."""
+        """The matched-play view of the dataset built from the package's embedded data."""
         return Dataset(raw_data())
+
+    @property
+    def game_mode(self) -> GameModeView:
+        """The game mode this view lists (``"all"`` lists every record)."""
+        return self._game_mode
+
+    def for_game_mode(self, mode: str) -> Dataset:
+        """This data viewed in ``mode`` (a game-mode id, or ``"all"``).
+
+        The view shares this dataset's records and indexes (nothing is reparsed or
+        copied) and is cached per mode. Raises ``ValueError`` for an unknown mode.
+        """
+        checked = check_game_mode(mode)
+        cached = self._views.get(checked)
+        if cached is not None:
+            return cached
+        view = Dataset.__new__(Dataset)
+        view.__dict__.update(self.__dict__)
+        view._game_mode = checked
+        # Linked entity views rebind to the new view so navigation stays in it.
+        view.units = self.units.with_game_mode(checked, lambda u: UnitView(u, view))
+        view.weapons = self.weapons.with_game_mode(checked, lambda w: WeaponView(w, view))
+        view.weapon_keywords = self.weapon_keywords.with_game_mode(
+            checked, lambda k: WeaponKeywordView(k, view)
+        )
+        view.factions = self.factions.with_game_mode(checked, lambda f: FactionView(f, view))
+        view.abilities = self.abilities.with_game_mode(checked, lambda a: AbilityView(a, view))
+        view.detachments = self.detachments.with_game_mode(checked)
+        view.enhancements = self.enhancements.with_game_mode(checked)
+        view.stratagems = self.stratagems.with_game_mode(checked)
+        view.wargear_options = self.wargear_options.with_game_mode(checked)
+        view.unit_compositions = view._compositions_in(checked)
+        self._views[checked] = view
+        return view
+
+    def _compositions_in(self, mode: GameModeView) -> list[dict[str, Any]]:
+        """The unit compositions listed in ``mode``."""
+        if mode == "all":
+            return self._all_unit_compositions
+        return [c for c in self._all_unit_compositions if in_game_mode(c.get("game_modes"), mode)]
+
+    def _listed(self, record: dict[str, Any]) -> bool:
+        """Whether a game-mode scoped record is listed in this view's mode."""
+        return in_game_mode(record.get("game_modes"), self._game_mode)
 
     def phases_for(self, source_type: str, source_id: str) -> list[str]:
         """Phases a source acts in, unioned across its phase-mappings."""
@@ -256,7 +343,9 @@ class Dataset:
 
     def units_with_ability(self, ability_id: str) -> list[UnitView]:
         """Units that list the given ability id."""
-        return [UnitView(u, self) for u in self._units_by_ability.get(ability_id, [])]
+        return [
+            UnitView(u, self) for u in self._units_by_ability.get(ability_id, []) if self._listed(u)
+        ]
 
     def reactive_triggers(self) -> list[ReactiveTrigger]:
         """Every ability carrying a reactive ``trigger``, sorted by ability id.
@@ -311,11 +400,17 @@ class Dataset:
 
     def units_with_weapon(self, weapon_id: str) -> list[UnitView]:
         """Units that list the given weapon id."""
-        return [UnitView(u, self) for u in self._units_by_weapon.get(weapon_id, [])]
+        return [
+            UnitView(u, self) for u in self._units_by_weapon.get(weapon_id, []) if self._listed(u)
+        ]
 
     def weapons_with_keyword(self, keyword_id: str) -> list[WeaponView]:
         """Weapons whose profiles reference the given weapon-keyword id."""
-        return [WeaponView(w, self) for w in self._weapons_by_keyword.get(keyword_id, [])]
+        return [
+            WeaponView(w, self)
+            for w in self._weapons_by_keyword.get(keyword_id, [])
+            if self._listed(w)
+        ]
 
     def units_with_keyword(self, keyword: str) -> list[UnitView]:
         """Units carrying the given keyword (case-insensitive).
@@ -326,7 +421,11 @@ class Dataset:
         of TS ``unitsWithKeyword``; pinned by the ``units_with_keyword``
         conformance query.
         """
-        return [UnitView(u, self) for u in self._units_by_keyword.get(keyword.lower(), [])]
+        return [
+            UnitView(u, self)
+            for u in self._units_by_keyword.get(keyword.lower(), [])
+            if self._listed(u)
+        ]
 
     def allies_for(
         self, faction_id: str, detachment_ids: list[str] | None = None
@@ -442,7 +541,7 @@ class Dataset:
             # Attachment data is faction-agnostic (no faction context
             # here); accept first-wins for a shared chassis via get_any.
             unit = self.units.get_any(la["leader_id"])
-            if unit is not None and unit.id not in seen:
+            if unit is not None and self._listed(unit.raw) and unit.id not in seen:
                 seen.add(unit.id)
                 out.append(unit)
         return sorted(out, key=lambda u: u.name)
@@ -460,7 +559,7 @@ class Dataset:
             for bodyguard_id in la.get("eligible_bodyguard_ids", []):
                 # Faction-agnostic attachment data — get_any, as above.
                 unit = self.units.get_any(bodyguard_id)
-                if unit is None or unit.id in seen:
+                if unit is None or not self._listed(unit.raw) or unit.id in seen:
                     continue
                 seen.add(unit.id)
                 out.append(unit)
@@ -528,11 +627,13 @@ class Dataset:
             intrinsic = ability.id in {held.id for held in owner.abilities}
             from wh40kdc.data.lever_providers import can_take_enhancement
 
+            # The detachment's own Enhancements, whatever mode they list in: the
+            # detachment id is a reference, so a combat-patrol one still resolves.
             enhancement = any(
                 item.get("ability_id") == ability.id
                 and item.get("detachment_id") == input.get("detachmentId")
                 and can_take_enhancement(self, item, owner)
-                for item in self.enhancements
+                for item in self.for_game_mode("all").enhancements
             )
             if not intrinsic and not enhancement:
                 continue

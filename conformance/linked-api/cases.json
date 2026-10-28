@@ -330,7 +330,6 @@
       "armoured-tracks-chaos-predator-destructor",
       "armoured-tracks-chaos-rhino",
       "autopistol",
-      "autopistol-frenzied-reavers-jakhals",
       "axe-of-dismemberment",
       "axe-of-khorne",
       "baleflamer",
@@ -339,12 +338,8 @@
       "blood-harpoon",
       "bloodflail",
       "bolt-pistol",
-      "bolt-pistol-frenzied-reavers-khorne-berzerkers",
-      "bolt-pistol-frenzied-reavers-master-of-executions",
       "bolt-pistol-khorne-berzerkers",
       "burning-roar",
-      "chainblade",
-      "chainblade-frenzied-reavers-jakhals",
       "chainblade-goremongers",
       "chainblade-khorne-berzerkers",
       "chainblades",
@@ -385,7 +380,6 @@
       "hellblade",
       "hellfire-breath",
       "hellforged-weapons",
-      "hellforged-weapons-vorrakh-lord-of-the-frenzied-reavers",
       "hideous-mutations",
       "ichor-cannon",
       "infernal-cannon",
@@ -405,7 +399,6 @@
       "paired-manglers",
       "plasma-cannon",
       "plasma-pistol",
-      "plasma-pistol-frenzied-reavers-khorne-berzerkers",
       "plasma-pistol-khorne-berzerkers",
       "power-fist",
       "power-scourge",
@@ -509,9 +502,6 @@
       "flesh-hounds",
       "forgefiend",
       "forgefiend",
-      "frenzied-reavers-jakhals",
-      "frenzied-reavers-khorne-berzerkers",
-      "frenzied-reavers-master-of-executions",
       "goremongers",
       "helbrute",
       "helbrute",
@@ -536,8 +526,7 @@
       "skull-cannon",
       "skullmaster",
       "skulltaker",
-      "slaughterbound",
-      "vorrakh-lord-of-the-frenzied-reavers"
+      "slaughterbound"
     ]
   },
   {
@@ -554,8 +543,7 @@
       "dark-commune",
       "fellgor-beastmen",
       "traitor-enforcer",
-      "traitor-guardsmen-squad",
-      "zarkans-daemonkin-cultist-mob"
+      "traitor-guardsmen-squad"
     ]
   },
   {
@@ -840,18 +828,12 @@
     "comparison": "set",
     "expected": [
       "aquila-kill-team",
-      "aquilan-talon-sentinel-guard-sodality",
-      "aquilan-wing-sentinel-guard-sodality",
-      "askars-wolfpack-blood-claws",
-      "assault-force-intercessor-squad",
       "assault-intercessor-squad",
       "battle-sisters-squad",
       "blood-claws",
       "brotherhood-terminator-squad",
       "cadian-shock-troops",
       "catachan-jungle-fighters",
-      "crowes-sanctifiers-brotherhood-terminator-squad",
-      "crowes-sanctifiers-strike-squad",
       "crusader-squad",
       "custodian-guard-sodality",
       "death-korps-of-krieg",
@@ -859,24 +841,17 @@
       "deathwatch-veterans",
       "decimus-kill-team",
       "exaction-squad",
-      "gilded-blades-custodian-guard",
       "grey-hunters",
       "heavy-intercessor-squad",
       "imperial-navy-breachers",
       "inquisitorial-agents",
-      "inquisitors-hand-vigilant-squad",
       "intercessor-squad",
-      "purge-corps-skitarii-vanguard",
-      "sanctuary-guardians-battle-sisters-squad",
-      "sanguinary-spearhead-assault-intercessor-squad",
       "sentinel-guard-sodality",
       "skitarii-rangers",
       "skitarii-vanguard",
       "strike-squad",
       "subductor-squad",
-      "vengeful-brethren-intercessor-squad",
-      "vigilant-squad",
-      "vow-sworn-crusader-squad"
+      "vigilant-squad"
     ]
   },
   {
@@ -3611,5 +3586,229 @@
       "wrath-undeniable-blood-legion-chaos-daemons",
       "yriels-example-eldritch-raiders-aeldari"
     ]
+  },
+  {
+    "name": "units_of_faction adeptus-mechanicus default view omits Combat Patrol units",
+    "query": "units_of_faction",
+    "args": {
+      "factionId": "adeptus-mechanicus"
+    },
+    "comparison": "set",
+    "expected": [
+      "archaeopter-fusilave",
+      "archaeopter-stratoraptor",
+      "archaeopter-transvector",
+      "belisarius-cawl",
+      "corpuscarii-electro-priests",
+      "cybernetica-datasmith",
+      "fulgurite-electro-priests",
+      "hastarii-exterminators",
+      "hastarii-fusiliers",
+      "ironstrider-ballistarii",
+      "kastelan-robots",
+      "kataphron-breachers",
+      "kataphron-destroyers",
+      "onager-dunecrawler",
+      "pteraxii-skystalkers",
+      "pteraxii-sterylizors",
+      "serberys-raiders",
+      "serberys-sulphurhounds",
+      "servitor-battleclade",
+      "sicarian-infiltrators",
+      "sicarian-ruststalkers",
+      "skitarii-marshal",
+      "skitarii-rangers",
+      "skitarii-vanguard",
+      "skorpius-disintegrator",
+      "skorpius-dunerider",
+      "sydonian-dragoons-with-radium-jezzails",
+      "sydonian-dragoons-with-taser-lances",
+      "sydonian-skatros",
+      "tech-priest-dominus",
+      "tech-priest-enginseer",
+      "tech-priest-manipulus",
+      "technoarcheologist",
+      "thulia-ghuld"
+    ]
+  },
+  {
+    "name": "units_of_faction adeptus-mechanicus combat-patrol view lists only Combat Patrol units",
+    "query": "units_of_faction",
+    "args": {
+      "factionId": "adeptus-mechanicus",
+      "gameMode": "combat-patrol"
+    },
+    "comparison": "set",
+    "expected": [
+      "manipulus-skand",
+      "purge-corps-pteraxii-sterylizors",
+      "purge-corps-serberys-sulphurhounds",
+      "purge-corps-skitarii-vanguard"
+    ]
+  },
+  {
+    "name": "units_of_faction adeptus-mechanicus all view lists every unit",
+    "query": "units_of_faction",
+    "args": {
+      "factionId": "adeptus-mechanicus",
+      "gameMode": "all"
+    },
+    "comparison": "set",
+    "expected": [
+      "archaeopter-fusilave",
+      "archaeopter-stratoraptor",
+      "archaeopter-transvector",
+      "belisarius-cawl",
+      "corpuscarii-electro-priests",
+      "cybernetica-datasmith",
+      "fulgurite-electro-priests",
+      "hastarii-exterminators",
+      "hastarii-fusiliers",
+      "ironstrider-ballistarii",
+      "kastelan-robots",
+      "kataphron-breachers",
+      "kataphron-destroyers",
+      "manipulus-skand",
+      "onager-dunecrawler",
+      "pteraxii-skystalkers",
+      "pteraxii-sterylizors",
+      "purge-corps-pteraxii-sterylizors",
+      "purge-corps-serberys-sulphurhounds",
+      "purge-corps-skitarii-vanguard",
+      "serberys-raiders",
+      "serberys-sulphurhounds",
+      "servitor-battleclade",
+      "sicarian-infiltrators",
+      "sicarian-ruststalkers",
+      "skitarii-marshal",
+      "skitarii-rangers",
+      "skitarii-vanguard",
+      "skorpius-disintegrator",
+      "skorpius-dunerider",
+      "sydonian-dragoons-with-radium-jezzails",
+      "sydonian-dragoons-with-taser-lances",
+      "sydonian-skatros",
+      "tech-priest-dominus",
+      "tech-priest-enginseer",
+      "tech-priest-manipulus",
+      "technoarcheologist",
+      "thulia-ghuld"
+    ]
+  },
+  {
+    "name": "get_unit resolves a Combat Patrol unit in the default view",
+    "query": "get_unit",
+    "args": {
+      "unitId": "manipulus-skand"
+    },
+    "comparison": "scalar",
+    "expected": "manipulus-skand"
+  },
+  {
+    "name": "find_unit misses a Combat Patrol unit by name in the default view",
+    "query": "find_unit",
+    "args": {
+      "query": "Manipulus Skand"
+    },
+    "comparison": "scalar",
+    "expected": null
+  },
+  {
+    "name": "find_unit finds a Combat Patrol unit by name in the combat-patrol view",
+    "query": "find_unit",
+    "args": {
+      "query": "Manipulus Skand",
+      "gameMode": "combat-patrol"
+    },
+    "comparison": "scalar",
+    "expected": "manipulus-skand"
+  },
+  {
+    "name": "detachments_of_faction adeptus-mechanicus default view omits Combat Patrol detachments",
+    "query": "detachments_of_faction",
+    "args": {
+      "factionId": "adeptus-mechanicus"
+    },
+    "comparison": "set",
+    "expected": [
+      "cohort-acquisitus",
+      "cohort-cybernetica",
+      "data-psalm-conclave",
+      "eradication-cohort",
+      "explorator-maniple",
+      "haloscreed-battle-clade",
+      "lords-of-the-forge",
+      "luminen-auto-choir",
+      "rad-zone-corps",
+      "skitarii-hunter-cohort"
+    ]
+  },
+  {
+    "name": "detachments_of_faction adeptus-mechanicus combat-patrol view",
+    "query": "detachments_of_faction",
+    "args": {
+      "factionId": "adeptus-mechanicus",
+      "gameMode": "combat-patrol"
+    },
+    "comparison": "set",
+    "expected": [
+      "purge-corps-deltic-9"
+    ]
+  },
+  {
+    "name": "get_detachment resolves a Combat Patrol detachment in the default view",
+    "query": "get_detachment",
+    "args": {
+      "detachmentId": "purge-corps-deltic-9"
+    },
+    "comparison": "scalar",
+    "expected": "purge-corps-deltic-9"
+  },
+  {
+    "name": "find_detachment misses a Combat Patrol detachment by name in the default view",
+    "query": "find_detachment",
+    "args": {
+      "query": "Purge Corps Deltic-9"
+    },
+    "comparison": "scalar",
+    "expected": null
+  },
+  {
+    "name": "find_detachment finds a Combat Patrol detachment by name in the combat-patrol view",
+    "query": "find_detachment",
+    "args": {
+      "query": "Purge Corps Deltic-9",
+      "gameMode": "combat-patrol"
+    },
+    "comparison": "scalar",
+    "expected": "purge-corps-deltic-9"
+  },
+  {
+    "name": "get_enhancement resolves a Combat Patrol enhancement in the default view",
+    "query": "get_enhancement",
+    "args": {
+      "id": "empowered-mechanisms-purge-corps-deltic-9-adeptus-mechanicus"
+    },
+    "comparison": "scalar",
+    "expected": "empowered-mechanisms-purge-corps-deltic-9-adeptus-mechanicus"
+  },
+  {
+    "name": "find_enhancement misses a Combat Patrol enhancement by name in the default view",
+    "query": "find_enhancement",
+    "args": {
+      "query": "Empowered Mechanisms"
+    },
+    "comparison": "scalar",
+    "expected": null
+  },
+  {
+    "name": "find_enhancement finds a Combat Patrol enhancement by name in the combat-patrol view",
+    "query": "find_enhancement",
+    "args": {
+      "query": "Empowered Mechanisms",
+      "gameMode": "combat-patrol"
+    },
+    "comparison": "scalar",
+    "expected": "empowered-mechanisms-purge-corps-deltic-9-adeptus-mechanicus"
   }
 ]

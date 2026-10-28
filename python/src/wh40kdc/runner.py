@@ -28,6 +28,7 @@ from wh40kdc.compare import LoadoutLine, compare_cell, loadout_cell
 from wh40kdc.cruncher import AllocationDefences, allocate, attribute_stages, crunch
 from wh40kdc.data.affordability import candidate_affordability
 from wh40kdc.data.base import encode_base
+from wh40kdc.data.collection import GAME_MODE_VIEWS
 from wh40kdc.data.dataset import Dataset
 from wh40kdc.data.loadout import (
     base_loadout,
@@ -250,14 +251,7 @@ def _handle_check_unit_legality(state: RunnerState, args: Any) -> Response:
     )
     if u is None:
         return _err("UNKNOWN_ENTITY", {"kind": "unit", "id": unit_id})
-    comp = next(
-        (
-            c
-            for c in ds.unit_compositions
-            if c.get("unit_id") == unit_id and c.get("faction_id") == u.raw.get("faction_id")
-        ),
-        None,
-    )
+    comp = ds.unit_composition_of(u.raw)
     counts = {k: int(v) for k, v in (args.get("counts") or {}).items()}
     violations = check_unit_legality(
         u.raw,
@@ -369,8 +363,16 @@ def _handle_linked_query(state: RunnerState, args: Any) -> Response:
     query = args.get("query")
     if not isinstance(query, str):
         return _err("INVALID_INPUT", {"detail": "linked_query.query must be a string"})
-    ds = state.dataset()
     input_ = args.get("input") or {}
+    if not isinstance(input_, dict):
+        return _err("INVALID_INPUT", {"detail": "linked_query.input must be an object"})
+    game_mode = input_.get("gameMode")
+    if game_mode is None:
+        ds = state.dataset()
+    elif isinstance(game_mode, str) and game_mode in GAME_MODE_VIEWS:
+        ds = state.dataset().for_game_mode(game_mode)
+    else:
+        return _err("INVALID_INPUT", {"detail": f"linked_query: unknown gameMode {game_mode!r}"})
     # The wire carries ids as strings; missing ids coerce to "" (matches the
     # TS Map.get(undefined) → miss behavior).
     unit_id = input_.get("unitId") or ""
@@ -387,6 +389,22 @@ def _handle_linked_query(state: RunnerState, args: Any) -> Response:
         if query == "find_ability":
             a = ds.abilities.find(input_.get("query", ""))
             return _ok(a.id if a else None)
+        if query == "find_enhancement":
+            e = ds.enhancements.find(input_.get("query", ""))
+            return _ok(e["id"] if e else None)
+        if query == "find_detachment":
+            d = ds.detachments.find(input_.get("query", ""))
+            return _ok(d["id"] if d else None)
+        if query == "get_unit":
+            gu = ds.units.get_any(input_.get("unitId") or "")
+            return _ok(gu.id if gu else None)
+        if query == "get_detachment":
+            gd = ds.detachments.get_any(input_.get("detachmentId") or "")
+            return _ok(gd["id"] if gd else None)
+        if query == "units_of_faction":
+            return _ok([x.id for x in ds.units.by_faction(input_.get("factionId") or "")])
+        if query == "detachments_of_faction":
+            return _ok([x["id"] for x in ds.detachments.by_faction(input_.get("factionId") or "")])
         if query == "get_enhancement":
             # Resolved enhancement's current id (or null): exercises renamed-id
             # resolution via the share-registry alias map.
@@ -413,7 +431,7 @@ def _handle_linked_query(state: RunnerState, args: Any) -> Response:
                 return _err("UNKNOWN_ENTITY", {"kind": "unit", "id": input_.get("unitId")})
             # The corpus always supplies modelCount; missing coerces to 0.
             model_count = int(input_.get("modelCount") or 0)
-            comp = next((c for c in ds.unit_compositions if c.get("unit_id") == unit_id), None)
+            comp = ds.unit_composition_of(u.raw)
             fn = base_loadout if query == "base_loadout" else maximal_loadout
             lo = fn(
                 u.raw,
@@ -428,7 +446,7 @@ def _handle_linked_query(state: RunnerState, args: Any) -> Response:
             if u is None:
                 return _err("UNKNOWN_ENTITY", {"kind": "unit", "id": input_.get("unitId")})
             model_count = int(input_.get("modelCount") or 0)
-            comp = next((c for c in ds.unit_compositions if c.get("unit_id") == unit_id), None)
+            comp = ds.unit_composition_of(u.raw)
             bounds = weapon_bounds(
                 u.raw,
                 model_count,
@@ -446,15 +464,7 @@ def _handle_linked_query(state: RunnerState, args: Any) -> Response:
             )
             if u is None:
                 return _err("UNKNOWN_ENTITY", {"kind": "unit", "id": input_.get("unitId")})
-            comp = next(
-                (
-                    c
-                    for c in ds.unit_compositions
-                    if c.get("unit_id") == unit_id
-                    and c.get("faction_id") == u.raw.get("faction_id")
-                ),
-                None,
-            )
+            comp = ds.unit_composition_of(u.raw)
             return _ok(
                 loadout_candidates(
                     u.raw,
@@ -484,7 +494,7 @@ def _handle_linked_query(state: RunnerState, args: Any) -> Response:
             u = ds.units.get_any(unit_id)
             if u is None:
                 return _err("UNKNOWN_ENTITY", {"kind": "unit", "id": input_.get("unitId")})
-            comp = next((c for c in ds.unit_compositions if c.get("unit_id") == unit_id), None)
+            comp = ds.unit_composition_of(u.raw)
             # Ordered "modelName=encodedBase" pairs in declared model order.
             models = (comp or {}).get("models") or []
             return _ok(

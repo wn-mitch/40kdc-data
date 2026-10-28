@@ -256,12 +256,12 @@
       "consumers": ["tools/src/mfm/project-loadout.ts#projectUnit"], "reason": "Dataslate is repository release context, not a dump-metadata transform."
     },
     "/game_modes": {
-      "provenance": "repo-authored", "coverage": "unimplemented", "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": [], "consumers": [],
-      "reason": "Current composition projection does not emit game_modes; any composition mode labels remain authored."
+      "provenance": "repo-authored", "coverage": "implemented", "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": ["A unit without game_modes leaves its composition's authored modes alone."], "consumers": ["tools/src/mfm/wargear.ts#stampCompositionGameModes"],
+      "reason": "Copied from the owning unit's game_modes (derived from its Combat Patrol publication), so a composition lists in the same game mode as its unit."
     },
     "/game_modes/*": {
-      "provenance": "repo-authored", "coverage": "unimplemented", "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": [], "consumers": [],
-      "reason": "Current composition projection does not emit game_modes; any composition mode labels remain authored."
+      "provenance": "repo-authored", "coverage": "implemented", "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": ["A unit without game_modes leaves its composition's authored modes alone."], "consumers": ["tools/src/mfm/wargear.ts#stampCompositionGameModes"],
+      "reason": "Copied from the owning unit's game_modes (derived from its Combat Patrol publication), so a composition lists in the same game mode as its unit."
     },
     "/models/*/excluded_from_enhancements": {
       "provenance": "direct",

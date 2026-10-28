@@ -85,6 +85,10 @@ import {
   RECIPIENT_CASE_PREFIX,
   stanceOptionFields,
 } from "./gen-conformance-cruncher-cases.js";
+import {
+  GAME_MODE_LINKED_QUERIES,
+  runGameModeQuery,
+} from "./gen-conformance-game-mode-cases.js";
 import { canonicalDamageZeroingCases, DAMAGE_ZEROING_CASE_PREFIX } from "./gen-conformance-zeroing-cases.js";
 import { canonicalIgnoreModifiersCases, IGNORE_MODIFIERS_CASE_PREFIX } from "./gen-conformance-ignore-cases.js";
 import { canonicalGrantedRecordCases, GRANTED_RECORD_CASE_PREFIX, withGrantedRecords } from "./gen-conformance-granted-cases.js";
@@ -916,10 +920,13 @@ const LINKED_API_QUERIES: LinkedApiQuery[] = [
 
 function genLinkedApi(): void {
   const ds = Dataset.embedded();
-  const cases = LINKED_API_QUERIES.map((q) => {
-    const expected = runLinkedQuery(ds, q);
-    return { ...q, expected };
-  });
+  const cases = [
+    ...LINKED_API_QUERIES.map((q) => ({ ...q, expected: runLinkedQuery(ds, q) })),
+    ...GAME_MODE_LINKED_QUERIES.map((q) => ({
+      ...q,
+      expected: runGameModeQuery(ds, q),
+    })),
+  ];
   writeJson(join(CONFORMANCE, "linked-api", "cases.json"), cases);
   console.log(`linked-api/cases.json: ${cases.length} cases`);
 }
@@ -992,7 +999,7 @@ function runLinkedQuery(
     case "model_bases_of": {
       const u = ds.units.getAny(q.args.unitId);
       if (!u) throw new Error(`model_bases_of: unknown unit ${q.args.unitId}`);
-      const comp = ds.unitCompositions.find((c) => c.unit_id === q.args.unitId);
+      const comp = ds.unitCompositionOf(u.raw);
       return (comp?.models ?? []).map(
         (m) => `${m.name}=${encodeBase(m.base_size_mm) ?? "none"}`,
       );
@@ -1011,7 +1018,7 @@ function runLinkedQuery(
       // a sorted "id:count" multiset (set-compared).
       const u = ds.units.getAny(q.args.unitId);
       if (!u) throw new Error(`base_loadout: unknown unit ${q.args.unitId}`);
-      const comp = ds.unitCompositions.find((c) => c.unit_id === q.args.unitId);
+      const comp = ds.unitCompositionOf(u.raw);
       const lo = baseLoadout(
         u.raw,
         Number(q.args.modelCount),
@@ -4219,7 +4226,9 @@ function bytesToBase64url(bytes: number[]): string {
  */
 function genShare(): void {
   mkdirSync(join(CONFORMANCE, "share"), { recursive: true });
-  const ds = Dataset.embedded();
+  // Every game mode: the share registry and codec cover every record, and the
+  // fixture lists are drawn from the full catalog, Combat Patrol included.
+  const ds = Dataset.embedded().forGameMode("all");
   const f = "adeptus-astartes";
   const dets = ds.detachments.all
     .filter((d) => d.faction_id === f)

@@ -32,16 +32,7 @@ func (s *RunnerState) handleCheckUnitLegality(args any) map[string]any {
 	if u == nil {
 		return errResp("UNKNOWN_ENTITY", map[string]any{"kind": "unit", "id": unitID})
 	}
-	factionID := getStr(u.Raw, "faction_id")
-	var models, tiers []any
-	for _, cAny := range ds.UnitCompositions {
-		c, _ := asMap(cAny)
-		if getStr(c, "unit_id") == unitID && getStr(c, "faction_id") == factionID {
-			models = getList(c, "models")
-			tiers = getList(c, "tiers")
-			break
-		}
-	}
+	models, tiers := ds.unitCompositionOf(u.Raw)
 	counts := map[string]int{}
 	if cs, ok := asMap(a["counts"]); ok {
 		for k, v := range cs {
@@ -189,6 +180,19 @@ func (s *RunnerState) handleLinkedQuery(args any) map[string]any {
 	if in == nil {
 		in = map[string]any{}
 	}
+	// Optional input.gameMode runs the query against that game-mode view;
+	// absent means the default (matched-play) view.
+	if modeAny, present := in["gameMode"]; present {
+		mode, isStr := modeAny.(string)
+		if !isStr {
+			return errResp("INVALID_INPUT", detail("linked_query.input.gameMode must be a string"))
+		}
+		view, err := ds.ForGameMode(mode)
+		if err != nil {
+			return errResp("INVALID_INPUT", detail(err.Error()))
+		}
+		ds = view
+	}
 	unitID := getStr(in, "unitId")
 
 	unknownUnit := func() map[string]any {
@@ -204,6 +208,38 @@ func (s *RunnerState) handleLinkedQuery(args any) map[string]any {
 	case "find_weapon":
 		if w, ok := ds.Weapons.Find(getStr(in, "query")); ok {
 			return okResp(w.ID())
+		}
+		return okResp(nil)
+	case "units_of_faction":
+		out := []any{}
+		for _, u := range ds.Units.ByFaction(getStr(in, "factionId")) {
+			out = append(out, u.ID())
+		}
+		return okResp(out)
+	case "detachments_of_faction":
+		out := []any{}
+		for _, d := range ds.Detachments.ByFaction(getStr(in, "factionId")) {
+			out = append(out, getStr(d.(map[string]any), "id"))
+		}
+		return okResp(out)
+	case "get_unit":
+		if u, ok := ds.Units.GetAny(getStr(in, "unitId")); ok {
+			return okResp(u.ID())
+		}
+		return okResp(nil)
+	case "get_detachment":
+		if d, ok := ds.Detachments.GetAny(getStr(in, "detachmentId")); ok {
+			return okResp(getStr(d.(map[string]any), "id"))
+		}
+		return okResp(nil)
+	case "find_enhancement":
+		if e, ok := ds.Enhancements.Find(getStr(in, "query")); ok {
+			return okResp(getStr(e.(map[string]any), "id"))
+		}
+		return okResp(nil)
+	case "find_detachment":
+		if d, ok := ds.Detachments.Find(getStr(in, "query")); ok {
+			return okResp(getStr(d.(map[string]any), "id"))
 		}
 		return okResp(nil)
 	case "find_faction":
@@ -251,14 +287,7 @@ func (s *RunnerState) handleLinkedQuery(args any) map[string]any {
 			return unknownUnit()
 		}
 		modelCount := asInt(in["modelCount"])
-		var models []any
-		for _, cAny := range ds.UnitCompositions {
-			c, _ := asMap(cAny)
-			if getStr(c, "unit_id") == unitID {
-				models = getList(c, "models")
-				break
-			}
-		}
+		models, _ := ds.unitCompositionOf(u.Raw)
 		var lo map[string]int
 		if query == "base_loadout" {
 			lo = baseLoadout(u.Raw, modelCount, ds.wargearOptionsOf(u.Raw), models)
@@ -276,14 +305,7 @@ func (s *RunnerState) handleLinkedQuery(args any) map[string]any {
 		if !ok {
 			return unknownUnit()
 		}
-		var models []any
-		for _, cAny := range ds.UnitCompositions {
-			c, _ := asMap(cAny)
-			if getStr(c, "unit_id") == unitID {
-				models = getList(c, "models")
-				break
-			}
-		}
+		models, _ := ds.unitCompositionOf(u.Raw)
 		bounds := weaponBounds(u.Raw, asInt(in["modelCount"]), ds.wargearOptionsOf(u.Raw), models)
 		strs := make([]string, 0, len(bounds))
 		for id, b := range bounds {
@@ -299,14 +321,7 @@ func (s *RunnerState) handleLinkedQuery(args any) map[string]any {
 		if !ok {
 			return unknownUnit()
 		}
-		var models, tiers []any
-		for _, cAny := range ds.UnitCompositions {
-			c, _ := asMap(cAny)
-			if getStr(c, "unit_id") == unitID && getStr(c, "faction_id") == getStr(u.Raw, "faction_id") {
-				models, tiers = getList(c, "models"), getList(c, "tiers")
-				break
-			}
-		}
+		models, tiers := ds.unitCompositionOf(u.Raw)
 		var limit *int
 		if in["limit"] != nil {
 			n := asInt(in["limit"])
@@ -339,19 +354,13 @@ func (s *RunnerState) handleLinkedQuery(args any) map[string]any {
 		}
 		return okResp(nil)
 	case "model_bases_of":
-		if _, ok := ds.Units.GetAny(unitID); !ok {
+		u, ok := ds.Units.GetAny(unitID)
+		if !ok {
 			return unknownUnit()
 		}
-		var comp map[string]any
-		for _, cAny := range ds.UnitCompositions {
-			c, _ := asMap(cAny)
-			if getStr(c, "unit_id") == unitID {
-				comp = c
-				break
-			}
-		}
+		models, _ := ds.unitCompositionOf(u.Raw)
 		out := []any{}
-		for _, mAny := range getList(comp, "models") {
+		for _, mAny := range models {
 			m, _ := asMap(mAny)
 			bs, _ := getMap(m, "base_size_mm")
 			enc, ok := encodeBase(bs)

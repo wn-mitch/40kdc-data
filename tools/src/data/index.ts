@@ -28,8 +28,13 @@ export type {
 } from "./dataset.js";
 export { isLegalLeverSelection } from "./lever-selection.js";
 export type { SelectableLever } from "./lever-selection.js";
-export { Collection } from "./collection.js";
-export type { CollectionConfig } from "./collection.js";
+export {
+  Collection,
+  DEFAULT_GAME_MODE,
+  GAME_MODE_VIEWS,
+  inGameMode,
+} from "./collection.js";
+export type { CollectionConfig, GameModeView } from "./collection.js";
 export {
   UnitView,
   AbilityView,

@@ -21,6 +21,7 @@ import { fileURLToPath } from "node:url";
 import process from "node:process";
 
 import { Dataset } from "./data/dataset.js";
+import { GAME_MODE_VIEWS, type GameModeView } from "./data/collection.js";
 import { normalizeName } from "./data/normalize.js";
 import {
   baseLoadout,
@@ -604,8 +605,21 @@ function handleLinkedQuery(state: RunnerState, args: unknown): RunnerResponse {
       detail: "linked_query.query must be a string",
     });
   }
-  const ds = getDataset(state);
   const input = (a.input ?? {}) as Record<string, string>;
+  // `gameMode` picks the dataset view the query runs against (default: the
+  // matched-play view); listings skip records outside it, id lookups do not.
+  let ds = getDataset(state);
+  if (input.gameMode !== undefined) {
+    if (
+      typeof input.gameMode !== "string" ||
+      !(GAME_MODE_VIEWS as readonly string[]).includes(input.gameMode)
+    ) {
+      return err("INVALID_INPUT", {
+        detail: `linked_query.input.gameMode must be one of ${GAME_MODE_VIEWS.join(", ")}`,
+      });
+    }
+    ds = ds.forGameMode(input.gameMode as GameModeView);
+  }
   // A shared chassis (same unit id in several factions) diverges per faction in
   // its options/composition/profiles; when the case pins `factionId`, resolve
   // that faction's copy, else fall back to first-wins `getAny` (back-compat).
@@ -787,6 +801,20 @@ function handleLinkedQuery(state: RunnerState, args: unknown): RunnerResponse {
         // Returns the resolved enhancement's current id (or null). Exercises
         // renamed-id resolution: a since-renamed id resolves to its new record.
         return ok(ds.enhancements.get(input.id ?? "")?.id ?? null);
+      case "units_of_faction":
+        return ok(ds.units.byFaction(input.factionId ?? "").map((u) => u.id));
+      case "detachments_of_faction":
+        return ok(
+          ds.detachments.byFaction(input.factionId ?? "").map((d) => d.id),
+        );
+      case "get_unit":
+        return ok(ds.units.getAny(input.unitId ?? "")?.id ?? null);
+      case "get_detachment":
+        return ok(ds.detachments.getAny(input.detachmentId ?? "")?.id ?? null);
+      case "find_enhancement":
+        return ok(ds.enhancements.find(input.query ?? "")?.id ?? null);
+      case "find_detachment":
+        return ok(ds.detachments.find(input.query ?? "")?.id ?? null);
       default:
         return err("INVALID_INPUT", {
           detail: `unknown linked_query: ${a.query}`,

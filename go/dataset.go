@@ -5,6 +5,11 @@ import "sort"
 // Dataset ties the embedded records together: it owns every Collection, builds
 // the cross-entity indexes once, and is the hub the linked views resolve
 // against. Go mirror of python .../data/dataset.py.
+//
+// A Dataset is a view with a game mode (see GameMode / ForGameMode in
+// game_mode.go): the listings of units, weapons, detachments, enhancements,
+// stratagems, wargear options and unit compositions show only records legal
+// in that mode, while id lookups resolve every record in every view.
 type Dataset struct {
 	// Richly-linked collections.
 	Units          *Collection[*UnitView]
@@ -32,7 +37,8 @@ type Dataset struct {
 	ResourcePools      *Collection[any]
 	UnitKeywords       *Collection[any]
 
-	// Id-less collections, exposed as plain lists.
+	// Id-less collections, exposed as plain lists. UnitCompositions is a
+	// listing, filtered by the view's game mode.
 	LeaderAttachments []any
 	UnitCompositions  []any
 	GameVersions      []any
@@ -46,16 +52,32 @@ type Dataset struct {
 	weaponsByKeyword     map[string][]any
 	unitsByKeyword       map[string][]any
 	wargearOptionsByUnit map[string][]any
+
+	// Game-mode view state (game_mode.go). gameMode is a game-mode id or
+	// "all"; visible is nil for "all". root is the "all" view every view of
+	// the same records shares, and views caches its per-mode views.
+	gameMode            string
+	visible             func(any) bool
+	root                *Dataset
+	views               *gameModeViews
+	allUnitCompositions []any
 }
 
 func factionIDOf(i any) string { return getStr(i.(map[string]any), "faction_id") }
 
-// EmbeddedDataset builds the dataset from the package's embedded data.
+// EmbeddedDataset builds the matched-play view of the package's embedded data.
 func EmbeddedDataset() *Dataset { return NewDataset(embeddedRawData()) }
 
-// NewDataset builds a Dataset from raw collection data.
+// NewDataset builds the matched-play view of raw collection data. Use
+// ForGameMode on the result for another mode or "all".
 func NewDataset(raw rawData) *Dataset {
-	ds := &Dataset{}
+	return buildDataset(raw).viewFor(defaultGameMode)
+}
+
+// buildDataset builds the "all" view: every collection, list and index over raw.
+func buildDataset(raw rawData) *Dataset {
+	ds := &Dataset{gameMode: gameModeAll, views: newGameModeViews()}
+	ds.root = ds
 
 	ds.Units = newCollection(raw["units"], func(i any) *UnitView {
 		return &UnitView{Raw: i.(map[string]any), ds: ds}
@@ -153,6 +175,7 @@ func NewDataset(raw rawData) *Dataset {
 
 	ds.LeaderAttachments = raw["leader_attachments"]
 	ds.UnitCompositions = raw["unit_compositions"]
+	ds.allUnitCompositions = raw["unit_compositions"]
 	ds.GameVersions = raw["game_versions"]
 	ds.InteractionFlags = raw["interaction_flags"]
 	ds.PhaseMappings = raw["phase_mappings"]
@@ -183,9 +206,11 @@ func (ds *Dataset) unitsWithWeapon(weaponID string) []*UnitView {
 
 func (ds *Dataset) weaponsWithKeyword(keywordID string) []*WeaponView {
 	items := ds.weaponsByKeyword[keywordID]
-	out := make([]*WeaponView, len(items))
-	for i, w := range items {
-		out[i] = &WeaponView{Raw: w.(map[string]any), ds: ds}
+	out := make([]*WeaponView, 0, len(items))
+	for _, w := range items {
+		if ds.shows(w) {
+			out = append(out, &WeaponView{Raw: w.(map[string]any), ds: ds})
+		}
 	}
 	return out
 }
@@ -207,11 +232,12 @@ func (ds *Dataset) wargearOptionsOf(unit map[string]any) []any {
 // unitCompositionOf returns the (models, tiers) of the unit's faction-scoped
 // composition — keyed by (faction_id, unit_id) so a shared chassis resolves the
 // right faction's composition. Both are nil when the unit has no composition.
-// Mirror of TS Dataset.unitCompositionOf.
+// A per-unit lookup, so it ignores the view's game mode. Mirror of TS
+// Dataset.unitCompositionOf.
 func (ds *Dataset) unitCompositionOf(unit map[string]any) (models, tiers []any) {
 	fid := getStr(unit, "faction_id")
 	uid := getStr(unit, "id")
-	for _, cAny := range ds.UnitCompositions {
+	for _, cAny := range ds.allUnitCompositions {
 		c, _ := asMap(cAny)
 		if getStr(c, "unit_id") == uid && getStr(c, "faction_id") == fid {
 			return getList(c, "models"), getList(c, "tiers")
@@ -378,7 +404,7 @@ func (ds *Dataset) leadersAttachableTo(bodyguardUnitID string) []*UnitView {
 		if !eligible {
 			continue
 		}
-		if leader, ok := ds.Units.GetAny(getStr(la, "leader_id")); ok && !seen[leader.ID()] {
+		if leader, ok := ds.Units.GetAny(getStr(la, "leader_id")); ok && ds.shows(leader.Raw) && !seen[leader.ID()] {
 			seen[leader.ID()] = true
 			out = append(out, leader)
 		}
@@ -407,7 +433,7 @@ func (ds *Dataset) bodyguardsAttachableFrom(leaderUnitID string) []*UnitView {
 			continue
 		}
 		for _, id := range getStrList(la, "eligible_bodyguard_ids") {
-			if u, ok := ds.Units.GetAny(id); ok {
+			if u, ok := ds.Units.GetAny(id); ok && ds.shows(u.Raw) {
 				add(u)
 			}
 		}
@@ -564,10 +590,13 @@ func (ds *Dataset) buildIndexes(raw rawData) {
 	}
 }
 
+// wrapUnits wraps the units of items visible in ds's game mode.
 func wrapUnits(ds *Dataset, items []any) []*UnitView {
-	out := make([]*UnitView, len(items))
-	for i, u := range items {
-		out[i] = &UnitView{Raw: u.(map[string]any), ds: ds}
+	out := make([]*UnitView, 0, len(items))
+	for _, u := range items {
+		if ds.shows(u) {
+			out = append(out, &UnitView{Raw: u.(map[string]any), ds: ds})
+		}
 	}
 	return out
 }

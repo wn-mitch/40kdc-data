@@ -60,7 +60,10 @@ func historicalSnapshotAbilities(ds *Dataset, input, context map[string]any, per
 		}
 		eligibleEnhancement := false
 		if !intrinsic {
-			for _, enhancementAny := range ds.Enhancements.All() {
+			// Resolves the enhancement a (detachment, ability) pair names, so it
+			// reads every game mode: a Combat Patrol detachment's enhancement
+			// is hidden from the matched-play listing but still resolves.
+			for _, enhancementAny := range ds.allModes().Enhancements.All() {
 				enhancement, ok := asMap(enhancementAny)
 				if !ok || getStr(enhancement, "ability_id") != ability.ID() || getStr(enhancement, "detachment_id") != getStr(input, "detachmentId") {
 					continue

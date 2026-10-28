@@ -382,15 +382,20 @@ def _keyword_lists_hold(
 
 
 def _printed_keyword(dataset: Dataset) -> Callable[[str], bool]:
-    """Whether some datasheet prints a keyword (unit or faction keyword), memoised per lookup."""
+    """Whether some datasheet prints a keyword (unit or faction keyword), memoised per lookup.
+
+    Scans every game mode: a keyword printed only on a combat-patrol datasheet is
+    still printed, whatever mode ``dataset`` lists.
+    """
     seen: dict[str, bool] = {}
+    units = dataset.for_game_mode("all").units
 
     def printed(keyword: str) -> bool:
         key = normalize_name(keyword)
         if key not in seen:
             seen[key] = any(
                 normalize_name(own) == key
-                for unit in dataset.units
+                for unit in units
                 for own in (unit.raw.get("keywords") or [])
                 + (unit.raw.get("faction_keywords") or [])
             )

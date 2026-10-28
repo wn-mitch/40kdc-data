@@ -545,10 +545,7 @@ fn resolve_unit(
         for alias in &unit.aliases {
             model_names.insert(singular(alias));
         }
-        if let Some(comp) = ds.unit_compositions.iter().find(|c| {
-            c.unit_id.as_str() == unit.id.as_str()
-                && c.faction_id.as_str() == unit.faction_id.as_str()
-        }) {
+        if let Some(comp) = ds.unit_composition_of(unit) {
             for m in &comp.models {
                 model_names.insert(singular(&m.name));
             }
@@ -573,12 +570,7 @@ fn resolve_unit(
             let line_names: HashSet<String> =
                 model_lines.iter().map(|w| singular(&w.raw_name)).collect();
             let covered = ds
-                .unit_compositions
-                .iter()
-                .find(|c| {
-                    c.unit_id.as_str() == unit.id.as_str()
-                        && c.faction_id.as_str() == unit.faction_id.as_str()
-                })
+                .unit_composition_of(unit)
                 .map(|c| {
                     c.models
                         .iter()
@@ -694,10 +686,7 @@ fn resolve_unit(
     // reference.
     if let Some(unit) = hit {
         if wargear.iter().all(|w| w.ref_.id.is_some()) {
-            let comp = ds.unit_compositions.iter().find(|c| {
-                c.unit_id.as_str() == unit.id.as_str()
-                    && c.faction_id.as_str() == unit.faction_id.as_str()
-            });
+            let comp = ds.unit_composition_of(unit);
             let models = comp.map(|c| loadout_models(&c.models));
             let rows = models.as_deref().unwrap_or(&[]);
             let env_min: u64 = rows.iter().map(|m| m.min).sum();
@@ -774,12 +763,7 @@ fn complete_implicit_defaults(
         return None;
     }
     let models = ds
-        .unit_compositions
-        .iter()
-        .find(|composition| {
-            composition.unit_id.as_str() == unit.id.as_str()
-                && composition.faction_id.as_str() == unit.faction_id.as_str()
-        })
+        .unit_composition_of(unit)
         .map(|composition| loadout_models(&composition.models));
     let mut explicit_refs = HashMap::new();
     let mut explicit_counts = BTreeMap::new();
@@ -1002,9 +986,7 @@ fn build_loadout_groups(
         *counts.entry(id.clone()).or_insert(0) += w.count as i64;
     }
     let options = ds.wargear_options_of(unit);
-    let comp = ds.unit_compositions.iter().find(|c| {
-        c.unit_id.as_str() == unit.id.as_str() && c.faction_id.as_str() == unit.faction_id.as_str()
-    });
+    let comp = ds.unit_composition_of(unit);
     if model_count <= 1 {
         return None;
     }
@@ -1140,12 +1122,7 @@ fn apply_leader_attachments(
     // `attachment_role`), falling back to first-wins by id.
     let resolve_unit = |id: &str| -> Option<&crate::Unit> {
         faction_id
-            .and_then(|f| {
-                ds.units
-                    .by_faction(f)
-                    .into_iter()
-                    .find(|u| u.id.as_str() == id)
-            })
+            .and_then(|f| ds.units.get_in_faction(id, f))
             .or_else(|| ds.units.get_any(id))
     };
 

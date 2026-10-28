@@ -71,13 +71,7 @@ pub fn candidate_affordability(spec: &AffordabilitySpec, dataset: &Dataset) -> V
             return None;
         }
         faction
-            .and_then(|f| {
-                dataset
-                    .units
-                    .by_faction(f)
-                    .into_iter()
-                    .find(|u| u.id.as_str() == unit_id)
-            })
+            .and_then(|f| dataset.units.get_in_faction(unit_id, f))
             .or_else(|| dataset.units.get_any(unit_id))
     };
 

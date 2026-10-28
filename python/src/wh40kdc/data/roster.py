@@ -276,7 +276,11 @@ def validate_roster_core(spec: dict[str, Any], dataset: Dataset) -> dict[str, An
             continue
         leader_bodyguard_id = su.get("leader_bodyguard_id")
         if leader_bodyguard_id:
-            eligible_bodyguards = {v.id for v in dataset.bodyguards_attachable_from(view.id)}
+            # Eligibility is a reference check on a saved roster, not a listing: a
+            # combat-patrol bodyguard stays eligible whatever mode the dataset lists.
+            eligible_bodyguards = {
+                v.id for v in dataset.for_game_mode("all").bodyguards_attachable_from(view.id)
+            }
             enhancement = (
                 dataset.enhancements.get(su["enhancement_id"]) if su.get("enhancement_id") else None
             )

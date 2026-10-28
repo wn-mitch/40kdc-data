@@ -3001,7 +3001,7 @@ export function runCompositionNames(dump: MfmDump, onlyDir?: string): CompNamesR
 }
 
 export interface CompTiersReport {
-  dirs: { dir: string; matched: number; unitsTiered: number; rowsAdjusted: number; modelCountResynced: number }[];
+  dirs: { dir: string; matched: number; unitsTiered: number; rowsAdjusted: number; modelCountResynced: number; modesStamped: number }[];
   skipped: { dir: string; id: string; reason: string }[];
   notes: { dir: string; id: string; note: string }[];
   staged: StagedWrite[];
@@ -3056,6 +3056,28 @@ function matchNamesNormalized(repoNames: string[], dumpNames: string[]): string[
  * to the aggregate envelope, and re-syncs `units.json` `model_count` to the tier
  * span `{min: min Σtier-min, max: max Σtier-max}`. Everything else is preserved.
  */
+/**
+ * Copy a unit's `game_modes` onto the unit's compositions in the same faction file, so a
+ * Combat Patrol unit's composition is Combat Patrol too and a game-mode view lists the two
+ * together. A unit without `game_modes` leaves its composition's authored modes alone.
+ * Returns how many compositions changed.
+ */
+export function stampCompositionGameModes(
+  comps: { unit_id: string; [k: string]: unknown }[],
+  unitsById: ReadonlyMap<string, object>,
+): number {
+  let stamped = 0;
+  for (const comp of comps) {
+    const unit = unitsById.get(comp.unit_id) as { game_modes?: unknown } | undefined;
+    const modes = unit?.game_modes;
+    if (!Array.isArray(modes) || modes.length === 0) continue;
+    if (JSON.stringify(comp.game_modes ?? null) === JSON.stringify(modes)) continue;
+    comp.game_modes = [...(modes as string[])];
+    stamped++;
+  }
+  return stamped;
+}
+
 export function runCompositionTiers(dump: MfmDump, onlyDir?: string): CompTiersReport {
   const dirs = repoDirs();
   const byDir = new Map<string, DatasheetRow[]>();
@@ -3181,9 +3203,12 @@ export function runCompositionTiers(dump: MfmDump, onlyDir?: string): CompTiersR
         }
       }
     }
+    // Every composition, matched or not, carries its unit's game modes.
+    const modesStamped = stampCompositionGameModes(comps, unitsById);
+    if (modesStamped > 0) compsChanged = true;
     if (compsChanged) staged.push({ path: cpath, value: comps });
     if (unitsChanged) staged.push({ path: upath, value: units });
-    reportDirs.push({ dir, matched, unitsTiered, rowsAdjusted, modelCountResynced });
+    reportDirs.push({ dir, matched, unitsTiered, rowsAdjusted, modelCountResynced, modesStamped });
   }
   return { dirs: reportDirs, skipped, notes, staged };
 }

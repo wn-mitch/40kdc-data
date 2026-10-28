@@ -4155,7 +4155,10 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "mfm-995"
-    }
+    },
+    "game_modes": [
+      "combat-patrol"
+    ]
   },
   {
     "unit_id": "draydens-lance-command-squad",
@@ -4247,7 +4250,10 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "mfm-995"
-    }
+    },
+    "game_modes": [
+      "combat-patrol"
+    ]
   },
   {
     "unit_id": "draydens-lance-kasrkin",
@@ -4415,6 +4421,9 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "mfm-995"
-    }
+    },
+    "game_modes": [
+      "combat-patrol"
+    ]
   }
 ]

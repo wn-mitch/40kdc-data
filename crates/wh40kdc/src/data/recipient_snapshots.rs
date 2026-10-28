@@ -1,6 +1,6 @@
 //! Rediscover valid source-owned persistent effects after an attachment has ended.
 
-use super::{dataset::unit_keyword_set, Dataset, EligibilityInput};
+use super::{dataset::unit_keyword_set, Dataset, EligibilityInput, GameModeView};
 use crate::cruncher::{AbilityKind, BuffSource, EngineContext, TranslationPerspective};
 use crate::{Ability, Enhancement, Unit, UnitRole};
 
@@ -27,6 +27,7 @@ impl Dataset {
         let Some(faction) = faction else {
             return Vec::new();
         };
+        let every_enhancement = self.enhancements.with_game_mode(GameModeView::All);
         let mut result: Vec<HistoricalSnapshotAbility<'a>> = Vec::new();
         for snapshot in &context.recipient_snapshots {
             if snapshot.perspective != perspective || snapshot.recipient_unit_id != input.unit_id {
@@ -58,7 +59,9 @@ impl Dataset {
                 continue;
             };
             let intrinsic = owner.ability_ids.iter().any(|held| held.id() == ability_id);
-            let enhancement = self.enhancements.iter().any(|item| {
+            // Every game mode: a Combat Patrol detachment's own Enhancements still grant
+            // their ability when that detachment is the one selected.
+            let enhancement = every_enhancement.iter().any(|item| {
                 item.ability_id
                     .as_ref()
                     .is_some_and(|id| id.as_str() == ability_id)
@@ -89,11 +92,7 @@ impl Dataset {
         {
             return false;
         }
-        if let Some(composition) = self
-            .unit_compositions
-            .iter()
-            .find(|entry| entry.unit_id == bearer.id && entry.faction_id == bearer.faction_id)
-        {
+        if let Some(composition) = self.unit_composition_of(bearer) {
             if !composition.models.is_empty()
                 && composition
                     .models

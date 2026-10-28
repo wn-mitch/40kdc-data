@@ -18,6 +18,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { Dataset } from "../src/data/dataset.js";
+import type { GameModeView } from "../src/data/collection.js";
 import { normalizeName } from "../src/data/normalize.js";
 import { baseLoadout, loadoutCandidates, maximalLoadout, weaponBounds } from "../src/data/loadout.js";
 import { exportRoster, type ExportFormat } from "../src/export/index.js";
@@ -551,7 +552,9 @@ interface LinkedApiCase {
   expected: string | null | string[];
 }
 
-function runLinkedApi(ds: Dataset, c: LinkedApiCase): string | null | string[] {
+function runLinkedApi(base: Dataset, c: LinkedApiCase): string | null | string[] {
+  // A case's `gameMode` names the dataset view it runs against (default: matched play).
+  const ds = c.args.gameMode ? base.forGameMode(c.args.gameMode as GameModeView) : base;
   switch (c.query) {
     case "find_unit":
       return ds.units.find(c.args.query)?.id ?? null;
@@ -579,7 +582,7 @@ function runLinkedApi(ds: Dataset, c: LinkedApiCase): string | null | string[] {
     case "base_loadout": {
       const u = ds.units.getAny(c.args.unitId);
       if (!u) throw new Error(`base_loadout: unknown unit ${c.args.unitId}`);
-      const comp = ds.unitCompositions.find((x) => x.unit_id === c.args.unitId);
+      const comp = ds.unitCompositionOf(u.raw);
       const lo = baseLoadout(u.raw, Number(c.args.modelCount), ds.wargearOptionsOf(u.raw), comp?.models);
       return [...lo.counts].map(([id, n]) => `${id}:${n}`).sort();
     }
@@ -641,7 +644,7 @@ function runLinkedApi(ds: Dataset, c: LinkedApiCase): string | null | string[] {
     case "model_bases_of": {
       const u = ds.units.getAny(c.args.unitId);
       if (!u) throw new Error(`model_bases_of: unknown unit ${c.args.unitId}`);
-      const comp = ds.unitCompositions.find((cc) => cc.unit_id === c.args.unitId);
+      const comp = ds.unitCompositionOf(u.raw);
       return (comp?.models ?? []).map((m) => `${m.name}=${encodeBase(m.base_size_mm) ?? "none"}`);
     }
     case "units_with_keyword":
@@ -664,6 +667,18 @@ function runLinkedApi(ds: Dataset, c: LinkedApiCase): string | null | string[] {
       return (ds.triggerIndex().get(c.args.event as GameEvent) ?? []).map((rt) => rt.abilityId);
     case "get_enhancement":
       return ds.enhancements.get(c.args.id)?.id ?? null;
+    case "units_of_faction":
+      return ds.units.byFaction(c.args.factionId).map((u) => u.id).sort();
+    case "detachments_of_faction":
+      return ds.detachments.byFaction(c.args.factionId).map((d) => d.id).sort();
+    case "get_unit":
+      return ds.units.getAny(c.args.unitId)?.id ?? null;
+    case "get_detachment":
+      return ds.detachments.getAny(c.args.detachmentId)?.id ?? null;
+    case "find_enhancement":
+      return ds.enhancements.find(c.args.query)?.id ?? null;
+    case "find_detachment":
+      return ds.detachments.find(c.args.query)?.id ?? null;
     default:
       throw new Error(`unknown linked-api query: ${c.query}`);
   }

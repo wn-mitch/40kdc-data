@@ -251,13 +251,7 @@ pub fn validate_roster_core_with_keyword_overrides(
             return None;
         }
         faction
-            .and_then(|f| {
-                dataset
-                    .units
-                    .by_faction(f)
-                    .into_iter()
-                    .find(|u| u.id.as_str() == unit_id)
-            })
+            .and_then(|f| dataset.units.get_in_faction(unit_id, f))
             .or_else(|| dataset.units.get_any(unit_id))
     };
 
@@ -272,10 +266,7 @@ pub fn validate_roster_core_with_keyword_overrides(
     for (idx, su) in spec.units.iter().enumerate() {
         let Some(view) = views[idx] else { continue };
         let options = dataset.wargear_options_of(view);
-        let comp = dataset.unit_compositions.iter().find(|c| {
-            c.unit_id.as_str() == view.id.as_str()
-                && c.faction_id.as_str() == view.faction_id.as_str()
-        });
+        let comp = dataset.unit_composition_of(view);
         let models = comp.map(|c| loadout_models(&c.models));
         let tiers = comp.map(|c| loadout_tiers(&c.tiers));
         let violations = check_unit_legality(
@@ -361,12 +352,7 @@ pub fn validate_roster_core_with_keyword_overrides(
         // A unit whose every model is `excluded_from_enhancements` has no model that
         // can carry the Enhancement. Mirror of TS `enhancement-on-excluded-model`.
         let rows = dataset
-            .unit_compositions
-            .iter()
-            .find(|c| {
-                c.unit_id.as_str() == view.id.as_str()
-                    && c.faction_id.as_str() == view.faction_id.as_str()
-            })
+            .unit_composition_of(view)
             .map(|c| c.models.as_slice())
             .unwrap_or(&[]);
         if !rows.is_empty() && rows.iter().all(|m| m.excluded_from_enhancements) {

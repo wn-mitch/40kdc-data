@@ -664,7 +664,9 @@ export function effectiveBattleSize(state: BuilderState): BattleSize {
  * the same across a shared chassis's faction views.
  */
 function unitModels(unit: Unit) {
-	return ds.unitCompositions.find((c) => c.unit_id === unit.id)?.models;
+	// Every game mode: a lookup for a unit already in the list, which a saved roster
+	// or share link may hold even when the default view does not list it.
+	return ds.forGameMode('all').unitCompositions.find((c) => c.unit_id === unit.id)?.models;
 }
 
 /**

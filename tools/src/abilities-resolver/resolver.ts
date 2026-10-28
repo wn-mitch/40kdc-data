@@ -303,14 +303,19 @@ export function stratagemCanTargetUnit(
   }));
 }
 
-/** Whether some datasheet prints a keyword (unit or faction keyword), memoised per lookup. */
+/**
+ * Whether some datasheet prints a keyword (unit or faction keyword), memoised per lookup.
+ * Counts every game mode's datasheets: a keyword printed only on a Combat Patrol unit is
+ * still printed, whatever view the caller's dataset lists.
+ */
 function printedKeyword(dataset: Dataset): (keyword: string) => boolean {
   const seen = new Map<string, boolean>();
+  const every = dataset.forGameMode("all");
   return (keyword) => {
     const key = normalizeName(keyword);
     let found = seen.get(key);
     if (found === undefined) {
-      found = [...dataset.units].some((unit) => [...(unit.keywords ?? []), ...(unit.factionKeywords ?? [])].some((own) => normalizeName(own) === key));
+      found = [...every.units].some((unit) => [...(unit.keywords ?? []), ...(unit.factionKeywords ?? [])].some((own) => normalizeName(own) === key));
       seen.set(key, found);
     }
     return found;

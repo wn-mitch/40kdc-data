@@ -10,7 +10,10 @@ import { damageScoringSession, detachmentCombos, emptySpec } from "../src/stack-
 // A Combat Patrol prints its own copy of an army rule. The copy applies only in the patrol's
 // detachment, and there it replaces the codex army rule, so the two never stack.
 
-const dataset = Dataset.embedded();
+// These pin the matrix's Combat Patrol machinery, so they run it on the dataset's "all"
+// view; the default (matched-play) view lists no Combat Patrol unit or detachment.
+const matchedPlay = Dataset.embedded();
+const dataset = matchedPlay.forGameMode("all");
 const CODEX = "doctrina-imperatives-adeptus-mechanicus";
 const PATROL = "doctrina-imperatives-purge-corps-deltic-9-adeptus-mechanicus";
 
@@ -91,6 +94,12 @@ describe("detachment combinations in the damage matrix", () => {
 
   it("offers the patrol detachment alone", () => {
     expect(combos.map((combo) => combo.map((detachment) => detachment.id))).toContainEqual(["purge-corps-deltic-9"]);
+  });
+
+  it("offers no patrol detachment in the default matched-play view", () => {
+    const matched = detachmentCombos(matchedPlay.detachments.byFaction("adeptus-mechanicus"), { maxDetachments: 3, dpBudget: 3 });
+    expect(matched.some((combo) => combo.some((detachment) => isPatrol(detachment.id)))).toBe(false);
+    expect(resolveFactionContext(matchedPlay, "adeptus-mechanicus").units.map((unit) => unit.id)).not.toContain("manipulus-skand");
   });
 
   it("never combines a patrol detachment with another detachment", () => {

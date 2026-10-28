@@ -381,7 +381,8 @@ func keywordListsHold(target map[string]any, required, excluded func(string) boo
 }
 
 // printedKeyword reports whether some datasheet prints a keyword (unit or faction keyword),
-// memoised per lookup.
+// memoised per lookup. It reads the "all" view: a keyword printed only on a Combat Patrol (or
+// other non-matched-play) datasheet is still printed.
 func (ds *Dataset) printedKeyword() func(string) bool {
 	seen := map[string]bool{}
 	return func(keyword string) bool {
@@ -390,7 +391,7 @@ func (ds *Dataset) printedKeyword() func(string) bool {
 			return found
 		}
 		found := false
-		for _, unit := range ds.Units.All() {
+		for _, unit := range ds.allModes().Units.All() {
 			for _, own := range append(getStrList(unit.Raw, "keywords"), getStrList(unit.Raw, "faction_keywords")...) {
 				if NormalizeName(own) == key {
 					found = true

@@ -106,6 +106,14 @@ The `query` enum covers the read paths on `Dataset`:
 | `abilities_of_faction`   | `{"factionId":"<id>"}`               | ordered list of ability ids |
 | `weapons_of_faction`     | `{"factionId":"<id>"}`               | ordered list of weapon ids |
 | `eligible_abilities`     | `{"input":…,"phase":"<phase>"}`      | ordered list of `{kind, abilityId}` |
+| `units_of_faction`       | `{"factionId":"<id>"}`               | list of unit ids (`units.by_faction`) |
+| `detachments_of_faction` | `{"factionId":"<id>"}`               | list of detachment ids (`detachments.by_faction`) |
+| `get_unit`               | `{"unitId":"<id>"}`                  | unit id (`units.get_any`) or null |
+| `get_detachment`         | `{"detachmentId":"<id>"}`            | detachment id (`detachments.get_any`) or null |
+| `find_enhancement`       | `{"query":"<string>"}`               | enhancement id or null |
+| `find_detachment`        | `{"query":"<string>"}`               | detachment id or null |
+
+Every query's `input` may also carry `"gameMode"`: one of `matched-play`, `combat-patrol`, `boarding-actions`, `crusade`, `all`. The query then runs against the dataset's view of that mode; without it, against the `matched-play` view. An unknown mode answers `INVALID_INPUT`. See the game-mode view contract in `CONFORMANCE.md`.
 
 Ordering semantics for each query are documented per-area in `CONFORMANCE.md`. The runner protocol itself is opaque to whether the order is load-bearing — it simply emits whatever the implementation's public API returns.
 

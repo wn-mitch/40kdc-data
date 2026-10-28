@@ -26,6 +26,7 @@ mod abilities;
 mod ability_refs;
 mod collection;
 mod dataset;
+pub mod game_mode;
 mod loadout;
 mod normalize;
 mod pricing;
@@ -50,6 +51,7 @@ pub use abilities::{
 pub use ability_refs::{printed_wargear_ids, rating_of, unit_ability_ids, with_rating};
 pub use collection::Collection;
 pub use dataset::{Dataset, RawData, ReactiveTrigger};
+pub use game_mode::{GameModeView, UnknownGameMode};
 pub use loadout::{
     base_loadout, check_unit_legality, clamp_weapon_count, complete_loadout, group_loadout,
     loadout_candidates, loadout_models, loadout_tiers, maximal_loadout, option_cap,

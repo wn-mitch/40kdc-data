@@ -945,6 +945,7 @@ async function runPointsAndCompositionTiersCmd(
   console.log(
     `Composition tiers — matched ${sum((d) => d.matched)}, units tiered ${sum((d) => d.unitsTiered)}, ` +
       `model rows adjusted ${sum((d) => d.rowsAdjusted)}, model_count re-synced ${sum((d) => d.modelCountResynced)}, ` +
+      `game modes stamped ${sum((d) => d.modesStamped)}, ` +
       `skipped (kill-team / structure differs) ${report.skipped.length}.`,
   );
   if (report.skipped.length) {
@@ -1334,6 +1335,7 @@ async function runCompositionTiersCmd(
   console.log(
     `Composition tiers — matched ${sum((d) => d.matched)}, units tiered ${sum((d) => d.unitsTiered)}, ` +
       `model rows adjusted ${sum((d) => d.rowsAdjusted)}, model_count re-synced ${sum((d) => d.modelCountResynced)}, ` +
+      `game modes stamped ${sum((d) => d.modesStamped)}, ` +
       `skipped (kill-team / structure differs) ${report.skipped.length}.`,
   );
   if (report.skipped.length) {

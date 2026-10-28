@@ -749,14 +749,17 @@ fn keyword_lists_hold(
 
 impl Dataset {
     /// Whether some datasheet prints a keyword (unit or faction keyword), memoised per lookup.
+    /// Scans the "all" game-mode view: a keyword printed only on a Combat Patrol datasheet is
+    /// still a printed keyword, whatever mode this dataset lists.
     fn printed_keyword(&self) -> impl Fn(&str) -> bool + '_ {
         let seen = std::cell::RefCell::new(std::collections::HashMap::<String, bool>::new());
+        let units = self.units.with_game_mode(crate::data::GameModeView::All);
         move |keyword: &str| {
             let key = normalize_name(keyword);
             if let Some(found) = seen.borrow().get(&key) {
                 return *found;
             }
-            let found = self.units.all().iter().any(|unit| {
+            let found = units.iter().any(|unit| {
                 [&unit.keywords, &unit.faction_keywords]
                     .into_iter()
                     .flatten()

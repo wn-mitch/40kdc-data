@@ -23,7 +23,8 @@ export function historicalSnapshotAbilities(
     const ability = ds.abilities.getInFaction(source.abilityId, faction) ?? ds.abilities.getInFaction(source.abilityId, "core");
     if (!owner || !ability) continue;
     const intrinsic = owner.abilities.some((held) => held.id === ability.id);
-    const enhancement = [...ds.enhancements].some((item) => item.ability_id === ability.id && item.detachment_id === input.detachmentId && canTakeEnhancement(ds, item, owner));
+    // Every game mode: a lookup of the chosen detachment's enhancement, not a listing.
+    const enhancement = [...ds.forGameMode("all").enhancements].some((item) => item.ability_id === ability.id && item.detachment_id === input.detachmentId && canTakeEnhancement(ds, item, owner));
     if (!intrinsic && !enhancement) continue;
     // The current record still owns the exact trigger/selector: describeBuffs checks
     // those fingerprints before any historical recipients are materialized.

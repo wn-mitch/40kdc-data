@@ -365,7 +365,11 @@ export function validateRosterCore(spec: NormRoster, dataset: Dataset): RosterLe
     const view = views[idx];
     if (!view) return;
     if (su.leaderBodyguardId) {
-      const eligible = new Set(dataset.bodyguardsAttachableFrom(view.id).map((v) => v.id));
+      // Every game mode: legality of a saved roster's attachment is a lookup, and a
+      // Combat Patrol bodyguard named by id must still count as eligible.
+      const eligible = new Set(
+        dataset.forGameMode("all").bodyguardsAttachableFrom(view.id).map((v) => v.id),
+      );
       const enhancement = su.enhancementId ? dataset.enhancements.get(su.enhancementId) : undefined;
       for (const bodyguardId of enhancement?.attachment_bodyguard_ids ?? []) eligible.add(bodyguardId);
       if (!eligible.has(su.leaderBodyguardId))

@@ -166,7 +166,9 @@ export function enhancementLevers(
   const out: AbilityLevers = { buffs: [], groups: [], capRaises: new Map(), optionRequirements: new Map() };
   if (!args.detachmentId) return out;
   const seen = new Set<string>();
-  const offered = [...ds.enhancements].filter((enhancement) => {
+  // Every game mode: the detachment is already chosen (possibly a Combat Patrol
+  // one, by id), so its enhancements are a lookup, not a listing.
+  const offered = [...ds.forGameMode("all").enhancements].filter((enhancement) => {
     if (enhancement.detachment_id !== args.detachmentId || seen.has(enhancement.id)) return false;
     seen.add(enhancement.id);
     return true;

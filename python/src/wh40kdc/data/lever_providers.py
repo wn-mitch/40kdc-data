@@ -262,7 +262,9 @@ def enhancement_levers(
         return out
     seen: set[str] = set()
     offered: list[dict[str, Any]] = []
-    for enhancement in ds.enhancements:
+    # The detachment id is a reference: its Enhancements resolve whatever mode they
+    # list in, so a combat-patrol detachment still offers its own.
+    for enhancement in ds.for_game_mode("all").enhancements:
         if enhancement.get("detachment_id") != detachment_id or enhancement["id"] in seen:
             continue
         seen.add(enhancement["id"])

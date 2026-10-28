@@ -421,11 +421,8 @@ fn handle_check_unit_legality(state: &mut RunnerState, args: &Value) -> Value {
     // Resolve the unit in its faction when pinned (shared chassis diverge per
     // faction in options/composition); else first-wins by id.
     let unit = match faction_id {
-        Some(fid) => ds
-            .units
-            .by_faction(fid)
-            .into_iter()
-            .find(|u| u.id.as_str() == unit_id),
+        // An id lookup, so it resolves in every game mode.
+        Some(fid) => ds.units.get_in_faction(unit_id, fid),
         None => ds.units.get_any(unit_id),
     };
     let Some(unit) = unit else {
@@ -434,9 +431,7 @@ fn handle_check_unit_legality(state: &mut RunnerState, args: &Value) -> Value {
             Some(json!({ "kind": "unit", "id": unit_id })),
         );
     };
-    let comp = ds.unit_compositions.iter().find(|c| {
-        c.unit_id.as_str() == unit_id && c.faction_id.as_str() == unit.faction_id.as_str()
-    });
+    let comp = ds.unit_composition_of(unit);
     let models = comp.map(|c| wh40kdc::loadout_models(&c.models));
     let tiers = comp.map(|c| wh40kdc::loadout_tiers(&c.tiers));
     let mut counts: std::collections::HashMap<String, i64> = std::collections::HashMap::new();
@@ -680,8 +675,64 @@ fn handle_linked_query(state: &mut RunnerState, args: &Value) -> Value {
     };
     let input = args.get("input").cloned().unwrap_or_else(|| json!({}));
     let str_arg = |k: &str| -> &str { input.get(k).and_then(Value::as_str).unwrap_or("") };
-    let ds = state.dataset();
+    // Optional `input.gameMode` runs the query against that game-mode view of
+    // the dataset; absent, the default (matched-play) view.
+    let ds: &Dataset = match input.get("gameMode") {
+        None => state.dataset(),
+        Some(mode) => {
+            let Some(mode) = mode.as_str() else {
+                return err_value(
+                    ErrorKind::InvalidInput,
+                    Some(json!({ "detail": "linked_query.input.gameMode must be a string" })),
+                );
+            };
+            match state.dataset().for_game_mode(mode) {
+                Ok(view) => view,
+                Err(e) => {
+                    return err_value(
+                        ErrorKind::InvalidInput,
+                        Some(json!({ "detail": e.to_string() })),
+                    )
+                }
+            }
+        }
+    };
+    let id_or_null = |id: Option<String>| ok_value(id.map_or(Value::Null, Value::String));
     match query {
+        "units_of_faction" => ok_value(Value::Array(
+            ds.units
+                .by_faction(str_arg("factionId"))
+                .into_iter()
+                .map(|u| Value::String(u.id.to_string()))
+                .collect(),
+        )),
+        "detachments_of_faction" => ok_value(Value::Array(
+            ds.detachments
+                .by_faction(str_arg("factionId"))
+                .into_iter()
+                .map(|d| Value::String(d.id.to_string()))
+                .collect(),
+        )),
+        "get_unit" => id_or_null(
+            ds.units
+                .get_any(str_arg("unitId"))
+                .map(|u| u.id.to_string()),
+        ),
+        "get_detachment" => id_or_null(
+            ds.detachments
+                .get_any(str_arg("detachmentId"))
+                .map(|d| d.id.to_string()),
+        ),
+        "find_enhancement" => id_or_null(
+            ds.enhancements
+                .find(str_arg("query"))
+                .map(|e| e.id.to_string()),
+        ),
+        "find_detachment" => id_or_null(
+            ds.detachments
+                .find(str_arg("query"))
+                .map(|d| d.id.to_string()),
+        ),
         "find_unit" => ok_value(match ds.find_unit(str_arg("query")) {
             Some(u) => Value::String(u.id.to_string()),
             None => Value::Null,
@@ -759,9 +810,7 @@ fn handle_linked_query(state: &mut RunnerState, args: &Value) -> Value {
             };
             let model_count: u64 = str_arg("modelCount").parse().unwrap_or(0);
             let models = ds
-                .unit_compositions
-                .iter()
-                .find(|c| c.unit_id.as_str() == id)
+                .unit_composition_of(unit)
                 .map(|c| wh40kdc::loadout_models(&c.models));
             let lo = wh40kdc::base_loadout(
                 unit,
@@ -787,9 +836,7 @@ fn handle_linked_query(state: &mut RunnerState, args: &Value) -> Value {
             };
             let model_count: u64 = str_arg("modelCount").parse().unwrap_or(0);
             let models = ds
-                .unit_compositions
-                .iter()
-                .find(|c| c.unit_id.as_str() == id)
+                .unit_composition_of(unit)
                 .map(|c| wh40kdc::loadout_models(&c.models));
             let bounds = wh40kdc::weapon_bounds(
                 unit,
@@ -814,9 +861,7 @@ fn handle_linked_query(state: &mut RunnerState, args: &Value) -> Value {
             };
             let model_count: u64 = str_arg("modelCount").parse().unwrap_or(0);
             let models = ds
-                .unit_compositions
-                .iter()
-                .find(|c| c.unit_id.as_str() == id)
+                .unit_composition_of(unit)
                 .map(|c| wh40kdc::loadout_models(&c.models));
             let lo = wh40kdc::maximal_loadout(
                 unit,
@@ -845,9 +890,7 @@ fn handle_linked_query(state: &mut RunnerState, args: &Value) -> Value {
                     Some(json!({ "kind": "unit", "id": id })),
                 );
             };
-            let composition = ds.unit_compositions.iter().find(|c| {
-                c.unit_id.as_str() == id && c.faction_id.as_str() == unit.faction_id.as_str()
-            });
+            let composition = ds.unit_composition_of(unit);
             let models = composition.map(|c| wh40kdc::loadout_models(&c.models));
             let tiers = composition.map(|c| wh40kdc::loadout_tiers(&c.tiers));
             let limit = input
@@ -906,16 +949,13 @@ fn handle_linked_query(state: &mut RunnerState, args: &Value) -> Value {
         }
         "model_bases_of" => {
             let id = str_arg("unitId");
-            if ds.units.get_any(id).is_none() {
+            let Some(unit) = ds.units.get_any(id) else {
                 return err_value(
                     ErrorKind::UnknownEntity,
                     Some(json!({ "kind": "unit", "id": id })),
                 );
-            }
-            let comp = ds
-                .unit_compositions
-                .iter()
-                .find(|c| c.unit_id.as_str() == id);
+            };
+            let comp = ds.unit_composition_of(unit);
             let pairs: Vec<Value> = comp
                 .map(|c| {
                     c.models

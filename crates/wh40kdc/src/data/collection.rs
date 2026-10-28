@@ -15,13 +15,22 @@
 //! so a faction-less [`get`](Collection::get) of a shared id panics in debug
 //! builds; deliberately faction-less callers use [`get_any`](Collection::get_any).
 //!
+//! A collection whose records carry `game_modes` is game-mode scoped (see
+//! [`super::game_mode`]): its listings (`all`, `iter`, `len`, `by_faction`,
+//! `find`, `find_all`) show only the records its view's mode includes, while id
+//! lookups (`get`, `get_any`, `get_in_faction`, `has`, `by_external_ref`)
+//! resolve every record. Views share the records and indexes through an `Arc`,
+//! so cloning a collection or re-viewing it in another mode copies pointers.
+//!
 //! This mirrors the TypeScript `Collection` (`tools/src/data/collection.ts`);
 //! unlike TS it stores owned records and hands back borrows (`&T`) rather than
 //! lazily-wrapped view objects.
 
 use crate::generated::ExternalReference;
 use std::collections::HashMap;
+use std::sync::Arc;
 
+use super::game_mode::{GameModeView, Listed, ModeScope, ModesOf};
 use super::normalize::normalize_name;
 
 /// A collection of one entity type, exposing id / name / faction lookups.
@@ -31,6 +40,26 @@ use super::normalize::normalize_name;
 /// precomputed, so the struct holds no borrows and is free of self-referential
 /// lifetimes.
 pub struct Collection<T> {
+    core: Arc<Core<T>>,
+    /// The game mode this view lists.
+    view: GameModeView,
+    /// The records this view lists (positions in `core.items` plus a
+    /// materialised copy), shared per mode; `None` lists every record.
+    listed: Option<Arc<Listed<T>>>,
+}
+
+impl<T> Clone for Collection<T> {
+    fn clone(&self) -> Self {
+        Self {
+            core: Arc::clone(&self.core),
+            view: self.view,
+            listed: self.listed.clone(),
+        }
+    }
+}
+
+/// The records and indexes every view of a collection shares.
+struct Core<T> {
     items: Vec<T>,
     by_id: HashMap<String, usize>,
     by_norm: HashMap<String, Vec<usize>>,
@@ -52,6 +81,8 @@ pub struct Collection<T> {
     id_aliases: Option<HashMap<String, String>>,
     /// Noun for the guard panic message (e.g. `"unit"`).
     entity_label: &'static str,
+    /// How records map to game modes, plus the cached per-mode listings.
+    scope: ModeScope<T>,
 }
 
 impl<T> Collection<T> {
@@ -143,17 +174,61 @@ impl<T> Collection<T> {
         }
 
         Self {
-            items: kept,
-            by_id,
-            by_norm,
-            by_faction,
-            by_faction_id,
-            by_external_ref: HashMap::new(),
-            norm_names,
-            ambiguous_ids: None,
-            id_aliases: None,
-            entity_label: "entity",
+            core: Arc::new(Core {
+                items: kept,
+                by_id,
+                by_norm,
+                by_faction,
+                by_faction_id,
+                by_external_ref: HashMap::new(),
+                norm_names,
+                ambiguous_ids: None,
+                id_aliases: None,
+                entity_label: "entity",
+                scope: ModeScope::unscoped(),
+            }),
+            view: GameModeView::All,
+            listed: None,
         }
+    }
+
+    /// The shared core, mutably — only while building, before any view of
+    /// this collection exists.
+    fn core_mut(&mut self) -> &mut Core<T> {
+        Arc::get_mut(&mut self.core).expect("collection builders run before any view is taken")
+    }
+
+    /// Scope the collection by game mode: `modes_of` reads a record's
+    /// `game_modes`. Builder step; the collection keeps listing every record
+    /// until [`with_game_mode`](Self::with_game_mode) picks a view.
+    pub(super) fn with_game_modes(mut self, modes_of: ModesOf<T>) -> Self {
+        self.core_mut().scope = ModeScope::scoped(modes_of);
+        self
+    }
+
+    /// This collection viewed in another game mode, sharing the record store
+    /// and every index. Listings borrow a per-mode copy of the listed records,
+    /// cloned once per mode and shared by every view of this collection.
+    /// Unscoped collections list every record in every view.
+    pub fn with_game_mode(&self, view: GameModeView) -> Self
+    where
+        T: Clone,
+    {
+        Self {
+            core: Arc::clone(&self.core),
+            view,
+            listed: self.core.scope.listed(&self.core.items, view),
+        }
+    }
+
+    /// The game mode this view lists.
+    pub fn game_mode(&self) -> GameModeView {
+        self.view
+    }
+
+    /// Whether this view lists `item` (a record of this collection).
+    pub fn lists(&self, item: &T) -> bool {
+        self.core.scope.lists(item, self.view)
     }
 
     /// Arm the unscoped-lookup tripwire: after this, a faction-less
@@ -170,7 +245,7 @@ impl<T> Collection<T> {
     pub fn with_unscoped_guard(mut self, entity_label: &'static str) -> Self {
         let mut ambiguous: std::collections::HashSet<String> = std::collections::HashSet::new();
         let mut seen: HashMap<&str, u32> = HashMap::new();
-        for per_faction in self.by_faction_id.values() {
+        for per_faction in self.core.by_faction_id.values() {
             for id in per_faction.keys() {
                 *seen.entry(id.as_str()).or_insert(0) += 1;
             }
@@ -180,8 +255,9 @@ impl<T> Collection<T> {
                 ambiguous.insert(id.to_string());
             }
         }
-        self.ambiguous_ids = Some(ambiguous);
-        self.entity_label = entity_label;
+        let core = self.core_mut();
+        core.ambiguous_ids = Some(ambiguous);
+        core.entity_label = entity_label;
         self
     }
 
@@ -193,20 +269,21 @@ impl<T> Collection<T> {
     /// id). Mirror of the TS `idAliases` (typically the share registry's
     /// `aliases`).
     pub fn with_id_aliases(mut self, id_aliases: HashMap<String, String>) -> Self {
-        self.id_aliases = Some(id_aliases);
+        self.core_mut().id_aliases = Some(id_aliases);
         self
     }
 
     /// Build the many-to-many external-source identity index.
     pub fn with_external_refs(mut self, refs_of: impl Fn(&T) -> &[ExternalReference]) -> Self {
-        for (index, item) in self.items.iter().enumerate() {
+        let core = self.core_mut();
+        for (index, item) in core.items.iter().enumerate() {
             for reference in refs_of(item) {
                 let key = format!(
                     "{}\0{}",
                     reference.namespace.as_str(),
                     reference.id.as_str()
                 );
-                self.by_external_ref.entry(key).or_default().push(index);
+                core.by_external_ref.entry(key).or_default().push(index);
             }
         }
         self
@@ -215,42 +292,60 @@ impl<T> Collection<T> {
     /// Item index for an id: exact `by_id`, falling back through the
     /// [`id_aliases`](Self::with_id_aliases) map (one hop) on a miss.
     fn raw_index(&self, id: &str) -> Option<usize> {
-        if let Some(&i) = self.by_id.get(id) {
+        let core = &*self.core;
+        if let Some(&i) = core.by_id.get(id) {
             return Some(i);
         }
-        self.id_aliases
+        core.id_aliases
             .as_ref()
             .and_then(|m| m.get(id))
-            .and_then(|new_id| self.by_id.get(new_id).copied())
+            .and_then(|new_id| core.by_id.get(new_id).copied())
     }
 
-    /// Every record, deduplicated, in first-seen order.
+    /// Every record this view lists, deduplicated, in first-seen order.
     pub fn all(&self) -> &[T] {
-        &self.items
+        match &self.listed {
+            Some(listed) => &listed.items,
+            None => &self.core.items,
+        }
     }
 
-    /// Number of distinct records.
+    /// Number of distinct records this view lists.
     pub fn len(&self) -> usize {
-        self.items.len()
+        self.all().len()
     }
 
-    /// Whether the collection holds no records.
+    /// Whether this view lists no records.
     pub fn is_empty(&self) -> bool {
-        self.items.is_empty()
+        self.all().is_empty()
     }
 
-    /// Return every record carrying the exact external source identity.
+    /// Every record in every game mode, ignoring this view's mode. For
+    /// internal enumerations that must see the whole dataset and for the
+    /// reverse indexes, whose stored positions index this slice.
+    pub(super) fn every(&self) -> &[T] {
+        &self.core.items
+    }
+
+    /// Return every record carrying the exact external source identity, in
+    /// every game mode (an id lookup, not a listing).
     ///
     /// External mappings are many-to-many, so this always returns a collection.
     pub fn by_external_ref(&self, namespace: &str, id: &str) -> Vec<&T> {
         let key = format!("{namespace}\0{id}");
-        self.by_external_ref
+        self.core
+            .by_external_ref
             .get(&key)
-            .map(|indices| indices.iter().map(|&index| &self.items[index]).collect())
+            .map(|indices| {
+                indices
+                    .iter()
+                    .map(|&index| &self.core.items[index])
+                    .collect()
+            })
             .unwrap_or_default()
     }
 
-    /// Look up by exact id.
+    /// Look up by exact id, in every game mode.
     ///
     /// For a guarded collection (see
     /// [`with_unscoped_guard`](Self::with_unscoped_guard)), an id that exists
@@ -260,63 +355,74 @@ impl<T> Collection<T> {
     /// builds degrade to first-wins.
     pub fn get(&self, id: &str) -> Option<&T> {
         #[cfg(debug_assertions)]
-        if let Some(ambiguous) = &self.ambiguous_ids {
+        if let Some(ambiguous) = &self.core.ambiguous_ids {
             if ambiguous.contains(id) {
                 panic!(
                     "Ambiguous {} lookup: \"{id}\" exists under multiple factions; \
                      a faction-less get() would return whichever copy registered first \
                      (wrong divergent fields). Use get_in_faction(\"{id}\", faction_id), \
                      or get_any(\"{id}\") when faction is genuinely unknown (import / conformance).",
-                    self.entity_label,
+                    self.core.entity_label,
                 );
             }
         }
-        self.raw_index(id).map(|i| &self.items[i])
+        self.raw_index(id).map(|i| &self.core.items[i])
     }
 
     /// First-wins lookup by exact id that never panics, for callers with no
     /// faction context on purpose (roster import, the conformance runner). For
     /// a guarded collection this is the explicit opt-out of
     /// [`get`](Self::get)'s ambiguity tripwire; for an unguarded one it is
-    /// identical to `get`. Mirror of the TS `getAny`.
+    /// identical to `get`. Resolves in every game mode. Mirror of the TS
+    /// `getAny`.
     pub fn get_any(&self, id: &str) -> Option<&T> {
-        self.raw_index(id).map(|i| &self.items[i])
+        self.raw_index(id).map(|i| &self.core.items[i])
     }
 
-    /// Look up by exact id *within a faction*. Returns the record with `id`
-    /// belonging to `faction_id`, or `None`. Use when an id is shared across
-    /// factions and faction context is known — [`get`](Self::get) returns
-    /// whichever copy registered first, which may be the wrong faction's. Mirror
-    /// of the TS `getInFaction`.
+    /// Look up by exact id *within a faction*, in every game mode. Returns the
+    /// record with `id` belonging to `faction_id`, or `None`. Use when an id is
+    /// shared across factions and faction context is known — [`get`](Self::get)
+    /// returns whichever copy registered first, which may be the wrong
+    /// faction's. Mirror of the TS `getInFaction`.
     pub fn get_in_faction(&self, id: &str, faction_id: &str) -> Option<&T> {
+        let core = &*self.core;
         // Resolve a renamed id to its current form before scoping to the faction.
-        let resolved: &str = if self.by_id.contains_key(id) {
+        let resolved: &str = if core.by_id.contains_key(id) {
             id
         } else {
-            self.id_aliases
+            core.id_aliases
                 .as_ref()
                 .and_then(|m| m.get(id))
                 .map(String::as_str)
                 .unwrap_or(id)
         };
-        self.by_faction_id
+        core.by_faction_id
             .get(faction_id)
             .and_then(|m| m.get(resolved))
-            .map(|&i| &self.items[i])
+            .map(|&i| &core.items[i])
     }
 
-    /// Whether a record with this exact id (or a renamed alias of it) exists.
+    /// Whether a record with this exact id (or a renamed alias of it) exists,
+    /// in any game mode.
     pub fn has(&self, id: &str) -> bool {
         self.raw_index(id).is_some()
     }
 
-    /// Record at a stored index (used by [`Dataset`](super::Dataset)'s reverse
-    /// indexes, which hold `usize` positions into this collection).
-    pub(super) fn at(&self, idx: usize) -> &T {
-        &self.items[idx]
+    /// Record at a stored index into [`every`](Self::every) (used by
+    /// [`Dataset`](super::Dataset)'s reverse indexes), or `None` when this
+    /// view does not list it.
+    pub(super) fn listed_at(&self, idx: usize) -> Option<&T> {
+        let item = &self.core.items[idx];
+        self.lists(item).then_some(item)
     }
 
-    /// Find one record by id or name, returning the first match.
+    /// Record at a stored index into [`every`](Self::every), in any game mode.
+    pub(super) fn at(&self, idx: usize) -> &T {
+        &self.core.items[idx]
+    }
+
+    /// Find one record this view lists by id or name, returning the first
+    /// match.
     ///
     /// Name matching is diacritic- and punctuation-insensitive (see
     /// [`normalize_name`](super::normalize_name)), trying in order: exact id →
@@ -327,46 +433,64 @@ impl<T> Collection<T> {
         self.find_all(query).into_iter().next()
     }
 
-    /// All records matching a query, by the same rules as [`find`](Self::find).
+    /// All records this view lists matching a query, by the same rules as
+    /// [`find`](Self::find).
     ///
     /// An exact id match returns just that record; otherwise every
     /// normalized-name-exact match is returned, falling back to every
     /// normalized-name-substring match. Surfaces (rather than silently
-    /// collapses) names shared across factions.
+    /// collapses) names shared across factions. Every step skips records
+    /// outside this view's game mode, the exact-id step included: a search
+    /// lists, so it never returns a hidden record (use
+    /// [`get_any`](Self::get_any) to resolve one by id).
     pub fn find_all(&self, query: &str) -> Vec<&T> {
+        let core = &*self.core;
         if let Some(i) = self.raw_index(query) {
-            return vec![&self.items[i]];
+            if let Some(item) = self.listed_at(i) {
+                return vec![item];
+            }
         }
         let key = normalize_name(query);
-        if let Some(idxs) = self.by_norm.get(&key) {
-            if !idxs.is_empty() {
-                return idxs.iter().map(|&i| &self.items[i]).collect();
+        if let Some(idxs) = core.by_norm.get(&key) {
+            let exact: Vec<&T> = idxs.iter().filter_map(|&i| self.listed_at(i)).collect();
+            if !exact.is_empty() {
+                return exact;
             }
         }
         if key.is_empty() {
             return Vec::new();
         }
-        self.norm_names
-            .iter()
-            .enumerate()
-            .filter_map(|(i, n)| match n {
-                Some(name) if name.contains(&key) => Some(&self.items[i]),
+        self.iter_indexed()
+            .filter_map(|(i, item)| match &core.norm_names[i] {
+                Some(name) if name.contains(&key) => Some(item),
                 _ => None,
             })
             .collect()
     }
 
-    /// All records belonging to a faction id (empty if the type has no faction).
+    /// Records of a faction id that this view lists (empty if the type has no
+    /// faction).
     pub fn by_faction(&self, faction_id: &str) -> Vec<&T> {
-        self.by_faction
+        self.core
+            .by_faction
             .get(faction_id)
-            .map(|idxs| idxs.iter().map(|&i| &self.items[i]).collect())
+            .map(|idxs| idxs.iter().filter_map(|&i| self.listed_at(i)).collect())
             .unwrap_or_default()
     }
 
-    /// Iterate the distinct records in first-seen order.
+    /// Iterate the distinct records this view lists, in first-seen order.
     pub fn iter(&self) -> std::slice::Iter<'_, T> {
-        self.items.iter()
+        self.all().iter()
+    }
+
+    /// Listed records paired with their index into [`every`](Self::every).
+    fn iter_indexed(&self) -> impl Iterator<Item = (usize, &T)> {
+        let items = &self.core.items;
+        let indices: Box<dyn Iterator<Item = usize> + '_> = match &self.listed {
+            Some(listed) => Box::new(listed.indices.iter().copied()),
+            None => Box::new(0..items.len()),
+        };
+        indices.map(move |i| (i, &items[i]))
     }
 }
 
@@ -375,6 +499,6 @@ impl<'a, T> IntoIterator for &'a Collection<T> {
     type IntoIter = std::slice::Iter<'a, T>;
 
     fn into_iter(self) -> Self::IntoIter {
-        self.items.iter()
+        self.iter()
     }
 }

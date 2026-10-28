@@ -39,6 +39,22 @@ def run_linked_query(ds: Any, query: str, args: dict[str, Any]) -> Any:
     if query == "find_ability":
         a = ds.abilities.find(args.get("query", ""))
         return a.id if a else None
+    if query == "find_enhancement":
+        e = ds.enhancements.find(args.get("query", ""))
+        return e["id"] if e else None
+    if query == "find_detachment":
+        d = ds.detachments.find(args.get("query", ""))
+        return d["id"] if d else None
+    if query == "get_unit":
+        gu = ds.units.get_any(args.get("unitId") or "")
+        return gu.id if gu else None
+    if query == "get_detachment":
+        gd = ds.detachments.get_any(args.get("detachmentId") or "")
+        return gd["id"] if gd else None
+    if query == "units_of_faction":
+        return [x.id for x in ds.units.by_faction(args.get("factionId") or "")]
+    if query == "detachments_of_faction":
+        return [x["id"] for x in ds.detachments.by_faction(args.get("factionId") or "")]
     if query == "get_enhancement":
         e = ds.enhancements.get(args.get("id", ""))
         return e["id"] if e else None
@@ -50,7 +66,7 @@ def run_linked_query(ds: Any, query: str, args: dict[str, Any]) -> Any:
         return [x["id"] for x in ds.units.get_any(args["unitId"]).wargear_options]
     if query == "base_loadout":
         unit = ds.units.get_any(args["unitId"])
-        comp = next((c for c in ds.unit_compositions if c.get("unit_id") == args["unitId"]), None)
+        comp = ds.unit_composition_of(unit.raw)
         lo = base_loadout(
             unit.raw,
             int(args["modelCount"]),
@@ -60,7 +76,7 @@ def run_linked_query(ds: Any, query: str, args: dict[str, Any]) -> Any:
         return sorted(f"{id_}:{n}" for id_, n in lo.items())
     if query == "weapon_bounds":
         unit = ds.units.get_any(args["unitId"])
-        comp = next((c for c in ds.unit_compositions if c.get("unit_id") == args["unitId"]), None)
+        comp = ds.unit_composition_of(unit.raw)
         bounds = weapon_bounds(
             unit.raw,
             int(args["modelCount"]),
@@ -78,15 +94,7 @@ def run_linked_query(ds: Any, query: str, args: dict[str, Any]) -> Any:
             if args.get("factionId")
             else ds.units.get_any(args["unitId"])
         )
-        comp = next(
-            (
-                c
-                for c in ds.unit_compositions
-                if c.get("unit_id") == args["unitId"]
-                and c.get("faction_id") == unit.raw.get("faction_id")
-            ),
-            None,
-        )
+        comp = ds.unit_composition_of(unit.raw)
         return loadout_candidates(
             unit.raw,
             int(args["modelCount"]),
@@ -103,8 +111,7 @@ def run_linked_query(ds: Any, query: str, args: dict[str, Any]) -> Any:
     if query == "base_size_of":
         return encode_base(ds.units.get_any(args["unitId"]).raw.get("base_size_mm"))
     if query == "model_bases_of":
-        unit_id = args["unitId"]
-        comp = next((c for c in ds.unit_compositions if c.get("unit_id") == unit_id), None)
+        comp = ds.unit_composition_of(ds.units.get_any(args["unitId"]).raw)
         models = (comp or {}).get("models") or []
         return [f"{m['name']}={encode_base(m.get('base_size_mm')) or 'none'}" for m in models]
     if query == "abilities_of_faction":
@@ -135,7 +142,10 @@ def run_linked_query(ds: Any, query: str, args: dict[str, Any]) -> Any:
 
 @pytest.mark.parametrize("case", _cases(), ids=lambda c: c["name"])
 def test_linked_api_case(dataset: Any, case: dict[str, Any]) -> None:
-    actual = run_linked_query(dataset, case["query"], case.get("args") or {})
+    args = case.get("args") or {}
+    # Optional gameMode runs the query against that game-mode view.
+    view = dataset.for_game_mode(args["gameMode"]) if "gameMode" in args else dataset
+    actual = run_linked_query(view, case["query"], args)
     expected = case["expected"]
     comparison = case.get("comparison", "scalar")
     if comparison == "set":

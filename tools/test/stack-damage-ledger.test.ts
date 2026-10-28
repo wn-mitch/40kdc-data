@@ -14,10 +14,12 @@ import type { Buff } from "../src/cruncher/index.js";
 import type { Unit, Weapon } from "../src/generated.js";
 
 const dataset = Dataset.embedded();
+// Every game mode, for rules printed only on Combat Patrol datasheets; the default view omits them.
+const every = dataset.forGameMode("all");
 const faction = resolveFactionContext(dataset, "tau-empire");
 const target = resolveTarget(dataset, dataset.targetProfiles.get("geq-guardsmen")!)!;
 
-function cellFor(factionId: string, phase: "shooting" | "fight", extra: Record<string, string> = {}) {
+function cellFor(factionId: string, phase: "shooting" | "fight", extra: Record<string, string> = {}, view = dataset) {
   const config = parseMatrixConfig({
     HC_FACTIONS: factionId,
     HC_TARGETS: "geq-guardsmen",
@@ -28,8 +30,8 @@ function cellFor(factionId: string, phase: "shooting" | "fight", extra: Record<s
     HC_OUTPUT: "ledger.json",
     ...extra,
   }, { factionIds: new Set([factionId]), targetIds: ["geq-guardsmen"] });
-  const context = factionId === "tau-empire" ? faction : resolveFactionContext(dataset, factionId);
-  return runDamageCell({ dataset, config, faction: context, target, phase });
+  const context = factionId === "tau-empire" && view === dataset ? faction : resolveFactionContext(view, factionId);
+  return runDamageCell({ dataset: view, config, faction: context, target, phase });
 }
 
 const tauCell = (extra: Record<string, string> = {}) => cellFor("tau-empire", "shooting", extra);
@@ -81,8 +83,9 @@ describe("stack damage ledger", () => {
       relevant: true,
       reasons: ['conditional: cannot evaluate condition "and" against current context'],
     });
-    // Grab Dat Scrap gates only effects outside the attack, so it is rejected.
-    const fight = cellFor("orks", "fight");
+    // Grab Dat Scrap gates only effects outside the attack, so it is rejected. Only a Combat
+    // Patrol datasheet (Ardmob Boyz) prints it, so the cell runs on every game mode.
+    const fight = cellFor("orks", "fight", {}, every);
     expect(fight.ledger.find((candidate) => candidate.abilityId === "grab-dat-scrap-orks")).toMatchObject({
       status: "rejected",
       relevant: false,
@@ -222,12 +225,13 @@ describe("unscoreable weapon profiles", () => {
   it("ranks a unit whose printed weapon has no BS and ledgers that weapon as relevant and unresolved", () => {
     // Manipulus Skand's own transonic cannon prints BS "-" and no weapon abilities in the dump.
     const factionId = "adeptus-mechanicus";
-    const admech = resolveFactionContext(dataset, factionId);
+    // Skand is a Combat Patrol datasheet, so the matrix runs on every game mode.
+    const admech = resolveFactionContext(every, factionId);
     const config = parseMatrixConfig({ HC_FACTIONS: factionId, HC_TARGETS: "geq-guardsmen", HC_PHASES: "shooting", HC_OUTPUT: "ledger.json" },
       { factionIds: new Set([factionId]), targetIds: ["geq-guardsmen"] });
-    const session = damageScoringSession({ dataset, config, faction: admech, target, phase: "shooting" });
+    const session = damageScoringSession({ dataset: every, config, faction: admech, target, phase: "shooting" });
     const skand = admech.units.find((unit) => unit.id === "manipulus-skand")!;
-    const spec = legalDetachmentSpec(session, factionId, [{ unit: skand, role: "bodyguard" }], [dataset.detachments.getAny("data-psalm-conclave")!])!;
+    const spec = legalDetachmentSpec(session, factionId, [{ unit: skand, role: "bodyguard" }], [every.detachments.getAny("data-psalm-conclave")!])!;
     expect(Number.isFinite(session.optimiseLevers(spec).total)).toBe(true);
     expect(unscoreableEntries(session)).toEqual([expect.objectContaining({
       abilityId: "transonic-cannon-manipulus-skand",
