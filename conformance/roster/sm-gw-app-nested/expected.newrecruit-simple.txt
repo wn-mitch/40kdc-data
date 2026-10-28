@@ -1,0 +1,17 @@
+Adeptus Astartes - Imported roster - [275 pts]
+
+# ++ Army Roster ++ [275 pts]
+## Configuration
+List Name: Imported roster
+Faction: Adeptus Astartes
+Detachment: Gladius Task Force
+Force Disposition: Priority Assets
+
+## Battleline [275 pts]
+Captain [105 pts]: Attachment: leader -> Intercessor Squad, Artificer Armour [15 pts], Warlord, Heavy Bolt Pistol, Master-crafted bolter, Master-crafted power weapon
+Intercessor Squad [85 pts]:
+• 1x Intercessor Sergeant: Bolt Pistol, Bolt Rifle, Knives and Fists
+• 4x Intercessor: Bolt Pistol, Bolt Rifle, Knives and Fists
+Intercessor Squad [85 pts]:
+• 1x Intercessor Sergeant: Bolt Pistol, Bolt Rifle, Knives and Fists
+• 4x Intercessor: Bolt Pistol, Bolt Rifle, Knives and Fists

@@ -1,0 +1,22 @@
++++++++++++++++++++++++++++++++++++++++++++++++
++ LIST NAME: Imported roster
++ FACTION KEYWORD: Adeptus Astartes
++ DETACHMENT: Gladius Task Force
++ FORCE DISPOSITION: Priority Assets
++ TOTAL ARMY POINTS: 275pts
++ POINTS LIMIT: 275pts
++
++ WARLORD: Char1: Captain
++ ENHANCEMENT: Artificer Armour (on Char1: Captain)
++ NUMBER OF UNITS: 3
++++++++++++++++++++++++++++++++++++++++++++++++
+
+Char1: 1x Captain (105 pts): Heavy Bolt Pistol, Master-crafted bolter, Master-crafted power weapon, Warlord
+Attachment: leader -> Intercessor Squad
+Enhancement: Artificer Armour (+15 pts)
+5x Intercessor Squad (85 pts): 
+• 1x Intercessor Sergeant: Bolt Pistol, Bolt Rifle, Knives and Fists
+• 4x Intercessor: Bolt Pistol, Bolt Rifle, Knives and Fists
+5x Intercessor Squad (85 pts): 
+• 1x Intercessor Sergeant: Bolt Pistol, Bolt Rifle, Knives and Fists
+• 4x Intercessor: Bolt Pistol, Bolt Rifle, Knives and Fists

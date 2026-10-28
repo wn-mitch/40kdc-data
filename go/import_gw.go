@@ -14,8 +14,15 @@ var gwHeaderDetachment = regexp.MustCompile(`(?i)^\+\s*DETACHMENT:\s*(.+?)\s*$`)
 var gwHeaderForceDisposition = regexp.MustCompile(`(?i)^\+\s*(?:FORCE DISPOSITION|DISPO):\s*(.+?)\s*$`)
 var gwHeaderTotalPoints = regexp.MustCompile(`(?i)^\+\s*TOTAL ARMY POINTS:\s*(\d+)\s*pts?\s*$`)
 var gwSectionHeader = regexp.MustCompile(`^[A-Z][A-Z0-9 \-/&]+$`)
-var gwUnitHeader = regexp.MustCompile(`(?i)^(.+?)\s*\(\s*(\d+)\s*pts?\s*\)\s*$`)
-var gwBulletLine = regexp.MustCompile(`^(\s*)•\s*(.+?)\s*$`)
+var gwUnitHeader = regexp.MustCompile(`(?i)^(.+?)\s*\(\s*(\d+)\s*(?:pts?|points?)\s*\)\s*$`)
+var gwBulletLine = regexp.MustCompile(`^(\s*)([•◦])\s*(.+?)\s*$`)
+
+// The "Attached Units" preamble groups a Leader/Support character with its
+// bodyguard unit under `Attached Unit N` before the ALL-CAPS role sections
+// begin. The marker is mixed case (never a section header) and has no
+// `(N pts)` suffix (never a unit header): it is purely a pairing fence.
+var gwAttachedUnitHeader = regexp.MustCompile(`(?i)^Attached Unit\s+\d+\s*$`)
+var gwAttachedAsBullet = regexp.MustCompile(`(?i)^Attached as:\s*(Leader|Support|Bodyguard)\b`)
 var gwNxPrefix = regexp.MustCompile(`^(\d+)x\s+(.+)$`)
 var gwEnhancementAnnot = regexp.MustCompile(`(?i)^(.+?)\s*\(\+\s*(\d+)\s*pts?\s*\)\s*$`)
 var gwWithLine = regexp.MustCompile(`(?m)^[\t ]*\d+\s+with\b`)
@@ -105,7 +112,9 @@ func gwParseHeader(lines []string) (map[string]any, int, bool) {
 	}, bodyStart, true
 }
 
-func finishGwUnit(acc *gwUnit) map[string]any {
+// finishGwUnit builds the parsed unit plus its `Attached as:` role ("" when
+// the unit carries none).
+func finishGwUnit(acc *gwUnit) (map[string]any, string) {
 	topIndent := 0
 	if len(acc.bullets) > 0 {
 		topIndent = acc.bullets[0].indent
@@ -120,6 +129,7 @@ func finishGwUnit(acc *gwUnit) map[string]any {
 	isWarlord := false
 	isCharacter := acc.section == gwCharactersSection
 	var enhancementRawName, enhancementPoints any
+	attachedRole := ""
 
 	for i, b := range acc.bullets {
 		if b.indent > topIndent {
@@ -134,6 +144,13 @@ func finishGwUnit(acc *gwUnit) map[string]any {
 					enhancementRawName = strings.TrimSpace(enh[1])
 					n, _ := strconv.Atoi(enh[2])
 					enhancementPoints = float64(n)
+				}
+				continue
+			}
+			if am := gwAttachedAsBullet.FindStringSubmatch(b.text); am != nil {
+				attachedRole = strings.ToLower(am[1])
+				if attachedRole != "bodyguard" {
+					isCharacter = true
 				}
 				continue
 			}
@@ -180,7 +197,7 @@ func finishGwUnit(acc *gwUnit) map[string]any {
 		"enhancement_raw_name": enhancementRawName,
 		"enhancement_points":   enhancementPoints,
 		"wargear":              wargear.pairs(),
-	}
+	}, attachedRole
 }
 
 var gwAdapter = formatAdapter{
@@ -203,9 +220,40 @@ var gwAdapter = formatAdapter{
 		var current *gwUnit
 		section := ""
 		alliedUnits := 0
+		// Units finished inside an "Attached Unit N" fence, paired once the fence
+		// closes (a new `Attached Unit N`, a real section header, or end of input).
+		type attachedEntry struct {
+			unit map[string]any
+			role string
+		}
+		var attachedGroup []attachedEntry
+		resolveAttachedGroup := func() {
+			var character, bodyguard *attachedEntry
+			for i := range attachedGroup {
+				e := &attachedGroup[i]
+				if character == nil && (e.role == "leader" || e.role == "support") {
+					character = e
+				}
+				if bodyguard == nil && e.role == "bodyguard" {
+					bodyguard = e
+				}
+			}
+			if character != nil && bodyguard != nil {
+				character.unit["leader_attachment"] = map[string]any{
+					"bodyguard_raw_name": bodyguard.unit["raw_name"],
+					"role":               character.role,
+					"provisional":        false,
+				}
+			}
+			attachedGroup = nil
+		}
 		finalize := func() {
 			if current != nil {
-				units = append(units, finishGwUnit(current))
+				unit, role := finishGwUnit(current)
+				if role != "" {
+					attachedGroup = append(attachedGroup, attachedEntry{unit, role})
+				}
+				units = append(units, unit)
 				current = nil
 			}
 		}
@@ -214,9 +262,20 @@ var gwAdapter = formatAdapter{
 			if line == "" || fenceRe.MatchString(line) || headerLineRe.MatchString(line) {
 				continue
 			}
+			if gwAttachedUnitHeader.MatchString(line) {
+				finalize()
+				resolveAttachedGroup()
+				continue
+			}
 			if bm := gwBulletLine.FindStringSubmatch(raw); bm != nil {
 				if current != nil {
-					rest := bm[2]
+					// A hollow `◦` bullet is one level deeper than a `•` at the
+					// same indent, so it is a child even without leading whitespace.
+					indent := len(bm[1])
+					if bm[2] == "◦" {
+						indent++
+					}
+					rest := bm[3]
 					var count any
 					txt := strings.TrimSpace(rest)
 					if nx := gwNxPrefix.FindStringSubmatch(rest); nx != nil {
@@ -224,7 +283,7 @@ var gwAdapter = formatAdapter{
 						count = n
 						txt = strings.TrimSpace(nx[2])
 					}
-					current.bullets = append(current.bullets, lftBulletEntry{indent: len(bm[1]), count: count, text: txt})
+					current.bullets = append(current.bullets, lftBulletEntry{indent: indent, count: count, text: txt})
 				}
 				continue
 			}
@@ -251,10 +310,12 @@ var gwAdapter = formatAdapter{
 			}
 			if gwSectionHeader.MatchString(line) {
 				finalize()
+				resolveAttachedGroup()
 				section = line
 			}
 		}
 		finalize()
+		resolveAttachedGroup()
 		totalComputed := 0.0
 		for _, u := range units {
 			if p, ok := u["points"].(float64); ok {

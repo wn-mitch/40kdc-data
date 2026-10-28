@@ -1,0 +1,90 @@
+{
+  "name": "Imported roster",
+  "generated_by": null,
+  "faction_raw_name": "Adeptus Astartes",
+  "detachment_raw_names": [
+    "Gladius Task Force"
+  ],
+  "force_disposition_raw_name": "Priority Assets",
+  "battle_size_raw": "Combat Patrol (500 Point limit)",
+  "declared_limit": 275,
+  "total_reported": 275,
+  "total_computed": 275,
+  "units": [
+    {
+      "raw_name": "Captain",
+      "is_character": true,
+      "model_count": 1,
+      "points": 90,
+      "is_warlord": true,
+      "enhancement_raw_name": "Artificer Armour",
+      "enhancement_points": 15,
+      "wargear": [
+        {
+          "raw_name": "Heavy Bolt Pistol",
+          "count": 1
+        },
+        {
+          "raw_name": "Master-crafted bolter",
+          "count": 1
+        },
+        {
+          "raw_name": "Master-crafted power weapon",
+          "count": 1
+        }
+      ],
+      "leader_attachment": {
+        "bodyguard_raw_name": "Intercessor Squad",
+        "role": "leader",
+        "provisional": false
+      }
+    },
+    {
+      "raw_name": "Intercessor Squad",
+      "is_character": false,
+      "model_count": 5,
+      "points": 85,
+      "is_warlord": false,
+      "enhancement_raw_name": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "raw_name": "Bolt Pistol",
+          "count": 5
+        },
+        {
+          "raw_name": "Bolt Rifle",
+          "count": 5
+        },
+        {
+          "raw_name": "Knives and Fists",
+          "count": 5
+        }
+      ]
+    },
+    {
+      "raw_name": "Intercessor Squad",
+      "is_character": false,
+      "model_count": 5,
+      "points": 85,
+      "is_warlord": false,
+      "enhancement_raw_name": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "raw_name": "Bolt Pistol",
+          "count": 5
+        },
+        {
+          "raw_name": "Bolt Rifle",
+          "count": 5
+        },
+        {
+          "raw_name": "Knives and Fists",
+          "count": 5
+        }
+      ]
+    }
+  ],
+  "multi_force": false
+}
