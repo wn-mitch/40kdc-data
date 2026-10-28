@@ -1093,6 +1093,7 @@
             "name": "Paladin with Ancient's Banner",
             "weapon_ids": [
               "nemesis-force-weapon-paladin-squad",
+              "ancients-banner",
               "storm-bolter-paladin-squad"
             ],
             "max_count": 1
@@ -1121,7 +1122,8 @@
           {
             "name": "Paladin with Narthecium",
             "weapon_ids": [
-              "nemesis-force-weapon-paladin-squad"
+              "nemesis-force-weapon-paladin-squad",
+              "apothecarys-narthecium"
             ],
             "max_count": 1
           }
@@ -1425,6 +1427,7 @@
             "name": "Terminator with Ancient's Banner",
             "weapon_ids": [
               "nemesis-force-weapon-brotherhood-terminator-squad",
+              "ancients-banner",
               "storm-bolter-brotherhood-terminator-squad"
             ],
             "max_count": 1
@@ -1432,7 +1435,8 @@
           {
             "name": "Terminator with Narthecium",
             "weapon_ids": [
-              "nemesis-force-weapon-brotherhood-terminator-squad"
+              "nemesis-force-weapon-brotherhood-terminator-squad",
+              "apothecarys-narthecium"
             ],
             "max_count": 1
           },

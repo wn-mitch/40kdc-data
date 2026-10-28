@@ -1219,7 +1219,8 @@
             "weapon_ids": [
               "arbites-combat-shotgun",
               "close-combat-weapon-exaction-squad",
-              "arbites-shotpistol"
+              "arbites-shotpistol",
+              "arbites-medi-kit"
             ],
             "max_count": 1
           },
@@ -1238,7 +1239,8 @@
             "weapon_ids": [
               "arbites-combat-shotgun",
               "close-combat-weapon-exaction-squad",
-              "arbites-shotpistol"
+              "arbites-shotpistol",
+              "soulguilt-scanner"
             ],
             "max_count": 1
           },

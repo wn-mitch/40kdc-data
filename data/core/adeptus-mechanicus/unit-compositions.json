@@ -741,7 +741,8 @@
             "name": "Skitarii Vanguard w/ data-tether",
             "weapon_ids": [
               "close-combat-weapon-skitarii-vanguard",
-              "radium-carbine"
+              "radium-carbine",
+              "enhanced-data-tether"
             ],
             "max_count": 1
           },
@@ -1118,7 +1119,37 @@
           "shape": "oval",
           "width": 60,
           "length": 35.5
-        }
+        },
+        "loadout_variants": [
+          {
+            "name": "Serberys Raider",
+            "weapon_ids": [
+              "cavalry-sabre-and-clawed-limbs",
+              "galvanic-carbine"
+            ],
+            "max_count": 5
+          },
+          {
+            "name": "Serberys Raider w/ data-tether",
+            "weapon_ids": [
+              "cavalry-sabre-and-clawed-limbs",
+              "galvanic-carbine",
+              "enhanced-data-tether"
+            ],
+            "max_count": 1
+          }
+        ],
+        "loadout_variant_budgets": [
+          {
+            "variant_names": [
+              "Serberys Raider",
+              "Serberys Raider w/ data-tether"
+            ],
+            "count": 5,
+            "per_models": 0,
+            "scope": "model-row"
+          }
+        ]
       }
     ],
     "game_version": {
@@ -1609,7 +1640,8 @@
             "name": "Skitarii Ranger w/ data-tether",
             "weapon_ids": [
               "close-combat-weapon-skitarii-rangers",
-              "galvanic-rifle"
+              "galvanic-rifle",
+              "enhanced-data-tether"
             ],
             "max_count": 1
           },

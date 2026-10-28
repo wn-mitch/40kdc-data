@@ -249,7 +249,7 @@ describe("BSData loadout variant projection", () => {
       const rows: Record<string, unknown>[] = [{ name: "Trooper" }];
       const issues = projectUnit({ selectionEntryGroups: [{ selectionEntries: [model("Trooper", "gun"), linked(target)] }] }, rows, [
         { id: "gun", external_refs: [{ namespace: "bsdata", id: "gun" }] },
-        { id: "heavy-blade" },
+        { id: "heavy-blade", profiles: [{}] },
       ], "troopers", [], nodes);
       const variants = rows[0].loadout_variants;
       if (variants !== undefined && !Array.isArray(variants)) throw new Error("loadout_variants is not an array");
@@ -262,7 +262,7 @@ describe("BSData loadout variant projection", () => {
         { name: "Trooper w/ Blade", weapon_ids: ["gun", "heavy-blade"], max_count: 2 },
       ],
     });
-    // A non-weapon profile is not equipment.
+    // A non-weapon profile is not a weapon.
     expect(project("banner-profile").variants).toEqual([
       { name: "Trooper", weapon_ids: ["gun"], max_count: 2 },
       { name: "Trooper w/ Blade", weapon_ids: ["gun"], max_count: 2 },

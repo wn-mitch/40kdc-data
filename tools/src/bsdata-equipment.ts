@@ -64,9 +64,14 @@ function product(left: EquipmentAlternative[], right: EquipmentAlternative[]): E
  * wargear matches. A required single-pick group with no default selection (no
  * `defaultSelectionEntryId`, or `"none"`) fixes one of its children, so each
  * child yields its own alternative; a defaultless optional group fixes only the
- * children it explicitly requires.
+ * children it explicitly requires. An inline entry with neither is kept when
+ * `isEquipment` recognises it (a vox-caster's only profile is its ability).
  */
-export function fixedEquipment(peer: JsonNode, sourceNodes: ReadonlyMap<string, JsonNode>): FixedEquipment {
+export function fixedEquipment(
+  peer: JsonNode,
+  sourceNodes: ReadonlyMap<string, JsonNode>,
+  isEquipment: (entry: JsonNode) => boolean = () => false,
+): FixedEquipment {
   let item: string | undefined;
   let reason: string | undefined;
   const unsupported = (node: JsonNode, why: string): void => {
@@ -139,7 +144,7 @@ export function fixedEquipment(peer: JsonNode, sourceNodes: ReadonlyMap<string, 
     else if (includeNode) {
       const profileLinks = arr(node.infoLinks).filter((link) => link.type === "profile");
       const targets = profileLinks.map((link) => sourceNodes.get(str(link.targetId) ?? ""));
-      if (targets.some((target) => target === undefined || isWeaponProfile(target))) add(node);
+      if (targets.some((target) => target === undefined || isWeaponProfile(target)) || isEquipment(node)) add(node);
     }
     for (const link of arr(node.entryLinks)) {
       const min = constraint(link, "min");

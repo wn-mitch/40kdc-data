@@ -231,7 +231,8 @@
             "weapon_ids": [
               "astartes-chainsword",
               "bolt-pistol-nemesis-claw",
-              "close-combat-weapon"
+              "close-combat-weapon",
+              "voice-eater"
             ],
             "max_count": 1
           }

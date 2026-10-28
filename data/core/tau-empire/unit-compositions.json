@@ -357,7 +357,8 @@
             "weapon_ids": [
               "kroot-pistol",
               "farstalker-firearm",
-              "close-combat-weapon"
+              "close-combat-weapon",
+              "pechra"
             ],
             "max_count": 1
           },

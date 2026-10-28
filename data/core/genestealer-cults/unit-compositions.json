@@ -215,23 +215,62 @@
             "weapon_ids": [
               "hybrid-firearm",
               "autopistol",
-              "close-combat-weapon-neophyte-hybrids"
+              "close-combat-weapon-neophyte-hybrids",
+              "cult-icon"
             ],
             "max_count": 1
           },
           {
-            "name": "Neophyte Hybrid w/ Heavy Weapon",
+            "name": "Neophyte Hybrid w/ Heavy Weapon (Mining laser)",
             "weapon_ids": [
               "close-combat-weapon-neophyte-hybrids",
-              "autopistol"
+              "autopistol",
+              "mining-laser-neophyte-hybrids"
             ],
             "max_count": 4
           },
           {
-            "name": "Neophyte Hybrid w/ Special Weapon",
+            "name": "Neophyte Hybrid w/ Heavy Weapon (Seismic cannon)",
+            "weapon_ids": [
+              "close-combat-weapon-neophyte-hybrids",
+              "autopistol",
+              "seismic-cannon"
+            ],
+            "max_count": 4
+          },
+          {
+            "name": "Neophyte Hybrid w/ Heavy Weapon (Heavy stubber)",
+            "weapon_ids": [
+              "close-combat-weapon-neophyte-hybrids",
+              "autopistol",
+              "heavy-stubber-neophyte-hybrids"
+            ],
+            "max_count": 4
+          },
+          {
+            "name": "Neophyte Hybrid w/ Special Weapon (Webber)",
             "weapon_ids": [
               "autopistol",
-              "close-combat-weapon-neophyte-hybrids"
+              "close-combat-weapon-neophyte-hybrids",
+              "webber"
+            ],
+            "max_count": 4
+          },
+          {
+            "name": "Neophyte Hybrid w/ Special Weapon (Flamer)",
+            "weapon_ids": [
+              "autopistol",
+              "close-combat-weapon-neophyte-hybrids",
+              "flamer"
+            ],
+            "max_count": 4
+          },
+          {
+            "name": "Neophyte Hybrid w/ Special Weapon (Grenade launcher)",
+            "weapon_ids": [
+              "autopistol",
+              "close-combat-weapon-neophyte-hybrids",
+              "grenade-launcher"
             ],
             "max_count": 4
           }
@@ -239,10 +278,34 @@
         "loadout_variant_budgets": [
           {
             "variant_names": [
+              "Neophyte Hybrid w/ Heavy Weapon (Mining laser)",
+              "Neophyte Hybrid w/ Heavy Weapon (Seismic cannon)",
+              "Neophyte Hybrid w/ Heavy Weapon (Heavy stubber)"
+            ],
+            "count": 4,
+            "per_models": 0,
+            "scope": "model-row"
+          },
+          {
+            "variant_names": [
+              "Neophyte Hybrid w/ Special Weapon (Webber)",
+              "Neophyte Hybrid w/ Special Weapon (Flamer)",
+              "Neophyte Hybrid w/ Special Weapon (Grenade launcher)"
+            ],
+            "count": 4,
+            "per_models": 0,
+            "scope": "model-row"
+          },
+          {
+            "variant_names": [
               "Neophyte Hybrid w/ Hybrid Firearm",
               "Neophyte Hybrid w/ Hybrid Firearm & Cult Icon",
-              "Neophyte Hybrid w/ Heavy Weapon",
-              "Neophyte Hybrid w/ Special Weapon"
+              "Neophyte Hybrid w/ Heavy Weapon (Mining laser)",
+              "Neophyte Hybrid w/ Heavy Weapon (Seismic cannon)",
+              "Neophyte Hybrid w/ Heavy Weapon (Heavy stubber)",
+              "Neophyte Hybrid w/ Special Weapon (Webber)",
+              "Neophyte Hybrid w/ Special Weapon (Flamer)",
+              "Neophyte Hybrid w/ Special Weapon (Grenade launcher)"
             ],
             "count": 19,
             "per_models": 0,
@@ -857,6 +920,15 @@
             "count": 9,
             "per_models": 0,
             "scope": "model-row"
+          },
+          {
+            "variant_names": [
+              "Acolyte Hybrid w/ Heavy Mining Tool"
+            ],
+            "count": 3,
+            "per_models": 5,
+            "scope": "unit",
+            "stepped": true
           }
         ]
       }
@@ -1048,13 +1120,30 @@
               "cult-claws-and-knife"
             ],
             "max_count": 1
+          },
+          {
+            "name": "Acolyte Hybrid w/ Demolition Charge, and Cult Claws and Knife",
+            "weapon_ids": [
+              "cult-claws-and-knife",
+              "demolition-charges-acolyte-hybrids-with-hand-flamers"
+            ]
           }
         ],
         "loadout_variant_budgets": [
           {
             "variant_names": [
+              "Acolyte Hybrid w/ Demolition Charge, and Cult Claws and Knife"
+            ],
+            "count": 2,
+            "per_models": 5,
+            "scope": "unit",
+            "stepped": true
+          },
+          {
+            "variant_names": [
               "Acolyte Hybrid w/ Hand Flamer",
-              "Acolyte Hybrid w/ Cult Icon"
+              "Acolyte Hybrid w/ Cult Icon",
+              "Acolyte Hybrid w/ Demolition Charge, and Cult Claws and Knife"
             ],
             "count": 9,
             "per_models": 0,
