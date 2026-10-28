@@ -483,16 +483,20 @@ def _ends_nearest_phrase(e: dict[str, Any], ctx: Ctx, who: str, move_ref: str) -
             named = re.sub(r"^(an?|the|all) ", "", effect_subject(e.get("of"), ctx), count=1)
             named = named.replace(" units", " unit", 1).replace(" units)", ")")
         nearest = f"as close as possible to the closest {named}"
+    # optional: this end is the unit's choice in place of the closest enemy unit.
+    verb = "can" if e.get("optional") is True else "must"
     must = (
-        f"each model in {'the unit' if who == 'it' else who} must end {move_ref}"
+        f"each model in {'the unit' if who == 'it' else who} {verb} end {move_ref}"
         if e.get("per") == "model"
-        else f"{who} must end {move_ref}"
+        else f"{who} {verb} end {move_ref}"
     )
-    instead = (
-        ", instead of as close as possible to the closest enemy unit"
-        if e.get("instead_of") == "closest-enemy-unit"
-        else ""
-    )
+    instead = ""
+    if e.get("instead_of") == "closest-enemy-unit":
+        instead = (
+            " instead of the closest enemy unit"
+            if e.get("optional") is True
+            else ", instead of as close as possible to the closest enemy unit"
+        )
     if e.get("waives") == "closest-enemy-model":
         return f"{must} either closer to the closest enemy model or {nearest}"
     return f"{must} {nearest}{instead}"

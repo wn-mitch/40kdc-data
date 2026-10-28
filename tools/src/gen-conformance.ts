@@ -4108,6 +4108,18 @@ function genEffectTranslation(): void {
       effect: { type: "select-units", selector: { filter: { owner: "enemy" }, count: { min: 1, max: 1 },
         eligibility: { type: "happened", parameters: { event: "model-destroyed", object: { level: "model", member_of: "selected-unit" }, filter: { by: "this-unit" }, window: "event" } } },
         effect: { type: "test", target: "selected-unit", modifier: { test: "battle-shock" } } } } },
+    // A move the unit can end at the closest objective marker in place of the closest enemy unit: either end is legal.
+    { caseId: "fidelity/move-end-nearest-objective-optional-instead", effect: { type: "move-modifier", target: "this-unit",
+      modifier: { applies_to_moves: ["normal"], ends_nearest: { of: { objective: {} }, instead_of: "closest-enemy-unit", optional: true } } } },
+    // The option the triggering use of another ability selected becomes active for this unit.
+    { caseId: "fidelity/activate-option-the-triggering-use-selected", effect: { type: "ability-activate", target: "this-unit",
+      modifier: { ability: "rite-of-wards", select: { by: "event" } } } },
+    // A pick that cannot be the option already active for the army.
+    { caseId: "fidelity/activate-player-pick-excluding-army-active", effect: { type: "ability-activate", target: "this-unit",
+      modifier: { ability: "rite-of-wards", select: { by: "player", excluding: "army-active" }, exclusive: true } } },
+    // The same pick, made once and shared across two targets, still excludes the army's option.
+    { caseId: "fidelity/activate-shared-pick-excluding-army-active", effect: { type: "sequence", steps: ["first", "second"].map((which) => ({ type: "ability-activate", target: { stratagem_target: which },
+      modifier: { ability: "rite-of-wards", select: { by: "player", excluding: "army-active", option_var: "picked-option" } } })) } },
     // Two friendly groups hold opposite designations: tagging one group tags the other with the opposite and clears each stale tag.
     { caseId: "fidelity/opposed-designations-on-unit-groups", effect: { type: "sequence", steps: [
       { type: "designate", target: { owner: "friendly", all_of: ["CRIMSON"] }, modifier: { tag: "winning-the-wager" } },

@@ -432,10 +432,26 @@ function expand(node: unknown, key: string | null, parent: Position): unknown {
     });
     if (position === "condition") return { operator: pick === "every" ? "and" : "or", operands: copies };
     if (position === "moment") return copies;
-    if (position === "effect") return { type: "sequence", steps: copies };
+    if (position === "effect") return { type: "sequence", steps: sharedPick(record, copies) };
     throw new CompileError("A reference to several Stratagem targets sits where only one unit fits.");
   }
   return Object.fromEntries(Object.entries(record).map(([field, value]) => [field, expand(value, field, position)]));
+}
+
+/**
+ * "Select one Hyper-adaptation. … that Hyper-adaptation is active for those selected units": an activation fanned out
+ * over several targets still picks once, so each copy binds the pick under one option_var (the name compile-wrappers.ts
+ * bindPicks gives an aura's or loop's pick).
+ */
+function sharedPick(record: Node, copies: Node[]): Node[] {
+  const select = (record.modifier as Node | undefined)?.select as Node | undefined;
+  if (record.type !== "ability-activate" || select === undefined || select.option_var !== undefined || copies.length < 2) return copies;
+  const bindPick = (copy: Node): Node => {
+    if (copy.type === "conditional") return { ...copy, effect: bindPick(copy.effect as Node) };
+    const modifier = copy.modifier as Node;
+    return { ...copy, modifier: { ...modifier, select: { ...(modifier.select as Node), option_var: "picked-option" } } };
+  };
+  return copies.map(bindPick);
 }
 
 /** An entry's target references as the DSL's `{stratagem_target}`, with several-target references fanned out. */

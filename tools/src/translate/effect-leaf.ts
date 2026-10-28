@@ -474,8 +474,10 @@ function abilityActivate(m: Record<string, unknown>, subj: string): string {
   const label = abilityLabel(m.ability);
   if (m.procedure === "oath") return `${subj} ${v(subj, "resolves")} the ${label} Oath procedure again`;
   const consumed = m.ignore_consumed === true ? ", even if it has already been selected this battle" : "";
-  const sel = m.select as { by?: unknown; count?: unknown; from?: unknown; option_var?: unknown } | undefined;
+  const sel = m.select as { by?: unknown; count?: unknown; from?: unknown; option_var?: unknown; excluding?: unknown } | undefined;
   const exclusive = m.exclusive === true ? " (and no other option is)" : "";
+  // The option another ability's triggering use selected ("the selected combat doctrine is active for this unit").
+  if (sel?.by === "event") return `the ${label} option the triggering use selected is active for ${subj}${exclusive}${consumed}`;
   if (sel != null) {
     const n = Number(sel.count ?? 1) || 1;
     const from = optionNames(sel.from);
@@ -484,7 +486,8 @@ function abilityActivate(m: Record<string, unknown>, subj: string): string {
       : `select ${n === 1 ? "one" : String(n)} ${from.length ? `of the ${orList(from)} options` : n === 1 ? "option" : "options"} of ${label}`;
     // A bound pick is made once and shared by every unit the surrounding aura or loop reaches.
     const shared = sel.option_var != null ? " (picked once and shared)" : "";
-    return `${how}${shared} for ${subj}, ${m.exclusive === true ? "in place of" : "in addition to"} any already active${consumed}`;
+    const other = sel.excluding === "army-active" ? ", other than the one active for your army," : "";
+    return `${how}${shared}${other} for ${subj}, ${m.exclusive === true ? "in place of" : "in addition to"} any already active${consumed}`;
   }
   const override = m.override as { amount?: unknown } | undefined;
   const instead = override != null ? `, using ${diceCase(override.amount)} in place of its usual amount` : "";

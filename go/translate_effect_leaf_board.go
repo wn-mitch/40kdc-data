@@ -318,16 +318,25 @@ func endsNearestPhrase(e map[string]any, ctx effCtx, who, moveRef string) string
 	if eventSubject == "event-subject" {
 		nearest = "as close as possible to that enemy unit"
 	}
-	must := who + " must end " + moveRef
+	// optional: this end is the unit's choice in place of the closest enemy unit.
+	optional := e["optional"] == true
+	verb := "must"
+	if optional {
+		verb = "can"
+	}
+	must := who + " " + verb + " end " + moveRef
 	if e["per"] == "model" {
 		unit := who
 		if who == "it" {
 			unit = "the unit"
 		}
-		must = "each model in " + unit + " must end " + moveRef
+		must = "each model in " + unit + " " + verb + " end " + moveRef
 	}
 	if e["waives"] == "closest-enemy-model" {
 		return must + " either closer to the closest enemy model or " + nearest
+	}
+	if e["instead_of"] == "closest-enemy-unit" && optional {
+		return must + " " + nearest + " instead of the closest enemy unit"
 	}
 	if e["instead_of"] == "closest-enemy-unit" {
 		return must + " " + nearest + ", instead of as close as possible to the closest enemy unit"

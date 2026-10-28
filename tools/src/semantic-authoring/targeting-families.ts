@@ -180,6 +180,15 @@ export const TARGETING_FAMILIES: readonly SemanticFamilyDefinition[] = [
     parameterSchema: { type: "object", required: ["option_id"], properties: { option_id: { type: "string", pattern: RULE_SLUG.source } }, additionalProperties: false },
   },
   {
+    id: "pick-exclusion",
+    version: 1,
+    role: "COMBINATOR",
+    label: "An option the pick cannot take",
+    description: "\"You cannot select the same Hyper-adaptation you selected at the start of the first battle round\": the player's pick an ability-activate names (chosen) cannot take the option active for your army (excluding army-active), a selection made once and fixed for the battle.",
+    starter: { excluding: "army-active" },
+    parameterSchema: { type: "object", required: ["excluding"], properties: { excluding: { const: "army-active" } }, additionalProperties: false },
+  },
+  {
     id: "eligibility-permission",
     version: 1,
     role: "EFFECT",
@@ -316,6 +325,10 @@ export function normalizeTargetingParameters(family: string, input: Record<strin
       exactKeys(input, ["option_id"], family);
       if (typeof input.option_id !== "string" || !RULE_SLUG.test(input.option_id)) throw new TypeError("stance-initial.option_id is the option's kebab-case id.");
       return { option_id: input.option_id };
+    case "pick-exclusion":
+      exactKeys(input, ["excluding"], family);
+      if (input.excluding !== "army-active") throw new TypeError("pick-exclusion.excluding is army-active.");
+      return { excluding: "army-active" };
     case "instead":
     case "with-embarked-units":
       exactKeys(input, [], family);

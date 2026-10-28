@@ -63,7 +63,8 @@ function pickOf(opener: CompileLeaf): Pick {
  * A `choose` activation is the player's own pick, so an opener before it must be a choice-open
  * picking the same number.
  */
-export function foldActivationPicks(list: readonly CompileLeaf[]): CompileLeaf[] {
+export function foldActivationPicks(given: readonly CompileLeaf[]): CompileLeaf[] {
+  const list = foldPickExclusion(given);
   const dropped = new Set<number>();
   const out = list.map((leaf, index) => {
     if (leaf.family_id !== "ability-activate" || (leaf.parameters.chosen === undefined && leaf.parameters.choose === undefined)) return leaf;
@@ -84,6 +85,24 @@ export function foldActivationPicks(list: readonly CompileLeaf[]): CompileLeaf[]
   return out.filter((_leaf, index) => !dropped.has(index));
 }
 
+/** The exclusion a pick-exclusion leaf puts on the activation's pick, held on the activation from here on. */
+const EXCLUDING = "pick_excluding";
+
+/**
+ * "You cannot select the same Hyper-adaptation you selected at the start of the first battle round": a pick-exclusion
+ * leaf bars the option active for your army from the record's one player pick. It folds onto that activation and is
+ * dropped; a record with no such activation, or more than one, refuses compilation.
+ */
+function foldPickExclusion(list: readonly CompileLeaf[]): CompileLeaf[] {
+  const exclusions = list.filter((leaf) => leaf.family_id === "pick-exclusion");
+  if (exclusions.length === 0) return [...list];
+  if (exclusions.length > 1) throw new CompileError("A record takes one pick-exclusion.");
+  const picks = list.filter((leaf) => leaf.family_id === "ability-activate" && (leaf.parameters.chosen === true || leaf.parameters.choose !== undefined));
+  if (picks.length !== 1) throw new CompileError(`pick-exclusion bars an option from the record's one player pick; found ${picks.length} activations with a pick.`);
+  return list.flatMap((leaf) => leaf === exclusions[0] ? []
+    : leaf === picks[0] ? [{ ...leaf, parameters: { ...leaf.parameters, [EXCLUDING]: exclusions[0]!.parameters.excluding } }] : [leaf]);
+}
+
 const NO_PICK = "ability-activate chosen names the option picked earlier, but no optionless choice-open or dice-pool-allocation-open before it picks one.";
 
 /**
@@ -102,7 +121,13 @@ export function activationModifier(leaf: CompileLeaf): Node {
   if (p.chosen === true && picked === undefined) throw new CompileError(NO_PICK);
   const pick: Pick | undefined = choose ? { by: "player", count: choose.count } : picked;
   if (pick) modifier.select = { by: pick.by, ...(pick.count > 1 ? { count: pick.count } : {}), ...(choose?.from ? { from: [...choose.from] } : {}) };
-  const hasOptions = p.option !== undefined || p.options !== undefined || pick !== undefined;
+  // "the selected combat doctrine is active for this unit": the option the triggering use selected.
+  if (p.from_event === true) modifier.select = { by: "event" };
+  if (p[EXCLUDING] !== undefined) {
+    if (pick?.by !== "player") throw new CompileError("pick-exclusion bars an option from the player's pick only.");
+    (modifier.select as Node).excluding = p[EXCLUDING];
+  }
+  const hasOptions = p.option !== undefined || p.options !== undefined || pick !== undefined || p.from_event === true;
   const exclusive = leaf.family_version === 1 ? p.exclusive === true : hasOptions && p.additive !== true;
   if (exclusive) modifier.exclusive = true;
   if (picked?.ignore_consumed === true || p.ignore_consumed === true) modifier.ignore_consumed = true;

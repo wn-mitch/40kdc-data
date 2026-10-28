@@ -64,15 +64,15 @@ export function sentenceIsOptional(sourceText: string | undefined, leaf: Compile
 }
 
 /**
- * The trigger's move for a move-end with no make-move in its sentence: the nearest earlier selected
- * or move-ended event. A selection names the moves it covers (move_types) and the move ends after it.
+ * The trigger's move for a move-end with no make-move in its sentence: the nearest earlier selected,
+ * move-started or move-ended event. A selection or a move's start names the moves it covers (move_types) and the move ends after it.
  * A move-ended trigger has no move left to end, and a trigger with no move_types names no move.
  */
 function triggerEndNearest(list: readonly CompileLeaf[], at: number, endsNearest: Node): { node: Node; trigger: number } | { error: string } {
   let trigger = -1;
   for (let other = at - 1; other >= 0 && trigger < 0; other -= 1) {
     const leaf = list[other]!;
-    if (leaf.family_id === "event" && (leaf.parameters.kind === "selected" || leaf.parameters.kind === "move-ended")) trigger = other;
+    if (leaf.family_id === "event" && (leaf.parameters.kind === "selected" || leaf.parameters.kind === "move-started" || leaf.parameters.kind === "move-ended")) trigger = other;
   }
   const named = trigger < 0 ? undefined : list[trigger];
   if (named === undefined || !Array.isArray(named.parameters.move_types)) return { error: "A move-end has no move to attach to." };
@@ -109,8 +109,11 @@ export function attachMoveEndNearest<T extends PlannedNode>(
     if (own.length === 1 && leaf.parameters.instead_of !== undefined) { errors.push("A move-end waiver and \"instead of\" the closest enemy unit in one sentence have no DSL form together."); continue; }
     const built = endsNearestValue(list, at, selectedObjective);
     if ("error" in built) { errors.push(built.error); continue; }
-    if (sentenceIsOptional(sourceText, leaf)) { errors.push("A move-end the unit can choose is optional; no optional destination shape exists."); continue; }
+    // "can end that move as close as possible to X (instead of … the closest enemy unit)": either end is legal.
+    const optional = sentenceIsOptional(sourceText, leaf);
+    if (optional && leaf.parameters.instead_of === undefined) { errors.push("A move-end the unit can choose is optional; only one that replaces the closest enemy unit (instead_of) has an optional form."); continue; }
     const endsNearest: Node = built.value;
+    if (optional) endsNearest.optional = true;
     if (own.length === 1) endsNearest.waives = list[own[0]!]!.parameters.rule;
     const target = planned.filter((item) => item.index < at && sentenceAt(item.index) === sentence && (item.node.type === "move" || isBonusNode(item.node))).at(-1);
     if (!target) {

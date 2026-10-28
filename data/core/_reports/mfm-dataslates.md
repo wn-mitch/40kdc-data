@@ -1,4 +1,4 @@
-# MFM dataslates — APPLIED
+# MFM dataslates — DRY RUN
 
 Current dataslate: `11th/mfm-995`.
 
@@ -15,10 +15,10 @@ dump confirmation.
 | wargear-options | 0 | 0 | 1234 | 0 |
 | leader-attachments | 0 | 0 | 283 | 8 |
 | enhancements | 0 | 0 | 890 | 0 |
-| detachments | 1 | 0 | 171 | 285 |
-| stratagems | 1 | 0 | 1036 | 276 |
-| abilities | 0 | 0 | 3653 | 881 |
-| phase-mappings | 1 | 0 | 1135 | 445 |
+| detachments | 0 | 0 | 172 | 285 |
+| stratagems | 0 | 0 | 1039 | 274 |
+| abilities | 0 | 0 | 3656 | 878 |
+| phase-mappings | 0 | 0 | 1136 | 445 |
 | resource-pools | 0 | 0 | 0 | 6 |
 
 ## Abilities by faction
@@ -27,7 +27,7 @@ dump confirmation.
 |---|--:|--:|--:|--:|
 | _core | 0 | 0 | 8 | 18 |
 | adepta-sororitas | 0 | 0 | 120 | 28 |
-| adeptus-astartes | 0 | 0 | 210 | 40 |
+| adeptus-astartes | 0 | 0 | 211 | 39 |
 | adeptus-custodes | 0 | 0 | 144 | 14 |
 | adeptus-mechanicus | 0 | 0 | 138 | 29 |
 | aeldari | 0 | 0 | 243 | 57 |
@@ -56,7 +56,7 @@ dump confirmation.
 | space-wolves | 0 | 0 | 74 | 13 |
 | tau-empire | 0 | 0 | 134 | 32 |
 | thousand-sons | 0 | 0 | 121 | 37 |
-| tyranids | 0 | 0 | 152 | 34 |
+| tyranids | 0 | 0 | 154 | 32 |
 | ultramarines | 0 | 0 | 10 | 1 |
 | white-scars | 0 | 0 | 11 | 0 |
 | world-eaters | 0 | 0 | 118 | 29 |
@@ -77,9 +77,9 @@ dump confirmation.
 | adeptus-astartes | ambiguous-source | 1 |
 | adeptus-astartes | digest-differs | 13 |
 | adeptus-astartes | no-source | 5 |
-| adeptus-astartes | stub | 20 |
+| adeptus-astartes | stub | 19 |
 | adeptus-astartes | unpublished | 1 |
-| adeptus-astartes | verified | 210 |
+| adeptus-astartes | verified | 211 |
 | adeptus-custodes | ambiguous-source | 1 |
 | adeptus-custodes | digest-differs | 2 |
 | adeptus-custodes | stub | 9 |
@@ -188,9 +188,9 @@ dump confirmation.
 | thousand-sons | unpublished | 27 |
 | thousand-sons | verified | 121 |
 | tyranids | digest-differs | 5 |
-| tyranids | stub | 18 |
+| tyranids | stub | 16 |
 | tyranids | unpublished | 11 |
-| tyranids | verified | 152 |
+| tyranids | verified | 154 |
 | ultramarines | stub | 1 |
 | ultramarines | verified | 10 |
 | white-scars | verified | 11 |

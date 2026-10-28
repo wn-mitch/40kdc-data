@@ -168,16 +168,21 @@ fn ends_nearest_phrase(e: &P, ctx: &Ctx, who: &str, move_ref: &str) -> String {
     } else {
         format!("as close as possible to the closest {named}")
     };
+    // optional: this end is the unit's choice in place of the closest enemy unit.
+    let optional = e.get("optional").and_then(Value::as_bool) == Some(true);
+    let verb = if optional { "can" } else { "must" };
     let must = if jstr(e.get("per")) == "model" {
         format!(
-            "each model in {} must end {move_ref}",
+            "each model in {} {verb} end {move_ref}",
             if who == "it" { "the unit" } else { who }
         )
     } else {
-        format!("{who} must end {move_ref}")
+        format!("{who} {verb} end {move_ref}")
     };
     if jstr(e.get("waives")) == "closest-enemy-model" {
         format!("{must} either closer to the closest enemy model or {nearest}")
+    } else if jstr(e.get("instead_of")) == "closest-enemy-unit" && optional {
+        format!("{must} {nearest} instead of the closest enemy unit")
     } else if jstr(e.get("instead_of")) == "closest-enemy-unit" {
         format!("{must} {nearest}, instead of as close as possible to the closest enemy unit")
     } else {

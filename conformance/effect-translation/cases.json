@@ -38523,6 +38523,113 @@
     }
   },
   {
+    "caseId": "fidelity/move-end-nearest-objective-optional-instead",
+    "effect": {
+      "type": "move-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "applies_to_moves": [
+          "normal"
+        ],
+        "ends_nearest": {
+          "of": {
+            "objective": {}
+          },
+          "instead_of": "closest-enemy-unit",
+          "optional": true
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, the unit can end its move as close as possible to the closest objective marker instead of the closest enemy unit, during its Normal moves."
+    }
+  },
+  {
+    "caseId": "fidelity/activate-option-the-triggering-use-selected",
+    "effect": {
+      "type": "ability-activate",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "rite-of-wards",
+        "select": {
+          "by": "event"
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, the Rite of Wards option the triggering use selected is active for the unit."
+    }
+  },
+  {
+    "caseId": "fidelity/activate-player-pick-excluding-army-active",
+    "effect": {
+      "type": "ability-activate",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "rite-of-wards",
+        "select": {
+          "by": "player",
+          "excluding": "army-active"
+        },
+        "exclusive": true
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, select one option of Rite of Wards, other than the one active for your army, for the unit, in place of any already active."
+    }
+  },
+  {
+    "caseId": "fidelity/activate-shared-pick-excluding-army-active",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-activate",
+          "target": {
+            "stratagem_target": "first"
+          },
+          "modifier": {
+            "ability": "rite-of-wards",
+            "select": {
+              "by": "player",
+              "excluding": "army-active",
+              "option_var": "picked-option"
+            }
+          }
+        },
+        {
+          "type": "ability-activate",
+          "target": {
+            "stratagem_target": "second"
+          },
+          "modifier": {
+            "ability": "rite-of-wards",
+            "select": {
+              "by": "player",
+              "excluding": "army-active",
+              "option_var": "picked-option"
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use:\n  -> Select one option of Rite of Wards (picked once and shared), other than the one active for your army, for the first target, in addition to any already active.\n  -> Select one option of Rite of Wards (picked once and shared), other than the one active for your army, for the second target, in addition to any already active."
+    }
+  },
+  {
     "caseId": "fidelity/opposed-designations-on-unit-groups",
     "effect": {
       "type": "sequence",

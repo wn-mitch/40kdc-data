@@ -9060,19 +9060,50 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "tyranids",
     "detachment_id": "invasion-fleet",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-activate",
+          "target": {
+            "stratagem_target": "first"
+          },
+          "modifier": {
+            "ability": "hyper-adaptations-tyranids",
+            "select": {
+              "by": "player",
+              "excluding": "army-active",
+              "option_var": "picked-option"
+            }
+          }
+        },
+        {
+          "type": "ability-activate",
+          "target": {
+            "stratagem_target": "second"
+          },
+          "modifier": {
+            "ability": "hyper-adaptations-tyranids",
+            "select": {
+              "by": "player",
+              "excluding": "army-active",
+              "option_var": "picked-option"
+            }
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "until-next-command-phase"
+    },
+    "behavior": "activated",
+    "source_digest": "e7961d597415a8ff48fbc30c273cc4cfb23fa2957c00ff59534238cdb1e3292c"
   },
   {
     "ability_id": "preservation-imperative-unending-swarm-tyranids",
@@ -10232,19 +10263,80 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "tyranids",
     "detachment_id": "unending-swarm",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "event-subject",
+          "filter": {
+            "within": {
+              "of": {
+                "owner": "friendly"
+              },
+              "range": {
+                "aura_of": "synapse-tyranids"
+              }
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "surge",
+              "result_scope": "any-result"
+            }
+          },
+          {
+            "type": "move-modifier",
+            "target": "event-subject",
+            "modifier": {
+              "applies_to_moves": [
+                "surge"
+              ],
+              "ends_nearest": {
+                "of": {
+                  "objective": {}
+                },
+                "instead_of": "closest-enemy-unit",
+                "optional": true
+              }
+            }
+          }
+        ]
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "move-started",
+      "filter": {
+        "move_types": [
+          "surge"
+        ]
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ENDLESS MULTITUDE"
+        ]
+      },
+      "optional": true
+    },
+    "source_digest": "020c227da1d6b9ff4b24b6dca6ff7f89d5532e502e6339a0d6b646aaa358ce44"
   },
   {
     "ability_id": "synaptic-linchpin-invasion-fleet-tyranids",

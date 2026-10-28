@@ -104,6 +104,10 @@ func abilityActivateLeaf(m map[string]any, subj string) string {
 	if m["exclusive"] == true {
 		excl = " (and no other option is)"
 	}
+	// The option another ability's triggering use selected.
+	if sel, ok := asMap(m["select"]); ok && sel != nil && sel["by"] == "event" {
+		return "the " + label + " option the triggering use selected is active for " + subj + excl + consumed
+	}
 	if sel, ok := asMap(m["select"]); ok && sel != nil {
 		count := sel["count"]
 		if count == nil {
@@ -147,7 +151,11 @@ func abilityActivateLeaf(m map[string]any, subj string) string {
 		if sel["option_var"] != nil {
 			shared = " (picked once and shared)"
 		}
-		return how + shared + " for " + subj + ", " + join + " any already active" + consumed
+		other := ""
+		if sel["excluding"] == "army-active" {
+			other = ", other than the one active for your army,"
+		}
+		return how + shared + other + " for " + subj + ", " + join + " any already active" + consumed
 	}
 	instead := ""
 	if override, ok := asMap(m["override"]); ok && override != nil {

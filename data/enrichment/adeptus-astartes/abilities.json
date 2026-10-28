@@ -8652,9 +8652,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "stub": true,
     "unit_ids": [
       "lieutenant",
       "lieutenant-in-phobos-armour"
@@ -8663,11 +8662,35 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "ability-activate",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "combat-doctrines-adeptus-astartes",
+        "select": {
+          "by": "event"
+        },
+        "exclusive": true
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "until-next-command-phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "ability",
+        "id": "strategic-acumen-adeptus-astartes"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "CAPTAIN"
+        ]
+      },
+      "optional": true
+    },
+    "source_digest": "98ebe34033d26391eaf311b5bea95b06c8063cdba9fd8af87aadcb088fe082f1"
   },
   {
     "ability_id": "devastator-mastery-adeptus-astartes",

@@ -524,6 +524,12 @@ fn ability_activate(m: &P, subj: &str) -> String {
     } else {
         ""
     };
+    // The option another ability's triggering use selected.
+    if nn(m, "select").is_some_and(|sel| jstr(obj(Some(sel)).get("by")) == "event") {
+        return format!(
+            "the {label} option the triggering use selected is active for {subj}{exclusive}{consumed}"
+        );
+    }
     if let Some(sel) = nn(m, "select") {
         let sel = obj(Some(sel));
         let n = num(sel.get("count"));
@@ -563,7 +569,12 @@ fn ability_activate(m: &P, subj: &str) -> String {
         } else {
             ""
         };
-        return format!("{how}{shared} for {subj}, {join} any already active{consumed}");
+        let other = if jstr(sel.get("excluding")) == "army-active" {
+            ", other than the one active for your army,"
+        } else {
+            ""
+        };
+        return format!("{how}{shared}{other} for {subj}, {join} any already active{consumed}");
     }
     let instead = nn(m, "override")
         .map(|o| {

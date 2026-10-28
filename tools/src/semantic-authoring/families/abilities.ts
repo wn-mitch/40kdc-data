@@ -265,6 +265,22 @@ export const ABILITY_EXTENSIONS: readonly FamilyExtension[] = [
       return { ...result, ignore_consumed: true };
     },
   },
+  {
+    // "When a friendly Captain uses its Strategic Acumen ability, … the selected combat doctrine is active for this unit".
+    family: "ability-activate",
+    version: 5,
+    description: "As the previous version, plus from_event: the option active is the one the triggering use of another ability selected (\"the selected combat doctrine is active for this unit\" after a Strategic Acumen use). It takes no other option form, and replaces the unit's active option.",
+    schema: (previous) => withProperties(previous, { from_event: optional({ const: true }) }),
+    normalize: (input, previous) => {
+      if (!("from_event" in input)) return previous(input);
+      const { from_event: fromEvent, ...rest } = input;
+      if (fromEvent !== true) throw new TypeError("ability-activate.from_event is true or omitted.");
+      const result = previous(rest);
+      const forms = ["option", "options", "all_options", "chosen", "choose", "additive", "ignore_consumed"].filter((key) => result[key] !== undefined);
+      if (forms.length) throw new TypeError(`ability-activate.from_event names the triggering use's option; it takes no ${forms.join(" or ")}.`);
+      return { ...result, from_event: true };
+    },
+  },
   STANCE_SELECT_ADDITIVE,
   CHOSEN_OPTION_HOLDER_ANTECEDENT,
   STANCE_CAPACITY_SHARED_OPTIONS,

@@ -130,6 +130,10 @@ def ability_activate(m: dict[str, Any], subj: str) -> str:
     )
     sel = m.get("select")
     exclusive = " (and no other option is)" if m.get("exclusive") is True else ""
+    # The option another ability's triggering use selected.
+    if isinstance(sel, dict) and sel.get("by") == "event":
+        picked = f"the {label} option the triggering use selected"
+        return f"{picked} is active for {subj}{exclusive}{consumed}"
     if sel is not None:
         sel = sel if isinstance(sel, dict) else {}
         count = sel.get("count")
@@ -150,7 +154,9 @@ def ability_activate(m: dict[str, Any], subj: str) -> str:
         join = "in place of" if m.get("exclusive") is True else "in addition to"
         # A bound pick is made once and shared by every unit the surrounding aura or loop reaches.
         shared = " (picked once and shared)" if sel.get("option_var") is not None else ""
-        return f"{how}{shared} for {subj}, {join} any already active{consumed}"
+        army = sel.get("excluding") == "army-active"
+        other = ", other than the one active for your army," if army else ""
+        return f"{how}{shared}{other} for {subj}, {join} any already active{consumed}"
     override = m.get("override")
     instead = ""
     if override is not None:

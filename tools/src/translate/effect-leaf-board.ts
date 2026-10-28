@@ -173,8 +173,10 @@ function endsNearestPhrase(e: P, ctx: Ctx, who: string, moveRef: string): string
     ? (objective.selection_var !== undefined ? "selected objective" : "objective marker")
     // A filter names a plural group ("all enemy units"); the closest one is singular.
     : effectSubject(e.of, ctx).replace(/^(an?|the|all) /, "").replace(" units", " unit").replace(/ units\)/g, ")")}`;
-  const must = e.per === "model" ? `each model in ${who === "it" ? "the unit" : who} must end ${moveRef}` : `${who} must end ${moveRef}`;
-  const instead = e.instead_of === "closest-enemy-unit" ? ", instead of as close as possible to the closest enemy unit" : "";
+  // optional: this end is the unit's choice in place of the closest enemy unit, so either end is legal.
+  const verb = e.optional === true ? "can" : "must";
+  const must = e.per === "model" ? `each model in ${who === "it" ? "the unit" : who} ${verb} end ${moveRef}` : `${who} ${verb} end ${moveRef}`;
+  const instead = e.instead_of !== "closest-enemy-unit" ? "" : e.optional === true ? " instead of the closest enemy unit" : ", instead of as close as possible to the closest enemy unit";
   return e.waives === "closest-enemy-model" ? `${must} either closer to the closest enemy model or ${nearest}` : `${must} ${nearest}${instead}`;
 }
 

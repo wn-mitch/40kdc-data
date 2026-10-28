@@ -1243,8 +1243,9 @@ FromItem: TypeAlias = str
 Select = TypedDict(
     "Select",
     {
-        "by": Literal["roll", "player"],
+        "by": Literal["roll", "player", "event"],
         "count": NotRequired[int],
+        "excluding": NotRequired[Literal["army-active"]],
         "from": NotRequired[list[FromItem]],
         "option_var": NotRequired[str],
     },
@@ -2126,6 +2127,7 @@ class EndsNearest(TypedDict):
     of: UnitRef | Of
     per: NotRequired[Literal["unit", "model"]]
     instead_of: NotRequired[Literal["closest-enemy-unit"]]
+    optional: NotRequired[Literal[True]]
     waives: NotRequired[Literal["closest-enemy-model"]]
 
 

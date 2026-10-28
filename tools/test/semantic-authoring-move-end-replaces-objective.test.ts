@@ -180,16 +180,20 @@ describe("move-end nearest on a selected move (no make-move in the sentence)", (
     ), text)).toMatch(/already ended/u);
   });
 
-  it("refuses an end with no move and no selection that names moves; a move-started trigger does not count", () => {
+  it("refuses an end with no move and no selection that names moves", () => {
     const text = "Your unit must end that move as close as possible to the closest objective marker.";
     expect(errorsOf(placed(text,
       ["must end that move as close as possible to the closest objective marker", "move-end-nearest", { to: "closest-objective-marker" }],
     ), text)).toMatch(/has no move to attach to/u);
+  });
+
+  it("attaches the end to a move-started trigger's move, which has its end still to come", () => {
     const started = "Each time your unit starts a Normal move, it must end that move as close as possible to the closest objective marker.";
-    expect(errorsOf(placed(started,
+    const mechanics = compiled(placed(started,
       ["starts a Normal move", "event", { kind: "move-started", move_types: ["normal"] }],
       ["must end that move as close as possible to the closest objective marker", "move-end-nearest", { to: "closest-objective-marker" }],
-    ), started)).toMatch(/has no move to attach to/u);
+    ), started);
+    expect(mechanics.effect).toEqual({ type: "move-modifier", target: "event-subject", modifier: { applies_to_moves: ["normal"], ends_nearest: { of: { objective: {} } } } });
   });
 });
 
@@ -318,14 +322,23 @@ describe("refusals kept from the design", () => {
   });
 });
 
-describe("a move-end destination in a sentence that says can (optional, refused)", () => {
-  it("refuses the objective end of a sentence with can and no must (the 9858 row 2 shape)", () => {
+describe("a move-end destination in a sentence that says can (optional)", () => {
+  it("marks the objective end optional when it replaces the closest enemy unit (the 9858 row 2 shape)", () => {
     const text = "Your unit can make a Normal move, and can end that move as close as possible to the closest objective marker instead of as close as possible to the closest enemy unit.";
     const list = placed(text,
       ["can make a Normal move", "make-move", { subject: "this-unit", move_type: "normal", distance: "D6" }],
       ["can end that move as close as possible to the closest objective marker", "move-end-nearest", { to: "closest-objective-marker", instead_of: "closest-enemy-unit" }],
     );
-    expect(errorsOf(list, text)).toMatch(/optional/u);
+    expect(JSON.stringify(compiled(list, text))).toContain('"ends_nearest":{"of":{"objective":{}},"instead_of":"closest-enemy-unit","optional":true}');
+  });
+
+  it("refuses an optional end that replaces nothing: no optional form without instead_of", () => {
+    const text = "Your unit can make a Normal move, and can end that move as close as possible to the closest objective marker.";
+    const list = placed(text,
+      ["can make a Normal move", "make-move", { subject: "this-unit", move_type: "normal", distance: "D6" }],
+      ["can end that move as close as possible to the closest objective marker", "move-end-nearest", { to: "closest-objective-marker" }],
+    );
+    expect(errorsOf(list, text)).toMatch(/only one that replaces the closest enemy unit/u);
   });
 
   it("compiles the same destination in a sentence with must (the 4210 shape)", () => {

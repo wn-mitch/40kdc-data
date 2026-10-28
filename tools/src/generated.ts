@@ -2702,7 +2702,7 @@ export interface PlacementRegion {
   wholly?: true;
 }
 /**
- * Where a move must end: as close as possible to the closest unit matching `of`, or to the closest objective matching `of.objective` (`{objective: {}}` is any objective marker; `{objective: {selection_var}}` is the objective a select-objective bound). per: model applies the end to each model of the unit. instead_of: closest-enemy-unit names the enemy unit the move need not end closer to. waives: closest-enemy-model lets the unit end without being closer to the closest enemy model when it does end as close as possible to `of` (either end is legal); it is a unit-only form.
+ * Where a move must end: as close as possible to the closest unit matching `of`, or to the closest objective matching `of.objective` (`{objective: {}}` is any objective marker; `{objective: {selection_var}}` is the objective a select-objective bound). per: model applies the end to each model of the unit. instead_of: closest-enemy-unit names the enemy unit the move need not end closer to. optional (only with instead_of): the unit can choose this end instead, so either end is legal ("can end that move as close as possible to the closest objective marker instead of the closest enemy unit"). waives: closest-enemy-model lets the unit end without being closer to the closest enemy model when it does end as close as possible to `of` (either end is legal); it is a unit-only form.
  *
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "ends-nearest".
@@ -2715,6 +2715,7 @@ export interface EndsNearest {
       };
   per?: "unit" | "model";
   instead_of?: "closest-enemy-unit";
+  optional?: true;
   waives?: "closest-enemy-model";
 }
 /**
@@ -4668,7 +4669,7 @@ export interface AbilityUsageLimit {
   per?: "army" | "unit" | "model";
 }
 /**
- * [ability] Make a named ability resolve now, or make options of it active: option (one), options (two or more together) or all_options (every one). select: which option is picked now (by a fresh roll, or by the player; count: how many, from: only among these; option_var: the pick is made once and bound under this name, so every unit a surrounding aura or loop applies it to shares it). exclusive: the activated options replace any already active; without it they join them. ignore_consumed: the option may be picked even if a once-per-battle selection already used it. override: the activation resolves with this amount instead of its own.
+ * [ability] Make a named ability resolve now, or make options of it active: option (one), options (two or more together) or all_options (every one). select: which option is picked now (by a fresh roll, by the player, or by event: the option the triggering use of another ability selected, "the selected combat doctrine is active for this unit" after a Strategic Acumen use; excluding: army-active, never the option active for your army; count: how many, from: only among these; option_var: the pick is made once and bound under this name, so every unit a surrounding aura or loop applies it to shares it). exclusive: the activated options replace any already active; without it they join them. ignore_consumed: the option may be picked even if a once-per-battle selection already used it. override: the activation resolves with this amount instead of its own.
  */
 export interface AbilityActivateEffect {
   type: "ability-activate";
@@ -4684,8 +4685,12 @@ export interface AbilityActivateEffect {
     all_options?: true;
     exclusive?: true;
     select?: {
-      by: "roll" | "player";
+      by: "roll" | "player" | "event";
       count?: number;
+      /**
+       * The pick cannot be the option active for your army. It reads a selection made once and fixed for the battle (a faction rule's option picked at the start of the first battle round); an army option that can change mid-battle has no meaning here.
+       */
+      excluding?: "army-active";
       /**
        * @minItems 2
        */
@@ -5281,6 +5286,7 @@ export interface EndsNearest1 {
       };
   per?: "unit" | "model";
   instead_of?: "closest-enemy-unit";
+  optional?: true;
   waives?: "closest-enemy-model";
 }
 /**
@@ -5418,6 +5424,7 @@ export interface EndsNearest2 {
       };
   per?: "unit" | "model";
   instead_of?: "closest-enemy-unit";
+  optional?: true;
   waives?: "closest-enemy-model";
 }
 /**
