@@ -36,9 +36,30 @@ pub(crate) fn onward_to_from(s: String) -> String {
     s
 }
 
-/// Whether an effect protects the unit being attacked (a save, Feel No Pain, damage
-/// reduction, its Save or Toughness): an attack condition on it is the incoming attack.
+/// Whether a modifier aimed at the attacker hinders its attack ("-1 to Hit", "subtract 1 from
+/// Damage", "worsen AP"). A `subtract` on BS, WS, AP, Sv or Ld improves the stat, so it does not.
+fn hinders_attacker(e: &Value) -> bool {
+    let m = e.get("modifier");
+    let op = m.and_then(|m| m.get("operation")).and_then(Value::as_str);
+    let stat = m.and_then(|m| m.get("stat")).and_then(Value::as_str);
+    match e.get("type").and_then(Value::as_str) {
+        Some("roll-modifier") => op == Some("subtract"),
+        Some("stat-modifier") => match op {
+            Some("worsen" | "halve") => true,
+            Some("subtract") => !matches!(stat, Some("BS" | "WS" | "AP" | "Sv" | "Ld")),
+            _ => false,
+        },
+        _ => false,
+    }
+}
+
+/// Whether an effect is resolved from the attacked unit's side: it protects the unit being
+/// attacked (a save, Feel No Pain, damage reduction, its Save or Toughness) or it hinders the
+/// attacker. An attack condition on it is the incoming attack.
 pub fn is_defensive_effect(e: &Value) -> bool {
+    if e.get("target").and_then(Value::as_str) == Some("attacker") && hinders_attacker(e) {
+        return true;
+    }
     match e.get("type").and_then(Value::as_str) {
         Some("invulnerable-save" | "feel-no-pain" | "damage-reduction") => true,
         Some("stat-modifier") => matches!(

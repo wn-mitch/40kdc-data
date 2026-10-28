@@ -54,11 +54,25 @@ function keywordNames(p: P): string {
 /** Leaves that protect the unit being attacked: an attack condition on them is the incoming attack. */
 const DEFENSIVE_LEAVES = new Set(["invulnerable-save", "feel-no-pain", "damage-reduction"]);
 const DEFENSIVE_STATS = new Set(["Sv", "T"]);
+/** Stats a `subtract` improves (a lower roll target or a more negative AP), so subtracting from the attacker's does not hinder it. */
+const LOWER_IS_BETTER_STATS = new Set(["BS", "WS", "AP", "Sv", "Ld"]);
 
-/** Whether an effect protects the unit being attacked (a save, Feel No Pain, damage reduction, its Save or Toughness). */
-export function isDefensiveEffect(e: { type?: string; modifier?: Record<string, unknown> } | undefined): boolean {
+/** Whether a modifier aimed at the attacker hinders its attack ("-1 to Hit", "subtract 1 from Damage", "worsen AP"). */
+function hindersAttacker(e: { type?: string; modifier?: Record<string, unknown> }): boolean {
+  const op = str(e.modifier?.operation);
+  if (e.type === "roll-modifier") return op === "subtract";
+  if (e.type !== "stat-modifier") return false;
+  return op === "worsen" || op === "halve" || (op === "subtract" && !LOWER_IS_BETTER_STATS.has(str(e.modifier?.stat)));
+}
+
+/**
+ * Whether an effect is resolved from the attacked unit's side: it protects the unit being attacked
+ * (a save, Feel No Pain, damage reduction, its Save or Toughness) or it hinders the attacker.
+ */
+export function isDefensiveEffect(e: { type?: string; target?: unknown; modifier?: Record<string, unknown> } | undefined): boolean {
   if (e == null) return false;
   if (DEFENSIVE_LEAVES.has(e.type ?? "")) return true;
+  if (e.target === "attacker" && hindersAttacker(e)) return true;
   return e.type === "stat-modifier" && DEFENSIVE_STATS.has(str(e.modifier?.stat));
 }
 

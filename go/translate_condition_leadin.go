@@ -85,10 +85,38 @@ func mapOrValue(m map[string]any, preferred, fallback string) []any {
 	return values
 }
 
-// isDefensiveEffect reports whether an effect protects the unit being attacked
-// (a save, Feel No Pain, damage reduction, its Save or Toughness): an attack
-// condition on it is the incoming attack.
+// hindersAttacker reports whether a modifier aimed at the attacker hinders its
+// attack ("-1 to Hit", "subtract 1 from Damage", "worsen AP"). A subtract on
+// BS, WS, AP, Sv or Ld improves the stat, so it does not.
+func hindersAttacker(e map[string]any) bool {
+	m := mapOr(e["modifier"])
+	op := m["operation"]
+	switch e["type"] {
+	case "roll-modifier":
+		return op == "subtract"
+	case "stat-modifier":
+		switch op {
+		case "worsen", "halve":
+			return true
+		case "subtract":
+			switch m["stat"] {
+			case "BS", "WS", "AP", "Sv", "Ld":
+				return false
+			}
+			return true
+		}
+	}
+	return false
+}
+
+// isDefensiveEffect reports whether an effect is resolved from the attacked
+// unit's side: it protects the unit being attacked (a save, Feel No Pain,
+// damage reduction, its Save or Toughness) or it hinders the attacker. An
+// attack condition on it is the incoming attack.
 func isDefensiveEffect(e map[string]any) bool {
+	if e["target"] == "attacker" && hindersAttacker(e) {
+		return true
+	}
 	switch e["type"] {
 	case "invulnerable-save", "feel-no-pain", "damage-reduction":
 		return true

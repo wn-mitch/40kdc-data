@@ -125,14 +125,34 @@ def _matches_lead_in(c: Condition, negated: bool) -> str:
 # Leaves that protect the unit being attacked: an attack condition on them is the incoming attack.
 _DEFENSIVE_LEAVES = frozenset({"invulnerable-save", "feel-no-pain", "damage-reduction"})
 _DEFENSIVE_STATS = frozenset({"Sv", "T"})
+# Stats a `subtract` improves (a lower roll target or a more negative AP).
+_LOWER_IS_BETTER_STATS = frozenset({"BS", "WS", "AP", "Sv", "Ld"})
+
+
+def _hinders_attacker(e: dict) -> bool:
+    """Whether a modifier aimed at the attacker hinders its attack ("-1 to Hit",
+    "subtract 1 from Damage", "worsen AP")."""
+    modifier = e.get("modifier")
+    m = modifier if isinstance(modifier, dict) else {}
+    op = m.get("operation")
+    if e.get("type") == "roll-modifier":
+        return op == "subtract"
+    if e.get("type") != "stat-modifier":
+        return False
+    return op in ("worsen", "halve") or (
+        op == "subtract" and m.get("stat") not in _LOWER_IS_BETTER_STATS
+    )
 
 
 def is_defensive_effect(e: object) -> bool:
-    """Whether an effect protects the unit being attacked (a save, Feel No Pain, damage
-    reduction, its Save or Toughness)."""
+    """Whether an effect is resolved from the attacked unit's side: it protects the unit
+    being attacked (a save, Feel No Pain, damage reduction, its Save or Toughness) or it
+    hinders the attacker."""
     if not isinstance(e, dict):
         return False
     if e.get("type") in _DEFENSIVE_LEAVES:
+        return True
+    if e.get("target") == "attacker" and _hinders_attacker(e):
         return True
     modifier = e.get("modifier")
     stat = modifier.get("stat") if isinstance(modifier, dict) else None
