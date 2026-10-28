@@ -15,13 +15,13 @@
   "headline": {
     "lists": 478,
     "parse_failures": 16,
-    "lists_with_violations": 95,
-    "violating_units": 295,
+    "lists_with_violations": 94,
+    "violating_units": 292,
     "warnings_by_code": {
-      "weapon-unresolved": 271,
-      "detachment-unresolved": 129,
+      "weapon-unresolved": 269,
+      "detachment-unresolved": 128,
       "enhancement-unresolved": 114,
-      "loadout-illegal": 97,
+      "loadout-illegal": 94,
       "unit-unresolved": 47,
       "points-mismatch": 36,
       "detachment-points-exceeded": 31,
@@ -31,18 +31,18 @@
       "faction-unresolved": 1
     },
     "violations_by_code": {
-      "exceeds-max": 136,
+      "exceeds-max": 133,
       "invalid-model-count": 117,
       "below-min": 77,
       "swap-conflict": 9
     },
     "grouping_by_outcome": {
-      "grouped": 3216,
+      "grouped": 3220,
       "unit-unresolved": 35,
-      "wargear-unresolved": 156,
+      "wargear-unresolved": 155,
       "single-model": 3513,
       "no-recorded-defaults": 0,
-      "solver-null": 191
+      "solver-null": 188
     },
     "composition_drift_units": 52
   },
@@ -218,10 +218,6 @@
       "count": 3
     },
     {
-      "key": "exceeds-max:jakhals",
-      "count": 3
-    },
-    {
       "key": "exceeds-max:telemon-heavy-dreadnought",
       "count": 3
     },
@@ -355,7 +351,7 @@
         "count": 1
       },
       {
-        "key": "10x Neophyte Hybrids unit,",
+        "key": "10x Neophyte Hybrids unit, 20x Neophyte Hybrids + Acolyte Iconward",
         "count": 1
       },
       {
@@ -364,10 +360,6 @@
       },
       {
         "key": "1995 points total",
-        "count": 1
-      },
-      {
-        "key": "20x Neophyte Hybrids + Acolyte Iconward",
         "count": 1
       },
       {
@@ -981,10 +973,6 @@
         "count": 7
       },
       {
-        "key": "Jakhals",
-        "count": 3
-      },
-      {
         "key": "Telemon Heavy Dreadnought",
         "count": 3
       },
@@ -1055,10 +1043,6 @@
         "count": 2
       },
       {
-        "key": "1x Lord of Contagion",
-        "count": 2
-      },
-      {
         "key": "Aleya",
         "count": 2
       },
@@ -1083,15 +1067,7 @@
         "count": 1
       },
       {
-        "key": "1x Daemon Prince of Nurgle",
-        "count": 1
-      },
-      {
         "key": "1x Defiler",
-        "count": 1
-      },
-      {
-        "key": "1x Tallyman",
         "count": 1
       },
       {
@@ -1108,6 +1084,22 @@
       },
       {
         "key": "Awakened Dynasty",
+        "count": 1
+      },
+      {
+        "key": "Char1: 1x Daemon Prince of Nurgle",
+        "count": 1
+      },
+      {
+        "key": "Char2: 1x Lord of Contagion",
+        "count": 1
+      },
+      {
+        "key": "Char3: 1x Lord of Contagion",
+        "count": 1
+      },
+      {
+        "key": "Char4: 1x Tallyman",
         "count": 1
       },
       {
@@ -1281,7 +1273,7 @@
         "count": 2
       },
       {
-        "key": "Gun Drone,",
+        "key": "Gun Drone, 2x Shield Drone",
         "count": 2
       },
       {
@@ -1345,10 +1337,6 @@
         "count": 1
       },
       {
-        "key": "Excruciator cannon, Heavy reaper autocannon, Heavy reaper autocannon, Shearing claws",
-        "count": 1
-      },
-      {
         "key": "Gauntlets of Ultramar in",
         "count": 1
       },
@@ -1357,15 +1345,11 @@
         "count": 1
       },
       {
-        "key": "Missile Drone,",
+        "key": "Missile Drone, 2x Weapon support system",
         "count": 1
       },
       {
         "key": "Missile Drone, Weapon support system",
-        "count": 1
-      },
-      {
-        "key": "Plague Spitter",
         "count": 1
       },
       {
@@ -1461,10 +1445,6 @@
     },
     {
       "key": "infiltrator-squad",
-      "count": 3
-    },
-    {
-      "key": "jakhals",
       "count": 3
     },
     {

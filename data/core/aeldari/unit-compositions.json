@@ -1004,15 +1004,7 @@
         "base_size_mm": {
           "shape": "round",
           "diameter": 40
-        },
-        "loadout_variants": [
-          {
-            "name": "Serpent’s Scale Platform",
-            "weapon_ids": [
-              "close-combat-weapon"
-            ]
-          }
-        ]
+        }
       }
     ],
     "game_version": {

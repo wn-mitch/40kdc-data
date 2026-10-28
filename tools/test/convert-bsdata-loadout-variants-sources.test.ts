@@ -140,5 +140,32 @@ describe("BSData variant sources", () => {
       expect(projection.compositions[0].models).toEqual(compositions[0].models);
       expect(projection.notes.join()).toContain("committed variants kept");
     });
+
+    it("drops committed variants that cannot field the MFM default loadout", () => {
+      const stale = [{ name: "Trooper", weapon_ids: ["knife"] }];
+      const compositions = [{ unit_id: "troopers", models: [{ name: "Trooper", max: 9, default_weapon_ids: ["gun", "knife"], loadout_variants: stale }] }];
+      const units = [{ id: "troopers", external_refs: [{ namespace: "bsdata", id: "source" }] }];
+      const projection = prepareFactionProjection(units, compositions, [gun], new Map([["source", { id: "source" }]]), []);
+      expect(projection.compositions[0].models[0]).not.toHaveProperty("loadout_variants");
+      expect(projection.notes.join()).toContain("committed variants dropped: no variant holds the MFM default loadout");
+    });
+  });
+
+  it("leaves a size-dependent group cap over every variant of the row to the row's model count", () => {
+    const sized = (members: Node[]): Node =>
+      ({ name: "Brutes", constraints: [limit("max", 1)], selectionEntries: members,
+        modifiers: [{ field: "max-1", type: "set", value: 2, conditions: [{ childId: "veterans", field: "selections", scope: "force", type: "atLeast", value: 1 }] }] });
+    const previous = [{ name: "Brute", loadout_variant_budgets: [{ variant_names: ["Brute w/ Hammer"], count: 1, per_models: 0, scope: "model-row" }] }];
+    const budgetsOf = (members: Node[]): unknown => {
+      const rows: Node[] = [{ name: "Brute", max: 2 }];
+      expect(projectUnit({ selectionEntryGroups: [sized(members)] }, rows, [gun], "brutes", [], new Map(), [1, 2], [], previous)).toEqual([]);
+      return rows[0].loadout_variant_budgets;
+    };
+    expect(budgetsOf([trooper("Brute w/ Hammer", 2), trooper("Brute w/ Axe", 2)])).toBeUndefined();
+    // A group holding only some of the row's variants still caps them.
+    const unit = { selectionEntryGroups: [sized([trooper("Brute w/ Hammer", 2), trooper("Brute w/ Axe", 2)]), { selectionEntries: [trooper("Brute", 2), trooper("Brute w/ Sword", 1)] }] };
+    const rows: Node[] = [{ name: "Brute", max: 2 }];
+    projectUnit(unit, rows, [gun], "brutes", [], new Map(), [1, 2], [], previous);
+    expect(rows[0].loadout_variant_budgets).toContainEqual(previous[0].loadout_variant_budgets[0]);
   });
 });

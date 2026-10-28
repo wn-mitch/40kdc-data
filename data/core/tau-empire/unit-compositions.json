@@ -1106,17 +1106,6 @@
             ],
             "max_count": 3
           }
-        ],
-        "loadout_variant_budgets": [
-          {
-            "variant_names": [
-              "Krootox Rider w/ repeater cannon",
-              "Krootox Rider w/ tanglecannon"
-            ],
-            "count": 3,
-            "per_models": 0,
-            "scope": "model-row"
-          }
         ]
       }
     ],

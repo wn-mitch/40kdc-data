@@ -99,6 +99,7 @@ export const BSDATA_EQUIPMENT_NAMES: Readonly<Record<string, Readonly<Record<str
     "Superkrak missile launcher": "Superkrak Rocket Launcher",
   },
   "hernkyn-pioneers": { "Pan-spectral scanner": "Panspectral Scanner" },
+  "plague-marines": { "Icon of Despair": "Icon of Despair (Aura)" },
   "sisters-novitiate-squad": { "Novitiate autogun": "Autogun", "Novitiate melee weapon": "Novitiate melee weapons" },
   "thunderwolf-cavalry": { "Crushing teeth and claws": "Teeth and Claws" },
 };
@@ -180,6 +181,41 @@ const budgetsFor = (names: string[], forms: readonly CapForm[]): LoadoutVariantB
     ...(form.stepped ? { stepped: true } : {}),
   }));
 
+const sameItems = (left: readonly string[], right: readonly string[]): boolean =>
+  left.length === right.length && [...left].sort().every((id, index) => id === [...right].sort()[index]);
+
+const itemIds = (value: unknown): string[] => typeof value === "string" ? [value] : Array.isArray(value) ? value.flatMap(itemIds) : [];
+
+/**
+ * Why `variants` cannot stand for `row` against the MFM dump, or undefined when they can. The
+ * rows' defaults and the unit's option items are everything the dump lets the unit carry; without
+ * the options or recorded defaults there is no inventory to hold the variants to.
+ */
+function dumpConflict(row: JsonNode, rows: readonly JsonNode[], variants: readonly LoadoutVariant[], wargearOptions?: readonly JsonNode[]): string | undefined {
+  const dumpItems = wargearOptions && rows.some((candidate) => Array.isArray(candidate.default_weapon_ids))
+    ? new Set([
+      ...rows.flatMap((candidate) => itemIds(candidate.default_weapon_ids)),
+      ...wargearOptions.flatMap((option) => [...itemIds(option.replaces), ...itemIds(option.replacement), ...itemIds(option.replacement_choice)]),
+    ])
+    : undefined;
+  // An item the dump never gives the unit is a loadout the live game does not
+  // offer (or a source name resolving to the wrong item).
+  const offDump = [...new Set(variants.flatMap((variant) => variant.weapon_ids))].filter((id) => dumpItems && !dumpItems.has(id));
+  if (offDump.length) return `${offDump.join(", ")} not in the unit's MFM wargear`;
+  // Every model of a full row can keep the MFM default loadout, so some
+  // variant must carry exactly those items with room for the whole row.
+  const defaults = Array.isArray(row.default_weapon_ids) ? itemIds(row.default_weapon_ids) : undefined;
+  const rowMax = typeof row.max === "number" ? row.max : 0;
+  if (defaults && !variants.some((variant) => sameItems(variant.weapon_ids, defaults) && (variant.max_count === undefined || variant.max_count >= rowMax))) {
+    return "no variant holds the MFM default loadout for the full row";
+  }
+  // A peer named for another MFM row (a Soul Weaver beside a Shade Runner) is
+  // that row's model, not an alternative loadout of this one.
+  const ownRowOf = variants.map((variant) => variant.name)
+    .filter((name) => rows.some((other) => other !== row && normModelName(str(other.name) ?? "") === normModelName(name)));
+  return ownRowOf.length ? `${ownRowOf.join(", ")} named for another MFM row` : undefined;
+}
+
 /** Copies of source entry `target` in one alternative's equipment. */
 const copiesOf = (links: readonly JsonNode[], target: string): number =>
   links.filter((link) => str(link.targetId) === target || str(link.id) === target).length;
@@ -208,7 +244,7 @@ export function projectUnit(
     /** Families that declare each variant name. */
     sources: Map<string, Set<number>>;
     /** Group-level budgets with the family whose constraint they project. */
-    groupBudgets: { budget: LoadoutVariantBudget; family: number }[];
+    groupBudgets: { budget: LoadoutVariantBudget; family: number; sizedOver?: string[] }[];
     /** Each variant's source equipment, for count rules on equipment entries. */
     links: Map<string, JsonNode[]>;
     /** Variant names by source peer id, and peer pools to resolve against them. */
@@ -242,8 +278,6 @@ export function projectUnit(
   // pick is one dump menu: the dump's limited set owns its duplicate limits even
   // where the summed budget leaves the item out because another model type also
   // takes it (the Aspiring Champion's own plasma pistol).
-  const sameItems = (left: readonly string[], right: readonly string[]): boolean =>
-    left.length === right.length && [...left].sort().every((id, index) => id === [...right].sort()[index]);
   const menuGoverned = (rowBase: string, items: readonly string[]): boolean =>
     (wargearOptions ?? []).some((option) => {
       const modelName = str((option.model_constraint as JsonNode | null | undefined)?.model_name);
@@ -336,7 +370,8 @@ export function projectUnit(
     if (ownNames.length >= 2) {
       const groupCap = projectCap(group, sizes, rules);
       let groupBudgets = groupCap && !groupCap.fallback ? budgetsFor(ownNames, groupCap.forms) : [projectBudget(group, ownNames)].filter((b): b is LoadoutVariantBudget => !!b);
-      if (groupCap?.fallback && arr(group.modifiers).some((m) => m.field !== "error")) {
+      const sized = !!groupCap?.fallback && arr(group.modifiers).some((m) => m.field !== "error");
+      if (sized) {
         const kept = previousBudgets(projected.rowName, ownNames);
         if (kept.length) groupBudgets = kept;
         noted(`${str(group.name) ?? "peer group"}: size-dependent cap kept at its ${kept.length ? "committed" : "static"} value`);
@@ -345,7 +380,9 @@ export function projectUnit(
       // weapons team: the gunner and the loader) fields every one of them.
       const fielded = family.own.reduce((sum, peer) => sum + (constraint(peer, "min") ?? 0), 0);
       if (family.own.every((peer) => (constraint(peer, "min") ?? 0) > 0)) groupBudgets = groupBudgets.map((budget) => ({ ...budget, count: budget.count * fielded }));
-      for (const budget of groupBudgets) bucket.groupBudgets.push({ budget, family: familyIndex });
+      // A flat count standing in for a size-dependent cap no ratio reproduces.
+      const flatStandIn = sized && groupBudgets.every((budget) => budget.per_models === 0);
+      for (const budget of groupBudgets) bucket.groupBudgets.push({ budget, family: familyIndex, ...(flatStandIn ? { sizedOver: ownNames } : {}) });
     }
     for (const [name, value] of links) bucket.links.set(name, value);
     for (const [id, names] of peerNames) bucket.peerNames.set(id, names);
@@ -372,16 +409,6 @@ export function projectUnit(
     grouped.set(base, bucket);
   }
   const targets = [...new Set(rules.map((rule) => rule.target))].filter((target) => !peerIds.has(target));
-  // The MFM rows' defaults and the unit's option items are everything the dump
-  // lets the unit carry; without the options or recorded defaults there is no
-  // inventory to hold a projection to.
-  const itemIds = (value: unknown): string[] => typeof value === "string" ? [value] : Array.isArray(value) ? value.flatMap(itemIds) : [];
-  const dumpItems = wargearOptions && rows.some((row) => Array.isArray(row.default_weapon_ids))
-    ? new Set([
-      ...rows.flatMap((row) => itemIds(row.default_weapon_ids)),
-      ...wargearOptions.flatMap((option) => [...itemIds(option.replaces), ...itemIds(option.replacement), ...itemIds(option.replacement_choice)]),
-    ])
-    : undefined;
   for (const [base, projected] of grouped) {
     if (incompleteRows.has(base) || !projected.variants.length) continue;
     const row = rows.find((candidate) => str(candidate.name)?.toLocaleLowerCase("en") === projected.rowName.toLocaleLowerCase("en"))
@@ -390,32 +417,19 @@ export function projectUnit(
     // Same-named rows each record their own default loadout (a miniature the MFM pass split
     // by default group); whole-loadout variants for the name cannot belong to one of them.
     if (rows.filter((candidate) => str(candidate.name) === str(row.name)).length > 1) continue;
-    // A variant carrying an item the dump never gives the unit is a loadout the
-    // live game does not offer (or a source name resolving to the wrong item),
-    // so the row keeps its committed variants.
-    const offDump = [...new Set(projected.variants.flatMap((variant) => variant.weapon_ids))].filter((id) => dumpItems && !dumpItems.has(id));
-    // Every model of a full row can keep the MFM default loadout, so some
-    // variant must carry exactly those items with room for the whole row.
-    const defaults = Array.isArray(row.default_weapon_ids) ? itemIds(row.default_weapon_ids) : undefined;
-    const rowMax = typeof row.max === "number" ? row.max : 0;
-    const holdsDefault = !defaults || projected.variants.some((variant) =>
-      sameItems(variant.weapon_ids, defaults) && (variant.max_count === undefined || variant.max_count >= rowMax));
-    // A peer named for another MFM row (a Soul Weaver beside a Shade Runner) is
-    // that row's model, not an alternative loadout of this one.
-    const ownRowOf = projected.variants.map((variant) => variant.name)
-      .filter((name) => rows.some((other) => other !== row && normModelName(str(other.name) ?? "") === normModelName(name)));
-    const refusal = offDump.length ? `${offDump.join(", ")} not in the unit's MFM wargear`
-      : !holdsDefault ? "no variant holds the MFM default loadout for the full row"
-      : ownRowOf.length ? `${ownRowOf.join(", ")} named for another MFM row`
-      : undefined;
+    const refusal = dumpConflict(row, rows, projected.variants, wargearOptions);
     if (refusal) {
       noted(`${str(row.name)}: not projected: ${refusal}`);
       continue;
     }
     // A group's cap counts only the selections made through that group. A
     // variant another family also declares is indistinguishable once merged,
-    // so the group cap cannot charge it.
-    for (const { budget, family } of projected.groupBudgets) {
+    // so the group cap cannot charge it. A flat stand-in for a size-dependent
+    // group cap over every variant of the row is the row's model count, which
+    // its own min/max and tiers bound (two Dishonoured in twenty Jakhals,
+    // whatever they carry).
+    for (const { budget, family, sizedOver } of projected.groupBudgets) {
+      if (sizedOver && projected.variants.every((variant) => sizedOver.includes(variant.name))) continue;
       const names = budget.variant_names.filter((name) => [...(projected.sources.get(name) ?? [])].every((source) => source === family));
       if (names.length) projected.budgets.push({ ...budget, variant_names: names });
     }
@@ -510,12 +524,20 @@ export function prepareFactionProjection(
     projectedVariants += variantCount;
   }
   // A row the source no longer projects onto (its peers renamed or removed
-  // upstream, or a projection refused) keeps its committed variants.
+  // upstream, or a projection refused) keeps its committed variants unless they
+  // cannot field the row the dump describes; then its MFM defaults and options
+  // govern it. An item outside the MFM wargear is left to the wargear pass,
+  // which owns the unit's weapon list that still names it.
   for (const [unitIndex, composition] of projected.entries()) {
     const committed = arr(compositions[unitIndex]?.models);
     for (const [index, row] of arr(composition.models).entries()) {
       const kept = committed[index];
       if (row.loadout_variants !== undefined || !kept?.loadout_variants) continue;
+      const conflict = dumpConflict(row, arr(composition.models), arr(kept.loadout_variants) as unknown as LoadoutVariant[]);
+      if (conflict) {
+        notes.push(`${str(composition.unit_id)}: ${str(row.name)}: committed variants dropped: ${conflict}`);
+        continue;
+      }
       row.loadout_variants = structuredClone(kept.loadout_variants);
       if (kept.loadout_variant_budgets) row.loadout_variant_budgets = structuredClone(kept.loadout_variant_budgets);
       notes.push(`${str(composition.unit_id)}: ${str(row.name)}: committed variants kept; no source projection replaces them`);

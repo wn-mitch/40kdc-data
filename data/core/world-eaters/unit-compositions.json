@@ -275,16 +275,6 @@
             ],
             "max_count": 2
           }
-        ],
-        "loadout_variant_budgets": [
-          {
-            "variant_names": [
-              "Dishonoured w/ skullsmasher and mangler"
-            ],
-            "count": 1,
-            "per_models": 0,
-            "scope": "model-row"
-          }
         ]
       },
       {

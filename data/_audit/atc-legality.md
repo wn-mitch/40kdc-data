@@ -17,17 +17,17 @@ rejects.
 - `examples/atc-viewer/src/data/atc-2026.json`: 248 lists (0 without text skipped)
 - `examples/atc-viewer/src/data/atc-5s.json`: 230 lists (2 without text skipped)
 - **Lists**: 478, parse failures: 16
-- **Legality**: 295 violating units across 95 lists
+- **Legality**: 292 violating units across 94 lists
 - **Composition drift**: 52 dataset units
 
 ### Warnings by code
 
 | code | count |
 |---|--:|
-| `weapon-unresolved` | 271 |
-| `detachment-unresolved` | 129 |
+| `weapon-unresolved` | 269 |
+| `detachment-unresolved` | 128 |
 | `enhancement-unresolved` | 114 |
-| `loadout-illegal` | 97 |
+| `loadout-illegal` | 94 |
 | `unit-unresolved` | 47 |
 | `points-mismatch` | 36 |
 | `detachment-points-exceeded` | 31 |
@@ -40,12 +40,12 @@ rejects.
 
 | outcome | count |
 |---|--:|
-| `grouped` | 3216 |
+| `grouped` | 3220 |
 | `unit-unresolved` | 35 |
-| `wargear-unresolved` | 156 |
+| `wargear-unresolved` | 155 |
 | `single-model` | 3513 |
 | `no-recorded-defaults` | 0 |
-| `solver-null` | 191 |
+| `solver-null` | 188 |
 
 ## Legality violations (ranked `code:unitId`)
 
@@ -69,7 +69,6 @@ rejects.
 | `exceeds-max:spectrus-kill-team` | 6 |
 | `exceeds-max:reiver-squad` | 5 |
 | `exceeds-max:fortis-kill-team` | 3 |
-| `exceeds-max:jakhals` | 3 |
 | `exceeds-max:telemon-heavy-dreadnought` | 3 |
 | `below-min:grey-hunters` | 2 |
 | `exceeds-max:crusader-squad` | 2 |
@@ -108,7 +107,6 @@ partition solver could not decompose — bad `replaces` data or genuinely illega
 | `eradicator-squad-with-heavy-bolters` | 3 |
 | `flash-gitz` | 3 |
 | `infiltrator-squad` | 3 |
-| `jakhals` | 3 |
 | `wolf-scouts` | 3 |
 | `deathwatch-veterans` | 2 |
 | `indomitor-kill-team` | 2 |
@@ -149,10 +147,9 @@ partition solver could not decompose — bad `replaces` data or genuinely illega
 | `Talons of the Emperor` | 2 |
 | `(Running Take and Hold)` | 1 |
 | `++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++` | 1 |
-| `10x Neophyte Hybrids unit,` | 1 |
+| `10x Neophyte Hybrids unit, 20x Neophyte Hybrids + Acolyte Iconward` | 1 |
 | `10x Purestrain Genestealers + Patriarch, &` | 1 |
 | `1995 points total` | 1 |
-| `20x Neophyte Hybrids + Acolyte Iconward` | 1 |
 | `5x Purestrain Genestealers` | 1 |
 | `All battle wagons and kill rig have boarding ramps unit enhancement` | 1 |
 | `Ambush Predators and Vanguard Onslaught,` | 1 |
@@ -193,7 +190,8 @@ partition solver could not decompose — bad `replaces` data or genuinely illega
 | `Firestorm Assault Force and Librarius Conclave` | 1 |
 | `Forgefather’s Seekers and Subversion Assets` | 1 |
 | `Freebooter Krew and More Dakka!` | 1 |
-| … 42 more | |
+| `Freebooter Krew and Rollin' Deff` | 1 |
+| … 41 more | |
 
 ## Unresolved names: `disposition-unresolved`
 
@@ -287,7 +285,6 @@ partition solver could not decompose — bad `replaces` data or genuinely illega
 | `Storm Speeder Hammerstrike` | 17 |
 | `Death Company Marines with Jump Packs` | 15 |
 | `Impulsor` | 7 |
-| `Jakhals` | 3 |
 | `Telemon Heavy Dreadnought` | 3 |
 | `Grey Hunters` | 2 |
 | `Indomitor Kill Team` | 2 |
@@ -310,20 +307,21 @@ partition solver could not decompose — bad `replaces` data or genuinely illega
 | `10x Poxwalkers` | 2 |
 | `1x Foetid Bloat-drone` | 2 |
 | `1x Foetid Bloat-drone with heavy blight launcher` | 2 |
-| `1x Lord of Contagion` | 2 |
 | `Aleya` | 2 |
 | `Burna Boyz` | 2 |
 | `Centurion Devastator Squad` | 2 |
 | `Rukkatrukk Squigbuggy` | 2 |
 | `Suppressor Squad` | 2 |
 | `10x Inquisitorial Agents` | 1 |
-| `1x Daemon Prince of Nurgle` | 1 |
 | `1x Defiler` | 1 |
-| `1x Tallyman` | 1 |
 | `2x Chaos Spawn` | 1 |
 | `3x Deathshroud Terminators` | 1 |
 | `6x Deathshroud Terminators` | 1 |
 | `Awakened Dynasty` | 1 |
+| `Char1: 1x Daemon Prince of Nurgle` | 1 |
+| `Char2: 1x Lord of Contagion` | 1 |
+| `Char3: 1x Lord of Contagion` | 1 |
+| `Char4: 1x Tallyman` | 1 |
 | `CHARACTERS` | 1 |
 | `Commander in Enforcer Bdattlesuit` | 1 |
 | `Devastator Squad` | 1 |
@@ -371,7 +369,7 @@ partition solver could not decompose — bad `replaces` data or genuinely illega
 | `Centurion fists` | 2 |
 | `Centurion missile launcher` | 2 |
 | `Cuttin’ flames` | 2 |
-| `Gun Drone,` | 2 |
+| `Gun Drone, 2x Shield Drone` | 2 |
 | `Hot-shot laspistol (ORANGE)` | 2 |
 | `Hot-shot marksman rifle (RED)` | 2 |
 | `Melta Mine (ORANGE/same guy as pistol)` | 2 |
@@ -387,19 +385,18 @@ partition solver could not decompose — bad `replaces` data or genuinely illega
 | `Agent firearm` | 1 |
 | `allarus` | 1 |
 | `Chirugeon's tools` | 1 |
-| `Excruciator cannon, Heavy reaper autocannon, Heavy reaper autocannon, Shearing claws` | 1 |
 | `Gauntlets of Ultramar in` | 1 |
 | `Kustom shokk rifle` | 1 |
-| `Missile Drone,` | 1 |
+| `Missile Drone, 2x Weapon support system` | 1 |
 | `Missile Drone, Weapon support system` | 1 |
-| `Plague Spitter` | 1 |
 | `Prosperine kopesh` | 1 |
 | `Purgation’s hand [+20 points]` | 1 |
 | `Questoris heavy stubber, Rapid-fire battle cannon, Reaper chainsword and Stormspear rocket pod` | 1 |
 | `Shieldbreaker missile launchers, 2 Twin meltaguns, Archeotech autoloaders [+25 points], Plasma decimator, Titanic feet, Twin siegebreaker cannon and Volcano lance` | 1 |
 | `Shuriken Pistol Enhancement: Camouflaged Snipers` | 1 |
 | `Tempest bolter` | 1 |
-| … 2 more | |
+| `Terropulse missiles` | 1 |
+| `Trygon Character upgrade` | 1 |
 
 ## Composition drift (dataset-wide)
 
