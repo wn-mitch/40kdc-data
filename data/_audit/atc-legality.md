@@ -17,7 +17,7 @@ rejects.
 - `examples/atc-viewer/src/data/atc-2026.json`: 248 lists (0 without text skipped)
 - `examples/atc-viewer/src/data/atc-5s.json`: 230 lists (2 without text skipped)
 - **Lists**: 478, parse failures: 16
-- **Legality**: 292 violating units across 94 lists
+- **Legality**: 291 violating units across 94 lists
 - **Composition drift**: 52 dataset units
 
 ### Warnings by code
@@ -27,7 +27,7 @@ rejects.
 | `weapon-unresolved` | 269 |
 | `detachment-unresolved` | 128 |
 | `enhancement-unresolved` | 114 |
-| `loadout-illegal` | 94 |
+| `loadout-illegal` | 93 |
 | `unit-unresolved` | 47 |
 | `points-mismatch` | 36 |
 | `detachment-points-exceeded` | 31 |
@@ -71,7 +71,6 @@ rejects.
 | `exceeds-max:fortis-kill-team` | 3 |
 | `exceeds-max:telemon-heavy-dreadnought` | 3 |
 | `below-min:grey-hunters` | 2 |
-| `exceeds-max:crusader-squad` | 2 |
 | `exceeds-max:indomitor-kill-team` | 2 |
 | `exceeds-max:khorne-berzerkers` | 2 |
 | `exceeds-max:rhino` | 2 |
@@ -291,7 +290,6 @@ partition solver could not decompose — bad `replaces` data or genuinely illega
 | `Khorne Berzerkers` | 2 |
 | `Rhino` | 2 |
 | `Spectrus Kill Team` | 2 |
-| `Crusader Squad` | 1 |
 | `Fortis Kill Team` | 1 |
 | `Prince Yriel` | 1 |
 | `Sword Brethren Squad` | 1 |

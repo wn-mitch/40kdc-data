@@ -8,11 +8,11 @@ import { REPO_ROOT } from "./mfm/repo-files.js";
 import { normModelName } from "./convert-bsdata-wargear.js";
 import { JjRevisionTree, parseRevision, resolveLinks } from "./mfm/bsdata-backstop.js";
 import { arr, children, constraint, constraints, fixedEquipment, str, type EquipmentAlternative, type JsonNode } from "./bsdata-equipment.js";
+import { dumpConflict, restoreCommittedRows, sameItems, type LoadoutVariant } from "./bsdata-variant-dump.js";
 import { compositionSizes, errorCountRules, evaluateMaxCap, fitCap, minCap, ruleCap, type CapForm, type CountRule, type SizeCap } from "./bsdata-caps.js";
 
 export type { JsonNode } from "./bsdata-equipment.js";
 
-export interface LoadoutVariant { name: string; weapon_ids: string[]; max_count?: number }
 export interface LoadoutVariantBudget { variant_names: string[]; count: number; per_models: number; scope: "unit" | "model-row"; stepped?: boolean }
 export interface VariantIssue { unit: string; model_row: string; variant: string; item: string; reason: string }
 
@@ -180,41 +180,6 @@ const budgetsFor = (names: string[], forms: readonly CapForm[]): LoadoutVariantB
     scope: form.per_models === 0 ? "model-row" : "unit",
     ...(form.stepped ? { stepped: true } : {}),
   }));
-
-const sameItems = (left: readonly string[], right: readonly string[]): boolean =>
-  left.length === right.length && [...left].sort().every((id, index) => id === [...right].sort()[index]);
-
-const itemIds = (value: unknown): string[] => typeof value === "string" ? [value] : Array.isArray(value) ? value.flatMap(itemIds) : [];
-
-/**
- * Why `variants` cannot stand for `row` against the MFM dump, or undefined when they can. The
- * rows' defaults and the unit's option items are everything the dump lets the unit carry; without
- * the options or recorded defaults there is no inventory to hold the variants to.
- */
-function dumpConflict(row: JsonNode, rows: readonly JsonNode[], variants: readonly LoadoutVariant[], wargearOptions?: readonly JsonNode[]): string | undefined {
-  const dumpItems = wargearOptions && rows.some((candidate) => Array.isArray(candidate.default_weapon_ids))
-    ? new Set([
-      ...rows.flatMap((candidate) => itemIds(candidate.default_weapon_ids)),
-      ...wargearOptions.flatMap((option) => [...itemIds(option.replaces), ...itemIds(option.replacement), ...itemIds(option.replacement_choice)]),
-    ])
-    : undefined;
-  // An item the dump never gives the unit is a loadout the live game does not
-  // offer (or a source name resolving to the wrong item).
-  const offDump = [...new Set(variants.flatMap((variant) => variant.weapon_ids))].filter((id) => dumpItems && !dumpItems.has(id));
-  if (offDump.length) return `${offDump.join(", ")} not in the unit's MFM wargear`;
-  // Every model of a full row can keep the MFM default loadout, so some
-  // variant must carry exactly those items with room for the whole row.
-  const defaults = Array.isArray(row.default_weapon_ids) ? itemIds(row.default_weapon_ids) : undefined;
-  const rowMax = typeof row.max === "number" ? row.max : 0;
-  if (defaults && !variants.some((variant) => sameItems(variant.weapon_ids, defaults) && (variant.max_count === undefined || variant.max_count >= rowMax))) {
-    return "no variant holds the MFM default loadout for the full row";
-  }
-  // A peer named for another MFM row (a Soul Weaver beside a Shade Runner) is
-  // that row's model, not an alternative loadout of this one.
-  const ownRowOf = variants.map((variant) => variant.name)
-    .filter((name) => rows.some((other) => other !== row && normModelName(str(other.name) ?? "") === normModelName(name)));
-  return ownRowOf.length ? `${ownRowOf.join(", ")} named for another MFM row` : undefined;
-}
 
 /** Copies of source entry `target` in one alternative's equipment. */
 const copiesOf = (links: readonly JsonNode[], target: string): number =>
@@ -490,7 +455,7 @@ export function prepareFactionProjection(
   equipment: JsonNode[],
   sourceNodes: ReadonlyMap<string, JsonNode>,
   wargearOptions: readonly JsonNode[] = [],
-): { compositions: JsonNode[]; issues: VariantIssue[]; notes: string[]; discoveredUnits: number; discoveredVariants: number; projectedUnits: number; projectedVariants: number } {
+): { compositions: JsonNode[]; units?: JsonNode[]; issues: VariantIssue[]; notes: string[]; discoveredUnits: number; discoveredVariants: number; projectedUnits: number; projectedVariants: number } {
   const projected = structuredClone(compositions);
   for (const composition of projected) {
     for (const row of arr(composition.models)) {
@@ -523,27 +488,9 @@ export function prepareFactionProjection(
     if (variantCount > 0) projectedUnits += 1;
     projectedVariants += variantCount;
   }
-  // A row the source no longer projects onto (its peers renamed or removed
-  // upstream, or a projection refused) keeps its committed variants unless they
-  // cannot field the row the dump describes; then its MFM defaults and options
-  // govern it. An item outside the MFM wargear is left to the wargear pass,
-  // which owns the unit's weapon list that still names it.
-  for (const [unitIndex, composition] of projected.entries()) {
-    const committed = arr(compositions[unitIndex]?.models);
-    for (const [index, row] of arr(composition.models).entries()) {
-      const kept = committed[index];
-      if (row.loadout_variants !== undefined || !kept?.loadout_variants) continue;
-      const conflict = dumpConflict(row, arr(composition.models), arr(kept.loadout_variants) as unknown as LoadoutVariant[]);
-      if (conflict) {
-        notes.push(`${str(composition.unit_id)}: ${str(row.name)}: committed variants dropped: ${conflict}`);
-        continue;
-      }
-      row.loadout_variants = structuredClone(kept.loadout_variants);
-      if (kept.loadout_variant_budgets) row.loadout_variant_budgets = structuredClone(kept.loadout_variant_budgets);
-      notes.push(`${str(composition.unit_id)}: ${str(row.name)}: committed variants kept; no source projection replaces them`);
-    }
-  }
-  return { compositions: projected, issues, notes, discoveredUnits, discoveredVariants, projectedUnits, projectedVariants };
+  const projectedUnitsList = structuredClone(units);
+  const unitsChanged = restoreCommittedRows(projected, compositions, projectedUnitsList, wargearOptions, notes);
+  return { compositions: projected, ...(unitsChanged ? { units: projectedUnitsList } : {}), issues, notes, discoveredUnits, discoveredVariants, projectedUnits, projectedVariants };
 }
 
 export async function run(argv: readonly string[]): Promise<void> {
@@ -594,6 +541,8 @@ export async function run(argv: readonly string[]): Promise<void> {
     const original = fs.readFileSync(compositionsPath, "utf8");
     const text = `${JSON.stringify(projection.compositions, null, 2)}\n`;
     if (text !== original) staged.push({ path: compositionsPath, value: projection.compositions, text });
+    // Variants dropped against the dump take the items only they fielded off the unit's weapon list.
+    if (projection.units) staged.push({ path: path.join(dir, "units.json"), value: projection.units, text: `${JSON.stringify(projection.units, null, 2)}\n` });
     console.log(`[bsdata-loadout-variants] ${faction}: 0 unresolved`);
   }
   console.log(`[bsdata-loadout-variants] discovered ${discoveredVariants} source variants across ${discoveredUnits} units; projected ${projectedVariants} variants across ${projectedUnits} units; ${unresolvedVariants} unresolved`);

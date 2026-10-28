@@ -16,12 +16,12 @@
     "lists": 478,
     "parse_failures": 16,
     "lists_with_violations": 94,
-    "violating_units": 292,
+    "violating_units": 291,
     "warnings_by_code": {
       "weapon-unresolved": 269,
       "detachment-unresolved": 128,
       "enhancement-unresolved": 114,
-      "loadout-illegal": 94,
+      "loadout-illegal": 93,
       "unit-unresolved": 47,
       "points-mismatch": 36,
       "detachment-points-exceeded": 31,
@@ -31,7 +31,7 @@
       "faction-unresolved": 1
     },
     "violations_by_code": {
-      "exceeds-max": 133,
+      "exceeds-max": 131,
       "invalid-model-count": 117,
       "below-min": 77,
       "swap-conflict": 9
@@ -223,10 +223,6 @@
     },
     {
       "key": "below-min:grey-hunters",
-      "count": 2
-    },
-    {
-      "key": "exceeds-max:crusader-squad",
       "count": 2
     },
     {
@@ -995,10 +991,6 @@
       {
         "key": "Spectrus Kill Team",
         "count": 2
-      },
-      {
-        "key": "Crusader Squad",
-        "count": 1
       },
       {
         "key": "Fortis Kill Team",

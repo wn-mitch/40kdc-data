@@ -148,6 +148,18 @@ describe("BSData variant sources", () => {
       const projection = prepareFactionProjection(units, compositions, [gun], new Map([["source", { id: "source" }]]), []);
       expect(projection.compositions[0].models[0]).not.toHaveProperty("loadout_variants");
       expect(projection.notes.join()).toContain("committed variants dropped: no variant holds the MFM default loadout");
+      // Its items stay reachable through the defaults, so the weapon list is untouched.
+      expect(projection.units).toBeUndefined();
+    });
+
+    it("takes an item only dropped variants fielded off the unit's weapon list", () => {
+      const stale = [{ name: "Trooper", weapon_ids: ["gun"] }, { name: "Trooper w/ Laser", weapon_ids: ["laser"] }];
+      const compositions = [{ unit_id: "troopers", models: [{ name: "Trooper", max: 9, default_weapon_ids: ["gun"], loadout_variants: stale }] }];
+      const units = [{ id: "troopers", weapon_ids: ["gun", "laser"], external_refs: [{ namespace: "bsdata", id: "source" }] }];
+      const projection = prepareFactionProjection(units, compositions, [gun], new Map([["source", { id: "source" }]]), []);
+      expect(projection.notes.join()).toContain("committed variants dropped: laser not in the unit's MFM wargear");
+      expect(projection.units?.[0].weapon_ids).toEqual(["gun"]);
+      expect(units[0].weapon_ids).toEqual(["gun", "laser"]);
     });
   });
 

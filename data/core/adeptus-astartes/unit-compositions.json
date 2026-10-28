@@ -306,36 +306,7 @@
         "base_size_mm": {
           "shape": "round",
           "diameter": 40
-        },
-        "loadout_variants": [
-          {
-            "name": "Neophyte w/ Firearm",
-            "weapon_ids": [
-              "close-combat-weapon",
-              "neophyte-firearm"
-            ],
-            "max_count": 8
-          },
-          {
-            "name": "Neophyte w/ Astartes Chainsword",
-            "weapon_ids": [
-              "bolt-pistol",
-              "neophyte-chainsword"
-            ],
-            "max_count": 8
-          }
-        ],
-        "loadout_variant_budgets": [
-          {
-            "variant_names": [
-              "Neophyte w/ Firearm",
-              "Neophyte w/ Astartes Chainsword"
-            ],
-            "count": 8,
-            "per_models": 0,
-            "scope": "model-row"
-          }
-        ]
+        }
       }
     ],
     "game_version": {
