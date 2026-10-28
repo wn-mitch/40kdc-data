@@ -20,6 +20,7 @@ import { CompileError } from "./compile-error.js";
 import type { KeywordOption } from "./compile-keyword-menu.js";
 import { namedAbilityStateEffect } from "./compile-named-ability-states.js";
 import { oathEffect } from "./compile-oath.js";
+import { compileNamedRegionProducer } from "./compile-named-region.js";
 import { abilityUseEffect } from "./compile-ability-use.js";
 
 export { CompileError };
@@ -677,6 +678,8 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
         : { within: { inches: closed(leaf, "within") } };
       return { type: "counts-as", target: target(leaf.parameters.subject), modifier };
     }
+    case "named-region-producer":
+      return compileNamedRegionProducer(leaf);
     case "rule-state":
       return {
         type: "rule-state", target: target(leaf.parameters.subject),

@@ -4015,8 +4015,8 @@ class NamedObjectiveState(TypedDict):
 class NamedRegionState(TypedDict):
     region_ref: NamedRegionRef
     producer: NamedRegionProducer
-    consumer: NamedRegionConsumer
-    branch_precedence: Literal["qualified-replaces-default"]
+    consumer: NotRequired[NamedRegionConsumer]
+    branch_precedence: NotRequired[Literal["qualified-replaces-default"]]
 
 
 class Consumer(TypedDict):

@@ -143,3 +143,66 @@ describe("menu-action eligibility in source order", () => {
     expect(() => normalizeFingerprintParameters("event", moment, 18)).toThrow();
   });
 });
+
+describe("menu actions led by heading markers", () => {
+  // Fabricated wording: a "Quick Step" heading, then its trigger sentence, its repeat allowance and its effect sentence.
+  const menuLeaves = () => [
+    opener(),
+    leaf("EVENT", "event", { kind: "round-ended" }, "B", 9),
+    leaf("EFFECT", "resource-spend", { pool: "battle-focus-pool", amount: "all" }, "B", 3),
+    leaf("EVENT", "menu-action", { action_id: "quick-step", label: "Quick Step", cost_amount: 1 }, "C", 2),
+    leaf("EVENT", "event", { kind: "selected", owner: "friendly", to: "move", move_types: ["normal"] }, "D", 9),
+    leaf("RESTRICTION", "usage-limit", { frequency: "once-per-phase", per: "unit" }, "E", 5),
+    leaf("DURATION", "duration", { endpoint: "end-of-phase" }, "F", 5),
+    leaf("EFFECT", "characteristic-modifier", { subject: "this-unit", characteristics: ["M"], operation: "add", value: 2, weapon_type: "all" }, "F", 3),
+    leaf("EVENT", "menu-action", { action_id: "duck-back", label: "Duck Back", cost_amount: 1, duration: "immediate" }, "G", 2),
+    leaf("CONDITION", "phase-window", { phase: "shooting", turn: "opponent" }, "H", 2),
+    leaf("EVENT", "event", { kind: "attacks-resolved", owner: "enemy", action_kind: "shoot" }, "H", 9),
+    leaf("EVENT", "select-unit", { scope: "friendly", distance: "any", visible: false }, "I"),
+    leaf("EFFECT", "make-move", { subject: "this-unit", move_type: "normal", distance: "D6+1" }, "I"),
+  ];
+
+  it("reads each action across its sentences, folds its duration and repeat allowance, and gives the round-end spend back", () => {
+    const result = compileLeaves(menuLeaves());
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.mechanics.effect).toEqual({
+      type: "sequence",
+      steps: [
+        {
+          type: "resource-action-menu", menu_id: "m", pool_id: "p",
+          actions: [
+            {
+              id: "quick-step", label: "Quick Step", cost: { pool_id: "p", amount: 1 },
+              when: { event: "selected", subject: { owner: "friendly" }, filter: { move_types: ["normal"], to: "move" } },
+              effect: { type: "stat-modifier", target: "this-unit", modifier: { stat: "M", operation: "add", value: 2 } },
+              duration: "phase", usage: { repeatable_if_different_unit: true },
+            },
+            {
+              id: "duck-back", label: "Duck Back", cost: { pool_id: "p", amount: 1 },
+              when: { event: "attacks-resolved", subject: { owner: "enemy" }, filter: { kind: "shoot" } },
+              effect: { type: "move", target: "this-unit", modifier: { move_type: "normal", distance: "D6+1" } },
+              eligibility: {
+                count: { min: 1, max: 1 },
+                requires: [{ type: "phase-is", parameters: { phase: "shooting" } }, { type: "player-turn-is", parameters: { turn: "opponent-turn" } }],
+              },
+              duration: "resolution",
+            },
+          ],
+        },
+        { type: "ability-part", trigger: { event: "round-ended" }, effect: { type: "resource-spend", target: "this-model", modifier: { pool: "battle-focus-pool", amount: "all" } } },
+      ],
+    });
+  });
+
+  it("refuses a usage limit in an action other than once per phase per unit, and a duration its marker contradicts", () => {
+    const leaves = menuLeaves();
+    leaves[5] = { ...leaves[5]!, parameters: { frequency: "once-per-battle" } };
+    const limited = compileLeaves(leaves);
+    expect(limited.ok ? [] : limited.errors).toEqual([expect.stringContaining("once per phase per unit")]);
+    const contradicted = menuLeaves();
+    contradicted[3] = { ...contradicted[3]!, parameters: { ...contradicted[3]!.parameters, duration: "until-end-of-turn" } };
+    const twice = compileLeaves(contradicted);
+    expect(twice.ok ? [] : twice.errors).toEqual([expect.stringContaining("but its duration leaf says phase")]);
+  });
+});

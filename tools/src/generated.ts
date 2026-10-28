@@ -4111,14 +4111,16 @@ export interface NamedRegionStateEffect {
   modifier: NamedRegionState;
 }
 /**
+ * A named region an army rule produces and, with a consumer, what it does for units inside it. Without a consumer it only declares the region, for other rules to name through rule_region; branch_precedence then has no branches to order.
+ *
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "named-region-state".
  */
 export interface NamedRegionState {
   region_ref: NamedRegionRef;
   producer: NamedRegionProducer;
-  consumer: NamedRegionConsumer;
-  branch_precedence: "qualified-replaces-default";
+  consumer?: NamedRegionConsumer;
+  branch_precedence?: "qualified-replaces-default";
 }
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema

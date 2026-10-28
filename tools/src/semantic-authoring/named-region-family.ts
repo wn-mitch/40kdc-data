@@ -94,6 +94,23 @@ export const NAMED_REGION_FAMILIES: readonly SemanticFamilyDefinition[] = [
       additionalProperties: false,
     },
   },
+  {
+    id: "named-region-producer",
+    version: 1,
+    role: "EFFECT",
+    label: "Declare a named region",
+    description: "\"Certain areas of the battlefield are considered to be within your army's Shadow of Chaos, as follows: …\": declares the named region an army rule produces — its own deployment zone for the battle, extended into no-man's-land and the opponent's deployment zone for a phase once the army holds half that zone's objective markers at its start — with no effect of its own. Other rules name it through in-region's rule-region.",
+    starter: { region_id: "", owner_faction: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["region_id", "owner_faction"],
+      properties: {
+        region_id: { type: "string", pattern: "^[a-z0-9][a-z0-9-]*[a-z0-9]$" },
+        owner_faction: { type: "string", pattern: "^[a-z0-9][a-z0-9-]*[a-z0-9]$" },
+      },
+      additionalProperties: false,
+    },
+  },
 ];
 
 function normalizeBranch(value: unknown, label: string): Record<string, unknown> {
@@ -119,6 +136,13 @@ function normalizeBranch(value: unknown, label: string): Record<string, unknown>
 }
 
 export function normalizeNamedRegionParameters(family: string, input: Record<string, unknown>, _version = 1): Record<string, unknown> | null {
+  if (family === "named-region-producer") {
+    exactKeys(input, ["region_id", "owner_faction"], family);
+    for (const key of ["region_id", "owner_faction"]) {
+      if (typeof input[key] !== "string" || !/^[a-z0-9][a-z0-9-]*[a-z0-9]$/u.test(input[key] as string)) throw new TypeError(`named-region-producer.${key} must be a kebab-case entity id.`);
+    }
+    return { region_id: input.region_id, owner_faction: input.owner_faction };
+  }
   if (family !== "named-region-state") return null;
   const optionalKeys = ["beneficiary_faction", "qualifies_by_keyword", "melee_or_visible_ranged", "proximity_extension"].filter((key) => key in input);
   exactKeys(input, ["region_id", "owner_faction", "behavior", "membership_scope", "beneficiary_operator", "beneficiary_keywords", "default_branch", "qualified_branch", ...optionalKeys], family);

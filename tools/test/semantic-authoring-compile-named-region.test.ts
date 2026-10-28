@@ -221,3 +221,38 @@ describe("Semantic authoring named-region-state compiler", () => {
     expect(result.ok).toBe(false);
   });
 });
+
+describe("named-region-producer", () => {
+  const producerLeaf = (parameters: Record<string, unknown>): CompileLeaf => ({
+    role: "EFFECT", family_id: "named-region-producer", family_version: 1,
+    parameters: normalizeFingerprintParameters("named-region-producer", parameters, 1), start_byte: 0,
+  });
+
+  it("declares the region alone: a schema-valid named-region-state with a producer and no consumer", () => {
+    const result = compileLeaves([producerLeaf({ region_id: "custom-region", owner_faction: "custom-faction" })]);
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    const effect = result.mechanics.effect as NamedRegionStateEffect;
+    expect(effect.type).toBe("named-region-state");
+    expect(effect.modifier).not.toHaveProperty("consumer");
+    expect(effect.modifier).not.toHaveProperty("branch_precedence");
+    expect(effect.modifier.producer).toMatchObject({
+      region_ref: { region_id: "custom-region", owner_faction: "custom-faction" }, mode: "complete", parent_ref: null,
+      baseline: [{ region: { territory: "your-deployment-zone" }, duration: "permanent" }], additive_extensions: [],
+    });
+    expect(effect.modifier.producer.phase_extensions.map((item) => item.region)).toEqual([{ territory: "no-mans-land" }, { territory: "enemy-deployment-zone" }]);
+    expect(effectOk(effect)).toBe(true);
+  });
+
+  it("keeps a consumer and its branch precedence together in the schema", () => {
+    const result = compileLeaves([producerLeaf({ region_id: "custom-region", owner_faction: "custom-faction" })]);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    const effect = structuredClone(result.mechanics.effect) as { modifier: Record<string, unknown> };
+    effect.modifier.branch_precedence = "qualified-replaces-default";
+    expect(effectOk(effect)).toBe(false);
+  });
+
+  it("refuses a region id that is not an entity id", () => {
+    expect(() => normalizeFingerprintParameters("named-region-producer", { region_id: "Shadow", owner_faction: "custom-faction" }, 1)).toThrow();
+  });
+});

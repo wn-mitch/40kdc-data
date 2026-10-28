@@ -164,3 +164,15 @@ export function compileNamedRegionState(leaf: CompileLeaf): { effect: NamedRegio
   const effect: NamedRegionStateEffect & Node = { type: "named-region-state", target: { owner: "friendly" }, modifier };
   return { effect, behavior: closed(leaf, "behavior") as string };
 }
+
+/**
+ * named-region-producer: the region alone, declared for other rules to name (its consumers are
+ * ordinary leaves gated by in-region's rule-region). Its zones are the fixed recipe above.
+ */
+export function compileNamedRegionProducer(leaf: CompileLeaf): Node {
+  const regionRef: NamedRegionRef = { region_id: closed(leaf, "region_id") as string, owner_faction: closed(leaf, "owner_faction") as string };
+  const producer: NamedRegionProducer = {
+    region_ref: structuredClone(regionRef), mode: "complete", parent_ref: null, ...fixedZones({}), additive_extensions: [],
+  };
+  return { type: "named-region-state", target: { owner: "friendly" }, modifier: { region_ref: regionRef, producer } };
+}

@@ -26457,16 +26457,15 @@ pub struct NamedRegionSourceGate {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub range: ::std::option::Option<RangeRef>,
 }
-///`NamedRegionState`
+///A named region an army rule produces and, with a consumer, what it does for units inside it. Without a consumer it only declares the region, for other rules to name through rule_region; branch_precedence then has no branches to order.
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
+///  "description": "A named region an army rule produces and, with a consumer, what it does for units inside it. Without a consumer it only declares the region, for other rules to name through rule_region; branch_precedence then has no branches to order.",
 ///  "type": "object",
 ///  "required": [
-///    "branch_precedence",
-///    "consumer",
 ///    "producer",
 ///    "region_ref"
 ///  ],
@@ -26491,8 +26490,10 @@ pub struct NamedRegionSourceGate {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct NamedRegionState {
-    pub branch_precedence: ::serde_json::Value,
-    pub consumer: NamedRegionConsumer,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub branch_precedence: ::std::option::Option<::serde_json::Value>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub consumer: ::std::option::Option<NamedRegionConsumer>,
     pub producer: NamedRegionProducer,
     pub region_ref: NamedRegionRef,
 }
