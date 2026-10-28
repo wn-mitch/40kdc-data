@@ -16,11 +16,21 @@
   // Auto-open panes once the user has put real content into them. Each Pane
   // also tracks an explicit user override (sticky once they click), so these
   // are *defaults*, not forced states.
-  const attackerOpen = $derived(salvo.selectedUnitId !== null);
-  const targetOpen = $derived(
+  const attackerHasUnit = $derived(salvo.selectedUnitId !== null);
+  const targetHasUnit = $derived(
     (salvo.targetMode === "dataset" && salvo.datasetTargetUnitId !== null) ||
       (salvo.targetMode === "roster" && salvo.rosterTargetUnitIndex !== null),
   );
+  // The unit pickers live inside these panes, and changing a faction clears the unit, so their
+  // auto-open latches: once open for a unit, a pane stays open while the user picks another.
+  let attackerLatched = $state(false);
+  let targetLatched = $state(false);
+  $effect(() => {
+    if (attackerHasUnit && !attackerLatched) attackerLatched = true;
+    if (targetHasUnit && !targetLatched) targetLatched = true;
+  });
+  const attackerOpen = $derived(attackerHasUnit || attackerLatched);
+  const targetOpen = $derived(targetHasUnit || targetLatched);
   const abilitiesOpen = $derived(
     Object.keys(salvo.buffOverrides).length > 0 ||
       salvo.manualBuffsActive.size > 0 ||

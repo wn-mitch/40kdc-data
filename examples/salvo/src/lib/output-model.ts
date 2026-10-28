@@ -65,51 +65,101 @@ export function synthTarget(t: ManualTarget): Unit {
   } as Unit;
 }
 
+export type AttackerChoice = {
+  unitId: string | null;
+  factionId: string | null;
+  detachmentId: string | null;
+  attachedUnitIds: readonly string[];
+  supportUnitIds: readonly string[];
+};
+
+/** One member's levers, read as that member, and the context its lines crunch under. */
+export type MemberLevers = { memberId: string; context: EngineContext; levers: LeverSelection };
+
 /**
- * `context` with the combined unit's wargear: each member's out-of-the-box loadout, which Salvo
- * does not edit, summed. Rules gated on the unit's wargear read it, as the damage matrix's do.
+ * Each member's role in the combined unit: the selected unit is the Bodyguard when the attached
+ * units can lead it, else it leads them.
  */
-export function withUnitWargear(ds: Dataset, factionId: string | null, memberIds: readonly (string | null)[], context: EngineContext): EngineContext {
-  const wargear: Record<string, number> = {};
-  for (const { unit, loadout } of memberUnits(ds, factionId, memberIds)) {
-    for (const [id, count] of Object.entries(baseWargear(ds, unit.raw, loadout.modelCount))) wargear[id] = (wargear[id] ?? 0) + count;
-  }
-  return { ...context, attackerWargear: wargear };
+export function memberRoles(ds: Dataset, unitId: string, attachedUnitIds: readonly string[]): Record<string, "leader" | "bodyguard"> {
+  const leaders = new Set(ds.leadersAttachableTo(unitId).map((unit) => unit.id));
+  const leads = attachedUnitIds.length > 0 && attachedUnitIds.every((id) => leaders.has(id));
+  return Object.fromEntries([
+    [unitId, leads ? "bodyguard" : "leader"],
+    ...attachedUnitIds.map((id) => [id, leads ? "leader" : "bodyguard"] as const),
+  ]);
 }
 
 /**
- * The combined unit's ability, army, detachment, attached and support levers, read with the
- * unit's wargear. These are weapon-independent and shared by every weapon line, so no weapon profiles are passed: crunch
- * injects each line's own weapon keywords, and passing them here too would double-count additive
- * keyword effects.
+ * `context` as one member of the combined unit reads it, as the damage matrix reads each member:
+ * its own unit, role (when attached), model keywords, unhurt Wounds unless the scenario states
+ * them, and the wargear of its out-of-the-box loadout, which Salvo does not edit.
  */
-export function attackerLevers(
+export function memberContext(ds: Dataset, member: MemberUnit, role: "leader" | "bodyguard" | undefined, context: EngineContext): EngineContext {
+  const unit = member.unit.raw;
+  const wounds = unit.profiles?.[0]?.W;
+  return {
+    ...context,
+    attackerUnitId: unit.id,
+    ...(role ? { attackerAttachmentRole: role } : {}),
+    attackerModelKeywords: [...new Set([...(unit.keywords ?? []), ...(unit.faction_keywords ?? [])].map((keyword) => keyword.toLowerCase()))].sort(),
+    ...(context.attackerWounds === undefined && typeof wounds === "number" ? { attackerWounds: { remaining: wounds, starting: wounds } } : {}),
+    attackerWargear: baseWargear(ds, unit, member.loadout.modelCount),
+  };
+}
+
+/**
+ * The combined unit's ability, army, detachment, attached and support levers, read per member:
+ * each member with the others attached, under its own {@link memberContext}. These are
+ * weapon-independent and shared by every weapon line of the member, so no weapon profiles are
+ * passed unless `weaponProfiles` asks for the selected unit's: crunch injects each line's own
+ * weapon keywords, and passing them here too would double-count additive keyword effects.
+ */
+export function memberLevers(
   ds: Dataset,
-  attacker: {
-    unitId: string | null;
-    factionId: string | null;
-    detachmentId: string | null;
-    attachedUnitIds: readonly string[];
-    supportUnitIds: readonly string[];
-  },
+  attacker: AttackerChoice,
   context: EngineContext,
-): LeverSelection {
-  if (!attacker.unitId) return { buffs: [], groups: [] };
-  try {
-    return ds.stackableBuffsFor(
-      {
-        unitId: attacker.unitId,
-        factionId: attacker.factionId ?? undefined,
-        detachmentId: attacker.detachmentId ?? undefined,
-        attachedUnitIds: [...attacker.attachedUnitIds],
-        supportingUnitIds: activeSupport(ds, attacker.factionId, [attacker.unitId, ...attacker.attachedUnitIds], attacker.supportUnitIds),
-        weaponProfiles: [],
-      },
-      withUnitWargear(ds, attacker.factionId, [attacker.unitId, ...attacker.attachedUnitIds], context),
-    );
-  } catch (err) {
-    return { buffs: [], groups: [], error: (err as Error).message };
+  weaponProfiles: { weaponId: string; profileIndex: number }[] = [],
+): MemberLevers[] {
+  if (!attacker.unitId) return [];
+  const members = memberUnits(ds, attacker.factionId, [attacker.unitId, ...attacker.attachedUnitIds]);
+  const ids = members.map((member) => member.memberId);
+  const roles = memberRoles(ds, attacker.unitId, attacker.attachedUnitIds);
+  return members.map((member, index) => {
+    const attached = members.length > 1;
+    const own = memberContext(ds, member, attached ? roles[member.memberId] : undefined, context);
+    try {
+      return {
+        memberId: member.memberId,
+        context: own,
+        levers: ds.stackableBuffsFor(
+          {
+            unitId: member.memberId,
+            factionId: attacker.factionId ?? undefined,
+            detachmentId: attacker.detachmentId ?? undefined,
+            attachedUnitIds: ids.filter((id) => id !== member.memberId),
+            ...(attached ? { attachmentRoles: roles } : {}),
+            supportingUnitIds: activeSupport(ds, attacker.factionId, ids, attacker.supportUnitIds),
+            weaponProfiles: index === 0 ? weaponProfiles : [],
+          },
+          own,
+        ),
+      };
+    } catch (err) {
+      return { memberId: member.memberId, context: own, levers: { buffs: [], groups: [], error: (err as Error).message } };
+    }
+  });
+}
+
+/** Every member's levers, one per id, with their groups: what the toggles and the selection check read. */
+export function unionLevers(perMember: readonly MemberLevers[]): LeverSelection {
+  const buffs = new Map<string, StackableBuff>();
+  const groups = new Map<string, StackableBuffGroup>();
+  for (const { levers } of perMember) {
+    for (const lever of levers.buffs) if (!buffs.has(lever.id)) buffs.set(lever.id, lever);
+    for (const group of levers.groups) if (!groups.has(group.id)) groups.set(group.id, group);
   }
+  const error = perMember.find(({ levers }) => levers.error)?.levers.error;
+  return { buffs: [...buffs.values()], groups: [...groups.values()], ...(error ? { error } : {}) };
 }
 
 /** The buffs of the enabled levers, leaving out weapon-keyword levers, which the engine injects per line. */

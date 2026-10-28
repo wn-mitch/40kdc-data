@@ -30,12 +30,13 @@
   import { buildDebugSnapshot } from "./debug-export.js";
   import { scenarioContext } from "./scenario.js";
   import {
-    attackerLevers,
+    memberLevers,
     crunchLine,
     enabledLeverBuffs,
     grantedCopies,
     memberUnits as resolveMembers,
     memberWargear,
+    unionLevers,
     synthTarget,
     targetDefences,
   } from "./output-model.js";
@@ -62,13 +63,16 @@
     ...scenarioContext(salvo.scenario),
   });
 
-  const leverSelection = $derived(attackerLevers(ds, {
+  // Each member's levers, read as that member under its own context (as the damage matrix reads
+  // them); the toggles and the selection check read their union.
+  const perMember = $derived(memberLevers(ds, {
     unitId: salvo.selectedUnitId,
     factionId: salvo.selectedFactionId,
     detachmentId: salvo.selectedDetachmentId,
     attachedUnitIds: salvo.attachedUnitIds,
     supportUnitIds: salvo.supportUnitIds,
   }, context));
+  const leverSelection = $derived(unionLevers(perMember));
 
   const stackable = $derived(leverSelection.buffs);
   const selectionValid = $derived(isLegalLeverSelection(
@@ -77,7 +81,6 @@
     new Set(stackable.filter((b) => salvo.isBuffEnabled(b.id, b.enabled)).map((b) => b.id)),
   ));
 
-  const datasetBuffs = $derived(enabledLeverBuffs(stackable, (b) => salvo.isBuffEnabled(b.id, b.enabled)));
 
   const manualBuffs = $derived<Buff[]>(
     MANUAL_BUFF_TOGGLES.filter((t) => salvo.manualBuffsActive.has(t.id)).map((t) =>
@@ -92,7 +95,14 @@
     wargear: salvo.targetWargear,
   }, context));
 
-  const allBuffs = $derived<Buff[]>([...datasetBuffs, ...manualBuffs, ...defensive.buffs]);
+  /** The buffs one member attacks with: its enabled levers, the manual toggles and the target's defences. */
+  function buffsOf(memberId: string): Buff[] {
+    const levers = perMember.find((member) => member.memberId === memberId)?.levers.buffs ?? [];
+    return [...enabledLeverBuffs(levers, (b) => salvo.isBuffEnabled(b.id, b.enabled)), ...manualBuffs, ...defensive.buffs];
+  }
+  const contextOf = (memberId: string) => perMember.find((member) => member.memberId === memberId)?.context ?? context;
+  // The selected unit's buffs, for the single-weapon projection and the debug snapshot.
+  const allBuffs = $derived<Buff[]>(salvo.selectedUnitId ? buffsOf(salvo.selectedUnitId) : [...manualBuffs, ...defensive.buffs]);
 
   // The selected unit and its attached members.
   const memberUnits = $derived(resolveMembers(ds, salvo.selectedFactionId, [salvo.selectedUnitId, ...salvo.attachedUnitIds]));
@@ -116,7 +126,7 @@
   const counts = $derived(memberUnits.map(({ memberId, unit, loadout }) =>
     memberCounts(loadout, unit.weapons.map((w) => w.id), (weaponId) => carriedBy(memberId, weaponId))));
   const wargear = $derived(memberUnits.map((member, index) =>
-    memberWargear({ ds, factionId: salvo.selectedFactionId, member, counts: counts[index], buffs: allBuffs, context })));
+    memberWargear({ ds, factionId: salvo.selectedFactionId, member, counts: counts[index], buffs: buffsOf(member.memberId), context: contextOf(member.memberId) })));
   const wargearOf = (memberId: string) => {
     const index = memberUnits.findIndex((member) => member.memberId === memberId);
     return index < 0 ? undefined : { counts: counts[index], wargear: wargear[index] };
@@ -174,6 +184,7 @@
             counts: counts[index],
             grants: wargear[index].grants,
             buffs: wargear[index].buffs,
+            context: contextOf(memberId),
           })),
           target: { unit: target, modelCount: salvo.manualTarget.modelCount },
           buffs: allBuffs,
@@ -206,8 +217,8 @@
         owner: memberUnits.find((member) => member.memberId === line.ownerMemberId)?.unit.raw,
         models: selection.value?.firing.get(line.id) ?? carried(line),
         target: { unit: target, modelCount: salvo.manualTarget.modelCount },
-        buffs: wargearOf(line.ownerMemberId)?.wargear.buffs ?? allBuffs,
-        context,
+        buffs: wargearOf(line.ownerMemberId)?.wargear.buffs ?? buffsOf(line.ownerMemberId),
+        context: contextOf(line.ownerMemberId),
       }))
     : []);
 
@@ -380,7 +391,8 @@
           </td>
           <td class="wname">
             {r.label}
-            {#if r.error}<span class="usage line-error" role="alert">{r.error}</span>{/if}
+            <!-- A line no model carries is dimmed, not an error. -->
+            {#if r.error && r.models > 0}<span class="usage line-error" role="alert">{r.error}</span>{/if}
           </td>
           <td class="value">
             <input

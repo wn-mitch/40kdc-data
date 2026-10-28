@@ -128,8 +128,9 @@ export function weaponLines(
 
 /**
  * Which lines each member fires and with how many models, given the weapon counts its models
- * carry. A member's `grants` add the weapons its wargear equips, and its `buffs` replace the
- * shared ones (the shared buffs less its printed rules for wargear it leaves out).
+ * carry. A member's `grants` add the weapons its wargear equips, and its `buffs` and `context`
+ * replace the shared ones (its own levers less its printed rules for wargear it leaves out, read
+ * as that member).
  */
 export function selectLines(input: {
   ds: Dataset;
@@ -139,6 +140,7 @@ export function selectLines(input: {
     counts: ReadonlyMap<string, number>;
     grants?: readonly WeaponGrant[];
     buffs?: readonly Buff[];
+    context?: EngineContext;
   }[];
   target: { unit: Unit; modelCount: number };
   buffs: readonly Buff[];
@@ -160,7 +162,7 @@ export function selectLines(input: {
       counts: member.counts,
       target: input.target,
       buffs: member.buffs ?? input.buffs,
-      context: input.context,
+      context: member.context ?? input.context,
       groups: legality.groups,
       grants: member.grants,
     });

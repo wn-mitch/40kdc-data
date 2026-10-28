@@ -13,9 +13,8 @@
     StackableBuffGroup,
   } from "@alpaca-software/40kdc-data";
   import EmptyState from "./EmptyState.svelte";
-  import { activeSupport } from "./defender.js";
   import { scenarioContext } from "./scenario.js";
-  import { withUnitWargear } from "./output-model.js";
+  import { memberLevers, unionLevers } from "./output-model.js";
 
   // EngineContext for the DSL→Buff translator. Without this the translator
   // defaults to `{ phase: "shooting" }`, so phase-gated branches misfire when
@@ -48,26 +47,19 @@
   // Every buff the attacker could stack, as toggleable levers. The package
   // does the DSL walk once and hands back (buff, enabled) pairs plus the
   // activation groups (dice-pool / choice) that cap how many fire at once.
-  const stackable = $derived.by<{ buffs: StackableBuff[]; groups: StackableBuffGroup[]; error?: string }>(() => {
-    if (!salvo.selectedUnitId) return { buffs: [], groups: [] };
-    try {
-      return ds.stackableBuffsFor(
-        {
-          unitId: salvo.selectedUnitId,
-          factionId: salvo.selectedFactionId ?? undefined,
-          detachmentId: salvo.selectedDetachmentId ?? undefined,
-          attachedUnitIds: salvo.attachedUnitIds,
-          supportingUnitIds: activeSupport(ds, salvo.selectedFactionId, [salvo.selectedUnitId, ...salvo.attachedUnitIds], salvo.supportUnitIds),
-          weaponProfiles: salvo.selectedWeaponId
-            ? [{ weaponId: salvo.selectedWeaponId, profileIndex: salvo.selectedProfileIndex }]
-            : [],
-        },
-        withUnitWargear(ds, salvo.selectedFactionId, [salvo.selectedUnitId, ...salvo.attachedUnitIds], engineContext),
-      );
-    } catch (err) {
-      return { buffs: [], groups: [], error: (err as Error).message };
-    }
-  });
+  const stackable = $derived.by<{ buffs: StackableBuff[]; groups: StackableBuffGroup[]; error?: string }>(() =>
+    unionLevers(memberLevers(
+      ds,
+      {
+        unitId: salvo.selectedUnitId,
+        factionId: salvo.selectedFactionId,
+        detachmentId: salvo.selectedDetachmentId,
+        attachedUnitIds: salvo.attachedUnitIds,
+        supportUnitIds: salvo.supportUnitIds,
+      },
+      engineContext,
+      salvo.selectedWeaponId ? [{ weaponId: salvo.selectedWeaponId, profileIndex: salvo.selectedProfileIndex }] : [],
+    )));
 
   // Free-standing levers (always-on abilities, stratagems, weapon keywords).
   const ungrouped = $derived(stackable.buffs.filter((b) => !b.group));
