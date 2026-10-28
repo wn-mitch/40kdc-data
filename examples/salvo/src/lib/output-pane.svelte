@@ -19,6 +19,7 @@
   } from "@alpaca-software/40kdc-data";
   import EmptyState from "./EmptyState.svelte";
   import WeaponCards from "./weapon-cards.svelte";
+  import ResultDock from "./result-dock.svelte";
   import {
     defaultWeaponCount,
     memberCounts,
@@ -300,8 +301,8 @@
   }
 </script>
 
-{#snippet numCell(s: AttributedStage | undefined, dimmed: boolean, openLeft: boolean)}
-  <td class="value numcell" class:dim-cell={dimmed} tabindex={s && !dimmed ? 0 : -1}>
+{#snippet numCell(s: AttributedStage | undefined, dimmed: boolean, openLeft: boolean, headline = false)}
+  <td class="value numcell" class:dim-cell={dimmed} class:headline tabindex={s && !dimmed ? 0 : -1}>
     {s ? fmt(s.expected) : "—"}
     {#if s && !dimmed}
       <span class="lift-pop" class:left={openLeft}>
@@ -333,7 +334,11 @@
 {#if !selectionValid}
   <EmptyState>Selected abilities exceed an allowance or lack a required provider. Adjust the ability toggles to see a projection.</EmptyState>
 {:else if weaponLines.length === 0}
-  <EmptyState>Pick a unit and target to see a projection.</EmptyState>
+  {#if salvo.selectedUnitId}
+    <EmptyState>This unit has no {salvo.phase}-phase weapons. Switch the phase in the Attacker pane.</EmptyState>
+  {:else}
+    <EmptyState>Pick an attacking unit and a target to see expected hits, wounds, damage and models killed.</EmptyState>
+  {/if}
 {:else}
   {#if leverSelection.error}
     <p class="error" role="alert">Abilities could not be read: {leverSelection.error}</p>
@@ -366,7 +371,7 @@
   />
 
   <div class="proj-table-wrap">
-  <p class="hint dim">Hover any value for the per-buff breakdown.</p>
+  <p class="hint dim">Hover or focus a value to see which abilities changed it.</p>
   <table class="stages proj">
     <thead>
       <tr>
@@ -419,7 +424,7 @@
         <td>Combined</td>
         <td></td>
         {#each STAGE_COLUMNS as col, idx (col.name)}
-          {@render numCell(stageOf(aggregate, col.name), false, idx >= 4)}
+          {@render numCell(stageOf(aggregate, col.name), false, idx >= 4, col.name === "after-fnp" || col.name === "models-killed")}
         {/each}
       </tr>
     </tbody>
@@ -427,14 +432,17 @@
   </div>
 
   <div class="row debug-row">
-    <button onclick={() => (showDebug = !showDebug)}>
+    <button aria-expanded={showDebug} onclick={() => (showDebug = !showDebug)}>
       {showDebug ? "Hide" : "Show"} resolved modifiers
     </button>
     <button onclick={copySnapshot}>
-      {copied ? "Copied ✓" : "Copy debug snapshot"}
+      {copied ? "Copied" : "Copy debug snapshot"}
     </button>
-    <span class="dim">{allBuffs.length} buff(s) in play</span>
+    <span class="visually-hidden" role="status">{copied ? "Debug snapshot copied" : ""}</span>
+    <span class="dim">{allBuffs.length} {allBuffs.length === 1 ? "modifier" : "modifiers"} in play</span>
   </div>
+
+  <ResultDock {aggregate} modelCount={salvo.manualTarget.modelCount} />
 
   {#if showDebug && resolved.error}
     <p class="error" role="alert">Resolving modifiers failed: {resolved.error}</p>

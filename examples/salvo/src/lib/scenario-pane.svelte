@@ -168,6 +168,7 @@
 
 <style>
   .side {
+    min-width: 0;
     border: 1px solid var(--border, currentColor);
     border-radius: var(--radius-sm, 4px);
     padding: var(--space-2);

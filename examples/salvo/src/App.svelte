@@ -46,12 +46,14 @@
 <div class="app">
   <AppHeader title="Salvo" tag="40k damage calculator" appId="salvo" />
 
-  <nav class="view-tabs">
+  <nav class="view-tabs" aria-label="View">
     <button
+      aria-pressed={salvo.appView === "calculator"}
       class:active={salvo.appView === "calculator"}
       onclick={() => (salvo.appView = "calculator")}>Calculator</button
     >
     <button
+      aria-pressed={salvo.appView === "compare"}
       class:active={salvo.appView === "compare"}
       onclick={() => (salvo.appView = "compare")}>Compare</button
     >
@@ -74,8 +76,8 @@
     </section>
 
     <main class="column output">
-      <section class="pane projection">
-        <h2>Projection</h2>
+      <section class="pane projection" id="projection" aria-labelledby="projection-title" tabindex="-1">
+        <h2 id="projection-title">Projection</h2>
         <OutputPane />
       </section>
     </main>

@@ -119,9 +119,9 @@
 
 <div class="controls">
   <div class="row">
-    <div class="phase-toggle mode-toggle">
-      <button class:active={salvo.compareMode === "matrix"} onclick={() => (salvo.compareMode = "matrix")}>Unit × target matrix</button>
-      <button class:active={salvo.compareMode === "loadouts"} onclick={() => (salvo.compareMode = "loadouts")}>Best loadout</button>
+    <div class="phase-toggle mode-toggle" role="group" aria-label="Comparison">
+      <button class:active={salvo.compareMode === "matrix"} aria-pressed={salvo.compareMode === "matrix"} onclick={() => (salvo.compareMode = "matrix")}>Unit × target matrix</button>
+      <button class:active={salvo.compareMode === "loadouts"} aria-pressed={salvo.compareMode === "loadouts"} onclick={() => (salvo.compareMode = "loadouts")}>Best loadout</button>
     </div>
   </div>
 
@@ -177,10 +177,11 @@
       max="72"
       bind:value={salvo.compareDistance}
     />
-    <div class="phase-toggle">
+    <div class="phase-toggle" role="group" aria-label="Phase">
       {#each ["shooting", "fight"] as const as ph (ph)}
         <button
           class:active={salvo.comparePhase === ph}
+          aria-pressed={salvo.comparePhase === ph}
           onclick={() => (salvo.comparePhase = ph)}>{ph}</button
         >
       {/each}
@@ -218,7 +219,9 @@
       </span>
       <button onclick={exportMarkdown}>{copyState === "copied" ? "Copied!" : copyState === "failed" ? "Copy blocked" : "Export markdown"}</button>
     </div>
-    <div class="table-wrap">
+    <!-- A scrollable region must be keyboard-focusable so it can be scrolled without a mouse. -->
+    <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+    <div class="table-wrap" role="region" aria-label="Unit by target matrix" tabindex="0">
       <table>
         <thead>
           <tr>
@@ -260,7 +263,9 @@
       compare slots relatively. Bold ≥ 1.0.
     </span>
   </div>
-  <div class="table-wrap">
+  <!-- A scrollable region must be keyboard-focusable so it can be scrolled without a mouse. -->
+  <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+  <div class="table-wrap" role="region" aria-label="Loadout ranking" tabindex="0">
     <table>
       <thead>
         <tr>
@@ -313,9 +318,12 @@
     gap: 2px;
     margin-left: auto;
   }
+  .phase-toggle:not(.mode-toggle) button { text-transform: capitalize; }
   .phase-toggle button.active {
-    background: var(--accent, #444);
-    color: #fff;
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--accent-foreground);
+    font-weight: 600;
   }
   .profiles {
     display: flex;
@@ -365,6 +373,10 @@
   .table-wrap {
     overflow-x: auto;
   }
+  .table-wrap:focus-visible {
+    outline: none;
+    box-shadow: var(--shadow-focus);
+  }
   table {
     border-collapse: collapse;
     font-size: var(--text-sm);
@@ -386,11 +398,11 @@
     text-align: left;
     position: sticky;
     left: 0;
-    background: var(--bg, #1a1a1a);
+    background: var(--panel);
   }
   td.strong {
     font-weight: 700;
-    color: var(--accent-text, #e8e8e8);
+    color: var(--text);
   }
   td.zero {
     color: var(--muted);
