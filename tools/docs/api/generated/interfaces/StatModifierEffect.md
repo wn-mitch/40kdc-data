@@ -6,7 +6,7 @@
 
 # Interface: StatModifierEffect
 
-Defined in: [generated.ts:3134](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3134)
+Defined in: [generated.ts:3513](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3513)
 
 [characteristic] Change a characteristic of the target's models or their weapons. incoming: the change applies to attacks made against the target.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:3134](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **type**: `"stat-modifier"`
 
-Defined in: [generated.ts:3135](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3135)
+Defined in: [generated.ts:3514](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3514)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:3135](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **target**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:3136](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3136)
+Defined in: [generated.ts:3515](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3515)
 
 ***
 
@@ -32,11 +32,11 @@ Defined in: [generated.ts:3136](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **modifier**: `object`
 
-Defined in: [generated.ts:3137](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3137)
+Defined in: [generated.ts:3516](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3516)
 
 #### stat
 
-> **stat**: `"M"` \| `"T"` \| `"Sv"` \| `"W"` \| `"Ld"` \| `"OC"` \| `"A"` \| `"WS"` \| `"BS"` \| `"S"` \| `"AP"` \| `"D"` \| `"Range"` \| `"detection-range"` \| `"psyker-level"`
+> **stat**: [`Stat`](../type-aliases/Stat.md)
 
 #### operation
 
@@ -68,4 +68,4 @@ Defined in: [generated.ts:3137](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **scaling?**: [`Scaling`](Scaling.md)
 
-Defined in: [generated.ts:3161](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3161)
+Defined in: [generated.ts:3525](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3525)

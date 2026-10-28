@@ -6,7 +6,7 @@
 
 # Interface: WeaponKeywordRef
 
-Defined in: [generated.ts:2324](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2324)
+Defined in: [generated.ts:2647](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2647)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "weapon-keyword-ref".
@@ -17,7 +17,7 @@ via the `definition` "weapon-keyword-ref".
 
 > **keyword\_id**: `string`
 
-Defined in: [generated.ts:2325](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2325)
+Defined in: [generated.ts:2648](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2648)
 
 ***
 
@@ -25,7 +25,7 @@ Defined in: [generated.ts:2325](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **parameters?**: `object`
 
-Defined in: [generated.ts:2326](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2326)
+Defined in: [generated.ts:2649](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2649)
 
 #### value?
 

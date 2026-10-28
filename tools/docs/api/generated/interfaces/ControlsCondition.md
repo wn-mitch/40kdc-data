@@ -6,7 +6,7 @@
 
 # Interface: ControlsCondition
 
-Defined in: [generated.ts:2071](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2071)
+Defined in: [generated.ts:2379](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2379)
 
 [board] A player controls objectives matching the filter. `count` supplies inclusive bounds; `compare` compares the controlling player's count with the named owner's count over the same objective filter; `proportion` compares controlled matching markers with a fraction of all matching markers.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:2071](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **type**: `"controls"`
 
-Defined in: [generated.ts:2072](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2072)
+Defined in: [generated.ts:2380](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2380)
 
 ***
 
@@ -24,11 +24,13 @@ Defined in: [generated.ts:2072](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **parameters?**: `object`
 
-Defined in: [generated.ts:2073](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2073)
+Defined in: [generated.ts:2381](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2381)
 
 #### by?
 
-> `optional` **by?**: `"friendly"` \| `"enemy"`
+> `optional` **by?**: `"friendly"` \| `"enemy"` \| `"any"`
+
+A definite player: friendly or enemy (an owner other than any).
 
 #### objective?
 
@@ -44,7 +46,9 @@ Defined in: [generated.ts:2073](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 ##### compare.owner
 
-> **owner**: `"friendly"` \| `"enemy"`
+> **owner**: `"friendly"` \| `"enemy"` \| `"any"`
+
+A definite player: friendly or enemy (an owner other than any).
 
 ##### compare.comparison
 

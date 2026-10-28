@@ -6,7 +6,7 @@
 
 # Interface: DestructionRuleEffect
 
-Defined in: [generated.ts:4583](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4583)
+Defined in: [generated.ts:5193](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5193)
 
 [models] The target unit counts as destroyed only once another model or unit is also destroyed.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:4583](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **type**: `"destruction-rule"`
 
-Defined in: [generated.ts:4584](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4584)
+Defined in: [generated.ts:5194](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5194)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:4584](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **target**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:4585](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4585)
+Defined in: [generated.ts:5195](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5195)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [generated.ts:4585](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **modifier**: `object`
 
-Defined in: [generated.ts:4586](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4586)
+Defined in: [generated.ts:5196](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5196)
 
 #### also
 
@@ -44,4 +44,4 @@ Defined in: [generated.ts:4586](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **scaling?**: [`Scaling`](Scaling.md)
 
-Defined in: [generated.ts:4589](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4589)
+Defined in: [generated.ts:5199](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5199)

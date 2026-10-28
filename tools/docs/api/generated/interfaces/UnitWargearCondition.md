@@ -6,7 +6,7 @@
 
 # Interface: UnitWargearCondition
 
-Defined in: [generated.ts:1731](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1731)
+Defined in: [generated.ts:2031](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2031)
 
 [composition] This unit has the wargear item `wargear` (a wargear record, not a weapon). With models, count bounds how many models in this unit carry the item (state carry) or lack it (state lack).
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:1731](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **type**: `"unit-wargear"`
 
-Defined in: [generated.ts:1732](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1732)
+Defined in: [generated.ts:2032](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2032)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:1732](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **parameters**: `object`
 
-Defined in: [generated.ts:1733](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1733)
+Defined in: [generated.ts:2033](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2033)
 
 #### subject
 

@@ -8,7 +8,7 @@
 
 > **Stat** = `"M"` \| `"T"` \| `"Sv"` \| `"W"` \| `"Ld"` \| `"OC"` \| `"A"` \| `"WS"` \| `"BS"` \| `"S"` \| `"AP"` \| `"D"` \| `"Range"` \| `"detection-range"` \| `"psyker-level"`
 
-Defined in: [generated.ts:124](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L124)
+Defined in: [generated.ts:124](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L124)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "stat".

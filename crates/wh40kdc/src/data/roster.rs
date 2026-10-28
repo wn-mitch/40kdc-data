@@ -437,13 +437,23 @@ pub fn validate_roster_core_with_keyword_overrides(
         }
     }
 
+    let roster_unit_ids: HashSet<String> = views
+        .iter()
+        .flatten()
+        .map(|view| view.id.as_str().to_string())
+        .collect();
+
     // --- Leader attachment. ----------------------------------------------------
     for (idx, su) in spec.units.iter().enumerate() {
         let Some(view) = views[idx] else { continue };
         let overrides = keyword_overrides.get(idx).map(Vec::as_slice).unwrap_or(&[]);
         if let Some(bodyguard_id) = &su.leader_bodyguard_id {
+            // Eligibility is a reference check on a saved roster, not a listing: a
+            // combat-patrol bodyguard stays eligible whatever mode the dataset lists.
             let mut eligible: HashSet<String> = dataset
-                .bodyguards_attachable_from(view.id.as_str())
+                .for_game_mode("all")
+                .expect("\"all\" is a known game mode")
+                .bodyguards_attachable_from_in_roster(view.id.as_str(), Some(&roster_unit_ids))
                 .into_iter()
                 .map(|candidate| candidate.id.as_str().to_string())
                 .collect();
@@ -470,7 +480,11 @@ pub fn validate_roster_core_with_keyword_overrides(
                     severity: Severity::Error,
                 });
             }
-        } else if view.attachment_role == Some(crate::generated::UnitAttachmentRole::Support)
+        } else if dataset.effective_attachment_role(
+            view.id.as_str(),
+            view.attachment_role,
+            &roster_unit_ids,
+        ) == Some(crate::generated::UnitAttachmentRole::Support)
             && is_character(view, overrides)
         {
             army.push(RosterViolation {

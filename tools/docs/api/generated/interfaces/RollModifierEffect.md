@@ -6,7 +6,7 @@
 
 # Interface: RollModifierEffect
 
-Defined in: [generated.ts:3252](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3252)
+Defined in: [generated.ts:3587](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3587)
 
 [roll] Add to or subtract from a roll. cap bounds a stacking modifier; value_from takes the value from an earlier step's roll.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:3252](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **type**: `"roll-modifier"`
 
-Defined in: [generated.ts:3253](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3253)
+Defined in: [generated.ts:3588](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3588)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:3253](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **target**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:3254](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3254)
+Defined in: [generated.ts:3589](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3589)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [generated.ts:3254](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **modifier**: `object`
 
-Defined in: [generated.ts:3255](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3255)
+Defined in: [generated.ts:3590](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3590)
 
 #### roll
 
@@ -68,4 +68,4 @@ Defined in: [generated.ts:3255](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **scaling?**: [`Scaling`](Scaling.md)
 
-Defined in: [generated.ts:3264](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3264)
+Defined in: [generated.ts:3599](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3599)

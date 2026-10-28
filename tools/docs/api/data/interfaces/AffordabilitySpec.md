@@ -6,7 +6,7 @@
 
 # Interface: AffordabilitySpec
 
-Defined in: [data/affordability.ts:35](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/affordability.ts#L35)
+Defined in: [data/affordability.ts:35](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/affordability.ts#L35)
 
 Compact input shared by [candidateAffordability](../functions/candidateAffordability.md) and the runner op.
 
@@ -16,7 +16,7 @@ Compact input shared by [candidateAffordability](../functions/candidateAffordabi
 
 > **factionId**: `string` \| `null`
 
-Defined in: [data/affordability.ts:36](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/affordability.ts#L36)
+Defined in: [data/affordability.ts:36](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/affordability.ts#L36)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [data/affordability.ts:36](https://github.com/wn-mitch/40kdc-data/bl
 
 > **battleSize**: `BattleSize` \| `null`
 
-Defined in: [data/affordability.ts:37](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/affordability.ts#L37)
+Defined in: [data/affordability.ts:37](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/affordability.ts#L37)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [data/affordability.ts:37](https://github.com/wn-mitch/40kdc-data/bl
 
 > `optional` **pointsLimitOverride?**: `number` \| `null`
 
-Defined in: [data/affordability.ts:39](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/affordability.ts#L39)
+Defined in: [data/affordability.ts:39](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/affordability.ts#L39)
 
 Explicit points limit; overrides the battle-size default when set.
 
@@ -42,7 +42,7 @@ Explicit points limit; overrides the battle-size default when set.
 
 > **units**: [`AffordabilityUnit`](AffordabilityUnit.md)[]
 
-Defined in: [data/affordability.ts:40](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/affordability.ts#L40)
+Defined in: [data/affordability.ts:40](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/affordability.ts#L40)
 
 ***
 
@@ -50,6 +50,6 @@ Defined in: [data/affordability.ts:40](https://github.com/wn-mitch/40kdc-data/bl
 
 > `optional` **candidateUnitIds?**: `string`[] \| `null`
 
-Defined in: [data/affordability.ts:42](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/affordability.ts#L42)
+Defined in: [data/affordability.ts:42](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/affordability.ts#L42)
 
 Units to price; defaults to every unit in `factionId` when omitted.

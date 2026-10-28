@@ -6,7 +6,7 @@
 
 # Interface: BorrowWeaponsEffect
 
-Defined in: [generated.ts:6027](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6027)
+Defined in: [generated.ts:6696](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6696)
 
 [ability] The target (a Transport) uses one ranged weapon from each of up to max_models models embarked within it (Firing Deck); those models cannot shoot.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:6027](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **type**: `"borrow-weapons"`
 
-Defined in: [generated.ts:6028](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6028)
+Defined in: [generated.ts:6697](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6697)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:6028](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **target**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:6029](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6029)
+Defined in: [generated.ts:6698](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6698)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [generated.ts:6029](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **modifier**: `object`
 
-Defined in: [generated.ts:6030](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6030)
+Defined in: [generated.ts:6699](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6699)
 
 #### from?
 
@@ -56,4 +56,4 @@ Defined in: [generated.ts:6030](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **scaling?**: [`Scaling`](Scaling.md)
 
-Defined in: [generated.ts:6036](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6036)
+Defined in: [generated.ts:6705](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6705)

@@ -6,7 +6,7 @@
 
 # Interface: IgnoreModifiersEffect
 
-Defined in: [generated.ts:3195](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3195)
+Defined in: [generated.ts:3559](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3559)
 
 [characteristic] Ignore modifiers to characteristics or rolls (all of them, or only worsening ones).
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:3195](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **type**: `"ignore-modifiers"`
 
-Defined in: [generated.ts:3196](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3196)
+Defined in: [generated.ts:3560](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3560)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:3196](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **target**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:3197](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3197)
+Defined in: [generated.ts:3561](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3561)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [generated.ts:3197](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **modifier**: `object`
 
-Defined in: [generated.ts:3198](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3198)
+Defined in: [generated.ts:3562](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3562)
 
 #### what
 
@@ -40,7 +40,7 @@ Defined in: [generated.ts:3198](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 #### stats?
 
-> `optional` **stats?**: \[`"M"` \| `"T"` \| `"Sv"` \| `"W"` \| `"Ld"` \| `"OC"` \| `"A"` \| `"WS"` \| `"BS"` \| `"S"` \| `"AP"` \| `"D"` \| `"Range"` \| `"detection-range"` \| `"psyker-level"`, ...("M" \| "T" \| "Sv" \| "W" \| "Ld" \| "OC" \| "A" \| "WS" \| "BS" \| "S" \| "AP" \| "D" \| "Range" \| "detection-range" \| "psyker-level")\[\]\]
+> `optional` **stats?**: \[[`Stat`](../type-aliases/Stat.md), `...Stat[]`\]
 
 ##### Min Items
 
@@ -49,6 +49,16 @@ Defined in: [generated.ts:3198](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 #### rolls?
 
 > `optional` **rolls?**: \[[`RollSelector`](../type-aliases/RollSelector.md), `...RollSelector[]`\]
+
+##### Min Items
+
+1
+
+#### except\_rolls?
+
+> `optional` **except\_rolls?**: \[[`RollKind`](../type-aliases/RollKind.md), `...RollKind[]`\]
+
+Rolls left out of an "any roll" list (rolls ["all"]): their modifiers still apply ("excluding modifiers to saving throws").
 
 ##### Min Items
 
@@ -72,4 +82,4 @@ Defined in: [generated.ts:3198](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **scaling?**: [`Scaling`](Scaling.md)
 
-Defined in: [generated.ts:3247](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3247)
+Defined in: [generated.ts:3582](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3582)

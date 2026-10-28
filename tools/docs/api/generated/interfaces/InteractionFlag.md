@@ -6,7 +6,7 @@
 
 # Interface: InteractionFlag
 
-Defined in: [generated.ts:7282](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7282)
+Defined in: [generated.ts:7998](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L7998)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "interaction-flag".
@@ -21,7 +21,7 @@ via the `definition` "interaction-flag".
 
 > **ability\_a**: `string`
 
-Defined in: [generated.ts:7283](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7283)
+Defined in: [generated.ts:7999](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L7999)
 
 ***
 
@@ -29,7 +29,7 @@ Defined in: [generated.ts:7283](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **ability\_b**: `string`
 
-Defined in: [generated.ts:7284](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7284)
+Defined in: [generated.ts:8000](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L8000)
 
 ***
 
@@ -37,7 +37,7 @@ Defined in: [generated.ts:7284](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **interaction\_type**: `"replaces"` \| `"conflicts"` \| `"combos"` \| `"sequencing-dependent"` \| `"stacks"` \| `"does-not-stack"`
 
-Defined in: [generated.ts:7285](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7285)
+Defined in: [generated.ts:8001](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L8001)
 
 ***
 
@@ -45,7 +45,7 @@ Defined in: [generated.ts:7285](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **resolution?**: `string`
 
-Defined in: [generated.ts:7286](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7286)
+Defined in: [generated.ts:8002](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L8002)
 
 ***
 
@@ -53,7 +53,7 @@ Defined in: [generated.ts:7286](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **faq\_reference?**: `string`
 
-Defined in: [generated.ts:7287](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7287)
+Defined in: [generated.ts:8003](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L8003)
 
 ***
 
@@ -61,7 +61,7 @@ Defined in: [generated.ts:7287](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **disputed?**: `boolean`
 
-Defined in: [generated.ts:7288](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7288)
+Defined in: [generated.ts:8004](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L8004)
 
 ***
 
@@ -69,7 +69,7 @@ Defined in: [generated.ts:7288](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **game\_version**: [`GameVersionReference`](GameVersionReference.md)
 
-Defined in: [generated.ts:7289](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7289)
+Defined in: [generated.ts:8005](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L8005)
 
 ***
 
@@ -77,4 +77,4 @@ Defined in: [generated.ts:7289](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **authored\_by?**: `string`
 
-Defined in: [generated.ts:7290](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7290)
+Defined in: [generated.ts:8006](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L8006)

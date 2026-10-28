@@ -6,7 +6,7 @@
 
 # Interface: AuraEffect
 
-Defined in: [generated.ts:3722](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3722)
+Defined in: [generated.ts:4078](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4078)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "aura-effect".
@@ -17,7 +17,7 @@ via the `definition` "aura-effect".
 
 > **type**: `"aura"`
 
-Defined in: [generated.ts:3723](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3723)
+Defined in: [generated.ts:4079](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4079)
 
 ***
 
@@ -25,7 +25,7 @@ Defined in: [generated.ts:3723](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **target**: `"enemy-within-aura"` \| `"friendly-within-aura"`
 
-Defined in: [generated.ts:3724](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3724)
+Defined in: [generated.ts:4080](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4080)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [generated.ts:3724](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **modifier**: `object`
 
-Defined in: [generated.ts:3725](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3725)
+Defined in: [generated.ts:4081](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4081)
 
 #### range?
 
@@ -41,7 +41,27 @@ Defined in: [generated.ts:3725](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 #### range\_bonus?
 
-> `optional` **range\_bonus?**: `number`
+> `optional` **range\_bonus?**: [`NonTieredRangeRef`](../type-aliases/NonTieredRangeRef.md) \| \{ `per_battle_round`: \[[`NonTieredRangeRef`](../type-aliases/NonTieredRangeRef.md), `...NonTieredRangeRef[]`\]; \}
+
+One reference for every distance. A per_battle_round table is indexed from battle round 1; each later round uses the next entry and the final entry continues for all subsequent rounds. Tier entries are non-tiered range refs, so nested tables are forbidden.
+
+##### Union Members
+
+[`NonTieredRangeRef`](../type-aliases/NonTieredRangeRef.md)
+
+***
+
+###### Type Literal
+
+\{ `per_battle_round`: \[[`NonTieredRangeRef`](../type-aliases/NonTieredRangeRef.md), `...NonTieredRangeRef[]`\]; \}
+
+###### per\_battle\_round
+
+> **per\_battle\_round**: \[[`NonTieredRangeRef`](../type-aliases/NonTieredRangeRef.md), `...NonTieredRangeRef[]`\]
+
+###### Min Items
+
+1
 
 #### of?
 
@@ -65,9 +85,27 @@ Defined in: [generated.ts:3725](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 #### range\_cap?
 
-> `optional` **range\_cap?**: `number`
+> `optional` **range\_cap?**: [`NonTieredRangeRef`](../type-aliases/NonTieredRangeRef.md) \| \{ `per_battle_round`: \[[`NonTieredRangeRef`](../type-aliases/NonTieredRangeRef.md), `...NonTieredRangeRef[]`\]; \}
 
-The aura range, extensions included, never exceeds this.
+One reference for every distance. A per_battle_round table is indexed from battle round 1; each later round uses the next entry and the final entry continues for all subsequent rounds. Tier entries are non-tiered range refs, so nested tables are forbidden.
+
+##### Union Members
+
+[`NonTieredRangeRef`](../type-aliases/NonTieredRangeRef.md)
+
+***
+
+###### Type Literal
+
+\{ `per_battle_round`: \[[`NonTieredRangeRef`](../type-aliases/NonTieredRangeRef.md), `...NonTieredRangeRef[]`\]; \}
+
+###### per\_battle\_round
+
+> **per\_battle\_round**: \[[`NonTieredRangeRef`](../type-aliases/NonTieredRangeRef.md), `...NonTieredRangeRef[]`\]
+
+###### Min Items
+
+1
 
 #### wholly?
 

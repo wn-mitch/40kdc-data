@@ -6,7 +6,7 @@
 
 # Interface: DestroyedWhileOnObjectiveCondition
 
-Defined in: [generated.ts:2210](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2210)
+Defined in: [generated.ts:2530](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2530)
 
 [board] Mission: enemy units destroyed on, or by a unit on, an objective.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:2210](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **type**: `"destroyed-while-on-objective"`
 
-Defined in: [generated.ts:2211](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2211)
+Defined in: [generated.ts:2531](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2531)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:2211](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **parameters?**: `object`
 
-Defined in: [generated.ts:2212](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2212)
+Defined in: [generated.ts:2532](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2532)
 
 #### count?
 

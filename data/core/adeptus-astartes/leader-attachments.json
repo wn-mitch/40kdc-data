@@ -317,8 +317,26 @@
   },
   {
     "leader_id": "cato-sicarius",
-    "eligible_bodyguard_ids": [
-      "victrix-honour-guard"
+    "eligible_bodyguard_ids": [],
+    "conditional_groups": [
+      {
+        "role": "support",
+        "eligible_bodyguard_ids": [
+          "victrix-honour-guard"
+        ],
+        "required_roster_unit_ids": [
+          "marneus-calgar"
+        ]
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "victrix-honour-guard"
+        ],
+        "excluded_roster_unit_ids": [
+          "marneus-calgar"
+        ]
+      }
     ],
     "game_version": {
       "edition": "11th",

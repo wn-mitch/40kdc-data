@@ -6,7 +6,7 @@
 
 # Interface: SelectUnitsEffect
 
-Defined in: [generated.ts:3704](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3704)
+Defined in: [generated.ts:4060](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4060)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "select-units-effect".
@@ -17,7 +17,7 @@ via the `definition` "select-units-effect".
 
 > **type**: `"select-units"`
 
-Defined in: [generated.ts:3705](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3705)
+Defined in: [generated.ts:4061](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4061)
 
 ***
 
@@ -25,7 +25,7 @@ Defined in: [generated.ts:3705](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **selector**: [`UnitSelector`](UnitSelector.md)
 
-Defined in: [generated.ts:3706](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3706)
+Defined in: [generated.ts:4062](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4062)
 
 ***
 
@@ -33,4 +33,4 @@ Defined in: [generated.ts:3706](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **effect**: [`EffectNode`](../type-aliases/EffectNode.md)
 
-Defined in: [generated.ts:3707](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3707)
+Defined in: [generated.ts:4063](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4063)

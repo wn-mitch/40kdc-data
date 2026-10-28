@@ -6,7 +6,7 @@
 
 # Interface: ArmyIncludesCondition
 
-Defined in: [generated.ts:2252](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2252)
+Defined in: [generated.ts:2572](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2572)
 
 [army] Your army includes at least `min` (default 1) units matching `filter`; with every: true, every unit (or model, with filter level: model) in your army matches it.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:2252](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **type**: `"army-includes"`
 
-Defined in: [generated.ts:2253](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2253)
+Defined in: [generated.ts:2573](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2573)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:2253](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **parameters**: `object`
 
-Defined in: [generated.ts:2254](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2254)
+Defined in: [generated.ts:2574](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2574)
 
 #### filter
 

@@ -6,7 +6,7 @@
 
 # Interface: RollReference
 
-Defined in: [generated.ts:1155](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1155)
+Defined in: [generated.ts:1174](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1174)
 
 The result of a roll an enclosing `roll` step bound: its total, or (with successes_on) how many of its dice rolled that value or higher.
 
@@ -19,7 +19,7 @@ via the `definition` "roll-reference".
 
 > **roll\_var**: `string`
 
-Defined in: [generated.ts:1156](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1156)
+Defined in: [generated.ts:1175](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1175)
 
 ***
 
@@ -27,4 +27,4 @@ Defined in: [generated.ts:1156](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **successes\_on?**: `number`
 
-Defined in: [generated.ts:1157](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1157)
+Defined in: [generated.ts:1176](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1176)

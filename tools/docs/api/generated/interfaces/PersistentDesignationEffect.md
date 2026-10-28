@@ -6,7 +6,7 @@
 
 # Interface: PersistentDesignationEffect
 
-Defined in: [generated.ts:4065](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4065)
+Defined in: [generated.ts:4573](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4573)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "persistent-designation-effect".
@@ -17,7 +17,7 @@ via the `definition` "persistent-designation-effect".
 
 > **type**: `"persistent-designation"`
 
-Defined in: [generated.ts:4066](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4066)
+Defined in: [generated.ts:4574](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4574)
 
 ***
 
@@ -25,7 +25,7 @@ Defined in: [generated.ts:4066](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **operation?**: `"replace"` \| `"establish"`
 
-Defined in: [generated.ts:4067](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4067)
+Defined in: [generated.ts:4575](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4575)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [generated.ts:4067](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **designation**: `string`
 
-Defined in: [generated.ts:4068](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4068)
+Defined in: [generated.ts:4576](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4576)
 
 ***
 
@@ -41,7 +41,7 @@ Defined in: [generated.ts:4068](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **select**: `object`
 
-Defined in: [generated.ts:4069](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4069)
+Defined in: [generated.ts:4577](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4577)
 
 #### kind
 
@@ -57,7 +57,7 @@ Defined in: [generated.ts:4069](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **consumer?**: `object`
 
-Defined in: [generated.ts:4073](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4073)
+Defined in: [generated.ts:4581](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4581)
 
 #### relation
 
@@ -65,7 +65,9 @@ Defined in: [generated.ts:4073](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 #### beneficiary
 
-> **beneficiary**: `"this-unit"` \| `"this-model"`
+> **beneficiary**: `"this-unit"` \| `"this-model"` \| `"model-in-this-unit"` \| `"attacker"` \| `"defender"` \| `"event-subject"` \| `"event-object"` \| `"stratagem-target"` \| `"selected-unit"` \| `"recipient"` \| `"bearer-transport"` \| `"ability-unit"` \| [`UnitFilter`](UnitFilter.md) \| \{ `event_var`: `string`; \} \| \{ `selection_var`: `string`; \} \| \{ `stratagem_target`: `string`; \}
+
+Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
 
 #### reference?
 
@@ -81,7 +83,7 @@ Defined in: [generated.ts:4073](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **duration**: [`ScopeDuration`](../type-aliases/ScopeDuration.md)
 
-Defined in: [generated.ts:4079](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4079)
+Defined in: [generated.ts:4614](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4614)
 
 ***
 
@@ -89,7 +91,7 @@ Defined in: [generated.ts:4079](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **lifecycle?**: `object`
 
-Defined in: [generated.ts:4080](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4080)
+Defined in: [generated.ts:4615](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4615)
 
 #### replace
 
@@ -117,7 +119,7 @@ Defined in: [generated.ts:4080](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **selection\_policy**: `"one-time"` \| `"replace-on-destroyed"`
 
-Defined in: [generated.ts:4088](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4088)
+Defined in: [generated.ts:4623](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4623)
 
 ***
 
@@ -125,4 +127,4 @@ Defined in: [generated.ts:4088](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **allow\_while\_embarked?**: `boolean`
 
-Defined in: [generated.ts:4089](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4089)
+Defined in: [generated.ts:4624](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4624)

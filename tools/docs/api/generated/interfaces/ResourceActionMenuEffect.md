@@ -6,7 +6,7 @@
 
 # Interface: ResourceActionMenuEffect
 
-Defined in: [generated.ts:3812](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3812)
+Defined in: [generated.ts:4256](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4256)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "resource-action-menu-effect".
@@ -17,7 +17,7 @@ via the `definition` "resource-action-menu-effect".
 
 > **type**: `"resource-action-menu"`
 
-Defined in: [generated.ts:3813](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3813)
+Defined in: [generated.ts:4257](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4257)
 
 ***
 
@@ -25,7 +25,7 @@ Defined in: [generated.ts:3813](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **menu\_id**: `string`
 
-Defined in: [generated.ts:3814](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3814)
+Defined in: [generated.ts:4258](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4258)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [generated.ts:3814](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **pool\_id**: `string`
 
-Defined in: [generated.ts:3815](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3815)
+Defined in: [generated.ts:4259](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4259)
 
 ***
 
@@ -41,7 +41,7 @@ Defined in: [generated.ts:3815](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **shared\_usage?**: `object`
 
-Defined in: [generated.ts:3816](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3816)
+Defined in: [generated.ts:4260](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4260)
 
 #### unit\_max\_manoeuvres\_per\_phase?
 
@@ -57,7 +57,7 @@ Defined in: [generated.ts:3816](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **capacity?**: `object`
 
-Defined in: [generated.ts:3820](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3820)
+Defined in: [generated.ts:4264](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4264)
 
 #### amount
 
@@ -79,9 +79,9 @@ Defined in: [generated.ts:3820](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 ### actions
 
-> **actions**: \[\{ `id`: `string`; `label`: `string`; `when`: [`ResourceActionMenuTrigger`](ResourceActionMenuTrigger.md) \| \[[`ResourceActionMenuTrigger`](ResourceActionMenuTrigger.md), `...ResourceActionMenuTrigger[]`\]; `cost`: \{ `pool_id`: `string`; `amount`: `number`; `resource_label?`: `string`; \}; `eligibility?`: \{ `filter?`: [`UnitFilter`](UnitFilter.md); `count?`: [`CountBounds`](CountBounds.md); `requires?`: \[[`AbilityDSLCondition1`](../type-aliases/AbilityDSLCondition1.md), `...AbilityDSLCondition1[]`\]; \}; `usage?`: \{ `repeatable_if_different_unit?`: `boolean`; \}; `duration?`: `"phase"` \| `"turn"` \| `"resolution"`; `effect`: [`EffectNode`](../type-aliases/EffectNode.md); \}, ...\{ id: string; label: string; when: ResourceActionMenuTrigger \| \[ResourceActionMenuTrigger, ...ResourceActionMenuTrigger\[\]\]; cost: \{ pool\_id: string; amount: number; resource\_label?: string \}; eligibility?: \{ filter?: UnitFilter; count?: CountBounds; requires?: \[AbilityDSLCondition1, ...AbilityDSLCondition1\[\]\] \}; usage?: \{ repeatable\_if\_different\_unit?: boolean \}; duration?: "phase" \| "turn" \| "resolution"; effect: EffectNode \}\[\]\]
+> **actions**: \[\{ `id`: `string`; `label`: `string`; `when`: [`ResourceActionMenuTrigger`](ResourceActionMenuTrigger.md) \| \[[`ResourceActionMenuTrigger`](ResourceActionMenuTrigger.md), `...ResourceActionMenuTrigger[]`\]; `cost`: \{ `pool_id`: `string`; `amount`: `number`; `resource_label?`: `string`; \}; `eligibility?`: \{ `filter?`: [`UnitFilter`](UnitFilter.md); `count?`: [`CountBounds`](CountBounds.md); `requires?`: \[[`AbilityDSLCondition1`](../type-aliases/AbilityDSLCondition1.md), `...AbilityDSLCondition1[]`\]; \}; `usage?`: \{ `repeatable_if_different_unit?`: `boolean`; \}; `duration?`: `"battle-round"` \| `"phase"` \| `"turn"` \| `"battle"` \| `"until-next-command-phase"` \| `"until-next-movement-phase"` \| `"until-next-battle-round"` \| `"until-start-next-turn"` \| `"one-use"` \| `"permanent"` \| `"attack-sequence"` \| `"resolution"` \| `"while-leading"` \| `"after-resolving"` \| `"until-next-shooting-phase"` \| `"until-end-of-your-next-turn"` \| `"until-end-of-opponent-next-turn"` \| `"until-end-of-next-turn"` \| `"until-this-unit-has-shot"` \| `"control-lost"` \| `"until-end-of-your-next-fight-phase"` \| `"until-end-of-your-next-shooting-phase"` \| `"until-end-of-your-next-movement-phase"` \| `"until-end-of-opponent-next-movement-phase"` \| `"until-start-of-opponent-next-command-phase"`; `effect`: [`EffectNode`](../type-aliases/EffectNode.md); \}, ...\{ id: string; label: string; when: ResourceActionMenuTrigger \| \[ResourceActionMenuTrigger, ...ResourceActionMenuTrigger\[\]\]; cost: \{ pool\_id: string; amount: number; resource\_label?: string \}; eligibility?: \{ filter?: UnitFilter; count?: CountBounds; requires?: \[AbilityDSLCondition1, ...AbilityDSLCondition1\[\]\] \}; usage?: \{ repeatable\_if\_different\_unit?: boolean \}; duration?: "battle-round" \| "phase" \| "turn" \| "battle" \| "until-next-command-phase" \| "until-next-movement-phase" \| "until-next-battle-round" \| "until-start-next-turn" \| "one-use" \| "permanent" \| "attack-sequence" \| "resolution" \| "while-leading" \| "after-resolving" \| "until-next-shooting-phase" \| "until-end-of-your-next-turn" \| "until-end-of-opponent-next-turn" \| "until-end-of-next-turn" \| "until-this-unit-has-shot" \| "control-lost" \| "until-end-of-your-next-fight-phase" \| "until-end-of-your-next-shooting-phase" \| "until-end-of-your-next-movement-phase" \| "until-end-of-opponent-next-movement-phase" \| "until-start-of-opponent-next-command-phase"; effect: EffectNode \}\[\]\]
 
-Defined in: [generated.ts:3829](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3829)
+Defined in: [generated.ts:4273](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4273)
 
 #### Min Items
 

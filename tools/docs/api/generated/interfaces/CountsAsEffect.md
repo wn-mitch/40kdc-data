@@ -6,7 +6,7 @@
 
 # Interface: CountsAsEffect
 
-Defined in: [generated.ts:4346](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4346)
+Defined in: [generated.ts:4952](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4952)
 
 [permission] The target counts as being within a range of something, or inside a region.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:4346](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **type**: `"counts-as"`
 
-Defined in: [generated.ts:4347](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4347)
+Defined in: [generated.ts:4953](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4953)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:4347](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **target**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:4348](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4348)
+Defined in: [generated.ts:4954](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4954)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [generated.ts:4348](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **modifier**: `object`
 
-Defined in: [generated.ts:4349](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4349)
+Defined in: [generated.ts:4955](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4955)
 
 #### Index Signature
 
@@ -44,4 +44,4 @@ Defined in: [generated.ts:4349](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **scaling?**: [`Scaling`](Scaling.md)
 
-Defined in: [generated.ts:4352](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4352)
+Defined in: [generated.ts:4958](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4958)

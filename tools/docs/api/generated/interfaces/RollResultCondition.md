@@ -6,7 +6,7 @@
 
 # Interface: RollResultCondition
 
-Defined in: [generated.ts:2126](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2126)
+Defined in: [generated.ts:2440](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2440)
 
 [attack] A roll came out this way.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:2126](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **type**: `"roll-result"`
 
-Defined in: [generated.ts:2127](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2127)
+Defined in: [generated.ts:2441](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2441)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:2127](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **parameters**: `object`
 
-Defined in: [generated.ts:2128](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2128)
+Defined in: [generated.ts:2442](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2442)
 
 #### roll
 

@@ -6,7 +6,7 @@
 
 # Interface: ShareRegistry
 
-Defined in: [share/registry.ts:30](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/share/registry.ts#L30)
+Defined in: [share/registry.ts:30](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/share/registry.ts#L30)
 
 The committed registry artifact (mirrors `data/share-registry.json`).
 
@@ -16,7 +16,7 @@ The committed registry artifact (mirrors `data/share-registry.json`).
 
 > **version**: `number`
 
-Defined in: [share/registry.ts:31](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/share/registry.ts#L31)
+Defined in: [share/registry.ts:31](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/share/registry.ts#L31)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [share/registry.ts:31](https://github.com/wn-mitch/40kdc-data/blob/b
 
 > **kinds**: `Record`\<[`ShareKind`](../type-aliases/ShareKind.md), `string`[]\>
 
-Defined in: [share/registry.ts:32](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/share/registry.ts#L32)
+Defined in: [share/registry.ts:32](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/share/registry.ts#L32)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [share/registry.ts:32](https://github.com/wn-mitch/40kdc-data/blob/b
 
 > **aliases**: `Record`\<`string`, `string`\>
 
-Defined in: [share/registry.ts:34](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/share/registry.ts#L34)
+Defined in: [share/registry.ts:34](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/share/registry.ts#L34)
 
 Rename map applied on decode: a retained (old) id → its current id.
 
@@ -42,6 +42,6 @@ Rename map applied on decode: a retained (old) id → its current id.
 
 > **tombstones**: `string`[]
 
-Defined in: [share/registry.ts:36](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/share/registry.ts#L36)
+Defined in: [share/registry.ts:36](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/share/registry.ts#L36)
 
 Ids dropped from the dataset whose slots are retained for old tokens.

@@ -8,6 +8,6 @@
 
 > `const` **abilities**: [`Collection`](../classes/Collection.md)\<[`AbilityDSLEntry`](../../generated/interfaces/AbilityDSLEntry.md), [`AbilityView`](../classes/AbilityView.md)\> = `dataset.abilities`
 
-Defined in: [data/index.ts:165](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/index.ts#L165)
+Defined in: [data/index.ts:171](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/index.ts#L171)
 
 All abilities, linked to their phases and the units that have them.

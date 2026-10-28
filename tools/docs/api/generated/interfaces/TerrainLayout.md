@@ -6,7 +6,7 @@
 
 # Interface: TerrainLayout
 
-Defined in: [generated.ts:6316](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6316)
+Defined in: [generated.ts:6989](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6989)
 
 A recommended arrangement of terrain pieces on the board, independent of the deployment map (a deployment-pattern references the layouts it recommends via recommended_terrain_layout_ids). Each piece draws its geometry from a catalog `template` (a terrain-template entity) or an inline `footprint`; geometry is the source of truth. Placement is template-centroid-anchored: `position` is the piece's centroid, which is invariant under rotation and mirror, so orientation and location are decoupled. Resolved board-space vertices are derived by the shared terrain resolver (pinned by the conformance corpus), never stored here. No layout data is authored yet beyond migrated examples.
 
@@ -19,7 +19,7 @@ via the `definition` "terrain-layout".
 
 > **id**: `string`
 
-Defined in: [generated.ts:6317](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6317)
+Defined in: [generated.ts:6990](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6990)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [generated.ts:6317](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **name**: `string`
 
-Defined in: [generated.ts:6318](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6318)
+Defined in: [generated.ts:6991](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6991)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [generated.ts:6318](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **source?**: `string`
 
-Defined in: [generated.ts:6322](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6322)
+Defined in: [generated.ts:6995](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6995)
 
 Mission pack or source the layout originates from.
 
@@ -45,7 +45,7 @@ Mission pack or source the layout originates from.
 
 > `optional` **description?**: `string`
 
-Defined in: [generated.ts:6323](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6323)
+Defined in: [generated.ts:6996](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6996)
 
 ***
 
@@ -53,7 +53,7 @@ Defined in: [generated.ts:6323](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **mission\_matchup\_id?**: `string`
 
-Defined in: [generated.ts:6327](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6327)
+Defined in: [generated.ts:7000](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L7000)
 
 Kebab-case identifier
 
@@ -63,7 +63,7 @@ Kebab-case identifier
 
 > `optional` **variant?**: `number`
 
-Defined in: [generated.ts:6331](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6331)
+Defined in: [generated.ts:7004](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L7004)
 
 The card's trailing variant number within its mission matchup (1–3 at launch, since three layouts share each pairing). No hard maximum, to avoid a breaking change if more variants ship.
 
@@ -73,7 +73,7 @@ The card's trailing variant number within its mission matchup (1–3 at launch, 
 
 > `optional` **deployment\_pattern\_id?**: `string`
 
-Defined in: [generated.ts:6335](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6335)
+Defined in: [generated.ts:7008](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L7008)
 
 Kebab-case identifier
 
@@ -83,7 +83,7 @@ Kebab-case identifier
 
 > `optional` **board?**: `object`
 
-Defined in: [generated.ts:6339](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6339)
+Defined in: [generated.ts:7012](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L7012)
 
 Board extents in inches (y-down). Absent means the 40kdc standard 60×44. A per-layout override for one-off boards (e.g. the 36×36 KOTC colosseum); resolver geometry is board-agnostic, so consumers use this only to size the table.
 
@@ -101,7 +101,7 @@ Board extents in inches (y-down). Absent means the 40kdc standard 60×44. A per-
 
 > `optional` **pieces?**: [`Piece`](Piece.md)[]
 
-Defined in: [generated.ts:6346](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6346)
+Defined in: [generated.ts:7019](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L7019)
 
 Terrain pieces composing the layout. May be empty while a layout is registered by name ahead of its confirmed geometry.
 
@@ -111,4 +111,4 @@ Terrain pieces composing the layout. May be empty while a layout is registered b
 
 > **game\_version**: [`GameVersionReference`](GameVersionReference.md)
 
-Defined in: [generated.ts:6347](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6347)
+Defined in: [generated.ts:7020](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L7020)

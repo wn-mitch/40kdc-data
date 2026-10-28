@@ -6,7 +6,7 @@
 
 # Interface: StrengthCondition
 
-Defined in: [generated.ts:1624](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1624)
+Defined in: [generated.ts:1924](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1924)
 
 [composition] The subject is below its Starting Strength, or below Half-strength.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:1624](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **type**: `"strength"`
 
-Defined in: [generated.ts:1625](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1625)
+Defined in: [generated.ts:1925](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1925)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:1625](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **parameters**: `object`
 
-Defined in: [generated.ts:1626](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1626)
+Defined in: [generated.ts:1926](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1926)
 
 #### subject?
 

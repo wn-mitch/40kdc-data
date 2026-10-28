@@ -6,7 +6,7 @@
 
 # Interface: AbilityModifierEffect
 
-Defined in: [generated.ts:3356](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3356)
+Defined in: [generated.ts:3691](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3691)
 
 [ability] Change one named ability: its uses, range, targets, recipients, selections, how many can apply at once, duration, start round, threshold or options.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:3356](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **type**: `"ability-modifier"`
 
-Defined in: [generated.ts:3357](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3357)
+Defined in: [generated.ts:3692](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3692)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:3357](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **target**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:3358](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3358)
+Defined in: [generated.ts:3693](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3693)
 
 ***
 
@@ -32,11 +32,11 @@ Defined in: [generated.ts:3358](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **modifier**: `object`
 
-Defined in: [generated.ts:3359](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3359)
+Defined in: [generated.ts:3694](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3694)
 
 #### ability
 
-> **ability**: `string` \| \{ `affecting`: [`UnitFilter`](UnitFilter.md); \} \| \{ `event`: `"used"`; `event_var`: `string`; \} \| \{ `keyword`: `string`; \}
+> **ability**: `string` \| [`StanceOptionRef1`](StanceOptionRef1.md) \| [`NamedAbilityRef1`](NamedAbilityRef1.md) \| \{ `affecting`: [`UnitFilter`](UnitFilter.md); \} \| \{ `event`: `"used"`; `event_var`: `string`; \} \| \{ `keyword`: `string`; \}
 
 #### aspect
 
@@ -110,4 +110,4 @@ This unit's use does not count toward the shared (once per phase per army) limit
 
 > `optional` **scaling?**: [`Scaling`](Scaling.md)
 
-Defined in: [generated.ts:3411](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3411)
+Defined in: [generated.ts:3748](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3748)

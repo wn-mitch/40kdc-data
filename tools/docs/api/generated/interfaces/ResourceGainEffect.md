@@ -6,7 +6,7 @@
 
 # Interface: ResourceGainEffect
 
-Defined in: [generated.ts:5077](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5077)
+Defined in: [generated.ts:5702](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5702)
 
 [resource] Add to a resource pool.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:5077](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **type**: `"resource-gain"`
 
-Defined in: [generated.ts:5078](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5078)
+Defined in: [generated.ts:5703](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5703)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:5078](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **target**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:5079](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5079)
+Defined in: [generated.ts:5704](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5704)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [generated.ts:5079](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **modifier**: `object`
 
-Defined in: [generated.ts:5080](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5080)
+Defined in: [generated.ts:5705](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5705)
 
 #### pool
 
@@ -52,4 +52,4 @@ Defined in: [generated.ts:5080](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **scaling?**: [`Scaling`](Scaling.md)
 
-Defined in: [generated.ts:5085](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5085)
+Defined in: [generated.ts:5710](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5710)

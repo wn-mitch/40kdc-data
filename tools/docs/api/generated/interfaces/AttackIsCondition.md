@@ -6,7 +6,7 @@
 
 # Interface: AttackIsCondition
 
-Defined in: [generated.ts:2090](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2090)
+Defined in: [generated.ts:2404](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2404)
 
 [attack] The attack being resolved matches every filter.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:2090](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **type**: `"attack-is"`
 
-Defined in: [generated.ts:2091](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2091)
+Defined in: [generated.ts:2405](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2405)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:2091](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **parameters**: `object`
 
-Defined in: [generated.ts:2092](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2092)
+Defined in: [generated.ts:2406](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2406)
 
 #### attack\_type?
 

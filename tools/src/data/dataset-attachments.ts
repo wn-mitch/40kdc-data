@@ -89,17 +89,20 @@ export function allyUnitsFor(
 }
 
 /**
- * Leaders whose leader-attachment data lists `bodyguardUnitId` among its
- * eligible body units, sorted by name. The attachment is stored on the
- * leader pointing down to its bodyguards, so answering "which leaders can
- * attach to this unit?" means scanning the attachment list. A shared leader
- * chassis carries one attachment record per faction, so leaders are deduped
- * by id. Returns an empty array for a unit that no leader can attach to
- * (including leader units).
+ * Leaders eligible for `bodyguardUnitId`, sorted by name. The attachment is
+ * stored on the leader pointing down to its bodyguards, so answering "which
+ * leaders can attach to this unit?" means scanning the attachment list. A
+ * shared leader chassis carries one attachment record per faction, so leaders
+ * are deduped by id. Without `rosterUnitIds` every conditional group counts;
+ * with it, only groups whose required units are present and excluded units
+ * absent. Unconditional id and keyword eligibility always applies. Returns an
+ * empty array for a unit that no leader can attach to (including leader units).
  */
 export function leadersAttachableTo(
   ds: Dataset,
-  bodyguardUnitId: string): UnitView[] {
+  bodyguardUnitId: string,
+  rosterUnitIds?: ReadonlySet<string>,
+): UnitView[] {
   const bodyguard = ds.units.getAny(bodyguardUnitId);
   const seen = new Set<string>();
   return (
@@ -107,6 +110,11 @@ export function leadersAttachableTo(
       .filter(
         (la) =>
           la.eligible_bodyguard_ids.includes(bodyguardUnitId) ||
+          (la.conditional_groups ?? []).some(
+            (group) =>
+              attachmentGroupApplies(group, rosterUnitIds) &&
+              group.eligible_bodyguard_ids.includes(bodyguardUnitId),
+          ) ||
           // Keyword eligibility (e.g. an Inquisitor leading any Imperium
           // Battleline Infantry unit): match on the bodyguard's keyword set.
           (bodyguard !== undefined &&
@@ -131,13 +139,14 @@ export function leadersAttachableTo(
  * data from the leader's side (`leader_id` matches; resolve each
  * `eligible_bodyguard_ids` entry), deduped by id. Empty for a non-leader
  * unit. Together the two queries give the bidirectional attachment graph the
- * SPA needs to offer a partner dropdown from either end.
+ * SPA needs to offer a partner dropdown from either end. Conditional groups
+ * follow the same roster rule as {@link leadersAttachableTo}.
  */
 export function bodyguardsAttachableFrom(
   ds: Dataset,
-  
   leaderUnitId: string,
   factionId?: string,
+  rosterUnitIds?: ReadonlySet<string>,
 ): UnitView[] {
   const seen = new Set<string>();
   const out: UnitView[] = [];
@@ -148,7 +157,13 @@ export function bodyguardsAttachableFrom(
   };
   for (const la of ds.leaderAttachments) {
     if (la.leader_id !== leaderUnitId) continue;
-    const bodyguards = la.eligible_bodyguard_ids.map((id) =>
+    const ids = [
+      ...la.eligible_bodyguard_ids,
+      ...(la.conditional_groups ?? [])
+        .filter((group) => attachmentGroupApplies(group, rosterUnitIds))
+        .flatMap((group) => group.eligible_bodyguard_ids),
+    ];
+    const bodyguards = ids.map((id) =>
       factionId
         ? ds.units.getInFaction(id, factionId)
         : ds.units.getAny(id),
@@ -171,6 +186,21 @@ export function bodyguardsAttachableFrom(
     }
   }
   return out.sort((a, b) => a.name.localeCompare(b.name));
+}
+
+/**
+ * Whether a roster-conditional attachment group applies: always without roster
+ * context, else when every required unit is in the roster and no excluded one is.
+ */
+export function attachmentGroupApplies(
+  group: NonNullable<LeaderAttachment["conditional_groups"]>[number],
+  rosterUnitIds?: ReadonlySet<string>,
+): boolean {
+  return (
+    !rosterUnitIds ||
+    ((group.required_roster_unit_ids ?? []).every((id) => rosterUnitIds.has(id)) &&
+      !(group.excluded_roster_unit_ids ?? []).some((id) => rosterUnitIds.has(id)))
+  );
 }
 
 /** Lowercased union of a unit's `keywords` and `faction_keywords`, for membership tests. */

@@ -6,7 +6,7 @@
 
 # Interface: NamedAbilityRef
 
-Defined in: [generated.ts:1112](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1112)
+Defined in: [generated.ts:1131](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1131)
 
 Stable reference to a named ability definition owned by its containing ability.
 
@@ -19,7 +19,7 @@ via the `definition` "named-ability-ref".
 
 > **ability\_id**: `string`
 
-Defined in: [generated.ts:1113](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1113)
+Defined in: [generated.ts:1132](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1132)
 
 ***
 
@@ -27,4 +27,4 @@ Defined in: [generated.ts:1113](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **definition\_id**: `string`
 
-Defined in: [generated.ts:1114](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1114)
+Defined in: [generated.ts:1133](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1133)

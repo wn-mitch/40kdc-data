@@ -6,7 +6,7 @@
 
 # Interface: SequenceEffect
 
-Defined in: [generated.ts:3498](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3498)
+Defined in: [generated.ts:3853](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3853)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "sequence-effect".
@@ -17,7 +17,7 @@ via the `definition` "sequence-effect".
 
 > **type**: `"sequence"`
 
-Defined in: [generated.ts:3499](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3499)
+Defined in: [generated.ts:3854](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3854)
 
 ***
 
@@ -25,7 +25,7 @@ Defined in: [generated.ts:3499](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **steps**: \[[`EffectNode`](../type-aliases/EffectNode.md), `...EffectNode[]`\]
 
-Defined in: [generated.ts:3503](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3503)
+Defined in: [generated.ts:3858](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3858)
 
 #### Min Items
 

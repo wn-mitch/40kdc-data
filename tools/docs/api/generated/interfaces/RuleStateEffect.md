@@ -6,7 +6,7 @@
 
 # Interface: RuleStateEffect
 
-Defined in: [generated.ts:4357](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4357)
+Defined in: [generated.ts:4963](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4963)
 
 [permission] Switch a named rule on or off for the target.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:4357](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **type**: `"rule-state"`
 
-Defined in: [generated.ts:4358](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4358)
+Defined in: [generated.ts:4964](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4964)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:4358](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **target**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:4359](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4359)
+Defined in: [generated.ts:4965](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4965)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [generated.ts:4359](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **modifier**: `object`
 
-Defined in: [generated.ts:4360](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4360)
+Defined in: [generated.ts:4966](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4966)
 
 #### direction
 
@@ -44,7 +44,7 @@ Defined in: [generated.ts:4360](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 #### rule
 
-> **rule**: `string` \| [`NamedAbilityRef`](NamedAbilityRef.md)
+> **rule**: `string` \| [`StanceOptionRef`](StanceOptionRef.md) \| [`NamedAbilityRef`](NamedAbilityRef.md)
 
 #### exchange\_with?
 
@@ -53,6 +53,12 @@ Defined in: [generated.ts:4360](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 #### except\_from?
 
 > `optional` **except\_from?**: `"this-ability"`
+
+#### any\_army\_faction?
+
+> `optional` **any\_army\_faction?**: `true`
+
+A granted faction rule the holder can use whatever your Army Faction is ("even though your Army Faction is not X"): the rule's own Army Faction requirement does not apply to it.
 
 #### attacks?
 
@@ -64,4 +70,4 @@ Defined in: [generated.ts:4360](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **scaling?**: [`Scaling`](Scaling.md)
 
-Defined in: [generated.ts:4368](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4368)
+Defined in: [generated.ts:4978](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4978)

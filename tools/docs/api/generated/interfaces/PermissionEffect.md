@@ -6,7 +6,7 @@
 
 # Interface: PermissionEffect
 
-Defined in: [generated.ts:4204](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4204)
+Defined in: [generated.ts:4744](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4744)
 
 [permission] Allow or forbid an activity. after: in a turn in which the unit made that move; despite: something that would normally block it (destroyed: a just-destroyed unit can still be targeted with a Stratagem); as_if: as if in that phase or using that shooting type; next: the unit must be the next one selected; reach: an extended distance.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:4204](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **type**: `"permission"`
 
-Defined in: [generated.ts:4205](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4205)
+Defined in: [generated.ts:4745](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4745)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:4205](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **target**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:4206](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4206)
+Defined in: [generated.ts:4746](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4746)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [generated.ts:4206](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **modifier**: `object`
 
-Defined in: [generated.ts:4207](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4207)
+Defined in: [generated.ts:4747](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4747)
 
 #### activity
 
@@ -52,7 +52,7 @@ Defined in: [generated.ts:4207](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 #### despite?
 
-> `optional` **despite?**: \[`"destroyed"` \| `"engaged"` \| `"battle-shocked"` \| `"shot-this-phase"` \| `"fought-this-phase"` \| `"disembarked-this-turn"` \| `"stratagem-used-this-phase"` \| `"performing-action"` \| `"advanced"` \| `"fell-back"`, ...("destroyed" \| "engaged" \| "battle-shocked" \| "shot-this-phase" \| "fought-this-phase" \| "disembarked-this-turn" \| "stratagem-used-this-phase" \| "performing-action" \| "advanced" \| "fell-back")\[\]\]
+> `optional` **despite?**: \[`"destroyed"` \| `"engaged"` \| `"battle-shocked"` \| `"shot-this-phase"` \| `"fought-this-phase"` \| `"disembarked-this-turn"` \| `"stratagem-used-this-phase"` \| `"performing-action"` \| `"advanced"` \| `"fell-back"` \| `"transport-advanced"`, ...("destroyed" \| "engaged" \| "battle-shocked" \| "shot-this-phase" \| "fought-this-phase" \| "disembarked-this-turn" \| "stratagem-used-this-phase" \| "performing-action" \| "advanced" \| "fell-back" \| "transport-advanced")\[\]\]
 
 ##### Min Items
 
@@ -72,7 +72,27 @@ Defined in: [generated.ts:4207](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 #### reach?
 
-> `optional` **reach?**: `number`
+> `optional` **reach?**: [`NonTieredRangeRef`](../type-aliases/NonTieredRangeRef.md) \| \{ `per_battle_round`: \[[`NonTieredRangeRef`](../type-aliases/NonTieredRangeRef.md), `...NonTieredRangeRef[]`\]; \}
+
+One reference for every distance. A per_battle_round table is indexed from battle round 1; each later round uses the next entry and the final entry continues for all subsequent rounds. Tier entries are non-tiered range refs, so nested tables are forbidden.
+
+##### Union Members
+
+[`NonTieredRangeRef`](../type-aliases/NonTieredRangeRef.md)
+
+***
+
+###### Type Literal
+
+\{ `per_battle_round`: \[[`NonTieredRangeRef`](../type-aliases/NonTieredRangeRef.md), `...NonTieredRangeRef[]`\]; \}
+
+###### per\_battle\_round
+
+> **per\_battle\_round**: \[[`NonTieredRangeRef`](../type-aliases/NonTieredRangeRef.md), `...NonTieredRangeRef[]`\]
+
+###### Min Items
+
+1
 
 #### stratagem?
 
@@ -84,11 +104,37 @@ Defined in: [generated.ts:4207](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 Doing so counts as having made this move this turn (a disembark counting as a Normal move).
 
+#### counts\_as\_until?
+
+> `optional` **counts\_as\_until?**: `"end-of-phase"`
+
+The counts_as_move status holds only until the end of the phase the subject used the permission in ("counts as having made a Normal move that phase"); absent, it holds for the turn. Needs counts_as_move.
+
+#### then\_cannot?
+
+> `optional` **then\_cannot?**: \[`"advance"` \| `"fall-back"` \| `"disembark"` \| `"embark"` \| `"fight"` \| `"shoot"` \| `"declare-charge"` \| `"start-action"` \| `"move"` \| `"observe"` \| `"use-stratagem"` \| `"issue-order"` \| `"attempt-ritual"` \| `"use-enhancement"`, ...("advance" \| "fall-back" \| "disembark" \| "embark" \| "fight" \| "shoot" \| "declare-charge" \| "start-action" \| "move" \| "observe" \| "use-stratagem" \| "issue-order" \| "attempt-ritual" \| "use-enhancement")\[\]\]
+
+If the subject uses this permission, it cannot do these activities for the rest of the turn ("if it does, it cannot declare a charge in the same turn"). Only with allow true.
+
+##### Min Items
+
+1
+
 #### consumes\_shared\_use?
 
 > `optional` **consumes\_shared\_use?**: `false`
 
 This use of the Stratagem does not count toward its once-per-phase limit for other units.
+
+#### weapons?
+
+> `optional` **weapons?**: \[[`WeaponScope`](WeaponScope.md), `...WeaponScope[]`\]
+
+A shoot permission that allows only these weapons: any one of them.
+
+##### Min Items
+
+1
 
 ***
 
@@ -96,4 +142,4 @@ This use of the Stratagem does not count toward its once-per-phase limit for oth
 
 > `optional` **scaling?**: [`Scaling`](Scaling.md)
 
-Defined in: [generated.ts:4287](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4287)
+Defined in: [generated.ts:4888](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4888)

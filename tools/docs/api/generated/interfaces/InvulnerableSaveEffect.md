@@ -6,7 +6,7 @@
 
 # Interface: InvulnerableSaveEffect
 
-Defined in: [generated.ts:4424](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4424)
+Defined in: [generated.ts:5034](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5034)
 
 [protection] The target has an invulnerable save of at least this.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:4424](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **type**: `"invulnerable-save"`
 
-Defined in: [generated.ts:4425](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4425)
+Defined in: [generated.ts:5035](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5035)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:4425](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **target**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:4426](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4426)
+Defined in: [generated.ts:5036](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5036)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [generated.ts:4426](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **modifier**: `object`
 
-Defined in: [generated.ts:4427](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4427)
+Defined in: [generated.ts:5037](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5037)
 
 #### invuln\_sv
 
@@ -48,4 +48,4 @@ Defined in: [generated.ts:4427](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **scaling?**: [`Scaling`](Scaling.md)
 
-Defined in: [generated.ts:4431](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4431)
+Defined in: [generated.ts:5041](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5041)

@@ -6,7 +6,7 @@
 
 # Interface: OathStateCondition
 
-Defined in: [generated.ts:2302](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2302)
+Defined in: [generated.ts:2625](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2625)
 
 [army] The referenced containing ability's current oath is fulfilled.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:2302](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **type**: `"oath-state"`
 
-Defined in: [generated.ts:2303](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2303)
+Defined in: [generated.ts:2626](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2626)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:2303](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **parameters**: `object`
 
-Defined in: [generated.ts:2304](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2304)
+Defined in: [generated.ts:2627](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2627)
 
 #### ability
 

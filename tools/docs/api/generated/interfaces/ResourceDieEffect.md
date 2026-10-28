@@ -6,7 +6,7 @@
 
 # Interface: ResourceDieEffect
 
-Defined in: [generated.ts:5105](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5105)
+Defined in: [generated.ts:5730](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5730)
 
 [resource] Add a die to a pool, or substitute a pooled die for a roll.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:5105](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **type**: `"resource-die"`
 
-Defined in: [generated.ts:5106](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5106)
+Defined in: [generated.ts:5731](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5731)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:5106](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **target**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:5107](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5107)
+Defined in: [generated.ts:5732](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5732)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [generated.ts:5107](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **modifier**: `object`
 
-Defined in: [generated.ts:5108](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5108)
+Defined in: [generated.ts:5733](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5733)
 
 #### pool
 
@@ -72,4 +72,4 @@ Defined in: [generated.ts:5108](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **scaling?**: [`Scaling`](Scaling.md)
 
-Defined in: [generated.ts:5120](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5120)
+Defined in: [generated.ts:5745](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5745)

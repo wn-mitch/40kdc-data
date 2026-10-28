@@ -6,7 +6,7 @@
 
 # Interface: ShareUnit
 
-Defined in: [share/codec.ts:50](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/share/codec.ts#L50)
+Defined in: [share/codec.ts:50](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/share/codec.ts#L50)
 
 One unit in a [ShareList](ShareList.md). Mirrors the builder's per-row essentials.
 
@@ -16,7 +16,7 @@ One unit in a [ShareList](ShareList.md). Mirrors the builder's per-row essential
 
 > **datasheetId**: `string`
 
-Defined in: [share/codec.ts:51](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/share/codec.ts#L51)
+Defined in: [share/codec.ts:51](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/share/codec.ts#L51)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [share/codec.ts:51](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **modelCount**: `number`
 
-Defined in: [share/codec.ts:52](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/share/codec.ts#L52)
+Defined in: [share/codec.ts:52](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/share/codec.ts#L52)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [share/codec.ts:52](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **isWarlord**: `boolean`
 
-Defined in: [share/codec.ts:53](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/share/codec.ts#L53)
+Defined in: [share/codec.ts:53](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/share/codec.ts#L53)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [share/codec.ts:53](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **enhancementId**: `string` \| `null`
 
-Defined in: [share/codec.ts:54](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/share/codec.ts#L54)
+Defined in: [share/codec.ts:54](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/share/codec.ts#L54)
 
 ***
 
@@ -48,7 +48,7 @@ Defined in: [share/codec.ts:54](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **allyFactionId**: `string` \| `null`
 
-Defined in: [share/codec.ts:56](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/share/codec.ts#L56)
+Defined in: [share/codec.ts:56](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/share/codec.ts#L56)
 
 Source faction id when this is an *allied* unit; null for own-faction.
 
@@ -58,7 +58,7 @@ Source faction id when this is an *allied* unit; null for own-faction.
 
 > **allyRuleId**: `string` \| `null`
 
-Defined in: [share/codec.ts:58](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/share/codec.ts#L58)
+Defined in: [share/codec.ts:58](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/share/codec.ts#L58)
 
 Allied-rule id this unit was included under; null when not an ally.
 
@@ -68,7 +68,7 @@ Allied-rule id this unit was included under; null when not an ally.
 
 > **attachedToOrdinal**: `number` \| `null`
 
-Defined in: [share/codec.ts:60](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/share/codec.ts#L60)
+Defined in: [share/codec.ts:60](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/share/codec.ts#L60)
 
 Ordinal (into [ShareList.units](ShareList.md#units)) of the bodyguard this leader joins.
 
@@ -78,7 +78,7 @@ Ordinal (into [ShareList.units](ShareList.md#units)) of the bodyguard this leade
 
 > **grants**: `string`[]
 
-Defined in: [share/codec.ts:62](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/share/codec.ts#L62)
+Defined in: [share/codec.ts:62](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/share/codec.ts#L62)
 
 Detachment keyword grants the player assigned to this unit.
 
@@ -88,4 +88,4 @@ Detachment keyword grants the player assigned to this unit.
 
 > **loadout**: [`ShareLoadoutEntry`](../type-aliases/ShareLoadoutEntry.md)[]
 
-Defined in: [share/codec.ts:63](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/share/codec.ts#L63)
+Defined in: [share/codec.ts:63](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/share/codec.ts#L63)

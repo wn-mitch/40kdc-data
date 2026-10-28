@@ -6,7 +6,7 @@
 
 # Interface: TestEffect
 
-Defined in: [generated.ts:5025](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5025)
+Defined in: [generated.ts:5650](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5650)
 
 [test] Force the target to take a test (count or per: several rolls).
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:5025](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **type**: `"test"`
 
-Defined in: [generated.ts:5026](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5026)
+Defined in: [generated.ts:5651](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5651)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:5026](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **target**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:5027](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5027)
+Defined in: [generated.ts:5652](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5652)
 
 ***
 
@@ -32,11 +32,11 @@ Defined in: [generated.ts:5027](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **modifier**: `object`
 
-Defined in: [generated.ts:5028](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5028)
+Defined in: [generated.ts:5653](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5653)
 
 #### test
 
-> **test**: `"battle-shock"` \| `"leadership"` \| `"hazard"` \| `"desperate-escape"`
+> **test**: `"battle-shock"` \| `"leadership"` \| `"hazard"` \| `"desperate-escape"` \| `"psychic"`
 
 #### modifier?
 
@@ -56,4 +56,4 @@ Defined in: [generated.ts:5028](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **scaling?**: [`Scaling`](Scaling.md)
 
-Defined in: [generated.ts:5034](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5034)
+Defined in: [generated.ts:5659](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5659)

@@ -6,7 +6,7 @@
 
 # Interface: DeathGate
 
-Defined in: [generated.ts:4549](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4549)
+Defined in: [generated.ts:5159](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5159)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "death-gate".
@@ -17,7 +17,7 @@ via the `definition` "death-gate".
 
 > **dice**: `string`
 
-Defined in: [generated.ts:4550](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4550)
+Defined in: [generated.ts:5160](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5160)
 
 ***
 
@@ -25,7 +25,7 @@ Defined in: [generated.ts:4550](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **comparison**: [`Comparison`](../type-aliases/Comparison.md)
 
-Defined in: [generated.ts:4551](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4551)
+Defined in: [generated.ts:5161](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5161)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [generated.ts:4551](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **threshold**: [`Quantity`](../type-aliases/Quantity.md)
 
-Defined in: [generated.ts:4552](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4552)
+Defined in: [generated.ts:5162](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5162)
 
 ***
 
@@ -41,7 +41,7 @@ Defined in: [generated.ts:4552](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **modifiers**: `object`[]
 
-Defined in: [generated.ts:4553](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4553)
+Defined in: [generated.ts:5163](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5163)
 
 #### condition
 

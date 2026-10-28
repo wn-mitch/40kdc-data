@@ -269,6 +269,12 @@ def validate_roster_core(spec: dict[str, Any], dataset: Dataset) -> dict[str, An
                 f"{enh_id} taken {uses} times, max {max_targets}",
             )
 
+    present_unit_ids = {
+        unit_id
+        for su in spec_units
+        if isinstance(unit_id := su.get("unit_id"), str)
+    }
+
     # --- Leader attachment. ----------------------------------------------------
     for idx, su in enumerate(spec_units):
         view = views[idx]
@@ -279,7 +285,10 @@ def validate_roster_core(spec: dict[str, Any], dataset: Dataset) -> dict[str, An
             # Eligibility is a reference check on a saved roster, not a listing: a
             # combat-patrol bodyguard stays eligible whatever mode the dataset lists.
             eligible_bodyguards = {
-                v.id for v in dataset.for_game_mode("all").bodyguards_attachable_from(view.id)
+                v.id
+                for v in dataset.for_game_mode("all").bodyguards_attachable_from(
+                    view.id, present_unit_ids
+                )
             }
             enhancement = (
                 dataset.enhancements.get(su["enhancement_id"]) if su.get("enhancement_id") else None
@@ -293,7 +302,9 @@ def validate_roster_core(spec: dict[str, Any], dataset: Dataset) -> dict[str, An
                     f"{view.id} cannot attach to {leader_bodyguard_id}",
                     idx,
                 )
-        elif view.raw.get("attachment_role") == "support" and (
+        elif dataset.effective_attachment_role(
+            view.id, present_unit_ids, view.raw.get("faction_id")
+        ) == "support" and (
             _is_character(view.raw) or "Character" in (su.get("keyword_overrides") or [])
         ):
             err(

@@ -6,7 +6,7 @@
 
 # Interface: NamedRegionBranch
 
-Defined in: [generated.ts:4058](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4058)
+Defined in: [generated.ts:4566](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4566)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "named-region-branch".
@@ -17,4 +17,4 @@ via the `definition` "named-region-branch".
 
 > **effect**: [`AbilityPart`](AbilityPart.md)
 
-Defined in: [generated.ts:4059](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4059)
+Defined in: [generated.ts:4567](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4567)

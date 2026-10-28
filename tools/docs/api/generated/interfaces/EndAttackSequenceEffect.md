@@ -6,7 +6,7 @@
 
 # Interface: EndAttackSequenceEffect
 
-Defined in: [generated.ts:3291](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3291)
+Defined in: [generated.ts:3626](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3626)
 
 [roll] The attack sequence ends for that attack.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:3291](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **type**: `"end-attack-sequence"`
 
-Defined in: [generated.ts:3292](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3292)
+Defined in: [generated.ts:3627](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3627)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:3292](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **target**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:3293](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3293)
+Defined in: [generated.ts:3628](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3628)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [generated.ts:3293](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **modifier?**: `object`
 
-Defined in: [generated.ts:3294](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3294)
+Defined in: [generated.ts:3629](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3629)
 
 ***
 
@@ -40,4 +40,4 @@ Defined in: [generated.ts:3294](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **scaling?**: [`Scaling`](Scaling.md)
 
-Defined in: [generated.ts:3295](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3295)
+Defined in: [generated.ts:3630](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3630)

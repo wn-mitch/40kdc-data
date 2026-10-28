@@ -6,7 +6,7 @@
 
 # Interface: PhaseIsCondition
 
-Defined in: [generated.ts:1546](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1546)
+Defined in: [generated.ts:1846](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1846)
 
 [clock] It is this phase.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:1546](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **type**: `"phase-is"`
 
-Defined in: [generated.ts:1547](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1547)
+Defined in: [generated.ts:1847](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1847)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:1547](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **parameters**: `object`
 
-Defined in: [generated.ts:1548](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1548)
+Defined in: [generated.ts:1848](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1848)
 
 #### phase
 

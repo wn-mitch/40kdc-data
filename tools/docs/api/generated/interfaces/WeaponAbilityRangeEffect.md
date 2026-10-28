@@ -6,7 +6,7 @@
 
 # Interface: WeaponAbilityRangeEffect
 
-Defined in: [generated.ts:6054](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6054)
+Defined in: [generated.ts:6723](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6723)
 
 [ability] The named weapon ability's test applies out to the given range instead of its printed range: keyword benefit when the target is within weapon range.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:6054](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **type**: `"weapon-ability-range"`
 
-Defined in: [generated.ts:6055](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6055)
+Defined in: [generated.ts:6724](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6724)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:6055](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **target**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:6056](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6056)
+Defined in: [generated.ts:6725](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6725)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [generated.ts:6056](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **modifier**: `object`
 
-Defined in: [generated.ts:6057](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6057)
+Defined in: [generated.ts:6726](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6726)
 
 #### keyword
 

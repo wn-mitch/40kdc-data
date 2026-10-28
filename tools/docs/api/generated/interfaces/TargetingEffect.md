@@ -6,7 +6,7 @@
 
 # Interface: TargetingEffect
 
-Defined in: [generated.ts:4292](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4292)
+Defined in: [generated.ts:4893](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4893)
 
 [permission] Who may, may not or must target whom, under which limit.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:4292](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **type**: `"targeting"`
 
-Defined in: [generated.ts:4293](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4293)
+Defined in: [generated.ts:4894](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4894)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:4293](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **target**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:4294](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4294)
+Defined in: [generated.ts:4895](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4895)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [generated.ts:4294](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **modifier**: `object`
 
-Defined in: [generated.ts:4295](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4295)
+Defined in: [generated.ts:4896](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4896)
 
 #### by?
 
@@ -57,6 +57,12 @@ Defined in: [generated.ts:4295](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 #### stratagem?
 
 > `optional` **stratagem?**: `string`
+
+#### ability?
+
+> `optional` **ability?**: `string`
+
+Kebab-case identifier
 
 #### only\_if\_none?
 
@@ -84,10 +90,14 @@ cannot-target with Stratagems: Core Stratagems can still target it.
 
 > `optional` **weapons?**: [`WeaponScope`](WeaponScope.md)
 
+#### target\_condition?
+
+> `optional` **target\_condition?**: [`AbilityDSLCondition5`](../type-aliases/AbilityDSLCondition5.md)
+
 ***
 
 ### scaling?
 
 > `optional` **scaling?**: [`Scaling`](Scaling.md)
 
-Defined in: [generated.ts:4341](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4341)
+Defined in: [generated.ts:4947](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4947)

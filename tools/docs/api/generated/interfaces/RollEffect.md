@@ -6,7 +6,7 @@
 
 # Interface: RollEffect
 
-Defined in: [generated.ts:4104](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4104)
+Defined in: [generated.ts:4639](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4639)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "roll-effect".
@@ -17,7 +17,7 @@ via the `definition` "roll-effect".
 
 > **type**: `"roll"`
 
-Defined in: [generated.ts:4105](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4105)
+Defined in: [generated.ts:4640](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4640)
 
 ***
 
@@ -25,7 +25,7 @@ Defined in: [generated.ts:4105](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **dice**: `string`
 
-Defined in: [generated.ts:4106](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4106)
+Defined in: [generated.ts:4641](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4641)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [generated.ts:4106](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **extra\_dice\_pool?**: `string`
 
-Defined in: [generated.ts:4107](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4107)
+Defined in: [generated.ts:4642](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4642)
 
 ***
 
@@ -41,7 +41,7 @@ Defined in: [generated.ts:4107](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **kind?**: [`RollKind`](../type-aliases/RollKind.md)
 
-Defined in: [generated.ts:4108](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4108)
+Defined in: [generated.ts:4643](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4643)
 
 ***
 
@@ -49,7 +49,7 @@ Defined in: [generated.ts:4108](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **roll\_var**: `string`
 
-Defined in: [generated.ts:4109](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4109)
+Defined in: [generated.ts:4644](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4644)
 
 ***
 
@@ -57,4 +57,4 @@ Defined in: [generated.ts:4109](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **effect**: [`EffectNode`](../type-aliases/EffectNode.md)
 
-Defined in: [generated.ts:4110](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4110)
+Defined in: [generated.ts:4645](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4645)

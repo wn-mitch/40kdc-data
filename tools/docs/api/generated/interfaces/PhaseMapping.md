@@ -6,7 +6,7 @@
 
 # Interface: PhaseMapping
 
-Defined in: [generated.ts:7297](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7297)
+Defined in: [generated.ts:8013](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L8013)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "phase-mapping".
@@ -21,7 +21,7 @@ via the `definition` "phase-mapping".
 
 > **source\_id**: `string`
 
-Defined in: [generated.ts:7298](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7298)
+Defined in: [generated.ts:8014](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L8014)
 
 ***
 
@@ -29,7 +29,7 @@ Defined in: [generated.ts:7298](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **source\_type**: [`SourceType`](../type-aliases/SourceType.md)
 
-Defined in: [generated.ts:7299](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7299)
+Defined in: [generated.ts:8015](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L8015)
 
 ***
 
@@ -37,7 +37,7 @@ Defined in: [generated.ts:7299](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **phases**: [`PhaseList`](../type-aliases/PhaseList.md)
 
-Defined in: [generated.ts:7300](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7300)
+Defined in: [generated.ts:8016](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L8016)
 
 ***
 
@@ -45,7 +45,7 @@ Defined in: [generated.ts:7300](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **game\_version**: [`GameVersionReference`](GameVersionReference.md)
 
-Defined in: [generated.ts:7301](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7301)
+Defined in: [generated.ts:8017](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L8017)
 
 ***
 
@@ -53,4 +53,4 @@ Defined in: [generated.ts:7301](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **authored\_by?**: `string`
 
-Defined in: [generated.ts:7302](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7302)
+Defined in: [generated.ts:8018](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L8018)

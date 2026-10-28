@@ -6,7 +6,7 @@
 
 # Interface: AffordabilityUnit
 
-Defined in: [data/affordability.ts:28](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/affordability.ts#L28)
+Defined in: [data/affordability.ts:28](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/affordability.ts#L28)
 
 One unit already in the list (fixes the running total + per-datasheet ordinals).
 
@@ -16,7 +16,7 @@ One unit already in the list (fixes the running total + per-datasheet ordinals).
 
 > **unitId**: `string`
 
-Defined in: [data/affordability.ts:29](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/affordability.ts#L29)
+Defined in: [data/affordability.ts:29](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/affordability.ts#L29)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [data/affordability.ts:29](https://github.com/wn-mitch/40kdc-data/bl
 
 > **modelCount**: `number`
 
-Defined in: [data/affordability.ts:30](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/affordability.ts#L30)
+Defined in: [data/affordability.ts:30](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/affordability.ts#L30)
 
 ***
 
@@ -32,4 +32,4 @@ Defined in: [data/affordability.ts:30](https://github.com/wn-mitch/40kdc-data/bl
 
 > `optional` **enhancementId?**: `string` \| `null`
 
-Defined in: [data/affordability.ts:31](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/affordability.ts#L31)
+Defined in: [data/affordability.ts:31](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/affordability.ts#L31)

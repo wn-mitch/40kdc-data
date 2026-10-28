@@ -6,7 +6,7 @@
 
 # Interface: DesignateEffect
 
-Defined in: [generated.ts:5134](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5134)
+Defined in: [generated.ts:5818](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5818)
 
 [designation] Tag a unit, objective or terrain area (or clear the tag).
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:5134](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **type**: `"designate"`
 
-Defined in: [generated.ts:5135](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5135)
+Defined in: [generated.ts:5819](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5819)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:5135](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **target**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:5136](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5136)
+Defined in: [generated.ts:5820](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5820)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [generated.ts:5136](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **modifier**: `object`
 
-Defined in: [generated.ts:5137](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5137)
+Defined in: [generated.ts:5821](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5821)
 
 #### subject?
 
@@ -62,4 +62,4 @@ Which unit a predicate or trigger talks about. A fixed role, a filter for 'any u
 
 > `optional` **scaling?**: [`Scaling`](Scaling.md)
 
-Defined in: [generated.ts:5180](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5180)
+Defined in: [generated.ts:5864](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5864)

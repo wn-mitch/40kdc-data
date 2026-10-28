@@ -6,7 +6,7 @@
 
 # Interface: MarkerEffect
 
-Defined in: [generated.ts:4959](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4959)
+Defined in: [generated.ts:5584](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5584)
 
 [placement] Place or relocate a marker.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:4959](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **type**: `"marker"`
 
-Defined in: [generated.ts:4960](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4960)
+Defined in: [generated.ts:5585](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5585)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:4960](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **target**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:4961](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4961)
+Defined in: [generated.ts:5586](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5586)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [generated.ts:4961](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **modifier**: `object`
 
-Defined in: [generated.ts:4962](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4962)
+Defined in: [generated.ts:5587](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5587)
 
 #### label
 
@@ -66,4 +66,4 @@ Relocate: only a marker that has not been moved this turn.
 
 > `optional` **scaling?**: [`Scaling`](Scaling.md)
 
-Defined in: [generated.ts:4973](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4973)
+Defined in: [generated.ts:5598](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5598)

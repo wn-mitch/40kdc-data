@@ -6,7 +6,7 @@
 
 # Interface: ArmyStateCondition
 
-Defined in: [generated.ts:2292](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2292)
+Defined in: [generated.ts:2612](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2612)
 
 [army] The named army state currently holds for the referenced side.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:2292](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **type**: `"army-state"`
 
-Defined in: [generated.ts:2293](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2293)
+Defined in: [generated.ts:2613](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2613)
 
 ***
 
@@ -24,11 +24,13 @@ Defined in: [generated.ts:2293](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **parameters**: `object`
 
-Defined in: [generated.ts:2294](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2294)
+Defined in: [generated.ts:2614](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2614)
 
 #### owner
 
-> **owner**: `"friendly"` \| `"enemy"`
+> **owner**: `"friendly"` \| `"enemy"` \| `"any"`
+
+A definite player: friendly or enemy (an owner other than any).
 
 #### state
 

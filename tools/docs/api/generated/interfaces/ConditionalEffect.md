@@ -6,7 +6,7 @@
 
 # Interface: ConditionalEffect
 
-Defined in: [generated.ts:3666](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3666)
+Defined in: [generated.ts:4022](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4022)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "conditional-effect".
@@ -17,7 +17,7 @@ via the `definition` "conditional-effect".
 
 > **type**: `"conditional"`
 
-Defined in: [generated.ts:3667](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3667)
+Defined in: [generated.ts:4023](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4023)
 
 ***
 
@@ -25,7 +25,7 @@ Defined in: [generated.ts:3667](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **condition**: [`AbilityDSLCondition1`](../type-aliases/AbilityDSLCondition1.md)
 
-Defined in: [generated.ts:3668](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3668)
+Defined in: [generated.ts:4024](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4024)
 
 ***
 
@@ -33,4 +33,4 @@ Defined in: [generated.ts:3668](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **effect**: [`EffectNode`](../type-aliases/EffectNode.md)
 
-Defined in: [generated.ts:3669](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3669)
+Defined in: [generated.ts:4025](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4025)

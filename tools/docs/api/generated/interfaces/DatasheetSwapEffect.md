@@ -6,7 +6,7 @@
 
 # Interface: DatasheetSwapEffect
 
-Defined in: [generated.ts:5986](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5986)
+Defined in: [generated.ts:6670](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6670)
 
 [identity] The target unit uses another datasheet from now on (its profile, keywords and abilities), keeping its wounds and position.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:5986](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **type**: `"datasheet-swap"`
 
-Defined in: [generated.ts:5987](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5987)
+Defined in: [generated.ts:6671](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6671)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:5987](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **target**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:5988](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5988)
+Defined in: [generated.ts:6672](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6672)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [generated.ts:5988](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **modifier**: `object`
 
-Defined in: [generated.ts:5989](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5989)
+Defined in: [generated.ts:6673](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6673)
 
 #### datasheet
 
@@ -44,4 +44,4 @@ Defined in: [generated.ts:5989](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **scaling?**: [`Scaling`](Scaling.md)
 
-Defined in: [generated.ts:5992](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5992)
+Defined in: [generated.ts:6676](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6676)

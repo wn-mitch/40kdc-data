@@ -6,7 +6,7 @@
 
 # Interface: ClosestCondition
 
-Defined in: [generated.ts:2059](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2059)
+Defined in: [generated.ts:2367](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2367)
 
 [position] The subject is the closest of `among` to `to` (default the attacker), within `range` if given.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:2059](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **type**: `"closest"`
 
-Defined in: [generated.ts:2060](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2060)
+Defined in: [generated.ts:2368](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2368)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:2060](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **parameters**: `object`
 
-Defined in: [generated.ts:2061](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2061)
+Defined in: [generated.ts:2369](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2369)
 
 #### subject?
 

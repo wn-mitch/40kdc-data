@@ -6,7 +6,7 @@
 
 # Interface: WeaponScope
 
-Defined in: [generated.ts:1685](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1685)
+Defined in: [generated.ts:1985](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1985)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "weapon-scope".
@@ -17,7 +17,7 @@ via the `definition` "weapon-scope".
 
 > `optional` **type?**: `"ranged"` \| `"melee"`
 
-Defined in: [generated.ts:1686](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1686)
+Defined in: [generated.ts:1986](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1986)
 
 ***
 
@@ -25,7 +25,7 @@ Defined in: [generated.ts:1686](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **name?**: `string`
 
-Defined in: [generated.ts:1687](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1687)
+Defined in: [generated.ts:1987](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1987)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [generated.ts:1687](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **keyword?**: [`WeaponKeywordSelection`](../type-aliases/WeaponKeywordSelection.md)
 
-Defined in: [generated.ts:1688](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1688)
+Defined in: [generated.ts:1988](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1988)
 
 ***
 
@@ -41,7 +41,7 @@ Defined in: [generated.ts:1688](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **ref?**: [`WeaponRef`](../type-aliases/WeaponRef.md)
 
-Defined in: [generated.ts:1689](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1689)
+Defined in: [generated.ts:1989](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1989)
 
 ***
 
@@ -49,7 +49,7 @@ Defined in: [generated.ts:1689](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **exclude\_name?**: `string`
 
-Defined in: [generated.ts:1690](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1690)
+Defined in: [generated.ts:1990](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1990)
 
 ***
 
@@ -57,4 +57,4 @@ Defined in: [generated.ts:1690](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **exclude\_keyword?**: [`WeaponKeywordSelection`](../type-aliases/WeaponKeywordSelection.md)
 
-Defined in: [generated.ts:1691](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1691)
+Defined in: [generated.ts:1991](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1991)

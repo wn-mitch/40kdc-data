@@ -6,7 +6,7 @@
 
 # Interface: DesignateTargetEffect
 
-Defined in: [generated.ts:3747](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3747)
+Defined in: [generated.ts:4120](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4120)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "designate-target-effect".
@@ -17,7 +17,7 @@ via the `definition` "designate-target-effect".
 
 > **type**: `"designate-target"`
 
-Defined in: [generated.ts:3748](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3748)
+Defined in: [generated.ts:4121](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4121)
 
 ***
 
@@ -25,7 +25,7 @@ Defined in: [generated.ts:3748](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **designation**: `string`
 
-Defined in: [generated.ts:3749](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3749)
+Defined in: [generated.ts:4122](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4122)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [generated.ts:3749](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **select**: `object`
 
-Defined in: [generated.ts:3750](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3750)
+Defined in: [generated.ts:4123](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4123)
 
 #### kind
 
@@ -49,7 +49,7 @@ Defined in: [generated.ts:3750](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **applies**: `object`
 
-Defined in: [generated.ts:3754](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3754)
+Defined in: [generated.ts:4127](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4127)
 
 #### to
 
@@ -81,4 +81,4 @@ Defined in: [generated.ts:3754](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **duration?**: [`ScopeDuration`](../type-aliases/ScopeDuration.md)
 
-Defined in: [generated.ts:3762](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3762)
+Defined in: [generated.ts:4135](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4135)

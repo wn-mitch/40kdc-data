@@ -6,7 +6,7 @@
 
 # Class: ShareRegistryIndex
 
-Defined in: [share/registry.ts:40](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/share/registry.ts#L40)
+Defined in: [share/registry.ts:40](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/share/registry.ts#L40)
 
 Bidirectional lookup over one registry, prepared once for encode/decode.
 
@@ -16,7 +16,7 @@ Bidirectional lookup over one registry, prepared once for encode/decode.
 
 > **new ShareRegistryIndex**(`registry`): `ShareRegistryIndex`
 
-Defined in: [share/registry.ts:47](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/share/registry.ts#L47)
+Defined in: [share/registry.ts:47](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/share/registry.ts#L47)
 
 #### Parameters
 
@@ -34,7 +34,7 @@ Defined in: [share/registry.ts:47](https://github.com/wn-mitch/40kdc-data/blob/b
 
 > `readonly` **version**: `number`
 
-Defined in: [share/registry.ts:41](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/share/registry.ts#L41)
+Defined in: [share/registry.ts:41](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/share/registry.ts#L41)
 
 ## Methods
 
@@ -42,7 +42,7 @@ Defined in: [share/registry.ts:41](https://github.com/wn-mitch/40kdc-data/blob/b
 
 > **index**(`kind`, `id`): `number` \| `undefined`
 
-Defined in: [share/registry.ts:72](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/share/registry.ts#L72)
+Defined in: [share/registry.ts:72](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/share/registry.ts#L72)
 
 Slot for an id, or undefined if the registry doesn't know it (stale).
 
@@ -66,7 +66,7 @@ Slot for an id, or undefined if the registry doesn't know it (stale).
 
 > **id**(`kind`, `index`): `string` \| `undefined`
 
-Defined in: [share/registry.ts:77](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/share/registry.ts#L77)
+Defined in: [share/registry.ts:77](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/share/registry.ts#L77)
 
 Current id at a slot, or undefined if the slot is out of range (stale).
 
@@ -90,7 +90,7 @@ Current id at a slot, or undefined if the slot is out of range (stale).
 
 > **size**(`kind`): `number`
 
-Defined in: [share/registry.ts:82](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/share/registry.ts#L82)
+Defined in: [share/registry.ts:82](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/share/registry.ts#L82)
 
 Number of slots in a kind.
 

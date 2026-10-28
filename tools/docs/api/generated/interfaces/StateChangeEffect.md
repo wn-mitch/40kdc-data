@@ -6,7 +6,7 @@
 
 # Interface: StateChangeEffect
 
-Defined in: [generated.ts:5039](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5039)
+Defined in: [generated.ts:5664](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5664)
 
 [test] Set or clear a state on the target.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:5039](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **type**: `"state-change"`
 
-Defined in: [generated.ts:5040](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5040)
+Defined in: [generated.ts:5665](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5665)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:5040](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **target**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:5041](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5041)
+Defined in: [generated.ts:5666](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5666)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [generated.ts:5041](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **modifier**: `object`
 
-Defined in: [generated.ts:5042](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5042)
+Defined in: [generated.ts:5667](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5667)
 
 #### state
 
@@ -48,4 +48,4 @@ Defined in: [generated.ts:5042](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **scaling?**: [`Scaling`](Scaling.md)
 
-Defined in: [generated.ts:5046](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5046)
+Defined in: [generated.ts:5671](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5671)

@@ -6,9 +6,9 @@
 
 # Interface: UnitFilter1
 
-Defined in: [generated.ts:5239](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5239)
+Defined in: [generated.ts:1582](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1582)
 
-Any unit (or model, with level: model) matching every listed property. Reads as 'a unit that…'.
+Only objective markers with no unit matching this filter within range of them ("has no enemy units (excluding AIRCRAFT units) within range of it").
 
 ## Properties
 
@@ -16,7 +16,7 @@ Any unit (or model, with level: model) matching every listed property. Reads as 
 
 > `optional` **owner?**: [`Owner`](../type-aliases/Owner.md)
 
-Defined in: [generated.ts:5240](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5240)
+Defined in: [generated.ts:1583](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1583)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:5240](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **all\_of?**: [`KeywordList`](../type-aliases/KeywordList.md)
 
-Defined in: [generated.ts:5241](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5241)
+Defined in: [generated.ts:1584](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1584)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [generated.ts:5241](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **any\_of?**: [`KeywordList`](../type-aliases/KeywordList.md)
 
-Defined in: [generated.ts:5242](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5242)
+Defined in: [generated.ts:1585](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1585)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [generated.ts:5242](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **none\_of?**: [`KeywordList`](../type-aliases/KeywordList.md)
 
-Defined in: [generated.ts:5243](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5243)
+Defined in: [generated.ts:1586](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1586)
 
 ***
 
@@ -48,7 +48,7 @@ Defined in: [generated.ts:5243](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **not\_all\_of?**: [`KeywordList1`](../type-aliases/KeywordList1.md)
 
-Defined in: [generated.ts:5244](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5244)
+Defined in: [generated.ts:1587](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1587)
 
 ***
 
@@ -56,7 +56,7 @@ Defined in: [generated.ts:5244](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **any\_of\_filters?**: \[[`UnitFilter`](UnitFilter.md), [`UnitFilter`](UnitFilter.md), `...UnitFilter[]`\]
 
-Defined in: [generated.ts:5250](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5250)
+Defined in: [generated.ts:1593](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1593)
 
 Only units matching at least one of these filters, as well as every other listed property ("LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE unit"; "PSYKER or Battle-shocked unit"). Each alternative keeps its own keywords, exclusions and states; their keywords are never pooled into one requirement.
 
@@ -70,7 +70,7 @@ Only units matching at least one of these filters, as well as every other listed
 
 > `optional` **designated?**: `string`
 
-Defined in: [generated.ts:5254](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5254)
+Defined in: [generated.ts:1597](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1597)
 
 The unit carries this designation (a tag an effect applied). warlord: the unit contains the Warlord model.
 
@@ -80,7 +80,7 @@ The unit carries this designation (a tag an effect applied). warlord: the unit c
 
 > `optional` **state?**: [`UnitState`](../type-aliases/UnitState.md)
 
-Defined in: [generated.ts:5255](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5255)
+Defined in: [generated.ts:1598](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1598)
 
 ***
 
@@ -88,7 +88,7 @@ Defined in: [generated.ts:5255](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **not\_states?**: \[[`UnitState`](../type-aliases/UnitState.md), `...UnitState[]`\]
 
-Defined in: [generated.ts:5261](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5261)
+Defined in: [generated.ts:1604](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1604)
 
 Only units in none of these states ("unengaged", "not Battle-shocked").
 
@@ -102,7 +102,7 @@ Only units in none of these states ("unengaged", "not Battle-shocked").
 
 > `optional` **level?**: `"unit"` \| `"model"`
 
-Defined in: [generated.ts:5265](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5265)
+Defined in: [generated.ts:1608](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1608)
 
 model: the filter matches individual models. Default unit.
 
@@ -112,7 +112,7 @@ model: the filter matches individual models. Default unit.
 
 > `optional` **model\_names?**: \[`string`, `...string[]`\]
 
-Defined in: [generated.ts:5271](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5271)
+Defined in: [generated.ts:1614](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1614)
 
 Exact model-profile names; alternatives. This predicate applies only to individual models.
 
@@ -126,7 +126,7 @@ Exact model-profile names; alternatives. This predicate applies only to individu
 
 > `optional` **unit\_ids?**: \[`string`, `...string[]`\]
 
-Defined in: [generated.ts:5277](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5277)
+Defined in: [generated.ts:1620](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1620)
 
 Exact owning-faction unit identities; this predicate applies only to whole units.
 
@@ -140,7 +140,7 @@ Exact owning-faction unit identities; this predicate applies only to whole units
 
 > `optional` **attachment\_role?**: `"bodyguard"` \| `"leader"`
 
-Defined in: [generated.ts:5281](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5281)
+Defined in: [generated.ts:1624](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1624)
 
 Actual attachment membership role, not a capability keyword.
 
@@ -150,7 +150,7 @@ Actual attachment membership role, not a capability keyword.
 
 > `optional` **visible?**: `object`
 
-Defined in: [generated.ts:5285](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5285)
+Defined in: [generated.ts:1628](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1628)
 
 Only units visible to the named observer.
 
@@ -164,7 +164,7 @@ Only units visible to the named observer.
 
 > `optional` **within?**: `object`
 
-Defined in: [generated.ts:5291](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5291)
+Defined in: [generated.ts:1634](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1634)
 
 Only units within (wholly within, if set) this range of `of` (default the unit with the ability): aura recipients.
 
@@ -186,7 +186,7 @@ Only units within (wholly within, if set) this range of `of` (default the unit w
 
 > `optional` **excluding?**: `"this-unit"` \| `"this-model"` \| `"model-in-this-unit"` \| `"attacker"` \| `"defender"` \| `"event-subject"` \| `"event-object"` \| `"stratagem-target"` \| `"selected-unit"` \| `"recipient"` \| `"bearer-transport"` \| `"ability-unit"` \| [`UnitFilter`](UnitFilter.md) \| \{ `event_var`: `string`; \} \| \{ `selection_var`: `string`; \} \| \{ `stratagem_target`: `string`; \}
 
-Defined in: [generated.ts:5299](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5299)
+Defined in: [generated.ts:1642](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1642)
 
 Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
 
@@ -196,7 +196,7 @@ Which unit a predicate or trigger talks about. A fixed role, a filter for 'any u
 
 > `optional` **designated\_by?**: `"this-unit"` \| `"this-model"` \| `"model-in-this-unit"` \| `"attacker"` \| `"defender"` \| `"event-subject"` \| `"event-object"` \| `"stratagem-target"` \| `"selected-unit"` \| `"recipient"` \| `"bearer-transport"` \| `"ability-unit"` \| [`UnitFilter`](UnitFilter.md) \| \{ `event_var`: `string`; \} \| \{ `selection_var`: `string`; \} \| \{ `stratagem_target`: `string`; \}
 
-Defined in: [generated.ts:5327](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5327)
+Defined in: [generated.ts:1670](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1670)
 
 Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
 
@@ -206,7 +206,7 @@ Which unit a predicate or trigger talks about. A fixed role, a filter for 'any u
 
 > `optional` **not\_designated?**: `string`
 
-Defined in: [generated.ts:5355](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5355)
+Defined in: [generated.ts:1698](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1698)
 
 A designation (a tag an effect applies: spotted, observer, afflicted, riled-up). Kebab-case id; the describer prints the rules' term from its label table and integrity rejects ids outside the registry. Upper-case legacy spellings are accepted until the record repair normalises them. warlord is the list-building designation: the model chosen as Warlord when mustering. A unit carries it when it contains the Warlord model; a rule may test it but never apply it.
 
@@ -216,7 +216,7 @@ A designation (a tag an effect applies: spotted, observer, afflicted, riled-up).
 
 > `optional` **embarked\_in?**: `"this-unit"` \| `"this-model"` \| `"model-in-this-unit"` \| `"attacker"` \| `"defender"` \| `"event-subject"` \| `"event-object"` \| `"stratagem-target"` \| `"selected-unit"` \| `"recipient"` \| `"bearer-transport"` \| `"ability-unit"` \| [`UnitFilter`](UnitFilter.md) \| \{ `event_var`: `string`; \} \| \{ `selection_var`: `string`; \} \| \{ `stratagem_target`: `string`; \}
 
-Defined in: [generated.ts:5359](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5359)
+Defined in: [generated.ts:1702](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1702)
 
 Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
 
@@ -226,7 +226,7 @@ Which unit a predicate or trigger talks about. A fixed role, a filter for 'any u
 
 > `optional` **member\_of?**: `"this-unit"` \| `"this-model"` \| `"model-in-this-unit"` \| `"attacker"` \| `"defender"` \| `"event-subject"` \| `"event-object"` \| `"stratagem-target"` \| `"selected-unit"` \| `"recipient"` \| `"bearer-transport"` \| `"ability-unit"` \| [`UnitFilter`](UnitFilter.md) \| \{ `event_var`: `string`; \} \| \{ `selection_var`: `string`; \} \| \{ `stratagem_target`: `string`; \}
 
-Defined in: [generated.ts:5387](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5387)
+Defined in: [generated.ts:1730](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1730)
 
 Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
 
@@ -236,7 +236,7 @@ Which unit a predicate or trigger talks about. A fixed role, a filter for 'any u
 
 > `optional` **engaged\_with?**: `"this-unit"` \| `"this-model"` \| `"model-in-this-unit"` \| `"attacker"` \| `"defender"` \| `"event-subject"` \| `"event-object"` \| `"stratagem-target"` \| `"selected-unit"` \| `"recipient"` \| `"bearer-transport"` \| `"ability-unit"` \| [`UnitFilter`](UnitFilter.md) \| \{ `event_var`: `string`; \} \| \{ `selection_var`: `string`; \} \| \{ `stratagem_target`: `string`; \}
 
-Defined in: [generated.ts:5415](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5415)
+Defined in: [generated.ts:1758](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1758)
 
 Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
 
@@ -246,7 +246,7 @@ Which unit a predicate or trigger talks about. A fixed role, a filter for 'any u
 
 > `optional` **not\_engaged\_with?**: `"this-unit"` \| `"this-model"` \| `"model-in-this-unit"` \| `"attacker"` \| `"defender"` \| `"event-subject"` \| `"event-object"` \| `"stratagem-target"` \| `"selected-unit"` \| `"recipient"` \| `"bearer-transport"` \| `"ability-unit"` \| [`UnitFilter`](UnitFilter.md) \| \{ `event_var`: `string`; \} \| \{ `selection_var`: `string`; \} \| \{ `stratagem_target`: `string`; \}
 
-Defined in: [generated.ts:5443](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5443)
+Defined in: [generated.ts:1786](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1786)
 
 Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
 
@@ -256,7 +256,7 @@ Which unit a predicate or trigger talks about. A fixed role, a filter for 'any u
 
 > `optional` **has\_ability?**: \[`string`, `...string[]`\]
 
-Defined in: [generated.ts:5473](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5473)
+Defined in: [generated.ts:1816](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1816)
 
 Units with every listed ability.
 
@@ -270,7 +270,7 @@ Units with every listed ability.
 
 > `optional` **lacks\_ability?**: \[`string`, `...string[]`\]
 
-Defined in: [generated.ts:5479](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5479)
+Defined in: [generated.ts:1822](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1822)
 
 Units with none of the listed abilities.
 

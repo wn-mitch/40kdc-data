@@ -6,7 +6,7 @@
 
 # Interface: ScoringTrigger
 
-Defined in: [generated.ts:2924](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2924)
+Defined in: [generated.ts:3303](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3303)
 
 When a VP award is evaluated. A bare `phase` is the legacy shorthand for 'during this phase'; richer triggers add `timing` (the moment within a phase/turn/game), `player_turn`, and a `battle_round` window. A card's section headers map onto these: 'ANY BATTLE ROUND' omits `battle_round`; 'SECOND BATTLE ROUND ONWARDS' is { min: 2 }; 'END OF THE BATTLE' is timing: end-of-battle.
 
@@ -19,7 +19,7 @@ via the `definition` "scoring-trigger".
 
 > `optional` **phase?**: `"charge"` \| `"command"` \| `"movement"` \| `"shooting"` \| `"fight"`
 
-Defined in: [generated.ts:2928](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2928)
+Defined in: [generated.ts:3307](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3307)
 
 The five official game phases. Unchanged between 10th and 11th edition — 11e reorders Pile In timing within the Fight phase but adds no top-level phase.
 
@@ -29,7 +29,7 @@ The five official game phases. Unchanged between 10th and 11th edition — 11e r
 
 > `optional` **timing?**: `"start-of-turn"` \| `"end-of-turn"` \| `"start-of-phase"` \| `"end-of-phase"` \| `"end-of-battle"`
 
-Defined in: [generated.ts:2932](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2932)
+Defined in: [generated.ts:3311](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3311)
 
 The moment the award is checked. 'End of your turn' = end-of-turn; 'End of your Command phase' = end-of-phase with phase: command; 'End of the battle' = end-of-battle.
 
@@ -39,7 +39,7 @@ The moment the award is checked. 'End of your turn' = end-of-turn; 'End of your 
 
 > `optional` **player\_turn?**: [`PlayerTurn`](../type-aliases/PlayerTurn.md)
 
-Defined in: [generated.ts:2933](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2933)
+Defined in: [generated.ts:3312](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3312)
 
 ***
 
@@ -47,7 +47,7 @@ Defined in: [generated.ts:2933](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **battle\_round?**: `object`
 
-Defined in: [generated.ts:2937](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2937)
+Defined in: [generated.ts:3316](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3316)
 
 Battle-round window in which the trigger is active. Absent means any battle round (1-5). 'Second battle round onwards' is { min: 2 }.
 

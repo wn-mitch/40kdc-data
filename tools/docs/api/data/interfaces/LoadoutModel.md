@@ -6,7 +6,7 @@
 
 # Interface: LoadoutModel
 
-Defined in: [data/loadout.ts:151](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/loadout.ts#L151)
+Defined in: [data/loadout.ts:151](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/loadout.ts#L151)
 
 A unit-composition model row, as far as loadout maths cares: its count range,
 whether it is a leader (taken at a fixed small count), and the weapons every
@@ -18,7 +18,7 @@ such model carries by default. Pass the unit's `unit_composition.models` here.
 
 > `optional` **name?**: `string`
 
-Defined in: [data/loadout.ts:153](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/loadout.ts#L153)
+Defined in: [data/loadout.ts:153](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/loadout.ts#L153)
 
 Model-profile name; matched against an option's `model_constraint.model_name`.
 
@@ -28,7 +28,7 @@ Model-profile name; matched against an option's `model_constraint.model_name`.
 
 > **min**: `number`
 
-Defined in: [data/loadout.ts:154](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/loadout.ts#L154)
+Defined in: [data/loadout.ts:154](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/loadout.ts#L154)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [data/loadout.ts:154](https://github.com/wn-mitch/40kdc-data/blob/b7
 
 > **max**: `number`
 
-Defined in: [data/loadout.ts:155](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/loadout.ts#L155)
+Defined in: [data/loadout.ts:155](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/loadout.ts#L155)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [data/loadout.ts:155](https://github.com/wn-mitch/40kdc-data/blob/b7
 
 > `optional` **default\_weapon\_ids?**: readonly `string`[]
 
-Defined in: [data/loadout.ts:156](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/loadout.ts#L156)
+Defined in: [data/loadout.ts:156](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/loadout.ts#L156)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [data/loadout.ts:156](https://github.com/wn-mitch/40kdc-data/blob/b7
 
 > `optional` **is\_leader\_model?**: `boolean`
 
-Defined in: [data/loadout.ts:157](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/loadout.ts#L157)
+Defined in: [data/loadout.ts:157](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/loadout.ts#L157)
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [data/loadout.ts:157](https://github.com/wn-mitch/40kdc-data/blob/b7
 
 > `optional` **loadout\_variants?**: readonly `LoadoutVariant`[]
 
-Defined in: [data/loadout.ts:158](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/loadout.ts#L158)
+Defined in: [data/loadout.ts:158](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/loadout.ts#L158)
 
 ***
 
@@ -68,4 +68,4 @@ Defined in: [data/loadout.ts:158](https://github.com/wn-mitch/40kdc-data/blob/b7
 
 > `optional` **loadout\_variant\_budgets?**: readonly `LoadoutVariantBudget`[]
 
-Defined in: [data/loadout.ts:159](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/loadout.ts#L159)
+Defined in: [data/loadout.ts:159](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/loadout.ts#L159)

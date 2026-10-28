@@ -6,7 +6,9 @@
 
 # Interface: NamedRegionState
 
-Defined in: [generated.ts:3937](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3937)
+Defined in: [generated.ts:4442](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4442)
+
+A named region an army rule produces and, with a consumer, what it does for units inside it. Without a consumer it only declares the region, for other rules to name through rule_region; branch_precedence then has no branches to order.
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "named-region-state".
@@ -17,7 +19,7 @@ via the `definition` "named-region-state".
 
 > **region\_ref**: [`NamedRegionRef`](NamedRegionRef.md)
 
-Defined in: [generated.ts:3938](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3938)
+Defined in: [generated.ts:4443](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4443)
 
 ***
 
@@ -25,20 +27,20 @@ Defined in: [generated.ts:3938](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **producer**: [`NamedRegionProducer`](NamedRegionProducer.md)
 
-Defined in: [generated.ts:3939](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3939)
+Defined in: [generated.ts:4444](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4444)
 
 ***
 
-### consumer
+### consumer?
 
-> **consumer**: [`NamedRegionConsumer`](NamedRegionConsumer.md)
+> `optional` **consumer?**: [`NamedRegionConsumer`](NamedRegionConsumer.md)
 
-Defined in: [generated.ts:3940](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3940)
+Defined in: [generated.ts:4445](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4445)
 
 ***
 
-### branch\_precedence
+### branch\_precedence?
 
-> **branch\_precedence**: `"qualified-replaces-default"`
+> `optional` **branch\_precedence?**: `"qualified-replaces-default"`
 
-Defined in: [generated.ts:3941](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3941)
+Defined in: [generated.ts:4446](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4446)

@@ -6,7 +6,7 @@
 
 # Interface: TransportCapacityEffect
 
-Defined in: [generated.ts:4978](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4978)
+Defined in: [generated.ts:5603](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5603)
 
 [placement] How models count against a Transport's capacity: grouped models, fixed spaces per model, an equivalent model, or the Transport's own capacity with per-model spaces.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:4978](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **type**: `"transport-capacity"`
 
-Defined in: [generated.ts:4979](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4979)
+Defined in: [generated.ts:5604](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5604)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:4979](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **target**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:4980](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4980)
+Defined in: [generated.ts:5605](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5605)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [generated.ts:4980](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **modifier**: \{ `occupancy_kind`: `"grouped-models"`; `subject_kind`: [`TransportOccupancySubjectKind`](../type-aliases/TransportOccupancySubjectKind.md); `model_keyword?`: `string`; `transport_eligibility?`: [`TransportEligibility`](../type-aliases/TransportEligibility.md); `models_per_group`: `number`; `spaces_per_group`: `number`; `rounding`: `"down"` \| `"up"`; \} \| \{ `occupancy_kind`: `"fixed-model-spaces"`; `subject_kind`: [`TransportOccupancySubjectKind`](../type-aliases/TransportOccupancySubjectKind.md); `model_keyword?`: `string`; `transport_eligibility?`: [`TransportEligibility`](../type-aliases/TransportEligibility.md); `spaces_per_model`: `number`; \} \| \{\[`k`: `string`\]: `unknown`; \} \| \{ `capacity`: `number`; `eligible?`: [`UnitFilter`](UnitFilter.md); `space_per_model?`: \[\{ `all_of?`: [`KeywordList`](../type-aliases/KeywordList.md); `any_of?`: [`KeywordList`](../type-aliases/KeywordList.md); `slots`: `number`; \}, `...{ all_of?: KeywordList; any_of?: KeywordList; slots: number }[]`\]; \}
 
-Defined in: [generated.ts:4981](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4981)
+Defined in: [generated.ts:5606](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5606)
 
 #### Union Members
 
@@ -80,4 +80,4 @@ Defined in: [generated.ts:4981](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **scaling?**: [`Scaling`](Scaling.md)
 
-Defined in: [generated.ts:5020](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5020)
+Defined in: [generated.ts:5645](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5645)

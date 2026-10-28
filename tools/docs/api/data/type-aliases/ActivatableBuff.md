@@ -8,7 +8,7 @@
 
 > **ActivatableBuff** = `object`
 
-Defined in: [cruncher/from-dsl.ts:73](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/cruncher/from-dsl.ts#L73)
+Defined in: [cruncher/from-dsl.ts:81](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/from-dsl.ts#L81)
 
 A buff-bearing *player decision* the cruncher can't make on its own: a
 dice-pool option, a `choice` branch, or an activation gated on a timing the
@@ -24,7 +24,7 @@ resolver gates them per-target rather than the lever vanishing.
 
 > **id**: `string`
 
-Defined in: [cruncher/from-dsl.ts:75](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/cruncher/from-dsl.ts#L75)
+Defined in: [cruncher/from-dsl.ts:83](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/from-dsl.ts#L83)
 
 Stable toggle id, e.g. `"blessings-of-khorne#Warp Blades"`.
 
@@ -34,7 +34,7 @@ Stable toggle id, e.g. `"blessings-of-khorne#Warp Blades"`.
 
 > **label**: `string`
 
-Defined in: [cruncher/from-dsl.ts:77](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/cruncher/from-dsl.ts#L77)
+Defined in: [cruncher/from-dsl.ts:85](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/from-dsl.ts#L85)
 
 Human label for the lever (option name, or a summary of its buffs).
 
@@ -44,7 +44,7 @@ Human label for the lever (option name, or a summary of its buffs).
 
 > **buffs**: [`Buff`](Buff.md)[]
 
-Defined in: [cruncher/from-dsl.ts:79](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/cruncher/from-dsl.ts#L79)
+Defined in: [cruncher/from-dsl.ts:87](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/from-dsl.ts#L87)
 
 Contributions this activation adds when the player opts in (≥1, or none for a [capRaise](#capraise) lever).
 
@@ -54,7 +54,7 @@ Contributions this activation adds when the player opts in (≥1, or none for a 
 
 > `optional` **group?**: [`ActivatableGroupRef`](ActivatableGroupRef.md)
 
-Defined in: [cruncher/from-dsl.ts:81](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/cruncher/from-dsl.ts#L81)
+Defined in: [cruncher/from-dsl.ts:89](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/from-dsl.ts#L89)
 
 Set when the lever belongs to a mutually-limited pool.
 
@@ -64,7 +64,7 @@ Set when the lever belongs to a mutually-limited pool.
 
 > `optional` **capRaise?**: `object`
 
-Defined in: [cruncher/from-dsl.ts:86](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/cruncher/from-dsl.ts#L86)
+Defined in: [cruncher/from-dsl.ts:94](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/from-dsl.ts#L94)
 
 The lever raises the cap of another ability's lever pool instead of adding buffs ("select one
 more augmentation"): `ability` names that ability as the DSL does, `by` the extra activations.
@@ -103,7 +103,7 @@ more augmentation"): `ability` names that ability as the DSL does, `by` the extr
 
 > `optional` **groups?**: [`ActivatableGroupRef`](ActivatableGroupRef.md)[]
 
-Defined in: [cruncher/from-dsl.ts:88](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/cruncher/from-dsl.ts#L88)
+Defined in: [cruncher/from-dsl.ts:96](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/from-dsl.ts#L96)
 
 All enclosing activation pools apply, in addition to the option's own group.
 
@@ -113,8 +113,29 @@ All enclosing activation pools apply, in addition to the option's own group.
 
 > `optional` **requires?**: `unknown`[]
 
-Defined in: [cruncher/from-dsl.ts:94](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/cruncher/from-dsl.ts#L94)
+Defined in: [cruncher/from-dsl.ts:102](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/from-dsl.ts#L102)
 
 DSL fragments the player vouches for when opting in, in the order they apply: a unit
 selection (its range, visibility and eligibility), a gating roll, a model count. Absent when
 the lever assumes nothing beyond the choice itself.
+
+***
+
+### requiresOption?
+
+> `optional` **requiresOption?**: `StanceOptionRef`
+
+Defined in: [cruncher/from-dsl.ts:107](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/from-dsl.ts#L107)
+
+The stance option the lever applies under: a `rule-active` gate on an option the context's
+`activeRules` does not declare. The lever pool binds it to that option's own lever.
+
+***
+
+### excludesOption?
+
+> `optional` **excludesOption?**: `StanceOptionRef`
+
+Defined in: [cruncher/from-dsl.ts:109](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/from-dsl.ts#L109)
+
+The stance option the lever does not apply under: a negated `rule-active` gate on it.

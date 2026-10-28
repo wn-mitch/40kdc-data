@@ -6,7 +6,7 @@
 
 # Interface: AbilityRoll
 
-Defined in: [generated.ts:1985](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1985)
+Defined in: [generated.ts:2293](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2293)
 
 The dice a named ability rolls (Reanimation Protocols' roll), not every roll the unit makes.
 
@@ -19,4 +19,4 @@ via the `definition` "ability-roll".
 
 > **of\_ability**: `string`
 
-Defined in: [generated.ts:1986](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1986)
+Defined in: [generated.ts:2294](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2294)

@@ -6,7 +6,7 @@
 
 # Interface: StratagemTargetRestriction
 
-Defined in: [generated.ts:6066](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6066)
+Defined in: [generated.ts:6735](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6735)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "stratagem-target-restriction".
@@ -17,7 +17,7 @@ via the `definition` "stratagem-target-restriction".
 
 > `optional` **name?**: `string`
 
-Defined in: [generated.ts:6070](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6070)
+Defined in: [generated.ts:6739](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6739)
 
 Kebab-case identifier
 
@@ -27,7 +27,7 @@ Kebab-case identifier
 
 > `optional` **required\_keywords?**: [`KeywordList9`](../type-aliases/KeywordList9.md)
 
-Defined in: [generated.ts:6071](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6071)
+Defined in: [generated.ts:6740](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6740)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [generated.ts:6071](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **required\_keywords\_any?**: [`KeywordList10`](../type-aliases/KeywordList10.md)
 
-Defined in: [generated.ts:6072](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6072)
+Defined in: [generated.ts:6741](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6741)
 
 ***
 
@@ -43,7 +43,17 @@ Defined in: [generated.ts:6072](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **excluded\_keywords?**: [`KeywordList`](../type-aliases/KeywordList.md)
 
-Defined in: [generated.ts:6073](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6073)
+Defined in: [generated.ts:6742](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6742)
+
+***
+
+### warlord?
+
+> `optional` **warlord?**: `true`
+
+Defined in: [generated.ts:6746](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6746)
+
+The target is your Warlord: the Warlord model when `selects` is model, the unit that contains it when `selects` is unit. Warlord is the model chosen at mustering, not a keyword, so it never appears in the keyword lists; those still apply to the Warlord ("your DEATH GUARD WARLORD" is warlord plus required_keywords DEATH GUARD). Absent when the target need not be the Warlord. An enemy target is never your Warlord (integrity rejects warlord with side enemy).
 
 ***
 
@@ -51,7 +61,7 @@ Defined in: [generated.ts:6073](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **count?**: `"one-or-more"` \| `"one"` \| `"up-to"`
 
-Defined in: [generated.ts:6077](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6077)
+Defined in: [generated.ts:6750](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6750)
 
 How many targets are selected: one, one or more, or up to `count_max`.
 
@@ -61,7 +71,7 @@ How many targets are selected: one, one or more, or up to `count_max`.
 
 > `optional` **count\_max?**: `number`
 
-Defined in: [generated.ts:6081](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6081)
+Defined in: [generated.ts:6754](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6754)
 
 Upper bound when `count` is up-to (1: an optional extra target, zero or one unit).
 
@@ -71,7 +81,7 @@ Upper bound when `count` is up-to (1: an optional extra target, zero or one unit
 
 > `optional` **side?**: `"enemy"` \| `"your-army"`
 
-Defined in: [generated.ts:6085](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6085)
+Defined in: [generated.ts:6758](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6758)
 
 Whose units can be selected.
 
@@ -81,7 +91,7 @@ Whose units can be selected.
 
 > `optional` **selects?**: `"unit"` \| `"model"`
 
-Defined in: [generated.ts:6089](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6089)
+Defined in: [generated.ts:6762](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6762)
 
 Whether the target is a unit or a single model.
 
@@ -91,7 +101,7 @@ Whether the target is a unit or a single model.
 
 > `optional` **bound\_to?**: `"triggering-unit"` \| `"attacked-unit"`
 
-Defined in: [generated.ts:6093](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6093)
+Defined in: [generated.ts:6766](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6766)
 
 The target is not freely chosen: it is the unit the WHEN moment names ("that unit"), or the unit the triggering enemy attacked.
 
@@ -99,9 +109,9 @@ The target is not freely chosen: it is the unit the WHEN moment names ("that uni
 
 ### eligibility?
 
-> `optional` **eligibility?**: [`AbilityDSLCondition8`](../type-aliases/AbilityDSLCondition8.md)
+> `optional` **eligibility?**: [`AbilityDSLCondition9`](../type-aliases/AbilityDSLCondition9.md)
 
-Defined in: [generated.ts:6094](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6094)
+Defined in: [generated.ts:6767](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6767)
 
 ***
 
@@ -109,7 +119,7 @@ Defined in: [generated.ts:6094](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **notes?**: `string`
 
-Defined in: [generated.ts:6095](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6095)
+Defined in: [generated.ts:6768](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6768)
 
 ***
 
@@ -117,7 +127,7 @@ Defined in: [generated.ts:6095](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **mode?**: `"a"` \| `"b"`
 
-Defined in: [generated.ts:6099](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6099)
+Defined in: [generated.ts:6772](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6772)
 
 The exclusive target mode this target belongs to. Targets with the same mode are chosen together; a and b are alternatives. Set on every target when the Stratagem has modes (see target_restrictions).
 
@@ -127,7 +137,7 @@ The exclusive target mode this target belongs to. Targets with the same mode are
 
 > `optional` **mode\_cost?**: `object`
 
-Defined in: [generated.ts:6103](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6103)
+Defined in: [generated.ts:6776](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6776)
 
 What choosing this mode costs ("spend 2YP and target ... instead"). Every target of one mode carries the same mode_cost.
 

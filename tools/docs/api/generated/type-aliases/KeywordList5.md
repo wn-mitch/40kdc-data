@@ -8,6 +8,6 @@
 
 > **KeywordList5** = [`Keyword`](Keyword.md)[]
 
-Defined in: [generated.ts:609](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L609)
+Defined in: [generated.ts:617](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L617)
 
 Additional filter: a unit must carry ALL of these to be included via this rule (e.g. the matching god ['Khorne'] for a per-god Daemon pool).

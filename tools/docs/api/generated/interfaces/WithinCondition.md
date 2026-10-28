@@ -6,7 +6,7 @@
 
 # Interface: WithinCondition
 
-Defined in: [generated.ts:2033](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2033)
+Defined in: [generated.ts:2341](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2341)
 
 [position] The subject is within `range` of `of`. `models` quantifies the subject's models (`every` requires all); `count` bounds how many subject models are within range. `wholly` requires the subject footprint to be inside the range. `at` reads the position at an earlier point.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:2033](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **type**: `"within"`
 
-Defined in: [generated.ts:2034](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2034)
+Defined in: [generated.ts:2342](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2342)
 
 ***
 
@@ -24,4 +24,4 @@ Defined in: [generated.ts:2034](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **parameters**: \{\[`k`: `string`\]: `unknown`; `at`: `"phase-start"`; \} \| \{\[`k`: `string`\]: `unknown`; \}
 
-Defined in: [generated.ts:2035](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2035)
+Defined in: [generated.ts:2343](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2343)

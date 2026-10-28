@@ -6,7 +6,7 @@
 
 # Interface: CandidateCost
 
-Defined in: [data/affordability.ts:46](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/affordability.ts#L46)
+Defined in: [data/affordability.ts:46](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/affordability.ts#L46)
 
 Affordability verdict for one candidate unit.
 
@@ -16,7 +16,7 @@ Affordability verdict for one candidate unit.
 
 > **unitId**: `string`
 
-Defined in: [data/affordability.ts:47](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/affordability.ts#L47)
+Defined in: [data/affordability.ts:47](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/affordability.ts#L47)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [data/affordability.ts:47](https://github.com/wn-mitch/40kdc-data/bl
 
 > **nextCopyCost**: `number`
 
-Defined in: [data/affordability.ts:48](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/affordability.ts#L48)
+Defined in: [data/affordability.ts:48](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/affordability.ts#L48)
 
 ***
 
@@ -32,4 +32,4 @@ Defined in: [data/affordability.ts:48](https://github.com/wn-mitch/40kdc-data/bl
 
 > **affordable**: `boolean`
 
-Defined in: [data/affordability.ts:49](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/affordability.ts#L49)
+Defined in: [data/affordability.ts:49](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/affordability.ts#L49)

@@ -6,7 +6,7 @@
 
 # Interface: ResourceCondition
 
-Defined in: [generated.ts:2169](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2169)
+Defined in: [generated.ts:2483](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2483)
 
 [resource] A resource pool holds at least / at most this much. below_max: fewer uses than its maximum have been spent.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:2169](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **type**: `"resource"`
 
-Defined in: [generated.ts:2170](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2170)
+Defined in: [generated.ts:2484](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2484)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:2170](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **parameters**: `object`
 
-Defined in: [generated.ts:2171](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2171)
+Defined in: [generated.ts:2485](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2485)
 
 #### pool
 
@@ -48,7 +48,9 @@ Defined in: [generated.ts:2171](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 ##### source\_ability.owner?
 
-> `optional` **owner?**: `"friendly"` \| `"enemy"`
+> `optional` **owner?**: `"friendly"` \| `"enemy"` \| `"any"`
+
+A definite player: friendly or enemy (an owner other than any).
 
 #### at?
 

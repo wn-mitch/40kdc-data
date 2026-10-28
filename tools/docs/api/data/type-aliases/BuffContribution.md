@@ -6,9 +6,9 @@
 
 # Type Alias: BuffContribution
 
-> **BuffContribution** = \{ `type`: `"hit-mod"`; `value`: `number`; \} \| \{ `type`: `"wound-mod"`; `value`: `number`; \} \| \{ `type`: `"save-mod"`; `value`: `number`; \} \| \{ `type`: `"cover"`; \} \| \{ `type`: `"reroll"`; `roll`: `"hit"` \| `"wound"` \| `"save"` \| `"damage"`; `subset`: `"ones"` \| `"all-failures"`; \} \| \{ `type`: `"extra-keyword"`; `keywordRef`: [`WeaponKeywordRef`](../../generated/interfaces/WeaponKeywordRef.md); \} \| \{ `type`: `"feel-no-pain"`; `threshold`: `number`; `scope?`: `"all"` \| `"mortal"`; \} \| \{ `type`: `"damage-mod"`; `value`: `number`; \} \| \{ `type`: `"attacks-mod"`; `value`: `number`; \} \| \{ `type`: `"strength-mod"`; `value`: `number`; \} \| \{ `type`: `"toughness-mod"`; `value`: `number`; \} \| \{ `type`: `"ap-mod"`; `value`: `number`; \} \| \{ `type`: `"damage-reduction"`; `value`: `number`; \} \| \{ `type`: `"invulnerable-save"`; `threshold`: `number`; \} \| \{ `type`: `"crit-threshold"`; `roll`: `"hit"` \| `"wound"`; `value`: `number`; \} \| \{ `type`: `"ignore-modifiers"`; `roll`: `"hit"` \| `"wound"`; \} \| \{ `type`: `"skill-mod"`; `stat`: `"WS"` \| `"BS"`; `value`: `number`; \} \| \{ `type`: `"save-characteristic"`; `value`: `number`; \}
+> **BuffContribution** = \{ `type`: `"hit-mod"`; `value`: `number`; \} \| \{ `type`: `"wound-mod"`; `value`: `number`; \} \| \{ `type`: `"save-mod"`; `value`: `number`; \} \| \{ `type`: `"cover"`; \} \| \{ `type`: `"reroll"`; `roll`: `"hit"` \| `"wound"` \| `"save"` \| `"damage"`; `subset`: `"ones"` \| `"all-failures"`; \} \| \{ `type`: `"reroll-one"`; `roll`: `"hit"` \| `"wound"` \| `"save"` \| `"damage"`; \} \| \{ `type`: `"extra-keyword"`; `keywordRef`: [`WeaponKeywordRef`](../../generated/interfaces/WeaponKeywordRef.md); \} \| \{ `type`: `"feel-no-pain"`; `threshold`: `number`; `scope?`: `"all"` \| `"mortal"`; \} \| \{ `type`: `"damage-mod"`; `value`: `number`; \} \| \{ `type`: `"attacks-mod"`; `value`: `number`; \} \| \{ `type`: `"strength-mod"`; `value`: `number`; \} \| \{ `type`: `"toughness-mod"`; `value`: `number`; \} \| \{ `type`: `"ap-mod"`; `value`: `number`; \} \| \{ `type`: `"stat-set"`; `stat`: `SetStat`; `value`: `number`; \} \| \{ `type`: `"damage-reduction"`; `value`: `number`; \} \| \{ `type`: `"damage-zeroing"`; `uses`: `number`; `per`: `"unit"` \| `"model"`; \} \| \{ `type`: `"invulnerable-save"`; `threshold`: `number`; \} \| \{ `type`: `"crit-threshold"`; `roll`: `"hit"` \| `"wound"`; `value`: `number`; \} \| \{ `type`: `"ignore-modifiers"`; `roll`: `"hit"` \| `"wound"`; \} \| \{ `type`: `"skill-mod"`; `stat`: `"WS"` \| `"BS"`; `value`: `number`; \} \| \{ `type`: `"save-characteristic"`; `value`: `number`; \} \| \{ `type`: `"save-improve"`; `value`: `number`; `best`: `number`; \}
 
-Defined in: [cruncher/buffs.ts:43](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/cruncher/buffs.ts#L43)
+Defined in: [cruncher/buffs.ts:45](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/buffs.ts#L45)
 
 One typed contribution; the engine reads `ResolvedModifiers` for the rest.
 
@@ -41,6 +41,16 @@ One typed contribution; the engine reads `ResolvedModifiers` for the rest.
 ### Type Literal
 
 \{ `type`: `"reroll"`; `roll`: `"hit"` \| `"wound"` \| `"save"` \| `"damage"`; `subset`: `"ones"` \| `"all-failures"`; \}
+
+***
+
+### Type Literal
+
+\{ `type`: `"reroll-one"`; `roll`: `"hit"` \| `"wound"` \| `"save"` \| `"damage"`; \}
+
+"Re-roll one Hit roll": one die of the roll, at the player's pick, across the attack pool —
+a failed die no other re-roll already took, or for Damage the lowest roll when it is below the
+mean of a fresh roll. The engine prices one such die per crunch (engine.ts `oneRerollDice`).
 
 ***
 
@@ -105,14 +115,31 @@ the weapon one AP more piercing.
 
 ### Type Literal
 
+\{ `type`: `"stat-set"`; `stat`: `SetStat`; `value`: `number`; \}
+
+Attacker-side: the weapon's A, S, AP or D characteristic becomes `value` before any modifier
+applies. AP is signed like the profile (`-2` is AP -2). The attacker's best set wins.
+
+***
+
+### Type Literal
+
 \{ `type`: `"damage-reduction"`; `value`: `number`; \}
 
 Defender-side: subtract `value` from each unsaved damage point (floored at
 1 by the engine). Multiple sources do NOT stack in 10e — the largest
-reduction wins. The corpus also encodes `"half"` and `"to-zero"`
-reductions; the buff layer only models the additive form because the
-other two are typically one-use ablation that doesn't fold into the
-expected-value math cleanly.
+reduction wins. A `"to-zero"` reduction is `damage-zeroing` below; a
+halving one is not modelled.
+
+***
+
+### Type Literal
+
+\{ `type`: `"damage-zeroing"`; `uses`: `number`; `per`: `"unit"` \| `"model"`; \}
+
+Defender-side: `uses` unsaved attacks have their Damage changed to 0 before it is rolled, from
+a pool the unit shares or `uses` for each model. Only the discrete allocation stage reads it;
+the expected-value stages ignore it.
 
 ***
 
@@ -158,3 +185,12 @@ capped like a hit-roll modifier). The engine floors the characteristic at 2+.
 \{ `type`: `"save-characteristic"`; `value`: `number`; \}
 
 Defender-side: the Save characteristic becomes `value`+. Best (lowest) wins.
+
+***
+
+### Type Literal
+
+\{ `type`: `"save-improve"`; `value`: `number`; `best`: `number`; \}
+
+Defender-side: improve the Save characteristic by `value`, but never to better than `best`+.
+Applies after any `save-characteristic` and before AP.

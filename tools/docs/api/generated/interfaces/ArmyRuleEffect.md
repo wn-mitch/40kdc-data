@@ -6,7 +6,7 @@
 
 # Interface: ArmyRuleEffect
 
-Defined in: [generated.ts:5185](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5185)
+Defined in: [generated.ts:5869](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5869)
 
 [army] A rule that applies when mustering the army.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:5185](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **type**: `"army-rule"`
 
-Defined in: [generated.ts:5186](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5186)
+Defined in: [generated.ts:5870](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5870)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:5186](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **target**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:5187](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5187)
+Defined in: [generated.ts:5871](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5871)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [generated.ts:5187](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **modifier**: `object`
 
-Defined in: [generated.ts:5188](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5188)
+Defined in: [generated.ts:5872](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5872)
 
 #### rule
 
@@ -64,7 +64,7 @@ What max counts (default units).
 
 #### per?
 
-> `optional` **per?**: [`UnitFilter1`](UnitFilter1.md)
+> `optional` **per?**: [`UnitFilter2`](UnitFilter2.md)
 
 #### exempt\_from?
 
@@ -78,11 +78,11 @@ Limits the rule's units are left out of: retinue-limit (composition: the Retinue
 
 #### attach\_as?
 
-> `optional` **attach\_as?**: [`UnitFilter2`](UnitFilter2.md)
+> `optional` **attach\_as?**: [`UnitFilter3`](UnitFilter3.md)
 
 #### can\_lead?
 
-> `optional` **can\_lead?**: [`UnitFilter3`](UnitFilter3.md)
+> `optional` **can\_lead?**: [`UnitFilter4`](UnitFilter4.md)
 
 #### detachment?
 
@@ -114,4 +114,4 @@ Limits the rule's units are left out of: retinue-limit (composition: the Retinue
 
 > `optional` **scaling?**: [`Scaling`](Scaling.md)
 
-Defined in: [generated.ts:5234](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5234)
+Defined in: [generated.ts:5918](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5918)

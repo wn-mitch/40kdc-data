@@ -6,7 +6,7 @@
 
 # Interface: NamedRegionConsumer
 
-Defined in: [generated.ts:4037](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4037)
+Defined in: [generated.ts:4545](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4545)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "named-region-consumer".
@@ -17,7 +17,7 @@ via the `definition` "named-region-consumer".
 
 > **state\_ref**: [`NamedRegionRef`](NamedRegionRef.md)
 
-Defined in: [generated.ts:4038](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4038)
+Defined in: [generated.ts:4546](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4546)
 
 ***
 
@@ -25,7 +25,7 @@ Defined in: [generated.ts:4038](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **membership**: [`NamedRegionMembership`](NamedRegionMembership.md)
 
-Defined in: [generated.ts:4039](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4039)
+Defined in: [generated.ts:4547](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4547)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [generated.ts:4039](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **qualified\_condition**: [`AbilityDSLCondition1`](../type-aliases/AbilityDSLCondition1.md)
 
-Defined in: [generated.ts:4040](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4040)
+Defined in: [generated.ts:4548](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4548)
 
 ***
 
@@ -41,7 +41,7 @@ Defined in: [generated.ts:4040](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **default\_branch**: [`NamedRegionBranch`](NamedRegionBranch.md)
 
-Defined in: [generated.ts:4041](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4041)
+Defined in: [generated.ts:4549](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4549)
 
 ***
 
@@ -49,7 +49,7 @@ Defined in: [generated.ts:4041](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **qualified\_branch**: [`NamedRegionBranch`](NamedRegionBranch.md)
 
-Defined in: [generated.ts:4042](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4042)
+Defined in: [generated.ts:4550](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4550)
 
 ***
 
@@ -57,7 +57,7 @@ Defined in: [generated.ts:4042](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **attack\_condition?**: [`AbilityDSLCondition4`](../type-aliases/AbilityDSLCondition4.md)
 
-Defined in: [generated.ts:4043](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4043)
+Defined in: [generated.ts:4551](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4551)
 
 ***
 
@@ -65,4 +65,4 @@ Defined in: [generated.ts:4043](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **beneficiary\_filter**: [`UnitFilter`](UnitFilter.md)
 
-Defined in: [generated.ts:4044](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4044)
+Defined in: [generated.ts:4552](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4552)

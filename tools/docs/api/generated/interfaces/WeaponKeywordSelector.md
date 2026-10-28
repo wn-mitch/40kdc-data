@@ -6,7 +6,7 @@
 
 # Interface: WeaponKeywordSelector
 
-Defined in: [generated.ts:1696](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1696)
+Defined in: [generated.ts:1996](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1996)
 
 A catalog-backed weapon keyword selector. Parameters may omit a rating when matching any rating.
 
@@ -16,7 +16,7 @@ A catalog-backed weapon keyword selector. Parameters may omit a rating when matc
 
 > **keyword\_id**: `string`
 
-Defined in: [generated.ts:1697](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1697)
+Defined in: [generated.ts:1997](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1997)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:1697](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **parameters?**: `object`
 
-Defined in: [generated.ts:1698](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1698)
+Defined in: [generated.ts:1998](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1998)
 
 #### value?
 

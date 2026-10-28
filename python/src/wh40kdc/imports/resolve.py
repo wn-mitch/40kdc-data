@@ -1054,6 +1054,7 @@ def _apply_leader_attachments(
         }
 
     # --- Pass 2: inference for characters without an explicit attachment. -----
+    present_unit_ids = {u["ref"]["id"] for u in units if u["ref"]["id"]}
     bodyguard_ids = {
         u["ref"]["id"]
         for i, u in enumerate(units)
@@ -1069,26 +1070,20 @@ def _apply_leader_attachments(
         # Only `support` characters are auto-attached: per the GW datasheet
         # bodyguard-group data they cannot operate alone, so attaching to an
         # eligible bodyguard present in the roster is certain. A `leader` (or a
-        # character with no attachment_role) MAY be solo — the source doesn't
-        # encode the attachment, so we don't guess one. attachment_role is
-        # faction-specific (e.g. the World Eaters Master of Executions is a
-        # leader while the Chaos Space Marines one is support), so resolve
-        # faction-scoped.
-        resolved_unit = (
-            (ds.units.get_in_faction(leader_id, faction_id) or ds.units.get(leader_id))
-            if faction_id
-            else ds.units.get_any(leader_id)
-        )
-        if resolved_unit is None or resolved_unit.raw.get("attachment_role") != "support":
+        # character with no attachment role) MAY be solo — the source doesn't
+        # encode the attachment, so we don't guess one. Conditional groups can
+        # change the effective role and eligible ids for this roster context.
+        if (
+            ds.effective_attachment_role(leader_id, present_unit_ids, faction_id) != "support"
+        ):
             continue
 
-        attachment = next(
-            (la for la in ds.leader_attachments if la.get("leader_id") == leader_id), None
-        )
-        if attachment is None:
-            continue
         bodyguard_id = next(
-            (id_ for id_ in attachment.get("eligible_bodyguard_ids", []) if id_ in bodyguard_ids),
+            (
+                id_
+                for id_ in ds.bodyguard_ids_attachable_from(leader_id, present_unit_ids)
+                if id_ in bodyguard_ids
+            ),
             None,
         )
         if bodyguard_id is None:

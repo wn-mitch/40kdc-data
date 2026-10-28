@@ -6,7 +6,7 @@
 
 # Interface: Wall
 
-Defined in: [generated.ts:1222](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1222)
+Defined in: [generated.ts:1241](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1241)
 
 A wall polyline: an open path of 2+ vertices with optional thickness, in the same local frame as the footprint.
 
@@ -19,7 +19,7 @@ via the `definition` "wall".
 
 > **points**: \[[`Vec2`](Vec2.md), [`Vec2`](Vec2.md), `...Vec2[]`\]
 
-Defined in: [generated.ts:1226](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1226)
+Defined in: [generated.ts:1245](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1245)
 
 #### Min Items
 
@@ -31,6 +31,6 @@ Defined in: [generated.ts:1226](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **thickness?**: `number`
 
-Defined in: [generated.ts:1230](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1230)
+Defined in: [generated.ts:1249](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1249)
 
 Wall thickness in inches. Omit for thin walls.

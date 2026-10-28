@@ -6,7 +6,7 @@
 
 # Interface: HealEffect
 
-Defined in: [generated.ts:4436](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4436)
+Defined in: [generated.ts:5046](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5046)
 
 [models] Models in the target regain lost wounds.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:4436](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **type**: `"heal"`
 
-Defined in: [generated.ts:4437](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4437)
+Defined in: [generated.ts:5047](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5047)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:4437](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **target**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:4438](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4438)
+Defined in: [generated.ts:5048](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5048)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [generated.ts:4438](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **modifier**: `object`
 
-Defined in: [generated.ts:4439](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4439)
+Defined in: [generated.ts:5049](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5049)
 
 #### amount
 
@@ -48,4 +48,4 @@ Defined in: [generated.ts:4439](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **scaling?**: [`Scaling`](Scaling.md)
 
-Defined in: [generated.ts:4443](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4443)
+Defined in: [generated.ts:5053](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5053)

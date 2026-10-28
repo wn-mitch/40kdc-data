@@ -6,7 +6,7 @@
 
 # Interface: MoveModifierEffect
 
-Defined in: [generated.ts:4717](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4717)
+Defined in: [generated.ts:5329](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5329)
 
 [move] Change how the target's moves work.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:4717](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **type**: `"move-modifier"`
 
-Defined in: [generated.ts:4718](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4718)
+Defined in: [generated.ts:5330](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5330)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:4718](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **target**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:4719](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4719)
+Defined in: [generated.ts:5331](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5331)
 
 ***
 
@@ -32,11 +32,11 @@ Defined in: [generated.ts:4719](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **modifier**: `object`
 
-Defined in: [generated.ts:4720](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4720)
+Defined in: [generated.ts:5332](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5332)
 
 #### applies\_to\_moves?
 
-> `optional` **applies\_to\_moves?**: \[`"normal"` \| `"advance"` \| `"fall-back"` \| `"charge"` \| `"pile-in"` \| `"consolidation"` \| `"ingress"` \| `"surge"` \| `"scout"` \| `"disembark"` \| `"embark"` \| `"pulse-jet"`, ...("normal" \| "advance" \| "fall-back" \| "charge" \| "pile-in" \| "consolidation" \| "ingress" \| "surge" \| "scout" \| "disembark" \| "embark" \| "pulse-jet")\[\]\]
+> `optional` **applies\_to\_moves?**: \[`"normal"` \| `"advance"` \| `"remain-stationary"` \| `"fall-back"` \| `"charge"` \| `"pile-in"` \| `"consolidation"` \| `"ingress"` \| `"surge"` \| `"scout"` \| `"disembark"` \| `"embark"` \| `"pulse-jet"`, ...("normal" \| "advance" \| "remain-stationary" \| "fall-back" \| "charge" \| "pile-in" \| "consolidation" \| "ingress" \| "surge" \| "scout" \| "disembark" \| "embark" \| "pulse-jet")\[\]\]
 
 ##### Min Items
 
@@ -60,19 +60,21 @@ Defined in: [generated.ts:4720](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 #### distance\_bonus?
 
-> `optional` **distance\_bonus?**: `string` \| `number` \| [`BattleSizeValue`](BattleSizeValue.md) \| [`RollReference`](RollReference.md) \| [`CountOf`](CountOf.md) \| [`UnitRating`](UnitRating.md)
+> `optional` **distance\_bonus?**: [`Quantity`](../type-aliases/Quantity.md)
 
-A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield, or the rating the unit prints for this rule.
+A distance bonus for the selected move; a negative integer shortens it ("-2\" from that pile-in move"). Numeric strings are not accepted.
 
 #### maximum?
 
-> `optional` **maximum?**: `"unlimited"`
+> `optional` **maximum?**: `number` \| `"unlimited"`
 
-The selected Advance has no maximum distance. This is an explicit distance-ceiling override, not an additional move.
+unlimited: the selected Advance has no maximum distance. A number: the selected moves can go up to that many inches ("that unit can move up to 4\""). An explicit distance ceiling, not an additional move.
 
 #### advance?
 
-> `optional` **advance?**: `"fixed-6"`
+> `optional` **advance?**: `"fixed-6"` \| `"fixed-8"`
+
+Advance without an Advance roll, adding this many inches to Move instead (fixed-6 is the core rule's 6").
 
 #### end\_on\_terrain?
 
@@ -84,7 +86,7 @@ The selected Advance has no maximum distance. This is an explicit distance-ceili
 
 #### ends\_when?
 
-> `optional` **ends\_when?**: [`AbilityDSLCondition6`](../type-aliases/AbilityDSLCondition6.md)
+> `optional` **ends\_when?**: [`AbilityDSLCondition7`](../type-aliases/AbilityDSLCondition7.md)
 
 #### ends\_when\_replaces?
 
@@ -92,10 +94,24 @@ The selected Advance has no maximum distance. This is an explicit distance-ceili
 
 Only with ends_when: the ends_when condition replaces the usual end threshold ("instead of more than 8\"") rather than adding to it. Without this flag the condition adds to the usual rules.
 
+#### mode\_choice?
+
+> `optional` **mode\_choice?**: `object`
+
+The unit can select a mode of its move (applies_to_moves) it otherwise could not: modes "any" is every mode of that move, a list names the modes. ignore_before_moving: the selection disregards the move's Before Moving restrictions ("regardless of that consolidation move's Before Moving restrictions").
+
+##### mode\_choice.modes
+
+> **modes**: `"any"` \| \[[`MoveMode`](../type-aliases/MoveMode.md), `...MoveMode[]`\]
+
+##### mode\_choice.ignore\_before\_moving?
+
+> `optional` **ignore\_before\_moving?**: `true`
+
 ***
 
 ### scaling?
 
 > `optional` **scaling?**: [`Scaling`](Scaling.md)
 
-Defined in: [generated.ts:4824](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4824)
+Defined in: [generated.ts:5448](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5448)

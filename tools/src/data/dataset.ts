@@ -473,31 +473,41 @@ export class Dataset {
   }
 
   /**
-   * Leaders whose leader-attachment data lists `bodyguardUnitId` among its
-   * eligible body units, sorted by name. The attachment is stored on the
-   * leader pointing down to its bodyguards, so answering "which leaders can
-   * attach to this unit?" means scanning the attachment list. A shared leader
-   * chassis carries one attachment record per faction, so leaders are deduped
-   * by id. Returns an empty array for a unit that no leader can attach to
-   * (including leader units).
+   * Leaders eligible for `bodyguardUnitId`, sorted by name. Without roster
+   * context this includes every possible conditional group; with a roster set
+   * it includes only groups whose required units are present and excluded
+   * units absent. Unconditional id and keyword eligibility always applies.
    */
-  leadersAttachableTo(bodyguardUnitId: string): UnitView[] {
-    return attachments.leadersAttachableTo(this, bodyguardUnitId);
+  leadersAttachableTo(bodyguardUnitId: string, rosterUnitIds?: ReadonlySet<string>): UnitView[] {
+    return attachments.leadersAttachableTo(this, bodyguardUnitId, rosterUnitIds);
   }
 
   /**
-   * The inverse of {@link leadersAttachableTo}: the body units the given
-   * leader can attach to, sorted by name. Scans the same leader-attachment
-   * data from the leader's side (`leader_id` matches; resolve each
-   * `eligible_bodyguard_ids` entry), deduped by id. Empty for a non-leader
-   * unit. Together the two queries give the bidirectional attachment graph the
-   * SPA needs to offer a partner dropdown from either end.
+   * Bodyguards eligible for `leaderUnitId`, deduped by id and sorted by name.
+   * Without roster context this includes every possible conditional group;
+   * with a roster set it applies each group's required/excluded unit conditions.
+   * `factionId` scopes the resolved bodyguard views when provided.
    */
   bodyguardsAttachableFrom(
     leaderUnitId: string,
     factionId?: string,
+    rosterUnitIds?: ReadonlySet<string>,
   ): UnitView[] {
-    return attachments.bodyguardsAttachableFrom(this, leaderUnitId, factionId);
+    return attachments.bodyguardsAttachableFrom(this, leaderUnitId, factionId, rosterUnitIds);
+  }
+
+  /** Conditional roster groups override the flat role; leader wins on overlap. */
+  conditionalAttachmentRole(leaderUnitId: string, rosterUnitIds: ReadonlySet<string>): "leader" | "support" | undefined {
+    let supportApplies = false;
+    for (const attachment of this.leaderAttachments) {
+      if (attachment.leader_id !== leaderUnitId) continue;
+      for (const group of attachment.conditional_groups ?? []) {
+        if (!attachments.attachmentGroupApplies(group, rosterUnitIds)) continue;
+        if (group.role === "leader") return "leader";
+        supportApplies = true;
+      }
+    }
+    return supportApplies ? "support" : undefined;
   }
 
   /**

@@ -6,7 +6,7 @@
 
 # Interface: VisibleCondition
 
-Defined in: [generated.ts:2144](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2144)
+Defined in: [generated.ts:2458](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2458)
 
 [visibility] The subject is visible (fully visible, if set) to `to` (default the attacker). With blocked_by, the view is instead blocked by that unit.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:2144](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **type**: `"visible"`
 
-Defined in: [generated.ts:2145](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2145)
+Defined in: [generated.ts:2459](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2459)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:2145](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **parameters**: `object`
 
-Defined in: [generated.ts:2146](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2146)
+Defined in: [generated.ts:2460](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2460)
 
 #### Index Signature
 

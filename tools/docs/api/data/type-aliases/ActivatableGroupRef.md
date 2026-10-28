@@ -8,7 +8,7 @@
 
 > **ActivatableGroupRef** = `object`
 
-Defined in: [cruncher/from-dsl.ts:59](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/cruncher/from-dsl.ts#L59)
+Defined in: [cruncher/from-dsl.ts:67](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/from-dsl.ts#L67)
 
 A mutually-limited pool of [ActivatableBuff](ActivatableBuff.md) levers. Dice-pool
 allocations cap how many options fire at once (`max_activations`); a `choice`
@@ -22,7 +22,7 @@ optimizer enumerates subsets within it.
 
 > **id**: `string`
 
-Defined in: [cruncher/from-dsl.ts:60](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/cruncher/from-dsl.ts#L60)
+Defined in: [cruncher/from-dsl.ts:68](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/from-dsl.ts#L68)
 
 ***
 
@@ -30,4 +30,4 @@ Defined in: [cruncher/from-dsl.ts:60](https://github.com/wn-mitch/40kdc-data/blo
 
 > **maxActivations**: `number`
 
-Defined in: [cruncher/from-dsl.ts:61](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/cruncher/from-dsl.ts#L61)
+Defined in: [cruncher/from-dsl.ts:69](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/from-dsl.ts#L69)

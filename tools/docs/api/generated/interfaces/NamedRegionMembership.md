@@ -6,7 +6,7 @@
 
 # Interface: NamedRegionMembership
 
-Defined in: [generated.ts:4050](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4050)
+Defined in: [generated.ts:4558](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4558)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "named-region-membership".
@@ -17,7 +17,7 @@ via the `definition` "named-region-membership".
 
 > **unit\_scope**: `"model"` \| `"whole-unit"`
 
-Defined in: [generated.ts:4051](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4051)
+Defined in: [generated.ts:4559](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4559)
 
 ***
 
@@ -25,4 +25,4 @@ Defined in: [generated.ts:4051](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **relation**: `string`
 
-Defined in: [generated.ts:4052](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4052)
+Defined in: [generated.ts:4560](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4560)

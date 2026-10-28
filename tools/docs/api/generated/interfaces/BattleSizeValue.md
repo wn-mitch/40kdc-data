@@ -6,7 +6,7 @@
 
 # Interface: BattleSizeValue
 
-Defined in: [generated.ts:1144](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1144)
+Defined in: [generated.ts:1163](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1163)
 
 One value per battle size (Incursion, Strike Force, Onslaught). Accepted wherever a count, amount or cap is: the value that applies is the one for the battle being played.
 
@@ -19,7 +19,7 @@ via the `definition` "battle-size-value".
 
 > **incursion**: `number`
 
-Defined in: [generated.ts:1145](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1145)
+Defined in: [generated.ts:1164](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1164)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [generated.ts:1145](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **strike-force**: `number`
 
-Defined in: [generated.ts:1146](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1146)
+Defined in: [generated.ts:1165](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1165)
 
 ***
 
@@ -35,4 +35,4 @@ Defined in: [generated.ts:1146](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **onslaught**: `number`
 
-Defined in: [generated.ts:1147](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1147)
+Defined in: [generated.ts:1166](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1166)

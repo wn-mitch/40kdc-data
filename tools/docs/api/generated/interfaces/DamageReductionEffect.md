@@ -6,7 +6,7 @@
 
 # Interface: DamageReductionEffect
 
-Defined in: [generated.ts:4400](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4400)
+Defined in: [generated.ts:5010](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5010)
 
 [protection] Reduce the Damage of attacks allocated to the target.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:4400](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **type**: `"damage-reduction"`
 
-Defined in: [generated.ts:4401](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4401)
+Defined in: [generated.ts:5011](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5011)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:4401](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **target**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:4402](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4402)
+Defined in: [generated.ts:5012](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5012)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [generated.ts:4402](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **modifier**: `object`
 
-Defined in: [generated.ts:4403](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4403)
+Defined in: [generated.ts:5013](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5013)
 
 #### reduction
 
@@ -48,4 +48,4 @@ Defined in: [generated.ts:4403](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **scaling?**: [`Scaling`](Scaling.md)
 
-Defined in: [generated.ts:4407](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4407)
+Defined in: [generated.ts:5017](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5017)

@@ -484,6 +484,14 @@ lldb -b 'run; bt' on the wh40kdc debug test binary hung with no output (stack-ov
 
 In a new jj workspace, just test-all ran pytest against the editable wh40kdc installation in the sibling checkout rather than this workspace, producing hundreds of misleading failures; set PYTHONPATH=src or install this workspace editable before pytest.
 
+## 2026-09-30T15:04:52Z — sol
+
+Python editable installation from another jj workspace made just test-all import the wrong package and fail unrelated conformance cases; set PYTHONPATH to this workspace's python/src for tests.
+
+## 2026-09-30T15:49:43Z — sol
+
+gh repo view without an explicit repository cannot locate a jj-only workspace; pass owner/repo to GitHub commands.
+
 ## 2026-10-14T22:35:48Z — claude-opus-5-5
 
 Round 5C leafDescriberAudit enumerated every family's full parameter product on the first leafBoard call (unit-filter@15 ~120s, characteristic-modifier@18 ~77s locally), so each vitest worker paid ~200s (12 min in CI) and an async test hit its 5s timeout only when the timer won the race; sync blocking hid it locally.

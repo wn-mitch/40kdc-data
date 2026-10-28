@@ -6,7 +6,7 @@
 
 # Interface: Stratagem
 
-Defined in: [generated.ts:6120](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6120)
+Defined in: [generated.ts:6793](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6793)
 
 A CP-costed ability usable during specific game phases.
 
@@ -19,7 +19,7 @@ via the `definition` "stratagem".
 
 > **id**: `string`
 
-Defined in: [generated.ts:6121](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6121)
+Defined in: [generated.ts:6794](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6794)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [generated.ts:6121](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **external\_refs?**: [`ExternalReferenceList`](../type-aliases/ExternalReferenceList.md)
 
-Defined in: [generated.ts:6122](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6122)
+Defined in: [generated.ts:6795](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6795)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [generated.ts:6122](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **name**: `string`
 
-Defined in: [generated.ts:6123](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6123)
+Defined in: [generated.ts:6796](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6796)
 
 ***
 
@@ -43,7 +43,7 @@ Defined in: [generated.ts:6123](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **category**: `"core"` \| `"detachment"`
 
-Defined in: [generated.ts:6127](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6127)
+Defined in: [generated.ts:6800](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6800)
 
 Whether this is a universal core stratagem or tied to a specific detachment
 
@@ -53,7 +53,7 @@ Whether this is a universal core stratagem or tied to a specific detachment
 
 > `optional` **type?**: `"battle-tactic"` \| `"strategic-ploy"` \| `"epic-deed"` \| `"wargear"`
 
-Defined in: [generated.ts:6131](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6131)
+Defined in: [generated.ts:6804](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6804)
 
 GW-printed stratagem category from the card. Optional: 11e faction packs omit it for newly introduced detachments, and the category has no in-game effect; absent when the source does not state one.
 
@@ -63,7 +63,7 @@ GW-printed stratagem category from the card. Optional: 11e faction packs omit it
 
 > `optional` **detachment\_id?**: `string` \| `null`
 
-Defined in: [generated.ts:6135](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6135)
+Defined in: [generated.ts:6808](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6808)
 
 Null for core stratagems
 
@@ -73,7 +73,7 @@ Null for core stratagems
 
 > **cp\_cost**: `number`
 
-Defined in: [generated.ts:6136](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6136)
+Defined in: [generated.ts:6809](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6809)
 
 ***
 
@@ -81,7 +81,7 @@ Defined in: [generated.ts:6136](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **phases**: [`PhaseList`](../type-aliases/PhaseList.md)
 
-Defined in: [generated.ts:6137](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6137)
+Defined in: [generated.ts:6810](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6810)
 
 ***
 
@@ -89,7 +89,7 @@ Defined in: [generated.ts:6137](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **player\_turn**: [`PlayerTurn`](../type-aliases/PlayerTurn.md)
 
-Defined in: [generated.ts:6138](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6138)
+Defined in: [generated.ts:6811](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6811)
 
 ***
 
@@ -97,7 +97,7 @@ Defined in: [generated.ts:6138](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **timing**: `"once-per-turn"` \| `"once-per-phase"` \| `"unlimited"` \| `"once-per-battle"`
 
-Defined in: [generated.ts:6139](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6139)
+Defined in: [generated.ts:6812](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6812)
 
 ***
 
@@ -105,7 +105,7 @@ Defined in: [generated.ts:6139](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **target\_restrictions?**: [`StratagemTargetRestriction`](StratagemTargetRestriction.md) \| \[[`StratagemTargetRestriction`](StratagemTargetRestriction.md) & `object`, [`StratagemTargetRestriction`](StratagemTargetRestriction.md) & `object`, `...(StratagemTargetRestriction & { [k: string]: unknown })[]`\] \| `null`
 
-Defined in: [generated.ts:6140](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6140)
+Defined in: [generated.ts:6813](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6813)
 
 ***
 
@@ -113,7 +113,7 @@ Defined in: [generated.ts:6140](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **ability\_id?**: `string` \| `null`
 
-Defined in: [generated.ts:6154](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6154)
+Defined in: [generated.ts:6827](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6827)
 
 ***
 
@@ -121,7 +121,7 @@ Defined in: [generated.ts:6154](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **game\_version**: [`GameVersionReference`](GameVersionReference.md)
 
-Defined in: [generated.ts:6155](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6155)
+Defined in: [generated.ts:6828](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6828)
 
 ***
 
@@ -129,4 +129,4 @@ Defined in: [generated.ts:6155](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **game\_modes?**: [`GameModes3`](../type-aliases/GameModes3.md)
 
-Defined in: [generated.ts:6156](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6156)
+Defined in: [generated.ts:6829](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6829)

@@ -8,7 +8,7 @@
 
 > **isLegalLeverSelection**(`levers`, `groups`, `selectedIds`): `boolean`
 
-Defined in: [data/lever-selection.ts:12](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/lever-selection.ts#L12)
+Defined in: [data/lever-selection.ts:12](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/lever-selection.ts#L12)
 
 Check every intersecting activation pool and provider dependency. Capacity raises
 supply extra slots only for their fixed option or allowed subset; overlapping

@@ -6,7 +6,7 @@
 
 # Interface: EligibleCondition
 
-Defined in: [generated.ts:1766](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1766)
+Defined in: [generated.ts:2066](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2066)
 
 [state] The subject is eligible to do this. be-selected: eligible for `source_ability`'s selection.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:1766](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **type**: `"eligible"`
 
-Defined in: [generated.ts:1767](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1767)
+Defined in: [generated.ts:2067](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2067)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:1767](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **parameters**: `object`
 
-Defined in: [generated.ts:1768](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1768)
+Defined in: [generated.ts:2068](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2068)
 
 #### subject?
 
@@ -44,11 +44,13 @@ Defined in: [generated.ts:1768](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 ##### source\_ability.owner?
 
-> `optional` **owner?**: `"friendly"` \| `"enemy"`
+> `optional` **owner?**: `"friendly"` \| `"enemy"` \| `"any"`
+
+A definite player: friendly or enemy (an owner other than any).
 
 #### at?
 
-> `optional` **at?**: `"now"` \| `"opponent-previous-turn-end"`
+> `optional` **at?**: `"now"` \| `"phase-start"` \| `"turn-start"` \| `"opponent-previous-turn-end"`
 
 #### transport?
 

@@ -6,7 +6,7 @@
 
 # Interface: KeywordGrantEffect
 
-Defined in: [generated.ts:3311](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3311)
+Defined in: [generated.ts:3646](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3646)
 
 [ability] Give the target unit keywords, optionally replacing others.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:3311](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **type**: `"keyword-grant"`
 
-Defined in: [generated.ts:3312](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3312)
+Defined in: [generated.ts:3647](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3647)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:3312](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **target**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:3313](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3313)
+Defined in: [generated.ts:3648](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3648)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [generated.ts:3313](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **modifier**: `object`
 
-Defined in: [generated.ts:3314](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3314)
+Defined in: [generated.ts:3649](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3649)
 
 #### keywords
 
@@ -48,4 +48,4 @@ Defined in: [generated.ts:3314](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **scaling?**: [`Scaling`](Scaling.md)
 
-Defined in: [generated.ts:3318](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3318)
+Defined in: [generated.ts:3653](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3653)

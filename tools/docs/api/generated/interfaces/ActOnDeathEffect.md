@@ -6,7 +6,7 @@
 
 # Interface: ActOnDeathEffect
 
-Defined in: [generated.ts:4533](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4533)
+Defined in: [generated.ts:5143](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5143)
 
 [models] A destroyed model can fight or shoot before it is removed.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:4533](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **type**: `"act-on-death"`
 
-Defined in: [generated.ts:4534](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4534)
+Defined in: [generated.ts:5144](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5144)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:4534](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **target**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:4535](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4535)
+Defined in: [generated.ts:5145](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5145)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [generated.ts:4535](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **modifier**: `object`
 
-Defined in: [generated.ts:4536](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4536)
+Defined in: [generated.ts:5146](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5146)
 
 #### act
 
@@ -60,4 +60,4 @@ Defined in: [generated.ts:4536](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **scaling?**: [`Scaling`](Scaling.md)
 
-Defined in: [generated.ts:4543](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4543)
+Defined in: [generated.ts:5153](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5153)

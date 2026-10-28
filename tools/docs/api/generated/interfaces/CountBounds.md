@@ -6,7 +6,7 @@
 
 # Interface: CountBounds
 
-Defined in: [generated.ts:1134](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1134)
+Defined in: [generated.ts:1153](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1153)
 
 Inclusive lower and/or upper cardinality bounds. Semantic integrity rejects statically known min > max.
 
@@ -19,7 +19,7 @@ via the `definition` "count-bounds".
 
 > `optional` **min?**: [`Quantity`](../type-aliases/Quantity.md)
 
-Defined in: [generated.ts:1135](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1135)
+Defined in: [generated.ts:1154](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1154)
 
 ***
 
@@ -27,4 +27,4 @@ Defined in: [generated.ts:1135](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **max?**: [`Quantity`](../type-aliases/Quantity.md)
 
-Defined in: [generated.ts:1136](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1136)
+Defined in: [generated.ts:1155](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1155)

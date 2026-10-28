@@ -6,7 +6,7 @@
 
 # Interface: DeploymentPattern
 
-Defined in: [generated.ts:2521](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2521)
+Defined in: [generated.ts:2845](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2845)
 
 A deployment map: per-side deployment zones, objective positions, and (11e) per-side territory polygons. Pattern geometry carries forward unchanged from 10th edition; downstream tooling (e.g. bevy-deploy-helper) consumes this as the canonical encoding.
 
@@ -19,7 +19,7 @@ via the `definition` "deployment-pattern".
 
 > **id**: `string`
 
-Defined in: [generated.ts:2522](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2522)
+Defined in: [generated.ts:2846](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2846)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [generated.ts:2522](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **name**: `string`
 
-Defined in: [generated.ts:2523](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2523)
+Defined in: [generated.ts:2847](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2847)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [generated.ts:2523](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **source?**: `string`
 
-Defined in: [generated.ts:2527](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2527)
+Defined in: [generated.ts:2851](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2851)
 
 Mission pack or source the pattern originates from (e.g. 'leviathan').
 
@@ -45,7 +45,7 @@ Mission pack or source the pattern originates from (e.g. 'leviathan').
 
 > `optional` **description?**: `string`
 
-Defined in: [generated.ts:2528](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2528)
+Defined in: [generated.ts:2852](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2852)
 
 ***
 
@@ -53,7 +53,7 @@ Defined in: [generated.ts:2528](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **zones**: \[\{ `player`: [`Side`](../type-aliases/Side.md); `name?`: `string`; `shape`: [`ZoneShape`](../type-aliases/ZoneShape.md); `position`: [`Vec2`](Vec2.md); `color?`: `string`; \}, `...{ player: Side; name?: string; shape: ZoneShape; position: Vec2; color?: string }[]`\]
 
-Defined in: [generated.ts:2534](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2534)
+Defined in: [generated.ts:2858](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2858)
 
 Per-side deployment zones.
 
@@ -67,7 +67,7 @@ Per-side deployment zones.
 
 > `optional` **territories?**: `object`[]
 
-Defined in: [generated.ts:2559](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2559)
+Defined in: [generated.ts:2883](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2883)
 
 11e per-side territory polygons, mirroring the deployment-zone shape (e.g. the band between a deployment zone and the midline). Empty until authored.
 
@@ -89,7 +89,7 @@ Defined in: [generated.ts:2559](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **objectives?**: [`Vec2`](Vec2.md)[]
 
-Defined in: [generated.ts:2567](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2567)
+Defined in: [generated.ts:2891](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2891)
 
 Objective-marker positions on the board.
 
@@ -99,7 +99,7 @@ Objective-marker positions on the board.
 
 > `optional` **recommended\_terrain\_layout\_ids?**: `string`[]
 
-Defined in: [generated.ts:2571](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2571)
+Defined in: [generated.ts:2895](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2895)
 
 Ids of recommended terrain-layout entities (resolved once terrain-layout data is authored).
 
@@ -109,4 +109,4 @@ Ids of recommended terrain-layout entities (resolved once terrain-layout data is
 
 > **game\_version**: [`GameVersionReference`](GameVersionReference.md)
 
-Defined in: [generated.ts:2572](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2572)
+Defined in: [generated.ts:2896](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2896)

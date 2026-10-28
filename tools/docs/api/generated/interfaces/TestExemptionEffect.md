@@ -6,7 +6,7 @@
 
 # Interface: TestExemptionEffect
 
-Defined in: [generated.ts:5974](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5974)
+Defined in: [generated.ts:6658](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6658)
 
 [test] The target does not need to take this test again within the window (no further Battle-shock tests this phase).
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:5974](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **type**: `"test-exemption"`
 
-Defined in: [generated.ts:5975](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5975)
+Defined in: [generated.ts:6659](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6659)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:5975](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **target**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:5976](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5976)
+Defined in: [generated.ts:6660](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6660)
 
 ***
 
@@ -32,11 +32,11 @@ Defined in: [generated.ts:5976](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **modifier**: `object`
 
-Defined in: [generated.ts:5977](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5977)
+Defined in: [generated.ts:6661](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6661)
 
 #### test
 
-> **test**: `"battle-shock"` \| `"leadership"` \| `"desperate-escape"`
+> **test**: `"battle-shock"` \| `"leadership"` \| `"hazard"` \| `"desperate-escape"` \| `"psychic"`
 
 #### window
 
@@ -48,4 +48,4 @@ Defined in: [generated.ts:5977](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **scaling?**: [`Scaling`](Scaling.md)
 
-Defined in: [generated.ts:5981](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5981)
+Defined in: [generated.ts:6665](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6665)

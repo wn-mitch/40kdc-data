@@ -6,7 +6,7 @@
 
 # Interface: WeaponGrantEffect
 
-Defined in: [generated.ts:3344](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3344)
+Defined in: [generated.ts:3679](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3679)
 
 [ability] Equip the target with a weapon.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:3344](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **type**: `"weapon-grant"`
 
-Defined in: [generated.ts:3345](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3345)
+Defined in: [generated.ts:3680](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3680)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:3345](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **target**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:3346](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3346)
+Defined in: [generated.ts:3681](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3681)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [generated.ts:3346](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **modifier**: `object`
 
-Defined in: [generated.ts:3347](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3347)
+Defined in: [generated.ts:3682](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3682)
 
 #### weapon\_id
 
@@ -48,4 +48,4 @@ Defined in: [generated.ts:3347](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **scaling?**: [`Scaling`](Scaling.md)
 
-Defined in: [generated.ts:3351](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3351)
+Defined in: [generated.ts:3686](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3686)

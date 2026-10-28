@@ -6,7 +6,7 @@
 
 # Interface: OperationMarkersCondition
 
-Defined in: [generated.ts:2185](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2185)
+Defined in: [generated.ts:2502](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2502)
 
 [board] Mission: operation markers on the battlefield.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:2185](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **type**: `"operation-markers"`
 
-Defined in: [generated.ts:2186](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2186)
+Defined in: [generated.ts:2503](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2503)
 
 ***
 
@@ -24,11 +24,13 @@ Defined in: [generated.ts:2186](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **parameters?**: `object`
 
-Defined in: [generated.ts:2187](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2187)
+Defined in: [generated.ts:2504](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2504)
 
 #### side?
 
-> `optional` **side?**: `"friendly"` \| `"enemy"`
+> `optional` **side?**: `"friendly"` \| `"enemy"` \| `"any"`
+
+A definite player: friendly or enemy (an owner other than any).
 
 #### count?
 

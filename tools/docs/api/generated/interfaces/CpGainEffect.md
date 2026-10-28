@@ -6,7 +6,7 @@
 
 # Interface: CpGainEffect
 
-Defined in: [generated.ts:5051](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5051)
+Defined in: [generated.ts:5676](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5676)
 
 [resource] Gain (or lose) CP.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:5051](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **type**: `"cp-gain"`
 
-Defined in: [generated.ts:5052](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5052)
+Defined in: [generated.ts:5677](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5677)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:5052](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **target**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:5053](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5053)
+Defined in: [generated.ts:5678](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5678)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [generated.ts:5053](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **modifier**: `object`
 
-Defined in: [generated.ts:5054](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5054)
+Defined in: [generated.ts:5679](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5679)
 
 #### amount
 
@@ -44,4 +44,4 @@ Defined in: [generated.ts:5054](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **scaling?**: [`Scaling`](Scaling.md)
 
-Defined in: [generated.ts:5057](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L5057)
+Defined in: [generated.ts:5682](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5682)

@@ -8,7 +8,7 @@
 
 > **UnsupportedFragment** = `object`
 
-Defined in: [cruncher/from-dsl.ts:45](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/cruncher/from-dsl.ts#L45)
+Defined in: [cruncher/from-dsl.ts:53](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/from-dsl.ts#L53)
 
 A fragment we couldn't translate. The SPA can render these as warnings.
 
@@ -18,7 +18,7 @@ A fragment we couldn't translate. The SPA can render these as warnings.
 
 > **reason**: `string`
 
-Defined in: [cruncher/from-dsl.ts:46](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/cruncher/from-dsl.ts#L46)
+Defined in: [cruncher/from-dsl.ts:54](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/from-dsl.ts#L54)
 
 ***
 
@@ -26,4 +26,4 @@ Defined in: [cruncher/from-dsl.ts:46](https://github.com/wn-mitch/40kdc-data/blo
 
 > **effectFragment**: `unknown`
 
-Defined in: [cruncher/from-dsl.ts:47](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/cruncher/from-dsl.ts#L47)
+Defined in: [cruncher/from-dsl.ts:55](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/from-dsl.ts#L55)

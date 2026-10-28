@@ -8,7 +8,7 @@
 
 > **resolveEligibleAbilities**(`dataset`, `input`, `phase`): [`EligibleAbility`](../type-aliases/EligibleAbility.md)[]
 
-Defined in: [abilities-resolver/resolver.ts:68](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/abilities-resolver/resolver.ts#L68)
+Defined in: [abilities-resolver/resolver.ts:74](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/abilities-resolver/resolver.ts#L74)
 
 Compute the sorted-by-source eligible-ability list for one (unit, phase).
 

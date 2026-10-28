@@ -6,7 +6,7 @@
 
 # Interface: MoveEffect
 
-Defined in: [generated.ts:4594](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4594)
+Defined in: [generated.ts:5204](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5204)
 
 [move] The target makes a move now. A surge move carries its core limit (21.02).
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:4594](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **type**: `"move"`
 
-Defined in: [generated.ts:4595](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4595)
+Defined in: [generated.ts:5205](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5205)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:4595](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **target**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:4596](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4596)
+Defined in: [generated.ts:5206](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5206)
 
 ***
 
@@ -32,11 +32,11 @@ Defined in: [generated.ts:4596](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **modifier**: `object`
 
-Defined in: [generated.ts:4597](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4597)
+Defined in: [generated.ts:5207](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5207)
 
 #### move\_type
 
-> **move\_type**: `"normal"` \| `"advance"` \| `"fall-back"` \| `"charge"` \| `"pile-in"` \| `"consolidation"` \| `"ingress"` \| `"surge"` \| `"scout"` \| `"disembark"` \| `"embark"` \| `"pulse-jet"`
+> **move\_type**: `"normal"` \| `"advance"` \| `"remain-stationary"` \| `"fall-back"` \| `"charge"` \| `"pile-in"` \| `"consolidation"` \| `"ingress"` \| `"surge"` \| `"scout"` \| `"disembark"` \| `"embark"` \| `"pulse-jet"`
 
 #### distance?
 
@@ -94,7 +94,7 @@ The move counts as this kind of move for rules that check what the unit did this
 
 #### ends\_when?
 
-> `optional` **ends\_when?**: [`AbilityDSLCondition5`](../type-aliases/AbilityDSLCondition5.md)
+> `optional` **ends\_when?**: [`AbilityDSLCondition6`](../type-aliases/AbilityDSLCondition6.md)
 
 #### keeps\_eligible?
 
@@ -110,4 +110,4 @@ The move counts as this kind of move for rules that check what the unit did this
 
 > `optional` **scaling?**: [`Scaling`](Scaling.md)
 
-Defined in: [generated.ts:4699](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4699)
+Defined in: [generated.ts:5310](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5310)

@@ -6,7 +6,7 @@
 
 # Interface: CountOf
 
-Defined in: [generated.ts:1165](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1165)
+Defined in: [generated.ts:1184](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1184)
 
 A number equal to how many of `count_of` there are (models in this unit with `keyword`, models equipped with `wargear`, the battle round number).
 
@@ -19,7 +19,7 @@ via the `definition` "count-of".
 
 > **count\_of**: [`ScalingSource`](../type-aliases/ScalingSource.md)
 
-Defined in: [generated.ts:1166](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1166)
+Defined in: [generated.ts:1185](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1185)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [generated.ts:1166](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **keyword?**: `string`
 
-Defined in: [generated.ts:1167](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1167)
+Defined in: [generated.ts:1186](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1186)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [generated.ts:1167](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **wargear?**: `string`
 
-Defined in: [generated.ts:1168](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1168)
+Defined in: [generated.ts:1187](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1187)
 
 ***
 
@@ -43,7 +43,7 @@ Defined in: [generated.ts:1168](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **within?**: [`NonTieredRangeRef`](../type-aliases/NonTieredRangeRef.md) \| \{ `per_battle_round`: \[[`NonTieredRangeRef`](../type-aliases/NonTieredRangeRef.md), `...NonTieredRangeRef[]`\]; \}
 
-Defined in: [generated.ts:1172](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1172)
+Defined in: [generated.ts:1191](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1191)
 
 Reach used by count sources that count models or units within a named range.
 

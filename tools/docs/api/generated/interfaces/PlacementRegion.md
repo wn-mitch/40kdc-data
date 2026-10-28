@@ -6,7 +6,7 @@
 
 # Interface: PlacementRegion
 
-Defined in: [generated.ts:2377](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2377)
+Defined in: [generated.ts:2700](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2700)
 
 Set up inside a region (wholly inside, if set).
 
@@ -19,7 +19,7 @@ via the `definition` "placement-region".
 
 > **region**: [`RegionRef`](../type-aliases/RegionRef.md)
 
-Defined in: [generated.ts:2378](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2378)
+Defined in: [generated.ts:2701](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2701)
 
 ***
 
@@ -27,4 +27,4 @@ Defined in: [generated.ts:2378](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **wholly?**: `true`
 
-Defined in: [generated.ts:2379](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2379)
+Defined in: [generated.ts:2702](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2702)

@@ -8,7 +8,7 @@
 
 > **ReactiveTrigger** = `object`
 
-Defined in: [data/dataset.ts:124](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L124)
+Defined in: [data/dataset-triggers.ts:19](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/dataset-triggers.ts#L19)
 
 One reactive ability resolved for event dispatch: the ability's id, the
 [GameEvent](../../generated/type-aliases/GameEvent.md) it fires on, the units that carry it (sorted; empty for
@@ -25,7 +25,7 @@ faction/detachment rules), and the full (non-null) `trigger` block.
 
 > **abilityId**: `string`
 
-Defined in: [data/dataset.ts:125](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L125)
+Defined in: [data/dataset-triggers.ts:20](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/dataset-triggers.ts#L20)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [data/dataset.ts:125](https://github.com/wn-mitch/40kdc-data/blob/b7
 
 > **event**: [`GameEvent`](../../generated/type-aliases/GameEvent.md)
 
-Defined in: [data/dataset.ts:126](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L126)
+Defined in: [data/dataset-triggers.ts:21](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/dataset-triggers.ts#L21)
 
 ***
 
@@ -41,7 +41,7 @@ Defined in: [data/dataset.ts:126](https://github.com/wn-mitch/40kdc-data/blob/b7
 
 > **unitIds**: `string`[]
 
-Defined in: [data/dataset.ts:127](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L127)
+Defined in: [data/dataset-triggers.ts:22](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/dataset-triggers.ts#L22)
 
 ***
 
@@ -49,4 +49,4 @@ Defined in: [data/dataset.ts:127](https://github.com/wn-mitch/40kdc-data/blob/b7
 
 > **trigger**: `NonNullable`\<[`RawData`](../interfaces/RawData.md)\[`"abilities"`\]\[`number`\]\[`"trigger"`\]\>
 
-Defined in: [data/dataset.ts:128](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L128)
+Defined in: [data/dataset-triggers.ts:23](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/dataset-triggers.ts#L23)

@@ -6,7 +6,7 @@
 
 # Interface: AbilityUsageLimit
 
-Defined in: [generated.ts:4157](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4157)
+Defined in: [generated.ts:4692](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4692)
 
 One usage limit: once per turn/phase/battle round, N per battle, with an optional per-army/unit/model granularity. Once per battle is frequency n-per-battle, count 1 (scope.duration one-use is retired).
 
@@ -19,7 +19,7 @@ via the `definition` "ability-usage-limit".
 
 > **frequency**: `"n-per-battle"` \| `"once-per-turn"` \| `"once-per-phase"` \| `"once-per-battle-round"` \| `"once-per-command-phase"` \| `"once-per-opponent-turn"` \| `"first-this-battle"` \| `"first-time-this-phase"`
 
-Defined in: [generated.ts:4158](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4158)
+Defined in: [generated.ts:4693](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4693)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [generated.ts:4158](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **count?**: `number`
 
-Defined in: [generated.ts:4167](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4167)
+Defined in: [generated.ts:4702](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4702)
 
 ***
 
@@ -35,4 +35,4 @@ Defined in: [generated.ts:4167](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **per?**: `"unit"` \| `"model"` \| `"army"`
 
-Defined in: [generated.ts:4168](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4168)
+Defined in: [generated.ts:4703](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4703)

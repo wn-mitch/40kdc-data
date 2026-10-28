@@ -6,7 +6,7 @@
 
 # Interface: HasBuffs
 
-Defined in: [cruncher/get-buffs.ts:9](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/cruncher/get-buffs.ts#L9)
+Defined in: [cruncher/get-buffs.ts:9](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/get-buffs.ts#L9)
 
 ## Methods
 
@@ -14,7 +14,7 @@ Defined in: [cruncher/get-buffs.ts:9](https://github.com/wn-mitch/40kdc-data/blo
 
 > **getBuffs**(...`args`): [`Buff`](../type-aliases/Buff.md)[]
 
-Defined in: [cruncher/get-buffs.ts:13](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/cruncher/get-buffs.ts#L13)
+Defined in: [cruncher/get-buffs.ts:13](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/get-buffs.ts#L13)
 
 #### Parameters
 

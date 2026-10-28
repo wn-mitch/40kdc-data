@@ -6,7 +6,7 @@
 
 # Interface: ForceDisposition
 
-Defined in: [generated.ts:2767](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2767)
+Defined in: [generated.ts:3112](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3112)
 
 A 11e strategic-intent tag granted by detachments. Players compare dispositions at game start to determine the shared mission; asymmetric primary objectives result.
 
@@ -19,7 +19,7 @@ via the `definition` "force-disposition".
 
 > **id**: `"take-and-hold"` \| `"disruption"` \| `"purge-the-foe"` \| `"priority-assets"` \| `"reconnaissance"`
 
-Defined in: [generated.ts:2771](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2771)
+Defined in: [generated.ts:3116](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3116)
 
 One of the five confirmed launch Force Dispositions.
 
@@ -29,7 +29,7 @@ One of the five confirmed launch Force Dispositions.
 
 > **name**: `string`
 
-Defined in: [generated.ts:2772](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2772)
+Defined in: [generated.ts:3117](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3117)
 
 ***
 
@@ -37,7 +37,7 @@ Defined in: [generated.ts:2772](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **text?**: `string`
 
-Defined in: [generated.ts:2776](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2776)
+Defined in: [generated.ts:3121](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3121)
 
 Community-authored description of the disposition's effect (original prose only — no reproduced rules text).
 
@@ -47,4 +47,4 @@ Community-authored description of the disposition's effect (original prose only 
 
 > **game\_version**: [`GameVersionReference`](GameVersionReference.md)
 
-Defined in: [generated.ts:2777](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2777)
+Defined in: [generated.ts:3122](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3122)

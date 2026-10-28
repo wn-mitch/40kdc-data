@@ -6,7 +6,7 @@
 
 # Interface: NamedRegionProducer
 
-Defined in: [generated.ts:3955](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3955)
+Defined in: [generated.ts:4460](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4460)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "named-region-producer".
@@ -17,7 +17,7 @@ via the `definition` "named-region-producer".
 
 > **region\_ref**: [`NamedRegionRef`](NamedRegionRef.md)
 
-Defined in: [generated.ts:3956](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3956)
+Defined in: [generated.ts:4461](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4461)
 
 ***
 
@@ -25,7 +25,7 @@ Defined in: [generated.ts:3956](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **mode**: `"complete"` \| `"extension"`
 
-Defined in: [generated.ts:3957](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3957)
+Defined in: [generated.ts:4462](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4462)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [generated.ts:3957](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **parent\_ref**: [`NamedRegionRef`](NamedRegionRef.md) \| `null`
 
-Defined in: [generated.ts:3958](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3958)
+Defined in: [generated.ts:4463](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4463)
 
 ***
 
@@ -41,7 +41,7 @@ Defined in: [generated.ts:3958](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **baseline**: [`NamedRegionBaseline`](NamedRegionBaseline.md)[]
 
-Defined in: [generated.ts:3959](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3959)
+Defined in: [generated.ts:4464](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4464)
 
 ***
 
@@ -49,7 +49,7 @@ Defined in: [generated.ts:3959](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **phase\_extensions**: [`NamedRegionPhaseExtension`](NamedRegionPhaseExtension.md)[]
 
-Defined in: [generated.ts:3960](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3960)
+Defined in: [generated.ts:4465](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4465)
 
 ***
 
@@ -57,7 +57,7 @@ Defined in: [generated.ts:3960](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **additive\_extensions**: `object`[]
 
-Defined in: [generated.ts:3961](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3961)
+Defined in: [generated.ts:4466](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4466)
 
 #### kind
 

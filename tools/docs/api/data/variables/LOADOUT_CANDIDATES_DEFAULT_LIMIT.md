@@ -8,7 +8,7 @@
 
 > `const` **LOADOUT\_CANDIDATES\_DEFAULT\_LIMIT**: `256` = `256`
 
-Defined in: [data/loadout.ts:1418](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/loadout.ts#L1418)
+Defined in: [data/loadout.ts:1754](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/loadout.ts#L1754)
 
 Default ceiling on how many candidates [loadoutCandidates](../functions/loadoutCandidates.md) returns.
 Part of the runner contract (`conformance/RUNNER_PROTOCOL.md`) and mirrored by

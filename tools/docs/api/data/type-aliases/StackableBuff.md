@@ -8,7 +8,7 @@
 
 > **StackableBuff** = `object`
 
-Defined in: [data/dataset.ts:79](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L79)
+Defined in: [data/dataset-buffs.ts:49](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/dataset-buffs.ts#L49)
 
 One toggleable buff lever for damage analysis: the contributions it adds and
 whether it's on by default. `enabled` is `true` for buffs that always apply
@@ -27,7 +27,7 @@ then crunches the enabled subset; an optimizer searches it.
 
 > **id**: `string`
 
-Defined in: [data/dataset.ts:81](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L81)
+Defined in: [data/dataset-buffs.ts:51](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/dataset-buffs.ts#L51)
 
 Stable toggle id (stable across re-enumeration of the same input).
 
@@ -37,7 +37,7 @@ Stable toggle id (stable across re-enumeration of the same input).
 
 > **label**: `string`
 
-Defined in: [data/dataset.ts:83](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L83)
+Defined in: [data/dataset-buffs.ts:53](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/dataset-buffs.ts#L53)
 
 Human label for the lever.
 
@@ -47,7 +47,7 @@ Human label for the lever.
 
 > **buffs**: [`Buff`](Buff.md)[]
 
-Defined in: [data/dataset.ts:85](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L85)
+Defined in: [data/dataset-buffs.ts:55](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/dataset-buffs.ts#L55)
 
 Contributions this lever adds when enabled (≥1).
 
@@ -57,7 +57,7 @@ Contributions this lever adds when enabled (≥1).
 
 > **enabled**: `boolean`
 
-Defined in: [data/dataset.ts:87](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L87)
+Defined in: [data/dataset-buffs.ts:57](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/dataset-buffs.ts#L57)
 
 Default selection state.
 
@@ -67,7 +67,7 @@ Default selection state.
 
 > **source**: [`BuffSource`](BuffSource.md)
 
-Defined in: [data/dataset.ts:89](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L89)
+Defined in: [data/dataset-buffs.ts:59](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/dataset-buffs.ts#L59)
 
 Where the lever came from.
 
@@ -77,7 +77,7 @@ Where the lever came from.
 
 > `optional` **group?**: `string`
 
-Defined in: [data/dataset.ts:91](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L91)
+Defined in: [data/dataset-buffs.ts:61](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/dataset-buffs.ts#L61)
 
 Id of the mutually-limited [StackableBuffGroup](StackableBuffGroup.md) this belongs to, if any.
 
@@ -87,7 +87,7 @@ Id of the mutually-limited [StackableBuffGroup](StackableBuffGroup.md) this belo
 
 > `optional` **groups?**: `string`[]
 
-Defined in: [data/dataset.ts:93](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L93)
+Defined in: [data/dataset-buffs.ts:63](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/dataset-buffs.ts#L63)
 
 Additional enclosing pools; every listed cap applies alongside `group`.
 
@@ -97,7 +97,7 @@ Additional enclosing pools; every listed cap applies alongside `group`.
 
 > `optional` **cost?**: `LeverCost`
 
-Defined in: [data/dataset.ts:95](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L95)
+Defined in: [data/dataset-buffs.ts:65](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/dataset-buffs.ts#L65)
 
 What turning the lever on costs: CP for a Stratagem, points for an Enhancement.
 
@@ -107,7 +107,7 @@ What turning the lever on costs: CP for a Stratagem, points for an Enhancement.
 
 > `optional` **requires?**: `unknown`[]
 
-Defined in: [data/dataset.ts:100](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L100)
+Defined in: [data/dataset-buffs.ts:70](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/dataset-buffs.ts#L70)
 
 DSL fragments the player vouches for when turning the lever on (a unit selection's range and
 eligibility, a gating roll, the model count a capped bonus needs), in the order they apply.
@@ -118,9 +118,29 @@ eligibility, a gating roll, the model count a capped bonus needs), in the order 
 
 > `optional` **requiresLever?**: `string`
 
-Defined in: [data/dataset.ts:102](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L102)
+Defined in: [data/dataset-buffs.ts:72](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/dataset-buffs.ts#L72)
 
 Id of the lever this one needs on (the Stratagem or Enhancement that provides it).
+
+***
+
+### requiresOption?
+
+> `optional` **requiresOption?**: `string`
+
+Defined in: [data/dataset-buffs.ts:74](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/dataset-buffs.ts#L74)
+
+Id of the stance option lever this one needs on (a rule that applies only under that option).
+
+***
+
+### excludesOption?
+
+> `optional` **excludesOption?**: `string`
+
+Defined in: [data/dataset-buffs.ts:76](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/dataset-buffs.ts#L76)
+
+Id of the stance option lever this one needs off (a rule that does not apply under that option).
 
 ***
 
@@ -128,7 +148,7 @@ Id of the lever this one needs on (the Stratagem or Enhancement that provides it
 
 > `optional` **raisesCap?**: `Omit`\<`CapacityRaise`, `"ability"`\> & `object`
 
-Defined in: [data/dataset.ts:104](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L104)
+Defined in: [data/dataset-buffs.ts:78](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/dataset-buffs.ts#L78)
 
 Turning the lever on raises the cap of the pool `group` by `by` instead of adding buffs.
 

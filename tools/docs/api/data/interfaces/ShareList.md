@@ -6,7 +6,7 @@
 
 # Interface: ShareList
 
-Defined in: [share/codec.ts:67](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/share/codec.ts#L67)
+Defined in: [share/codec.ts:67](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/share/codec.ts#L67)
 
 The lossless, serializable essence of a list — what a share link carries.
 
@@ -16,7 +16,7 @@ The lossless, serializable essence of a list — what a share link carries.
 
 > **name**: `string`
 
-Defined in: [share/codec.ts:68](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/share/codec.ts#L68)
+Defined in: [share/codec.ts:68](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/share/codec.ts#L68)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [share/codec.ts:68](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **factionId**: `string` \| `null`
 
-Defined in: [share/codec.ts:69](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/share/codec.ts#L69)
+Defined in: [share/codec.ts:69](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/share/codec.ts#L69)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [share/codec.ts:69](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **detachmentIds**: `string`[]
 
-Defined in: [share/codec.ts:70](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/share/codec.ts#L70)
+Defined in: [share/codec.ts:70](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/share/codec.ts#L70)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [share/codec.ts:70](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **battleSize**: `"incursion"` \| `"strike-force"`
 
-Defined in: [share/codec.ts:71](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/share/codec.ts#L71)
+Defined in: [share/codec.ts:71](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/share/codec.ts#L71)
 
 ***
 
@@ -48,7 +48,7 @@ Defined in: [share/codec.ts:71](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **disposition**: `string` \| `null`
 
-Defined in: [share/codec.ts:72](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/share/codec.ts#L72)
+Defined in: [share/codec.ts:72](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/share/codec.ts#L72)
 
 ***
 
@@ -56,4 +56,4 @@ Defined in: [share/codec.ts:72](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **units**: [`ShareUnit`](ShareUnit.md)[]
 
-Defined in: [share/codec.ts:73](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/share/codec.ts#L73)
+Defined in: [share/codec.ts:73](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/share/codec.ts#L73)

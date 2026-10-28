@@ -6,7 +6,7 @@
 
 # Class: Collection\<T, V\>
 
-Defined in: [data/collection.ts:100](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/collection.ts#L100)
+Defined in: [data/collection.ts:173](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/collection.ts#L173)
 
 A collection of one entity type, exposing id/name/faction lookups.
 
@@ -36,7 +36,7 @@ the linked view type returned to callers
 
 > **new Collection**\<`T`, `V`\>(`cfg`): `Collection`\<`T`, `V`\>
 
-Defined in: [data/collection.ts:115](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/collection.ts#L115)
+Defined in: [data/collection.ts:181](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/collection.ts#L181)
 
 #### Parameters
 
@@ -48,6 +48,16 @@ Defined in: [data/collection.ts:115](https://github.com/wn-mitch/40kdc-data/blob
 
 `Collection`\<`T`, `V`\>
 
+## Properties
+
+### gameMode
+
+> `readonly` **gameMode**: [`GameModeView`](../type-aliases/GameModeView.md)
+
+Defined in: [data/collection.ts:177](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/collection.ts#L177)
+
+The game mode listing methods filter to.
+
 ## Accessors
 
 ### all
@@ -56,7 +66,7 @@ Defined in: [data/collection.ts:115](https://github.com/wn-mitch/40kdc-data/blob
 
 > **get** **all**(): `V`[]
 
-Defined in: [data/collection.ts:174](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/collection.ts#L174)
+Defined in: [data/collection.ts:222](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/collection.ts#L222)
 
 Every record, deduplicated by id, in first-seen order.
 
@@ -72,7 +82,7 @@ Every record, deduplicated by id, in first-seen order.
 
 > **get** **size**(): `number`
 
-Defined in: [data/collection.ts:179](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/collection.ts#L179)
+Defined in: [data/collection.ts:227](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/collection.ts#L227)
 
 Number of distinct records.
 
@@ -82,11 +92,37 @@ Number of distinct records.
 
 ## Methods
 
+### withGameMode()
+
+> **withGameMode**(`mode`, `wrap?`): `Collection`\<`T`, `V`\>
+
+Defined in: [data/collection.ts:193](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/collection.ts#L193)
+
+A view of this collection listing `mode` instead, sharing every index (no
+rebuild). `wrap` re-binds linked views to the caller's dataset view;
+omitted, records wrap as they do here.
+
+#### Parameters
+
+##### mode
+
+[`GameModeView`](../type-aliases/GameModeView.md)
+
+##### wrap?
+
+(`item`) => `V`
+
+#### Returns
+
+`Collection`\<`T`, `V`\>
+
+***
+
 ### get()
 
 > **get**(`id`): `V` \| `undefined`
 
-Defined in: [data/collection.ts:190](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/collection.ts#L190)
+Defined in: [data/collection.ts:238](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/collection.ts#L238)
 
 Look up by exact id. For a guarded collection (see
 [CollectionConfig.guardUnscoped](../interfaces/CollectionConfig.md#guardunscoped)), an id that exists under more than
@@ -110,7 +146,7 @@ unknown. In production this degrades to first-wins.
 
 > **getAny**(`id`): `V` \| `undefined`
 
-Defined in: [data/collection.ts:221](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/collection.ts#L221)
+Defined in: [data/collection.ts:269](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/collection.ts#L269)
 
 First-wins lookup by exact id that never throws, for callers with no
 faction context on purpose (roster import, the conformance runner). For a
@@ -133,7 +169,7 @@ tripwire; for an unguarded one it is identical to [get](#get).
 
 > **getInFaction**(`id`, `factionId`): `V` \| `undefined`
 
-Defined in: [data/collection.ts:233](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/collection.ts#L233)
+Defined in: [data/collection.ts:281](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/collection.ts#L281)
 
 Look up by exact id *within a faction*. Use this when an id is shared
 across factions (e.g. `chaos-land-raider` lives under five Chaos factions)
@@ -161,7 +197,7 @@ was registered first, which may belong to the wrong faction. Returns
 
 > **has**(`id`): `boolean`
 
-Defined in: [data/collection.ts:242](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/collection.ts#L242)
+Defined in: [data/collection.ts:292](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/collection.ts#L292)
 
 Whether a record with this exact id (or a renamed alias of it) exists.
 
@@ -181,7 +217,7 @@ Whether a record with this exact id (or a renamed alias of it) exists.
 
 > **byExternalRef**(`namespace`, `id`): `V`[]
 
-Defined in: [data/collection.ts:251](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/collection.ts#L251)
+Defined in: [data/collection.ts:301](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/collection.ts#L301)
 
 Return every canonical record carrying an exact external source identity.
 External mappings are many-to-many: several records may share one source
@@ -207,7 +243,7 @@ identity, and one record may carry several ids from the same namespace.
 
 > **find**(`query`): `V` \| `undefined`
 
-Defined in: [data/collection.ts:267](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/collection.ts#L267)
+Defined in: [data/collection.ts:319](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/collection.ts#L319)
 
 Find one record by id or name. Name matching is diacritic- and
 punctuation-insensitive (see [normalizeName](../functions/normalizeName.md)), trying, in order:
@@ -237,12 +273,15 @@ units.find("Kharn"); // resolves "Khârn the Betrayer"
 
 > **findAll**(`query`): `V`[]
 
-Defined in: [data/collection.ts:277](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/collection.ts#L277)
+Defined in: [data/collection.ts:332](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/collection.ts#L332)
 
 All records matching a query, by the same rules as [find](#find). An exact id
 match returns just that record; otherwise every normalized-name-exact match
 is returned, falling back to every normalized-name-substring match. Useful
 to surface (rather than silently collapse) names shared across factions.
+Every step skips records outside this view's game mode, the exact-id step
+included: a name search lists, so it never returns a hidden record (use
+[getAny](#getany) to resolve one by id).
 
 #### Parameters
 
@@ -260,9 +299,10 @@ to surface (rather than silently collapse) names shared across factions.
 
 > **byFaction**(`factionId`): `V`[]
 
-Defined in: [data/collection.ts:292](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/collection.ts#L292)
+Defined in: [data/collection.ts:351](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/collection.ts#L351)
 
-All records belonging to a faction id (empty if the type has no faction).
+All records belonging to a faction id that this view's game mode lists
+(empty if the type has no faction).
 
 #### Parameters
 
@@ -280,7 +320,7 @@ All records belonging to a faction id (empty if the type has no faction).
 
 > **\[iterator\]**(): `Iterator`\<`V`\>
 
-Defined in: [data/collection.ts:296](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/collection.ts#L296)
+Defined in: [data/collection.ts:357](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/collection.ts#L357)
 
 #### Returns
 

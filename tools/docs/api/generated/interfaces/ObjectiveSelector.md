@@ -6,7 +6,7 @@
 
 # Interface: ObjectiveSelector
 
-Defined in: [generated.ts:2313](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2313)
+Defined in: [generated.ts:2636](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2636)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "objective-selector".
@@ -17,7 +17,7 @@ via the `definition` "objective-selector".
 
 > **filter**: [`ObjectiveFilter`](ObjectiveFilter.md)
 
-Defined in: [generated.ts:2314](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2314)
+Defined in: [generated.ts:2637](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2637)
 
 ***
 
@@ -25,7 +25,7 @@ Defined in: [generated.ts:2314](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **count?**: [`CountBounds`](CountBounds.md)
 
-Defined in: [generated.ts:2315](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2315)
+Defined in: [generated.ts:2638](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2638)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [generated.ts:2315](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **limit?**: [`SelectionLimit`](SelectionLimit.md)
 
-Defined in: [generated.ts:2316](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2316)
+Defined in: [generated.ts:2639](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2639)
 
 ***
 
@@ -41,7 +41,7 @@ Defined in: [generated.ts:2316](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **bind\_as?**: `string`
 
-Defined in: [generated.ts:2317](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2317)
+Defined in: [generated.ts:2640](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2640)
 
 ***
 
@@ -49,4 +49,4 @@ Defined in: [generated.ts:2317](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **eligibility?**: [`AbilityDSLCondition1`](../type-aliases/AbilityDSLCondition1.md)
 
-Defined in: [generated.ts:2318](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2318)
+Defined in: [generated.ts:2641](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2641)

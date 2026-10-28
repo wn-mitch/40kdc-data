@@ -8,7 +8,7 @@
 
 > **checkRosterLegality**(`roster`, `dataset`): [`UnitLegality`](../interfaces/UnitLegality.md)[]
 
-Defined in: [data/roster-resolve.ts:106](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/roster-resolve.ts#L106)
+Defined in: [data/roster-resolve.ts:107](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/roster-resolve.ts#L107)
 
 Check every resolved unit in a roster for loadout legality — the building
 block for a "is this list legal" report (e.g. a tournament-organiser check).

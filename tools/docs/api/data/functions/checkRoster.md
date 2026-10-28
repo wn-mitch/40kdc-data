@@ -8,7 +8,7 @@
 
 > **checkRoster**(`roster`, `dataset`): [`RosterLegality`](../interfaces/RosterLegality.md)
 
-Defined in: [data/roster-resolve.ts:620](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/roster-resolve.ts#L620)
+Defined in: [data/roster-resolve.ts:627](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/roster-resolve.ts#L627)
 
 Whole-army legality for a resolved Roster: the per-unit loadout check
 plus the nine army-construction dimensions (enhancements, leader attachment,

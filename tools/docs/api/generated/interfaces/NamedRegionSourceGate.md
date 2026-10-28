@@ -6,7 +6,7 @@
 
 # Interface: NamedRegionSourceGate
 
-Defined in: [generated.ts:7228](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7228)
+Defined in: [generated.ts:7924](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L7924)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "named-region-source-gate".
@@ -17,7 +17,7 @@ via the `definition` "named-region-source-gate".
 
 > **filter**: [`UnitFilter`](UnitFilter.md)
 
-Defined in: [generated.ts:7229](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7229)
+Defined in: [generated.ts:7925](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L7925)
 
 ***
 
@@ -25,4 +25,4 @@ Defined in: [generated.ts:7229](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **range?**: [`RangeRef`](../type-aliases/RangeRef.md)
 
-Defined in: [generated.ts:7230](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7230)
+Defined in: [generated.ts:7926](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L7926)

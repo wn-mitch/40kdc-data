@@ -6,7 +6,7 @@
 
 # Interface: ForEachUnitEffect
 
-Defined in: [generated.ts:3713](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3713)
+Defined in: [generated.ts:4069](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4069)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "for-each-unit-effect".
@@ -17,7 +17,7 @@ via the `definition` "for-each-unit-effect".
 
 > **type**: `"for-each-unit"`
 
-Defined in: [generated.ts:3714](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3714)
+Defined in: [generated.ts:4070](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4070)
 
 ***
 
@@ -25,7 +25,7 @@ Defined in: [generated.ts:3714](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **selector**: [`UnitSelector`](UnitSelector.md)
 
-Defined in: [generated.ts:3715](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3715)
+Defined in: [generated.ts:4071](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4071)
 
 ***
 
@@ -33,4 +33,4 @@ Defined in: [generated.ts:3715](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **effect**: [`EffectNode`](../type-aliases/EffectNode.md)
 
-Defined in: [generated.ts:3716](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3716)
+Defined in: [generated.ts:4072](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4072)

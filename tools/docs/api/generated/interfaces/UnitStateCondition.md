@@ -6,7 +6,7 @@
 
 # Interface: UnitStateCondition
 
-Defined in: [generated.ts:1752](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1752)
+Defined in: [generated.ts:2052](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2052)
 
 [state] The subject is in this core-rules state. `with` narrows engaged to one unit; `at` reads the state at an earlier point.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:1752](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **type**: `"unit-state"`
 
-Defined in: [generated.ts:1753](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1753)
+Defined in: [generated.ts:2053](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2053)
 
 ***
 
@@ -24,4 +24,4 @@ Defined in: [generated.ts:1753](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **parameters**: \{\[`k`: `string`\]: `unknown`; \} \| \{\[`k`: `string`\]: `unknown`; `at`: `"phase-start"` \| `"turn-start"`; \}
 
-Defined in: [generated.ts:1754](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1754)
+Defined in: [generated.ts:2054](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2054)

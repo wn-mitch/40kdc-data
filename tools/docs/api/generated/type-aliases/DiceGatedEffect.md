@@ -8,7 +8,7 @@
 
 > **DiceGatedEffect** = `object` & `object`
 
-Defined in: [generated.ts:815](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L815)
+Defined in: [generated.ts:824](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L824)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "dice-gated-effect".
@@ -31,7 +31,7 @@ Fixed threshold or model characteristic to compare against
 
 ### comparison?
 
-> `optional` **comparison?**: `"gte"` \| `"lte"` \| `"gt"` \| `"lt"` \| `"eq"`
+> `optional` **comparison?**: `"gt"` \| `"gte"` \| `"lt"` \| `"lte"` \| `"eq"`
 
 ### on\_success?
 
@@ -55,7 +55,7 @@ Perform the named actual 2D6 test using the subject's current Leadership and nor
 
 #### test.kind
 
-> **kind**: `"leadership"` \| `"battle-shock"`
+> **kind**: `"battle-shock"` \| `"leadership"` \| `"hazard"` \| `"desperate-escape"` \| `"psychic"`
 
 #### test.subject
 
@@ -99,6 +99,6 @@ With `from`: succeeds when the bound roll's unused dice form this pair, triple o
 
 ### kind?
 
-> `optional` **kind?**: `"hit"` \| `"wound"` \| `"save"` \| `"damage"` \| `"charge"` \| `"advance"` \| `"battle-shock"` \| `"leadership"` \| `"hazard"` \| `"psychic"` \| `"desperate-escape"` \| `"dark-pact"` \| `"blessings-of-khorne"` \| `"manoeuvre"` \| `"channelling"` \| `"deadly-demise"` \| `"attacks"` \| `"normal-move"` \| `"surge"` \| `"resource-die"` \| [`AbilityRoll`](../interfaces/AbilityRoll.md)
+> `optional` **kind?**: `"hit"` \| `"wound"` \| `"save"` \| `"damage"` \| `"charge"` \| `"advance"` \| `"battle-shock"` \| `"leadership"` \| `"hazard"` \| `"psychic"` \| `"desperate-escape"` \| `"dark-pact"` \| `"blessings-of-khorne"` \| `"manoeuvre"` \| `"channelling"` \| `"deadly-demise"` \| `"attacks"` \| `"normal"` \| `"surge"` \| `"resource-die"` \| [`AbilityRoll`](../interfaces/AbilityRoll.md)
 
 Which roll this is (a Psychic test), so modifiers and re-rolls to that roll apply.

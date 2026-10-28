@@ -6,7 +6,7 @@
 
 # Interface: AttackCompareCondition
 
-Defined in: [generated.ts:2103](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2103)
+Defined in: [generated.ts:2417](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2417)
 
 [attack] Compares a stat of one side of the attack with a stat of the other, or with a value.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:2103](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **type**: `"attack-compare"`
 
-Defined in: [generated.ts:2104](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2104)
+Defined in: [generated.ts:2418](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2418)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:2104](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **parameters**: `object`
 
-Defined in: [generated.ts:2105](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2105)
+Defined in: [generated.ts:2419](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2419)
 
 #### left
 

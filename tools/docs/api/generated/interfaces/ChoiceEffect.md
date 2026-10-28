@@ -6,7 +6,7 @@
 
 # Interface: ChoiceEffect
 
-Defined in: [generated.ts:3477](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3477)
+Defined in: [generated.ts:3832](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3832)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "choice-effect".
@@ -17,7 +17,7 @@ via the `definition` "choice-effect".
 
 > **type**: `"choice"`
 
-Defined in: [generated.ts:3478](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3478)
+Defined in: [generated.ts:3833](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3833)
 
 ***
 
@@ -25,7 +25,7 @@ Defined in: [generated.ts:3478](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > **options**: \[[`EffectNode`](../type-aliases/EffectNode.md), [`EffectNode`](../type-aliases/EffectNode.md), `...EffectNode[]`\]
 
-Defined in: [generated.ts:3482](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3482)
+Defined in: [generated.ts:3837](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3837)
 
 #### Min Items
 
@@ -37,7 +37,7 @@ Defined in: [generated.ts:3482](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **choice\_label?**: `string`
 
-Defined in: [generated.ts:3483](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3483)
+Defined in: [generated.ts:3838](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3838)
 
 ***
 
@@ -45,7 +45,7 @@ Defined in: [generated.ts:3483](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **choice\_prompt?**: `string`
 
-Defined in: [generated.ts:3484](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3484)
+Defined in: [generated.ts:3839](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3839)
 
 ***
 
@@ -53,7 +53,7 @@ Defined in: [generated.ts:3484](https://github.com/wn-mitch/40kdc-data/blob/b7ac
 
 > `optional` **min\_choices?**: `number`
 
-Defined in: [generated.ts:3488](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3488)
+Defined in: [generated.ts:3843](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3843)
 
 Minimum number of distinct options selected at this activation; defaults to one.
 
@@ -63,6 +63,6 @@ Minimum number of distinct options selected at this activation; defaults to one.
 
 > `optional` **max\_choices?**: `number`
 
-Defined in: [generated.ts:3492](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3492)
+Defined in: [generated.ts:3847](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3847)
 
 Maximum number of distinct options selected at this activation; defaults to one.
