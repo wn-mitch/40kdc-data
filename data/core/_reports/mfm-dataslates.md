@@ -15,10 +15,10 @@ dump confirmation.
 | wargear-options | 0 | 0 | 1234 | 0 |
 | leader-attachments | 0 | 0 | 283 | 8 |
 | enhancements | 0 | 0 | 890 | 0 |
-| detachments | 1 | 0 | 164 | 292 |
-| stratagems | 2 | 0 | 1030 | 281 |
-| abilities | 0 | 0 | 3631 | 904 |
-| phase-mappings | 1 | 0 | 1127 | 453 |
+| detachments | 3 | 0 | 165 | 289 |
+| stratagems | 0 | 0 | 1032 | 281 |
+| abilities | 0 | 0 | 3635 | 900 |
+| phase-mappings | 3 | 0 | 1128 | 450 |
 | resource-pools | 0 | 0 | 0 | 6 |
 
 ## Abilities by faction
@@ -35,7 +35,7 @@ dump confirmation.
 | astra-militarum | 0 | 0 | 193 | 58 |
 | black-templars | 0 | 0 | 51 | 12 |
 | blood-angels | 0 | 0 | 49 | 12 |
-| chaos-daemons | 0 | 0 | 161 | 34 |
+| chaos-daemons | 0 | 0 | 162 | 33 |
 | chaos-knights | 0 | 0 | 83 | 27 |
 | chaos-space-marines | 0 | 0 | 220 | 61 |
 | dark-angels | 0 | 0 | 59 | 18 |
@@ -44,18 +44,18 @@ dump confirmation.
 | drukhari | 0 | 0 | 125 | 39 |
 | emperors-children | 0 | 0 | 120 | 26 |
 | genestealer-cults | 0 | 0 | 115 | 32 |
-| grey-knights | 0 | 0 | 120 | 14 |
+| grey-knights | 0 | 0 | 121 | 13 |
 | imperial-fists | 0 | 0 | 8 | 3 |
 | imperial-knights | 0 | 0 | 89 | 29 |
 | iron-hands | 0 | 0 | 9 | 2 |
 | leagues-of-votann | 0 | 0 | 127 | 28 |
-| necrons | 0 | 0 | 189 | 41 |
+| necrons | 0 | 0 | 190 | 40 |
 | orks | 0 | 0 | 173 | 37 |
 | raven-guard | 0 | 0 | 10 | 1 |
 | salamanders | 0 | 0 | 6 | 5 |
 | space-wolves | 0 | 0 | 74 | 13 |
 | tau-empire | 0 | 0 | 134 | 32 |
-| thousand-sons | 0 | 0 | 120 | 38 |
+| thousand-sons | 0 | 0 | 121 | 37 |
 | tyranids | 0 | 0 | 150 | 36 |
 | ultramarines | 0 | 0 | 10 | 1 |
 | white-scars | 0 | 0 | 11 | 0 |
@@ -112,8 +112,8 @@ dump confirmation.
 | blood-angels | verified | 49 |
 | chaos-daemons | digest-differs | 3 |
 | chaos-daemons | stub | 17 |
-| chaos-daemons | unpublished | 14 |
-| chaos-daemons | verified | 161 |
+| chaos-daemons | unpublished | 13 |
+| chaos-daemons | verified | 162 |
 | chaos-knights | digest-differs | 5 |
 | chaos-knights | unpublished | 22 |
 | chaos-knights | verified | 83 |
@@ -146,8 +146,8 @@ dump confirmation.
 | genestealer-cults | unpublished | 12 |
 | genestealer-cults | verified | 115 |
 | grey-knights | stub | 11 |
-| grey-knights | unpublished | 3 |
-| grey-knights | verified | 120 |
+| grey-knights | unpublished | 2 |
+| grey-knights | verified | 121 |
 | imperial-fists | digest-differs | 3 |
 | imperial-fists | verified | 8 |
 | imperial-knights | digest-differs | 6 |
@@ -163,8 +163,8 @@ dump confirmation.
 | leagues-of-votann | verified | 127 |
 | necrons | digest-differs | 7 |
 | necrons | stub | 15 |
-| necrons | unpublished | 19 |
-| necrons | verified | 189 |
+| necrons | unpublished | 18 |
+| necrons | verified | 190 |
 | orks | ambiguous-source | 1 |
 | orks | digest-differs | 21 |
 | orks | no-source | 1 |
@@ -184,10 +184,10 @@ dump confirmation.
 | tau-empire | stub | 3 |
 | tau-empire | unpublished | 24 |
 | tau-empire | verified | 134 |
-| thousand-sons | digest-differs | 8 |
+| thousand-sons | digest-differs | 7 |
 | thousand-sons | stub | 3 |
 | thousand-sons | unpublished | 27 |
-| thousand-sons | verified | 120 |
+| thousand-sons | verified | 121 |
 | tyranids | digest-differs | 5 |
 | tyranids | stub | 19 |
 | tyranids | unpublished | 12 |

@@ -6192,7 +6192,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "c1fe5f04f71204cf59d7051660f6d8da1089e1a114dcfbe793fc53d23c5ef3b7",
     "version": "2025-q3",
@@ -6265,7 +6265,7 @@
                       "parameters": {
                         "by": "friendly",
                         "objective": {
-                          "territory": "enemy-territory"
+                          "territory": "enemy-deployment-zone"
                         },
                         "proportion": {
                           "comparison": "gte",

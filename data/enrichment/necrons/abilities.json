@@ -7407,7 +7407,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "source_digest": "1cfea78402a545f07f27b5b5c86c87b24f9e54c8184b09efaad8f3af093bf345",
     "version": "2025-q3",
@@ -7451,6 +7451,9 @@
                 "type": "controls",
                 "parameters": {
                   "by": "friendly",
+                  "objective": {
+                    "territory": "no-mans-land"
+                  },
                   "proportion": {
                     "comparison": "gte",
                     "fraction": 0.5
@@ -7471,6 +7474,9 @@
                 "type": "controls",
                 "parameters": {
                   "by": "friendly",
+                  "objective": {
+                    "territory": "enemy-deployment-zone"
+                  },
                   "proportion": {
                     "comparison": "gte",
                     "fraction": 0.5
@@ -7490,6 +7496,13 @@
           "state_ref": {
             "region_id": "power-matrix",
             "owner_faction": "necrons"
+          },
+          "beneficiary_filter": {
+            "owner": "friendly",
+            "any_of": [
+              "CRYPTEK",
+              "CANOPTEK"
+            ]
           },
           "membership": {
             "unit_scope": "whole-unit",
@@ -7519,8 +7532,7 @@
                   "subset": "ones"
                 }
               },
-              "optional": true,
-              "duration": "resolution"
+              "optional": false
             }
           },
           "qualified_branch": {
@@ -7534,19 +7546,8 @@
                   "result_scope": "any-result"
                 }
               },
-              "optional": true,
-              "duration": "resolution"
+              "optional": true
             }
-          },
-          "beneficiary_filter": {
-            "owner": "friendly",
-            "all_of": [
-              "NECRONS"
-            ],
-            "any_of": [
-              "CRYPTEK",
-              "CANOPTEK"
-            ]
           }
         },
         "branch_precedence": "qualified-replaces-default"

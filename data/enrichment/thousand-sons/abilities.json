@@ -4525,16 +4525,16 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "3768507a97101f7275a631ec70720692e8afc38394ed9bb8252db9f57bb44391",
+    "source_digest": "02c32074d19620d35ed80eb81e4787fc06decc56e6a09d35573cdcf8d87abb7a",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "thousand-sons",
     "detachment_id": "hexwarp-thrallband",
     "ability_type": "detachment",
-    "behavior": "aura",
+    "behavior": "passive",
     "effect": {
       "type": "named-region-state",
       "target": {
@@ -4569,6 +4569,9 @@
                 "type": "controls",
                 "parameters": {
                   "by": "friendly",
+                  "objective": {
+                    "territory": "no-mans-land"
+                  },
                   "proportion": {
                     "comparison": "gte",
                     "fraction": 0.5
@@ -4589,6 +4592,9 @@
                 "type": "controls",
                 "parameters": {
                   "by": "friendly",
+                  "objective": {
+                    "territory": "enemy-deployment-zone"
+                  },
                   "proportion": {
                     "comparison": "gte",
                     "fraction": 0.5
@@ -4608,6 +4614,12 @@
           "state_ref": {
             "region_id": "flow-of-magic",
             "owner_faction": "thousand-sons"
+          },
+          "beneficiary_filter": {
+            "owner": "friendly",
+            "all_of": [
+              "THOUSAND SONS"
+            ]
           },
           "membership": {
             "unit_scope": "model",
@@ -4642,8 +4654,7 @@
                   }
                 }
               },
-              "optional": false,
-              "duration": "resolution"
+              "optional": false
             }
           },
           "qualified_branch": {
@@ -4653,9 +4664,9 @@
                 "type": "roll-modifier",
                 "target": "attacker",
                 "modifier": {
+                  "roll": "wound",
                   "operation": "add",
                   "value": 1,
-                  "roll": "wound",
                   "weapons": {
                     "keyword": {
                       "keyword_id": "psychic"
@@ -4663,16 +4674,8 @@
                   }
                 }
               },
-              "optional": false,
-              "duration": "resolution"
+              "optional": false
             }
-          },
-          "beneficiary_filter": {
-            "owner": "friendly",
-            "all_of": [
-              "THOUSAND-SONS",
-              "THOUSAND SONS"
-            ]
           }
         },
         "branch_precedence": "qualified-replaces-default"

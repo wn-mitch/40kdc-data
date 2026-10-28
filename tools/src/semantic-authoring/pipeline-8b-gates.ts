@@ -107,6 +107,7 @@ const RUNTIME_CONTEXT_UNKNOWN: Readonly<Record<string, true>> = {
   "activation condition cannot be evaluated against current context": true,
   "persistent-designation: retained selection state is not resolved by the buff engine": true,
   "aura emitter filter requires the source unit's keywords": true,
+  "named-region-state beneficiary filter cannot be evaluated against current attacker facts": true,
 };
 let effectValidator: Ajv | undefined;
 function validEffect(fragment: unknown): boolean {

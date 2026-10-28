@@ -109,6 +109,30 @@ describe("pipeline-8b cruncher unsupported classification", () => {
       .toEqual({ honestUnknown: 0, outsideDamagePath: 0, unrecognizedShape: 1 });
   });
 
+  it("keeps a valid region's unknown beneficiary separate from a malformed region", () => {
+    const ref = { region_id: "fixture-zone", owner_faction: "fixture-faction" };
+    const branch = (value: number) => ({ effect: { type: "ability-part", effect: { type: "roll-modifier", target: "attacker", modifier: { roll: "wound", operation: "add", value } }, optional: false } });
+    const region = {
+      type: "named-region-state", target: { owner: "friendly" },
+      modifier: {
+        region_ref: ref,
+        producer: { region_ref: ref, mode: "complete", parent_ref: null, baseline: [{ region: { territory: "your-deployment-zone" }, duration: "permanent" }], phase_extensions: [], additive_extensions: [] },
+        consumer: {
+          state_ref: ref, beneficiary_filter: { owner: "friendly", all_of: ["FIXTURE"] }, membership: { unit_scope: "model", relation: "wholly-within" },
+          qualified_condition: { type: "in-region", parameters: { subject: "this-model", region: { rule_region: ref }, wholly: true } },
+          default_branch: branch(1), qualified_branch: branch(2),
+        },
+        branch_precedence: "qualified-replaces-default",
+      },
+    };
+    // No attacker keywords: whether the attacker is a FIXTURE unit is live state.
+    const unknown = effectToBuffs(region, source, { phase: "shooting", attackerStationary: false }).unsupported;
+    expect(unknown.map((item) => item.reason)).toEqual(["named-region-state beneficiary filter cannot be evaluated against current attacker facts"]);
+    expect(classifyUnsupported(unknown)).toEqual({ honestUnknown: 1, outsideDamagePath: 0, unrecognizedShape: 0 });
+    const malformed = unknown.map((item) => ({ ...item, effectFragment: { ...region, modifier: { ...region.modifier, region_ref: "fixture-zone" } } }));
+    expect(classifyUnsupported(malformed)).toEqual({ honestUnknown: 0, outsideDamagePath: 0, unrecognizedShape: 1 });
+  });
+
   it("keeps supplied activation and retained-selection context unknown rather than inventing active buffs", () => {
     const bonus = { type: "roll-modifier", target: "this-unit", modifier: { roll: "hit", operation: "add", value: 1 } };
     const effects = [
