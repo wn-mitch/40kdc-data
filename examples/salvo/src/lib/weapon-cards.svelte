@@ -137,9 +137,10 @@
           {@render usage(r)}
         </label>
       </div>
-      {#if r.error}
+      <!-- A line no model carries has no stages to show and is not an error. -->
+      {#if r.error && r.models > 0}
         <p class="error">{r.error}</p>
-      {:else}
+      {:else if !r.error}
         {@render headline(r.attributed)}
         {#if expandedCards.has(r.id)}
           {@render cardDetail(r.attributed, r.id)}
