@@ -63,7 +63,7 @@ export function planEffects(frame: PartFrame, sourceText: string | undefined, op
         if (!attack && candidate.family_id === "attack" && !isBackref(candidate)) attack = candidate;
         if (!currentMoment && candidate.role === "EVENT") currentMoment = candidate;
       }
-      return effect(leaf, {
+      const compiled = effect(leaf, {
         attached,
         attacker: attack && attack.parameters.direction === "makes" ? attackerOf(attack, thatUnit) : null,
         // A defender-bound unit-filter before the roll makes the roll the attacker's, unless an
@@ -74,6 +74,14 @@ export function planEffects(frame: PartFrame, sourceText: string | undefined, op
         defended: currentMoment?.family_id === "event" && currentMoment.parameters.kind === "damage-allocated",
         allocatedToModel: currentMoment?.parameters.object === "this-model",
       });
+      // "… are selected as a target …, each time an attack targets that unit": the attacks on the moment's
+      // targeted unit (its object, folded from the filter before it), not every attack the enemy makes.
+      const attackAt = attack === undefined ? -1 : list.indexOf(attack);
+      const targeting = attackAt === -1 ? undefined : list.slice(0, attackAt).filter((other) => other.family_id === "event").at(-1);
+      const onObject = attack?.parameters.direction === "targeted" && attack.parameters.unit === "that-unit"
+        && targeting?.parameters.kind === "targets-selected" && targeting.parameters.object_filter !== undefined
+        && places[attackAt]!.sentence === sentence;
+      return onObject ? { type: "conditional", condition: { type: "same-unit", parameters: { subject: "defender", as: "event-object" } }, effect: compiled } : compiled;
     });
     if (!node) return;
     planned.push({

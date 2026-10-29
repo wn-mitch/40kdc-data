@@ -206,9 +206,27 @@ function onMomentUnit(leaves: readonly CompileLeaf[], index: number, sourceText:
   return destroyedObject(leaves[moment], leaves[at]) ? "event-object" : "event-subject";
 }
 
-/** "when a friendly X model … is destroyed": a destruction whose object a unit-filter before it names. */
+/**
+ * "Each time an enemy unit is selected to shoot … and one or more friendly X units are selected as a target of those
+ * attacks": a targets-selected moment the other side owns, after a filter of one side, names that filter's units as
+ * what was targeted, not who selected them.
+ */
+export function targetedByOtherSide(leaf: CompileLeaf | undefined, side: unknown): boolean {
+  return leaf?.family_id === "event" && leaf.parameters.kind === "targets-selected" && leaf.parameters.subject === undefined
+    && leaf.parameters.object_filter === undefined && (side === "friendly" || side === "enemy")
+    && (leaf.parameters.owner === "friendly" || leaf.parameters.owner === "enemy") && leaf.parameters.owner !== side;
+}
+
+/**
+ * "when a friendly X model … is destroyed": a destruction whose object a unit-filter before it names; or "an enemy
+ * unit is selected to shoot and" + "friendly X units" + "are selected as a target": the other side's targeting.
+ */
 function filterNamesObject(leaves: readonly CompileLeaf[], momentIndex: number): boolean {
-  return leaves.some((leaf, at) => at < momentIndex && momentOfFilter(leaves, at) === momentIndex && destroyedObject(leaves[momentIndex], leaf));
+  if (leaves.some((leaf, at) => at < momentIndex && momentOfFilter(leaves, at) === momentIndex && destroyedObject(leaves[momentIndex], leaf))) return true;
+  let at = momentIndex - 1;
+  while (leaves[at]?.family_id === "unit-owner" && leaves[at]!.fragment === leaves[momentIndex]!.fragment) at -= 1;
+  const filter = leaves[at];
+  return filter?.family_id === "unit-filter" && filter.fragment === leaves[momentIndex]!.fragment && targetedByOtherSide(leaves[momentIndex], filter.parameters.side);
 }
 
 /**
@@ -642,6 +660,8 @@ function boundValue(leaf: CompileLeaf, key: string, role: string): string | null
   if ((role === "selected-unit" || role === "event-subject" || role === "event-object" || role === "attacker")
     && (ANY_UNIT_KEYS[leaf.family_id]?.includes(key) || ANY_UNIT_CONDITION_KEYS[leaf.family_id]?.includes(key))) return role;
   if (leaf.family_id === "mortal-wounds" && role === "selected-unit" && values.includes("that-unit")) return "that-unit";
+  // "… are selected as a target …, that unit suffers D3 mortal wounds": the moment's object, a plain DSL unit-ref.
+  if (leaf.family_id === "mortal-wounds" && key === "recipient" && role === "event-object") return role;
   return null;
 }
 

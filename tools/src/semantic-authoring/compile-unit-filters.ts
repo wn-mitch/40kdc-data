@@ -1,4 +1,4 @@
-import { attackOfFilter, AURA_RECIPIENT, FILTERED_UNITS, momentOfFilter, objectEvent, targetedAttackOfFilter } from "./compile-antecedent.js";
+import { attackOfFilter, AURA_RECIPIENT, FILTERED_UNITS, momentOfFilter, objectEvent, targetedAttackOfFilter, targetedByOtherSide } from "./compile-antecedent.js";
 import { EXCLUDED_FROM_ATTACKS, FILTER_SUBJECT_TARGET } from "./families/unit-filters.js";
 import { destinationOf } from "./compile-move-end-nearest.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
@@ -268,6 +268,11 @@ export function foldUnitFilters(input0: readonly CompileLeaf[], sourceText?: str
       // the filter's own side, so the filter names the unit whose moment it is.
       const at = pastOwners(list, index, leaf);
       out.push({ ...list[at]!, parameters: { ...list[at]!.parameters, subject_filter: dslUnitFilter(leaf, { warlordTarget: true }) } });
+      index = at;
+    } else if (isFilter(leaf) && targetedByOtherSide(list[pastOwners(list, index, leaf)], leaf.parameters.side)) {
+      // "an enemy unit is selected to shoot and" + "friendly X units from your army" + "are selected as a target": what the other side targeted.
+      const at = pastOwners(list, index, leaf);
+      out.push({ ...list[at]!, parameters: { ...list[at]!.parameters, object_filter: dslUnitFilter(leaf) } });
       index = at;
     } else if (isFilter(leaf) && destroyedByFilterAfter(out, list, index, sourceText)) {
       // "a friendly X unit is destroyed by a" + "PENITENT unit from your army": the destroyer is the

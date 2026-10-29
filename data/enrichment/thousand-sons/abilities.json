@@ -6053,7 +6053,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "0a199aba77883c675cb028aa2051cb212c019cc37e20c4732d54616b945ae0fa",
     "version": "2025-q3",
@@ -6064,147 +6064,145 @@
     "ability_type": "detachment",
     "behavior": "reactive",
     "effect": {
-      "type": "choice",
-      "choice_label": "Warpmeld Sacrifice",
-      "options": [
+      "type": "sequence",
+      "steps": [
         {
-          "type": "sequence",
-          "steps": [
-            {
-              "type": "roll-modifier",
-              "target": "attacker",
-              "modifier": {
-                "roll": "wound",
-                "operation": "subtract",
-                "value": 1
-              }
+          "type": "ability-part",
+          "trigger": {
+            "event": "targets-selected",
+            "subject": {
+              "owner": "enemy"
             },
-            {
-              "type": "mortal-wounds",
-              "target": "this-model",
-              "modifier": {
-                "count": "D3"
+            "filter": {
+              "kind": "attack"
+            },
+            "object": {
+              "owner": "friendly",
+              "all_of": [
+                "MUTANT",
+                "TZEENTCH"
+              ],
+              "any_of": [
+                "INFANTRY",
+                "MOUNTED"
+              ]
+            },
+            "optional": true
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "conditional",
+                "condition": {
+                  "type": "same-unit",
+                  "parameters": {
+                    "subject": "defender",
+                    "as": "event-object"
+                  }
+                },
+                "effect": {
+                  "type": "roll-modifier",
+                  "target": "attacker",
+                  "modifier": {
+                    "roll": "wound",
+                    "operation": "subtract",
+                    "value": 1
+                  }
+                }
+              },
+              {
+                "type": "ability-part",
+                "trigger": {
+                  "event": "phase-ended"
+                },
+                "effect": {
+                  "type": "mortal-wounds",
+                  "target": "event-object",
+                  "modifier": {
+                    "count": "D3"
+                  }
+                },
+                "duration": "phase"
               }
-            }
-          ]
+            ]
+          }
         },
         {
-          "type": "sequence",
-          "steps": [
+          "type": "ability-part",
+          "trigger": [
             {
-              "type": "roll-modifier",
-              "target": "this-unit",
-              "modifier": {
-                "roll": "wound",
-                "operation": "add",
-                "value": 1
-              }
+              "event": "selected",
+              "filter": {
+                "to": "shoot"
+              },
+              "subject": {
+                "owner": "friendly",
+                "all_of": [
+                  "MUTANT",
+                  "TZEENTCH"
+                ],
+                "any_of": [
+                  "INFANTRY",
+                  "MOUNTED"
+                ]
+              },
+              "optional": true
             },
             {
-              "type": "mortal-wounds",
-              "target": "this-model",
-              "modifier": {
-                "count": "D3"
-              }
+              "event": "selected",
+              "filter": {
+                "to": "fight"
+              },
+              "subject": {
+                "owner": "friendly",
+                "all_of": [
+                  "MUTANT",
+                  "TZEENTCH"
+                ],
+                "any_of": [
+                  "INFANTRY",
+                  "MOUNTED"
+                ]
+              },
+              "optional": true
             }
-          ]
+          ],
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "roll-modifier",
+                "target": "event-subject",
+                "modifier": {
+                  "roll": "wound",
+                  "operation": "add",
+                  "value": 1
+                }
+              },
+              {
+                "type": "ability-part",
+                "trigger": {
+                  "event": "phase-ended"
+                },
+                "effect": {
+                  "type": "mortal-wounds",
+                  "target": "event-subject",
+                  "modifier": {
+                    "count": "D3"
+                  }
+                },
+                "duration": "phase"
+              }
+            ]
+          }
         }
       ]
     },
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "[APPROX] Restricted to TZEENTCH MUTANT INFANTRY/MOUNTED units. First option is the defensive sacrifice (-1 to enemy Wound rolls against it), second is the offensive sacrifice (+1 to its own Wound rolls); the D3 mortal-wound self-cost resolves at end of phase (timing not encoded). Full rule in raw-text store.",
-    "trigger": [
-      {
-        "event": "selected",
-        "filter": {
-          "to": "shoot"
-        },
-        "subject": {
-          "owner": "enemy"
-        },
-        "optional": false,
-        "condition": {
-          "operator": "and",
-          "operands": [
-            {
-              "type": "happened",
-              "parameters": {
-                "event": "targets-selected",
-                "subject": "event-subject",
-                "object": "this-unit",
-                "filter": {
-                  "kind": "attack"
-                },
-                "window": "event"
-              }
-            },
-            {
-              "type": "matches",
-              "parameters": {
-                "subject": "this-unit",
-                "filter": {
-                  "owner": "friendly",
-                  "all_of": [
-                    "MUTANT",
-                    "TZEENTCH"
-                  ],
-                  "any_of": [
-                    "INFANTRY",
-                    "MOUNTED"
-                  ]
-                }
-              }
-            }
-          ]
-        }
-      },
-      {
-        "event": "selected",
-        "filter": {
-          "to": "fight"
-        },
-        "subject": {
-          "owner": "enemy"
-        },
-        "optional": false,
-        "condition": {
-          "operator": "and",
-          "operands": [
-            {
-              "type": "happened",
-              "parameters": {
-                "event": "targets-selected",
-                "subject": "event-subject",
-                "object": "this-unit",
-                "filter": {
-                  "kind": "attack"
-                },
-                "window": "event"
-              }
-            },
-            {
-              "type": "matches",
-              "parameters": {
-                "subject": "this-unit",
-                "filter": {
-                  "owner": "friendly",
-                  "all_of": [
-                    "MUTANT",
-                    "TZEENTCH"
-                  ],
-                  "any_of": [
-                    "INFANTRY",
-                    "MOUNTED"
-                  ]
-                }
-              }
-            }
-          ]
-        }
-      }
-    ]
+    "community_notes": "[APPROX] Restricted to TZEENTCH MUTANT INFANTRY/MOUNTED units. First option is the defensive sacrifice (-1 to enemy Wound rolls against it), second is the offensive sacrifice (+1 to its own Wound rolls); the D3 mortal-wound self-cost resolves at end of phase (timing not encoded). Full rule in raw-text store."
   },
   {
     "ability_id": "all-is-dust-thousand-sons",

@@ -105,3 +105,38 @@ export function momentsWhileMarked(
   });
   return nested;
 }
+
+/** "If it does" (or "if you do") between an offered use and what follows it. */
+const IF_USE_MADE = /\bif (?:you|it|they) (?:do|does)\b/iu;
+
+/**
+ * The phase-end moments that follow an offered use in its own paragraph: "…, each of those units can make a
+ * Sacrifice. If it does, until the end of the phase, …. At the end of the phase, that unit suffers D3 mortal
+ * wounds." The phase end is the end of the phase in which the use was made: it exists only once the use is, so it
+ * nests in the part that offered the use, for that phase, instead of being a sibling that fires at the end of every
+ * phase. Returns the positions (in `partStarts`) of those moments: the phase end names no particular phase or turn
+ * (isAnyPhaseEnd), an optional use comes after an earlier moment and before it, "if it does" stands between the use
+ * and it, and no line break does.
+ */
+export function momentsAfterOwnUse(
+  list: readonly CompileLeaf[],
+  triggerIndexes: readonly number[],
+  partStarts: ReadonlyArray<{ index: number; moments: number[] }>,
+  sourceText: string | undefined,
+): Set<number> {
+  const nested = new Set<number>();
+  if (sourceText === undefined) return nested;
+  const bytes = Buffer.from(sourceText, "utf8");
+  partStarts.forEach((part, position) => {
+    const moments = part.moments.map((at) => list[triggerIndexes[at]!]!);
+    if (moments.length === 0 || !moments.every(isAnyPhaseEnd)) return;
+    const use = list.slice(0, part.index).filter((leaf) => leaf.family_id === "optional-use" && leaf.fragment === moments[0]!.fragment).at(-1);
+    if (use?.end_byte === undefined || moments[0]!.start_byte === undefined || use.end_byte > moments[0]!.start_byte) return;
+    const useAt = list.indexOf(use);
+    const offering = triggerIndexes.filter((index) => index < useAt).map((index) => list[index]!).at(-1);
+    if (offering === undefined || isAnyPhaseEnd(offering)) return;
+    const between = bytes.subarray(use.end_byte, moments[0]!.start_byte).toString("utf8");
+    if (IF_USE_MADE.test(between) && !/[\r\n]/u.test(between)) nested.add(position);
+  });
+  return nested;
+}

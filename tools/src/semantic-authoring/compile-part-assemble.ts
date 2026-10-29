@@ -12,7 +12,7 @@ import { boundAttackDesignation, designation, selectUnit, wrapAura, wrapForEachU
 import { destroyedFilterObject, wrapModelAura } from "./compile-model-level.js";
 import { auraPart, namesUnboundRecipient } from "./compile-aura-parts.js";
 import { isForbiddenSetUp } from "./compile-set-up-placement.js";
-import { momentsUnderUse, momentsWhileMarked } from "./compile-nested-moment.js";
+import { momentsAfterOwnUse, momentsUnderUse, momentsWhileMarked } from "./compile-nested-moment.js";
 import { gatedMoment } from "./compile-usability-gate.js";
 import { resolveEntry } from "./compile-target-refs.js";
 import { optionalTargetGroup, severalTargets } from "./compile-target-groups.js";
@@ -403,6 +403,9 @@ export function assemblePart(
     // A moment while an objective carries the tag the entry put on it nests in the entry part for as long as the tag lasts.
     const whileMarked = entryTrigger ? momentsWhileMarked(list, partStarts, firstEffectIndex, sourceText) : new Set<number>();
     whileMarked.delete(usagePart);
+    // "If it does, … At the end of the phase, …": a phase end after a part's own use nests in that part, for the phase.
+    const afterOwnUse = momentsAfterOwnUse(list, triggerIndexes, partStarts, sourceText);
+    afterOwnUse.delete(usagePart);
     const nestedSteps: Node[] = [];
     // "In addition, … if such an enemy unit is …, it must …": a later part about the aura's recipient holds for each unit in the aura.
     const rawEffects: Node[] = partStarts.map((_, position) => {
@@ -426,7 +429,11 @@ export function assemblePart(
       };
       if (whileMarked.has(position)) nestedSteps.push(node);
       else if (under.has(position)) nestedSteps.push({ ...node, duration: "phase" });
-      else partSteps.push(node);
+      else if (afterOwnUse.has(position) && partSteps.length > 0) {
+        const owner = partSteps.at(-1)!;
+        const inner = owner.effect as Node;
+        partSteps[partSteps.length - 1] = { ...owner, effect: { type: "sequence", steps: [...(inner.type === "sequence" ? inner.steps as Node[] : [inner]), { ...node, duration: "phase" }] } };
+      } else partSteps.push(node);
     });
     if (nestedSteps.length) {
       const entry = partSteps[0]!;
