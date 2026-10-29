@@ -115,8 +115,8 @@ The unit gains Tactical Doctrine (Combat Doctrines).</characteristic>
             <profile name="Black Rage" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">You can re-roll a Hit roll of 1 with melee weapons.
-While the unit is not within 6" of a friendly BLOOD ANGELS CHARACTER unit, while the unit is not within 12" of a friendly CHAPLAIN unit, the unit cannot Fall Back.
-While the unit is not within 6" of a friendly BLOOD ANGELS CHARACTER unit, while the unit is not within 12" of a friendly CHAPLAIN unit, set the unit's Objective Control characteristic to 0.</characteristic>
+While the unit is not within 6" of a friendly BLOOD ANGELS CHARACTER unit or while the unit is not within 12" of a friendly CHAPLAIN unit, the unit cannot Fall Back.
+While the unit is not within 6" of a friendly BLOOD ANGELS CHARACTER unit or while the unit is not within 12" of a friendly CHAPLAIN unit, set the unit's Objective Control characteristic to 0.</characteristic>
               </characteristics>
             </profile>
             <profile name="Savage Fury" typeName="Abilities">

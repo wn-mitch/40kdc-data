@@ -6449,7 +6449,7 @@
             "operator": "not",
             "operands": [
               {
-                "operator": "and",
+                "operator": "or",
                 "operands": [
                   {
                     "type": "matches",
@@ -6505,7 +6505,7 @@
         {
           "type": "conditional",
           "condition": {
-            "operator": "and",
+            "operator": "or",
             "operands": [
               {
                 "type": "matches",
