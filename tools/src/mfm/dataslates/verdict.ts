@@ -6,7 +6,7 @@
  * claims dump confirmation (a slate in {@link DUMP_CONFIRMED_DATASLATES}) is demoted to the
  * provisional slate; any other unverified record keeps its stamp.
  */
-import { hashJson } from "../../round4/hash.js";
+import { hashJson } from "../../canonical-hash.js";
 import { DUMP_CONFIRMED_DATASLATES, PROVISIONAL_DATASLATE, type GameVersion } from "../dataslate.js";
 import type { WeaponProfile } from "../gear-projection.js";
 

@@ -10,7 +10,7 @@ import { planPilotStep, reportPilotStep, runPilotStep, type PilotStepOptions } f
 import { classificationHealth, familyStatus, frontier, FRONTIER_KINDS, gapsReport, leafCompleteTexts, readQuery, reviewSessions, segmentationHealth, type FrontierKind } from "./control-reads.js";
 import { classifyBatch, segmentBatch, unsegmentedAbilities } from "./control-machine.js";
 import { propagateDuplicateTexts } from "./propagate.js";
-import { runGatesOnly } from "./pipeline-8b.js";
+import { runGatesOnly } from "./gates.js";
 import { publishableEntries } from "./publish-queue.js";
 import { checkPublication } from "./publish.js";
 import { factionReviewSheet, writeReviewSheet } from "./review-sheet.js";

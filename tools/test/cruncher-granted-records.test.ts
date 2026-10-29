@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { effectToBuffs } from "../src/cruncher/from-dsl.js";
 import { resolveGrantedRecords, type GrantedRecord } from "../src/cruncher/granted-records.js";
 import type { BuffSource, EngineContext } from "../src/cruncher/index.js";
-import { classifyUnsupported } from "../src/semantic-authoring/pipeline-8b-gates.js";
+import { classifyUnsupported } from "../src/semantic-authoring/gates.js";
 
 const source: BuffSource = { kind: "ability", abilityId: "fabricated-banner", abilityKind: "unit" };
 const context: EngineContext = { phase: "shooting", attackerStationary: false };

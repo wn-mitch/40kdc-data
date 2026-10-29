@@ -4,7 +4,7 @@ import { relative, sep } from "node:path";
 
 import { openProjectionChecker, type ProjectionChecker, type StagedWrite } from "../mfm/apply.js";
 import type { GameVersion } from "../mfm/dataslate.js";
-import { hashJson } from "../round4/hash.js";
+import { hashJson } from "../canonical-hash.js";
 import { sourceDigest } from "../source-digest.js";
 import { compilationInputsHash } from "./compiled.js";
 import type { ValidationResult } from "../validate.js";

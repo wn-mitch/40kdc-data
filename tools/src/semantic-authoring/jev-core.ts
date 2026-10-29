@@ -1,14 +1,12 @@
-import { TypeSafeClient, choice, noul, type ChoiceCriteria, type JsonValue, type Questions, type RequestOptions, type SystemOneRequest, type SystemOneResult } from "@typesafe-ai/sdk";
+import { TypeSafeClient, choice, type ChoiceCriteria, type JsonValue, type Questions, type RequestOptions, type SystemOneRequest, type SystemOneResult } from "@typesafe-ai/sdk";
 
 import { cacheKeyFor, getCachedAnswer, putCachedAnswer, type JevCache } from "./jev-cache.js";
 
 /**
- * Shared plumbing for both Jev proposer arms (v1: role-then-family over every active family; v2:
- * a single narrowed choice per piece, seeded by segmentation against decided surfaces) — the
- * TypeSafe client shape, request/cost accounting, the answer cache, and the two question-asking
- * primitives. Mirrors `round4/jev.ts`'s client/cost/usage shape.
+ * The TypeSafe client shape, request/cost accounting, the answer cache and the question-asking
+ * primitives behind the Jev family classifier (`jev-classify.ts`).
  *
- * Concurrency and spend-cap exactness: callers may fire many `askChoice`/`askYesNo` calls
+ * Concurrency and spend-cap exactness: callers may fire many requests
  * concurrently (see `concurrency.ts`'s `mapWithConcurrency`). To keep the cap exact under that —
  * rather than merely "probably close" — every request reserves a conservative worst-case cost
  * against the cap *before* it is sent (`JevBudget.tryReserve`, synchronous, so concurrent callers
@@ -17,13 +15,9 @@ import { cacheKeyFor, getCachedAnswer, putCachedAnswer, type JevCache } from "./
  */
 
 export const JEV_MODEL = "jev-latest";
-/** Matches round4/jev.ts's derived-cost convention; no separate published price for this pilot. */
+/** A derived input price: TypeSafe publishes no separate price for this model. */
 export const JEV_INPUT_PRICE_PER_MILLION_USD = 0.042;
 export const NONE_OF_THESE = "none-of-these";
-/** No published TypeSafe rate limit is documented in the SDK or its README; this is a
- * conservative default, not a measured ceiling — errors/timeouts still retry with backoff, so an
- * over-eager value degrades gracefully rather than corrupting results. */
-export const DEFAULT_JEV_CONCURRENCY = 16;
 
 /**
  * The `systemOne` shape this module needs — a real `TypeSafeClient` or a test double. Requests
@@ -197,18 +191,6 @@ async function performRequest(
   return outcome.value;
 }
 
-export async function askChoice(
-  client: JevClient, timeoutMs: number, budget: JevBudget, spanKey: string, kind: JevRequestKind,
-  state: Record<string, JsonValue>, prompt: string, criteria: ChoiceCriteria, cache?: JevCache,
-): Promise<{ selected: string; confidence: number } | null> {
-  const questions: Questions = { answer: choice(prompt, criteria) };
-  const result = await performRequest(client, timeoutMs, budget, spanKey, kind, state, questions, cache);
-  if (!result) return null;
-  const answer = result.answers.answer;
-  if (!answer || answer.type !== "choice") return null;
-  return { selected: answer.choice, confidence: answer.confidence };
-}
-
 /** One choice question answered with every option's probability, most probable first. */
 export async function askChoiceRanked(
   client: JevClient, timeoutMs: number, budget: JevBudget, spanKey: string, kind: JevRequestKind,
@@ -230,27 +212,6 @@ export async function askMany(
 ): Promise<SystemOneResult<Questions>["answers"] | null> {
   const result = await performRequest(client, timeoutMs, budget, spanKey, kind, state, questions, cache);
   return result?.answers ?? null;
-}
-
-export async function askYesNo(
-  client: JevClient, timeoutMs: number, budget: JevBudget, spanKey: string,
-  state: Record<string, JsonValue>, prompt: string, cache?: JevCache,
-): Promise<{ value: boolean; confidence: number } | null> {
-  const questions: Questions = { answer: noul(prompt) };
-  const result = await performRequest(client, timeoutMs, budget, spanKey, "parameter", state, questions, cache);
-  if (!result) return null;
-  const answer = result.answers.answer;
-  if (!answer || answer.type !== "noul") return null;
-  const confidence = Math.max(answer.noul, 1 - answer.noul);
-  return { value: answer.noul >= 0.5, confidence };
-}
-
-/** A closed-enum criteria map for the given values, each self-labelled, plus "none of these". */
-export function enumCriteria(values: readonly string[], describe: (value: string) => string | null = () => null): ChoiceCriteria {
-  const criteria: ChoiceCriteria = {};
-  for (const value of values) criteria[value] = describe(value);
-  criteria[NONE_OF_THESE] = "None of the listed options describe this.";
-  return criteria;
 }
 
 /** Trim descriptive text to keep the per-request state small. */

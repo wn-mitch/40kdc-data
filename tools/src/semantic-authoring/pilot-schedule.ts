@@ -2,7 +2,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import type { DatabaseSync } from "node:sqlite";
 
-import { hashJson } from "../round4/hash.js";
+import { hashJson } from "../canonical-hash.js";
 import type { PilotSample } from "./pilot-sample.js";
 
 /**

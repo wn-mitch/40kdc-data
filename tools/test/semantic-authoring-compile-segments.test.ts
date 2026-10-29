@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { sentenceSegments } from "../src/semantic-authoring/compile-segments.js";
 import { currentFamilyVersion, familyRole } from "../src/semantic-authoring/contracts.js";
-import { isOutsideDamagePath } from "../src/semantic-authoring/pipeline-8b-gates.js";
+import { isOutsideDamagePath } from "../src/semantic-authoring/gates.js";
 import { effectToBuffs } from "../src/cruncher/from-dsl.js";
 import type { EngineContext } from "../src/cruncher/index.js";
 

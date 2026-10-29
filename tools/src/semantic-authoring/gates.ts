@@ -1,4 +1,5 @@
 import type { DatabaseSync } from "node:sqlite";
+import type { CoverageView } from "./coverage.js";
 import type Ajv from "ajv";
 
 import { createValidator } from "../schema-loader.js";
@@ -11,7 +12,7 @@ import type { ProjectionChecker } from "../mfm/apply.js";
 import type { BuffSource, EngineContext } from "../cruncher/buffs.js";
 import { tiledSources, type TiledSourceOptions } from "./leaf-view.js";
 import { ownAbilityIds } from "./own-abilities.js";
-import { cachedEmbeddings, type Embedder } from "./embeddings.js";
+import { cachedEmbeddings, localEmbedder, type Embedder } from "./embeddings.js";
 import { dot } from "./leaf-knn.js";
 import { compileLeaves, type CompileLeaf, type Compiled } from "./compile.js";
 import { coreCheckErrors } from "./core-checks.js";
@@ -410,4 +411,23 @@ async function gateTiled(
     if (gate.schema && gate.coreChecks && gate.integrity && gate.describer && gate.crunchShapeOk) report.all_gates_pass += 1;
     report.failures.push(...gate.failures);
   }
+}
+
+export type GatesOnlyReport = { compile: CompileGateReport };
+export type GatesOnlyOptions = {
+  /** Describer round-trip cosine-similarity floor a compiled entry's render must clear to pass. */
+  describerSimilarityFloor?: number;
+  /** Restrict compile+gate to this set of ability versions (a pilot sample, for example). */
+  abilityVersionIds?: ReadonlySet<number>;
+  /** Leaf view; the default trusted view gates only human and derived leaves. */
+  view?: CoverageView;
+};
+
+/**
+ * Re-gate the workbench's current compiles and nothing else: no source refresh and no leaf
+ * decisions. `abilityVersionIds` scopes the pass to a sample instead of every current ability.
+ */
+export async function runGatesOnly(db: DatabaseSync, options: GatesOnlyOptions = {}): Promise<GatesOnlyReport> {
+  const compile = await runCompileGates(db, localEmbedder(), options.describerSimilarityFloor ?? 0.55, options.abilityVersionIds, options.view ?? {});
+  return { compile };
 }

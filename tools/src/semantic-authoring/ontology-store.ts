@@ -1,6 +1,6 @@
 import type { DatabaseSync } from "node:sqlite";
 
-import { hashJson } from "../round4/hash.js";
+import { hashJson } from "../canonical-hash.js";
 import { LEAF_ROLES } from "./contracts.js";
 import { normalizedSurface } from "./matching.js";
 

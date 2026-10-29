@@ -3,7 +3,7 @@ import { resolve } from "node:path";
 import type { DatabaseSync } from "node:sqlite";
 import { fileURLToPath } from "node:url";
 
-import { canonicalize, hashJson } from "../round4/hash.js";
+import { canonicalize, hashJson } from "../canonical-hash.js";
 import {
   LEAF_ROLES,
   REVIEWED_FAMILY_REGISTRY,

@@ -5,7 +5,7 @@ import { join } from "node:path";
 import type { DatabaseSync as DatabaseType } from "node:sqlite";
 
 import { afterEach, describe, expect, it } from "vitest";
-import { hashJson } from "../src/round4/hash.js";
+import { hashJson } from "../src/canonical-hash.js";
 import { humanActor } from "../src/semantic-authoring/authority.js";
 import { validateFingerprint } from "../src/semantic-authoring/contracts.js";
 import { getAbilityCoverage } from "../src/semantic-authoring/coverage.js";

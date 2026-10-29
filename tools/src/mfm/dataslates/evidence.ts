@@ -8,7 +8,7 @@ import { existsSync, readFileSync } from "node:fs";
 import * as path from "node:path";
 import type { DatabaseSync } from "node:sqlite";
 
-import { hashJson } from "../../round4/hash.js";
+import { hashJson } from "../../canonical-hash.js";
 import { entryWithMechanics } from "../../semantic-authoring/entries.js";
 import { compilationInputsHash } from "../../semantic-authoring/compiled.js";
 import { loadDumpSourceRecords } from "../../semantic-authoring/dump-source.js";

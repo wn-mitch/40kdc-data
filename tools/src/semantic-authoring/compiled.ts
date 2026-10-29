@@ -1,6 +1,6 @@
 import type { DatabaseSync } from "node:sqlite";
 
-import { hashJson } from "../round4/hash.js";
+import { hashJson } from "../canonical-hash.js";
 import { reviewedConnectives } from "./connective-rows.js";
 import { NAME_FRAGMENT } from "./contracts.js";
 import type { Mechanics } from "./entries.js";

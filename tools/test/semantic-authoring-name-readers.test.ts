@@ -2,16 +2,15 @@ import { createRequire } from "node:module";
 import type { DatabaseSync as DatabaseType } from "node:sqlite";
 
 import { describe, expect, it } from "vitest";
-import { hashJson } from "../src/round4/hash.js";
+import { hashJson } from "../src/canonical-hash.js";
 import { compileLeaves } from "../src/semantic-authoring/compile.js";
 import { currentFamilyVersion, familyRole } from "../src/semantic-authoring/contracts.js";
 import { projectStatus } from "../src/semantic-authoring/cli-control.js";
 import { familyStatus } from "../src/semantic-authoring/control-reads.js";
 import { initializeWorkbench, insertSpan } from "../src/semantic-authoring/db.js";
 import { trustedWordings } from "../src/semantic-authoring/jev-classify.js";
-import { tiledCalibrationSample } from "../src/semantic-authoring/jev-v2-segment.js";
 import { tiledSources } from "../src/semantic-authoring/leaf-view.js";
-import { runCompileGates } from "../src/semantic-authoring/pipeline-8b-gates.js";
+import { runCompileGates } from "../src/semantic-authoring/gates.js";
 import { localEmbedder } from "../src/semantic-authoring/embeddings.js";
 import { propagateDuplicateTexts } from "../src/semantic-authoring/propagate.js";
 import { getAbility, progressCounts } from "../src/semantic-authoring/review.js";
@@ -157,22 +156,6 @@ describe("Semantic authoring NAME rows stay out of body readers", () => {
       expect(trustedWordings(db).get("characteristic-set")).toBeUndefined();
       await addLeaf(db, id, "Alpha Hex", "characteristic-set", { ...PARAMETERS, value: 1 });
       expect(trustedWordings(db).get("characteristic-set")?.map((example) => example.text)).toEqual(["Alpha Hex"]);
-    } finally {
-      db.close();
-    }
-  });
-
-  it("samples boundaries from body spans only when calibrating segmentation", async () => {
-    const db = open();
-    try {
-      const id = addAbility(db, "captain", NAME, SPLIT_BODY);
-      await addLeaf(db, id, "Alpha", "characteristic-set", { ...PARAMETERS, value: 1 });
-      await addLeaf(db, id, "Bravo", "characteristic-set", { ...PARAMETERS, value: 2 });
-      await addLeaf(db, id, "psyker level 3", "characteristic-set", PARAMETERS, "NAME");
-      const samples = tiledCalibrationSample(db, {} as never, 40);
-      expect(samples).toHaveLength(1);
-      // The NAME span sits at name bytes 20-34; body boundaries are only 0, 5, 6 and 11.
-      expect(new Set(samples[0]!.trueBoundaries)).toEqual(new Set(["0", "5", "6", "11"]));
     } finally {
       db.close();
     }

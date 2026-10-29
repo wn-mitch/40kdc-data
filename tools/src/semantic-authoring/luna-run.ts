@@ -4,7 +4,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import type { DatabaseSync } from "node:sqlite";
 
-import { hashJson } from "../round4/hash.js";
+import { hashJson } from "../canonical-hash.js";
 import { bumpWorkbenchRevision, withTransaction } from "./db.js";
 import { LUNA_MODEL, lunaStdinEnvelope, LunaRunError } from "./luna-schema.js";
 import {

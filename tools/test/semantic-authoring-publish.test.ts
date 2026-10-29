@@ -21,7 +21,7 @@ import {
 
 import { projectRecords } from "../src/semantic-authoring/publication-projection.js";
 import { refreshSources } from "../src/semantic-authoring/source.js";
-import { hashJson } from "../src/round4/hash.js";
+import { hashJson } from "../src/canonical-hash.js";
 import { sourceDigest } from "../src/source-digest.js";
 import { applyAnnotationBatch, undoBatch } from "./semantic-authoring-human.js";
 

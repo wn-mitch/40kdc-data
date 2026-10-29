@@ -5,7 +5,7 @@ import { join } from "node:path";
 import type { DatabaseSync as DatabaseType } from "node:sqlite";
 
 import { describe, expect, it } from "vitest";
-import { hashJson } from "../src/round4/hash.js";
+import { hashJson } from "../src/canonical-hash.js";
 import { initializeWorkbench, openWorkbench } from "../src/semantic-authoring/db.js";
 import { getDashboard, getPrivateExport } from "../src/semantic-authoring/review.js";
 import { applyAnnotationBatch } from "./semantic-authoring-human.js";

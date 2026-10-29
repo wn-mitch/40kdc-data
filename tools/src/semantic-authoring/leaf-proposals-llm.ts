@@ -2,7 +2,7 @@ import { existsSync, readFileSync } from "node:fs";
 import type { DatabaseSync } from "node:sqlite";
 import { fileURLToPath } from "node:url";
 
-import { hashJson } from "../round4/hash.js";
+import { hashJson } from "../canonical-hash.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters, REVIEWED_FAMILY_REGISTRY } from "./contracts.js";
 import { withTransaction } from "./db.js";
 import { leafBoard, leafSurface } from "./leaves.js";

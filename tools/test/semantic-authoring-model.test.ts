@@ -5,7 +5,7 @@ import { join } from "node:path";
 import type { DatabaseSync as DatabaseType } from "node:sqlite";
 
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { canonicalize, hashJson } from "../src/round4/hash.js";
+import { canonicalize, hashJson } from "../src/canonical-hash.js";
 import { initializeWorkbench } from "../src/semantic-authoring/db.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters, validateFingerprint } from "../src/semantic-authoring/contracts.js";
 import { dropUncoveredRegions, importLuna, prepareLuna, serializeLunaRequest, type PreparedLuna } from "../src/semantic-authoring/proposal.js";

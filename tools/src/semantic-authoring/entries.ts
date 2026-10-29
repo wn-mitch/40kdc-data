@@ -4,7 +4,7 @@ import { relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { buildRepairedEntry, lintCanonical } from "../author-batch.js";
-import { hashJson } from "../round4/hash.js";
+import { hashJson } from "../canonical-hash.js";
 import { createValidator, findSchemaFiles, SCHEMAS_ROOT } from "../schema-loader.js";
 import { describeAbility } from "../translate/effect.js";
 

@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import type { DatabaseSync } from "node:sqlite";
 
 import { prepareWrites } from "../mfm/apply.js";
-import { hashJson } from "../round4/hash.js";
+import { hashJson } from "../canonical-hash.js";
 import { sourceDigest } from "../source-digest.js";
 import { compilationInputsHash, compiledIdentity, getCompiledEntry } from "./compiled.js";
 import { abilityFilePath, canonicalDataRoot, semanticAuthoringDataRoot, schemaTreeHash, type Mechanics } from "./entries.js";

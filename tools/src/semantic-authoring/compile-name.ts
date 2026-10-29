@@ -3,7 +3,7 @@ import type { CompileLeaf } from "./compile-fragments.js";
 import { joinSegments } from "./compile-segments.js";
 import { exactSpan, NAME_FRAGMENT } from "./contracts.js";
 import { usageFor } from "./restriction-families.js";
-import { hashJson } from "../round4/hash.js";
+import { hashJson } from "../canonical-hash.js";
 
 /**
  * Leaves over the record's name. A workbench span with fragment `NAME` indexes the name column,

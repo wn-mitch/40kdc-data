@@ -3,7 +3,7 @@ import { basename, resolve } from "node:path";
 import type { DatabaseSync } from "node:sqlite";
 
 import { assembleStoreSource, type StoreSourceFragment } from "../mfm/store-source.js";
-import { hashJson } from "../round4/hash.js";
+import { hashJson } from "../canonical-hash.js";
 import { bumpWorkbenchRevision, initializeWorkbench, withTransaction } from "./db.js";
 import { type DumpSourceOptions, loadDumpSourceRecords } from "./dump-source.js";
 import { proposeLexical } from "./retrieval.js";

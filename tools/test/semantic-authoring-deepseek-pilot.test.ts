@@ -4,7 +4,7 @@ import { join } from "node:path";
 import type { DatabaseSync } from "node:sqlite";
 
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { hashJson } from "../src/round4/hash.js";
+import { hashJson } from "../src/canonical-hash.js";
 import { openWorkbench } from "../src/semantic-authoring/db.js";
 import { runDeepSeekArm } from "../src/semantic-authoring/deepseek-pilot.js";
 import type { DeepSeekUsage, ModelReply } from "../src/semantic-authoring/leaf-proposals-llm.js";

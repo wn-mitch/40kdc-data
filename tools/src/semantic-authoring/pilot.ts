@@ -10,8 +10,8 @@ import { classifySpans, jevSignalsFor, jevSpendFor, type JevClassifyReport } fro
 import { deepseekReservationUsd, DEEPSEEK_FLASH_MODEL, DEFAULT_MAX_TOKENS, type DeepSeekReasoningEffort, type ModelCall } from "./leaf-proposals-llm.js";
 import { untiledRuns, reapplyLeafSurfaces } from "./leaves.js";
 import { abandonLunaRun } from "./luna-run.js";
-import { runGatesOnly } from "./pipeline-8b.js";
-import type { AbilityGateResult } from "./pipeline-8b-gates.js";
+import { runGatesOnly } from "./gates.js";
+import type { AbilityGateResult } from "./gates.js";
 import { evaluateStep, fragmentHandle, freezeProposals, reviewedAbilities, runAccounting, stepRuns, type StepEvaluation, type StepManifest } from "./pilot-report.js";
 import type { PilotSample } from "./pilot-sample.js";
 import { buildSchedule, nextSlice, readSchedule, scheduleHash, writeSchedule, type PilotSchedule } from "./pilot-schedule.js";

@@ -17,9 +17,6 @@ const NEEDLE = "40kdc-abilities";
 /** Files that may still name the store, each with the reason. Remove an entry when its reason goes. */
 const ALLOWED: Record<string, string> = {
   "tools/test/no-abilities-store.test.ts": "this guard",
-  "tools/src/round4/contracts.ts": "provenance literal of datasets frozen from the retired store",
-  "tools/src/round4b/contracts.ts": "provenance literal of datasets frozen from the retired store",
-  "tools/test/round4.test.ts": "fixture of a dataset frozen from the retired store",
   "examples/codex/src/App.svelte": "example app fetches the public repo at runtime; moves with the examples phase",
   "examples/data-explorer/src/lib/source-store.ts": "example app fetches the public repo at runtime; moves with the examples phase",
   "examples/data-explorer/src/lib/source-store.test.ts": "example app fetches the public repo at runtime; moves with the examples phase",

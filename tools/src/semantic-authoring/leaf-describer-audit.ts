@@ -1,5 +1,5 @@
 import { normalizeFingerprintParameters, REVIEWED_FAMILY_REGISTRY, type SemanticFamilyDefinition } from "./contracts.js";
-import { hashJson } from "../round4/hash.js";
+import { hashJson } from "../canonical-hash.js";
 import { previewLeaf } from "./leaf-preview.js";
 import {
   boundedCombinations, familySampling, STRUCTURED_FILTER_ALTERNATIVE_SAMPLES, type FamilySampling,

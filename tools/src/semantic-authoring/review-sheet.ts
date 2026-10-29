@@ -3,8 +3,8 @@ import { dirname, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import type { DatabaseSync } from "node:sqlite";
 
-import type { AbilityGateResult, GateFailure, LeverDiff } from "./pipeline-8b-gates.js";
-import { runGatesOnly } from "./pipeline-8b.js";
+import type { AbilityGateResult, GateFailure, LeverDiff } from "./gates.js";
+import { runGatesOnly } from "./gates.js";
 import { reviewMembers, type ReviewMember } from "./shapes.js";
 import { UNSIGNED_REVIEWER, type ChatDecision } from "./review-apply.js";
 

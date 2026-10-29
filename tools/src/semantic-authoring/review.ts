@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 import type { DatabaseSync } from "node:sqlite";
 
-import { hashJson } from "../round4/hash.js";
+import { hashJson } from "../canonical-hash.js";
 
 import { currentFamilyVersion, familyRole, LEAF_ROLES, NAME_FRAGMENT, REVIEWED_FAMILY_REGISTRY, validateFingerprint } from "./contracts.js";
 import { getAbilityCoverage, getCurrentCoverage, type AbilityCoverage, type SourceFragmentView } from "./coverage.js";
@@ -15,11 +15,15 @@ import { assertResolved } from "./placeholders.js";
 import { applyShapeUndo, assertShapeUndo, COMPILED_MEMBER_KINDS } from "./shapes.js";
 import { applyOntologyUndo, assertOntologyUndo } from "./ontology.js";
 import { recordCandidateSuggestion } from "./ontology-store.js";
-import { RELATION_TYPES } from "../round4b/contracts.js";
 import { assertReviewer, MACHINE_REVIEWERS, requireHuman, TRUSTED_ANNOTATION, type Actor } from "./authority.js";
 
-/** Relations a reviewer may record on a confirmed connective: Round 4B's set plus plain conjunction. */
-export const CONNECTIVE_RELATION_TYPES: readonly string[] = [...RELATION_TYPES, "coexists-with"];
+/** The relations a reviewed connective may name between two leaves. */
+export const CONNECTIVE_RELATION_TYPES: readonly string[] = [
+  "modifies", "targets", "binds-to", "antecedent-of", "governs", "attaches-to", "iterates-over",
+  "choice-option-of", "precedes", "replaces", "condition-of", "duration-of", "consumes-resource",
+  "argument-filling", "branch-kind", "choice-vs-disjunction", "iterator-collection",
+  "replacement-vs-coexistence", "coexists-with",
+];
 
 /** An API-shaped failure. The local bridge returns `status` verbatim. */
 export class WorkbenchError extends Error {

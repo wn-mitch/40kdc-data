@@ -1,6 +1,6 @@
 import type { DatabaseSync } from "node:sqlite";
 
-import { hashJson } from "../round4/hash.js";
+import { hashJson } from "../canonical-hash.js";
 import { sourceQualified } from "./family-validation.js";
 import { BUFF_FAMILIES, normalizeBuffParameters } from "./buff-families.js";
 import { CORE_FAMILIES, normalizeCoreParameters } from "./core-families.js";

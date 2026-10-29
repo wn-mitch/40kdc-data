@@ -7,7 +7,7 @@ import type { DatabaseSync as DatabaseType } from "node:sqlite";
 
 import type { Questions, SystemOneResult } from "@typesafe-ai/sdk";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { hashJson } from "../src/round4/hash.js";
+import { hashJson } from "../src/canonical-hash.js";
 import { initializeWorkbench, openWorkbench } from "../src/semantic-authoring/db.js";
 import type { Embedder } from "../src/semantic-authoring/embeddings.js";
 import type { JevClient } from "../src/semantic-authoring/jev-core.js";

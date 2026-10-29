@@ -8,7 +8,7 @@ import type { DatabaseSync as DatabaseType } from "node:sqlite";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { initializeWorkbench } from "../src/semantic-authoring/db.js";
 
-import { runGatesOnly } from "../src/semantic-authoring/pipeline-8b.js";
+import { runGatesOnly } from "../src/semantic-authoring/gates.js";
 import { compiledPublicationErrors, openPublicationChecker, type CompiledRecord } from "../src/semantic-authoring/publication-projection.js";
 import { applyChatReview } from "../src/semantic-authoring/review-apply.js";
 import { factionReviewSheet } from "../src/semantic-authoring/review-sheet.js";

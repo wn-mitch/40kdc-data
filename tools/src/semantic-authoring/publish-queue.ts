@@ -1,5 +1,5 @@
 import type { DatabaseSync } from "node:sqlite";
-import { hashJson } from "../round4/hash.js";
+import { hashJson } from "../canonical-hash.js";
 import { compilationInputsHash, getCompiledEntry } from "./compiled.js";
 import { existsSync, readFileSync } from "node:fs";
 

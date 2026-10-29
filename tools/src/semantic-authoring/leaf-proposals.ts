@@ -1,6 +1,6 @@
 import type { DatabaseSync } from "node:sqlite";
 
-import { hashJson } from "../round4/hash.js";
+import { hashJson } from "../canonical-hash.js";
 import { familyRole, normalizeFingerprintParameters, REVIEWED_FAMILY_REGISTRY } from "./contracts.js";
 import { prefillFromSource, type PrefillFamily } from "./leaf-prefill.js";
 import { keywordIndex } from "./core-keywords.js";

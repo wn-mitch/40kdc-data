@@ -5,7 +5,7 @@ import { join, resolve } from "node:path";
 import { type AbilityRow, type AbilityRowKind, CORE_FACTION, type DumpProse, loadDumpProse, type OwnerQuery, type ProseQuery } from "../mfm/dump-prose.js";
 import { DEFAULT_DUMP_PATH } from "../mfm/loader.js";
 import { assembleStoreSource } from "../mfm/store-source.js";
-import { hashJson } from "../round4/hash.js";
+import { hashJson } from "../canonical-hash.js";
 import { semanticAuthoringDataRoot } from "./entries.js";
 import type { SkippedSourceRecord, SourceConflict, SourceLoadReport, SourceRecord } from "./source.js";
 

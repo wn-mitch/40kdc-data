@@ -2,7 +2,7 @@ import { createRequire } from "node:module";
 import type { DatabaseSync as DatabaseType } from "node:sqlite";
 
 import { describe, expect, it } from "vitest";
-import { hashJson } from "../src/round4/hash.js";
+import { hashJson } from "../src/canonical-hash.js";
 import { getAbilityCoverage } from "../src/semantic-authoring/coverage.js";
 import { initializeWorkbench, insertSpan } from "../src/semantic-authoring/db.js";
 import { currentFamilyVersion } from "../src/semantic-authoring/contracts.js";

@@ -7,7 +7,7 @@ import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compi
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters, validateFingerprint } from "../src/semantic-authoring/contracts.js";
 import { getAbilityCoverage } from "../src/semantic-authoring/coverage.js";
 import { initializeWorkbench, insertSpan } from "../src/semantic-authoring/db.js";
-import { hashJson } from "../src/round4/hash.js";
+import { hashJson } from "../src/canonical-hash.js";
 
 // Fabricated wording and parameters only; no GW rule prose in this file.
 

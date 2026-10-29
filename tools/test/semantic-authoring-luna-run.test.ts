@@ -4,7 +4,7 @@ import { join } from "node:path";
 import type { DatabaseSync } from "node:sqlite";
 
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { hashJson } from "../src/round4/hash.js";
+import { hashJson } from "../src/canonical-hash.js";
 import { openWorkbench } from "../src/semantic-authoring/db.js";
 import { abandonLunaRun, ABANDON_AFTER_MS, claimLunaRun, finishLunaRun, lunaRunView, runLuna, startLunaRun } from "../src/semantic-authoring/luna-run.js";
 import { LUNA_MODEL, lunaStdinEnvelope, LunaRunError } from "../src/semantic-authoring/luna-schema.js";

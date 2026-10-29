@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { effectToBuffs } from "../src/cruncher/from-dsl.js";
 import type { BuffSource, EngineContext } from "../src/cruncher/buffs.js";
 import { assumeEventSubjectMatches, bindEventSubject } from "../src/cruncher/from-dsl-selection.js";
-import { classifyUnsupported } from "../src/semantic-authoring/pipeline-8b.js";
+import { classifyUnsupported } from "../src/semantic-authoring/gates.js";
 
 // Fabricated wording only; no GW rule prose.
 
