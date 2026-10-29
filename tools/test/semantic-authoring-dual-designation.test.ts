@@ -69,6 +69,21 @@ describe("A designation that acts on the unit and on attacks against it", () => 
     expect((before.applies as Array<{ to: string }>).map((entry) => entry.to)).toEqual(["target", "attackers-of-target"]);
   });
 
+  it("reads a clause after the attacks' effect that names the selected unit as that unit's own entry", () => {
+    const text = "Select one enemy unit. Until the end of the phase, each time an ALPHA unit from your army makes an attack that targets that unit, improve the Strength characteristic of that attack by 2, and that enemy unit cannot have the Benefit of Cover.";
+    const result = run(text, [SELECT, DURATION, ALPHA, OWNER, ATTACK, TARGETS, STRENGTH, COVER]);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    // Not one attackers-of-target entry holding both: losing Cover is not limited to those attacks.
+    expect(result.mechanics.effect).toEqual({ ...DESIGNATION, applies: [STRENGTH_ENTRY, COVER_ENTRY] });
+  });
+
+  it("keeps an effect on the selected unit in the attack's own clause limited to those attacks", () => {
+    const text = "Select one enemy unit. Until the end of the phase, each time an ALPHA unit from your army makes an attack that targets that unit, that enemy unit cannot have the Benefit of Cover.";
+    const result = run(text, [SELECT, DURATION, ALPHA, OWNER, ATTACK, TARGETS, COVER]);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    expect(result.mechanics.effect).toMatchObject({ applies: { to: "attackers-of-target", effect: COVER_ENTRY.effect } });
+  });
+
   it("still refuses an effect on a unit other than the selected one", () => {
     const text = "Select one enemy unit. Until the end of the phase, this unit cannot have the Benefit of Cover, and each time an ALPHA unit from your army makes an attack that targets that unit, improve the Strength characteristic of that attack by 2.";
     const result = run(text, [SELECT, DURATION, ["this unit cannot have the Benefit of Cover", "rule-state", { subject: "this-unit", direction: "suppressed", rule_kind: "core-rule", rule: "benefit-of-cover" }], ALPHA, OWNER, ATTACK, TARGETS, STRENGTH]);

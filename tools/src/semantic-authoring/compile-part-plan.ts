@@ -50,6 +50,12 @@ export function planEffects(frame: PartFrame, sourceText: string | undefined, op
   const unitMoment = list.some((leaf, at) => momentNamesUnit(list, at) && !ATTACK_EVENTS.has(String(leaf.parameters.kind)));
   const thatUnit = auraLeaf ? AURA_RECIPIENT : selections.length ? "selected-unit" : unitMoment ? "event-subject" : "this-unit";
   const planned: PlannedEffect[] = [];
+  // "each time … makes an attack that targets that unit, improve …, and that enemy unit cannot have the Benefit of
+  // Cover": an effect on the selected unit itself, in a clause after the one that limits its sentence to attacks on
+  // that unit, is the unit's own effect (the designation's target entry), not one limited to those attacks.
+  const limiting = list.flatMap((leaf, at) => leaf.family_id === "target-is-selected" ? [places[at]!] : []);
+  const ownEffectOfSelected = (sentence: number, clause: number, node: Node) => node.target === "selected-unit"
+    && !limiting.some((place) => place.clause === clause) && limiting.some((place) => place.sentence === sentence && place.clause < clause);
   list.forEach((leaf, index) => {
     if (consumedByContainer.has(index)) return;
     if (leaf.role !== "EFFECT") return;
@@ -92,7 +98,7 @@ export function planEffects(frame: PartFrame, sourceText: string | undefined, op
     planned.push({
       index, leaf, node,
       gate: optionalSpends.has(leaf) ? sentenceGates.get(sentence) ?? [] : [...(sentenceGates.get(sentence) ?? []), ...(attachedGates.get(index) ?? []), ...(isBonusNode(node) && endClauses.has(clause) ? [] : clauseGates.get(clause) ?? [])],
-      selected: selectedGlobally || selectedSentences.has(sentence) || selectedClauses.has(clause),
+      selected: (selectedGlobally || selectedSentences.has(sentence) || selectedClauses.has(clause)) && !ownEffectOfSelected(sentence, clause, node),
       replaces: false,
     });
   });
