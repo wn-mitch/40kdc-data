@@ -2589,7 +2589,13 @@
     "behavior": "reactive",
     "faction_id": "death-guard",
     "trigger": {
-      "event": "damage-allocated"
+      "event": "damage-allocated",
+      "condition": {
+        "type": "attack-is",
+        "parameters": {
+          "attack_type": "ranged"
+        }
+      }
     }
   },
   {

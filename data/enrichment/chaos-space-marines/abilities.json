@@ -90,6 +90,7 @@
     "trigger": [
       {
         "event": "selected",
+        "subject": "this-model",
         "filter": {
           "to": "shoot"
         },
@@ -97,6 +98,7 @@
       },
       {
         "event": "selected",
+        "subject": "this-model",
         "filter": {
           "to": "fight"
         },
@@ -2261,7 +2263,13 @@
     "behavior": "reactive",
     "faction_id": "chaos-space-marines",
     "trigger": {
-      "event": "damage-allocated"
+      "event": "damage-allocated",
+      "condition": {
+        "type": "attack-is",
+        "parameters": {
+          "attack_type": "ranged"
+        }
+      }
     }
   },
   {
@@ -2583,6 +2591,7 @@
             "parameters": {
               "subject": "defender",
               "filter": {
+                "owner": "enemy",
                 "all_of": [
                   "INFANTRY"
                 ]
@@ -2818,19 +2827,33 @@
           "effect": {
             "type": "conditional",
             "condition": {
-              "operator": "not",
+              "operator": "and",
               "operands": [
                 {
                   "type": "matches",
                   "parameters": {
-                    "subject": {
-                      "owner": "friendly",
-                      "excluding": "this-unit"
-                    },
+                    "subject": "defender",
                     "filter": {
-                      "engaged_with": "defender"
+                      "engaged_with": "this-model"
                     }
                   }
+                },
+                {
+                  "operator": "not",
+                  "operands": [
+                    {
+                      "type": "matches",
+                      "parameters": {
+                        "subject": {
+                          "owner": "friendly",
+                          "excluding": "this-unit"
+                        },
+                        "filter": {
+                          "engaged_with": "defender"
+                        }
+                      }
+                    }
+                  ]
                 }
               ]
             },
@@ -2980,56 +3003,84 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "a1b30bcc227f112a8a0df3d43238231ada246b10a0da482f67ef46627f57b5cf",
     "version": "2025-q3",
     "effect": {
-      "type": "select-units",
-      "selector": {
-        "filter": {
-          "owner": "friendly",
-          "all_of": [
-            "HERETIC ASTARTES",
-            "VEHICLE"
-          ],
-          "level": "model",
-          "within": {
-            "range": {
-              "inches": 3
-            },
-            "of": "this-model"
-          }
-        },
-        "count": {
-          "min": 1,
-          "max": 1
-        },
-        "limit": {
-          "count": 1,
-          "period": "phase"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
           {
-            "type": "heal",
-            "target": "selected-unit",
-            "modifier": {
-              "amount": "D3"
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
             }
           },
           {
-            "type": "roll-modifier",
-            "target": "selected-unit",
-            "modifier": {
-              "roll": "hit",
-              "operation": "add",
-              "value": 1
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
             }
           }
         ]
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "HERETIC ASTARTES",
+              "VEHICLE"
+            ],
+            "level": "model"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "matches",
+            "parameters": {
+              "subject": "selected-unit",
+              "filter": {
+                "within": {
+                  "of": "this-model",
+                  "range": {
+                    "inches": 3
+                  }
+                }
+              }
+            }
+          },
+          "limit": {
+            "count": 1,
+            "period": "phase"
+          }
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "heal",
+              "target": "selected-unit",
+              "modifier": {
+                "amount": "D3"
+              }
+            },
+            {
+              "type": "roll-modifier",
+              "target": "selected-unit",
+              "modifier": {
+                "roll": "hit",
+                "operation": "add",
+                "value": 1
+              }
+            }
+          ]
+        }
       }
     },
     "scope": {
@@ -3059,17 +3110,25 @@
           "owner": "enemy",
           "all_of": [
             "VEHICLE"
-          ],
-          "within": {
-            "range": {
-              "inches": 12
-            },
-            "of": "this-model"
-          }
+          ]
         },
         "count": {
           "min": 1,
           "max": 1
+        },
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "subject": "selected-unit",
+            "filter": {
+              "within": {
+                "of": "this-model",
+                "range": {
+                  "inches": 12
+                }
+              }
+            }
+          }
         }
       },
       "effect": {
@@ -3524,7 +3583,7 @@
             "pile-in",
             "consolidation"
           ],
-          "distance_bonus": 3
+          "maximum": 6
         }
       }
     },
@@ -4543,25 +4602,25 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "f34f96882d513a86be882b26a15bed31153cf5b0ebfdc82492c59ce19e9d9b00",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "not",
-        "operands": [
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "state": "battle-shocked"
-              },
-              "subject": "recipient"
+        "type": "matches",
+        "parameters": {
+          "subject": "recipient",
+          "filter": {
+            "within": {
+              "of": "this-model",
+              "range": {
+                "inches": 6
+              }
             }
           }
-        ]
+        }
       },
       "effect": {
         "type": "stat-modifier",
@@ -4574,11 +4633,9 @@
           "none_of": [
             "DAMNED"
           ],
-          "within": {
-            "range": {
-              "inches": 6
-            }
-          }
+          "not_states": [
+            "battle-shocked"
+          ]
         },
         "modifier": {
           "stat": "OC",
@@ -5133,9 +5190,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "source_digest": "1dcb21b71d68c31deb63aeb6f71a7264e6bda6b914eb0497984bbd5331d60d4b",
+    "source_digest": "d5866cb3beaf2ab8f4cb2d0e1abfd3ce7acebe54e1e0042837dcc4b3b893e1ff",
     "version": "2025-q3",
     "effect": {
       "type": "dice-gated",
@@ -5143,17 +5200,32 @@
       "threshold": 2,
       "comparison": "gte",
       "on_success": {
-        "type": "return-models",
-        "target": "this-model",
-        "modifier": {
-          "count": 1,
-          "wounds_remaining": "full",
-          "placement": "closest-to-destruction"
-        }
-      }
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "set-up",
+            "target": "this-model",
+            "modifier": {
+              "to": "battlefield",
+              "min_enemy_distance": {
+                "inches": 1
+              },
+              "placement": "closest-to-destruction"
+            }
+          },
+          {
+            "type": "heal",
+            "target": "this-model",
+            "modifier": {
+              "amount": "full"
+            }
+          }
+        ]
+      },
+      "on_fail": null
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "unit_ids": [
       "fabius-bile"
@@ -5162,13 +5234,24 @@
     "behavior": "reactive",
     "community_notes": "[APPROX] applies to this unit's Fabius Bile model; if he was attached when destroyed, he is set back up attached to that unit",
     "trigger": {
-      "event": "model-destroyed",
-      "object": "model-in-this-unit",
-      "filter": {
-        "first": true
+      "event": "phase-ended",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "model-destroyed",
+          "object": "this-model",
+          "window": "phase",
+          "count": {
+            "min": 1
+          }
+        }
       }
     },
-    "faction_id": "chaos-space-marines"
+    "faction_id": "chaos-space-marines",
+    "usage": {
+      "frequency": "first-this-battle",
+      "per": "model"
+    }
   },
   {
     "ability_id": "agent-of-discord-chaos-space-marines",
@@ -5432,10 +5515,26 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "army-faction",
-        "parameters": {
-          "faction": "chaos-space-marines"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "army-faction",
+            "parameters": {
+              "faction": "chaos-space-marines"
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "event-subject",
+              "filter": {
+                "has_ability": [
+                  "dark-pacts-chaos-space-marines"
+                ]
+              }
+            }
+          }
+        ]
       },
       "effect": {
         "type": "sequence",
@@ -5621,43 +5720,61 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "source_digest": "e86c6631b723d1817bacf9524994a6ee427a59038e55a8d7a1db84ce32e68211",
+    "source_digest": "72aad7e0393ab53658ea15e87a9d0ce5f0b4786229e2300b751a156be3702ce9",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "chaos-space-marines",
     "detachment_id": "cabal-of-chaos",
     "ability_type": "detachment",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          "effect": {
-            "type": "conditional",
-            "condition": {
-              "type": "happened",
-              "parameters": {
-                "event": "used",
-                "subject": "recipient",
-                "filter": {
-                  "kind": "dark-pact"
-                },
-                "window": "phase"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "shooting"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
               }
-            },
-            "effect": {
-              "type": "stat-modifier",
-              "target": {
+            ]
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "used",
+              "filter": {
+                "kind": "dark-pact"
+              },
+              "window": "event"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "ability-part",
+            "trigger": {
+              "event": "selected",
+              "filter": {
+                "to": "shoot"
+              },
+              "subject": {
                 "owner": "friendly",
                 "all_of": [
                   "HERETIC ASTARTES",
@@ -5666,95 +5783,79 @@
                 "none_of": [
                   "DAEMON"
                 ]
-              },
+              }
+            },
+            "effect": {
+              "type": "stat-modifier",
+              "target": "event-subject",
               "modifier": {
                 "stat": "S",
-                "operation": "add",
+                "operation": "improve",
                 "value": 1,
                 "weapons": {
                   "type": "ranged"
                 }
               }
             }
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
-            }
           },
-          "effect": {
-            "type": "sequence",
-            "steps": [
-              {
-                "type": "conditional",
-                "condition": {
-                  "type": "happened",
-                  "parameters": {
-                    "event": "used",
-                    "subject": "recipient",
-                    "filter": {
-                      "kind": "dark-pact"
-                    },
-                    "window": "phase"
-                  }
-                },
-                "effect": {
-                  "type": "stat-modifier",
-                  "target": {
-                    "owner": "friendly",
-                    "all_of": [
-                      "HERETIC ASTARTES"
-                    ],
-                    "any_of": [
-                      "DAEMON PRINCE",
-                      "DAEMON PRINCE WITH WINGS"
-                    ],
-                    "none_of": [
-                      "KHORNE"
-                    ]
+          {
+            "type": "ability-part",
+            "trigger": {
+              "event": "selected",
+              "filter": {
+                "to": "fight"
+              },
+              "subject": {
+                "owner": "friendly",
+                "all_of": [
+                  "HERETIC ASTARTES"
+                ],
+                "any_of": [
+                  "DAEMON PRINCE",
+                  "DAEMON PRINCE WITH WINGS"
+                ],
+                "none_of": [
+                  "KHORNE"
+                ]
+              },
+              "condition": {
+                "type": "happened",
+                "parameters": {
+                  "event": "used",
+                  "filter": {
+                    "kind": "dark-pact"
                   },
-                  "modifier": {
-                    "stat": "S",
-                    "operation": "add",
-                    "value": 2,
-                    "weapons": {
-                      "type": "melee"
+                  "window": "event"
+                }
+              }
+            },
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "conditional",
+                  "condition": {
+                    "type": "phase-is",
+                    "parameters": {
+                      "phase": "fight"
+                    }
+                  },
+                  "effect": {
+                    "type": "stat-modifier",
+                    "target": "event-subject",
+                    "modifier": {
+                      "stat": "S",
+                      "operation": "improve",
+                      "value": 2,
+                      "weapons": {
+                        "type": "melee"
+                      }
                     }
                   }
-                }
-              },
-              {
-                "type": "conditional",
-                "condition": {
-                  "type": "happened",
-                  "parameters": {
-                    "event": "used",
-                    "subject": "recipient",
-                    "filter": {
-                      "kind": "dark-pact"
-                    },
-                    "window": "phase"
-                  }
                 },
-                "effect": {
+                {
                   "type": "stat-modifier",
-                  "target": {
-                    "owner": "friendly",
-                    "all_of": [
-                      "HERETIC ASTARTES"
-                    ],
-                    "any_of": [
-                      "DAEMON PRINCE",
-                      "DAEMON PRINCE WITH WINGS"
-                    ],
-                    "none_of": [
-                      "KHORNE"
-                    ]
-                  },
+                  "target": "event-subject",
                   "modifier": {
                     "stat": "AP",
                     "operation": "improve",
@@ -5764,14 +5865,14 @@
                     }
                   }
                 }
-              }
-            ]
+              ]
+            }
           }
-        }
-      ]
+        ]
+      }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "phase"
     },
     "applies_to": {
       "all_of": [
@@ -10251,7 +10352,8 @@
     "trigger": {
       "event": "after-roll",
       "filter": {
-        "roll": "save"
+        "roll": "save",
+        "result": "failure"
       },
       "optional": true
     },
@@ -11279,7 +11381,13 @@
           },
           "effect": {
             "type": "return-models",
-            "target": "this-unit",
+            "target": {
+              "level": "model",
+              "member_of": "this-unit",
+              "none_of": [
+                "CHARACTER"
+              ]
+            },
             "modifier": {
               "count": 1
             }
@@ -11299,7 +11407,13 @@
           },
           "effect": {
             "type": "return-models",
-            "target": "this-unit",
+            "target": {
+              "level": "model",
+              "member_of": "this-unit",
+              "none_of": [
+                "CHARACTER"
+              ]
+            },
             "modifier": {
               "count": "D3"
             }
@@ -11711,7 +11825,11 @@
     },
     "behavior": "reactive",
     "trigger": {
-      "event": "destroyed"
+      "event": "destroyed",
+      "object": {
+        "owner": "any",
+        "designated": "focus-of-hatred"
+      }
     },
     "source_digest": "8e0f09bfdf5045c6c60cd5ca6ce1f2aa9d4f321b12f9312d596892e9727ed1d5"
   },
@@ -11897,7 +12015,11 @@
     },
     "behavior": "reactive",
     "trigger": {
-      "event": "destroyed"
+      "event": "destroyed",
+      "object": {
+        "owner": "any",
+        "designated": "focus-of-hatred"
+      }
     },
     "source_digest": "fb7a9a6ea2d1cc3b432c1296625a0011e83fed8a2d85b1cd4b6bda724ca7d52e"
   },
@@ -13058,6 +13180,7 @@
       "condition": {
         "type": "matches",
         "parameters": {
+          "subject": "this-model",
           "filter": {
             "within": {
               "of": {
@@ -15193,7 +15316,13 @@
           },
           "effect": {
             "type": "return-models",
-            "target": "this-unit",
+            "target": {
+              "level": "model",
+              "member_of": "this-unit",
+              "none_of": [
+                "CHARACTER"
+              ]
+            },
             "modifier": {
               "count": 1
             }
@@ -15437,7 +15566,10 @@
         {
           "type": "ability-part",
           "trigger": {
-            "event": "attacks-resolved"
+            "event": "attacks-resolved",
+            "filter": {
+              "kind": "fight"
+            }
           },
           "duration": "phase",
           "effect": {

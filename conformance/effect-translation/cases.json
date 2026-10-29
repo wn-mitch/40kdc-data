@@ -5171,10 +5171,16 @@
       "duration": "permanent"
     },
     "trigger": {
-      "event": "damage-allocated"
+      "event": "damage-allocated",
+      "condition": {
+        "type": "attack-is",
+        "parameters": {
+          "attack_type": "ranged"
+        }
+      }
     },
     "expected": {
-      "text": "When damage is allocated, unless the target is not fully visible to the attacking model because of this model, that unit has the Benefit of Cover."
+      "text": "When damage is allocated, if for ranged attacks, unless the target is not fully visible to the attacking model because of this model, that unit has the Benefit of Cover."
     }
   },
   {

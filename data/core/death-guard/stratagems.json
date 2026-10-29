@@ -717,13 +717,11 @@
                   {
                     "type": "happened",
                     "parameters": {
-                      "event": "move-ended",
+                      "event": "targets-selected",
                       "filter": {
-                        "move_types": [
-                          "charge"
-                        ]
+                        "kind": "charge"
                       },
-                      "window": "turn"
+                      "window": "phase"
                     }
                   },
                   {
@@ -1704,13 +1702,11 @@
                   {
                     "type": "happened",
                     "parameters": {
-                      "event": "move-ended",
+                      "event": "targets-selected",
                       "filter": {
-                        "move_types": [
-                          "charge"
-                        ]
+                        "kind": "charge"
                       },
-                      "window": "turn"
+                      "window": "phase"
                     }
                   },
                   {

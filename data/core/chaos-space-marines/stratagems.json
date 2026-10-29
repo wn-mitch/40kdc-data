@@ -4432,10 +4432,14 @@
             }
           },
           {
-            "type": "wounds",
+            "type": "happened",
             "parameters": {
-              "subject": "this-unit",
-              "lost": true
+              "event": "damage-allocated",
+              "object": "this-unit",
+              "filter": {
+                "by": "event-subject"
+              },
+              "window": "event"
             }
           }
         ]
@@ -4730,9 +4734,6 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": {
-      "required_keywords": [
-        "Heretic Astartes"
-      ],
       "count": "one",
       "side": "your-army",
       "selects": "unit",
@@ -4740,15 +4741,30 @@
         "operator": "and",
         "operands": [
           {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "any_of": [
-                  "VASHTORR THE ARKIFANE",
-                  "VEHICLE"
-                ]
+            "operator": "or",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "all_of": [
+                      "HERETIC ASTARTES",
+                      "VEHICLE"
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "all_of": [
+                      "VASHTORR THE ARKIFANE"
+                    ]
+                  }
+                }
               }
-            }
+            ]
           },
           {
             "type": "matches",
@@ -4767,13 +4783,11 @@
                   {
                     "type": "happened",
                     "parameters": {
-                      "event": "move-ended",
+                      "event": "targets-selected",
                       "filter": {
-                        "move_types": [
-                          "charge"
-                        ]
+                        "kind": "charge"
                       },
-                      "window": "turn"
+                      "window": "phase"
                     }
                   },
                   {

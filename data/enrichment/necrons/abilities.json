@@ -1932,7 +1932,13 @@
     "behavior": "reactive",
     "faction_id": "necrons",
     "trigger": {
-      "event": "damage-allocated"
+      "event": "damage-allocated",
+      "condition": {
+        "type": "attack-is",
+        "parameters": {
+          "attack_type": "ranged"
+        }
+      }
     }
   },
   {
@@ -2629,7 +2635,7 @@
         },
         "effect": {
           "type": "stat-modifier",
-          "target": "this-unit",
+          "target": "recipient",
           "modifier": {
             "stat": "OC",
             "operation": "add",

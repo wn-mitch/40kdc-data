@@ -2622,7 +2622,13 @@
     "behavior": "reactive",
     "faction_id": "chaos-daemons",
     "trigger": {
-      "event": "damage-allocated"
+      "event": "damage-allocated",
+      "condition": {
+        "type": "attack-is",
+        "parameters": {
+          "attack_type": "ranged"
+        }
+      }
     }
   },
   {
@@ -5085,7 +5091,13 @@
     "behavior": "reactive",
     "faction_id": "chaos-daemons",
     "trigger": {
-      "event": "damage-allocated"
+      "event": "damage-allocated",
+      "condition": {
+        "type": "attack-is",
+        "parameters": {
+          "attack_type": "ranged"
+        }
+      }
     }
   },
   {

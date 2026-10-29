@@ -1987,7 +1987,13 @@
     "behavior": "reactive",
     "faction_id": "tau-empire",
     "trigger": {
-      "event": "damage-allocated"
+      "event": "damage-allocated",
+      "condition": {
+        "type": "attack-is",
+        "parameters": {
+          "attack_type": "ranged"
+        }
+      }
     }
   },
   {
