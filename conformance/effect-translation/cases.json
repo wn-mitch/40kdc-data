@@ -42496,5 +42496,77 @@
     "expected": {
       "text": "Unless during the Battle-shock step of the Command phase, when resolving this use, you gain 1CP."
     }
+  },
+  {
+    "caseId": "canonical/within-unit-sharing-a-keyword",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "within": {
+              "of": {
+                "owner": "friendly",
+                "any_of": [
+                  "HERALD",
+                  "PRINCE"
+                ],
+                "shares_any_of": [
+                  "KHORNE",
+                  "NURGLE"
+                ]
+              },
+              "range": {
+                "inches": 6
+              },
+              "wholly": true
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "stat": "OC",
+          "operation": "add",
+          "value": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "While the unit is wholly within 6\" of a friendly unit with the HERALD or PRINCE keyword that shares the KHORNE or NURGLE keyword with it, add 1 to the unit's Objective Control characteristic."
+    }
+  },
+  {
+    "caseId": "canonical/effect-target-sharing-a-keyword",
+    "effect": {
+      "type": "stat-modifier",
+      "target": {
+        "owner": "friendly",
+        "all_of": [
+          "DAEMON"
+        ],
+        "shares_any_of": [
+          "KHORNE",
+          "NURGLE"
+        ]
+      },
+      "modifier": {
+        "stat": "OC",
+        "operation": "add",
+        "value": 1
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Add 1 to the Objective Control characteristic of all friendly DAEMON units that share the KHORNE or NURGLE keyword with it."
+    }
   }
 ]

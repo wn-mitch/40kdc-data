@@ -54719,6 +54719,10 @@ pub struct UnitDetachmentPricingItem {
 ///    "owner": {
 ///      "$ref": "#/$defs/owner"
 ///    },
+///    "shares_any_of": {
+///      "description": "Only units that have at least one of these keywords that the unit this filter is matched for also has: the subject of the condition or the unit a `within` is measured for (\"friendly BLOODTHIRSTER units with which it shares the KHORNE, TZEENTCH, NURGLE or SLAANESH keyword\").",
+///      "$ref": "#/$defs/keyword-list"
+///    },
 ///    "state": {
 ///      "$ref": "#/$defs/unit-state"
 ///    },
@@ -54827,6 +54831,9 @@ pub struct UnitFilter {
     pub not_states: ::std::option::Option<Vec<UnitState>>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub owner: ::std::option::Option<Owner>,
+    ///Only units that have at least one of these keywords that the unit this filter is matched for also has: the subject of the condition or the unit a `within` is measured for ("friendly BLOODTHIRSTER units with which it shares the KHORNE, TZEENTCH, NURGLE or SLAANESH keyword").
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub shares_any_of: ::std::option::Option<KeywordList>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub state: ::std::option::Option<UnitState>,
     ///Exact owning-faction unit identities; this predicate applies only to whole units.
@@ -54860,6 +54867,7 @@ impl ::std::default::Default for UnitFilter {
             not_engaged_with: Default::default(),
             not_states: Default::default(),
             owner: Default::default(),
+            shares_any_of: Default::default(),
             state: Default::default(),
             unit_ids: Default::default(),
             visible: Default::default(),

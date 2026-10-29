@@ -2251,5 +2251,15 @@
     "caseId": "canonical/condition-not-in-battle-shock-step",
     "effect": { "type": "conditional", "condition": { "operator": "not", "operands": [{ "type": "phase-is", "parameters": { "phase": "command", "step": "battle-shock" } }] }, "effect": { "type": "cp-gain", "target": "this-model", "modifier": { "amount": 1 } } },
     "scope": { "duration": "resolution" }
+  },
+  {
+    "caseId": "canonical/within-unit-sharing-a-keyword",
+    "effect": { "type": "conditional", "condition": { "type": "matches", "parameters": { "filter": { "within": { "of": { "owner": "friendly", "any_of": ["HERALD", "PRINCE"], "shares_any_of": ["KHORNE", "NURGLE"] }, "range": { "inches": 6 }, "wholly": true } } } }, "effect": { "type": "stat-modifier", "target": "this-unit", "modifier": { "stat": "OC", "operation": "add", "value": 1 } } },
+    "scope": { "duration": "permanent" }
+  },
+  {
+    "caseId": "canonical/effect-target-sharing-a-keyword",
+    "effect": { "type": "stat-modifier", "target": { "owner": "friendly", "all_of": ["DAEMON"], "shares_any_of": ["KHORNE", "NURGLE"] }, "modifier": { "stat": "OC", "operation": "add", "value": 1 } },
+    "scope": { "duration": "permanent" }
   }
 ]

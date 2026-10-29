@@ -287,6 +287,8 @@ export function matchingUnit(leaf: CompileLeaf, subject: string | undefined): No
     ...(leaf.parameters.of_not_designated !== undefined ? { not_designated: closed(leaf, "of_not_designated") } : {}),
     // "of one or more friendly X VEHICLE or Y units": any one alternative.
     ...dslAlternatives(leaf.parameters.of_alternatives as FilterAlternative[] | undefined),
+    // "units with which it shares the KHORNE … keyword": one of these the subject also has (unit-position@27).
+    ...(leaf.parameters.of_shares_keywords !== undefined ? { shares_any_of: closed(leaf, "of_shares_keywords") } : {}),
     ...(leaf.parameters.of_other === true ? { excluding: subject ?? "this-unit" } : {}),
   };
 }

@@ -303,6 +303,8 @@ def unit_filter_phrase(f: Any) -> str:
         s += f" (excluding {_or_list([_str(k) for k in f['none_of']])} {noun}s)"
     if isinstance(f.get("not_all_of"), list):
         s += f" (excluding {' '.join(_str(k) for k in f['not_all_of'])} {noun}s)"
+    if isinstance(f.get("shares_any_of"), list):
+        s += f" that shares the {_or_list([_str(k) for k in f['shares_any_of']])} keyword with it"
     if isinstance(f.get("has_ability"), list):
         s += f" with the {_and_list([id_label(a) for a in f['has_ability']])} ability"
     if isinstance(f.get("lacks_ability"), list):

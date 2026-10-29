@@ -253,6 +253,9 @@ func unitFilterPhrase(f map[string]any) string {
 	if isList(f["not_all_of"]) {
 		s += " (excluding " + strings.Join(cstrList(f["not_all_of"]), " ") + " " + noun + "s)"
 	}
+	if isList(f["shares_any_of"]) {
+		s += " that shares the " + orList(cstrList(f["shares_any_of"])) + " keyword with it"
+	}
 	if isList(f["has_ability"]) {
 		s += " with the " + andList(idLabelList(f["has_ability"])) + " ability"
 	}

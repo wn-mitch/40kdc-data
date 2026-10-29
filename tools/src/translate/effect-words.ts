@@ -341,6 +341,7 @@ export function filterSubject(f: P, ctx: Ctx = {}): string {
 /** A unit filter's relations to other units and abilities: " embarked within this model", " with the Deep Strike ability". */
 function filterRelations(f: P, ctx: Ctx): string {
   let s = "";
+  if (Array.isArray(f.shares_any_of)) s += ` that share the ${orList((f.shares_any_of as unknown[]).map(jstr))} keyword with it`;
   if (Array.isArray(f.has_ability)) s += ` with the ${andList((f.has_ability as unknown[]).map(abilityLabel))} ability`;
   if (Array.isArray(f.lacks_ability)) s += ` without the ${orList((f.lacks_ability as unknown[]).map(abilityLabel))} ability`;
   if (f.embarked_in != null) s += ` embarked within ${effectSubject(f.embarked_in, ctx)}`;

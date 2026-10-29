@@ -164,6 +164,7 @@ export function unitFilterPhrase(f: P): string {
   if (Array.isArray(f.any_of)) s += ` with the ${orList((f.any_of as unknown[]).map(str))} keyword`;
   if (Array.isArray(f.none_of)) s += ` (excluding ${orList((f.none_of as unknown[]).map(str))} ${noun}s)`;
   if (Array.isArray(f.not_all_of)) s += ` (excluding ${(f.not_all_of as unknown[]).map(str).join(" ")} ${noun}s)`;
+  if (Array.isArray(f.shares_any_of)) s += ` that shares the ${orList((f.shares_any_of as unknown[]).map(str))} keyword with it`;
   if (Array.isArray(f.has_ability)) s += ` with the ${andList((f.has_ability as unknown[]).map((a) => idLabel(a)))} ability`;
   if (Array.isArray(f.lacks_ability)) s += ` without the ${orList((f.lacks_ability as unknown[]).map((a) => idLabel(a)))} ability`;
   if (Array.isArray(f.model_names)) s += ` named ${orList(f.model_names.map(str))}`;

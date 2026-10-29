@@ -527,6 +527,8 @@ def filter_subject(f: dict[str, Any], ctx: Ctx | None = None) -> str:
 def _filter_relations(f: dict[str, Any], ctx: Ctx) -> str:
     """A unit filter's canonical relations to other units and abilities."""
     s = ""
+    if isinstance(f.get("shares_any_of"), list):
+        s += f" that share the {or_list([jstr(x) for x in f['shares_any_of']])} keyword with it"
     if isinstance(f.get("has_ability"), list):
         s += f" with the {and_list([ability_label(a) for a in f['has_ability']])} ability"
     if isinstance(f.get("lacks_ability"), list):

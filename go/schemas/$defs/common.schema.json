@@ -556,6 +556,10 @@
           "$ref": "#/$defs/keyword-list",
           "description": "Not units that have every listed keyword (\"excluding MONSTER CHARACTER units\" excludes only units that are both)."
         },
+        "shares_any_of": {
+          "$ref": "#/$defs/keyword-list",
+          "description": "Only units that have at least one of these keywords that the unit this filter is matched for also has: the subject of the condition or the unit a `within` is measured for (\"friendly BLOODTHIRSTER units with which it shares the KHORNE, TZEENTCH, NURGLE or SLAANESH keyword\")."
+        },
         "any_of_filters": {
           "type": "array",
           "items": {

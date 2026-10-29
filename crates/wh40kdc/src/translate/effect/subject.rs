@@ -149,6 +149,12 @@ pub(crate) fn filter_subject(f: &P, ctx: &Ctx) -> String {
 /// A unit filter's relations to other units and abilities.
 fn filter_relations(f: &P, ctx: &Ctx) -> String {
     let mut s = String::new();
+    if let Some(shared) = map_arr(f, "shares_any_of", jv) {
+        s.push_str(&format!(
+            " that share the {} keyword with it",
+            or_list(&shared)
+        ));
+    }
     if let Some(has) = map_arr(f, "has_ability", |a| ability_label(Some(a))) {
         s.push_str(&format!(" with the {} ability", and_list(&has)));
     }

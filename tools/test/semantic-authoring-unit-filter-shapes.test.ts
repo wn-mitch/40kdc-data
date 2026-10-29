@@ -321,6 +321,23 @@ describe("a unit-filter naming the unit a Leader is leading", () => {
       });
       expect(checkEntry(entryWithMechanics(authored, result.mechanics)).errors).toEqual([]);
     });
+
+    it("measures a distance to a unit that shares one of the listed keywords with the subject", () => {
+      const text = "While this unit is within 6\" of a friendly ALPHA or BETA GAMMA unit with which it shares the DELTA or EPSILON keyword, this unit gains the ZETA keyword.";
+      const result = compiled(placed(text,
+        ["within 6\" of a friendly ALPHA or BETA GAMMA unit with which it shares the DELTA or EPSILON keyword", "unit-position", { kind: "within", inches: 6, subject: "this-unit", negated: false, of: "matching-unit", of_side: "friendly", of_alternatives: ALPHA_OR_BETA_GAMMA, of_shares_keywords: ["EPSILON", "DELTA"] }],
+        ["this unit gains the ZETA keyword", "keyword-grant", { subject: "this-unit", keywords: ["ZETA"] }]), text);
+      expect(nodes(result.mechanics, (node) => node.type === "matches")).toContainEqual({
+        type: "matches", parameters: { filter: { within: { range: { inches: 6 }, of: { owner: "friendly", any_of_filters: [{ all_of: ["ALPHA"] }, { all_of: ["BETA", "GAMMA"] }], shares_any_of: ["DELTA", "EPSILON"] } } } },
+      });
+      expect(checkEntry(entryWithMechanics(authored, result.mechanics)).errors).toEqual([]);
+    });
+
+    it("refuses shared keywords off the matching-unit form or with a single keyword", () => {
+      const base = { kind: "within", inches: 6, subject: "this-unit", negated: false };
+      expect(() => normalize("unit-position", { ...base, of: "this-model", of_shares_keywords: ["DELTA", "EPSILON"] })).toThrow(/matching-unit/u);
+      expect(() => normalize("unit-position", { ...base, of: "matching-unit", of_side: "friendly", of_keywords: ["ALPHA"], of_shares_keywords: ["DELTA"] })).toThrow();
+    });
   });
 
   describe("unit-filter alternatives written as separate filters", () => {

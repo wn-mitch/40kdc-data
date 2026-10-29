@@ -459,4 +459,17 @@ export const POSITION_EXTENSIONS: readonly FamilyExtension[] = [
     schema: (previous) => withProperties(previous, { subject: widenedEnum(previous, "subject", [FILTERED_UNITS]) }),
     normalize: (input, previous) => input.subject === FILTERED_UNITS ? standIn(input, "subject", "this-unit", previous) : previous(input),
   },
+  {
+    // "within 6\" of one or more friendly BLOODTHIRSTER … units with which it shares the KHORNE, TZEENTCH, NURGLE or SLAANESH keyword".
+    family: "unit-position",
+    version: 27,
+    description: "As the previous version, plus of_shares_keywords on of matching-unit: the unit measured to has at least one of these keywords that the subject also has (\"units with which it shares the KHORNE, TZEENTCH, NURGLE or SLAANESH keyword\"). Two or more keywords.",
+    schema: (previous) => withProperties(previous, { of_shares_keywords: optional({ type: "array", items: KEYWORD_ITEMS, minItems: 2, uniqueItems: true, "x-only-when": { of: ["matching-unit"] } }) }),
+    normalize: (input, previous) => {
+      if (input.of_shares_keywords === undefined) return previous(input);
+      const { of_shares_keywords: shared, ...rest } = input;
+      if (rest.of !== "matching-unit") throw new TypeError("unit-position.of_shares_keywords goes with of: matching-unit.");
+      return { ...previous(rest), of_shares_keywords: keywordList(shared, "unit-position.of_shares_keywords", 2) };
+    },
+  },
 ];

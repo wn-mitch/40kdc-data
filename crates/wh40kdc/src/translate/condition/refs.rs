@@ -248,6 +248,12 @@ pub(crate) fn unit_filter_phrase(f: &P) -> String {
     if let Some(not_all) = strs(f.get("not_all_of")) {
         s.push_str(&format!(" (excluding {} {noun}s)", not_all.join(" ")));
     }
+    if let Some(shared) = strs(f.get("shares_any_of")) {
+        s.push_str(&format!(
+            " that shares the {} keyword with it",
+            or_list(&shared)
+        ));
+    }
     let titled = |v: &Value| id_label(Some(v));
     if let Some(has) = f.get("has_ability").and_then(Value::as_array) {
         let names: Vec<String> = has.iter().map(titled).collect();

@@ -108,6 +108,16 @@ describe("and/or between conditions (SS-C)", () => {
     expect(JSON.stringify(result.ok ? result.mechanics : {})).toContain('"operator":"or"');
   });
 
+  it("joins two conditions written \", and/or\" as one any-of", () => {
+    const comma = "If this unit is within range of an **objective**, and/or the target unit is within range of an **objective**, add 1 to the Hit roll.";
+    const result = compileLeaves(placed(comma,
+      ["this unit is within range of an **objective**", "unit-position", onObjective("this-unit")],
+      ["the target unit is within range of an **objective**", "unit-position", onObjective("target")],
+      ["add 1 to the Hit roll", "roll-modifier", { roll: "hit", operation: "add", value: 1 }]), comma);
+    expect(result.ok ? "ok" : result.errors.join(" | ")).toBe("ok");
+    expect(JSON.stringify(result.ok ? result.mechanics : {})).toContain('"operator":"or"');
+  });
+
   it("keeps two conditions written \"and\" stacked as AND", () => {
     const and = text.replace("and/or", "and");
     const result = compileLeaves(placed(and,

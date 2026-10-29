@@ -368,6 +368,9 @@ func filterRelations(f map[string]any, ctx effCtx) string {
 		}
 		return out
 	}
+	if isList(f["shares_any_of"]) {
+		s += " that share the " + orList(jstrList(f["shares_any_of"])) + " keyword with it"
+	}
 	if isList(f["has_ability"]) {
 		s += " with the " + andList(labels(f["has_ability"])) + " ability"
 	}
