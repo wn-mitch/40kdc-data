@@ -148,7 +148,8 @@ const HISTORY: Record<string, (subject: string | undefined, attackType?: string)
   "suffered-mortal-wounds-from-this-ability": (subject) => ({ event: "damage-allocated", object: subject ?? "this-unit", filter: { attack_type: "mortal" }, window: "event" }),
   "lost-models-to-own-mortal-wounds": (subject) => ({ event: "model-destroyed", object: { level: "model", member_of: subject ?? "this-unit" }, filter: { attack_type: "mortal" }, window: "event" }),
   // Wave 10: "was charged this turn": the unit was the target of a declared charge.
-  "was-charged-this-turn": (subject) => ({ event: "targets-selected", subject: { owner: "any" }, object: subject ?? "this-unit", filter: { kind: "charge" }, window: "turn" }),
+  // "Was charged": a charge move made against the unit, not only a declared charge that may fail.
+  "was-charged-this-turn": (subject) => ({ event: "move-ended", subject: { owner: "any" }, object: subject ?? "this-unit", filter: { move_types: ["charge"] }, window: "turn" }),
   // Past targeting: targeted by any unit's attacks this phase, and attacks the subject made at this unit.
   "targeted-by-attacks-this-phase": (subject) => ({ event: "targets-selected", subject: { owner: "any" }, object: subject ?? "this-unit", filter: { kind: "attack" }, window: "phase" }),
   "made-attacks-targeting-this-phase": (subject) => {

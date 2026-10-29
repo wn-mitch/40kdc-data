@@ -4,7 +4,7 @@ import { destinationOf } from "./compile-move-end-nearest.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { destroyedFilter, destroyedModelAfter, destroyedObject, membershipOf, modelRecipientFilter, modelSelection, rollOwnerEvent } from "./compile-model-level.js";
 import { embarkedStateBefore, foldEmbarkedExclusion } from "./compile-embarked-exclusion.js";
-import { foldSelectExclusions } from "./compile-select-exclusions.js";
+import { foldSelectExclusions, foldTargetExclusions } from "./compile-select-exclusions.js";
 import { foldTriggeringDestruction, isTriggeringDestruction } from "./compile-triggering-destruction.js";
 import { attackFrameRolls, defenderCompareAfter, foldAttackFrame, subjectlessRoll, targetFrameBefore } from "./compile-attack-frame.js";
 import { measuresTargetedFilter, targetedWithin } from "./compile-targeted-within.js";
@@ -78,7 +78,7 @@ export function foldUnitFilters(input0: readonly CompileLeaf[], sourceText?: str
   // "if those attacks destroyed an enemy unit" pairs its destroyed unit before the merges below (compile-triggering-destruction.ts).
   // A filter naming the attack's target is the defender's condition, not a filter a neighbouring leaf can take.
   const input = foldTriggeringDestruction(input0.map(targetNamingFilter));
-  const list = foldSelectExclusions(mergeStackedFilters(input, sourceText), mergedFilter);
+  const list = foldTargetExclusions(foldSelectExclusions(mergeStackedFilters(input, sourceText), mergedFilter), mergedFilter);
   if (list.some((leaf, at) => isFilter(leaf) && leaf.parameters.datasheets !== undefined && !armyGroup(list, at))) {
     throw new CompileError("A datasheet list has no DSL unit-filter shape outside army construction.");
   }

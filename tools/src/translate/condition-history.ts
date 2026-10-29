@@ -42,6 +42,8 @@ function happenedPhrase(p: P, negated: boolean): string {
       const types = (f.move_types as string[] | undefined) ?? [];
       const verb: Record<string, string> = { charge: "charge", advance: "advance", "fall-back": "fall back", "remain-stationary": "remain stationary", ingress: "make an ingress move" };
       const done = types.length === 1 && verb[types[0]!] ? didNot(verb[types[0]!]!) : didNot(types.length ? `make a ${moveKinds(types)} move` : "move");
+      // A charge with an object: the unit the charge was made against ("was charged this turn").
+      if (p.object != null && types.length === 1 && types[0] === "charge") return withWindow(`${who} ${done} ${unitRefPhrase(p.object)}`, p.window);
       return withWindow(`${who} ${done}`, p.window);
     }
     case "selected": {

@@ -73,6 +73,10 @@ func describeHappenedCore(p map[string]any, negated bool) string {
 		} else {
 			done = didNot("move")
 		}
+		// A charge with an object: the unit the charge was made against ("was charged this turn").
+		if p["object"] != nil && len(types) == 1 && types[0] == "charge" {
+			return withWindow(who+" "+done+" "+unitRefPhrase(p["object"], "the unit"), p["window"])
+		}
 		return withWindow(who+" "+done, p["window"])
 	case "selected":
 		to := cstr(f["to"])

@@ -975,69 +975,101 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "a86a3ee30d8be7db1597abcd98e819627a408b529d22b9acaff37c9009d35ce1",
     "version": "2025-q3",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "permission",
-          "target": "this-model",
-          "modifier": {
-            "activity": "disembark",
-            "allow": true,
-            "after": [
-              "advance"
-            ]
-          }
-        },
-        {
-          "type": "ability-part",
-          "trigger": {
-            "event": "disembarked",
-            "subject": {
-              "owner": "friendly"
-            },
-            "object": "this-model"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
           },
-          "effect": {
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "resource-spend",
+            "target": "this-model",
+            "modifier": {
+              "pool": "pain-token-pool",
+              "amount": 1,
+              "label": "Pain token"
+            }
+          },
+          {
+            "type": "designate",
+            "target": "this-model",
+            "modifier": {
+              "tag": "empowered"
+            }
+          },
+          {
             "type": "conditional",
             "condition": {
-              "type": "happened",
+              "type": "matches",
               "parameters": {
-                "event": "move-ended",
                 "subject": "this-model",
                 "filter": {
-                  "move_types": [
-                    "advance"
-                  ]
-                },
-                "window": "turn"
+                  "designated": "empowered"
+                }
               }
             },
             "effect": {
               "type": "permission",
-              "target": "event-subject",
+              "target": {
+                "owner": "friendly",
+                "embarked_in": "this-model"
+              },
               "modifier": {
-                "activity": "declare-charge",
-                "allow": false
+                "activity": "disembark",
+                "allow": true,
+                "despite": [
+                  "transport-advanced"
+                ],
+                "counts_as_move": "normal",
+                "counts_as_until": "end-of-phase",
+                "then_cannot": [
+                  "declare-charge"
+                ]
               }
             }
           }
-        }
-      ]
+        ]
+      }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "phase"
     },
     "unit_ids": [
       "venom"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "drukhari"
+    "behavior": "reactive",
+    "faction_id": "drukhari",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "move_types": [
+          "advance"
+        ],
+        "to": "move"
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "aerialists-drukhari",

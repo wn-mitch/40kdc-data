@@ -3383,7 +3383,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "724cbdaa778c5b31dcaae2ecedf9394996cb7f37be10176587dcb01bfcd51e5e",
     "version": "2025-q3",
@@ -3391,7 +3391,10 @@
       "type": "ability-activate",
       "target": "this-unit",
       "modifier": {
-        "ability": "voice-of-command-astra-militarum"
+        "ability": "voice-of-command-astra-militarum",
+        "select": {
+          "by": "player"
+        }
       }
     },
     "scope": {
@@ -3401,8 +3404,16 @@
       "kasrkin"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "faction_id": "astra-militarum"
+    "behavior": "reactive",
+    "faction_id": "astra-militarum",
+    "trigger": {
+      "event": "phase-started",
+      "optional": true
+    },
+    "usage": {
+      "frequency": "once-per-battle-round",
+      "per": "unit"
+    }
   },
   {
     "ability_id": "melta-mine-astra-militarum",
@@ -4871,59 +4882,28 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "e3fa10d60def2eeae9c434a96ac5ce97bac4da07cb3e9a2d65d37e056d0c140d",
     "version": "2025-q3",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "permission",
-          "target": "this-model",
-          "modifier": {
-            "activity": "disembark",
-            "allow": true,
-            "after": [
-              "advance"
-            ]
-          }
-        },
-        {
-          "type": "ability-part",
-          "trigger": {
-            "event": "disembarked",
-            "subject": {
-              "owner": "friendly"
-            },
-            "object": "this-model"
-          },
-          "effect": {
-            "type": "conditional",
-            "condition": {
-              "type": "happened",
-              "parameters": {
-                "event": "move-ended",
-                "subject": "this-model",
-                "filter": {
-                  "move_types": [
-                    "advance"
-                  ]
-                },
-                "window": "turn"
-              }
-            },
-            "effect": {
-              "type": "permission",
-              "target": "event-subject",
-              "modifier": {
-                "activity": "declare-charge",
-                "allow": false
-              }
-            }
-          }
-        }
-      ]
+      "type": "permission",
+      "target": {
+        "owner": "friendly",
+        "embarked_in": "this-unit"
+      },
+      "modifier": {
+        "activity": "disembark",
+        "allow": true,
+        "despite": [
+          "transport-advanced"
+        ],
+        "counts_as_move": "normal",
+        "counts_as_until": "end-of-phase",
+        "then_cannot": [
+          "declare-charge"
+        ]
+      }
     },
     "scope": {
       "duration": "permanent"
@@ -5400,7 +5380,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "8ff6858b42a4caf7ad8b4bbe37ef2fce601412955d93925cc0bfb42ec26d3039",
     "version": "2025-q3",
@@ -5410,22 +5390,43 @@
         "operator": "and",
         "operands": [
           {
-            "type": "phase-is",
+            "type": "attack-is",
             "parameters": {
-              "phase": "fight"
+              "attack_type": "melee"
             }
           },
           {
-            "type": "happened",
-            "parameters": {
-              "event": "move-ended",
-              "filter": {
-                "move_types": [
-                  "charge"
-                ]
+            "operator": "or",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "move-ended",
+                  "filter": {
+                    "move_types": [
+                      "charge"
+                    ]
+                  },
+                  "window": "turn"
+                }
               },
-              "window": "turn"
-            }
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "move-ended",
+                  "subject": {
+                    "owner": "any"
+                  },
+                  "object": "this-unit",
+                  "filter": {
+                    "move_types": [
+                      "charge"
+                    ]
+                  },
+                  "window": "turn"
+                }
+              }
+            ]
           }
         ]
       },
@@ -12296,19 +12297,77 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "astra-militarum",
     "detachment_id": "hammer-of-the-emperor",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "hazardous"
+              }
+            ],
+            "weapons": {
+              "type": "ranged",
+              "exclude_keyword": {
+                "keyword_id": "one-shot"
+              }
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "ranged"
+            }
+          },
+          "effect": {
+            "type": "ignore-modifiers",
+            "target": "this-unit",
+            "modifier": {
+              "what": "characteristics",
+              "stats": [
+                "BS"
+              ]
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "ranged"
+            }
+          },
+          "effect": {
+            "type": "ignore-modifiers",
+            "target": "this-unit",
+            "modifier": {
+              "what": "rolls",
+              "rolls": [
+                "hit"
+              ]
+            }
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "battle-round"
+    },
+    "behavior": "activated",
+    "source_digest": "2121c70e4c745468f3efdfde36942132e685e6daf2b399ec79c2e7a37384db2c"
   },
   {
     "ability_id": "first-wave-draydens-lance-astra-militarum",

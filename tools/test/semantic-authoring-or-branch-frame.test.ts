@@ -260,7 +260,9 @@ describe("Semantic authoring antecedent frames on an Or: branch", () => {
 
   describe("family versions", () => {
     it("grant v10 and scope v5 take frame antecedent and nothing that names a recipient or keyword", () => {
-      expect(currentFamilyVersion("weapon-ability-grant")).toBe(10);
+      // Version 10 is the frame-antecedent widening; later widenings (exclude_weapon_keyword) stack on it.
+      expect(currentFamilyVersion("weapon-ability-grant")).toBeGreaterThanOrEqual(10);
+      expect(normalizeFingerprintParameters("weapon-ability-grant", { frame: "antecedent" }, currentFamilyVersion("weapon-ability-grant"))).toEqual({ frame: "antecedent" });
       // Version 5 is the frame-antecedent widening; later widenings (weapon_names) stack on it.
       expect(currentFamilyVersion("weapon-property-scope")).toBeGreaterThanOrEqual(5);
       expect(normalizeFingerprintParameters("weapon-ability-grant", { frame: "antecedent" }, 10)).toEqual({ frame: "antecedent" });

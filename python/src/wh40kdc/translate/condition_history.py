@@ -79,6 +79,9 @@ def _describe_happened_core(p: P, negated: bool) -> str:
             done = did_not(_MOVE_VERBS[types[0]])
         else:
             done = did_not(f"make a {move_kinds(types)} move" if types else "move")
+        # A charge with an object: the unit the charge was made against ("was charged this turn").
+        if p.get("object") is not None and types == ["charge"]:
+            return _with_window(f"{who} {done} {unit_ref_phrase(p['object'])}", window)
         return _with_window(f"{who} {done}", window)
     if event == "selected":
         to = _str(f.get("to"))

@@ -129,6 +129,11 @@ fn happened_phrase(p: &P, negated: bool) -> String {
                 }
                 _ => did_not("move"),
             };
+            // A charge with an object: the unit the charge was made against ("was charged this turn").
+            if nn(p, "object").is_some() && types.len() == 1 && types[0] == "charge" {
+                let object = unit_ref_phrase(nn(p, "object"), "the unit");
+                return with_window(&format!("{who} {done} {object}"), window);
+            }
             with_window(&format!("{who} {done}"), window)
         }
         "selected" => {

@@ -3811,59 +3811,28 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "d2bfbac73dac869045afb0b3e7b9a78bac5e0b16c6754afcfd1c6504f386186a",
     "version": "2025-q3",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "permission",
-          "target": "this-model",
-          "modifier": {
-            "activity": "disembark",
-            "allow": true,
-            "after": [
-              "advance"
-            ]
-          }
-        },
-        {
-          "type": "ability-part",
-          "trigger": {
-            "event": "disembarked",
-            "subject": {
-              "owner": "friendly"
-            },
-            "object": "this-model"
-          },
-          "effect": {
-            "type": "conditional",
-            "condition": {
-              "type": "happened",
-              "parameters": {
-                "event": "move-ended",
-                "subject": "this-model",
-                "filter": {
-                  "move_types": [
-                    "advance"
-                  ]
-                },
-                "window": "turn"
-              }
-            },
-            "effect": {
-              "type": "permission",
-              "target": "event-subject",
-              "modifier": {
-                "activity": "declare-charge",
-                "allow": false
-              }
-            }
-          }
-        }
-      ]
+      "type": "permission",
+      "target": {
+        "owner": "friendly",
+        "embarked_in": "this-unit"
+      },
+      "modifier": {
+        "activity": "disembark",
+        "allow": true,
+        "despite": [
+          "transport-advanced"
+        ],
+        "counts_as_move": "normal",
+        "counts_as_until": "end-of-phase",
+        "then_cannot": [
+          "declare-charge"
+        ]
+      }
     },
     "scope": {
       "duration": "permanent"

@@ -43,6 +43,42 @@ export function foldSelectExclusions(
 }
 
 /**
+ * "One **SQUADRON** unit from your army that is Below Half-strength (excluding **OFFICER** units)": a
+ * Stratagem target's exclusion-only filter after the target's own conditions (its owner, and states,
+ * positions or model counts of the target) merges into the target's filter, as a selection's does.
+ */
+export function foldTargetExclusions(
+  input: readonly CompileLeaf[],
+  mergeFilters: (first: CompileLeaf, second: CompileLeaf) => CompileLeaf | null,
+): CompileLeaf[] {
+  const list = [...input];
+  for (let index = 0; index < list.length; index += 1) {
+    const target = list[index]!;
+    if (target.family_id !== "stratagem-target" || !isFilter(list[index + 1]) || list[index + 1]!.fragment !== target.fragment) continue;
+    const base = index + 1;
+    let cursor = base + 1;
+    while (targetCondition(list[cursor], list[base]!)) cursor += 1;
+    // An exclusion right after the filter is the merge pass's own case.
+    if (cursor === base + 1) continue;
+    const exclusion = list[cursor];
+    if (!exclusionOnly(exclusion) || exclusion!.fragment !== target.fragment) continue;
+    if (exclusion!.parameters.side !== list[base]!.parameters.side) throw new CompileError("An exclusion's side differs from the Stratagem target's side.");
+    const merged = mergeFilters(list[base]!, exclusion!);
+    if (merged === null) throw new CompileError("An exclusion cannot narrow the Stratagem target's filter (its sides or keyword lists conflict).");
+    list[base] = merged;
+    list.splice(cursor, 1);
+  }
+  return list;
+}
+
+/** A condition on a Stratagem target its exclusion may sit past: "from your army" of its side, or a state, position or model count of the target. */
+function targetCondition(leaf: CompileLeaf | undefined, filter: CompileLeaf): boolean {
+  if (leaf === undefined || leaf.fragment !== filter.fragment || awaitsFollowingFilter(leaf.parameters)) return false;
+  if (leaf.family_id === "unit-owner") return leaf.parameters.owner === filter.parameters.side;
+  return ["unit-state", "unit-position", "model-count"].includes(leaf.family_id) && ["antecedent", "target", "this-unit"].includes(String(leaf.parameters.subject));
+}
+
+/**
  * A condition on the selected unit a selection's exclusion may sit past: a side-less aura-range, a unit-position
  * measured to the selection's own units, or a model count of the selected unit.
  */

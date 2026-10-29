@@ -260,6 +260,22 @@ export const WEAPON_EXTENSIONS: readonly FamilyExtension[] = [
       return { ...others, [FRAME]: ANTECEDENT_FRAME };
     },
   },
+  {
+    // "(excluding [ONE SHOT] weapons)": a grant to every weapon of its type but those with one ability.
+    family: "weapon-ability-grant",
+    version: 11,
+    description: "As the previous version, plus exclude_weapon_keyword: weapons with that ability are left out of the grant (\"excluding [ONE SHOT] weapons\"). It needs weapon_type (all is allowed) and takes no weapon (a bound weapon is already one weapon) or frame.",
+    schema: (previous) => withProperties(previous, { exclude_weapon_keyword: optional({ enum: WEAPON_KEYWORDS }) }),
+    normalize: (input, previous) => {
+      if (!("exclude_weapon_keyword" in input)) return previous(input);
+      refuseWith(input, [WEAPON, FRAME], "weapon-ability-grant.exclude_weapon_keyword");
+      if (input.weapon_type === undefined) throw new TypeError("weapon-ability-grant.exclude_weapon_keyword needs weapon_type (all is allowed).");
+      const { exclude_weapon_keyword: excluded, ...rest } = input;
+      const normalized = previous(rest);
+      if (normalized.weapon_keyword === excluded) throw new TypeError("weapon-ability-grant cannot both select and exclude one weapon keyword.");
+      return { ...normalized, exclude_weapon_keyword: enumValue(excluded, WEAPON_KEYWORDS, "weapon-ability-grant.exclude_weapon_keyword") };
+    },
+  },
   /**
    * Weapon-ability vocabulary: the keywords the printed rules name that the keyword enum and
    * pattern did not yet take. Each widening adds keywords and changes nothing a previous version

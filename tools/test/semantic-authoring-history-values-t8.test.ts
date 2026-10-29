@@ -272,12 +272,14 @@ describe("set up through a named ability", () => {
 });
 
 describe("was charged and the ability's own mortal wounds", () => {
-  it("lowers was-charged-this-turn to a charge declaration against the unit", () => {
+  it("lowers was-charged-this-turn to a charge move made against the unit", () => {
     const mechanics = compiled("If this unit was charged this turn, this unit has the Feel No Pain 6+ ability.", [
       ["this unit was charged this turn", "unit-activity", { activities: ["was-charged-this-turn"], subject: "this-unit", negated: false }],
       FNP_ITEM("this unit has the Feel No Pain 6+ ability"),
     ]);
-    expect(happened(mechanics, "targets-selected")).toEqual([{ event: "targets-selected", subject: { owner: "any" }, object: "this-unit", filter: { kind: "charge" }, window: "turn" }]);
+    // A declared charge can fail; "was charged" means the charge move was made against the unit.
+    expect(happened(mechanics, "targets-selected")).toEqual([]);
+    expect(happened(mechanics, "move-ended")).toEqual([{ event: "move-ended", subject: { owner: "any" }, object: "this-unit", filter: { move_types: ["charge"] }, window: "turn" }]);
   });
 
   it("lowers a charge move or being charged to an any-of", () => {
@@ -286,7 +288,9 @@ describe("was charged and the ability's own mortal wounds", () => {
       FNP_ITEM("this unit has the Feel No Pain 6+ ability"),
     ]);
     expect(mechanics.effect.condition.operator).toBe("or");
-    expect(mechanics.effect.condition.operands.map((operand: any) => `${operand.parameters.event}:${operand.parameters.filter.kind ?? operand.parameters.filter.move_types[0]}`)).toEqual(["move-ended:charge", "targets-selected:charge"]);
+    expect(mechanics.effect.condition.operands.map((operand: any) => `${operand.parameters.event}:${operand.parameters.filter.kind ?? operand.parameters.filter.move_types[0]}`)).toEqual(["move-ended:charge", "move-ended:charge"]);
+    // The second operand is the charge made against this unit, not this unit's own charge.
+    expect(mechanics.effect.condition.operands.map((operand: any) => operand.parameters.object ?? null)).toEqual([null, "this-unit"]);
   });
 
   const MORTAL_TEXT = "When this unit uses its Foo ability, one unit suffers D3 mortal wounds. If that unit suffers mortal wounds as a result of this ability, this unit has the Feel No Pain 6+ ability.";
