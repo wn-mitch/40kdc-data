@@ -9,7 +9,7 @@ import { allOf, condition } from "./compile-conditions.js";
 import { durationPart, placeInWindow } from "./compile-durations.js";
 import { isRollMarker, resolveRolls } from "./compile-dice.js";
 import { boundAttackDesignation, designation, directEntry, selectUnit, wrapAura, wrapForEachUnit, wrapLeaderTarget, wrapRulesBundle } from "./compile-wrappers.js";
-import { destroyedFilterObject, wrapModelAura } from "./compile-model-level.js";
+import { filterObjectMoment, wrapModelAura } from "./compile-model-level.js";
 import { auraPart, namesUnboundRecipient } from "./compile-aura-parts.js";
 import { isForbiddenSetUp } from "./compile-set-up-placement.js";
 import { momentsAfterOwnUse, momentsUnderUse, momentsWhileMarked } from "./compile-nested-moment.js";
@@ -373,8 +373,8 @@ export function assemblePart(
       // of a friendly X unit") the Stratagem's unit is never that enemy: it is the moment's
       // object, or else this unit, which the keywords gate.
       const enemyActs = moment.subject !== null && typeof moment.subject === "object" && (moment.subject as Node).owner === "enemy";
-      // "When a friendly X unit is destroyed" + "that X unit": the destroyed unit, the moment's object.
-      if (destroyedFilterObject(moment)) moment.object = withKeywords(moment.object as Node);
+      // "When a friendly X unit is destroyed" (or "suffers a mortal wound") + "that X unit": the moment's object.
+      if (filterObjectMoment(moment)) moment.object = withKeywords(moment.object as Node);
       else if (enemyActs) {
         if (moment.object !== null && typeof moment.object === "object" && (moment.object as Node).owner !== "enemy") moment.object = withKeywords(moment.object as Node);
         else if (nearTarget) {

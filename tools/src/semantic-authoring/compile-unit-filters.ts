@@ -2,7 +2,7 @@ import { attackOfFilter, AURA_RECIPIENT, FILTERED_UNITS, momentOfFilter, objectE
 import { EXCLUDED_FROM_ATTACKS, FILTER_SUBJECT_TARGET } from "./families/unit-filters.js";
 import { destinationOf } from "./compile-move-end-nearest.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
-import { destroyedFilter, destroyedModelAfter, destroyedObject, membershipOf, modelRecipientFilter, modelSelection, rollOwnerEvent } from "./compile-model-level.js";
+import { allocatedObject, destroyedFilter, destroyedModelAfter, destroyedObject, membershipOf, modelRecipientFilter, modelSelection, rollOwnerEvent } from "./compile-model-level.js";
 import { embarkedStateBefore, foldEmbarkedExclusion } from "./compile-embarked-exclusion.js";
 import { foldSelectExclusions, foldTargetExclusions } from "./compile-select-exclusions.js";
 import { foldTriggeringDestruction, isTriggeringDestruction } from "./compile-triggering-destruction.js";
@@ -244,6 +244,12 @@ export function foldUnitFilters(input0: readonly CompileLeaf[], sourceText?: str
         index = at;
         continue;
       }
+      // "each time a friendly X unit" + "suffers a mortal wound": what the damage is allocated to.
+      if (allocatedObject(list[at], leaf, list[index - 1])) {
+        out.push({ ...list[at]!, parameters: { ...list[at]!.parameters, object_filter: dslUnitFilter(leaf, { warlordTarget: true }) } });
+        index = at;
+        continue;
+      }
       out.push({ ...list[at]!, parameters: { ...list[at]!.parameters, subject_filter: dslUnitFilter(leaf, { warlordTarget: true }) } });
       index = at;
       // "is selected to move" + "or" + "declares a charge": the alternative moment is the same unit's.
@@ -260,7 +266,8 @@ export function foldUnitFilters(input0: readonly CompileLeaf[], sourceText?: str
       out.push(...between);
       // "a friendly X model" + "within 6\" of this unit" + "is destroyed": what was destroyed.
       const participant = dslUnitFilter(leaf, { warlordTarget: true });
-      const named = destroyedObject(list[at], leaf) ? { object_filter: destroyedFilter(list[at]!, leaf, participant) } : { subject_filter: participant };
+      const named = destroyedObject(list[at], leaf) ? { object_filter: destroyedFilter(list[at]!, leaf, participant) }
+        : allocatedObject(list[at], leaf, list[index - 1]) ? { object_filter: participant } : { subject_filter: participant };
       out.push({ ...list[at]!, parameters: { ...list[at]!.parameters, ...named } });
       index = at;
     } else if (isFilter(leaf) && ownedBy(list[pastOwners(list, index, leaf)], leaf.parameters.side)) {

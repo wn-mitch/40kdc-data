@@ -38,6 +38,18 @@ export function destroyedObject(moment: CompileLeaf | undefined, filter: Compile
 }
 
 /**
+ * "Each time a friendly X unit" + "suffers a mortal wound": the unit-filter names the unit the damage
+ * is allocated to, the moment's object (its subject is the attacker), unless the moment already names
+ * it. A filter right after an attack in its sentence ("an attack made by a" + "NURGLE model") names
+ * that attack's maker instead.
+ */
+export function allocatedObject(moment: CompileLeaf | undefined, filter: CompileLeaf | undefined, before: CompileLeaf | undefined): boolean {
+  return moment?.family_id === "event" && moment.parameters.kind === "damage-allocated" && filter?.family_id === "unit-filter"
+    && moment.parameters.object === undefined && moment.parameters.object_filter === undefined && moment.parameters.object_owner === undefined
+    && !(before?.family_id === "attack" && before.fragment === filter.fragment);
+}
+
+/**
  * "When this unit destroys a" + "enemy CHARACTER model": a model-destroyed event with a model-level
  * unit-filter right after it in the same sentence. The filter names the destroyed model, so it
  * folds into the event's object (compile-unit-filters.ts foldDestroyedModelAfter).
@@ -67,9 +79,12 @@ export function destroyedFilter(moment: CompileLeaf, filter: CompileLeaf, dsl: N
   return { ...dsl, member_of: "this-unit" };
 }
 
-/** A compiled destruction trigger whose destroyed unit or model is a folded filter and which names no destroyer. */
-export function destroyedFilterObject(trigger: Node): boolean {
-  return (trigger.event === "destroyed" || trigger.event === "model-destroyed") && trigger.subject === undefined
+/**
+ * A compiled trigger whose unit is the one it happens to, a folded filter, with no actor named: a
+ * destruction with no destroyer, or damage allocated to it (whose attacker the DSL leaves unnamed).
+ */
+export function filterObjectMoment(trigger: Node): boolean {
+  return (trigger.event === "destroyed" || trigger.event === "model-destroyed" || trigger.event === "damage-allocated") && trigger.subject === undefined
     && trigger.object !== null && typeof trigger.object === "object";
 }
 

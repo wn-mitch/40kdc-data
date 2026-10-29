@@ -8452,16 +8452,6 @@
           "CULT MECHANICUS"
         ],
         "level": "model"
-      },
-      "condition": {
-        "type": "matches",
-        "parameters": {
-          "filter": {
-            "all_of": [
-              "CULT MECHANICUS"
-            ]
-          }
-        }
       }
     },
     "source_digest": "8d80cf731200a47ece273d79795738b82bf2a65953c52177f6e2407f4d8bedd4"

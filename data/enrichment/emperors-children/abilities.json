@@ -6420,16 +6420,6 @@
         "all_of": [
           "EMPEROR'S CHILDREN"
         ]
-      },
-      "condition": {
-        "type": "matches",
-        "parameters": {
-          "filter": {
-            "all_of": [
-              "EMPEROR'S CHILDREN"
-            ]
-          }
-        }
       }
     }
   },

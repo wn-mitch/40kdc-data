@@ -126,6 +126,29 @@ describe("Semantic authoring attacker filter on an incoming attack's damage", ()
     expect(mechanics.effect).toEqual({ type: "stat-modifier", target: "this-unit", modifier: { stat: "D", operation: "add", value: 1 } });
   });
 
+  it("makes the unit-filter before the moment what the damage is allocated to, not who attacks", () => {
+    const { mechanics, rendered } = compiled("Each time a friendly GLOOMWARD unit suffers a mortal wound, add 1 to the Hit roll.", [
+      ["friendly GLOOMWARD unit", "unit-filter", { side: "friendly", keywords: ["GLOOMWARD"] }],
+      ["suffers a mortal wound", "event", { kind: "damage-allocated", attack_type: "mortal" }],
+      hitRoll(),
+    ]);
+    expect(mechanics.trigger).toEqual({ event: "damage-allocated", object: { owner: "friendly", all_of: ["GLOOMWARD"] }, filter: { attack_type: "mortal" } });
+    expect(rendered).toContain("allocated to a friendly GLOOMWARD unit");
+  });
+
+  it("keeps a distance between the unit-filter and its moment on the unit the damage is allocated to", () => {
+    const { mechanics } = compiled("Each time an enemy model within 6\" of this unit has an attack allocated to it, add 1 to the Hit roll.", [
+      ["enemy model", "unit-filter", { side: "enemy", level: "model" }],
+      ["within 6\" of this unit", "unit-position", { kind: "within", inches: 6, of: "this-unit", subject: "antecedent", negated: false }],
+      ["has an attack allocated to it", "event", { kind: "damage-allocated" }],
+      hitRoll(),
+    ]);
+    expect(mechanics.trigger.subject).toBeUndefined();
+    expect(mechanics.trigger.object).toMatchObject({ owner: "enemy", level: "model" });
+    // Measured from the model the damage goes to, not from the attacker.
+    expect(mechanics.effect.condition).toEqual({ type: "matches", parameters: { subject: "event-object", filter: { within: { of: "this-unit", range: { inches: 6 } } } } });
+  });
+
   it("reduces only this model's damage when an attack is allocated to it", () => {
     const { mechanics } = compiled("Each time an attack is allocated to this model, subtract 1 from the Damage characteristic of that attack.", [
       ["Each time an attack is allocated to this model", "event", { kind: "damage-allocated", object: "this-model" }],

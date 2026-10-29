@@ -12050,7 +12050,7 @@
           "type": "ability-part",
           "trigger": {
             "event": "damage-allocated",
-            "subject": {
+            "object": {
               "owner": "enemy",
               "level": "model"
             }

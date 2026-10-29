@@ -6,7 +6,7 @@ import { selectionLimitFor } from "./compile-selection-limit.js";
 import { boundSelectionPair, independentPairRefusal, independentSelectionPair } from "./compile-bound-selection.js";
 import { bearerModelMax } from "./compile-bearer-size.js";
 import { applyHolderAllowance } from "./compile-holder-abilities.js";
-import { destroyedFilterObject } from "./compile-model-level.js";
+import { filterObjectMoment } from "./compile-model-level.js";
 import { alternativeMoments } from "./compile-segments.js";
 import { planDelayedDestruction } from "./compile-delayed-destruction.js";
 import { momentsAfterDestruction } from "./compile-nested-moment.js";
@@ -117,7 +117,7 @@ export function bindParts(frame: PartFrame, plan: ReturnType<typeof planEffects>
   const keyworded = targetParts.some((leaf) => leaf.family_id === "triggering-target" && leaf.parameters.match === "all" && (leaf.parameters.keywords as string[]).length > 0);
   if (keyworded && !nearTarget && target !== null && !Array.isArray(target) && target.bound_to === "triggering-unit"
     && triggers.some((moment) => moment.subject !== null && typeof moment.subject === "object" && (moment.subject as Node).owner === "enemy"
-      && !destroyedFilterObject(moment) && !(moment.object !== null && typeof moment.object === "object" && (moment.object as Node).owner !== "enemy"))) {
+      && !filterObjectMoment(moment) && !(moment.object !== null && typeof moment.object === "object" && (moment.object as Node).owner !== "enemy"))) {
     errors.push("A Stratagem target \"That K unit\" after an enemy-acting moment names no friendly K unit in the moment.");
   }
   const selected = planned.filter((item) => item.selected);

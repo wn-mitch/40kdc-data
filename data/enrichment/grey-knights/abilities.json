@@ -7242,7 +7242,7 @@
     "behavior": "reactive",
     "trigger": {
       "event": "damage-allocated",
-      "subject": {
+      "object": {
         "owner": "friendly",
         "all_of": [
           "PALADIN SQUAD"
@@ -7311,7 +7311,7 @@
     "behavior": "reactive",
     "trigger": {
       "event": "damage-allocated",
-      "subject": {
+      "object": {
         "owner": "friendly",
         "all_of": [
           "GREY KNIGHTS",

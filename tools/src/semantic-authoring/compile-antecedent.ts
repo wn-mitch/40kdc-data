@@ -4,7 +4,7 @@ import { exactSpan, reviewedFamily } from "./contracts.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { awaitsFollowingFilter } from "./families/shared.js";
 import { exclusionOnly } from "./compile-select-exclusions.js";
-import { destroyedObject, rollOwnerEvent } from "./compile-model-level.js";
+import { allocatedObject, destroyedObject, rollOwnerEvent } from "./compile-model-level.js";
 import { refuseDestroyedUnitAntecedent, trailingDestroyerFilter } from "./compile-destroying-attack.js";
 import { claimedByEmbarkedState } from "./compile-embarked-exclusion.js";
 import { isTargetRef, TARGET_REF_KEYS } from "./compile-target-refs.js";
@@ -190,7 +190,7 @@ export function momentOfFilter(leaves: readonly CompileLeaf[], filterIndex: numb
 
 /**
  * The moment's unit a condition between a bare filter and the moment describes, or null: the
- * subject, or, for a destruction the filter names (compile-unit-filters.ts), the destroyed object.
+ * subject, or, for a destruction or damage allocation the filter names (compile-unit-filters.ts), its object.
  */
 function onMomentUnit(leaves: readonly CompileLeaf[], index: number, sourceText: string | undefined): string | null {
   const leaf = leaves[index]!;
@@ -206,7 +206,7 @@ function onMomentUnit(leaves: readonly CompileLeaf[], index: number, sourceText:
     refuseDestroyedUnitAntecedent(leaves, moment, leaf, sourceText);
     return "event-subject";
   }
-  return destroyedObject(leaves[moment], leaves[at]) ? "event-object" : "event-subject";
+  return destroyedObject(leaves[moment], leaves[at]) || allocatedObject(leaves[moment], leaves[at], leaves[at - 1]) ? "event-object" : "event-subject";
 }
 
 /**

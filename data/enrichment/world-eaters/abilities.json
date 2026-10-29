@@ -8828,7 +8828,7 @@
     "community_notes": "Friendly WORLD EATERS CHARACTER (excluding EPIC HERO) gains Feel No Pain 4+ against mortal wounds when it suffers a mortal wound.",
     "trigger": {
       "event": "damage-allocated",
-      "subject": {
+      "object": {
         "owner": "friendly",
         "all_of": [
           "CHARACTER",

@@ -4019,7 +4019,7 @@
     },
     "trigger": {
       "event": "damage-allocated",
-      "subject": {
+      "object": {
         "owner": "friendly",
         "all_of": [
           "PSYKER",

@@ -4181,7 +4181,7 @@
           "type": "ability-part",
           "trigger": {
             "event": "damage-allocated",
-            "subject": {
+            "object": {
               "owner": "enemy",
               "level": "model"
             }
@@ -4226,7 +4226,7 @@
       "duration": "phase"
     },
     "expected": {
-      "text": "Until the end of the phase:\n  -> Enemy units are not considered to be within Engagement Range of the unit when targets are selected with ranged weapons.\n  -> When damage is allocated:\n    -> Roll one D6: on a 5+, while that unit is a unit within Engagement Range of the unit, after the attacking unit resolves its attacks: the unit suffers 1 mortal wound."
+      "text": "Until the end of the phase:\n  -> Enemy units are not considered to be within Engagement Range of the unit when targets are selected with ranged weapons.\n  -> When damage is allocated to an enemy model:\n    -> Roll one D6: on a 5+, while that unit is a unit within Engagement Range of the unit, after the attacking unit resolves its attacks: the unit suffers 1 mortal wound."
     }
   },
   {
@@ -12823,7 +12823,7 @@
           "type": "ability-part",
           "trigger": {
             "event": "damage-allocated",
-            "subject": {
+            "object": {
               "owner": "enemy",
               "level": "model"
             }
@@ -12868,7 +12868,7 @@
       "duration": "phase"
     },
     "expected": {
-      "text": "Until the end of the phase:\n  -> Enemy units are not considered to be within Engagement Range of the unit when targets are selected with ranged weapons.\n  -> When damage is allocated:\n    -> Roll one D6: on a 4+, while that unit is a unit within Engagement Range of the unit, after the attacking unit resolves its attacks: destroy 1 model in the unit."
+      "text": "Until the end of the phase:\n  -> Enemy units are not considered to be within Engagement Range of the unit when targets are selected with ranged weapons.\n  -> When damage is allocated to an enemy model:\n    -> Roll one D6: on a 4+, while that unit is a unit within Engagement Range of the unit, after the attacking unit resolves its attacks: destroy 1 model in the unit."
     }
   },
   {

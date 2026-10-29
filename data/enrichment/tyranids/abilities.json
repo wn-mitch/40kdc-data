@@ -5261,7 +5261,7 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
       "event": "damage-allocated",
-      "subject": {
+      "object": {
         "owner": "friendly",
         "all_of": [
           "NORN ASSIMILATOR"
