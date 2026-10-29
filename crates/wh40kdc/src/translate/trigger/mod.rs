@@ -14,7 +14,7 @@ use super::condition::{
 };
 use super::dekebab;
 
-use event::{actor_keywords, event_phrase, turn_owner};
+use event::{actor_keywords, allocated_attack_type, event_phrase, turn_owner};
 
 fn operator(c: &Value) -> Option<&str> {
     c.get("operator").and_then(Value::as_str)
@@ -245,7 +245,7 @@ pub fn describe_trigger_value(trigger: &Value) -> String {
     let condition = t.get("condition").filter(|c| truthy(Some(c)));
     let disembark_shock = event == Some("phase-ended") && disembark_battle_shock(condition);
     let split = match condition {
-        Some(c) if !disembark_shock => Some(phase_window(c)),
+        Some(c) if !disembark_shock && allocated_attack_type(t).is_none() => Some(phase_window(c)),
         _ => None,
     };
     let mut s = if !clock {

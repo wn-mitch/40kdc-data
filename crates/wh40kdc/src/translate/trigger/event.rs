@@ -11,6 +11,28 @@ use crate::translate::condition::{named_use_phrase, roll_word, used_ability_phra
 use crate::translate::dekebab;
 use crate::translate::effect::title_case;
 
+/// The attack type a damage-allocated trigger's whole condition names ("each time a ranged attack is
+/// allocated"), which the moment's own clause then says; None for any other condition.
+pub(crate) fn allocated_attack_type(t: &P) -> Option<&'static str> {
+    if !is(t, "event", "damage-allocated") {
+        return None;
+    }
+    let c = t.get("condition")?.as_object()?;
+    if truthy(c.get("operator")) || !is(c, "type", "attack-is") {
+        return None;
+    }
+    let params = obj(c.get("parameters"));
+    if key_count(params) != 1 {
+        return None;
+    }
+    match params.get("attack_type").and_then(Value::as_str) {
+        Some("ranged") => Some("ranged"),
+        Some("melee") => Some("melee"),
+        Some("psychic") => Some("psychic"),
+        _ => None,
+    }
+}
+
 /// Whose turn, as a trigger window names it.
 pub(crate) fn turn_owner(turn: &str) -> Option<&'static str> {
     match turn {
@@ -499,10 +521,14 @@ pub(crate) fn event_phrase(t: &P) -> String {
         }
         "before-roll" | "after-roll" => roll_clause(t, f),
         "damage-allocated" => {
+            let allocated = match allocated_attack_type(t) {
+                Some(kind) => format!("when a {kind} attack is allocated"),
+                None => "when damage is allocated".to_string(),
+            };
             if nn(t, "object").is_some() && !is(t, "object", "this-unit") {
-                format!("when damage is allocated to {}", object_phrase(object))
+                format!("{allocated} to {}", object_phrase(object))
             } else {
-                "when damage is allocated".to_string()
+                allocated
             }
         }
         "attacks-resolved" => {

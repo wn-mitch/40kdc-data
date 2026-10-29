@@ -293,6 +293,22 @@ var trailingSpaceUnitRe = regexp.MustCompile(`\s+unit$`)
 
 // triggerEventPhrase renders the event family's own clause, before proximity,
 // condition and options.
+// allocatedAttackType is the attack type a damage-allocated trigger's whole condition names ("each
+// time a ranged attack is allocated"), which the moment's own clause then says; "" for any other
+// condition.
+func allocatedAttackType(t map[string]any) string {
+	c, ok := asMap(t["condition"])
+	if t["event"] != "damage-allocated" || !ok || len(c) == 0 || jsTruthy(c["operator"]) || c["type"] != "attack-is" {
+		return ""
+	}
+	params := mapOr(c["parameters"])
+	kind, _ := params["attack_type"].(string)
+	if len(params) != 1 || (kind != "ranged" && kind != "melee" && kind != "psychic") {
+		return ""
+	}
+	return kind
+}
+
 func triggerEventPhrase(t map[string]any) string {
 	f := mapOr(t["filter"])
 	who := triggerActor(t["subject"])
@@ -416,10 +432,14 @@ func triggerEventPhrase(t map[string]any) string {
 	case "before-roll", "after-roll":
 		return rollClause(t, f)
 	case "damage-allocated":
-		if object != nil && object != "this-unit" {
-			return "when damage is allocated to " + triggerObjectPhrase(object)
+		allocated := "when damage is allocated"
+		if kind := allocatedAttackType(t); kind != "" {
+			allocated = "when a " + kind + " attack is allocated"
 		}
-		return "when damage is allocated"
+		if object != nil && object != "this-unit" {
+			return allocated + " to " + triggerObjectPhrase(object)
+		}
+		return allocated
 	case "attacks-resolved":
 		if isObject(t["subject"]) {
 			if object != nil {
@@ -796,7 +816,7 @@ func describeReactiveTrigger(t map[string]any) string {
 	}
 	cond, _ := asMap(t["condition"])
 	disembarkShock := event == "phase-ended" && disembarkBattleShock(cond)
-	hasSplit := jsTruthy(t["condition"]) && !disembarkShock
+	hasSplit := jsTruthy(t["condition"]) && !disembarkShock && allocatedAttackType(t) == ""
 	var window, phase, owner string
 	var rest map[string]any
 	if hasSplit {

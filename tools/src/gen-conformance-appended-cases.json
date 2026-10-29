@@ -2222,4 +2222,23 @@
     },
     "scope": { "duration": "turn" }
   }
+  ,
+  {
+    "caseId": "canonical/damage-allocated-ranged-attack",
+    "trigger": { "event": "damage-allocated", "condition": { "type": "attack-is", "parameters": { "attack_type": "ranged" } } },
+    "effect": { "type": "feel-no-pain", "target": "this-unit", "modifier": { "threshold": 5 } },
+    "scope": { "duration": "resolution" }
+  },
+  {
+    "caseId": "canonical/damage-allocated-melee-attack-to-object",
+    "trigger": { "event": "damage-allocated", "object": "model-in-this-unit", "condition": { "type": "attack-is", "parameters": { "attack_type": "melee" } } },
+    "effect": { "type": "feel-no-pain", "target": "this-unit", "modifier": { "threshold": 5 } },
+    "scope": { "duration": "resolution" }
+  },
+  {
+    "caseId": "canonical/damage-allocated-attack-condition-with-weapons",
+    "trigger": { "event": "damage-allocated", "condition": { "type": "attack-is", "parameters": { "attack_type": "ranged", "weapons": { "keyword": { "keyword_id": "blast" } } } } },
+    "effect": { "type": "feel-no-pain", "target": "this-unit", "modifier": { "threshold": 5 } },
+    "scope": { "duration": "resolution" }
+  }
 ]

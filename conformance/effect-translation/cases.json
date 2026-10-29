@@ -5180,7 +5180,7 @@
       }
     },
     "expected": {
-      "text": "When damage is allocated, if for ranged attacks, unless the target is not fully visible to the attacking model because of this model, that unit has the Benefit of Cover."
+      "text": "When a ranged attack is allocated, unless the target is not fully visible to the attacking model because of this model, that unit has the Benefit of Cover."
     }
   },
   {
@@ -42301,6 +42301,87 @@
     },
     "expected": {
       "text": "At the start of the Command phase, once per turn per model, until the end of the turn:\n  -> Roll 4D6; allocate dice to activate up to 2 of the following:\n    - Renamed Defensive Option (requires pair of 3+): the unit has the Feel No Pain 5+ ability.\n    - Renamed Offensive Option (requires pair of 4+): the unit's weapons gain [SUSTAINED HITS 1]."
+    }
+  },
+  {
+    "caseId": "canonical/damage-allocated-ranged-attack",
+    "trigger": {
+      "event": "damage-allocated",
+      "condition": {
+        "type": "attack-is",
+        "parameters": {
+          "attack_type": "ranged"
+        }
+      }
+    },
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 5
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When a ranged attack is allocated, when resolving this use, the unit has the Feel No Pain 5+ ability."
+    }
+  },
+  {
+    "caseId": "canonical/damage-allocated-melee-attack-to-object",
+    "trigger": {
+      "event": "damage-allocated",
+      "object": "model-in-this-unit",
+      "condition": {
+        "type": "attack-is",
+        "parameters": {
+          "attack_type": "melee"
+        }
+      }
+    },
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 5
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When a melee attack is allocated to a model in this unit, when resolving this use, the unit has the Feel No Pain 5+ ability."
+    }
+  },
+  {
+    "caseId": "canonical/damage-allocated-attack-condition-with-weapons",
+    "trigger": {
+      "event": "damage-allocated",
+      "condition": {
+        "type": "attack-is",
+        "parameters": {
+          "attack_type": "ranged",
+          "weapons": {
+            "keyword": {
+              "keyword_id": "blast"
+            }
+          }
+        }
+      }
+    },
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 5
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When damage is allocated, if for ranged attacks made with [BLAST] weapons, when resolving this use, the unit has the Feel No Pain 5+ ability."
     }
   }
 ]

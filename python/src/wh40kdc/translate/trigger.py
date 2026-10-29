@@ -273,6 +273,20 @@ _FIXED_EVENTS: dict[str, str] = {
 }
 
 
+def _allocated_attack_type(t: AbilityTrigger) -> str | None:
+    """The attack type a damage-allocated trigger's whole condition names ("each time a ranged
+    attack is allocated"), which the moment's own clause then says; None for any other condition."""
+    c = t.get("condition")
+    if t.get("event") != "damage-allocated" or not isinstance(c, dict) or not c:
+        return None
+    if _truthy(c.get("operator")) or c.get("type") != "attack-is":
+        return None
+    params = c.get("parameters")
+    params = params if isinstance(params, dict) else {}
+    kind = params.get("attack_type")
+    return kind if len(params) == 1 and kind in ("ranged", "melee", "psychic") else None
+
+
 def _event_phrase(t: AbilityTrigger) -> str:
     """The event family's own clause, before proximity, condition and options."""
     f = _obj(t.get("filter"))
@@ -358,9 +372,11 @@ def _event_phrase(t: AbilityTrigger) -> str:
     if event in ("before-roll", "after-roll"):
         return _roll_clause(t, f)
     if event == "damage-allocated":
+        kind = _allocated_attack_type(t)
+        allocated = f"when a {kind} attack is allocated" if kind else "when damage is allocated"
         if obj is not None and obj != "this-unit":
-            return f"when damage is allocated to {_object_phrase(obj)}"
-        return "when damage is allocated"
+            return f"{allocated} to {_object_phrase(obj)}"
+        return allocated
     if event == "attacks-resolved":
         if subject_obj:
             if obj is not None:
@@ -633,7 +649,10 @@ def describe_trigger(t: AbilityTrigger) -> str:
     disembark_shock = event == "phase-ended" and _disembark_battle_shock(condition)
     split = (
         phase_window(condition)
-        if _truthy(condition) and isinstance(condition, dict) and not disembark_shock
+        if _truthy(condition)
+        and isinstance(condition, dict)
+        and not disembark_shock
+        and _allocated_attack_type(t) is None
         else None
     )
     if not clock:

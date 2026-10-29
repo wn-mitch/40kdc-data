@@ -232,8 +232,11 @@ function eventPhrase(t: AbilityTrigger): string {
     case "before-roll":
     case "after-roll":
       return rollClause(t, f);
-    case "damage-allocated":
-      return t.object != null && t.object !== "this-unit" ? `when damage is allocated to ${objectPhrase(t.object)}` : "when damage is allocated";
+    case "damage-allocated": {
+      const type = allocatedAttackType(t);
+      const allocated = type ? `when a ${type} attack is allocated` : "when damage is allocated";
+      return t.object != null && t.object !== "this-unit" ? `${allocated} to ${objectPhrase(t.object)}` : allocated;
+    }
     case "attacks-resolved":
       if (typeof t.subject === "object") return t.object != null ? `after ${who} has shot and targeted ${objectPhrase(t.object)}` : `after ${who} ${f.kind === "fight" ? "fights" : "shoots"}`;
       return f.kind === "fight" ? `after ${who} resolves its attacks in a fight` : `after ${who} resolves its attacks`;
@@ -307,6 +310,18 @@ function eventPhrase(t: AbilityTrigger): string {
     default:
       return `when ${dekebab(str(t.event))}`;
   }
+}
+
+/**
+ * The attack type a damage-allocated trigger's whole condition names ("each time a ranged attack is
+ * allocated"), which the moment's own clause then says; undefined for any other condition.
+ */
+function allocatedAttackType(t: AbilityTrigger): string | undefined {
+  const c = t.condition;
+  if (t.event !== "damage-allocated" || !c || c.operator || c.type !== "attack-is") return undefined;
+  const params = c.parameters ?? {};
+  const type = params.attack_type;
+  return Object.keys(params).length === 1 && (type === "ranged" || type === "melee" || type === "psychic") ? type : undefined;
 }
 
 /** "At the start of your turn": a turn boundary narrowed only by whose turn. */
@@ -385,7 +400,7 @@ export function describeTrigger(t: AbilityTrigger): string {
   if (boundary) return t.optional ? `${boundary}, you may use this ability` : boundary;
   const edge = t.event === "phase-started" ? "start" : t.event === "phase-ended" ? "end" : null;
   const disembarkShock = t.event === "phase-ended" && disembarkBattleShock(t.condition);
-  const split = t.condition && !disembarkShock ? phaseWindow(t.condition) : null;
+  const split = t.condition && !disembarkShock && allocatedAttackType(t) === undefined ? phaseWindow(t.condition) : null;
   let s = !clock ? eventPhrase(t)
     : split?.phase ? `at the ${edge} of ${split.owner ?? "the"} ${capWord(split.phase)} phase`
       : `at the ${edge} of each phase`;
