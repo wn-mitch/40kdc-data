@@ -1929,77 +1929,101 @@
       "applies": {
         "to": "attackers-of-target",
         "effect": {
-          "type": "conditional",
-          "condition": {
-            "type": "attack-is",
-            "parameters": {
-              "attack_type": "ranged"
-            }
-          },
-          "effect": {
-            "type": "sequence",
-            "steps": [
-              {
-                "type": "conditional",
-                "condition": {
-                  "operator": "not",
-                  "operands": [
-                    {
-                      "type": "attack-is",
-                      "parameters": {
-                        "weapons": {
-                          "keyword": {
-                            "keyword_id": "blast"
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "conditional",
+              "condition": {
+                "operator": "and",
+                "operands": [
+                  {
+                    "type": "attack-is",
+                    "parameters": {
+                      "attack_type": "ranged"
+                    }
+                  },
+                  {
+                    "operator": "not",
+                    "operands": [
+                      {
+                        "operator": "and",
+                        "operands": [
+                          {
+                            "type": "attack-is",
+                            "parameters": {
+                              "attack_type": "ranged"
+                            }
+                          },
+                          {
+                            "type": "attack-is",
+                            "parameters": {
+                              "weapons": {
+                                "keyword": {
+                                  "keyword_id": "blast"
+                                }
+                              }
+                            }
                           }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "effect": {
+                "type": "re-roll",
+                "target": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "DEATH GUARD"
+                  ],
+                  "level": "model"
+                },
+                "modifier": {
+                  "roll": "hit",
+                  "subset": "ones"
+                }
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "operator": "and",
+                "operands": [
+                  {
+                    "type": "attack-is",
+                    "parameters": {
+                      "attack_type": "ranged"
+                    }
+                  },
+                  {
+                    "type": "attack-is",
+                    "parameters": {
+                      "weapons": {
+                        "keyword": {
+                          "keyword_id": "blast"
                         }
                       }
                     }
-                  ]
-                },
-                "effect": {
-                  "type": "re-roll",
-                  "target": {
-                    "owner": "friendly",
-                    "all_of": [
-                      "DEATH GUARD"
-                    ],
-                    "level": "model"
-                  },
-                  "modifier": {
-                    "roll": "hit",
-                    "subset": "ones"
                   }
-                }
+                ]
               },
-              {
-                "type": "conditional",
-                "condition": {
-                  "type": "attack-is",
-                  "parameters": {
-                    "weapons": {
-                      "keyword": {
-                        "keyword_id": "blast"
-                      }
-                    }
-                  }
+              "effect": {
+                "type": "re-roll",
+                "target": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "DEATH GUARD"
+                  ],
+                  "level": "model"
                 },
-                "effect": {
-                  "type": "re-roll",
-                  "target": {
-                    "owner": "friendly",
-                    "all_of": [
-                      "DEATH GUARD"
-                    ],
-                    "level": "model"
-                  },
-                  "modifier": {
-                    "roll": "hit",
-                    "result_scope": "any-result"
-                  }
+                "modifier": {
+                  "roll": "hit",
+                  "result_scope": "any-result"
                 }
               }
-            ]
-          }
+            }
+          ]
         }
       },
       "duration": "phase"
@@ -9211,31 +9235,15 @@
         "operator": "and",
         "operands": [
           {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "phase-is",
-                "parameters": {
-                  "phase": "shooting"
-                }
-              },
-              {
-                "type": "player-turn-is",
-                "parameters": {
-                  "turn": "your-turn"
-                }
-              }
-            ]
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
           },
           {
-            "type": "matches",
+            "type": "player-turn-is",
             "parameters": {
-              "subject": "attacker",
-              "filter": {
-                "all_of": [
-                  "PLAGUE LEGIONS"
-                ]
-              }
+              "turn": "your-turn"
             }
           }
         ]
@@ -9271,13 +9279,27 @@
         "applies": {
           "to": "attackers-of-target",
           "effect": {
-            "type": "re-roll",
-            "target": {
-              "owner": "friendly"
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "attacker",
+                "filter": {
+                  "all_of": [
+                    "PLAGUE LEGIONS"
+                  ]
+                }
+              }
             },
-            "modifier": {
-              "roll": "wound",
-              "result_scope": "any-result"
+            "effect": {
+              "type": "re-roll",
+              "target": {
+                "owner": "friendly"
+              },
+              "modifier": {
+                "roll": "wound",
+                "result_scope": "any-result"
+              }
             }
           }
         },
@@ -9656,65 +9678,65 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "matches",
-        "parameters": {
-          "subject": "attacker",
+      "type": "designate-target",
+      "designation": "virulent-blessing-target",
+      "select": {
+        "kind": "unit",
+        "selector": {
           "filter": {
-            "all_of": [
-              "PLAGUE LEGIONS"
-            ]
-          }
-        }
-      },
-      "effect": {
-        "type": "designate-target",
-        "designation": "virulent-blessing-target",
-        "select": {
-          "kind": "unit",
-          "selector": {
-            "filter": {
-              "owner": "enemy"
-            },
-            "count": {
-              "min": 1,
-              "max": 1
-            },
-            "eligibility": {
-              "operator": "and",
-              "operands": [
-                {
-                  "type": "matches",
-                  "parameters": {
-                    "subject": "selected-unit",
-                    "filter": {
-                      "within": {
-                        "of": "this-model",
-                        "range": {
-                          "inches": 24
-                        }
-                      }
-                    }
-                  }
-                },
-                {
-                  "type": "matches",
-                  "parameters": {
-                    "subject": "selected-unit",
-                    "filter": {
-                      "visible": {
-                        "to": "this-model"
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "selected-unit",
+                  "filter": {
+                    "within": {
+                      "of": "this-model",
+                      "range": {
+                        "inches": 24
                       }
                     }
                   }
                 }
-              ]
-            }
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "selected-unit",
+                  "filter": {
+                    "visible": {
+                      "to": "this-model"
+                    }
+                  }
+                }
+              }
+            ]
           }
-        },
-        "applies": {
-          "to": "attackers-of-target",
+        }
+      },
+      "applies": {
+        "to": "attackers-of-target",
+        "effect": {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": "attacker",
+              "filter": {
+                "all_of": [
+                  "PLAGUE LEGIONS"
+                ]
+              }
+            }
+          },
           "effect": {
             "type": "stat-modifier",
             "target": {
@@ -9726,9 +9748,9 @@
               "value": 1
             }
           }
-        },
-        "duration": "phase"
-      }
+        }
+      },
+      "duration": "phase"
     },
     "scope": {
       "duration": "phase"

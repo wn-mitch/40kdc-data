@@ -6621,27 +6621,39 @@
               }
             },
             {
-              "type": "sequence",
-              "steps": [
-                {
-                  "type": "roll-modifier",
-                  "target": "selected-unit",
-                  "modifier": {
-                    "roll": "advance",
-                    "operation": "subtract",
-                    "value": 2
-                  }
-                },
-                {
-                  "type": "roll-modifier",
-                  "target": "selected-unit",
-                  "modifier": {
-                    "roll": "charge",
-                    "operation": "subtract",
-                    "value": 2
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "selected-unit",
+                  "filter": {
+                    "designated": "pinned"
                   }
                 }
-              ]
+              },
+              "effect": {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "roll-modifier",
+                    "target": "selected-unit",
+                    "modifier": {
+                      "roll": "advance",
+                      "operation": "subtract",
+                      "value": 2
+                    }
+                  },
+                  {
+                    "type": "roll-modifier",
+                    "target": "selected-unit",
+                    "modifier": {
+                      "roll": "charge",
+                      "operation": "subtract",
+                      "value": 2
+                    }
+                  }
+                ]
+              }
             }
           ]
         }
@@ -8526,22 +8538,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "battle-round",
-            "parameters": {
-              "min": 1,
-              "max": 1
-            }
-          },
-          {
-            "type": "attack-is",
-            "parameters": {
-              "attack_type": "ranged"
-            }
-          }
-        ]
+        "type": "battle-round",
+        "parameters": {
+          "min": 1,
+          "max": 1
+        }
       },
       "effect": {
         "type": "select-units",
@@ -8572,10 +8573,29 @@
           }
         },
         "effect": {
-          "type": "ability-grant",
-          "target": "this-unit",
-          "modifier": {
-            "ability": "benefit-of-cover"
+          "type": "conditional",
+          "condition": {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "ranged"
+            }
+          },
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "same-unit",
+              "parameters": {
+                "subject": "defender",
+                "as": "selected-unit"
+              }
+            },
+            "effect": {
+              "type": "ability-grant",
+              "target": "selected-unit",
+              "modifier": {
+                "ability": "benefit-of-cover"
+              }
+            }
           }
         }
       }

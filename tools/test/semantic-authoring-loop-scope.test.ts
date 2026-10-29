@@ -134,3 +134,46 @@ describe("Semantic authoring recipient scope", () => {
     expect(unscopedRecipientEffect({ type: "sequence", steps: [{ type: "conditional", effect: test }] })).toBe("test");
   });
 });
+
+describe("Semantic authoring gates after a selection", () => {
+  const COVER = "At the start of your Command phase, select up to two friendly ALPHA units. Until the end of the turn, each time a ranged attack targets one of those units, models in that unit have the Benefit of Cover against that attack.";
+  const SELECT: Item[] = [
+    ["At the start of your Command phase", "event", { kind: "phase-start", phase: "command", turn: "your" }],
+    ["select up to two", "select-unit", { distance: "any", visible: false, count: 2, up_to: true }],
+    ["friendly ALPHA units", "unit-filter", { side: "friendly", keywords: ["ALPHA"] }],
+  ];
+  const UNTIL: Item = ["Until the end of the turn", "duration", { endpoint: "end-of-turn" }];
+
+  it("gates the effects inside the selection, and only on attacks against a selected unit", () => {
+    const mechanics = compiled(COVER, ...SELECT, UNTIL,
+      ["each time a ranged attack targets one of those units", "attack", { direction: "targeted", unit: "that-unit", attack_type: "ranged" }],
+      ["models in that unit have the Benefit of Cover against that attack", "core-ability-grant", { subject: "antecedent", ability: "benefit-of-cover" }]);
+    const selection = nodes(mechanics, "select-units");
+    expect(selection).toHaveLength(1);
+    // The selection is made at the moment, before any attack: no attack gate outside it.
+    expect(nodes(mechanics, "attack-is")).toEqual(nodes(selection[0], "attack-is"));
+    expect(nodes(selection[0], "attack-is")).toHaveLength(1);
+    expect(nodes(selection[0], "same-unit").map((node) => node.parameters)).toEqual([{ subject: "defender", as: "selected-unit" }]);
+    expect(nodes(selection[0], "ability-grant").map((node) => node.target)).toEqual(["selected-unit"]);
+  });
+
+  it("keeps an owner after the selection out of the selected units' effects", () => {
+    const text = "At the start of your Command phase, select up to two friendly ALPHA units from your army. Until the end of the turn, models in that unit have the Benefit of Cover.";
+    const mechanics = compiled(text, ...SELECT, ["from your army", "unit-owner", { owner: "friendly" }], UNTIL,
+      ["models in that unit have the Benefit of Cover", "core-ability-grant", { subject: "antecedent", ability: "benefit-of-cover" }]);
+    expect(nodes(nodes(mechanics, "select-units")[0], "conditional")).toEqual([]);
+  });
+
+  it("gates every sentence a colon lists after the gate, and only its own sentence otherwise", () => {
+    const listed = "At the start of your Command phase, select up to two friendly ALPHA units. Their ranged attacks can: Re-roll Hit rolls of 1. Re-roll Wound rolls of 1.";
+    const items = (text: string): Item[] => [...SELECT,
+      ["Their ranged attacks", "attack-filter", { attack_type: "ranged" }],
+      [text.includes("can:") ? "Re-roll Hit rolls of 1" : "re-roll Hit rolls of 1", "reroll", { roll: "hit", subset: "ones", weapon_type: "all" }],
+      ["Re-roll Wound rolls of 1", "reroll", { roll: "wound", subset: "ones", weapon_type: "all" }]];
+    const gatedRerolls = (mechanics: Record<string, unknown>) => nodes(mechanics, "conditional")
+      .filter((node) => (node.condition as Record<string, unknown>).type === "attack-is").flatMap((node) => nodes(node, "re-roll"));
+    expect(gatedRerolls(compiled(listed, ...items(listed)))).toHaveLength(2);
+    const unlisted = "At the start of your Command phase, select up to two friendly ALPHA units. Their ranged attacks re-roll Hit rolls of 1. Re-roll Wound rolls of 1.";
+    expect(gatedRerolls(compiled(unlisted, ...items(unlisted)))).toHaveLength(1);
+  });
+});

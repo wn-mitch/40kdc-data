@@ -9654,46 +9654,46 @@
     "detachment_id": "covenite-coterie",
     "ability_type": "stratagem",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "happened",
-        "parameters": {
-          "event": "after-roll",
-          "subject": "event-subject",
-          "object": "this-unit",
-          "filter": {
-            "roll": "hit",
-            "result": "success"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "attacks-resolved",
+            "subject": {
+              "owner": "friendly",
+              "all_of": [
+                "HAEMONCULUS COVENS"
+              ]
+            }
           },
-          "window": "event"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "ability-part",
-            "trigger": {
-              "event": "attacks-resolved",
-              "subject": {
-                "owner": "friendly",
-                "all_of": [
-                  "HAEMONCULUS COVENS"
+          "effect": {
+            "type": "select-units",
+            "selector": {
+              "filter": {
+                "owner": "enemy",
+                "none_of": [
+                  "VEHICLE"
                 ]
+              },
+              "count": {
+                "min": 1,
+                "max": 1
               }
             },
             "effect": {
-              "type": "select-units",
-              "selector": {
-                "filter": {
-                  "owner": "enemy",
-                  "none_of": [
-                    "VEHICLE"
-                  ]
-                },
-                "count": {
-                  "min": 1,
-                  "max": 1
+              "type": "conditional",
+              "condition": {
+                "type": "happened",
+                "parameters": {
+                  "event": "after-roll",
+                  "subject": "event-subject",
+                  "object": "this-unit",
+                  "filter": {
+                    "roll": "hit",
+                    "result": "success"
+                  },
+                  "window": "event"
                 }
               },
               "effect": {
@@ -9704,50 +9704,50 @@
                 }
               }
             }
-          },
-          {
-            "type": "ability-part",
-            "trigger": {
-              "event": "phase-started",
-              "condition": {
-                "operator": "and",
-                "operands": [
-                  {
-                    "type": "phase-is",
-                    "parameters": {
-                      "phase": "command"
-                    }
-                  },
-                  {
-                    "type": "matches",
-                    "parameters": {
-                      "filter": {
-                        "all_of": [
-                          "HAEMONCULUS COVENS"
-                        ]
-                      }
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "phase-started",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "phase-is",
+                  "parameters": {
+                    "phase": "command"
+                  }
+                },
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "filter": {
+                      "all_of": [
+                        "HAEMONCULUS COVENS"
+                      ]
                     }
                   }
-                ]
+                }
+              ]
+            }
+          },
+          "effect": {
+            "type": "dice-gated",
+            "dice": "D6",
+            "threshold": 4,
+            "comparison": "gte",
+            "on_success": {
+              "type": "mortal-wounds",
+              "target": "selected-unit",
+              "modifier": {
+                "count": "D3"
               }
             },
-            "effect": {
-              "type": "dice-gated",
-              "dice": "D6",
-              "threshold": 4,
-              "comparison": "gte",
-              "on_success": {
-                "type": "mortal-wounds",
-                "target": "selected-unit",
-                "modifier": {
-                  "count": "D3"
-                }
-              },
-              "on_fail": null
-            }
+            "on_fail": null
           }
-        ]
-      }
+        }
+      ]
     },
     "scope": {
       "duration": "battle"

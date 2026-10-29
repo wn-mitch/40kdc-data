@@ -8810,11 +8810,21 @@
                 ]
               },
               "effect": {
-                "type": "re-roll",
-                "target": "attacker",
-                "modifier": {
-                  "roll": "hit",
-                  "subset": "ones"
+                "type": "conditional",
+                "condition": {
+                  "type": "same-unit",
+                  "parameters": {
+                    "subject": "defender",
+                    "as": "selected-unit"
+                  }
+                },
+                "effect": {
+                  "type": "re-roll",
+                  "target": "attacker",
+                  "modifier": {
+                    "roll": "hit",
+                    "subset": "ones"
+                  }
                 }
               }
             }

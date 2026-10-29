@@ -674,17 +674,17 @@
       "applies": {
         "to": "attackers-of-target",
         "effect": {
-          "type": "conditional",
-          "condition": {
-            "type": "attack-is",
-            "parameters": {
-              "attack_type": "melee"
-            }
-          },
-          "effect": {
-            "type": "sequence",
-            "steps": [
-              {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "attack-is",
+                "parameters": {
+                  "attack_type": "melee"
+                }
+              },
+              "effect": {
                 "type": "roll-modifier",
                 "target": {
                   "owner": "friendly",
@@ -699,27 +699,27 @@
                   "operation": "add",
                   "value": 1
                 }
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "attack-is",
+                "parameters": {
+                  "attack_type": "melee"
+                }
               },
-              {
-                "type": "conditional",
-                "condition": {
-                  "type": "attack-is",
-                  "parameters": {
-                    "attack_type": "melee"
-                  }
-                },
-                "effect": {
-                  "type": "roll-modifier",
-                  "target": "selected-unit",
-                  "modifier": {
-                    "roll": "wound",
-                    "operation": "subtract",
-                    "value": 1
-                  }
+              "effect": {
+                "type": "roll-modifier",
+                "target": "selected-unit",
+                "modifier": {
+                  "roll": "wound",
+                  "operation": "subtract",
+                  "value": 1
                 }
               }
-            ]
-          }
+            }
+          ]
         }
       },
       "duration": "phase"

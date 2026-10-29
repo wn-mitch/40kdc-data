@@ -81,6 +81,8 @@ export function classifyLeaves(given: CompileLeaf[], places: Placement[], contai
   // "If A, X, and if B, Y": each leading condition with an "and if" sibling gates only its clause.
   const siblingScoped = siblingClauseConditions(list, places, sourceText);
   const firstEffect = (sentence: number) => list.findIndex((leaf, index) => leaf.role === "EFFECT" && places[index]!.sentence === sentence);
+  // A unit selection ahead of the leaf at `index`.
+  const selectedBefore = (index: number) => list.some((leaf, at) => at < index && leaf.family_id === "select-unit");
   const attached = list.some((leaf) => leaf.family_id === "leading-unit");
   const global: Node[] = [];
   /** Conditions keyed by the scope they gate: a sentence's leading conditions, or one clause. */
@@ -203,6 +205,13 @@ export function classifyLeaves(given: CompileLeaf[], places: Placement[], contai
     if (sourceText === undefined || end === undefined) return false;
     return /^\**[ \t]*:/u.test(Buffer.from(sourceText, "utf8").subarray(end, end + 8).toString("utf8"));
   };
+  // A colon between the leaf at `index` and its sentence's first effect, at `first`, opens a list of the sentences after.
+  const listsLaterSentences = (index: number, first: number) => {
+    const from = list[index]!.end_byte;
+    const to = list[first]?.start_byte;
+    if (sourceText === undefined || from === undefined || to === undefined || to < from) return false;
+    return Buffer.from(sourceText, "utf8").subarray(from, to).toString("utf8").includes(":");
+  };
   const anyEffectBefore = (index: number) => list.slice(0, index).some((leaf) => leaf.role === "EFFECT");
   const partMomentsBefore = (index: number): number[] => {
     const moment = [...triggerIndexes].reverse().find((at) => at < index);
@@ -254,6 +263,17 @@ export function classifyLeaves(given: CompileLeaf[], places: Placement[], contai
           const own = triggers[at]!.condition as Node | undefined;
           triggers[at] = { ...triggers[at]!, condition: own ? { operator: "and", operands: [own, node] } : node };
         }
+      // "Select up to three X units. Until the end of the round, each time a ranged attack targets one of those units, …":
+      // a gate printed after the selection gates the effects of its sentence inside the selection, not the selection
+      // itself, which is made before any such attack; a colon before its first effect ("… can: A. B.") lists the
+      // later sentences under it too. An owner ("from your army") says which units the selection takes, so it is no
+      // gate on the effects.
+      } else if (node !== "selected" && leading && effectSentences.has(sentence) && selectedBefore(index) && leaf.family_id !== "unit-owner") {
+        const gated = listsLaterSentences(index, first) ? [...new Set(places.map((place) => place.sentence))].filter((later) => later >= sentence) : [sentence];
+        for (const each of gated) {
+          sentenceGates.set(each, [...(sentenceGates.get(each) ?? []), node]);
+        }
+        gateOrigin.set(node, index);
       } else if (!effectSentences.has(sentence) || (sentence === firstSentence && leading)) {
         if (node === "selected") selectedGlobally = true;
         else global.push(node);

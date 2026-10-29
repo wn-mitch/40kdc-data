@@ -1165,29 +1165,15 @@
         "operator": "and",
         "operands": [
           {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "phase-is",
-                "parameters": {
-                  "phase": "shooting"
-                }
-              },
-              {
-                "type": "player-turn-is",
-                "parameters": {
-                  "turn": "your-turn"
-                }
-              }
-            ]
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
           },
           {
-            "type": "matches",
+            "type": "player-turn-is",
             "parameters": {
-              "subject": "this-model",
-              "filter": {
-                "state": "on-battlefield"
-              }
+              "turn": "your-turn"
             }
           }
         ]
@@ -1224,10 +1210,22 @@
           "type": "sequence",
           "steps": [
             {
-              "type": "designate",
-              "target": "selected-unit",
-              "modifier": {
-                "tag": "suppressed"
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "this-model",
+                  "filter": {
+                    "state": "on-battlefield"
+                  }
+                }
+              },
+              "effect": {
+                "type": "designate",
+                "target": "selected-unit",
+                "modifier": {
+                  "tag": "suppressed"
+                }
               }
             },
             {
@@ -4377,101 +4375,103 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "moved-over",
-        "parameters": {
-          "subject": "this-unit",
-          "by": "this-unit",
-          "window": "phase"
-        }
-      },
-      "effect": {
-        "type": "select-units",
-        "selector": {
-          "filter": {
-            "owner": "enemy"
-          },
-          "count": {
-            "min": 1,
-            "max": 1
-          },
-          "eligibility": {
-            "operator": "and",
-            "operands": [
-              {
-                "operator": "not",
-                "operands": [
-                  {
-                    "type": "matches",
-                    "parameters": {
-                      "subject": "selected-unit",
-                      "filter": {
-                        "all_of": [
-                          "MONSTER"
-                        ]
-                      }
-                    }
-                  }
-                ]
-              },
-              {
-                "operator": "not",
-                "operands": [
-                  {
-                    "type": "matches",
-                    "parameters": {
-                      "subject": "selected-unit",
-                      "filter": {
-                        "all_of": [
-                          "VEHICLE"
-                        ]
-                      }
-                    }
-                  }
-                ]
-              }
-            ]
-          }
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy"
         },
-        "effect": {
-          "type": "sequence",
-          "steps": [
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "operator": "and",
+          "operands": [
             {
-              "type": "mortal-wounds",
-              "target": "selected-unit",
-              "modifier": {
-                "count": 1,
-                "per": "success",
-                "roll": {
-                  "dice": 6,
-                  "threshold": 4
+              "operator": "and",
+              "operands": [
+                {
+                  "operator": "not",
+                  "operands": [
+                    {
+                      "type": "matches",
+                      "parameters": {
+                        "subject": "selected-unit",
+                        "filter": {
+                          "all_of": [
+                            "MONSTER"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "operator": "not",
+                  "operands": [
+                    {
+                      "type": "matches",
+                      "parameters": {
+                        "subject": "selected-unit",
+                        "filter": {
+                          "all_of": [
+                            "VEHICLE"
+                          ]
+                        }
+                      }
+                    }
+                  ]
                 }
-              }
+              ]
             },
             {
-              "type": "conditional",
-              "condition": {
-                "type": "happened",
-                "parameters": {
-                  "event": "model-destroyed",
-                  "object": {
-                    "owner": "enemy",
-                    "level": "model"
-                  },
-                  "window": "event"
-                }
-              },
-              "effect": {
-                "type": "test",
-                "target": "selected-unit",
-                "modifier": {
-                  "test": "battle-shock"
-                }
+              "type": "moved-over",
+              "parameters": {
+                "subject": "selected-unit",
+                "by": "this-unit",
+                "window": "phase"
               }
             }
           ]
         }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "mortal-wounds",
+            "target": "selected-unit",
+            "modifier": {
+              "count": 1,
+              "per": "success",
+              "roll": {
+                "dice": 6,
+                "threshold": 4
+              }
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "happened",
+              "parameters": {
+                "event": "model-destroyed",
+                "object": {
+                  "owner": "enemy",
+                  "level": "model"
+                },
+                "window": "event"
+              }
+            },
+            "effect": {
+              "type": "test",
+              "target": "selected-unit",
+              "modifier": {
+                "test": "battle-shock"
+              }
+            }
+          }
+        ]
       }
     },
     "scope": {

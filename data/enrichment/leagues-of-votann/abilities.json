@@ -3193,25 +3193,34 @@
       "applies": {
         "to": "attackers-of-target",
         "effect": {
-          "type": "conditional",
-          "condition": {
-            "type": "attack-is",
-            "parameters": {
-              "attack_type": "ranged"
-            }
-          },
-          "effect": {
-            "type": "sequence",
-            "steps": [
-              {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "attack-is",
+                "parameters": {
+                  "attack_type": "ranged"
+                }
+              },
+              "effect": {
                 "type": "re-roll",
                 "target": "this-unit",
                 "modifier": {
                   "roll": "hit",
                   "subset": "ones"
                 }
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "attack-is",
+                "parameters": {
+                  "attack_type": "ranged"
+                }
               },
-              {
+              "effect": {
                 "type": "re-roll",
                 "target": "this-unit",
                 "modifier": {
@@ -3219,8 +3228,8 @@
                   "subset": "ones"
                 }
               }
-            ]
-          }
+            }
+          ]
         }
       }
     },

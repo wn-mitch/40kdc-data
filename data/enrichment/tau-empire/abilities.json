@@ -1012,28 +1012,15 @@
         "operator": "and",
         "operands": [
           {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "phase-is",
-                "parameters": {
-                  "phase": "shooting"
-                }
-              },
-              {
-                "type": "player-turn-is",
-                "parameters": {
-                  "turn": "your-turn"
-                }
-              }
-            ]
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
           },
           {
-            "type": "matches",
+            "type": "player-turn-is",
             "parameters": {
-              "filter": {
-                "state": "on-battlefield"
-              }
+              "turn": "your-turn"
             }
           }
         ]
@@ -1069,10 +1056,21 @@
           "type": "sequence",
           "steps": [
             {
-              "type": "designate",
-              "target": "selected-unit",
-              "modifier": {
-                "tag": "suppressed"
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "state": "on-battlefield"
+                  }
+                }
+              },
+              "effect": {
+                "type": "designate",
+                "target": "selected-unit",
+                "modifier": {
+                  "tag": "suppressed"
+                }
               }
             },
             {
@@ -6862,51 +6860,51 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "not",
-        "operands": [
-          {
-            "type": "matches",
+      "type": "designate-target",
+      "designation": "a-trap-well-laid",
+      "select": {
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "happened",
             "parameters": {
-              "subject": "attacker",
+              "event": "after-roll",
+              "subject": "event-subject",
+              "object": "this-unit",
               "filter": {
-                "state": "battle-shocked"
-              }
+                "roll": "hit",
+                "result": "success"
+              },
+              "window": "event"
             }
           }
-        ]
+        }
       },
-      "effect": {
-        "type": "designate-target",
-        "designation": "a-trap-well-laid",
-        "select": {
-          "kind": "unit",
-          "selector": {
-            "filter": {
-              "owner": "enemy"
-            },
-            "count": {
-              "min": 1,
-              "max": 1
-            },
-            "eligibility": {
-              "type": "happened",
-              "parameters": {
-                "event": "after-roll",
-                "subject": "event-subject",
-                "object": "this-unit",
-                "filter": {
-                  "roll": "hit",
-                  "result": "success"
-                },
-                "window": "event"
+      "applies": {
+        "to": "attackers-of-target",
+        "effect": {
+          "type": "conditional",
+          "condition": {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "attacker",
+                  "filter": {
+                    "state": "battle-shocked"
+                  }
+                }
               }
-            }
-          }
-        },
-        "applies": {
-          "to": "attackers-of-target",
+            ]
+          },
           "effect": {
             "type": "stat-modifier",
             "target": {
@@ -6922,9 +6920,9 @@
               "value": 1
             }
           }
-        },
-        "duration": "phase"
-      }
+        }
+      },
+      "duration": "phase"
     },
     "scope": {
       "duration": "phase"

@@ -340,29 +340,15 @@
         "operator": "and",
         "operands": [
           {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "phase-is",
-                "parameters": {
-                  "phase": "shooting"
-                }
-              },
-              {
-                "type": "player-turn-is",
-                "parameters": {
-                  "turn": "your-turn"
-                }
-              }
-            ]
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
           },
           {
-            "type": "matches",
+            "type": "player-turn-is",
             "parameters": {
-              "subject": "this-model",
-              "filter": {
-                "state": "on-battlefield"
-              }
+              "turn": "your-turn"
             }
           }
         ]
@@ -399,10 +385,22 @@
           "type": "sequence",
           "steps": [
             {
-              "type": "designate",
-              "target": "selected-unit",
-              "modifier": {
-                "tag": "suppressed"
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "this-model",
+                  "filter": {
+                    "state": "on-battlefield"
+                  }
+                }
+              },
+              "effect": {
+                "type": "designate",
+                "target": "selected-unit",
+                "modifier": {
+                  "tag": "suppressed"
+                }
               }
             },
             {

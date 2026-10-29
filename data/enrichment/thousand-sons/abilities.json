@@ -902,33 +902,33 @@
         "applies": {
           "to": "attackers-of-target",
           "effect": {
-            "type": "conditional",
-            "condition": {
-              "operator": "and",
-              "operands": [
-                {
-                  "type": "happened",
-                  "parameters": {
-                    "subject": "attacker",
-                    "event": "disembarked",
-                    "filter": {
-                      "transport": "this-unit"
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "conditional",
+                "condition": {
+                  "operator": "and",
+                  "operands": [
+                    {
+                      "type": "happened",
+                      "parameters": {
+                        "subject": "attacker",
+                        "event": "disembarked",
+                        "filter": {
+                          "transport": "this-unit"
+                        },
+                        "window": "turn"
+                      }
                     },
-                    "window": "turn"
-                  }
+                    {
+                      "type": "attack-is",
+                      "parameters": {
+                        "attack_type": "psychic"
+                      }
+                    }
+                  ]
                 },
-                {
-                  "type": "attack-is",
-                  "parameters": {
-                    "attack_type": "psychic"
-                  }
-                }
-              ]
-            },
-            "effect": {
-              "type": "sequence",
-              "steps": [
-                {
+                "effect": {
                   "type": "roll-modifier",
                   "target": {
                     "owner": "friendly",
@@ -939,8 +939,33 @@
                     "operation": "add",
                     "value": 1
                   }
+                }
+              },
+              {
+                "type": "conditional",
+                "condition": {
+                  "operator": "and",
+                  "operands": [
+                    {
+                      "type": "happened",
+                      "parameters": {
+                        "subject": "attacker",
+                        "event": "disembarked",
+                        "filter": {
+                          "transport": "this-unit"
+                        },
+                        "window": "turn"
+                      }
+                    },
+                    {
+                      "type": "attack-is",
+                      "parameters": {
+                        "attack_type": "psychic"
+                      }
+                    }
+                  ]
                 },
-                {
+                "effect": {
                   "type": "roll-modifier",
                   "target": {
                     "owner": "friendly",
@@ -952,8 +977,8 @@
                     "value": 1
                   }
                 }
-              ]
-            }
+              }
+            ]
           }
         },
         "duration": "phase"

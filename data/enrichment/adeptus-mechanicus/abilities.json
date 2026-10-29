@@ -9563,12 +9563,24 @@
               }
             },
             {
-              "type": "roll-modifier",
-              "target": "selected-unit",
-              "modifier": {
-                "roll": "charge",
-                "operation": "subtract",
-                "value": 2
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "selected-unit",
+                  "filter": {
+                    "designated": "pinned"
+                  }
+                }
+              },
+              "effect": {
+                "type": "roll-modifier",
+                "target": "selected-unit",
+                "modifier": {
+                  "roll": "charge",
+                  "operation": "subtract",
+                  "value": 2
+                }
               }
             }
           ]

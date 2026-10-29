@@ -81,7 +81,12 @@ export function planEffects(frame: PartFrame, sourceText: string | undefined, op
       const onObject = attack?.parameters.direction === "targeted" && attack.parameters.unit === "that-unit"
         && targeting?.parameters.kind === "targets-selected" && targeting.parameters.object_filter !== undefined
         && places[attackAt]!.sentence === sentence;
-      return onObject ? { type: "conditional", condition: { type: "same-unit", parameters: { subject: "defender", as: "event-object" } }, effect: compiled } : compiled;
+      // "Select up to three units. …, each time a ranged attack targets one of those units, …": the attacks on a
+      // selected unit. An attack on "your unit" printed before the selection is on the bearer's or the target's unit.
+      const onSelected = !onObject && attack?.parameters.direction === "targeted" && attack.parameters.unit === "that-unit"
+        && list.slice(0, attackAt).some((other) => other.family_id === "select-unit");
+      if (onObject || onSelected) return { type: "conditional", condition: { type: "same-unit", parameters: { subject: "defender", as: onObject ? "event-object" : "selected-unit" } }, effect: compiled };
+      return compiled;
     });
     if (!node) return;
     planned.push({

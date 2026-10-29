@@ -7109,12 +7109,22 @@
               ]
             },
             "effect": {
-              "type": "roll-modifier",
-              "target": "attacker",
-              "modifier": {
-                "roll": "hit",
-                "operation": "subtract",
-                "value": 1
+              "type": "conditional",
+              "condition": {
+                "type": "same-unit",
+                "parameters": {
+                  "subject": "defender",
+                  "as": "selected-unit"
+                }
+              },
+              "effect": {
+                "type": "roll-modifier",
+                "target": "attacker",
+                "modifier": {
+                  "roll": "hit",
+                  "operation": "subtract",
+                  "value": 1
+                }
               }
             }
           }
