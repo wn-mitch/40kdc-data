@@ -3533,7 +3533,7 @@
           "steps": [
             {
               "type": "roll-modifier",
-              "target": "this-unit",
+              "target": "recipient",
               "modifier": {
                 "roll": "advance",
                 "operation": "add",
@@ -3542,7 +3542,7 @@
             },
             {
               "type": "roll-modifier",
-              "target": "this-unit",
+              "target": "recipient",
               "modifier": {
                 "roll": "charge",
                 "operation": "add",
@@ -3839,7 +3839,7 @@
           "steps": [
             {
               "type": "roll-modifier",
-              "target": "this-unit",
+              "target": "recipient",
               "modifier": {
                 "roll": "battle-shock",
                 "operation": "subtract",
@@ -3848,7 +3848,7 @@
             },
             {
               "type": "roll-modifier",
-              "target": "this-unit",
+              "target": "recipient",
               "modifier": {
                 "roll": "leadership",
                 "operation": "subtract",
@@ -13861,40 +13861,40 @@
     "detachment_id": "corsair-coterie",
     "ability_type": "stratagem",
     "effect": {
-      "type": "select-units",
-      "selector": {
-        "filter": {
-          "owner": "enemy"
-        },
-        "count": {
-          "min": 1,
-          "max": 1
-        },
-        "eligibility": {
-          "type": "unit-state",
-          "parameters": {
-            "subject": "selected-unit",
-            "state": "engaged",
-            "with": "this-unit",
-            "at": "phase-start"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "declare-charge",
+            "allow": true,
+            "after": [
+              "fall-back"
+            ]
           }
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "permission",
-            "target": "this-unit",
-            "modifier": {
-              "activity": "declare-charge",
-              "allow": true,
-              "after": [
-                "fall-back"
-              ]
+        },
+        {
+          "type": "select-units",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            },
+            "eligibility": {
+              "type": "unit-state",
+              "parameters": {
+                "subject": "selected-unit",
+                "state": "engaged",
+                "with": "this-unit",
+                "at": "phase-start"
+              }
             }
           },
-          {
+          "effect": {
             "type": "conditional",
             "condition": {
               "type": "matches",
@@ -13919,8 +13919,8 @@
               }
             }
           }
-        ]
-      }
+        }
+      ]
     },
     "scope": {
       "duration": "turn"

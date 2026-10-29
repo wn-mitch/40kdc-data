@@ -1589,7 +1589,7 @@
           "steps": [
             {
               "type": "re-roll",
-              "target": "this-unit",
+              "target": "recipient",
               "modifier": {
                 "roll": "hit",
                 "subset": "ones"
@@ -1597,7 +1597,7 @@
             },
             {
               "type": "re-roll",
-              "target": "this-unit",
+              "target": "recipient",
               "modifier": {
                 "roll": "wound",
                 "subset": "ones"
@@ -8261,7 +8261,7 @@
         },
         "effect": {
           "type": "re-roll",
-          "target": "this-unit",
+          "target": "recipient",
           "modifier": {
             "roll": "hit",
             "subset": "ones"

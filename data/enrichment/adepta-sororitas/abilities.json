@@ -7025,66 +7025,66 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "select-units",
-      "selector": {
-        "filter": {
-          "owner": "friendly",
-          "all_of": [
-            "CELESTIAN SACRESANTS"
-          ],
-          "excluding": "this-unit"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "roll-modifier",
+          "target": "attacker",
+          "modifier": {
+            "roll": "hit",
+            "operation": "subtract",
+            "value": 1
+          }
         },
-        "count": {
-          "min": 1,
-          "max": 1
-        },
-        "eligibility": {
-          "operator": "and",
-          "operands": [
-            {
-              "operator": "not",
+        {
+          "type": "select-units",
+          "selector": {
+            "filter": {
+              "owner": "friendly",
+              "all_of": [
+                "CELESTIAN SACRESANTS"
+              ],
+              "excluding": "this-unit"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            },
+            "eligibility": {
+              "operator": "and",
               "operands": [
+                {
+                  "operator": "not",
+                  "operands": [
+                    {
+                      "type": "matches",
+                      "parameters": {
+                        "subject": "selected-unit",
+                        "filter": {
+                          "state": "battle-shocked"
+                        }
+                      }
+                    }
+                  ]
+                },
                 {
                   "type": "matches",
                   "parameters": {
                     "subject": "selected-unit",
                     "filter": {
-                      "state": "battle-shocked"
+                      "within": {
+                        "of": "this-unit",
+                        "range": {
+                          "inches": 6
+                        }
+                      }
                     }
                   }
                 }
               ]
-            },
-            {
-              "type": "matches",
-              "parameters": {
-                "subject": "selected-unit",
-                "filter": {
-                  "within": {
-                    "of": "this-unit",
-                    "range": {
-                      "inches": 6
-                    }
-                  }
-                }
-              }
-            }
-          ]
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "roll-modifier",
-            "target": "attacker",
-            "modifier": {
-              "roll": "hit",
-              "operation": "subtract",
-              "value": 1
             }
           },
-          {
+          "effect": {
             "type": "conditional",
             "condition": {
               "operator": "and",
@@ -7128,8 +7128,8 @@
               }
             }
           }
-        ]
-      }
+        }
+      ]
     },
     "scope": {
       "duration": "phase"

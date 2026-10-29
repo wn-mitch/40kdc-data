@@ -6058,7 +6058,7 @@
         },
         "effect": {
           "type": "re-roll",
-          "target": "this-unit",
+          "target": "recipient",
           "modifier": {
             "roll": "charge",
             "result_scope": "any-result"

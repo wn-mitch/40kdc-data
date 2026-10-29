@@ -177,3 +177,27 @@ describe("Semantic authoring gates after a selection", () => {
     expect(gatedRerolls(compiled(unlisted, ...items(unlisted)))).toHaveLength(1);
   });
 });
+
+describe("Semantic authoring effects before a selection", () => {
+  const PHASE: Item = ["At the start of your Command phase", "event", { kind: "phase-start", phase: "command", turn: "your" }];
+  const HEAL: Item = ["this unit heals D3 wounds", "regain-wounds", { subject: "this-unit", amount: "D3" }];
+  const SELECT: Item[] = [["select one", "select-unit", { distance: "any", visible: false }], ["enemy unit", "unit-filter", { side: "enemy" }],
+    ["that unit must take a Battle-shock test", "test", { target: "selected-unit", test: "battle-shock" }]];
+
+  it("keeps the effects of a sentence before the selection's outside the select", () => {
+    const text = "At the start of your Command phase, this unit heals D3 wounds. Then select one enemy unit: that unit must take a Battle-shock test.";
+    const effect = compiled(text, PHASE, HEAL, ...SELECT).effect as Record<string, unknown>;
+    expect(effect.type).toBe("sequence");
+    const [first, second] = effect.steps as Record<string, unknown>[];
+    expect(first!.type).toBe("heal");
+    expect(second!.type).toBe("select-units");
+    expect(nodes(second, "heal")).toEqual([]);
+  });
+
+  it("keeps a sentence's effects inside the select when the selection opens that sentence", () => {
+    const text = "At the start of your Command phase, select one enemy unit: that unit must take a Battle-shock test, and this unit heals D3 wounds.";
+    const effect = compiled(text, PHASE, ...SELECT, HEAL).effect as Record<string, unknown>;
+    expect(effect.type).toBe("select-units");
+    expect(nodes(effect, "heal")).toHaveLength(1);
+  });
+});

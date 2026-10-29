@@ -1671,7 +1671,7 @@
           },
           "effect": {
             "type": "ability-grant",
-            "target": "this-unit",
+            "target": "recipient",
             "modifier": {
               "ability": "benefit-of-cover"
             }
@@ -8433,51 +8433,51 @@
     "detachment_id": "shamblerot-vectorium",
     "ability_type": "stratagem",
     "effect": {
-      "type": "select-units",
-      "selector": {
-        "filter": {
-          "owner": "enemy"
-        },
-        "count": {
-          "min": 1,
-          "max": 1
-        },
-        "eligibility": {
-          "type": "happened",
-          "parameters": {
-            "event": "targets-selected",
-            "subject": "selected-unit",
-            "object": "this-unit",
-            "filter": {
-              "kind": "attack"
-            },
-            "window": "phase"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "use-stratagem",
+            "allow": true,
+            "despite": [
+              "destroyed"
+            ]
           }
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "permission",
-            "target": "this-unit",
-            "modifier": {
-              "activity": "use-stratagem",
-              "allow": true,
-              "despite": [
-                "destroyed"
-              ]
+        },
+        {
+          "type": "select-units",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            },
+            "eligibility": {
+              "type": "happened",
+              "parameters": {
+                "event": "targets-selected",
+                "subject": "selected-unit",
+                "object": "this-unit",
+                "filter": {
+                  "kind": "attack"
+                },
+                "window": "phase"
+              }
             }
           },
-          {
+          "effect": {
             "type": "designate",
             "target": "selected-unit",
             "modifier": {
               "tag": "afflicted"
             }
           }
-        ]
-      }
+        }
+      ]
     },
     "scope": {
       "duration": "battle"

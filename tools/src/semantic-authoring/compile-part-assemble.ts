@@ -269,11 +269,21 @@ export function assemblePart(
     body = selectUnit(pair.outer, selectUnit(pair.inner, body, { eligibility: pairCandidateEligibility }), { eligibility });
   }
   else if (selections.length === 1 && (selectionPart === null || selectionPart === 0)) {
-    body = selectUnit(selections[0]!, body, {
+    // "Each time an attack targets your unit, subtract 1 …. In addition, you can select one other unit …": the effects
+    // of the sentences before the selection's do not wait on it, so they stay outside the select.
+    const selectionSentence = places[list.indexOf(selections[0]!)]?.sentence;
+    const firstItems = pieceItems.filter((item) => partOf(item.index) === 0);
+    const before = selectionSentence !== undefined && partStarts.length === 0 && window === null && body === unwrapped && body.type === "sequence" && steps.length === firstItems.length
+      ? firstItems.map((item) => places[item.index]!.sentence < selectionSentence) : [];
+    const leading = before.indexOf(false) > 0 && before.lastIndexOf(true) === before.indexOf(false) - 1 ? steps.slice(0, before.indexOf(false)) : [];
+    const ahead = leading.some((step) => JSON.stringify(step).includes("\"selected-unit\"")) ? [] : leading;
+    const reached = steps.slice(ahead.length);
+    const select = selectUnit(selections[0]!, ahead.length === 0 ? body : reached.length === 1 ? reached[0]! : { type: "sequence", steps: reached }, {
       ...(maxCount ? { maxCount } : {}),
       eligibility,
       selectionLimit,
     });
+    body = ahead.length ? { type: "sequence", steps: [...ahead, select] } : select;
   }
   else if (forEachLeaf) {
     const each = forEachLeaf;

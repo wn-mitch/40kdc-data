@@ -3131,7 +3131,7 @@
         },
         "effect": {
           "type": "ability-grant",
-          "target": "this-unit",
+          "target": "recipient",
           "modifier": {
             "ability": "stealth"
           }
@@ -9566,7 +9566,7 @@
         },
         "effect": {
           "type": "re-roll",
-          "target": "this-unit",
+          "target": "recipient",
           "modifier": {
             "roll": "battle-shock",
             "result_scope": "any-result"

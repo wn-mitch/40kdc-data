@@ -716,7 +716,7 @@
           "steps": [
             {
               "type": "roll-modifier",
-              "target": "this-unit",
+              "target": "recipient",
               "modifier": {
                 "roll": "advance",
                 "operation": "add",
@@ -725,7 +725,7 @@
             },
             {
               "type": "roll-modifier",
-              "target": "this-unit",
+              "target": "recipient",
               "modifier": {
                 "roll": "charge",
                 "operation": "add",
@@ -2187,24 +2187,28 @@
           }
         },
         {
-          "type": "aura",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "range": {
-              "inches": 6
-            },
-            "effect": {
-              "type": "re-roll",
-              "target": "this-unit",
-              "modifier": {
-                "roll": "hit",
-                "subset": "ones"
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": "defender",
+              "filter": {
+                "within": {
+                  "of": "this-unit",
+                  "range": {
+                    "inches": 6
+                  }
+                }
               }
-            },
-            "eligible": {
-              "owner": "enemy"
-            },
-            "of": "this-unit"
+            }
+          },
+          "effect": {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "subset": "ones"
+            }
           }
         }
       ]
@@ -2216,7 +2220,7 @@
       "wolf-guard-battle-leader"
     ],
     "ability_type": "unit",
-    "behavior": "aura",
+    "behavior": "passive",
     "community_notes": "auto-generated, partial",
     "faction_id": "space-wolves"
   },
@@ -2268,101 +2272,107 @@
         ]
       },
       "effect": {
-        "type": "select-units",
-        "selector": {
-          "filter": {
-            "owner": "enemy",
-            "visible": {
-              "to": "this-model"
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "roll",
+            "dice": "D6",
+            "roll_var": "psychic",
+            "effect": {
+              "type": "dice-table",
+              "dice": "D6",
+              "outcomes": [
+                {
+                  "results": [
+                    1
+                  ],
+                  "effect": {
+                    "type": "state-change",
+                    "target": "this-unit",
+                    "modifier": {
+                      "state": "battle-shocked",
+                      "set": true
+                    }
+                  }
+                },
+                {
+                  "results": [
+                    2,
+                    3,
+                    4,
+                    5,
+                    6
+                  ],
+                  "effect": {
+                    "type": "no-effect"
+                  }
+                }
+              ]
             }
           },
-          "count": {
-            "min": 1,
-            "max": 1
-          },
-          "eligibility": {
-            "type": "matches",
-            "parameters": {
-              "subject": "selected-unit",
+          {
+            "type": "select-units",
+            "selector": {
               "filter": {
-                "within": {
-                  "of": "this-unit",
-                  "range": {
-                    "inches": 18
+                "owner": "enemy",
+                "visible": {
+                  "to": "this-model"
+                }
+              },
+              "count": {
+                "min": 1,
+                "max": 1
+              },
+              "eligibility": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "selected-unit",
+                  "filter": {
+                    "within": {
+                      "of": "this-unit",
+                      "range": {
+                        "inches": 18
+                      }
+                    }
                   }
                 }
               }
-            }
-          }
-        },
-        "effect": {
-          "type": "sequence",
-          "steps": [
-            {
-              "type": "roll",
-              "dice": "D6",
-              "roll_var": "psychic",
-              "effect": {
-                "type": "dice-table",
-                "dice": "D6",
-                "outcomes": [
-                  {
-                    "results": [
-                      1
-                    ],
-                    "effect": {
-                      "type": "state-change",
-                      "target": "this-unit",
-                      "modifier": {
-                        "state": "battle-shocked",
-                        "set": true
+            },
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "designate",
+                  "target": "selected-unit",
+                  "modifier": {
+                    "tag": "suppressed"
+                  }
+                },
+                {
+                  "type": "conditional",
+                  "condition": {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "selected-unit",
+                      "filter": {
+                        "designated": "suppressed"
                       }
                     }
                   },
-                  {
-                    "results": [
-                      2,
-                      3,
-                      4,
-                      5,
-                      6
-                    ],
-                    "effect": {
-                      "type": "no-effect"
+                  "effect": {
+                    "type": "roll-modifier",
+                    "target": "selected-unit",
+                    "modifier": {
+                      "roll": "hit",
+                      "operation": "subtract",
+                      "value": 1
                     }
                   }
-                ]
-              }
-            },
-            {
-              "type": "designate",
-              "target": "selected-unit",
-              "modifier": {
-                "tag": "suppressed"
-              }
-            },
-            {
-              "type": "conditional",
-              "condition": {
-                "type": "matches",
-                "parameters": {
-                  "filter": {
-                    "designated": "suppressed"
-                  }
                 }
-              },
-              "effect": {
-                "type": "roll-modifier",
-                "target": "this-unit",
-                "modifier": {
-                  "roll": "hit",
-                  "operation": "subtract",
-                  "value": 1
-                }
-              }
+              ]
             }
-          ]
-        }
+          }
+        ]
       }
     },
     "scope": {

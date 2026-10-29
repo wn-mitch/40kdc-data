@@ -6367,7 +6367,7 @@
         },
         "effect": {
           "type": "re-roll",
-          "target": "this-unit",
+          "target": "recipient",
           "modifier": {
             "roll": "battle-shock",
             "result_scope": "any-result"
@@ -6390,7 +6390,7 @@
       ]
     },
     "expected": {
-      "text": "While a friendly RUBRICAE unit is within 9\" of this model, you can re-roll the Battle-shock roll.\nApplies to: units with THOUSAND SONS."
+      "text": "While a friendly RUBRICAE unit is within 9\" of this model, you can re-roll the Battle-shock roll for that unit.\nApplies to: units with THOUSAND SONS."
     }
   },
   {
@@ -8093,7 +8093,7 @@
         },
         "effect": {
           "type": "re-roll",
-          "target": "this-unit",
+          "target": "recipient",
           "modifier": {
             "roll": "leadership",
             "result_scope": "any-result"
@@ -8111,7 +8111,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "While a friendly ADEPTUS ASTARTES unit is within 12\" of this model, you can re-roll the Leadership roll."
+      "text": "While a friendly ADEPTUS ASTARTES unit is within 12\" of this model, you can re-roll the Leadership roll for that unit."
     }
   },
   {
@@ -8608,66 +8608,66 @@
   {
     "caseId": "bastion-of-faith-champions-of-faith-adepta-sororitas#162",
     "effect": {
-      "type": "select-units",
-      "selector": {
-        "filter": {
-          "owner": "friendly",
-          "all_of": [
-            "CELESTIAN SACRESANTS"
-          ],
-          "excluding": "this-unit"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "roll-modifier",
+          "target": "attacker",
+          "modifier": {
+            "roll": "hit",
+            "operation": "subtract",
+            "value": 1
+          }
         },
-        "count": {
-          "min": 1,
-          "max": 1
-        },
-        "eligibility": {
-          "operator": "and",
-          "operands": [
-            {
-              "operator": "not",
+        {
+          "type": "select-units",
+          "selector": {
+            "filter": {
+              "owner": "friendly",
+              "all_of": [
+                "CELESTIAN SACRESANTS"
+              ],
+              "excluding": "this-unit"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            },
+            "eligibility": {
+              "operator": "and",
               "operands": [
+                {
+                  "operator": "not",
+                  "operands": [
+                    {
+                      "type": "matches",
+                      "parameters": {
+                        "subject": "selected-unit",
+                        "filter": {
+                          "state": "battle-shocked"
+                        }
+                      }
+                    }
+                  ]
+                },
                 {
                   "type": "matches",
                   "parameters": {
                     "subject": "selected-unit",
                     "filter": {
-                      "state": "battle-shocked"
+                      "within": {
+                        "of": "this-unit",
+                        "range": {
+                          "inches": 6
+                        }
+                      }
                     }
                   }
                 }
               ]
-            },
-            {
-              "type": "matches",
-              "parameters": {
-                "subject": "selected-unit",
-                "filter": {
-                  "within": {
-                    "of": "this-unit",
-                    "range": {
-                      "inches": 6
-                    }
-                  }
-                }
-              }
-            }
-          ]
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "roll-modifier",
-            "target": "attacker",
-            "modifier": {
-              "roll": "hit",
-              "operation": "subtract",
-              "value": 1
             }
           },
-          {
+          "effect": {
             "type": "conditional",
             "condition": {
               "operator": "and",
@@ -8711,8 +8711,8 @@
               }
             }
           }
-        ]
-      }
+        }
+      ]
     },
     "scope": {
       "duration": "phase"
@@ -8734,7 +8734,7 @@
       "optional": true
     },
     "expected": {
-      "text": "When an enemy unit targets this unit, you may use this ability, until the end of the phase:\n  -> Select one friendly CELESTIAN SACRESANTS unit other than the unit if the selected unit is not Battle-shocked and the selected unit is within 6\" of the unit:\n    -> The attacking unit gets -1 to Hit rolls.\n    -> While the unit is tagged righteous, while the unit is friendly, if the target unit is the same unit as the selected unit, the attacking unit gets -1 to Hit rolls.\nApplies to: units with CELESTIAN SACRESANTS."
+      "text": "When an enemy unit targets this unit, you may use this ability, until the end of the phase:\n  -> The attacking unit gets -1 to Hit rolls.\n  -> Select one friendly CELESTIAN SACRESANTS unit other than the unit if the selected unit is not Battle-shocked and the selected unit is within 6\" of the unit: while the selected unit is tagged righteous, while the selected unit is friendly, if the target unit is the same unit as the selected unit, the attacking unit gets -1 to Hit rolls.\nApplies to: units with CELESTIAN SACRESANTS."
     }
   },
   {
@@ -13468,81 +13468,81 @@
               ]
             },
             "effect": {
-              "type": "select-units",
-              "selector": {
-                "filter": {
-                  "owner": "enemy",
-                  "visible": {
-                    "to": "this-model"
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "roll",
+                  "dice": "D6",
+                  "roll_var": "psychic",
+                  "effect": {
+                    "type": "dice-table",
+                    "dice": "D6",
+                    "outcomes": [
+                      {
+                        "results": [
+                          1
+                        ],
+                        "effect": {
+                          "type": "state-change",
+                          "target": "this-unit",
+                          "modifier": {
+                            "state": "battle-shocked",
+                            "set": true
+                          }
+                        }
+                      },
+                      {
+                        "results": [
+                          2,
+                          3,
+                          4,
+                          5,
+                          6
+                        ],
+                        "effect": {
+                          "type": "no-effect"
+                        }
+                      }
+                    ]
                   }
                 },
-                "count": {
-                  "min": 1,
-                  "max": 1
-                },
-                "eligibility": {
-                  "type": "matches",
-                  "parameters": {
-                    "subject": "selected-unit",
+                {
+                  "type": "select-units",
+                  "selector": {
                     "filter": {
-                      "within": {
-                        "of": "this-unit",
-                        "range": {
-                          "inches": 24
+                      "owner": "enemy",
+                      "visible": {
+                        "to": "this-model"
+                      }
+                    },
+                    "count": {
+                      "min": 1,
+                      "max": 1
+                    },
+                    "eligibility": {
+                      "type": "matches",
+                      "parameters": {
+                        "subject": "selected-unit",
+                        "filter": {
+                          "within": {
+                            "of": "this-unit",
+                            "range": {
+                              "inches": 24
+                            }
+                          }
                         }
                       }
                     }
-                  }
-                }
-              },
-              "effect": {
-                "type": "sequence",
-                "steps": [
-                  {
-                    "type": "roll",
-                    "dice": "D6",
-                    "roll_var": "psychic",
-                    "effect": {
-                      "type": "dice-table",
-                      "dice": "D6",
-                      "outcomes": [
-                        {
-                          "results": [
-                            1
-                          ],
-                          "effect": {
-                            "type": "state-change",
-                            "target": "this-unit",
-                            "modifier": {
-                              "state": "battle-shocked",
-                              "set": true
-                            }
-                          }
-                        },
-                        {
-                          "results": [
-                            2,
-                            3,
-                            4,
-                            5,
-                            6
-                          ],
-                          "effect": {
-                            "type": "no-effect"
-                          }
-                        }
-                      ]
-                    }
                   },
-                  {
+                  "effect": {
                     "type": "mortal-wounds",
                     "target": "selected-unit",
                     "modifier": {
                       "count": "2D3"
                     }
                   }
-                ]
-              }
+                }
+              ]
             }
           }
         }
@@ -13552,7 +13552,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "Set this model's Psyker Level characteristic to 3.\n-> By paying this cost (spend 2 Psychic Levels), until the start of your next turn: during the Movement phase, in your turn, while the unit is not Battle-shocked, roll D6; then roll one D6: on 1, the unit is Battle-shocked; on 2-6, nothing happens; improve the unit's Save characteristic by 1.\n-> By paying this cost (spend 1 Psychic Level): during the Shooting phase, in your turn, while the unit is not Battle-shocked, select one enemy unit visible to this model if the selected unit is within 24\" of the unit: roll D6; then roll one D6: on 1, this unit is Battle-shocked; on 2-6, nothing happens; that unit suffers 2D3 mortal wounds."
+      "text": "Set this model's Psyker Level characteristic to 3.\n-> By paying this cost (spend 2 Psychic Levels), until the start of your next turn: during the Movement phase, in your turn, while the unit is not Battle-shocked, roll D6; then roll one D6: on 1, the unit is Battle-shocked; on 2-6, nothing happens; improve the unit's Save characteristic by 1.\n-> By paying this cost (spend 1 Psychic Level): during the Shooting phase, in your turn, while the unit is not Battle-shocked, roll D6; then roll one D6: on 1, the unit is Battle-shocked; on 2-6, nothing happens; select one enemy unit visible to this model if the selected unit is within 24\" of the unit: that unit suffers 2D3 mortal wounds."
     }
   },
   {
@@ -13907,70 +13907,70 @@
                 ]
               },
               "effect": {
-                "type": "select-units",
-                "selector": {
-                  "filter": {
-                    "owner": "enemy"
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "roll",
+                    "dice": "D6",
+                    "roll_var": "psychic",
+                    "effect": {
+                      "type": "dice-table",
+                      "dice": "D6",
+                      "outcomes": [
+                        {
+                          "results": [
+                            1
+                          ],
+                          "effect": {
+                            "type": "state-change",
+                            "target": "this-unit",
+                            "modifier": {
+                              "state": "battle-shocked",
+                              "set": true
+                            }
+                          }
+                        },
+                        {
+                          "results": [
+                            2,
+                            3,
+                            4,
+                            5,
+                            6
+                          ],
+                          "effect": {
+                            "type": "no-effect"
+                          }
+                        }
+                      ]
+                    }
                   },
-                  "count": {
-                    "min": 1,
-                    "max": 1
-                  },
-                  "eligibility": {
-                    "type": "matches",
-                    "parameters": {
-                      "subject": "selected-unit",
+                  {
+                    "type": "select-units",
+                    "selector": {
                       "filter": {
-                        "within": {
-                          "of": "this-model",
-                          "range": {
-                            "inches": 12
+                        "owner": "enemy"
+                      },
+                      "count": {
+                        "min": 1,
+                        "max": 1
+                      },
+                      "eligibility": {
+                        "type": "matches",
+                        "parameters": {
+                          "subject": "selected-unit",
+                          "filter": {
+                            "within": {
+                              "of": "this-model",
+                              "range": {
+                                "inches": 12
+                              }
+                            }
                           }
                         }
                       }
-                    }
-                  }
-                },
-                "effect": {
-                  "type": "sequence",
-                  "steps": [
-                    {
-                      "type": "roll",
-                      "dice": "D6",
-                      "roll_var": "psychic",
-                      "effect": {
-                        "type": "dice-table",
-                        "dice": "D6",
-                        "outcomes": [
-                          {
-                            "results": [
-                              1
-                            ],
-                            "effect": {
-                              "type": "state-change",
-                              "target": "this-unit",
-                              "modifier": {
-                                "state": "battle-shocked",
-                                "set": true
-                              }
-                            }
-                          },
-                          {
-                            "results": [
-                              2,
-                              3,
-                              4,
-                              5,
-                              6
-                            ],
-                            "effect": {
-                              "type": "no-effect"
-                            }
-                          }
-                        ]
-                      }
                     },
-                    {
+                    "effect": {
                       "type": "test",
                       "target": "selected-unit",
                       "modifier": {
@@ -13978,8 +13978,8 @@
                         "modifier": -1
                       }
                     }
-                  ]
-                }
+                  }
+                ]
               }
             }
           }
@@ -14080,7 +14080,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "Set this model's Psyker Level characteristic to 3.\n-> You can:\n  -> By paying this cost (spend 1 Psychic Level): during the Shooting phase, in your turn, while the unit is not Battle-shocked, select one enemy unit if the selected unit is within 12\" of this model: roll D6; then roll one D6: on 1, this unit is Battle-shocked; on 2-6, nothing happens; that unit must take a Battle-shock test, applying -1 to that test.\n-> When an enemy unit targets this unit, you may use this ability, by paying this cost (spend 1 Psychic Level), until the end of the phase: while the unit is not Battle-shocked, roll D6; then roll one D6: on 1, the unit is Battle-shocked; on 2-6, nothing happens; the unit gets -1 to Hit rolls."
+      "text": "Set this model's Psyker Level characteristic to 3.\n-> You can:\n  -> By paying this cost (spend 1 Psychic Level): during the Shooting phase, in your turn, while the unit is not Battle-shocked, roll D6; then roll one D6: on 1, the unit is Battle-shocked; on 2-6, nothing happens; select one enemy unit if the selected unit is within 12\" of this model: that unit must take a Battle-shock test, applying -1 to that test.\n-> When an enemy unit targets this unit, you may use this ability, by paying this cost (spend 1 Psychic Level), until the end of the phase: while the unit is not Battle-shocked, roll D6; then roll one D6: on 1, the unit is Battle-shocked; on 2-6, nothing happens; the unit gets -1 to Hit rolls."
     }
   },
   {
@@ -20235,60 +20235,60 @@
   {
     "caseId": "melancholic-miasma-chaos-daemons#293",
     "effect": {
-      "type": "select-units",
-      "selector": {
-        "filter": {
-          "owner": "enemy"
-        },
-        "count": {
-          "min": 1,
-          "max": 1
-        },
-        "eligibility": {
-          "type": "in-region",
-          "parameters": {
-            "subject": "selected-unit",
-            "region": {
-              "rule_region": {
-                "region_id": "the-shadow-of-chaos",
-                "owner_faction": "chaos-daemons"
-              }
-            }
-          }
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "conditional",
-            "condition": {
-              "type": "matches",
-              "parameters": {
-                "subject": "recipient",
-                "filter": {
-                  "within": {
-                    "of": {
-                      "owner": "friendly",
-                      "all_of": [
-                        "LEGIONES DAEMONICA",
-                        "NURGLE"
-                      ]
-                    },
-                    "range": {
-                      "inches": 9
-                    }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": "recipient",
+              "filter": {
+                "within": {
+                  "of": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "LEGIONES DAEMONICA",
+                      "NURGLE"
+                    ]
+                  },
+                  "range": {
+                    "inches": 9
                   }
                 }
               }
+            }
+          },
+          "effect": {
+            "type": "counts-as",
+            "target": {
+              "owner": "enemy"
             },
-            "effect": {
-              "type": "counts-as",
-              "target": {
-                "owner": "enemy"
-              },
-              "modifier": {
-                "in_region": {
+            "modifier": {
+              "in_region": {
+                "rule_region": {
+                  "region_id": "the-shadow-of-chaos",
+                  "owner_faction": "chaos-daemons"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "select-units",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            },
+            "eligibility": {
+              "type": "in-region",
+              "parameters": {
+                "subject": "selected-unit",
+                "region": {
                   "rule_region": {
                     "region_id": "the-shadow-of-chaos",
                     "owner_faction": "chaos-daemons"
@@ -20297,7 +20297,7 @@
               }
             }
           },
-          {
+          "effect": {
             "type": "conditional",
             "condition": {
               "type": "phase-is",
@@ -20313,14 +20313,14 @@
               }
             }
           }
-        ]
-      }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
     },
     "expected": {
-      "text": "Select one enemy unit if the selected unit is within The Shadow of Chaos:\n  -> While the unit is within 9\" of a friendly LEGIONES DAEMONICA NURGLE unit, all enemy units count as being within The Shadow of Chaos.\n  -> During the Command phase, that unit must take a Battle-shock test."
+      "text": "While the unit is within 9\" of a friendly LEGIONES DAEMONICA NURGLE unit, all enemy units count as being within The Shadow of Chaos.\nSelect one enemy unit if the selected unit is within The Shadow of Chaos: during the Command phase, that unit must take a Battle-shock test."
     }
   },
   {
@@ -31804,7 +31804,7 @@
                 "steps": [
                   {
                     "type": "roll-modifier",
-                    "target": "this-unit",
+                    "target": "recipient",
                     "modifier": {
                       "roll": "battle-shock",
                       "operation": "subtract",
@@ -31813,7 +31813,7 @@
                   },
                   {
                     "type": "roll-modifier",
-                    "target": "this-unit",
+                    "target": "recipient",
                     "modifier": {
                       "roll": "leadership",
                       "operation": "subtract",
@@ -31849,7 +31849,7 @@
                 "steps": [
                   {
                     "type": "roll-modifier",
-                    "target": "this-unit",
+                    "target": "recipient",
                     "modifier": {
                       "roll": "battle-shock",
                       "operation": "subtract",
@@ -31858,7 +31858,7 @@
                   },
                   {
                     "type": "roll-modifier",
-                    "target": "this-unit",
+                    "target": "recipient",
                     "modifier": {
                       "roll": "leadership",
                       "operation": "subtract",
@@ -31894,7 +31894,7 @@
       }
     ],
     "expected": {
-      "text": "When the unit takes a Battle-shock test or when the unit takes a Leadership test, while an enemy unit is within 6\" of this unit, while the unit is not within 6\" of a friendly ADEPTUS MECHANICUS BATTLELINE unit, the unit gets -1 to Battle-shock rolls; the unit gets -1 to Leadership rolls; while the unit is within 6\" of a friendly ADEPTUS MECHANICUS BATTLELINE unit, the unit gets -2 to Battle-shock rolls; the unit gets -2 to Leadership rolls."
+      "text": "When the unit takes a Battle-shock test or when the unit takes a Leadership test, while an enemy unit is within 6\" of this unit, while the unit is not within 6\" of a friendly ADEPTUS MECHANICUS BATTLELINE unit, that unit gets -1 to Battle-shock rolls; that unit gets -1 to Leadership rolls; while the unit is within 6\" of a friendly ADEPTUS MECHANICUS BATTLELINE unit, that unit gets -2 to Battle-shock rolls; that unit gets -2 to Leadership rolls."
     }
   },
   {
@@ -34201,7 +34201,7 @@
                         "steps": [
                           {
                             "type": "roll-modifier",
-                            "target": "this-unit",
+                            "target": "recipient",
                             "modifier": {
                               "roll": "advance",
                               "operation": "add",
@@ -34210,7 +34210,7 @@
                           },
                           {
                             "type": "roll-modifier",
-                            "target": "this-unit",
+                            "target": "recipient",
                             "modifier": {
                               "roll": "charge",
                               "operation": "add",
@@ -34267,7 +34267,7 @@
                         "steps": [
                           {
                             "type": "roll-modifier",
-                            "target": "this-unit",
+                            "target": "recipient",
                             "modifier": {
                               "roll": "advance",
                               "operation": "add",
@@ -34276,7 +34276,7 @@
                           },
                           {
                             "type": "roll-modifier",
-                            "target": "this-unit",
+                            "target": "recipient",
                             "modifier": {
                               "roll": "charge",
                               "operation": "add",
@@ -34325,7 +34325,7 @@
                   },
                   "effect": {
                     "type": "invulnerable-save",
-                    "target": "this-unit",
+                    "target": "recipient",
                     "modifier": {
                       "invuln_sv": 4
                     }
@@ -34361,7 +34361,7 @@
                   },
                   "effect": {
                     "type": "invulnerable-save",
-                    "target": "this-unit",
+                    "target": "recipient",
                     "modifier": {
                       "invuln_sv": 4
                     }
@@ -34418,7 +34418,7 @@
       "optional": true
     },
     "expected": {
-      "text": "At the start of your Command phase, you may use this ability, until the start of your next Command phase:\n  -> Select one (each may be chosen once per battle):\n    - Idol of Infinite Rage: while a friendly unit with the GOREMONGERS or JAKHALS keyword is within 6\" of one or more friendly WORLD EATERS models with at least one of MONSTER or TITANIC without TITANIC, that unit gets +1 to Hit rolls; that unit gets +1 to Wound rolls; while a friendly unit with the GOREMONGERS or JAKHALS keyword is within 9\" of one or more friendly WORLD EATERS TITANIC models with at least one of MONSTER or TITANIC, that unit gets +1 to Hit rolls; that unit gets +1 to Wound rolls.\n    - Idol of Burning Wrath: while a friendly unit with the GOREMONGERS or JAKHALS keyword is within 6\" of one or more friendly WORLD EATERS models with at least one of MONSTER or TITANIC without TITANIC, add 1 to that unit's Move characteristic; the unit gets +1 to Advance rolls; the unit gets +1 to Charge rolls; while a friendly unit with the GOREMONGERS or JAKHALS keyword is within 9\" of one or more friendly WORLD EATERS TITANIC models with at least one of MONSTER or TITANIC, add 1 to that unit's Move characteristic; the unit gets +1 to Advance rolls; the unit gets +1 to Charge rolls.\n    - Idol of Blessed Blood: while a friendly unit with the GOREMONGERS or JAKHALS keyword is within 6\" of one or more friendly WORLD EATERS models with at least one of MONSTER or TITANIC without TITANIC, the unit has a 4+ invulnerable save; while a friendly unit with the GOREMONGERS or JAKHALS keyword is within 9\" of one or more friendly WORLD EATERS TITANIC models with at least one of MONSTER or TITANIC, the unit has a 4+ invulnerable save."
+      "text": "At the start of your Command phase, you may use this ability, until the start of your next Command phase:\n  -> Select one (each may be chosen once per battle):\n    - Idol of Infinite Rage: while a friendly unit with the GOREMONGERS or JAKHALS keyword is within 6\" of one or more friendly WORLD EATERS models with at least one of MONSTER or TITANIC without TITANIC, that unit gets +1 to Hit rolls; that unit gets +1 to Wound rolls; while a friendly unit with the GOREMONGERS or JAKHALS keyword is within 9\" of one or more friendly WORLD EATERS TITANIC models with at least one of MONSTER or TITANIC, that unit gets +1 to Hit rolls; that unit gets +1 to Wound rolls.\n    - Idol of Burning Wrath: while a friendly unit with the GOREMONGERS or JAKHALS keyword is within 6\" of one or more friendly WORLD EATERS models with at least one of MONSTER or TITANIC without TITANIC, add 1 to that unit's Move characteristic; that unit gets +1 to Advance rolls; that unit gets +1 to Charge rolls; while a friendly unit with the GOREMONGERS or JAKHALS keyword is within 9\" of one or more friendly WORLD EATERS TITANIC models with at least one of MONSTER or TITANIC, add 1 to that unit's Move characteristic; that unit gets +1 to Advance rolls; that unit gets +1 to Charge rolls.\n    - Idol of Blessed Blood: while a friendly unit with the GOREMONGERS or JAKHALS keyword is within 6\" of one or more friendly WORLD EATERS models with at least one of MONSTER or TITANIC without TITANIC, that unit has a 4+ invulnerable save; while a friendly unit with the GOREMONGERS or JAKHALS keyword is within 9\" of one or more friendly WORLD EATERS TITANIC models with at least one of MONSTER or TITANIC, that unit has a 4+ invulnerable save."
     }
   },
   {

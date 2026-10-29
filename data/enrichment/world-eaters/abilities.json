@@ -4284,7 +4284,7 @@
                         "steps": [
                           {
                             "type": "roll-modifier",
-                            "target": "this-unit",
+                            "target": "recipient",
                             "modifier": {
                               "roll": "advance",
                               "operation": "add",
@@ -4293,7 +4293,7 @@
                           },
                           {
                             "type": "roll-modifier",
-                            "target": "this-unit",
+                            "target": "recipient",
                             "modifier": {
                               "roll": "charge",
                               "operation": "add",
@@ -4350,7 +4350,7 @@
                         "steps": [
                           {
                             "type": "roll-modifier",
-                            "target": "this-unit",
+                            "target": "recipient",
                             "modifier": {
                               "roll": "advance",
                               "operation": "add",
@@ -4359,7 +4359,7 @@
                           },
                           {
                             "type": "roll-modifier",
-                            "target": "this-unit",
+                            "target": "recipient",
                             "modifier": {
                               "roll": "charge",
                               "operation": "add",
@@ -4408,7 +4408,7 @@
                   },
                   "effect": {
                     "type": "invulnerable-save",
-                    "target": "this-unit",
+                    "target": "recipient",
                     "modifier": {
                       "invuln_sv": 4
                     }
@@ -4444,7 +4444,7 @@
                   },
                   "effect": {
                     "type": "invulnerable-save",
-                    "target": "this-unit",
+                    "target": "recipient",
                     "modifier": {
                       "invuln_sv": 4
                     }
@@ -5221,7 +5221,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "93ae2b5b7dbdea037962cba57372a68d23631cd37726d52c16fdf4d8a36ddb24",
     "version": "2025-q3",
@@ -5230,75 +5230,49 @@
     "faction_id": "world-eaters",
     "detachment_id": "khorne-daemonkin",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "aura",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "matches",
-        "parameters": {
-          "filter": {
-            "within": {
-              "range": {
-                "inches": 6
-              },
-              "of": {
-                "owner": "friendly",
-                "all_of": [
-                  "BLOOD LEGIONS"
-                ]
-              }
-            }
-          }
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "ability-grant",
-            "target": {
-              "owner": "friendly",
-              "all_of": [
-                "BLOOD LEGIONS"
-              ],
-              "within": {
-                "range": {
-                  "inches": 6
-                }
-              }
-            },
-            "modifier": {
-              "ability": "blessings-of-khorne-world-eaters"
-            }
-          },
-          {
-            "type": "conditional",
-            "condition": {
-              "type": "rule-active",
-              "parameters": {
-                "rule": "might-of-khorne-world-eaters"
-              }
-            },
-            "effect": {
-              "type": "re-roll",
-              "target": {
-                "owner": "friendly",
-                "all_of": [
-                  "BLOOD LEGIONS"
-                ],
-                "within": {
-                  "range": {
-                    "inches": 6
-                  }
-                }
-              },
+      "type": "aura",
+      "target": "friendly-within-aura",
+      "modifier": {
+        "range": {
+          "inches": 6
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "ability-grant",
+              "target": "recipient",
               "modifier": {
-                "roll": "battle-shock",
-                "result_scope": "any-result"
+                "ability": "blessings-of-khorne-world-eaters"
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "rule-active",
+                "parameters": {
+                  "rule": "might-of-khorne-world-eaters"
+                }
+              },
+              "effect": {
+                "type": "re-roll",
+                "target": "recipient",
+                "modifier": {
+                  "roll": "battle-shock",
+                  "result_scope": "any-result"
+                }
               }
             }
-          }
-        ]
+          ]
+        },
+        "eligible": {
+          "owner": "friendly",
+          "all_of": [
+            "BLOOD LEGIONS"
+          ]
+        }
       }
     },
     "scope": {

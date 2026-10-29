@@ -978,7 +978,7 @@
         },
         "effect": {
           "type": "re-roll",
-          "target": "this-unit",
+          "target": "recipient",
           "modifier": {
             "roll": "leadership",
             "result_scope": "any-result"
@@ -1542,70 +1542,70 @@
         ]
       },
       "effect": {
-        "type": "select-units",
-        "selector": {
-          "filter": {
-            "owner": "enemy"
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "roll",
+            "dice": "D6",
+            "roll_var": "psychic",
+            "effect": {
+              "type": "dice-table",
+              "dice": "D6",
+              "outcomes": [
+                {
+                  "results": [
+                    1
+                  ],
+                  "effect": {
+                    "type": "state-change",
+                    "target": "this-unit",
+                    "modifier": {
+                      "state": "battle-shocked",
+                      "set": true
+                    }
+                  }
+                },
+                {
+                  "results": [
+                    2,
+                    3,
+                    4,
+                    5,
+                    6
+                  ],
+                  "effect": {
+                    "type": "no-effect"
+                  }
+                }
+              ]
+            }
           },
-          "count": {
-            "min": 1,
-            "max": 1
-          },
-          "eligibility": {
-            "type": "matches",
-            "parameters": {
-              "subject": "selected-unit",
+          {
+            "type": "select-units",
+            "selector": {
               "filter": {
-                "within": {
-                  "of": "this-model",
-                  "range": {
-                    "inches": 12
+                "owner": "enemy"
+              },
+              "count": {
+                "min": 1,
+                "max": 1
+              },
+              "eligibility": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "selected-unit",
+                  "filter": {
+                    "within": {
+                      "of": "this-model",
+                      "range": {
+                        "inches": 12
+                      }
+                    }
                   }
                 }
               }
-            }
-          }
-        },
-        "effect": {
-          "type": "sequence",
-          "steps": [
-            {
-              "type": "roll",
-              "dice": "D6",
-              "roll_var": "psychic",
-              "effect": {
-                "type": "dice-table",
-                "dice": "D6",
-                "outcomes": [
-                  {
-                    "results": [
-                      1
-                    ],
-                    "effect": {
-                      "type": "state-change",
-                      "target": "this-unit",
-                      "modifier": {
-                        "state": "battle-shocked",
-                        "set": true
-                      }
-                    }
-                  },
-                  {
-                    "results": [
-                      2,
-                      3,
-                      4,
-                      5,
-                      6
-                    ],
-                    "effect": {
-                      "type": "no-effect"
-                    }
-                  }
-                ]
-              }
             },
-            {
+            "effect": {
               "type": "test",
               "target": "selected-unit",
               "modifier": {
@@ -1613,8 +1613,8 @@
                 "modifier": -1
               }
             }
-          ]
-        }
+          }
+        ]
       }
     },
     "scope": {
@@ -3875,70 +3875,70 @@
                 ]
               },
               "effect": {
-                "type": "select-units",
-                "selector": {
-                  "filter": {
-                    "owner": "enemy"
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "roll",
+                    "dice": "D6",
+                    "roll_var": "psychic",
+                    "effect": {
+                      "type": "dice-table",
+                      "dice": "D6",
+                      "outcomes": [
+                        {
+                          "results": [
+                            1
+                          ],
+                          "effect": {
+                            "type": "state-change",
+                            "target": "this-unit",
+                            "modifier": {
+                              "state": "battle-shocked",
+                              "set": true
+                            }
+                          }
+                        },
+                        {
+                          "results": [
+                            2,
+                            3,
+                            4,
+                            5,
+                            6
+                          ],
+                          "effect": {
+                            "type": "no-effect"
+                          }
+                        }
+                      ]
+                    }
                   },
-                  "count": {
-                    "min": 1,
-                    "max": 1
-                  },
-                  "eligibility": {
-                    "type": "matches",
-                    "parameters": {
-                      "subject": "selected-unit",
+                  {
+                    "type": "select-units",
+                    "selector": {
                       "filter": {
-                        "within": {
-                          "of": "this-model",
-                          "range": {
-                            "inches": 12
+                        "owner": "enemy"
+                      },
+                      "count": {
+                        "min": 1,
+                        "max": 1
+                      },
+                      "eligibility": {
+                        "type": "matches",
+                        "parameters": {
+                          "subject": "selected-unit",
+                          "filter": {
+                            "within": {
+                              "of": "this-model",
+                              "range": {
+                                "inches": 12
+                              }
+                            }
                           }
                         }
                       }
-                    }
-                  }
-                },
-                "effect": {
-                  "type": "sequence",
-                  "steps": [
-                    {
-                      "type": "roll",
-                      "dice": "D6",
-                      "roll_var": "psychic",
-                      "effect": {
-                        "type": "dice-table",
-                        "dice": "D6",
-                        "outcomes": [
-                          {
-                            "results": [
-                              1
-                            ],
-                            "effect": {
-                              "type": "state-change",
-                              "target": "this-unit",
-                              "modifier": {
-                                "state": "battle-shocked",
-                                "set": true
-                              }
-                            }
-                          },
-                          {
-                            "results": [
-                              2,
-                              3,
-                              4,
-                              5,
-                              6
-                            ],
-                            "effect": {
-                              "type": "no-effect"
-                            }
-                          }
-                        ]
-                      }
                     },
-                    {
+                    "effect": {
                       "type": "test",
                       "target": "selected-unit",
                       "modifier": {
@@ -3946,8 +3946,8 @@
                         "modifier": -1
                       }
                     }
-                  ]
-                }
+                  }
+                ]
               }
             }
           }

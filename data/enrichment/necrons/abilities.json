@@ -1864,7 +1864,7 @@
         },
         "effect": {
           "type": "feel-no-pain",
-          "target": "this-unit",
+          "target": "recipient",
           "modifier": {
             "threshold": 6
           }
@@ -2995,24 +2995,165 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "9c4a622f0fb7a7b0d45d02a12ba5fb0f0a0434e06c79db71aa1fdb7e3fe5be52",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
+        "type": "matches",
         "parameters": {
-          "phase": "fight"
+          "filter": {
+            "state": "engaged"
+          }
         }
       },
       "effect": {
-        "type": "mortal-wounds",
-        "target": "defender",
-        "modifier": {
-          "count": "D3"
-        }
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "destroy-models",
+            "target": "this-unit",
+            "modifier": {
+              "count": 1
+            }
+          },
+          {
+            "type": "select-units",
+            "selector": {
+              "filter": {
+                "owner": "enemy"
+              },
+              "count": {
+                "min": 1,
+                "max": 1
+              },
+              "eligibility": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "selected-unit",
+                  "filter": {
+                    "engaged_with": "this-unit"
+                  }
+                }
+              }
+            },
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "conditional",
+                  "condition": {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "selected-unit",
+                      "filter": {
+                        "all_of": [
+                          "VEHICLE"
+                        ]
+                      }
+                    }
+                  },
+                  "effect": {
+                    "type": "dice-table",
+                    "dice": "D6",
+                    "outcomes": [
+                      {
+                        "results": [
+                          1,
+                          2,
+                          3,
+                          4
+                        ],
+                        "effect": {
+                          "type": "mortal-wounds",
+                          "target": "selected-unit",
+                          "modifier": {
+                            "count": "D3"
+                          }
+                        }
+                      },
+                      {
+                        "results": [
+                          5,
+                          6
+                        ],
+                        "effect": {
+                          "type": "mortal-wounds",
+                          "target": "selected-unit",
+                          "modifier": {
+                            "count": 3
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "type": "conditional",
+                  "condition": {
+                    "operator": "not",
+                    "operands": [
+                      {
+                        "type": "matches",
+                        "parameters": {
+                          "subject": "selected-unit",
+                          "filter": {
+                            "all_of": [
+                              "VEHICLE"
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "effect": {
+                    "type": "dice-table",
+                    "dice": "D6",
+                    "outcomes": [
+                      {
+                        "results": [
+                          1
+                        ],
+                        "effect": {
+                          "type": "no-effect"
+                        }
+                      },
+                      {
+                        "results": [
+                          2,
+                          3,
+                          4,
+                          5
+                        ],
+                        "effect": {
+                          "type": "mortal-wounds",
+                          "target": "selected-unit",
+                          "modifier": {
+                            "count": "D3"
+                          }
+                        }
+                      },
+                      {
+                        "results": [
+                          6
+                        ],
+                        "effect": {
+                          "type": "mortal-wounds",
+                          "target": "selected-unit",
+                          "modifier": {
+                            "count": 3
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -3022,8 +3163,18 @@
       "canoptek-scarab-swarms"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "necrons"
+    "behavior": "reactive",
+    "faction_id": "necrons",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "chittering-swarm-necrons",
@@ -3937,7 +4088,7 @@
         },
         "effect": {
           "type": "feel-no-pain",
-          "target": "this-unit",
+          "target": "recipient",
           "modifier": {
             "threshold": 5,
             "against": "psychic-and-mortal"
@@ -5220,7 +5371,7 @@
         },
         "effect": {
           "type": "feel-no-pain",
-          "target": "this-unit",
+          "target": "recipient",
           "modifier": {
             "threshold": 6
           }
@@ -5263,7 +5414,7 @@
         },
         "effect": {
           "type": "feel-no-pain",
-          "target": "this-unit",
+          "target": "recipient",
           "modifier": {
             "threshold": 5,
             "against": "psychic-and-mortal"

@@ -649,7 +649,7 @@
         },
         "effect": {
           "type": "feel-no-pain",
-          "target": "this-unit",
+          "target": "recipient",
           "modifier": {
             "threshold": 6,
             "against": "mortal"

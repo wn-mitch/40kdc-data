@@ -1686,7 +1686,7 @@
         },
         "effect": {
           "type": "roll-modifier",
-          "target": "this-unit",
+          "target": "recipient",
           "modifier": {
             "roll": "charge",
             "operation": "add",
@@ -7782,64 +7782,69 @@
     "source_digest": "639ca9f5c5ff22ca020d4a6512999385251cbc3ba967538a37e2c226674600eb",
     "version": "2025-q3",
     "effect": {
-      "type": "select-units",
-      "selector": {
-        "filter": {
-          "owner": "enemy"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "rule-state",
+          "target": "this-unit",
+          "modifier": {
+            "direction": "suppressed",
+            "rule_kind": "ability",
+            "rule": "deadly-demise"
+          }
         },
-        "count": {
-          "min": 1,
-          "max": 1
-        },
-        "eligibility": {
-          "type": "matches",
-          "parameters": {
-            "subject": "selected-unit",
+        {
+          "type": "select-units",
+          "selector": {
             "filter": {
-              "within": {
-                "of": "this-unit",
-                "range": {
-                  "inches": 12
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            },
+            "eligibility": {
+              "type": "matches",
+              "parameters": {
+                "subject": "selected-unit",
+                "filter": {
+                  "within": {
+                    "of": "this-unit",
+                    "range": {
+                      "inches": 12
+                    }
+                  }
                 }
               }
             }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "mortal-wounds",
+                "target": "selected-unit",
+                "modifier": {
+                  "count": 1,
+                  "per": "success",
+                  "roll": {
+                    "dice": 8,
+                    "threshold": 4
+                  }
+                }
+              },
+              {
+                "type": "destroy-models",
+                "target": "this-unit",
+                "modifier": {
+                  "count": "all",
+                  "remove_from_play": true
+                }
+              }
+            ]
           }
         }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "rule-state",
-            "target": "this-unit",
-            "modifier": {
-              "direction": "suppressed",
-              "rule_kind": "ability",
-              "rule": "deadly-demise"
-            }
-          },
-          {
-            "type": "mortal-wounds",
-            "target": "selected-unit",
-            "modifier": {
-              "count": 1,
-              "per": "success",
-              "roll": {
-                "dice": 8,
-                "threshold": 4
-              }
-            }
-          },
-          {
-            "type": "destroy-models",
-            "target": "this-unit",
-            "modifier": {
-              "count": "all",
-              "remove_from_play": true
-            }
-          }
-        ]
-      }
+      ]
     },
     "scope": {
       "duration": "phase"

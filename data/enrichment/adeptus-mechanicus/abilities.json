@@ -1608,7 +1608,7 @@
                 "steps": [
                   {
                     "type": "roll-modifier",
-                    "target": "this-unit",
+                    "target": "recipient",
                     "modifier": {
                       "roll": "battle-shock",
                       "operation": "subtract",
@@ -1617,7 +1617,7 @@
                   },
                   {
                     "type": "roll-modifier",
-                    "target": "this-unit",
+                    "target": "recipient",
                     "modifier": {
                       "roll": "leadership",
                       "operation": "subtract",
@@ -1653,7 +1653,7 @@
                 "steps": [
                   {
                     "type": "roll-modifier",
-                    "target": "this-unit",
+                    "target": "recipient",
                     "modifier": {
                       "roll": "battle-shock",
                       "operation": "subtract",
@@ -1662,7 +1662,7 @@
                   },
                   {
                     "type": "roll-modifier",
-                    "target": "this-unit",
+                    "target": "recipient",
                     "modifier": {
                       "roll": "leadership",
                       "operation": "subtract",

@@ -4547,43 +4547,48 @@
     "source_digest": "be15b1e834bf00cc98e113f9a21eade42f31e571507b9f0013a02fe3839292ed",
     "version": "2025-q3",
     "effect": {
-      "type": "aura",
-      "target": "enemy-within-aura",
-      "modifier": {
-        "range": {
-          "inches": 18
-        },
-        "effect": {
-          "type": "sequence",
-          "steps": [
-            {
-              "type": "roll-modifier",
-              "target": "this-unit",
-              "modifier": {
-                "roll": "hit",
-                "operation": "subtract",
-                "value": 1
-              }
-            },
-            {
-              "type": "weapon-ability-grant",
-              "target": "recipient",
-              "modifier": {
-                "keywords": [
-                  {
-                    "keyword_id": "hazardous"
-                  }
-                ],
-                "weapons": {
-                  "type": "ranged"
-                }
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "event-subject",
+          "filter": {
+            "within": {
+              "of": "this-model",
+              "range": {
+                "inches": 18
               }
             }
-          ]
-        },
-        "eligible": {
-          "owner": "enemy"
+          }
         }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "roll-modifier",
+            "target": "event-subject",
+            "modifier": {
+              "roll": "hit",
+              "operation": "subtract",
+              "value": 1
+            }
+          },
+          {
+            "type": "weapon-ability-grant",
+            "target": "event-subject",
+            "modifier": {
+              "keywords": [
+                {
+                  "keyword_id": "hazardous"
+                }
+              ],
+              "weapons": {
+                "type": "ranged"
+              }
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -4593,7 +4598,7 @@
       "vashtorr-the-arkifane"
     ],
     "ability_type": "unit",
-    "behavior": "aura",
+    "behavior": "reactive",
     "faction_id": "chaos-space-marines",
     "trigger": {
       "event": "targets-selected",
@@ -15140,80 +15145,80 @@
         }
       },
       "effect": {
-        "type": "select-units",
-        "selector": {
-          "filter": {
-            "owner": "enemy",
-            "any_of": [
-              "INFANTRY",
-              "MOUNTED"
-            ]
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "set-up",
+            "target": "this-unit",
+            "modifier": {
+              "to": "battlefield",
+              "min_enemy_distance": {
+                "inches": 6
+              }
+            }
           },
-          "count": {
-            "min": 1,
-            "max": 1
+          {
+            "type": "permission",
+            "target": "this-unit",
+            "modifier": {
+              "activity": "declare-charge",
+              "allow": false
+            }
           },
-          "eligibility": {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "matches",
-                "parameters": {
-                  "subject": "selected-unit",
-                  "filter": {
-                    "within": {
-                      "of": "this-unit",
-                      "range": {
-                        "inches": 9
+          {
+            "type": "select-units",
+            "selector": {
+              "filter": {
+                "owner": "enemy",
+                "any_of": [
+                  "INFANTRY",
+                  "MOUNTED"
+                ]
+              },
+              "count": {
+                "min": 1,
+                "max": 1
+              },
+              "eligibility": {
+                "operator": "and",
+                "operands": [
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "selected-unit",
+                      "filter": {
+                        "within": {
+                          "of": "this-unit",
+                          "range": {
+                            "inches": 9
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "selected-unit",
+                      "filter": {
+                        "visible": {
+                          "to": "this-unit"
+                        }
                       }
                     }
                   }
-                }
-              },
-              {
-                "type": "matches",
-                "parameters": {
-                  "subject": "selected-unit",
-                  "filter": {
-                    "visible": {
-                      "to": "this-unit"
-                    }
-                  }
-                }
-              }
-            ]
-          }
-        },
-        "effect": {
-          "type": "sequence",
-          "steps": [
-            {
-              "type": "set-up",
-              "target": "this-unit",
-              "modifier": {
-                "to": "battlefield",
-                "min_enemy_distance": {
-                  "inches": 6
-                }
+                ]
               }
             },
-            {
-              "type": "permission",
-              "target": "this-unit",
-              "modifier": {
-                "activity": "declare-charge",
-                "allow": false
-              }
-            },
-            {
+            "effect": {
               "type": "test",
               "target": "selected-unit",
               "modifier": {
                 "test": "battle-shock"
               }
             }
-          ]
-        }
+          }
+        ]
       }
     },
     "scope": {
