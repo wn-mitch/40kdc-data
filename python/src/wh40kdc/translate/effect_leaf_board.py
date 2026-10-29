@@ -95,6 +95,17 @@ def _mortal_wounds(m: dict[str, Any], subj: str) -> str:
             if roll.get("for_each") is not None
             else ""
         )
+        per_attack = roll.get("per_attack")
+        if not each and per_attack is not None:
+            kind = _obj(per_attack).get("attack_type")
+            prefix = f"{jstr(kind)} " if kind is not None else ""
+            each = f" for each {prefix}attack allocated to a model in this unit"
+        # "(to a maximum of six D6)": a cap on the dice, however many candidates roll.
+        most = (
+            f" (to a maximum of {jstr(roll['max_dice'])} D6)"
+            if roll.get("max_dice") is not None
+            else ""
+        )
         # A plain number of dice is that many D6 ("roll 7 D6", "roll one D6 for each model").
         count = jstr(roll.get("dice"))
         if re.fullmatch(r"\d+", count):
@@ -109,7 +120,7 @@ def _mortal_wounds(m: dict[str, Any], subj: str) -> str:
         else:
             band = f"result of {jstr(roll.get('threshold'))} or less"
         return (
-            f"roll {dice}{each}: for each {band}, {who} "
+            f"roll {dice}{each}{most}: for each {band}, {who} "
             f"{v(who, 'suffers')} "
             f"{suffered}{psychic}{cap}"
         )
@@ -260,15 +271,17 @@ def _act_on_death(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx) -> str:
             f"On {format_comparison(comparison, gate.get('threshold'))}, leave that model on "
             f"the battlefield; {resolution}{removal}"
         )
+    # The destroyed model the trigger names stays, not its unit.
+    held = "that model" if target == "event-object" else subj
     if m.get("resolution") == "when-unit-fights":
         return (
-            f"do not remove {subj} yet; when its unit is selected to fight, it can {act}; "
+            f"do not remove {held} yet; when its unit is selected to fight, it can {act}; "
             "remove it after its unit "
             "has finished fighting or at the end of the phase, whichever happens first"
         )
     if m.get("resolution") == "after-attacking-unit-finishes":
         return (
-            f"do not remove {subj} yet; after the attacking unit has finished making its attacks, "
+            f"do not remove {held} yet; after the attacking unit has finished making its attacks, "
             f"it can {act}; then remove it"
         )
     if ctx.get("destroyed_trigger"):

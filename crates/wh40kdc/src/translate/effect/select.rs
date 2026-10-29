@@ -108,8 +108,13 @@ pub(super) fn selection_limit(sel: &P, noun: &str) -> String {
         .unwrap_or_default()
 }
 
-pub(super) fn selector_subject(sel: &P, plural: bool) -> String {
-    let phrase = super::subject::filter_subject(selector_filter(sel), &Ctx::default());
+/// `each_model`: inside a loop over models, a range from the pass's model reads "that model".
+pub(super) fn selector_subject(sel: &P, plural: bool, each_model: bool) -> String {
+    let ctx = Ctx {
+        each_model,
+        ..Ctx::default()
+    };
+    let phrase = super::subject::filter_subject(selector_filter(sel), &ctx);
     let phrase = phrase.strip_prefix("all ").unwrap_or(&phrase);
     if plural {
         phrase.to_string()
@@ -117,12 +122,17 @@ pub(super) fn selector_subject(sel: &P, plural: bool) -> String {
         phrase
             .replacen("units", "unit", 1)
             .replacen("models", "model", 1)
-            .replacen("that are", "that is", 1)
+            .replace("that are", "that is")
     }
 }
 
 /// A canonical unit selector, including cardinality, eligibility and selection allowance.
 pub(crate) fn select_units_subject(sel: &P) -> String {
+    select_units_subject_in(sel, false)
+}
+
+/// As `select_units_subject`, inside a loop over models when `each_model`.
+pub(crate) fn select_units_subject_in(sel: &P, each_model: bool) -> String {
     let (mut quantity, plural) = selector_count(sel);
     let (min, max) = selector_bounds(sel);
     let mut tail = String::new();
@@ -138,7 +148,7 @@ pub(crate) fn select_units_subject(sel: &P) -> String {
     }
     format!(
         "{quantity} {}{tail}{}{}",
-        selector_subject(sel, plural),
+        selector_subject(sel, plural, each_model),
         eligibility_clause(sel, true),
         selection_limit(sel, selector_level(sel))
     )
@@ -146,6 +156,14 @@ pub(crate) fn select_units_subject(sel: &P) -> String {
 
 pub(crate) fn select_units_plural(sel: &P) -> bool {
     selector_count(sel).1
+}
+
+/// A `for-each-unit` body: a loop over models names each pass's model "that model".
+pub(crate) fn each_context(ctx: &Ctx, sel: &P) -> Ctx {
+    Ctx {
+        each_model: selector_level(sel) == "model",
+        ..selected_context(ctx, sel)
+    }
 }
 
 pub(crate) fn selected_context(ctx: &Ctx, sel: &P) -> Ctx {
@@ -159,7 +177,7 @@ pub(crate) fn selected_context(ctx: &Ctx, sel: &P) -> Ctx {
 }
 
 pub(crate) fn select_units_inline(sel: &P, effect: &Value, ctx: &Ctx) -> String {
-    let subject = select_units_subject(sel);
+    let subject = select_units_subject_in(sel, ctx.each_model);
     let binding = selection_binding(sel);
     let nested = inline(effect, &selected_context(ctx, sel));
     format!("select {subject}{binding}: {nested}")
@@ -181,7 +199,7 @@ pub(crate) fn for_each_cap(max: Option<&Value>) -> String {
 pub(crate) fn for_each_unit_subject(sel: &P) -> String {
     format!(
         "{}{}{}{}",
-        selector_subject(sel, false),
+        selector_subject(sel, false, false),
         eligibility_clause(sel, false),
         selection_binding(sel),
         selection_limit(sel, selector_level(sel))

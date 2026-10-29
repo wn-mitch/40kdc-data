@@ -172,6 +172,16 @@ describe("mortal wound sources outside an attack", () => {
     expect(unknown.unsupported[0]?.reason).toMatch(/number of models/);
   });
 
+  // Hunts: a die per allocated attack, or a cap on the dice, read as a single die would undercount silently.
+  it("refuses dice rolled per allocated attack and a cap on the dice instead of counting one die", () => {
+    const perAttack = sourcesOf("x", selectEnemy(mw({ count: 1, per: "success", roll: { dice: 1, threshold: 4, per_attack: { attack_type: "melee" }, max_dice: 6 } })), charge, {});
+    expect(perAttack.sources).toEqual([]);
+    expect(perAttack.unsupported.map((item) => item.reason)).toEqual(["mortal-wounds: dice rolled for each allocated attack are not modelled"]);
+    const capped = sourcesOf("x", selectEnemy(mw({ count: 1, per: "success", roll: { dice: 1, threshold: 4, per_model: "this-unit", max_dice: 3 } })), charge, { attackerModelCount: 5 });
+    expect(capped.sources).toEqual([]);
+    expect(capped.unsupported.map((item) => item.reason)).toEqual(["mortal-wounds: a cap on the dice rolled is not modelled"]);
+  });
+
   it("sums a dice table's outcomes and keeps choice options apart", () => {
     const table = { type: "dice-table", dice: "D6", outcomes: [{ results: [1, 2], effect: { type: "no-effect" } }, { results: [3, 4, 5], effect: mw({ count: 1 }) }, { results: [6], effect: mw({ count: 3 }) }] };
     const out = sourcesOf("x", { type: "choice", options: [selectEnemy(table), selectEnemy(mw({ count: 2 }))] }, null, {});

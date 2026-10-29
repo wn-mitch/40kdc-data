@@ -74,6 +74,8 @@ function perModelRoll(list: readonly CompileLeaf[], anchor: number): number | nu
   // A bonus bound from "adding 1 to the result" (compile-preceding-roll.ts) is refused when the roll resolves.
   const plain = rolls.filter(({ leaf }) => Object.keys(leaf.parameters).every((key) => key === "dice" || key === "bonus"));
   if (plain.length !== 1 || !window.some(({ leaf }) => leaf.family_id === "roll-result") || !window.some(({ leaf }) => leaf.family_id === "mortal-wounds")) return null;
+  // "for each model …, select one of those enemy units. … roll one D6": each pass selects, so the roll is the pass's own (a for-each loop), not one die per model.
+  if (window.some(({ leaf, at }) => leaf.family_id === "select-unit" && at > anchor)) return null;
   return plain[0]!.at;
 }
 
@@ -184,11 +186,15 @@ function onePerItem(effect: CompileLeaf): void {
   if (String(amount) !== "1") throw new CompileError(`A count of listed items adds 1 per item; ${effect.family_id} has amount ${JSON.stringify(amount)}.`);
 }
 
-/** A membership right after a model-level unit-filter that a select-unit opens: the selected model's unit. */
+/**
+ * A membership right after a model-level unit-filter that a select-unit or a bare for-each opens: the selected
+ * model's unit, or the unit whose models the loop passes over ("for each model in this unit").
+ */
 function selectedModelMembership(list: readonly CompileLeaf[], index: number): boolean {
   const filter = list[index - 1];
+  const opener = list[index - 2];
   return list[index]!.family_id === "membership" && filter?.family_id === "unit-filter" && filter.parameters.level === "model"
-    && list[index - 2]?.family_id === "select-unit" && filter.fragment === list[index]!.fragment;
+    && (opener?.family_id === "select-unit" || (opener !== undefined && bareQuantifier(opener))) && filter.fragment === list[index]!.fragment;
 }
 
 /** Fold every count-scale, scale-cap and per-model quantifier into the leaf it multiplies. */
@@ -264,7 +270,7 @@ export function foldCountScales(input: readonly CompileLeaf[], sourceText?: stri
   for (const at of caps) if (!take.has(at)) throw new CompileError("A scale-cap (\"to a maximum of\") has no count-scale before it in its sentence.");
   list.forEach((leaf, index) => {
     if (take.has(index)) return;
-    // "select one X model in your unit": the selection's own membership, folded by compile-unit-filters.ts.
+    // "select one X model in your unit" / "for each model in this unit": the selection's or loop's own membership, folded by compile-unit-filters.ts.
     if (leaf.family_id === "membership" && !selectedModelMembership(list, index)) throw new CompileError("A membership (\"in this unit\") qualifies a counted model-level filter; no count or per-model roll takes it here.");
     if (leaf.parameters.subject === COUNTED) throw new CompileError(`${leaf.family_id} is about each counted model, but no count or per-model roll takes it here.`);
   });

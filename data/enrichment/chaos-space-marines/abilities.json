@@ -390,79 +390,76 @@
     "source_digest": "90d7a40693be0016e6ba8ac93439660a45ffe9284ed81d5368f2457c2dc97b89",
     "version": "2025-q3",
     "effect": {
-      "type": "select-units",
-      "selector": {
-        "filter": {
-          "owner": "enemy"
+      "type": "dice-table",
+      "dice": "D6",
+      "outcomes": [
+        {
+          "results": [
+            1
+          ],
+          "effect": {
+            "type": "mortal-wounds",
+            "target": "this-unit",
+            "modifier": {
+              "count": "D3"
+            }
+          }
         },
-        "count": {
-          "min": 1,
-          "max": 1
-        },
-        "eligibility": {
-          "operator": "and",
-          "operands": [
-            {
-              "type": "matches",
-              "parameters": {
-                "subject": "selected-unit",
+        {
+          "results": [
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "effect": {
+            "type": "designate-target",
+            "designation": "death-hex-target",
+            "select": {
+              "kind": "unit",
+              "selector": {
                 "filter": {
-                  "within": {
-                    "of": "this-model",
-                    "range": {
-                      "inches": 12
+                  "owner": "enemy"
+                },
+                "count": {
+                  "min": 1,
+                  "max": 1
+                },
+                "eligibility": {
+                  "operator": "and",
+                  "operands": [
+                    {
+                      "type": "matches",
+                      "parameters": {
+                        "subject": "selected-unit",
+                        "filter": {
+                          "within": {
+                            "of": "this-model",
+                            "range": {
+                              "inches": 12
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "type": "matches",
+                      "parameters": {
+                        "subject": "selected-unit",
+                        "filter": {
+                          "visible": {
+                            "to": "this-model"
+                          }
+                        }
+                      }
                     }
-                  }
+                  ]
                 }
               }
             },
-            {
-              "type": "matches",
-              "parameters": {
-                "subject": "selected-unit",
-                "filter": {
-                  "visible": {
-                    "to": "this-model"
-                  }
-                }
-              }
-            }
-          ]
-        }
-      },
-      "effect": {
-        "type": "dice-table",
-        "dice": "D6",
-        "outcomes": [
-          {
-            "results": [
-              1
-            ],
-            "effect": {
-              "type": "mortal-wounds",
-              "target": "this-unit",
-              "modifier": {
-                "count": "D3"
-              }
-            }
-          },
-          {
-            "results": [
-              2,
-              3,
-              4,
-              5,
-              6
-            ],
-            "effect": {
-              "type": "conditional",
-              "condition": {
-                "type": "same-unit",
-                "parameters": {
-                  "subject": "defender",
-                  "as": "selected-unit"
-                }
-              },
+            "applies": {
+              "to": "attackers-of-target",
               "effect": {
                 "type": "stat-modifier",
                 "target": "attacker",
@@ -472,10 +469,11 @@
                   "value": 1
                 }
               }
-            }
+            },
+            "duration": "until-next-movement-phase"
           }
-        ]
-      }
+        }
+      ]
     },
     "scope": {
       "duration": "until-next-movement-phase"

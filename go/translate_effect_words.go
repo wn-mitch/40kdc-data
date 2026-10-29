@@ -25,6 +25,8 @@ type effCtx struct {
 	auraRecipient bool
 	// destroyedTrigger: the ability's trigger already says a unit or model is destroyed; leaves must not repeat it.
 	destroyedTrigger bool
+	// eachModel: inside a for-each-unit over models, each pass's model (the recipient) reads "that model".
+	eachModel bool
 }
 
 // ejstr is JS-template stringification: null -> "?", arrays join with ", ",
@@ -548,19 +550,36 @@ func filterSubject(f map[string]any, ctx effCtx) string {
 		s += " with unit ID " + orList(jstrList(l))
 	}
 	within, hasWithin := asMap(f["within"])
+	// "each model in this unit within 3\" of an enemy unit": the models' unit comes before their range.
+	memberFirst := f["level"] == "model" && f["member_of"] != nil && hasWithin && within != nil
+	if memberFirst {
+		s += memberOf(f["member_of"], ctx)
+	}
 	if hasWithin && within != nil {
 		s += " "
 		if within["wholly"] == true {
 			s += "wholly "
 		}
 		s += "within " + rangePhrase(within["range"])
-		if within["of"] != nil {
+		if within["of"] == "recipient" && ctx.eachModel {
+			s += " of that model"
+		} else if within["of"] != nil {
 			s += " of " + placeRefPhrase(within["of"])
 		}
 	} else {
 		hasWithin = false
 	}
-	s += filterRelations(f, ctx)
+	if memberFirst {
+		rest := make(map[string]any, len(f))
+		for key, value := range f {
+			if key != "member_of" {
+				rest[key] = value
+			}
+		}
+		s += filterRelations(rest, ctx)
+	} else {
+		s += filterRelations(f, ctx)
+	}
 	if visible, ok := asMap(f["visible"]); ok && visible != nil {
 		s += " visible to " + effectSubject(visible["to"], ctx)
 	}
@@ -617,6 +636,9 @@ func effectSubject(target any, ctx effCtx) string {
 	case "recipient":
 		if ctx.auraRecipient {
 			return "that unit"
+		}
+		if ctx.eachModel {
+			return "that model"
 		}
 		return "the unit"
 	case "attacker":

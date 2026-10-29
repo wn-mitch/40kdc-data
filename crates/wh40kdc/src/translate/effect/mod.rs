@@ -498,7 +498,7 @@ fn inline_base(e: &P, ctx: &Ctx) -> String {
                 "for each {}{}: {}",
                 for_each_unit_subject(sel),
                 for_each_cap(nn(e, "max_affected")),
-                inline(child(e, "effect"), &selected_context(ctx, sel))
+                inline(child(e, "effect"), &each_context(ctx, sel))
             )
         }
         "designate-target" => designate_target_inline(e, ctx),

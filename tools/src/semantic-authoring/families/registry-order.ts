@@ -86,4 +86,5 @@ export const REGISTRY_ORDER: readonly string[] = [
   "targeting-restriction@7",
   "issue-orders-open@2", "unit-position@28",
   "unit-keyword@8",
+  "dice-roll@8",
 ];

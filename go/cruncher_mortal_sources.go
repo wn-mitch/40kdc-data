@@ -254,6 +254,15 @@ func mortalWoundSources(abilityID string, effect, trigger any, context map[strin
 		modifier, _ := asMap(node["modifier"])
 		roll, _ := asMap(modifier["roll"])
 		var models *float64
+		// How many attacks the attacker allocates, and a cap on the dice, are outside what the walk knows.
+		if _, perAttack := roll["per_attack"]; perAttack {
+			report(node, "mortal-wounds: dice rolled for each allocated attack are not modelled")
+			return
+		}
+		if _, maxDice := roll["max_dice"]; maxDice {
+			report(node, "mortal-wounds: a cap on the dice rolled is not modelled")
+			return
+		}
 		_, perModel := roll["per_model"]
 		_, forEach := roll["for_each"]
 		if perModel || forEach {

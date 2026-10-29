@@ -8,19 +8,20 @@
 import { objectivePhrase, type P } from "./condition-refs.js";
 import { describeSelectionEligibility } from "./condition-leadin.js";
 import type { Condition } from "./condition.js";
-import { capitalize, diceCase, filterSubject, jstr, quantityPhrase, rollKindNoun, titleCase } from "./effect-words.js";
+import { capitalize, diceCase, filterSubject, jstr, quantityPhrase, rollKindNoun, titleCase, type Ctx } from "./effect-words.js";
 
 export function selectorNoun(sel: P): string {
   return (sel.filter as P | undefined)?.level === "model" ? "model" : "unit";
 }
 
-export function selectorSubject(sel: P, plural: boolean): string {
-  const subject = filterSubject((sel.filter ?? {}) as P).replace(/^all /, "");
-  return plural ? subject : subject.replace(/\bunits\b/, "unit").replace(/\bmodels\b/, "model").replace(/\bthat are\b/, "that is");
+/** `eachModel` only: inside a loop over models, a range from the pass's model reads "that model" (filterSubject). */
+export function selectorSubject(sel: P, plural: boolean, ctx: Pick<Ctx, "eachModel"> = {}): string {
+  const subject = filterSubject((sel.filter ?? {}) as P, ctx.eachModel ? { eachModel: true } : {}).replace(/^all /, "");
+  return plural ? subject : subject.replace(/\bunits\b/, "unit").replace(/\bmodels\b/, "model").replace(/\bthat are\b/g, "that is");
 }
 
 /** A canonical unit selector, including cardinality and eligibility. */
-export function selectUnitsSubject(sel: P = {}): string {
+export function selectUnitsSubject(sel: P = {}, ctx: Pick<Ctx, "eachModel"> = {}): string {
   const count = selectorCount(sel);
   const bounds = (sel.count ?? {}) as P;
   const cap = bounds.max != null && typeof bounds.max === "object" && (bounds.min == null || bounds.min === 0) ? bounds.max as P : undefined;
@@ -28,7 +29,7 @@ export function selectUnitsSubject(sel: P = {}): string {
   const phrase = cap ? cap.count_of != null ? "any number of" : `up to ${capPhrase.replace(/ \(.*\)$/, "")}` : count.phrase;
   const tail = cap ? cap.count_of != null ? ` (at most ${capPhrase})` : ` (${capPhrase.replace(/^.*\((.*)\)$/, "$1")})` : "";
   const eligibility = sel.eligibility ? ` ${describeSelectionEligibility(sel.eligibility as Condition)}` : "";
-  return `${phrase} ${selectorSubject(sel, count.plural)}${tail}${eligibility}${selectionLimit(sel, selectorNoun(sel))}`;
+  return `${phrase} ${selectorSubject(sel, count.plural, ctx)}${tail}${eligibility}${selectionLimit(sel, selectorNoun(sel))}`;
 }
 
 /** "Blessings of Khorne pool" from a pool id. */

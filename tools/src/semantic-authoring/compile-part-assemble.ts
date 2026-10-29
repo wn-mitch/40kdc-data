@@ -8,6 +8,7 @@ import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { allOf, condition } from "./compile-conditions.js";
 import { durationPart, placeInWindow } from "./compile-durations.js";
 import { isRollMarker, resolveRolls } from "./compile-dice.js";
+import { foldBandSelection } from "./compile-band-selection.js";
 import { boundAttackDesignation, designation, directEntry, selectUnit, wrapAura, wrapForEachUnit, wrapLeaderTarget, wrapRulesBundle } from "./compile-wrappers.js";
 import { filterObjectMoment, wrapModelAura } from "./compile-model-level.js";
 import { auraPart, namesUnboundRecipient } from "./compile-aura-parts.js";
@@ -23,7 +24,7 @@ import { isAttackMoment } from "./compile-attack-window.js";
 import { AURA_RECIPIENT } from "./compile-antecedent.js";
 import type { PartFrame } from "./compile-part-classify.js";
 import type { planEffects } from "./compile-part-plan.js";
-import type { PartBindings } from "./compile-part-bindings.js";
+import { selectionPerPass, type PartBindings } from "./compile-part-bindings.js";
 
 type Node = Record<string, unknown>;
 
@@ -151,7 +152,17 @@ export function assemblePart(
     optionalSentence = Math.max(optionalSentence, connective.optionalSentence);
     offerSentences.push(connective.optionalSentence);
   }
-  const pieceItems = planned.filter((item) => !designatedSpends.includes(item) && !afterLoop.includes(item) && !direct.includes(item));
+  // The selection's eligibility: each condition on the selected unit, read by the select that wraps it (below).
+  const eligibility = eligibilityIndexes.length ? attempt(() => allOf(eligibilityIndexes.map((at) => condition(eligibilityLeaf(list[at]!))))) : null;
+  // A condition the selection cannot say is a refusal, not an eligibility left off the selection.
+  if (eligibilityIndexes.length && eligibility === null) return { ok: false, signature, errors };
+  // "2-3: Select one other enemy unit …": a selection inside one result band selects on that outcome only (compile-band-selection.ts).
+  const bandSelected = selections.length === 1 && selected.length === 0 && pair === null && independent === null && partStarts.length === 0 && forEachLeaf === null
+    ? attempt(() => foldBandSelection(planned, selections[0]!, list, rolls, eligibility,
+      // A designation inside a band lasts as long as the one duration printed after the roll ("on a 2+, until …").
+      (body) => designation(options.name, selections[0]!, list, body, durations.length === 1 && rolls.every((roll) => list.indexOf(roll) < durationAt[0]!) ? durations[0] : undefined, eligibility, selectionLimit))) : null;
+  if (errors.length > 0) return { ok: false, signature, errors };
+  const pieceItems = (bandSelected ?? planned).filter((item) => !designatedSpends.includes(item) && !afterLoop.includes(item) && !direct.includes(item));
   const pieces = [0, ...partStarts.map((_, position) => position + 1)].map((part) => attempt(() => resolveRolls(
     pieceItems.filter((item) => partOf(item.index) === part),
     part === 0 ? global : [],
@@ -167,10 +178,6 @@ export function assemblePart(
   if (pieces.some((piece) => !piece)) return { ok: false, signature, errors };
   // In a compound ability, a selection wraps only its own part's effects.
   const selectionPart = partStarts.length && selections.length === 1 ? partOf(list.indexOf(selections[0]!)) : null;
-  // The selection's eligibility: each condition on the selected unit, read by the select that wraps it (below).
-  const eligibility = eligibilityIndexes.length ? attempt(() => allOf(eligibilityIndexes.map((at) => condition(eligibilityLeaf(list[at]!))))) : null;
-  // A condition the selection cannot say is a refusal, not an eligibility left off the selection.
-  if (eligibilityIndexes.length && eligibility === null) return { ok: false, signature, errors };
   // A count by battle size, battle round or markers caps the one selection's max_count.
   const maxCount: Node | undefined = battleSizeCount
     ? { incursion: battleSizeCount.parameters.incursion, "strike-force": battleSizeCount.parameters["strike-force"], onslaught: battleSizeCount.parameters.onslaught }
@@ -184,6 +191,15 @@ export function assemblePart(
     // A designated selection takes its eligibility in designation() below, so the part's select takes it only otherwise.
     const designated = selected.length > 0;
     pieces[selectionPart] = [selectUnit(selections[0]!, own.length === 1 ? own[0]! : { type: "sequence", steps: own }, { selectionLimit, eligibility: designated ? null : eligibility, ...(maxCount ? { maxCount } : {}) })];
+  }
+  // "At the start of each player's Command phase, roll one D6 for each poisoned enemy unit": a loop in a later part repeats only that part.
+  const forEachPart = forEachLeaf !== null && partStarts.length ? partOf(list.indexOf(forEachLeaf)) : 0;
+  if (forEachPart > 0) {
+    const own = pieces[forEachPart]!;
+    const each = forEachLeaf!;
+    const looped = attempt(() => wrapForEachUnit(each, own.length === 1 ? own[0]! : { type: "sequence", steps: own }));
+    if (looped === null) return { ok: false, signature, errors };
+    pieces[forEachPart] = [looped];
   }
   let steps = pieces[0]!;
   // Under a window, the effects that last within it sit in one window part, which takes the moment as its trigger below.
@@ -271,7 +287,7 @@ export function assemblePart(
     // A bound pair: the outer select takes the selection's eligibility, the inner one its candidate's (compile-pair-eligibility.ts).
     body = selectUnit(pair.outer, selectUnit(pair.inner, body, { eligibility: pairCandidateEligibility }), { eligibility });
   }
-  else if (selections.length === 1 && (selectionPart === null || selectionPart === 0)) {
+  else if (selections.length === 1 && (selectionPart === null || selectionPart === 0) && bandSelected === null) {
     // "Each time an attack targets your unit, subtract 1 …. In addition, you can select one other unit …": the effects
     // of the sentences before the selection's do not wait on it, so they stay outside the select.
     const selectionSentence = places[list.indexOf(selections[0]!)]?.sentence;
@@ -281,14 +297,19 @@ export function assemblePart(
     const leading = before.indexOf(false) > 0 && before.lastIndexOf(true) === before.indexOf(false) - 1 ? steps.slice(0, before.indexOf(false)) : [];
     const ahead = leading.some((step) => JSON.stringify(step).includes("\"selected-unit\"")) ? [] : leading;
     const reached = steps.slice(ahead.length);
-    const select = selectUnit(selections[0]!, ahead.length === 0 ? body : reached.length === 1 ? reached[0]! : { type: "sequence", steps: reached }, {
+    // A selection made in each pass of a loop over models measures its range from that pass's model.
+    const perPass = forEachLeaf !== null && selectionPerPass(list, forEachLeaf, selections, planned, (leaf) => partOf(list.indexOf(leaf)));
+    const selection = perPass && selections[0]!.parameters.distance === "within" && selections[0]!.parameters.within_origin === undefined && selections[0]!.parameters.within_of === undefined
+      ? { ...selections[0]!, parameters: { ...selections[0]!.parameters, within_origin: AURA_RECIPIENT } } : selections[0]!;
+    const select = selectUnit(selection, ahead.length === 0 ? body : reached.length === 1 ? reached[0]! : { type: "sequence", steps: reached }, {
       ...(maxCount ? { maxCount } : {}),
       eligibility,
       selectionLimit,
     });
     body = ahead.length ? { type: "sequence", steps: [...ahead, select] } : select;
+    if (perPass) body = attempt(() => wrapForEachUnit(forEachLeaf!, body!));
   }
-  else if (forEachLeaf) {
+  else if (forEachLeaf && forEachPart === 0) {
     const each = forEachLeaf;
     body = attempt(() => wrapForEachUnit(each, body!));
     // "The maximum number of units that can be … depends on the battle size": the loop's cap on the units it affects.

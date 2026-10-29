@@ -34,14 +34,18 @@ function mortalWounds(m: Record<string, unknown>, subj: string): string {
   const cap = m.max != null ? ` (to a maximum of ${jstr(m.max)} mortal ${m.max === 1 ? "wound" : "wounds"})` : "";
   const roll = m.roll as P | undefined;
   if (roll != null) {
+    const perAttack = roll.per_attack as P | undefined;
     const each = roll.per_model != null ? ` for each model in ${effectSubject(roll.per_model)}`
-      : roll.for_each != null ? ` for each ${forEachUnitSubject(roll.for_each as Record<string, unknown>)}` : "";
+      : roll.for_each != null ? ` for each ${forEachUnitSubject(roll.for_each as Record<string, unknown>)}`
+      : perAttack != null ? ` for each ${perAttack.attack_type != null ? `${jstr(perAttack.attack_type)} ` : ""}attack allocated to a model in this unit` : "";
+    // "(to a maximum of six D6)": a cap on the dice, however many candidates roll.
+    const most = roll.max_dice != null ? ` (to a maximum of ${jstr(roll.max_dice)} D6)` : "";
     // A plain number of dice is that many D6 ("roll 7 D6", "roll one D6 for each model").
     const many = /^\d+$/u.test(jstr(roll.dice)) ? Number(roll.dice) : null;
     const dice = many !== null ? (each && many === 1 ? "one D6" : `${many} D6`) : each ? `one ${diceCase(roll.dice)}` : diceCase(roll.dice);
     // "for each 1": a die at or under the threshold succeeds.
     const band = roll.comparison !== "lte" ? `${jstr(roll.threshold)}+` : Number(roll.threshold) === 1 ? "1" : `result of ${jstr(roll.threshold)} or less`;
-    return `roll ${dice}${each}: for each ${band}, ${who} ${v(who, "suffers")} ${suffered}${psychic}${cap}`;
+    return `roll ${dice}${each}${most}: for each ${band}, ${who} ${v(who, "suffers")} ${suffered}${psychic}${cap}`;
   }
   const per = m.per === "model" ? ` for each model in ${pronoun(who) === "their" ? "them" : "it"}` : "";
   return `${who} ${v(who, "suffers")} ${suffered}${per}${psychic}${cap}`;
@@ -111,8 +115,10 @@ function actOnDeath(e: Leaf, m: Record<string, unknown>, subj: string, ctx: Ctx)
     return `${lead}roll one ${diceCase(gate.dice)}${adds}. On ${formatComparison(jstr(gate.comparison), gate.threshold)}, leave that model on the battlefield; ${resolution}${removal}`;
   }
   const lead = eligibility ? `${eligibility}, ` : "";
-  if (m.resolution === "when-unit-fights") return `${lead}do not remove ${subj} yet; ${resolution}; remove it after its unit has finished fighting or at the end of the phase, whichever happens first`;
-  if (m.resolution === "after-attacking-unit-finishes") return `${lead}do not remove ${subj} yet; ${resolution}; then remove it`;
+  // The destroyed model the trigger names stays, not its unit.
+  const held = e.target === "event-object" ? "that model" : subj;
+  if (m.resolution === "when-unit-fights") return `${lead}do not remove ${held} yet; ${resolution}; remove it after its unit has finished fighting or at the end of the phase, whichever happens first`;
+  if (m.resolution === "after-attacking-unit-finishes") return `${lead}do not remove ${held} yet; ${resolution}; then remove it`;
   if (ctx.destroyedTrigger) return `${lead}${model === "this model" ? "this model" : "that model"} can ${act} before being removed from play`;
   return `${lead}each time ${model} is destroyed, it can ${act} before being removed from play`;
 }

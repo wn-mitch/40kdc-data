@@ -6,7 +6,7 @@ import { perDieConditionalRolls, resolveAlternativePools } from "./compile-dice-
  * Result bands of a roll. A roll-result leaf compiles to a marker condition that clause binding
  * places like any other; this module then turns marked effects into the DSL's roll shapes:
  *
- * - fight-on-death takes its band as its own per-model gate, and its other conditions as its
+ * - fight-on-death that is the roll's only banded effect takes its band as its own per-model gate, and its other conditions as its
  *   eligibility, because each destroyed model rolls separately;
  * - one band that reaches the die's top face ("on a 4+") becomes dice-gated;
  * - several bands ("on a 2-5 …; on a 6 …") become a dice-table, faces no band names doing nothing.
@@ -38,10 +38,11 @@ const body = (items: Planned[]): Node => {
  * that unit suffers 1 mortal wound", or one D6 for each model in this unit). The DSL expresses this only for mortal wounds, as a count
  * per success of a roll of `count` D6; anything else rolled per die has no DSL shape yet.
  */
-export function perSuccess(planned: Planned[], banded: Planned[], dice: string, count: number, bound: boolean, perModel?: string, forEach?: Node): Node[] {
+export function perSuccess(planned: Planned[], banded: Planned[], dice: string, count: number, bound: boolean, perModel?: string, forEach?: Node,
+  perAttack?: { per_attack: Node; max_dice?: number }): Node[] {
   if (dice !== "D6") throw new CompileError(`Rolling ${count} ${dice} has no DSL shape; only several D6 fold into a count per success.`);
   if (bound) throw new CompileError("A roll of several dice cannot also bind a roll_var.");
-  if (perModel === undefined && forEach === undefined && banded.some((item) => item.leaf.family_id !== "mortal-wounds")
+  if (perModel === undefined && forEach === undefined && perAttack === undefined && banded.some((item) => item.leaf.family_id !== "mortal-wounds")
     && banded.every((item) => COUNTED_TYPES.has(String(item.node.type)))) return countedSuccesses(planned, banded, count);
   for (const item of banded) {
     const markers = item.gate.filter(isRollMarker);
@@ -61,6 +62,8 @@ export function perSuccess(planned: Planned[], banded: Planned[], dice: string, 
       ...(perModel ? { per_model: perModel === "target" ? item.node.target : "this-unit" } : {}),
       // One die for each model the selector matches (compile-count-scale.ts).
       ...(forEach ? { for_each: structuredClone(forEach) } : {}),
+      // One die for each attack allocated to this unit (compile-selected-model-roll.ts), capped.
+      ...(perAttack ? { per_attack: structuredClone(perAttack.per_attack), ...(perAttack.max_dice === undefined ? {} : { max_dice: perAttack.max_dice }) } : {}),
     };
     item.gate = item.gate.filter((node) => !isRollMarker(node));
   }
@@ -163,10 +166,14 @@ export function resolveRolls(planned: Planned[], global: Node[], rolls: readonly
   const count = rolls[0]!.parameters.count as number | undefined;
   const perModel = rolls[0]!.parameters.per_model as string | undefined;
   const forEach = rolls[0]!.parameters.for_each as Node | undefined;
-  if ((count !== undefined || perModel !== undefined || forEach !== undefined) && rolls[0]!.parameters.bonus !== undefined) {
+  const perAttackNode = rolls[0]!.parameters.per_attack as Node | undefined;
+  const perAttack = perAttackNode === undefined ? undefined : { per_attack: perAttackNode, max_dice: rolls[0]!.parameters.max_dice as number | undefined };
+  if ((count !== undefined || perModel !== undefined || forEach !== undefined || perAttack !== undefined) && rolls[0]!.parameters.bonus !== undefined) {
     throw new CompileError("Several dice rolled at once each read their own face; a bonus added to the result has no per-die DSL shape.");
   }
-  if (count !== undefined || perModel !== undefined || forEach !== undefined) return perSuccess(planned, banded, die, count ?? 1, rolls[0]!.parameters.roll_var !== undefined, perModel, forEach);
+  if (count !== undefined || perModel !== undefined || forEach !== undefined || perAttack !== undefined) {
+    return perSuccess(planned, banded, die, count ?? 1, rolls[0]!.parameters.roll_var !== undefined, perModel, forEach, perAttack);
+  }
   // "adding 1 to the result" (compile-preceding-roll.ts): the bands read the roll plus the bonus.
   const bonus = Number(rolls[0]!.parameters.bonus ?? 0);
   const dice = bonus > 0 ? `${die}+${bonus}` : die;
@@ -193,7 +200,8 @@ export function resolveRolls(planned: Planned[], global: Node[], rolls: readonly
   const table: Array<{ band: { from: number; to: number }; items: Planned[] }> = [];
   for (const item of banded) {
     const band = bandOf(item);
-    if (item.leaf.family_id === "fight-on-death" && (item.node.modifier as Node).act === "fight") {
+    // Beside other banded effects ("On a 1, …. On a 2+, do not remove that model"), the roll is one table and fighting on death is its row.
+    if (item.leaf.family_id === "fight-on-death" && (item.node.modifier as Node).act === "fight" && banded.length === 1) {
       if (band.to !== faces) throw new CompileError("Fighting on death needs a band that reaches the top face (\"on a 2+\").");
       const modifier = item.node.modifier as Node;
       modifier.gate = { dice, threshold: band.from, comparison: "gte", modifiers: [] };
@@ -337,7 +345,7 @@ function bandedRoll(rows: Row[], dice: string, faces: number, names: RollNames):
  * act-on-death effects whose eligibility is the condition, since each model rolls on its own.
  */
 function resolveConditionalRolls(planned: Planned[], global: Node[], banded: Planned[], roll: CompileLeaf, bonus: ConditionalBonus): Node[] {
-  if (roll.parameters.count !== undefined || roll.parameters.per_model !== undefined || roll.parameters.for_each !== undefined) {
+  if (roll.parameters.count !== undefined || roll.parameters.per_model !== undefined || roll.parameters.for_each !== undefined || roll.parameters.per_attack !== undefined) {
     // Only a plain count of dice folds. A per-model or per-unit roll that adds a bonus stays refused (BRIEF: per-model dice).
     if (roll.parameters.count !== undefined && roll.parameters.per_model === undefined && roll.parameters.for_each === undefined) return perDieConditionalRolls(planned, banded, roll, bonus);
     throw new CompileError("A conditional change to a roll of several dice has no DSL shape.");

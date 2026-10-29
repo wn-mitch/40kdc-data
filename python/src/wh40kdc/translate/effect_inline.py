@@ -32,6 +32,7 @@ from wh40kdc.translate.effect_select import (
     designation_label,
     designation_target_subject,
     duration_clauses,
+    each_context,
     for_each_cap,
     for_each_unit_subject,
     persistent_designation_lead,
@@ -75,7 +76,7 @@ def inline(x: Any, ctx: Ctx) -> str:
 
 def _select_units_inline(sel: Any, effect: Effect, ctx: Ctx) -> str:
     sel = _obj(sel)
-    subject = select_units_subject(sel)
+    subject = select_units_subject(sel, bool(ctx.get("each_model")))
     engagement = select_units_engagement(sel)
     binding = selection_binding(sel)
     nested = describe_effect_inline(effect, selected_context(ctx, sel))
@@ -421,7 +422,7 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx) -> str:
             f"{inline(consumer.get('effect'), ctx)}"
         )
     if t == "for-each-unit":
-        inner_ctx = selected_context(ctx, e.get("selector"))
+        inner_ctx = each_context(ctx, e.get("selector"))
         return (
             f"for each {for_each_unit_subject(e.get('selector'))}"
             f"{for_each_cap(e.get('max_affected'))}: "

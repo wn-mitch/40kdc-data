@@ -362,6 +362,14 @@ var (
 
 // filterRelations renders a unit filter's relations to other units and
 // abilities: " embarked within this model", " with the Deep Strike ability".
+// memberOf renders " in the unit": the unit a model-level filter's models are in.
+func memberOf(unit any, ctx effCtx) string {
+	if value, ok := unit.(string); ok && value == "this-unit" {
+		return " in the unit"
+	}
+	return " in " + effectSubject(unit, ctx)
+}
+
 func filterRelations(f map[string]any, ctx effCtx) string {
 	s := ""
 	labels := func(v any) []string {
@@ -390,11 +398,7 @@ func filterRelations(f map[string]any, ctx effCtx) string {
 		s += " embarked within " + effectSubject(f["embarked_in"], ctx)
 	}
 	if f["member_of"] != nil {
-		member := effectSubject(f["member_of"], ctx)
-		if value, ok := f["member_of"].(string); ok && value == "this-unit" {
-			member = "the unit"
-		}
-		s += " in " + member
+		s += memberOf(f["member_of"], ctx)
 	}
 	// "any other friendly unit": a filter excluding the unit with the ability reads "other".
 	exactReference := func(ref any) bool {

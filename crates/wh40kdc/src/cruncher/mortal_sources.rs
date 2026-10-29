@@ -441,6 +441,21 @@ impl Walker<'_> {
             .and_then(Value::as_object)
             .unwrap_or(&empty);
         let mut models = None;
+        // How many attacks the attacker allocates, and a cap on the dice, are outside what the walk knows.
+        if roll.contains_key("per_attack") {
+            self.report(
+                node,
+                "mortal-wounds: dice rolled for each allocated attack are not modelled".to_string(),
+            );
+            return;
+        }
+        if roll.contains_key("max_dice") {
+            self.report(
+                node,
+                "mortal-wounds: a cap on the dice rolled is not modelled".to_string(),
+            );
+            return;
+        }
         if roll.contains_key("per_model") || roll.contains_key("for_each") {
             match self.models_rolling(roll, state) {
                 Err(reason) => {

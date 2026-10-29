@@ -152,6 +152,26 @@ export const CHOICE_AND_DICE_EXTENSIONS: readonly FamilyExtension[] = [
     },
   },
   {
+    // "Each time a melee attack is allocated to a model in this unit, after the attacking unit has finished making its
+    // attacks, roll one D6 (to a maximum of six D6 per attacking unit)".
+    family: "dice-roll",
+    version: 8,
+    description: "As the previous version, plus per_model allocated-attack: one die for each attack the attacking unit allocated to a model in this unit, rolled once it has finished making its attacks; the attack moment before the roll says which attacks count. max_dice caps the dice (\"to a maximum of six D6\"). It takes no count.",
+    schema: (previous) => withProperties(previous, {
+      per_model: widenedEnum(previous, "per_model", ["allocated-attack"]),
+      max_dice: optional({ type: "integer", minimum: 1, maximum: 30 }),
+    }),
+    normalize: (input, previous) => {
+      if (input.per_model !== "allocated-attack") {
+        if (input.max_dice !== undefined) throw new TypeError("dice-roll.max_dice caps the dice of per_model allocated-attack only.");
+        return previous(input);
+      }
+      const { per_model: _perModel, max_dice: maxDice, ...rest } = input;
+      if (rest.count !== undefined) throw new TypeError("dice-roll.per_model allocated-attack rolls one die per allocated attack; it takes no count.");
+      return { ...previous(rest), per_model: "allocated-attack", ...(maxDice === undefined ? {} : { max_dice: boundedInteger(maxDice, 1, 30, "dice-roll.max_dice") }) };
+    },
+  },
+  {
     // "this model can issue 1 Order to that unit, regardless of how many Orders it has already issued this turn".
     family: "issue-orders-open",
     version: 2,

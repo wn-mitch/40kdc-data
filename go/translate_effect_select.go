@@ -10,25 +10,36 @@ import (
 // they share. Mirror of the selection half of tools/src/translate/effect.ts.
 
 func selectorSubject(sel map[string]any, plural bool) string {
-	subject := strings.TrimPrefix(filterSubject(mapOr(sel["filter"]), effCtx{}), "all ")
+	return selectorSubjectIn(sel, plural, false)
+}
+
+// selectorSubjectIn is selectorSubject inside a loop over models when eachModel: a range from the
+// pass's model reads "that model".
+func selectorSubjectIn(sel map[string]any, plural, eachModel bool) string {
+	subject := strings.TrimPrefix(filterSubject(mapOr(sel["filter"]), effCtx{eachModel: eachModel}), "all ")
 	if plural {
 		return subject
 	}
 	subject = strings.Replace(subject, "units", "unit", 1)
 	subject = strings.Replace(subject, "models", "model", 1)
-	return strings.Replace(subject, "that are", "that is", 1)
+	return strings.ReplaceAll(subject, "that are", "that is")
 }
 
 // selectUnitsSubject renders a canonical unit selector's filter and inclusive
 // count bounds ("up to two enemy units", "at least one model").
 func selectUnitsSubject(sel map[string]any) string {
+	return selectUnitsSubjectIn(sel, false)
+}
+
+// selectUnitsSubjectIn is selectUnitsSubject inside a loop over models when eachModel.
+func selectUnitsSubjectIn(sel map[string]any, eachModel bool) string {
 	filter := mapOr(sel["filter"])
 	phrase, plural := selectorCountPhrase(sel)
-	subject := strings.TrimPrefix(filterSubject(filter, effCtx{}), "all ")
+	subject := strings.TrimPrefix(filterSubject(filter, effCtx{eachModel: eachModel}), "all ")
 	if !plural {
 		subject = strings.Replace(subject, "units", "unit", 1)
 		subject = strings.Replace(subject, "models", "model", 1)
-		subject = strings.Replace(subject, "that are", "that is", 1)
+		subject = strings.ReplaceAll(subject, "that are", "that is")
 	}
 	bounds, _ := getMap(sel, "count")
 	cap, _ := asMap(bounds["max"])
@@ -134,6 +145,13 @@ func selectUnitsPlural(sel map[string]any) bool {
 	return jsNumber(max) != 1
 }
 
+// eachContext is a for-each-unit body's context: a loop over models names each pass's model "that model".
+func eachContext(ctx effCtx, sel map[string]any) effCtx {
+	ctx = selectedContext(ctx, sel)
+	ctx.eachModel = selectorNoun(sel) == "model"
+	return ctx
+}
+
 func selectedContext(ctx effCtx, sel map[string]any) effCtx {
 	model := selectorNoun(sel) == "model"
 	ctx.selectedUnit = !model
@@ -143,7 +161,7 @@ func selectedContext(ctx effCtx, sel map[string]any) effCtx {
 }
 
 func selectUnitsInline(sel, effect map[string]any, ctx effCtx) string {
-	subject := selectUnitsSubject(sel)
+	subject := selectUnitsSubjectIn(sel, ctx.eachModel)
 	binding := selectionBinding(sel)
 	nested := describeEffectInline(effect, selectedContext(ctx, sel))
 	return "select " + subject + binding + ": " + nested

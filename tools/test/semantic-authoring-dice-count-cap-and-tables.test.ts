@@ -440,3 +440,89 @@ describe("S8 roll-recipient exclusion", () => {
     expect(mergedFilter(leaf({ side: "friendly", level: "model", member_of: "this-unit" }), leaf({ side: "friendly", level: "model", member_of: "selected-unit" }))).toBeNull();
   });
 });
+
+describe("Semantic authoring selection inside one result band", () => {
+  const text = "At the start of your Shooting phase, roll one D6: on a 1, this unit suffers 1 mortal wound; on a 2-6, select one enemy unit within 6\" of this unit. That unit suffers D3 mortal wounds.";
+  const head: Item[] = [
+    ["At the start of your Shooting phase", "event", { kind: "phase-start", phase: "shooting", turn: "your" }],
+    ["roll one D6", "dice-roll", { dice: "D6" }],
+    ["1", "roll-result", { from: 1, to: 1 }],
+    ["this unit suffers 1 mortal wound", "mortal-wounds", { recipient: "this-unit", count: 1 }],
+    ["2-6", "roll-result", { from: 2, to: 6 }],
+    ["select one", "select-unit", { distance: "any", visible: false }],
+    ["enemy unit", "unit-filter", { side: "enemy" }],
+    ["within 6\" of this unit", "unit-position", { kind: "within", inches: 6, of: "this-unit", subject: "antecedent", negated: false }],
+  ];
+
+  it("selects on that outcome only, not around the whole roll", () => {
+    const mechanics = mechanicsOf(text, [...head, ["That unit suffers D3 mortal wounds", "mortal-wounds", { recipient: "antecedent", count: "D3" }]]);
+    expect(mechanics.effect.type).toBe("dice-table");
+    const outcomes = mechanics.effect.outcomes as Array<{ results: number[]; effect: Record<string, any> }>;
+    expect(outcomes[0]).toMatchObject({ results: [1], effect: { type: "mortal-wounds", target: "this-unit" } });
+    expect(outcomes[1]).toMatchObject({ results: [2, 3, 4, 5, 6], effect: { type: "select-units", effect: { type: "mortal-wounds", target: "selected-unit" } } });
+    expect(outcomes[1]!.effect.selector.eligibility).toBeDefined();
+  });
+
+  it("refuses an effect on the selected unit in another band", () => {
+    const later = text.replace("D3 mortal wounds.", "D3 mortal wounds. On a 6, that unit suffers 1 mortal wound.");
+    const errors = errorsOf(later, [...head, ["That unit suffers D3 mortal wounds", "mortal-wounds", { recipient: "antecedent", count: "D3" }],
+      ["6", "roll-result", { from: 6, to: 6 }], ["that unit suffers 1 mortal wound", "mortal-wounds", { recipient: "antecedent", count: 1 }]]);
+    expect(errors.join("; ")).toMatch(/selection inside one result band/u);
+  });
+});
+
+describe("Semantic authoring selection before a roll that only one band uses", () => {
+  const text = "At the start of your Shooting phase, select one enemy unit within 12\" of this model and roll one D6: on a 1, this unit suffers D3 mortal wounds; on a 2+, until the start of your next Movement phase, each time an attack targets that enemy unit, improve the Armour Penetration characteristic of that attack by 1.";
+  const items: Item[] = [
+    ["At the start of your Shooting phase", "event", { kind: "phase-start", phase: "shooting", turn: "your" }],
+    ["select one enemy unit", "select-unit", { scope: "enemy", distance: "any", visible: false }],
+    ["within 12\" of", "unit-position", { kind: "within", inches: 12, of: "this-model", subject: "antecedent", negated: false }],
+    ["roll one D6", "dice-roll", { dice: "D6" }],
+    ["on a 1", "roll-result", { from: 1, to: 1 }],
+    ["this unit suffers D3 mortal wounds", "mortal-wounds", { recipient: "this-unit", count: "D3" }],
+    ["on a 2+", "roll-result", { from: 2 }],
+    ["until the start of your next Movement phase", "duration", { endpoint: "start-of-next-movement-phase" }],
+    ["each time an attack targets that enemy unit", "attack", { direction: "targeted", unit: "that-unit", attack_type: "any" }],
+    ["improve the Armour Penetration characteristic of that attack by 1", "characteristic-modifier", { subject: "attack", characteristics: ["AP"], operation: "improve", value: 1, weapon_type: "all" }],
+  ];
+  const placedLeaves = (wording: string, list: Item[]) => {
+    const bytes = Buffer.from(wording, "utf8");
+    let from = 0;
+    return list.map(([w, family, parameters]) => {
+      const start = bytes.indexOf(Buffer.from(w, "utf8"), from);
+      from = start + Buffer.byteLength(w, "utf8");
+      const version = currentFamilyVersion(family);
+      return { role: familyRole(family, version), family_id: family, family_version: version, parameters, start_byte: start, end_byte: from, fragment: "RAW_TEXT" } as CompileLeaf;
+    });
+  };
+
+  it("designates the unit on the outcome whose attacks it changes, not around the roll", () => {
+    const result = compileLeaves(placedLeaves(text, items), text, { name: "Death Hex" });
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    const effect = result.mechanics.effect as Record<string, any>;
+    expect(effect.type).toBe("dice-table");
+    expect(effect.outcomes[0]).toMatchObject({ results: [1], effect: { type: "mortal-wounds", target: "this-unit" } });
+    expect(effect.outcomes[1]).toMatchObject({
+      results: [2, 3, 4, 5, 6],
+      effect: {
+        type: "designate-target", designation: "death-hex-target",
+        select: { kind: "unit", selector: { filter: { owner: "enemy" }, count: { min: 1, max: 1 } } },
+        applies: { to: "attackers-of-target", effect: { type: "stat-modifier", modifier: { stat: "AP", operation: "improve", value: 1 } } },
+        duration: "until-next-movement-phase",
+      },
+    });
+    const validate = createValidator().getSchema("https://40kdc.dev/schemas/enrichment/ability-dsl/effect.schema.json")!;
+    expect(validate(effect), JSON.stringify(validate.errors)).toBe(true);
+  });
+
+  it("keeps the selection around a roll with one band", () => {
+    const single = "Select one enemy unit and roll one D6: on a 4+, that unit suffers D3 mortal wounds.";
+    const mechanics = mechanicsOf(single, [
+      ["Select one enemy unit", "select-unit", { scope: "enemy", distance: "any", visible: false }],
+      ["roll one D6", "dice-roll", { dice: "D6" }],
+      ["on a 4+", "roll-result", { from: 4 }],
+      ["that unit suffers D3 mortal wounds", "mortal-wounds", { recipient: "antecedent", count: "D3" }],
+    ]);
+    expect(mechanics.effect).toMatchObject({ type: "select-units", effect: { type: "dice-gated" } });
+  });
+});

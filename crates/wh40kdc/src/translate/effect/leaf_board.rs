@@ -68,8 +68,20 @@ fn mortal_wounds(m: &P, subj: &str, ctx: &Ctx) -> String {
             (_, Some(selector)) => {
                 format!(" for each {}", for_each_unit_subject(obj(Some(selector))))
             }
-            _ => String::new(),
+            _ => match nn(roll, "per_attack") {
+                Some(per_attack) => format!(
+                    " for each {}attack allocated to a model in this unit",
+                    nn(obj(Some(per_attack)), "attack_type")
+                        .map(|kind| format!("{} ", jstr(Some(kind))))
+                        .unwrap_or_default()
+                ),
+                None => String::new(),
+            },
         };
+        // "(to a maximum of six D6)": a cap on the dice, however many candidates roll.
+        let most = nn(roll, "max_dice")
+            .map(|max| format!(" (to a maximum of {} D6)", jstr(Some(max))))
+            .unwrap_or_default();
         // A plain number of dice is that many D6 ("roll 7 D6", "roll one D6 for each model").
         let count = jstr(roll.get("dice"));
         let many = if !count.is_empty() && count.chars().all(|c| c.is_ascii_digit()) {
@@ -92,7 +104,7 @@ fn mortal_wounds(m: &P, subj: &str, ctx: &Ctx) -> String {
             format!("result of {} or less", jstr(roll.get("threshold")))
         };
         return format!(
-            "roll {dice}{each}: for each {band}, {who} {} {suffered}{psychic}{cap}",
+            "roll {dice}{each}{most}: for each {band}, {who} {} {suffered}{psychic}{cap}",
             v(&who, "suffers")
         );
     }
@@ -293,12 +305,18 @@ fn act_on_death(target: Option<&Value>, m: &P, subj: &str, ctx: &Ctx) -> String 
         .map(condition_lead_in_value)
         .map(|s| format!("{s}, "))
         .unwrap_or_default();
+    // The destroyed model the trigger names stays, not its unit.
+    let held = if target.and_then(Value::as_str) == Some("event-object") {
+        "that model"
+    } else {
+        subj
+    };
     match sv(m, "resolution") {
         Some("when-unit-fights") => format!(
-            "{eligibility}do not remove {subj} yet; when its unit is selected to fight, it can {act}; remove it after its unit has finished fighting or at the end of the phase, whichever happens first"
+            "{eligibility}do not remove {held} yet; when its unit is selected to fight, it can {act}; remove it after its unit has finished fighting or at the end of the phase, whichever happens first"
         ),
         Some("after-attacking-unit-finishes") => format!(
-            "{eligibility}do not remove {subj} yet; after the attacking unit has finished making its attacks, it can {act}; then remove it"
+            "{eligibility}do not remove {held} yet; after the attacking unit has finished making its attacks, it can {act}; then remove it"
         ),
         _ if ctx.destroyed_trigger => format!(
             "{eligibility}{} can {act} before being removed from play",

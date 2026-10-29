@@ -302,70 +302,70 @@
     "source_digest": "3facdd09f4f860335b1f2b1917fa5a199d172cb0b145ff80c8411f48b175f693",
     "version": "2025-q3",
     "effect": {
-      "type": "select-units",
-      "selector": {
-        "filter": {
-          "owner": "enemy"
+      "type": "dice-table",
+      "dice": "D6",
+      "outcomes": [
+        {
+          "results": [
+            1
+          ],
+          "effect": {
+            "type": "mortal-wounds",
+            "target": "this-model",
+            "modifier": {
+              "count": "D3"
+            }
+          }
         },
-        "count": {
-          "min": 1,
-          "max": 1
-        },
-        "eligibility": {
-          "operator": "and",
-          "operands": [
-            {
-              "type": "matches",
-              "parameters": {
-                "subject": "selected-unit",
-                "filter": {
-                  "within": {
-                    "of": "this-model",
-                    "range": {
-                      "inches": 12
+        {
+          "results": [
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "effect": {
+            "type": "select-units",
+            "selector": {
+              "filter": {
+                "owner": "enemy"
+              },
+              "count": {
+                "min": 1,
+                "max": 1
+              },
+              "eligibility": {
+                "operator": "and",
+                "operands": [
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "selected-unit",
+                      "filter": {
+                        "within": {
+                          "of": "this-model",
+                          "range": {
+                            "inches": 12
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "selected-unit",
+                      "filter": {
+                        "visible": {
+                          "to": "this-model"
+                        }
+                      }
                     }
                   }
-                }
+                ]
               }
             },
-            {
-              "type": "matches",
-              "parameters": {
-                "subject": "selected-unit",
-                "filter": {
-                  "visible": {
-                    "to": "this-model"
-                  }
-                }
-              }
-            }
-          ]
-        }
-      },
-      "effect": {
-        "type": "dice-table",
-        "dice": "D6",
-        "outcomes": [
-          {
-            "results": [
-              1
-            ],
-            "effect": {
-              "type": "mortal-wounds",
-              "target": "this-model",
-              "modifier": {
-                "count": "D3"
-              }
-            }
-          },
-          {
-            "results": [
-              2,
-              3,
-              4,
-              5,
-              6
-            ],
             "effect": {
               "type": "stat-modifier",
               "target": "selected-unit",
@@ -376,8 +376,8 @@
               }
             }
           }
-        ]
-      }
+        }
+      ]
     },
     "scope": {
       "duration": "phase"
@@ -1279,15 +1279,97 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "source_digest": "e9f53949b907e94f5e365eb1df6e6dbf627c484ddb54670a2d711859ebbad777",
+    "source_digest": "7c1843833d2e7a2d6be28f57babb87a6961120445e7586e2d3bfbedbf3f6a5a7",
     "version": "2025-q3",
     "effect": {
-      "type": "mortal-wounds",
-      "target": "defender",
-      "modifier": {
-        "count": 1
+      "type": "for-each-unit",
+      "selector": {
+        "filter": {
+          "owner": "friendly",
+          "level": "model",
+          "member_of": "this-unit",
+          "within": {
+            "range": {
+              "inches": 3
+            },
+            "of": {
+              "owner": "enemy"
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy",
+            "within": {
+              "range": {
+                "inches": 3
+              },
+              "of": "recipient"
+            }
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "destroy-models",
+              "target": "recipient",
+              "modifier": {
+                "count": 1
+              }
+            },
+            {
+              "type": "dice-table",
+              "dice": "D6",
+              "outcomes": [
+                {
+                  "results": [
+                    1
+                  ],
+                  "effect": {
+                    "type": "no-effect"
+                  }
+                },
+                {
+                  "results": [
+                    2,
+                    3,
+                    4,
+                    5
+                  ],
+                  "effect": {
+                    "type": "mortal-wounds",
+                    "target": "selected-unit",
+                    "modifier": {
+                      "count": "D3"
+                    }
+                  }
+                },
+                {
+                  "results": [
+                    6
+                  ],
+                  "effect": {
+                    "type": "mortal-wounds",
+                    "target": "selected-unit",
+                    "modifier": {
+                      "count": "D6"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
       }
     },
     "scope": {
@@ -1297,8 +1379,19 @@
       "mucolid-spores"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "tyranids"
+    "behavior": "reactive",
+    "faction_id": "tyranids",
+    "trigger": [
+      {
+        "event": "move-ended"
+      },
+      {
+        "event": "move-ended",
+        "subject": {
+          "owner": "enemy"
+        }
+      }
+    ]
   },
   {
     "ability_id": "aerial-seeding-tyranids",
@@ -8136,9 +8229,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [
       "spore-mines"
     ],
@@ -8146,11 +8238,110 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "for-each-unit",
+      "selector": {
+        "filter": {
+          "owner": "friendly",
+          "level": "model",
+          "member_of": "this-unit",
+          "within": {
+            "range": {
+              "inches": 3
+            },
+            "of": {
+              "owner": "enemy"
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy",
+            "within": {
+              "range": {
+                "inches": 3
+              },
+              "of": "recipient"
+            }
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "destroy-models",
+              "target": "recipient",
+              "modifier": {
+                "count": 1
+              }
+            },
+            {
+              "type": "dice-table",
+              "dice": "D6",
+              "outcomes": [
+                {
+                  "results": [
+                    1
+                  ],
+                  "effect": {
+                    "type": "no-effect"
+                  }
+                },
+                {
+                  "results": [
+                    2,
+                    3,
+                    4,
+                    5
+                  ],
+                  "effect": {
+                    "type": "mortal-wounds",
+                    "target": "selected-unit",
+                    "modifier": {
+                      "count": 1
+                    }
+                  }
+                },
+                {
+                  "results": [
+                    6
+                  ],
+                  "effect": {
+                    "type": "mortal-wounds",
+                    "target": "selected-unit",
+                    "modifier": {
+                      "count": "D3"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": [
+      {
+        "event": "move-ended"
+      },
+      {
+        "event": "move-ended",
+        "subject": {
+          "owner": "enemy"
+        }
+      }
+    ],
+    "source_digest": "e9f53949b907e94f5e365eb1df6e6dbf627c484ddb54670a2d711859ebbad777"
   },
   {
     "ability_id": "hunting-grounds-vanguard-onslaught-tyranids",

@@ -209,6 +209,9 @@ export function mortalWoundSources(
     const modifier = isObject(node.modifier) ? node.modifier : {};
     const roll = isObject(modifier.roll) ? modifier.roll : {};
     let models: number | undefined;
+    // How many attacks the attacker allocates, and a cap on the dice, are outside what the walk knows.
+    if (roll.per_attack !== undefined) return report(node, "mortal-wounds: dice rolled for each allocated attack are not modelled");
+    if (roll.max_dice !== undefined) return report(node, "mortal-wounds: a cap on the dice rolled is not modelled");
     if (roll.per_model !== undefined || roll.for_each !== undefined) {
       const counted = modelsRolling(roll, state);
       if (typeof counted === "string") return report(node, `mortal-wounds: ${counted}`);

@@ -3523,9 +3523,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "source_digest": "8320291f3ac7f0d0cf60bf41c5f37a4fe7bc09e3e7df0c4cf4353c306f888bc7",
+    "source_digest": "3916ad07d507a73af506a834442b3a4235af6cb506f91e0d0d3b63e970bb29bf",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -3534,51 +3534,65 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
-            }
-          },
-          {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "happened",
-                "parameters": {
-                  "event": "selected",
-                  "filter": {
-                    "to": "fight"
-                  },
-                  "window": "phase"
-                }
-              }
-            ]
-          }
-        ]
+      "type": "ability-part",
+      "trigger": {
+        "event": "model-destroyed",
+        "object": "model-in-this-unit"
       },
       "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 2,
-        "comparison": "gte",
-        "on_success": {
-          "type": "act-on-death",
-          "target": "this-unit",
-          "modifier": {
-            "act": "fight"
-          }
+        "type": "conditional",
+        "condition": {
+          "operator": "not",
+          "operands": [
+            {
+              "type": "happened",
+              "parameters": {
+                "event": "selected",
+                "filter": {
+                  "to": "fight"
+                },
+                "window": "phase"
+              }
+            }
+          ]
         },
-        "on_fail": {
-          "type": "mortal-wounds",
-          "target": "attacker",
-          "modifier": {
-            "count": 1
-          }
+        "effect": {
+          "type": "dice-table",
+          "dice": "D6",
+          "outcomes": [
+            {
+              "results": [
+                1
+              ],
+              "effect": {
+                "type": "mortal-wounds",
+                "target": {
+                  "event_var": "when-subject"
+                },
+                "modifier": {
+                  "count": 1
+                }
+              }
+            },
+            {
+              "results": [
+                2,
+                3,
+                4,
+                5,
+                6
+              ],
+              "effect": {
+                "type": "act-on-death",
+                "target": "event-object",
+                "modifier": {
+                  "act": "fight",
+                  "resolution": "when-unit-fights",
+                  "removal": "after-unit-fights-or-phase-end"
+                }
+              }
+            }
+          ]
         }
       }
     },
@@ -3600,13 +3614,7 @@
           "KILLER"
         ]
       },
-      "optional": true,
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
-        }
-      }
+      "binds_event_variable": "when-subject"
     }
   },
   {

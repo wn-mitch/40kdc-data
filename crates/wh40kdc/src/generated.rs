@@ -23878,6 +23878,25 @@ pub struct ModelProfileConditionParameters {
 ///          "description": "One die (dice per candidate) for each unit or model the selector matches (\"one D6 for each WRACKS model in your unit\"); per_model names the two fixed sets.",
 ///          "$ref": "#/$defs/unit-selector"
 ///        },
+///        "max_dice": {
+///          "description": "No more than this many dice are rolled, however many candidates there are (\"to a maximum of six D6\").",
+///          "type": "integer",
+///          "minimum": 1.0
+///        },
+///        "per_attack": {
+///          "description": "One die (dice per candidate) for each attack the attacking unit allocated to a model in this unit (\"each time a melee attack is allocated to a model in this unit, … roll one D6\"), rolled once that unit has finished making its attacks.",
+///          "type": "object",
+///          "properties": {
+///            "attack_type": {
+///              "description": "Only attacks of this type count. Omitted: every attack.",
+///              "enum": [
+///                "melee",
+///                "ranged"
+///              ]
+///            }
+///          },
+///          "additionalProperties": false
+///        },
 ///        "per_model": {
 ///          "$ref": "#/$defs/unit-ref"
 ///        },
@@ -24025,6 +24044,25 @@ impl ::std::convert::TryFrom<::std::string::String> for MortalWoundsEffectModifi
 ///      "description": "One die (dice per candidate) for each unit or model the selector matches (\"one D6 for each WRACKS model in your unit\"); per_model names the two fixed sets.",
 ///      "$ref": "#/$defs/unit-selector"
 ///    },
+///    "max_dice": {
+///      "description": "No more than this many dice are rolled, however many candidates there are (\"to a maximum of six D6\").",
+///      "type": "integer",
+///      "minimum": 1.0
+///    },
+///    "per_attack": {
+///      "description": "One die (dice per candidate) for each attack the attacking unit allocated to a model in this unit (\"each time a melee attack is allocated to a model in this unit, … roll one D6\"), rolled once that unit has finished making its attacks.",
+///      "type": "object",
+///      "properties": {
+///        "attack_type": {
+///          "description": "Only attacks of this type count. Omitted: every attack.",
+///          "enum": [
+///            "melee",
+///            "ranged"
+///          ]
+///        }
+///      },
+///      "additionalProperties": false
+///    },
 ///    "per_model": {
 ///      "$ref": "#/$defs/unit-ref"
 ///    },
@@ -24049,6 +24087,11 @@ pub struct MortalWoundsEffectModifierRoll {
     ///One die (dice per candidate) for each unit or model the selector matches ("one D6 for each WRACKS model in your unit"); per_model names the two fixed sets.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub for_each: ::std::option::Option<UnitSelector>,
+    ///No more than this many dice are rolled, however many candidates there are ("to a maximum of six D6").
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub max_dice: ::std::option::Option<::std::num::NonZeroU64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub per_attack: ::std::option::Option<MortalWoundsEffectModifierRollPerAttack>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub per_model: ::std::option::Option<UnitRef>,
     ///The face a die must reach: at least this (comparison gte, the default, from 2) or at most this (comparison lte: "for each 1").
@@ -24217,6 +24260,122 @@ impl ::std::convert::From<u64> for MortalWoundsEffectModifierRollDice {
 impl ::std::convert::From<DiceExpression> for MortalWoundsEffectModifierRollDice {
     fn from(value: DiceExpression) -> Self {
         Self::DiceExpression(value)
+    }
+}
+///One die (dice per candidate) for each attack the attacking unit allocated to a model in this unit ("each time a melee attack is allocated to a model in this unit, … roll one D6"), rolled once that unit has finished making its attacks.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "One die (dice per candidate) for each attack the attacking unit allocated to a model in this unit (\"each time a melee attack is allocated to a model in this unit, … roll one D6\"), rolled once that unit has finished making its attacks.",
+///  "type": "object",
+///  "properties": {
+///    "attack_type": {
+///      "description": "Only attacks of this type count. Omitted: every attack.",
+///      "enum": [
+///        "melee",
+///        "ranged"
+///      ]
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct MortalWoundsEffectModifierRollPerAttack {
+    ///Only attacks of this type count. Omitted: every attack.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub attack_type: ::std::option::Option<
+        MortalWoundsEffectModifierRollPerAttackAttackType,
+    >,
+}
+impl ::std::default::Default for MortalWoundsEffectModifierRollPerAttack {
+    fn default() -> Self {
+        Self {
+            attack_type: Default::default(),
+        }
+    }
+}
+///Only attacks of this type count. Omitted: every attack.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Only attacks of this type count. Omitted: every attack.",
+///  "enum": [
+///    "melee",
+///    "ranged"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum MortalWoundsEffectModifierRollPerAttackAttackType {
+    #[serde(rename = "melee")]
+    Melee,
+    #[serde(rename = "ranged")]
+    Ranged,
+}
+impl ::std::fmt::Display for MortalWoundsEffectModifierRollPerAttackAttackType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Melee => f.write_str("melee"),
+            Self::Ranged => f.write_str("ranged"),
+        }
+    }
+}
+impl ::std::str::FromStr for MortalWoundsEffectModifierRollPerAttackAttackType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "melee" => Ok(Self::Melee),
+            "ranged" => Ok(Self::Ranged),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for MortalWoundsEffectModifierRollPerAttackAttackType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for MortalWoundsEffectModifierRollPerAttackAttackType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for MortalWoundsEffectModifierRollPerAttackAttackType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
     }
 }
 ///`MoveEffectModifier`

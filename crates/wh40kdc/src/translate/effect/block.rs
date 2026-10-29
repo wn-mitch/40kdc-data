@@ -127,7 +127,7 @@ pub(super) fn block(e: &Value, depth: usize, ctx: &Ctx) -> String {
             let selected = selected_context(ctx, sel);
             let lead = format!(
                 "Select {}{}",
-                select_units_subject(sel),
+                select_units_subject_in(sel, ctx.each_model),
                 selection_binding(sel)
             );
             let header = format!("{indent}{arrow}{lead}");
@@ -170,7 +170,7 @@ pub(super) fn block(e: &Value, depth: usize, ctx: &Ctx) -> String {
         "for-each-unit" => {
             let sel = obj(nn(e, "selector"));
             let inner = child(e, "effect");
-            let selected = selected_context(ctx, sel);
+            let selected = each_context(ctx, sel);
             let lead = format!(
                 "For each {}{}",
                 for_each_unit_subject(sel),

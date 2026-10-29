@@ -264,23 +264,23 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "e3e07fc31ce14b4a2003c13bfe1095f0d6eadea359bd11a67fb3645d2405aef7",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
-        }
-      },
-      "effect": {
-        "type": "mortal-wounds",
-        "target": "defender",
-        "modifier": {
-          "count": 1
+      "type": "mortal-wounds",
+      "target": "event-subject",
+      "modifier": {
+        "count": 1,
+        "per": "success",
+        "roll": {
+          "dice": 1,
+          "threshold": 4,
+          "per_attack": {
+            "attack_type": "melee"
+          },
+          "max_dice": 6
         }
       }
     },
@@ -291,8 +291,17 @@
       "chaos-spawn"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "death-guard"
+    "behavior": "reactive",
+    "faction_id": "death-guard",
+    "trigger": {
+      "event": "attacks-resolved",
+      "subject": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "kind": "fight"
+      }
+    }
   },
   {
     "ability_id": "malicious-calculations-death-guard",

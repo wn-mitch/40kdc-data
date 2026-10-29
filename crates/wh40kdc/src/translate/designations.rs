@@ -46,6 +46,7 @@ pub const DESIGNATION_IDS: &[&str] = &[
     "cyberstimm-infusion-yp-spent",
     "daring-recon-target",
     "death-begets-vengeance-hated",
+    "death-hex-target",
     "deaths-heads-target",
     "decoyed",
     "defect-scrutiny-target",

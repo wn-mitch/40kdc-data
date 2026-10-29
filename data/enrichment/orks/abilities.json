@@ -11159,137 +11159,163 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "source_digest": "b176c4a2dd9006e6802d1098185971cdc99405bebf9f4256ed159fa97ab5f51e",
+    "source_digest": "24aa6ebcd45b40fed113c27e8e54ce553c7d3e53d0eb7d3f0690f9c423785843",
     "version": "2025-q3",
     "effect": {
-      "type": "dice-table",
-      "dice": "D6",
-      "outcomes": [
-        {
-          "results": [
-            1
-          ],
-          "effect": {
-            "type": "invulnerable-save",
-            "target": "defender",
-            "modifier": {
-              "invuln_sv": 4
-            }
-          }
-        },
-        {
-          "results": [
-            2,
-            3
-          ],
-          "effect": {
-            "type": "select-units",
-            "selector": {
-              "filter": {
-                "owner": "enemy",
-                "level": "unit",
-                "within": {
-                  "range": {
-                    "inches": 3
-                  },
-                  "of": "this-model"
-                }
-              },
-              "count": {
-                "min": 1,
-                "max": 1
-              },
-              "eligibility": {
-                "operator": "not",
-                "operands": [
-                  {
-                    "operator": "not",
-                    "operands": [
-                      {
-                        "type": "same-unit",
-                        "parameters": {
-                          "as": "defender"
-                        }
-                      }
-                    ]
-                  }
-                ]
-              }
-            },
-            "effect": {
-              "type": "mortal-wounds",
-              "target": "selected-unit",
-              "modifier": {
-                "count": "D3"
-              }
-            }
-          }
-        },
-        {
-          "results": [
-            4
-          ],
-          "effect": {
-            "type": "roll-modifier",
-            "target": "attacker",
-            "modifier": {
-              "roll": "hit",
-              "operation": "add",
-              "value": 1,
-              "weapons": {
-                "type": "ranged"
-              }
-            }
-          }
-        },
-        {
-          "results": [
-            5
-          ],
-          "effect": {
-            "type": "sequence",
-            "steps": [
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
               {
-                "type": "keyword-grant",
-                "target": "defender",
-                "modifier": {
-                  "keywords": [
-                    "FLY"
-                  ]
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "shooting"
                 }
               },
               {
-                "type": "rule-state",
-                "target": "defender",
-                "modifier": {
-                  "direction": "suppressed",
-                  "rule_kind": "core-rule",
-                  "rule": "benefit-of-cover"
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
                 }
               }
             ]
-          }
-        },
-        {
-          "results": [
-            6
-          ],
-          "effect": {
-            "type": "stat-modifier",
-            "target": "defender",
-            "modifier": {
-              "stat": "T",
-              "operation": "subtract",
-              "value": 1
+          },
+          {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "ranged"
+            }
+          },
+          {
+            "type": "attack-is",
+            "parameters": {
+              "all_target_same_unit": true
             }
           }
-        }
-      ]
+        ]
+      },
+      "effect": {
+        "type": "dice-table",
+        "dice": "D6",
+        "outcomes": [
+          {
+            "results": [
+              1
+            ],
+            "effect": {
+              "type": "invulnerable-save",
+              "target": "defender",
+              "modifier": {
+                "invuln_sv": 4
+              }
+            }
+          },
+          {
+            "results": [
+              2,
+              3
+            ],
+            "effect": {
+              "type": "select-units",
+              "selector": {
+                "filter": {
+                  "owner": "enemy",
+                  "excluding": "this-unit"
+                },
+                "count": {
+                  "min": 1,
+                  "max": 1
+                },
+                "eligibility": {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "selected-unit",
+                    "filter": {
+                      "within": {
+                        "of": "defender",
+                        "range": {
+                          "inches": 3
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "effect": {
+                "type": "mortal-wounds",
+                "target": "selected-unit",
+                "modifier": {
+                  "count": "D3"
+                }
+              }
+            }
+          },
+          {
+            "results": [
+              4
+            ],
+            "effect": {
+              "type": "roll-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "hit",
+                "operation": "add",
+                "value": 1
+              }
+            }
+          },
+          {
+            "results": [
+              5
+            ],
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "keyword-grant",
+                  "target": "defender",
+                  "modifier": {
+                    "keywords": [
+                      "FLY"
+                    ]
+                  }
+                },
+                {
+                  "type": "rule-state",
+                  "target": "defender",
+                  "modifier": {
+                    "direction": "suppressed",
+                    "rule_kind": "core-rule",
+                    "rule": "benefit-of-cover"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "results": [
+              6
+            ],
+            "effect": {
+              "type": "stat-modifier",
+              "target": "defender",
+              "modifier": {
+                "stat": "T",
+                "operation": "worsen",
+                "value": 1
+              }
+            }
+          }
+        ]
+      }
     },
     "scope": {
-      "duration": "one-use"
+      "duration": "until-this-unit-has-shot"
     },
     "unit_ids": [],
     "ability_type": "detachment",
@@ -11297,46 +11323,18 @@
     "detachment_id": "madcap-meks",
     "community_notes": "community-authored from 11e source",
     "trigger": {
-      "event": "selected",
-      "filter": {
-        "to": "shoot"
-      },
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "your-turn"
-            }
-          },
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "any_of": [
-                  "BIG MEK",
-                  "MEK GUNZ",
-                  "MORKANAUT",
-                  "WAZBOM BLASTAJET"
-                ]
-              }
-            }
-          },
-          {
-            "type": "attack-is",
-            "parameters": {
-              "attack_type": "ranged",
-              "all_target_same_unit": true
-            }
-          }
+      "event": "targets-selected",
+      "subject": {
+        "owner": "friendly",
+        "any_of": [
+          "BIG MEK",
+          "MEK GUNZ",
+          "MORKANAUT",
+          "WAZBOM BLASTAJET"
         ]
+      },
+      "filter": {
+        "kind": "shoot"
       }
     },
     "faction_id": "orks"

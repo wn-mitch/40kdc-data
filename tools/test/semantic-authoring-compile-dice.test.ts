@@ -161,6 +161,62 @@ describe("Semantic authoring dice-family compiler", () => {
     expect(rendered(base(), [leaf("EFFECT", "fight-on-death", { act: "shoot", subject: "this-unit" }, 2)])).toMatch(/can shoot before being removed/u);
   });
 
+  // Hunts: "On a 1, …. On a 2+, do not remove that model" compiled a dice-table and a separately gated act-on-death: two D6 for one roll.
+  it("makes fighting on death one row of the table when the roll has other bands", () => {
+    const text = "Roll one D6: on a 1, this unit suffers 1 mortal wound. On a 2+, when its unit fights, that model can fight.";
+    const at = (wording: string, role: string, family: string, parameters: Record<string, unknown>, version: number): CompileLeaf => {
+      const start = Buffer.from(text).indexOf(Buffer.from(wording));
+      return { role, family_id: family, family_version: version, parameters, start_byte: start, end_byte: start + Buffer.byteLength(wording), fragment: "RAW_TEXT" };
+    };
+    const roll = at("Roll one D6", "EVENT", "dice-roll", { dice: "D6" }, 4);
+    const fight = at("when its unit fights, that model can fight", "EFFECT", "fight-on-death", { act: "fight", timing: "when-its-unit-fights" }, 2);
+    const two = at("On a 2+", "CONDITION", "roll-result", { from: 2 }, 2);
+    const result = compileLeaves([roll, at("on a 1", "CONDITION", "roll-result", { from: 1, to: 1 }, 2),
+      at("this unit suffers 1 mortal wound", "EFFECT", "mortal-wounds", { recipient: "this-unit", count: "1" }, 1), two, fight], text);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    expect(result.mechanics.effect).toEqual({ type: "dice-table", dice: "D6", outcomes: [
+      { results: [1], effect: { type: "mortal-wounds", target: "this-unit", modifier: { count: 1 } } },
+      { results: [2, 3, 4, 5, 6], effect: { type: "act-on-death", target: "event-object", modifier: { act: "fight", resolution: "when-unit-fights", removal: "after-unit-fights-or-phase-end" } } },
+    ] });
+    // Alone, the band stays the destroyed model's own gate.
+    const alone = compileLeaves([roll, two, fight], text);
+    if (!alone.ok) throw new Error(alone.errors.join("; "));
+    expect(alone.mechanics.effect).toMatchObject({ type: "act-on-death", modifier: { gate: { dice: "D6", threshold: 2, comparison: "gte" } } });
+  });
+
+  describe("a die for each allocated attack", () => {
+    const text = "Each time a melee attack is allocated to a model in this unit, after the attacking unit has finished making its attacks, roll one D6 (to a maximum of six D6 per attacking unit): for each 4+, the attacking unit suffers 1 mortal wound.";
+    const at = (wording: string, family: string, parameters: Record<string, unknown>): CompileLeaf => {
+      const start = Buffer.from(text).indexOf(Buffer.from(wording));
+      const version = currentFamilyVersion(family);
+      return { role: familyRole(family, version), family_id: family, family_version: version, parameters: normalizeFingerprintParameters(family, parameters, version), start_byte: start, end_byte: start + Buffer.byteLength(wording), fragment: "RAW_TEXT" };
+    };
+    const attack = at("Each time a melee attack is allocated to a model in this unit", "attack", { direction: "targeted", unit: "this-unit", attack_type: "melee" });
+    const resolved = at("after the attacking unit has finished making its attacks", "event", { kind: "attacks-resolved", owner: "enemy", action_kind: "fight" });
+    const roll = at("roll one D6 (to a maximum of six D6 per attacking unit)", "dice-roll", { dice: "D6", per_model: "allocated-attack", max_dice: 6 });
+    const band = at("for each 4+", "roll-result", { from: 4 });
+    const wound = at("the attacking unit suffers 1 mortal wound", "mortal-wounds", { recipient: "event-subject", count: "1" });
+
+    // Hunts: one D6 with the cap read as a cap on mortal wounds, gated on a melee attack after attacks are done.
+    it("rolls one die per allocated attack of the moment's type, capped, once the attacker has fought", () => {
+      const result = compileLeaves([attack, resolved, roll, band, wound], text);
+      if (!result.ok) throw new Error(result.errors.join("; "));
+      expect(result.mechanics.trigger).toEqual({ event: "attacks-resolved", subject: { owner: "enemy" }, filter: { kind: "fight" } });
+      expect(result.mechanics.effect).toEqual({ type: "mortal-wounds", target: "event-subject", modifier: { count: 1, per: "success", roll: { dice: 1, threshold: 4, per_attack: { attack_type: "melee" }, max_dice: 6 } } });
+    });
+
+    it("refuses the roll without an attack on this unit before it", () => {
+      const result = compileLeaves([resolved, roll, band, wound], text);
+      expect(result.ok).toBe(false);
+      if (!result.ok) expect(result.errors.join(" ")).toMatch(/needs the moment an attack targets this unit before it/u);
+    });
+
+    it("takes max_dice and no count only on a roll per allocated attack", () => {
+      expect(() => normalizeFingerprintParameters("dice-roll", { dice: "D6", max_dice: 6 }, 8)).toThrow(/max_dice caps the dice of per_model allocated-attack only/u);
+      expect(() => normalizeFingerprintParameters("dice-roll", { dice: "D6", per_model: "allocated-attack", count: 2 }, 8)).toThrow(/takes no count/u);
+    });
+  });
+
   it("migrates a fight-on-death@1 leaf to @2 by naming its act as fight", () => {
     expect(normalizeFingerprintParameters("fight-on-death", { timing: "when-its-unit-fights" }, 1)).toEqual({ timing: "when-its-unit-fights" });
     expect(mapToLatest("fight-on-death", 1, { timing: "when-its-unit-fights" })).toEqual({

@@ -294,14 +294,20 @@ describe("Semantic authoring per-model dice: one die for each counted model", ()
     expect(effect.effect.modifier.roll.for_each).toEqual({ filter: { owner: "friendly", level: "model", embarked_in: "this-model" } });
   });
 
-  it("refuses a per-model roll whose success does anything but mortal wounds", () => {
+  // Only mortal wounds fold into one roll of several dice; any other success is the loop over the unit's models,
+  // one roll in each pass, which resolves the same way.
+  it("loops over the models for a per-model roll whose success does anything but mortal wounds", () => {
     const text = "Roll one D6 for each ALPHA model in your unit: for each 3+, this unit regains 1 lost wound.";
-    expect(errorsOf(placed(text, ["Roll one D6", "dice-roll", { dice: "D6" }],
+    expect(mechanicsOf(placed(text, ["Roll one D6", "dice-roll", { dice: "D6" }],
       ["for each", "for-each-unit-select", {}],
       ["ALPHA model", "unit-filter", { side: "friendly", keywords: ["ALPHA"], level: "model" }],
       ["in your unit", "membership", { relation: "in", of: "this-unit" }],
       ["for each 3+", "roll-result", { from: 3 }],
-      ["this unit regains 1 lost wound", "regain-wounds", { subject: "this-unit", amount: "1" }]), text)).toMatch(/no count or per-model roll takes it/u);
+      ["this unit regains 1 lost wound", "regain-wounds", { subject: "this-unit", amount: "1" }]), text).effect).toEqual({
+      type: "for-each-unit",
+      selector: { filter: { owner: "friendly", all_of: ["ALPHA"], level: "model", member_of: "this-unit" } },
+      effect: { type: "dice-gated", dice: "D6", threshold: 3, comparison: "gte", on_success: { type: "heal", target: "this-unit", modifier: { amount: 1 } }, on_fail: null },
+    });
   });
 
   it("refuses a bonus on a per-model roll, and a condition on counted models nothing counts", () => {

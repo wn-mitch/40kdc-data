@@ -14,7 +14,7 @@ import { dslUnitFilter, filterOf } from "./compile-unit-filter-dsl.js";
 import { joinerBetween, mergedFilter, mergeStackedFilters } from "./compile-unit-filter-merge.js";
 import {
   armyGroup, attackerAfter, bareForEach, engagedWithOwnUnit, filterDesignation, filteredAfter, followedBy, followsTargetingAttack, inheritedPostfixFilter, isFilter, madeBy,
-  nearOther, nestedEngagedChain, openAura, openSelect, openTarget, orAlternative, ownedBy, ownerlessEvent, pastOwners, postfixRecipient, renamedAttackTarget, restatesObjectOwner, selectionBefore, selectOf, side,
+  nearMatching, nearOther, nestedEngagedChain, openAura, openSelect, openTarget, orAlternative, ownedBy, ownerlessEvent, pastOwners, postfixRecipient, renamedAttackTarget, restatesObjectOwner, selectionBefore, selectOf, side,
 } from "./compile-unit-filter-predicates.js";
 
 /**
@@ -126,6 +126,16 @@ export function foldUnitFilters(input0: readonly CompileLeaf[], sourceText?: str
       out.push({ ...leaf, parameters: { ...leaf.parameters, scope: side(next!, "a for-each", { anySide: true }), filter: filterOf(next!) } });
       index += 1;
       if (reach(out, list[index + 1])) index += 1;
+    } else if (bareForEach(leaf) && isFilter(next) && next!.fragment === leaf.fragment && next!.parameters.level === "model") {
+      // "for each" + "model" + "in this unit" + "that is within 3\" of one or more enemy units": each pass takes one
+      // model of that unit, near the units the range names. The membership is required: a loop over every model on
+      // the battlefield has no reading.
+      const membership = list[index + 2]?.family_id === "membership" && list[index + 2]!.fragment === next!.fragment ? list[index + 2] : undefined;
+      if (membership === undefined) throw new CompileError("A for-each over models needs the unit they are in (\"in this unit\") right after its unit-filter.");
+      const near = nearMatching(list[index + 3], leaf);
+      out.push({ ...leaf, parameters: { ...leaf.parameters, scope: side(next!, "a for-each", { models: true }), distance: "any",
+        filter: { ...filterOf(next!), membership: membershipOf(membership, list) }, ...(near ? { near } : {}) } });
+      index += near ? 3 : 2;
     } else if (bareForEach(leaf) && isFilter(next) && next!.fragment === leaf.fragment) {
       // "for each" + "enemy unit" (+ "within 6\" of this model" | "engaged with your unit"): the
       // units each pass takes, folded into the quantifier as select-unit's filter is.
@@ -138,6 +148,13 @@ export function foldUnitFilters(input0: readonly CompileLeaf[], sourceText?: str
       }
       else if (engagedWithOwnUnit(list[index + 1], leaf)) {
         out[out.length - 1] = { ...out.at(-1)!, parameters: { ...out.at(-1)!.parameters, engaged_with: list[index + 1]!.parameters.with } };
+        index += 1;
+      }
+      else if (onBattlefieldAfter(list[index + 1], leaf)) {
+        // "for each poisoned enemy unit" + "on the battlefield": only the units each pass takes that are on the battlefield.
+        const loop = out.at(-1)!;
+        const filter = loop.parameters.filter as Record<string, unknown>;
+        out[out.length - 1] = { ...loop, parameters: { ...loop.parameters, filter: { ...filter, states: [...((filter.states as string[] | undefined) ?? []), "on-battlefield"] } } };
         index += 1;
       }
     } else if (leaf.family_id === "for-each-unit-select" && !bareForEach(leaf) && engagedWithOwnUnit(next, leaf)) {
@@ -420,9 +437,20 @@ export function foldUnitFilters(input0: readonly CompileLeaf[], sourceText?: str
     }
   }
   // "For each enemy unit …: that enemy unit suffers D3 mortal wounds": each pass's unit.
+  // A selection after the quantifier ("for each model …, select one of those enemy units") is the "that unit" of the effects after it.
   const quantifier = out.findIndex((leaf) => leaf.family_id === "for-each-unit-select");
-  return quantifier < 0 ? out : out.map((leaf, at) => at > quantifier && leaf.family_id === "mortal-wounds" && leaf.parameters.recipient === "that-unit"
+  const selected = out.findIndex((leaf, at) => at > quantifier && leaf.family_id === "select-unit");
+  return quantifier < 0 ? out : out.map((leaf, at) => at > quantifier && (selected < 0 || at < selected) && leaf.family_id === "mortal-wounds" && leaf.parameters.recipient === "that-unit"
     ? { ...leaf, parameters: { ...leaf.parameters, recipient: AURA_RECIPIENT } } : leaf);
+}
+
+/** "on the battlefield" right after a bare loop's unit-filter: a unit-state on that loop's units, in its fragment. */
+function onBattlefieldAfter(state: CompileLeaf | undefined, loop: CompileLeaf): boolean {
+  const states = state?.parameters.states as unknown[] | undefined;
+  // Bound before the filters fold (compile-antecedent.ts) to the filter's units. One bound to each pass's unit
+  // (recipient) is already a gate inside each pass.
+  return state?.family_id === "unit-state" && state.fragment === loop.fragment && state.parameters.subject === FILTERED_UNITS
+    && state.parameters.negated !== true && states?.length === 1 && states[0] === "on-battlefield";
 }
 
 function attackerFilter(filter: CompileLeaf, attack: CompileLeaf): Record<string, unknown> {

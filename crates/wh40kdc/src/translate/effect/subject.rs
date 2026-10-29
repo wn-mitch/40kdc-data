@@ -77,6 +77,13 @@ pub(crate) fn filter_subject(f: &P, ctx: &Ctx) -> String {
     if let Some(ids) = map_arr(f, "unit_ids", jv) {
         s.push_str(&format!(" with unit ID {}", or_list(&ids)));
     }
+    // "each model in this unit within 3\" of an enemy unit": the models' unit comes before their range.
+    let member_first = sv(f, "level") == Some("model")
+        && nn(f, "member_of").is_some()
+        && nn(f, "within").is_some();
+    if member_first {
+        s.push_str(&member_of(nn(f, "member_of").unwrap(), ctx));
+    }
     if let Some(within) = nn(f, "within") {
         let within = obj(Some(within));
         s.push_str(&format!(
@@ -89,11 +96,21 @@ pub(crate) fn filter_subject(f: &P, ctx: &Ctx) -> String {
             range_phrase(within.get("range")),
             within
                 .get("of")
-                .map(|of| format!(" of {}", place_ref_phrase(Some(of))))
+                .map(|of| if of.as_str() == Some("recipient") && ctx.each_model {
+                    " of that model".to_string()
+                } else {
+                    format!(" of {}", place_ref_phrase(Some(of)))
+                })
                 .unwrap_or_default()
         ));
     }
-    s.push_str(&filter_relations(f, ctx));
+    if member_first {
+        let mut rest = f.clone();
+        rest.remove("member_of");
+        s.push_str(&filter_relations(&rest, ctx));
+    } else {
+        s.push_str(&filter_relations(f, ctx));
+    }
     if let Some(visible) = nn(f, "visible") {
         let visible = obj(Some(visible));
         s.push_str(&format!(
@@ -175,12 +192,7 @@ fn filter_relations(f: &P, ctx: &Ctx) -> String {
         ));
     }
     if let Some(m) = nn(f, "member_of") {
-        s.push_str(" in ");
-        if m.as_str() == Some("this-unit") {
-            s.push_str("the unit");
-        } else {
-            s.push_str(&effect_subject(Some(m), ctx));
-        }
+        s.push_str(&member_of(m, ctx));
     }
     let relation_phrase = |g: &Value| -> String {
         let exact = g.is_string()
@@ -246,6 +258,15 @@ fn filter_relations(f: &P, ctx: &Ctx) -> String {
     s
 }
 
+/// " in the unit": the unit a model-level filter's models are in.
+fn member_of(unit: &Value, ctx: &Ctx) -> String {
+    if unit.as_str() == Some("this-unit") {
+        " in the unit".to_string()
+    } else {
+        format!(" in {}", effect_subject(Some(unit), ctx))
+    }
+}
+
 /// An effect target (a unit-ref) as the effect's subject.
 pub(crate) fn effect_subject(target: Option<&Value>, ctx: &Ctx) -> String {
     let target = target.filter(|t| !t.is_null());
@@ -268,6 +289,8 @@ pub(crate) fn effect_subject(target: Option<&Value>, ctx: &Ctx) -> String {
         .to_string(),
         Some((_, Some("recipient"))) => if ctx.aura_recipient {
             "that unit"
+        } else if ctx.each_model {
+            "that model"
         } else {
             "the unit"
         }

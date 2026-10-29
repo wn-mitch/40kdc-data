@@ -485,12 +485,21 @@ def filter_subject(f: dict[str, Any], ctx: Ctx | None = None) -> str:
     if isinstance(f.get("not_all_of"), list):
         s += f" (excluding {' '.join(jstr(x) for x in f['not_all_of'])} {noun})"
     within = f.get("within")
+    # "each model in this unit within 3\" of an enemy unit": the unit comes before the range.
+    member_first = (
+        f.get("level") == "model" and f.get("member_of") is not None and within is not None
+    )
+    if member_first:
+        s += _member_of(f["member_of"], ctx)
     if within is not None:
         w = within if isinstance(within, dict) else {}
-        of = f" of {place_ref_phrase(w['of'])}" if w.get("of") is not None else ""
+        if w.get("of") == "recipient" and ctx.get("each_model"):
+            of = " of that model"
+        else:
+            of = f" of {place_ref_phrase(w['of'])}" if w.get("of") is not None else ""
         wholly = "wholly " if w.get("wholly") is True else ""
         s += f" {wholly}within {range_phrase(w.get('range'))}{of}"
-    s += _filter_relations(f, ctx)
+    s += _filter_relations({**f, "member_of": None} if member_first else f, ctx)
     visible = f.get("visible")
     if isinstance(visible, dict) and visible.get("to") is not None:
         s += f" visible to {effect_subject(visible['to'], ctx)}"
@@ -524,6 +533,11 @@ def filter_subject(f: dict[str, Any], ctx: Ctx | None = None) -> str:
     return s if bounded else f"all {s}"
 
 
+def _member_of(unit: Any, ctx: Ctx) -> str:
+    """\" in the unit\": the unit a model-level filter's models are in."""
+    return f" in {'the unit' if unit == 'this-unit' else effect_subject(unit, ctx)}"
+
+
 def _filter_relations(f: dict[str, Any], ctx: Ctx) -> str:
     """A unit filter's canonical relations to other units and abilities."""
     s = ""
@@ -542,12 +556,7 @@ def _filter_relations(f: dict[str, Any], ctx: Ctx) -> str:
     if f.get("embarked_in") is not None:
         s += f" embarked within {effect_subject(f['embarked_in'], ctx)}"
     if f.get("member_of") is not None:
-        member = (
-            "the unit"
-            if f["member_of"] == "this-unit"
-            else effect_subject(f["member_of"], ctx)
-        )
-        s += f" in {member}"
+        s += _member_of(f["member_of"], ctx)
     if f.get("engaged_with") is not None:
         s += f" within Engagement Range of {effect_subject(f['engaged_with'], ctx)}"
     if f.get("not_engaged_with") is not None:
@@ -572,7 +581,9 @@ def effect_subject(target: Any, ctx: Ctx | None = None) -> str:
             return "that model"
         return "that unit" if ctx.get("selected_unit") else "the selected unit"
     if target == "recipient":
-        return "that unit" if ctx.get("aura_recipient") else "the unit"
+        if ctx.get("aura_recipient"):
+            return "that unit"
+        return "that model" if ctx.get("each_model") else "the unit"
     if target == "attacker":
         return ctx.get("unit_subject") or "the attacking unit"
     if isinstance(target, str):

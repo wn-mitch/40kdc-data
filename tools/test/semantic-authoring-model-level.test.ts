@@ -186,12 +186,12 @@ describe("Semantic authoring model-level selection", () => {
       ["add 1 to the Hit roll", "roll-modifier", { roll: "hit", operation: "add", value: 1 }])).toContain("designate-target selects units");
   });
 
-  it("still refuses a for-each over models", () => {
+  it("still refuses a for-each over models that names no unit they are in", () => {
     const each = "For each enemy GLIMMER model within 6\" of this model, roll one D6.";
     expect(errorsOf(each,
       ["For each", "for-each-unit-select", {}],
       ["enemy GLIMMER model", "unit-filter", { side: "enemy", keywords: ["GLIMMER"], level: "model" }],
-      ["roll one D6", "dice-roll", { dice: "D6" }])).toContain("naming models has no DSL shape for a for-each");
+      ["roll one D6", "dice-roll", { dice: "D6" }])).toContain("A for-each over models needs the unit they are in");
   });
 });
 

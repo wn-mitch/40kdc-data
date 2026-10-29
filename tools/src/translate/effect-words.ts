@@ -19,6 +19,8 @@ export interface Ctx {
   unitSubject?: string;
   /** Inside an aura: the recipient reads "that unit". */
   auraRecipient?: boolean;
+  /** Inside a `for-each-unit` over models: each pass's model (the recipient) reads "that model". */
+  eachModel?: boolean;
   /** The ability's trigger already says a unit or model is destroyed; leaves must not repeat it. */
   destroyedTrigger?: boolean;
 }
@@ -327,8 +329,12 @@ export function filterSubject(f: P, ctx: Ctx = {}): string {
   if (Array.isArray(f.model_names)) s += ` named ${orList(f.model_names.map(jstr))}`;
   if (Array.isArray(f.unit_ids)) s += ` with unit ID ${orList(f.unit_ids.map(jstr))}`;
   const within = f.within as P | undefined;
-  if (within != null) s += ` ${within.wholly === true ? "wholly " : ""}within ${rangePhrase(within.range)}${within.of != null ? ` of ${placeRefPhrase(within.of)}` : ""}`;
-  s += filterRelations(f, ctx);
+  // "each model in this unit within 3\" of an enemy unit": the models' unit comes before their range.
+  const memberFirst = f.level === "model" && f.member_of != null && within != null;
+  if (memberFirst) s += memberOf(f.member_of, ctx);
+  const of = within?.of === "recipient" && ctx.eachModel ? "that model" : within?.of != null ? placeRefPhrase(within.of) : "";
+  if (within != null) s += ` ${within.wholly === true ? "wholly " : ""}within ${rangePhrase(within.range)}${of ? ` of ${of}` : ""}`;
+  s += filterRelations(memberFirst ? { ...f, member_of: undefined } : f, ctx);
   if (f.visible != null) s += ` visible to ${effectSubject((f.visible as P).to, ctx)}`;
   if (f.designated != null) s += ` that are ${designationPhrase(jstr(f.designated), true)}${f.designated_by != null ? ` by ${effectSubject(f.designated_by, ctx)}` : ""}`;
   if (f.not_designated != null) s += ` that are not ${designationPhrase(jstr(f.not_designated), true)}`;
@@ -351,7 +357,7 @@ function filterRelations(f: P, ctx: Ctx): string {
   }
   if (Array.isArray(f.lacks_ability)) s += ` without the ${orList((f.lacks_ability as unknown[]).map(abilityLabel))} ability`;
   if (f.embarked_in != null) s += ` embarked within ${effectSubject(f.embarked_in, ctx)}`;
-  if (f.member_of != null) s += ` in ${f.member_of === "this-unit" ? "the unit" : effectSubject(f.member_of, ctx)}`;
+  if (f.member_of != null) s += memberOf(f.member_of, ctx);
   // "any other friendly unit": a filter excluding the unit with the ability reads "other".
   const exactReference = (ref: unknown): boolean => typeof ref === "string" || (ref != null && typeof ref === "object" && ("selection_var" in ref || "event_var" in ref || "stratagem_target" in ref));
   const engagedWith = (g: unknown): string => {
@@ -367,6 +373,11 @@ function filterRelations(f: P, ctx: Ctx): string {
   return s;
 }
 
+/** " in the unit": the unit a model-level filter's models are in. */
+function memberOf(unit: unknown, ctx: Ctx): string {
+  return ` in ${unit === "this-unit" ? "the unit" : effectSubject(unit, ctx)}`;
+}
+
 function articled(s: string): string {
   return `${/^[aeiou]/i.test(s) ? "an" : "a"} ${s}`;
 }
@@ -375,7 +386,7 @@ function articled(s: string): string {
 export function effectSubject(target: unknown, ctx: Ctx = {}): string {
   if (target == null || target === "this-unit") return ctx.unitSubject ?? (ctx.selectedUnit || ctx.selectedModel ? "this unit" : "the unit");
   if (target === "selected-unit") return ctx.selectedModel ? "that model" : ctx.selectedUnit ? "that unit" : "the selected unit";
-  if (target === "recipient") return ctx.auraRecipient ? "that unit" : "the unit";
+  if (target === "recipient") return ctx.auraRecipient ? "that unit" : ctx.eachModel ? "that model" : "the unit";
   if (target === "attacker") return ctx.unitSubject ?? "the attacking unit";
   if (typeof target === "string") return ROLE_SUBJECTS[target] ?? dekebab(target);
   const r = target as P;

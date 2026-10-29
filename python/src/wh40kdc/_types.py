@@ -1278,6 +1278,10 @@ class Modifier20(TypedDict):
     attacks: NotRequired[EventBoundReference]
 
 
+class PerAttack(TypedDict):
+    attack_type: NotRequired[Literal["melee", "ranged"]]
+
+
 class Modifier23(TypedDict):
     threshold: int | UnitRating
     against: NotRequired[Literal["all", "mortal", "psychic", "psychic-and-mortal"]]
@@ -3122,6 +3126,8 @@ class Roll(TypedDict):
     per_model: NotRequired[UnitRef]
     comparison: NotRequired[Comparison]
     for_each: NotRequired[UnitSelector]
+    per_attack: NotRequired[PerAttack]
+    max_dice: NotRequired[int]
 
 
 class Modifier21(TypedDict):

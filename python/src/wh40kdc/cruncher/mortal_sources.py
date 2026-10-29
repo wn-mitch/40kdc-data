@@ -179,6 +179,13 @@ def mortal_wound_sources(
         modifier = node["modifier"] if _is_object(node.get("modifier")) else {}
         roll = modifier["roll"] if _is_object(modifier.get("roll")) else {}
         models: int | float | None = None
+        # How many attacks the attacker allocates, and a cap on the dice, are outside the walk.
+        if "per_attack" in roll:
+            report(node, "mortal-wounds: dice rolled for each allocated attack are not modelled")
+            return
+        if "max_dice" in roll:
+            report(node, "mortal-wounds: a cap on the dice rolled is not modelled")
+            return
         if "per_model" in roll or "for_each" in roll:
             counted = models_rolling(roll, state)
             if isinstance(counted, str):

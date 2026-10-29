@@ -1395,34 +1395,127 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "b1c3ff2bd5baa30eee1342bbabdc5020b82bc0b4dc7eb83c3ab9bf2c42e91160",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "trigger": [
+            {
+              "event": "attacks-resolved",
+              "subject": "this-model",
+              "condition": {
+                "operator": "and",
+                "operands": [
+                  {
+                    "type": "phase-is",
+                    "parameters": {
+                      "phase": "shooting"
+                    }
+                  },
+                  {
+                    "type": "player-turn-is",
+                    "parameters": {
+                      "turn": "your-turn"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "event": "attacks-resolved",
+              "subject": "this-model",
+              "condition": {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "fight"
+                }
+              }
+            }
+          ],
+          "effect": {
+            "type": "select-units",
+            "selector": {
+              "filter": {
+                "owner": "enemy"
+              },
+              "count": {
+                "min": 1,
+                "max": 1
+              },
+              "eligibility": {
+                "type": "happened",
+                "parameters": {
+                  "event": "after-roll",
+                  "subject": "event-subject",
+                  "object": "this-unit",
+                  "filter": {
+                    "roll": "hit",
+                    "result": "success"
+                  },
+                  "window": "phase"
+                }
+              }
+            },
+            "effect": {
+              "type": "designate",
+              "target": "selected-unit",
+              "modifier": {
+                "tag": "poisoned"
+              }
+            }
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "phase-started",
+            "condition": {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "command"
+              }
+            }
+          },
+          "effect": {
+            "type": "for-each-unit",
+            "selector": {
+              "filter": {
+                "owner": "enemy",
+                "state": "on-battlefield",
+                "designated": "poisoned"
+              }
+            },
+            "effect": {
+              "type": "dice-gated",
+              "dice": "D6",
+              "threshold": 4,
+              "comparison": "gte",
+              "on_success": {
+                "type": "mortal-wounds",
+                "target": "recipient",
+                "modifier": {
+                  "count": "D3"
+                }
+              },
+              "on_fail": null
+            }
+          }
         }
-      },
-      "effect": {
-        "type": "mortal-wounds",
-        "target": "defender",
-        "modifier": {
-          "count": "D3"
-        }
-      }
+      ]
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "battle"
     },
     "unit_ids": [
       "fulgrim"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "faction_id": "emperors-children"
   },
   {

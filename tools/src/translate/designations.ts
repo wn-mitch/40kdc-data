@@ -49,6 +49,7 @@ export const DESIGNATION_IDS: ReadonlySet<string> = new Set([
   "cyberstimm-infusion-yp-spent",
   "daring-recon-target",
   "death-begets-vengeance-hated",
+  "death-hex-target",
   "deaths-heads-target",
   "decoyed",
   "defect-scrutiny-target",

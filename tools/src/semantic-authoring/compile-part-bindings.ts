@@ -1,4 +1,5 @@
 import type { CompileOptions } from "./compile.js";
+import type { CompileLeaf } from "./compile-fragments.js";
 import { targetRestrictions } from "./compile-conditions.js";
 import { CONFLICTING_DURATIONS, refuseTestAfterMark } from "./compile-durations.js";
 import { selectionHasFilter } from "./compile-wrappers.js";
@@ -183,7 +184,10 @@ export function bindParts(frame: PartFrame, plan: ReturnType<typeof planEffects>
     && bearerModelMax(options.abilityId) !== 1) {
     errors.push("An other-model selection excludes only the bearer's unit; it selects only other models when the bearer has one model.");
   }
-  if (forEachLeaf && selections.length > 0) errors.push("A unit is selected and the ability also loops with for-each-unit-select; the compiler binds only one of them.");
+  // A selection and a loop in different parts ("… select one enemy unit … At the start of each Command phase, roll one D6 for each …") each wrap their own part.
+  const partOfLeaf = (leaf: CompileLeaf) => partStarts.filter((part) => part.index < list.indexOf(leaf)).length;
+  const perPass = forEachLeaf !== null && selectionPerPass(list, forEachLeaf, selections, planned, partOfLeaf);
+  if (forEachLeaf && selections.length > 0 && !perPass && (partStarts.length === 0 || selections.some((selection) => partOfLeaf(selection) === partOfLeaf(forEachLeaf!)))) errors.push("A unit is selected and the ability also loops with for-each-unit-select; the compiler binds only one of them.");
   // Several durations: the parts that take the durations' own wrapping, with the features that read one duration are refused.
   if (split) {
     const selectsAttacks = selections.length === 1 && planned.some((item) => item.selected);
@@ -209,4 +213,18 @@ function namesSelected(node: unknown): boolean {
   // A selection already compiled into a node (an option's own select-units) binds its own selected unit.
   if (record.type === "select-units") return false;
   return record.target === "selected-unit" || Object.values(record).some(namesSelected);
+}
+
+/**
+ * "for each model in this unit that is within 3\" of one or more enemy units, select one of those enemy units. That
+ * model … is destroyed, then …": one selection made in each pass of a loop over models, so the loop wraps the selection.
+ * The selection follows the loop's quantifier in its part, and every effect of that part follows the selection.
+ */
+export function selectionPerPass(list: readonly CompileLeaf[], loop: CompileLeaf, selections: readonly CompileLeaf[], planned: readonly PlannedEffect[],
+  partOfLeaf: (leaf: CompileLeaf) => number): boolean {
+  if (selections.length !== 1 || (loop.parameters.filter as { membership?: unknown } | undefined)?.membership === undefined) return false;
+  const selection = selections[0]!;
+  const at = list.indexOf(selection);
+  if (list.indexOf(loop) > at || partOfLeaf(selection) !== partOfLeaf(loop)) return false;
+  return planned.every((item) => partOfLeaf(list[item.index]!) !== partOfLeaf(loop) || item.index > at);
 }

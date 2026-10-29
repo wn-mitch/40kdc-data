@@ -48,6 +48,17 @@ func mortalWoundsLeaf(m map[string]any, subj string) string {
 			each = " for each model in " + effectSubject(roll["per_model"], effCtx{})
 		} else if selector, ok := asMap(roll["for_each"]); ok && selector != nil {
 			each = " for each " + forEachUnitSubject(selector)
+		} else if perAttack, ok := asMap(roll["per_attack"]); ok && perAttack != nil {
+			kind := ""
+			if perAttack["attack_type"] != nil {
+				kind = ejstr(perAttack["attack_type"]) + " "
+			}
+			each = " for each " + kind + "attack allocated to a model in this unit"
+		}
+		// "(to a maximum of six D6)": a cap on the dice, however many candidates roll.
+		most := ""
+		if roll["max_dice"] != nil {
+			most = " (to a maximum of " + ejstr(roll["max_dice"]) + " D6)"
 		}
 		// A plain number of dice is that many D6 ("roll 7 D6", "roll one D6 for each model").
 		dice := diceCase(roll["dice"])
@@ -70,7 +81,7 @@ func mortalWoundsLeaf(m map[string]any, subj string) string {
 				band = "result of " + ejstr(roll["threshold"]) + " or less"
 			}
 		}
-		return "roll " + dice + each + ": for each " + band + ", " + who + " " + ev(who, "suffers") + " " + suffered + psychic + cap
+		return "roll " + dice + each + most + ": for each " + band + ", " + who + " " + ev(who, "suffers") + " " + suffered + psychic + cap
 	}
 	per := ""
 	if m["per"] == "model" {
@@ -191,11 +202,16 @@ func actOnDeathLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 	if eligibility != "" {
 		lead = eligibility + ", "
 	}
+	// The destroyed model the trigger names stays, not its unit.
+	held := subj
+	if e["target"] == "event-object" {
+		held = "that model"
+	}
 	switch m["resolution"] {
 	case "when-unit-fights":
-		return lead + "do not remove " + subj + " yet; " + resolution + "; remove it after its unit has finished fighting or at the end of the phase, whichever happens first"
+		return lead + "do not remove " + held + " yet; " + resolution + "; remove it after its unit has finished fighting or at the end of the phase, whichever happens first"
 	case "after-attacking-unit-finishes":
-		return lead + "do not remove " + subj + " yet; " + resolution + "; then remove it"
+		return lead + "do not remove " + held + " yet; " + resolution + "; then remove it"
 	}
 	if ctx.destroyedTrigger {
 		who := "that model"

@@ -59,7 +59,7 @@ pub(crate) fn designation_attacker_phrase(applies: &P, block: bool) -> String {
         }
         let mut selector = P::new();
         selector.insert("filter".into(), Value::Object(filter));
-        selector_subject(&selector, false)
+        selector_subject(&selector, false, false)
     };
     let attacker = match (model_filter, unit_filter) {
         (Some(model), Some(unit)) => format!(

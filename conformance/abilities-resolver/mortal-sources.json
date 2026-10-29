@@ -426,6 +426,84 @@
       }
     },
     {
+      "caseId": "per-allocated-attack-unmodelled",
+      "abilityId": "a",
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        },
+        "effect": {
+          "type": "mortal-wounds",
+          "target": "selected-unit",
+          "modifier": {
+            "count": 1,
+            "per": "success",
+            "roll": {
+              "dice": 1,
+              "threshold": 4,
+              "per_attack": {
+                "attack_type": "melee"
+              },
+              "max_dice": 6
+            }
+          }
+        }
+      },
+      "context": {},
+      "expected": {
+        "sources": [],
+        "unsupportedReasons": [
+          "mortal-wounds: dice rolled for each allocated attack are not modelled"
+        ]
+      }
+    },
+    {
+      "caseId": "capped-dice-unmodelled",
+      "abilityId": "a",
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        },
+        "effect": {
+          "type": "mortal-wounds",
+          "target": "selected-unit",
+          "modifier": {
+            "count": 1,
+            "per": "success",
+            "roll": {
+              "dice": 1,
+              "threshold": 4,
+              "per_model": "this-unit",
+              "max_dice": 3
+            }
+          }
+        }
+      },
+      "context": {
+        "attackerModelCount": 5
+      },
+      "expected": {
+        "sources": [],
+        "unsupportedReasons": [
+          "mortal-wounds: a cap on the dice rolled is not modelled"
+        ]
+      }
+    },
+    {
       "caseId": "for-each-own-model-eligibility",
       "abilityId": "a",
       "trigger": {

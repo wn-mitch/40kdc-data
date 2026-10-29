@@ -55,6 +55,7 @@ from wh40kdc.translate.effect_select import (
     designation_label,
     designation_target_subject,
     duration_clauses,
+    each_context,
     for_each_cap,
     for_each_unit_subject,
     persistent_designation_lead,
@@ -238,7 +239,7 @@ def describe_effect(e: Effect, depth: int = 0, ctx: Ctx | None = None) -> str:
         return f"{head}, {describe_effect_inline(inner, ctx)}."
     if t == "for-each-unit":
         inner = _obj(e.get("effect"))
-        inner_ctx = selected_context(ctx, e.get("selector"))
+        inner_ctx = each_context(ctx, e.get("selector"))
         lead = (
             f"For each {for_each_unit_subject(e.get('selector'))}"
             f"{for_each_cap(e.get('max_affected'))}"
@@ -317,7 +318,10 @@ def _select_units_block(e: Effect, depth: int, ctx: Ctx, indent: str, arrow: str
     inner = _obj(e.get("effect"))
     inner_ctx = selected_context(ctx, selector)
     engagement = select_units_engagement(selector)
-    lead = f"Select {select_units_subject(selector)}{selection_binding(selector)}"
+    lead = (
+        f"Select {select_units_subject(selector, bool(ctx.get('each_model')))}"
+        f"{selection_binding(selector)}"
+    )
     header = f"{indent}{arrow}{lead}. {engagement}" if engagement else f"{indent}{arrow}{lead}"
     if _is_container(inner):
         bare = re.sub(r"\.$", "", header)

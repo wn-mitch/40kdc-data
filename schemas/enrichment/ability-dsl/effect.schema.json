@@ -2366,6 +2366,25 @@
                     "for_each": {
                       "$ref": "../../defs/common.schema.json#/$defs/unit-selector",
                       "description": "One die (dice per candidate) for each unit or model the selector matches (\"one D6 for each WRACKS model in your unit\"); per_model names the two fixed sets."
+                    },
+                    "per_attack": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "attack_type": {
+                          "enum": [
+                            "melee",
+                            "ranged"
+                          ],
+                          "description": "Only attacks of this type count. Omitted: every attack."
+                        }
+                      },
+                      "description": "One die (dice per candidate) for each attack the attacking unit allocated to a model in this unit (\"each time a melee attack is allocated to a model in this unit, … roll one D6\"), rolled once that unit has finished making its attacks."
+                    },
+                    "max_dice": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "description": "No more than this many dice are rolled, however many candidates there are (\"to a maximum of six D6\")."
                     }
                   },
                   "required": [
@@ -2378,6 +2397,48 @@
                         "required": [
                           "per_model",
                           "for_each"
+                        ]
+                      }
+                    },
+                    {
+                      "not": {
+                        "required": [
+                          "per_model",
+                          "per_attack"
+                        ]
+                      }
+                    },
+                    {
+                      "not": {
+                        "required": [
+                          "for_each",
+                          "per_attack"
+                        ]
+                      }
+                    },
+                    {
+                      "if": {
+                        "required": [
+                          "max_dice"
+                        ]
+                      },
+                      "then": {
+                        "anyOf": [
+                          {
+                            "required": [
+                              "per_model"
+                            ]
+                          },
+                          {
+                            "required": [
+                              "for_each"
+                            ]
+                          },
+                          {
+                            "required": [
+                              "per_attack"
+                            ]
+                          }
                         ]
                       }
                     },

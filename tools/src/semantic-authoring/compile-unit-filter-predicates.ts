@@ -21,6 +21,17 @@ export function side(filter: CompileLeaf, what: string, options: { models?: bool
   return value;
 }
 
+/**
+ * "that is within 3\" of one or more enemy units" after a loop's model-level filter: each pass's model is near a
+ * unit of that side (and keywords), the DSL's `within` measured to a unit filter.
+ */
+export function nearMatching(leaf: CompileLeaf | undefined, quantifier: CompileLeaf): { of: Record<string, unknown>; inches: unknown } | null {
+  if (leaf?.family_id !== "unit-position" || leaf.fragment !== quantifier.fragment) return null;
+  const p = leaf.parameters;
+  if (p.kind !== "within" || p.of !== "matching-unit" || p.subject !== AURA_RECIPIENT || p.negated === true || p.wholly === true || p.of_other === true) return null;
+  return { of: { owner: p.of_side, ...(Array.isArray(p.of_keywords) ? { all_of: p.of_keywords } : {}) }, inches: p.inches };
+}
+
 /** Units a distance after a quantifier's filter can be measured to, as the DSL's unit-refs. */
 const NEAR_REFS: Record<string, string> = { target: "defender", "selected-unit": "selected-unit", "event-subject": "event-subject", "event-object": "event-object", attacker: "attacker" };
 

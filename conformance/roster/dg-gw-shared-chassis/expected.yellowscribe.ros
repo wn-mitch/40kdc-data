@@ -28,7 +28,7 @@
             </profile>
             <profile name="Lethal Ichor" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">During the Fight phase, the target suffers 1 mortal wound.</characteristic>
+                <characteristic name="Description">After an enemy unit fights, roll one D6 for each melee attack allocated to a model in this unit (to a maximum of 6 D6): for each 4+, the triggering unit suffers 1 mortal wound.</characteristic>
               </characteristics>
             </profile>
             <profile name="Scouts" typeName="Abilities">

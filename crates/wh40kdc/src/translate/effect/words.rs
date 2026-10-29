@@ -26,6 +26,8 @@ pub(crate) struct Ctx {
     pub unit_subject: Option<String>,
     /// Inside an aura: the recipient reads "that unit".
     pub aura_recipient: bool,
+    /// Inside a `for-each-unit` over models: each pass's model (the recipient) reads "that model".
+    pub each_model: bool,
     /// The ability's trigger already says a unit or model is destroyed; leaves must not repeat it.
     pub destroyed_trigger: bool,
 }

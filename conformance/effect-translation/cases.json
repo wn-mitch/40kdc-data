@@ -32295,7 +32295,7 @@
       }
     },
     "expected": {
-      "text": "At the start of the battle, if the unit is an attached unit, for the rest of the battle:\n  For each friendly Bodyguard model in the unit:\n    -> Add 1 to the Strength characteristic of melee weapons equipped by the unit.\n    -> Add 1 to the unit's Toughness characteristic."
+      "text": "At the start of the battle, if the unit is an attached unit, for the rest of the battle:\n  For each friendly Bodyguard model in the unit:\n    -> Add 1 to the Strength characteristic of melee weapons equipped by that model.\n    -> Add 1 to that model's Toughness characteristic."
     }
   },
   {
@@ -43767,6 +43767,289 @@
     },
     "expected": {
       "text": "This model's Voice of Command ability gains the option Steady Aim (improve the unit's Armour Penetration characteristic by 1)."
+    }
+  },
+  {
+    "caseId": "canonical/act-on-death-table-row",
+    "effect": {
+      "type": "ability-part",
+      "trigger": {
+        "event": "model-destroyed",
+        "object": "model-in-this-unit"
+      },
+      "effect": {
+        "type": "dice-table",
+        "dice": "D6",
+        "outcomes": [
+          {
+            "results": [
+              1
+            ],
+            "effect": {
+              "type": "mortal-wounds",
+              "target": "this-unit",
+              "modifier": {
+                "count": 1
+              }
+            }
+          },
+          {
+            "results": [
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "effect": {
+              "type": "act-on-death",
+              "target": "event-object",
+              "modifier": {
+                "act": "fight",
+                "resolution": "when-unit-fights",
+                "removal": "after-unit-fights-or-phase-end"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "expected": {
+      "text": "Until the end of the phase:\n  -> When a model in the unit is destroyed:\n    -> Roll one D6:\n      - On 1: The unit suffers 1 mortal wound.\n      - On 2-6: Do not remove that model yet; when its unit is selected to fight, it can fight; remove it after its unit has finished fighting or at the end of the phase, whichever happens first."
+    }
+  },
+  {
+    "caseId": "canonical/for-each-model-selects",
+    "effect": {
+      "type": "for-each-unit",
+      "selector": {
+        "filter": {
+          "owner": "friendly",
+          "level": "model",
+          "member_of": "this-unit",
+          "within": {
+            "range": {
+              "inches": 3
+            },
+            "of": {
+              "owner": "enemy"
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy",
+            "within": {
+              "range": {
+                "inches": 3
+              },
+              "of": "recipient"
+            }
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "destroy-models",
+              "target": "recipient",
+              "modifier": {
+                "count": 1
+              }
+            },
+            {
+              "type": "dice-gated",
+              "dice": "D6",
+              "threshold": 2,
+              "comparison": "gte",
+              "on_success": {
+                "type": "mortal-wounds",
+                "target": "selected-unit",
+                "modifier": {
+                  "count": "D3"
+                }
+              },
+              "on_fail": null
+            }
+          ]
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "move-ended"
+    },
+    "expected": {
+      "text": "When the unit ends a move:\n  For each friendly model in the unit within 3\" of an enemy unit:\n    -> Select one enemy unit within 3\" of that model:\n      -> Destroy that model.\n      -> Roll one D6: on a 2+, that unit suffers D3 mortal wounds."
+    }
+  },
+  {
+    "caseId": "canonical/for-each-model-selects-inline",
+    "effect": {
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 4,
+      "comparison": "gte",
+      "on_fail": null,
+      "on_success": {
+        "type": "for-each-unit",
+        "selector": {
+          "filter": {
+            "owner": "friendly",
+            "level": "model",
+            "member_of": "this-unit",
+            "within": {
+              "range": {
+                "inches": 3
+              },
+              "of": {
+                "owner": "enemy"
+              }
+            }
+          }
+        },
+        "effect": {
+          "type": "select-units",
+          "selector": {
+            "filter": {
+              "owner": "enemy",
+              "within": {
+                "range": {
+                  "inches": 3
+                },
+                "of": "recipient"
+              }
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            }
+          },
+          "effect": {
+            "type": "destroy-models",
+            "target": "recipient",
+            "modifier": {
+              "count": 1
+            }
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Roll one D6: on a 4+, for each friendly model in the unit within 3\" of an enemy unit: select one enemy unit within 3\" of that model: destroy that model."
+    }
+  },
+  {
+    "caseId": "canonical/mortal-wounds-per-allocated-attack",
+    "effect": {
+      "type": "mortal-wounds",
+      "target": "event-subject",
+      "modifier": {
+        "count": 1,
+        "per": "success",
+        "roll": {
+          "dice": 1,
+          "threshold": 4,
+          "per_attack": {
+            "attack_type": "melee"
+          },
+          "max_dice": 6
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "attacks-resolved",
+      "subject": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "kind": "fight"
+      }
+    },
+    "expected": {
+      "text": "After an enemy unit fights, roll one D6 for each melee attack allocated to a model in this unit (to a maximum of 6 D6): for each 4+, the triggering unit suffers 1 mortal wound."
+    }
+  },
+  {
+    "caseId": "canonical/mortal-wounds-per-any-allocated-attack",
+    "effect": {
+      "type": "mortal-wounds",
+      "target": "event-subject",
+      "modifier": {
+        "count": 1,
+        "per": "success",
+        "roll": {
+          "dice": 1,
+          "threshold": 5,
+          "per_attack": {}
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Roll one D6 for each attack allocated to a model in this unit: for each 5+, the triggering unit suffers 1 mortal wound."
+    }
+  },
+  {
+    "caseId": "canonical/for-each-designated-on-battlefield",
+    "effect": {
+      "type": "for-each-unit",
+      "selector": {
+        "filter": {
+          "owner": "enemy",
+          "designated": "poisoned",
+          "state": "on-battlefield"
+        }
+      },
+      "effect": {
+        "type": "dice-gated",
+        "dice": "D6",
+        "threshold": 4,
+        "comparison": "gte",
+        "on_success": {
+          "type": "mortal-wounds",
+          "target": "recipient",
+          "modifier": {
+            "count": "D3"
+          }
+        },
+        "on_fail": null
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "command"
+        }
+      }
+    },
+    "expected": {
+      "text": "At the start of the Command phase:\n  For each enemy unit that is poisoned that is on the battlefield:\n    -> Roll one D6: on a 4+, the unit suffers D3 mortal wounds."
     }
   }
 ]

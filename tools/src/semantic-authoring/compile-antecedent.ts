@@ -495,6 +495,19 @@ function laterPartMoment(leaves: readonly CompileLeaf[], index: number): boolean
   return false;
 }
 
+/**
+ * "for each model in this unit …, select one of those enemy units. That model in this unit is destroyed": "that
+ * model" after a selection made in each pass of a loop over models is the pass's model, not the selected unit.
+ */
+function passModelAnaphor(leaves: readonly CompileLeaf[], index: number, sourceText?: string): boolean {
+  const leaf = leaves[index]!;
+  if (sourceText === undefined || leaf.end_byte === undefined) return false;
+  const loop = leaves.slice(0, index).map((other) => other.family_id === "for-each-unit-select").lastIndexOf(true);
+  if (loop < 0 || Object.keys(leaves[loop]!.parameters).length !== 0 || leaves[loop + 1]?.family_id !== "unit-filter" || leaves[loop + 1]!.parameters.level !== "model") return false;
+  if (!leaves.slice(loop, index).some((other) => other.family_id === "select-unit")) return false;
+  return /^that model\b/iu.test(exactSpan(sourceText, leaf.start_byte, leaf.end_byte).replace(/\*/gu, ""));
+}
+
 /** The role an earlier leaf of the record gives an anaphor, in order of precedence. */
 function antecedentRole(leaves: readonly CompileLeaf[], index: number, focus?: (index: number) => string | null, sourceText?: string): string | null {
   // "makes a ranged attack that targets an enemy unit visible to the bearer": the unit the attack names after it is the defender.
@@ -536,6 +549,7 @@ function antecedentRole(leaves: readonly CompileLeaf[], index: number, focus?: (
   // triggering attacks ("if the enemy WARLORD was destroyed …"): the filter names the units, not the selection.
   if (leaves[index]!.family_id === "unit-position" && leaves[index]!.role === "CONDITION" && bareFilter(leaves, index)
     && leaves[index - 1]?.family_id === "unit-filter" && leaves.some(isDestructionActivity)) return FILTERED_UNITS;
+  if (passModelAnaphor(leaves, index, sourceText)) return AURA_RECIPIENT;
   if (earlier.some((other) => other.family_id === "select-unit")) {
     // "While an enemy unit is infested …, that unit …": a bare filter after the last selection is the nearer unit,
     // unless it is the other unit a condition measures to (a following filter).
@@ -674,6 +688,8 @@ function boundValue(leaf: CompileLeaf, key: string, role: string): string | null
   if (role === AURA_RECIPIENT) {
     if (ANY_UNIT_KEYS[leaf.family_id]?.includes(key) || ANY_UNIT_CONDITION_KEYS[leaf.family_id]?.includes(key)) return role;
     if (leaf.family_id === "mortal-wounds" && key === "recipient") return role;
+    // "That model in this unit is destroyed" in a loop over models: the pass's model (passModelAnaphor).
+    if (leaf.family_id === "destroy-models" && key === "recipient") return role;
     // A family that lists the recipient itself ("each enemy unit … must take a Battle-shock test").
     return keyEnum(reviewedFamily(leaf.family_id, leaf.family_version).parameterSchema, key)?.includes(role) ? role : null;
   }

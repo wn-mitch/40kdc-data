@@ -248,8 +248,13 @@ function selectedContext(ctx: Ctx, sel: Record<string, unknown>): Ctx {
   return { ...ctx, selectedUnit: !selectedModel, selectedModel, unitSubject: undefined };
 }
 
+/** A `for-each-unit` body: a loop over models names each pass's model "that model". */
+function eachContext(ctx: Ctx, sel: Record<string, unknown>): Ctx {
+  return { ...selectedContext(ctx, sel), eachModel: selectorNoun(sel) === "model" };
+}
+
 function selectUnitsInline(sel: Record<string, unknown>, effect: Effect, ctx: Ctx): string {
-  const subject = selectUnitsSubject(sel);
+  const subject = selectUnitsSubject(sel, ctx);
   const binding = selectionBinding(sel);
   const nested = describeEffectInline(effect, selectedContext(ctx, sel));
   return `select ${subject}${binding}: ${nested}`;
@@ -619,7 +624,7 @@ function describeEffectInlineBase(e: Effect, ctx: Ctx = {}): string {
       if (!persistentDesignationSupported(e)) return "[persistent-designation]";
       return `${persistentDesignationLead(e)} ${persistentDesignationWhen(e)}, ${describeEffectInline(e.consumer?.effect ?? {}, ctx)}`;
     case "for-each-unit": {
-      const selectedCtx = selectedContext(ctx, e.selector ?? {});
+      const selectedCtx = eachContext(ctx, e.selector ?? {});
       return `for each ${forEachUnitSubject(e.selector)}${forEachCap(e.max_affected)}: ${describeEffectInline(e.effect ?? {}, selectedCtx)}`;
     }
     case "designate-target": {
@@ -924,7 +929,7 @@ export function describeEffect(e: Effect, depth: number = 0, ctx: Ctx = {}): str
       const selector = e.selector ?? {};
       const inner = e.effect ?? {};
       const selectedCtx = selectedContext(ctx, selector);
-      const lead = `Select ${selectUnitsSubject(selector)}${selectionBinding(selector)}`;
+      const lead = `Select ${selectUnitsSubject(selector, ctx)}${selectionBinding(selector)}`;
       const header = `${indent}${arrow}${lead}`;
       if (CONTAINER_TYPES.has(inner.type ?? "")) {
         if (selectUnitsPlural(selector)) {
@@ -949,7 +954,7 @@ export function describeEffect(e: Effect, depth: number = 0, ctx: Ctx = {}): str
     }
     case "for-each-unit": {
       const inner = e.effect ?? {};
-      const selectedCtx = selectedContext(ctx, e.selector ?? {});
+      const selectedCtx = eachContext(ctx, e.selector ?? {});
       const lead = `For each ${forEachUnitSubject(e.selector)}${forEachCap(e.max_affected)}`;
       if (CONTAINER_TYPES.has(inner.type ?? ""))
         return `${indent}${lead}:\n` + describeEffect(inner, depth + 1, selectedCtx);

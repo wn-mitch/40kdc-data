@@ -115,13 +115,15 @@ def selector_noun(sel: dict[str, Any]) -> str:
     return "model" if _selector_filter(sel).get("level") == "model" else "unit"
 
 
-def selector_subject(sel: dict[str, Any], plural: bool) -> str:
-    subject = filter_subject(_selector_filter(sel)).removeprefix("all ")
+def selector_subject(sel: dict[str, Any], plural: bool, each_model: bool = False) -> str:
+    """``each_model``: in a loop over models, a range from the pass's model reads "that model"."""
+    ctx = {"each_model": True} if each_model else {}
+    subject = filter_subject(_selector_filter(sel), ctx).removeprefix("all ")
     if plural:
         return subject
     subject = re.sub(r"\bunits\b", "unit", subject, count=1)
     subject = re.sub(r"\bmodels\b", "model", subject, count=1)
-    return re.sub(r"\bthat are\b", "that is", subject, count=1)
+    return re.sub(r"\bthat are\b", "that is", subject)
 
 
 def selector_count(sel: dict[str, Any]) -> tuple[str, bool]:
@@ -147,7 +149,7 @@ def selector_count(sel: dict[str, Any]) -> tuple[str, bool]:
     return "each", False
 
 
-def select_units_subject(sel: Any) -> str:
+def select_units_subject(sel: Any, each_model: bool = False) -> str:
     sel = _obj(sel)
     phrase, plural = selector_count(sel)
     bounds = sel.get("count") if isinstance(sel.get("count"), dict) else {}
@@ -166,7 +168,7 @@ def select_units_subject(sel: Any) -> str:
     else:
         tail = ""
     return (
-        f"{phrase} {selector_subject(sel, plural)}{tail}{_eligibility(sel)}"
+        f"{phrase} {selector_subject(sel, plural, each_model)}{tail}{_eligibility(sel)}"
         f"{selection_limit(sel.get('limit'), selector_noun(sel))}"
     )
 
@@ -193,6 +195,11 @@ def select_units_engagement(sel: Any) -> str:
 
 def select_units_plural(sel: Any) -> bool:
     return selector_count(_obj(sel))[1]
+
+
+def each_context(ctx: Ctx, sel: Any) -> Ctx:
+    """A ``for-each-unit`` body: a loop over models names each pass's model "that model"."""
+    return {**selected_context(ctx, sel), "each_model": _selector_level(_obj(sel)) == "model"}
 
 
 def selected_context(ctx: Ctx, sel: Any) -> Ctx:

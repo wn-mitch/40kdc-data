@@ -13,7 +13,8 @@ function notStates(states: readonly string[] | undefined): string[] {
 export const HELD_STATES: Record<string, string> = { "strategic-reserves": "in-strategic-reserves", "cult-ambush": "in-cult-ambush" };
 
 /** The states a unit-filter holds as its one DSL `state` (unengaged and not-battle-shocked are negations). */
-const POSITIVE_FILTER_STATES: readonly string[] = ["battle-shocked", "engaged", "hidden"];
+// "on-battlefield" arrives only from a loop's folded "on the battlefield" (compile-unit-filters.ts).
+const POSITIVE_FILTER_STATES: readonly string[] = ["battle-shocked", "engaged", "hidden", "on-battlefield"];
 
 const positiveFilterStates = (states: readonly string[] | undefined): string[] => (states ?? []).filter((state) => POSITIVE_FILTER_STATES.includes(state));
 
