@@ -144,7 +144,8 @@
       "get-back-in-the-fight-astra-militarum",
       "leader",
       "orders-cadian-castellan-astra-militarum",
-      "senior-officer-astra-militarum"
+      "senior-officer-astra-militarum",
+      "voice-of-command-astra-militarum"
     ],
     "game_version": {
       "edition": "11th",
@@ -536,7 +537,8 @@
         "wargear": "regimental-standard"
       },
       "tempestor-prime-astra-militarum",
-      "orders-astra-militarum"
+      "orders-astra-militarum",
+      "voice-of-command-astra-militarum"
     ],
     "game_version": {
       "edition": "11th",
@@ -670,7 +672,8 @@
       "supreme-commander-astra-militarum",
       "the-collegiate-astrolex-astra-militarum",
       "the-lord-solar-astra-militarum",
-      "orders-lord-solar-leontus-astra-militarum"
+      "orders-lord-solar-leontus-astra-militarum",
+      "voice-of-command-astra-militarum"
     ],
     "game_version": {
       "edition": "11th",
@@ -1487,7 +1490,8 @@
         "id": "damaged",
         "value": 6
       },
-      "orders-leman-russ-commander-astra-militarum"
+      "orders-leman-russ-commander-astra-militarum",
+      "voice-of-command-astra-militarum"
     ],
     "game_version": {
       "edition": "11th",
@@ -2242,7 +2246,8 @@
       "leader",
       "political-overwatch-astra-militarum",
       "summary-execution-astra-militarum",
-      "orders-commissar-astra-militarum"
+      "orders-commissar-astra-militarum",
+      "voice-of-command-astra-militarum"
     ],
     "game_version": {
       "edition": "11th",
@@ -3156,7 +3161,8 @@
       {
         "id": "regimental-standard-astra-militarum",
         "wargear": "regimental-standard"
-      }
+      },
+      "voice-of-command-astra-militarum"
     ],
     "game_version": {
       "edition": "11th",
@@ -3271,7 +3277,8 @@
       {
         "id": "regimental-standard-astra-militarum",
         "wargear": "regimental-standard"
-      }
+      },
+      "voice-of-command-astra-militarum"
     ],
     "game_version": {
       "edition": "11th",
@@ -4265,7 +4272,8 @@
       {
         "id": "regimental-standard-astra-militarum",
         "wargear": "regimental-standard"
-      }
+      },
+      "voice-of-command-astra-militarum"
     ],
     "game_version": {
       "edition": "11th",
@@ -4692,7 +4700,8 @@
         "id": "feel-no-pain",
         "value": 6
       },
-      "orders-lord-marshal-dreir-astra-militarum"
+      "orders-lord-marshal-dreir-astra-militarum",
+      "voice-of-command-astra-militarum"
     ],
     "game_version": {
       "edition": "11th",
@@ -5055,7 +5064,8 @@
         "value": 4
       },
       "orders-leman-russ-commander-astra-militarum",
-      "vox-net-astra-militarum"
+      "vox-net-astra-militarum",
+      "voice-of-command-astra-militarum"
     ],
     "game_version": {
       "edition": "11th",
@@ -5239,7 +5249,8 @@
       "leader",
       "lord-castellan-astra-militarum",
       "tactical-genius-astra-militarum",
-      "orders-lord-marshal-dreir-astra-militarum"
+      "orders-lord-marshal-dreir-astra-militarum",
+      "voice-of-command-astra-militarum"
     ],
     "game_version": {
       "edition": "11th",
@@ -6497,7 +6508,8 @@
         "value": "D3"
       },
       "mechanised-spearhead-astra-militarum",
-      "orders-commissar-graves-astra-militarum"
+      "orders-commissar-graves-astra-militarum",
+      "voice-of-command-astra-militarum"
     ]
   },
   {
@@ -6572,7 +6584,8 @@
       "icon-of-discipline-astra-militarum",
       "leader",
       "orders-commissar-graves-on-foot-astra-militarum",
-      "using-commissar-graves-astra-militarum"
+      "using-commissar-graves-astra-militarum",
+      "voice-of-command-astra-militarum"
     ]
   },
   {
@@ -6649,7 +6662,8 @@
       "hero-of-hades-hive-astra-militarum",
       "leader",
       "orders-commissar-yarrick-astra-militarum",
-      "will-of-iron-astra-militarum"
+      "will-of-iron-astra-militarum",
+      "voice-of-command-astra-militarum"
     ]
   },
   {
@@ -6780,7 +6794,8 @@
       "power-sabre"
     ],
     "ability_ids": [
-      "horsemasters-draydens-lance-attilan-rough-riders-astra-militarum"
+      "horsemasters-draydens-lance-attilan-rough-riders-astra-militarum",
+      "voice-of-command-astra-militarum"
     ],
     "game_version": {
       "edition": "11th",

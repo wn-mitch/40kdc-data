@@ -414,6 +414,8 @@ describe("Kharn proof (the headline one-liner)", () => {
     expect(kharn!.weapons.length).toBe(2);
     expect(kharn!.abilities.map((a) => a.id).sort()).toEqual([
       "berzerker-frenzy-world-eaters",
+      // The army rule Kharn's datasheet prints.
+      "blessings-of-khorne-world-eaters",
       "leader",
       "legendary-killer-world-eaters",
       "the-betrayer-world-eaters",

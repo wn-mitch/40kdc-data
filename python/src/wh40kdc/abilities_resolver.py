@@ -169,8 +169,11 @@ def resolve_eligible_abilities(
                     }
                 )
 
-    # 4. Unit's own abilities.
+    # 4. Unit's own abilities. A unit lists the army rules its datasheet prints, but an army rule
+    # is the army's (step 1, which also applies a Combat Patrol's replacements).
     for ability in unit.abilities:
+        if ability.raw.get("ability_type") == "faction":
+            continue
         if not phase_matches(ability):
             continue
         push_unique(
@@ -189,6 +192,8 @@ def resolve_eligible_abilities(
         if member is None:
             continue
         for ability in member.abilities:
+            if ability.raw.get("ability_type") == "faction":
+                continue
             if not phase_matches(ability):
                 continue
             push_unique(
@@ -208,6 +213,8 @@ def resolve_eligible_abilities(
         if supporter is None:
             continue
         for ability in supporter.abilities:
+            if ability.raw.get("ability_type") == "faction":
+                continue
             if not phase_matches(ability):
                 continue
             if not _is_aura_scope(

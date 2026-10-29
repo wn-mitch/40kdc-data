@@ -60,7 +60,8 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "strafing-run-adeptus-mechanicus"
+      "strafing-run-adeptus-mechanicus",
+      "doctrina-imperatives-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -147,7 +148,8 @@
       {
         "id": "damaged",
         "value": 4
-      }
+      },
+      "doctrina-imperatives-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -224,7 +226,8 @@
       "phosphor-blaster"
     ],
     "ability_ids": [
-      "sentinel-directives-adeptus-mechanicus"
+      "sentinel-directives-adeptus-mechanicus",
+      "doctrina-imperatives-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -296,7 +299,8 @@
     "ability_ids": [
       "battle-protocols-adeptus-mechanicus",
       "data-severed-adeptus-mechanicus",
-      "support"
+      "support",
+      "doctrina-imperatives-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -405,7 +409,8 @@
         "value": 1
       },
       "elevated-strider-adeptus-mechanicus",
-      "broad-spectrum-data-tether-adeptus-mechanicus"
+      "broad-spectrum-data-tether-adeptus-mechanicus",
+      "doctrina-imperatives-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -485,7 +490,8 @@
     "ability_ids": [
       "defend-the-divine-work-adeptus-mechanicus",
       "galvanic-field-adeptus-mechanicus",
-      "leader"
+      "leader",
+      "doctrina-imperatives-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -573,7 +579,8 @@
         "id": "deadly-demise",
         "value": 1
       },
-      "broad-spectrum-data-tether-adeptus-mechanicus"
+      "broad-spectrum-data-tether-adeptus-mechanicus",
+      "doctrina-imperatives-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -651,7 +658,8 @@
       "canticles-of-the-omnissiah-adeptus-mechanicus",
       "mechanicus-bodyguard-adeptus-mechanicus",
       "self-repair-mechanisms-adeptus-mechanicus",
-      "supreme-commander-adeptus-mechanicus"
+      "supreme-commander-adeptus-mechanicus",
+      "doctrina-imperatives-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -744,7 +752,8 @@
     ],
     "ability_ids": [
       "attached-unit-servitor-battleclade-adeptus-mechanicus",
-      "network-override-adeptus-mechanicus"
+      "network-override-adeptus-mechanicus",
+      "doctrina-imperatives-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -837,7 +846,8 @@
       {
         "id": "feel-no-pain",
         "value": 5
-      }
+      },
+      "doctrina-imperatives-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -922,7 +932,8 @@
       {
         "id": "damaged",
         "value": 4
-      }
+      },
+      "doctrina-imperatives-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -1005,7 +1016,8 @@
       "dread-snipers-adeptus-mechanicus",
       "lone-operative",
       "sydonian-sentinel-adeptus-mechanicus",
-      "stealth"
+      "stealth",
+      "doctrina-imperatives-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -1101,7 +1113,8 @@
       "infiltrators",
       "neurostatic-interference-adeptus-mechanicus",
       "voices-in-the-code-adeptus-mechanicus",
-      "stealth"
+      "stealth",
+      "doctrina-imperatives-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -1185,7 +1198,8 @@
       {
         "id": "command-uplink-adeptus-mechanicus",
         "wargear": "command-uplink"
-      }
+      },
+      "doctrina-imperatives-adeptus-mechanicus"
     ],
     "transport_capacity": {
       "capacity": 11,
@@ -1274,7 +1288,8 @@
         "id": "omnispex-adeptus-mechanicus",
         "wargear": "omnispex"
       },
-      "rad-saturation-adeptus-mechanicus"
+      "rad-saturation-adeptus-mechanicus",
+      "doctrina-imperatives-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -1381,7 +1396,8 @@
     "ability_ids": [
       "dataspike-adeptus-mechanicus",
       "leader",
-      "lord-of-the-machine-cult-adeptus-mechanicus"
+      "lord-of-the-machine-cult-adeptus-mechanicus",
+      "doctrina-imperatives-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -1479,7 +1495,8 @@
     ],
     "ability_ids": [
       "ride-the-thermals-adeptus-mechanicus",
-      "deep-strike"
+      "deep-strike",
+      "doctrina-imperatives-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -1559,7 +1576,8 @@
       "torsion-cannon"
     ],
     "ability_ids": [
-      "breaching-command-adeptus-mechanicus"
+      "breaching-command-adeptus-mechanicus",
+      "doctrina-imperatives-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -1652,7 +1670,8 @@
     ],
     "ability_ids": [
       "optimised-gait-adeptus-mechanicus",
-      "stealth"
+      "stealth",
+      "doctrina-imperatives-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -1724,7 +1743,8 @@
     "ability_ids": [
       "cogitative-instincts-adeptus-mechanicus",
       "seekers-of-divine-arcana-adeptus-mechanicus",
-      "support"
+      "support",
+      "doctrina-imperatives-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -1802,7 +1822,8 @@
       {
         "id": "feel-no-pain",
         "value": 5
-      }
+      },
+      "doctrina-imperatives-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -1888,7 +1909,8 @@
       {
         "id": "enhanced-data-tether-adeptus-mechanicus",
         "wargear": "enhanced-data-tether"
-      }
+      },
+      "doctrina-imperatives-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -1983,7 +2005,8 @@
         "id": "deadly-demise",
         "value": 1
       },
-      "broad-spectrum-data-tether-adeptus-mechanicus"
+      "broad-spectrum-data-tether-adeptus-mechanicus",
+      "doctrina-imperatives-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -2060,7 +2083,8 @@
       "sulphur-breath"
     ],
     "ability_ids": [
-      "line-breakers-adeptus-mechanicus"
+      "line-breakers-adeptus-mechanicus",
+      "doctrina-imperatives-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -2135,7 +2159,8 @@
       "enginseer-adeptus-mechanicus",
       "leader",
       "omnissiahs-blessing-adeptus-mechanicus",
-      "vengeance-for-the-omnissiah-adeptus-mechanicus"
+      "vengeance-for-the-omnissiah-adeptus-mechanicus",
+      "doctrina-imperatives-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -2208,7 +2233,8 @@
     "ability_ids": [
       "control-edict-adeptus-mechanicus",
       "servo-skull-uplink-adeptus-mechanicus",
-      "support"
+      "support",
+      "doctrina-imperatives-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -2298,7 +2324,8 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "broad-spectrum-data-tether-skorpius-disintegrator-adeptus-mechanicus"
+      "broad-spectrum-data-tether-skorpius-disintegrator-adeptus-mechanicus",
+      "doctrina-imperatives-adeptus-mechanicus"
     ],
     "transport_capacity": {
       "capacity": 12,
@@ -2404,7 +2431,8 @@
       {
         "id": "deadly-demise",
         "value": 1
-      }
+      },
+      "doctrina-imperatives-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -2500,7 +2528,8 @@
     ],
     "ability_ids": [
       "searing-conflagration-adeptus-mechanicus",
-      "deep-strike"
+      "deep-strike",
+      "doctrina-imperatives-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -2586,7 +2615,8 @@
       {
         "id": "command-uplink-adeptus-mechanicus",
         "wargear": "command-uplink"
-      }
+      },
+      "doctrina-imperatives-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -2673,7 +2703,8 @@
       {
         "id": "omnispex-adeptus-mechanicus",
         "wargear": "omnispex"
-      }
+      },
+      "doctrina-imperatives-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -2803,7 +2834,8 @@
       }
     ],
     "ability_ids": [
-      "broad-spectrum-targeting-augurs-adeptus-mechanicus"
+      "broad-spectrum-targeting-augurs-adeptus-mechanicus",
+      "doctrina-imperatives-adeptus-mechanicus"
     ]
   },
   {
@@ -2882,7 +2914,8 @@
       }
     ],
     "ability_ids": [
-      "monocular-targeting-helms-adeptus-mechanicus"
+      "monocular-targeting-helms-adeptus-mechanicus",
+      "doctrina-imperatives-adeptus-mechanicus"
     ]
   },
   {
@@ -2957,7 +2990,8 @@
       "mechanicus-bodyguard-adeptus-mechanicus",
       "rod-of-the-war-forge-adeptus-mechanicus",
       "secutor-of-olympus-adeptus-mechanicus",
-      "supreme-commander-adeptus-mechanicus"
+      "supreme-commander-adeptus-mechanicus",
+      "doctrina-imperatives-adeptus-mechanicus"
     ]
   },
   {
@@ -3006,7 +3040,8 @@
     ],
     "ability_ids": [
       "defend-the-divine-work-manipulus-skand-adeptus-mechanicus",
-      "mechanical-guidance-adeptus-mechanicus"
+      "mechanical-guidance-adeptus-mechanicus",
+      "doctrina-imperatives-purge-corps-deltic-9-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -3073,7 +3108,8 @@
       "talons"
     ],
     "ability_ids": [
-      "searing-conflagration-purge-corps-pteraxii-sterylizors-adeptus-mechanicus"
+      "searing-conflagration-purge-corps-pteraxii-sterylizors-adeptus-mechanicus",
+      "doctrina-imperatives-purge-corps-deltic-9-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",
@@ -3166,7 +3202,8 @@
       }
     ],
     "ability_ids": [
-      "pinning-fire-adeptus-mechanicus"
+      "pinning-fire-adeptus-mechanicus",
+      "doctrina-imperatives-purge-corps-deltic-9-adeptus-mechanicus"
     ]
   },
   {
@@ -3217,7 +3254,8 @@
     ],
     "ability_ids": [
       "omnispex-purge-corps-skitarii-vanguard-adeptus-mechanicus",
-      "rad-saturation-purge-corps-skitarii-vanguard-adeptus-mechanicus"
+      "rad-saturation-purge-corps-skitarii-vanguard-adeptus-mechanicus",
+      "doctrina-imperatives-purge-corps-deltic-9-adeptus-mechanicus"
     ],
     "game_version": {
       "edition": "11th",

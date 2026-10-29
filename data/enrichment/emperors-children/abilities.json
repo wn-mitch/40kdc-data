@@ -2369,7 +2369,7 @@
     "faction_id": "emperors-children",
     "ability_type": "faction",
     "behavior": "passive",
-    "unit_ids": []
+    "unit_ids": ["callous-blades-flawless-blades","callous-blades-infractors","chaos-land-raider","chaos-rhino","chaos-spawn","chaos-terminators","daemon-prince-of-slaanesh","daemon-prince-of-slaanesh-with-wings","defiler","flawless-blades","fulgrim","heldrake","infractors","lord-exultant","lord-kakophonist","lord-kaphrael-of-the-callous-blades","lucius-the-eternal","maulerfiend","noise-marines","sorcerer","tormentors"]
   },
   {
     "ability_id": "pact-of-excess-emperors-children",
@@ -2395,7 +2395,7 @@
     "faction_id": "emperors-children",
     "ability_type": "faction",
     "behavior": "passive",
-    "unit_ids": []
+    "unit_ids": ["callous-blades-flawless-blades","callous-blades-infractors","daemonettes","fiends","keeper-of-secrets","lord-kaphrael-of-the-callous-blades","seekers","shalaxi-helbane"]
   },
   {
     "ability_id": "eager-to-kill-emperors-children",
@@ -10044,7 +10044,8 @@
         ]
       }
     },
-    "source_digest": "f45098adfa15d78d190b764e864e32657d0935ef4df9b50bf877d3560cc21a4c"
+    "source_digest": "f45098adfa15d78d190b764e864e32657d0935ef4df9b50bf877d3560cc21a4c",
+    "faction_id": "emperors-children"
   },
   {
     "ability_id": "revel-in-desecration-emperors-children",
@@ -10087,6 +10088,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "source_digest": "32a08652638a00f20a4d6cea9cb82c5965d4a494b68f291239a10076efc4759a"
+    "source_digest": "32a08652638a00f20a4d6cea9cb82c5965d4a494b68f291239a10076efc4759a",
+    "faction_id": "emperors-children"
   }
 ]

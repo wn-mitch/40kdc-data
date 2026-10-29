@@ -36,6 +36,12 @@
                 <characteristic name="Description">The unit gains the Scouts X" ability, X being its rating.</characteristic>
               </characteristics>
             </profile>
+            <profile name="Nurgle’s Gift (Aura)" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">If your Army Faction is DEATH GUARD, while an enemy unit is within 3", 6", 9" in battle rounds 1, 2, 3 respectively (using the final range in later battle rounds) (to a maximum of 12", extensions included) of one or more friendly DEATH GUARD models, that unit is Afflicted.
+-&gt; When declaring Battle Formations, for the rest of the battle: if your Army Faction is DEATH GUARD, select exactly 1 distinct options (Plague): while making ranged attacks, while the attacking unit is an enemy unit that is Afflicted, the target has the Benefit of Cover; while making melee attacks, while the attacking unit is an enemy unit that is Afflicted, enemy units that are Afflicted get -1 to Hit rolls / worsen the Save characteristic of enemy units that are Afflicted by 1 / worsen the Move characteristic of enemy units that are Afflicted by 1; worsen the Leadership characteristic of enemy units that are Afflicted by 1; worsen the Objective Control characteristic of enemy units that are Afflicted by 1 (to a minimum of 1); subtract 1 from the Toughness characteristic of enemy units that are Afflicted.</characteristic>
+              </characteristics>
+            </profile>
           </profiles>
           <categories>
             <category name="Faction: Death Guard"/>
@@ -94,6 +100,12 @@
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
   -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Nurgle’s Gift (Aura)" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">If your Army Faction is DEATH GUARD, while an enemy unit is within 3", 6", 9" in battle rounds 1, 2, 3 respectively (using the final range in later battle rounds) (to a maximum of 12", extensions included) of one or more friendly DEATH GUARD models, that unit is Afflicted.
+-&gt; When declaring Battle Formations, for the rest of the battle: if your Army Faction is DEATH GUARD, select exactly 1 distinct options (Plague): while making ranged attacks, while the attacking unit is an enemy unit that is Afflicted, the target has the Benefit of Cover; while making melee attacks, while the attacking unit is an enemy unit that is Afflicted, enemy units that are Afflicted get -1 to Hit rolls / worsen the Save characteristic of enemy units that are Afflicted by 1 / worsen the Move characteristic of enemy units that are Afflicted by 1; worsen the Leadership characteristic of enemy units that are Afflicted by 1; worsen the Objective Control characteristic of enemy units that are Afflicted by 1 (to a minimum of 1); subtract 1 from the Toughness characteristic of enemy units that are Afflicted.</characteristic>
               </characteristics>
             </profile>
           </profiles>

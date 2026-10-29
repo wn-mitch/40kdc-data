@@ -49,7 +49,8 @@
       {
         "id": "damaged",
         "value": 5
-      }
+      },
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -128,7 +129,8 @@
       {
         "id": "damaged",
         "value": 5
-      }
+      },
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -210,7 +212,9 @@
       "venom-cannon"
     ],
     "ability_ids": [
-      "adaptable-predators-tyranids"
+      "adaptable-predators-tyranids",
+      "shadow-in-the-warp-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -314,7 +318,9 @@
       },
       "paroxysm-tyranids",
       "will-of-the-hive-mind-tyranids",
-      "deep-strike"
+      "deep-strike",
+      "shadow-in-the-warp-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -400,7 +406,8 @@
       {
         "id": "damaged",
         "value": 10
-      }
+      },
+      "synapse-tyranids"
     ],
     "transport_capacity": {
       "capacity": 20
@@ -489,7 +496,9 @@
       {
         "id": "damaged",
         "value": 5
-      }
+      },
+      "shadow-in-the-warp-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -562,7 +571,9 @@
       "alpha-warrior-winged-tyranid-prime-tyranids",
       "death-blow-tyranids",
       "leader",
-      "deep-strike"
+      "deep-strike",
+      "shadow-in-the-warp-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -731,7 +742,8 @@
       {
         "id": "damaged-objective-control",
         "value": 6
-      }
+      },
+      "synapse-tyranids"
     ],
     "transport_capacity": {
       "capacity": 20
@@ -813,7 +825,9 @@
       {
         "id": "deadly-demise",
         "value": "D3"
-      }
+      },
+      "shadow-in-the-warp-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -897,7 +911,8 @@
       {
         "id": "damaged",
         "value": 5
-      }
+      },
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -969,7 +984,8 @@
     ],
     "ability_ids": [
       "foul-spores-tyranids",
-      "stealth"
+      "stealth",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -1040,7 +1056,9 @@
       "tyranid-warrior-claws-and-talons-tyranid-warriors-with-melee-bio-weapons"
     ],
     "ability_ids": [
-      "adaptive-instincts-tyranids"
+      "adaptive-instincts-tyranids",
+      "shadow-in-the-warp-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -1117,7 +1135,8 @@
     "ability_ids": [
       "bio-minefield-tyranids",
       "deep-strike",
-      "floating-death-spore-mines-tyranids"
+      "floating-death-spore-mines-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -1202,7 +1221,8 @@
       {
         "id": "deadly-demise",
         "value": "D3"
-      }
+      },
+      "synapse-tyranids"
     ],
     "transport_capacity": {
       "capacity": 20
@@ -1281,7 +1301,8 @@
     ],
     "ability_ids": [
       "chitinous-horrors-tyranids",
-      "deep-strike"
+      "deep-strike",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -1359,7 +1380,8 @@
         "id": "deadly-demise",
         "value": 1
       },
-      "seed-spore-mines-tyranids"
+      "seed-spore-mines-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -1434,7 +1456,8 @@
       "hunter-organism-tyranids",
       "infiltrators",
       "lone-operative",
-      "stealth"
+      "stealth",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -1527,7 +1550,9 @@
       "alpha-invader-tyranids",
       "hypersensory-array-tyranids",
       "deep-strike",
-      "leader"
+      "leader",
+      "shadow-in-the-warp-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -1613,7 +1638,9 @@
         "id": "damaged",
         "value": 5
       },
-      "singular-purpose-tyranids"
+      "singular-purpose-tyranids",
+      "shadow-in-the-warp-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -1684,7 +1711,8 @@
       {
         "id": "deadly-demise",
         "value": "D3"
-      }
+      },
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -1771,7 +1799,8 @@
       {
         "id": "damaged",
         "value": 5
-      }
+      },
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -1861,7 +1890,9 @@
       "stealth",
       "infiltrators",
       "lone-operative",
-      "feeder-tendrils-tyranids"
+      "feeder-tendrils-tyranids",
+      "shadow-in-the-warp-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -1939,7 +1970,8 @@
       {
         "id": "deadly-demise",
         "value": 1
-      }
+      },
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -2014,7 +2046,9 @@
     ],
     "ability_ids": [
       "spirit-leech-tyranids",
-      "warp-field-tyranids"
+      "warp-field-tyranids",
+      "shadow-in-the-warp-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -2091,7 +2125,9 @@
         "id": "scouts",
         "value": 8
       },
-      "vicious-insight-tyranids"
+      "vicious-insight-tyranids",
+      "shadow-in-the-warp-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -2172,7 +2208,8 @@
       {
         "id": "damaged",
         "value": 4
-      }
+      },
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -2247,7 +2284,9 @@
       "parasitic-infection-tyranids",
       "deep-strike",
       "stealth",
-      "lone-operative"
+      "lone-operative",
+      "shadow-in-the-warp-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -2319,7 +2358,8 @@
       "scything-talons-and-rending-claws"
     ],
     "ability_ids": [
-      "guardian-organism-tyranids"
+      "guardian-organism-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -2401,7 +2441,8 @@
       {
         "id": "deadly-demise",
         "value": 1
-      }
+      },
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -2545,7 +2586,8 @@
       "hormagaunt-talons"
     ],
     "ability_ids": [
-      "bounding-leap-tyranids"
+      "bounding-leap-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -2641,7 +2683,8 @@
       {
         "id": "scouts",
         "value": 8
-      }
+      },
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -2713,7 +2756,8 @@
       {
         "id": "deadly-demise",
         "value": "D3"
-      }
+      },
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -2816,7 +2860,8 @@
       {
         "id": "deadly-demise",
         "value": 1
-      }
+      },
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -2890,7 +2935,9 @@
       "leader",
       "neuroloids-tyranids",
       "node-lash-tyranids",
-      "psychic-terror-tyranids"
+      "psychic-terror-tyranids",
+      "shadow-in-the-warp-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -2970,7 +3017,8 @@
       "termagant-spinefists"
     ],
     "ability_ids": [
-      "skulking-horrors-tyranids"
+      "skulking-horrors-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -3046,7 +3094,9 @@
     "ability_ids": [
       "aggressive-leader-beast-tyranids",
       "leader",
-      "alpha-warrior-tyranids"
+      "alpha-warrior-tyranids",
+      "shadow-in-the-warp-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -3136,7 +3186,8 @@
       "shockcannon"
     ],
     "ability_ids": [
-      "defensive-stance-tyranids"
+      "defensive-stance-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -3207,7 +3258,8 @@
       "chitinous-claws-and-teeth-barbgaunts"
     ],
     "ability_ids": [
-      "disruption-bombardment-tyranids"
+      "disruption-bombardment-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -3282,7 +3334,8 @@
       "chitinous-claws-and-teeth-neurogaunts"
     ],
     "ability_ids": [
-      "neurocytes-tyranids"
+      "neurocytes-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -3363,7 +3416,8 @@
       {
         "id": "damaged",
         "value": 4
-      }
+      },
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -3444,7 +3498,9 @@
       {
         "id": "damaged",
         "value": 5
-      }
+      },
+      "shadow-in-the-warp-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -3519,7 +3575,8 @@
       {
         "id": "feel-no-pain",
         "value": 5
-      }
+      },
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -3605,7 +3662,9 @@
       {
         "id": "damaged",
         "value": 5
-      }
+      },
+      "shadow-in-the-warp-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -3688,7 +3747,8 @@
       {
         "id": "deadly-demise",
         "value": 1
-      }
+      },
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -3766,7 +3826,9 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "will-of-the-hive-mind-tyranids"
+      "will-of-the-hive-mind-tyranids",
+      "shadow-in-the-warp-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -3845,7 +3907,8 @@
     ],
     "ability_ids": [
       "winged-swarm-tyranids",
-      "deep-strike"
+      "deep-strike",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -3934,7 +3997,8 @@
       {
         "id": "damaged",
         "value": 5
-      }
+      },
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -4005,7 +4069,8 @@
       "infiltrators",
       "lone-operative",
       "fights-first",
-      "feeder-tendrils-tyranids"
+      "feeder-tendrils-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -4081,7 +4146,8 @@
     ],
     "ability_ids": [
       "death-from-below-tyranids",
-      "deep-strike"
+      "deep-strike",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
@@ -4175,7 +4241,8 @@
     "ability_ids": [
       "deep-strike",
       "subterranean-hunter-tyranids",
-      "swallow-whole-tyranids"
+      "swallow-whole-tyranids",
+      "synapse-tyranids"
     ]
   },
   {

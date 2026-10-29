@@ -309,6 +309,8 @@ fn kharn_links_faction_weapons_abilities() {
         ability_ids,
         [
             "berzerker-frenzy-world-eaters",
+            // The army rule Kharn's datasheet prints.
+            "blessings-of-khorne-world-eaters",
             "leader",
             "legendary-killer-world-eaters",
             "the-betrayer-world-eaters"

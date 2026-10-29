@@ -2461,7 +2461,7 @@
     "faction_id": "blood-angels",
     "ability_type": "faction",
     "behavior": "passive",
-    "unit_ids": [],
+    "unit_ids": ["captain-raldeo","sanguinary-spearhead-assault-intercessor-squad"],
     "detachment_id": "sanguinary-spearhead"
   },
   {
@@ -3190,7 +3190,7 @@
       "dataslate": "pre-launch-provisional"
     },
     "stub": true,
-    "unit_ids": [],
+    "unit_ids": ["astorath","baal-predator","blood-angels-captain","chief-librarian-mephiston","commander-dante","death-company-captain","death-company-captain-with-jump-pack","death-company-dreadnought","death-company-marines","death-company-marines-with-jump-packs","lemartes","sanguinary-guard","sanguinary-priest","the-sanguinor"],
     "faction_id": "blood-angels",
     "detachment_id": null,
     "ability_type": "faction",
@@ -3380,7 +3380,7 @@
       "edition": "11th",
       "dataslate": "2026-10-14"
     },
-    "unit_ids": [],
+    "unit_ids": ["blood-angels-captain","chief-librarian-mephiston","commander-dante"],
     "faction_id": "blood-angels",
     "detachment_id": null,
     "ability_type": "faction",

@@ -154,3 +154,19 @@ describe("Semantic authoring source prose from the dump", () => {
     expect(loadSourceRecords()).toMatchObject({ origin: fixture, records: [expect.objectContaining({ factionId: "alpha", text: "Fixture war cry." })] });
   });
 });
+
+describe("Semantic authoring army-rule prose for a unit that lists the rule", () => {
+  it("reads an army rule from the army rules, not the datasheet line of a unit that lists it", () => {
+    const root = dataRoot({
+      "enrichment/alpha/abilities.json": [{ ability_id: "war-cry", name: "War Cry", ability_type: "faction", unit_ids: ["warden"] }],
+      "core/alpha/units.json": [{ id: "warden", external_refs: mfm("ds-warden"), ability_ids: ["war-cry"] }],
+    });
+    const prose = new DumpProse({ rows: [
+      row("alpha", { kind: "army" }, "War Cry", { kind: "army-rule", text: "Codex war cry." }),
+      // The datasheet's own line naming the rule, with other words.
+      row("alpha", datasheet("ds-warden", "warden"), "War Cry", { text: "Datasheet line naming war cry." }),
+    ], unowned: [] });
+    const loaded = loadDumpSourceRecords({ dataRoot: root, prose, dumpPath: "fixture" });
+    expect(loaded.records.find((record) => record.abilityId === "war-cry")?.text).toBe("Codex war cry.");
+  });
+});

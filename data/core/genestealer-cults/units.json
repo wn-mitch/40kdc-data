@@ -99,7 +99,8 @@
         "id": "scouts",
         "value": 9
       },
-      "stealth"
+      "stealth",
+      "cult-ambush-genestealer-cults"
     ],
     "game_version": {
       "edition": "11th",
@@ -259,7 +260,8 @@
         "id": "cult-icon-neophyte-hybrids-genestealer-cults",
         "wargear": "cult-icon"
       },
-      "deep-strike"
+      "deep-strike",
+      "cult-ambush-genestealer-cults"
     ],
     "game_version": {
       "edition": "11th",
@@ -1354,7 +1356,8 @@
       {
         "id": "feel-no-pain",
         "value": 5
-      }
+      },
+      "cult-ambush-genestealer-cults"
     ],
     "game_version": {
       "edition": "11th",
@@ -1436,7 +1439,8 @@
       {
         "id": "cult-icon-genestealer-cults",
         "wargear": "cult-icon"
-      }
+      },
+      "cult-ambush-genestealer-cults"
     ],
     "game_version": {
       "edition": "11th",
@@ -1556,7 +1560,8 @@
       {
         "id": "cult-icon-genestealer-cults",
         "wargear": "cult-icon"
-      }
+      },
+      "cult-ambush-genestealer-cults"
     ],
     "game_version": {
       "edition": "11th",
@@ -1647,7 +1652,8 @@
       {
         "id": "cult-icon-genestealer-cults",
         "wargear": "cult-icon"
-      }
+      },
+      "cult-ambush-genestealer-cults"
     ],
     "game_version": {
       "edition": "11th",
@@ -1992,7 +1998,8 @@
     "ability_ids": [
       "swift-and-deadly-genestealer-cults",
       "deep-strike",
-      "infiltrators"
+      "infiltrators",
+      "cult-ambush-genestealer-cults"
     ],
     "game_version": {
       "edition": "11th",
@@ -2131,7 +2138,8 @@
     ],
     "ability_ids": [
       "crossfire-claw-of-ascension-achilles-ridgerunner-genestealer-cults",
-      "survey-augur-claw-of-ascension-achilles-ridgerunner-genestealer-cults"
+      "survey-augur-claw-of-ascension-achilles-ridgerunner-genestealer-cults",
+      "cult-ambush-claw-of-ascension-genestealer-cults"
     ],
     "game_version": {
       "edition": "11th",
@@ -2207,7 +2215,8 @@
       "power-weapon-claw-of-ascension-atalan-jackals"
     ],
     "ability_ids": [
-      "adaptable-fighters-genestealer-cults"
+      "adaptable-fighters-genestealer-cults",
+      "cult-ambush-claw-of-ascension-genestealer-cults"
     ],
     "game_version": {
       "edition": "11th",
@@ -2328,7 +2337,8 @@
     ],
     "ability_ids": [
       "master-outrider-shanus-daskovian-genestealer-cults",
-      "priority-target-shanus-daskovian-genestealer-cults"
+      "priority-target-shanus-daskovian-genestealer-cults",
+      "cult-ambush-claw-of-ascension-genestealer-cults"
     ],
     "game_version": {
       "edition": "11th",

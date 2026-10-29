@@ -36,6 +36,19 @@
                 <characteristic name="Description">While the model is Damaged, subtract its rating from this model's Objective Control characteristic.</characteristic>
               </characteristics>
             </profile>
+            <profile name="Harbingers of Dread" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">For the rest of the battle:
+  -&gt; Subtract 1 from the Leadership characteristic of enemy units within 9".
+  Select one of the following (Dread Ability):
+    - Subtract 1 from the Leadership characteristic of enemy units within 9".
+    - While the target is Battle-shocked, the unit gets +1 to Wound rolls.
+    - This model gains the Stealth ability.
+    - Enemy units within 9" must take a Battle-shock test.
+    - Enemy units within 9" suffer D3 mortal wounds.
+    - Increase the range of each AURA ability of this model by 3".</characteristic>
+              </characteristics>
+            </profile>
           </profiles>
           <categories>
             <category name="Faction: Chaos Knights"/>
@@ -144,6 +157,19 @@
             <profile name="Damaged Objective Control" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">While the model is Damaged, subtract its rating from this model's Objective Control characteristic.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Harbingers of Dread" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">For the rest of the battle:
+  -&gt; Subtract 1 from the Leadership characteristic of enemy units within 9".
+  Select one of the following (Dread Ability):
+    - Subtract 1 from the Leadership characteristic of enemy units within 9".
+    - While the target is Battle-shocked, the unit gets +1 to Wound rolls.
+    - This model gains the Stealth ability.
+    - Enemy units within 9" must take a Battle-shock test.
+    - Enemy units within 9" suffer D3 mortal wounds.
+    - Increase the range of each AURA ability of this model by 3".</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -257,6 +283,19 @@ If this model has destroyed 1+ enemy units with its just-resolved attacks, enemy
                 <characteristic name="Description">While the model is Damaged, subtract its rating from this model's Objective Control characteristic.</characteristic>
               </characteristics>
             </profile>
+            <profile name="Harbingers of Dread" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">For the rest of the battle:
+  -&gt; Subtract 1 from the Leadership characteristic of enemy units within 9".
+  Select one of the following (Dread Ability):
+    - Subtract 1 from the Leadership characteristic of enemy units within 9".
+    - While the target is Battle-shocked, the unit gets +1 to Wound rolls.
+    - This model gains the Stealth ability.
+    - Enemy units within 9" must take a Battle-shock test.
+    - Enemy units within 9" suffer D3 mortal wounds.
+    - Increase the range of each AURA ability of this model by 3".</characteristic>
+              </characteristics>
+            </profile>
           </profiles>
           <categories>
             <category name="Faction: Chaos Knights"/>
@@ -351,6 +390,19 @@ If this model has destroyed 1+ enemy units with its just-resolved attacks, enemy
             <profile name="Damaged Objective Control" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">While the model is Damaged, subtract its rating from this model's Objective Control characteristic.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Harbingers of Dread" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">For the rest of the battle:
+  -&gt; Subtract 1 from the Leadership characteristic of enemy units within 9".
+  Select one of the following (Dread Ability):
+    - Subtract 1 from the Leadership characteristic of enemy units within 9".
+    - While the target is Battle-shocked, the unit gets +1 to Wound rolls.
+    - This model gains the Stealth ability.
+    - Enemy units within 9" must take a Battle-shock test.
+    - Enemy units within 9" suffer D3 mortal wounds.
+    - Increase the range of each AURA ability of this model by 3".</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -449,6 +501,19 @@ You can re-roll the Advance roll.</characteristic>
                 <characteristic name="Description">While the model is Damaged, subtract its rating from this model's Objective Control characteristic.</characteristic>
               </characteristics>
             </profile>
+            <profile name="Harbingers of Dread" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">For the rest of the battle:
+  -&gt; Subtract 1 from the Leadership characteristic of enemy units within 9".
+  Select one of the following (Dread Ability):
+    - Subtract 1 from the Leadership characteristic of enemy units within 9".
+    - While the target is Battle-shocked, the unit gets +1 to Wound rolls.
+    - This model gains the Stealth ability.
+    - Enemy units within 9" must take a Battle-shock test.
+    - Enemy units within 9" suffer D3 mortal wounds.
+    - Increase the range of each AURA ability of this model by 3".</characteristic>
+              </characteristics>
+            </profile>
           </profiles>
           <categories>
             <category name="Faction: Chaos Knights"/>
@@ -543,6 +608,19 @@ You can re-roll the Advance roll.</characteristic>
             <profile name="Damaged Objective Control" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">While the model is Damaged, subtract its rating from this model's Objective Control characteristic.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Harbingers of Dread" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">For the rest of the battle:
+  -&gt; Subtract 1 from the Leadership characteristic of enemy units within 9".
+  Select one of the following (Dread Ability):
+    - Subtract 1 from the Leadership characteristic of enemy units within 9".
+    - While the target is Battle-shocked, the unit gets +1 to Wound rolls.
+    - This model gains the Stealth ability.
+    - Enemy units within 9" must take a Battle-shock test.
+    - Enemy units within 9" suffer D3 mortal wounds.
+    - Increase the range of each AURA ability of this model by 3".</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -641,6 +719,19 @@ You can re-roll the Advance roll.</characteristic>
                 <characteristic name="Description">While the model is Damaged, subtract its rating from this model's Objective Control characteristic.</characteristic>
               </characteristics>
             </profile>
+            <profile name="Harbingers of Dread" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">For the rest of the battle:
+  -&gt; Subtract 1 from the Leadership characteristic of enemy units within 9".
+  Select one of the following (Dread Ability):
+    - Subtract 1 from the Leadership characteristic of enemy units within 9".
+    - While the target is Battle-shocked, the unit gets +1 to Wound rolls.
+    - This model gains the Stealth ability.
+    - Enemy units within 9" must take a Battle-shock test.
+    - Enemy units within 9" suffer D3 mortal wounds.
+    - Increase the range of each AURA ability of this model by 3".</characteristic>
+              </characteristics>
+            </profile>
           </profiles>
           <categories>
             <category name="Faction: Chaos Knights"/>
@@ -735,6 +826,19 @@ You can re-roll the Advance roll.</characteristic>
             <profile name="Damaged Objective Control" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">While the model is Damaged, subtract its rating from this model's Objective Control characteristic.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Harbingers of Dread" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">For the rest of the battle:
+  -&gt; Subtract 1 from the Leadership characteristic of enemy units within 9".
+  Select one of the following (Dread Ability):
+    - Subtract 1 from the Leadership characteristic of enemy units within 9".
+    - While the target is Battle-shocked, the unit gets +1 to Wound rolls.
+    - This model gains the Stealth ability.
+    - Enemy units within 9" must take a Battle-shock test.
+    - Enemy units within 9" suffer D3 mortal wounds.
+    - Increase the range of each AURA ability of this model by 3".</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -837,6 +941,19 @@ You can re-roll the Advance roll.</characteristic>
                 <characteristic name="Description">While the model is Damaged, subtract its rating from this model's Objective Control characteristic.</characteristic>
               </characteristics>
             </profile>
+            <profile name="Harbingers of Dread" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">For the rest of the battle:
+  -&gt; Subtract 1 from the Leadership characteristic of enemy units within 9".
+  Select one of the following (Dread Ability):
+    - Subtract 1 from the Leadership characteristic of enemy units within 9".
+    - While the target is Battle-shocked, the unit gets +1 to Wound rolls.
+    - This model gains the Stealth ability.
+    - Enemy units within 9" must take a Battle-shock test.
+    - Enemy units within 9" suffer D3 mortal wounds.
+    - Increase the range of each AURA ability of this model by 3".</characteristic>
+              </characteristics>
+            </profile>
           </profiles>
           <categories>
             <category name="Faction: Chaos Knights"/>
@@ -935,6 +1052,19 @@ You can re-roll the Advance roll.</characteristic>
             <profile name="Damaged Objective Control" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">While the model is Damaged, subtract its rating from this model's Objective Control characteristic.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Harbingers of Dread" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">For the rest of the battle:
+  -&gt; Subtract 1 from the Leadership characteristic of enemy units within 9".
+  Select one of the following (Dread Ability):
+    - Subtract 1 from the Leadership characteristic of enemy units within 9".
+    - While the target is Battle-shocked, the unit gets +1 to Wound rolls.
+    - This model gains the Stealth ability.
+    - Enemy units within 9" must take a Battle-shock test.
+    - Enemy units within 9" suffer D3 mortal wounds.
+    - Increase the range of each AURA ability of this model by 3".</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -1037,6 +1167,19 @@ You can re-roll the Advance roll.</characteristic>
                 <characteristic name="Description">While the model is Damaged, subtract its rating from this model's Objective Control characteristic.</characteristic>
               </characteristics>
             </profile>
+            <profile name="Harbingers of Dread" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">For the rest of the battle:
+  -&gt; Subtract 1 from the Leadership characteristic of enemy units within 9".
+  Select one of the following (Dread Ability):
+    - Subtract 1 from the Leadership characteristic of enemy units within 9".
+    - While the target is Battle-shocked, the unit gets +1 to Wound rolls.
+    - This model gains the Stealth ability.
+    - Enemy units within 9" must take a Battle-shock test.
+    - Enemy units within 9" suffer D3 mortal wounds.
+    - Increase the range of each AURA ability of this model by 3".</characteristic>
+              </characteristics>
+            </profile>
           </profiles>
           <categories>
             <category name="Faction: Chaos Knights"/>
@@ -1135,6 +1278,19 @@ You can re-roll the Advance roll.</characteristic>
             <profile name="Damaged Objective Control" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">While the model is Damaged, subtract its rating from this model's Objective Control characteristic.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Harbingers of Dread" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">For the rest of the battle:
+  -&gt; Subtract 1 from the Leadership characteristic of enemy units within 9".
+  Select one of the following (Dread Ability):
+    - Subtract 1 from the Leadership characteristic of enemy units within 9".
+    - While the target is Battle-shocked, the unit gets +1 to Wound rolls.
+    - This model gains the Stealth ability.
+    - Enemy units within 9" must take a Battle-shock test.
+    - Enemy units within 9" suffer D3 mortal wounds.
+    - Increase the range of each AURA ability of this model by 3".</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -1237,6 +1393,19 @@ You can re-roll the Advance roll.</characteristic>
                 <characteristic name="Description">While the model is Damaged, subtract its rating from this model's Objective Control characteristic.</characteristic>
               </characteristics>
             </profile>
+            <profile name="Harbingers of Dread" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">For the rest of the battle:
+  -&gt; Subtract 1 from the Leadership characteristic of enemy units within 9".
+  Select one of the following (Dread Ability):
+    - Subtract 1 from the Leadership characteristic of enemy units within 9".
+    - While the target is Battle-shocked, the unit gets +1 to Wound rolls.
+    - This model gains the Stealth ability.
+    - Enemy units within 9" must take a Battle-shock test.
+    - Enemy units within 9" suffer D3 mortal wounds.
+    - Increase the range of each AURA ability of this model by 3".</characteristic>
+              </characteristics>
+            </profile>
           </profiles>
           <categories>
             <category name="Faction: Chaos Knights"/>
@@ -1337,6 +1506,13 @@ You can re-roll the Advance roll.</characteristic>
                 <characteristic name="Description">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
               </characteristics>
             </profile>
+            <profile name="The Shadow of Chaos" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">If your Army Faction is CHAOS DAEMONS, your deployment zone is within The Shadow of Chaos. At the start of each phase, if you control at least half of the objectives in no man's land, no man's land is within The Shadow of Chaos until the end of the phase (evaluated once at that time). At the start of each phase, if you control at least half of the objectives in your opponent's deployment zone, your opponent's deployment zone is within The Shadow of Chaos until the end of the phase (evaluated once at that time).
+-&gt; When a friendly unit takes a Battle-shock test (the triggering unit must have LEGIONES DAEMONICA): if your Army Faction is CHAOS DAEMONS, while the triggering unit is within The Shadow of Chaos, the triggering unit gets +1 to Battle-shock rolls; if the triggering battle shock roll succeeded, unless the triggering unit has the BATTLELINE keyword, if the triggering battle shock roll succeeded, the triggering unit regains up to D3 lost wounds; if the triggering unit has the BATTLELINE keyword, if the triggering battle shock roll succeeded, return D3 destroyed models (excluding CHARACTER models) to the triggering unit, each with its full wounds remaining.
+-&gt; When an enemy unit takes a Battle-shock test: if your Army Faction is CHAOS DAEMONS, while the triggering unit is within The Shadow of Chaos or while the triggering unit is within 6" of a friendly unit with the BLOODTHIRSTER, GREAT UNCLEAN ONE, KAIROS FATEWEAVER, KEEPER OF SECRETS, LORD OF CHANGE, ROTIGUS, SHALAXI HELBANE or SKARBRAND keyword, the triggering unit gets -1 to Battle-shock rolls; if the triggering battle shock roll was a failure, the triggering unit suffers D3 mortal wounds.</characteristic>
+              </characteristics>
+            </profile>
           </profiles>
           <categories>
             <category name="Faction: Legiones Daemonica"/>
@@ -1398,6 +1574,13 @@ You can re-roll the Advance roll.</characteristic>
             <profile name="Deep Strike" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="The Shadow of Chaos" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">If your Army Faction is CHAOS DAEMONS, your deployment zone is within The Shadow of Chaos. At the start of each phase, if you control at least half of the objectives in no man's land, no man's land is within The Shadow of Chaos until the end of the phase (evaluated once at that time). At the start of each phase, if you control at least half of the objectives in your opponent's deployment zone, your opponent's deployment zone is within The Shadow of Chaos until the end of the phase (evaluated once at that time).
+-&gt; When a friendly unit takes a Battle-shock test (the triggering unit must have LEGIONES DAEMONICA): if your Army Faction is CHAOS DAEMONS, while the triggering unit is within The Shadow of Chaos, the triggering unit gets +1 to Battle-shock rolls; if the triggering battle shock roll succeeded, unless the triggering unit has the BATTLELINE keyword, if the triggering battle shock roll succeeded, the triggering unit regains up to D3 lost wounds; if the triggering unit has the BATTLELINE keyword, if the triggering battle shock roll succeeded, return D3 destroyed models (excluding CHARACTER models) to the triggering unit, each with its full wounds remaining.
+-&gt; When an enemy unit takes a Battle-shock test: if your Army Faction is CHAOS DAEMONS, while the triggering unit is within The Shadow of Chaos or while the triggering unit is within 6" of a friendly unit with the BLOODTHIRSTER, GREAT UNCLEAN ONE, KAIROS FATEWEAVER, KEEPER OF SECRETS, LORD OF CHANGE, ROTIGUS, SHALAXI HELBANE or SKARBRAND keyword, the triggering unit gets -1 to Battle-shock rolls; if the triggering battle shock roll was a failure, the triggering unit suffers D3 mortal wounds.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -1462,6 +1645,13 @@ You can re-roll the Advance roll.</characteristic>
             <profile name="Deep Strike" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="The Shadow of Chaos" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">If your Army Faction is CHAOS DAEMONS, your deployment zone is within The Shadow of Chaos. At the start of each phase, if you control at least half of the objectives in no man's land, no man's land is within The Shadow of Chaos until the end of the phase (evaluated once at that time). At the start of each phase, if you control at least half of the objectives in your opponent's deployment zone, your opponent's deployment zone is within The Shadow of Chaos until the end of the phase (evaluated once at that time).
+-&gt; When a friendly unit takes a Battle-shock test (the triggering unit must have LEGIONES DAEMONICA): if your Army Faction is CHAOS DAEMONS, while the triggering unit is within The Shadow of Chaos, the triggering unit gets +1 to Battle-shock rolls; if the triggering battle shock roll succeeded, unless the triggering unit has the BATTLELINE keyword, if the triggering battle shock roll succeeded, the triggering unit regains up to D3 lost wounds; if the triggering unit has the BATTLELINE keyword, if the triggering battle shock roll succeeded, return D3 destroyed models (excluding CHARACTER models) to the triggering unit, each with its full wounds remaining.
+-&gt; When an enemy unit takes a Battle-shock test: if your Army Faction is CHAOS DAEMONS, while the triggering unit is within The Shadow of Chaos or while the triggering unit is within 6" of a friendly unit with the BLOODTHIRSTER, GREAT UNCLEAN ONE, KAIROS FATEWEAVER, KEEPER OF SECRETS, LORD OF CHANGE, ROTIGUS, SHALAXI HELBANE or SKARBRAND keyword, the triggering unit gets -1 to Battle-shock rolls; if the triggering battle shock roll was a failure, the triggering unit suffers D3 mortal wounds.</characteristic>
               </characteristics>
             </profile>
           </profiles>

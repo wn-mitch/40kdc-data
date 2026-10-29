@@ -1504,7 +1504,7 @@
       "dataslate": "pre-launch-provisional"
     },
     "stub": true,
-    "unit_ids": [],
+    "unit_ids": ["corvus-blackstar","deathwatch-terminator-squad","deathwatch-veterans","decimus-kill-team","fortis-kill-team","indomitor-kill-team","spectrus-kill-team","talonstrike-kill-team","watch-captain-artemis","watch-master"],
     "faction_id": "deathwatch",
     "detachment_id": null,
     "ability_type": "faction",
@@ -2066,7 +2066,7 @@
       "edition": "11th",
       "dataslate": "2026-10-14"
     },
-    "unit_ids": [],
+    "unit_ids": ["watch-captain-artemis","watch-master"],
     "faction_id": "deathwatch",
     "detachment_id": null,
     "ability_type": "faction",

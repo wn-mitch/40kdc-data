@@ -36,6 +36,15 @@
                 <characteristic name="Description">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
               </characteristics>
             </profile>
+            <profile name="Combat Doctrines" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">At the start of your Command phase, you may use this ability, until the start of your next Command phase:
+  -&gt; Select one (each may be chosen once per battle):
+    - Assault Doctrine: when the unit is selected to Advance: the unit is eligible to declare a charge even if it Advanced this turn.
+    - Devastator Doctrine: ranged weapons equipped by models in this unit gain [ASSAULT].
+    - Tactical Doctrine: when the unit is selected to Fall Back: the unit is eligible to shoot even if it Fell Back this turn; the unit is eligible to declare a charge even if it Fell Back this turn.</characteristic>
+              </characteristics>
+            </profile>
           </profiles>
           <categories>
             <category name="Faction: Adeptus Astartes"/>
@@ -128,6 +137,15 @@
             <profile name="Damaged" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Combat Doctrines" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">At the start of your Command phase, you may use this ability, until the start of your next Command phase:
+  -&gt; Select one (each may be chosen once per battle):
+    - Assault Doctrine: when the unit is selected to Advance: the unit is eligible to declare a charge even if it Advanced this turn.
+    - Devastator Doctrine: ranged weapons equipped by models in this unit gain [ASSAULT].
+    - Tactical Doctrine: when the unit is selected to Fall Back: the unit is eligible to shoot even if it Fell Back this turn; the unit is eligible to declare a charge even if it Fell Back this turn.</characteristic>
               </characteristics>
             </profile>
           </profiles>

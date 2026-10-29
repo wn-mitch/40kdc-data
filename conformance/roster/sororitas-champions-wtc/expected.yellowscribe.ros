@@ -36,6 +36,11 @@
                 <characteristic name="Description">Nothing happens.</characteristic>
               </characteristics>
             </profile>
+            <profile name="Acts of Faith" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Until the end of the phase, discard a die from your Miracle dice and use its value in place of a Hit or Wound or saving throw or Advance or Charge or Desperate Escape or Hazard or Leadership roll.</characteristic>
+              </characteristics>
+            </profile>
           </profiles>
           <categories>
             <category name="Faction: Adepta Sororitas"/>
@@ -113,6 +118,11 @@
             <profile name="Support" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Nothing happens.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Acts of Faith" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Until the end of the phase, discard a die from your Miracle dice and use its value in place of a Hit or Wound or saving throw or Advance or Charge or Desperate Escape or Hazard or Leadership roll.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -223,6 +233,11 @@
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
   -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Acts of Faith" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Until the end of the phase, discard a die from your Miracle dice and use its value in place of a Hit or Wound or saving throw or Advance or Charge or Desperate Escape or Hazard or Leadership roll.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -343,6 +358,11 @@
   -&gt; Each time an attack made by a model in this unit scores a wound: the target suffers 1 mortal wound.</characteristic>
               </characteristics>
             </profile>
+            <profile name="Acts of Faith" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Until the end of the phase, discard a die from your Miracle dice and use its value in place of a Hit or Wound or saving throw or Advance or Charge or Desperate Escape or Hazard or Leadership roll.</characteristic>
+              </characteristics>
+            </profile>
           </profiles>
           <categories>
             <category name="Faction: Adepta Sororitas"/>
@@ -431,6 +451,11 @@
               <characteristics>
                 <characteristic name="Description">At the end of the Command phase, if you control 1+ objectives, while the unit is within range of an objective marker, until the end of the phase:
   -&gt; Roll one D6: on a 4+, you gain 1 Miracle die.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Acts of Faith" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Until the end of the phase, discard a die from your Miracle dice and use its value in place of a Hit or Wound or saving throw or Advance or Charge or Desperate Escape or Hazard or Leadership roll.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -727,6 +752,11 @@
                 <characteristic name="Description">While this unit is being led by an ADEPTA SORORITAS CHARACTER model, the attacking unit gets -1 to Wound rolls.</characteristic>
               </characteristics>
             </profile>
+            <profile name="Acts of Faith" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Until the end of the phase, discard a die from your Miracle dice and use its value in place of a Hit or Wound or saving throw or Advance or Charge or Desperate Escape or Hazard or Leadership roll.</characteristic>
+              </characteristics>
+            </profile>
           </profiles>
           <categories>
             <category name="Faction: Adepta Sororitas"/>
@@ -829,6 +859,11 @@
                 <characteristic name="Description">Against MONSTER or VEHICLE targets:
   -&gt; The unit gets +1 to Hit rolls.
   -&gt; The unit gets +1 to Wound rolls.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Acts of Faith" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Until the end of the phase, discard a die from your Miracle dice and use its value in place of a Hit or Wound or saving throw or Advance or Charge or Desperate Escape or Hazard or Leadership roll.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -993,6 +1028,11 @@
                 <characteristic name="Description">Against MONSTER or VEHICLE targets:
   -&gt; The unit gets +1 to Hit rolls.
   -&gt; The unit gets +1 to Wound rolls.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Acts of Faith" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Until the end of the phase, discard a die from your Miracle dice and use its value in place of a Hit or Wound or saving throw or Advance or Charge or Desperate Escape or Hazard or Leadership roll.</characteristic>
               </characteristics>
             </profile>
           </profiles>

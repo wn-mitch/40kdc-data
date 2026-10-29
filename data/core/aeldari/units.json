@@ -63,7 +63,8 @@
       {
         "id": "damaged-objective-control",
         "value": 8
-      }
+      },
+      "battle-focus-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -229,7 +230,8 @@
         "id": "scouts",
         "value": 7
       },
-      "stealth"
+      "stealth",
+      "battle-focus-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -312,7 +314,8 @@
     "ability_ids": [
       "diviner-of-futures-aeldari",
       "doom-aeldari",
-      "leader"
+      "leader",
+      "battle-focus-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -489,7 +492,8 @@
       {
         "id": "damaged",
         "value": 4
-      }
+      },
+      "battle-focus-aeldari"
     ],
     "transport_capacity": {
       "capacity": 12,
@@ -569,7 +573,9 @@
       "herald-of-ynnead-aeldari",
       "leader",
       "servant-of-the-whispering-god-yvraine-aeldari",
-      "word-of-the-phoenix-aeldari"
+      "word-of-the-phoenix-aeldari",
+      "battle-focus-aeldari",
+      "disparate-paths-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -684,7 +690,8 @@
       {
         "id": "scouts",
         "value": 7
-      }
+      },
+      "battle-focus-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -790,7 +797,8 @@
       {
         "id": "damaged",
         "value": 4
-      }
+      },
+      "battle-focus-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -868,7 +876,8 @@
       "aspect-training-aeldari",
       "leader",
       "path-of-command-aeldari",
-      "superlative-strategist-aeldari"
+      "superlative-strategist-aeldari",
+      "battle-focus-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -968,7 +977,9 @@
       "klaive"
     ],
     "ability_ids": [
-      "tormentors-aeldari"
+      "tormentors-aeldari",
+      "battle-focus-aeldari",
+      "disparate-paths-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -1077,7 +1088,8 @@
         "id": "aspect-shrine-token-aeldari",
         "wargear": "aspect-shrine-token"
       },
-      "assured-destruction-aeldari"
+      "assured-destruction-aeldari",
+      "battle-focus-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -1160,7 +1172,8 @@
     "ability_ids": [
       "hand-of-asuryan-aeldari",
       "leader",
-      "tactical-acumen-aeldari"
+      "tactical-acumen-aeldari",
+      "battle-focus-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -1249,7 +1262,8 @@
         "id": "serpent-shield-aeldari",
         "wargear": "serpent-shield"
       },
-      "stormblades-aeldari"
+      "stormblades-aeldari",
+      "battle-focus-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -1432,7 +1446,8 @@
     "ability_ids": [
       "psychic-communion-aeldari",
       "runes-of-battle-aeldari",
-      "support"
+      "support",
+      "battle-focus-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -1510,7 +1525,8 @@
       "deep-strike",
       "empyric-ambush-aeldari",
       "leader",
-      "whispering-web-aeldari"
+      "whispering-web-aeldari",
+      "battle-focus-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -1586,7 +1602,9 @@
         "wargear": "flip-belt"
       },
       "lone-operative",
-      "travelling-players-aeldari"
+      "travelling-players-aeldari",
+      "battle-focus-aeldari",
+      "disparate-paths-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -1663,7 +1681,8 @@
       {
         "id": "scouts",
         "value": 7
-      }
+      },
+      "battle-focus-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -1743,7 +1762,9 @@
       {
         "id": "deadly-demise",
         "value": "D3"
-      }
+      },
+      "battle-focus-aeldari",
+      "disparate-paths-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -1820,7 +1841,8 @@
     "ability_ids": [
       "branching-fates-farseer-skyrunner-aeldari",
       "leader",
-      "misfortune-aeldari"
+      "misfortune-aeldari",
+      "battle-focus-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -1898,7 +1920,9 @@
       {
         "id": "flip-belt-aeldari",
         "wargear": "flip-belt"
-      }
+      },
+      "battle-focus-aeldari",
+      "disparate-paths-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -1970,7 +1994,8 @@
     "ability_ids": [
       "face-of-death-aeldari",
       "harvester-of-souls-aeldari",
-      "leader"
+      "leader",
+      "battle-focus-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -2058,7 +2083,8 @@
       {
         "id": "scouts",
         "value": 7
-      }
+      },
+      "battle-focus-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -2157,7 +2183,8 @@
     ],
     "ability_ids": [
       "fleet-of-foot-aeldari",
-      "crewed-platform-aeldari"
+      "crewed-platform-aeldari",
+      "battle-focus-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -2246,7 +2273,8 @@
       {
         "id": "damaged-objective-control",
         "value": 10
-      }
+      },
+      "battle-focus-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -2324,7 +2352,8 @@
       {
         "id": "damaged",
         "value": 5
-      }
+      },
+      "battle-focus-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -2403,7 +2432,8 @@
       {
         "id": "scouts",
         "value": 9
-      }
+      },
+      "battle-focus-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -2480,7 +2510,8 @@
       {
         "id": "scouts",
         "value": 7
-      }
+      },
+      "battle-focus-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -2656,7 +2687,8 @@
       {
         "id": "damaged-objective-control",
         "value": 5
-      }
+      },
+      "battle-focus-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -2748,7 +2780,9 @@
       {
         "id": "grav-talon-aeldari",
         "wargear": "grav-talon"
-      }
+      },
+      "battle-focus-aeldari",
+      "disparate-paths-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -2878,7 +2912,8 @@
         "wargear": "aspect-shrine-token"
       },
       "grenade-pack-flyover-aeldari",
-      "deep-strike"
+      "deep-strike",
+      "battle-focus-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -3040,7 +3075,8 @@
     "ability_ids": [
       "burning-lance-aeldari",
       "leader",
-      "unquenchable-resolve-aeldari"
+      "unquenchable-resolve-aeldari",
+      "battle-focus-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -3113,7 +3149,9 @@
     "ability_ids": [
       "empowered-by-death-aeldari",
       "leader",
-      "storm-of-blades-aeldari"
+      "storm-of-blades-aeldari",
+      "battle-focus-aeldari",
+      "disparate-paths-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -3207,7 +3245,8 @@
       {
         "id": "shimmershield-aeldari",
         "wargear": "shimmershield"
-      }
+      },
+      "battle-focus-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -3278,7 +3317,9 @@
       "way-of-the-blade-aeldari",
       "yvraines-champion-aeldari",
       "servant-of-the-whispering-god-aeldari",
-      "support"
+      "support",
+      "battle-focus-aeldari",
+      "disparate-paths-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -3369,7 +3410,8 @@
       {
         "id": "mistshield-aeldari",
         "wargear": "mistshield"
-      }
+      },
+      "battle-focus-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -3537,7 +3579,9 @@
         "id": "flip-belt-aeldari",
         "wargear": "flip-belt"
       },
-      "travelling-players-aeldari"
+      "travelling-players-aeldari",
+      "battle-focus-aeldari",
+      "disparate-paths-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -3612,7 +3656,8 @@
       "leader",
       "storm-of-silence-aeldari",
       "whirling-death-aeldari",
-      "fights-first"
+      "fights-first",
+      "battle-focus-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -3724,7 +3769,8 @@
         "wargear": "aspect-shrine-token"
       },
       "flickerjump-aeldari",
-      "deep-strike"
+      "deep-strike",
+      "battle-focus-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -3822,7 +3868,8 @@
         "id": "aspect-shrine-token-aeldari",
         "wargear": "aspect-shrine-token"
       },
-      "inescapable-accuracy-aeldari"
+      "inescapable-accuracy-aeldari",
+      "battle-focus-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -3911,7 +3958,9 @@
         "id": "phantasm-grenade-launcher-aeldari",
         "wargear": "phantasm-grenade-launcher"
       },
-      "sadistic-raiders-aeldari"
+      "sadistic-raiders-aeldari",
+      "battle-focus-aeldari",
+      "disparate-paths-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -4019,7 +4068,9 @@
       {
         "id": "deadly-demise",
         "value": 1
-      }
+      },
+      "battle-focus-aeldari",
+      "disparate-paths-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -4102,7 +4153,8 @@
       {
         "id": "scouts",
         "value": 9
-      }
+      },
+      "battle-focus-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -4175,7 +4227,8 @@
     "ability_ids": [
       "runes-of-fortune-aeldari",
       "psychic-communion-warlock-aeldari",
-      "support"
+      "support",
+      "battle-focus-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -4274,7 +4327,8 @@
       {
         "id": "damaged-objective-control",
         "value": 5
-      }
+      },
+      "battle-focus-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -4345,7 +4399,9 @@
       "splinter-pistol"
     ],
     "ability_ids": [
-      "no-escape-aeldari"
+      "no-escape-aeldari",
+      "battle-focus-aeldari",
+      "disparate-paths-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -4423,7 +4479,8 @@
     "ability_ids": [
       "protect-aeldari",
       "psychic-communion-aeldari",
-      "support"
+      "support",
+      "battle-focus-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -4497,7 +4554,8 @@
     "ability_ids": [
       "guide-aeldari",
       "leader",
-      "branching-fates-aeldari"
+      "branching-fates-aeldari",
+      "battle-focus-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -4587,7 +4645,8 @@
       {
         "id": "damaged",
         "value": 4
-      }
+      },
+      "battle-focus-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -4667,7 +4726,8 @@
       "indomitable-strength-of-will-aeldari",
       "leader",
       "deep-strike",
-      "path-of-command-aeldari"
+      "path-of-command-aeldari",
+      "battle-focus-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -4762,7 +4822,8 @@
       {
         "id": "shimmershield-aeldari",
         "wargear": "shimmershield"
-      }
+      },
+      "battle-focus-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -4861,7 +4922,8 @@
         "id": "aspect-shrine-token-aeldari",
         "wargear": "aspect-shrine-token"
       },
-      "fights-first"
+      "fights-first",
+      "battle-focus-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -4957,7 +5019,8 @@
       {
         "id": "damaged",
         "value": 4
-      }
+      },
+      "battle-focus-aeldari"
     ],
     "transport_capacity": {
       "capacity": 6,
@@ -5038,7 +5101,8 @@
       "twin-shuriken-catapult"
     ],
     "ability_ids": [
-      "swift-demise-aeldari"
+      "swift-demise-aeldari",
+      "battle-focus-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -5123,7 +5187,9 @@
         "id": "flip-belt-aeldari",
         "wargear": "flip-belt"
       },
-      "travelling-players-aeldari"
+      "travelling-players-aeldari",
+      "battle-focus-aeldari",
+      "disparate-paths-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -5199,7 +5265,8 @@
     "ability_ids": [
       "path-of-the-outcast-aeldari",
       "stealth",
-      "infiltrators"
+      "infiltrators",
+      "battle-focus-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -5368,7 +5435,9 @@
       {
         "id": "deadly-demise",
         "value": "D3"
-      }
+      },
+      "battle-focus-aeldari",
+      "disparate-paths-aeldari"
     ],
     "transport_capacity": {
       "capacity": 11
@@ -5456,7 +5525,8 @@
       {
         "id": "scouts",
         "value": 7
-      }
+      },
+      "battle-focus-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -5535,7 +5605,9 @@
       "zephyrglaive"
     ],
     "ability_ids": [
-      "acrobatic-grace-aeldari"
+      "acrobatic-grace-aeldari",
+      "battle-focus-aeldari",
+      "disparate-paths-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -5611,7 +5683,9 @@
       {
         "id": "shadow-field-aeldari",
         "wargear": "shadow-field"
-      }
+      },
+      "battle-focus-aeldari",
+      "disparate-paths-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -5689,7 +5763,8 @@
       "cloudstrider-aeldari",
       "cry-of-the-wind-aeldari",
       "leader",
-      "deep-strike"
+      "deep-strike",
+      "battle-focus-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -5856,7 +5931,9 @@
       {
         "id": "flip-belt-aeldari",
         "wargear": "flip-belt"
-      }
+      },
+      "battle-focus-aeldari",
+      "disparate-paths-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -5976,7 +6053,9 @@
       {
         "id": "deadly-demise",
         "value": 1
-      }
+      },
+      "battle-focus-aeldari",
+      "disparate-paths-aeldari"
     ],
     "transport_capacity": {
       "capacity": 6
@@ -6060,7 +6139,8 @@
       {
         "id": "deadly-demise",
         "value": 1
-      }
+      },
+      "battle-focus-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -6132,7 +6212,8 @@
       "spirit-mark-aeldari",
       "spiritseer-aeldari",
       "tears-of-isha-aeldari",
-      "stealth"
+      "stealth",
+      "battle-focus-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -6223,7 +6304,9 @@
       {
         "id": "firing-deck",
         "value": 6
-      }
+      },
+      "battle-focus-aeldari",
+      "disparate-paths-aeldari"
     ],
     "transport_capacity": {
       "capacity": 6
@@ -6303,7 +6386,8 @@
     "ability_ids": [
       "aspect-shrine-token-kygharils-protectors-dire-avengers-aeldari",
       "bladestorm-kygharils-protectors-dire-avengers-aeldari",
-      "shimmershield-kygharils-protectors-dire-avengers-aeldari"
+      "shimmershield-kygharils-protectors-dire-avengers-aeldari",
+      "battle-focus-kygharils-protectors-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -6381,7 +6465,8 @@
     ],
     "ability_ids": [
       "aspect-shrine-token-kygharils-protectors-dire-avengers-aeldari",
-      "engulfing-flames-aeldari"
+      "engulfing-flames-aeldari",
+      "battle-focus-kygharils-protectors-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -6445,7 +6530,8 @@
     "ability_ids": [
       "forceshield-kygharils-protectors-wraithblades-aeldari",
       "malevolent-souls-kygharils-protectors-wraithblades-aeldari",
-      "psychic-guidance-kygharils-protectors-wraithblades-aeldari"
+      "psychic-guidance-kygharils-protectors-wraithblades-aeldari",
+      "battle-focus-kygharils-protectors-aeldari"
     ],
     "game_version": {
       "edition": "11th",
@@ -6513,7 +6599,8 @@
     "ability_ids": [
       "spirit-mark-psychic-aeldari",
       "spiritseer-spiritseer-kygharil-aeldari",
-      "tears-of-isha-spiritseer-kygharil-aeldari"
+      "tears-of-isha-spiritseer-kygharil-aeldari",
+      "battle-focus-kygharils-protectors-aeldari"
     ],
     "game_version": {
       "edition": "11th",

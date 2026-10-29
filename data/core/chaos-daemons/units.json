@@ -68,7 +68,8 @@
       {
         "id": "damaged",
         "value": 5
-      }
+      },
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -141,7 +142,8 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "daemonic-allegiance-chaos-daemons"
+      "daemonic-allegiance-chaos-daemons",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -218,7 +220,8 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "daemonic-allegiance-chaos-daemons"
+      "daemonic-allegiance-chaos-daemons",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -305,7 +308,8 @@
       {
         "id": "damaged",
         "value": 7
-      }
+      },
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -380,7 +384,8 @@
       "fights-first",
       "lone-operative",
       "the-eternal-dance-chaos-daemons",
-      "deep-strike"
+      "deep-strike",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -459,7 +464,8 @@
         "wargear": "instrument-of-chaos"
       },
       "deep-strike",
-      "fights-first"
+      "fights-first",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -551,7 +557,8 @@
     "ability_ids": [
       "infiltrators",
       "mischief-makers-chaos-daemons",
-      "deep-strike"
+      "deep-strike",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -623,7 +630,8 @@
       "a-gory-path-chaos-daemons",
       "bloodmaster-chaos-daemons",
       "leader",
-      "deep-strike"
+      "deep-strike",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -704,7 +712,8 @@
       "symphony-of-pain-chaos-daemons",
       "tranceweaver-chaos-daemons",
       "deep-strike",
-      "fights-first"
+      "fights-first",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -783,7 +792,8 @@
     ],
     "ability_ids": [
       "eldritch-flames-chaos-daemons",
-      "deep-strike"
+      "deep-strike",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -877,7 +887,8 @@
       {
         "id": "instrument-of-chaos-chaos-daemons",
         "wargear": "instrument-of-chaos"
-      }
+      },
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -968,7 +979,8 @@
       "harmonic-alignment-chaos-daemons",
       "leader",
       "deep-strike",
-      "fights-first"
+      "fights-first",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -1053,7 +1065,8 @@
       {
         "id": "instrument-of-chaos-chaos-daemons",
         "wargear": "instrument-of-chaos"
-      }
+      },
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -1166,7 +1179,8 @@
       {
         "id": "damaged",
         "value": 6
-      }
+      },
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -1257,7 +1271,8 @@
       {
         "id": "damaged",
         "value": 7
-      }
+      },
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -1344,7 +1359,8 @@
       {
         "id": "instrument-of-chaos-chaos-daemons",
         "wargear": "instrument-of-chaos"
-      }
+      },
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -1436,7 +1452,8 @@
       "leader",
       "deep-strike",
       "delightful-agonies-chaos-daemons",
-      "prince-of-slaanesh-chaos-daemons"
+      "prince-of-slaanesh-chaos-daemons",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -1512,7 +1529,8 @@
     ],
     "ability_ids": [
       "slashing-dive-chaos-daemons",
-      "deep-strike"
+      "deep-strike",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -1590,7 +1608,8 @@
       {
         "id": "instrument-of-chaos-chaos-daemons",
         "wargear": "instrument-of-chaos"
-      }
+      },
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -1699,7 +1718,8 @@
       {
         "id": "damaged",
         "value": 7
-      }
+      },
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -1779,7 +1799,8 @@
       "changecaster-chaos-daemons",
       "leader",
       "storm-of-mutating-sorcery-chaos-daemons",
-      "deep-strike"
+      "deep-strike",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -1855,7 +1876,8 @@
       "diseased-cover-chaos-daemons",
       "fortification-chaos-daemons",
       "shroud-of-flies-chaos-daemons",
-      "infiltrators"
+      "infiltrators",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -1952,7 +1974,8 @@
       {
         "id": "damaged",
         "value": 7
-      }
+      },
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -2058,7 +2081,8 @@
       {
         "id": "instrument-of-chaos-chaos-daemons",
         "wargear": "instrument-of-chaos"
-      }
+      },
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -2165,7 +2189,8 @@
     ],
     "ability_ids": [
       "soporific-musk-chaos-daemons",
-      "deep-strike"
+      "deep-strike",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -2248,7 +2273,8 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "damaged-1-7-wounds-remaining-chaos-daemons"
+      "damaged-1-7-wounds-remaining-chaos-daemons",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -2414,7 +2440,8 @@
       "beast-handler-chaos-daemons",
       "leader",
       "seed-the-garden-of-nurgle-chaos-daemons",
-      "deep-strike"
+      "deep-strike",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -2498,7 +2525,8 @@
       "leader",
       "swallow-energy-chaos-daemons",
       "deep-strike",
-      "fights-first"
+      "fights-first",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -2674,7 +2702,8 @@
       "fateskimmer-chaos-daemons",
       "leader",
       "rider-of-the-immaterial-winds-chaos-daemons",
-      "deep-strike"
+      "deep-strike",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -2756,7 +2785,8 @@
     ],
     "ability_ids": [
       "cutting-down-the-foe-chaos-daemons",
-      "deep-strike"
+      "deep-strike",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -2843,7 +2873,8 @@
       {
         "id": "instrument-of-chaos-chaos-daemons",
         "wargear": "instrument-of-chaos"
-      }
+      },
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -2953,7 +2984,8 @@
         "id": "damaged",
         "value": 6
       },
-      "greater-daemon-of-khorne-chaos-daemons"
+      "greater-daemon-of-khorne-chaos-daemons",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -3035,7 +3067,8 @@
       "flames-of-change-chaos-daemons",
       "leader",
       "manifestation-of-destruction-chaos-daemons",
-      "deep-strike"
+      "deep-strike",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -3116,7 +3149,8 @@
       "devastating-charge-chaos-daemons",
       "leader",
       "skullmasters-fury-chaos-daemons",
-      "deep-strike"
+      "deep-strike",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -3196,7 +3230,8 @@
       "blessed-by-the-plague-god-chaos-daemons",
       "leader",
       "tally-of-pestilence-chaos-daemons",
-      "deep-strike"
+      "deep-strike",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -3276,7 +3311,8 @@
       "leader",
       "pack-leader-chaos-daemons",
       "prey-of-the-blood-god-chaos-daemons",
-      "deep-strike"
+      "deep-strike",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -3350,7 +3386,8 @@
       "keep-counting-chaos-daemons",
       "leader",
       "meet-your-quota-chaos-daemons",
-      "deep-strike"
+      "deep-strike",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -3434,7 +3471,8 @@
       "hysterical-frenzy-chaos-daemons",
       "leader",
       "tormentbringer-chaos-daemons",
-      "deep-strike"
+      "deep-strike",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -3514,7 +3552,8 @@
       "leader",
       "lord-of-decapitations-chaos-daemons",
       "skulls-for-khorne-chaos-daemons",
-      "deep-strike"
+      "deep-strike",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -3596,7 +3635,8 @@
     "ability_ids": [
       "blood-throne-chaos-daemons",
       "champion-slayer-chaos-daemons",
-      "deep-strike"
+      "deep-strike",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -3671,7 +3711,8 @@
       "cover-chaos-daemons",
       "shadow-of-khorne-chaos-daemons",
       "fortification-chaos-daemons",
-      "infiltrators"
+      "infiltrators",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -3743,7 +3784,8 @@
       "disease-of-mirth-chaos-daemons",
       "jolly-gutpipes-chaos-daemons",
       "leader",
-      "deep-strike"
+      "deep-strike",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -3834,7 +3876,8 @@
       {
         "id": "damaged",
         "value": 7
-      }
+      },
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -3911,7 +3954,8 @@
       "sullen-malevolence-chaos-daemons",
       "deep-strike",
       "infiltrators",
-      "split-chaos-daemons"
+      "split-chaos-daemons",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -3988,7 +4032,8 @@
       "ptarixs-sorcerous-syphon-chaos-daemons",
       "xiratps-sorcerous-barrages-chaos-daemons",
       "deep-strike",
-      "lone-operative"
+      "lone-operative",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -4064,7 +4109,8 @@
       "mischief-and-confusion-chaos-daemons",
       "stealth",
       "deep-strike",
-      "lone-operative"
+      "lone-operative",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -4142,7 +4188,8 @@
       "altered-reality-chaos-daemons",
       "fluxmaster-chaos-daemons",
       "leader",
-      "deep-strike"
+      "deep-strike",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -4224,7 +4271,8 @@
     ],
     "ability_ids": [
       "bounding-leaps-chaos-daemons",
-      "deep-strike"
+      "deep-strike",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -4304,7 +4352,8 @@
         "id": "scouts",
         "value": 6
       },
-      "deep-strike"
+      "deep-strike",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -4383,7 +4432,8 @@
         "wargear": "collar-of-khorne"
       },
       "hunters-from-the-warp-chaos-daemons",
-      "deep-strike"
+      "deep-strike",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
@@ -4454,7 +4504,8 @@
     ],
     "ability_ids": [
       "skulls-of-the-fallen-chaos-daemons",
-      "deep-strike"
+      "deep-strike",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",

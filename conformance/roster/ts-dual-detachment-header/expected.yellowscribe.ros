@@ -39,6 +39,14 @@
                 <characteristic name="Description">While this model is leading a unit, the unit's weapons gain [SUSTAINED HITS 1].</characteristic>
               </characteristics>
             </profile>
+            <profile name="Cabal of Sorcerers" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">During the Shooting phase, until the end of the phase:
+  -&gt; You can re-roll a Hit roll of 1.
+  -&gt; Improve the unit's Armour Penetration characteristic by 1.
+  -&gt; The target suffers D3 mortal wounds.</characteristic>
+              </characteristics>
+            </profile>
           </profiles>
           <categories>
             <category name="Faction: Thousand Sons"/>

@@ -31,6 +31,16 @@
   -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
               </characteristics>
             </profile>
+            <profile name="Dark Pacts" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">When the unit is selected to shoot, you may use this ability or when the unit is selected to fight, you may use this ability, if your Army Faction is CHAOS SPACE MARINES, while the triggering unit has the Dark Pacts ability, until the end of the phase:
+  -&gt; The unit must take a Leadership test.
+  -&gt; If the triggering leadership roll was a failure, the triggering unit suffers D3 mortal wounds.
+  Select one of the following:
+    - The triggering unit's weapons gain [LETHAL HITS].
+    - The triggering unit's weapons gain [SUSTAINED HITS 1].</characteristic>
+              </characteristics>
+            </profile>
           </profiles>
           <categories>
             <category name="Faction: Heretic Astartes"/>
@@ -110,6 +120,16 @@
             <profile name="Damaged" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Dark Pacts" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">When the unit is selected to shoot, you may use this ability or when the unit is selected to fight, you may use this ability, if your Army Faction is CHAOS SPACE MARINES, while the triggering unit has the Dark Pacts ability, until the end of the phase:
+  -&gt; The unit must take a Leadership test.
+  -&gt; If the triggering leadership roll was a failure, the triggering unit suffers D3 mortal wounds.
+  Select one of the following:
+    - The triggering unit's weapons gain [LETHAL HITS].
+    - The triggering unit's weapons gain [SUSTAINED HITS 1].</characteristic>
               </characteristics>
             </profile>
           </profiles>

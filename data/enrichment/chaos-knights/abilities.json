@@ -2161,7 +2161,7 @@
     "ability_type": "faction",
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "unit_ids": [],
+    "unit_ids": ["chaos-acastus-knight-asterius","chaos-acastus-knight-porphyrion","chaos-cerastus-knight-acheron","chaos-cerastus-knight-atrapos","chaos-cerastus-knight-castigator","chaos-cerastus-knight-lancer","chaos-questoris-knight-magaera","chaos-questoris-knight-styrix","knight-abominant","knight-desecrator","knight-despoiler","knight-rampager","knight-ruinator","knight-tyrant"],
     "source_digest": "68c5153b55c80b5a04b53c8c071fa532fb59856d6c23aa9ddb86326bd05b9484"
   },
   {
@@ -3811,7 +3811,7 @@
     "source_digest": "60f48fa7a937d0b312844e6a579cd4b0a163c746fda648f727418e611612cf21",
     "version": "2025-q3",
     "supersedes": null,
-    "unit_ids": [],
+    "unit_ids": ["chaos-acastus-knight-asterius","chaos-acastus-knight-porphyrion","chaos-cerastus-knight-acheron","chaos-cerastus-knight-atrapos","chaos-cerastus-knight-castigator","chaos-cerastus-knight-lancer","chaos-questoris-knight-magaera","chaos-questoris-knight-styrix","knight-abominant","knight-desecrator","knight-despoiler","knight-rampager","knight-ruinator","knight-tyrant","war-dog-brigand","war-dog-executioner","war-dog-huntsman","war-dog-karnivore","war-dog-moirax","war-dog-stalker"],
     "faction_id": "chaos-knights",
     "ability_type": "faction",
     "behavior": "passive",

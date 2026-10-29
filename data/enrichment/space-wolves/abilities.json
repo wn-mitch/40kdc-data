@@ -607,7 +607,7 @@
     "faction_id": "space-wolves",
     "ability_type": "faction",
     "behavior": "passive",
-    "unit_ids": []
+    "unit_ids": ["murderfang","wulfen","wulfen-dreadnought","wulfen-with-storm-shields"]
   },
   {
     "ability_id": "deadly-stalkers-space-wolves",
@@ -1889,7 +1889,7 @@
     "ability_type": "faction",
     "behavior": "passive",
     "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)",
-    "unit_ids": [],
+    "unit_ids": ["askars-wolfpack-blood-claws","askars-wolfpack-wolf-guard-terminators","askars-wolfpack-wulfen","fyrri-askar"],
     "detachment_id": "askars-wolfpack"
   },
   {
@@ -4460,7 +4460,7 @@
       "dataslate": "pre-launch-provisional"
     },
     "stub": true,
-    "unit_ids": [],
+    "unit_ids": ["arjac-rockfist","bjorn-the-fell-handed","blood-claws","fenrisian-wolves","grey-hunters","iron-priest","logan-grimnar","murderfang","njal-stormcaller","ragnar-blackmane","thunderwolf-cavalry","ulrik-the-slayer","venerable-dreadnought","wolf-guard-battle-leader","wolf-guard-headtakers","wolf-guard-terminators","wolf-priest","wolf-scouts","wulfen","wulfen-dreadnought","wulfen-with-storm-shields"],
     "faction_id": "space-wolves",
     "detachment_id": null,
     "ability_type": "faction",
@@ -4479,7 +4479,7 @@
       "edition": "11th",
       "dataslate": "2026-10-14"
     },
-    "unit_ids": [],
+    "unit_ids": ["askars-wolfpack-blood-claws","askars-wolfpack-wolf-guard-terminators","askars-wolfpack-wulfen","fyrri-askar"],
     "faction_id": "space-wolves",
     "detachment_id": "askars-wolfpack",
     "ability_type": "faction",
@@ -4730,7 +4730,7 @@
       "edition": "11th",
       "dataslate": "2026-10-14"
     },
-    "unit_ids": [],
+    "unit_ids": ["askars-wolfpack-blood-claws","askars-wolfpack-wolf-guard-terminators","askars-wolfpack-wulfen","fyrri-askar"],
     "faction_id": "space-wolves",
     "detachment_id": "askars-wolfpack",
     "ability_type": "faction",
@@ -4768,7 +4768,7 @@
       "edition": "11th",
       "dataslate": "2026-10-14"
     },
-    "unit_ids": [],
+    "unit_ids": ["logan-grimnar","ragnar-blackmane"],
     "faction_id": "space-wolves",
     "detachment_id": null,
     "ability_type": "faction",

@@ -319,7 +319,8 @@
     "ability_ids": [
       "bestial-prophet-thousand-sons",
       "leader",
-      "sacrificial-blessing-thousand-sons"
+      "sacrificial-blessing-thousand-sons",
+      "cabal-of-sorcerers-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
@@ -482,7 +483,8 @@
     "ability_ids": [
       "empyric-guidance-thousand-sons",
       "leader",
-      "twisted-sorceries-thousand-sons"
+      "twisted-sorceries-thousand-sons",
+      "cabal-of-sorcerers-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
@@ -742,7 +744,8 @@
     "ability_ids": [
       "arch-sorcerer-of-tzeentch-thousand-sons",
       "leader",
-      "scryer-of-fates-thousand-sons"
+      "scryer-of-fates-thousand-sons",
+      "cabal-of-sorcerers-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
@@ -856,7 +859,8 @@
       {
         "id": "icon-of-flame-thousand-sons",
         "wargear": "icon-of-flame"
-      }
+      },
+      "cabal-of-sorcerers-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
@@ -946,7 +950,8 @@
     "ability_ids": [
       "glimpse-of-eternity-thousand-sons",
       "leader",
-      "malefic-maelstrom-thousand-sons"
+      "malefic-maelstrom-thousand-sons",
+      "cabal-of-sorcerers-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
@@ -1206,7 +1211,8 @@
     ],
     "ability_ids": [
       "deep-strike",
-      "rites-of-coalescence-thousand-sons"
+      "rites-of-coalescence-thousand-sons",
+      "cabal-of-sorcerers-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
@@ -1302,7 +1308,8 @@
       {
         "id": "damaged",
         "value": 6
-      }
+      },
+      "cabal-of-sorcerers-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
@@ -1585,7 +1592,8 @@
       {
         "id": "deadly-demise",
         "value": "D3"
-      }
+      },
+      "cabal-of-sorcerers-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
@@ -1871,7 +1879,8 @@
     "ability_ids": [
       "binding-tendrils-thousand-sons",
       "illusions-of-tzeentch-thousand-sons",
-      "leader"
+      "leader",
+      "cabal-of-sorcerers-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
@@ -2034,7 +2043,8 @@
     "ability_ids": [
       "arcane-shield-thousand-sons",
       "leader",
-      "rebind-rubricae-thousand-sons"
+      "rebind-rubricae-thousand-sons",
+      "cabal-of-sorcerers-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
@@ -2120,7 +2130,8 @@
       "empyric-guidance-thousand-sons",
       "leader",
       "marked-by-fate-thousand-sons",
-      "deep-strike"
+      "deep-strike",
+      "cabal-of-sorcerers-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
@@ -2465,7 +2476,8 @@
       {
         "id": "deadly-demise",
         "value": "D3"
-      }
+      },
+      "cabal-of-sorcerers-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
@@ -2537,7 +2549,9 @@
     ],
     "ability_ids": [
       "bestial-prophet-kaaskrek-thousand-sons",
-      "sacrificial-blessing-kaaskrek-thousand-sons"
+      "sacrificial-blessing-kaaskrek-thousand-sons",
+      "cabal-of-sorcerers-prism-of-zadophon-thousand-sons",
+      "pact-of-sorcery-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
@@ -2640,7 +2654,9 @@
     ],
     "ability_ids": [
       "bringers-of-change-prism-of-zadophon-rubric-marines-thousand-sons",
-      "icon-of-flame-prism-of-zadophon-rubric-marines-thousand-sons"
+      "icon-of-flame-prism-of-zadophon-rubric-marines-thousand-sons",
+      "cabal-of-sorcerers-prism-of-zadophon-thousand-sons",
+      "pact-of-sorcery-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
@@ -2723,7 +2739,9 @@
       }
     ],
     "ability_ids": [
-      "prophesied-doom-prism-of-zadophon-tzaangor-enlightened-thousand-sons"
+      "prophesied-doom-prism-of-zadophon-tzaangor-enlightened-thousand-sons",
+      "cabal-of-sorcerers-prism-of-zadophon-thousand-sons",
+      "pact-of-sorcery-thousand-sons"
     ]
   },
   {
@@ -2773,7 +2791,9 @@
     ],
     "ability_ids": [
       "glamour-of-tzeentch-zadophon-the-soul-eater-thousand-sons",
-      "spirit-snare-zadophon-the-soul-eater-thousand-sons"
+      "spirit-snare-zadophon-the-soul-eater-thousand-sons",
+      "cabal-of-sorcerers-prism-of-zadophon-thousand-sons",
+      "pact-of-sorcery-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
@@ -2862,7 +2882,8 @@
       "exploding-horrors-thousand-sons",
       "infiltrators",
       "split-thousand-sons",
-      "sullen-malevolence-thousand-sons"
+      "sullen-malevolence-thousand-sons",
+      "pact-of-sorcery-thousand-sons"
     ]
   },
   {
@@ -2930,7 +2951,8 @@
     },
     "ability_ids": [
       "bounding-leaps-thousand-sons",
-      "deep-strike"
+      "deep-strike",
+      "pact-of-sorcery-thousand-sons"
     ]
   },
   {
@@ -3006,7 +3028,8 @@
       },
       "deep-strike",
       "one-head-looks-back-thousand-sons",
-      "one-head-looks-forward-thousand-sons"
+      "one-head-looks-forward-thousand-sons",
+      "pact-of-sorcery-thousand-sons"
     ]
   },
   {
@@ -3097,7 +3120,8 @@
         "value": "D6"
       },
       "deep-strike",
-      "master-of-magicks-thousand-sons"
+      "master-of-magicks-thousand-sons",
+      "pact-of-sorcery-thousand-sons"
     ]
   },
   {
@@ -3200,7 +3224,8 @@
         "id": "instrument-of-chaos-thousand-sons",
         "wargear": "instrument-of-chaos"
       },
-      "split-pink-horrors-thousand-sons"
+      "split-pink-horrors-thousand-sons",
+      "pact-of-sorcery-thousand-sons"
     ]
   },
   {
@@ -3263,7 +3288,8 @@
     ],
     "ability_ids": [
       "deep-strike",
-      "slashing-dive-thousand-sons"
+      "slashing-dive-thousand-sons",
+      "pact-of-sorcery-thousand-sons"
     ]
   }
 ]

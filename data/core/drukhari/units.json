@@ -79,7 +79,8 @@
         "id": "grav-talon-drukhari",
         "wargear": "grav-talon"
       },
-      "matchless-swiftness-drukhari"
+      "matchless-swiftness-drukhari",
+      "power-from-pain-drukhari"
     ],
     "game_version": {
       "edition": "11th",
@@ -182,7 +183,8 @@
         "value": 5
       },
       "pain-engine-drukhari",
-      "pain-parasite-drukhari"
+      "pain-parasite-drukhari",
+      "power-from-pain-drukhari"
     ],
     "game_version": {
       "edition": "11th",
@@ -257,7 +259,8 @@
       "bloody-spectacle-drukhari",
       "leader",
       "lithe-agility-drukhari",
-      "storm-of-blades-drukhari"
+      "storm-of-blades-drukhari",
+      "power-from-pain-drukhari"
     ],
     "game_version": {
       "edition": "11th",
@@ -358,7 +361,8 @@
         "id": "phantasm-grenade-launcher-drukhari",
         "wargear": "phantasm-grenade-launcher"
       },
-      "skyboard-evasion-drukhari"
+      "skyboard-evasion-drukhari",
+      "power-from-pain-drukhari"
     ],
     "game_version": {
       "edition": "11th",
@@ -452,7 +456,8 @@
       {
         "id": "deadly-demise",
         "value": 1
-      }
+      },
+      "power-from-pain-drukhari"
     ],
     "transport_capacity": {
       "capacity": 6
@@ -541,7 +546,8 @@
     "ability_ids": [
       "murderous-crossfire-drukhari",
       "swooping-descent-drukhari",
-      "deep-strike"
+      "deep-strike",
+      "power-from-pain-drukhari"
     ],
     "game_version": {
       "edition": "11th",
@@ -636,7 +642,8 @@
       {
         "id": "phantasm-grenade-launcher-drukhari",
         "wargear": "phantasm-grenade-launcher"
-      }
+      },
+      "power-from-pain-drukhari"
     ],
     "game_version": {
       "edition": "11th",
@@ -759,7 +766,8 @@
       },
       "splinter-racks-drukhari",
       "vanguard-of-the-dark-city-drukhari",
-      "deep-strike"
+      "deep-strike",
+      "power-from-pain-drukhari"
     ],
     "transport_capacity": {
       "capacity": 11
@@ -836,7 +844,8 @@
       "brides-of-death-drukhari",
       "fights-first",
       "leader",
-      "thrilling-spectacle-drukhari"
+      "thrilling-spectacle-drukhari",
+      "power-from-pain-drukhari"
     ],
     "game_version": {
       "edition": "11th",
@@ -916,7 +925,8 @@
       {
         "id": "deadly-demise",
         "value": "D3"
-      }
+      },
+      "power-from-pain-drukhari"
     ],
     "game_version": {
       "edition": "11th",
@@ -1006,7 +1016,8 @@
     "ability_ids": [
       "airborne-evasion-drukhari",
       "winged-strike-drukhari",
-      "deep-strike"
+      "deep-strike",
+      "power-from-pain-drukhari"
     ],
     "game_version": {
       "edition": "11th",
@@ -1124,7 +1135,8 @@
       {
         "id": "feel-no-pain",
         "value": 5
-      }
+      },
+      "power-from-pain-drukhari"
     ],
     "game_version": {
       "edition": "11th",
@@ -1219,7 +1231,8 @@
     ],
     "ability_ids": [
       "experimental-enhancements-drukhari",
-      "torturers-craft-drukhari"
+      "torturers-craft-drukhari",
+      "power-from-pain-drukhari"
     ],
     "game_version": {
       "edition": "11th",
@@ -1325,7 +1338,8 @@
       {
         "id": "feel-no-pain",
         "value": 5
-      }
+      },
+      "power-from-pain-drukhari"
     ],
     "game_version": {
       "edition": "11th",
@@ -1409,7 +1423,8 @@
       {
         "id": "soul-trap-drukhari",
         "wargear": "soul-trap"
-      }
+      },
+      "power-from-pain-drukhari"
     ],
     "game_version": {
       "edition": "11th",
@@ -1572,7 +1587,8 @@
       {
         "id": "damaged",
         "value": 4
-      }
+      },
+      "power-from-pain-drukhari"
     ],
     "game_version": {
       "edition": "11th",
@@ -1652,7 +1668,8 @@
     ],
     "ability_ids": [
       "acrobatic-gladiators-drukhari",
-      "no-escape-drukhari"
+      "no-escape-drukhari",
+      "power-from-pain-drukhari"
     ],
     "game_version": {
       "edition": "11th",
@@ -1758,7 +1775,8 @@
       {
         "id": "phantasm-grenade-launcher-hand-of-the-archon-drukhari",
         "wargear": "phantasm-grenade-launcher"
-      }
+      },
+      "power-from-pain-drukhari"
     ],
     "game_version": {
       "edition": "11th",
@@ -1857,7 +1875,8 @@
       {
         "id": "damaged",
         "value": 4
-      }
+      },
+      "power-from-pain-drukhari"
     ],
     "game_version": {
       "edition": "11th",
@@ -1929,7 +1948,8 @@
       "leader",
       "master-of-blades-drukhari",
       "onslaught-drukhari",
-      "silent-executioner-drukhari"
+      "silent-executioner-drukhari",
+      "power-from-pain-drukhari"
     ],
     "game_version": {
       "edition": "11th",
@@ -2034,7 +2054,8 @@
         "id": "incubi-shrine-token-drukhari",
         "wargear": "incubi-shrine-token"
       },
-      "tormentors-drukhari"
+      "tormentors-drukhari",
+      "power-from-pain-drukhari"
     ],
     "game_version": {
       "edition": "11th",
@@ -2140,7 +2161,8 @@
       "infiltrators",
       "shade-weavers-drukhari",
       "deep-strike",
-      "stealth"
+      "stealth",
+      "power-from-pain-drukhari"
     ],
     "game_version": {
       "edition": "11th",
@@ -2207,7 +2229,9 @@
     ],
     "ability_ids": [
       "empowered-engines-drukhari",
-      "pain-engine-coven-of-agonies-cronos-drukhari"
+      "pain-engine-coven-of-agonies-cronos-drukhari",
+      "corsairs-and-travelling-players-drukhari",
+      "power-from-pain-drukhari"
     ],
     "game_version": {
       "edition": "11th",
@@ -2269,7 +2293,9 @@
     ],
     "ability_ids": [
       "torture-device-coven-of-agonies-talos-drukhari",
-      "mindless-killing-machines-coven-of-agonies-talos-drukhari"
+      "mindless-killing-machines-coven-of-agonies-talos-drukhari",
+      "corsairs-and-travelling-players-drukhari",
+      "power-from-pain-drukhari"
     ],
     "game_version": {
       "edition": "11th",
@@ -2352,7 +2378,9 @@
     ],
     "ability_ids": [
       "experimental-enhancements-coven-of-agonies-wracks-drukhari",
-      "torturers-craft-coven-of-agonies-wracks-drukhari"
+      "torturers-craft-coven-of-agonies-wracks-drukhari",
+      "corsairs-and-travelling-players-drukhari",
+      "power-from-pain-drukhari"
     ]
   },
   {
@@ -2401,7 +2429,9 @@
     "ability_ids": [
       "fear-incarnate-xatrophos-nuul-drukhari",
       "vile-weaponry-drukhari",
-      "pain-adept-xatrophos-nuul-drukhari"
+      "pain-adept-xatrophos-nuul-drukhari",
+      "corsairs-and-travelling-players-drukhari",
+      "power-from-pain-drukhari"
     ],
     "game_version": {
       "edition": "11th",

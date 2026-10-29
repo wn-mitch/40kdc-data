@@ -45,7 +45,8 @@
     "ability_ids": [
       "computational-mastermind-leagues-of-votann",
       "leader",
-      "predictive-guidance-leagues-of-votann"
+      "predictive-guidance-leagues-of-votann",
+      "prioritised-efficiency-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
@@ -146,7 +147,8 @@
       {
         "id": "weavefield-crest-leagues-of-votann",
         "wargear": "weavefield-crest"
-      }
+      },
+      "prioritised-efficiency-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
@@ -232,7 +234,8 @@
     "ability_ids": [
       "fortify-leagues-of-votann",
       "grimnyrs-regard-leagues-of-votann",
-      "leader"
+      "leader",
+      "prioritised-efficiency-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
@@ -349,7 +352,8 @@
       {
         "id": "scouts",
         "value": 9
-      }
+      },
+      "prioritised-efficiency-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
@@ -451,7 +455,8 @@
     ],
     "ability_ids": [
       "destabilising-quakes-leagues-of-votann",
-      "geomantic-hunters-leagues-of-votann"
+      "geomantic-hunters-leagues-of-votann",
+      "prioritised-efficiency-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
@@ -549,7 +554,8 @@
       {
         "id": "scouts",
         "value": 9
-      }
+      },
+      "prioritised-efficiency-leagues-of-votann"
     ],
     "transport_capacity": {
       "capacity": 5
@@ -646,7 +652,8 @@
         "id": "preymark-crest-leagues-of-votann",
         "wargear": "preymark-crest"
       },
-      "purge-response-leagues-of-votann"
+      "purge-response-leagues-of-votann",
+      "prioritised-efficiency-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
@@ -739,7 +746,8 @@
       {
         "id": "panspectral-scanner-leagues-of-votann",
         "wargear": "panspectral-scanner"
-      }
+      },
+      "prioritised-efficiency-leagues-of-votann"
     ],
     "transport_capacity": {
       "capacity": 14
@@ -813,7 +821,8 @@
       "grudge-fuelled-fortitude-leagues-of-votann",
       "lone-operative",
       "stealth",
-      "unhinged-vengeance-leagues-of-votann"
+      "unhinged-vengeance-leagues-of-votann",
+      "prioritised-efficiency-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
@@ -910,7 +919,8 @@
       "brokhyr-guild-support-leagues-of-votann",
       "forgewrought-expertise-leagues-of-votann",
       "leader",
-      "multispectral-visor-leagues-of-votann"
+      "multispectral-visor-leagues-of-votann",
+      "prioritised-efficiency-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
@@ -990,7 +1000,8 @@
         "value": 4
       },
       "leader",
-      "relentless-avalanche-leagues-of-votann"
+      "relentless-avalanche-leagues-of-votann",
+      "prioritised-efficiency-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
@@ -1084,7 +1095,8 @@
       {
         "id": "preymark-crest-leagues-of-votann",
         "wargear": "preymark-crest"
-      }
+      },
+      "prioritised-efficiency-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
@@ -1159,7 +1171,8 @@
       {
         "id": "rampart-crest-uthar-the-destined-leagues-of-votann",
         "wargear": "rampart-crest"
-      }
+      },
+      "prioritised-efficiency-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
@@ -1233,7 +1246,8 @@
     ],
     "ability_ids": [
       "infiltrators",
-      "pragmatic-hunters-leagues-of-votann"
+      "pragmatic-hunters-leagues-of-votann",
+      "prioritised-efficiency-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
@@ -1312,7 +1326,8 @@
       {
         "id": "weavefield-crest-einhyr-champion-leagues-of-votann",
         "wargear": "weavefield-crest"
-      }
+      },
+      "prioritised-efficiency-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
@@ -1405,7 +1420,8 @@
       "sp-conversion-beamer"
     ],
     "ability_ids": [
-      "breaching-fire-leagues-of-votann"
+      "breaching-fire-leagues-of-votann",
+      "prioritised-efficiency-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
@@ -1481,7 +1497,8 @@
       {
         "id": "deadly-demise",
         "value": 1
-      }
+      },
+      "prioritised-efficiency-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
@@ -1585,7 +1602,8 @@
       {
         "id": "smoke-launcher-leagues-of-votann",
         "wargear": "smoke-launcher"
-      }
+      },
+      "prioritised-efficiency-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
@@ -1664,7 +1682,8 @@
       {
         "id": "feel-no-pain",
         "value": 4
-      }
+      },
+      "prioritised-efficiency-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
@@ -1755,7 +1774,8 @@
       {
         "id": "deadly-demise",
         "value": 1
-      }
+      },
+      "prioritised-efficiency-leagues-of-votann"
     ],
     "transport_capacity": {
       "capacity": 6
@@ -1837,7 +1857,8 @@
       {
         "id": "teleport-crest-kahl-leagues-of-votann",
         "wargear": "teleport-crest"
-      }
+      },
+      "prioritised-efficiency-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
@@ -1925,7 +1946,8 @@
       {
         "id": "weavefield-crest-leagues-of-votann",
         "wargear": "weavefield-crest"
-      }
+      },
+      "prioritised-efficiency-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
@@ -2010,7 +2032,8 @@
       "sp-conversion-beamer"
     ],
     "ability_ids": [
-      "breaching-fire-bane-slayers-bulwark-brokhyr-thunderkyn-leagues-of-votann"
+      "breaching-fire-bane-slayers-bulwark-brokhyr-thunderkyn-leagues-of-votann",
+      "prioritised-efficiency-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
@@ -2076,7 +2099,8 @@
     ],
     "ability_ids": [
       "decisive-destruction-bane-slayers-bulwark-einhyr-hearthguard-leagues-of-votann",
-      "weavefield-crest-bane-slayers-bulwark-einhyr-hearthguard-leagues-of-votann"
+      "weavefield-crest-bane-slayers-bulwark-einhyr-hearthguard-leagues-of-votann",
+      "prioritised-efficiency-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
@@ -2146,7 +2170,8 @@
     ],
     "ability_ids": [
       "panspectral-scanning-bane-slayers-bulwark-hearthkyn-warriors-leagues-of-votann",
-      "weavefield-crest-bane-slayers-bulwark-einhyr-hearthguard-leagues-of-votann"
+      "weavefield-crest-bane-slayers-bulwark-einhyr-hearthguard-leagues-of-votann",
+      "prioritised-efficiency-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
@@ -2213,7 +2238,8 @@
     ],
     "ability_ids": [
       "fast-firing-targeters-leagues-of-votann",
-      "weavefield-crest-vynn-bane-slayer-leagues-of-votann"
+      "weavefield-crest-vynn-bane-slayer-leagues-of-votann",
+      "prioritised-efficiency-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",

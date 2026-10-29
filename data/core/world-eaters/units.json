@@ -65,7 +65,8 @@
       {
         "id": "damaged",
         "value": 4
-      }
+      },
+      "blessings-of-khorne-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -145,7 +146,8 @@
       "berzerker-frenzy-world-eaters",
       "leader",
       "legendary-killer-world-eaters",
-      "the-betrayer-world-eaters"
+      "the-betrayer-world-eaters",
+      "blessings-of-khorne-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -217,7 +219,8 @@
     "ability_ids": [
       "a-worthy-skull-world-eaters",
       "forwards-for-blood-world-eaters",
-      "leader"
+      "leader",
+      "blessings-of-khorne-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -304,7 +307,8 @@
         "id": "icon-of-khorne-world-eaters",
         "wargear": "icon-of-khorne"
       },
-      "murderous-charge-world-eaters"
+      "murderous-charge-world-eaters",
+      "blessings-of-khorne-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -392,7 +396,8 @@
         "id": "icon-of-khorne-world-eaters",
         "wargear": "icon-of-khorne"
       },
-      "objective-ravaged-world-eaters"
+      "objective-ravaged-world-eaters",
+      "blessings-of-khorne-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -471,7 +476,8 @@
     "ability_ids": [
       "aggressive-advance-world-eaters",
       "crush-all-who-stand-before-us-world-eaters",
-      "leader"
+      "leader",
+      "blessings-of-khorne-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -550,7 +556,8 @@
         "value": "D3"
       },
       "deep-strike",
-      "swooping-predator-world-eaters"
+      "swooping-predator-world-eaters",
+      "blessings-of-khorne-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -641,7 +648,8 @@
       {
         "id": "damaged",
         "value": 5
-      }
+      },
+      "blessings-of-khorne-world-eaters"
     ],
     "transport_capacity": {
       "capacity": 14
@@ -732,7 +740,8 @@
       {
         "id": "damaged",
         "value": 4
-      }
+      },
+      "blessings-of-khorne-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -826,7 +835,8 @@
       {
         "id": "damaged",
         "value": 6
-      }
+      },
+      "blessings-of-khorne-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -916,7 +926,8 @@
       {
         "id": "damaged",
         "value": 4
-      }
+      },
+      "blessings-of-khorne-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -993,7 +1004,8 @@
       },
       "devastating-assault-world-eaters",
       "direct-the-slaughter-world-eaters",
-      "lord-of-murder-world-eaters"
+      "lord-of-murder-world-eaters",
+      "blessings-of-khorne-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -1087,7 +1099,8 @@
       {
         "id": "scouts",
         "value": 6
-      }
+      },
+      "blessings-of-khorne-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -1168,7 +1181,8 @@
       "leader",
       "lord-of-the-eightbound-world-eaters",
       "possessed-lord-world-eaters",
-      "rage-eternal-world-eaters"
+      "rage-eternal-world-eaters",
+      "blessings-of-khorne-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -1260,7 +1274,8 @@
     ],
     "ability_ids": [
       "deep-strike",
-      "rend-and-tear-world-eaters"
+      "rend-and-tear-world-eaters",
+      "blessings-of-khorne-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -1343,7 +1358,8 @@
       {
         "id": "scouts",
         "value": 6
-      }
+      },
+      "blessings-of-khorne-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -1435,7 +1451,8 @@
         "id": "firing-deck",
         "value": 2
       },
-      "meet-any-challenge-world-eaters"
+      "meet-any-challenge-world-eaters",
+      "blessings-of-khorne-world-eaters"
     ],
     "transport_capacity": {
       "capacity": 12
@@ -1521,7 +1538,8 @@
         "value": 1
       },
       "devoted-to-destruction-world-eaters",
-      "frenzy-world-eaters"
+      "frenzy-world-eaters",
+      "blessings-of-khorne-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -1612,7 +1630,8 @@
       {
         "id": "damaged",
         "value": 4
-      }
+      },
+      "blessings-of-khorne-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -1695,7 +1714,8 @@
       {
         "id": "damaged",
         "value": 6
-      }
+      },
+      "blessings-of-khorne-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -1786,7 +1806,8 @@
       {
         "id": "damaged",
         "value": 4
-      }
+      },
+      "blessings-of-khorne-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -1884,7 +1905,8 @@
     ],
     "ability_ids": [
       "bloody-fury-world-eaters",
-      "deep-strike"
+      "deep-strike",
+      "blessings-of-khorne-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -2012,7 +2034,8 @@
       {
         "id": "damaged-objective-control",
         "value": 4
-      }
+      },
+      "blessings-of-khorne-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -2087,7 +2110,8 @@
         "id": "scouts",
         "value": 8
       },
-      "to-slake-its-rage-world-eaters"
+      "to-slake-its-rage-world-eaters",
+      "blessings-of-khorne-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -2162,7 +2186,8 @@
     ],
     "ability_ids": [
       "infiltrators",
-      "loping-speed-world-eaters"
+      "loping-speed-world-eaters",
+      "blessings-of-khorne-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -2236,7 +2261,8 @@
     ],
     "ability_ids": [
       "icon-of-khorne-frenzied-reavers-jakhals-world-eaters",
-      "objective-ravaged-frenzied-reavers-jakhals-world-eaters"
+      "objective-ravaged-frenzied-reavers-jakhals-world-eaters",
+      "blessings-of-khorne-frenzied-reavers-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -2301,7 +2327,8 @@
     ],
     "ability_ids": [
       "blood-surge-frenzied-reavers-khorne-berzerkers-world-eaters",
-      "icon-of-khorne-frenzied-reavers-jakhals-world-eaters"
+      "icon-of-khorne-frenzied-reavers-jakhals-world-eaters",
+      "blessings-of-khorne-frenzied-reavers-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -2366,7 +2393,8 @@
       "axe-of-dismemberment"
     ],
     "ability_ids": [
-      "a-worthy-skull-frenzied-reavers-master-of-executions-world-eaters"
+      "a-worthy-skull-frenzied-reavers-master-of-executions-world-eaters",
+      "blessings-of-khorne-frenzied-reavers-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -2436,7 +2464,8 @@
     "ability_ids": [
       "devastating-assault-vorrakh-lord-of-the-frenzied-reavers-world-eaters",
       "direct-the-slaughter-vorrakh-lord-of-the-frenzied-reavers-world-eaters",
-      "lord-of-murder-vorrakh-lord-of-the-frenzied-reavers-world-eaters"
+      "lord-of-murder-vorrakh-lord-of-the-frenzied-reavers-world-eaters",
+      "blessings-of-khorne-frenzied-reavers-world-eaters"
     ],
     "game_version": {
       "edition": "11th",
@@ -2564,7 +2593,8 @@
       {
         "id": "instrument-of-chaos-world-eaters",
         "wargear": "instrument-of-chaos"
-      }
+      },
+      "pact-of-blood-world-eaters"
     ]
   },
   {
@@ -2651,7 +2681,8 @@
       {
         "id": "instrument-of-chaos-world-eaters",
         "wargear": "instrument-of-chaos"
-      }
+      },
+      "pact-of-blood-world-eaters"
     ]
   },
   {
@@ -2743,7 +2774,8 @@
         "value": "D6"
       },
       "deep-strike",
-      "relentless-carnage-world-eaters"
+      "relentless-carnage-world-eaters",
+      "pact-of-blood-world-eaters"
     ]
   },
   {
@@ -2815,7 +2847,8 @@
         "wargear": "collar-of-khorne"
       },
       "deep-strike",
-      "hunters-from-the-warp-world-eaters"
+      "hunters-from-the-warp-world-eaters",
+      "pact-of-blood-world-eaters"
     ]
   },
   {
@@ -2886,7 +2919,8 @@
       },
       "deep-strike",
       "murderlust-world-eaters",
-      "rage-embodied-world-eaters"
+      "rage-embodied-world-eaters",
+      "pact-of-blood-world-eaters"
     ]
   }
 ]

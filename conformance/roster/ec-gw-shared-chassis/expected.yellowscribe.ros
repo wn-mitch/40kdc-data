@@ -32,6 +32,21 @@
   -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
               </characteristics>
             </profile>
+            <profile name="Thrill Seekers" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">If your Army Faction is EMPERORS CHILDREN:
+  -&gt; Ranged weapons equipped by models in this unit gain [ASSAULT].
+  -&gt; The unit is eligible to declare a charge in a turn in which it Advanced.
+  -&gt; The unit is eligible to shoot in a turn in which it Fell Back.
+  -&gt; The unit is eligible to declare a charge in a turn in which it Fell Back.
+  If the unit advanced this turn or if the unit fell back this turn:
+    -&gt; The unit cannot target enemy units with ranged attacks if the target unit was engaged with this unit at the start of the turn.
+    -&gt; The unit cannot target enemy units with a charge if the target unit was engaged with this unit at the start of the turn.
+  If the unit advanced this turn or if the unit fell back this turn:
+    -&gt; The unit cannot target enemy units with ranged attacks if a unit other than this unit has selected the target unit as a target this phase or a unit other than this unit has selected the target unit as a charge target this phase.
+    -&gt; The unit cannot target enemy units with a charge if a unit other than this unit has selected the target unit as a target this phase or a unit other than this unit has selected the target unit as a charge target this phase.</characteristic>
+              </characteristics>
+            </profile>
           </profiles>
           <categories>
             <category name="Faction: Emperor’s Children"/>
@@ -102,6 +117,21 @@
             <profile name="Scuttling Horrors" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Each time an enemy unit ends a move, you may use this ability, during the Movement phase, in the opponent's turn, while the triggering unit is within 8" of the unit, while the unit is unengaged, the unit can make a Normal move of up to 6".</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Thrill Seekers" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">If your Army Faction is EMPERORS CHILDREN:
+  -&gt; Ranged weapons equipped by models in this unit gain [ASSAULT].
+  -&gt; The unit is eligible to declare a charge in a turn in which it Advanced.
+  -&gt; The unit is eligible to shoot in a turn in which it Fell Back.
+  -&gt; The unit is eligible to declare a charge in a turn in which it Fell Back.
+  If the unit advanced this turn or if the unit fell back this turn:
+    -&gt; The unit cannot target enemy units with ranged attacks if the target unit was engaged with this unit at the start of the turn.
+    -&gt; The unit cannot target enemy units with a charge if the target unit was engaged with this unit at the start of the turn.
+  If the unit advanced this turn or if the unit fell back this turn:
+    -&gt; The unit cannot target enemy units with ranged attacks if a unit other than this unit has selected the target unit as a target this phase or a unit other than this unit has selected the target unit as a charge target this phase.
+    -&gt; The unit cannot target enemy units with a charge if a unit other than this unit has selected the target unit as a target this phase or a unit other than this unit has selected the target unit as a charge target this phase.</characteristic>
               </characteristics>
             </profile>
           </profiles>

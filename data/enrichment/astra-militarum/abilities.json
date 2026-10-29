@@ -6775,9 +6775,24 @@
     "behavior": "passive",
     "community_notes": "Each OFFICER datasheet specifies how many Orders it can issue per battle round and which units are eligible; Orders are issued in your Command phase (and at the end of a phase in which the OFFICER disembarked from a TRANSPORT or was set up). A unit can be affected by only one Order at a time. TAKE COVER! cannot improve a Save to better than 3+. Only ASTRA MILITARUM models benefit from an Order.",
     "unit_ids": [
+      "cadian-castellan",
+      "cadian-command-squad",
+      "catachan-command-squad",
+      "commissar",
+      "commissar-graves",
+      "commissar-graves-on-foot",
+      "commissar-yarrick",
+      "draydens-lance-attilan-rough-riders",
       "draydens-lance-command-squad",
       "draydens-lance-kasrkin",
-      "gaunts-ghosts"
+      "gaunts-ghosts",
+      "krieg-command-squad",
+      "leman-russ-commander",
+      "lord-marshal-dreir",
+      "lord-solar-leontus",
+      "militarum-tempestus-command-squad",
+      "rogal-dorn-commander",
+      "ursula-creed"
     ]
   },
   {

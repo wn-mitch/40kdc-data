@@ -65,7 +65,9 @@
       {
         "id": "damaged",
         "value": 5
-      }
+      },
+      "aegis-of-the-emperor-adeptus-custodes",
+      "martial-katah-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -151,7 +153,9 @@
         "id": "damaged",
         "value": 4
       },
-      "unyielding-ancient-adeptus-custodes"
+      "unyielding-ancient-adeptus-custodes",
+      "aegis-of-the-emperor-adeptus-custodes",
+      "martial-katah-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -234,7 +238,9 @@
         "id": "damaged",
         "value": 4
       },
-      "unyielding-ancient-adeptus-custodes"
+      "unyielding-ancient-adeptus-custodes",
+      "aegis-of-the-emperor-adeptus-custodes",
+      "martial-katah-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -312,7 +318,9 @@
       "deep-strike",
       "leader",
       "swift-onslaught-adeptus-custodes",
-      "sword-of-the-throne-adeptus-custodes"
+      "sword-of-the-throne-adeptus-custodes",
+      "aegis-of-the-emperor-adeptus-custodes",
+      "martial-katah-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -403,7 +411,8 @@
         "value": 5
       },
       "deep-strike",
-      "destructor-optics-adeptus-custodes"
+      "destructor-optics-adeptus-custodes",
+      "aegis-of-the-emperor-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -496,7 +505,9 @@
         "wargear": "vexilla"
       },
       "deep-strike",
-      "slayer-of-tyrants-adeptus-custodes"
+      "slayer-of-tyrants-adeptus-custodes",
+      "aegis-of-the-emperor-adeptus-custodes",
+      "martial-katah-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -579,7 +590,10 @@
       "leader",
       "sweeping-advance-adeptus-custodes",
       "deep-strike",
-      "master-of-katahs-adeptus-custodes"
+      "master-of-katahs-adeptus-custodes",
+      "aegis-of-the-emperor-adeptus-custodes",
+      "aquila-commander-adeptus-custodes",
+      "martial-katah-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -834,7 +848,8 @@
       {
         "id": "damaged",
         "value": 7
-      }
+      },
+      "aegis-of-the-emperor-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -919,7 +934,9 @@
       {
         "id": "vexilla-wargear-adeptus-custodes",
         "wargear": "vexilla"
-      }
+      },
+      "aegis-of-the-emperor-adeptus-custodes",
+      "martial-katah-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -1006,7 +1023,8 @@
       {
         "id": "damaged",
         "value": 7
-      }
+      },
+      "aegis-of-the-emperor-adeptus-custodes"
     ],
     "transport_capacity": {
       "capacity": 12
@@ -1086,7 +1104,8 @@
         "id": "scouts",
         "value": 7
       },
-      "support"
+      "support",
+      "daughters-of-the-abyss-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -1260,7 +1279,9 @@
     ],
     "ability_ids": [
       "death-blow-adeptus-custodes",
-      "deep-strike"
+      "deep-strike",
+      "aegis-of-the-emperor-adeptus-custodes",
+      "martial-katah-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -1352,7 +1373,9 @@
       {
         "id": "vexilla-adeptus-custodes",
         "wargear": "vexilla"
-      }
+      },
+      "aegis-of-the-emperor-adeptus-custodes",
+      "martial-katah-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -1428,7 +1451,8 @@
         "value": 1
       },
       "deep-strike",
-      "mobile-hunter-adeptus-custodes"
+      "mobile-hunter-adeptus-custodes",
+      "aegis-of-the-emperor-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -1518,7 +1542,9 @@
     ],
     "ability_ids": [
       "quicksilver-execution-adeptus-custodes",
-      "deep-strike"
+      "deep-strike",
+      "aegis-of-the-emperor-adeptus-custodes",
+      "martial-katah-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -1600,7 +1626,9 @@
       "deep-strike",
       "neutronium-cascade-mine-adeptus-custodes",
       "swift-ruin-adeptus-custodes",
-      "take-wing-adeptus-custodes"
+      "take-wing-adeptus-custodes",
+      "aegis-of-the-emperor-adeptus-custodes",
+      "martial-katah-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -1682,7 +1710,10 @@
       "leader",
       "deep-strike",
       "archeotech-teleport-shunter-adeptus-custodes",
-      "master-of-katahs-adeptus-custodes"
+      "master-of-katahs-adeptus-custodes",
+      "aegis-of-the-emperor-adeptus-custodes",
+      "aquila-commander-adeptus-custodes",
+      "martial-katah-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -1759,7 +1790,9 @@
     ],
     "ability_ids": [
       "deep-strike",
-      "dread-foe-adeptus-custodes"
+      "dread-foe-adeptus-custodes",
+      "aegis-of-the-emperor-adeptus-custodes",
+      "martial-katah-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -1850,7 +1883,8 @@
       },
       "assault-vehicle-adeptus-custodes",
       "deep-strike",
-      "repulsor-suspensor-technology-adeptus-custodes"
+      "repulsor-suspensor-technology-adeptus-custodes",
+      "aegis-of-the-emperor-adeptus-custodes"
     ],
     "transport_capacity": {
       "capacity": 8
@@ -2027,7 +2061,10 @@
         "id": "praesidium-shield-shield-captain-adeptus-custodes",
         "wargear": "praesidium-shield"
       },
-      "vengeful-surge-adeptus-custodes"
+      "vengeful-surge-adeptus-custodes",
+      "aegis-of-the-emperor-adeptus-custodes",
+      "aquila-commander-adeptus-custodes",
+      "martial-katah-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -2111,7 +2148,10 @@
       {
         "id": "feel-no-pain",
         "value": 5
-      }
+      },
+      "aegis-of-the-emperor-adeptus-custodes",
+      "aquila-commander-adeptus-custodes",
+      "martial-katah-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -2177,7 +2217,8 @@
     ],
     "ability_ids": [
       "from-golden-light-adeptus-custodes",
-      "slayers-of-tyrants-adeptus-custodes"
+      "slayers-of-tyrants-adeptus-custodes",
+      "martial-katah-tristraens-gilded-blades-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -2246,7 +2287,8 @@
       {
         "id": "praesidium-shield-wargear-adeptus-custodes",
         "wargear": "praesidium-shield"
-      }
+      },
+      "martial-katah-tristraens-gilded-blades-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -2308,7 +2350,8 @@
       "castellan-axe-gilded-blades-custodian-wardens"
     ],
     "ability_ids": [
-      "divine-protection-adeptus-custodes"
+      "divine-protection-adeptus-custodes",
+      "martial-katah-tristraens-gilded-blades-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -2372,7 +2415,8 @@
       "vaultswords"
     ],
     "ability_ids": [
-      "rapid-strike-adeptus-custodes"
+      "rapid-strike-adeptus-custodes",
+      "martial-katah-tristraens-gilded-blades-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -2456,7 +2500,9 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "intimidating-presence-adeptus-custodes"
+      "intimidating-presence-adeptus-custodes",
+      "aegis-of-the-emperor-adeptus-custodes",
+      "martial-katah-adeptus-custodes"
     ],
     "base_size_mm": {
       "shape": "round",
@@ -2523,7 +2569,9 @@
     "points_provisional": false,
     "ability_ids": [
       "deep-strike",
-      "resolute-will-adeptus-custodes"
+      "resolute-will-adeptus-custodes",
+      "aegis-of-the-emperor-adeptus-custodes",
+      "martial-katah-adeptus-custodes"
     ],
     "base_size_mm": {
       "shape": "round",
@@ -2589,7 +2637,9 @@
     "ability_ids": [
       "deep-strike",
       "fight-to-the-death-adeptus-custodes",
-      "leader"
+      "leader",
+      "aegis-of-the-emperor-adeptus-custodes",
+      "martial-katah-adeptus-custodes"
     ],
     "base_size_mm": {
       "shape": "round",
@@ -2659,7 +2709,9 @@
       {
         "id": "vexilla-adeptus-custodes",
         "wargear": "vexilla"
-      }
+      },
+      "aegis-of-the-emperor-adeptus-custodes",
+      "martial-katah-adeptus-custodes"
     ],
     "base_size_mm": {
       "shape": "round",
@@ -2725,7 +2777,9 @@
     "ability_ids": [
       "deep-strike",
       "leader",
-      "unstoppable-will-adeptus-custodes"
+      "unstoppable-will-adeptus-custodes",
+      "aegis-of-the-emperor-adeptus-custodes",
+      "martial-katah-adeptus-custodes"
     ],
     "base_size_mm": {
       "shape": "round",
@@ -2788,7 +2842,9 @@
     "points_provisional": false,
     "ability_ids": [
       "deep-strike",
-      "strike-from-the-skies-adeptus-custodes"
+      "strike-from-the-skies-adeptus-custodes",
+      "aegis-of-the-emperor-adeptus-custodes",
+      "martial-katah-adeptus-custodes"
     ],
     "base_size_mm": {
       "shape": "round",
@@ -2855,7 +2911,9 @@
     "points_provisional": false,
     "ability_ids": [
       "deep-strike",
-      "reap-a-terrible-tally-adeptus-custodes"
+      "reap-a-terrible-tally-adeptus-custodes",
+      "aegis-of-the-emperor-adeptus-custodes",
+      "martial-katah-adeptus-custodes"
     ],
     "base_size_mm": {
       "shape": "round",
@@ -2935,7 +2993,8 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "deep-strike"
+      "deep-strike",
+      "aegis-of-the-emperor-adeptus-custodes"
     ],
     "base_size_mm": {
       "shape": "oval",
@@ -3016,7 +3075,9 @@
       {
         "id": "vexilla-adeptus-custodes",
         "wargear": "vexilla"
-      }
+      },
+      "aegis-of-the-emperor-adeptus-custodes",
+      "martial-katah-adeptus-custodes"
     ],
     "base_size_mm": {
       "shape": "round",
@@ -3087,7 +3148,9 @@
       "deep-strike",
       "neutronium-cascade-mine-adeptus-custodes",
       "strike-from-the-skies-adeptus-custodes",
-      "take-wing-adeptus-custodes"
+      "take-wing-adeptus-custodes",
+      "aegis-of-the-emperor-adeptus-custodes",
+      "martial-katah-adeptus-custodes"
     ],
     "base_size_mm": {
       "shape": "round",

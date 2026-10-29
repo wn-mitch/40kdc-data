@@ -3257,7 +3257,7 @@
     "faction_id": "genestealer-cults",
     "ability_type": "faction",
     "behavior": "reactive",
-    "unit_ids": []
+    "unit_ids": ["aberrants","acolyte-hybrids-with-autopistols","acolyte-hybrids-with-hand-flamers","atalan-jackals","hybrid-metamorphs","neophyte-hybrids","purestrain-genestealers"]
   },
   {
     "ability_id": "killer-reputation-genestealer-cults",
@@ -5807,7 +5807,7 @@
       "dataslate": "pre-launch-provisional"
     },
     "stub": true,
-    "unit_ids": [],
+    "unit_ids": ["claw-of-ascension-achilles-ridgerunner","claw-of-ascension-atalan-jackals","shanus-daskovian"],
     "faction_id": "genestealer-cults",
     "detachment_id": "claw-of-ascension",
     "ability_type": "faction",

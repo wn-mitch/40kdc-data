@@ -1957,7 +1957,7 @@
     "ability_type": "faction",
     "behavior": "reactive",
     "community_notes": "Community-authored from 10e source (provisional 11e); see #21.",
-    "unit_ids": [],
+    "unit_ids": ["acastus-knight-asterius","acastus-knight-porphyrion","canis-rex","cerastus-knight-acheron","cerastus-knight-atrapos","cerastus-knight-castigator","cerastus-knight-lancer","knight-castellan","knight-crusader","knight-defender","knight-destrier","knight-errant","knight-gallant","knight-paladin","knight-preceptor","knight-valiant","knight-warden","questoris-knight-magaera","questoris-knight-styrix"],
     "source_digest": "68c5153b55c80b5a04b53c8c071fa532fb59856d6c23aa9ddb86326bd05b9484"
   },
   {

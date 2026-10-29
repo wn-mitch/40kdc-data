@@ -5683,7 +5683,7 @@
     "faction_id": "chaos-space-marines",
     "ability_type": "faction",
     "behavior": "reactive",
-    "unit_ids": []
+    "unit_ids": ["abaddon-the-despoiler","accursed-cultists","aranis-zarkan","chaos-bikers","chaos-land-raider","chaos-lord","chaos-lord-in-terminator-armour","chaos-lord-with-jump-pack","chaos-predator-annihilator","chaos-predator-destructor","chaos-rhino","chaos-spawn","chaos-terminator-squad","chaos-vindicator","chosen","cultist-firebrand","cultist-mob","cypher","dark-apostle","dark-commune","defiler","fabius-bile","fellgor-beastmen","forgefiend","haarken-worldclaimer","havocs","helbrute","heldrake","heretic-astartes-daemon-prince","heretic-astartes-daemon-prince-with-wings","huron-blackheart","khorne-lord-of-skulls","kravek-morne","legionaries","lord-discordant-on-helstalker","master-of-executions","master-of-possession","masters-of-the-maelstrom","maulerfiend","mutilators","nemesis-claw","noctilith-crown","obliterators","possessed","raptors","red-corsairs-raiders","red-corsairs-reave-captain","sorcerer","sorcerer-in-terminator-armour","traitor-enforcer","traitor-guardsmen-squad","vashtorr-the-arkifane","venomcrawler","warp-talons","warpsmith","zarkans-daemonkin-cultist-mob","zarkans-daemonkin-legionaries","zarkans-daemonkin-possessed"]
   },
   {
     "ability_id": "cults-of-the-dark-gods-chaos-space-marines",
@@ -5776,7 +5776,7 @@
     "faction_id": "chaos-space-marines",
     "ability_type": "faction",
     "behavior": "activated",
-    "unit_ids": [],
+    "unit_ids": ["aranis-zarkan","zarkans-daemonkin-cultist-mob","zarkans-daemonkin-legionaries","zarkans-daemonkin-possessed"],
     "optional": true
   },
   {

@@ -167,7 +167,8 @@
       "slugga"
     ],
     "ability_ids": [
-      "grab-dat-scrap-orks"
+      "grab-dat-scrap-orks",
+      "waaagh-ardmob-orks"
     ]
   },
   {
@@ -230,7 +231,8 @@
       "scavenged-shivs"
     ],
     "ability_ids": [
-      "grot-infestation-orks"
+      "grot-infestation-orks",
+      "waaagh-ardmob-orks"
     ]
   },
   {
@@ -294,7 +296,8 @@
       "kustom-shoota"
     ],
     "ability_ids": [
-      "smash-em-up-orks"
+      "smash-em-up-orks",
+      "waaagh-ardmob-orks"
     ]
   },
   {
@@ -358,7 +361,8 @@
       "rokkit-launcha"
     ],
     "ability_ids": [
-      "indiscriminate-detonations-orks"
+      "indiscriminate-detonations-orks",
+      "waaagh-ardmob-orks"
     ]
   },
   {
@@ -422,7 +426,8 @@
       "waaagh-staff"
     ],
     "ability_ids": [
-      "totem-of-mork-orks"
+      "totem-of-mork-orks",
+      "waaagh-ardmob-orks"
     ]
   },
   {
@@ -477,7 +482,9 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "support"
+      "support",
+      "unstable-energies-orks",
+      "waaagh-orks"
     ],
     "game_version": {
       "edition": "11th",
@@ -563,7 +570,8 @@
       "dual-kombi-rokkit"
     ],
     "ability_ids": [
-      "high-speed-carnage-orks"
+      "high-speed-carnage-orks",
+      "waaagh-orks"
     ],
     "game_version": {
       "edition": "11th",
@@ -656,7 +664,8 @@
     "ability_ids": [
       "deep-strike",
       "deff-from-above-orks",
-      "aerial-manoover-orks"
+      "aerial-manoover-orks",
+      "waaagh-orks"
     ],
     "game_version": {
       "edition": "11th",
@@ -725,7 +734,8 @@
     "ability_ids": [
       "crude-surgery-orks",
       "catch-dat-red-bit-orks",
-      "support"
+      "support",
+      "waaagh-orks"
     ],
     "game_version": {
       "edition": "11th",
@@ -819,7 +829,8 @@
       {
         "id": "deadly-demise",
         "value": 1
-      }
+      },
+      "waaagh-orks"
     ],
     "game_version": {
       "edition": "11th",
@@ -899,7 +910,8 @@
     "ability_ids": [
       "more-dakka-orks",
       "shokk-boosta-orks",
-      "leader"
+      "leader",
+      "waaagh-orks"
     ],
     "game_version": {
       "edition": "11th",
@@ -1003,7 +1015,8 @@
     ],
     "ability_ids": [
       "bomb-squig-orks",
-      "brutal-impact-orks"
+      "brutal-impact-orks",
+      "waaagh-orks"
     ],
     "game_version": {
       "edition": "11th",
@@ -1082,7 +1095,9 @@
     "ability_ids": [
       "intimidating-motivation-orks",
       "krushin-impetus-orks",
-      "leader"
+      "leader",
+      "da-boss-orks",
+      "waaagh-orks"
     ],
     "game_version": {
       "edition": "11th",
@@ -1176,7 +1191,8 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "go-fer-da-weak-spot-orks"
+      "go-fer-da-weak-spot-orks",
+      "waaagh-orks"
     ],
     "game_version": {
       "edition": "11th",
@@ -1266,7 +1282,8 @@
       {
         "id": "damaged",
         "value": 6
-      }
+      },
+      "waaagh-orks"
     ],
     "transport_capacity": {
       "capacity": 22
@@ -1350,7 +1367,8 @@
       "lone-operative",
       "stealth",
       "deff-from-the-shadows-orks",
-      "leader"
+      "leader",
+      "waaagh-orks"
     ],
     "game_version": {
       "edition": "11th",
@@ -1442,7 +1460,8 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "super-heavy-walker"
+      "super-heavy-walker",
+      "waaagh-orks"
     ],
     "transport_capacity": {
       "capacity": 12
@@ -1519,7 +1538,9 @@
       "da-grand-warlords-ladz-orks",
       "makari-hoist-dat-banner-orks",
       "prophet-of-da-great-waaagh-orks",
-      "supreme-commander-orks"
+      "supreme-commander-orks",
+      "da-boss-orks",
+      "waaagh-orks"
     ],
     "game_version": {
       "edition": "11th",
@@ -1602,7 +1623,8 @@
     ],
     "ability_ids": [
       "bomb-squigs-orks",
-      "trophy-hunters-orks"
+      "trophy-hunters-orks",
+      "waaagh-orks"
     ],
     "game_version": {
       "edition": "11th",
@@ -1693,7 +1715,8 @@
         "id": "damaged",
         "value": 10
       },
-      "super-heavy-walker"
+      "super-heavy-walker",
+      "waaagh-orks"
     ],
     "transport_capacity": {
       "capacity": 22
@@ -1774,7 +1797,8 @@
       {
         "id": "firing-deck",
         "value": 11
-      }
+      },
+      "waaagh-orks"
     ],
     "transport_capacity": {
       "capacity": 11
@@ -1869,7 +1893,8 @@
         "id": "pulsa-rokkit-orks",
         "wargear": "pulsa-rokkit-once-per-battle-per-unit"
       },
-      "rokkit-barrage-orks"
+      "rokkit-barrage-orks",
+      "waaagh-orks"
     ],
     "game_version": {
       "edition": "11th",
@@ -1959,7 +1984,8 @@
       "nowhere-to-hide-orks",
       "taktikal-know-wotz-orks",
       "infiltrators",
-      "stealth"
+      "stealth",
+      "waaagh-orks"
     ],
     "game_version": {
       "edition": "11th",
@@ -2079,7 +2105,8 @@
     "ability_ids": [
       "ammo-runts-orks",
       "never-too-busy-to-fight-orks",
-      "tide-of-muscle-orks"
+      "tide-of-muscle-orks",
+      "waaagh-orks"
     ],
     "game_version": {
       "edition": "11th",
@@ -2160,7 +2187,8 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "pilin-out-orks"
+      "pilin-out-orks",
+      "waaagh-orks"
     ],
     "transport_capacity": {
       "capacity": 12,
@@ -2244,7 +2272,8 @@
       "hardy-bioniks-orks",
       "push-dat-bit-back-in-orks",
       "runnin-wiv-da-herd-orks",
-      "support"
+      "support",
+      "waaagh-orks"
     ],
     "game_version": {
       "edition": "11th",
@@ -2336,7 +2365,8 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "super-heavy-walker"
+      "super-heavy-walker",
+      "waaagh-orks"
     ],
     "transport_capacity": {
       "capacity": 12,
@@ -2444,7 +2474,8 @@
       "scavenged-shivs-mek-gunz"
     ],
     "ability_ids": [
-      "madcap-artillery-orks"
+      "madcap-artillery-orks",
+      "waaagh-orks"
     ],
     "game_version": {
       "edition": "11th",
@@ -2530,7 +2561,8 @@
     ],
     "ability_ids": [
       "rokkit-charge-orks",
-      "deep-strike"
+      "deep-strike",
+      "waaagh-orks"
     ],
     "game_version": {
       "edition": "11th",
@@ -2624,7 +2656,8 @@
       "snazzgun"
     ],
     "ability_ids": [
-      "finderz-keeperz-orks"
+      "finderz-keeperz-orks",
+      "waaagh-orks"
     ],
     "game_version": {
       "edition": "11th",
@@ -2705,7 +2738,8 @@
       {
         "id": "deadly-demise",
         "value": "D3"
-      }
+      },
+      "waaagh-orks"
     ],
     "game_version": {
       "edition": "11th",
@@ -2787,7 +2821,8 @@
         "id": "deadly-demise",
         "value": 1
       },
-      "dread-ard-orks"
+      "dread-ard-orks",
+      "waaagh-orks"
     ],
     "game_version": {
       "edition": "11th",
@@ -2862,7 +2897,9 @@
       {
         "id": "feel-no-pain",
         "value": 6
-      }
+      },
+      "da-boss-orks",
+      "waaagh-orks"
     ],
     "game_version": {
       "edition": "11th",
@@ -2939,7 +2976,8 @@
       {
         "id": "deadly-demise",
         "value": "D3"
-      }
+      },
+      "waaagh-orks"
     ],
     "game_version": {
       "edition": "11th",
@@ -3019,7 +3057,8 @@
         "wargear": "kustom-force-field"
       },
       "more-dakka-orks",
-      "leader"
+      "leader",
+      "waaagh-orks"
     ],
     "game_version": {
       "edition": "11th",
@@ -3121,7 +3160,8 @@
       "thump-gun"
     ],
     "ability_ids": [
-      "mobbed-orks"
+      "mobbed-orks",
+      "waaagh-orks"
     ],
     "game_version": {
       "edition": "11th",
@@ -3190,7 +3230,9 @@
         "id": "deadly-demise",
         "value": 1
       },
-      "leader"
+      "leader",
+      "da-boss-orks",
+      "waaagh-orks"
     ],
     "game_version": {
       "edition": "11th",
@@ -3261,7 +3303,8 @@
     "ability_ids": [
       "kustom-dakka-orks",
       "clever-know-wotz-orks",
-      "support"
+      "support",
+      "waaagh-orks"
     ],
     "game_version": {
       "edition": "11th",
@@ -3338,7 +3381,8 @@
       {
         "id": "feel-no-pain",
         "value": 5
-      }
+      },
+      "waaagh-orks"
     ],
     "game_version": {
       "edition": "11th",
@@ -3409,7 +3453,8 @@
     ],
     "ability_ids": [
       "super-runts-orks",
-      "leader"
+      "leader",
+      "waaagh-orks"
     ],
     "game_version": {
       "edition": "11th",
@@ -3491,7 +3536,8 @@
     ],
     "ability_ids": [
       "downtrodden-orks",
-      "thievin-scavengers-orks"
+      "thievin-scavengers-orks",
+      "waaagh-orks"
     ],
     "game_version": {
       "edition": "11th",
@@ -3584,7 +3630,8 @@
     "ability_ids": [
       "more-dakka-orks",
       "leader",
-      "support-shokka-orks"
+      "support-shokka-orks",
+      "waaagh-orks"
     ],
     "game_version": {
       "edition": "11th",
@@ -3681,7 +3728,9 @@
       {
         "id": "feel-no-pain",
         "value": 5
-      }
+      },
+      "unstable-energies-orks",
+      "waaagh-orks"
     ],
     "transport_capacity": {
       "capacity": 11
@@ -3788,7 +3837,8 @@
       {
         "id": "paired-krumpas-orks",
         "wargear": "paired-krumpas"
-      }
+      },
+      "waaagh-orks"
     ],
     "game_version": {
       "edition": "11th",
@@ -3871,7 +3921,9 @@
         "value": 5
       },
       "thundering-stampede-orks",
-      "keep-huntin-beastboss-on-squigosaur-orks"
+      "keep-huntin-beastboss-on-squigosaur-orks",
+      "da-boss-orks",
+      "waaagh-orks"
     ],
     "game_version": {
       "edition": "11th",
@@ -3989,7 +4041,8 @@
     ],
     "ability_ids": [
       "arrogant-invulnerability-orks",
-      "krumpin-time-orks"
+      "krumpin-time-orks",
+      "waaagh-orks"
     ],
     "game_version": {
       "edition": "11th",
@@ -4077,7 +4130,8 @@
       {
         "id": "deadly-demise",
         "value": "D3"
-      }
+      },
+      "waaagh-orks"
     ],
     "game_version": {
       "edition": "11th",
@@ -4174,7 +4228,8 @@
       {
         "id": "firing-deck",
         "value": 11
-      }
+      },
+      "waaagh-orks"
     ],
     "transport_capacity": {
       "capacity": 21
@@ -4257,7 +4312,9 @@
       "intimidating-motivation-orks",
       "might-is-right-orks",
       "boss-ammo-runt-orks",
-      "leader"
+      "leader",
+      "da-boss-orks",
+      "waaagh-orks"
     ],
     "game_version": {
       "edition": "11th",
@@ -4416,7 +4473,8 @@
       {
         "id": "deadly-demise",
         "value": 1
-      }
+      },
+      "waaagh-orks"
     ],
     "external_refs": [
       {
@@ -4485,7 +4543,8 @@
     "attachment_role": "support",
     "ability_ids": [
       "sumfin-to-prove-orks",
-      "support"
+      "support",
+      "waaagh-orks"
     ],
     "external_refs": [
       {
@@ -4567,7 +4626,8 @@
         "value": "D3"
       },
       "deep-strike",
-      "lone-operative"
+      "lone-operative",
+      "waaagh-orks"
     ],
     "external_refs": [
       {
@@ -4669,7 +4729,8 @@
         "id": "deadly-demise",
         "value": "D6"
       },
-      "mobile-arsenal-orks"
+      "mobile-arsenal-orks",
+      "waaagh-orks"
     ]
   },
   {
@@ -4714,7 +4775,8 @@
       "supreme-kunnin-orks",
       "waaagh-orks",
       "leader",
-      "deep-strike"
+      "deep-strike",
+      "da-boss-orks"
     ],
     "game_version": {
       "edition": "11th",
@@ -4945,7 +5007,8 @@
         "id": "deadly-demise",
         "value": 1
       },
-      "drive-by-skorchin-orks"
+      "drive-by-skorchin-orks",
+      "waaagh-orks"
     ]
   },
   {

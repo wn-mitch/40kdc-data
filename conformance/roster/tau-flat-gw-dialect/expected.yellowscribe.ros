@@ -40,6 +40,13 @@
                 <characteristic name="Description">The unit gains the Scouts X" ability, X being its rating.</characteristic>
               </characteristics>
             </profile>
+            <profile name="For the Greater Good" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">During the Shooting phase against SPOTTED targets, until the end of the phase:
+  -&gt; The unit gets +1 to Hit rolls.
+  -&gt; The unit's weapons gain [IGNORES COVER].</characteristic>
+              </characteristics>
+            </profile>
           </profiles>
           <categories>
             <category name="Faction: T’au Empire"/>
@@ -140,6 +147,13 @@ The unit is eligible to act as an Observer even if it Advanced this turn.</chara
             <profile name="Shield Drone" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Add 1 to this model's Wounds characteristic.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="For the Greater Good" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">During the Shooting phase against SPOTTED targets, until the end of the phase:
+  -&gt; The unit gets +1 to Hit rolls.
+  -&gt; The unit's weapons gain [IGNORES COVER].</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -367,6 +381,13 @@ The unit is eligible to act as an Observer even if it Advanced this turn.</chara
             <profile name="Shield Drone" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Add 1 to this model's Wounds characteristic.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="For the Greater Good" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">During the Shooting phase against SPOTTED targets, until the end of the phase:
+  -&gt; The unit gets +1 to Hit rolls.
+  -&gt; The unit's weapons gain [IGNORES COVER].</characteristic>
               </characteristics>
             </profile>
           </profiles>

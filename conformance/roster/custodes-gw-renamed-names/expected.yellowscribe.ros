@@ -254,6 +254,17 @@ All friendly ANATHEMA PSYKANA units cannot be your Warlord.</characteristic>
                 <characteristic name="Description">At the end of your opponent's Fight phase, you may use this ability, while the unit is unengaged, the unit can be placed into Strategic Reserves.</characteristic>
               </characteristics>
             </profile>
+            <profile name="Aegis of the Emperor" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">All friendly ADEPTUS CUSTODES units have the Feel No Pain 5+ ability against mortal wounds.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Martial Ka’tah" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">-&gt; At the start of your Command phase: all friendly ADEPTUS CUSTODES units with the Martial Katah ability are readied.
+-&gt; You can: while the unit is readied, select one: Conversai (until the end of the turn: the unit is no longer readied; during the Command phase, in your turn, the unit is eligible to start an Action even if it is within Engagement Range of enemy units or it is Battle-shocked; the unit is eligible to shoot even if it is performing an Action) / Calistus (when the unit is selected to move, until the end of the phase: the unit is no longer readied; during the Movement phase, in your turn, the unit can move over models as though they were not there, during its Normal, Advance and Fall Back moves) / Salvus (when the unit is selected to shoot, until the end of the phase: the unit is no longer readied; during the Shooting phase, in your turn, the unit ignores any modifiers to its Ballistic Skill characteristics; the unit ignores any modifiers to its Hit and Wound rolls) / Dacatarai (at the start of the Fight phase, until the end of the phase: the unit is no longer readied; while making melee attacks, while the target is an enemy unit (excluding MONSTER or VEHICLE units), you can re-roll a Hit roll of 1 with melee weapons) / Kaptaris (at the start of the Fight phase, until the end of the phase: the unit is no longer readied; against melee attacks, the attacking unit gets -1 to Hit rolls) / Rendax (when the unit is selected to fight, until the end of the phase: the unit is no longer readied; during the Fight phase, against MONSTER or VEHICLE targets, melee weapons equipped by models in this unit gain [LETHAL HITS]).</characteristic>
+              </characteristics>
+            </profile>
           </profiles>
           <categories>
             <category name="Faction: Adeptus Custodes"/>

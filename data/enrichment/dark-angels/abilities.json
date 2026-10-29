@@ -3229,7 +3229,7 @@
     "faction_id": "dark-angels",
     "ability_type": "faction",
     "behavior": "passive",
-    "unit_ids": [],
+    "unit_ids": ["master-zacharial","vengeful-brethren-bladeguard-veteran-squad","vengeful-brethren-hellblaster-squad","vengeful-brethren-intercessor-squad"],
     "detachment_id": "the-vengeful-brethren"
   },
   {
@@ -4059,7 +4059,7 @@
       "dataslate": "pre-launch-provisional"
     },
     "stub": true,
-    "unit_ids": [],
+    "unit_ids": ["asmodai","azrael","belial","deathwing-knights","deathwing-terminator-squad","ezekiel","inner-circle-companions","land-speeder-vengeance","lazarus","lion-eljonson","nephilim-jetfighter","ravenwing-black-knights","ravenwing-command-squad","ravenwing-dark-talon","ravenwing-darkshroud","sammael"],
     "faction_id": "dark-angels",
     "detachment_id": null,
     "ability_type": "faction",
@@ -4173,7 +4173,7 @@
       "dataslate": "pre-launch-provisional"
     },
     "stub": true,
-    "unit_ids": [],
+    "unit_ids": ["master-zacharial","vengeful-brethren-bladeguard-veteran-squad","vengeful-brethren-hellblaster-squad","vengeful-brethren-intercessor-squad"],
     "faction_id": "dark-angels",
     "detachment_id": "the-vengeful-brethren",
     "ability_type": "faction",
@@ -4198,7 +4198,7 @@
       "edition": "11th",
       "dataslate": "2026-10-14"
     },
-    "unit_ids": [],
+    "unit_ids": ["master-zacharial","vengeful-brethren-bladeguard-veteran-squad","vengeful-brethren-hellblaster-squad","vengeful-brethren-intercessor-squad"],
     "faction_id": "dark-angels",
     "detachment_id": "the-vengeful-brethren",
     "ability_type": "faction",
@@ -4277,7 +4277,7 @@
       "edition": "11th",
       "dataslate": "2026-10-14"
     },
-    "unit_ids": [],
+    "unit_ids": ["asmodai","azrael","belial","lazarus","lion-eljonson","sammael"],
     "faction_id": "dark-angels",
     "detachment_id": null,
     "ability_type": "faction",

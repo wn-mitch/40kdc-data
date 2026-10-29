@@ -31,6 +31,18 @@ Add one rolled D6 to your Blessings of Khorne for each Bloodshed points you have
                 <characteristic name="Description">If the unit charged this turn, improve the Strength characteristic of melee weapons equipped by models in this unit by 1.</characteristic>
               </characteristics>
             </profile>
+            <profile name="Blessings of Khorne" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">At the start of the battle round, you may use this ability, once per battle round per army, if your Army Faction is WORLD EATERS, until the end of the battle round:
+  -&gt; Roll 8D6; allocate dice to activate up to 2 of the following:
+    - Unbridled Bloodlust (requires pair of 1+): the unit gets +1 to Charge rolls.
+    - Rage-Fuelled Invigoration (requires pair of 2+): add 3" to the unit's Pile-in and Consolidation moves.
+    - Total Carnage (requires pair of 3+): when a model in the unit is destroyed: each time a model in this unit is destroyed, unless that unit has fought this phase, roll one D6. On a 4+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.
+    - Martial Excellence (requires pair of 4+ or triple of 1+): melee weapons equipped by models in this unit gain [SUSTAINED HITS 1].
+    - Warp Blades (requires pair of 5+ or triple of 2+): melee weapons equipped by models in this unit gain [LETHAL HITS].
+    - Decapitating Strikes (requires pair of 6+ or triple of 3+): while making melee attacks against INFANTRY targets, the unit's weapons gain [DEVASTATING WOUNDS].</characteristic>
+              </characteristics>
+            </profile>
           </profiles>
           <categories>
             <category name="Faction: World Eaters"/>
@@ -106,6 +118,18 @@ Add one rolled D6 to your Blessings of Khorne for each Bloodshed points you have
                 <characteristic name="Description">The unit is eligible to declare a charge in a turn in which it Advanced.</characteristic>
               </characteristics>
             </profile>
+            <profile name="Blessings of Khorne" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">At the start of the battle round, you may use this ability, once per battle round per army, if your Army Faction is WORLD EATERS, until the end of the battle round:
+  -&gt; Roll 8D6; allocate dice to activate up to 2 of the following:
+    - Unbridled Bloodlust (requires pair of 1+): the unit gets +1 to Charge rolls.
+    - Rage-Fuelled Invigoration (requires pair of 2+): add 3" to the unit's Pile-in and Consolidation moves.
+    - Total Carnage (requires pair of 3+): when a model in the unit is destroyed: each time a model in this unit is destroyed, unless that unit has fought this phase, roll one D6. On a 4+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.
+    - Martial Excellence (requires pair of 4+ or triple of 1+): melee weapons equipped by models in this unit gain [SUSTAINED HITS 1].
+    - Warp Blades (requires pair of 5+ or triple of 2+): melee weapons equipped by models in this unit gain [LETHAL HITS].
+    - Decapitating Strikes (requires pair of 6+ or triple of 3+): while making melee attacks against INFANTRY targets, the unit's weapons gain [DEVASTATING WOUNDS].</characteristic>
+              </characteristics>
+            </profile>
           </profiles>
           <categories>
             <category name="Faction: World Eaters"/>
@@ -163,6 +187,18 @@ Add one rolled D6 to your Blessings of Khorne for each Bloodshed points you have
             <profile name="Meet Any Challenge" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">When an enemy unit is set up or each time an enemy unit ends a Normal, Advance or Fall Back move, during the Movement phase, in the opponent's turn, while the triggering unit is within 8" of this model, until the end of the phase, the unit is eligible to disembark.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Blessings of Khorne" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">At the start of the battle round, you may use this ability, once per battle round per army, if your Army Faction is WORLD EATERS, until the end of the battle round:
+  -&gt; Roll 8D6; allocate dice to activate up to 2 of the following:
+    - Unbridled Bloodlust (requires pair of 1+): the unit gets +1 to Charge rolls.
+    - Rage-Fuelled Invigoration (requires pair of 2+): add 3" to the unit's Pile-in and Consolidation moves.
+    - Total Carnage (requires pair of 3+): when a model in the unit is destroyed: each time a model in this unit is destroyed, unless that unit has fought this phase, roll one D6. On a 4+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.
+    - Martial Excellence (requires pair of 4+ or triple of 1+): melee weapons equipped by models in this unit gain [SUSTAINED HITS 1].
+    - Warp Blades (requires pair of 5+ or triple of 2+): melee weapons equipped by models in this unit gain [LETHAL HITS].
+    - Decapitating Strikes (requires pair of 6+ or triple of 3+): while making melee attacks against INFANTRY targets, the unit's weapons gain [DEVASTATING WOUNDS].</characteristic>
               </characteristics>
             </profile>
           </profiles>

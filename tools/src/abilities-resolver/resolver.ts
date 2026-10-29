@@ -153,8 +153,10 @@ export function resolveEligibleAbilities(
     }
   }
 
-  // 4. Unit's own abilities.
+  // 4. Unit's own abilities. A unit lists the army rules its datasheet prints, but an army rule is
+  // the army's (step 1, which also applies a Combat Patrol's replacements), never the unit's own.
   for (const ability of unit.abilities) {
+    if (ability.raw.ability_type === "faction") continue;
     if (!phaseMatches(ability, phase)) continue;
     pushUnique(out, seen, {
       ability,
@@ -171,6 +173,7 @@ export function resolveEligibleAbilities(
     const member = resolveUnit(memberId, factionId);
     if (!member) continue;
     for (const ability of member.abilities) {
+      if (ability.raw.ability_type === "faction") continue;
       if (!phaseMatches(ability, phase)) continue;
       pushUnique(out, seen, {
         ability,
@@ -188,6 +191,7 @@ export function resolveEligibleAbilities(
     const supporter = resolveUnit(supportId, factionId);
     if (!supporter) continue;
     for (const ability of supporter.abilities) {
+      if (ability.raw.ability_type === "faction") continue;
       if (!phaseMatches(ability, phase)) continue;
       if (!reachesOtherUnits(ability.raw.effect)) continue;
       pushUnique(out, seen, {

@@ -71,7 +71,9 @@
       {
         "id": "damaged-objective-control",
         "value": 5
-      }
+      },
+      "code-chivalric-imperial-knights",
+      "super-heavy-walker-imperial-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -169,7 +171,9 @@
       {
         "id": "damaged-objective-control",
         "value": 5
-      }
+      },
+      "code-chivalric-imperial-knights",
+      "super-heavy-walker-imperial-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -266,7 +270,9 @@
       {
         "id": "damaged-objective-control",
         "value": 5
-      }
+      },
+      "code-chivalric-imperial-knights",
+      "super-heavy-walker-imperial-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -363,7 +369,9 @@
       {
         "id": "damaged-objective-control",
         "value": 5
-      }
+      },
+      "code-chivalric-imperial-knights",
+      "super-heavy-walker-imperial-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -459,7 +467,9 @@
       {
         "id": "damaged-objective-control",
         "value": 5
-      }
+      },
+      "code-chivalric-imperial-knights",
+      "super-heavy-walker-imperial-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -560,7 +570,9 @@
       {
         "id": "damaged-objective-control",
         "value": 5
-      }
+      },
+      "code-chivalric-imperial-knights",
+      "super-heavy-walker-imperial-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -661,7 +673,9 @@
       {
         "id": "damaged-objective-control",
         "value": 5
-      }
+      },
+      "code-chivalric-imperial-knights",
+      "super-heavy-walker-imperial-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -764,7 +778,9 @@
       {
         "id": "damaged-objective-control",
         "value": 5
-      }
+      },
+      "code-chivalric-imperial-knights",
+      "super-heavy-walker-imperial-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -872,7 +888,9 @@
       {
         "id": "damaged-objective-control",
         "value": 5
-      }
+      },
+      "code-chivalric-imperial-knights",
+      "super-heavy-walker-imperial-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -974,7 +992,9 @@
       {
         "id": "damaged-objective-control",
         "value": 5
-      }
+      },
+      "code-chivalric-imperial-knights",
+      "super-heavy-walker-imperial-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -1068,7 +1088,9 @@
       {
         "id": "damaged-objective-control",
         "value": 5
-      }
+      },
+      "code-chivalric-imperial-knights",
+      "super-heavy-walker-imperial-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -1163,7 +1185,8 @@
       {
         "id": "damaged-objective-control",
         "value": 3
-      }
+      },
+      "code-chivalric-imperial-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -1269,7 +1292,9 @@
       {
         "id": "damaged-objective-control",
         "value": 5
-      }
+      },
+      "code-chivalric-imperial-knights",
+      "super-heavy-walker-imperial-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -1352,7 +1377,8 @@
       {
         "id": "damaged-objective-control",
         "value": 3
-      }
+      },
+      "code-chivalric-imperial-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -1457,7 +1483,9 @@
       {
         "id": "damaged-objective-control",
         "value": 5
-      }
+      },
+      "code-chivalric-imperial-knights",
+      "super-heavy-walker-imperial-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -1612,7 +1640,9 @@
       {
         "id": "damaged-objective-control",
         "value": 5
-      }
+      },
+      "code-chivalric-imperial-knights",
+      "super-heavy-walker-imperial-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -1715,7 +1745,9 @@
       {
         "id": "damaged-objective-control",
         "value": 5
-      }
+      },
+      "code-chivalric-imperial-knights",
+      "super-heavy-walker-imperial-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -1799,7 +1831,8 @@
       {
         "id": "damaged-objective-control",
         "value": 3
-      }
+      },
+      "code-chivalric-imperial-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -1903,7 +1936,9 @@
       {
         "id": "damaged-objective-control",
         "value": 5
-      }
+      },
+      "code-chivalric-imperial-knights",
+      "super-heavy-walker-imperial-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -2001,7 +2036,9 @@
       {
         "id": "damaged-objective-control",
         "value": 5
-      }
+      },
+      "code-chivalric-imperial-knights",
+      "super-heavy-walker-imperial-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -2096,7 +2133,9 @@
       {
         "id": "damaged-objective-control",
         "value": 5
-      }
+      },
+      "code-chivalric-imperial-knights",
+      "super-heavy-walker-imperial-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -2196,7 +2235,9 @@
       {
         "id": "damaged-objective-control",
         "value": 4
-      }
+      },
+      "code-chivalric-imperial-knights",
+      "super-heavy-walker-imperial-knights"
     ],
     "game_version": {
       "edition": "11th",

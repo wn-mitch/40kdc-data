@@ -49,6 +49,12 @@
                 <characteristic name="Description">Each time you target the unit with a Stratagem, you may use this ability, once per battle round per army, while the unit is friendly, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).</characteristic>
               </characteristics>
             </profile>
+            <profile name="Gate of Infinity" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">At the end of your opponent's Fight phase, you may use this ability, if your Army Faction is GREY KNIGHTS:
+  -&gt; Select up to 2/3/4 friendly units (Incursion/Strike Force/Onslaught) if the selected unit is on the battlefield and the selected unit is unengaged and the selected unit has the Gate of Infinity Crowes Sanctifiers ability: that unit can be placed into Strategic Reserves.</characteristic>
+              </characteristics>
+            </profile>
           </profiles>
           <categories>
             <category name="Faction: Grey Knights"/>
@@ -133,6 +139,11 @@ Your army can include only one OFFICIO ASSASSINORUM unit.</characteristic>
             <profile name="Reign of Confusion" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">When an enemy unit within 12" of this model is targeted with a Stratagem, you may use this ability, once per turn per model, increase the CP cost of that use of the Stratagem by 1CP.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Assigned Agents" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Your army can include AGENTS OF THE IMPERIUM units.</characteristic>
               </characteristics>
             </profile>
           </profiles>

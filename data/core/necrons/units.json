@@ -53,7 +53,8 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "repair-barge-necrons"
+      "repair-barge-necrons",
+      "reanimation-protocols-necrons"
     ],
     "transport_capacity": {
       "capacity": 10
@@ -148,7 +149,8 @@
       {
         "id": "damaged-objective-control",
         "value": 5
-      }
+      },
+      "reanimation-protocols-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -223,7 +225,8 @@
     ],
     "ability_ids": [
       "deep-strike",
-      "relentless-combatants-necrons"
+      "relentless-combatants-necrons",
+      "reanimation-protocols-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -296,7 +299,8 @@
       "gauss-reaper"
     ],
     "ability_ids": [
-      "their-number-is-legion-necrons"
+      "their-number-is-legion-necrons",
+      "reanimation-protocols-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -378,7 +382,8 @@
       {
         "id": "scouts",
         "value": 8
-      }
+      },
+      "reanimation-protocols-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -456,7 +461,8 @@
     "ability_ids": [
       "rites-of-reanimation-necrons",
       "technomancer-necrons",
-      "support"
+      "support",
+      "reanimation-protocols-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -536,7 +542,8 @@
       {
         "id": "damaged",
         "value": 4
-      }
+      },
+      "reanimation-protocols-necrons"
     ],
     "transport_capacity": {
       "capacity": 1
@@ -615,7 +622,8 @@
       {
         "id": "resurrection-orb-necrons",
         "wargear": "resurrection-orb"
-      }
+      },
+      "reanimation-protocols-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -685,7 +693,8 @@
     "ability_ids": [
       "adaptive-strategy-necrons",
       "engrammatic-logic-necrons",
-      "leader"
+      "leader",
+      "reanimation-protocols-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -763,7 +772,8 @@
       {
         "id": "damaged",
         "value": 4
-      }
+      },
+      "reanimation-protocols-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -836,7 +846,8 @@
       "tesla-carbine"
     ],
     "ability_ids": [
-      "implacable-eradication-necrons"
+      "implacable-eradication-necrons",
+      "reanimation-protocols-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -903,7 +914,8 @@
     "ability_ids": [
       "bound-creation-necrons",
       "cryptek-retinue-necrons",
-      "systematic-vigour-necrons"
+      "systematic-vigour-necrons",
+      "reanimation-protocols-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -975,7 +987,8 @@
     "ability_ids": [
       "master-chronomancer-necrons",
       "the-stars-are-right-necrons",
-      "support"
+      "support",
+      "reanimation-protocols-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -1063,7 +1076,8 @@
         "value": "D6+3"
       },
       "powers-of-the-ctan-necrons",
-      "damaged-1-8-wounds-remaining-necrons"
+      "damaged-1-8-wounds-remaining-necrons",
+      "reanimation-protocols-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -1170,7 +1184,8 @@
       {
         "id": "shieldvanes-necrons",
         "wargear": "shieldvanes"
-      }
+      },
+      "reanimation-protocols-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -1239,7 +1254,8 @@
     "ability_ids": [
       "harbinger-of-despair-necrons",
       "nightmare-shroud-necrons",
-      "support"
+      "support",
+      "reanimation-protocols-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -1340,7 +1356,8 @@
       "gauss-destructor"
     ],
     "ability_ids": [
-      "optimised-for-slaughter-necrons"
+      "optimised-for-slaughter-necrons",
+      "reanimation-protocols-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -1431,7 +1448,8 @@
         "id": "plasmacyte-necrons",
         "wargear": "plasmacyte"
       },
-      "whirling-onslaught-necrons"
+      "whirling-onslaught-necrons",
+      "reanimation-protocols-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -1508,7 +1526,8 @@
       "ancient-cover-necrons",
       "deployment-necrons",
       "fortification-necrons",
-      "reanimation-nodes-necrons"
+      "reanimation-nodes-necrons",
+      "reanimation-protocols-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -1587,7 +1606,8 @@
     "ability_ids": [
       "crimson-harvest-necrons",
       "leader",
-      "united-in-destruction-necrons"
+      "united-in-destruction-necrons",
+      "reanimation-protocols-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -1676,7 +1696,8 @@
     ],
     "ability_ids": [
       "hyperspace-hunters-necrons",
-      "deep-strike"
+      "deep-strike",
+      "reanimation-protocols-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -1763,7 +1784,8 @@
       {
         "id": "deadly-demise",
         "value": "D3"
-      }
+      },
+      "reanimation-protocols-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -1834,7 +1856,8 @@
     "ability_ids": [
       "grand-strategist-necrons",
       "leader",
-      "lord-of-the-storm-necrons"
+      "lord-of-the-storm-necrons",
+      "reanimation-protocols-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -1926,7 +1949,8 @@
       {
         "id": "damaged-objective-control",
         "value": 4
-      }
+      },
+      "reanimation-protocols-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -1998,7 +2022,8 @@
         "id": "feel-no-pain",
         "value": 4
       },
-      "nanoscarab-reanimation-beam-necrons"
+      "nanoscarab-reanimation-beam-necrons",
+      "reanimation-protocols-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -2082,7 +2107,8 @@
       {
         "id": "resurrection-orb-catacomb-command-barge-necrons",
         "wargear": "resurrection-orb"
-      }
+      },
+      "reanimation-protocols-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -2198,7 +2224,8 @@
       "gauss-cannon"
     ],
     "ability_ids": [
-      "hard-wired-for-destruction-necrons"
+      "hard-wired-for-destruction-necrons",
+      "reanimation-protocols-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -2272,7 +2299,8 @@
         "id": "dispersion-shield-necrons",
         "wargear": "dispersion-shield"
       },
-      "guardian-protocols-necrons"
+      "guardian-protocols-necrons",
+      "reanimation-protocols-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -2368,7 +2396,8 @@
       {
         "id": "damaged-objective-control",
         "value": 4
-      }
+      },
+      "reanimation-protocols-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -2442,7 +2471,8 @@
       {
         "id": "resurrection-orb-necrons",
         "wargear": "resurrection-orb"
-      }
+      },
+      "reanimation-protocols-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -2516,7 +2546,8 @@
     ],
     "ability_ids": [
       "chittering-swarm-necrons",
-      "self-destruction-necrons"
+      "self-destruction-necrons",
+      "reanimation-protocols-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -2608,7 +2639,8 @@
       "whip-coils"
     ],
     "ability_ids": [
-      "wraith-form-necrons"
+      "wraith-form-necrons",
+      "reanimation-protocols-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -2678,7 +2710,8 @@
     "ability_ids": [
       "ancient-collector-necrons",
       "leader",
-      "surrogate-hosts-necrons"
+      "surrogate-hosts-necrons",
+      "reanimation-protocols-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -2761,7 +2794,8 @@
       {
         "id": "resurrection-orb-necrons",
         "wargear": "resurrection-orb"
-      }
+      },
+      "reanimation-protocols-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -2921,7 +2955,8 @@
     "ability_ids": [
       "flesh-hunger-necrons",
       "infiltrators",
-      "stealth"
+      "stealth",
+      "reanimation-protocols-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -2997,7 +3032,8 @@
       {
         "id": "deadly-demise",
         "value": 1
-      }
+      },
+      "reanimation-protocols-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -3072,7 +3108,8 @@
       {
         "id": "feel-no-pain",
         "value": 4
-      }
+      },
+      "reanimation-protocols-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -3150,7 +3187,8 @@
         "wargear": "nullstone-field-generator-aura"
       },
       "prophet-of-destruction-necrons",
-      "protective-disciples-necrons"
+      "protective-disciples-necrons",
+      "reanimation-protocols-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -3219,7 +3257,8 @@
     ],
     "ability_ids": [
       "canoptek-retinue-necrons",
-      "weapon-sentinels-necrons"
+      "weapon-sentinels-necrons",
+      "reanimation-protocols-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -3311,7 +3350,8 @@
       {
         "id": "plasmacyte-necrons",
         "wargear": "plasmacyte"
-      }
+      },
+      "reanimation-protocols-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -3380,7 +3420,8 @@
     "ability_ids": [
       "harbinger-of-destruction-necrons",
       "living-lightning-necrons",
-      "support"
+      "support",
+      "reanimation-protocols-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -3468,7 +3509,8 @@
       {
         "id": "damaged",
         "value": 5
-      }
+      },
+      "reanimation-protocols-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -3539,7 +3581,8 @@
       "inescapable-death-necrons",
       "lone-operative",
       "multi-threat-eliminator-necrons",
-      "deep-strike"
+      "deep-strike",
+      "reanimation-protocols-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -3794,7 +3837,8 @@
       {
         "id": "damaged",
         "value": 4
-      }
+      },
+      "reanimation-protocols-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -3864,7 +3908,8 @@
       "obelisk-node-control-necrons",
       "tectonic-reverberations-necrons",
       "vanguard-protocols-necrons",
-      "support"
+      "support",
+      "reanimation-protocols-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -3956,7 +4001,8 @@
       "the-silent-king-necrons",
       "triarch-abilities-necrons",
       "triarchal-menhirs-necrons",
-      "damaged-1-6-wounds-remaining-necrons"
+      "damaged-1-6-wounds-remaining-necrons",
+      "reanimation-protocols-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -4033,7 +4079,8 @@
     "ability_ids": [
       "chronometron-necrons",
       "timesplinter-mantle-necrons",
-      "support"
+      "support",
+      "reanimation-protocols-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -4223,7 +4270,8 @@
       {
         "id": "deadly-demise",
         "value": 1
-      }
+      },
+      "reanimation-protocols-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -4349,7 +4397,8 @@
       "feeder-mandibles"
     ],
     "ability_ids": [
-      "scarab-interference-necrons"
+      "scarab-interference-necrons",
+      "reanimation-protocols-amonhotekhs-guard-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -4413,7 +4462,8 @@
       "combat-attachments"
     ],
     "ability_ids": [
-      "their-number-is-legion-amonhotekhs-guard-necron-warriors-necrons"
+      "their-number-is-legion-amonhotekhs-guard-necron-warriors-necrons",
+      "reanimation-protocols-amonhotekhs-guard-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -4475,7 +4525,8 @@
     ],
     "ability_ids": [
       "plasmacyte-amonhotekhs-guard-skorpekh-destroyers-necrons",
-      "whirling-onslaught-amonhotekhs-guard-skorpekh-destroyers-necrons"
+      "whirling-onslaught-amonhotekhs-guard-skorpekh-destroyers-necrons",
+      "reanimation-protocols-amonhotekhs-guard-necrons"
     ],
     "game_version": {
       "edition": "11th",
@@ -4540,7 +4591,8 @@
       "overlords-blade"
     ],
     "ability_ids": [
-      "iron-will-necrons"
+      "iron-will-necrons",
+      "reanimation-protocols-amonhotekhs-guard-necrons"
     ],
     "game_version": {
       "edition": "11th",

@@ -168,7 +168,8 @@
         "id": "damaged",
         "value": 4
       },
-      "warrior-strategist-grand-master-in-nemesis-dreadknight-grey-knights"
+      "warrior-strategist-grand-master-in-nemesis-dreadknight-grey-knights",
+      "gate-of-infinity-grey-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -350,7 +351,8 @@
       "leader",
       "might-of-titan-grey-knights",
       "deep-strike",
-      "warrior-strategist-grey-knights"
+      "warrior-strategist-grey-knights",
+      "gate-of-infinity-grey-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -536,7 +538,8 @@
     ],
     "ability_ids": [
       "sanctity-of-purpose-grey-knights",
-      "deep-strike"
+      "deep-strike",
+      "gate-of-infinity-grey-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -638,7 +641,8 @@
       {
         "id": "damaged",
         "value": 4
-      }
+      },
+      "gate-of-infinity-grey-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -910,7 +914,8 @@
       "eye-of-judgement-grey-knights",
       "hammerhand-grey-knights",
       "leader",
-      "deep-strike"
+      "deep-strike",
+      "gate-of-infinity-grey-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -999,7 +1004,8 @@
         "value": 1
       },
       "guidance-of-the-ancients-grey-knights",
-      "deep-strike"
+      "deep-strike",
+      "gate-of-infinity-grey-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -1074,7 +1080,8 @@
       "champion-of-the-order-of-purifiers-grey-knights",
       "foesight-grey-knights",
       "leader",
-      "deep-strike"
+      "deep-strike",
+      "gate-of-infinity-grey-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -1159,7 +1166,8 @@
         "id": "scouts",
         "value": 6
       },
-      "deep-strike"
+      "deep-strike",
+      "gate-of-infinity-grey-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -1247,7 +1255,8 @@
       "guardians-of-the-machine-grey-knights",
       "leader",
       "techmarine-grey-knights",
-      "deep-strike"
+      "deep-strike",
+      "gate-of-infinity-grey-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -1331,7 +1340,8 @@
       "haloed-in-soulfire-grey-knights",
       "leader",
       "sanctic-hood-grey-knights",
-      "deep-strike"
+      "deep-strike",
+      "gate-of-infinity-grey-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -1405,7 +1415,8 @@
       "clarion-of-haste-grey-knights",
       "inspiring-exemplar-grey-knights",
       "leader",
-      "deep-strike"
+      "deep-strike",
+      "gate-of-infinity-grey-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -1501,7 +1512,8 @@
     ],
     "ability_ids": [
       "righteous-persecution-grey-knights",
-      "deep-strike"
+      "deep-strike",
+      "gate-of-infinity-grey-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -1692,7 +1704,8 @@
     ],
     "ability_ids": [
       "personal-teleporters-grey-knights",
-      "deep-strike"
+      "deep-strike",
+      "gate-of-infinity-grey-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -1777,7 +1790,8 @@
       "leader",
       "litanies-of-sanctity-grey-knights",
       "zealous-path-grey-knights",
-      "deep-strike"
+      "deep-strike",
+      "gate-of-infinity-grey-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -1907,7 +1921,8 @@
         "wargear": "apothecarys-narthecium"
       },
       "attuned-onslaught-grey-knights",
-      "deep-strike"
+      "deep-strike",
+      "gate-of-infinity-grey-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -2080,7 +2095,8 @@
       "hammer-aflame-grey-knights",
       "leader",
       "sanctuary-grey-knights",
-      "deep-strike"
+      "deep-strike",
+      "gate-of-infinity-grey-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -2178,7 +2194,8 @@
       {
         "id": "apothecarys-narthecium-grey-knights",
         "wargear": "apothecarys-narthecium"
-      }
+      },
+      "gate-of-infinity-grey-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -2435,7 +2452,8 @@
       "storm-bolter"
     ],
     "ability_ids": [
-      "force-edge-crowes-sanctifiers-brotherhood-terminator-squad-grey-knights"
+      "force-edge-crowes-sanctifiers-brotherhood-terminator-squad-grey-knights",
+      "gate-of-infinity-crowes-sanctifiers-grey-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -2505,7 +2523,8 @@
     ],
     "ability_ids": [
       "combat-squad-grey-knights",
-      "sanctifying-ritual-crowes-sanctifiers-strike-squad-grey-knights"
+      "sanctifying-ritual-crowes-sanctifiers-strike-squad-grey-knights",
+      "gate-of-infinity-crowes-sanctifiers-grey-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -2574,7 +2593,8 @@
       "twin-lascannon"
     ],
     "ability_ids": [
-      "guidance-of-the-ancients-crowes-sanctifiers-venerable-dreadnought-grey-knights"
+      "guidance-of-the-ancients-crowes-sanctifiers-venerable-dreadnought-grey-knights",
+      "gate-of-infinity-crowes-sanctifiers-grey-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -2642,7 +2662,8 @@
       "storm-bolter-sanctifiers-castellan-crowe"
     ],
     "ability_ids": [
-      "foesight-sanctifiers-castellan-crowe-grey-knights"
+      "foesight-sanctifiers-castellan-crowe-grey-knights",
+      "gate-of-infinity-crowes-sanctifiers-grey-knights"
     ],
     "game_version": {
       "edition": "11th",

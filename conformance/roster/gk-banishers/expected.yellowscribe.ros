@@ -40,6 +40,12 @@
                 <characteristic name="Description">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
               </characteristics>
             </profile>
+            <profile name="Gate of Infinity" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">At the end of your opponent's Fight phase, you may use this ability, if your Army Faction is GREY KNIGHTS:
+  -&gt; Select up to 2/3/4 friendly units (Incursion/Strike Force/Onslaught) if the selected unit is on the battlefield and the selected unit is unengaged and the selected unit has the Gate of Infinity Crowes Sanctifiers ability: that unit can be placed into Strategic Reserves.</characteristic>
+              </characteristics>
+            </profile>
           </profiles>
           <categories>
             <category name="Faction: Grey Knights"/>
@@ -149,6 +155,12 @@
                 <characteristic name="Description">Each time you target the unit with a Stratagem, you may use this ability, once per battle round per army, while the unit is friendly, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).</characteristic>
               </characteristics>
             </profile>
+            <profile name="Gate of Infinity" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">At the end of your opponent's Fight phase, you may use this ability, if your Army Faction is GREY KNIGHTS:
+  -&gt; Select up to 2/3/4 friendly units (Incursion/Strike Force/Onslaught) if the selected unit is on the battlefield and the selected unit is unengaged and the selected unit has the Gate of Infinity Crowes Sanctifiers ability: that unit can be placed into Strategic Reserves.</characteristic>
+              </characteristics>
+            </profile>
           </profiles>
           <categories>
             <category name="Faction: Grey Knights"/>
@@ -232,6 +244,12 @@ While the target is within range of an objective marker, you can re-roll the Wou
             <profile name="Deep Strike" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Gate of Infinity" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">At the end of your opponent's Fight phase, you may use this ability, if your Army Faction is GREY KNIGHTS:
+  -&gt; Select up to 2/3/4 friendly units (Incursion/Strike Force/Onslaught) if the selected unit is on the battlefield and the selected unit is unengaged and the selected unit has the Gate of Infinity Crowes Sanctifiers ability: that unit can be placed into Strategic Reserves.</characteristic>
               </characteristics>
             </profile>
           </profiles>

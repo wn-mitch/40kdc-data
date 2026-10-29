@@ -339,8 +339,12 @@ impl Dataset {
                 c.push(ability, source, vec![phase], None);
             }
         }
-        // 4. The unit's own abilities.
+        // 4. The unit's own abilities. A unit lists the army rules its datasheet prints, but an army
+        // rule is the army's (step 1, which also applies a Combat Patrol's replacements).
         for ability in self.abilities_of(unit) {
+            if json_str(&ability.ability_type) == "faction" {
+                continue;
+            }
             let source = EligibleAbilitySource::Unit {
                 unit_id: input.unit_id.clone(),
             };
@@ -356,6 +360,9 @@ impl Dataset {
                 continue;
             };
             for ability in self.abilities_of(member) {
+                if json_str(&ability.ability_type) == "faction" {
+                    continue;
+                }
                 let source = EligibleAbilitySource::Attached {
                     unit_id: member_id.clone(),
                 };
@@ -374,6 +381,9 @@ impl Dataset {
                 continue;
             };
             for ability in self.abilities_of(supporter) {
+                if json_str(&ability.ability_type) == "faction" {
+                    continue;
+                }
                 if !reaches_other_units(
                     &serde_json::to_value(&ability.effect).unwrap_or(Value::Null),
                 ) {

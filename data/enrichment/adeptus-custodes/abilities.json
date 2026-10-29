@@ -560,6 +560,7 @@
     },
     "unit_ids": [
       "anathema-psykana-rhino",
+      "knight-centura",
       "prosecutor-squad",
       "vigilator-squad",
       "witchseeker-squad"
@@ -2190,7 +2191,7 @@
     "faction_id": "adeptus-custodes",
     "ability_type": "faction",
     "behavior": "reactive",
-    "unit_ids": []
+    "unit_ids": ["allarus-custodians","aquilan-talon-contemptor-achillus-dreadnought","aquilan-talon-sentinel-guard-sodality","aquilan-talon-shield-captain","aquilan-wing-sentinel-guard-sodality","aquilan-wing-shield-captain","aquilan-wing-venatari-with-kinetic-destroyers","aquilon-terminators-with-solarite-power-gauntlets","aquilon-terminators-with-solarite-power-talons","blade-champion","contemptor-achillus-dreadnought","contemptor-galatus-dreadnought","custodian-guard-sodality","custodian-wardens","gyrfalcon-jetbike-sodality","sentinel-guard-sodality","shield-captain","shield-captain-in-allarus-terminator-armour","shield-captain-on-dawneagle-jetbike","telemon-heavy-dreadnought","trajann-valoris","venatari-with-kinetic-destroyers","venatari-with-verutum-lances","vertus-praetors"]
   },
   {
     "ability_id": "assemblage-of-might-adeptus-custodes",
@@ -4110,7 +4111,7 @@
       "edition": "11th",
       "dataslate": "2026-10-14"
     },
-    "unit_ids": [],
+    "unit_ids": ["allarus-custodians","aquilan-talon-contemptor-achillus-dreadnought","aquilan-talon-sentinel-guard-sodality","aquilan-talon-shield-captain","aquilan-wing-sentinel-guard-sodality","aquilan-wing-shield-captain","aquilan-wing-venatari-with-kinetic-destroyers","aquilon-terminators-with-solarite-power-gauntlets","aquilon-terminators-with-solarite-power-talons","ares-gunship","blade-champion","caladius-annihilator-grav-tank","caladius-grav-tank","contemptor-achillus-dreadnought","contemptor-galatus-dreadnought","coronus-grav-carrier","custodian-guard-sodality","custodian-wardens","gyrfalcon-jetbike-sodality","orion-assault-dropship","pallas-grav-attack","sentinel-guard-sodality","shield-captain","shield-captain-in-allarus-terminator-armour","shield-captain-on-dawneagle-jetbike","telemon-heavy-dreadnought","trajann-valoris","venatari-with-kinetic-destroyers","venatari-with-verutum-lances","vertus-praetors"],
     "faction_id": "adeptus-custodes",
     "detachment_id": null,
     "ability_type": "faction",
@@ -4141,7 +4142,7 @@
       "edition": "11th",
       "dataslate": "2026-10-14"
     },
-    "unit_ids": [],
+    "unit_ids": ["shield-captain","shield-captain-in-allarus-terminator-armour","shield-captain-on-dawneagle-jetbike","trajann-valoris"],
     "faction_id": "adeptus-custodes",
     "detachment_id": null,
     "ability_type": "faction",
@@ -5303,7 +5304,7 @@
       "edition": "11th",
       "dataslate": "2026-10-14"
     },
-    "unit_ids": [],
+    "unit_ids": ["gilded-blades-allarus-custodians","gilded-blades-custodian-guard","gilded-blades-custodian-wardens","tristraen-of-the-gilded-blades"],
     "faction_id": "adeptus-custodes",
     "detachment_id": null,
     "ability_type": "faction",

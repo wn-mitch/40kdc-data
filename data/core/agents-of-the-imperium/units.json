@@ -105,7 +105,8 @@
         "id": "simulacrum-imperialis-agents-of-the-imperium",
         "wargear": "simulacrum-imperialis"
       },
-      "atttached-unit-agents-of-the-imperium"
+      "atttached-unit-agents-of-the-imperium",
+      "assigned-agents-agents-of-the-imperium"
     ],
     "game_version": {
       "edition": "11th",
@@ -291,7 +292,8 @@
         "id": "firing-deck",
         "value": 2
       },
-      "rapid-deployment-agents-of-the-imperium"
+      "rapid-deployment-agents-of-the-imperium",
+      "assigned-agents-agents-of-the-imperium"
     ],
     "transport_capacity": {
       "capacity": 13
@@ -386,7 +388,8 @@
       "infiltrators",
       "lone-operative",
       "shadow-assignment-agents-of-the-imperium",
-      "reign-of-confusion-agents-of-the-imperium"
+      "reign-of-confusion-agents-of-the-imperium",
+      "assigned-agents-agents-of-the-imperium"
     ],
     "game_version": {
       "edition": "11th",
@@ -478,7 +481,8 @@
       "authority-of-the-inquisition-agents-of-the-imperium",
       "leader",
       "no-mercy-agents-of-the-imperium",
-      "psyoculum-agents-of-the-imperium"
+      "psyoculum-agents-of-the-imperium",
+      "assigned-agents-agents-of-the-imperium"
     ],
     "game_version": {
       "edition": "11th",
@@ -574,7 +578,8 @@
       {
         "id": "deadly-demise",
         "value": "D3"
-      }
+      },
+      "assigned-agents-agents-of-the-imperium"
     ],
     "transport_capacity": {
       "capacity": 6
@@ -687,7 +692,8 @@
       {
         "id": "tome-skull-agents-of-the-imperium",
         "wargear": "tome-skull"
-      }
+      },
+      "assigned-agents-agents-of-the-imperium"
     ],
     "game_version": {
       "edition": "11th",
@@ -796,7 +802,8 @@
         "id": "psychic-gifts-agents-of-the-imperium",
         "wargear": "psychic-gifts"
       },
-      "authority-of-the-inquisition-agents-of-the-imperium"
+      "authority-of-the-inquisition-agents-of-the-imperium",
+      "assigned-agents-agents-of-the-imperium"
     ],
     "game_version": {
       "edition": "11th",
@@ -888,7 +895,8 @@
         "wargear": "narthecium"
       },
       "rites-of-teleportation-agents-of-the-imperium",
-      "deep-strike"
+      "deep-strike",
+      "assigned-agents-agents-of-the-imperium"
     ],
     "game_version": {
       "edition": "11th",
@@ -986,7 +994,8 @@
     ],
     "ability_ids": [
       "masters-of-close-confines-agents-of-the-imperium",
-      "navy-bodyguard-agents-of-the-imperium"
+      "navy-bodyguard-agents-of-the-imperium",
+      "assigned-agents-agents-of-the-imperium"
     ],
     "game_version": {
       "edition": "11th",
@@ -1209,7 +1218,8 @@
         "value": "D3"
       },
       "lone-operative",
-      "shadow-assignment-agents-of-the-imperium"
+      "shadow-assignment-agents-of-the-imperium",
+      "assigned-agents-agents-of-the-imperium"
     ],
     "game_version": {
       "edition": "11th",
@@ -1311,7 +1321,8 @@
       {
         "id": "firing-deck",
         "value": 2
-      }
+      },
+      "assigned-agents-agents-of-the-imperium"
     ],
     "transport_capacity": {
       "capacity": 12
@@ -1524,7 +1535,8 @@
       "stealth",
       "infiltrators",
       "lone-operative",
-      "shadow-assignment-agents-of-the-imperium"
+      "shadow-assignment-agents-of-the-imperium",
+      "assigned-agents-agents-of-the-imperium"
     ],
     "game_version": {
       "edition": "11th",
@@ -1626,7 +1638,8 @@
       {
         "id": "soulguilt-scanner-agents-of-the-imperium",
         "wargear": "soulguilt-scanner"
-      }
+      },
+      "assigned-agents-agents-of-the-imperium"
     ],
     "game_version": {
       "edition": "11th",
@@ -1754,7 +1767,8 @@
         "id": "endurant-shield-agents-of-the-imperium",
         "wargear": "endurant-shield"
       },
-      "gheistskull-agents-of-the-imperium"
+      "gheistskull-agents-of-the-imperium",
+      "assigned-agents-agents-of-the-imperium"
     ],
     "game_version": {
       "edition": "11th",
@@ -1838,7 +1852,8 @@
       "deep-strike",
       "stealth",
       "lone-operative",
-      "shadow-assignment-agents-of-the-imperium"
+      "shadow-assignment-agents-of-the-imperium",
+      "assigned-agents-agents-of-the-imperium"
     ],
     "game_version": {
       "edition": "11th",
@@ -1933,7 +1948,8 @@
       {
         "id": "nuncio-acquila-agents-of-the-imperium",
         "wargear": "nuncio-acquila"
-      }
+      },
+      "assigned-agents-agents-of-the-imperium"
     ],
     "game_version": {
       "edition": "11th",
@@ -2026,7 +2042,8 @@
       {
         "id": "nuncio-acquila-agents-of-the-imperium",
         "wargear": "nuncio-acquila"
-      }
+      },
+      "assigned-agents-agents-of-the-imperium"
     ],
     "game_version": {
       "edition": "11th",
@@ -2105,7 +2122,8 @@
     "ability_ids": [
       "gaze-into-the-empyrean-agents-of-the-imperium",
       "leader",
-      "third-eye-agents-of-the-imperium"
+      "third-eye-agents-of-the-imperium",
+      "assigned-agents-agents-of-the-imperium"
     ],
     "game_version": {
       "edition": "11th",
@@ -2191,7 +2209,8 @@
       "leader",
       "psychic-veil-agents-of-the-imperium",
       "xenos-hunter-agents-of-the-imperium",
-      "authority-of-the-inquisition-agents-of-the-imperium"
+      "authority-of-the-inquisition-agents-of-the-imperium",
+      "assigned-agents-agents-of-the-imperium"
     ],
     "game_version": {
       "edition": "11th",
@@ -2360,7 +2379,8 @@
       "leader",
       "malefic-wardings-agents-of-the-imperium",
       "spy-network-agents-of-the-imperium",
-      "authority-of-the-inquisition-agents-of-the-imperium"
+      "authority-of-the-inquisition-agents-of-the-imperium",
+      "assigned-agents-agents-of-the-imperium"
     ],
     "game_version": {
       "edition": "11th",
@@ -2456,7 +2476,8 @@
       {
         "id": "simulacrum-imperialis-agents-of-the-imperium",
         "wargear": "simulacrum-imperialis"
-      }
+      },
+      "assigned-agents-agents-of-the-imperium"
     ],
     "game_version": {
       "edition": "11th",
@@ -2755,7 +2776,8 @@
         "wargear": "healing-serum"
       },
       "leader",
-      "warrant-of-trade-agents-of-the-imperium"
+      "warrant-of-trade-agents-of-the-imperium",
+      "assigned-agents-agents-of-the-imperium"
     ],
     "game_version": {
       "edition": "11th",
@@ -2871,7 +2893,8 @@
         "id": "scouts",
         "value": 6
       },
-      "tox-cycler-agents-of-the-imperium"
+      "tox-cycler-agents-of-the-imperium",
+      "assigned-agents-agents-of-the-imperium"
     ]
   },
   {
@@ -2920,7 +2943,8 @@
       "power-sword-and-neuro-gauntlet"
     ],
     "ability_ids": [
-      "overkill-inquisitors-hand-eversor-assassin-agents-of-the-imperium"
+      "overkill-inquisitors-hand-eversor-assassin-agents-of-the-imperium",
+      "assigned-agents-inquisitors-hand-agents-of-the-imperium"
     ],
     "game_version": {
       "edition": "11th",
@@ -2988,7 +3012,8 @@
     ],
     "ability_ids": [
       "loyal-to-the-cause-agents-of-the-imperium",
-      "tome-skull-inquisitors-hand-inquisitorial-agents-agents-of-the-imperium"
+      "tome-skull-inquisitors-hand-inquisitorial-agents-agents-of-the-imperium",
+      "assigned-agents-inquisitors-hand-agents-of-the-imperium"
     ],
     "game_version": {
       "edition": "11th",
@@ -3111,7 +3136,8 @@
     ],
     "ability_ids": [
       "holy-hatred-preacher-teguen-agents-of-the-imperium",
-      "zealot-preacher-teguen-agents-of-the-imperium"
+      "zealot-preacher-teguen-agents-of-the-imperium",
+      "assigned-agents-inquisitors-hand-agents-of-the-imperium"
     ],
     "attachment_role": "support",
     "game_version": {

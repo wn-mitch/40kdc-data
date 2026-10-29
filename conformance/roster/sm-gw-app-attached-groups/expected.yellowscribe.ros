@@ -42,6 +42,20 @@
                 <characteristic name="Description">You can: During the Command phase, in your turn, until the start of your next Command phase, select one option of Combat Doctrines for the unit, in place of any already active.</characteristic>
               </characteristics>
             </profile>
+            <profile name="Combat Doctrines" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">At the start of your Command phase, you may use this ability, until the start of your next Command phase:
+  -&gt; Select one (each may be chosen once per battle):
+    - Assault Doctrine: when the unit is selected to Advance: the unit is eligible to declare a charge even if it Advanced this turn.
+    - Devastator Doctrine: ranged weapons equipped by models in this unit gain [ASSAULT].
+    - Tactical Doctrine: when the unit is selected to Fall Back: the unit is eligible to shoot even if it Fell Back this turn; the unit is eligible to declare a charge even if it Fell Back this turn.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Transhuman Strategist" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">At the start of the battle round, while this model has the Transhuman Strategist ability, while this model is the Warlord, you gain 1CP.</characteristic>
+              </characteristics>
+            </profile>
           </profiles>
           <categories>
             <category name="Faction: Adeptus Astartes"/>
@@ -125,6 +139,15 @@
               <characteristics>
                 <characteristic name="Description">The unit is eligible to start an Action even if it is within Engagement Range of enemy units or it is Battle-shocked.
 -&gt; Each time the unit uses action: the unit is eligible to shoot even if it is performing an Action.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Combat Doctrines" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">At the start of your Command phase, you may use this ability, until the start of your next Command phase:
+  -&gt; Select one (each may be chosen once per battle):
+    - Assault Doctrine: when the unit is selected to Advance: the unit is eligible to declare a charge even if it Advanced this turn.
+    - Devastator Doctrine: ranged weapons equipped by models in this unit gain [ASSAULT].
+    - Tactical Doctrine: when the unit is selected to Fall Back: the unit is eligible to shoot even if it Fell Back this turn; the unit is eligible to declare a charge even if it Fell Back this turn.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -279,6 +302,15 @@
   -&gt; Improve the Armour Penetration characteristic of melee weapons equipped by models in this unit by 1.</characteristic>
               </characteristics>
             </profile>
+            <profile name="Combat Doctrines" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">At the start of your Command phase, you may use this ability, until the start of your next Command phase:
+  -&gt; Select one (each may be chosen once per battle):
+    - Assault Doctrine: when the unit is selected to Advance: the unit is eligible to declare a charge even if it Advanced this turn.
+    - Devastator Doctrine: ranged weapons equipped by models in this unit gain [ASSAULT].
+    - Tactical Doctrine: when the unit is selected to Fall Back: the unit is eligible to shoot even if it Fell Back this turn; the unit is eligible to declare a charge even if it Fell Back this turn.</characteristic>
+              </characteristics>
+            </profile>
           </profiles>
           <categories>
             <category name="Faction: Adeptus Astartes"/>
@@ -392,6 +424,15 @@
                 <characteristic name="Description">Each time a friendly unit uses Strategic Acumen (the triggering unit must have CAPTAIN), you may use this ability, until the start of your next Command phase, the Combat Doctrines option the triggering use selected is active for the unit (and no other option is).</characteristic>
               </characteristics>
             </profile>
+            <profile name="Combat Doctrines" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">At the start of your Command phase, you may use this ability, until the start of your next Command phase:
+  -&gt; Select one (each may be chosen once per battle):
+    - Assault Doctrine: when the unit is selected to Advance: the unit is eligible to declare a charge even if it Advanced this turn.
+    - Devastator Doctrine: ranged weapons equipped by models in this unit gain [ASSAULT].
+    - Tactical Doctrine: when the unit is selected to Fall Back: the unit is eligible to shoot even if it Fell Back this turn; the unit is eligible to declare a charge even if it Fell Back this turn.</characteristic>
+              </characteristics>
+            </profile>
           </profiles>
           <categories>
             <category name="Faction: Adeptus Astartes"/>
@@ -475,6 +516,15 @@
               <characteristics>
                 <characteristic name="Description">The unit is eligible to start an Action even if it is within Engagement Range of enemy units or it is Battle-shocked.
 -&gt; Each time the unit uses action: the unit is eligible to shoot even if it is performing an Action.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Combat Doctrines" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">At the start of your Command phase, you may use this ability, until the start of your next Command phase:
+  -&gt; Select one (each may be chosen once per battle):
+    - Assault Doctrine: when the unit is selected to Advance: the unit is eligible to declare a charge even if it Advanced this turn.
+    - Devastator Doctrine: ranged weapons equipped by models in this unit gain [ASSAULT].
+    - Tactical Doctrine: when the unit is selected to Fall Back: the unit is eligible to shoot even if it Fell Back this turn; the unit is eligible to declare a charge even if it Fell Back this turn.</characteristic>
               </characteristics>
             </profile>
           </profiles>

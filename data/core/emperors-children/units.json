@@ -67,7 +67,8 @@
       {
         "id": "damaged",
         "value": 5
-      }
+      },
+      "thrill-seekers-emperors-children"
     ],
     "transport_capacity": {
       "capacity": 14
@@ -146,7 +147,8 @@
     ],
     "ability_ids": [
       "deep-strike",
-      "lethal-obsession-emperors-children"
+      "lethal-obsession-emperors-children",
+      "thrill-seekers-emperors-children"
     ],
     "game_version": {
       "edition": "11th",
@@ -251,7 +253,8 @@
     "ability_ids": [
       "leader",
       "warped-interference-emperors-children",
-      "wracking-agonies-emperors-children"
+      "wracking-agonies-emperors-children",
+      "thrill-seekers-emperors-children"
     ],
     "game_version": {
       "edition": "11th",
@@ -339,7 +342,8 @@
       "euphoric-strikes-emperors-children",
       "leader",
       "lord-of-the-host-emperors-children",
-      "perfectionists-emperors-children"
+      "perfectionists-emperors-children",
+      "thrill-seekers-emperors-children"
     ],
     "game_version": {
       "edition": "11th",
@@ -413,7 +417,8 @@
     "ability_ids": [
       "doom-siren-emperors-children",
       "leader",
-      "obsessive-annunciation-emperors-children"
+      "obsessive-annunciation-emperors-children",
+      "thrill-seekers-emperors-children"
     ],
     "game_version": {
       "edition": "11th",
@@ -484,7 +489,8 @@
         "id": "feel-no-pain",
         "value": 5
       },
-      "scuttling-horrors-emperors-children"
+      "scuttling-horrors-emperors-children",
+      "thrill-seekers-emperors-children"
     ],
     "game_version": {
       "edition": "11th",
@@ -573,7 +579,8 @@
       },
       "ecstatic-death-emperors-children",
       "excessive-vigour-emperors-children",
-      "lord-of-excess-emperors-children"
+      "lord-of-excess-emperors-children",
+      "thrill-seekers-emperors-children"
     ],
     "game_version": {
       "edition": "11th",
@@ -651,7 +658,8 @@
       "sonic-blaster"
     ],
     "ability_ids": [
-      "terrifying-crescendo-emperors-children"
+      "terrifying-crescendo-emperors-children",
+      "thrill-seekers-emperors-children"
     ],
     "game_version": {
       "edition": "11th",
@@ -746,7 +754,8 @@
         "wargear": "icon-of-excess"
       },
       "infiltrators",
-      "objective-defiled-emperors-children"
+      "objective-defiled-emperors-children",
+      "thrill-seekers-emperors-children"
     ],
     "game_version": {
       "edition": "11th",
@@ -846,7 +855,8 @@
       {
         "id": "deadly-demise",
         "value": "D3"
-      }
+      },
+      "thrill-seekers-emperors-children"
     ],
     "transport_capacity": {
       "capacity": 12
@@ -935,7 +945,8 @@
       {
         "id": "deadly-demise",
         "value": "D3"
-      }
+      },
+      "thrill-seekers-emperors-children"
     ],
     "game_version": {
       "edition": "11th",
@@ -1021,7 +1032,8 @@
       {
         "id": "damaged",
         "value": 6
-      }
+      },
+      "thrill-seekers-emperors-children"
     ],
     "game_version": {
       "edition": "11th",
@@ -1098,7 +1110,8 @@
       {
         "id": "feel-no-pain",
         "value": 5
-      }
+      },
+      "thrill-seekers-emperors-children"
     ],
     "game_version": {
       "edition": "11th",
@@ -1179,7 +1192,8 @@
       {
         "id": "damaged",
         "value": 4
-      }
+      },
+      "thrill-seekers-emperors-children"
     ],
     "game_version": {
       "edition": "11th",
@@ -1265,7 +1279,8 @@
       {
         "id": "icon-of-excess-emperors-children",
         "wargear": "icon-of-excess"
-      }
+      },
+      "thrill-seekers-emperors-children"
     ],
     "game_version": {
       "edition": "11th",
@@ -1352,7 +1367,8 @@
       {
         "id": "damaged",
         "value": 4
-      }
+      },
+      "thrill-seekers-emperors-children"
     ],
     "game_version": {
       "edition": "11th",
@@ -1425,7 +1441,8 @@
       "bolt-pistol-flawless-blades"
     ],
     "ability_ids": [
-      "daemonic-patrons-emperors-children"
+      "daemonic-patrons-emperors-children",
+      "thrill-seekers-emperors-children"
     ],
     "game_version": {
       "edition": "11th",
@@ -1513,7 +1530,9 @@
       }
     ],
     "ability_ids": [
-      "daemonic-patrons-callous-blades-flawless-blades-emperors-children"
+      "daemonic-patrons-callous-blades-flawless-blades-emperors-children",
+      "pact-of-excess-emperors-children",
+      "thrill-seekers-emperors-children"
     ]
   },
   {
@@ -1556,7 +1575,9 @@
     ],
     "ability_ids": [
       "excessive-assault-callous-blades-infractors-emperors-children",
-      "icon-of-excess-callous-blades-infractors-emperors-children"
+      "icon-of-excess-callous-blades-infractors-emperors-children",
+      "pact-of-excess-emperors-children",
+      "thrill-seekers-emperors-children"
     ],
     "game_version": {
       "edition": "11th",
@@ -1623,7 +1644,9 @@
       "power-fist-lord-kaphrael-of-the-callous-blades"
     ],
     "ability_ids": [
-      "peerless-killer-emperors-children"
+      "peerless-killer-emperors-children",
+      "pact-of-excess-emperors-children",
+      "thrill-seekers-emperors-children"
     ],
     "game_version": {
       "edition": "11th",
@@ -1731,7 +1754,8 @@
       {
         "id": "instrument-of-chaos-emperors-children",
         "wargear": "instrument-of-chaos"
-      }
+      },
+      "pact-of-excess-emperors-children"
     ]
   },
   {
@@ -1798,7 +1822,8 @@
     },
     "ability_ids": [
       "deep-strike",
-      "soporific-musk-emperors-children"
+      "soporific-musk-emperors-children",
+      "pact-of-excess-emperors-children"
     ]
   },
   {
@@ -1893,7 +1918,8 @@
       {
         "id": "shining-aegis-emperors-children",
         "wargear": "shining-aegis"
-      }
+      },
+      "pact-of-excess-emperors-children"
     ]
   },
   {
@@ -1989,7 +2015,8 @@
         "id": "scouts",
         "value": 9
       },
-      "unholy-speed-emperors-children"
+      "unholy-speed-emperors-children",
+      "pact-of-excess-emperors-children"
     ]
   },
   {
@@ -2066,7 +2093,8 @@
       },
       "deep-strike",
       "monarch-of-the-hunt-emperors-children",
-      "no-prey-can-evade-emperors-children"
+      "no-prey-can-evade-emperors-children",
+      "pact-of-excess-emperors-children"
     ]
   },
   {
@@ -2148,7 +2176,8 @@
       {
         "id": "damaged",
         "value": 6
-      }
+      },
+      "thrill-seekers-emperors-children"
     ],
     "base_size_mm": {
       "shape": "round",

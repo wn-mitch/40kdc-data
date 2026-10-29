@@ -164,8 +164,12 @@ func resolveEligibleAbilities(ds *Dataset, input map[string]any, phase string) [
 		}
 	}
 
-	// 4. Unit's own abilities.
+	// 4. Unit's own abilities. A unit lists the army rules its datasheet prints, but an army rule
+	// is the army's (step 1, which also applies a Combat Patrol's replacements).
 	for _, ability := range unit.Abilities() {
+		if ability.Raw["ability_type"] == "faction" {
+			continue
+		}
 		if !phaseMatches(ability) {
 			continue
 		}
@@ -179,6 +183,9 @@ func resolveEligibleAbilities(ds *Dataset, input map[string]any, phase string) [
 			continue
 		}
 		for _, ability := range member.Abilities() {
+			if ability.Raw["ability_type"] == "faction" {
+				continue
+			}
 			if !phaseMatches(ability) {
 				continue
 			}
@@ -195,6 +202,9 @@ func resolveEligibleAbilities(ds *Dataset, input map[string]any, phase string) [
 			continue
 		}
 		for _, ability := range supporter.Abilities() {
+			if ability.Raw["ability_type"] == "faction" {
+				continue
+			}
 			if !phaseMatches(ability) {
 				continue
 			}

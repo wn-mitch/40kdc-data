@@ -159,7 +159,8 @@
       {
         "id": "damaged",
         "value": 20
-      }
+      },
+      "for-the-greater-good-tau-empire"
     ],
     "transport_capacity": {
       "capacity": 200
@@ -255,7 +256,8 @@
         "id": "shield-drone-tau-empire",
         "wargear": "shield-drone"
       },
-      "weapon-support-systems-tau-empire"
+      "weapon-support-systems-tau-empire",
+      "for-the-greater-good-tau-empire"
     ],
     "game_version": {
       "edition": "11th",
@@ -397,7 +399,8 @@
       {
         "id": "scouts",
         "value": 9
-      }
+      },
+      "for-the-greater-good-tau-empire"
     ],
     "game_version": {
       "edition": "11th",
@@ -495,7 +498,8 @@
       {
         "id": "marker-drone-tau-empire",
         "wargear": "marker-drone"
-      }
+      },
+      "for-the-greater-good-tau-empire"
     ],
     "game_version": {
       "edition": "11th",
@@ -583,7 +587,8 @@
       {
         "id": "damaged",
         "value": 4
-      }
+      },
+      "for-the-greater-good-tau-empire"
     ],
     "game_version": {
       "edition": "11th",
@@ -903,7 +908,8 @@
       {
         "id": "shield-drone-tau-empire",
         "wargear": "shield-drone"
-      }
+      },
+      "for-the-greater-good-tau-empire"
     ],
     "game_version": {
       "edition": "11th",
@@ -1025,7 +1031,8 @@
       {
         "id": "shield-drone-tau-empire",
         "wargear": "shield-drone"
-      }
+      },
+      "for-the-greater-good-tau-empire"
     ],
     "game_version": {
       "edition": "11th",
@@ -1118,7 +1125,8 @@
         "id": "scouts",
         "value": 8
       },
-      "deep-strike"
+      "deep-strike",
+      "for-the-greater-good-tau-empire"
     ],
     "game_version": {
       "edition": "11th",
@@ -1211,7 +1219,8 @@
       {
         "id": "shield-drone-tau-empire",
         "wargear": "shield-drone"
-      }
+      },
+      "for-the-greater-good-tau-empire"
     ],
     "game_version": {
       "edition": "11th",
@@ -1334,7 +1343,8 @@
       {
         "id": "damaged",
         "value": 6
-      }
+      },
+      "for-the-greater-good-tau-empire"
     ],
     "game_version": {
       "edition": "11th",
@@ -1423,7 +1433,8 @@
       {
         "id": "shield-drone-tau-empire",
         "wargear": "shield-drone"
-      }
+      },
+      "for-the-greater-good-tau-empire"
     ],
     "game_version": {
       "edition": "11th",
@@ -1530,7 +1541,8 @@
       {
         "id": "damaged-objective-control",
         "value": 3
-      }
+      },
+      "for-the-greater-good-tau-empire"
     ],
     "game_version": {
       "edition": "11th",
@@ -1779,7 +1791,8 @@
       {
         "id": "shield-drone-tau-empire",
         "wargear": "shield-drone"
-      }
+      },
+      "for-the-greater-good-tau-empire"
     ],
     "game_version": {
       "edition": "11th",
@@ -1876,7 +1889,8 @@
       {
         "id": "damaged",
         "value": 4
-      }
+      },
+      "for-the-greater-good-tau-empire"
     ],
     "game_version": {
       "edition": "11th",
@@ -1957,7 +1971,8 @@
       "leader",
       "puretides-teachings-tau-empire",
       "way-of-the-short-blade-tau-empire",
-      "deep-strike"
+      "deep-strike",
+      "for-the-greater-good-tau-empire"
     ],
     "game_version": {
       "edition": "11th",
@@ -2125,7 +2140,8 @@
       "lone-operative",
       "supreme-commander-tau-empire",
       "stealth",
-      "infiltrators"
+      "infiltrators",
+      "for-the-greater-good-tau-empire"
     ],
     "game_version": {
       "edition": "11th",
@@ -2223,7 +2239,8 @@
       {
         "id": "damaged",
         "value": 4
-      }
+      },
+      "for-the-greater-good-tau-empire"
     ],
     "game_version": {
       "edition": "11th",
@@ -2316,7 +2333,8 @@
       {
         "id": "damaged",
         "value": 6
-      }
+      },
+      "for-the-greater-good-tau-empire"
     ],
     "game_version": {
       "edition": "11th",
@@ -2399,7 +2417,8 @@
       {
         "id": "damaged",
         "value": 5
-      }
+      },
+      "for-the-greater-good-tau-empire"
     ],
     "game_version": {
       "edition": "11th",
@@ -2581,7 +2600,8 @@
       {
         "id": "weapon-support-system-tau-empire",
         "wargear": "weapon-support-system"
-      }
+      },
+      "for-the-greater-good-tau-empire"
     ],
     "game_version": {
       "edition": "11th",
@@ -2905,7 +2925,8 @@
       {
         "id": "weapon-support-system-tau-empire",
         "wargear": "weapon-support-system"
-      }
+      },
+      "for-the-greater-good-tau-empire"
     ],
     "game_version": {
       "edition": "11th",
@@ -3013,7 +3034,8 @@
       {
         "id": "weapon-support-system-tau-empire",
         "wargear": "weapon-support-system"
-      }
+      },
+      "for-the-greater-good-tau-empire"
     ],
     "game_version": {
       "edition": "11th",
@@ -3133,7 +3155,8 @@
       {
         "id": "shield-drone-tau-empire",
         "wargear": "shield-drone"
-      }
+      },
+      "for-the-greater-good-tau-empire"
     ],
     "game_version": {
       "edition": "11th",
@@ -3213,7 +3236,8 @@
       {
         "id": "damaged",
         "value": 4
-      }
+      },
+      "for-the-greater-good-tau-empire"
     ],
     "game_version": {
       "edition": "11th",
@@ -3301,7 +3325,8 @@
       {
         "id": "deadly-demise",
         "value": "D3"
-      }
+      },
+      "for-the-greater-good-tau-empire"
     ],
     "transport_capacity": {
       "capacity": 12
@@ -3380,7 +3405,8 @@
       {
         "id": "scouts",
         "value": 7
-      }
+      },
+      "for-the-greater-good-tau-empire"
     ],
     "game_version": {
       "edition": "11th",
@@ -3473,7 +3499,8 @@
         "id": "damaged",
         "value": 5
       },
-      "targeting-array-tau-empire"
+      "targeting-array-tau-empire",
+      "for-the-greater-good-tau-empire"
     ],
     "game_version": {
       "edition": "11th",
@@ -3645,7 +3672,8 @@
       {
         "id": "shield-drone-tau-empire",
         "wargear": "shield-drone"
-      }
+      },
+      "for-the-greater-good-tau-empire"
     ],
     "game_version": {
       "edition": "11th",
@@ -3740,7 +3768,8 @@
       "precise-targeting-tau-empire",
       "stealth",
       "infiltrators",
-      "lone-operative"
+      "lone-operative",
+      "for-the-greater-good-tau-empire"
     ],
     "game_version": {
       "edition": "11th",
@@ -4141,7 +4170,9 @@
     ],
     "ability_ids": [
       "shield-drone-commander-cloudspear-tau-empire",
-      "superior-weapon-support-system-tau-empire"
+      "superior-weapon-support-system-tau-empire",
+      "drones-sudden-dawn-cadre-tau-empire",
+      "for-the-greater-good-sudden-dawn-cadre-tau-empire"
     ],
     "game_version": {
       "edition": "11th",
@@ -4208,7 +4239,9 @@
       "pulse-pistol-sudden-dawn-cadre-breacher-team"
     ],
     "ability_ids": [
-      "breach-and-clear-sudden-dawn-cadre-breacher-team-tau-empire"
+      "breach-and-clear-sudden-dawn-cadre-breacher-team-tau-empire",
+      "drones-sudden-dawn-cadre-tau-empire",
+      "for-the-greater-good-sudden-dawn-cadre-tau-empire"
     ],
     "game_version": {
       "edition": "11th",
@@ -4292,7 +4325,9 @@
       }
     ],
     "ability_ids": [
-      "rapid-disembark-tau-empire"
+      "rapid-disembark-tau-empire",
+      "drones-sudden-dawn-cadre-tau-empire",
+      "for-the-greater-good-sudden-dawn-cadre-tau-empire"
     ]
   },
   {
@@ -4339,7 +4374,9 @@
     ],
     "ability_ids": [
       "target-uploaded-sudden-dawn-cadre-pathfinder-team-tau-empire",
-      "grav-inhibitor-drone-sudden-dawn-cadre-pathfinder-team-tau-empire"
+      "grav-inhibitor-drone-sudden-dawn-cadre-pathfinder-team-tau-empire",
+      "drones-sudden-dawn-cadre-tau-empire",
+      "for-the-greater-good-sudden-dawn-cadre-tau-empire"
     ],
     "game_version": {
       "edition": "11th",

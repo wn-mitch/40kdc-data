@@ -51,7 +51,9 @@
     "ability_ids": [
       "crusade-of-wrath-black-templars",
       "high-marshal-black-templars",
-      "leader"
+      "leader",
+      "combat-doctrines-black-templars",
+      "transhuman-strategist-black-templars"
     ],
     "game_version": {
       "edition": "11th",
@@ -138,7 +140,8 @@
       {
         "id": "damaged",
         "value": 4
-      }
+      },
+      "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -256,7 +259,8 @@
     "ability_ids": [
       "deep-strike",
       "fury-of-the-first-adeptus-astartes",
-      "teleport-homer-adeptus-astartes"
+      "teleport-homer-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -365,7 +369,9 @@
     "ability_ids": [
       "inspirational-exemplar-black-templars",
       "leader",
-      "pious-fervour-black-templars"
+      "pious-fervour-black-templars",
+      "combat-doctrines-black-templars",
+      "transhuman-strategist-black-templars"
     ],
     "game_version": {
       "edition": "11th",
@@ -484,7 +490,8 @@
       "hand-flamer"
     ],
     "ability_ids": [
-      "exploit-their-cowardice-black-templars"
+      "exploit-their-cowardice-black-templars",
+      "combat-doctrines-black-templars"
     ],
     "game_version": {
       "edition": "11th",
@@ -579,7 +586,8 @@
       "combat-knife"
     ],
     "ability_ids": [
-      "righteous-zeal-black-templars"
+      "righteous-zeal-black-templars",
+      "combat-doctrines-black-templars"
     ],
     "game_version": {
       "edition": "11th",
@@ -665,7 +673,8 @@
     "ability_ids": [
       "condemnatory-annihilation-black-templars",
       "leader",
-      "remorseless-persecution-black-templars"
+      "remorseless-persecution-black-templars",
+      "combat-doctrines-black-templars"
     ],
     "game_version": {
       "edition": "11th",
@@ -760,7 +769,8 @@
       "heavy-bolter-sternguard-veteran-squad"
     ],
     "ability_ids": [
-      "veteran-marksmen-adeptus-astartes"
+      "veteran-marksmen-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -888,7 +898,8 @@
         "id": "damaged",
         "value": 6
       },
-      "fury-of-the-machine-spirit-adeptus-astartes"
+      "fury-of-the-machine-spirit-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes"
     ],
     "transport_capacity": {
       "capacity": 16
@@ -995,7 +1006,8 @@
       "leader",
       "litanies-of-the-devout-black-templars",
       "temple-relics-black-templars",
-      "faithful-cenobytes-black-templars"
+      "faithful-cenobytes-black-templars",
+      "combat-doctrines-black-templars"
     ],
     "game_version": {
       "edition": "11th",
@@ -1075,7 +1087,8 @@
     ],
     "ability_ids": [
       "vehement-aggression-black-templars",
-      "support"
+      "support",
+      "combat-doctrines-black-templars"
     ],
     "game_version": {
       "edition": "11th",
@@ -1151,7 +1164,8 @@
       "lone-operative",
       "armour-of-faith-black-templars",
       "chosen-of-the-emperor-black-templars",
-      "sigismunds-heir-black-templars"
+      "sigismunds-heir-black-templars",
+      "combat-doctrines-black-templars"
     ],
     "game_version": {
       "edition": "11th",
@@ -1259,7 +1273,8 @@
         "wargear": "shield-dome"
       },
       "rapid-disembarkation-adeptus-astartes",
-      "rapid-disembarkation-black-templars"
+      "rapid-disembarkation-black-templars",
+      "combat-doctrines-adeptus-astartes"
     ],
     "transport_capacity": {
       "capacity": 7,
@@ -1369,7 +1384,8 @@
         "id": "damaged",
         "value": 6
       },
-      "executioner-black-templars"
+      "executioner-black-templars",
+      "combat-doctrines-adeptus-astartes"
     ],
     "transport_capacity": {
       "capacity": 7
@@ -1551,7 +1567,8 @@
         "id": "damaged",
         "value": 4
       },
-      "priority-target-acquisition-black-templars"
+      "priority-target-acquisition-black-templars",
+      "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -1648,7 +1665,8 @@
     "ability_ids": [
       "martial-honour-black-templars",
       "vengeful-exhortation-black-templars",
-      "support"
+      "support",
+      "combat-doctrines-black-templars"
     ],
     "game_version": {
       "edition": "11th",
@@ -1740,7 +1758,8 @@
         "value": 6
       },
       "combat-embarkation-adeptus-astartes",
-      "combat-embarkation-black-templars"
+      "combat-embarkation-black-templars",
+      "combat-doctrines-adeptus-astartes"
     ],
     "transport_capacity": {
       "capacity": 14
@@ -1843,7 +1862,8 @@
         "id": "damaged",
         "value": 4
       },
-      "reaping-tally-black-templars"
+      "reaping-tally-black-templars",
+      "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -1946,7 +1966,8 @@
       {
         "id": "damaged",
         "value": 4
-      }
+      },
+      "combat-doctrines-blood-angels"
     ],
     "game_version": {
       "edition": "11th",
@@ -2025,7 +2046,8 @@
     "ability_ids": [
       "blood-chalice-blood-angels",
       "support",
-      "narthecium-blood-angels"
+      "narthecium-blood-angels",
+      "combat-doctrines-blood-angels"
     ],
     "game_version": {
       "edition": "11th",
@@ -2116,7 +2138,8 @@
       {
         "id": "relic-shield-blood-angels",
         "wargear": "relic-shield"
-      }
+      },
+      "combat-doctrines-blood-angels"
     ],
     "game_version": {
       "edition": "11th",
@@ -2222,7 +2245,8 @@
         "id": "feel-no-pain",
         "value": 6
       },
-      "black-rage-death-company-marines-blood-angels"
+      "black-rage-death-company-marines-blood-angels",
+      "combat-doctrines-blood-angels"
     ],
     "game_version": {
       "edition": "11th",
@@ -2324,7 +2348,8 @@
       "leader",
       "mass-of-doom-blood-angels",
       "redeemer-of-the-lost-blood-angels",
-      "deep-strike"
+      "deep-strike",
+      "combat-doctrines-blood-angels"
     ],
     "game_version": {
       "edition": "11th",
@@ -2402,7 +2427,9 @@
     "ability_ids": [
       "finest-hour-blood-angels",
       "leader",
-      "strategic-acumen-blood-angels"
+      "strategic-acumen-blood-angels",
+      "combat-doctrines-blood-angels",
+      "transhuman-strategist-blood-angels"
     ],
     "game_version": {
       "edition": "11th",
@@ -2484,7 +2511,9 @@
       "fights-first",
       "lone-operative",
       "transfixing-gaze-blood-angels",
-      "chief-librarian-blood-angels"
+      "chief-librarian-blood-angels",
+      "combat-doctrines-blood-angels",
+      "transhuman-strategist-blood-angels"
     ],
     "game_version": {
       "edition": "11th",
@@ -2567,7 +2596,8 @@
       {
         "id": "feel-no-pain",
         "value": 6
-      }
+      },
+      "combat-doctrines-blood-angels"
     ],
     "game_version": {
       "edition": "11th",
@@ -2646,7 +2676,9 @@
       "death-mask-of-sanguinius-blood-angels",
       "leader",
       "warden-of-the-imperium-nihilus-blood-angels",
-      "deep-strike"
+      "deep-strike",
+      "combat-doctrines-blood-angels",
+      "transhuman-strategist-blood-angels"
     ],
     "game_version": {
       "edition": "11th",
@@ -2723,7 +2755,8 @@
       "miraculous-saviour-blood-angels",
       "deep-strike",
       "lone-operative",
-      "fights-first"
+      "fights-first",
+      "combat-doctrines-blood-angels"
     ],
     "game_version": {
       "edition": "11th",
@@ -2817,7 +2850,8 @@
     "ability_ids": [
       "angelic-visage-blood-angels",
       "heirs-of-azkaellon-blood-angels",
-      "deep-strike"
+      "deep-strike",
+      "combat-doctrines-blood-angels"
     ],
     "game_version": {
       "edition": "11th",
@@ -2911,7 +2945,8 @@
       {
         "id": "damaged",
         "value": 4
-      }
+      },
+      "combat-doctrines-blood-angels"
     ],
     "game_version": {
       "edition": "11th",
@@ -3015,7 +3050,8 @@
       {
         "id": "feel-no-pain",
         "value": 6
-      }
+      },
+      "combat-doctrines-blood-angels"
     ],
     "game_version": {
       "edition": "11th",
@@ -3114,7 +3150,8 @@
         "id": "feel-no-pain",
         "value": 6
       },
-      "death-visions-of-sanguinius-blood-angels"
+      "death-visions-of-sanguinius-blood-angels",
+      "combat-doctrines-blood-angels"
     ],
     "game_version": {
       "edition": "11th",
@@ -3196,7 +3233,8 @@
         "value": "D3"
       },
       "deep-strike",
-      "lone-operative"
+      "lone-operative",
+      "combat-doctrines-dark-angels"
     ],
     "game_version": {
       "edition": "11th",
@@ -3288,7 +3326,8 @@
       "grenade-launcher"
     ],
     "ability_ids": [
-      "knights-of-caliban-dark-angels"
+      "knights-of-caliban-dark-angels",
+      "combat-doctrines-dark-angels"
     ],
     "game_version": {
       "edition": "11th",
@@ -3377,7 +3416,8 @@
       "engulfing-fear-dark-angels",
       "leader",
       "psychic-hood-dark-angels",
-      "chief-librarian-dark-angels"
+      "chief-librarian-dark-angels",
+      "combat-doctrines-dark-angels"
     ],
     "game_version": {
       "edition": "11th",
@@ -3478,7 +3518,8 @@
         "id": "watcher-in-the-dark-dark-angels",
         "wargear": "watcher-in-the-dark"
       },
-      "deep-strike"
+      "deep-strike",
+      "combat-doctrines-dark-angels"
     ],
     "game_version": {
       "edition": "11th",
@@ -3586,7 +3627,8 @@
     ],
     "ability_ids": [
       "braziers-of-judgement-dark-angels",
-      "emnity-for-the-unworthy-dark-angels"
+      "emnity-for-the-unworthy-dark-angels",
+      "combat-doctrines-dark-angels"
     ],
     "game_version": {
       "edition": "11th",
@@ -3667,7 +3709,9 @@
         "id": "the-lion-helm-dark-angels",
         "wargear": "the-lion-helm"
       },
-      "watcher-in-the-dark-azrael-dark-angels"
+      "watcher-in-the-dark-azrael-dark-angels",
+      "combat-doctrines-dark-angels",
+      "transhuman-strategist-dark-angels"
     ],
     "game_version": {
       "edition": "11th",
@@ -3757,7 +3801,8 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "deep-strike"
+      "deep-strike",
+      "combat-doctrines-dark-angels"
     ],
     "game_version": {
       "edition": "11th",
@@ -3839,7 +3884,8 @@
       {
         "id": "damaged",
         "value": 3
-      }
+      },
+      "combat-doctrines-dark-angels"
     ],
     "game_version": {
       "edition": "11th",
@@ -3915,7 +3961,9 @@
     "ability_ids": [
       "exemplar-of-hate-dark-angels",
       "feared-interrogator-dark-angels",
-      "leader"
+      "leader",
+      "combat-doctrines-dark-angels",
+      "transhuman-strategist-dark-angels"
     ],
     "game_version": {
       "edition": "11th",
@@ -4001,7 +4049,8 @@
       {
         "id": "watcher-in-the-dark-dark-angels",
         "wargear": "watcher-in-the-dark"
-      }
+      },
+      "combat-doctrines-dark-angels"
     ],
     "game_version": {
       "edition": "11th",
@@ -4077,7 +4126,9 @@
       "grand-master-of-the-deathwing-dark-angels",
       "leader",
       "strikes-of-retribution-dark-angels",
-      "deep-strike"
+      "deep-strike",
+      "combat-doctrines-dark-angels",
+      "transhuman-strategist-dark-angels"
     ],
     "game_version": {
       "edition": "11th",
@@ -4157,7 +4208,9 @@
       "the-emperors-shield-dark-angels",
       "supreme-commander-dark-angels",
       "master-strategist-dark-angels",
-      "the-watchers-dark-angels"
+      "the-watchers-dark-angels",
+      "combat-doctrines-dark-angels",
+      "transhuman-strategist-dark-angels"
     ],
     "game_version": {
       "edition": "11th",
@@ -4243,7 +4296,8 @@
       "astartes-banner-dark-angels",
       "honour-or-death-dark-angels",
       "narthecium-dark-angels",
-      "support"
+      "support",
+      "combat-doctrines-dark-angels"
     ],
     "game_version": {
       "edition": "11th",
@@ -4329,7 +4383,9 @@
     "ability_ids": [
       "intractable-will-dark-angels",
       "leader",
-      "the-spiritshield-helm-dark-angels"
+      "the-spiritshield-helm-dark-angels",
+      "combat-doctrines-dark-angels",
+      "transhuman-strategist-dark-angels"
     ],
     "game_version": {
       "edition": "11th",
@@ -4410,7 +4466,8 @@
       {
         "id": "damaged",
         "value": 3
-      }
+      },
+      "combat-doctrines-dark-angels"
     ],
     "game_version": {
       "edition": "11th",
@@ -4492,7 +4549,9 @@
     "ability_ids": [
       "cut-off-their-escape-dark-angels",
       "grand-master-of-the-ravenwing-dark-angels",
-      "leader"
+      "leader",
+      "combat-doctrines-dark-angels",
+      "transhuman-strategist-dark-angels"
     ],
     "game_version": {
       "edition": "11th",
@@ -4572,7 +4631,9 @@
       },
       "leader",
       "tactical-instinct-deathwatch",
-      "unstoppable-champion-deathwatch"
+      "unstoppable-champion-deathwatch",
+      "combat-doctrines-deathwatch",
+      "transhuman-strategist-deathwatch"
     ],
     "game_version": {
       "edition": "11th",
@@ -4659,7 +4720,8 @@
       "ceramite-fists"
     ],
     "ability_ids": [
-      "indomitor-doctrines-deathwatch"
+      "indomitor-doctrines-deathwatch",
+      "combat-doctrines-deathwatch"
     ],
     "game_version": {
       "edition": "11th",
@@ -4757,7 +4819,8 @@
       {
         "id": "storm-shield-deathwatch",
         "wargear": "storm-shield"
-      }
+      },
+      "combat-doctrines-deathwatch"
     ],
     "game_version": {
       "edition": "11th",
@@ -4883,7 +4946,8 @@
       {
         "id": "storm-shield-deathwatch",
         "wargear": "storm-shield"
-      }
+      },
+      "combat-doctrines-deathwatch"
     ],
     "game_version": {
       "edition": "11th",
@@ -4982,7 +5046,8 @@
     ],
     "ability_ids": [
       "talonstrike-doctrines-deathwatch",
-      "deep-strike"
+      "deep-strike",
+      "combat-doctrines-deathwatch"
     ],
     "game_version": {
       "edition": "11th",
@@ -5056,7 +5121,9 @@
       "leader",
       "strategic-knowledge-deathwatch",
       "purgatus-quarry-deathwatch",
-      "watch-master-deathwatch"
+      "watch-master-deathwatch",
+      "combat-doctrines-deathwatch",
+      "transhuman-strategist-deathwatch"
     ],
     "game_version": {
       "edition": "11th",
@@ -5146,7 +5213,8 @@
       {
         "id": "damaged",
         "value": 5
-      }
+      },
+      "combat-doctrines-deathwatch"
     ],
     "transport_capacity": {
       "capacity": 12
@@ -5252,7 +5320,8 @@
       {
         "id": "storm-shield-deathwatch-terminator-squad-deathwatch",
         "wargear": "storm-shield"
-      }
+      },
+      "combat-doctrines-deathwatch"
     ],
     "game_version": {
       "edition": "11th",
@@ -5367,7 +5436,8 @@
       "chainsword"
     ],
     "ability_ids": [
-      "fortis-doctrines-deathwatch"
+      "fortis-doctrines-deathwatch",
+      "combat-doctrines-deathwatch"
     ],
     "game_version": {
       "edition": "11th",
@@ -5473,7 +5543,8 @@
         "id": "scouts",
         "value": 6
       },
-      "spectrus-doctrines-deathwatch"
+      "spectrus-doctrines-deathwatch",
+      "combat-doctrines-deathwatch"
     ],
     "game_version": {
       "edition": "11th",
@@ -5550,7 +5621,9 @@
     "ability_ids": [
       "leader",
       "refuse-to-yield-adeptus-astartes",
-      "strategic-acumen-adeptus-astartes"
+      "strategic-acumen-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes",
+      "transhuman-strategist-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -5626,7 +5699,9 @@
     "ability_ids": [
       "leader",
       "lord-of-the-pyroclasts-adeptus-astartes",
-      "unto-the-anvil-adeptus-astartes"
+      "unto-the-anvil-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes",
+      "transhuman-strategist-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -5706,7 +5781,8 @@
       "chainsword"
     ],
     "ability_ids": [
-      "targeted-intercession-adeptus-astartes"
+      "targeted-intercession-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -5810,7 +5886,8 @@
     "ability_ids": [
       "meteoric-descent-adeptus-astartes",
       "deep-strike",
-      "parabolic-jetleap-adeptus-astartes"
+      "parabolic-jetleap-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -5883,7 +5960,8 @@
       "deep-strike",
       "support",
       "never-shall-the-standard-fall-adeptus-astartes",
-      "raise-the-banner-adeptus-astartes"
+      "raise-the-banner-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -5974,7 +6052,8 @@
       {
         "id": "deadly-demise",
         "value": "D3"
-      }
+      },
+      "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -6057,7 +6136,8 @@
     "ability_ids": [
       "leader",
       "techmarine-adeptus-astartes",
-      "blessings-of-the-omnissiah-adeptus-astartes"
+      "blessings-of-the-omnissiah-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -6134,7 +6214,9 @@
     "ability_ids": [
       "leader",
       "for-the-khan-adeptus-astartes",
-      "trophy-taker-adeptus-astartes"
+      "trophy-taker-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes",
+      "transhuman-strategist-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -6212,7 +6294,9 @@
     "ability_ids": [
       "leader",
       "skilled-riders-adeptus-astartes",
-      "spear-of-chogoris-adeptus-astartes"
+      "spear-of-chogoris-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes",
+      "transhuman-strategist-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -6293,7 +6377,9 @@
       "master-of-shadows-adeptus-astartes",
       "deep-strike",
       "stealth",
-      "lone-operative"
+      "lone-operative",
+      "combat-doctrines-adeptus-astartes",
+      "transhuman-strategist-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -6367,7 +6453,9 @@
     "ability_ids": [
       "leader",
       "psychic-hood-adeptus-astartes",
-      "librarian-adeptus-astartes"
+      "librarian-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes",
+      "librarius-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -6445,7 +6533,9 @@
       "icon-of-obstinacy-adeptus-astartes",
       "leader",
       "rampart-adeptus-astartes",
-      "deep-strike"
+      "deep-strike",
+      "combat-doctrines-adeptus-astartes",
+      "transhuman-strategist-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -6539,7 +6629,8 @@
       {
         "id": "storm-shield-terminator-assault-squad-adeptus-astartes",
         "wargear": "storm-shield"
-      }
+      },
+      "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -6644,7 +6735,8 @@
       "master-crafted-power-sword"
     ],
     "ability_ids": [
-      "bladeguard-adeptus-astartes"
+      "bladeguard-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -6752,7 +6844,8 @@
       "hovering-bulk-firestrike-servo-turrets"
     ],
     "ability_ids": [
-      "sentinel-protocols-adeptus-astartes"
+      "sentinel-protocols-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -6836,7 +6929,8 @@
       {
         "id": "deadly-demise",
         "value": "D3"
-      }
+      },
+      "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -6920,7 +7014,9 @@
     "ability_ids": [
       "leader",
       "siege-captain-adeptus-astartes",
-      "signum-array-adeptus-astartes"
+      "signum-array-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes",
+      "transhuman-strategist-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -6993,7 +7089,8 @@
     "ability_ids": [
       "tempormortis-adeptus-astartes",
       "fights-first",
-      "support"
+      "support",
+      "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -7089,7 +7186,8 @@
         "wargear": "banner-of-macragge"
       },
       "glory-of-ultramar-adeptus-astartes",
-      "honour-guard-of-macragge-adeptus-astartes"
+      "honour-guard-of-macragge-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -7182,7 +7280,9 @@
       "leader",
       "unstoppable-valour-adeptus-astartes",
       "deep-strike",
-      "strategic-acumen-adeptus-astartes"
+      "strategic-acumen-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes",
+      "transhuman-strategist-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -7269,7 +7369,9 @@
         "value": 5
       },
       "leader-of-astartes-adeptus-astartes",
-      "primarch-of-the-xiii-adeptus-astartes"
+      "primarch-of-the-xiii-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes",
+      "transhuman-strategist-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -7350,7 +7452,8 @@
       {
         "id": "deadly-demise",
         "value": 1
-      }
+      },
+      "combat-doctrines-adeptus-astartes"
     ],
     "transport_capacity": {
       "capacity": 12,
@@ -7441,7 +7544,9 @@
         "wargear": "relic-shield"
       },
       "deep-strike",
-      "strategic-acumen-adeptus-astartes"
+      "strategic-acumen-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes",
+      "transhuman-strategist-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -7534,7 +7639,8 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "shattered-defences-adeptus-astartes"
+      "shattered-defences-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -7618,7 +7724,9 @@
       "leader",
       "deep-strike",
       "psychic-hood-adeptus-astartes",
-      "librarian-librarian-in-terminator-armour-adeptus-astartes"
+      "librarian-librarian-in-terminator-armour-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes",
+      "librarius-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -7707,7 +7815,9 @@
         "value": 6
       },
       "forgefather-adeptus-astartes",
-      "seeker-of-the-unfound-adeptus-astartes"
+      "seeker-of-the-unfound-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes",
+      "transhuman-strategist-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -7798,7 +7908,8 @@
       "ceramite-fists"
     ],
     "ability_ids": [
-      "rites-of-thermal-appeasement-adeptus-astartes"
+      "rites-of-thermal-appeasement-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -7874,7 +7985,8 @@
       "ceramite-fists"
     ],
     "ability_ids": [
-      "unyielding-in-the-face-of-the-foe-adeptus-astartes"
+      "unyielding-in-the-face-of-the-foe-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -7954,7 +8066,9 @@
       {
         "id": "feel-no-pain",
         "value": 5
-      }
+      },
+      "combat-doctrines-adeptus-astartes",
+      "transhuman-strategist-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -8038,7 +8152,8 @@
         "id": "scouts",
         "value": 6
       },
-      "flexible-asset-adeptus-astartes"
+      "flexible-asset-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -8122,7 +8237,8 @@
     ],
     "ability_ids": [
       "support",
-      "vivispectral-analysis-targeting-adeptus-astartes"
+      "vivispectral-analysis-targeting-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -8214,7 +8330,8 @@
       {
         "id": "damaged",
         "value": 4
-      }
+      },
+      "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -8302,7 +8419,9 @@
         "id": "scouts",
         "value": 6
       },
-      "stealth"
+      "stealth",
+      "combat-doctrines-adeptus-astartes",
+      "librarius-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -8377,7 +8496,8 @@
     ],
     "ability_ids": [
       "narthecium-adeptus-astartes",
-      "support"
+      "support",
+      "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -8475,7 +8595,8 @@
         "id": "damaged",
         "value": 6
       },
-      "power-of-the-machine-spirit-adeptus-astartes"
+      "power-of-the-machine-spirit-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes"
     ],
     "transport_capacity": {
       "capacity": 12
@@ -8566,7 +8687,8 @@
         "wargear": "storm-shield"
       },
       "support",
-      "demi-company-commander-adeptus-astartes"
+      "demi-company-commander-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -8642,7 +8764,10 @@
     "ability_ids": [
       "hood-of-hellfire-adeptus-astartes",
       "leader",
-      "chief-librarian-adeptus-astartes"
+      "chief-librarian-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes",
+      "librarius-adeptus-astartes",
+      "transhuman-strategist-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -8724,7 +8849,9 @@
         "value": 5
       },
       "leader",
-      "righteous-fury-adeptus-astartes"
+      "righteous-fury-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes",
+      "transhuman-strategist-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -8800,7 +8927,8 @@
       "stealth",
       "infiltrators",
       "chameleoline-cloaks-adeptus-astartes",
-      "special-issue-optics-and-ammunition-adeptus-astartes"
+      "special-issue-optics-and-ammunition-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -8876,7 +9004,8 @@
       "chainsword"
     ],
     "ability_ids": [
-      "full-throttle-assault-adeptus-astartes"
+      "full-throttle-assault-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -8991,7 +9120,8 @@
       "ceramite-fists"
     ],
     "ability_ids": [
-      "targeter-optics-adeptus-astartes"
+      "targeter-optics-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -9072,7 +9202,9 @@
       "knight-champion-of-macragge-adeptus-astartes",
       "honour-or-death-adeptus-astartes",
       "captain-of-the-honour-guard-adeptus-astartes",
-      "leader"
+      "leader",
+      "combat-doctrines-adeptus-astartes",
+      "transhuman-strategist-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -9200,7 +9332,8 @@
     "ability_ids": [
       "strategium-command-adeptus-astartes",
       "support",
-      "raise-the-banner-adeptus-astartes"
+      "raise-the-banner-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -9291,7 +9424,8 @@
       {
         "id": "damaged",
         "value": 4
-      }
+      },
+      "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -9377,7 +9511,8 @@
     "ability_ids": [
       "support",
       "honour-of-the-company-adeptus-astartes",
-      "raise-the-banner-adeptus-astartes"
+      "raise-the-banner-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -9459,7 +9594,8 @@
         "id": "relic-shield-adeptus-astartes",
         "wargear": "relic-shield"
       },
-      "zealous-fortitude-adeptus-astartes"
+      "zealous-fortitude-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -9545,7 +9681,8 @@
         "id": "feel-no-pain",
         "value": 5
       },
-      "priority-target-identified-adeptus-astartes"
+      "priority-target-identified-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -9640,7 +9777,8 @@
         "id": "scouts",
         "value": 6
       },
-      "divinator-class-auspexes-adeptus-astartes"
+      "divinator-class-auspexes-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -9735,7 +9873,8 @@
     ],
     "ability_ids": [
       "hammer-of-wrath-adeptus-astartes",
-      "deep-strike"
+      "deep-strike",
+      "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -9844,7 +9983,9 @@
       {
         "id": "feel-no-pain",
         "value": 5
-      }
+      },
+      "combat-doctrines-adeptus-astartes",
+      "transhuman-strategist-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -9941,7 +10082,8 @@
     "ability_ids": [
       "vanguard-assault-adeptus-astartes",
       "deep-strike",
-      "combat-shield-adeptus-astartes"
+      "combat-shield-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -10058,7 +10200,8 @@
     ],
     "ability_ids": [
       "command-squad-adeptus-astartes",
-      "raise-the-banner-adeptus-astartes"
+      "raise-the-banner-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -10131,7 +10274,8 @@
       "twin-power-fists-aggressor-squad"
     ],
     "ability_ids": [
-      "close-quarters-firestorm-adeptus-astartes"
+      "close-quarters-firestorm-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -10211,7 +10355,9 @@
         "id": "relic-shield-adeptus-astartes",
         "wargear": "relic-shield"
       },
-      "strategic-acumen-adeptus-astartes"
+      "strategic-acumen-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes",
+      "transhuman-strategist-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -10286,7 +10432,8 @@
     "ability_ids": [
       "catechism-of-fire-adeptus-astartes",
       "leader",
-      "litany-of-hate-adeptus-astartes"
+      "litany-of-hate-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -10374,7 +10521,9 @@
         "value": 6
       },
       "strategic-acumen-adeptus-astartes",
-      "tactical-fluidity-adeptus-astartes"
+      "tactical-fluidity-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes",
+      "transhuman-strategist-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -10451,7 +10600,8 @@
       "exhortation-of-rage-adeptus-astartes",
       "leader",
       "deep-strike",
-      "litany-of-hate-adeptus-astartes"
+      "litany-of-hate-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -10542,7 +10692,8 @@
     ],
     "ability_ids": [
       "bolter-discipline-adeptus-astartes",
-      "tactical-mainstay-adeptus-astartes"
+      "tactical-mainstay-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -10633,7 +10784,8 @@
         "id": "damaged",
         "value": 8
       },
-      "suppression-fire-adeptus-astartes"
+      "suppression-fire-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -10724,7 +10876,8 @@
         "id": "damaged",
         "value": 6
       },
-      "wrath-of-the-machine-spirit-adeptus-astartes"
+      "wrath-of-the-machine-spirit-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes"
     ],
     "transport_capacity": {
       "capacity": 14
@@ -10824,7 +10977,8 @@
       {
         "id": "damaged",
         "value": 10
-      }
+      },
+      "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -10912,7 +11066,8 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "veiling-smoke-adeptus-astartes"
+      "veiling-smoke-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes"
     ],
     "transport_capacity": {
       "capacity": 12,
@@ -10997,7 +11152,8 @@
       {
         "id": "helix-gauntlet-adeptus-astartes",
         "wargear": "helix-gauntlet"
-      }
+      },
+      "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -11092,7 +11248,8 @@
       {
         "id": "damaged",
         "value": 4
-      }
+      },
+      "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -11187,7 +11344,8 @@
       "ceramite-fists"
     ],
     "ability_ids": [
-      "driven-from-cover-adeptus-astartes"
+      "driven-from-cover-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -11267,7 +11425,9 @@
       "leader",
       "trifold-path-of-shadow-adeptus-astartes",
       "deep-strike",
-      "lone-operative"
+      "lone-operative",
+      "combat-doctrines-adeptus-astartes",
+      "transhuman-strategist-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -11348,7 +11508,8 @@
       },
       "support",
       "tactical-precision-adeptus-astartes",
-      "demi-company-commander-adeptus-astartes"
+      "demi-company-commander-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -11433,7 +11594,8 @@
       {
         "id": "grav-chutes-adeptus-astartes",
         "wargear": "grav-chutes"
-      }
+      },
+      "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -11505,7 +11667,8 @@
     "ability_ids": [
       "leader",
       "spiritual-leader-adeptus-astartes",
-      "litany-of-hate-adeptus-astartes"
+      "litany-of-hate-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -11598,7 +11761,8 @@
         "id": "damaged",
         "value": 4
       },
-      "forward-assault-warsuit-adeptus-astartes"
+      "forward-assault-warsuit-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -11671,7 +11835,8 @@
     "ability_ids": [
       "support",
       "deeds-of-legend-adeptus-astartes",
-      "raise-the-banner-adeptus-astartes"
+      "raise-the-banner-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
       "edition": "11th",
@@ -11775,7 +11940,8 @@
         "id": "blizzard-shield-space-wolves",
         "wargear": "blizzard-shield"
       },
-      "fervour-of-the-ancients-space-wolves"
+      "fervour-of-the-ancients-space-wolves",
+      "combat-doctrines-space-wolves"
     ],
     "game_version": {
       "edition": "11th",
@@ -11870,7 +12036,9 @@
     "ability_ids": [
       "battle-lust-space-wolves",
       "leader",
-      "war-howl-space-wolves"
+      "war-howl-space-wolves",
+      "combat-doctrines-space-wolves",
+      "transhuman-strategist-space-wolves"
     ],
     "game_version": {
       "edition": "11th",
@@ -11966,7 +12134,8 @@
       {
         "id": "storm-shield-space-wolves",
         "wargear": "storm-shield"
-      }
+      },
+      "combat-doctrines-space-wolves"
     ],
     "game_version": {
       "edition": "11th",
@@ -12057,7 +12226,8 @@
     ],
     "ability_ids": [
       "cunning-hunters-space-wolves",
-      "old-greymanes-space-wolves"
+      "old-greymanes-space-wolves",
+      "combat-doctrines-space-wolves"
     ],
     "game_version": {
       "edition": "11th",
@@ -12144,7 +12314,8 @@
     ],
     "ability_ids": [
       "predatory-instinct-space-wolves",
-      "hunting-hounds-fenrisian-wolves-space-wolves"
+      "hunting-hounds-fenrisian-wolves-space-wolves",
+      "combat-doctrines-space-wolves"
     ],
     "game_version": {
       "edition": "11th",
@@ -12216,7 +12387,8 @@
     "ability_ids": [
       "healing-balms-space-wolves",
       "leader",
-      "litany-of-hate-space-wolves"
+      "litany-of-hate-space-wolves",
+      "combat-doctrines-space-wolves"
     ],
     "game_version": {
       "edition": "11th",
@@ -12336,7 +12508,8 @@
         "id": "storm-shield-space-wolves",
         "wargear": "storm-shield"
       },
-      "hunting-hounds-space-wolves"
+      "hunting-hounds-space-wolves",
+      "combat-doctrines-space-wolves"
     ],
     "game_version": {
       "edition": "11th",
@@ -12421,7 +12594,8 @@
       "gift-of-the-iron-wolf-space-wolves",
       "iron-priest-space-wolves",
       "judgement-of-the-omnissiah-space-wolves",
-      "leader"
+      "leader",
+      "combat-doctrines-space-wolves"
     ],
     "game_version": {
       "edition": "11th",
@@ -12498,7 +12672,8 @@
       "leader",
       "tempests-wrath-space-wolves",
       "wind-walker-space-wolves",
-      "high-rune-priest-space-wolves"
+      "high-rune-priest-space-wolves",
+      "combat-doctrines-space-wolves"
     ],
     "game_version": {
       "edition": "11th",
@@ -12576,7 +12751,8 @@
       "chainsword"
     ],
     "ability_ids": [
-      "berserk-charge-space-wolves"
+      "berserk-charge-space-wolves",
+      "combat-doctrines-space-wolves"
     ],
     "game_version": {
       "edition": "11th",
@@ -12654,7 +12830,8 @@
       {
         "id": "feel-no-pain",
         "value": 6
-      }
+      },
+      "combat-doctrines-space-wolves"
     ],
     "game_version": {
       "edition": "11th",
@@ -12731,7 +12908,9 @@
       "guile-of-the-wolf-space-wolves",
       "high-king-of-fenris-space-wolves",
       "leader",
-      "deep-strike"
+      "deep-strike",
+      "combat-doctrines-space-wolves",
+      "transhuman-strategist-space-wolves"
     ],
     "game_version": {
       "edition": "11th",
@@ -12829,7 +13008,8 @@
       {
         "id": "storm-shield-wolf-guard-battle-leader-space-wolves",
         "wargear": "storm-shield"
-      }
+      },
+      "combat-doctrines-space-wolves"
     ],
     "game_version": {
       "edition": "11th",
@@ -12928,7 +13108,9 @@
       {
         "id": "blizzard-shield-space-wolves",
         "wargear": "blizzard-shield"
-      }
+      },
+      "combat-doctrines-space-wolves",
+      "curse-of-the-wulfen-space-wolves"
     ],
     "game_version": {
       "edition": "11th",
@@ -13020,7 +13202,9 @@
         "id": "death-totem-space-wolves",
         "wargear": "death-totem"
       },
-      "hammer-blow-space-wolves"
+      "hammer-blow-space-wolves",
+      "combat-doctrines-space-wolves",
+      "curse-of-the-wulfen-space-wolves"
     ],
     "game_version": {
       "edition": "11th",
@@ -13105,7 +13289,8 @@
       {
         "id": "feel-no-pain",
         "value": 5
-      }
+      },
+      "combat-doctrines-space-wolves"
     ],
     "game_version": {
       "edition": "11th",
@@ -13178,7 +13363,8 @@
       "anvil-of-endurance-space-wolves",
       "champion-of-the-kingsguard-space-wolves",
       "leader",
-      "deep-strike"
+      "deep-strike",
+      "combat-doctrines-space-wolves"
     ],
     "game_version": {
       "edition": "11th",
@@ -13256,7 +13442,8 @@
       {
         "id": "storm-shield-wolf-guard-battle-leader-space-wolves",
         "wargear": "storm-shield"
-      }
+      },
+      "combat-doctrines-space-wolves"
     ],
     "game_version": {
       "edition": "11th",
@@ -13375,7 +13562,8 @@
         "id": "haywire-mine-space-wolves",
         "wargear": "haywire-mine-once-per-battle-per-unit"
       },
-      "hunting-hounds-space-wolves"
+      "hunting-hounds-space-wolves",
+      "combat-doctrines-space-wolves"
     ],
     "game_version": {
       "edition": "11th",
@@ -13482,7 +13670,9 @@
         "id": "death-totem-space-wolves",
         "wargear": "death-totem"
       },
-      "savage-frenzy-space-wolves"
+      "savage-frenzy-space-wolves",
+      "combat-doctrines-space-wolves",
+      "curse-of-the-wulfen-space-wolves"
     ],
     "game_version": {
       "edition": "11th",
@@ -13570,7 +13760,9 @@
       {
         "id": "deadly-demise",
         "value": 1
-      }
+      },
+      "combat-doctrines-space-wolves",
+      "curse-of-the-wulfen-space-wolves"
     ],
     "game_version": {
       "edition": "11th",
@@ -13665,7 +13857,8 @@
       "diameter": 40
     },
     "ability_ids": [
-      "overlapping-destruction-adeptus-astartes"
+      "overlapping-destruction-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes"
     ],
     "external_refs": [
       {
@@ -13744,7 +13937,8 @@
     ],
     "ability_ids": [
       "purgation-run-adeptus-astartes",
-      "deep-strike"
+      "deep-strike",
+      "combat-doctrines-adeptus-astartes"
     ],
     "external_refs": [
       {
@@ -14161,7 +14355,9 @@
       }
     ],
     "ability_ids": [
-      "deft-riposte-black-templars"
+      "deft-riposte-black-templars",
+      "heirs-of-sigismund-vow-sworn-of-vedrenn-black-templars",
+      "templar-vows-vow-sworn-of-vedrenn-black-templars"
     ],
     "weapon_ids": [
       "black-sword-emperors-champion-vedrenn",
@@ -14226,7 +14422,9 @@
       }
     ],
     "ability_ids": [
-      "bladeguard-black-templars"
+      "bladeguard-black-templars",
+      "heirs-of-sigismund-vow-sworn-of-vedrenn-black-templars",
+      "templar-vows-vow-sworn-of-vedrenn-black-templars"
     ],
     "weapon_ids": [
       "master-crafted-power-weapon-vow-sworn-bladeguard-veteran-squad",
@@ -14300,7 +14498,9 @@
       }
     ],
     "ability_ids": [
-      "righteous-zeal-vow-sworn-crusader-squad-black-templars"
+      "righteous-zeal-vow-sworn-crusader-squad-black-templars",
+      "heirs-of-sigismund-vow-sworn-of-vedrenn-black-templars",
+      "templar-vows-vow-sworn-of-vedrenn-black-templars"
     ],
     "weapon_ids": [
       "heavy-bolt-pistol-vow-sworn-crusader-squad",
@@ -14371,7 +14571,9 @@
       }
     ],
     "ability_ids": [
-      "exploit-their-cowardice-vow-sworn-sword-brethren-squad-black-templars"
+      "exploit-their-cowardice-vow-sworn-sword-brethren-squad-black-templars",
+      "heirs-of-sigismund-vow-sworn-of-vedrenn-black-templars",
+      "templar-vows-vow-sworn-of-vedrenn-black-templars"
     ],
     "weapon_ids": [
       "plasma-pistol-vow-sworn-sword-brethren-squad",
@@ -14438,7 +14640,8 @@
       "diameter": 40
     },
     "ability_ids": [
-      "targeted-intercession-blood-angels"
+      "targeted-intercession-blood-angels",
+      "the-sons-of-sanguinius-blood-angels"
     ],
     "external_refs": [
       {
@@ -14505,7 +14708,8 @@
       "diameter": 32
     },
     "ability_ids": [
-      "targeted-intercession-blood-angels"
+      "targeted-intercession-blood-angels",
+      "the-sons-of-sanguinius-blood-angels"
     ],
     "external_refs": [
       {
@@ -14641,7 +14845,10 @@
       }
     ],
     "ability_ids": [
-      "gravis-protection-dark-angels"
+      "gravis-protection-dark-angels",
+      "the-deathwing-the-vengeful-brethren-dark-angels",
+      "the-ravenwing-the-vengeful-brethren-dark-angels",
+      "the-unforgiven-dark-angels"
     ],
     "weapon_ids": [
       "boltstorm-gauntlet-master-zacharial",
@@ -14717,7 +14924,10 @@
       }
     ],
     "ability_ids": [
-      "bladeguard-dark-angels"
+      "bladeguard-dark-angels",
+      "the-deathwing-the-vengeful-brethren-dark-angels",
+      "the-ravenwing-the-vengeful-brethren-dark-angels",
+      "the-unforgiven-dark-angels"
     ],
     "weapon_ids": [
       "heavy-bolt-pistol-vengeful-brethren-bladeguard-veteran-squad",
@@ -14782,7 +14992,10 @@
       }
     ],
     "ability_ids": [
-      "punishing-volley-dark-angels"
+      "punishing-volley-dark-angels",
+      "the-deathwing-the-vengeful-brethren-dark-angels",
+      "the-ravenwing-the-vengeful-brethren-dark-angels",
+      "the-unforgiven-dark-angels"
     ],
     "weapon_ids": [
       "bolt-pistol-vengeful-brethren-hellblaster-squad",
@@ -14850,7 +15063,10 @@
       }
     ],
     "ability_ids": [
-      "objective-secured-dark-angels"
+      "objective-secured-dark-angels",
+      "the-deathwing-the-vengeful-brethren-dark-angels",
+      "the-ravenwing-the-vengeful-brethren-dark-angels",
+      "the-unforgiven-dark-angels"
     ],
     "weapon_ids": [
       "bolt-pistol-vengeful-brethren-intercessor-squad",
@@ -14918,7 +15134,10 @@
       }
     ],
     "ability_ids": [
-      "berserk-charge-askars-wolfpack-blood-claws-space-wolves"
+      "berserk-charge-askars-wolfpack-blood-claws-space-wolves",
+      "curse-of-the-wulfen-askars-wolfpack-space-wolves",
+      "sagas-space-wolves",
+      "sons-of-russ-askars-wolfpack-space-wolves"
     ],
     "weapon_ids": [
       "plasma-pistol-askars-wolfpack-blood-claws",
@@ -14985,7 +15204,10 @@
       }
     ],
     "ability_ids": [
-      "rugged-resilience-askars-wolfpack-wolf-guard-terminators-space-wolves"
+      "rugged-resilience-askars-wolfpack-wolf-guard-terminators-space-wolves",
+      "curse-of-the-wulfen-askars-wolfpack-space-wolves",
+      "sagas-space-wolves",
+      "sons-of-russ-askars-wolfpack-space-wolves"
     ],
     "weapon_ids": [
       "relic-greataxe-askars-wolfpack-wolf-guard-terminators",
@@ -15052,7 +15274,10 @@
     ],
     "ability_ids": [
       "death-totem-askars-wolfpack-wulfen-space-wolves",
-      "savage-frenzy-askars-wolfpack-wulfen-space-wolves"
+      "savage-frenzy-askars-wolfpack-wulfen-space-wolves",
+      "curse-of-the-wulfen-askars-wolfpack-space-wolves",
+      "sagas-space-wolves",
+      "sons-of-russ-askars-wolfpack-space-wolves"
     ],
     "weapon_ids": [
       "frost-blades-and-feral-claws",
@@ -15121,7 +15346,10 @@
     ],
     "ability_ids": [
       "heroic-last-stand-fyrri-askar-space-wolves",
-      "storm-shield-fyrri-askar-space-wolves"
+      "storm-shield-fyrri-askar-space-wolves",
+      "curse-of-the-wulfen-askars-wolfpack-space-wolves",
+      "sagas-space-wolves",
+      "sons-of-russ-askars-wolfpack-space-wolves"
     ],
     "weapon_ids": [
       "master-crafted-power-weapon-fyrri-askar"
@@ -15190,7 +15418,9 @@
     "ability_ids": [
       "into-the-fray-adeptus-astartes",
       "leader",
-      "strategic-acumen-adeptus-astartes"
+      "strategic-acumen-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes",
+      "transhuman-strategist-adeptus-astartes"
     ],
     "conditional_keywords": [
       {
@@ -15262,7 +15492,8 @@
     "ability_ids": [
       "calgars-champion-adeptus-astartes",
       "support",
-      "veteran-bodyguard-adeptus-astartes"
+      "veteran-bodyguard-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes"
     ]
   },
   {
@@ -15344,7 +15575,8 @@
       "ceramite-fists"
     ],
     "ability_ids": [
-      "total-obliteration-adeptus-astartes"
+      "total-obliteration-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes"
     ]
   },
   {
@@ -15429,7 +15661,8 @@
       }
     ],
     "ability_ids": [
-      "aggressive-reconnaissance-adeptus-astartes"
+      "aggressive-reconnaissance-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes"
     ],
     "conditional_keywords": [
       {
@@ -15503,7 +15736,9 @@
       "deep-strike",
       "leader",
       "master-tactician-adeptus-astartes",
-      "thunderhawk-insertion-adeptus-astartes"
+      "thunderhawk-insertion-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes",
+      "transhuman-strategist-adeptus-astartes"
     ],
     "weapon_ids": [
       "gauntlets-of-ultramar"

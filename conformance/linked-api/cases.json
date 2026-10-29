@@ -89,7 +89,8 @@
     "comparison": "ordered",
     "expected": [
       "bolter-discipline-adeptus-astartes",
-      "tactical-mainstay-adeptus-astartes"
+      "tactical-mainstay-adeptus-astartes",
+      "combat-doctrines-adeptus-astartes"
     ]
   },
   {
@@ -103,7 +104,8 @@
       "berzerker-frenzy-world-eaters",
       "leader",
       "legendary-killer-world-eaters",
-      "the-betrayer-world-eaters"
+      "the-betrayer-world-eaters",
+      "blessings-of-khorne-world-eaters"
     ]
   },
   {

@@ -48,7 +48,8 @@
     "ability_ids": [
       "gift-of-poxes-death-guard",
       "leader",
-      "shroud-of-disease-death-guard"
+      "shroud-of-disease-death-guard",
+      "nurgles-gift-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -143,7 +144,8 @@
       {
         "id": "damaged",
         "value": 6
-      }
+      },
+      "nurgles-gift-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -232,7 +234,8 @@
       {
         "id": "scouts",
         "value": 6
-      }
+      },
+      "nurgles-gift-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -307,7 +310,8 @@
     "ability_ids": [
       "leader",
       "malicious-calculations-death-guard",
-      "sevenfold-chant-death-guard"
+      "sevenfold-chant-death-guard",
+      "nurgles-gift-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -384,7 +388,8 @@
       {
         "id": "feel-no-pain",
         "value": 5
-      }
+      },
+      "nurgles-gift-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -463,7 +468,8 @@
       "deep-strike",
       "leader",
       "unholy-resilience-death-guard",
-      "vector-of-disease-death-guard"
+      "vector-of-disease-death-guard",
+      "nurgles-gift-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -555,7 +561,8 @@
       {
         "id": "damaged",
         "value": 4
-      }
+      },
+      "nurgles-gift-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -646,7 +653,8 @@
       {
         "id": "damaged",
         "value": 4
-      }
+      },
+      "nurgles-gift-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -727,7 +735,8 @@
       {
         "id": "deadly-demise",
         "value": "D3"
-      }
+      },
+      "nurgles-gift-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -822,7 +831,8 @@
       {
         "id": "damaged",
         "value": 4
-      }
+      },
+      "nurgles-gift-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -899,7 +909,8 @@
       {
         "id": "deadly-demise",
         "value": 1
-      }
+      },
+      "nurgles-gift-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -994,7 +1005,8 @@
         "id": "icon-of-despair-death-guard",
         "wargear": "icon-of-despair-aura"
       },
-      "infused-with-the-blessings-of-nurgle-death-guard"
+      "infused-with-the-blessings-of-nurgle-death-guard",
+      "nurgles-gift-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -1089,7 +1101,8 @@
     "ability_ids": [
       "inflamed-infections-death-guard",
       "leader",
-      "tainted-narthecium-death-guard"
+      "tainted-narthecium-death-guard",
+      "nurgles-gift-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -1167,7 +1180,8 @@
       {
         "id": "deadly-demise",
         "value": "D3"
-      }
+      },
+      "nurgles-gift-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -1263,7 +1277,8 @@
       {
         "id": "icon-of-despair-death-guard",
         "wargear": "icon-of-despair-aura"
-      }
+      },
+      "nurgles-gift-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -1336,7 +1351,8 @@
       "blight-bombardment-death-guard",
       "leader",
       "virulent-aura-death-guard",
-      "deep-strike"
+      "deep-strike",
+      "nurgles-gift-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -1419,7 +1435,8 @@
       {
         "id": "deadly-demise",
         "value": "D3"
-      }
+      },
+      "nurgles-gift-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -1496,7 +1513,8 @@
     "ability_ids": [
       "leader",
       "sickening-vitality-death-guard",
-      "tocsin-of-misery-death-guard"
+      "tocsin-of-misery-death-guard",
+      "nurgles-gift-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -1575,7 +1593,8 @@
       {
         "id": "deadly-demise",
         "value": "D3"
-      }
+      },
+      "nurgles-gift-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -1648,7 +1667,8 @@
       {
         "id": "deadly-demise",
         "value": "D3"
-      }
+      },
+      "nurgles-gift-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -1731,7 +1751,8 @@
         "value": 1
       },
       "diseased-malice-death-guard",
-      "froth-spattered-frenzy-death-guard"
+      "froth-spattered-frenzy-death-guard",
+      "nurgles-gift-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -1817,7 +1838,8 @@
       {
         "id": "deadly-demise",
         "value": "D3"
-      }
+      },
+      "nurgles-gift-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -1910,7 +1932,8 @@
       {
         "id": "damaged",
         "value": 6
-      }
+      },
+      "nurgles-gift-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -1983,7 +2006,8 @@
     "ability_ids": [
       "gift-of-contagion-death-guard",
       "leader",
-      "pestilent-fallout-death-guard"
+      "pestilent-fallout-death-guard",
+      "nurgles-gift-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -2075,7 +2099,8 @@
       {
         "id": "deadly-demise",
         "value": "D3"
-      }
+      },
+      "nurgles-gift-death-guard"
     ],
     "transport_capacity": {
       "capacity": 12
@@ -2169,7 +2194,8 @@
       {
         "id": "damaged",
         "value": 5
-      }
+      },
+      "nurgles-gift-death-guard"
     ],
     "transport_capacity": {
       "capacity": 14
@@ -2244,7 +2270,8 @@
     "ability_ids": [
       "blinding-spray-death-guard",
       "leader",
-      "putrefying-stink-death-guard"
+      "putrefying-stink-death-guard",
+      "nurgles-gift-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -2317,7 +2344,8 @@
     "ability_ids": [
       "blessed-icon-of-disease-death-guard",
       "leader",
-      "unclean-icon-death-guard"
+      "unclean-icon-death-guard",
+      "nurgles-gift-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -2392,7 +2420,8 @@
       "destroyer-hive-death-guard",
       "eater-plague-death-guard",
       "leader",
-      "deep-strike"
+      "deep-strike",
+      "nurgles-gift-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -2504,7 +2533,8 @@
     ],
     "ability_ids": [
       "blistering-fusillade-death-guard",
-      "deep-strike"
+      "deep-strike",
+      "nurgles-gift-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -2580,7 +2610,10 @@
       "armoured-tracks",
       "havoc-launcher-maggot-lords-chaos-rhino"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "nurgles-gift-maggot-lords-death-guard",
+      "pact-of-decay-death-guard"
+    ],
     "transport_capacity": {
       "capacity": 12
     },
@@ -2642,7 +2675,9 @@
       "plaguespurt-gauntlet-maggot-lords-deathshroud-terminators"
     ],
     "ability_ids": [
-      "obstinate-resistance-death-guard"
+      "obstinate-resistance-death-guard",
+      "nurgles-gift-maggot-lords-death-guard",
+      "pact-of-decay-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -2712,7 +2747,9 @@
       "plague-knives-maggot-lords-plague-marines"
     ],
     "ability_ids": [
-      "infused-with-the-blessings-of-nurgle-maggot-lords-plague-marines-death-guard"
+      "infused-with-the-blessings-of-nurgle-maggot-lords-plague-marines-death-guard",
+      "nurgles-gift-maggot-lords-death-guard",
+      "pact-of-decay-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -2779,7 +2816,9 @@
     ],
     "ability_ids": [
       "malicious-calculations-septimol-fulg-maggot-lords-tallyman-death-guard",
-      "sevenfold-chant-septimol-fulg-maggot-lords-tallyman-death-guard"
+      "sevenfold-chant-septimol-fulg-maggot-lords-tallyman-death-guard",
+      "nurgles-gift-maggot-lords-death-guard",
+      "pact-of-decay-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -2846,7 +2885,9 @@
       "twin-plague-spewer"
     ],
     "ability_ids": [
-      "enemy-spotted-death-guard"
+      "enemy-spotted-death-guard",
+      "nurgles-gift-maggot-lords-death-guard",
+      "pact-of-decay-death-guard"
     ],
     "game_version": {
       "edition": "11th",
@@ -2938,7 +2979,8 @@
       {
         "id": "scouts",
         "value": 6
-      }
+      },
+      "pact-of-decay-death-guard"
     ]
   },
   {
@@ -3033,7 +3075,8 @@
         "id": "feel-no-pain",
         "value": 6
       },
-      "nurgles-rot-death-guard"
+      "nurgles-rot-death-guard",
+      "pact-of-decay-death-guard"
     ]
   },
   {
@@ -3100,7 +3143,8 @@
     "ability_ids": [
       "deep-strike",
       "infiltrators",
-      "mischief-makers-death-guard"
+      "mischief-makers-death-guard",
+      "pact-of-decay-death-guard"
     ]
   },
   {
@@ -3189,7 +3233,8 @@
       {
         "id": "instrument-of-chaos-death-guard",
         "wargear": "instrument-of-chaos"
-      }
+      },
+      "pact-of-decay-death-guard"
     ]
   },
   {
@@ -3276,7 +3321,8 @@
       {
         "id": "instrument-of-chaos-death-guard",
         "wargear": "instrument-of-chaos"
-      }
+      },
+      "pact-of-decay-death-guard"
     ]
   },
   {
@@ -3355,7 +3401,8 @@
         "id": "feel-no-pain",
         "value": 6
       },
-      "virulent-blessing-death-guard"
+      "virulent-blessing-death-guard",
+      "pact-of-decay-death-guard"
     ]
   }
 ]

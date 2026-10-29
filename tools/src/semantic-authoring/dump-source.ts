@@ -127,9 +127,10 @@ function ownerQueries(faction: string, abilityId: string, ability: EnrichmentAbi
     const owner: OwnerQuery = detachmentIds.length ? { kind: "detachment", id: detachment, detachmentIds } : { kind: "detachment", id: detachment };
     return [{ faction: withPrinting([faction], detachmentIds, printing), owner, kinds: DETACHMENT_KINDS[type] }];
   }
-  // The units the enrichment record names, and the units whose own record lists the ability.
+  // The units the enrichment record names, and the units whose own record lists the ability. A unit
+  // that lists an army rule prints only a line naming it, so an army rule reads the army rules below.
   const unitIds = [...new Set([...strings(ability.unit_ids), ...(listing.get(`${faction}\u0000${abilityId}`) ?? [])])];
-  if (unitIds.length) {
+  if (unitIds.length && type !== "faction") {
     return unitIds.map((unit) => {
       const homes = units.get(unit) ?? [];
       const local = homes.filter((home) => home.faction === faction);

@@ -7,7 +7,7 @@ import { matchName } from "../src/mfm/mirror/names.js";
 import { findRefs } from "../src/mfm/mirror/refs.js";
 import { effectToBuffs } from "../src/cruncher/from-dsl.js";
 import { abilityIdsOf, printedWargearIds, withRating } from "../src/data/ability-refs.js";
-import { ratingValue } from "../src/mfm/mirror/units.js";
+import { projectUnit, ratingValue, type UnitContext } from "../src/mfm/mirror/units.js";
 import { describeAbility } from "../src/translate/effect.js";
 
 describe("mirror identity helpers", () => {
@@ -168,5 +168,27 @@ describe("rated core rules", () => {
     const refs = ["a", { id: "feel-no-pain", value: 5 }, { id: "serpent-shield-aeldari", wargear: "serpent-shield" }, 7, null];
     expect(abilityIdsOf(refs)).toEqual(["a", "feel-no-pain", "serpent-shield-aeldari"]);
     expect(printedWargearIds(refs)).toEqual(["serpent-shield"]);
+  });
+});
+
+describe("mirror unit ability lists", () => {
+  // Fabricated names and ids only.
+  const line = (key: string, name: string, textFrom?: AbilityRow["textFrom"]): AbilityRow => ({
+    key, kind: "datasheet-ability", table: "datasheet_ability", rowId: key, ref: `dump.json#${key}`, faction: "alpha",
+    publication: null, owner: { kind: "datasheet", id: "ds-warden", name: "Warden", slug: "warden" }, name, slug: key,
+    ...(textFrom ? { textFrom } : {}), legends: false, sharedWith: [],
+  });
+  const rows = [line("own", "Grim Resolve"), line("army", "War Cry", { table: "army_rule", rowId: "ar-1" }), line("det", "Hold Fast", { table: "detachment_rule", rowId: "dr-1" })];
+  const byRow: Record<string, string> = { own: "grim-resolve-alpha", army: "war-cry-alpha", det: "hold-fast-alpha" };
+  const ctx = {
+    ids: { byRowKey: new Map(Object.entries(byRow)), byId: new Map() },
+    resolve: () => undefined, hasRecord: () => true, wargearOf: () => [], roleOf: () => null, readsRating: () => false,
+    dumpDatasheets: new Set(["ds-warden"]),
+  } as unknown as UnitContext;
+
+  it("lists the army rules a datasheet names, and drops the ones it does not, but never a detachment rule", () => {
+    const projected = projectUnit(ctx, new Map([["ds-warden", rows]]), "alpha", { id: "warden", external_refs: [{ namespace: "mfm", id: "ds-warden" }], ability_ids: ["other-rule-alpha"] } as never);
+    expect(projected.after).toEqual(["grim-resolve-alpha", "war-cry-alpha"]);
+    expect(projected.dropped).toEqual([{ id: "other-rule-alpha", reason: "unresolved" }]);
   });
 });

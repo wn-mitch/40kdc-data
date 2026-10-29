@@ -4,8 +4,9 @@
  * wins over a Combat Patrol or Legends one when a unit carries both. Leader and Support follow
  * the unit's attachment role from the attachment-role ingest (leader-wins for mixed datasheets).
  *
- * A datasheet line that only names the army or detachment rule is not a unit ability: the rule
- * stays on `faction_rule_ids` / the detachment.
+ * A datasheet line that names the army rule ("Oath of Moment") is that rule, which the unit has: the
+ * unit lists it, so a test of whether a unit has the rule reads the datasheet. A line that names a
+ * detachment rule is not a unit ability: the rule stays on the detachment.
  *
  * Existing refs to kept records that the datasheet also prints but that are not a printed kind
  * (a rule section, an attached-unit note) stay; every other existing ref not printed goes.
@@ -120,8 +121,9 @@ export function projectUnit(ctx: UnitContext, byDatasheet: Map<string, AbilityRo
     const id = ctx.ids.byRowKey.get(r.key);
     if (!id) continue;
     owned.add(id);
-    // A datasheet line that points at the army or detachment rule is that rule, listed on the faction or detachment.
-    if (!UNIT_PRINTED_KINDS.has(r.kind) || isStructural(r) || r.textFrom) continue;
+    // A datasheet line that points at the army rule is that rule, printed for this unit; one that points at a
+    // detachment rule is listed on the detachment.
+    if (!UNIT_PRINTED_KINDS.has(r.kind) || isStructural(r) || (r.textFrom && r.textFrom.table !== "army_rule")) continue;
     if (!ctx.hasRecord(id)) continue;
     printed.add(id);
     if (r.kind === "wargear" && !wargearOfId.has(id)) {

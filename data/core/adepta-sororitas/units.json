@@ -71,7 +71,8 @@
       "spear-of-the-faithful"
     ],
     "ability_ids": [
-      "sworn-protectors-adepta-sororitas"
+      "sworn-protectors-adepta-sororitas",
+      "acts-of-faith-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -159,7 +160,8 @@
       {
         "id": "feel-no-pain",
         "value": 5
-      }
+      },
+      "acts-of-faith-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -245,7 +247,8 @@
       "deep-strike",
       "divine-deliverance-adepta-sororitas",
       "leader",
-      "sacred-command-adepta-sororitas"
+      "sacred-command-adepta-sororitas",
+      "acts-of-faith-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -318,7 +321,8 @@
     "ability_ids": [
       "fury-of-the-righteous-adepta-sororitas",
       "leader",
-      "rapturous-blows-adepta-sororitas"
+      "rapturous-blows-adepta-sororitas",
+      "acts-of-faith-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -447,7 +451,8 @@
       {
         "id": "simulacrum-imperialis-adepta-sororitas",
         "wargear": "simulacrum-imperialis"
-      }
+      },
+      "acts-of-faith-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -522,7 +527,8 @@
       {
         "id": "feel-no-pain",
         "value": 5
-      }
+      },
+      "acts-of-faith-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -603,7 +609,8 @@
       {
         "id": "simulacrum-imperialis-adepta-sororitas",
         "wargear": "simulacrum-imperialis"
-      }
+      },
+      "acts-of-faith-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -691,7 +698,8 @@
     "ability_ids": [
       "litany-of-deeds-adepta-sororitas",
       "stanchion-of-holy-martyrs-adepta-sororitas",
-      "support"
+      "support",
+      "acts-of-faith-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -766,7 +774,8 @@
       "leader",
       "relics-of-the-matriarchs-adepta-sororitas",
       "solemn-procession-adepta-sororitas",
-      "damaged-1-6-wounds-remaining-adepta-sororitas"
+      "damaged-1-6-wounds-remaining-adepta-sororitas",
+      "acts-of-faith-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -864,7 +873,8 @@
     ],
     "ability_ids": [
       "angelic-ascent-adepta-sororitas",
-      "deep-strike"
+      "deep-strike",
+      "acts-of-faith-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -962,7 +972,8 @@
       {
         "id": "feel-no-pain",
         "value": 5
-      }
+      },
+      "acts-of-faith-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -1032,7 +1043,8 @@
     "ability_ids": [
       "laud-hailer-adepta-sororitas",
       "stirring-rhetoric-adepta-sororitas",
-      "support"
+      "support",
+      "acts-of-faith-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -1104,7 +1116,8 @@
     "ability_ids": [
       "executioner-of-heretics-adepta-sororitas",
       "unflinching-determination-adepta-sororitas",
-      "support"
+      "support",
+      "acts-of-faith-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -1192,7 +1205,8 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "purge-and-cleanse-adepta-sororitas"
+      "purge-and-cleanse-adepta-sororitas",
+      "acts-of-faith-adepta-sororitas"
     ],
     "transport_capacity": {
       "capacity": 6,
@@ -1282,7 +1296,8 @@
     "ability_ids": [
       "medicus-ministorum-adepta-sororitas",
       "sacred-healing-adepta-sororitas",
-      "support"
+      "support",
+      "acts-of-faith-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -1361,7 +1376,8 @@
       {
         "id": "deadly-demise",
         "value": 1
-      }
+      },
+      "acts-of-faith-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -1449,7 +1465,8 @@
     ],
     "ability_ids": [
       "cherubs-adepta-sororitas",
-      "storm-of-retribution-adepta-sororitas"
+      "storm-of-retribution-adepta-sororitas",
+      "acts-of-faith-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -1548,7 +1565,8 @@
       {
         "id": "simulacrum-imperialis-adepta-sororitas",
         "wargear": "simulacrum-imperialis"
-      }
+      },
+      "acts-of-faith-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -1656,7 +1674,8 @@
       "holy-judgement-adepta-sororitas",
       "lone-operative",
       "mysterious-saviours-adepta-sororitas",
-      "deep-strike"
+      "deep-strike",
+      "acts-of-faith-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -1744,7 +1763,8 @@
       {
         "id": "deadly-demise",
         "value": "D3"
-      }
+      },
+      "acts-of-faith-adepta-sororitas"
     ],
     "transport_capacity": {
       "capacity": 12,
@@ -1832,7 +1852,8 @@
       "paragon-war-mace"
     ],
     "ability_ids": [
-      "righteous-paragons-adepta-sororitas"
+      "righteous-paragons-adepta-sororitas",
+      "acts-of-faith-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -1926,7 +1947,8 @@
       {
         "id": "damaged",
         "value": 4
-      }
+      },
+      "acts-of-faith-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -2013,7 +2035,8 @@
       {
         "id": "damaged",
         "value": 4
-      }
+      },
+      "acts-of-faith-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -2096,7 +2119,8 @@
       {
         "id": "feel-no-pain",
         "value": 5
-      }
+      },
+      "acts-of-faith-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -2172,7 +2196,8 @@
       {
         "id": "deadly-demise",
         "value": 1
-      }
+      },
+      "acts-of-faith-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -2246,7 +2271,8 @@
       "holy-mission-adepta-sororitas",
       "leader",
       "righteous-smiting-adepta-sororitas",
-      "zealot-adepta-sororitas"
+      "zealot-adepta-sororitas",
+      "acts-of-faith-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -2344,7 +2370,8 @@
       {
         "id": "sacred-banner-adepta-sororitas",
         "wargear": "sacred-banner"
-      }
+      },
+      "acts-of-faith-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -2440,7 +2467,8 @@
       {
         "id": "simulacrum-imperialis-adepta-sororitas",
         "wargear": "simulacrum-imperialis"
-      }
+      },
+      "acts-of-faith-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -2551,7 +2579,8 @@
       "leader",
       "lifewards-adepta-sororitas",
       "miraculous-intervention-adepta-sororitas",
-      "deep-strike"
+      "deep-strike",
+      "acts-of-faith-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -2644,7 +2673,8 @@
       {
         "id": "simulacrum-imperialis-adepta-sororitas",
         "wargear": "simulacrum-imperialis"
-      }
+      },
+      "acts-of-faith-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -2750,7 +2780,8 @@
         "wargear": "rod-of-office"
       },
       "the-emperors-grace-adepta-sororitas",
-      "sacred-command-adepta-sororitas"
+      "sacred-command-adepta-sororitas",
+      "acts-of-faith-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -2836,7 +2867,8 @@
     "ability_ids": [
       "auto-tapestry-of-the-emperors-judgement-adepta-sororitas",
       "leader",
-      "recount-the-deeds-of-the-saints-adepta-sororitas"
+      "recount-the-deeds-of-the-saints-adepta-sororitas",
+      "acts-of-faith-adepta-sororitas"
     ],
     "game_version": {
       "edition": "11th",
@@ -3004,7 +3036,8 @@
     ],
     "ability_ids": [
       "divine-guidance-adepta-sororitas",
-      "null-rod-sanctuary-canoness-adalya-adepta-sororitas"
+      "null-rod-sanctuary-canoness-adalya-adepta-sororitas",
+      "acts-of-faith-sanctuary-guardians-adepta-sororitas"
     ],
     "weapon_ids": [
       "condemnor-boltgun-sanctuary-canoness-adalya",
@@ -3067,7 +3100,8 @@
       }
     ],
     "ability_ids": [
-      "extremis-trigger-word-sanctuary-guardians-arco-flagellants-adepta-sororitas"
+      "extremis-trigger-word-sanctuary-guardians-arco-flagellants-adepta-sororitas",
+      "acts-of-faith-sanctuary-guardians-adepta-sororitas"
     ],
     "weapon_ids": [
       "arco-flails"
@@ -3137,7 +3171,8 @@
       {
         "id": "simulacrum-imperialis-wargear-adepta-sororitas",
         "wargear": "simulacrum-imperialis"
-      }
+      },
+      "acts-of-faith-sanctuary-guardians-adepta-sororitas"
     ],
     "weapon_ids": [
       "boltgun",
@@ -3205,7 +3240,8 @@
       }
     ],
     "ability_ids": [
-      "sworn-protectors-sanctuary-guardians-celestian-sacresants-adepta-sororitas"
+      "sworn-protectors-sanctuary-guardians-celestian-sacresants-adepta-sororitas",
+      "acts-of-faith-sanctuary-guardians-adepta-sororitas"
     ],
     "weapon_ids": [
       "bolt-pistol-sanctuary-guardians-celestian-sacresants",
