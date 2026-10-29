@@ -49,11 +49,11 @@ const ENCOUNTER_EFFECT_TYPES: ReadonlySet<string> = new Set(["mortal-wounds", "a
  */
 export const NON_DAMAGE_ABILITIES: ReadonlySet<string> = new Set([
   "deadly-demise", "deep-strike", "fights-first", "hover", "infiltrators", "leader", "lone-operative", "scouts",
-  "support", "super-heavy-walker", "mobile", "reanimation-protocols", // mfm:mirror keep — core and named ability slugs, not record ids
+  "support", "super-heavy-walker", "mobile", "reanimation-protocols-necrons", // mfm:mirror keep — core ability slugs and the Reanimation Protocols record id
 ]);
 
 /** Of those, the ones that act on a death or bring models back. */
-const ENCOUNTER_ABILITIES: ReadonlySet<string> = new Set(["deadly-demise", "reanimation-protocols"]);
+const ENCOUNTER_ABILITIES: ReadonlySet<string> = new Set(["deadly-demise", "reanimation-protocols-necrons"]);
 
 const STAT_MODIFIER_OUTSIDE_DAMAGE_PATH = /^stat-modifier on ".*" is outside the damage path$/u;
 const ROLL_MODIFIER_OUTSIDE_DAMAGE_PATH = /^roll-modifier on ".*" is outside the damage path$/u;

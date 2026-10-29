@@ -106,11 +106,11 @@ const NON_DAMAGE_ABILITIES: &[&str] = &[
     "support",
     "super-heavy-walker",
     "mobile",
-    "reanimation-protocols",
+    "reanimation-protocols-necrons",
 ];
 
 /// Of those, the ones that act on a death or bring models back.
-const ENCOUNTER_ABILITIES: &[&str] = &["deadly-demise", "reanimation-protocols"];
+const ENCOUNTER_ABILITIES: &[&str] = &["deadly-demise", "reanimation-protocols-necrons"];
 
 const OUTSIDE_DAMAGE_PATH: &str = "\" is outside the damage path";
 

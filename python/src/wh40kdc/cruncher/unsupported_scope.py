@@ -55,12 +55,12 @@ NON_DAMAGE_ABILITIES = frozenset(
     [
         "deadly-demise", "deep-strike", "fights-first", "hover", "infiltrators", "leader",
         "lone-operative", "scouts", "support", "super-heavy-walker", "mobile",
-        "reanimation-protocols",
+        "reanimation-protocols-necrons",
     ]
 )
 
 #: Of those, the ones that act on a death or bring models back.
-ENCOUNTER_ABILITIES = frozenset(["deadly-demise", "reanimation-protocols"])
+ENCOUNTER_ABILITIES = frozenset(["deadly-demise", "reanimation-protocols-necrons"])
 
 _STAT_MODIFIER_OUTSIDE = re.compile(r'^stat-modifier on ".*" is outside the damage path\Z')
 _ROLL_MODIFIER_OUTSIDE = re.compile(r'^roll-modifier on ".*" is outside the damage path\Z')

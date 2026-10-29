@@ -179,9 +179,9 @@ describe("Semantic authoring batch-3 families: targeting, eligibility and unit-s
   });
 
   it("compiles a faction rule granted whatever the Army Faction (rule-state@4) and the Dark Pact test's auto-pass (roll-auto-result@5)", () => {
-    const grant = { subject: "this-unit", direction: "granted", rule_kind: "faction-rule", rule: "dark-pacts", any_army_faction: true };
+    const grant = { subject: "this-unit", direction: "granted", rule_kind: "faction-rule", rule: "dark-pacts", any_army_faction: true }; // mfm:mirror keep — a fabricated rule id
     expect(compiled([leaf("EFFECT", "rule-state", grant, 4)]).mechanics.effect).toEqual({
-      type: "rule-state", target: "this-unit", modifier: { direction: "granted", rule_kind: "faction-rule", rule: "dark-pacts", any_army_faction: true },
+      type: "rule-state", target: "this-unit", modifier: { direction: "granted", rule_kind: "faction-rule", rule: "dark-pacts", any_army_faction: true }, // mfm:mirror keep — a fabricated rule id
     });
     expect(() => normalizeFingerprintParameters("rule-state", { ...grant, direction: "suppressed" }, 4)).toThrow(/granted faction rule/u);
     expect(compiled([leaf("EFFECT", "roll-auto-result", { roll: "dark-pact", outcome: "auto-pass" }, 5)]).mechanics.effect)

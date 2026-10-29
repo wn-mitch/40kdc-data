@@ -228,7 +228,7 @@ func TestViewsShareRecordsAndCache(t *testing.T) {
 }
 
 func TestUnknownGameModeErrors(t *testing.T) {
-	for _, mode := range []string{"", "Matched-Play", "kill-team"} {
+	for _, mode := range []string{"", "Matched-Play", "kill-team"} { // mfm:mirror keep — game mode names, not ability ids
 		if v, err := EmbeddedDataset().ForGameMode(mode); err == nil {
 			t.Errorf("ForGameMode(%q) = %v, want error", mode, v.GameMode())
 		}

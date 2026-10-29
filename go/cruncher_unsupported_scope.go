@@ -49,10 +49,10 @@ var encounterEffectTypes = map[string]bool{
 var nonDamageAbilities = map[string]bool{
 	"deadly-demise": true, "deep-strike": true, "fights-first": true, "hover": true, "infiltrators": true,
 	"leader": true, "lone-operative": true, "scouts": true, "support": true, "super-heavy-walker": true,
-	"mobile": true, "reanimation-protocols": true,
+	"mobile": true, "reanimation-protocols-necrons": true,
 }
 
-var encounterAbilities = map[string]bool{"deadly-demise": true, "reanimation-protocols": true}
+var encounterAbilities = map[string]bool{"deadly-demise": true, "reanimation-protocols-necrons": true}
 
 var (
 	statModifierOutsideDamagePath = regexp.MustCompile(`^stat-modifier on ".*" is outside the damage path$`)
