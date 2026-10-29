@@ -2603,6 +2603,15 @@ function conditionSide(subject: unknown, perspective: TranslationPerspective): "
   return isBuffedUnit(subject) ? perspective === "attacker" ? "attacker" : "target" : undefined;
 }
 
+/**
+ * Whether a filter only asks that the unit have the ability being resolved ("a unit with this
+ * ability"): the ability is resolved for its holder, so the holder has it.
+ */
+function holdsOwnAbility(filter: unknown, source: BuffSource | undefined): boolean {
+  if (source?.kind !== "ability" || !isObject(filter) || Object.keys(filter).length !== 1) return false;
+  return Array.isArray(filter.has_ability) && filter.has_ability.length === 1 && filter.has_ability[0] === source.abilityId;
+}
+
 /** The single required keyword in a canonical filter, else undefined. */
 function singleKeyword(params: Record<string, unknown> | undefined): string | undefined {
   const all = Array.isArray(params?.all_of) ? params!.all_of : [];
@@ -2718,6 +2727,7 @@ function evaluateConditionFromContext(
       const side = conditionSide(params.subject, perspective);
       // Ownership is relative to the side whose ability it is.
       const owner = side === (perspective === "attacker" ? "attacker" : "target") ? "friendly" : "enemy";
+      if (owner === "friendly" && holdsOwnAbility(params.filter, source)) return true;
       return side ? matchesUnitFilter(params.filter, ctx, side, owner) : "unknown";
     }
     case "designated": {

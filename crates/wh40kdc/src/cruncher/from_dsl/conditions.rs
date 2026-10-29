@@ -87,6 +87,21 @@ pub(super) fn evaluate_condition_for_source(
         .copied()
 }
 
+/// Whether a filter only asks that the unit have the ability being resolved ("a unit with this
+/// ability"): the ability is resolved for its holder, so the holder has it.
+fn holds_own_ability(filter: Option<&Value>, source: Option<&BuffSource>) -> bool {
+    let (Some(BuffSource::Ability { ability_id, .. }), Some(Value::Object(filter))) =
+        (source, filter)
+    else {
+        return false;
+    };
+    filter.len() == 1
+        && filter
+            .get("has_ability")
+            .and_then(Value::as_array)
+            .is_some_and(|ids| ids.len() == 1 && ids[0].as_str() == Some(ability_id.as_str()))
+}
+
 fn evaluate_condition_from_context(
     condition: &Obj,
     ctx: &EngineContext,
@@ -209,6 +224,9 @@ fn evaluate_condition_from_context(
             } else {
                 "enemy"
             };
+            if owner == "friendly" && holds_own_ability(p.get("filter"), source) {
+                return Some(true);
+            }
             matches_unit_filter(p.get("filter")?, ctx, side, owner)
         }
         Some("designated") => {

@@ -2921,6 +2921,17 @@ func evaluateCondition(condition, ctx map[string]any, rest ...any) any {
 	return nil
 }
 
+// holdsOwnAbility reports whether a filter only asks that the unit have the ability being
+// resolved ("a unit with this ability"): the ability is resolved for its holder, so the holder
+// has it.
+func holdsOwnAbility(filter, source map[string]any) bool {
+	if source == nil || source["kind"] != "ability" || len(filter) != 1 {
+		return false
+	}
+	ids, ok := asList(filter["has_ability"])
+	return ok && len(ids) == 1 && ids[0] == source["abilityId"]
+}
+
 func evaluateConditionFromContext(condition, ctx map[string]any, rest ...any) any {
 	perspective := "attacker"
 	var source map[string]any
@@ -3013,6 +3024,9 @@ func evaluateConditionFromContext(condition, ctx map[string]any, rest ...any) an
 		owner := "enemy"
 		if side == perspectiveSide(perspective) {
 			owner = "friendly"
+		}
+		if owner == "friendly" && holdsOwnAbility(filter, source) {
+			return true
 		}
 		return matchesUnitFilter(filter, ctx, side, owner)
 	case "army-faction":

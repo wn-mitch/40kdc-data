@@ -304,7 +304,8 @@ pub(crate) fn bind_event_subject(
     rebind_event_subject(effect, if verdict { SELECTED_UNIT } else { OTHER_UNIT })
 }
 
-/// The effect with each `event-subject` target rebound to `to`, or `None` when it holds none.
+/// The effect with each `event-subject` an effect target or a condition subject names rebound to
+/// `to`, or `None` when it holds none.
 fn rebind_event_subject(node: &Value, to: &str) -> Option<Value> {
     match node {
         Value::Array(children) => {
@@ -329,7 +330,9 @@ fn rebind_event_subject(node: &Value, to: &str) -> Option<Value> {
             let out: Obj = o
                 .iter()
                 .map(|(key, value)| {
-                    let bound = if key == "target" && value.as_str() == Some(EVENT_SUBJECT) {
+                    let bound = if (key == "target" || key == "subject")
+                        && value.as_str() == Some(EVENT_SUBJECT)
+                    {
                         Some(Value::from(to))
                     } else {
                         rebind_event_subject(value, to)

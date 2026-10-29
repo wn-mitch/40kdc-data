@@ -3644,6 +3644,22 @@ def _undecided_needs(
     return [need for need in needs if need["condition"].get("type") != "timing-is"]
 
 
+def _holds_own_ability(filter_: Any, source: BuffSource | None) -> bool:
+    """Whether a filter only asks that the unit have the ability being resolved.
+
+    "A unit with this ability": the ability is resolved for its holder, so the holder has it.
+    """
+    if source is None or source.get("kind") != "ability" or not isinstance(filter_, dict):
+        return False
+    ids = filter_.get("has_ability")
+    return (
+        len(filter_) == 1
+        and isinstance(ids, list)
+        and len(ids) == 1
+        and ids[0] == source.get("abilityId")
+    )
+
+
 def _evaluate_condition_from_context(
     condition: dict[str, Any],
     ctx: EngineContext,
@@ -3740,6 +3756,8 @@ def _evaluate_condition_from_context(
             return "unknown"
         # Ownership is relative to the side whose ability it is.
         own_side = "attacker" if perspective == "attacker" else "target"
+        if side == own_side and _holds_own_ability(p.get("filter"), source):
+            return True
         return _matches_unit_filter(
             p.get("filter"), ctx, side, "friendly" if side == own_side else "enemy"
         )

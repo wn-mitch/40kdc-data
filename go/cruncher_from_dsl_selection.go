@@ -575,8 +575,8 @@ func bindEventSubject(trigger, effect any, context map[string]any, perspective s
 	}
 }
 
-// rebindEventSubject rewrites every `event-subject` target to `to`, returning node
-// itself and false when it holds none to rebind.
+// rebindEventSubject rewrites every `event-subject` an effect target or a condition subject
+// names to `to`, returning node itself and false when it holds none to rebind.
 func rebindEventSubject(node any, to string) (any, bool) {
 	switch value := node.(type) {
 	case []any:
@@ -598,7 +598,7 @@ func rebindEventSubject(node any, to string) (any, bool) {
 		out := make(map[string]any, len(value))
 		changed := false
 		for key, child := range value {
-			if key == "target" && child == eventSubject {
+			if (key == "target" || key == "subject") && child == eventSubject {
 				out[key] = to
 				changed = true
 				continue

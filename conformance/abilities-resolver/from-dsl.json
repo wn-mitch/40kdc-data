@@ -2371,15 +2371,9 @@
       "perspective": "attacker",
       "expected": {
         "applied": [],
-        "unsupportedReasons": [
-          "conditional: cannot evaluate condition \"and\" against current context"
-        ],
-        "unsupportedScopes": [
-          "out-of-scope"
-        ],
-        "needKeys": [
-          "attacker:{\"parameters\":{\"filter\":{\"has_ability\":[\"stealth\"]},\"subject\":\"this-unit\"},\"type\":\"matches\"}"
-        ],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -2396,16 +2390,14 @@
       },
       "perspective": "target",
       "expected": {
-        "applied": [],
-        "unsupportedReasons": [
-          "conditional: cannot evaluate condition \"and\" against current context"
+        "applied": [
+          {
+            "type": "cover"
+          }
         ],
-        "unsupportedScopes": [
-          "unresolved"
-        ],
-        "needKeys": [
-          "target:{\"parameters\":{\"filter\":{\"has_ability\":[\"stealth\"]},\"subject\":\"this-unit\"},\"type\":\"matches\"}"
-        ],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
         "activatable": []
       }
     },
@@ -15521,6 +15513,151 @@
           "target \"event-subject\" is not resolved by the buff engine"
         ],
         "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/trigger-subject/condition-subject-holds-own-ability",
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "selected",
+          "filter": {
+            "to": "shoot"
+          }
+        },
+        "effect": {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": "event-subject",
+              "filter": {
+                "has_ability": [
+                  "trigger-subject-example"
+                ]
+              }
+            }
+          },
+          "effect": {
+            "type": "weapon-ability-grant",
+            "target": "event-subject",
+            "modifier": {
+              "keywords": [
+                {
+                  "keyword_id": "sustained-hits",
+                  "parameters": {
+                    "value": 1
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "abilityId": "trigger-subject-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "trigger-subject-example",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "needKeys": [],
+        "activatable": [
+          {
+            "id": "trigger-subject-example@selected:shoot",
+            "label": "Sustained Hits 1",
+            "group": null,
+            "requires": [
+              {
+                "type": "ability-part",
+                "trigger": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "shoot"
+                  }
+                }
+              }
+            ],
+            "capRaise": null,
+            "buffs": [
+              {
+                "type": "extra-keyword",
+                "keywordRef": {
+                  "keyword_id": "sustained-hits",
+                  "parameters": {
+                    "value": 1
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/trigger-subject/condition-subject-other-ability-unknown",
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "selected",
+          "filter": {
+            "to": "shoot"
+          }
+        },
+        "effect": {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": "event-subject",
+              "filter": {
+                "has_ability": [
+                  "another-ability"
+                ]
+              }
+            }
+          },
+          "effect": {
+            "type": "weapon-ability-grant",
+            "target": "event-subject",
+            "modifier": {
+              "keywords": [
+                {
+                  "keyword_id": "sustained-hits",
+                  "parameters": {
+                    "value": 1
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "abilityId": "trigger-subject-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "trigger-subject-example",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"matches\" against current context"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"filter\":{\"has_ability\":[\"another-ability\"]},\"subject\":\"this-unit\"},\"type\":\"matches\"}"
+        ],
         "activatable": []
       }
     },

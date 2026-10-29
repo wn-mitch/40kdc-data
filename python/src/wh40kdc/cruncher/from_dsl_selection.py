@@ -441,7 +441,10 @@ def bind_event_subject(
 
 
 def _rebind_event_subject(node: Any, to: str) -> Any:
-    """Returns ``node`` itself when it holds no ``event-subject`` target to rebind."""
+    """Rebinds every ``event-subject`` an effect target or a condition subject names.
+
+    Returns ``node`` itself when it holds none.
+    """
     if isinstance(node, list):
         children = [_rebind_event_subject(child, to) for child in node]
         changed = any(child is not orig for child, orig in zip(children, node, strict=True))
@@ -455,7 +458,7 @@ def _rebind_event_subject(node: Any, to: str) -> Any:
     for key, value in node.items():
         out[key] = (
             to
-            if key == "target" and isinstance(value, str) and value == _EVENT_SUBJECT
+            if key in ("target", "subject") and isinstance(value, str) and value == _EVENT_SUBJECT
             else _rebind_event_subject(value, to)
         )
         if out[key] is not value:

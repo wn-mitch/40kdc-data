@@ -86,9 +86,13 @@ export function canonicalRecipientCases() {
 export function canonicalTriggerSubjectCases() {
   const source = { kind: "ability", abilityId: "trigger-subject-example", abilityKind: "unit" } as const;
   const grant = { type: "weapon-ability-grant", target: "event-subject", modifier: { keywords: [{ keyword_id: "sustained-hits", parameters: { value: 1 } }] } };
+  const holderGated = (abilityId: string) => ({ type: "conditional", condition: { type: "matches", parameters: { subject: "event-subject", filter: { has_ability: [abilityId] } } }, effect: grant });
   const cases: DslInput[] = [
     { caseId: `${TRIGGER_SUBJECT_CASE_PREFIX}owned-moment-defaults-to-this-unit`, effect: { type: "ability-part", trigger: { event: "selected", filter: { to: "shoot" } }, effect: grant } },
     { caseId: `${TRIGGER_SUBJECT_CASE_PREFIX}clock-moment-stays-unbound`, effect: { type: "ability-part", trigger: { event: "phase-started", condition: { type: "phase-is", parameters: { phase: "shooting" } } }, effect: grant } },
+    // "Each time a unit with this ability is selected to shoot": the holder has the ability it resolves.
+    { caseId: `${TRIGGER_SUBJECT_CASE_PREFIX}condition-subject-holds-own-ability`, effect: { type: "ability-part", trigger: { event: "selected", filter: { to: "shoot" } }, effect: holderGated(source.abilityId) } },
+    { caseId: `${TRIGGER_SUBJECT_CASE_PREFIX}condition-subject-other-ability-unknown`, effect: { type: "ability-part", trigger: { event: "selected", filter: { to: "shoot" } }, effect: holderGated("another-ability") } },
   ].map((row) => ({ ...row, abilityId: source.abilityId, source, context: { phase: "shooting" }, perspective: "attacker" as const }));
   return cases.map((row) => {
     const result = effectToBuffs(row.effect, row.source, row.context, row.perspective);

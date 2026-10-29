@@ -231,7 +231,10 @@ export function assumeEventSubjectMatches(trigger: unknown, effect: unknown): { 
   return subject.owner === "friendly" ? { effect: rebindEventSubject(effect, SELECTED_UNIT), perspective: "attacker" } : unbound;
 }
 
-/** Returns `node` itself when it holds no `event-subject` target to rebind. */
+/**
+ * Rebinds every `event-subject` an effect target or a condition subject names. Returns `node`
+ * itself when it holds none.
+ */
 function rebindEventSubject(node: unknown, to: string): unknown {
   if (Array.isArray(node)) {
     const children = node.map((child) => rebindEventSubject(child, to));
@@ -242,7 +245,7 @@ function rebindEventSubject(node: unknown, to: string): unknown {
   const out: Record<string, unknown> = {};
   for (const key in node) {
     const value = node[key];
-    out[key] = key === "target" && value === EVENT_SUBJECT ? to : rebindEventSubject(value, to);
+    out[key] = (key === "target" || key === "subject") && value === EVENT_SUBJECT ? to : rebindEventSubject(value, to);
     if (out[key] !== value) changed = true;
   }
   return changed ? out : node;
