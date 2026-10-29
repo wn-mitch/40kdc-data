@@ -5,7 +5,7 @@ type Node = Record<string, unknown>;
 const MODELS = "destroyed-models-by-triggering-attacks";
 
 /** The select-unit key a destroyed-model-selection folds into: who made the triggering attacks. */
-export const AMONG_DESTROYED = "among_destroyed_by";
+const AMONG_DESTROYED = "among_destroyed_by";
 
 /**
  * "Select one of those destroyed models; that destroyed model's unit must take a Battle-shock

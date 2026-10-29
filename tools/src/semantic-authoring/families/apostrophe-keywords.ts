@@ -24,7 +24,7 @@ function withLeadingApostrophe(schema: unknown): unknown {
   return schema;
 }
 
-export function leadingApostropheExtension(family: string, version: number): FamilyExtension {
+function leadingApostropheExtension(family: string, version: number): FamilyExtension {
   return {
     family,
     version,

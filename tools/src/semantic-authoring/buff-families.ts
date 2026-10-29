@@ -37,7 +37,7 @@ export const CORE_ABILITY_GRANT_IDS = [
 /** Core abilities whose datasheet rating carries a number (Scouts 6", Firing Deck N, Deadly Demise D3/D6). */
 const VALUED_ABILITY_GRANTS = ["scouts", "deep-strike", "firing-deck", "deadly-demise"] as const;
 /** `{rating: true}`: the value is the unit's own datasheet rating for this ability, not a fixed number. Shared with ability-modifier-families.ts. */
-export const abilityRatingSchema = { type: "object", required: ["rating"], properties: { rating: { const: true } }, additionalProperties: false } as const;
+const abilityRatingSchema = { type: "object", required: ["rating"], properties: { rating: { const: true } }, additionalProperties: false } as const;
 
 export function entityId(value: unknown, label: string): string {
   if (typeof value === "string" && ENTITY_ID.test(value)) return value;

@@ -19,7 +19,7 @@ const LEAF_ROLE_SQL_LIST = LEAF_ROLES.map((role) => `'${role}'`).join(", ");
  */
 
 /** An API-shaped failure. The local bridge returns `status` verbatim. */
-export class SourceAtomError extends Error {
+class SourceAtomError extends Error {
   readonly status: number;
 
   constructor(status: 404 | 409 | 422, message: string) {

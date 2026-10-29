@@ -11,7 +11,7 @@ type Node = Record<string, unknown>;
 type Leaf = { family_id: string; parameters: Record<string, unknown> };
 
 /** DSL trigger events that name one attack: its target chosen, or its damage allocated (the moment's `event`). */
-export const ATTACK_MOMENT_EVENTS: ReadonlySet<string> = new Set(["targets-selected", "damage-allocated"]);
+const ATTACK_MOMENT_EVENTS: ReadonlySet<string> = new Set(["targets-selected", "damage-allocated"]);
 
 /**
  * The period a trigger window names: "phase" for a phase-window leaf that names phases, "turn" for

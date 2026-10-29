@@ -12,7 +12,7 @@ import { CompileError, type CompileLeaf } from "./compile-fragments.js";
  * effect pays for them.
  */
 
-export type ModeCost = { label: string; amount: number };
+type ModeCost = { label: string; amount: number };
 
 /** Leaves that may sit between two targets' wording without ending the first target's group. */
 const LEAD_FAMILIES = new Set(["optional-use", "resource-spend", "event"]);

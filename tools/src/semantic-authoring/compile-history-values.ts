@@ -7,7 +7,7 @@ import { CompileError, type CompileLeaf } from "./compile-fragments.js";
  */
 
 /** Moments whose attacks "those attacks" names: attacks resolved, an enemy having shot, or a unit having shot. */
-export const ATTACK_RESULT_MOMENTS: ReadonlySet<string> = new Set(["attacks-resolved", "enemy-has-shot", "after-shooting"]);
+const ATTACK_RESULT_MOMENTS: ReadonlySet<string> = new Set(["attacks-resolved", "enemy-has-shot", "after-shooting"]);
 const MORTAL_ACTIVITIES = ["suffered-mortal-wounds-from-this-ability", "lost-models-to-own-mortal-wounds"] as const;
 
 function activitiesOf(leaf: CompileLeaf): string[] {

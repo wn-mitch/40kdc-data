@@ -11,19 +11,19 @@ import { booleanValue, enumValue, exactKeys } from "./family-validation.js";
  */
 
 /** Rules a unit can be recorded as having used: event@17's `used` activities. */
-export const USED_ACTIVITY_KINDS = ["ability", "manoeuvre", "stratagem", "action", "dark-pact", "act-of-faith", "ritual", "order"] as const;
+const USED_ACTIVITY_KINDS = ["ability", "manoeuvre", "stratagem", "action", "dark-pact", "act-of-faith", "ritual", "order"] as const;
 /** Who used it. */
-export const ABILITY_USED_SUBJECTS = ["this-unit", "this-model", ANTECEDENT, "event-subject", "recipient", "selected-unit"] as const;
+const ABILITY_USED_SUBJECTS = ["this-unit", "this-model", ANTECEDENT, "event-subject", "recipient", "selected-unit"] as const;
 /** now: the use is being resolved at this moment ("while it is performing"); phase and turn: earlier in the window. */
-export const ABILITY_USED_WINDOWS = ["now", "phase", "turn"] as const;
+const ABILITY_USED_WINDOWS = ["now", "phase", "turn"] as const;
 
 /**
  * "performs an Agile Manoeuvre that involves rolling a D6": the manoeuvres whose own effect rolls
  * that die, derived from the faction's resource-action menus (compile-manoeuvre-own-roll.ts).
  */
-export const MANOEUVRE_DIE_KINDS = ["D6"] as const;
+const MANOEUVRE_DIE_KINDS = ["D6"] as const;
 
-export const MANOEUVRE_OWN_ROLL_FAMILY: SemanticFamilyDefinition = {
+const MANOEUVRE_OWN_ROLL_FAMILY: SemanticFamilyDefinition = {
   id: "manoeuvre-own-roll",
   version: 1,
   role: "CONDITION",

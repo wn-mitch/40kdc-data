@@ -11,20 +11,20 @@ import { EACH_TARGET } from "./shared.js";
 const NEW_ACTIVITIES = ["declared-charge-this-phase", "fell-back-this-turn"] as const;
 
 /** Activities a unit's history records, lowered to `happened` in compile-conditions.ts. */
-export const HISTORY_ACTIVITIES = [
+const HISTORY_ACTIVITIES = [
   "destroyed-enemy-unit-this-phase", "destroyed-enemy-unit-this-turn",
   "set-up-by-deep-strike-this-phase", "set-up-by-deep-strike-this-turn",
   "lost-models-to-triggering-attacks",
 ] as const;
 
 /** History that names the Transport, lowered to `happened` disembarked in compile-conditions.ts. */
-export const TRANSPORT_ACTIVITIES = ["disembarked-from-this-transport-this-turn"] as const;
+const TRANSPORT_ACTIVITIES = ["disembarked-from-this-transport-this-turn"] as const;
 
 /**
  * "That arrived from Reserves this turn": set up on the battlefield from Strategic Reserves, which
  * the rules call Reserves. Lowered to `happened` set-up from strategic-reserves in compile-conditions.ts.
  */
-export const RESERVES_ARRIVAL_ACTIVITIES = ["set-up-from-reserves-this-phase", "set-up-from-reserves-this-turn"] as const;
+const RESERVES_ARRIVAL_ACTIVITIES = ["set-up-from-reserves-this-phase", "set-up-from-reserves-this-turn"] as const;
 
 const TARGETING_ACTIVITY_LIST = activitiesExtension(
   13,
@@ -62,7 +62,7 @@ const EACH_TARGET_ACTIVITY: FamilyExtension = {
  */
 export const DESTRUCTION_ACTIVITIES = ["destroyed-units-by-triggering-attacks", "destroyed-models-by-triggering-attacks"] as const;
 
-export const DESTROYERS = ["this-unit", "event-subject", "stratagem-target"] as const;
+const DESTROYERS = ["this-unit", "event-subject", "stratagem-target"] as const;
 
 const NAMED = ["before", "after", "none"] as const;
 
@@ -91,8 +91,6 @@ const DESTROYER_THIS_MODEL: FamilyExtension = {
   },
   normalize: (input, previous) => input.destroyer === "this-model" ? standIn(input, "destroyer", "this-unit", previous) : previous(input),
 };
-
-const UNITS = "destroyed-units-by-triggering-attacks";
 
 const MODELS = "destroyed-models-by-triggering-attacks";
 
@@ -136,13 +134,13 @@ export const DESTROYED_STRATAGEM_TARGET = "destroyed-stratagem-target";
  *    the older roles and is valid only here) and a `history-window` leaf after it names the
  *    window. Lowered in compile-triggering-destruction.ts.
  */
-export const HISTORY_VALUE_ACTIVITIES = [
+const HISTORY_VALUE_ACTIVITIES = [
   "lost-wounds-to-triggering-attacks", "was-charged-this-turn", "suffered-mortal-wounds-from-this-ability", "lost-models-to-own-mortal-wounds",
 ] as const;
 
 export const WINDOWED_DESTRUCTION = "destroyed-units-in-window";
 
-export const WINDOWED_DESTROYERS = ["this-unit", "this-model", "event-subject", "stratagem-target", "defender"] as const;
+const WINDOWED_DESTROYERS = ["this-unit", "this-model", "event-subject", "stratagem-target", "defender"] as const;
 
 const WINDOWED_NAMED = ["before", "after"] as const;
 

@@ -14,7 +14,7 @@ import { CorePublicationError, projectCore, type CoreProjection, type CoreRow } 
 /**
  * What publishing compiled records would write: each record grafted onto its authored entry in
  * the faction's abilities.json, and its stratagem target onto core stratagems.json. Publication
- * (`publish.ts`) and the compile gates (`pipeline-8b-gates.ts`) both project through here, so a
+ * (`publish.ts`) and the compile gates (`gates.ts`) both project through here, so a
  * gate judges the bytes publication would validate.
  */
 

@@ -10,12 +10,12 @@ import { boundedInteger, enumValue, exactKeys } from "./family-validation.js";
  * instead; a disagreement blocks approval rather than writing a second source of truth.
  */
 
-export const USAGE_FREQUENCIES = ["once-per-battle", "once-per-battle-round", "once-per-turn", "once-per-phase", "once-per-opponent-turn"] as const;
+const USAGE_FREQUENCIES = ["once-per-battle", "once-per-battle-round", "once-per-turn", "once-per-phase", "once-per-opponent-turn"] as const;
 /** Version 2 (batch 7a) adds once per Command phase and the two "first this battle/phase" frequencies. */
-export const USAGE_FREQUENCIES_V2 = [...USAGE_FREQUENCIES, "once-per-command-phase", "first-this-battle", "first-time-this-phase"] as const;
-export const USAGE_PER = ["any", "army", "unit", "model"] as const;
-export const WINDOW_PHASES = ["command", "movement", "shooting", "charge", "fight"] as const;
-export const KEYWORD_MATCH = ["all", "any"] as const;
+const USAGE_FREQUENCIES_V2 = [...USAGE_FREQUENCIES, "once-per-command-phase", "first-this-battle", "first-time-this-phase"] as const;
+const USAGE_PER = ["any", "army", "unit", "model"] as const;
+const WINDOW_PHASES = ["command", "movement", "shooting", "charge", "fight"] as const;
+const KEYWORD_MATCH = ["all", "any"] as const;
 
 /** A unit keyword as the DSL writes it: uppercase words, without markdown emphasis. */
 const UNIT_KEYWORD = /^[A-Z][A-Z0-9' -]*[A-Z0-9]$/u;
@@ -24,13 +24,13 @@ const phaseSet = { type: "array", items: { enum: WINDOW_PHASES }, minItems: 0, u
 
 /** Optional-use version 1 users. "The bearer" is the model, so version 2 spells it this-model. */
 const OPTIONAL_USERS_WITH_BEARER = ["you", "bearer", "this-unit", "this-model"] as const;
-export const OPTIONAL_USERS = ["you", "this-unit", "this-model"] as const;
-export const TARGET_COUNTS = ["one", "one-or-more", "up-to"] as const;
-export const TARGET_SIDES = ["your-army", "enemy"] as const;
-export const TARGET_SELECTS = ["unit", "model"] as const;
-export const TARGET_BINDINGS = ["triggering-unit", "attacked-unit"] as const;
+const OPTIONAL_USERS = ["you", "this-unit", "this-model"] as const;
+const TARGET_COUNTS = ["one", "one-or-more", "up-to"] as const;
+const TARGET_SIDES = ["your-army", "enemy"] as const;
+const TARGET_SELECTS = ["unit", "model"] as const;
+const TARGET_BINDINGS = ["triggering-unit", "attacked-unit"] as const;
 /** Who holds the options chosen from a menu. */
-export const CHOSEN_OPTION_HOLDERS = ["this-model", "this-unit"] as const;
+const CHOSEN_OPTION_HOLDERS = ["this-model", "this-unit"] as const;
 
 const keywordList = { type: "array", items: { type: "string", pattern: UNIT_KEYWORD.source }, minItems: 0, uniqueItems: true } as const;
 

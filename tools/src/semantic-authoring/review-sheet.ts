@@ -14,7 +14,7 @@ import { UNSIGNED_REVIEWER, type ChatDecision } from "./review-apply.js";
  * sign for the members that pass every gate. Read-only; the decisions are a draft for Will.
  */
 
-export type ReviewSheetRow = ReviewMember & {
+type ReviewSheetRow = ReviewMember & {
   gates: AbilityGateResult["gates"];
   compile_errors: string[];
   failures: GateFailure[];
@@ -80,7 +80,7 @@ export async function factionReviewSheet(db: DatabaseSync, factionId: string): P
 }
 
 /** The sheet as Markdown for reading in an editor: changed rows grouped by shape, renders side by side. */
-export function reviewSheetMarkdown(sheet: ReviewSheet): string {
+function reviewSheetMarkdown(sheet: ReviewSheet): string {
   const lines = [`# ${sheet.faction_id} publication review`, "", `| tiled | all gates | changed | unchanged | approved | failing |`, `|---:|---:|---:|---:|---:|---:|`,
     `| ${sheet.totals.tiled} | ${sheet.totals.all_gates} | ${sheet.totals.changed} | ${sheet.totals.unchanged} | ${sheet.totals.approved} | ${sheet.totals.failing} |`, ""];
   let signature: string | null = null;

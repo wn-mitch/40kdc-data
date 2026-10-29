@@ -9,40 +9,40 @@ import { booleanValue, boundedInteger, enumSet, enumValue, exactKeys } from "./f
  * leaf and "that targets a CHARACTER unit" is another.
  */
 
-export const ATTACK_DIRECTIONS = ["makes", "targeted"] as const;
+const ATTACK_DIRECTIONS = ["makes", "targeted"] as const;
 /** Attack version 1 units. "The bearer" is the model, so version 2 spells it this-model. */
 const ATTACK_UNITS_WITH_BEARER = ["this-model", "this-unit", "bearer", "bearers-unit", "that-unit"] as const;
-export const ATTACK_UNITS = ["this-model", "this-unit", "bearers-unit", "that-unit"] as const;
-export const ATTACK_TYPES = ["any", "melee", "ranged"] as const;
+const ATTACK_UNITS = ["this-model", "this-unit", "bearers-unit", "that-unit"] as const;
+const ATTACK_TYPES = ["any", "melee", "ranged"] as const;
 /** Version 3: a Psychic Attack, and the unit an aura applies to as the one attacking. */
-export const ATTACK_TYPES_V3 = [...ATTACK_TYPES, "psychic"] as const;
-export const ATTACK_UNITS_V3 = [...ATTACK_UNITS, "recipient"] as const;
+const ATTACK_TYPES_V3 = [...ATTACK_TYPES, "psychic"] as const;
+const ATTACK_UNITS_V3 = [...ATTACK_UNITS, "recipient"] as const;
 /** Version 4: an attack by any friendly unit ("each time a friendly unit makes an attack that targets that enemy unit"). */
-export const ATTACK_UNITS_V4 = [...ATTACK_UNITS_V3, "friendly-unit"] as const;
-export const SELECT_SCOPES = ["enemy", "friendly"] as const;
+const ATTACK_UNITS_V4 = [...ATTACK_UNITS_V3, "friendly-unit"] as const;
+const SELECT_SCOPES = ["enemy", "friendly"] as const;
 const SELECT_DISTANCES = ["any", "within"] as const;
 const MAX_INCHES = 48;
 
 /** Who an eligibility-permission, targeting-restriction, counts-as or rule-state leaf changes. */
-export const SUBJECTS = ["this-unit", "this-model"] as const;
-export const PERMISSION_ACTIVITIES = [
+const SUBJECTS = ["this-unit", "this-model"] as const;
+const PERMISSION_ACTIVITIES = [
   "shoot", "declare-charge", "fight", "start-action", "embark", "disembark", "fall-back",
   "advance", "use-stratagem", "issue-order", "attempt-ritual", "use-enhancement", "move", "observe",
 ] as const;
-export const PERMISSION_DESPITE = [
+const PERMISSION_DESPITE = [
   "engaged", "battle-shocked", "shot-this-phase", "fought-this-phase", "disembarked-this-turn",
   "stratagem-used-this-phase", "performing-action", "advanced", "fell-back",
 ] as const;
 /** Version 2 adds being just destroyed: "you can use this Stratagem on that unit even though it was just destroyed". */
-export const PERMISSION_DESPITE_V2 = [...PERMISSION_DESPITE, "destroyed"] as const;
-export const PERMISSION_AS_IF = ["shooting-phase", "snap-shooting", "fight-phase"] as const;
+const PERMISSION_DESPITE_V2 = [...PERMISSION_DESPITE, "destroyed"] as const;
+const PERMISSION_AS_IF = ["shooting-phase", "snap-shooting", "fight-phase"] as const;
 /** targeting-restriction's subject: who the modifier applies to; enemy-units compiles to an owner filter. */
-export const TARGETING_RESTRICTION_SUBJECTS = ["this-unit", "this-model", "enemy-units"] as const;
-export const TARGETING_MAY = ["target", "cannot-target", "must-target"] as const;
+const TARGETING_RESTRICTION_SUBJECTS = ["this-unit", "this-model", "enemy-units"] as const;
+const TARGETING_MAY = ["target", "cannot-target", "must-target"] as const;
 export const TARGETING_KINDS = ["attack", "shoot", "fight", "charge", "stratagem"] as const;
 const TARGETING_WEAPON_SCOPES = ["all", "melee", "ranged"] as const;
-export const RULE_KINDS = ["core-rule", "keyword", "ability", "faction-rule"] as const;
-export const DAMAGE_REDUCTION_VALUES = ["1", "2", "half", "to-zero"] as const;
+const RULE_KINDS = ["core-rule", "keyword", "ability", "faction-rule"] as const;
+const DAMAGE_REDUCTION_VALUES = ["1", "2", "half", "to-zero"] as const;
 /** Kebab-case rule slugs (core-rule, ability, faction-rule); keyword rules are uppercase words instead. */
 const RULE_SLUG = /^[a-z0-9][a-z0-9-]*[a-z0-9]$/u;
 

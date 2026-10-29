@@ -5,10 +5,8 @@ import { hashJson } from "../canonical-hash.js";
 import { compilationInputsHash, compiledIdentity, preMigrationInputsHash } from "./compiled.js";
 import { compileLeaves, type CompileLeaf, type Compiled } from "./compile.js";
 import { coreCheckErrors } from "./core-checks.js";
-import { getCurrentCoverage } from "./coverage.js";
 import { bumpWorkbenchRevision, withTransaction } from "./db.js";
 import { checkEntry, entryWithMechanics, resolveCheckedEntity, semanticAuthoringDataRoot } from "./entries.js";
-import { untiledRuns } from "./leaves.js";
 import { assertReviewer, requireHuman, type Actor } from "./authority.js";
 import { tiledSources } from "./leaf-view.js";
 import { ownAbilityIds } from "./own-abilities.js";
@@ -21,7 +19,7 @@ import type { ProjectionChecker } from "../mfm/apply.js";
  * renders and approves the shape for all of them at once.
  */
 
-export class ShapeError extends Error {
+class ShapeError extends Error {
   readonly status: number;
 
   constructor(status: 404 | 409 | 422, message: string) {
@@ -40,7 +38,7 @@ function tiledMembers(db: DatabaseSync, factionId: string | null): Member[] {
 
 /**
  * Each member's compiler context: its own ability and owning-faction unit and weapon catalogs, as
- * the compile gates pass them (pipeline-8b-gates.ts), so a named weapon resolves here too.
+ * the compile gates pass them (gates.ts), so a named weapon resolves here too.
  */
 function ownOptions(db: DatabaseSync): (member: Member) => { abilityId?: string; name?: string; units: { faction_id: string }; weapons: { faction_id: string; source_type: string } } {
   const own = ownAbilityIds(db, semanticAuthoringDataRoot());

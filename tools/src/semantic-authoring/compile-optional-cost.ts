@@ -7,7 +7,7 @@ type Node = Record<string, unknown>;
  * The designation an optional spend of a pool sets, for version-1 window-use leaves that name no
  * tag. Version 2 leaves name their own tag (optional-cost-paid@2, families/army.ts).
  */
-export const OPTIONAL_COST_TAGS: Record<string, string> = { "yp-pool": "yp-spent-this-use" };
+const OPTIONAL_COST_TAGS: Record<string, string> = { "yp-pool": "yp-spent-this-use" };
 
 /** A read of an optional spend that the ability's own spend feeds: this use, or a trigger later in the ability. */
 export function isSpendRead(leaf: CompileLeaf): boolean {
@@ -22,7 +22,7 @@ export function flatLeaves(list: readonly CompileLeaf[]): CompileLeaf[] {
 }
 
 /** The designation tag a read tests and its spend sets. */
-export function optionalCostTag(leaf: CompileLeaf): string {
+function optionalCostTag(leaf: CompileLeaf): string {
   if (typeof leaf.parameters.tag === "string") return leaf.parameters.tag;
   const legacy = leaf.family_version === 1 && leaf.parameters.window === "use" ? OPTIONAL_COST_TAGS[String(leaf.parameters.pool)] : undefined;
   if (legacy === undefined) throw new CompileError(`optional-cost-paid window ${String(leaf.parameters.window)} names no designation tag.`);
@@ -91,7 +91,7 @@ const OR_BETWEEN = /^[\s,*()]*(?:or|and\/or)[\s*()]*$/iu;
  * Whether a trigger read and its spend are alternatives: a condition in the same fragment sits
  * beside the read joined by "or" (or "and/or"), and the spend sits right beside the read.
  */
-export function optionalOrPairing(list: readonly CompileLeaf[], read: CompileLeaf, spend: CompileLeaf, sourceText: string): boolean {
+function optionalOrPairing(list: readonly CompileLeaf[], read: CompileLeaf, spend: CompileLeaf, sourceText: string): boolean {
   const bytes = Buffer.from(sourceText, "utf8");
   const sameFragment = (leaf: CompileLeaf) => leaf !== read && leaf.role === "CONDITION" && leaf.fragment === read.fragment && leaf.end_byte !== undefined;
   const before = list.filter((leaf) => sameFragment(leaf) && leaf.end_byte! <= read.start_byte).sort((a, b) => b.end_byte! - a.end_byte!)[0];

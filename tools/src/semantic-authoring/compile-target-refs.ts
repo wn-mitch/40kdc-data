@@ -21,7 +21,7 @@ const ONE = "stratagem-target:";
 const SEVERAL = "stratagem-targets:";
 
 /** The reference to one named target. */
-export const targetRef = (name: string) => `${ONE}${name}`;
+const targetRef = (name: string) => `${ONE}${name}`;
 
 /** Whether a lowered value is a reference to the Stratagem's targets (one or several). */
 export function isTargetRef(value: unknown): value is string {
@@ -38,7 +38,7 @@ type Match = { name: string; gate?: string[] };
 type Several = { pick: "every" | "any"; targets: Match[] };
 
 /** One target, or every / any one of several. */
-export function targetRefs(pick: "every" | "any", targets: readonly Match[]): string {
+function targetRefs(pick: "every" | "any", targets: readonly Match[]): string {
   return targets.length === 1 && !targets[0]!.gate ? targetRef(targets[0]!.name) : `${SEVERAL}${JSON.stringify({ pick, targets })}`;
 }
 
@@ -455,7 +455,7 @@ function sharedPick(record: Node, copies: Node[]): Node[] {
 }
 
 /** An entry's target references as the DSL's `{stratagem_target}`, with several-target references fanned out. */
-export function resolveTargetRefs<T>(value: T, position: Position = "effect"): T {
+function resolveTargetRefs<T>(value: T, position: Position = "effect"): T {
   return expand(value, null, position) as T;
 }
 

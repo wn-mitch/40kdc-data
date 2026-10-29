@@ -16,8 +16,8 @@ const TAIL_MESSAGE = "persistent designation replacement takes only its trigger,
 const isOpener = (leaf: CompileLeaf): boolean => leaf.family_id === "persistent-designation-open";
 const isStartOpener = (leaf: CompileLeaf): boolean => isOpener(leaf) && leaf.parameters.timing !== DESTROYED;
 /** A destruction-timed opener: a replacement when its ability has an earlier start-timed opener, else a standalone selection. */
-export const isDesignationReplacement = (leaf: CompileLeaf): boolean => isOpener(leaf) && leaf.parameters.timing === DESTROYED;
-export const isUnitDestroyed = (leaf: CompileLeaf): boolean => leaf.family_id === "event" && leaf.parameters.kind === "unit-destroyed";
+const isDesignationReplacement = (leaf: CompileLeaf): boolean => isOpener(leaf) && leaf.parameters.timing === DESTROYED;
+const isUnitDestroyed = (leaf: CompileLeaf): boolean => leaf.family_id === "event" && leaf.parameters.kind === "unit-destroyed";
 
 /** A designation id in the registry's spelling where the registry has one ("hated foe" is "hated-foe"); any other tag is kept as written. */
 export function canonicalDesignation(raw: unknown): string {

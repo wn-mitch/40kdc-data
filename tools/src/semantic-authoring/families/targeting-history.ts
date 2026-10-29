@@ -8,10 +8,10 @@ import { TARGETING_KINDS } from "../targeting-families.js";
  * (`by`): within its Engagement Range at the start of the turn, or the target of another unit's
  * attack or charge this phase. A leaf that lists several means any one of them.
  */
-export const TARGET_HISTORY = ["engaged-with-by-at-turn-start", "attacked-by-another-unit-this-phase", "charged-by-another-unit-this-phase"] as const;
+const TARGET_HISTORY = ["engaged-with-by-at-turn-start", "attacked-by-another-unit-this-phase", "charged-by-another-unit-this-phase"] as const;
 
 /** The moves after which a restriction holds ("in a turn in which it Advanced or Fell Back, but when doing so"). */
-export const AFTER_MOVES = ["advance", "fall-back"] as const;
+const AFTER_MOVES = ["advance", "fall-back"] as const;
 
 /** Every kind a targeting restriction can name, as the version before this one knows them. */
 const KINDS = [...TARGETING_KINDS, "ability"] as const;

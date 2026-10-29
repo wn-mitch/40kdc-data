@@ -8,7 +8,7 @@ import type { DatabaseSync } from "node:sqlite";
  */
 
 /** The relations compilation consumes. Every other reviewed relation is coverage only. */
-export const CONSUMED_RELATIONS: ReadonlySet<string> = new Set(["condition-of"]);
+const CONSUMED_RELATIONS: ReadonlySet<string> = new Set(["condition-of"]);
 
 export type ReviewedConnective = {
   ability_version_id: number;

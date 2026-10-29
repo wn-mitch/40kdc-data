@@ -25,7 +25,7 @@ export type CandidateSuggestion = {
 };
 
 /** Candidates group by reviewed role plus normalized source surface, never by model label. */
-export function candidateSignature(role: string, exactText: string): string {
+function candidateSignature(role: string, exactText: string): string {
   return hashJson({ role, surface: normalizedSurface(exactText) });
 }
 

@@ -12,11 +12,11 @@ import { enumValue, exactKeys } from "./family-validation.js";
  */
 
 /** Who did the targeting; antecedent points back to an earlier leaf's unit ("that unit"). */
-export const TARGETED_SUBJECTS = ["this-unit", "this-model", "event-subject", "selected-unit", ANTECEDENT] as const;
+const TARGETED_SUBJECTS = ["this-unit", "this-model", "event-subject", "selected-unit", ANTECEDENT] as const;
 /** What was targeted: this unit, or any unit the unit-filter right after the leaf matches. */
-export const TARGETED_OBJECTS = ["this-unit", FOLLOWING_FILTER] as const;
+const TARGETED_OBJECTS = ["this-unit", FOLLOWING_FILTER] as const;
 /** event: in the moment the ability names (the shooting that just ended); phase: any time this phase. */
-export const TARGETED_WINDOWS = ["phase", "event"] as const;
+const TARGETED_WINDOWS = ["phase", "event"] as const;
 const ATTACK_TYPES = ["ranged", "melee", "psychic"] as const;
 
 export const TARGETED_FAMILIES: readonly SemanticFamilyDefinition[] = [

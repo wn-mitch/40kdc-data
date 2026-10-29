@@ -14,7 +14,7 @@ import { PublicationError, projectRecords, record, relativeAbilityPath, stagedWr
 import { coreManifest, coreReplicaManifests, coreStratagemFile, observedCoreHash, type CoreManifest, type CoreProjection } from "./publish-core.js";
 import { loadSourceRecords, type SourceRecord } from "./source.js";
 
-export { PublicationError };
+;
 
 type PublicationState = "prepared" | "publishing" | "published" | "failed";
 

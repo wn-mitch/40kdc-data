@@ -15,7 +15,7 @@ import { printedKeywordsExtension } from "./shared.js";
  */
 
 /** How many abilities a printed header introduces: "the following ability", "abilities", or an unnamed "the following". */
-export const PRINTED_GRANTS = ["one", "several", "unnamed"] as const;
+const PRINTED_GRANTS = ["one", "several", "unnamed"] as const;
 
 /** A stand-in id the previous version checks the rest of a printed header with. */
 const PRINTED_STAND_IN = "printed-ability";
@@ -114,7 +114,7 @@ function chooseValue(value: unknown): { count: number; from?: string[] } {
   return { count: picked, from: listed };
 }
 
-export const ABILITY_ACTIVATE_OPTIONS: FamilyExtension = {
+const ABILITY_ACTIVATE_OPTIONS: FamilyExtension = {
   // "the Protector Imperative and the Conqueror Imperative are both active for that unit";
   // "every Blessing of Khorne is active for this unit"; "That doctrine is active for that VEHICLE
   // unit"; "select one combat doctrine to be active for this unit, in addition to any other".
@@ -162,7 +162,7 @@ export const ABILITY_ACTIVATE_OPTIONS: FamilyExtension = {
   },
 };
 
-export const STANCE_SELECT_ADDITIVE: FamilyExtension = {
+const STANCE_SELECT_ADDITIVE: FamilyExtension = {
   // "select one combat doctrine to be active for this unit …, in addition to any other combat doctrine".
   family: "stance-select-open",
   version: 2,
@@ -175,7 +175,7 @@ export const STANCE_SELECT_ADDITIVE: FamilyExtension = {
   },
 };
 
-export const CHOSEN_OPTION_HOLDER_ANTECEDENT: FamilyExtension = {
+const CHOSEN_OPTION_HOLDER_ANTECEDENT: FamilyExtension = {
   // "until the start of your next Command phase, that unit has that ability".
   family: "chosen-option-grant",
   version: 2,
@@ -184,7 +184,7 @@ export const CHOSEN_OPTION_HOLDER_ANTECEDENT: FamilyExtension = {
   normalize: (input, previous) => input.holder === ANTECEDENT ? { ...previous({ ...input, holder: "this-unit" }), holder: ANTECEDENT } : previous(input),
 };
 
-export const STANCE_CAPACITY_SHARED_OPTIONS: FamilyExtension = {
+const STANCE_CAPACITY_SHARED_OPTIONS: FamilyExtension = {
   // "You can select the assault doctrine or tactical doctrine one additional time per battle":
   // one extra selection, spent on either of the two, not one of each.
   family: "stance-selection-capacity",
@@ -207,7 +207,7 @@ export const STANCE_CAPACITY_SHARED_OPTIONS: FamilyExtension = {
 /** The id shape the condition schema's stance-option-ref takes for both of its fields. */
 const ENTITY_ID = /^[a-z0-9][a-z0-9-]*[a-z0-9]$/u;
 
-export const RULE_ACTIVE_OPTION: FamilyExtension = {
+const RULE_ACTIVE_OPTION: FamilyExtension = {
   // "If the Protector Imperative is active for that unit": one option of Doctrina Imperatives,
   // not an ability record of its own.
   family: "rule-active",

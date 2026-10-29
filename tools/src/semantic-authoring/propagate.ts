@@ -18,7 +18,7 @@ import { stillAuthorized } from "./leaves.js";
  * where two records of the same text were decided differently (`SOURCES_DISAGREE`).
  */
 
-export type DuplicateBlock = { ability_version_id: number; fragment: string; start_byte: number; end_byte: number; reason: "TRUSTED_HERE" | "REJECTED_HERE" | "SOURCES_DISAGREE" };
+type DuplicateBlock = { ability_version_id: number; fragment: string; start_byte: number; end_byte: number; reason: "TRUSTED_HERE" | "REJECTED_HERE" | "SOURCES_DISAGREE" };
 
 export type DuplicatePropagation = {
   dry_run: boolean;

@@ -19,7 +19,7 @@ const STRATAGEM_TARGETS = new Set(["stratagem-target", "triggering-target", "tar
  * turn, round and step boundaries, resource and designation changes, uses of a rule and named
  * rolls introduce no unit.
  */
-export const UNIT_EVENT_KINDS = new Set([
+const UNIT_EVENT_KINDS = new Set([
   "attack-made", "hit-roll", "wound-roll", "charge", "unit-destroyed", "model-destroyed", "this-model-destroyed", "after-shooting",
   "selected-to-shoot", "selected-to-fight", "enemy-selected-targets", "enemy-ended-move", "enemy-has-shot", "enemy-declared-charge",
   "disembarked", "damage-allocated", "state-changed", "move-ended", "selected", "targets-selected", "attacks-resolved", "set-up",
@@ -134,7 +134,7 @@ function bareFilterAt(leaves: readonly CompileLeaf[], index: number): number {
  * A unit-filter a condition before it names as its following filter ("If a friendly X model is your
  * Warlord": the condition's units, which the later effects' units do not share).
  */
-export function gateFilter(leaves: readonly CompileLeaf[], index: number): boolean {
+function gateFilter(leaves: readonly CompileLeaf[], index: number): boolean {
   const filter = leaves[index];
   const condition = leaves[index - 1];
   return filter?.family_id === "unit-filter" && condition !== undefined && condition.role === "CONDITION"

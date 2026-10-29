@@ -31,7 +31,7 @@ export type ProposalSettings = {
   cluster_k: number;
   cluster_sim: number;
 };
-export const DEFAULT_PROPOSAL_SETTINGS: ProposalSettings = { k: 7, direct_sim: 0.88, direct_share: 0.6, cluster_k: 4, cluster_sim: 0.9 };
+const DEFAULT_PROPOSAL_SETTINGS: ProposalSettings = { k: 7, direct_sim: 0.88, direct_share: 0.6, cluster_k: 4, cluster_sim: 0.9 };
 
 export type ProposalPiece = {
   text: string;
@@ -190,12 +190,12 @@ async function proposeInto(db: DatabaseSync, runId: number, embedder: Embedder, 
   return counts;
 }
 
-export type ListedProposal = {
+type ListedProposal = {
   id: number; surface: string; sample_text: string; kind: ProposalKind; pieces: Array<ProposalPiece | UnnamedPiece | Record<string, unknown>>;
   confidence: number; occurrences: number; closes: number; dropped: string[];
 };
-export type ListedCluster = { cluster: number; closes: number; occurrences: number; proposals: ListedProposal[] };
-export type ProposalRunView = { id: number; status: string; model: string; counts: ProposalRunCounts | null; error: string | null; started_at: string; finished_at: string | null };
+type ListedCluster = { cluster: number; closes: number; occurrences: number; proposals: ListedProposal[] };
+type ProposalRunView = { id: number; status: string; model: string; counts: ProposalRunCounts | null; error: string | null; started_at: string; finished_at: string | null };
 export type ProposalListing = { run: ProposalRunView | null; latest: ProposalRunView | null; clusters: ListedCluster[]; total_clusters: number };
 
 const runView = (row: Record<string, unknown> | undefined): ProposalRunView | null => row ? {
@@ -203,14 +203,9 @@ const runView = (row: Record<string, unknown> | undefined): ProposalRunView | nu
   error: (row.error as string | null) ?? null, started_at: row.started_at as string, finished_at: (row.finished_at as string | null) ?? null,
 } : null;
 
-/** Runs left "running" by a server that stopped mid-run; no process owns them any more. */
-export function abandonStaleProposalRuns(db: DatabaseSync): number {
-  return Number(db.prepare("UPDATE leaf_proposal_runs SET status = 'failed', error = 'The server stopped before the run finished.', finished_at = ? WHERE status = 'running'")
-    .run(new Date().toISOString()).changes);
-}
 
 /** The latest run, whether or not it finished. */
-export function latestProposalRun(db: DatabaseSync): ProposalRunView | null {
+function latestProposalRun(db: DatabaseSync): ProposalRunView | null {
   return runView(db.prepare("SELECT * FROM leaf_proposal_runs ORDER BY id DESC LIMIT 1").get() as Record<string, unknown> | undefined);
 }
 

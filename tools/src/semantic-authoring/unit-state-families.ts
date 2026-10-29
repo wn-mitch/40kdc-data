@@ -14,23 +14,23 @@ import { normalizeUnitKeywords } from "./unit-filter-family.js";
 const UNIT_KEYWORD = /^[A-Z][A-Z0-9' -]*[A-Z0-9]$/u;
 const ENTITY_ID = /^[a-z0-9][a-z0-9-]*[a-z0-9]$/u;
 
-export const RETURN_SUBJECTS = ["this-unit", "this-model"] as const;
-export const RETURN_COUNTS = ["1", "2", "3", "D3", "D3+1", "D3+3", "D6", "all"] as const;
+const RETURN_SUBJECTS = ["this-unit", "this-model"] as const;
+const RETURN_COUNTS = ["1", "2", "3", "D3", "D3+1", "D3+3", "D6", "all"] as const;
 /** wounds_remaining is either "full" or a quantity (a plain number or dice expression); "half" is not a valid quantity. */
-export const WOUNDS_REMAINING = ["full", "1", "D3", "D6"] as const;
+const WOUNDS_REMAINING = ["full", "1", "D3", "D6"] as const;
 
 /** What a wounds-remaining qualifier names besides a whole number: full, half of the starting wounds, or a roll. */
-export const WOUNDS_REMAINING_WORDS = ["full", "half-starting", "D3", "D6"] as const;
+const WOUNDS_REMAINING_WORDS = ["full", "half-starting", "D3", "D6"] as const;
 
-export const DESTROY_RECIPIENTS = ["this-unit", "this-model", "defender", "selected-unit"] as const;
-export const DESTROY_COUNTS = ["1", "2", "3", "D3", "D6", "all"] as const;
+const DESTROY_RECIPIENTS = ["this-unit", "this-model", "defender", "selected-unit"] as const;
+const DESTROY_COUNTS = ["1", "2", "3", "D3", "D6", "all"] as const;
 
-export const SPLIT_MODES = ["model", "counts", "keywords"] as const;
+const SPLIT_MODES = ["model", "counts", "keywords"] as const;
 
-export const ADD_UNIT_SOURCES = ["copy-of-destroyed", "datasheet"] as const;
-export const ADD_UNIT_COUNTS = ["1", "2", "3", "D3", "D6"] as const;
+const ADD_UNIT_SOURCES = ["copy-of-destroyed", "datasheet"] as const;
+const ADD_UNIT_COUNTS = ["1", "2", "3", "D3", "D6"] as const;
 
-export const BATTLE_SHOCK_RECIPIENTS = ["this-unit", "defender", "selected-unit"] as const;
+const BATTLE_SHOCK_RECIPIENTS = ["this-unit", "defender", "selected-unit"] as const;
 
 export const UNIT_STATE_EFFECT_FAMILIES: readonly SemanticFamilyDefinition[] = [
   {

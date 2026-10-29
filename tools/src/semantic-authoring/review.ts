@@ -37,7 +37,7 @@ export class WorkbenchError extends Error {
 }
 
 /** A source-bound confirmed semantic occurrence. */
-export type AnnotationView = {
+type AnnotationView = {
   id: number;
   span_id: number;
   fragment: string;
@@ -55,7 +55,7 @@ export type AnnotationView = {
 };
 
 /** A machine, retrieval, or manual proposal that is not a Golden annotation. */
-export type ProposalView = {
+type ProposalView = {
   id: number;
   fragment: string;
   start_byte: number;
@@ -124,14 +124,8 @@ export type AbilityView = {
   };
 };
 
-/**
- * Display threshold for the dashboard's top leaf-histogram bucket. It is not a composition
- * gate: readiness (`readiness.ts`) requires every meaningful byte to be accounted for.
- */
-export const COMPOSITION_READY_LEAF_FRACTION = 0.95;
-
 /** What is known, reviewed, and still open on one ability: the gate for upward composition. */
-export type LeafProgress = {
+type LeafProgress = {
   leaves: Array<{ family_id: string; authority_kind: string; count: number }>;
   connective_bytes: number;
   pending_proposals: number;
@@ -205,7 +199,7 @@ function leafProgress(coverage: AbilityCoverage, annotations: readonly Annotatio
 }
 
 /** Payload for the separate, whole-ability review action. */
-export type ReviewAbilityBody = {
+type ReviewAbilityBody = {
   source_hash: string;
   reviewer: string;
   whole_context_checked: boolean;
@@ -214,10 +208,10 @@ export type ReviewAbilityBody = {
   cues?: Record<string, unknown>;
 };
 
-export type AnnotationDecisionAction = "confirm" | "correct" | "retire" | "reject" | "novel" | "ambiguous" | "confirm-connective";
+type AnnotationDecisionAction = "confirm" | "correct" | "retire" | "reject" | "novel" | "ambiguous" | "confirm-connective";
 
 /** A single source-bound decision, including every byte-level identity guard. */
-export type AnnotationDecision = {
+type AnnotationDecision = {
   action: AnnotationDecisionAction;
   proposal_id?: number;
   supersedes_annotation_id?: number;
@@ -244,14 +238,9 @@ export type AnnotationDecision = {
   relation?: string;
 };
 
-/** Atomic review-batch payload. Every decision is applied or none is. */
-export type ApplyAnnotationBatchBody = {
-  reviewer: string;
-  decisions: AnnotationDecision[];
-};
 
 /** Payload for a reviewer-scoped reversal batch. */
-export type UndoBatchBody = { reviewer: string };
+type UndoBatchBody = { reviewer: string };
 
 type JsonRecord = Record<string, unknown>;
 type AbilityRow = {

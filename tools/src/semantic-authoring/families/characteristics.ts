@@ -84,7 +84,7 @@ const INVULNERABLE_SAVE_BEARER = bearerTransportSubject(
   "As the previous version, plus subject bearer-transport: the Transport the model is embarked within.",
 );
 
-export const PSYKER_LEVEL = "psyker-level";
+const PSYKER_LEVEL = "psyker-level";
 
 /** A psyker-level setter names the model itself: no other recipient, and no weapon scope. */
 function requirePsykerScope(input: Record<string, unknown>): void {

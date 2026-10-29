@@ -12,9 +12,9 @@ import { ENHANCEMENT_KIND, FOLLOWING_FILTER, isObject } from "./shared.js";
  * unchanged.
  */
 
-export const BATTLE_SIZES = ["incursion", "strike-force", "onslaught"] as const;
+const BATTLE_SIZES = ["incursion", "strike-force", "onslaught"] as const;
 
-export const ARMY_MEASURES = ["units", "models", "points"] as const;
+const ARMY_MEASURES = ["units", "models", "points"] as const;
 
 const FACTION_ID = /^[a-z0-9][a-z0-9-]*[a-z0-9]$/u;
 
@@ -26,7 +26,7 @@ const battleSizeSchema = (maximum: number) => ({
 });
 
 /** One value per battle size ("6 / 10 / 14 Resurgence points"), each within 0..maximum. */
-export function battleSizeValue(value: unknown, maximum: number, label: string): Record<string, number> {
+function battleSizeValue(value: unknown, maximum: number, label: string): Record<string, number> {
   if (typeof value !== "object" || value === null || Array.isArray(value)) throw new TypeError(`${label} is a number, or an object with incursion, strike-force and onslaught.`);
   const keys = Object.keys(value);
   if (keys.length !== BATTLE_SIZES.length || !BATTLE_SIZES.every((size) => keys.includes(size))) {
@@ -38,11 +38,9 @@ export function battleSizeValue(value: unknown, maximum: number, label: string):
 /** Rules about the units a group names: the group is the rule's subject (its DSL target). */
 export const ARMY_SUBJECT_RULES = ["warlord-required", "warlord-forbidden", "enhancement-forbidden", "enhancement-source", "limit-exemption"] as const;
 
-/** Rules that count the units a group names: the group is what is counted (the DSL's `with`). */
-export const ARMY_COUNTING_RULES = ["unique", "composition"] as const;
 
 /** Rules about the list as a whole, which no group of units qualifies. */
-export const ARMY_LIST_RULES = ["single-chapter", "detachment-forbidden", "detachment-tag-exclusive", "faction-forbidden"] as const;
+const ARMY_LIST_RULES = ["single-chapter", "detachment-forbidden", "detachment-tag-exclusive", "faction-forbidden"] as const;
 
 const NEW_RULES = ["enhancement-source", "limit-exemption"] as const;
 
@@ -51,17 +49,17 @@ const SUBJECTS = ["this-unit", "this-model", ANTECEDENT] as const;
 const OBJECTS = ["this-unit", FOLLOWING_FILTER] as const;
 
 /** Limits a unit or Enhancement can be left out of: the Retinue cap, the Enhancement cap, the Strategic Reserves points cap. */
-export const ARMY_EXEMPTIONS = ["retinue-limit", "enhancement-limit", "strategic-reserves-points"] as const;
+const ARMY_EXEMPTIONS = ["retinue-limit", "enhancement-limit", "strategic-reserves-points"] as const;
 
-export const OPTIONAL_COST_POOLS_V2 = ["yp-pool", "pain-token-pool"] as const;
+const OPTIONAL_COST_POOLS_V2 = ["yp-pool", "pain-token-pool"] as const;
 
-export const OPTIONAL_COST_WINDOWS_V2 = ["use", "trigger", "turn"] as const;
+const OPTIONAL_COST_WINDOWS_V2 = ["use", "trigger", "turn"] as const;
 
-export const OPTIONAL_COST_HOLDERS = ["this-unit", "selected-unit"] as const;
+const OPTIONAL_COST_HOLDERS = ["this-unit", "selected-unit"] as const;
 
 const TAG = { type: "string", pattern: "^[a-z][a-z0-9-]*$", minLength: 1, maxLength: 60 };
 
-export const OPTIONAL_COST_PAID_V2: FamilyExtension = {
+const OPTIONAL_COST_PAID_V2: FamilyExtension = {
   family: "optional-cost-paid",
   version: 2,
   description: "As version 1, plus window trigger (a spend the ability's own moment offers, read later), pool pain-token-pool (not with window use), tag (the designation the spend sets and the read tests), and holder (the unit the designation is set on; trigger only).",
@@ -80,7 +78,7 @@ export const OPTIONAL_COST_PAID_V2: FamilyExtension = {
  * Checks one version-2 leaf. Each window takes only its own keys: use and trigger name the
  * subject that spent and the designation tag; turn names neither, and takes negation instead.
  */
-export function normalizeOptionalCostV2(input: Record<string, unknown>): Record<string, unknown> {
+function normalizeOptionalCostV2(input: Record<string, unknown>): Record<string, unknown> {
   const family = "optional-cost-paid";
   const window = enumValue(input.window, OPTIONAL_COST_WINDOWS_V2, `${family}.window`);
   const pool = enumValue(input.pool, OPTIONAL_COST_POOLS_V2, `${family}.pool`);
@@ -110,7 +108,7 @@ export function normalizeOptionalCostV2(input: Record<string, unknown>): Record<
 }
 
 /** A spend of as many as the player chooses, at least one ("spend one or more BTP"). */
-export const ONE_OR_MORE = "one-or-more";
+const ONE_OR_MORE = "one-or-more";
 
 export const ARMY_EXTENSIONS: readonly FamilyExtension[] = [
   /**

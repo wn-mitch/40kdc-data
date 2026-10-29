@@ -142,7 +142,7 @@ type Node = Record<string, unknown>;
 /** Fields the leaves set on the core record rather than the enrichment entry (a stratagem's target). */
 export type CorePatch = { target_restrictions: Node | Node[] };
 
-export { leafFragment, type LeafFragment } from "./compile-leaf-fragment.js";
+export { leafFragment,  } from "./compile-leaf-fragment.js";
 export { shapeSignature } from "./compile-placement.js";
 
 

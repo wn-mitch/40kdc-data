@@ -1,6 +1,6 @@
 import { DESIGNATION_IDS } from "../translate/designations.js";
 import type { SemanticFamilyDefinition } from "./contracts.js";
-import { boundedInteger, enumSet, enumValue, exactKeys } from "./family-validation.js";
+import { boundedInteger, enumValue, exactKeys } from "./family-validation.js";
 
 /**
  * Batch 7b, containers half: `risk-reward`, `resource-action-menu`, `persistent-designation`,

@@ -20,7 +20,7 @@ export function manoeuvreLookupFor(abilityId: string | undefined, dataRoot = DEF
 }
 
 /** Whether a leaf needs this fold: a manoeuvre-own-roll condition, or a roll-modifier or re-roll of a manoeuvre. */
-export function hasManoeuvreRoll(list: readonly CompileLeaf[]): boolean {
+function hasManoeuvreRoll(list: readonly CompileLeaf[]): boolean {
   return list.some((leaf) => leaf.family_id === "manoeuvre-own-roll" || ((leaf.family_id === "roll-modifier" || leaf.family_id === "reroll") && leaf.parameters.roll === "manoeuvre"));
 }
 
@@ -40,7 +40,7 @@ function reRollHasMoment(list: readonly CompileLeaf[], index: number): boolean {
 }
 
 /** Each re-roll of a manoeuvre roll has a manoeuvre moment in its clause (reRollHasMoment). */
-export function checkManoeuvreRollMoments(list: readonly CompileLeaf[]): void {
+function checkManoeuvreRollMoments(list: readonly CompileLeaf[]): void {
   list.forEach((leaf, index) => {
     if (leaf.family_id !== "reroll" || leaf.parameters.roll !== "manoeuvre") return;
     if (!reRollHasMoment(list, index)) throw new CompileError(`re-roll of a manoeuvre roll at byte ${leaf.start_byte} has no manoeuvre moment in its clause.`);

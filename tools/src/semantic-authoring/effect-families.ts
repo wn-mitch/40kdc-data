@@ -25,14 +25,14 @@ const CHARACTERISTICS_V4 = [...CHARACTERISTICS, "detection-range"] as const;
 const CHARACTERISTIC_SUBJECTS_V4 = [...CHARACTERISTIC_SUBJECTS, "selected-unit"] as const;
 const WEAPON_SCOPES = ["all", "melee", "ranged"] as const;
 
-export const MOVES = ["advance", "fall-back"] as const;
-export const ACTS = ["shoot", "charge"] as const;
+const MOVES = ["advance", "fall-back"] as const;
+const ACTS = ["shoot", "charge"] as const;
 
 /** Amounts as GW prints them; plain numbers become numbers in the DSL. */
-export const WOUND_AMOUNTS = ["1", "2", "3", "D3", "D6", "D3+3"] as const;
+const WOUND_AMOUNTS = ["1", "2", "3", "D3", "D6", "D3+3"] as const;
 /** Version 3 adds the D3+1 and D3+2 amounts GW also prints for healing. */
-export const WOUND_AMOUNTS_V3 = [...WOUND_AMOUNTS, "D3+1", "D3+2"] as const;
-export const HEAL_PER = ["model", "unit"] as const;
+const WOUND_AMOUNTS_V3 = [...WOUND_AMOUNTS, "D3+1", "D3+2"] as const;
+const HEAL_PER = ["model", "unit"] as const;
 
 export const EFFECT_FAMILIES: readonly SemanticFamilyDefinition[] = [
   {

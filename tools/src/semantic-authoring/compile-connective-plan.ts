@@ -43,13 +43,13 @@ const fragmentOf = (leaf: CompileLeaf) => leaf.fragment ?? "RAW_TEXT";
 const wording = (connective: LeafConnective) => connective.surface.replace(/[*_]/gu, "").trim();
 
 /** A moment the ability or one of its parts fires on (compile.ts lowers it to a trigger). */
-export function isMoment(leaf: CompileLeaf): boolean {
+function isMoment(leaf: CompileLeaf): boolean {
   if (leaf.role !== "EVENT" || NOT_MOMENTS.has(leaf.family_id)) return false;
   return !(leaf.family_id === "event" && ATTACK_EVENTS.has(String(leaf.parameters.kind)));
 }
 
 /** An effect whose own wording is a permission the player may decline ("can make a move", "can be set up"). */
-export function isDeclinable(leaf: CompileLeaf): boolean {
+function isDeclinable(leaf: CompileLeaf): boolean {
   if (leaf.role !== "EFFECT") return false;
   switch (leaf.family_id) {
     case "make-move":

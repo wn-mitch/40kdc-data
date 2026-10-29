@@ -819,7 +819,7 @@ export function workbenchPath(path?: string): string {
 }
 
 /** Whether a path is the live workbench, or any database kept beside it. */
-export function isLiveWorkbench(path: string): boolean {
+function isLiveWorkbench(path: string): boolean {
   const live = dirname(defaultDatabasePath);
   const target = resolve(path);
   return target === defaultDatabasePath || dirname(target) === live;

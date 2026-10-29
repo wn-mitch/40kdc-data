@@ -131,7 +131,7 @@ const EVENT_MODEL_DESTROYER: FamilyExtension = {
 };
 
 /** Where a set-up moment brings a unit from. */
-export const SET_UP_SOURCES = ["strategic-reserves"] as const;
+const SET_UP_SOURCES = ["strategic-reserves"] as const;
 
 /** Activities a `used` moment can name one member of. Dark Pacts, Acts of Faith, Rituals and the rest are named only as a kind. */
 export const NAMED_ACTIVITIES = ["ability", "manoeuvre", "stratagem", "action"] as const;
@@ -195,7 +195,7 @@ const EVENT_NAMED_USE: FamilyExtension = {
 };
 
 /** The Transport a disembarked moment leaves: the unit's own Transport, the only value the wording names. */
-export const DISEMBARK_TRANSPORTS = ["this-unit"] as const;
+const DISEMBARK_TRANSPORTS = ["this-unit"] as const;
 
 /** The moments a roll names: a roll before it is made, or after it is made. */
 const ROLL_MOMENTS = ["before-roll", "after-roll"] as const;
@@ -284,10 +284,10 @@ const EVENT_OBJECT_KEYWORDS: FamilyExtension = {
 };
 
 /** What a resource-spent moment can be done for: the same activities a used moment names. */
-export const SPEND_ACTIVITIES = ["stratagem", "ability", "action", "manoeuvre", "order", "ritual", "dark-pact", "act-of-faith", "doctrine", "contract"] as const;
+const SPEND_ACTIVITIES = ["stratagem", "ability", "action", "manoeuvre", "order", "ritual", "dark-pact", "act-of-faith", "doctrine", "contract"] as const;
 
 /** The unit a spend serves: this unit, or the unit an earlier leaf named. */
-export const SPEND_OBJECTS = ["this-unit", ANTECEDENT] as const;
+const SPEND_OBJECTS = ["this-unit", ANTECEDENT] as const;
 
 const SPEND_KINDS = ["resource-spent"] as const;
 

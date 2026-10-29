@@ -128,9 +128,6 @@ function parentFaction(dataRoot: string, factionId: string): string | null {
   return typeof parent === "string" && parent !== factionId ? parent : null;
 }
 
-/** What one set of mechanics would become for an ability, without persisting anything. */
-export type MechanicsRender = { entry: Record<string, unknown> | null; rendered_text: string | null; errors: string[] };
-
 let previewValidator: Ajv | null = null;
 let previewValidityValidator: Ajv | null = null;
 
@@ -177,14 +174,3 @@ export function checkEntry(entry: Record<string, unknown>): { rendered_text: str
   return { rendered_text: rendered, errors };
 }
 
-/** Render mechanics for one tracked ability, resolving its current entry from the data root. */
-export function renderMechanicsPreview(factionId: string, abilityId: string, mechanics: Mechanics): MechanicsRender {
-  let resolved: ResolvedAbilityEntity;
-  try {
-    resolved = resolveAbilityEntity(semanticAuthoringDataRoot(), factionId, abilityId);
-  } catch (error) {
-    return { entry: null, rendered_text: null, errors: [error instanceof Error ? error.message : String(error)] };
-  }
-  const entry = entryWithMechanics(resolved.entry, mechanics);
-  return { entry, ...checkEntry(entry) };
-}

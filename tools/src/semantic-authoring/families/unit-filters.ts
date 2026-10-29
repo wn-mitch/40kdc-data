@@ -57,7 +57,7 @@ const UNIT_FILTER_ALTERNATIVES: FamilyExtension = {
 export const AMONG_TARGETS = "stratagem-targets";
 
 /** How many of the matching targets an among-filter names. */
-export const TARGET_PICKS = ["one", "every", "any"] as const;
+const TARGET_PICKS = ["one", "every", "any"] as const;
 
 const AMONG_FILTER: FamilyExtension = {
   // "your **VEHICLE** unit", "one of those units", "both of those units" after two targets.
@@ -98,7 +98,7 @@ const DESIGNATION_PATTERN = "^[a-z0-9][a-z0-9-]*[a-z0-9]$";
 export const EXCLUDED_FROM_ATTACKS = "attacks";
 
 /** The unit states a unit-filter gains in this version. */
-export const FILTER_STATES_16 = ["engaged", "hidden"] as const;
+const FILTER_STATES_16 = ["engaged", "hidden"] as const;
 
 /** The only subject a unit-filter takes in this version. */
 export const FILTER_SUBJECT_TARGET = "target";
@@ -121,7 +121,7 @@ const MATCHED_FILTER: FamilyExtension = {
 };
 
 /** The unit-filter value naming the Leader units attached to this unit. */
-export const ATTACHED_TO_THIS_UNIT = "this-unit";
+const ATTACHED_TO_THIS_UNIT = "this-unit";
 
 /** unit-filter parameters that name units another way, so attached Leaders cannot combine with them. */
 const EXCLUSIVE_WITH_ATTACHED = ["level", "among", "targets", "designated", "designated_by", "held_in", "other", "datasheets", "excluded_from", "subject", "alternatives"] as const;
@@ -147,7 +147,7 @@ const ATTACHED_LEADERS: FamilyExtension = {
 const EMBARKED_IN_EXCLUDES = ["held_in", "alternatives", "among", "subject", "datasheets", "designated", "designated_by"] as const;
 
 /** An aura measured from any model with the given keywords, rather than from this unit or model. */
-export const MATCHING_MODELS = "matching-models";
+const MATCHING_MODELS = "matching-models";
 
 export const UNIT_FILTER_EXTENSIONS: readonly FamilyExtension[] = [
   {

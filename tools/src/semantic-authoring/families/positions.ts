@@ -126,7 +126,7 @@ const WITHIN_OF = ["this-unit", "following-filter"] as const;
 const REFUSED_WITH_EVERY = ["wholly", "distance", "range_ref", "weapon_range"] as const;
 
 /** The middle of the battlefield: a place a distance can be measured from. */
-export const BATTLEFIELD_CENTRE = "battlefield-centre";
+const BATTLEFIELD_CENTRE = "battlefield-centre";
 
 const PLACE_REFUSED = ["range_ref", "distance", "weapon_range", "models"] as const;
 

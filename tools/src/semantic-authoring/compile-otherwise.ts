@@ -30,7 +30,7 @@ const ROUTED_ELSEWHERE = new Set(["target-is-selected", "battle-size", "roll-res
 type Node = Record<string, unknown>;
 
 /** An else gate for the Otherwise sentence at `sentence` (its merged sentence number). */
-export type ElseGate = { sentence: number; gate: Node };
+type ElseGate = { sentence: number; gate: Node };
 
 export type OtherwiseElse = {
   /** One else gate per valid Otherwise sentence; each ANDs into that sentence's gates. */

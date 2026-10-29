@@ -12,7 +12,7 @@ import { listLeafProposals } from "./leaf-proposals.js";
  * "other" stratum, so the sample still covers residue outside the biggest named shapes.
  */
 
-export type PilotAbility = {
+type PilotAbility = {
   ability_version_id: number;
   faction_id: string;
   ability_id: string;
@@ -21,7 +21,7 @@ export type PilotAbility = {
   untiled_spans: number;
 };
 
-export type PilotStratum = { cluster: number | "other"; occurrences: number; candidates: number; sampled: number };
+type PilotStratum = { cluster: number | "other"; occurrences: number; candidates: number; sampled: number };
 
 export type PilotSample = {
   seed: number;

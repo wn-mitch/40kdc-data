@@ -38,7 +38,7 @@ import { WEAPON_EXTENSIONS } from "./weapons.js";
 export type { FamilyExtension } from "../family-extension-helpers.js";
 
 /** Every extension, by subject. A family's extensions apply in ascending `version`, wherever they are listed. */
-export const FAMILY_EXTENSIONS: readonly FamilyExtension[] = [
+const FAMILY_EXTENSIONS: readonly FamilyExtension[] = [
   ...POSITION_EXTENSIONS,
   ...REGION_EXTENSIONS,
   ...EVENT_EXTENSIONS,

@@ -9,7 +9,7 @@ import { isObject, namedId } from "./shared.js";
  */
 
 /** The DSL's dice-requirement types: a pair, triple, single die or run at or above min_value. */
-export const DICE_REQUIREMENT_TYPES = ["pair", "triple", "single", "run"] as const;
+const DICE_REQUIREMENT_TYPES = ["pair", "triple", "single", "run"] as const;
 
 const requirementSchema = {
   type: "object",
@@ -26,7 +26,7 @@ function requirement(value: unknown, label: string): { type: string; min_value: 
 }
 
 /** Roll kinds a dice-roll leaf may name, from the DSL's roll-kind: the tests a rule asks for by name. */
-export const ROLL_KINDS = ["psychic", "hazard", "leadership", "battle-shock", "desperate-escape", "channelling"] as const;
+const ROLL_KINDS = ["psychic", "hazard", "leadership", "battle-shock", "desperate-escape", "channelling"] as const;
 
 const RANDOM_DICE = ["D3", "D6"] as const;
 

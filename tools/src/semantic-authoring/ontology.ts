@@ -12,7 +12,7 @@ import { bumpWorkbenchRevision, getWorkbenchRevision, invalidateWholeReview, wit
  * family is an ontology stop that requires a maintainer code change.
  */
 
-export class OntologyError extends Error {
+class OntologyError extends Error {
   readonly status: number;
 
   constructor(status: 404 | 409 | 422, message: string) {
@@ -25,9 +25,9 @@ export class OntologyError extends Error {
 const invalid = (message: string): never => { throw new OntologyError(422, message); };
 const conflict = (message: string): never => { throw new OntologyError(409, message); };
 
-export const HUMAN_VERDICTS = ["supports", "counterexample", "insufficient"] as const;
-export type HumanVerdict = typeof HUMAN_VERDICTS[number];
-export type Verdict = HumanVerdict | "suggested";
+const HUMAN_VERDICTS = ["supports", "counterexample", "insufficient"] as const;
+type HumanVerdict = typeof HUMAN_VERDICTS[number];
+type Verdict = HumanVerdict | "suggested";
 
 type JsonRecord = Record<string, unknown>;
 
@@ -190,7 +190,7 @@ export function getOntology(db: DatabaseSync, options: { faction?: string } = {}
 }
 
 /** The explicit, code-level path that promotes a candidate into a new reviewed family. */
-export const NEW_FAMILY_STEPS = [
+const NEW_FAMILY_STEPS = [
   "Add the family to REVIEWED_FAMILY_REGISTRY in tools/src/semantic-authoring/contracts.ts with its role, label, and parameter schema.",
   "Extend normalizeFingerprintParameters and validateFamilySource for any source-qualified parameters.",
   "Re-run initializeWorkbench so seedReviewedFamilies records the new family; registry drift is rejected.",

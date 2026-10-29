@@ -95,7 +95,7 @@ function combinations(family: SemanticFamilyDefinition): Record<string, unknown>
 
 const SILENT = /^No separate text:/u;
 
-export function auditFamily(family: SemanticFamilyDefinition): FamilyAudit {
+function auditFamily(family: SemanticFamilyDefinition): FamilyAudit {
   const sampling = familySampling(family);
   const report: FamilyAudit = {
     family_id: family.id,

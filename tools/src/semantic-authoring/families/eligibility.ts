@@ -13,7 +13,7 @@ import { FILTERED_UNITS, MATCHED_UNITS, printedKeywordsExtension } from "./share
  * The units a targeting restriction can name on either side: the ability's own unit or model,
  * the selected unit, the triggering unit, every enemy or friendly unit, or an earlier leaf's unit.
  */
-export const TARGETING_UNITS = ["this-unit", "this-model", "selected-unit", "event-subject", "enemy-units", "friendly-units", ANTECEDENT] as const;
+const TARGETING_UNITS = ["this-unit", "this-model", "selected-unit", "event-subject", "enemy-units", "friendly-units", ANTECEDENT] as const;
 
 /** A Stratagem's id, as its core or detachment record has it ("fire-overwatch"). */
 const STRATAGEM_ID = /^[a-z0-9][a-z0-9-]*[a-z0-9]$/u;
@@ -48,7 +48,7 @@ const MATCHED_TARGET: FamilyExtension = {
  * binder resolves), "following-filter" (the unit-filter right after the permission), "selection"
  * (the inner unit of a bound selection pair) or "this-unit" (the ability's own Transport).
  */
-export const PERMISSION_INTO = ["antecedent", "following-filter", "selection", "this-unit"] as const;
+const PERMISSION_INTO = ["antecedent", "following-filter", "selection", "this-unit"] as const;
 
 /** The widest fight reach a leaf may name, in inches. */
 const MAX_REACH = 12;

@@ -13,7 +13,7 @@ import { PSYCHIC_COST_FAMILY } from "./psychic-families.js";
  * pool: the part applies only once that cost is paid, and the spend comes before its effect.
  */
 
-export const PSYCHIC_POOL = "psychic-level";
+const PSYCHIC_POOL = "psychic-level";
 
 /** One psychic ability: its heading's cost leaf and the leaves that belong to it. */
 export type PsychicSegment = { cost: CompileLeaf; leaves: CompileLeaf[] };

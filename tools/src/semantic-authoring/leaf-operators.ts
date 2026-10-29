@@ -44,7 +44,7 @@ export type OperatorSpelling = {
   bindings: Record<string, string>;
 };
 
-export type OperatorSpellingReport = Omit<OperatorSpelling, "parameters"> & {
+type OperatorSpellingReport = Omit<OperatorSpelling, "parameters"> & {
   fingerprint_id: string;
   surface_id: number;
   /** `created`: a new surface of this operator; `kept`: an earlier surface already decided it. */

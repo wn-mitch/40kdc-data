@@ -25,7 +25,7 @@ import { ANTECEDENT } from "./antecedent-families.js";
  * "engaged with that enemy unit") is about each counted unit or model, whatever else the record
  * selected. It is marked before anaphors bind, so the selection does not claim it.
  */
-export const COUNTED = "counted";
+const COUNTED = "counted";
 
 /** The count of models equipped with a wargear item (count-scale counts models-equipped-with). */
 const MODELS_EQUIPPED_WITH = "models-equipped-with";
@@ -97,7 +97,7 @@ function unmapped(what: string): never {
 }
 
 /** The DSL scaling source (with its range and keyword) the counted filter and its qualifiers name. */
-export function scalingSource(list: readonly CompileLeaf[], group: Group): Record<string, unknown> {
+function scalingSource(list: readonly CompileLeaf[], group: Group): Record<string, unknown> {
   const filter = list[group.filter]!.parameters as { side?: string; keywords?: string[]; level?: string } & Record<string, unknown>;
   const narrower = Object.keys(filter).filter((key) => !["side", "keywords", "level"].includes(key));
   if (narrower.length) unmapped(`units narrowed by ${narrower.join(", ")}`);

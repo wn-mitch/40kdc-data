@@ -5,7 +5,7 @@ import type Ajv from "ajv";
 import { createValidator } from "../schema-loader.js";
 import { effectToBuffs, POST_ATTACK_MOMENT, type EffectTranslation } from "../cruncher/from-dsl.js";
 import { assumeEventSubjectMatches } from "../cruncher/from-dsl-selection.js";
-import { DEFENDER_SIDE_STAT, effectScope, isOutsideDamagePath as outsideDamagePath } from "../cruncher/unsupported-scope.js";
+import { DEFENDER_SIDE_STAT, isOutsideDamagePath as outsideDamagePath } from "../cruncher/unsupported-scope.js";
 import { grantedRecordIds } from "../data/lever-providers.js";
 import { resolveGrantedRecords, type GrantedRecord, type GrantedRecordLookup } from "../cruncher/granted-records.js";
 import type { ProjectionChecker } from "../mfm/apply.js";
@@ -14,7 +14,7 @@ import { tiledSources, type TiledSourceOptions } from "./leaf-view.js";
 import { ownAbilityIds } from "./own-abilities.js";
 import { cachedEmbeddings, localEmbedder, type Embedder } from "./embeddings.js";
 import { dot } from "./leaf-knn.js";
-import { compileLeaves, type CompileLeaf, type Compiled } from "./compile.js";
+import { compileLeaves, type Compiled } from "./compile.js";
 import { coreCheckErrors } from "./core-checks.js";
 import { checkEntry, entryWithMechanics, resolveCheckedEntity, semanticAuthoringDataRoot } from "./entries.js";
 import { approvedCompanions, compiledPublicationErrors, openPublicationChecker, type CompiledRecord, type FactionRecord } from "./publication-projection.js";
@@ -145,16 +145,8 @@ const OUTSIDE_CRUNCHER_SCOPE: ReadonlyArray<{ reason: RegExp; why: string }> = [
 ];
 
 /** Whether an unsupported item is marked as outside the cruncher's scope. */
-export function isOutsideCruncherScope(item: EffectTranslation["unsupported"][number]): boolean {
+function isOutsideCruncherScope(item: EffectTranslation["unsupported"][number]): boolean {
   return OUTSIDE_CRUNCHER_SCOPE.some((entry) => entry.reason.test(item.reason));
-}
-
-/**
- * Whether every leaf of an effect subtree is off the damage path; the cruncher's scope classifier
- * with this gate's schema check, since a compiled candidate is not yet validated.
- */
-export function isNonDamageEffect(node: unknown): boolean {
-  return effectScope(node, validEffect) !== "unresolved";
 }
 
 export function isOutsideDamagePath(item: EffectTranslation["unsupported"][number]): boolean {

@@ -9,7 +9,7 @@ import { CompileError } from "./compile-fragments.js";
  */
 
 /** Effects that name a roll and take no subject: whose rolls they are comes from a filter before them. */
-export const SUBJECTLESS_ROLLS = new Set(["reroll", "roll-modifier", "roll-auto-result"]);
+const SUBJECTLESS_ROLLS = new Set(["reroll", "roll-modifier", "roll-auto-result"]);
 export const subjectlessRoll = (leaf: CompileLeaf | undefined) => leaf !== undefined && SUBJECTLESS_ROLLS.has(leaf.family_id) && leaf.parameters.subject === undefined;
 
 /** Rolls an attack type's weapon_type can scope: attack rolls only, not tests. */
@@ -18,7 +18,7 @@ const ATTACK_ROLLS = new Set(["hit", "wound", "damage"]);
 const FOLDABLE_FAMILIES = new Set(["reroll", "roll-modifier"]);
 
 /** A melee or ranged attack-filter with no field but its type, not negated: the only frame that folds. */
-export function frameFilter(leaf: CompileLeaf | undefined): leaf is CompileLeaf & { parameters: { attack_type: "melee" | "ranged" } } {
+function frameFilter(leaf: CompileLeaf | undefined): leaf is CompileLeaf & { parameters: { attack_type: "melee" | "ranged" } } {
   if (leaf?.family_id !== "attack-filter") return false;
   const { attack_type: type, negated, ...rest } = leaf.parameters;
   return (type === "melee" || type === "ranged") && Object.keys(rest).length === 0 && negated !== true;

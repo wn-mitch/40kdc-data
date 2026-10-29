@@ -35,7 +35,7 @@ function weaponType(input: Record<string, unknown>, rolls: readonly unknown[], l
 const ROLL_SUBJECTS = ["this-unit", "this-model", "event-subject", "selected-unit", "recipient", ANTECEDENT] as const;
 
 /** A version whose rolls belong to a named unit: subject, which an earlier leaf's unit may bind. */
-export function rollSubject(family: string, version: number, example: string): FamilyExtension {
+function rollSubject(family: string, version: number, example: string): FamilyExtension {
   return {
     family,
     version,
@@ -87,7 +87,7 @@ const ABILITY_ROLL_SCHEMA: Schema = {
 };
 
 /** Rolls a weapon name can limit: the attacker's three rolls and the Hazard roll a weapon causes. */
-export const NAMED_WEAPON_ROLLS = ["hit", "wound", "damage", "hazard"] as const;
+const NAMED_WEAPON_ROLLS = ["hit", "wound", "damage", "hazard"] as const;
 
 /** The most dice a re-roll of "up to N" can name. */
 const REROLL_MAX = 12;

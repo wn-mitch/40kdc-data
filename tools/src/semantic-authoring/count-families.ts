@@ -14,11 +14,11 @@ import { optional } from "./family-extension-helpers.js";
  * names, narrowed by the range and membership leaves after that filter. following-items: one count
  * per bulleted item whose conditions all hold ("for each of the following conditions you satisfy").
  */
-export const COUNT_SCALE_COUNTS = ["following-filter", "following-items"] as const;
+const COUNT_SCALE_COUNTS = ["following-filter", "following-items"] as const;
 /** in: a model of that unit; embarked-in: a model embarked within it; in-or-embarked-in: either. */
-export const MEMBERSHIP_RELATIONS = ["in", "embarked-in", "in-or-embarked-in"] as const;
+const MEMBERSHIP_RELATIONS = ["in", "embarked-in", "in-or-embarked-in"] as const;
 /** The unit or Transport the counted models belong to. */
-export const MEMBERSHIP_OF = ["this-unit", "this-model"] as const;
+const MEMBERSHIP_OF = ["this-unit", "this-model"] as const;
 
 export const COUNT_FAMILIES: readonly SemanticFamilyDefinition[] = [
   {

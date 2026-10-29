@@ -10,10 +10,10 @@ import { type Schema, standIn, widenedEnum, withProperties } from "../family-ext
 export const WAVE9_KEYWORDS = ["Close-quarters"] as const;
 
 /** Value-carrying keywords those versions add: Cleave N, and Anti whose target is one of several slash-separated keywords. */
-export const WAVE9_KEYWORD_PATTERN = /^(?:Cleave [1-9]|Anti-[A-Z][A-Za-z -]*[A-Za-z](?:\/[A-Z][A-Za-z -]*[A-Za-z])* [2-6]\+)$/u;
+const WAVE9_KEYWORD_PATTERN = /^(?:Cleave [1-9]|Anti-[A-Z][A-Za-z -]*[A-Za-z](?:\/[A-Z][A-Za-z -]*[A-Za-z])* [2-6]\+)$/u;
 
 /** Whether a keyword is one those versions add. Anti with one target is already in the earlier pattern, so it is not checked here. */
-export function isWave9Keyword(keyword: string): boolean {
+function isWave9Keyword(keyword: string): boolean {
   return (WAVE9_KEYWORDS as readonly string[]).includes(keyword) || WAVE9_KEYWORD_PATTERN.test(keyword);
 }
 

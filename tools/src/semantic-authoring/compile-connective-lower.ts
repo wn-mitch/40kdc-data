@@ -17,7 +17,7 @@ import { matchesKey, type ConditionOfPlan, type LeafKey } from "./compile-connec
 type Node = Record<string, unknown>;
 
 /** The planned-effect fields compile.ts keeps for each effect leaf. */
-export type PlannedItem = { index: number; leaf: CompileLeaf; node: Node; gate: Node[]; selected: boolean; replaces: boolean };
+type PlannedItem = { index: number; leaf: CompileLeaf; node: Node; gate: Node[]; selected: boolean; replaces: boolean };
 
 export type ConnectiveContext = {
   list: readonly CompileLeaf[];

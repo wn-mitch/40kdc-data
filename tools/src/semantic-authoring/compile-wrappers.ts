@@ -243,7 +243,7 @@ export function selectionHasFilter(selection: CompileLeaf): boolean {
  * A grant or attack scope whose recipient is the friendly unit of an independent pair ("weapons
  * equipped by models in that friendly unit have …"): it says whose attacks the designation affects.
  */
-export function friendlyRecipientFrame(leaf: CompileLeaf): boolean {
+function friendlyRecipientFrame(leaf: CompileLeaf): boolean {
   return (leaf.family_id === "weapon-ability-grant" || leaf.family_id === "weapon-property-scope")
     && (leaf.parameters.subject === "antecedent" || leaf.parameters.subject === "selected-unit") && leaf.parameters.weapon_type !== undefined;
 }

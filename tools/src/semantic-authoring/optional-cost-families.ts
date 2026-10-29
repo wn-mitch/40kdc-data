@@ -9,8 +9,8 @@ import { SUBJECT_REF } from "./predicate-families.js";
  */
 
 /** The pools a spend can name here; each maps to the designation its optional spend sets (compile-optional-cost.ts). */
-export const OPTIONAL_COST_POOLS = ["yp-pool"] as const;
-export const OPTIONAL_COST_WINDOWS = ["use", "turn"] as const;
+const OPTIONAL_COST_POOLS = ["yp-pool"] as const;
+const OPTIONAL_COST_WINDOWS = ["use", "turn"] as const;
 
 export const OPTIONAL_COST_FAMILIES: readonly SemanticFamilyDefinition[] = [
   {

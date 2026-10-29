@@ -3,7 +3,7 @@ import { optional, withProperties } from "../family-extension-helpers.js";
 import { enumValue } from "../family-validation.js";
 
 /** Who counts as having moved: the units the permission's own subject is (it disembarks itself). */
-export const COUNTS_AS_MOVED_UNITS = ["permission-subject"] as const;
+const COUNTS_AS_MOVED_UNITS = ["permission-subject"] as const;
 
 /**
  * "The bearer's unit can disembark … If it does, it counts as having made a Normal move": the

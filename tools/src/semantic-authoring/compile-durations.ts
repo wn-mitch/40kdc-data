@@ -89,7 +89,7 @@ export function bindDurations(list: readonly CompileLeaf[], places: readonly Pla
 }
 
 /** Position of a duration in the lifetime order; an endpoint outside it cannot be compared with a window. */
-export function lifetimeRank(name: string): number {
+function lifetimeRank(name: string): number {
   const rank = LIFETIME.indexOf(canonicalDurationName(name));
   if (rank === -1) throw new CompileError(`A duration ${name} cannot be ordered against a window.`);
   return rank;

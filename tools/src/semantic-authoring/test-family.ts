@@ -16,16 +16,16 @@ import { boundedInteger, enumSet, enumValue, exactKeys } from "./family-validati
  * directly as the effect's own `target`.
  */
 
-export const TARGET_ENUM = [
+const TARGET_ENUM = [
   "this-unit", "this-model", "attacker", "defender", "event-subject", "event-object",
   "stratagem-target", "selected-unit", "recipient", "bearer-transport", "ability-unit", "enemy", "friendly",
 ] as const;
 const FILTERED_TARGETS = new Set(["enemy", "friendly"]);
-export const TARGET_RANGES = ["engagement", "inches", "any"] as const;
-export const TARGET_OF = ["this-model", "event-object"] as const;
-export const TARGET_OF_OWNERS = ["friendly", "enemy"] as const;
+const TARGET_RANGES = ["engagement", "inches", "any"] as const;
+const TARGET_OF = ["this-model", "event-object"] as const;
+const TARGET_OF_OWNERS = ["friendly", "enemy"] as const;
 
-export const targetFilterProperties = {
+const targetFilterProperties = {
   target: { enum: TARGET_ENUM },
   range: { enum: TARGET_RANGES, "x-only-when": { target: ["enemy", "friendly"] } },
   within_inches: { type: "integer", minimum: 1, maximum: 48, "x-only-when": { range: ["inches"] } },
@@ -40,7 +40,7 @@ export const targetFilterProperties = {
   exclude_keywords: { type: "array", items: { type: "string", minLength: 1 }, minItems: 1, uniqueItems: true, "x-only-when": { target: ["enemy", "friendly"] } },
 } as const;
 
-export function normalizeTargetFilter(input: Record<string, unknown>, prefix: string): {
+function normalizeTargetFilter(input: Record<string, unknown>, prefix: string): {
   keys: string[]; target: string; range?: string; within_inches?: number; of?: string;
   of_owner?: string; of_keywords?: string[]; require_keywords?: string[]; exclude_keywords?: string[];
 } {

@@ -52,7 +52,7 @@ export type PilotStepOptions = {
   jevClient?: JevClient;
 };
 
-export type PilotAbilityReport = {
+type PilotAbilityReport = {
   ability_version_id: number; faction_id: string; ability_id: string; kind: string | null; source_hash: string;
   trusted_leaves_before: number;
   spans: Array<{
@@ -286,7 +286,7 @@ function buildReport(
 }
 
 /** The label table Will reads before reviewing a step. */
-export function renderMarkdown(report: PilotStepReport): string {
+function renderMarkdown(report: PilotStepReport): string {
   const lines = [`# Pilot step ${report.step}`, "", `Abilities: ${report.ability_version_ids.join(", ")}. Spend: $${report.spend.cost_usd.toFixed(4)} DeepSeek (${report.spend.unknown_cost_runs} runs of unknown cost), $${report.spend.jev_usd.toFixed(4)} Jev.`, ""];
   for (const ability of report.abilities) {
     const gate = ability.gate;

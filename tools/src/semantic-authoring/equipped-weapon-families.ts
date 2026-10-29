@@ -8,7 +8,7 @@ import { boundedInteger, enumValue, exactKeys } from "./family-validation.js";
  * unit's models), this counts one model's own weapons.
  */
 
-export const EQUIPPED_WEAPON_TYPES = ["melee", "ranged"] as const;
+const EQUIPPED_WEAPON_TYPES = ["melee", "ranged"] as const;
 
 export const EQUIPPED_WEAPON_COUNT_FAMILIES: readonly SemanticFamilyDefinition[] = [
   {

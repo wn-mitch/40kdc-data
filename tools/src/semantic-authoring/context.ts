@@ -3,32 +3,32 @@ import { abilityIdsOf } from "../data/ability-refs.js";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-export type JsonObject = Record<string, unknown>;
+type JsonObject = Record<string, unknown>;
 
-export type AbilityOwnerContext = {
+type AbilityOwnerContext = {
   unit_id: string;
   name: string | null;
   role: string | null;
 };
 
-export type AbilitySelectionBudgetContext = {
+type AbilitySelectionBudgetContext = {
   unit_id: string;
   count: number;
   per_models: number;
 };
 
-export type AbilityWargearOptionContext = {
+type AbilityWargearOptionContext = {
   id: string;
   model_constraint: JsonObject | null;
 };
 
-export type AbilityWargearContext = {
+type AbilityWargearContext = {
   id: string;
   name: string | null;
   options: AbilityWargearOptionContext[];
 };
 
-export type ExistingDslContext = {
+type ExistingDslContext = {
   /** This is tracked community-authored DSL, not the workbench's live proposal. */
   provenance: "existing-community-authored-dsl";
   effect: JsonObject | null;

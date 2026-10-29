@@ -104,7 +104,7 @@ export function normalizeMovePassthroughUsedParameters(family: string, input: Re
 }
 
 /** The disembark modes the DSL names; the move's modifier carries one as `mode`. */
-export const DISEMBARK_MODES = ["rapid", "tactical", "combat", "emergency", "assault"] as const;
+const DISEMBARK_MODES = ["rapid", "tactical", "combat", "emergency", "assault"] as const;
 /** make-move version 7 adds the shock disembark mode. */
 const DISEMBARK_MODES_V7 = [...DISEMBARK_MODES, "shock"] as const;
 
@@ -125,10 +125,10 @@ const NO_ADVANCE_ROLL_EVENT_SUBJECT: FamilyExtension = {
  */
 
 /** The move kinds a counts-as-moved status can name. Only "normal" is evidenced; widen by a new version. */
-export const COUNTS_AS_MOVED_MOVE_TYPES = ["normal"] as const;
+const COUNTS_AS_MOVED_MOVE_TYPES = ["normal"] as const;
 
 /** The only printed period the status takes: "that phase". Absent means the DSL default applies. */
-export const COUNTS_AS_MOVED_WINDOWS = ["phase"] as const;
+const COUNTS_AS_MOVED_WINDOWS = ["phase"] as const;
 
 export const COUNTS_AS_MOVED_FAMILIES: readonly SemanticFamilyDefinition[] = [
   {

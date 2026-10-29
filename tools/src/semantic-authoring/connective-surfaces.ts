@@ -188,7 +188,7 @@ export function relabelConnective(db: DatabaseSync, value: { reviewer: string; p
 }
 
 /** Write one connective's reviewed relation, or remove it. */
-export function setConnectiveRelation(db: DatabaseSync, proposalId: number, relation: string | null): void {
+function setConnectiveRelation(db: DatabaseSync, proposalId: number, relation: string | null): void {
   if (relation === null) db.prepare("UPDATE proposals SET reason_json = json_remove(reason_json, '$.reviewed_relation') WHERE id = ?").run(proposalId);
   else db.prepare("UPDATE proposals SET reason_json = json_set(reason_json, '$.reviewed_relation', ?) WHERE id = ?").run(relation, proposalId);
 }

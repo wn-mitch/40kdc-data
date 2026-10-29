@@ -24,7 +24,7 @@ export function destinationOf(leaf: CompileLeaf): string {
  * must come before the move-end, since the DSL binds the name for the select's own effect only.
  * Returns an error when the destination has no value in this ability.
  */
-export function endsNearestValue(list: readonly CompileLeaf[], at: number, selectedObjective?: string): { value: Node } | { error: string } {
+function endsNearestValue(list: readonly CompileLeaf[], at: number, selectedObjective?: string): { value: Node } | { error: string } {
   const leaf = list[at]!;
   const to = destinationOf(leaf);
   const value: Node = {};
@@ -53,7 +53,7 @@ export function endsNearestValue(list: readonly CompileLeaf[], at: number, selec
  * no "must", so the unit may choose this destination. The sentence is the text between the sentence
  * stops (. ; :) around the leaf. Needs the source text; without it the answer is no.
  */
-export function sentenceIsOptional(sourceText: string | undefined, leaf: CompileLeaf): boolean {
+function sentenceIsOptional(sourceText: string | undefined, leaf: CompileLeaf): boolean {
   if (sourceText === undefined || leaf.end_byte === undefined) return false;
   const bytes = Buffer.from(sourceText, "utf8");
   const before = bytes.subarray(0, leaf.start_byte).toString("utf8").replace(/^[\s\S]*[.;:]/u, "");

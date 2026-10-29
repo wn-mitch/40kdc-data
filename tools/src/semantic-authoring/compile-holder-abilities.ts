@@ -105,7 +105,7 @@ function existentialFilters(leaf: CompileLeaf): Node[] {
 }
 
 /** Whether a folded leaf list holds the record's own ability holders as an existential over the army. */
-export function holdsArmyHolders(list: readonly CompileLeaf[], abilityId: string | undefined): boolean {
+function holdsArmyHolders(list: readonly CompileLeaf[], abilityId: string | undefined): boolean {
   if (abilityId === undefined) return false;
   return list.some((leaf) => existentialFilters(leaf).some((filter) => filter.owner === "friendly"
     && Array.isArray(filter.has_ability) && (filter.has_ability as string[]).includes(abilityId)));
@@ -127,7 +127,7 @@ function triggerFrequency(trigger: Node): string | null {
  * Command phase"). A record whose moment can recur ("each time …") gets none: the existential
  * filter alone says one test per enemy unit.
  */
-export function holderAllowance(list: readonly CompileLeaf[], triggers: readonly Node[]): Node | null {
+function holderAllowance(list: readonly CompileLeaf[], triggers: readonly Node[]): Node | null {
   const frequencies = new Set<string | null>(triggers.map(triggerFrequency));
   if (triggers.length === 0) {
     const windows = list.filter((leaf) => leaf.family_id === "phase-window" && leaf.parameters.phase !== "any");

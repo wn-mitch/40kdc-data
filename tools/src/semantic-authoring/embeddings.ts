@@ -15,7 +15,7 @@ export type Embedder = {
   embed: (texts: readonly string[]) => Promise<Float32Array[]>;
 };
 
-export const DEFAULT_EMBEDDING_MODEL = "Xenova/bge-small-en-v1.5";
+const DEFAULT_EMBEDDING_MODEL = "Xenova/bge-small-en-v1.5";
 const BATCH = 64;
 
 type Extractor = (texts: string[], options: { pooling: "mean"; normalize: true }) => Promise<{ dims: number[]; data: Float32Array }>;

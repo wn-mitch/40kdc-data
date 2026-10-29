@@ -177,7 +177,7 @@ export function resolveDefinitionName(factionId: string, name: string): { abilit
 }
 
 /** The one army-wide record whose issue-orders lists the faction's Orders, nearest scope first; null when none or several do. */
-export function resolveOrderMenu(factionId: string): string | null {
+function resolveOrderMenu(factionId: string): string | null {
   for (const faction of scopes(factionId)) {
     const menus = [...new Set(catalogOf(faction).orderMenus)];
     if (menus.length === 1) return menus[0]!;

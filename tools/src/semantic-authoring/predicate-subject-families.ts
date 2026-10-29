@@ -11,7 +11,7 @@ import { UNIT_KEYWORD } from "./buff-families.js";
  */
 
 /** Version 1-3 subjects: only the attack's own two parties. */
-export const PREDICATE_SUBJECTS = ["this-unit", "target"] as const;
+const PREDICATE_SUBJECTS = ["this-unit", "target"] as const;
 /**
  * Version 4/3/2 (unit-state/unit-activity/unit-keyword) widen `subject` to every unit-ref role
  * that shows up in authored data beyond the attack's own two parties: the model itself, the
@@ -19,7 +19,7 @@ export const PREDICATE_SUBJECTS = ["this-unit", "target"] as const;
  * selected earlier (selected-unit). `attacker` already reads via the attack leaf, but a
  * predicate can also ask about it directly ("if the attacking unit is below half-strength").
  */
-export const WIDE_SUBJECTS = ["this-unit", "this-model", "target", "attacker", "event-subject", "recipient", "selected-unit"] as const;
+const WIDE_SUBJECTS = ["this-unit", "this-model", "target", "attacker", "event-subject", "recipient", "selected-unit"] as const;
 /** unit-position@5's `of` can also be the unit the triggering event acted on (event-object): "within 6\" of that unit when it was destroyed". */
 const POSITION_OF_V5 = [...WIDE_SUBJECTS, "event-object"] as const;
 
@@ -27,18 +27,18 @@ const UNIT_STATES_V1 = ["below-starting-strength", "below-half-strength", "battl
 /** Version 2 adds being within Engagement Range of an enemy unit (negated: unengaged). */
 const UNIT_STATES_V2 = [...UNIT_STATES_V1, "engaged"] as const;
 /** Version 3 adds being on the battlefield, the one state a single model can have. */
-export const UNIT_STATES = [...UNIT_STATES_V2, "on-battlefield"] as const;
+const UNIT_STATES = [...UNIT_STATES_V2, "on-battlefield"] as const;
 /** unit-state version 3 subjects: "this model" is only for being on the battlefield. */
-export const STATE_SUBJECTS = ["this-model", ...PREDICATE_SUBJECTS] as const;
-export const UNIT_MARKS = ["oath-of-moment", "afflicted", "spotted", "hidden", "marked"] as const;
+const STATE_SUBJECTS = ["this-model", ...PREDICATE_SUBJECTS] as const;
+const UNIT_MARKS = ["oath-of-moment", "afflicted", "spotted", "hidden", "marked"] as const;
 /** Version 2 adds being riled up ("+1 to that roll if your unit is riled up"). */
-export const UNIT_MARKS_V2 = [...UNIT_MARKS, "riled-up"] as const;
-export const POSITION_KINDS = ["closest-eligible", "within", "beyond", "objective-range"] as const;
+const UNIT_MARKS_V2 = [...UNIT_MARKS, "riled-up"] as const;
+const POSITION_KINDS = ["closest-eligible", "within", "beyond", "objective-range"] as const;
 const DISTANCE_KINDS = ["within", "beyond"] as const;
-export const OBJECTIVE_CONTROLLERS = ["any", "you", "opponent"] as const;
+const OBJECTIVE_CONTROLLERS = ["any", "you", "opponent"] as const;
 const UNIT_ACTIVITIES_V1 = ["charged-this-turn", "advanced-this-turn", "remained-stationary", "fought-this-phase", "selected-to-shoot-this-phase"] as const;
 /** Version 2 adds being selected to move this phase. Selected to fight is fought this phase. */
-export const UNIT_ACTIVITIES = [...UNIT_ACTIVITIES_V1, "selected-to-move-this-phase"] as const;
+const UNIT_ACTIVITIES = [...UNIT_ACTIVITIES_V1, "selected-to-move-this-phase"] as const;
 const MAX_INCHES = 48;
 
 const subjectAndNegation = {

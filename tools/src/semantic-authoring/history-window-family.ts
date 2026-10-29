@@ -7,7 +7,7 @@ import { enumValue } from "./family-validation.js";
  * unit-filter sits between), so a leaf accounts for them. compile-history-window.ts folds it into
  * the history condition it follows.
  */
-export const HISTORY_WINDOWS = ["phase", "turn", "battle"] as const;
+const HISTORY_WINDOWS = ["phase", "turn", "battle"] as const;
 
 export const HISTORY_WINDOW_FAMILIES: readonly SemanticFamilyDefinition[] = [
   {

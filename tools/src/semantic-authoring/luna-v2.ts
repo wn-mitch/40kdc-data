@@ -12,7 +12,7 @@ import { STRUCTURAL_KINDS, type StructuralKind } from "./schema-ext.js";
 
 const PARAMETER_NAME = /^[a-z][a-z0-9_]*$/u;
 /** A model offset may be re-anchored to its exact text at most this many bytes away. */
-export const MAX_OFFSET_REPAIR_BYTES = 64;
+const MAX_OFFSET_REPAIR_BYTES = 64;
 
 /** An interval whose bytes equal its exact text, and whether the model's offsets were re-anchored. */
 export type AnchoredInterval = { start_byte: number; end_byte: number; repaired: boolean };

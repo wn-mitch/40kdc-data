@@ -16,7 +16,7 @@ import type { ProposalPiece, UnnamedPiece } from "./leaf-proposals.js";
  * dropped with the reason. Accepted answers become ordinary proposals for the reviewer.
  */
 
-export const LEAF_PROPOSAL_PROMPT_VERSION = "leaf-proposals-v1";
+const LEAF_PROPOSAL_PROMPT_VERSION = "leaf-proposals-v1";
 const CLUSTERS_PER_CALL = 10;
 const MEMBERS_PER_CLUSTER = 8;
 const EXAMPLES_PER_FAMILY = 3;
@@ -73,14 +73,14 @@ export function deepseekReservationUsd(requestBytes: number, maxTokens: number, 
 }
 
 /** Cost of one DeepSeek reply from its own usage accounting, at the off-peak published prices. */
-export function deepseekCostUsd(usage: DeepSeekUsage, model: string = DEEPSEEK_MODEL): number {
+function deepseekCostUsd(usage: DeepSeekUsage, model: string = DEEPSEEK_MODEL): number {
   const price = DEEPSEEK_PRICE_PER_MILLION_USD[model] ?? DEEPSEEK_PRICE_PER_MILLION_USD[DEEPSEEK_MODEL]!;
   return (usage.prompt_cache_hit_tokens / 1_000_000) * price.cacheHitInput
     + (usage.prompt_cache_miss_tokens / 1_000_000) * price.cacheMissInput
     + (usage.completion_tokens / 1_000_000) * price.output;
 }
 
-export const LEAF_PROPOSAL_INSTRUCTIONS = [
+const LEAF_PROPOSAL_INSTRUCTIONS = [
   "You label Warhammer 40,000 rules wording with leaves. A leaf is one meaning from the listed families: an EFFECT (what changes), a CONDITION (when it applies), an EVENT (when it fires), a DURATION, a RESTRICTION, or a COMBINATOR.",
   "For each wording, divide it into contiguous pieces, each carrying exactly one meaning, and give each piece a family_id and parameters. Copy each piece's text exactly from the wording. Joining words (and, as well, then) belong to no piece.",
   "Use only the listed families and versions. Parameters must satisfy the family's parameter schema exactly: no extra keys, only listed enum values.",
@@ -93,7 +93,7 @@ export const DEEPSEEK_MODEL = "deepseek-v4-pro";
 /** DeepSeek's fast/cheap model (the API's own id; the `omp` CLI profile calls it "deepseek-v4-flash"). */
 export const DEEPSEEK_FLASH_MODEL = "deepseek-flash";
 /** `reasoning_effort` request values DeepSeek's chat-completions API accepts. */
-export const DEEPSEEK_REASONING_EFFORTS = ["none", "low", "high", "max"] as const;
+const DEEPSEEK_REASONING_EFFORTS = ["none", "low", "high", "max"] as const;
 export type DeepSeekReasoningEffort = typeof DEEPSEEK_REASONING_EFFORTS[number];
 const DEEPSEEK_ENDPOINT = process.env.DEEPSEEK_BASE_URL ?? "https://api.deepseek.com/chat/completions";
 /** The gitignored file holding the key when the environment does not. */
@@ -120,7 +120,6 @@ export function deepseekKey(): string {
  * before it ever reaches its answer ("DeepSeek stopped with length"). The old hardcoded 32768
  * sat *below* the model's own thinking-mode default and caused exactly that truncation.
  */
-export const DEEPSEEK_MAX_TOKENS_CEILING = 393216;
 export const DEFAULT_MAX_TOKENS = 100000;
 
 /** Hard wall-clock budget for one DeepSeek HTTP call; a timeout is a transport failure like any other. */
@@ -234,7 +233,7 @@ function context(db: DatabaseSync) {
 }
 
 /** Checked pieces for one answer, and why any piece was dropped. */
-export function checkAnswer(wording: string, answer: unknown): { pieces: Array<ProposalPiece | UnnamedPiece>; dropped: string[]; new_family?: Record<string, string> } {
+function checkAnswer(wording: string, answer: unknown): { pieces: Array<ProposalPiece | UnnamedPiece>; dropped: string[]; new_family?: Record<string, string> } {
   const dropped: string[] = [];
   if (!answer || typeof answer !== "object") return { pieces: [], dropped: ["The model gave no answer for this wording."] };
   const record = answer as { pieces?: unknown; new_family?: unknown };

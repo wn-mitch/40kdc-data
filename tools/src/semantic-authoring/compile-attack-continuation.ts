@@ -47,7 +47,6 @@ export function inheritAttackFrames(
     const attackAt = list.map((other, at) => other.family_id === "attack" && !isBackref(other) && at < earlier.index && places[at]!.sentence === places[earlier.index]!.sentence ? at : -1)
       .filter((at) => at !== -1).at(-1);
     if (attackAt === undefined) continue;
-    const attack = list[attackAt]!;
     const framed = list.flatMap((other, at) => at > attackAt && at < earlier.index && other.role === "CONDITION" && ATTACK_QUALIFIERS.has(other.family_id)
       && places[at]!.sentence === places[attackAt]!.sentence ? [conditionOf(other)] : []);
     for (const node of framed) {

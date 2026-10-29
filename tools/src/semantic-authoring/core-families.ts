@@ -6,7 +6,7 @@ import {
 import { pickedRolls, ROLL_KINDS, WEAPON_TYPES } from "./dice-families.js";
 import { EVENT_FAMILY, normalizeEventParameters } from "./event-family.js";
 
-export { PHASE_EVENT_KINDS, PHASES, TURNS } from "./event-family.js";
+export {  PHASES, TURNS } from "./event-family.js";
 
 /** A kebab-case entity id, shared with buff-families.ts's ENTITY_ID. */
 export const ENTITY_ID_PATTERN = /^[a-z0-9][a-z0-9-]*[a-z0-9]$/u;

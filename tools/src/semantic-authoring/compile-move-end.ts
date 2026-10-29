@@ -52,7 +52,7 @@ export function triggerMoveEnd(
  * (a targets-selected event with action_kind charge). Any other nearest event gives no charge anchor,
  * so a restriction never borrows a charge declared before a later move-ended or shoot trigger.
  */
-export function chargeDeclarationBefore(list: readonly CompileLeaf[], index: number): CompileLeaf | undefined {
+function chargeDeclarationBefore(list: readonly CompileLeaf[], index: number): CompileLeaf | undefined {
   for (let at = index - 1; at >= 0; at -= 1) {
     const leaf = list[at]!;
     if (leaf.family_id !== "event") continue;

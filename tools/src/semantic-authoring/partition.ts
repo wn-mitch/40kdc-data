@@ -35,7 +35,7 @@ export function overlapLength(base: readonly Interval[], covered: readonly Inter
 }
 
 /** `base ∩ other`; both must be normalized. */
-export function intersectIntervals(base: readonly Interval[], other: readonly Interval[]): Interval[] {
+function intersectIntervals(base: readonly Interval[], other: readonly Interval[]): Interval[] {
   const result: Interval[] = [];
   let left = 0;
   let right = 0;
@@ -73,7 +73,7 @@ export function subtractIntervals(base: readonly Interval[], exclusions: readonl
  * Layers of the exclusive byte partition, highest priority first. A meaningful byte belongs to
  * the first layer that claims it; bytes no layer claims are `residue`.
  */
-export const PARTITION_LAYERS = ["leaf", "structural", "connective", "pending", "unresolved"] as const;
+const PARTITION_LAYERS = ["leaf", "structural", "connective", "pending", "unresolved"] as const;
 export type PartitionLayer = typeof PARTITION_LAYERS[number];
 export type ExclusivePartition = Record<PartitionLayer | "residue", Interval[]>;
 

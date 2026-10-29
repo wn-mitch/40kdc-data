@@ -15,7 +15,7 @@ import { canonicalTarget, coreStratagemFile } from "./publish-core.js";
  * since approval; the publisher re-checks all of that before writing.
  */
 
-export type PublishableEntry = { entry_id: string; ability_id: string; shape_signature: string; changes: string[] };
+type PublishableEntry = { entry_id: string; ability_id: string; shape_signature: string; changes: string[] };
 export type PublishableFaction = { faction_id: string; entries: PublishableEntry[] };
 
 const FIELDS = ["effect", "scope", "behavior", "optional", "trigger", "usage", "applies_to"] as const;

@@ -146,7 +146,7 @@ export function addMember(db: DatabaseSync, batchId: string, kind: string, id: n
 type Occurrence = { ability_version_id: number; faction_id: string; ability_id: string; fragment: string; start_byte: number; end_byte: number; exact_text: string };
 
 /** Every current occurrence of a surface: the lexical scan plus pending proposals with that exact wording. */
-export function surfaceOccurrences(db: DatabaseSync, surface: string, abilityVersionIds?: ReadonlySet<number>): Occurrence[] {
+function surfaceOccurrences(db: DatabaseSync, surface: string, abilityVersionIds?: ReadonlySet<number>): Occurrence[] {
   const found = new Map<string, Occurrence>();
   const add = (occurrence: Occurrence) => {
     if (abilityVersionIds && !abilityVersionIds.has(occurrence.ability_version_id)) return;
@@ -657,7 +657,7 @@ export function applyLeafUndo(db: DatabaseSync, batchId: string, reversalId: str
   }
 }
 
-export type BoardSurface = {
+type BoardSurface = {
   /** The human surface deciding this spelling; null when undecided (or decided only by a machine). */
   surface_id: number | null;
   /** A machine-founded surface for this spelling, awaiting review. */
@@ -667,7 +667,7 @@ export type BoardSurface = {
   closes: number;
   warnings?: string[];
 };
-export type BoardLeaf = {
+type BoardLeaf = {
   fingerprint_id: string; family_id: string; family_version: number; role: string; parameters: Record<string, unknown>;
   retired_version: boolean; surfaces: BoardSurface[];
   /** Sources its pending spellings would finish, and every occurrence it has (decided or pending). */

@@ -12,7 +12,7 @@
  * `humanActor` mints. `test/semantic-authoring-authority.test.ts` pins the set of modules allowed to call it.
  */
 
-export const AUTHORITY_KINDS = ["human", "derived", "machine"] as const;
+const AUTHORITY_KINDS = ["human", "derived", "machine"] as const;
 export type Authority = (typeof AUTHORITY_KINDS)[number];
 
 const RANK: Record<Authority, number> = { machine: 0, derived: 1, human: 2 };
@@ -22,9 +22,6 @@ export function mayReplace(writer: Authority, existing: Authority): boolean {
   return RANK[writer] >= RANK[existing];
 }
 
-export function isTrusted(authority: Authority): boolean {
-  return authority !== "machine";
-}
 
 /** SQL predicate over `annotations`: the row is trusted (human or derived). */
 export const TRUSTED_ANNOTATION = "(annotations.authority_kind IN ('human', 'derived'))";

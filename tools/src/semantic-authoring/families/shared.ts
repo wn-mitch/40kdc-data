@@ -16,7 +16,7 @@ export const WEAPON_KEYWORDS = [
 const ASCII_KEYWORD = "^[A-Z][A-Z0-9' -]*[A-Z0-9]$";
 
 /** Keywords as the rules print them, accented capitals included ("KÂHL"). */
-export const PRINTED_KEYWORD = "^[A-ZÀ-ÖØ-Þ][A-ZÀ-ÖØ-Þ0-9' -]*[A-ZÀ-ÖØ-Þ0-9]$";
+const PRINTED_KEYWORD = "^[A-ZÀ-ÖØ-Þ][A-ZÀ-ÖØ-Þ0-9' -]*[A-ZÀ-ÖØ-Þ0-9]$";
 
 function withPrintedKeywords(schema: unknown): unknown {
   if (schema === ASCII_KEYWORD) return PRINTED_KEYWORD;
@@ -155,9 +155,9 @@ export function designationId(value: unknown, label: string): string {
 }
 
 /** Two to eight printed weapon names: one name is one weapon_name, so a single name needs no list. */
-export const WEAPON_NAMES_MIN = 2;
+const WEAPON_NAMES_MIN = 2;
 
-export const WEAPON_NAMES_MAX = 8;
+const WEAPON_NAMES_MAX = 8;
 
 export const WEAPON_NAMES_SCHEMA = { type: "array", items: { type: "string", minLength: 1 }, minItems: WEAPON_NAMES_MIN, maxItems: WEAPON_NAMES_MAX, uniqueItems: true };
 

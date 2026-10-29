@@ -108,7 +108,7 @@ export function loadSourceRecords(origin: SourceOrigin = defaultOrigin()): Sourc
  * record names its own. `index.json` holds no records; an integer `data_version` in it stands
  * for the dump the fixture's prose was read from.
  */
-export function loadFixtureSourceRecords(storePath: string): SourceLoadReport {
+function loadFixtureSourceRecords(storePath: string): SourceLoadReport {
   const skipped: SkippedSourceRecord[] = [];
   const conflicts: SourceConflict[] = [];
   const candidates = new Map<string, PendingRecord>();

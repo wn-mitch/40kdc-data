@@ -31,12 +31,12 @@ type Compile = (leaves: readonly CompileLeaf[], sourceText?: string) => Compiled
  * and the keyword filter a leading "… units only" narrows its holders by (`narrow`), if any.
  */
 /** `ability` names the printed ability as one this record defines inside itself, when the record's id is known. */
-export type GrantedBody = { ability?: string | { ability_id: string; definition_id: string }; part: Node; narrow?: Node };
+type GrantedBody = { ability?: string | { ability_id: string; definition_id: string }; part: Node; narrow?: Node };
 
 const SELF_HOLDERS = new Set(["this-unit", "this-model"]);
 const BEHAVIOR_RANK = ["passive", "activated", "reactive", "aura"];
 
-export const isPrintedHeader = (leaf: CompileLeaf) => leaf.family_id === "ability-record-grant" && leaf.parameters.printed !== undefined;
+const isPrintedHeader = (leaf: CompileLeaf) => leaf.family_id === "ability-record-grant" && leaf.parameters.printed !== undefined;
 
 /** Byte ranges of the source's paragraphs, with continuation lines joined (see above). */
 function paragraphs(sourceText: string): Array<[number, number]> {

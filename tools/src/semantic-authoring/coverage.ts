@@ -10,7 +10,7 @@ import {
 } from "./partition.js";
 
 /** A source-native byte interval. All offsets are UTF-8 byte offsets. */
-export type ByteInterval = {
+type ByteInterval = {
   start_byte: number;
   end_byte: number;
 };
@@ -28,7 +28,7 @@ export type UncoveredInterval = ByteInterval & {
 };
 
 /** Byte totals for one exclusive coverage layer. */
-export type PartitionBytes = Record<PartitionLayer | "residue", number>;
+type PartitionBytes = Record<PartitionLayer | "residue", number>;
 
 /**
  * Coverage keeps confirmed and proposed semantic paint separate, and reports two metrics:
@@ -122,7 +122,7 @@ function idList(ids: Iterable<number>): string {
  * SQL predicate over `source_atom_reviews`: the structural review is active and, when it is a
  * reviewed qualifier inside a semantic span, its parent annotation still has authority.
  */
-export const EFFECTIVE_STRUCTURAL_REVIEW = `(
+const EFFECTIVE_STRUCTURAL_REVIEW = `(
   source_atom_reviews.status = 'active'
   AND (
     source_atom_reviews.contained_by_annotation_id IS NULL
@@ -379,5 +379,3 @@ export function getCurrentCoverage(db: DatabaseSync, options: CoverageView & { a
   ]));
 }
 
-/** Canonical roles that may contribute to leaf or proposal coverage. */
-export const COVERAGE_SEMANTIC_ROLES = semanticRoles;

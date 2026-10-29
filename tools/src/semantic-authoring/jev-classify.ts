@@ -19,7 +19,7 @@ import { leafSurfaceKey } from "./matching.js";
  * and never include the span's own wording, so a span cannot be classified by copying itself.
  */
 
-export const EXAMPLES_PER_FAMILY = 3;
+const EXAMPLES_PER_FAMILY = 3;
 const TIMEOUT_MS = 60_000;
 const STATE_CONTEXT = "A phrase cut from a Warhammer 40,000 rule. Which rule piece does it express?";
 
@@ -37,7 +37,7 @@ export type JevClassification = {
 
 export type JevClassifyReport = {
   model: string; spans: number; classified: number; already: number; unanswered: number;
-  cost_usd: number; requests: number; cache_hits: number; latency_ms: number; budget_exhausted: boolean;
+  cost_usd: number; requests: number; latency_ms: number; budget_exhausted: boolean;
 };
 
 type Example = { surface: string; text: string; count: number };
@@ -74,7 +74,7 @@ function overlap(left: Set<string>, right: Set<string>): number {
  * then repeatedly the wording least like those already chosen. A common family gets no more
  * room than a rare one.
  */
-export function pickExamples(examples: readonly Example[], exclude: string): string[] {
+function pickExamples(examples: readonly Example[], exclude: string): string[] {
   const pool = examples.filter((example) => example.surface !== exclude);
   if (pool.length === 0) return [];
   const chosen: Example[] = [pool[0]!];
@@ -194,7 +194,7 @@ export async function classifySpans(
     results,
     report: {
       model: JEV_MODEL, spans: unique.length, classified: results.length, already: unique.length - pending.length, unanswered,
-      cost_usd: budget.totalCostUsd, requests: budget.requests, cache_hits: budget.cacheHits, latency_ms: budget.totalLatencyMs,
+      cost_usd: budget.totalCostUsd, requests: budget.requests, latency_ms: budget.totalLatencyMs,
       budget_exhausted: budget.exhausted(),
     },
   };

@@ -33,7 +33,7 @@ const EXACT_COUNT: FamilyExtension = {
 /** A selection name: the bind_as of an earlier selection, or the name one selection binds. */
 const SELECTION_NAME = { type: "string", pattern: "^[a-z][a-z0-9_-]*$", minLength: 1, maxLength: 40 };
 
-export function selectionName(value: unknown, field: string): string {
+function selectionName(value: unknown, field: string): string {
   if (typeof value !== "string" || !/^[a-z][a-z0-9_-]*$/.test(value) || value.length > 40) throw new TypeError(`${field} is a lowercase selection name.`);
   return value;
 }
@@ -71,7 +71,7 @@ const SELECT_UNIT_WITHIN_ORIGIN: FamilyExtension = {
  * The compiler checks the on-apply rules (compile-count-scale.ts); this version checks only the
  * timing key and what it can combine with.
  */
-export const TIMINGS = ["live", "on-apply"] as const;
+const TIMINGS = ["live", "on-apply"] as const;
 
 /** The counts a count-scale takes beside the previous two. */
 const MODELS_EQUIPPED_WITH = "models-equipped-with";

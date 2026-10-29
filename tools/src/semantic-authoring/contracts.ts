@@ -51,8 +51,7 @@ import { OATH_FAMILIES, normalizeOathParameters } from "./oath-families.js";
 import { ABILITY_USE_FAMILIES, normalizeAbilityUseParameters } from "./ability-use-families.js";
 import { NAMED_RANGE_FAMILIES, normalizeNamedRangeParameters } from "./named-ranges.js";
 
-export const SEMANTIC_ROLES = ["EFFECT", "DURATION", "EVENT", "CONDITION"] as const;
-export type SemanticRole = (typeof SEMANTIC_ROLES)[number];
+const SEMANTIC_ROLES = ["EFFECT", "DURATION", "EVENT", "CONDITION"] as const;
 /** Leaf roles: the proposal roles, combinators (which join leaves), and restrictions (limits on when and by whom an ability is used). */
 export const LEAF_ROLES = [...SEMANTIC_ROLES, "COMBINATOR", "RESTRICTION"] as const;
 export type LeafRole = (typeof LEAF_ROLES)[number];
@@ -60,8 +59,8 @@ export type LeafRole = (typeof LEAF_ROLES)[number];
 type FamilyParameters = Record<string, unknown>;
 
 /** The rule kind an ability's own record carries (`abilities.source_type`). */
-export const ABILITY_KINDS = ["stratagem", "unit", "enhancement", "detachment", "faction", "core"] as const;
-export type AbilityKind = (typeof ABILITY_KINDS)[number];
+const ABILITY_KINDS = ["stratagem", "unit", "enhancement", "detachment", "faction", "core"] as const;
+type AbilityKind = (typeof ABILITY_KINDS)[number];
 
 export type SemanticFamilyDefinition = {
   id: string;
@@ -92,8 +91,7 @@ export function familyFitsKind(family: Pick<SemanticFamilyDefinition, "kinds">, 
   return family.kinds === undefined || (family.kinds as readonly string[]).includes(kind);
 }
 
-export { PHASE_EVENT_KINDS } from "./core-families.js";
-export type * from "./stamp-types.js";
+;
 
 /** Versioned, human-reviewed semantic families available to local tooling. */
 export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = withFamilyExtensions(withAntecedentVersions([
@@ -304,7 +302,7 @@ export function seedReviewedFamilies(db: DatabaseSync): void {
  * printed text uses ("ANTI‑MONSTER", U+2010–U+2012, en dash, minus) and no-break spaces folded to
  * their plain forms.
  */
-export function foldKeywordText(text: string): string {
+function foldKeywordText(text: string): string {
   return text.replace(/\*/gu, "").replace(/[\u2010-\u2013\u2212]/gu, "-").replace(/[\u00a0\u202f]/gu, " ").toLowerCase();
 }
 

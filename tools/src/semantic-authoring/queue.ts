@@ -6,16 +6,16 @@ import { normalizedSurface } from "./matching.js";
 import { GROUP_PAGE_LIMIT, pendingFamilyGroups, unresolvedClusters } from "./retrieval.js";
 
 /** A repeatable decision matters when it can affect more than one source occurrence. */
-export const MULTI_YIELD_THRESHOLD = 2;
+const MULTI_YIELD_THRESHOLD = 2;
 /** A seed shorter than this is already phrase-sized; only longer whole-clause seeds are flagged. */
-export const BROAD_SEED_MIN_TOKENS = 6;
+const BROAD_SEED_MIN_TOKENS = 6;
 const BROAD_SEED_WINDOW = { min: 4, max: 8 } as const;
 const DEFAULT_LIMIT = 50;
 const MAX_LIMIT = 200;
 
-export type QueueKind = "conflict" | "unparsed-source" | "family-group" | "unresolved-cluster" | "broad-seed" | "luna" | "ability";
+type QueueKind = "conflict" | "unparsed-source" | "family-group" | "unresolved-cluster" | "broad-seed" | "luna" | "ability";
 
-export type QueueTarget =
+type QueueTarget =
   | { view: "family"; family_id: string; signature: string }
   | { view: "abilities"; ability_version_id: number; source_hash?: string; action?: "analyze-source" }
   | { view: "luna"; mode: "residue"; faction_id: string | null };
@@ -238,7 +238,7 @@ function broadSeedItems(db: DatabaseSync, factionId: string | null): QueueItem[]
 }
 
 /** Abilities named by any pending source-decomposition run, whatever its transport or model label. */
-export function pendingLunaAbilities(db: DatabaseSync): Set<number> {
+function pendingLunaAbilities(db: DatabaseSync): Set<number> {
   return new Set((db.prepare(`
     SELECT DISTINCT json_extract(request_ability.value, '$.ability_version_id') AS id
     FROM model_runs, json_each(model_runs.config_json, '$.request_abilities') AS request_ability

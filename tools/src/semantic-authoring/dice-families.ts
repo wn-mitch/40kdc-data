@@ -8,14 +8,14 @@ import { boundedInteger, enumSet, enumValue, exactKeys } from "./family-validati
  * its roll and eligibility inside itself, because each destroyed model rolls separately.
  */
 
-export const DICE = ["D3", "D6", "2D6"] as const;
+const DICE = ["D3", "D6", "2D6"] as const;
 export const DICE_FACES: Record<string, number> = { D3: 3, D6: 6, "2D6": 12 };
-export const WOUND_COUNTS = ["1", "2", "3", "D3", "D6", "D3+3", "2D6"] as const;
-export const MORTAL_RECIPIENTS = ["target", "that-unit", "this-unit", "this-model"] as const;
-export const FIGHT_ON_DEATH_TIMING = ["when-its-unit-fights", "after-the-attacking-unit-finishes"] as const;
-export const FIGHT_ON_DEATH_ACTS = ["fight", "shoot"] as const;
+const WOUND_COUNTS = ["1", "2", "3", "D3", "D6", "D3+3", "2D6"] as const;
+const MORTAL_RECIPIENTS = ["target", "that-unit", "this-unit", "this-model"] as const;
+const FIGHT_ON_DEATH_TIMING = ["when-its-unit-fights", "after-the-attacking-unit-finishes"] as const;
+const FIGHT_ON_DEATH_ACTS = ["fight", "shoot"] as const;
 /** A shooting destroyed model is a plain grant to a named subject; it carries no timing of its own. */
-export const FIGHT_ON_DEATH_SUBJECTS = ["this-unit", "this-model"] as const;
+const FIGHT_ON_DEATH_SUBJECTS = ["this-unit", "this-model"] as const;
 
 /**
  * The shared roll-kind vocabulary for this round's dice families (re-roll, ignore-modifiers,
@@ -39,13 +39,13 @@ export const TRIGGER_ROLL_KINDS = [
   "psychic", "desperate-escape", "blessings-of-khorne", "deadly-demise", "channelling",
 ] as const;
 
-export const IGNORE_SUBJECTS = ["this-unit", "this-model"] as const;
+const IGNORE_SUBJECTS = ["this-unit", "this-model"] as const;
 /** ignore-modifiers' own `stats` enum: the model/weapon characteristics plus the three extras the DSL allows there. */
 export const IGNORE_STATS = ["M", "T", "Sv", "W", "Ld", "OC", "A", "WS", "BS", "S", "AP", "D", "Range", "detection-range", "psyker-level"] as const;
-export const IGNORE_ONLY = ["worsening", "improving"] as const;
+const IGNORE_ONLY = ["worsening", "improving"] as const;
 /** "all" is this family's own placeholder for no restriction; the DSL's weapon_type has no such value, so the fragment omits it. */
 export const WEAPON_TYPES = ["all", "melee", "ranged"] as const;
-export const ROLL_AUTO_OUTCOMES = ["succeeds-on", "counts-as-6", "auto-pass"] as const;
+const ROLL_AUTO_OUTCOMES = ["succeeds-on", "counts-as-6", "auto-pass"] as const;
 /** Rolls that are tests, not attacks; a melee/ranged weapon scope has no meaning for them. */
 const TEST_ROLLS = new Set(["battle-shock", "leadership", "desperate-escape"]);
 const WEAPON_SCOPED_ROLLS = ROLL_KINDS.filter((roll) => !TEST_ROLLS.has(roll));

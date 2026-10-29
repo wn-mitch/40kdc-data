@@ -1,9 +1,8 @@
 import { TypeSafeClient, choice, type ChoiceCriteria, type JsonValue, type Questions, type RequestOptions, type SystemOneRequest, type SystemOneResult } from "@typesafe-ai/sdk";
 
-import { cacheKeyFor, getCachedAnswer, putCachedAnswer, type JevCache } from "./jev-cache.js";
 
 /**
- * The TypeSafe client shape, request/cost accounting, the answer cache and the question-asking
+ * The TypeSafe client shape, request/cost accounting and the question-asking
  * primitives behind the Jev family classifier (`jev-classify.ts`).
  *
  * Concurrency and spend-cap exactness: callers may fire many requests
@@ -16,7 +15,7 @@ import { cacheKeyFor, getCachedAnswer, putCachedAnswer, type JevCache } from "./
 
 export const JEV_MODEL = "jev-latest";
 /** A derived input price: TypeSafe publishes no separate price for this model. */
-export const JEV_INPUT_PRICE_PER_MILLION_USD = 0.042;
+const JEV_INPUT_PRICE_PER_MILLION_USD = 0.042;
 export const NONE_OF_THESE = "none-of-these";
 
 /**
@@ -36,9 +35,7 @@ export type JevRequestLog = {
   input_tokens: number;
   output_tokens: number;
   latency_ms: number;
-  /** True when this "request" was actually a cache hit — no network call was made. */
-  cached: boolean;
-  /** Network attempts made (0 for a cache hit or a budget-skip; >1 means a retry fired). */
+  /** Network attempts made (0 for a budget-skip; >1 means a retry fired). */
   attempts: number;
 };
 
@@ -50,10 +47,7 @@ export class JevBudget {
   totalInputTokens = 0;
   totalOutputTokens = 0;
   totalLatencyMs = 0;
-  /** Real network requests only — a cache hit is deliberately not counted here (see `cacheHits`),
-   * since "no request" is the point of the cache. */
   requests = 0;
-  cacheHits = 0;
   private reservedUsd = 0;
   readonly log: JevRequestLog[] = [];
   constructor(private readonly capUsd: number) {}
@@ -90,20 +84,16 @@ export class JevBudget {
     this.totalOutputTokens += usage.output_tokens;
     this.totalLatencyMs += latencyMs;
     this.requests += 1;
-    this.log.push({ span_key: spanKey, kind, cost_usd: cost, input_tokens: usage.input_tokens, output_tokens: usage.output_tokens, latency_ms: latencyMs, cached: false, attempts });
+    this.log.push({ span_key: spanKey, kind, cost_usd: cost, input_tokens: usage.input_tokens, output_tokens: usage.output_tokens, latency_ms: latencyMs, attempts });
     return cost;
   }
 
   /** Every retry attempt failed: free the reservation, spend nothing, log it as unanswered. */
   releaseReservation(reservedUsd: number, spanKey: string, kind: JevRequestKind, latencyMs: number, attempts: number): void {
     this.reservedUsd = Math.max(0, this.reservedUsd - reservedUsd);
-    this.log.push({ span_key: spanKey, kind, cost_usd: 0, input_tokens: 0, output_tokens: 0, latency_ms: latencyMs, cached: false, attempts });
+    this.log.push({ span_key: spanKey, kind, cost_usd: 0, input_tokens: 0, output_tokens: 0, latency_ms: latencyMs, attempts });
   }
 
-  recordCacheHit(spanKey: string, kind: JevRequestKind): void {
-    this.cacheHits += 1;
-    this.log.push({ span_key: spanKey, kind, cost_usd: 0, input_tokens: 0, output_tokens: 0, latency_ms: 0, cached: true, attempts: 0 });
-  }
 }
 
 /** A conservative (over-, never under-) estimate of a request's cost, used only to reserve room
@@ -111,7 +101,7 @@ export class JevBudget {
  * `JevBudget.settle`), so this estimates input size from the serialized request body: ~3 chars per
  * token is a safe floor for English JSON (real average is closer to 4), plus a fixed margin for
  * whatever fixed system-prompt overhead the request doesn't itself carry. */
-export function estimateWorstCaseCostUsd(state: Record<string, JsonValue>, questions: Questions): number {
+function estimateWorstCaseCostUsd(state: Record<string, JsonValue>, questions: Questions): number {
   const approxChars = JSON.stringify({ state, questions }).length;
   const approxTokens = Math.ceil(approxChars / 3) + 200;
   return (approxTokens / 1_000_000) * JEV_INPUT_PRICE_PER_MILLION_USD;
@@ -147,22 +137,12 @@ async function withRetry<T>(fn: () => PromiseLike<T>): Promise<{ value: T; attem
   return { error: lastError, attempts: RETRY_ATTEMPTS };
 }
 
-/** The shared request path: cache lookup, reserve, retry-with-backoff, settle/release, cache
- * write. Returns `null` for a cache miss the caller can't afford (budget exhausted) or that never
- * got a usable answer (every retry failed, or the model returned something unexpected). */
+/** The shared request path: reserve, retry-with-backoff, settle/release. Returns `null` for a
+ * request the caller can't afford (budget exhausted) or that never got a usable answer (every retry failed, or the model returned something unexpected). */
 async function performRequest(
   client: JevClient, timeoutMs: number, budget: JevBudget, spanKey: string, kind: JevRequestKind,
-  state: Record<string, JsonValue>, questions: Questions, cache: JevCache | undefined,
+  state: Record<string, JsonValue>, questions: Questions,
 ): Promise<SystemOneResult<Questions> | null> {
-  const cacheKey = cache ? cacheKeyFor(JEV_MODEL, state, questions) : null;
-  if (cache && cacheKey) {
-    const cached = getCachedAnswer(cache, cacheKey);
-    if (cached) {
-      budget.recordCacheHit(spanKey, kind);
-      return cached;
-    }
-  }
-
   const estimate = estimateWorstCaseCostUsd(state, questions);
   if (!budget.tryReserve(estimate)) return null; // skipped-budget: no network call, no reservation held
 
@@ -187,17 +167,16 @@ async function performRequest(
   }
 
   budget.settle(estimate, spanKey, kind, outcome.value.usage, latency, outcome.attempts);
-  if (cache && cacheKey) putCachedAnswer(cache, cacheKey, JEV_MODEL, outcome.value);
   return outcome.value;
 }
 
 /** One choice question answered with every option's probability, most probable first. */
 export async function askChoiceRanked(
   client: JevClient, timeoutMs: number, budget: JevBudget, spanKey: string, kind: JevRequestKind,
-  state: Record<string, JsonValue>, prompt: string, criteria: ChoiceCriteria, cache?: JevCache,
+  state: Record<string, JsonValue>, prompt: string, criteria: ChoiceCriteria,
 ): Promise<Array<{ value: string; probability: number }> | null> {
   const questions: Questions = { answer: choice(prompt, criteria) };
-  const result = await performRequest(client, timeoutMs, budget, spanKey, kind, state, questions, cache);
+  const result = await performRequest(client, timeoutMs, budget, spanKey, kind, state, questions);
   const answer = result?.answers.answer;
   if (!answer || answer.type !== "choice") return null;
   return Object.entries(answer.probabilities as Record<string, number>)
@@ -208,9 +187,9 @@ export async function askChoiceRanked(
 /** Several questions in one request (one billed state); the raw answers, or null when unanswered. */
 export async function askMany(
   client: JevClient, timeoutMs: number, budget: JevBudget, spanKey: string, kind: JevRequestKind,
-  state: Record<string, JsonValue>, questions: Questions, cache?: JevCache,
+  state: Record<string, JsonValue>, questions: Questions,
 ): Promise<SystemOneResult<Questions>["answers"] | null> {
-  const result = await performRequest(client, timeoutMs, budget, spanKey, kind, state, questions, cache);
+  const result = await performRequest(client, timeoutMs, budget, spanKey, kind, state, questions);
   return result?.answers ?? null;
 }
 

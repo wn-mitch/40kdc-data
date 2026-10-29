@@ -11,7 +11,7 @@ import {
 
 /** Who a movement effect changes; a Leader attachment does not fold these into the unit the way
  * buff subjects do, since a move is made by a physical body, so the family's own value is kept. */
-export const MOVE_SUBJECTS = ["this-unit", "this-model", "selected-unit"] as const;
+const MOVE_SUBJECTS = ["this-unit", "this-model", "selected-unit"] as const;
 const MOVE_ACTOR_SUBJECTS = ["this-unit", "this-model"] as const;
 const MODE_CHOICE_SUBJECTS = ["this-unit", "this-model", "antecedent"] as const;
 /** The DSL's move-mode: a move type's named modes (a Fall Back's desperate escape, a consolidation's objective mode, a disembark's). */

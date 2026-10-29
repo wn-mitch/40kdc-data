@@ -23,7 +23,7 @@
  * A scope never changes once stored: a different scope is a different decision.
  */
 
-export const SCOPE_VERSION = 1;
+const SCOPE_VERSION = 1;
 
 export type SurfaceScope = {
   version: typeof SCOPE_VERSION;

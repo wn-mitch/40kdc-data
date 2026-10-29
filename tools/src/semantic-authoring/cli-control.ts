@@ -24,7 +24,7 @@ import { factionReviewSheet, writeReviewSheet } from "./review-sheet.js";
  * (Will's decisions; not reachable from this CLI).
  */
 
-export type Effect = "read" | "propose" | "machine" | "derive" | "human";
+type Effect = "read" | "propose" | "machine" | "derive" | "human";
 
 type ControlCommand = {
   effect: (args: Flags) => Effect;

@@ -9,7 +9,7 @@ import { enumValue, exactKeys } from "./family-validation.js";
  * granted rating adds to the printed one). The leaf must say which; no fold picks a reading.
  * Folded into the host of the sentence after it by compile-weapon-already-has.ts.
  */
-export const GRANTED_RATINGS = ["keep", "add"] as const;
+const GRANTED_RATINGS = ["keep", "add"] as const;
 
 export const WEAPON_HAS_ABILITY_FAMILIES: readonly SemanticFamilyDefinition[] = [
   {

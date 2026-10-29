@@ -27,7 +27,7 @@ function rows<T>(db: DatabaseSync, sql: string, ...args: Array<string | number |
 // ---------------------------------------------------------------------------------------------
 // Family status
 
-export type FamilyState = "DEFINED" | "OBSERVED" | "SUPPORTED" | "MATURE" | "DEPRECATED";
+type FamilyState = "DEFINED" | "OBSERVED" | "SUPPORTED" | "MATURE" | "DEPRECATED";
 
 export type FamilyStatus = {
   family_id: string; version: number | null; role: string; state: FamilyState;

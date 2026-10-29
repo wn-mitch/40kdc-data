@@ -1,4 +1,4 @@
-import { LEAF_ROLES, SEMANTIC_ROLES } from "./contracts.js";
+import { LEAF_ROLES } from "./contracts.js";
 import { STRUCTURAL_KINDS } from "./schema-ext.js";
 
 /**
@@ -33,7 +33,6 @@ export const LUNA_MODEL = "openai-codex/gpt-5.6-luna";
 export const CONNECTIVE_KINDS = [
   "and", "or", "if", "unless", "while", "until", "during", "before", "after", "then", "reference", "other",
 ] as const;
-export type ConnectiveKind = typeof CONNECTIVE_KINDS[number];
 
 /** An API-shaped Luna transport failure; the local bridge returns `status` verbatim. */
 export class LunaRunError extends Error {
@@ -49,11 +48,6 @@ export class LunaRunError extends Error {
 const interval = {
   start_byte: { type: "integer", minimum: 0 },
   end_byte: { type: "integer", minimum: 1 },
-} as const;
-
-const qualifierSpans = {
-  type: "array",
-  items: { type: "object", required: ["start_byte", "end_byte"], additionalProperties: false, properties: interval },
 } as const;
 
 const unresolvedRegions = {
@@ -73,65 +67,6 @@ const qualifierSpansV2 = {
     required: ["start_byte", "end_byte", "exact_text"],
     additionalProperties: false,
     properties: { ...interval, exact_text: { type: "string", minLength: 1 } },
-  },
-} as const;
-
-/** Frozen v1 response schema, kept for runs prepared before v2. */
-export const RESPONSE_SCHEMA_V1 = {
-  schema_version: 1,
-  type: "object",
-  required: ["schema_version", "input_hash", "model", "model_version", "prompt_version", "abilities"],
-  additionalProperties: false,
-  properties: {
-    schema_version: { const: 1 },
-    input_hash: { type: "string", minLength: 1 },
-    model: { type: "string", minLength: 1 },
-    model_version: { type: "string", minLength: 1 },
-    prompt_version: { const: LEGACY_PROMPT_VERSION },
-    abilities: {
-      type: "array",
-      items: {
-        type: "object",
-        required: ["faction_id", "ability_id", "source_hash", "spans", "connectives", "unresolved_regions"],
-        additionalProperties: false,
-        properties: {
-          faction_id: { type: "string", minLength: 1 },
-          ability_id: { type: "string", minLength: 1 },
-          source_hash: { type: "string", minLength: 1 },
-          spans: {
-            type: "array",
-            items: {
-              type: "object",
-              required: ["start_byte", "end_byte", "exact_text", "role", "status"],
-              additionalProperties: false,
-              properties: {
-                ...interval,
-                exact_text: { type: "string", minLength: 1 },
-                role: { enum: [...SEMANTIC_ROLES, "UNRESOLVED"] },
-                status: { enum: ["EXISTING", "NOVEL", "UNRESOLVED"] },
-                family_id: { type: "string", minLength: 1 },
-                family_version: { type: "integer", minimum: 1 },
-                parameters: { type: "object" },
-                qualifier_spans: qualifierSpans,
-                description: { type: "string", minLength: 1 },
-              },
-            },
-          },
-          connectives: {
-            type: "array",
-            items: {
-              type: "object",
-              required: ["start_byte", "end_byte", "kind"],
-              additionalProperties: false,
-              properties: { ...interval, kind: { type: "string", minLength: 1 } },
-            },
-          },
-          unresolved_regions: unresolvedRegions,
-        },
-      },
-    },
-    latency_ms: { type: "integer", minimum: 0 },
-    cost_usd: { type: "number", minimum: 0 },
   },
 } as const;
 
@@ -227,17 +162,6 @@ export const RESPONSE_SCHEMA_V2 = {
     cost_usd: { type: "number", minimum: 0 },
   },
 } as const;
-
-export const LUNA_INSTRUCTIONS_V1 = [
-  "You are an external Luna annotation transport for a local semantic-painting workbench.",
-  "Return only one JSON object conforming exactly to response_schema.",
-  "Return every input ability exactly once, using the supplied faction_id, ability_id, and source_hash unchanged.",
-  "Copy exact_text directly from source_text at the supplied UTF-8 byte offsets; never paraphrase.",
-  "Propose source-native leaf spans only: no graphs, no DSL constructors, no inferred relations, and no new family IDs or schema versions.",
-  "Use EXISTING only for a supplied reviewed family with parameters that meet its schema; use NOVEL when a leaf has no reviewed family; use UNRESOLVED when the leaf cannot be safely classified.",
-  "Report connectives separately. Preserve qualifiers with qualifier_spans rather than silently dropping them.",
-  "Mark uncertainty explicitly in unresolved_regions rather than silently treating source text as covered.",
-].join(" ");
 
 export const LUNA_INSTRUCTIONS_V2 = [
   "You decompose game-rule source text for a local review workbench. A human reviews every suggestion; nothing you return is accepted automatically.",

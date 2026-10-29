@@ -62,7 +62,7 @@ export const MARK_TAGS: readonly string[] = [
 ];
 const DESIGNATE_SUBJECTS = ["this-unit", "this-model", "selected-unit"] as const;
 
-export const ARMY_RULES = [
+const ARMY_RULES = [
   "warlord-required", "warlord-forbidden", "unique", "enhancement-forbidden", "enhancement-slot",
   "attachment", "composition", "faction-forbidden", "single-chapter", "detachment-forbidden", "detachment-tag-exclusive",
 ] as const;

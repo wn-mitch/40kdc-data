@@ -15,7 +15,7 @@ import {
 
 /** Aspects with a plain numeric value: everything except widening recipients or adding an option. */
 const NUMERIC_ASPECTS = ["range", "uses", "targets", "selections", "concurrent", "duration", "start-round", "end-round", "threshold"] as const;
-export const ABILITY_MODIFIER_ASPECTS = [...NUMERIC_ASPECTS, "recipients", "options"] as const;
+const ABILITY_MODIFIER_ASPECTS = [...NUMERIC_ASPECTS, "recipients", "options"] as const;
 /** Version 1's aspect enum: numeric aspects only, no recipients/options. Frozen; version 2 replaces it. */
 const ABILITY_MODIFIER_ASPECTS_V1 = ["range", "uses", "selections", "concurrent", "threshold", "duration", "start-round"] as const;
 const ABILITY_MODIFIER_OPERATIONS = ["add", "subtract", "set", "lift-limit"] as const;

@@ -12,10 +12,10 @@ import type { CompileLeaf } from "./compile-fragments.js";
 type Node = Record<string, unknown>;
 
 /** The lowered moment: the phase-ended trigger, and the condition that the destruction happened this phase. */
-export type DelayedDestruction = { trigger: Node; condition: Node };
+type DelayedDestruction = { trigger: Node; condition: Node };
 
 /** A destruction of some other model followed by the end of the phase: the phase end nests under the destruction. */
-export type NestedPhaseEnd = { nest: true };
+type NestedPhaseEnd = { nest: true };
 
 /** The refusal for a nested moment that cannot be lowered (compile.ts pushes it verbatim). */
 export const NESTED_MOMENT_ERROR = "A moment nested in another (\"each time …, at the end of the phase\") has no DSL trigger; a trigger list fires on any one of its moments.";
@@ -31,7 +31,7 @@ export const NAMED_MODEL_ERROR = "A destruction of a model other than this model
 export const FIRST_TIME_ERROR = "A \"first time\" limit with no usage limit has no DSL form; the ability would fire on every destruction.";
 
 /** The event leaf that a model's own destruction is ("this model is destroyed"). */
-export function isThisModelDestroyed(leaf: CompileLeaf): boolean {
+function isThisModelDestroyed(leaf: CompileLeaf): boolean {
   return leaf.family_id === "event" && leaf.parameters.kind === "this-model-destroyed";
 }
 
@@ -51,7 +51,7 @@ export function isAnyPhaseEnd(leaf: CompileLeaf): boolean {
  * The source between a destruction moment and a phase-end moment, in either order. Leaves that
  * overlap or lack offsets have no gap between them.
  */
-export function momentGap(sourceText: string, first: CompileLeaf, second: CompileLeaf): string {
+function momentGap(sourceText: string, first: CompileLeaf, second: CompileLeaf): string {
   const from = first.end_byte ?? first.start_byte;
   const to = second.start_byte;
   return from < to ? exactSpan(sourceText, from, to) : "";
@@ -72,7 +72,7 @@ export function momentGap(sourceText: string, first: CompileLeaf, second: Compil
  *
  * `between` is the source text between the two moments (momentGap).
  */
-export function lowerDelayedDestruction(
+function lowerDelayedDestruction(
   history: CompileLeaf,
   delayed: CompileLeaf,
   between: string,

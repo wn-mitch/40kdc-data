@@ -33,7 +33,7 @@ function loadJson(path: string): Record<string, unknown> {
   return JSON.parse(readFileSync(path, "utf8")) as Record<string, unknown>;
 }
 
-export type CatalogKind = "effect" | "container" | "predicate" | "trigger" | "duration" | "usage" | "behavior";
+type CatalogKind = "effect" | "container" | "predicate" | "trigger" | "duration" | "usage" | "behavior";
 export type CatalogEntry = { kind: CatalogKind; type: string };
 
 /** The five behavior markers census.py tracks by name, ported as-is. */
@@ -249,7 +249,7 @@ function producedKey(entry: CatalogEntry): string {
   return `${bucket}:${entry.type}`;
 }
 
-export type Produced = Map<string, string[]>;
+type Produced = Map<string, string[]>;
 
 let producedCache: Produced | undefined;
 
@@ -267,7 +267,7 @@ function leavesFor(family: SemanticFamilyDefinition, parameters: Record<string, 
  * samples are expected while crossing independent schema domains; an uncovered type still appears
  * in `leafCoverage().unproduced`, so failures cannot turn into coverage by being ignored here.
  */
-export function produceLiterals(): Produced {
+function produceLiterals(): Produced {
   if (producedCache) {
     return new Map([...producedCache].map(([literal, families]) => [literal, [...families]] as const));
   }

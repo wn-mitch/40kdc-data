@@ -20,8 +20,8 @@ export type PrefillFamily = { id: string; parameterSchema: { properties?: Record
 export function choices(property: Property): string[] {
   return property.enum ?? property.anyOf?.flatMap((item) => item.enum ?? []) ?? [];
 }
-export const numeric = (property: Property) => property.type === "integer" || (property.anyOf?.some((item) => item.type === "integer") ?? false);
-export const freeText = (property: Property) => property.anyOf?.some((item) => item.type === "string") ?? property.type === "string";
+const numeric = (property: Property) => property.type === "integer" || (property.anyOf?.some((item) => item.type === "integer") ?? false);
+const freeText = (property: Property) => property.anyOf?.some((item) => item.type === "string") ?? property.type === "string";
 
 const titleCase = (text: string) => text.toLowerCase().replace(/(^|[\s-])(\p{L})/gu, (_match, lead: string, letter: string) => lead + letter.toUpperCase());
 

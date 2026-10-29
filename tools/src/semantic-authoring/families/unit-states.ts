@@ -14,7 +14,7 @@ import { EACH_TARGET, EMBARKED_IN, FILTERED_UNITS, FOLLOWING_FILTER, NAMED_ID, b
  * Reserves states a unit-state leaf can name. in-reserves records the wording "in Reserves", which
  * the rules define as Strategic Reserves; compilation lowers it to the DSL's in-strategic-reserves.
  */
-export const RESERVE_STATES = ["in-reserves", "in-strategic-reserves", "in-cult-ambush"] as const;
+const RESERVE_STATES = ["in-reserves", "in-strategic-reserves", "in-cult-ambush"] as const;
 
 /** States the DSL's unit-state can read at the start of the phase or turn (strength and carrying are other predicates). */
 const STATES_AT = ["engaged", "battle-shocked", "on-battlefield", "in-reserves", "in-strategic-reserves", "in-cult-ambush"] as const;

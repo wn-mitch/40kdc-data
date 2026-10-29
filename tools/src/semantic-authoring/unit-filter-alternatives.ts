@@ -11,7 +11,7 @@ import { normalizeUnitKeywords } from "./unit-filter-family.js";
 export type FilterAlternative = { keywords?: string[]; excluded_keywords?: string[]; states?: string[] };
 
 /** The states an alternative can name, as unit-filter names them. */
-export const ALTERNATIVE_STATES = ["unengaged", "battle-shocked", "not-battle-shocked"] as const;
+const ALTERNATIVE_STATES = ["unengaged", "battle-shocked", "not-battle-shocked"] as const;
 
 /** One alternative's parameter schema: at least one of its keywords, exclusions and states. */
 export const ALTERNATIVE_SCHEMA = {

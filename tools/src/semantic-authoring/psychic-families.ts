@@ -10,7 +10,7 @@ import { boundedInteger, exactKeys } from "./family-validation.js";
 export const PSYCHIC_COST_FAMILY = "psychic-level-cost";
 
 /** The highest psychic level the schema accepts. A higher level is a new reading to review, not a value to lower. */
-export const MAX_PSYCHIC_LEVEL = 6;
+const MAX_PSYCHIC_LEVEL = 6;
 
 export const PSYCHIC_FAMILIES: readonly SemanticFamilyDefinition[] = [
   {

@@ -396,13 +396,3 @@ export async function runLuna(openDb: () => DatabaseSync, runIdValue: unknown, o
   return finishLunaRun(openDb, claimed, options);
 }
 
-/** The latest source-decomposition run that requested one ability version, if any. */
-export function latestLunaRunForAbility(db: DatabaseSync, abilityVersionId: number): LunaRunView | null {
-  if (!Number.isSafeInteger(abilityVersionId) || abilityVersionId < 1) throw new LunaRunError(422, "ability_version_id must be positive.");
-  const row = db.prepare(`
-    SELECT model_runs.id FROM model_runs, json_each(model_runs.config_json, '$.request_abilities') AS request_ability
-    WHERE json_extract(request_ability.value, '$.ability_version_id') = ?
-    ORDER BY model_runs.id DESC LIMIT 1
-  `).get(abilityVersionId) as { id: number } | undefined;
-  return row ? lunaRunView(db, row.id) : null;
-}

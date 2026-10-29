@@ -4,7 +4,7 @@ import { getAbilityCoverage, getCurrentCoverage, type AbilityCoverage } from "./
 import { RESTATES_ACTIVE_ANNOTATION } from "./db.js";
 
 /** Why an ability is not yet ready for a whole-context check and composition. */
-export type ReadinessReasonCode =
+type ReadinessReasonCode =
   | "NO_MEANINGFUL_SOURCE"
   | "UNACCOUNTED_SOURCE"
   | "PENDING_CLAIMS"
@@ -14,7 +14,7 @@ export type ReadinessReasonCode =
   | "UNSANCTIONED_OVERLAP"
   | "UNSUPPORTED_STRUCTURE";
 
-export type ReadinessReason = { code: ReadinessReasonCode; count: number; message: string };
+type ReadinessReason = { code: ReadinessReasonCode; count: number; message: string };
 
 /**
  * One ability's composition readiness. `ready` means every meaningful byte is accounted for by

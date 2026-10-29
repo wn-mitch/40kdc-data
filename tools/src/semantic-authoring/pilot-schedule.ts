@@ -69,7 +69,7 @@ export function buildSchedule(db: DatabaseSync, sample: PilotSample, samplePath:
   return { seed, sample_path: samplePath, created_at: new Date().toISOString(), excluded: [...excluded], order, taken: [] };
 }
 
-export function schedulePath(artifactDirectory: string): string {
+function schedulePath(artifactDirectory: string): string {
   return resolve(artifactDirectory, "pilot-schedule.json");
 }
 

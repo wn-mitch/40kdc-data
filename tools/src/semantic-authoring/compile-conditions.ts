@@ -19,7 +19,6 @@ import { abilityChecks, alternativesCheck, stateCheck } from "./compile-wrappers
 import { attackedChecks, namesSelection, targetingCondition } from "./compile-targeting-history.js";
 import { dslAlternatives } from "./compile-filter-alternatives.js";
 import type { FilterAlternative } from "./unit-filter-alternatives.js";
-import { DESIGNATION_IDS } from "../translate/designations.js";
 import { abilityUsedCondition } from "./compile-named-ability.js";
 import { namedRange } from "./named-ranges.js";
 import { optionalCostCondition } from "./compile-optional-cost.js";
@@ -59,7 +58,7 @@ function attackFilter(leaf: CompileLeaf, source: Node): Node {
   return parameters;
 }
 
-export const DURATIONS: Record<string, string> = {
+const DURATIONS: Record<string, string> = {
   "end-of-phase": "phase", "end-of-turn": "turn", "end-of-battle-round": "battle-round", "end-of-battle": "battle",
   "start-of-next-turn": "until-start-next-turn", "start-of-next-command-phase": "until-next-command-phase",
   "start-of-next-movement-phase": "until-next-movement-phase", "start-of-next-battle-round": "until-next-battle-round",
@@ -168,7 +167,7 @@ const MARK_TAGS: Record<string, string> = {
 };
 
 /** Lower a source predicate directly to the one canonical candidate-filter representation. */
-export function pred(type: string, parameters: Node, subject?: unknown): Node {
+function pred(type: string, parameters: Node, subject?: unknown): Node {
   const who = subject === undefined ? {} : { subject };
   let filter: Node | undefined;
   if (type === "has-keyword" && parameters.chosen_by === undefined) filter = parameters;

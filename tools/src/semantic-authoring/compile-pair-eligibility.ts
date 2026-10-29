@@ -24,7 +24,7 @@ export const isSelectionRef = (value: unknown): value is SelectionRef =>
   typeof value === "object" && value !== null && typeof (value as SelectionRef).selection_var === "string";
 
 /** The refusal for a pair's leaves the pair cannot bind (compile.ts guard, and the permissions below). */
-export const PAIR_REFUSAL = "A bound selection's effects are only the inner unit's; attacks, parts, eligibility, battle-size counts and for-each loops are not bound with it yet.";
+const PAIR_REFUSAL = "A bound selection's effects are only the inner unit's; attacks, parts, eligibility, battle-size counts and for-each loops are not bound with it yet.";
 
 /** The outer and inner select-unit indexes of a bound pair, or null when the selections are not one. */
 export function pairIndexes(list: readonly CompileLeaf[]): { outer: number; inner: number } | null {

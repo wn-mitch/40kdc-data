@@ -117,7 +117,7 @@ function conditionBetween(leaves: readonly CompileLeaf[], dice: number, change: 
  * A sentence, colon, or semicolon break leaves the condition gating the ability as a whole (null),
  * as does a missing source text.
  */
-export function adjacentCondition(leaves: readonly CompileLeaf[], change: number, sourceText: string | undefined): "attach" | "refuse" | null {
+function adjacentCondition(leaves: readonly CompileLeaf[], change: number, sourceText: string | undefined): "attach" | "refuse" | null {
   if (sourceText === undefined || !isClauseCondition(leaves[change + 1], leaves[change]!)) return null;
   const bytes = Buffer.from(sourceText, "utf8");
   const text = (from: number, to: number) => bytes.subarray(from, to).toString("utf8");
@@ -222,7 +222,7 @@ function foldTestModifiers(leaves: readonly CompileLeaf[], sourceText: string | 
  * Whether an "instead" later in the change's fragment replaces it: the next roll-modifier after the
  * "instead" is a change to the same roll ("subtracting 1 from that test (or subtracting 2 if …)").
  */
-export function replacedByInstead(leaves: readonly CompileLeaf[], change: number): boolean {
+function replacedByInstead(leaves: readonly CompileLeaf[], change: number): boolean {
   const leaf = leaves[change];
   if (leaf?.family_id !== "roll-modifier") return false;
   for (let at = change + 1; at < leaves.length; at += 1) {

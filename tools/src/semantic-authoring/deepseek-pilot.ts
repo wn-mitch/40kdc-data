@@ -16,7 +16,7 @@ const LENGTH_STOP_PATTERN = /stopped with length/iu;
  * effect at the point of the actual HTTP reply, via `LunaRunOptions.deepseekCall`.
  */
 
-export type DeepSeekRunLog = {
+type DeepSeekRunLog = {
   run_id: string;
   state: LunaRunView["state"];
   ability_version_ids: number[];

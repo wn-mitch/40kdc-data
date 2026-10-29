@@ -313,7 +313,7 @@ function requestAbility(ability: CurrentAbility, uncovered: UncoveredInterval[],
  * Word and punctuation tokens with exact UTF-8 byte boundaries. Models misplace raw byte
  * counts; choosing spans from token boundaries keeps every offset exact.
  */
-export function byteTokens(source: string): Array<[number, number, string]> {
+function byteTokens(source: string): Array<[number, number, string]> {
   const tokens: Array<[number, number, string]> = [];
   for (const match of source.matchAll(/[\p{L}\p{N}][\p{L}\p{N}\p{M}'’-]*|[^\s\p{L}\p{N}]/gu)) {
     const start = Buffer.byteLength(source.slice(0, match.index), "utf8");
@@ -1169,7 +1169,7 @@ function insertLeafGap(db: DatabaseSync, abilityVersionId: number, description: 
  * Who produced a response. Only the trusted OMP runner observes the model; an offline file
  * import of a v2 run records `external` and never asserts Luna from response text.
  */
-export type LunaProvenance = {
+type LunaProvenance = {
   origin: string;
   model: string;
   model_version: string;

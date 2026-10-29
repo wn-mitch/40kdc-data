@@ -5,10 +5,10 @@
  * create one. Values given as the source's own words (`{ source: "…" }`) are not placeholders.
  */
 
-export const PLACEHOLDER = "source";
+const PLACEHOLDER = "source";
 
 /** Top-level parameters still holding the placeholder. */
-export function unresolvedParameters(parameters: Record<string, unknown>): string[] {
+function unresolvedParameters(parameters: Record<string, unknown>): string[] {
   return Object.entries(parameters).filter(([, value]) => value === PLACEHOLDER).map(([key]) => key);
 }
 
