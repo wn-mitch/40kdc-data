@@ -1,6 +1,7 @@
 import { exactSpan } from "./contracts.js";
 import { condition } from "./compile-conditions.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
+import { historyConnective } from "./compile-connective-history.js";
 import { AMONG_TARGETS } from "./families/unit-filters.js";
 
 /**
@@ -138,6 +139,10 @@ export function foldSetUpPlacement(leaves: readonly CompileLeaf[], sourceText: s
         result[at] = restriction(result, at, moment, sourceText);
         drop.add(at - 1);
       }
+    } else if (isSetUp(leaf) && leaf.parameters.allow !== false && leaf.parameters.subject === "antecedent" && scopingMoment(result, at, sourceText)) {
+      const momentAt = scopingMomentAt(result, at);
+      result[at] = scopedPermission(result[momentAt]!, leaf);
+      drop.add(momentAt);
     } else if (!isSetUp(leaf)) {
       continue;
     }
@@ -228,6 +233,76 @@ function restriction(list: readonly CompileLeaf[], at: number, moment: CompileLe
     throw new CompileError("A unit-filter on a set-up restriction's moment has no fold yet; the restriction would forbid every unit of that side.");
   }
   return { ...setUp, start_byte: moment.start_byte, parameters: { ...setUp.parameters, subject: "this-unit", from, restricted_owner: owner } };
+}
+
+/**
+ * "Until the end of the phase, when setting up your unit on the battlefield from Reserves, it can be
+ * set up anywhere …", "… when your unit is set up using the Deep Strike ability, it can be set up
+ * …": inside the window a permission lasts for, a set-up moment right before a permitted set-up of
+ * its own unit, joined by a comma, names which set-ups the permission covers. It is not a trigger:
+ * its source (from) or the Deep Strike rules it uses (via) belong to the set-up.
+ */
+/**
+ * Before folds: whether the set-up moment at `at`, after a reviewed "If", scopes the permitted set-up
+ * of its own unit after it (past an arrival window and the by-ability it used), which
+ * `foldSetUpPlacement` folds it into. Its "If" then plans no history condition.
+ */
+export function scopesSetUpPermission(list: readonly CompileLeaf[], at: number, sourceText: string | undefined): boolean {
+  const moment = list[at]!;
+  if (sourceText === undefined || moment.family_id !== "event" || moment.parameters.kind !== "set-up") return false;
+  let next = at + 1;
+  if (list[next]?.family_id === "reserves-arrival" && sameFragment(list[next]!, moment)) next += 1;
+  const byAbility = list[next]?.family_id === "by-ability" && sameFragment(list[next]!, moment) ? list[next++]! : undefined;
+  const setUp = list[next];
+  if (!setUp || !isSetUp(setUp) || setUp.parameters.allow === false || setUp.parameters.subject !== "antecedent" || !sameFragment(setUp, moment)) return false;
+  if (moment.parameters.from === undefined && byAbility?.parameters.id !== "deep-strike") return false;
+  const between = gap(list[next - 1]!, setUp, sourceText);
+  return between !== null && /^\s*(?:ability\s*)?,\s*$/iu.test(between);
+}
+
+/** The set-up moment a permission at `at` is scoped by, past an arrival window between them, or -1. */
+function scopingMomentAt(result: readonly CompileLeaf[], at: number): number {
+  return result[at - 1]?.family_id === "reserves-arrival" ? at - 2 : at - 1;
+}
+
+function scopingMoment(result: readonly CompileLeaf[], at: number, sourceText: string): boolean {
+  const momentAt = scopingMomentAt(result, at);
+  const moment = result[momentAt];
+  const leaf = result[at]!;
+  const last = result[at - 1]!;
+  if (!moment || moment.role !== "EVENT" || moment.family_id !== "event" || moment.parameters.kind !== "set-up" || !sameFragment(moment, leaf)) return false;
+  // Only inside a window the permission lasts for ("Until the end of the phase, when …"), or after a
+  // reviewed "If" ("If it arrives back … using the Deep Strike ability, it can be set up …"); a bare
+  // "When this unit is set up, it can be set up …" stays a reactive trigger.
+  if (historyConnective(moment) === undefined) {
+    const window = result[momentAt - 1];
+    if (!window || window.role !== "DURATION" || !sameFragment(window, moment)) return false;
+    const lead = gap(window, moment, sourceText);
+    if (lead === null || !/^\s*,\s*$/u.test(lead)) return false;
+  }
+  if (last !== moment && !sameFragment(last, leaf)) return false;
+  const between = gap(last, leaf, sourceText);
+  // A folded by-ability ("using the Deep Strike ability") keeps its own words between the moment and the set-up.
+  const joined = moment.parameters.by_ability !== undefined ? /^\s*(?:using [^,.;:]*\bability\s*)?,\s*$/iu : /^\s*,\s*$/u;
+  if (between === null || !joined.test(between)) return false;
+  return moment.parameters.from !== undefined || moment.parameters.by_ability === "deep-strike";
+}
+
+function scopedPermission(moment: CompileLeaf, setUp: CompileLeaf): CompileLeaf {
+  const p = moment.parameters;
+  const extra = Object.keys(p).find((key) => !["kind", "from", "by_ability", "owner", "subject"].includes(key));
+  if (p.subject !== undefined && p.subject !== "antecedent" && p.subject !== "this-unit") throw new CompileError("A set-up moment that scopes a permission names the permission's own unit.");
+  if (extra !== undefined) throw new CompileError(`A set-up moment that scopes a set-up permission has no DSL form for ${extra}.`);
+  if (p.owner !== undefined && p.owner !== "friendly") throw new CompileError("A set-up moment that scopes a permission for your unit names a friendly unit.");
+  if (p.from !== undefined && setUp.parameters.from !== undefined && setUp.parameters.from !== p.from) {
+    throw new CompileError(`A set-up permission's moment is from ${String(p.from)}, but its set-up says from ${JSON.stringify(setUp.parameters.from)}.`);
+  }
+  if (p.by_ability === "deep-strike" && setUp.parameters.via !== undefined) throw new CompileError("A set-up permission scoped to Deep Strike already names how it is set up.");
+  // The moment's "If" is the scoping itself, so it does not carry over to the set-up.
+  return {
+    ...setUp, start_byte: moment.start_byte, connectives: setUp.connectives,
+    parameters: { ...setUp.parameters, ...(p.from !== undefined ? { from: p.from } : {}), ...(p.by_ability === "deep-strike" ? { via: "deep-strike" } : {}) },
+  };
 }
 
 /** A forbidden set-up ("enemy units cannot be set up within 12\" of …") holds until it ends, like a permission. */

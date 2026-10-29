@@ -7387,19 +7387,55 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "hearthband",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "duration": "phase",
+          "effect": {
+            "type": "set-up",
+            "target": "this-unit",
+            "modifier": {
+              "to": "battlefield",
+              "min_enemy_distance": {
+                "inches": 6
+              },
+              "via": "deep-strike"
+            }
+          }
+        },
+        {
+          "type": "ability-part",
+          "duration": "turn",
+          "effect": {
+            "type": "permission",
+            "target": "this-unit",
+            "modifier": {
+              "activity": "declare-charge",
+              "allow": false
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "step-started",
+      "filter": {
+        "step": "reinforcements"
+      }
+    },
+    "source_digest": "602bb086b31bb09e9da1fcf6a0a418eced965c507387d56296db188f6ce92f6b"
   },
   {
     "ability_id": "mercenary-prospector-mercenary-oathband-leagues-of-votann",

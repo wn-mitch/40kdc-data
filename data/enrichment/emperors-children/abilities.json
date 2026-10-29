@@ -4437,9 +4437,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "source_digest": "ad2c51facfc0e562d358a9a5dceb1e462a5fce43280906d5c04a0e3adf7ecbc2",
+    "source_digest": "52824543ce0de895e1252e522564518ec78994ff4cd8b889cd44c2929999e1b6",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -4451,98 +4451,46 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "ability-part",
-          "trigger": {
-            "event": "phase-ended",
-            "condition": {
-              "operator": "and",
-              "operands": [
-                {
-                  "type": "phase-is",
-                  "parameters": {
-                    "phase": "fight"
-                  }
-                },
-                {
-                  "type": "player-turn-is",
-                  "parameters": {
-                    "turn": "opponent-turn"
-                  }
-                }
-              ]
-            }
-          },
-          "effect": {
-            "type": "conditional",
-            "condition": {
-              "operator": "not",
-              "operands": [
-                {
-                  "type": "matches",
-                  "parameters": {
-                    "filter": {
-                      "within": {
-                        "of": {
-                          "owner": "friendly",
-                          "all_of": [
-                            "EMPEROR'S CHILDREN"
-                          ]
-                        },
-                        "range": {
-                          "inches": 8
-                        },
-                        "wholly": true
-                      }
-                    }
-                  }
-                }
-              ]
-            },
-            "effect": {
-              "type": "set-up",
-              "target": "this-unit",
-              "modifier": {
-                "to": "strategic-reserves",
-                "from": "battlefield"
-              }
-            }
+          "type": "set-up",
+          "target": "this-unit",
+          "modifier": {
+            "to": "strategic-reserves",
+            "from": "battlefield",
+            "mandatory": true
           }
         },
         {
-          "type": "ability-part",
-          "trigger": {
-            "event": "set-up"
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "EMPEROR'S CHILDREN"
+                    ]
+                  },
+                  "range": {
+                    "inches": 8
+                  },
+                  "wholly": true
+                }
+              }
+            }
           },
           "effect": {
-            "type": "conditional",
-            "condition": {
-              "type": "matches",
-              "parameters": {
-                "filter": {
-                  "within": {
-                    "of": {
-                      "owner": "friendly",
-                      "all_of": [
-                        "EMPEROR'S CHILDREN"
-                      ]
-                    },
-                    "range": {
-                      "inches": 8
-                    },
-                    "wholly": true
-                  }
-                }
-              }
-            },
-            "effect": {
-              "type": "set-up",
-              "target": "this-unit",
-              "modifier": {
-                "to": "battlefield",
-                "min_enemy_distance": {
-                  "inches": 6
-                }
-              }
+            "type": "set-up",
+            "target": "this-unit",
+            "modifier": {
+              "to": "battlefield",
+              "from": "strategic-reserves",
+              "min_enemy_distance": {
+                "inches": 6
+              },
+              "via": "deep-strike",
+              "arrives": "next-movement-phase"
             }
           }
         }
@@ -4556,7 +4504,27 @@
         "DAEMONETTES"
       ]
     },
-    "community_notes": "The 6\" (instead of 9\") Deep Strike return applies only in the Reinforcements step of your next Movement phase and requires setting up wholly within 8\" of one or more friendly Emperor's Children units."
+    "community_notes": "The 6\" (instead of 9\") Deep Strike return applies only in the Reinforcements step of your next Movement phase and requires setting up wholly within 8\" of one or more friendly Emperor's Children units.",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "ecstatic-slaughter-carnival-of-excess-emperors-children",

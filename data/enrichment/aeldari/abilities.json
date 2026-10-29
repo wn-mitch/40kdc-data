@@ -12253,19 +12253,85 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "aeldari",
     "detachment_id": "windrider-host",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "step-started",
+            "filter": {
+              "step": "reinforcements"
+            }
+          },
+          "effect": {
+            "type": "ability-part",
+            "duration": "phase",
+            "effect": {
+              "type": "set-up",
+              "target": "this-unit",
+              "modifier": {
+                "to": "battlefield",
+                "from": "strategic-reserves",
+                "min_enemy_distance": {
+                  "inches": 6
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "set-up",
+            "filter": {
+              "from": "strategic-reserves"
+            }
+          },
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "within": {
+                    "of": {
+                      "owner": "enemy"
+                    },
+                    "range": {
+                      "inches": 8
+                    }
+                  }
+                }
+              }
+            },
+            "effect": {
+              "type": "ability-part",
+              "duration": "turn",
+              "effect": {
+                "type": "permission",
+                "target": "this-unit",
+                "modifier": {
+                  "activity": "declare-charge",
+                  "allow": false
+                }
+              }
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "source_digest": "fc577f3601406c9e21c2b085adea6cd5a4ae460cccaad4127a473e138333dcb6"
   },
   {
     "ability_id": "death-answers-death-devoted-of-ynnead-aeldari",

@@ -9162,19 +9162,89 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "tyranids",
     "detachment_id": "synaptic-nexus",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "set-up",
+          "target": {
+            "owner": "enemy"
+          },
+          "modifier": {
+            "to": "battlefield",
+            "from": "strategic-reserves",
+            "allow": false,
+            "near": [
+              {
+                "of": "this-model",
+                "range": {
+                  "inches": 12
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "selected",
+            "subject": {
+              "owner": "enemy"
+            },
+            "filter": {
+              "move_types": [
+                "ingress"
+              ],
+              "to": "move"
+            },
+            "optional": true
+          },
+          "usage": {
+            "frequency": "n-per-battle",
+            "count": 1,
+            "per": "model"
+          },
+          "duration": "turn",
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "battle-round",
+              "parameters": {
+                "min": 1,
+                "max": 2
+              }
+            },
+            "effect": {
+              "type": "dice-gated",
+              "dice": "D6",
+              "threshold": 4,
+              "comparison": "gte",
+              "on_success": {
+                "type": "set-up",
+                "target": "event-subject",
+                "modifier": {
+                  "to": "battlefield",
+                  "from": "strategic-reserves",
+                  "allow": false
+                }
+              },
+              "on_fail": null
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "source_digest": "1e09637618bcb8b18f69082a6d71adbdf998e2bdcd6f47570cf32729b00700be"
   },
   {
     "ability_id": "rampaging-monstrosities-crusher-stampede-tyranids",

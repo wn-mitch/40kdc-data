@@ -133,9 +133,16 @@ export function foldByAbility(list: readonly CompileLeaf[], sourceText?: string)
       out.push(leaf);
       continue;
     }
+    // "arrives back … in the Reinforcements step of your next Movement phase using the Foo ability":
+    // the arrival window between the set-up moment and its ability stays where it is.
+    const arrival: CompileLeaf[] = [];
+    if (out.length && out.at(-1)!.fragment === leaf.fragment && out.at(-1)!.family_id === "reserves-arrival") arrival.push(out.pop()!);
     const between: CompileLeaf[] = [];
     while (out.length && out.at(-1)!.fragment === leaf.fragment && (out.at(-1)!.family_id === "unit-filter" || out.at(-1)!.family_id === "unit-owner")) between.unshift(out.pop()!);
     const moment = out.at(-1);
+    if (arrival.length && (moment?.family_id !== "event" || moment.parameters.kind !== "set-up" || between.length)) {
+      throw new CompileError(`by-ability at byte ${leaf.start_byte} after an arrival window names the ability a set-up moment used; none sits right before the window.`);
+    }
     // "set up using the Foo ability of a X model": a set-up activity is a host too (viaAbility).
     if (moment?.family_id === "unit-activity" && moment.fragment === leaf.fragment && setUpWindow(moment) !== undefined && sameSentence(sourceText, moment.end_byte, leaf.start_byte)) {
       if (moment.parameters.via_ability !== undefined) throw new CompileError(`by-ability at byte ${leaf.start_byte} names an ability for a set-up that already names one.`);
@@ -165,6 +172,7 @@ export function foldByAbility(list: readonly CompileLeaf[], sourceText?: string)
     }
     if (filters.length) throw new CompileError("by-ability on a move, selection or set-up names the moment's own unit's ability; a unit-filter between them names another unit.");
     out[out.length - 1] = { ...moment, parameters: { ...moment.parameters, by_ability: id } };
+    out.push(...arrival);
   }
   return out;
 }

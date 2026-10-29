@@ -1,3 +1,4 @@
+import { scopesSetUpPermission } from "./compile-set-up-placement.js";
 import { ATTACK_EVENTS } from "./compile-conditions.js";
 import { CompileError, type CompileLeaf, type LeafConnective } from "./compile-fragments.js";
 import { planHistory, type HistoryPlan } from "./compile-connective-history.js";
@@ -84,7 +85,8 @@ export function planConditionOf(leaves: readonly CompileLeaf[], sourceText: stri
       const word = wording(connective);
       if (!USE_REFERENCE.test(word)) {
         // A bare "if"/"while": the leaf after it says the condition. Before a moment, that is a condition on history.
-        if (!connective.trailing && isMoment(leaf)) plans.push(planHistory(list, at, connective, sourceText, isMoment));
+        // "If it arrives back … using the Deep Strike ability, it can be set up …": the moment scopes that permission (compile-set-up-placement.ts).
+        if (!connective.trailing && isMoment(leaf) && !scopesSetUpPermission(list, at, sourceText)) plans.push(planHistory(list, at, connective, sourceText, isMoment));
         continue;
       }
       if (connective.trailing) throw new CompileError(`"${word}" has no leaf after it in its fragment, so nothing it gates is reviewed.`);

@@ -5226,7 +5226,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "ead5ecb83b55db7e323a05df3718683402ddcd156c313f2277a743c8c7ccfc2c",
     "version": "2025-q3",
@@ -5234,34 +5234,16 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "conditional",
-          "condition": {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "all_of": [
-                  "RUBRIC MARINES"
-                ]
-              }
-            }
-          },
-          "effect": {
-            "type": "ability-grant",
-            "target": "this-unit",
-            "modifier": {
-              "ability": "deep-strike"
-            }
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "all_of": [
-                  "SCARAB OCCULT TERMINATORS"
-                ]
+          "type": "ability-part",
+          "trigger": {
+            "event": "step-started",
+            "filter": {
+              "step": "reinforcements"
+            },
+            "condition": {
+              "type": "player-turn-is",
+              "parameters": {
+                "turn": "your-turn"
               }
             }
           },
@@ -5269,36 +5251,116 @@
             "type": "sequence",
             "steps": [
               {
-                "type": "set-up",
-                "target": "this-unit",
-                "modifier": {
-                  "to": "battlefield",
-                  "from": "strategic-reserves",
-                  "via": "deep-strike",
-                  "min_enemy_distance": {
-                    "inches": 6
+                "type": "conditional",
+                "condition": {
+                  "type": "matches",
+                  "parameters": {
+                    "filter": {
+                      "all_of": [
+                        "RUBRIC MARINES"
+                      ]
+                    }
+                  }
+                },
+                "effect": {
+                  "type": "ability-part",
+                  "duration": "phase",
+                  "effect": {
+                    "type": "ability-grant",
+                    "target": "this-unit",
+                    "modifier": {
+                      "ability": "deep-strike"
+                    }
                   }
                 }
               },
               {
-                "type": "permission",
-                "target": "this-unit",
-                "modifier": {
-                  "activity": "declare-charge",
-                  "allow": false
+                "type": "conditional",
+                "condition": {
+                  "type": "matches",
+                  "parameters": {
+                    "filter": {
+                      "all_of": [
+                        "SCARAB OCCULT TERMINATORS"
+                      ]
+                    }
+                  }
+                },
+                "effect": {
+                  "type": "ability-part",
+                  "duration": "turn",
+                  "effect": {
+                    "type": "permission",
+                    "target": "this-unit",
+                    "modifier": {
+                      "activity": "declare-charge",
+                      "allow": false
+                    }
+                  }
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "set-up",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "happened",
+                  "parameters": {
+                    "event": "used",
+                    "filter": {
+                      "kind": "ability",
+                      "id": "deep-strike"
+                    },
+                    "window": "event"
+                  }
+                },
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "filter": {
+                      "all_of": [
+                        "SCARAB OCCULT TERMINATORS"
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "effect": {
+            "type": "set-up",
+            "target": "this-unit",
+            "modifier": {
+              "to": "battlefield",
+              "min_enemy_distance": {
+                "inches": 6
+              },
+              "in_region": {
+                "region": {
+                  "rule_region": {
+                    "region_id": "flow-of-magic",
+                    "owner_faction": "thousand-sons"
+                  }
+                },
+                "wholly": true
+              }
+            }
           }
         }
       ]
     },
     "scope": {
-      "duration": "turn"
+      "duration": "permanent"
     },
     "unit_ids": [],
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "detachment_id": "hexwarp-thrallband",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "faction_id": "thousand-sons"

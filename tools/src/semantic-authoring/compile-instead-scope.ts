@@ -77,8 +77,11 @@ export function ifGatedConditions(list: readonly CompileLeaf[], places: readonly
   return found;
 }
 
-/** A sentence-opening "If" in the text before a leaf: the "if" is the first word of its sentence, line or bulleted item. */
-const IF_OPENS = /(?:^|[.;:\r\n])[\s*■•●▪]*if[\s*]*$/iu;
+/**
+ * A sentence-opening "If" in the text before a leaf: the "if" is the first word of its sentence, line or bulleted
+ * item, optionally followed by "it is a"/"it is an" naming the unit the leaf describes ("If it is a **K** unit").
+ */
+const IF_OPENS = /(?:^|[.;:\r\n])[\s*■•●▪]*if(?:\s+it\s+is\s+an?)?[\s*]*$/iu;
 /** The text before a leaf ends where a sentence, line or bulleted item starts. */
 const SENTENCE_START = /(?:^|[.;:\r\n])[\s*■•●▪]*$/u;
 /** A leaf whose own wording is led by "If" ("If this unit has X"). */
@@ -98,7 +101,9 @@ function openedByIf(list: readonly CompileLeaf[], places: readonly Placement[], 
   list.forEach((leaf, at) => {
     if (leaf.role !== "CONDITION" || at >= firstEffect || places[at]!.sentence !== sentence || raw[at] !== raw[firstEffect]) return;
     if (leaf.family_id === "roll-result" || leaf.family_id === "target-is-selected" || leaf.end_byte === undefined) return;
-    const before = bytes.subarray(Math.max(0, leaf.start_byte - 16), leaf.start_byte).toString("utf8");
+    // The text just before the leaf. A window cut short of the record's start is marked so "^" means the record starts there.
+    const from = Math.max(0, leaf.start_byte - 24);
+    const before = (from > 0 ? "\u0000" : "") + bytes.subarray(from, leaf.start_byte).toString("utf8");
     const own = bytes.subarray(leaf.start_byte, leaf.end_byte).toString("utf8");
     const previous = list[at - 1];
     const lead = previous?.end_byte !== undefined && previous.end_byte <= leaf.start_byte ? bytes.subarray(previous.end_byte, leaf.start_byte).toString("utf8") : "";

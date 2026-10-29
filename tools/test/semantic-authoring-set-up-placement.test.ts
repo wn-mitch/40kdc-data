@@ -119,6 +119,32 @@ describe("Semantic authoring set-up restriction (an enemy exclusion zone)", () =
     expect(mechanics.effect.modifier.near).toEqual([{ of: { marker: "beacon-marker" }, range: { inches: 6 } }]);
   });
 
+  it("reads a set-up moment inside a permission's window as which set-ups it covers, not a second trigger", () => {
+    const text = "At the start of the step, select one unit. Until the end of the phase, when placing your unit from the Vault, it can be set up anywhere that is more than 6\" away from all enemy units.";
+    const mechanics = mechanicsOf(text,
+      ["At the start of the step", "event", { kind: "step-started", step: "reinforcements", turn: "your" }],
+      ["Until the end of the phase", "duration", { endpoint: "end-of-phase" }],
+      ["when placing your unit from the Vault", "event", { kind: "set-up", from: "strategic-reserves" }],
+      ["it can be set up anywhere", "set-up", { subject: "antecedent", to: "battlefield" }],
+      beyondEnemy("more than 6\" away from all enemy units", 6));
+    expect(mechanics.trigger).toEqual({ event: "step-started", filter: { step: "reinforcements" }, condition: { type: "player-turn-is", parameters: { turn: "your-turn" } } });
+    expect(JSON.stringify(mechanics.effect)).not.toContain("\"event\":\"set-up\"");
+    expect(JSON.stringify(mechanics.effect)).toContain("\"from\":\"strategic-reserves\"");
+  });
+
+  it("carries a Deep Strike moment inside a permission's window onto the set-up as via deep-strike", () => {
+    const text = "At the start of the step, select one unit. Until the end of the phase, when your unit is placed using the Deep Strike ability, it can be set up anywhere that is more than 6\" away from all enemy units.";
+    const mechanics = mechanicsOf(text,
+      ["At the start of the step", "event", { kind: "step-started", step: "reinforcements", turn: "your" }],
+      ["Until the end of the phase", "duration", { endpoint: "end-of-phase" }],
+      ["when your unit is placed", "event", { kind: "set-up" }],
+      ["using the Deep Strike ability", "by-ability", { id: "deep-strike" }],
+      ["it can be set up anywhere", "set-up", { subject: "antecedent", to: "battlefield" }],
+      beyondEnemy("more than 6\" away from all enemy units", 6));
+    expect(JSON.stringify(mechanics.effect)).toContain("\"via\":\"deep-strike\"");
+    expect(JSON.stringify(mechanics.effect)).not.toContain("\"event\":\"set-up\"");
+  });
+
 });
 
 describe("Semantic authoring placement limits after a set-up or add-unit", () => {

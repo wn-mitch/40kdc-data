@@ -84,6 +84,30 @@ describe("an If-led sentence gates its own sentence only (compile-instead-scope.
     expect(steps[1]).toMatchObject({ type: "ability-part", trigger: { event: "set-up" }, effect: { type: "conditional", condition: hasKeyword("KEYB") } });
   });
 
+  it("stops the condition at its sentence when the leaf names only the unit after \"If it is a\"", () => {
+    const text = "At the start of the phase. If it is a **KEYA** unit, it has +1 OC. When this unit is set up, it has +2 OC.";
+    const mechanics = mechanicsOf(text, [
+      ["At the start of the phase", "event", { kind: "phase-start", phase: "any" }],
+      ["KEYA** unit", "unit-keyword", keyword("KEYA")],
+      ["it has +1 OC", "characteristic-modifier", stat("OC", 1)],
+      ["When this unit is set up", "event", { kind: "set-up" }],
+      ["it has +2 OC", "characteristic-modifier", stat("OC", 2)],
+    ]);
+    const steps = mechanics.effect.steps as Array<Record<string, any>>;
+    expect(steps[0]).toMatchObject({ type: "ability-part", effect: { type: "conditional", condition: hasKeyword("KEYA") } });
+    expect(steps[1]).toMatchObject({ type: "ability-part", trigger: { event: "set-up" }, effect: { type: "stat-modifier" } });
+  });
+
+  it("keeps the ability-wide gate on an \"If it is a\" sentence the next sentence only continues", () => {
+    const text = "If it is a **KEYA** unit, it has +1 OC. It has +3 M.";
+    const mechanics = mechanicsOf(text, [
+      ["KEYA** unit", "unit-keyword", keyword("KEYA")],
+      ["it has +1 OC", "characteristic-modifier", stat("OC", 1)],
+      ["It has +3 M", "characteristic-modifier", stat("M", 3)],
+    ]);
+    expect(mechanics.effect).toMatchObject({ type: "conditional", condition: hasKeyword("KEYA"), effect: { type: "sequence" } });
+  });
+
   it("keeps the ability-wide gate when the next sentence only continues the first", () => {
     const text = "If this unit has KEYA, this unit has +1 OC. This unit has +3 M.";
     const mechanics = mechanicsOf(text, [
