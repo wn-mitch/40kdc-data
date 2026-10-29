@@ -1378,6 +1378,23 @@ fn handle_translate_effect(args: &Value) -> Value {
     };
     let effect: wh40kdc::EffectNode = match serde_json::from_value(effect_value.clone()) {
         Ok(e) => e,
+        // The generated types model only authored conditions; an effect with the cruncher's
+        // generated `dice-table-result` leaf is rendered from its JSON form.
+        Err(_) if effect_value.to_string().contains("\"dice-table-result\"") => {
+            let part = |key: &str| args.get(key).filter(|v| !v.is_null());
+            let applies_to: Option<wh40kdc::KeywordPredicate> =
+                part("applies_to").and_then(|v| serde_json::from_value(v.clone()).ok());
+            return ok_value(json!({
+                "text": wh40kdc::describe_ability_value_with_optional(
+                    effect_value,
+                    part("scope"),
+                    applies_to.as_ref(),
+                    part("usage"),
+                    part("trigger"),
+                    args.get("optional") == Some(&Value::Bool(true)),
+                )
+            }));
+        }
         Err(e) => {
             return err_value(
                 ErrorKind::InvalidInput,

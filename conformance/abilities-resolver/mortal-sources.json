@@ -136,7 +136,7 @@
           {
             "id": "a",
             "moment": null,
-            "expected": 0.8333333333333334,
+            "expected": 0.833333333333,
             "needKeys": []
           }
         ],
@@ -206,7 +206,7 @@
           {
             "id": "a",
             "moment": null,
-            "expected": 2.6666666666666665,
+            "expected": 2.666666666667,
             "needKeys": []
           }
         ],
@@ -296,7 +296,7 @@
           {
             "id": "a",
             "moment": null,
-            "expected": 1.326474622770919,
+            "expected": 1.326474622771,
             "needKeys": []
           }
         ],
@@ -418,7 +418,7 @@
           {
             "id": "a",
             "moment": null,
-            "expected": 1.6666666666666674,
+            "expected": 1.666666666667,
             "needKeys": []
           }
         ],
@@ -483,7 +483,7 @@
           {
             "id": "a",
             "moment": "move-ended:charge",
-            "expected": 3.333333333333334,
+            "expected": 3.333333333333,
             "needKeys": [
               "attacker:{\"parameters\":{\"filter\":{\"engaged_with\":\"selected-unit\"}},\"type\":\"matches\"}"
             ]
@@ -625,7 +625,7 @@
           {
             "id": "a?0",
             "moment": null,
-            "expected": 1.3333333333333333,
+            "expected": 1.333333333333,
             "needKeys": []
           },
           {
@@ -1286,7 +1286,7 @@
           {
             "id": "crimson-harvest-necrons",
             "moment": "move-ended:charge",
-            "expected": 2.1666666666666665,
+            "expected": 2.166666666667,
             "needKeys": [
               "attacker:{\"parameters\":{\"filter\":{\"engaged_with\":\"this-model\"},\"subject\":\"selected-unit\"},\"type\":\"matches\"}"
             ]
@@ -1307,7 +1307,7 @@
           {
             "id": "krushin-impetus-orks",
             "moment": "move-ended:charge",
-            "expected": 6.666666666666666,
+            "expected": 6.666666666667,
             "needKeys": [
               "attacker:{\"parameters\":{\"filter\":{\"engaged_with\":\"this-unit\"},\"subject\":\"selected-unit\"},\"type\":\"matches\"}",
               "attacker:{\"parameters\":{\"filter\":{\"engaged_with\":\"selected-unit\"}},\"type\":\"matches\"}"
@@ -1327,7 +1327,7 @@
           {
             "id": "hypertoxic-miasma-tyranids",
             "moment": "phase-ended",
-            "expected": 1.5833333333333333,
+            "expected": 1.583333333333,
             "needKeys": [
               "attacker:{\"parameters\":{\"turn\":\"your-turn\"},\"type\":\"player-turn-is\"}",
               "attacker:{\"parameters\":{\"filter\":{\"within\":{\"of\":\"this-model\",\"range\":{\"inches\":6}}},\"subject\":\"target\"},\"type\":\"matches\"}"

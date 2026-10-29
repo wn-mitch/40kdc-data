@@ -31,6 +31,14 @@ const table = {
   outcomes: [{ results: [1, 2], effect: { type: "no-effect" } }, { results: [3, 4, 5], effect: mw({ count: 1 }) }, { results: [6], effect: mw({ count: "D3+3" }) }],
 };
 
+/**
+ * An expectation rounded to 12 decimal places: summation order can move the last bit between
+ * platforms, and every port compares it within 1e-9, so the golden pins no more than that.
+ */
+function stable(value: number): number {
+  return Math.round(value * 1e12) / 1e12;
+}
+
 /** Every mortal-sources row with its expectation. */
 export function canonicalMortalSourceCases(ds: Dataset): (MortalSourceRow & { expected: unknown })[] {
   const rows: MortalSourceRow[] = [
@@ -79,7 +87,7 @@ export function canonicalMortalSourceCases(ds: Dataset): (MortalSourceRow & { ex
     return {
       ...row,
       expected: {
-        sources: result.sources.map((source) => ({ id: source.id, moment: source.moment, expected: source.expected, needKeys: source.needs.map((need) => need.key) })),
+        sources: result.sources.map((source) => ({ id: source.id, moment: source.moment, expected: stable(source.expected), needKeys: source.needs.map((need) => need.key) })),
         unsupportedReasons: result.unsupported.map((fragment) => fragment.reason),
       },
     };
