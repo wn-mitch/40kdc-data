@@ -349,12 +349,17 @@ describe("Semantic authoring Stratagems with several targets: a target with alte
       ["one", "stratagem-target", { count: "one" }, "TARGET"],
       ["friendly BETA unit", "unit-filter", { side: "friendly", keywords: ["BETA"] }, "TARGET"],
       ["Until the end of the turn", "duration", { endpoint: "end-of-turn" }, "EFFECT"]];
-    const { target } = compiled(or, ...items, ["is eligible to shoot and charge after falling back", "act-after-move", { subject: "antecedent", moves: ["fall-back"], acts: ["shoot", "charge"] }, "EFFECT"]);
+    const { target, mechanics } = compiled(or, ...items, ["is eligible to shoot and charge after falling back", "act-after-move", { subject: "antecedent", moves: ["fall-back"], acts: ["shoot", "charge"] }, "EFFECT"]);
     expect(target).toEqual([
       { name: "first", mode: "a", count: "one", side: "your-army", selects: "unit", required_keywords: ["ALPHA"] },
       { name: "second", mode: "b", count: "one", side: "your-army", selects: "unit", required_keywords: ["BETA"] },
     ]);
-    expect(refused(or, ...items, ["is eligible to shoot and charge after falling back", "act-after-move", { subject: "this-unit", moves: ["fall-back"], acts: ["shoot", "charge"] }, "EFFECT"])).toMatch(/several targets/u);
+    // One unit per mode: "it" and "your unit" are whichever target was selected, so the effect holds for each
+    // (an unselected target takes none), never for the second target alone.
+    const targets = (effect: unknown) => JSON.stringify(effect).match(/\{"stratagem_target":"(first|second)"\}/gu);
+    expect(targets(mechanics.effect)).toEqual(expect.arrayContaining([JSON.stringify(first), JSON.stringify(second)]));
+    const own = compiled(or, ...items, ["is eligible to shoot and charge after falling back", "act-after-move", { subject: "this-unit", moves: ["fall-back"], acts: ["shoot", "charge"] }, "EFFECT"]);
+    expect(own.mechanics.effect).toEqual(mechanics.effect);
   });
 });
 

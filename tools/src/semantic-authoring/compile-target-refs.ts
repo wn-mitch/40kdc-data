@@ -1,4 +1,5 @@
 import { ANTECEDENT, antecedentKeys } from "./antecedent-families.js";
+import { momentUnitRole } from "./compile-antecedent.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { currentFamilyVersion, exactSpan, familyRole } from "./contracts.js";
 import { AMONG_TARGETS } from "./families/unit-filters.js";
@@ -60,6 +61,8 @@ export const TARGET_REF_KEYS: Readonly<Record<string, readonly string[]>> = {
   "unit-state": ["subject", "with"], "unit-activity": ["subject"], "unit-position": ["subject", "of"], "unit-keyword": ["subject"],
   "hit-by-attacks": ["subject"], "in-region": ["subject"], targeted: ["subject"], "target-is-selected": ["by", "target"],
   visible: ["subject", "to"], eligible: ["subject"],
+  // "while a friendly X unit is within 3\" of your unit": an aura measured from a target (compile-wrappers.ts wrapAura).
+  "aura-range": ["of"],
 };
 
 const accepts = (leaf: CompileLeaf, key: string) => TARGET_REF_KEYS[leaf.family_id]?.includes(key) === true;
@@ -158,7 +161,14 @@ function bindInTarget(list: readonly CompileLeaf[], index: number, heads: readon
     return bind(leaf, keys, oneTarget(heads[group - 1]!, leaf));
   }
   if (group === 0 || keys.length === 0) return leaf;
-  return bind(leaf, keys, oneTarget(heads[group - 1]!, leaf));
+  const earlier = heads[group - 1]!;
+  // "That X unit, or one Y unit within 3\" of it": in the other mode the first target is not selected, so "it" is
+  // the moment's unit that target is bound to, not the target.
+  if (earlier.selector?.family_id === "triggering-target" && earlier.mode !== null && earlier.mode !== heads[group]!.mode) {
+    const role = momentUnitRole(list, index, sourceText);
+    return { ...leaf, parameters: { ...leaf.parameters, ...Object.fromEntries(keys.map((key) => [key, role])) } };
+  }
+  return bind(leaf, keys, oneTarget(earlier, leaf));
 }
 
 /**
@@ -251,12 +261,14 @@ export function bindTargetRefs(raw: readonly CompileLeaf[], sourceText?: string)
   const focusAt: Array<string | null> = leaves.map(() => null);
   // The level of the target a bare antecedent names: "model" when the focus is a model-level target.
   const focusLevelAt: Array<string> = leaves.map(() => "unit");
-  let focus = targetRef(names.at(-1)!);
+  // With one unit per target mode, a bare "it" is whichever target was selected (chosenTarget).
+  const chosen = chosenTarget(heads);
+  let focus = chosen ?? targetRef(names.at(-1)!);
   let focusLevel = String(heads.at(-1)?.level ?? "unit");
   // What a later bare antecedent names as a subject: the first target, until an among-filter binds the
   // subject of a later leaf. An embark permission's subject reads this, its destination reads focus.
   const subjectFocusAt: Array<string | null> = leaves.map(() => null);
-  let subjectFocus = targetRef(names[0]!);
+  let subjectFocus = chosen ?? targetRef(names[0]!);
   for (let index = 0; index < leaves.length; index += 1) {
     const leaf = leaves[index]!;
     if (!(leaf.family_id === "unit-filter" && leaf.parameters.among === AMONG_TARGETS)) {
@@ -357,14 +369,32 @@ function settleDestination(leaf: CompileLeaf, subject: string | null, destinatio
  * set-up's unit; `placedLimit` exempts that subject only, so a limit's other fields still refuse.
  */
 export function refuseBareTarget(leaves: readonly CompileLeaf[], placedLimit: (leaf: CompileLeaf) => boolean = () => false): CompileLeaf[] {
-  if (targetHeads(leaves).flatMap((head) => head.names).length < 2) return [...leaves];
-  for (const leaf of leaves) {
-    if (leaf.fragment === "TARGET") continue;
+  const heads = targetHeads(leaves);
+  if (heads.flatMap((head) => head.names).length < 2) return [...leaves];
+  const chosen = chosenTarget(heads);
+  return leaves.map((leaf) => {
+    if (leaf.fragment === "TARGET" || leaf.fragment === "WHEN") return leaf;
     const exempt = placedLimit(leaf) ? "subject" : undefined;
     const keys = Object.entries(leaf.parameters).filter(([key, value]) => value === "this-unit" && key !== exempt).map(([key]) => key);
-    if (keys.length) throw new CompileError(`${leaf.family_id} at byte ${leaf.start_byte} names this unit (${keys.join(", ")}), but the Stratagem has several targets; name the one it means.`);
-  }
-  return [...leaves];
+    if (keys.length === 0) return leaf;
+    if (chosen === null) throw new CompileError(`${leaf.family_id} at byte ${leaf.start_byte} names this unit (${keys.join(", ")}), but the Stratagem has several targets; name the one it means.`);
+    return bind(leaf, keys, chosen);
+  });
+}
+
+/**
+ * "That X unit, or one friendly Y unit within 3\" of it": when every target mode holds one unit, the
+ * player selects exactly one unit, so "your unit" names whichever was selected. As a reference to
+ * any one of the targets, an effect on it is one effect per target (an unselected target takes
+ * none) and a condition on it holds when the selected one meets it. Null when a mode holds several
+ * units or the targets have no modes: "your unit" then does not say which one.
+ */
+function chosenTarget(heads: readonly TargetHead[]): string | null {
+  if (!heads.some((head) => head.mode !== null)) return null;
+  const single = (head: TargetHead) => head.names.length === 1 && !isMultiCountHead(heads, head.names[0]!);
+  const modes = new Set(heads.map((head) => head.mode));
+  if (![...modes].every((mode) => heads.filter((head) => head.mode === mode).length === 1) || !heads.every(single)) return null;
+  return targetRefs("any", heads.map((head) => ({ name: head.names[0]! })));
 }
 
 /** Keys under which a node is a condition rather than an effect or a moment. */

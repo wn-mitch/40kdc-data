@@ -6,6 +6,8 @@ import { currentFamilyVersion } from "./contracts.js";
 import type { FilterAlternative } from "./unit-filter-alternatives.js";
 import { dslUnitFilter } from "./compile-unit-filter-dsl.js";
 import { destroyedSelectionEligibility } from "./compile-destroyed-selection.js";
+import { AURA_RECIPIENT } from "./compile-antecedent.js";
+import { isTargetRef } from "./compile-target-refs.js";
 
 /**
  * Wrapping leaves (`aura-range`, `leader-target`, `for-each-unit-select`, `rules-bundle-marker`)
@@ -82,6 +84,26 @@ function anySideRegionGrant(leaf: CompileLeaf, body: Node, modifier: Node, eligi
   return { ...body, target: { owner: "any", ...eligible, within: { range: modifier.range, of: of ?? "this-model", ...(modifier.wholly === true ? { wholly: true } : {}) } } };
 }
 
+/**
+ * "While a friendly X unit is within 3\" of your unit" in a Stratagem with several targets: the DSL
+ * aura measures only from its own unit or model, so an aura from a Stratagem target is its body on
+ * every unit within range of that target, as the body's target. A conditional body ("if you
+ * targeted a **JUMP PACK** unit, … models in that unit have …") keeps its gate, which must not name
+ * the recipient. Refuses any other body that is not one effect on the aura's recipient, and the
+ * range modifiers that target filter has no field for.
+ */
+function targetAura(leaf: CompileLeaf, body: Node, modifier: Node, eligible: Node): Node {
+  if (modifier.range_cap !== undefined || modifier.conditional_range !== undefined || modifier.emitter_filter !== undefined || leaf.parameters.range_table !== undefined) {
+    throw new CompileError(`aura-range at byte ${leaf.start_byte} measures from a Stratagem target; a unit-filter's within holds only a fixed range.`);
+  }
+  const reached = { ...eligible, within: { range: modifier.range, of: leaf.parameters.of, ...(modifier.wholly === true ? { wholly: true } : {}) } };
+  if (body.type === "conditional" && !JSON.stringify(body.condition).includes(`"${AURA_RECIPIENT}"`)) {
+    return { ...body, effect: targetAura(leaf, body.effect as Node, modifier, eligible) };
+  }
+  if (body.target !== AURA_RECIPIENT || typeof body.type !== "string") throw new CompileError(`aura-range at byte ${leaf.start_byte} measures from a Stratagem target, so its body must be one effect on the unit it reaches.`);
+  return { ...body, target: reached };
+}
+
 export function wrapAura(leaf: CompileLeaf, body: Node): Node {
   // A named range (aura-range@5 range_ref) arrives as the range-ref compile-named-range.ts built.
   const range = leaf.parameters.range_table ?? { inches: closed(leaf, "inches") };
@@ -98,6 +120,7 @@ export function wrapAura(leaf: CompileLeaf, body: Node): Node {
   // Version 2 (batch 7a): the aura's range, extensions included, never exceeds this many inches (the DSL's range_cap distance).
   if (leaf.parameters.range_cap_inches !== undefined) modifier.range_cap = { inches: closed(leaf, "range_cap_inches") };
   if (closed(leaf, "side") === "any") return anySideRegionGrant(leaf, body, modifier, eligible);
+  if (isTargetRef(leaf.parameters.of)) return targetAura(leaf, body, modifier, eligible);
   return { type: "aura", target: closed(leaf, "side") === "friendly" ? "friendly-within-aura" : "enemy-within-aura", modifier };
 }
 

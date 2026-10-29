@@ -1505,11 +1505,46 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": [
+      {
+        "required_keywords": [
+          "Adepta Sororitas"
+        ],
+        "name": "first",
+        "count": "one",
+        "mode": "a",
+        "selects": "unit",
+        "bound_to": "triggering-unit"
+      },
+      {
+        "required_keywords": [
+          "Adepta Sororitas",
+          "Jump Pack"
+        ],
+        "name": "second",
+        "count": "one",
+        "mode": "b",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "filter": {
+              "within": {
+                "of": "event-object",
+                "range": {
+                  "inches": 3
+                }
+              }
+            }
+          }
+        }
+      }
+    ],
     "ability_id": "shield-of-faith-army-of-faith-adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {

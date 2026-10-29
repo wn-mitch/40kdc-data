@@ -7980,7 +7980,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "b65250c06faf08a865aa3e73dcd27fb5db28392a7def92e339a03a5b531282c9",
     "version": "2025-q3",
@@ -7991,12 +7991,112 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "feel-no-pain",
-      "target": "this-unit",
-      "modifier": {
-        "threshold": 5,
-        "against": "mortal"
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "feel-no-pain",
+          "target": {
+            "stratagem_target": "first"
+          },
+          "modifier": {
+            "threshold": 5,
+            "against": "mortal"
+          }
+        },
+        {
+          "type": "feel-no-pain",
+          "target": {
+            "stratagem_target": "second"
+          },
+          "modifier": {
+            "threshold": 5,
+            "against": "mortal"
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "or",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": {
+                    "stratagem_target": "first"
+                  },
+                  "filter": {
+                    "all_of": [
+                      "ADEPTA SORORITAS",
+                      "JUMP PACK"
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": {
+                    "stratagem_target": "second"
+                  },
+                  "filter": {
+                    "all_of": [
+                      "ADEPTA SORORITAS",
+                      "JUMP PACK"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "feel-no-pain",
+                "target": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "ADEPTA SORORITAS"
+                  ],
+                  "within": {
+                    "range": {
+                      "inches": 3
+                    },
+                    "of": {
+                      "stratagem_target": "first"
+                    }
+                  }
+                },
+                "modifier": {
+                  "threshold": 5,
+                  "against": "mortal"
+                }
+              },
+              {
+                "type": "feel-no-pain",
+                "target": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "ADEPTA SORORITAS"
+                  ],
+                  "within": {
+                    "range": {
+                      "inches": 3
+                    },
+                    "of": {
+                      "stratagem_target": "second"
+                    }
+                  }
+                },
+                "modifier": {
+                  "threshold": 5,
+                  "against": "mortal"
+                }
+              }
+            ]
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "phase"
@@ -8006,52 +8106,15 @@
         "ADEPTA SORORITAS"
       ]
     },
-    "community_notes": "Used just after the unit suffers a mortal wound; can instead target one friendly Jump Pack unit within 3\" of it, in which case friendly Adepta Sororitas units within 3\" of that unit also gain the Feel No Pain (extension not encoded).",
     "trigger": {
       "event": "damage-allocated",
       "filter": {
         "attack_type": "mortal"
       },
-      "subject": {
+      "object": {
         "owner": "friendly",
         "all_of": [
           "ADEPTA SORORITAS"
-        ]
-      },
-      "optional": true,
-      "condition": {
-        "operator": "or",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "command"
-            }
-          },
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "movement"
-            }
-          },
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "charge"
-            }
-          },
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
-            }
-          }
         ]
       }
     }

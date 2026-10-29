@@ -776,7 +776,7 @@ function bindInScope(leaves: readonly CompileLeaf[], focus?: (index: number) => 
  * The unit a moment names for a membership ("that unit's Character models"): the nearest earlier
  * moment naming a unit. A destruction without a destroyer names the object; others name the subject.
  */
-function momentUnitRole(leaves: readonly CompileLeaf[], index: number, sourceText: string | undefined): string {
+export function momentUnitRole(leaves: readonly CompileLeaf[], index: number, sourceText: string | undefined): string {
   let at = -1;
   for (let other = 0; other < index; other += 1) if (momentNamesUnit(leaves, other)) at = other;
   if (at < 0) {

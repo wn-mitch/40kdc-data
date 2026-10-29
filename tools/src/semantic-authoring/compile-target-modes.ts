@@ -16,7 +16,8 @@ type ModeCost = { label: string; amount: number };
 
 /** Leaves that may sit between two targets' wording without ending the first target's group. */
 const LEAD_FAMILIES = new Set(["optional-use", "resource-spend", "event"]);
-const SELECTOR_FAMILIES = new Set(["stratagem-target"]);
+// "That X unit, or one friendly Y unit within 3\" of it": the moment's own unit is a target a mode can hold.
+const SELECTOR_FAMILIES = new Set(["stratagem-target", "triggering-target"]);
 export const OR_CONNECTIVE = /(?:^|[\s,;:.])or(?=\s|$)/iu;
 export const ONE_OR_MORE = /\bor\s+more\b/giu;
 export const ALTERNATIVELY = /\balternatively\b/iu;

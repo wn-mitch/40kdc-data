@@ -463,7 +463,8 @@ export function condition(leaf: CompileLeaf): Node {
         const each = keywords.map((keyword) => negate(pred("has-keyword", { all_of: [keyword] }, subject)));
         return each.length === 1 ? each[0]! : { operator: "and", operands: each };
       }
-      return pred("has-keyword", keywords.length === 1 ? { all_of: keywords } : { any_of: keywords }, subject);
+      // Version 8: match all is one unit with every keyword ("an **ADEPTA SORORITAS JUMP PACK** unit").
+      return pred("has-keyword", keywords.length === 1 || leaf.parameters.match === "all" ? { all_of: keywords } : { any_of: keywords }, subject);
     }
     // "In a turn in which it used its Foo ability", "while it is performing a Bar" (compile-named-ability.ts).
     case "ability-used":

@@ -417,4 +417,22 @@ export const UNIT_STATE_EXTENSIONS: readonly FamilyExtension[] = [
       return { ...result, any_army_faction: true };
     },
   },
+  {
+    // "If you targeted an **ADEPTA SORORITAS JUMP PACK** unit": one unit with every keyword, where
+    // several keywords otherwise read as alternatives ("a **MONSTER** or **VEHICLE** unit").
+    family: "unit-keyword",
+    version: 8,
+    description: "As the previous version, plus match all: the subject has every listed keyword. Without match, several keywords are alternatives.",
+    schema: (previous) => withProperties(previous, { match: optional({ const: "all" }) }),
+    normalize: (input, previous) => {
+      const { match, ...rest } = input;
+      const result = previous(rest);
+      if (match === undefined) return result;
+      if (match !== "all") throw new TypeError("unit-keyword.match is all or omitted.");
+      const keywords = result.keywords as string[] | undefined;
+      if (keywords === undefined || keywords.length < 2) throw new TypeError("unit-keyword.match all names two or more keywords.");
+      if (result.negated === true) throw new TypeError("unit-keyword.match all is not negated; name the keywords the subject lacks one by one.");
+      return { ...result, match: "all" };
+    },
+  },
 ];
