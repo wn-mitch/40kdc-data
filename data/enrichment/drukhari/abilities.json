@@ -93,13 +93,14 @@
                   "advance": "fixed-8"
                 }
               }
-            }
+            },
+            "duration": "phase"
           }
         ]
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "unit_ids": [
       "reavers"
@@ -2390,13 +2391,14 @@
                   }
                 ]
               }
-            }
+            },
+            "duration": "until-start-next-turn"
           }
         ]
       }
     },
     "scope": {
-      "duration": "until-start-next-turn"
+      "duration": "permanent"
     },
     "unit_ids": [
       "razorwing-jetfighter"
@@ -3973,13 +3975,14 @@
                   }
                 ]
               }
-            }
+            },
+            "duration": "until-start-next-turn"
           }
         ]
       }
     },
     "scope": {
-      "duration": "until-start-next-turn"
+      "duration": "permanent"
     },
     "unit_ids": [
       "ravager"
@@ -4595,13 +4598,14 @@
                   }
                 }
               }
-            }
+            },
+            "duration": "phase"
           }
         ]
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "unit_ids": [
       "voidraven-bomber"

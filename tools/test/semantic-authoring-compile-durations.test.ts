@@ -358,3 +358,24 @@ describe("a bound duration renders as its own clause", () => {
     expect(text).toContain("Until the end of the turn: ranged weapons equipped by the triggering unit gain [ASSAULT].");
   });
 });
+
+describe("a duration printed in a later part with a moment of its own", () => {
+  // Fabricated wording with the shape of an enhancement that buffs a chosen weapon before the battle and again when fighting.
+  const text = "Before the battle, pick one melee weapon of the bearer; add 1 to the Attacks characteristic of that weapon. Also, each time the bearer is chosen to fight, it can use this Enhancement. If it does, while resolving those attacks, add 1 to the Damage characteristic of that weapon.";
+  const leaves = () => placed(text,
+    ["Before the battle", "event", { kind: "battle-started" }],
+    ["pick one melee weapon of the bearer", "select-weapon", { target: "this-model", bind_as: "selected-weapon", count: 1, weapon_type: "melee" }],
+    ["add 1 to the Attacks characteristic of that weapon", "characteristic-modifier", { subject: "this-model", characteristics: ["A"], operation: "add", value: 1, weapon: "antecedent" }],
+    ["each time the bearer is chosen to fight", "event", { kind: "selected", to: "fight", subject: "this-model" }],
+    ["it can use this Enhancement", "optional-use", { who: "this-model" }],
+    ["while resolving those attacks", "duration", { endpoint: "end-of-attack-sequence" }],
+    ["add 1 to the Damage characteristic of that weapon", "characteristic-modifier", { subject: "this-model", characteristics: ["D"], operation: "add", value: 1, weapon: "antecedent" }]);
+
+  it("bounds only that part, not the earlier part's lasting effect", () => {
+    const result = compileLeaves(leaves(), text, { name: FIXTURE_RULE_NAME });
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    expect(result.mechanics.scope?.duration).toBe("permanent");
+    const parts = (result.mechanics.effect as { steps: Array<Record<string, unknown>> }).steps;
+    expect(parts.map((part) => part.duration)).toEqual([undefined, "attack-sequence"]);
+  });
+});

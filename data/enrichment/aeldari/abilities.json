@@ -4441,13 +4441,14 @@
                 "target": "this-unit",
                 "stratagem": "explosives"
               }
-            }
+            },
+            "duration": "turn"
           }
         ]
       }
     },
     "scope": {
-      "duration": "turn"
+      "duration": "permanent"
     },
     "unit_ids": [
       "swooping-hawks"

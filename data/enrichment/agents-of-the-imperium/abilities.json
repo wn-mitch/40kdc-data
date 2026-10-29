@@ -4074,9 +4074,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "source_digest": "a96ae647dc29710ceb0346b6fe3fd71c35e718f558d27752d61983e13a4da049",
+    "source_digest": "0e1fa84de828b646754ce1a9b178c340278afcee9bca62199cf16fbedfd6e2b1",
     "version": "2025-q3",
     "effect": {
       "type": "sequence",
@@ -4177,12 +4177,13 @@
                 "value": 1
               }
             }
-          }
+          },
+          "duration": "turn"
         }
       ]
     },
     "scope": {
-      "duration": "turn"
+      "duration": "permanent"
     },
     "unit_ids": [],
     "ability_type": "stratagem",

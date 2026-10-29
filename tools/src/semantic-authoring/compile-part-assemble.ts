@@ -199,8 +199,11 @@ export function assemblePart(
   const unwrapped = body;
   // "X units have the following ability: … Each time …, it can use this ability. If it does, until the end of the phase: ■ A ■ B":
   // one printed duration in a later part, after only the grant of the ability, lasts that part, not the grant.
+  // So does one after a first part that has a moment of its own ("At the start of the battle, select … add 1 to
+  // the Attacks …. Each time the bearer is selected to fight, … If it does, while resolving those attacks, …").
   const onlyGrantBefore = partStarts.length > 0 && list.every((leaf, at) => at >= partStarts[0]!.index || leaf.role !== "EFFECT" || leaf.family_id === "ability-record-grant");
-  const laterPartDuration = !split && onlyGrantBefore && durations.length === 1 && durationAt.length === 1 && partOf(durationAt[0]!) > 0 ? partOf(durationAt[0]!) : 0;
+  const firstPartTriggered = partStarts.length > 0 && triggerIndexes.some((index) => index < partStarts[0]!.index);
+  const laterPartDuration = !split && (onlyGrantBefore || firstPartTriggered) && durations.length === 1 && durationAt.length === 1 && partOf(durationAt[0]!) > 0 ? partOf(durationAt[0]!) : 0;
   const scopeDuration = split || laterPartDuration ? "permanent" : (durations[0] ?? "permanent");
   // "If an enemy unit within 8\" of this unit is below Starting Strength": a gate on each unit an
   // aura or a for-each reaches holds per recipient, inside the wrap, not once around it.

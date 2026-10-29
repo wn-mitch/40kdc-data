@@ -7233,7 +7233,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "9080c05c7091577d2c97f8f42e89c21adcada743d2b8f4cc7adf6c938e0536f8",
     "version": "2025-q3",
@@ -7242,30 +7242,55 @@
     "faction_id": "emperors-children",
     "detachment_id": "carnival-of-excess",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "sequence",
       "steps": [
         {
-          "type": "stat-modifier",
-          "target": "this-model",
-          "modifier": {
-            "stat": "A",
-            "operation": "add",
-            "value": 1,
-            "weapons": {
-              "type": "melee"
-            }
+          "type": "ability-part",
+          "trigger": {
+            "event": "battle-started"
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "select-weapon",
+                "target": "this-model",
+                "modifier": {
+                  "bind_as": "selected-weapon",
+                  "weapons": {
+                    "type": "melee"
+                  },
+                  "count": 1
+                }
+              },
+              {
+                "type": "stat-modifier",
+                "target": "this-model",
+                "modifier": {
+                  "stat": "A",
+                  "operation": "add",
+                  "value": 1,
+                  "weapons": {
+                    "ref": {
+                      "weapon_var": "selected-weapon"
+                    }
+                  }
+                }
+              }
+            ]
           }
         },
         {
           "type": "ability-part",
-          "optional": true,
           "trigger": {
             "event": "selected",
+            "subject": "this-model",
             "filter": {
               "to": "fight"
-            }
+            },
+            "optional": true
           },
           "effect": {
             "type": "sequence",
@@ -7278,7 +7303,9 @@
                   "operation": "add",
                   "value": 1,
                   "weapons": {
-                    "type": "melee"
+                    "ref": {
+                      "weapon_var": "selected-weapon"
+                    }
                   }
                 }
               },
@@ -7286,26 +7313,44 @@
                 "type": "weapon-ability-grant",
                 "target": "this-model",
                 "modifier": {
-                  "weapons": {
-                    "type": "melee"
-                  },
                   "keywords": [
                     {
                       "keyword_id": "devastating-wounds"
-                    },
+                    }
+                  ],
+                  "weapons": {
+                    "type": "melee",
+                    "ref": {
+                      "weapon_var": "selected-weapon"
+                    }
+                  }
+                }
+              },
+              {
+                "type": "weapon-ability-grant",
+                "target": "this-model",
+                "modifier": {
+                  "keywords": [
                     {
                       "keyword_id": "hazardous"
                     }
-                  ]
+                  ],
+                  "weapons": {
+                    "type": "melee",
+                    "ref": {
+                      "weapon_var": "selected-weapon"
+                    }
+                  }
                 }
               }
             ]
-          }
+          },
+          "duration": "attack-sequence"
         }
       ]
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
