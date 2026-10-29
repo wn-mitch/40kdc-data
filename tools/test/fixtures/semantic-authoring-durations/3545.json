@@ -1,0 +1,156 @@
+{
+ "id": 3545,
+ "source_text": "xxxxxxxxxxxxxx xxxx xx xxxx xxxxxxxxxxxx xxxxxxxx xxxxx, wwww wwwww ww xxxxx xxxx ww xxx xx xx xxx xxxxxxxxxxx xxxx xxxxxxxx.\nxxx **xxxxx xxxxxxxxx** xx **xxxxxxxxxxx xxxxx** xxxx xxxx xxxx xxxx (xxxxxxxxx **xxxxxxxx** xxx **xxxxxxxx**) xxxxxx 12\" xx xxxx xxxxx xxxx.\nxxxx xxxx xxx xxxx x xxxxxx xxxx xx xx xx 6\".",
+ "leaves": [
+  {
+   "role": "EVENT",
+   "family_id": "event",
+   "family_version": 18,
+   "parameters": {
+    "kind": "step-started",
+    "step": "reinforcements",
+    "turn": "opponent"
+   },
+   "start_byte": 0,
+   "end_byte": 55,
+   "fragment": "WHEN"
+  },
+  {
+   "role": "CONDITION",
+   "family_id": "unit-filter",
+   "family_version": 8,
+   "parameters": {
+    "side": "enemy"
+   },
+   "start_byte": 71,
+   "end_byte": 81,
+   "fragment": "WHEN"
+  },
+  {
+   "role": "EVENT",
+   "family_id": "event",
+   "family_version": 18,
+   "parameters": {
+    "kind": "set-up"
+   },
+   "start_byte": 85,
+   "end_byte": 124,
+   "fragment": "WHEN"
+  },
+  {
+   "role": "RESTRICTION",
+   "family_id": "stratagem-target",
+   "family_version": 4,
+   "parameters": {
+    "count": "one"
+   },
+   "start_byte": 126,
+   "end_byte": 129,
+   "fragment": "TARGET"
+  },
+  {
+   "role": "CONDITION",
+   "family_id": "unit-filter",
+   "family_version": 8,
+   "parameters": {
+    "side": "friendly",
+    "any_keywords": [
+     "ASTRA MILITARUM",
+     "GENESTEALER CULTS"
+    ]
+   },
+   "start_byte": 132,
+   "end_byte": 179,
+   "fragment": "TARGET"
+  },
+  {
+   "role": "CONDITION",
+   "family_id": "unit-owner",
+   "family_version": 1,
+   "parameters": {
+    "owner": "friendly"
+   },
+   "start_byte": 180,
+   "end_byte": 194,
+   "fragment": "TARGET"
+  },
+  {
+   "role": "CONDITION",
+   "family_id": "unit-filter",
+   "family_version": 8,
+   "parameters": {
+    "side": "friendly",
+    "excluded_keywords": [
+     "MONSTER",
+     "VEHICLE"
+    ]
+   },
+   "start_byte": 196,
+   "end_byte": 233,
+   "fragment": "TARGET"
+  },
+  {
+   "role": "CONDITION",
+   "family_id": "unit-position",
+   "family_version": 14,
+   "parameters": {
+    "kind": "within",
+    "inches": 12,
+    "of": "event-subject",
+    "subject": "this-unit",
+    "negated": false
+   },
+   "start_byte": 237,
+   "end_byte": 266,
+   "fragment": "TARGET"
+  },
+  {
+   "role": "EFFECT",
+   "family_id": "make-move",
+   "family_version": 5,
+   "parameters": {
+    "subject": "this-unit",
+    "move_type": "normal",
+    "distance": 6
+   },
+   "start_byte": 268,
+   "end_byte": 311,
+   "fragment": "EFFECT"
+  }
+ ],
+ "edits": null,
+ "baseline_mechanics": {
+  "effect": {
+   "type": "move",
+   "target": "this-unit",
+   "modifier": {
+    "move_type": "normal",
+    "distance": 6
+   }
+  },
+  "scope": {
+   "duration": "permanent"
+  },
+  "behavior": "reactive",
+  "trigger": [
+   {
+    "event": "step-started",
+    "filter": {
+     "step": "reinforcements"
+    },
+    "condition": {
+     "type": "player-turn-is",
+     "parameters": {
+      "turn": "opponent-turn"
+     }
+    }
+   },
+   {
+    "event": "set-up",
+    "subject": {
+     "owner": "enemy"
+    }
+   }
+  ]
+ }
+}

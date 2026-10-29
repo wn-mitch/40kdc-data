@@ -8,7 +8,7 @@
 
 > **StackableBuffGroup** = `object`
 
-Defined in: [data/dataset.ts:75](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/dataset.ts#L75)
+Defined in: [data/dataset-buffs.ts:82](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/dataset-buffs.ts#L82)
 
 A pool of [StackableBuff](StackableBuff.md) levers limited to `maxActivations` at once.
 
@@ -18,7 +18,17 @@ A pool of [StackableBuff](StackableBuff.md) levers limited to `maxActivations` a
 
 > **id**: `string`
 
-Defined in: [data/dataset.ts:76](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/dataset.ts#L76)
+Defined in: [data/dataset-buffs.ts:83](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/dataset-buffs.ts#L83)
+
+***
+
+### abilityId?
+
+> `optional` **abilityId?**: `string`
+
+Defined in: [data/dataset-buffs.ts:85](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/dataset-buffs.ts#L85)
+
+Stable owning ability id, independent of its display name.
 
 ***
 
@@ -26,7 +36,7 @@ Defined in: [data/dataset.ts:76](https://github.com/wn-mitch/40kdc-data/blob/0b6
 
 > **label**: `string`
 
-Defined in: [data/dataset.ts:77](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/dataset.ts#L77)
+Defined in: [data/dataset-buffs.ts:86](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/dataset-buffs.ts#L86)
 
 ***
 
@@ -34,4 +44,4 @@ Defined in: [data/dataset.ts:77](https://github.com/wn-mitch/40kdc-data/blob/0b6
 
 > **maxActivations**: `number`
 
-Defined in: [data/dataset.ts:78](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/dataset.ts#L78)
+Defined in: [data/dataset-buffs.ts:87](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/dataset-buffs.ts#L87)

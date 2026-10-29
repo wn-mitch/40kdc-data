@@ -1,0 +1,105 @@
+{
+  "name": "Imported roster",
+  "source": {
+    "format": "gw",
+    "generated_by": null
+  },
+  "faction_id": "adeptus-astartes",
+  "detachments": [
+    {
+      "ref": {
+        "id": "gladius-task-force",
+        "raw_name": "Gladius Task Force",
+        "resolved": true,
+        "candidates": []
+      },
+      "dp_cost": 3
+    }
+  ],
+  "battle_size": null,
+  "force_disposition": "priority-assets",
+  "points": {
+    "declared_limit": 310,
+    "detachment_cap": null,
+    "total_reported": 310,
+    "total_computed": 310
+  },
+  "units": [
+    {
+      "ref": {
+        "id": "marneus-calgar",
+        "raw_name": "Marneus Calgar in Armour of Antilochus",
+        "resolved": true,
+        "candidates": []
+      },
+      "model_count": 1,
+      "points": 180,
+      "is_warlord": true,
+      "enhancement": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "ref": {
+            "id": "gauntlets-of-ultramar",
+            "raw_name": "Gauntlets of Ultramar",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        }
+      ],
+      "leader_attachment": null
+    },
+    {
+      "ref": {
+        "id": "death-company-marines-with-jump-packs",
+        "raw_name": "Death Company Marines with Jump Packs",
+        "resolved": true,
+        "candidates": []
+      },
+      "model_count": 1,
+      "points": 130,
+      "is_warlord": false,
+      "enhancement": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "ref": {
+            "id": "chainsword",
+            "raw_name": "Astartes chainsword",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 5
+        },
+        {
+          "ref": {
+            "id": "heavy-bolt-pistol",
+            "raw_name": "Heavy bolt pistol",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 5
+        }
+      ],
+      "leader_attachment": null
+    }
+  ],
+  "game_version": {
+    "edition": "11th",
+    "dataslate": "pre-launch-provisional"
+  },
+  "diagnostics": {
+    "resolved_units": 2,
+    "unresolved_units": 0,
+    "resolved_weapons": 3,
+    "unresolved_weapons": 0,
+    "warnings": [
+      {
+        "code": "battle-size-unmapped",
+        "message": "Battle size label could not be mapped.",
+        "raw_name": "Combat Patrol (500 Point limit)"
+      }
+    ]
+  }
+}

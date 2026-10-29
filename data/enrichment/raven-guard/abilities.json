@@ -1,0 +1,516 @@
+[
+  {
+    "ability_id": "blackwing-shroud-shadowmark-talon-raven-guard",
+    "name": "Blackwing Shroud",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "raven-guard",
+    "detachment_id": "shadowmark-talon",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "infiltrators"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "passive",
+    "source_digest": "dd25d5dfc2b162435ae5fe6cf8673cb4239c577e5073e13e1eee4a557b37a433"
+  },
+  {
+    "ability_id": "coronal-susurrant-shadowmark-talon-raven-guard",
+    "name": "Coronal Susurrant",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "raven-guard",
+    "detachment_id": "shadowmark-talon",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "for-each-unit",
+      "selector": {
+        "filter": {
+          "owner": "enemy",
+          "none_of": [
+            "MONSTER",
+            "VEHICLE"
+          ],
+          "engaged_with": "this-unit"
+        }
+      },
+      "effect": {
+        "type": "targeting",
+        "target": "recipient",
+        "modifier": {
+          "may": "cannot-target",
+          "kind": "stratagem",
+          "target": "recipient"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "passive",
+    "source_digest": "73fd3925f3c49ed98da6b474e3e02797fd58a8a8258c89be4ccca88ddc203a9f"
+  },
+  {
+    "ability_id": "feint-and-thrust-shadowmark-talon-raven-guard",
+    "name": "Feint and Thrust",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "raven-guard",
+    "detachment_id": "shadowmark-talon",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "ability-activate",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "combat-doctrines-adeptus-astartes",
+        "option": "tactical-doctrine"
+      }
+    },
+    "scope": {
+      "duration": "until-next-command-phase"
+    },
+    "behavior": "activated",
+    "source_digest": "5bf7a6027926a9ff6626d4d66bea49a4407f4e3c32a75c4398e1c765451b774f"
+  },
+  {
+    "ability_id": "hunters-instincts-shadowmark-talon-raven-guard",
+    "name": "Hunter’s Instincts",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "source_digest": "5665953906df8dc7b25ce72d8353c4e588cc67b20176612a1d04b9b90129b7ac",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "raven-guard",
+    "detachment_id": "shadowmark-talon",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "battle-round",
+            "parameters": {
+              "min": 1,
+              "max": 1
+            }
+          },
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "movement"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "effect": {
+        "type": "move",
+        "target": "this-unit",
+        "modifier": {
+          "move_type": "ingress"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "all_of": [
+        "ADEPTUS ASTARTES",
+        "MOUNTED"
+      ]
+    },
+    "community_notes": "While the bearer's unit is in Strategic Reserves, treat the battle round as one higher for set-up purposes"
+  },
+  {
+    "ability_id": "into-darkness-shadowmark-talon-raven-guard",
+    "name": "Into Darkness",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "raven-guard",
+    "detachment_id": "shadowmark-talon",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "set-up",
+      "target": "this-unit",
+      "modifier": {
+        "to": "strategic-reserves"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
+    },
+    "source_digest": "cbb3f18b793a2df7fb72d3e09df4cea5c9be19aad9d497eee7fa2c44e2cf87d1"
+  },
+  {
+    "ability_id": "lay-low-the-tyrants-shadowmark-talon-raven-guard",
+    "name": "Lay Low the Tyrants",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "raven-guard",
+    "detachment_id": "shadowmark-talon",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "keywords": [
+          {
+            "keyword_id": "precision"
+          }
+        ],
+        "weapons": {
+          "type": "melee"
+        }
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "fight"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS ASTARTES",
+          "INFANTRY"
+        ]
+      }
+    },
+    "source_digest": "4dd4acd231ac3bc586d92faaae395af78a22814b3c4125e02eb9c27f62977d7c"
+  },
+  {
+    "ability_id": "raptorial-vigilance-shadowmark-talon-raven-guard",
+    "name": "Raptorial Vigilance",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "raven-guard",
+    "detachment_id": "shadowmark-talon",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "umbral-raptor-shadowmark-talon-raven-guard",
+    "name": "Umbral Raptor",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "raven-guard",
+    "detachment_id": "shadowmark-talon",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-grant",
+          "target": "this-model",
+          "modifier": {
+            "ability": "fights-first"
+          }
+        },
+        {
+          "type": "ability-grant",
+          "target": "this-model",
+          "modifier": {
+            "ability": "lone-operative"
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "passive",
+    "source_digest": "1a3c884366537337663e3ec5a559e7f019640d8fc331a72f7658d05818e3e6ce"
+  },
+  {
+    "ability_id": "shadow-tactics-raven-guard",
+    "name": "Shadow Tactics",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "raven-guard",
+    "detachment_id": "shadowmark-talon",
+    "ability_type": "detachment",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-grant",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "ADEPTUS ASTARTES"
+            ]
+          },
+          "modifier": {
+            "ability": "stealth"
+          }
+        },
+        {
+          "type": "stat-modifier",
+          "target": {
+            "owner": "friendly",
+            "any_of": [
+              "PHOBOS",
+              "SCOUT SQUAD"
+            ]
+          },
+          "modifier": {
+            "stat": "detection-range",
+            "operation": "subtract",
+            "value": 3
+          }
+        },
+        {
+          "type": "ability-grant",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "AETHON SHAAN"
+            ]
+          },
+          "modifier": {
+            "ability": {
+              "ability_id": "shadow-tactics-raven-guard",
+              "definition_id": "unparalleled-tactician"
+            },
+            "definition": {
+              "type": "ability-part",
+              "name": "Unparalleled Tactician",
+              "effect": {
+                "type": "cost-modifier",
+                "target": "this-unit",
+                "modifier": {
+                  "of": "stratagem",
+                  "operation": "decrease",
+                  "amount": 1,
+                  "applies_to": "the-triggering-use"
+                }
+              },
+              "trigger": {
+                "event": "used",
+                "filter": {
+                  "kind": "stratagem",
+                  "id": "into-darkness-shadowmark-talon-raven-guard"
+                }
+              },
+              "usage": {
+                "frequency": "once-per-battle-round",
+                "per": "army"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "passive",
+    "source_digest": "739c71e0b9dcf94688a22efc90ffc05af11d4a7edbbb8c013370d9342ca355b1"
+  },
+  {
+    "ability_id": "murderous-fusillade-shadowmark-talon-raven-guard",
+    "name": "Murderous Fusillade",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "raven-guard",
+    "detachment_id": "shadowmark-talon",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "subject": "event-subject",
+          "event": "move-ended",
+          "filter": {
+            "move_types": [
+              "ingress"
+            ]
+          },
+          "window": "turn"
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "stat-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "stat": "BS",
+              "operation": "improve",
+              "value": 1,
+              "weapons": {
+                "type": "ranged"
+              }
+            }
+          },
+          {
+            "type": "stat-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "stat": "AP",
+              "operation": "improve",
+              "value": 1,
+              "weapons": {
+                "type": "ranged"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS ASTARTES",
+          "INFANTRY"
+        ]
+      }
+    },
+    "source_digest": "4da20f8fb958d24c423d2f676ad98b5bf76407a4ac2e03ecd7cd6d31689e3f7f"
+  },
+  {
+    "ability_id": "suppressed-weapons-shadowmark-talon-raven-guard",
+    "name": "Suppressed Weapons",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "raven-guard",
+    "detachment_id": "shadowmark-talon",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "rule-state",
+      "target": "this-unit",
+      "modifier": {
+        "direction": "suppressed",
+        "rule_kind": "core-rule",
+        "rule": "attacking-ends-hidden",
+        "attacks": {
+          "event_var": "those-attacks"
+        }
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "binds_event_variable": "those-attacks",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS ASTARTES",
+          "INFANTRY"
+        ]
+      }
+    },
+    "source_digest": "4721cc9bf9e17093b21036c7abfa1323aaab2ff72c33dd7bfd974f1b0a89431c"
+  }
+]

@@ -1,0 +1,84 @@
+{
+  "name": "Imported roster",
+  "generated_by": null,
+  "faction_raw_name": "Adeptus Custodes",
+  "detachment_raw_names": [
+    "Lions of the Emperor"
+  ],
+  "force_disposition_raw_name": null,
+  "battle_size_raw": "Combat Patrol (500 Point limit)",
+  "declared_limit": 360,
+  "total_reported": 360,
+  "total_computed": 360,
+  "units": [
+    {
+      "raw_name": "Witchseekers",
+      "is_character": false,
+      "model_count": 1,
+      "points": 50,
+      "is_warlord": false,
+      "enhancement_raw_name": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "raw_name": "Close combat weapon",
+          "count": 4
+        },
+        {
+          "raw_name": "Witchseeker flamer",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "raw_name": "Prosecutors",
+      "is_character": false,
+      "model_count": 1,
+      "points": 50,
+      "is_warlord": false,
+      "enhancement_raw_name": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "raw_name": "Boltgun",
+          "count": 4
+        },
+        {
+          "raw_name": "Close combat weapon",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "raw_name": "Vigilators",
+      "is_character": false,
+      "model_count": 1,
+      "points": 100,
+      "is_warlord": false,
+      "enhancement_raw_name": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "raw_name": "Executioner greatblade",
+          "count": 10
+        }
+      ]
+    },
+    {
+      "raw_name": "Venatari Custodians",
+      "is_character": false,
+      "model_count": 1,
+      "points": 160,
+      "is_warlord": false,
+      "enhancement_raw_name": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "raw_name": "Venatari lance",
+          "count": 3
+        }
+      ]
+    }
+  ],
+  "multi_force": false
+}

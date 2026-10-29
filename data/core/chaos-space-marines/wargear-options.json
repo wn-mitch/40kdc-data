@@ -5,7 +5,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -21,14 +21,14 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
       "combi-bolter"
     ],
     "replacement": [
-      "combi-weapon"
+      "combi-weapon-sorcerer-in-terminator-armour"
     ],
     "model_constraint": {
       "any_number": true
@@ -40,11 +40,11 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
-      "boltgun"
+      "boltgun-nemesis-claw"
     ],
     "replacement_choice": [
       [
@@ -90,11 +90,11 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
-      "bolt-pistol"
+      "bolt-pistol-nemesis-claw"
     ],
     "replacement": [
       "plasma-pistol"
@@ -110,7 +110,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -135,7 +135,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -154,7 +154,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -173,7 +173,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -187,7 +187,7 @@
         "reaper-autocannon"
       ],
       [
-        "combi-weapon"
+        "combi-weapon-chaos-terminator-squad"
       ]
     ],
     "model_constraint": {
@@ -201,14 +201,14 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
       "combi-bolter"
     ],
     "replacement": [
-      "combi-weapon"
+      "combi-weapon-chaos-terminator-squad"
     ],
     "model_constraint": {
       "model_name": "Terminator Champion",
@@ -221,7 +221,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -246,7 +246,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -263,7 +263,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -288,7 +288,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -305,7 +305,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -321,7 +321,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -329,7 +329,7 @@
         "combi-bolter"
       ],
       [
-        "combi-weapon"
+        "combi-weapon-chaos-land-raider"
       ]
     ],
     "model_constraint": {
@@ -342,7 +342,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -359,7 +359,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -376,7 +376,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -399,12 +399,12 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
       [
-        "combi-weapon"
+        "combi-weapon-chaos-predator-annihilator"
       ],
       [
         "combi-bolter"
@@ -420,7 +420,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -436,7 +436,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -461,7 +461,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -478,7 +478,7 @@
         "power-fist"
       ],
       [
-        "boltgun"
+        "boltgun-havocs"
       ],
       [
         "plasma-pistol"
@@ -498,12 +498,11 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
-      "havoc-autocannon",
-      "havoc-lascannon"
+      "havoc-autocannon"
     ],
     "replacement_choice": [
       [
@@ -511,6 +510,9 @@
       ],
       [
         "havoc-reaper-chaincannon"
+      ],
+      [
+        "havoc-lascannon"
       ],
       [
         "havoc-heavy-bolter"
@@ -527,11 +529,11 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
-      "bolt-pistol"
+      "bolt-pistol-raptors"
     ],
     "replacement": [
       "plasma-pistol"
@@ -547,14 +549,16 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
-      "astartes-chainsword"
+      "astartes-chainsword",
+      "bolt-pistol-raptors"
     ],
     "replacement": [
-      "mutations"
+      "mutations",
+      "bolt-pistol-raptors"
     ],
     "model_constraint": {
       "model_name": "Raptor",
@@ -567,27 +571,36 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
-      "astartes-chainsword"
+      "astartes-chainsword",
+      "bolt-pistol-raptors"
     ],
     "replacement_choice": [
       [
-        "close-combat-weapon",
+        "bolt-pistol-raptors",
+        "close-combat-weapon-raptors",
         "flamer"
       ],
       [
-        "close-combat-weapon",
+        "close-combat-weapon-raptors",
+        "bolt-pistol-raptors",
         "meltagun"
       ],
       [
-        "heavy-melee-weapon"
+        "heavy-melee-weapon",
+        "bolt-pistol-raptors"
       ],
       [
         "plasma-gun",
-        "close-combat-weapon"
+        "bolt-pistol-raptors",
+        "close-combat-weapon-raptors"
+      ],
+      [
+        "astartes-chainsword",
+        "plasma-pistol"
       ]
     ],
     "model_constraint": {
@@ -601,27 +614,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replaces": [
-      "bolt-pistol"
-    ],
-    "replacement": [
-      "plasma-pistol"
-    ],
-    "model_constraint": {
-      "model_name": "Raptor",
-      "any_number": true
-    }
-  },
-  {
-    "id": "raptors-wgo-mfm-5",
-    "unit_id": "raptors",
-    "faction_id": "chaos-space-marines",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -646,34 +639,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replaces": [
-      "heavy-missile-launcher"
-    ],
-    "replacement_choice": [
-      [
-        "heavy-reaper-autocannon"
-      ],
-      [
-        "hades-lascannon"
-      ],
-      [
-        "electroscourge"
-      ]
-    ],
-    "model_constraint": {
-      "any_number": true
-    }
-  },
-  {
-    "id": "defiler-wgo-mfm-2",
-    "unit_id": "defiler",
-    "faction_id": "chaos-space-marines",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -682,16 +648,40 @@
     ],
     "replacement_choice": [
       [
-        "electroscourge",
+        "heavy-reaper-autocannon",
+        "heavy-baleflamer"
+      ],
+      [
+        "hades-lascannon",
+        "electroscourge"
+      ],
+      [
+        "hades-lascannon",
+        "heavy-missile-launcher"
+      ],
+      [
+        "heavy-baleflamer",
         "hades-lascannon"
       ],
       [
-        "electroscourge",
+        "heavy-reaper-autocannon",
+        "electroscourge"
+      ],
+      [
+        "heavy-missile-launcher",
         "heavy-reaper-autocannon"
       ],
       [
         "hades-lascannon",
         "hades-lascannon"
+      ],
+      [
+        "electroscourge",
+        "heavy-baleflamer"
+      ],
+      [
+        "electroscourge",
+        "heavy-missile-launcher"
       ],
       [
         "heavy-reaper-autocannon",
@@ -707,39 +697,12 @@
     }
   },
   {
-    "id": "defiler-wgo-mfm-3",
+    "id": "defiler-wgo-mfm-2",
     "unit_id": "defiler",
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replaces": [
-      "heavy-baleflamer"
-    ],
-    "replacement_choice": [
-      [
-        "hades-lascannon"
-      ],
-      [
-        "heavy-reaper-autocannon"
-      ],
-      [
-        "electroscourge"
-      ]
-    ],
-    "model_constraint": {
-      "any_number": true
-    }
-  },
-  {
-    "id": "defiler-wgo-mfm-4",
-    "unit_id": "defiler",
-    "faction_id": "chaos-space-marines",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -753,12 +716,12 @@
     }
   },
   {
-    "id": "defiler-wgo-mfm-5",
+    "id": "defiler-wgo-mfm-3",
     "unit_id": "defiler",
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -766,8 +729,8 @@
       "excruciator-cannon"
     ],
     "replacement": [
-      "magma-cutters",
-      "magma-cutters"
+      "magma-cutters-defiler",
+      "magma-cutters-defiler"
     ],
     "model_constraint": {
       "any_number": true
@@ -779,7 +742,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -795,7 +758,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -818,7 +781,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -826,7 +789,7 @@
         "combi-bolter"
       ],
       [
-        "combi-weapon"
+        "combi-weapon-chaos-predator-destructor"
       ]
     ],
     "model_constraint": {
@@ -839,7 +802,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -856,14 +819,48 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
-      "bolt-pistol"
+      "bolt-pistol-chosen",
+      "boltgun-chosen",
+      "accursed-weapon"
     ],
-    "replacement": [
-      "plasma-pistol"
+    "replacement_choice": [
+      [
+        "plasma-pistol",
+        "accursed-weapon",
+        "boltgun-chosen"
+      ],
+      [
+        "paired-accursed-weapons-chosen",
+        "bolt-pistol-chosen"
+      ],
+      [
+        "accursed-weapon",
+        "combi-weapon-chosen",
+        "bolt-pistol-chosen"
+      ],
+      [
+        "power-fist-chosen",
+        "boltgun-chosen",
+        "bolt-pistol-chosen"
+      ],
+      [
+        "boltgun-chosen",
+        "plasma-pistol",
+        "power-fist-chosen"
+      ],
+      [
+        "combi-weapon-chosen",
+        "plasma-pistol",
+        "accursed-weapon"
+      ],
+      [
+        "plasma-pistol",
+        "paired-accursed-weapons-chosen"
+      ]
     ],
     "model_constraint": {
       "model_name": "Chosen",
@@ -876,18 +873,51 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
-      "boltgun",
-      "accursed-weapon"
+      "bolt-pistol-chosen",
+      "accursed-weapon",
+      "boltgun-chosen"
     ],
-    "replacement": [
-      "paired-accursed-weapons-chosen"
+    "replacement_choice": [
+      [
+        "boltgun-chosen",
+        "plasma-pistol",
+        "power-fist-chosen"
+      ],
+      [
+        "bolt-pistol-chosen",
+        "power-fist-chosen",
+        "boltgun-chosen"
+      ],
+      [
+        "paired-accursed-weapons-chosen",
+        "plasma-pistol"
+      ],
+      [
+        "accursed-weapon",
+        "combi-weapon-chosen",
+        "bolt-pistol-chosen"
+      ],
+      [
+        "plasma-pistol",
+        "boltgun-chosen",
+        "accursed-weapon"
+      ],
+      [
+        "paired-accursed-weapons-chosen",
+        "bolt-pistol-chosen"
+      ],
+      [
+        "accursed-weapon",
+        "combi-weapon-chosen",
+        "plasma-pistol"
+      ]
     ],
     "model_constraint": {
-      "model_name": "Chosen",
+      "model_name": "Chosen Champion",
       "any_number": true
     }
   },
@@ -897,262 +927,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replaces": [
-      "boltgun"
-    ],
-    "replacement": [
-      "combi-weapon"
-    ],
-    "model_constraint": {
-      "model_name": "Chosen",
-      "any_number": true
-    }
-  },
-  {
-    "id": "chosen-wgo-mfm-5",
-    "unit_id": "chosen",
-    "faction_id": "chaos-space-marines",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replaces": [
-      "accursed-weapon"
-    ],
-    "replacement": [
-      "power-fist-chosen"
-    ],
-    "model_constraint": {
-      "model_name": "Chosen",
-      "any_number": true
-    }
-  },
-  {
-    "id": "chosen-wgo-mfm-6",
-    "unit_id": "chosen",
-    "faction_id": "chaos-space-marines",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replaces": [
-      "bolt-pistol",
-      "accursed-weapon"
-    ],
-    "replacement": [
-      "plasma-pistol",
-      "power-fist-chosen"
-    ],
-    "model_constraint": {
-      "model_name": "Chosen",
-      "any_number": true
-    }
-  },
-  {
-    "id": "chosen-wgo-mfm-7",
-    "unit_id": "chosen",
-    "faction_id": "chaos-space-marines",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replaces": [
-      "boltgun",
-      "bolt-pistol"
-    ],
-    "replacement": [
-      "combi-weapon",
-      "plasma-pistol"
-    ],
-    "model_constraint": {
-      "model_name": "Chosen",
-      "any_number": true
-    }
-  },
-  {
-    "id": "chosen-wgo-mfm-8",
-    "unit_id": "chosen",
-    "faction_id": "chaos-space-marines",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replaces": [
-      "boltgun",
-      "bolt-pistol",
-      "accursed-weapon"
-    ],
-    "replacement": [
-      "plasma-pistol",
-      "paired-accursed-weapons-chosen"
-    ],
-    "model_constraint": {
-      "model_name": "Chosen",
-      "any_number": true
-    }
-  },
-  {
-    "id": "chosen-wgo-mfm-9",
-    "unit_id": "chosen",
-    "faction_id": "chaos-space-marines",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replaces": [
-      "bolt-pistol",
-      "accursed-weapon"
-    ],
-    "replacement": [
-      "plasma-pistol",
-      "power-fist-chosen"
-    ],
-    "model_constraint": {
-      "model_name": "Chosen Champion",
-      "any_number": true
-    }
-  },
-  {
-    "id": "chosen-wgo-mfm-10",
-    "unit_id": "chosen",
-    "faction_id": "chaos-space-marines",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replaces": [
-      "accursed-weapon"
-    ],
-    "replacement": [
-      "power-fist-chosen"
-    ],
-    "model_constraint": {
-      "model_name": "Chosen Champion",
-      "any_number": true
-    }
-  },
-  {
-    "id": "chosen-wgo-mfm-11",
-    "unit_id": "chosen",
-    "faction_id": "chaos-space-marines",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replaces": [
-      "boltgun",
-      "bolt-pistol",
-      "accursed-weapon"
-    ],
-    "replacement": [
-      "paired-accursed-weapons-chosen",
-      "plasma-pistol"
-    ],
-    "model_constraint": {
-      "model_name": "Chosen Champion",
-      "any_number": true
-    }
-  },
-  {
-    "id": "chosen-wgo-mfm-12",
-    "unit_id": "chosen",
-    "faction_id": "chaos-space-marines",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replaces": [
-      "boltgun"
-    ],
-    "replacement": [
-      "combi-weapon"
-    ],
-    "model_constraint": {
-      "model_name": "Chosen Champion",
-      "any_number": true
-    }
-  },
-  {
-    "id": "chosen-wgo-mfm-13",
-    "unit_id": "chosen",
-    "faction_id": "chaos-space-marines",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replaces": [
-      "bolt-pistol"
-    ],
-    "replacement": [
-      "plasma-pistol"
-    ],
-    "model_constraint": {
-      "model_name": "Chosen Champion",
-      "any_number": true
-    }
-  },
-  {
-    "id": "chosen-wgo-mfm-14",
-    "unit_id": "chosen",
-    "faction_id": "chaos-space-marines",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replaces": [
-      "boltgun",
-      "accursed-weapon"
-    ],
-    "replacement": [
-      "paired-accursed-weapons-chosen"
-    ],
-    "model_constraint": {
-      "model_name": "Chosen Champion",
-      "any_number": true
-    }
-  },
-  {
-    "id": "chosen-wgo-mfm-15",
-    "unit_id": "chosen",
-    "faction_id": "chaos-space-marines",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replaces": [
-      "boltgun",
-      "bolt-pistol"
-    ],
-    "replacement": [
-      "combi-weapon",
-      "plasma-pistol"
-    ],
-    "model_constraint": {
-      "model_name": "Chosen Champion",
-      "any_number": true
-    }
-  },
-  {
-    "id": "chosen-wgo-mfm-16",
-    "unit_id": "chosen",
-    "faction_id": "chaos-space-marines",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -1169,7 +944,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1189,7 +964,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1223,7 +998,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1248,7 +1023,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1267,7 +1042,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -1283,7 +1058,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -1291,7 +1066,7 @@
         "combi-bolter"
       ],
       [
-        "combi-weapon"
+        "combi-weapon-chaos-vindicator"
       ]
     ],
     "model_constraint": {
@@ -1304,7 +1079,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1325,7 +1100,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1345,7 +1120,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1375,7 +1150,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1394,7 +1169,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1418,14 +1193,16 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
-      "reavers-blade"
+      "reavers-blade",
+      "boltgun-red-corsairs-raiders"
     ],
     "replacement": [
-      "power-fist"
+      "power-fist",
+      "boltgun-red-corsairs-raiders"
     ],
     "model_constraint": {
       "model_name": "Red Corsairs Raider",
@@ -1438,14 +1215,16 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
-      "boltgun"
+      "reavers-blade",
+      "boltgun-red-corsairs-raiders"
     ],
     "replacement": [
-      "meltagun"
+      "meltagun",
+      "reavers-blade"
     ],
     "model_constraint": {
       "model_name": "Red Corsairs Raider",
@@ -1458,11 +1237,11 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
-      "bolt-pistol"
+      "bolt-pistol-red-corsairs-raiders"
     ],
     "replacement": [
       "hand-flamer"
@@ -1478,7 +1257,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1519,7 +1298,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1686,7 +1465,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1721,7 +1500,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1747,7 +1526,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1766,7 +1545,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1785,7 +1564,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1805,7 +1584,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1829,7 +1608,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1848,18 +1627,27 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
+    "replaces": [
+      "combi-bolter"
+    ],
     "replacement_choice": [
       [
-        "meltagun"
+        "meltagun",
+        "combi-bolter"
       ],
       [
-        "flamer"
+        "flamer",
+        "combi-bolter"
       ],
       [
-        "plasma-gun"
+        "combi-weapon"
+      ],
+      [
+        "plasma-gun",
+        "combi-bolter"
       ]
     ],
     "model_constraint": {
@@ -1873,31 +1661,11 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
-      "combi-bolter"
-    ],
-    "replacement": [
-      "combi-weapon"
-    ],
-    "model_constraint": {
-      "model_name": "Chaos Biker",
-      "max_count": 2
-    }
-  },
-  {
-    "id": "chaos-bikers-wgo-mfm-3",
-    "unit_id": "chaos-bikers",
-    "faction_id": "chaos-space-marines",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replaces": [
-      "bolt-pistol"
+      "bolt-pistol-chaos-bikers"
     ],
     "replacement_choice": [
       [
@@ -1919,12 +1687,12 @@
     }
   },
   {
-    "id": "chaos-bikers-wgo-mfm-4",
+    "id": "chaos-bikers-wgo-mfm-3",
     "unit_id": "chaos-bikers",
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -1936,12 +1704,12 @@
     }
   },
   {
-    "id": "chaos-bikers-wgo-mfm-5",
+    "id": "chaos-bikers-wgo-mfm-4",
     "unit_id": "chaos-bikers",
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -1953,16 +1721,16 @@
     }
   },
   {
-    "id": "chaos-bikers-wgo-mfm-6",
+    "id": "chaos-bikers-wgo-mfm-5",
     "unit_id": "chaos-bikers",
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
-      "bolt-pistol"
+      "bolt-pistol-chaos-bikers"
     ],
     "replacement": [
       "astartes-chainsword"
@@ -1978,23 +1746,18 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
       "close-combat-weapon-fellgor-beastmen"
     ],
-    "replacement_choice": [
-      [
-        "great-weapon"
-      ],
-      [
-        "corrupted-stave"
-      ]
+    "replacement": [
+      "great-weapon"
     ],
     "model_constraint": {
       "model_name": "Fellgor Beastmen",
-      "max_count": 2
+      "max_count": 1
     }
   },
   {
@@ -2003,7 +1766,27 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "close-combat-weapon-fellgor-beastmen"
+    ],
+    "replacement": [
+      "corrupted-stave"
+    ],
+    "model_constraint": {
+      "model_name": "Fellgor Beastmen",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "fellgor-beastmen-wgo-mfm-3",
+    "unit_id": "fellgor-beastmen",
+    "faction_id": "chaos-space-marines",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2023,7 +1806,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2043,7 +1826,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2054,40 +1837,30 @@
         "havoc-launcher"
       ],
       [
-        "combi-weapon",
-        "havoc-launcher"
-      ]
-    ],
-    "model_constraint": {
-      "any_number": true
-    }
-  },
-  {
-    "id": "chaos-rhino-wgo-mfm-2",
-    "unit_id": "chaos-rhino",
-    "faction_id": "chaos-space-marines",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replacement_choice": [
-      [
-        "combi-weapon"
+        "combi-bolter",
+        "combi-weapon-chaos-rhino"
       ],
       [
+        "combi-bolter",
         "havoc-launcher"
       ],
       [
         "havoc-launcher",
+        "combi-bolter",
         "combi-bolter"
       ],
       [
+        "combi-bolter",
         "combi-bolter"
+      ],
+      [
+        "combi-weapon-chaos-rhino",
+        "havoc-launcher"
       ],
       [
         "havoc-launcher",
-        "combi-weapon"
+        "combi-weapon-chaos-rhino",
+        "combi-bolter"
       ]
     ],
     "model_constraint": {
@@ -2100,7 +1873,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -2117,23 +1890,85 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
-      "boltgun"
+      "boltgun-legionaries",
+      "bolt-pistol-legionaries"
     ],
     "replacement_choice": [
       [
-        "astartes-chainsword"
+        "astartes-chainsword",
+        "bolt-pistol-legionaries"
       ],
       [
+        "boltgun-legionaries",
         "plasma-pistol"
       ],
       [
+        "astartes-chainsword",
+        "astartes-chainsword"
+      ],
+      [
+        "astartes-chainsword",
+        "heavy-melee-weapon"
+      ],
+      [
+        "plasma-pistol",
+        "bolt-pistol-legionaries"
+      ],
+      [
+        "accursed-weapon",
+        "plasma-pistol"
+      ],
+      [
+        "accursed-weapon",
+        "bolt-pistol-legionaries"
+      ],
+      [
+        "boltgun-legionaries",
+        "astartes-chainsword"
+      ],
+      [
+        "bolt-pistol-legionaries",
+        "heavy-melee-weapon"
+      ],
+      [
+        "astartes-chainsword",
         "accursed-weapon"
       ],
       [
+        "accursed-weapon",
+        "heavy-melee-weapon"
+      ],
+      [
+        "heavy-melee-weapon",
+        "boltgun-legionaries"
+      ],
+      [
+        "accursed-weapon",
+        "accursed-weapon"
+      ],
+      [
+        "heavy-melee-weapon",
+        "heavy-melee-weapon"
+      ],
+      [
+        "astartes-chainsword",
+        "plasma-pistol"
+      ],
+      [
+        "heavy-melee-weapon",
+        "plasma-pistol"
+      ],
+      [
+        "boltgun-legionaries",
+        "accursed-weapon"
+      ],
+      [
+        "astartes-chainsword",
+        "plasma-pistol",
         "heavy-melee-weapon"
       ]
     ],
@@ -2148,103 +1983,11 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
-      "bolt-pistol"
-    ],
-    "replacement_choice": [
-      [
-        "plasma-pistol"
-      ],
-      [
-        "astartes-chainsword"
-      ],
-      [
-        "heavy-melee-weapon"
-      ],
-      [
-        "accursed-weapon"
-      ]
-    ],
-    "model_constraint": {
-      "model_name": "Aspiring Champion",
-      "any_number": true
-    }
-  },
-  {
-    "id": "legionaries-wgo-mfm-4",
-    "unit_id": "legionaries",
-    "faction_id": "chaos-space-marines",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replaces": [
-      "bolt-pistol",
-      "boltgun"
-    ],
-    "replacement_choice": [
-      [
-        "astartes-chainsword",
-        "astartes-chainsword"
-      ],
-      [
-        "astartes-chainsword",
-        "heavy-melee-weapon"
-      ],
-      [
-        "accursed-weapon",
-        "plasma-pistol"
-      ],
-      [
-        "astartes-chainsword",
-        "accursed-weapon"
-      ],
-      [
-        "accursed-weapon",
-        "heavy-melee-weapon"
-      ],
-      [
-        "accursed-weapon",
-        "accursed-weapon"
-      ],
-      [
-        "heavy-melee-weapon",
-        "heavy-melee-weapon"
-      ],
-      [
-        "astartes-chainsword",
-        "plasma-pistol"
-      ],
-      [
-        "heavy-melee-weapon",
-        "plasma-pistol"
-      ],
-      [
-        "astartes-chainsword",
-        "plasma-pistol",
-        "heavy-melee-weapon"
-      ]
-    ],
-    "model_constraint": {
-      "model_name": "Aspiring Champion",
-      "any_number": true
-    }
-  },
-  {
-    "id": "legionaries-wgo-mfm-5",
-    "unit_id": "legionaries",
-    "faction_id": "chaos-space-marines",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replaces": [
-      "boltgun"
+      "boltgun-legionaries"
     ],
     "replacement_choice": [
       [
@@ -2263,13 +2006,7 @@
         "lascannon-legionaries"
       ],
       [
-        "heavy-melee-weapon"
-      ],
-      [
         "missile-launcher"
-      ],
-      [
-        "balefire-tome"
       ],
       [
         "meltagun"
@@ -2291,12 +2028,52 @@
     }
   },
   {
+    "id": "legionaries-wgo-mfm-4",
+    "unit_id": "legionaries",
+    "faction_id": "chaos-space-marines",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "boltgun-legionaries"
+    ],
+    "replacement": [
+      "heavy-melee-weapon"
+    ],
+    "model_constraint": {
+      "model_name": "Legionary",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "legionaries-wgo-mfm-5",
+    "unit_id": "legionaries",
+    "faction_id": "chaos-space-marines",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "boltgun-legionaries"
+    ],
+    "replacement": [
+      "balefire-tome"
+    ],
+    "model_constraint": {
+      "model_name": "Legionary",
+      "max_count": 1
+    }
+  },
+  {
     "id": "legionaries-wgo-mfm-6",
     "unit_id": "legionaries",
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -2313,7 +2090,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -2329,7 +2106,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2348,7 +2125,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2367,7 +2144,7 @@
     "faction_id": "chaos-space-marines",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [

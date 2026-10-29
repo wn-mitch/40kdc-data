@@ -8,7 +8,7 @@
 
 > **EligibilityInput** = `object`
 
-Defined in: [abilities-resolver/resolver.ts:40](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/abilities-resolver/resolver.ts#L40)
+Defined in: [abilities-resolver/resolver.ts:46](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/abilities-resolver/resolver.ts#L46)
 
 ## Properties
 
@@ -16,7 +16,7 @@ Defined in: [abilities-resolver/resolver.ts:40](https://github.com/wn-mitch/40kd
 
 > **unitId**: `string`
 
-Defined in: [abilities-resolver/resolver.ts:41](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/abilities-resolver/resolver.ts#L41)
+Defined in: [abilities-resolver/resolver.ts:47](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/abilities-resolver/resolver.ts#L47)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [abilities-resolver/resolver.ts:41](https://github.com/wn-mitch/40kd
 
 > `optional` **factionId?**: `string`
 
-Defined in: [abilities-resolver/resolver.ts:43](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/abilities-resolver/resolver.ts#L43)
+Defined in: [abilities-resolver/resolver.ts:49](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/abilities-resolver/resolver.ts#L49)
 
 Overrides the unit's own `faction_id` when given (for inheritance cases).
 
@@ -34,7 +34,7 @@ Overrides the unit's own `faction_id` when given (for inheritance cases).
 
 > `optional` **detachmentId?**: `string`
 
-Defined in: [abilities-resolver/resolver.ts:44](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/abilities-resolver/resolver.ts#L44)
+Defined in: [abilities-resolver/resolver.ts:50](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/abilities-resolver/resolver.ts#L50)
 
 ***
 
@@ -42,7 +42,7 @@ Defined in: [abilities-resolver/resolver.ts:44](https://github.com/wn-mitch/40kd
 
 > `optional` **attachedUnitIds?**: `string`[]
 
-Defined in: [abilities-resolver/resolver.ts:51](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/abilities-resolver/resolver.ts#L51)
+Defined in: [abilities-resolver/resolver.ts:57](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/abilities-resolver/resolver.ts#L57)
 
 Other members of the combined ("attached") unit — the attached leader, its
 bodyguard, or (11th) support attachments — whichever is *not* the selected
@@ -51,10 +51,20 @@ multi-member attachments need no shape change; order is preserved.
 
 ***
 
+### attachmentRoles?
+
+> `optional` **attachmentRoles?**: `Readonly`\<`Record`\<`string`, `"leader"` \| `"bodyguard"`\>\>
+
+Defined in: [abilities-resolver/resolver.ts:59](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/abilities-resolver/resolver.ts#L59)
+
+Actual roles within this attached unit, keyed by unit id; never inferred from datasheet abilities.
+
+***
+
 ### supportingUnitIds?
 
 > `optional` **supportingUnitIds?**: `string`[]
 
-Defined in: [abilities-resolver/resolver.ts:53](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/abilities-resolver/resolver.ts#L53)
+Defined in: [abilities-resolver/resolver.ts:61](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/abilities-resolver/resolver.ts#L61)
 
 Friendly units whose auras could apply (M2 walks only their aura-ranged abilities).

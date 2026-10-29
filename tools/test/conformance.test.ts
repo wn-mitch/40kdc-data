@@ -11,14 +11,16 @@
  * 3. Every export target: `exportRoster(roster, fmt)` reproduces each
  *    `expected.<fmt>.{txt,json}` golden byte-for-byte.
  */
+import { withRating } from "../src/data/ability-refs.js";
 import { describe, it, expect } from "vitest";
 import { readdirSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { Dataset } from "../src/data/dataset.js";
+import type { GameModeView } from "../src/data/collection.js";
 import { normalizeName } from "../src/data/normalize.js";
-import { baseLoadout, loadoutCandidates, maximalLoadout } from "../src/data/loadout.js";
+import { baseLoadout, loadoutCandidates, maximalLoadout, weaponBounds } from "../src/data/loadout.js";
 import { exportRoster, type ExportFormat } from "../src/export/index.js";
 import {
   decodeShareToken,
@@ -32,10 +34,12 @@ import type { RosterFormat } from "../src/import/types.js";
 import { crunch, type Buff, type EngineContext, type Stage } from "../src/cruncher/index.js";
 import { compareCell, loadoutCell, type ComparePhase, type LoadoutLine } from "../src/compare.js";
 import { attributeStages } from "../src/cruncher/attribution.js";
-import type { Phase, GameEvent } from "../src/generated.js";
+import type { Phase, GameEvent, Stratagem } from "../src/generated.js";
 import { effectToBuffs } from "../src/cruncher/from-dsl.js";
+import { mortalWoundSources } from "../src/cruncher/mortal-sources.js";
+import { resolveGrantedRecords, type GrantedRecord } from "../src/cruncher/granted-records.js";
 import { encodeBase } from "../src/runner.js";
-import type { EligibilityInput } from "../src/abilities-resolver/index.js";
+import { stratagemCanTarget, stratagemCanTargetUnit, type EligibilityInput } from "../src/abilities-resolver/index.js";
 import {
   resolveLayout,
   type TerrainTemplate as ResolverTemplate,
@@ -413,7 +417,7 @@ describe("abilities-resolver conformance corpus", () => {
   const ds = Dataset.embedded();
   const dir = join(CONFORMANCE, "abilities-resolver");
   const files = readdirSync(dir)
-    .filter((n) => n.endsWith(".json") && !n.endsWith("from-dsl.json"))
+    .filter((n) => /^[0-9]/.test(n) && n.endsWith(".json"))
     .sort();
 
   it("the resolver corpus is non-empty", () => {
@@ -432,30 +436,67 @@ describe("abilities-resolver conformance corpus", () => {
     });
   }
 
+  type TargetCase = {
+    name: string; target_restrictions: unknown; expected: boolean;
+    keywords?: string[]; members?: string[][]; trigger_subject?: unknown; printed?: string[];
+  };
+  const targets = readJson(join(dir, "stratagem-targets.json")) as { cases: TargetCase[] };
+  for (const c of targets.cases) {
+    it(`abilities-resolver/stratagem-targets.json: ${c.name}`, () => {
+      const stratagem = { target_restrictions: c.target_restrictions } as unknown as Stratagem;
+      if (!c.members) {
+        expect(stratagemCanTarget(stratagem, new Set(c.keywords))).toBe(c.expected);
+        return;
+      }
+      const printed = c.printed ? new Set(c.printed.map(normalizeName)) : null;
+      const isPrinted = (keyword: string) => printed === null || printed.has(normalizeName(keyword));
+      expect(stratagemCanTargetUnit(stratagem, c.members.map((member) => new Set(member)), c.trigger_subject, isPrinted)).toBe(c.expected);
+    });
+  }
+
   type DslCase = {
     abilityId: string;
+    /** The rating a unit prints for a rated rule ({rating: true} in the record). */
+    rating?: string | number;
+    /** Frozen DSL for a specimen whose ability left the dataset (used instead of a lookup). */
+    effect?: unknown;
+    /** Ability records the effect grants, resolved as printed definitions before translation. */
+    grantedRecords?: Record<string, GrantedRecord>;
     source: { kind: "ability"; abilityId: string; abilityKind: string };
     context: EngineContext;
     perspective?: "attacker" | "target";
     expected: {
       applied: unknown[];
       unsupportedReasons: string[];
+      unsupportedScopes?: string[];
+      needKeys?: string[];
       /** Opt-in levers behind player gates, projected to id/label/group/buffs. */
       activatable?: unknown[];
+      /** Each applied buff's gate (null when ungated), pinned on the rows that carry it. */
+      applicableWhen?: unknown[];
     };
   };
 
   function runDslCorpus(filename: string): void {
     const dsl = readJson(join(dir, filename)) as { cases: DslCase[] };
     for (const c of dsl.cases) {
-      const ability = ds.abilities.getAny(c.abilityId);
-      expect(ability, `unknown ability ${c.abilityId}`).toBeDefined();
-      const result = effectToBuffs(
-        ability!.raw.effect,
-        c.source as never,
-        c.context,
-        c.perspective ?? "attacker",
-      );
+      // A specimen whose ability left the dataset carries its frozen DSL inline.
+      const ability = c.effect === undefined ? ds.abilities.getAny(c.abilityId) : undefined;
+      if (c.effect === undefined) expect(ability, `unknown ability ${c.abilityId}`).toBeDefined();
+      // A rated rule reads the unit's printed rating; the case supplies it.
+      const result = c.effect === undefined
+        ? ability!.describeBuffs(
+          c.source as never,
+          c.context,
+          c.perspective ?? "attacker",
+          c.rating,
+        )
+        : effectToBuffs(
+          withRating(c.grantedRecords ? resolveGrantedRecords(c.effect, (id) => c.grantedRecords![id], new Set([c.source.abilityId])) : c.effect, c.rating),
+          c.source as never,
+          c.context,
+          c.perspective ?? "attacker",
+        );
       const appliedContribs = result.applied.map((b) => b.contribution);
       expect(
         appliedContribs,
@@ -466,17 +507,33 @@ describe("abilities-resolver conformance corpus", () => {
         reasons,
         `unsupported reasons for ${c.abilityId} (${c.perspective ?? "attacker"})`,
       ).toEqual(c.expected.unsupportedReasons);
+      if (c.expected.unsupportedScopes) {
+        expect(result.unsupported.map((u) => u.scope), `unsupported scopes for ${c.abilityId}`).toEqual(c.expected.unsupportedScopes);
+      }
+      expect(
+        result.unsupported.flatMap((u) => (u.needs ?? []).map((need) => need.key)),
+        `need keys for ${c.abilityId} (${c.perspective ?? "attacker"})`,
+      ).toEqual(c.expected.needKeys ?? []);
+      if (c.expected.applicableWhen) {
+        expect(result.applied.map((b) => b.applicableWhen ?? null), `buff gates for ${c.abilityId}`).toEqual(c.expected.applicableWhen);
+      }
       if (c.expected.activatable) {
         const acts = result.activatable.map((a) => ({
           id: a.id,
           label: a.label,
           group: a.group ?? null,
+          requires: a.requires ?? null,
+          capRaise: a.capRaise ?? null,
+          requiresOption: a.requiresOption ?? null,
+          excludesOption: a.excludesOption ?? null,
           buffs: a.buffs.map((b) => b.contribution),
         }));
+        // An expected lever omits `group`, `requires`, `capRaise`, `requiresOption` and `excludesOption` when it has none.
+        const want = (c.expected.activatable as Record<string, unknown>[]).map((e) => ({ group: null, requires: null, capRaise: null, requiresOption: null, excludesOption: null, ...e }));
         expect(
           acts,
           `activatable levers for ${c.abilityId} (${c.perspective ?? "attacker"})`,
-        ).toEqual(c.expected.activatable);
+        ).toEqual(want);
       }
     }
   }
@@ -487,6 +544,27 @@ describe("abilities-resolver conformance corpus", () => {
 
   it("defensive-from-dsl.json: target-perspective translations match", () => {
     runDslCorpus("defensive-from-dsl.json");
+  });
+
+  it("mortal-sources.json: mortal wounds outside an attack match", () => {
+    type Row = {
+      caseId: string; abilityId: string; factionId?: string; effect?: unknown; trigger?: unknown; rating?: string | number;
+      context: EngineContext;
+      expected: { sources: { id: string; moment: string | null; expected: number; needKeys: string[] }[]; unsupportedReasons: string[] };
+    };
+    const { cases } = JSON.parse(readFileSync(join(CONFORMANCE, "abilities-resolver", "mortal-sources.json"), "utf8")) as { cases: Row[] };
+    expect(cases.length).toBeGreaterThan(0);
+    const ds = Dataset.embedded();
+    for (const c of cases) {
+      const record = c.factionId === undefined ? undefined : ds.abilities.getInFaction(c.abilityId, c.factionId);
+      const result = record
+        ? mortalWoundSources(record.id, record.raw.effect, record.raw.trigger, c.context, c.rating)
+        : mortalWoundSources(c.abilityId, c.effect, c.trigger, c.context, c.rating);
+      expect(result.unsupported.map((entry) => entry.reason), c.caseId).toEqual(c.expected.unsupportedReasons);
+      expect(result.sources.map((source) => [source.id, source.moment, source.needs.map((need) => need.key)]), c.caseId)
+        .toEqual(c.expected.sources.map((source) => [source.id, source.moment, source.needKeys]));
+      result.sources.forEach((source, index) => expect(source.expected, c.caseId).toBeCloseTo(c.expected.sources[index]!.expected, 9));
+    }
   });
 });
 
@@ -505,7 +583,9 @@ interface LinkedApiCase {
   expected: string | null | string[];
 }
 
-function runLinkedApi(ds: Dataset, c: LinkedApiCase): string | null | string[] {
+function runLinkedApi(base: Dataset, c: LinkedApiCase): string | null | string[] {
+  // A case's `gameMode` names the dataset view it runs against (default: matched play).
+  const ds = c.args.gameMode ? base.forGameMode(c.args.gameMode as GameModeView) : base;
   switch (c.query) {
     case "find_unit":
       return ds.units.find(c.args.query)?.id ?? null;
@@ -533,9 +613,16 @@ function runLinkedApi(ds: Dataset, c: LinkedApiCase): string | null | string[] {
     case "base_loadout": {
       const u = ds.units.getAny(c.args.unitId);
       if (!u) throw new Error(`base_loadout: unknown unit ${c.args.unitId}`);
-      const comp = ds.unitCompositions.find((x) => x.unit_id === c.args.unitId);
+      const comp = ds.unitCompositionOf(u.raw);
       const lo = baseLoadout(u.raw, Number(c.args.modelCount), ds.wargearOptionsOf(u.raw), comp?.models);
       return [...lo.counts].map(([id, n]) => `${id}:${n}`).sort();
+    }
+    case "weapon_bounds": {
+      const u = ds.units.getAny(c.args.unitId);
+      if (!u) throw new Error(`weapon_bounds: unknown unit ${c.args.unitId}`);
+      const comp = ds.unitCompositionOf(u.raw);
+      const bounds = weaponBounds(u.raw, Number(c.args.modelCount), ds.wargearOptionsOf(u.raw), comp?.models);
+      return [...bounds].map(([id, b]) => `${id}:${b.min}-${b.max}`).sort();
     }
     case "maximal_loadout": {
       const u = ds.units.getAny(c.args.unitId);
@@ -588,7 +675,7 @@ function runLinkedApi(ds: Dataset, c: LinkedApiCase): string | null | string[] {
     case "model_bases_of": {
       const u = ds.units.getAny(c.args.unitId);
       if (!u) throw new Error(`model_bases_of: unknown unit ${c.args.unitId}`);
-      const comp = ds.unitCompositions.find((cc) => cc.unit_id === c.args.unitId);
+      const comp = ds.unitCompositionOf(u.raw);
       return (comp?.models ?? []).map((m) => `${m.name}=${encodeBase(m.base_size_mm) ?? "none"}`);
     }
     case "units_with_keyword":
@@ -611,6 +698,18 @@ function runLinkedApi(ds: Dataset, c: LinkedApiCase): string | null | string[] {
       return (ds.triggerIndex().get(c.args.event as GameEvent) ?? []).map((rt) => rt.abilityId);
     case "get_enhancement":
       return ds.enhancements.get(c.args.id)?.id ?? null;
+    case "units_of_faction":
+      return ds.units.byFaction(c.args.factionId).map((u) => u.id).sort();
+    case "detachments_of_faction":
+      return ds.detachments.byFaction(c.args.factionId).map((d) => d.id).sort();
+    case "get_unit":
+      return ds.units.getAny(c.args.unitId)?.id ?? null;
+    case "get_detachment":
+      return ds.detachments.getAny(c.args.detachmentId)?.id ?? null;
+    case "find_enhancement":
+      return ds.enhancements.find(c.args.query)?.id ?? null;
+    case "find_detachment":
+      return ds.detachments.find(c.args.query)?.id ?? null;
     default:
       throw new Error(`unknown linked-api query: ${c.query}`);
   }
@@ -684,6 +783,7 @@ const VALIDATOR_TARGET_SCHEMAS: Record<string, string> = {
   ability: "https://40kdc.dev/schemas/enrichment/ability-dsl/ability.schema.json",
   wargear: "https://40kdc.dev/schemas/core/wargear.schema.json",
   "wargear-option": "https://40kdc.dev/schemas/core/wargear-option.schema.json",
+  stratagem: "https://40kdc.dev/schemas/core/stratagem.schema.json",
 };
 
 /** Map an AJV error to the closed-enum code defined in RUNNER_PROTOCOL.md. */

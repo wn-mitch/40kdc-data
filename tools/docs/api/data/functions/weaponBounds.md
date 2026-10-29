@@ -6,9 +6,9 @@
 
 # Function: weaponBounds()
 
-> **weaponBounds**(`unit`, `modelCount`, `options`): `Map`\<`string`, [`WeaponBound`](../interfaces/WeaponBound.md)\>
+> **weaponBounds**(`unit`, `modelCount`, `options`, `models?`): `Map`\<`string`, [`WeaponBound`](../interfaces/WeaponBound.md)\>
 
-Defined in: [data/loadout.ts:110](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/loadout.ts#L110)
+Defined in: [data/loadout.ts:383](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/loadout.ts#L383)
 
 Inclusive valid count range for each weapon/wargear id, used to clamp a UI's
 per-weapon inputs so invalid loadouts are unreachable. A base weapon ranges
@@ -28,6 +28,10 @@ per-weapon inputs so invalid loadouts are unreachable. A base weapon ranges
 ### options
 
 readonly [`WargearOption`](../../generated/interfaces/WargearOption.md)[]
+
+### models?
+
+readonly [`LoadoutModel`](../interfaces/LoadoutModel.md)[]
 
 ## Returns
 

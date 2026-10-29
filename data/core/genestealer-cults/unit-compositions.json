@@ -76,15 +76,14 @@
         ],
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "oval",
-          "width": 60,
-          "length": 35.5
+          "shape": "round",
+          "diameter": 60
         }
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -152,7 +151,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -215,23 +214,62 @@
             "weapon_ids": [
               "hybrid-firearm",
               "autopistol",
-              "close-combat-weapon-neophyte-hybrids"
+              "close-combat-weapon-neophyte-hybrids",
+              "cult-icon"
             ],
             "max_count": 1
           },
           {
-            "name": "Neophyte Hybrid w/ Heavy Weapon",
+            "name": "Neophyte Hybrid w/ Heavy Weapon (Mining laser)",
             "weapon_ids": [
               "close-combat-weapon-neophyte-hybrids",
-              "autopistol"
+              "autopistol",
+              "mining-laser-neophyte-hybrids"
             ],
             "max_count": 4
           },
           {
-            "name": "Neophyte Hybrid w/ Special Weapon",
+            "name": "Neophyte Hybrid w/ Heavy Weapon (Seismic cannon)",
+            "weapon_ids": [
+              "close-combat-weapon-neophyte-hybrids",
+              "autopistol",
+              "seismic-cannon"
+            ],
+            "max_count": 4
+          },
+          {
+            "name": "Neophyte Hybrid w/ Heavy Weapon (Heavy stubber)",
+            "weapon_ids": [
+              "close-combat-weapon-neophyte-hybrids",
+              "autopistol",
+              "heavy-stubber-neophyte-hybrids"
+            ],
+            "max_count": 4
+          },
+          {
+            "name": "Neophyte Hybrid w/ Special Weapon (Webber)",
             "weapon_ids": [
               "autopistol",
-              "close-combat-weapon-neophyte-hybrids"
+              "close-combat-weapon-neophyte-hybrids",
+              "webber"
+            ],
+            "max_count": 4
+          },
+          {
+            "name": "Neophyte Hybrid w/ Special Weapon (Flamer)",
+            "weapon_ids": [
+              "autopistol",
+              "close-combat-weapon-neophyte-hybrids",
+              "flamer"
+            ],
+            "max_count": 4
+          },
+          {
+            "name": "Neophyte Hybrid w/ Special Weapon (Grenade launcher)",
+            "weapon_ids": [
+              "autopistol",
+              "close-combat-weapon-neophyte-hybrids",
+              "grenade-launcher"
             ],
             "max_count": 4
           }
@@ -239,10 +277,34 @@
         "loadout_variant_budgets": [
           {
             "variant_names": [
+              "Neophyte Hybrid w/ Heavy Weapon (Mining laser)",
+              "Neophyte Hybrid w/ Heavy Weapon (Seismic cannon)",
+              "Neophyte Hybrid w/ Heavy Weapon (Heavy stubber)"
+            ],
+            "count": 4,
+            "per_models": 0,
+            "scope": "model-row"
+          },
+          {
+            "variant_names": [
+              "Neophyte Hybrid w/ Special Weapon (Webber)",
+              "Neophyte Hybrid w/ Special Weapon (Flamer)",
+              "Neophyte Hybrid w/ Special Weapon (Grenade launcher)"
+            ],
+            "count": 4,
+            "per_models": 0,
+            "scope": "model-row"
+          },
+          {
+            "variant_names": [
               "Neophyte Hybrid w/ Hybrid Firearm",
               "Neophyte Hybrid w/ Hybrid Firearm & Cult Icon",
-              "Neophyte Hybrid w/ Heavy Weapon",
-              "Neophyte Hybrid w/ Special Weapon"
+              "Neophyte Hybrid w/ Heavy Weapon (Mining laser)",
+              "Neophyte Hybrid w/ Heavy Weapon (Seismic cannon)",
+              "Neophyte Hybrid w/ Heavy Weapon (Heavy stubber)",
+              "Neophyte Hybrid w/ Special Weapon (Webber)",
+              "Neophyte Hybrid w/ Special Weapon (Flamer)",
+              "Neophyte Hybrid w/ Special Weapon (Grenade launcher)"
             ],
             "count": 19,
             "per_models": 0,
@@ -253,7 +315,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -307,7 +369,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -344,7 +406,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -378,7 +440,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -415,7 +477,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -452,7 +514,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -487,7 +549,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -525,7 +587,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -570,7 +632,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -604,7 +666,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -639,7 +701,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -673,7 +735,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -710,7 +772,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -757,7 +819,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -857,13 +919,22 @@
             "count": 9,
             "per_models": 0,
             "scope": "model-row"
+          },
+          {
+            "variant_names": [
+              "Acolyte Hybrid w/ Heavy Mining Tool"
+            ],
+            "count": 3,
+            "per_models": 5,
+            "scope": "unit",
+            "stepped": true
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -968,7 +1039,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1048,13 +1119,30 @@
               "cult-claws-and-knife"
             ],
             "max_count": 1
+          },
+          {
+            "name": "Acolyte Hybrid w/ Demolition Charge, and Cult Claws and Knife",
+            "weapon_ids": [
+              "cult-claws-and-knife",
+              "demolition-charges-acolyte-hybrids-with-hand-flamers"
+            ]
           }
         ],
         "loadout_variant_budgets": [
           {
             "variant_names": [
+              "Acolyte Hybrid w/ Demolition Charge, and Cult Claws and Knife"
+            ],
+            "count": 2,
+            "per_models": 5,
+            "scope": "unit",
+            "stepped": true
+          },
+          {
+            "variant_names": [
               "Acolyte Hybrid w/ Hand Flamer",
-              "Acolyte Hybrid w/ Cult Icon"
+              "Acolyte Hybrid w/ Cult Icon",
+              "Acolyte Hybrid w/ Demolition Charge, and Cult Claws and Knife"
             ],
             "count": 9,
             "per_models": 0,
@@ -1065,7 +1153,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1118,7 +1206,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1155,7 +1243,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1190,7 +1278,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1224,7 +1312,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1268,7 +1356,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1297,16 +1385,15 @@
           "length": 92
         },
         "default_weapon_ids": [
-          "armoured-hull-achilles-ridgerunners",
+          "armoured-hull-claw-of-ascension-achilles-ridgerunner",
           "missile-launcher",
-          "survey-augur",
           "twin-heavy-stubber"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1318,6 +1405,9 @@
           }
         ]
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -1336,7 +1426,7 @@
           "length": 35.5
         },
         "default_weapon_ids": [
-          "atalan-power-weapon",
+          "power-weapon-claw-of-ascension-atalan-jackals",
           "stolen-firearms"
         ]
       },
@@ -1352,7 +1442,7 @@
         },
         "default_weapon_ids": [
           "mining-laser",
-          "stolen-blade",
+          "stolen-blade-claw-of-ascension-atalan-jackals",
           "stolen-firearms"
         ]
       },
@@ -1367,14 +1457,14 @@
           "length": 35.5
         },
         "default_weapon_ids": [
-          "stolen-blade",
+          "stolen-blade-claw-of-ascension-atalan-jackals",
           "stolen-firearms"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1396,6 +1486,9 @@
           }
         ]
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -1447,7 +1540,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1469,6 +1562,9 @@
           }
         ]
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -1486,15 +1582,15 @@
           "length": 35.5
         },
         "default_weapon_ids": [
-          "autopistol-jackal-alphus",
-          "cult-sniper-rifle-jackal-alphus",
+          "autopistol-shanus-daskovian",
+          "cult-sniper-rifle-shanus-daskovian",
           "stolen-blade"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1506,6 +1602,9 @@
           }
         ]
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   }
 ]

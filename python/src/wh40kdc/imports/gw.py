@@ -38,17 +38,31 @@ _FACTION_KEYWORD_PREFIX = "+ FACTION KEYWORD:"
 
 _HEADER_FACTION = re.compile(r"^\+\s*FACTION KEYWORD:\s*(.+?)\s*$", re.IGNORECASE)
 _HEADER_DETACHMENT = re.compile(r"^\+\s*DETACHMENT:\s*(.+?)\s*$", re.IGNORECASE)
+_HEADER_DISPOSITION = re.compile(r"^\+\s*(?:FORCE DISPOSITION|DISPO):\s*(.+?)\s*$", re.IGNORECASE)
 _HEADER_TOTAL_POINTS = re.compile(r"^\+\s*TOTAL ARMY POINTS:\s*(\d+)\s*pts?\s*$", re.IGNORECASE)
 
 _FENCE = re.compile(r"^\++\s*$")
 _HEADER_LINE = re.compile(r"^\+")
 _SECTION_HEADER = re.compile(r"^[A-Z][A-Z0-9 \-/&]+$")  # BATTLELINE, ALLIED UNITS, …
-_UNIT_HEADER = re.compile(r"^(.+?)\s*\(\s*(\d+)\s*pts?\s*\)\s*$", re.IGNORECASE)
-_BULLET_LINE = re.compile(r"^(\s*)•\s*(.+?)\s*$")
+_UNIT_HEADER = re.compile(r"^(.+?)\s*\(\s*(\d+)\s*(?:pts?|points?)\s*\)\s*$", re.IGNORECASE)
+_BULLET_LINE = re.compile(r"^(\s*)([•◦])\s*(.+?)\s*$")
 _NX_PREFIX = re.compile(r"^(\d+)x\s+(.+)$")
 _ENHANCEMENT_ANNOT = re.compile(r"^(.+?)\s*\(\+\s*(\d+)\s*pts?\s*\)\s*$", re.IGNORECASE)
+# The "Attached Units" preamble groups a Leader/Support character with its
+# bodyguard unit under `Attached Unit N` before the ALL-CAPS role sections
+# begin. The marker is mixed case (never a section header) and has no
+# `(N pts)` suffix (never a unit header): it is purely a pairing fence.
+_ATTACHED_UNIT_HEADER = re.compile(r"^Attached Unit\s+\d+\s*$", re.IGNORECASE)
+_ATTACHED_AS_BULLET = re.compile(r"^Attached as:\s*(Leader|Support|Bodyguard)\b", re.IGNORECASE)
 _WITH_LINE = re.compile(r"^[\t ]*\d+\s+with\b", re.MULTILINE)
 _BULLET = re.compile(r"^[\t ]*•", re.MULTILINE)
+_EMBEDDED_APP_BATTLE_SIZE = re.compile(
+    r"^\s*(?:Combat Patrol|Incursion|Strike Force|Onslaught)\s*\(\s*[\d.,]+\s*Points?\s*\)\s*$",
+    re.IGNORECASE | re.MULTILINE,
+)
+_WTC_COMPACT_UNIT = re.compile(
+    r"^(?:Char\d+:\s*)?\d+x\s+.+?\(\s*\d+\s*pts?\s*\)\s*:", re.IGNORECASE | re.MULTILINE
+)
 _SPLIT_LINES = re.compile(r"\r?\n")
 _SERIALIZED_WTC = re.compile(r"^\+\s*LIST NAME:", re.IGNORECASE | re.MULTILINE)
 
@@ -68,7 +82,14 @@ def _is_gw_text(decoded: Any) -> str | None:
         return None
     if _WITH_LINE.search(decoded) is not None:  # that's wtc-full
         return None
+    if _WTC_COMPACT_UNIT.search(decoded) is not None:
+        return None
     if _SERIALIZED_WTC.search(decoded) is not None:
+        return None
+    # BCP sometimes wraps a complete modern GW app export in the older `+`
+    # summary fence. The body then carries its own faction/detachment/battle-size
+    # preamble and belongs to gw-headerless, which strips the wrapper first.
+    if _EMBEDDED_APP_BATTLE_SIZE.search(decoded) is not None:
         return None
     return decoded
 
@@ -77,6 +98,7 @@ def _parse_header(lines: list[str]) -> tuple[dict[str, Any], int] | None:
     faction_raw_name: str | None = None
     detachment_raw_name: str | None = None
     total_reported: int | None = None
+    force_disposition_raw_name: str | None = None
 
     fence_indices: list[int] = []
     for i, line in enumerate(lines):
@@ -98,6 +120,10 @@ def _parse_header(lines: list[str]) -> tuple[dict[str, Any], int] | None:
         if m:
             detachment_raw_name = strip_parenthetical(m.group(1))
             continue
+        m = _HEADER_DISPOSITION.match(line)
+        if m:
+            force_disposition_raw_name = m.group(1)
+            continue
         m = _HEADER_TOTAL_POINTS.match(line)
         if m:
             total_reported = int(m.group(1))
@@ -113,6 +139,7 @@ def _parse_header(lines: list[str]) -> tuple[dict[str, Any], int] | None:
         "name": "Imported roster",
         "faction_raw_name": faction_raw_name,
         "detachment_raw_name": detachment_raw_name,
+        "force_disposition_raw_name": force_disposition_raw_name,
         "total_reported": total_reported,
         "declared_limit": declared_limit,
         "battle_size_raw": infer_battle_size_raw(declared_limit),
@@ -120,7 +147,8 @@ def _parse_header(lines: list[str]) -> tuple[dict[str, Any], int] | None:
     return header, body_start
 
 
-def _finish_unit(acc: dict[str, Any]) -> dict[str, Any]:
+def _finish_unit(acc: dict[str, Any]) -> tuple[dict[str, Any], str | None]:
+    """Build the parsed unit, plus its `Attached as:` role (or None)."""
     bullets: list[dict[str, Any]] = acc["bullets"]
     top_indent = min((b["indent"] for b in bullets), default=0)
 
@@ -130,6 +158,7 @@ def _finish_unit(acc: dict[str, Any]) -> dict[str, Any]:
     is_character = acc["section"] == _CHARACTERS_SECTION
     enhancement_raw_name: str | None = None
     enhancement_points: int | None = None
+    attached_role: str | None = None
 
     for i, b in enumerate(bullets):
         # A child bullet (deeper than the unit's top level) is a model group's
@@ -139,13 +168,20 @@ def _finish_unit(acc: dict[str, Any]) -> dict[str, Any]:
                 wargear[b["text"]] = wargear.get(b["text"], 0) + b["count"]
             continue
 
-        # Top-level annotation (no `Nx` count): enhancement / character / warlord.
+        # Top-level annotation (no `Nx` count): enhancement / character / warlord /
+        # attached-as (Leader/Support/Bodyguard, from the "Attached Units" preamble).
         if b["count"] is None:
             enh = _ENHANCEMENT_ANNOT.match(b["text"])
             if enh:
                 if enhancement_raw_name is None:
                     enhancement_raw_name = enh.group(1).strip()
                     enhancement_points = int(enh.group(2))
+                continue
+            attached_as = _ATTACHED_AS_BULLET.match(b["text"])
+            if attached_as:
+                attached_role = attached_as.group(1).lower()
+                if attached_role != "bodyguard":
+                    is_character = True
                 continue
             for token in (s.strip() for s in b["text"].split(",")):
                 if not token:
@@ -176,7 +212,7 @@ def _finish_unit(acc: dict[str, Any]) -> dict[str, Any]:
     else:
         points = displayed
 
-    return {
+    unit = {
         "raw_name": acc["raw_name"],
         "is_character": is_character,
         "model_count": model_count,
@@ -186,6 +222,7 @@ def _finish_unit(acc: dict[str, Any]) -> dict[str, Any]:
         "enhancement_points": enhancement_points,
         "wargear": [{"raw_name": n, "count": c} for n, c in wargear.items()],
     }
+    return unit, attached_role
 
 
 def _parse_body(lines: list[str], body_start: int) -> tuple[list[dict[str, Any]], bool]:
@@ -193,11 +230,28 @@ def _parse_body(lines: list[str], body_start: int) -> tuple[list[dict[str, Any]]
     current: dict[str, Any] | None = None
     section: str | None = None
     allied_units = 0
+    # Units finished inside an "Attached Unit N" fence, paired once the fence
+    # closes (a new `Attached Unit N`, a real section header, or end of input).
+    attached_group: list[tuple[dict[str, Any], str]] = []
+
+    def resolve_attached_group() -> None:
+        character = next((e for e in attached_group if e[1] in ("leader", "support")), None)
+        bodyguard = next((e for e in attached_group if e[1] == "bodyguard"), None)
+        if character and bodyguard:
+            character[0]["leader_attachment"] = {
+                "bodyguard_raw_name": bodyguard[0]["raw_name"],
+                "role": character[1],
+                "provisional": False,
+            }
+        attached_group.clear()
 
     def finalize() -> None:
         nonlocal current
         if current is not None:
-            units.append(_finish_unit(current))
+            unit, attached_role = _finish_unit(current)
+            if attached_role:
+                attached_group.append((unit, attached_role))
+            units.append(unit)
             current = None
 
     for raw in lines[body_start:]:
@@ -205,11 +259,18 @@ def _parse_body(lines: list[str], body_start: int) -> tuple[list[dict[str, Any]]
         if not line or _FENCE.match(line) or _HEADER_LINE.match(line):
             continue
 
+        if _ATTACHED_UNIT_HEADER.match(line):
+            finalize()
+            resolve_attached_group()
+            continue
+
         bullet_match = _BULLET_LINE.match(raw)
         if bullet_match:
             if current is not None:
-                indent = len(bullet_match.group(1))
-                rest = bullet_match.group(2)
+                # A hollow `◦` bullet is one level deeper than a `•` at the same
+                # indent, so it is a child even without leading whitespace.
+                indent = len(bullet_match.group(1)) + (1 if bullet_match.group(2) == "◦" else 0)
+                rest = bullet_match.group(3)
                 nx = _NX_PREFIX.match(rest)
                 current["bullets"].append(
                     {
@@ -251,9 +312,11 @@ def _parse_body(lines: list[str], body_start: int) -> tuple[list[dict[str, Any]]
 
         if _SECTION_HEADER.match(line):
             finalize()
+            resolve_attached_group()
             section = line
 
     finalize()
+    resolve_attached_group()
     return units, allied_units > 0
 
 
@@ -286,7 +349,7 @@ def _parse(decoded: Any) -> dict[str, Any]:
         "detachment_raw_names": (
             [header["detachment_raw_name"]] if header["detachment_raw_name"] else []
         ),
-        "force_disposition_raw_name": None,
+        "force_disposition_raw_name": header["force_disposition_raw_name"],
         "battle_size_raw": header["battle_size_raw"],
         "declared_limit": header["declared_limit"],
         "total_reported": header["total_reported"],

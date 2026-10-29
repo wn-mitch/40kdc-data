@@ -1,37 +1,41 @@
 ---
 name: Author Ability
-description: One-shot ingest of 40K abilities from a PDF or JSON into 40kdc-data's non-agentic DSL pipeline, capturing raw text into a sibling store keyed by ability_id. Runs end-to-end autonomously (extract → ingest → propose → repair-until-converged → apply → validate → regenerate data-derived artifacts so the branch is push-ready/CI-green) without pausing, and bundles any questions into a single final report. Use for "author/import abilities from this PDF/JSON", "structure these abilities", "fill ability stubs", "build the raw-text lookup". Never hand-writes DSL — the gated classify→assemble→validate→verify pipeline does.
+description: Reviewable ingestion of 40K abilities from a PDF or JSON into 40kdc-data's semantic-authoring pipeline. Extracts source metadata, proposes and reviews leaves, propagates approved surfaces, deterministically compiles complete records, and validates generated artifacts. Never auto-applies model proposals or hand-writes canonical DSL. Use for "author/import abilities from this PDF/JSON", "structure these abilities", "fill ability stubs".
 ---
 
 # Skill: Author Ability
 
 Turn raw ability text (a rulebook / faction-pack PDF, or a foreign JSON dump) into
-authored **Ability DSL** in `data/enrichment/<faction>/abilities.json`, and capture
-the original raw text into a durable lookup store — the sibling `40kdc-abilities` git
-repo — keyed by `ability_id`.
+authored **Ability DSL** in `data/enrichment/<faction>/abilities.json`. The canonical
+rule text of every ability is the private MFM dump (`_private/dump.json`); read it with
+`cd tools && npm run prose -- get <faction> <ability_id>`. The pipeline keeps no other
+copy of the prose.
 
-## Operating mode — one-shot, autonomous, no mid-run pauses
+## Operating mode — reviewable, deterministic authoring
 
-Run the WHOLE pipeline end-to-end in a single invocation without asking the user or
-stopping for approval. Author as much as the gate will admit.
+Run the existing segmentation → review → propagation → compilation pipeline. Do not
+auto-apply model proposals or ask a model to emit a whole authored rule in one shot.
 
-- **Apply unattended — it is safe.** The gate admits only schema-valid +
-  verifier-faithful + confidence≥medium + canonical proposals, splices ONLY into
-  empty stubs (never overwrites authored work), and is fully git-reversible. The gate
-  is the safety mechanism, not a human checkpoint.
-- **Never ask mid-run.** If faction / edition / unit-mapping is ambiguous, make the
-  best-effort inference, record the assumption, and keep going.
-- **Bundle everything for the end.** Collect all questions, assumptions, review items,
-  and unauthored residue into ONE final report (see **Final report**) — the only place
-  you raise anything with the user.
+- **Proposals are not authority.** Model segmentation, family, parameter, and retrieval
+  outputs are hypotheses only. A human reviewer must confirm or correct each semantic leaf.
+- **Human-approved leaves are the source of truth.** Scoped surfaces and duplicate-text
+  propagation may copy a confirmed meaning mechanically, but derived rows remain traceable
+  to the human decision.
+- **Compilation is deterministic.** When a record is fully accounted for by trusted leaves,
+  connectives, and relations, `compile.ts` lowers it to the canonical DSL. Models do not
+  hand-write or directly override `effect`, `scope`, `trigger`, `usage`, or `applies_to`.
+- **Do not silently fill gaps.** An unresolved or unmodelable clause stays an honest
+  `DSL_GAP`/review item until a human-authorized semantic repair and compiler lowering exist.
+- Treat the working tree as shared. Never revert, reset, clean, or overwrite unrelated
+  concurrent changes.
 
 ## Respect concurrent work — NEVER revert without confirmation
 
 The user may be editing this repo at the same time the pipeline runs (the `propose`/
 `repair` passes are long). Treat the working tree as shared and not yours to clean up.
 
-- **This pipeline writes to three authoring places** — `data/enrichment/<faction>/abilities.json`,
-  `data/_audit/**`, and the out-of-repo `40kdc-abilities` raw-text store — **plus, in the
+- **This pipeline writes to two authoring places** — `data/enrichment/<faction>/abilities.json`
+  and `data/_audit/**` — **plus, in the
   push-ready step (Step 7), a fixed set of regenerated artifacts:** `conformance/**`,
   `crates/wh40kdc/src/data/bundle.generated.json`, `python/src/wh40kdc/_bundle.json`, and
   (only on a real corpus change) `python/src/wh40kdc/_spec.py`. A schema change this run also
@@ -48,47 +52,56 @@ The user may be editing this repo at the same time the pipeline runs (the `propo
 - If you must report the change-set, scope your `git` reads to the three paths above; describe
   everything else as "your other changes, untouched."
 
-## What the DSL is FOR — mathhammer estimation, not exact text
+## What the DSL is for — structured, source-faithful mechanics
 
-The Ability DSL exists for **mathhammer / estimation** (expected damage, scoring, matchup
-math), NOT to reproduce rules text. Two consequences shape every authoring + verifier
-judgement:
+The Ability DSL is a structured mechanical representation used by the cruncher,
+describers, and consumers. It is not a copy of source prose, but it MUST preserve
+every source-supported mechanic that the canonical schema and compiler can express.
+The private dump is the source-text authority; trusted semantic leaves are the
+human-authorized meaning; deterministic compilation is the only path to canonical
+DSL.
 
-1. **Assume the most powerful applicable version.** When a rule has a conditional or
-   escalating effect ("+1, or +2 if the unit is X"; "re-roll 1s, and full re-rolls if Y"),
-   author the **strongest outcome** — model it as if the condition is met. Do NOT gate an
-   estimation-relevant buff behind a hard-to-evaluate trigger and thereby under-count it. A
-   blanket-looking effect that is really the upper bound of a conditional rule is correct,
-   not a fidelity bug.
-2. **Resources are SPENT, not generated.** For faction-resource abilities (Miracle dice,
-   Blessings of Khorne, Pain tokens), author the **effect of using** the resource at its
-   best (e.g. a Miracle dice as a guaranteed critical / auto-6), NOT the act of gaining it.
-   So an army rule like `acts-of-faith` models the auto-6 spend, and a per-round/​on-destruction
-   *generation* clause is intentionally NOT re-authored — but because that omits part of the
-   rule, the entry is still an approximation and MUST carry the `[APPROX]` mark (below).
+- Do not assume the strongest conditional outcome or drop a trigger/resource cadence
+  merely because a consumer cannot evaluate it yet. Preserve the condition, timing,
+  duration, and usage semantics in trusted leaves and lower them through the existing
+  compiler.
+- Keep concepts distinct: static `applies_to` is only a human-curated roster
+  highlighting predicate; runtime recipients use `unit-filter`/typed unit references.
+  Model attachment membership uses `member_of` plus `attachment_role`, not
+  `CHARACTER`, possession of a Leader ability, `self`, or `bearer`.
+- Emit selectors with `filter`, inclusive `count` bounds, optional `limit`,
+  `bind_as`, and event-dependent `eligibility`. Keep objective selectors typed
+  separately. Use `range`/`range-ref` and structured `weapon-scope`; never emit
+  `scope.range_inches` or flattened weapon fields.
+- Every stance option has a stable `id` and display `name`; cross-record links use
+  `{ability_id, option_id}`. Labels are not identifiers. Preserve parent usage
+  allowances independently from local part triggers.
+- Unknown board state remains unknown/permissive according to the consumer contract;
+  do not invent distances or collapse a correlated historical predicate into
+  unrelated `matches`/`within` atoms.
+- A source-family parameter such as reviewed `bodyguard_only` may remain in trusted
+  family semantics, but it is not a lowered DSL field. The compiler emits the
+  canonical typed target filter.
 
-This is the opposite contract from the **raw-text store**, which MUST reproduce the
-ability's exact wording. Same ability → two representations: DSL = strongest-case
-mechanical estimate; store = verbatim text. When the verifier weighs faithfulness, it
-judges the *strongest-case mechanic*, not text-completeness.
+If the schema genuinely cannot express a source clause, retain an honest `DSL_GAP`
+and route a minimal schema/compiler/describer proposal through human review. Never
+smuggle it through an open modifier or free-text note.
 
-Corollary for the final report: a "rules update" that only changes a trigger distance,
-a condition, or a resource-gain cadence usually needs **no DSL re-author** (the store holds
-the new text, and the DSL models the strongest case). Re-author only for genuine
-effect-magnitude or wrong-effect changes — but if the DSL no longer fully matches the
-current rule, still add the `[APPROX]` mark (below) so the divergence is tracked.
+Corollary for updates: re-author when the structured mechanic, magnitude, timing,
+or applicability changes. A source-text update alone does not authorize rewriting
+the DSL or bypassing review.
 
 ### Mark every approximation — the `[APPROX]` convention
 
-When a DSL entry does NOT fully/faithfully represent its rule — a strongest-version
-simplification, a dropped condition/clause, or a placeholder — it MUST be flagged so a
-later faithful-authoring pass can find and extend it. The standardized marker is a
-**leading `[APPROX]` token in `community_notes`** (chosen over a schema field so it needs
-no downstream regen/approval; promote it to a structured field later only via the normal
+When a DSL entry does not fully/faithfully represent its source, it MUST be
+flagged so a later human-authorized repair can find and extend it. A dropped
+condition, clause, or placeholder is never silently accepted. The standardized
+marker is a **leading `[APPROX]` token in `community_notes`** (chosen over a
+schema field so it needs no downstream regen; promote it only through the normal
 Schema Change process):
 
 ```
-[APPROX] <exactly what is simplified or dropped vs the full rule>. Full rule in raw-text store. <any prior notes>
+[APPROX] <exactly what is simplified or dropped vs the full rule>. <any prior notes>
 ```
 
 Rules:
@@ -96,11 +109,10 @@ Rules:
   (check for `[APPROX]` first).
 - Be specific about the gap ("+1 Hit/Wound applied unconditionally; rule gates it on the
   target having destroyed a friendly unit"), so the later pass knows what to extend.
-- **Strongest-case and resource-as-spent modeling ARE approximations — mark them.** Any
-  time the DSL omits or simplifies part of the rule (a dropped condition/clause, an
-  upper-bound assumption, modeling only the resource's spend and not its generation), the
-  entry gets `[APPROX]`. Only an entry that **completely and faithfully** captures the rule
-  is left unmarked.
+- **Any omitted or simplified source mechanic is an approximation — mark it.** Only an
+  entry that completely and faithfully captures the source meaning is left
+  unmarked. Do not choose a strongest-case rewrite as a substitute for a reviewed
+  condition or usage rule.
 - **A wrong/stale value is a BUG, not an approximation — fix it, don't mark it.** An
   incorrect scalar or enum (a distance, threshold, stat, CP cost, phase, or a stale id
   reference — e.g. the rule says 8" but the DSL holds 9") is simply wrong: **correct the
@@ -130,7 +142,7 @@ express it, do so.
 **Structured data, never prose — and know which repo you're in.** Committed `data/**`
 (core schemas *and* enrichment DSL) carries only *structured* facts: enums, ids,
 keyword lists, `target_restrictions`, condition/effect trees. The original rule *text*
-lives ONLY in the out-of-repo `40kdc-abilities` store. So when a mechanic resists a
+lives ONLY in the private MFM dump (`_private/`). So when a mechanic resists a
 field, the fix is to author the real structure (or extend the schema — below), **never**
 to retreat into a free-text `notes` / `description` / `community_notes` field and
 restate the rule in prose there. A `notes` string that paraphrases what a structured
@@ -203,17 +215,18 @@ If the user points at a file elsewhere, copy it under `_private/sources/` first.
 
 ## IP safety (non-negotiable)
 
-- Raw GW rule text goes ONLY to git-ignored / out-of-repo places: `_private/**`,
-  the ignored `data/_audit/author-input/<faction>.json` workspace, and the private
-  `40kdc-abilities` store. Never write it into a tracked repository file.
+- Raw GW rule text goes ONLY to git-ignored places: `_private/**` and the ignored
+  `data/_audit/author-input/<faction>.json` workspace. Never write it into a tracked
+  repository file.
 - Never commit source PDFs. Don't paste prose into `name` / `community_notes` / any DSL
   field (the audit flags it `gw-leak`). Names are factual labels and are fine.
 
-## Workflow (run every step, no stopping)
+## Workflow (run the applicable steps, with human review)
 
-You run all commands. `propose` / `repair` shell out to `claude -p` (must be installed
-+ authenticated; spends the user's tokens). Those passes are long — run them in the
-**background** and read their output when done. Surface CLI/auth failures; don't retry blindly.
+Run extraction, segmentation, proposal, review, propagation, compilation, and
+validation as applicable. Do not bypass human authorization for semantic leaves or
+apply model-written whole-rule DSL. A validation pass is not a substitute for
+review authority.
 
 ### 1. Read & identify the source
 
@@ -236,8 +249,8 @@ cd tools
 node -e "const f='<faction>';const r={units:require('../data/core/'+f+'/units.json').map(u=>({id:u.id,name:u.name})),detachments:require('../data/core/'+f+'/detachments.json').map(d=>({id:d.id,name:d.name})),existing_abilities:require('../data/enrichment/'+f+'/abilities.json').map(a=>({ability_id:a.ability_id,name:a.name}))};require('fs').writeFileSync('../_private/extracted/_'+f+'-reference.json',JSON.stringify(r,null,2));console.log('units',r.units.length,'detachments',r.detachments.length,'abilities',r.existing_abilities.length)"
 ```
 
-If the fork lacks core data (`data/core/<faction>/` absent), pass just the existing
-abilities; extraction then best-effort slugs `unit_ids` from datasheet names.
+If the fork lacks core data (`data/core/<faction>/` absent), stop and report the
+missing mapping prerequisite; do not invent or best-effort slug `unit_ids`.
 
 ### 3. Extract → ingest manifest
 
@@ -281,22 +294,35 @@ cd tools
 npm run author:ingest -- ../_private/manifests/<faction>.manifest.json   # or ../_private/manifests for every file
 ```
 
-Seeds empty stubs into live `abilities.json`, writes the canonical author-input, and
-writes the raw-text store. Note its summary (esp. the "merged into authored" count) for
+Seeds empty stubs into live `abilities.json` and writes the canonical author-input
+(the manifest's `raw_text` goes only there). Note its summary (esp. the "merged into authored" count) for
 the final report.
 
-### 5. Author: propose → repair-until-converged → apply (the autonomous core)
+### 5. Author: leaves → review → compile → approve → publish
 
-1. `npm run author:propose -- <faction>` (Haiku). Note the `gateable` count.
-2. **Repair loop** — `author:repair` re-touches ONLY still-ungated residue and recovers
-   failed batches, so loop it:
-   - `npm run author:repair -- <faction> --batch 3` (Sonnet). Re-run while `gateable`
-     keeps rising (cap ~3 passes). Use a **small `--batch`**: the default 8 overflows a
-     single `claude -p` call on conditional stratagems and fails whole batches.
-   - One final escalation on the stubborn residue: `npm run author:repair -- <faction>
-     --batch 2 --model claude-opus-4-8`.
-3. `npm run author:apply -- <faction>` (autonomous). Splices the gated set into stubs;
-   already-authored entries are skipped as "not-a-stub".
+All commands run from `tools/` as `npm run semantic-authoring -- <cmd>`; `--abilities` takes
+workbench `ability_version_id`s (`query "SELECT id FROM abilities WHERE ability_id='…' AND current=1"`).
+
+1. Propose: `segment <batch> --abilities <ids>` then `classify <batch>`. These are machine rows only.
+2. Review: present the proposals to the user in chat and write their answers as a decisions
+   file (`confirm`/`correct`/`add`/`surface`/`gap`/…, see `review-apply.ts`), signed with the
+   user's reviewer name. Apply it with `review-apply <file>`, then
+   `propagate --duplicate-texts --abilities <ids>`.
+3. Compile and gate: `gates --abilities <ids>` (read-only). The gates are schema, core checks,
+   integrity (the schema and referential-integrity checks `prepare-publication` runs, on the
+   dataset with that record alone published), describer round-trip and cruncher shape.
+4. Publication review: `review-sheet <faction> --out ../_private/round5c/review` writes
+   `<faction>.md` (published vs compiled renders, lever diffs, failing gates) and an unsigned
+   `<faction>.decisions.json` of `approve-shape` decisions for the members that pass every gate.
+   The user reads the sheet and signs (sets `reviewer`) or edits the decisions; only then run
+   `review-apply` on it. An unsigned draft is refused, and so is an `approve-shape` decision
+   with a member that fails the integrity gate.
+5. Publish: `publishable --faction <faction>` lists the approved entries that change the tracked
+   record; `prepare-publication <faction> <entry-ids>` then `publish <batch-id> <preview-hash>`.
+   Publication validates the whole projected dataset before writing.
+
+The older `author:propose`/`author:repair`/`author:apply` scripts apply model output without
+leaf review. Do not use them for new authoring.
 
 ### 6. Validate, measure & emit the fidelity-review report
 
@@ -313,12 +339,14 @@ cd tools && npm run author:report -- <faction> && cd ..   # omit <faction> for a
 This is `audit:phrasing --review`: it runs the real `describeAbility` (DSL→English) over every
 authored ability and joins, per ability, **the units that carry it** (names from
 `data/core/<faction>/units.json`), its **`ability_id`**, the **verbatim GW source text** (from
-the out-of-repo `40kdc-abilities` store), and the **DSL→English** readout. Output goes to
-`_private/reports/ability-review-<faction>.md` — **git-ignored, because it embeds GW text; never
-commit it.** Skim it to confirm each authored entry is a faithful strongest-case estimate of its
-rule (strongest-case and `[APPROX]` simplifications are expected, per the IP/fidelity sections);
-surface any genuine mismatch in the final report. Abilities with no store text (e.g. universal
-USRs) render `_(not in raw-text store)_` — expected, not a defect.
+the private MFM dump, `_private/dump.json`), and the **DSL→English** readout. Output goes to
+`_private/reports/ability-review-<faction>.md` — **git-ignored, because it embeds GW text;
+never commit it.** Skim it to confirm each authored entry is faithful to the source meaning
+and that every omitted clause is explicitly reviewed as `DSL_GAP` or `[APPROX]`; do not
+accept a strongest-case rewrite as faithful.
+surface any genuine mismatch in the final report. Abilities whose own owner prints no dump text
+render `_(no dump text)_` — check them with `npm run prose -- grep`; they are usually
+misfiled or renamed, and the final report should list them.
 
 ### 7. Make it push-ready — regenerate the data-derived artifacts
 
@@ -411,11 +439,10 @@ Two layers; use the cheapest that's safe for each.
 
 - **Extraction (step 3, this skill's work):** delegate to a subagent — `haiku` for
   already-structured JSON, `sonnet` for prose PDFs. Opus rarely worth it.
-- **DSL authoring (step 5, the pipeline):** gate makes a weaker model **lower yield,
-  not lower correctness** (rejects stay stubs, never reach live data). Default ladder:
-  Haiku `propose` → Sonnet `repair --batch 3` (looped) → Opus `repair --batch 2` for the
-  tail. A pass uses ONE model for *both* classify and the fidelity verifier, so never
-  drop `propose` below Haiku (it weakens the judge, not just the author).
+- **DSL authoring (step 5, the pipeline):** model passes propose and verify candidate
+  leaf mappings, but only human-authorized leaves are trusted. Deterministic
+  compilation lowers complete records; a model's confidence never promotes a
+  candidate or justifies a strongest-case rewrite.
 
 ## Final report (bundle ALL of this — the only place you raise anything)
 
@@ -424,7 +451,9 @@ End with one consolidated summary:
   `gw-leak` count.
 - **Fidelity-review report (Step 6):** the path written
   (`_private/reports/ability-review-<faction>.md`) and any source-vs-DSL mismatches the
-  side-by-side surfaced (genuine errors only — strongest-case / `[APPROX]` modeling is expected).
+  side-by-side surfaced, including any source clause that remains a reviewed
+  `DSL_GAP` or `[APPROX]` note. Do not describe strongest-case rewrites as expected
+  behavior; report every omitted or simplified mechanic.
 - **Stubs remaining,** bucketed by why: not-faithful (verifier rejected), complex,
   unencodable (flagged — need hand-authoring), schema-invalid.
 - **Schema changes (NEED APPROVAL):** any condition type / effect field / modifier key
@@ -433,7 +462,9 @@ End with one consolidated summary:
 - **Unmodeled by design:** out-of-scope omissions (build restrictions, pre-game,
   bespoke sub-abilities) — flagged here, never silent.
 - **Review items:** "merged into authored" unit-link additions; any same-name collisions.
-- **Assumptions** you made (faction/edition inference, best-effort `unit_id` slugs, …).
+- **Mapping decisions:** source-backed faction/edition/unit mappings and any
+  unresolved prerequisites; never report heuristic `unit_id` slugs as an accepted
+  assumption.
 - **Questions** for the user — bundled here, nowhere else.
 - **Push-ready state (Step 7):** confirm all data-derived artifacts (Rust/Python/Go bundles +
   TS corpus) were regenerated and the **TS conformance suite** is green locally; state that the
@@ -441,26 +472,23 @@ End with one consolidated summary:
   `python`/`go` jobs + `parity.yml`); state the `SPEC_VERSION` (and whether it was bumped); flag
   any regen step whose toolchain was missing as a **blocking** follow-up (a stale committed bundle
   turns CI red).
-- **Recommended next actions:** commit in two repos — the `data/enrichment/<faction>` changes
+- **Recommended next actions:** commit the `data/enrichment/<faction>` changes
   **together with** the Step-7 regen outputs (`conformance/**`, the Rust/Python/Go bundles,
-  `SPEC_VERSION`/`_spec.py`/`go/spec.go`) as one push-ready commit, and the `40kdc-abilities` store
-  repo separately; hand-author / Opus-retry the listed residue.
+  `SPEC_VERSION`/`_spec.py`/`go/spec.go`) as one push-ready commit; hand-author / Opus-retry the listed residue.
 
-## The raw-text lookup store
+## Rule prose
 
-`author:ingest` writes to `RAW_TEXT_STORE` (default `../40kdc-abilities`, a sibling of
-the repo; resolved relative to the tool so it's found regardless of cwd):
-- `index.json` — flat `ability_id → { faction, raw_text }` for O(1) lookup.
-- `<faction>.json` — full records (id + hierarchy + provenance + `raw_text`).
-
-It's its own git repo (auto-`git init`ed on first run; writes are additive — existing
-entries are never deleted, same-id entries update in place). Recover any ability's
-original text by reading `<store>/index.json` and indexing by `ability_id`.
+Rule text comes only from the private MFM dump, read through `tools/src/mfm/record-prose.ts`:
+`npm run prose -- get <faction> <ability_id>` prints one ability's text and its `dump.json#<row>`
+ref; `npm run prose -- grep <regex>` searches it. Each ability resolves only through its own
+owner (datasheet, detachment, army rule, or core rules), so a same-named rule in another faction
+is never returned. The manifest's `raw_text` is a transient copy for the classify pass and lives
+only in the git-ignored author-input.
 
 ## Idempotency
 
 Re-running the same input is safe: ids are reused (no duplicate stubs, additive unit
-merges), author-input entries are replaced by id, the store merges additively, and
+merges), author-input entries are replaced by id, and
 `apply` only touches remaining stubs. Authored abilities are never overwritten.
 
 ## Key files

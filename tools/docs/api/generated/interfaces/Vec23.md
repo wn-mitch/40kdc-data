@@ -6,7 +6,7 @@
 
 # Interface: Vec23
 
-Defined in: [generated.ts:1057](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L1057)
+Defined in: [generated.ts:7051](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L7051)
 
 A 2D point in board inches. Origin at a board corner; JSON uses y-down (downstream renderers may flip to y-up).
 
@@ -16,7 +16,7 @@ A 2D point in board inches. Origin at a board corner; JSON uses y-down (downstre
 
 > **x**: `number`
 
-Defined in: [generated.ts:1058](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L1058)
+Defined in: [generated.ts:7052](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L7052)
 
 ***
 
@@ -24,4 +24,4 @@ Defined in: [generated.ts:1058](https://github.com/wn-mitch/40kdc-data/blob/0b69
 
 > **y**: `number`
 
-Defined in: [generated.ts:1059](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L1059)
+Defined in: [generated.ts:7053](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L7053)

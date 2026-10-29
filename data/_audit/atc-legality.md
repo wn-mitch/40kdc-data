@@ -7,57 +7,82 @@ the loadout-grouping classifier. The corpus is the accuracy baseline: violations
 should be rare and real — a `code:unitId` cluster across many independent players
 is a data or checker bug, not mass cheating.
 
+The lists follow the game data current at their event. After a later MFM
+dataslate, violations and unresolved names that dataslate introduces are expected
+drift; a cluster is a bug only when the current MFM dump allows what the checker
+rejects.
+
 ## Headline
 
 - `examples/atc-viewer/src/data/atc-2026.json`: 248 lists (0 without text skipped)
 - `examples/atc-viewer/src/data/atc-5s.json`: 230 lists (2 without text skipped)
-- **Lists**: 478, parse failures: 18
-- **Legality**: 79 violating units across 50 lists
-- **Composition drift**: 33 dataset units
+- **Lists**: 478, parse failures: 16
+- **Legality**: 291 violating units across 94 lists
+- **Composition drift**: 52 dataset units
 
 ### Warnings by code
 
 | code | count |
 |---|--:|
-| `weapon-unresolved` | 691 |
-| `detachment-unresolved` | 219 |
-| `faction-unresolved` | 204 |
-| `leader-attachment-inferred` | 151 |
-| `multi-force` | 52 |
-| `unit-unresolved` | 38 |
-| `detachment-points-exceeded` | 17 |
-| `battle-size-unmapped` | 8 |
-| `enhancement-unresolved` | 8 |
-| `loadout-illegal` | 6 |
-| `points-mismatch` | 2 |
+| `weapon-unresolved` | 269 |
+| `detachment-unresolved` | 128 |
+| `enhancement-unresolved` | 114 |
+| `loadout-illegal` | 93 |
+| `unit-unresolved` | 47 |
+| `points-mismatch` | 36 |
+| `detachment-points-exceeded` | 31 |
+| `battle-size-unmapped` | 19 |
+| `leader-attachment-inferred` | 10 |
+| `disposition-unresolved` | 3 |
+| `faction-unresolved` | 1 |
 
 ### Loadout grouping by outcome
 
 | outcome | count |
 |---|--:|
-| `grouped` | 2876 |
-| `unit-unresolved` | 38 |
-| `wargear-unresolved` | 569 |
-| `single-model` | 3356 |
+| `grouped` | 3220 |
+| `unit-unresolved` | 35 |
+| `wargear-unresolved` | 155 |
+| `single-model` | 3513 |
 | `no-recorded-defaults` | 0 |
-| `solver-null` | 234 |
+| `solver-null` | 188 |
 
 ## Legality violations (ranked `code:unitId`)
 
 | violation | count |
 |---|--:|
-| `below-min:hyperadapted-raveners` | 29 |
-| `below-min:servitor-battleclade` | 24 |
-| `below-min:tormentors` | 14 |
-| `below-min:company-heroes` | 12 |
-| `exceeds-max:cadian-command-squad` | 9 |
-| `below-min:imperial-navy-breachers` | 8 |
-| `exceeds-max:broadside-battlesuits` | 4 |
-| `exceeds-max:rhino` | 4 |
-| `below-min:red-corsairs-raiders` | 3 |
-| `below-min:cultist-mob` | 2 |
-| `below-min:zoanthropes` | 2 |
-| `exceeds-allowance:khorne-berzerkers` | 2 |
+| `exceeds-max:boyz` | 66 |
+| `invalid-model-count:custodian-guard-sodality` | 35 |
+| `invalid-model-count:gretchin` | 33 |
+| `below-min:scout-squad` | 20 |
+| `invalid-model-count:custodian-wardens` | 20 |
+| `below-min:boyz` | 19 |
+| `below-min:kommandos` | 17 |
+| `exceeds-max:storm-speeder-hammerstrike` | 17 |
+| `exceeds-max:death-company-marines-with-jump-packs` | 15 |
+| `invalid-model-count:allarus-custodians` | 13 |
+| `below-min:victrix-honour-guard` | 12 |
+| `invalid-model-count:ghazghkull-thraka` | 11 |
+| `exceeds-max:impulsor` | 7 |
+| `swap-conflict:impulsor` | 7 |
+| `below-min:company-heroes` | 6 |
+| `exceeds-max:spectrus-kill-team` | 6 |
+| `exceeds-max:reiver-squad` | 5 |
+| `exceeds-max:fortis-kill-team` | 3 |
+| `exceeds-max:telemon-heavy-dreadnought` | 3 |
+| `below-min:grey-hunters` | 2 |
+| `exceeds-max:indomitor-kill-team` | 2 |
+| `exceeds-max:khorne-berzerkers` | 2 |
+| `exceeds-max:rhino` | 2 |
+| `invalid-model-count:boyz` | 2 |
+| `swap-conflict:grey-hunters` | 2 |
+| `below-min:hyperadapted-raveners` | 1 |
+| `exceeds-max:prince-yriel` | 1 |
+| `exceeds-max:sword-brethren-squad` | 1 |
+| `exceeds-max:warlock-conclave` | 1 |
+| `invalid-model-count:inquisitorial-agents` | 1 |
+| `invalid-model-count:tankbustas` | 1 |
+| `invalid-model-count:venatari-with-verutum-lances` | 1 |
 
 ## `solver-null` grouping failures (ranked unit)
 
@@ -66,245 +91,230 @@ partition solver could not decompose — bad `replaces` data or genuinely illega
 
 | unit | count |
 |---|--:|
-| `pathfinder-team` | 59 |
-| `hyperadapted-raveners` | 29 |
-| `tormentors` | 14 |
-| `plague-marines` | 13 |
-| `servitor-battleclade` | 12 |
-| `victrix-honour-guard` | 12 |
-| `paladin-squad` | 11 |
-| `warp-spiders` | 10 |
-| `howling-banshees` | 7 |
-| `nobz` | 7 |
+| `incursor-squad` | 23 |
+| `boyz` | 19 |
+| `intercessor-squad` | 18 |
+| `custodian-wardens` | 17 |
+| `custodian-guard-sodality` | 16 |
+| `kommandos` | 16 |
+| `death-company-marines-with-jump-packs` | 15 |
+| `ghazghkull-thraka` | 11 |
+| `scout-squad` | 10 |
 | `company-heroes` | 6 |
-| `deathwing-knights` | 6 |
-| `breacher-team` | 5 |
-| `havocs` | 5 |
-| `brotherhood-terminator-squad` | 4 |
-| `chaos-terminator-squad` | 4 |
-| `chaos-terminators` | 3 |
-| `fire-dragons` | 3 |
+| `nobz` | 6 |
+| `deffkoptas` | 3 |
+| `eradicator-squad-with-heavy-bolters` | 3 |
 | `flash-gitz` | 3 |
-| `piranhas` | 3 |
-| `blightlord-terminators` | 2 |
-| `raptors` | 2 |
-| `sisters-of-battle-squad` | 2 |
-| `swooping-hawks` | 2 |
-| `termagants` | 2 |
-| `cultist-mob` | 1 |
-| `dark-reapers` | 1 |
-| `deathwing-terminator-squad` | 1 |
-| `inquisitorial-agents` | 1 |
-| `red-corsairs-raiders` | 1 |
-| `strike-team` | 1 |
-| `striking-scorpions` | 1 |
-| `zoanthropes` | 1 |
+| `infiltrator-squad` | 3 |
+| `wolf-scouts` | 3 |
+| `deathwatch-veterans` | 2 |
+| `indomitor-kill-team` | 2 |
+| `spectrus-kill-team` | 2 |
+| `tankbustas` | 2 |
+| `allarus-custodians` | 1 |
+| `crusader-squad` | 1 |
+| `deathwatch-kill-team` | 1 |
+| `fortis-kill-team` | 1 |
+| `gretchin` | 1 |
+| `reiver-squad` | 1 |
+| `sword-brethren-squad` | 1 |
+| `the-twin-lance` | 1 |
 
 ## Unresolved names: `battle-size-unmapped`
 
 | raw name | count |
 |---|--:|
-| `Combat Patrol (500 Point limit)` | 8 |
+| `Combat Patrol (500 Point limit)` | 19 |
 
 ## Unresolved names: `detachment-unresolved`
 
 | raw name | count |
 |---|--:|
-| `Attached unit 1` | 14 |
-| `Space Marines` | 13 |
-| `Orks` | 9 |
-| `T’au Empire` | 9 |
-| `Ultramarines` | 8 |
-| `Space Wolves` | 7 |
-| `Tyranids` | 7 |
-| `Chaos Space Marines` | 6 |
-| `Necrons` | 5 |
-| `Adeptus Custodes` | 4 |
-| `Astra Militarum` | 4 |
-| `Blood Angels` | 4 |
-| `Chaos Daemons` | 4 |
-| `Thousand Sons` | 4 |
-| `++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++` | 3 |
-| `Emperor’s Children` | 3 |
-| `Imperial Knights` | 3 |
-| `Leagues of Votann` | 3 |
-| `World Eaters` | 3 |
-| `Armoured Trailblazers, Farseekers, and Hearthguard Covenant` | 2 |
-| `Attached Unit 1` | 2 |
-| `Attached Units` | 2 |
-| `Chaos Knights` | 2 |
-| `Dark Angels` | 2 |
-| `Deathwatch` | 2 |
-| `Team Name: Canton Warhammer` | 2 |
-| `———————————————-` | 1 |
-| `<br>` | 1 |
-| `~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~` | 1 |
-| `16 naked men walk into a bar` | 1 |
-| `1x Command-link Drone (Aura)` | 1 |
-| `1x Straight silver knife` | 1 |
-| `Adeptus Mechanicus` | 1 |
-| `Aeldari` | 1 |
-| `Air Force Gaming` | 1 |
-| `Battle Size: Strike Force (2000 point limit)` | 1 |
-| `Black Templars` | 1 |
-| `Brace for Impact` | 1 |
-| `Death Guard` | 1 |
-| `Drukhari` | 1 |
-| `Faction Used: Tyranids` | 1 |
-| `Faction: Adeptus Custodes` | 1 |
-| `Faction: Chaos Space Marines` | 1 |
-| `Faction: Orks` | 1 |
-| `Faction: Thousand Sons` | 1 |
-| `Factions Used: Astra Militarum` | 1 |
-| `Factions Used: Chaos Daemons` | 1 |
-| `Factions Used: Death Guard` | 1 |
-| `Factions Used: Imperial Knights, Agents of the Imperium` | 1 |
-| `Factions used: Necrons` | 1 |
-| `Factions Used: T'au Empire` | 1 |
-| `Factions Used: World Eaters` | 1 |
-| `Force Dispositions: Disruption` | 1 |
-| `Force Dispositions: Disruption, Purge the Foe` | 1 |
-| `Force Dispositions: Disruption, Reconnaissance` | 1 |
-| `Force Dispositions: Priority Assets, Reconnaissance` | 1 |
-| `Force Dispositions: Reconnaissance` | 1 |
-| `Force Dispositions: Take and Hold` | 1 |
-| `Full Send 40K` | 1 |
-| `Genestealer Cults` | 1 |
-| … 58 more | |
+| `Lions of the Emperor and Silent Hunters` | 8 |
+| `Shield Host and Tharanatoi Hammerblow` | 4 |
+| `CHARACTER` | 3 |
+| `Company of Hunters and Darkflight Pursuit` | 3 |
+| `Legends of Saga and Song and Saga of the Great Wolf` | 3 |
+| `Liberator Assault Group` | 3 |
+| `Rage-cursed Onslaught` | 3 |
+| `Forgefather’s Seekers and Fulguris Task Force` | 2 |
+| `Green Tide and More Dakka!` | 2 |
+| `Librarius Conclave and Shadowmark Talon` | 2 |
+| `Librarius Conclave and Vanguard Spearhead` | 2 |
+| `More Dakka! and Speedwaaagh!` | 2 |
+| `Saga of the Great Wolf and Veterans of the Fang` | 2 |
+| `Talons of the Emperor` | 2 |
+| `(Running Take and Hold)` | 1 |
+| `++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++` | 1 |
+| `10x Neophyte Hybrids unit, 20x Neophyte Hybrids + Acolyte Iconward` | 1 |
+| `10x Purestrain Genestealers + Patriarch, &` | 1 |
+| `1995 points total` | 1 |
+| `5x Purestrain Genestealers` | 1 |
+| `All battle wagons and kill rig have boarding ramps unit enhancement` | 1 |
+| `Ambush Predators and Vanguard Onslaught,` | 1 |
+| `and Ritual of Regeneration` | 1 |
+| `Army points: 1995 points.` | 1 |
+| `Army Upgrade: 3 Units of Flawless Blades with Beguiling Grotesquerie Upgrades` | 1 |
+| `Army Upgrades and Enhancements (list on which model):` | 1 |
+| `Army upgrades and enhancements: Curse of Life Enhancement on Sorcerer in Terminator Armour` | 1 |
+| `Asemalators 4+ inv safe on both` | 1 |
+| `Attached units: See list below` | 1 |
+| `Attached: Sloppity bile piper attached to plague bearers, skull master attached to blood crushers` | 1 |
+| `Bastion Task Force and Legacy of Grace` | 1 |
+| `Beastboss leading beast snagga boyz` | 1 |
+| `Bully Boyz and Rollin' Deff (3 Detachment` | 1 |
+| `Companions of Vehemence and Marshal's Household` | 1 |
+| `Dark Age Arsenal and Ironstorm Spearhead` | 1 |
+| `Demon Lords` | 1 |
+| `Detachment Used: Assimilation Swam and Talons of the Norn Queen` | 1 |
+| `Detachment Used: Heroes of the Uprising, Purestrain Broodswarm, and Xenocult Masses` | 1 |
+| `Detatchments used: Hexwarp Thrallband` | 1 |
+| `Disposition Used: Primary Assets` | 1 |
+| `Disposition Used: Priority Assets` | 1 |
+| `Disposition used: priority assets,` | 1 |
+| `Disposition used: TAKE AND HOLD` | 1 |
+| `Disposition: Take and hold` | 1 |
+| `Empyric Onslaught (Sorcerer)` | 1 |
+| `Enforcer attached to Fireknife, Coldstar attached to Sunforge, Farsight attached to Sunforge` | 1 |
+| `Enhancement: gene-tailored toxin on Sanctus` | 1 |
+| `Enhancement: Surgical Saboteur (10 pts - on Echamp)` | 1 |
+| `Enhancements used: snarling rivalry on 2 executioners` | 1 |
+| `Enhancements: Auric Mantle on Sield-Captain, From the Hall of Armouries on Shield-Captain in Allarus Terminator Armour` | 1 |
+| `Enhancements: Bilemaw Blight on Malignant Plaguecaster, Rejuvenating Swarm on Plague Surgeon, Tendrilous Emissions on Lord of Virulence` | 1 |
+| `Enhancements: Curse of Life (Terminator Sorcerer)` | 1 |
+| `Enhancements: Malice Made Manifest on skull master - Bane-Forged Weapons (upgrade) both demonettes` | 1 |
+| `Exalted Sorcerer Attached to ten man unit of Rubric Marines.` | 1 |
+| `Factions Used: Genestealer Cult` | 1 |
+| `Factions Used: Tyranids` | 1 |
+| `Firestorm Assault Force and Librarius Conclave` | 1 |
+| `Forgefather’s Seekers and Subversion Assets` | 1 |
+| `Freebooter Krew and More Dakka!` | 1 |
+| `Freebooter Krew and Rollin' Deff` | 1 |
+| … 41 more | |
+
+## Unresolved names: `disposition-unresolved`
+
+| raw name | count |
+|---|--:|
+| `Disruption(using this one` | 1 |
+| `TAKE AN HOLD` | 1 |
+| `Using Reconnaissance` | 1 |
 
 ## Unresolved names: `enhancement-unresolved`
 
 | raw name | count |
 |---|--:|
+| `Admonimortis` | 11 |
+| `Psyk-out Grenades (Upgrade)` | 9 |
+| `Dead Shiny Shootas (Upgrade)` | 7 |
+| `Fusillade` | 7 |
+| `Bloodthirsty Belligerence` | 5 |
+| `Fierce Conqueror` | 4 |
+| `Panoptispex` | 4 |
 | `Gyro-optimized Actuators` | 3 |
-| `Assassins' Eye (Upgrade)` | 1 |
+| `Interred Expertise (Upgrade)` | 3 |
+| `Mork’s Kunnin’` | 3 |
+| `Recon Hunter` | 3 |
+| `Temporal Corridor` | 3 |
+| `Thirst for Glory (Upgrade)` | 3 |
+| `Angel’s Fang` | 2 |
+| `Auric Mantle` | 2 |
+| `Big Gob` | 2 |
+| `Carmine Reliquary` | 2 |
+| `Da Kaptin` | 2 |
+| `Encircling Hunter` | 2 |
+| `Eye of the Hunter` | 2 |
+| `Mnemo-locked Shrine Cipher` | 2 |
+| `The Honour Vehement` | 2 |
+| `Adamantine Talisman` | 1 |
+| `Aegis Projector` | 1 |
+| `Atrapos lascutter, Graviton singularity cannon and Purgation’s hand` | 1 |
+| `Bionik Workshop` | 1 |
+| `Blades of Valour` | 1 |
+| `Blood Boil` | 1 |
+| `Bombast Omnivox` | 1 |
+| `Champion of Humanity` | 1 |
+| `Chastiser gatling cannon, Frag bombard, Questoris heavy stubber, Titanic feet and Vengeful tread` | 1 |
+| `Da Biggest Boss` | 1 |
+| `Efficient Aggression` | 1 |
+| `Elder’s Guidance` | 1 |
+| `Fierce Example (Upgrade)` | 1 |
+| `Guiding Omens` | 1 |
+| `Hero of the Chapter` | 1 |
 | `Kustom Shokk Box` | 1 |
-| `Mortality Shroud (Aura) (Upgrade)` | 1 |
-| `Stave of Kurnous` | 1 |
+| `Master of Machine War` | 1 |
+| `Master of Manoeuvre` | 1 |
+| `Master-crafted Weapon` | 1 |
+| `Merciless Denunciation` | 1 |
+| `Mounted Strategist` | 1 |
+| `Paragon of Fury` | 1 |
+| `Praesidius` | 1 |
+| `Rage-fuelled Warrior` | 1 |
+| `Raucous Warcaller` | 1 |
+| `Sanguinary Tear (Aura)` | 1 |
+| `Stubborn Tenacity` | 1 |
 | `Supa-Burny Fuel` | 1 |
+| `Supa-Cybork Body` | 1 |
+| `The Blade Driven Deep` | 1 |
+| `Weaver of Sagas` | 1 |
 
 ## Unresolved names: `faction-unresolved`
 
 | raw name | count |
 |---|--:|
-| `++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++` | 26 |
-| `Attached Unit 1` | 5 |
-| `Factions Used: Orks` | 4 |
-| `+++++++` | 3 |
-| `Disruption` | 3 |
-| `Factions Used: Adeptus Custodes` | 3 |
-| `+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++` | 2 |
-| `Attached Units` | 2 |
-| `Canton Warhammer` | 2 |
-| `Factions Used: Adeptus Astartes (Dark Angels)` | 2 |
-| `Factions Used: Astra Militarum` | 2 |
-| `Factions Used: Imperial Knights` | 2 |
-| `Factions Used: Necrons` | 2 |
-| `Factions Used: T'au Empire` | 2 |
-| `Factions Used: Tyranids` | 2 |
-| `-Factions Used: Chaos Space Marinee` | 1 |
-| `.....have...` | 1 |
-| `(1990 points)` | 1 |
-| `[1975 points]` | 1 |
-| `*************************************` | 1 |
-| `++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++` | 1 |
-| `1x Battlesuit fists` | 1 |
-| `1x Gaunt’s chainsword` | 1 |
-| `1x The Blade of Shadows` | 1 |
-| `Advanced Acquisition Cadre and Kauyon` | 1 |
-| `Air Force gaming` | 1 |
-| `Ambush Predators and Crusher Stampede (3 Detachment Points)` | 1 |
-| `Army: Tyranids` | 1 |
-| `Assimilation Swarm and Talons of the Norn Queen` | 1 |
-| `Awakened Dynasty (3 Detachment Points)` | 1 |
 | `Behind them thundered the infamous biker gang known as the Hogs of War. Their leader, Bryce, wore enough leather, chains, and bad decisions to sink a small boat. The bikers swerved around the convoy, revving engines and shouting threats that sounded suspiciously rehearsed. Chris merely adjusted his sunglasses and informed the team that things had become "interesting."` | 1 |
-| `Bryce ordered the attack, and chaos erupted across the highway. Daren kicked open the van door and stood on the running board like an action hero who had absolutely no concern for insurance premiums. Several bikers attempted to block the road, only to discover that Brent had converted a tournament terrain crate into a makeshift battering ram. Nobody was seriously hurt, but motorcycles, hay bales, and at least one portable toilet achieved low orbit before crashing back to Earth.` | 1 |
-| `Coulter Cloward` | 1 |
-| `Dan Raymond` | 1 |
-| `Disposition : Reconaissance` | 1 |
-| `Disposition Selected: Priority Assets` | 1 |
-| `Disposition used: Disruption` | 1 |
-| `Disposition used: Purge the Foe` | 1 |
-| `Disposition Used: Purge the Foe (Reconnaissance)` | 1 |
-| `Disposition Used: Recon` | 1 |
-| `Disposition used: Take and hold` | 1 |
-| `Disposition: Purge` | 1 |
-| `Dumpster Protection Syndicate` | 1 |
-| `Evan Shelburne` | 1 |
-| `Eventually, da big boss couldn't crack every single skull 'imself—cuz dere's only so many 'eads ya can smash at once, right? So 'e needed some Nobs to do da delegatin'. 'E went out an' found da biggest, meanest boyz around—da ones dat were proper killy, but still smaller dan 'im, cuz nobody is bigger dan da Boss! 'E made 'em 'is under-bosses to keep da smaller gits in line.` | 1 |
-| `Faction Orks` | 1 |
-| `Faction Used: Necrons` | 1 |
-| `Faction Used: T'au Empire` | 1 |
-| `Faction: Emperor’s Children` | 1 |
-| `Faction: Leagues of Votann` | 1 |
-| `Faction: Space Wolves` | 1 |
-| `Factions used:   Astra Militarum` | 1 |
-| `Factions Used: Admech` | 1 |
-| `Factions Used: Black Templars` | 1 |
-| `Factions Used: chaos space marines` | 1 |
-| `Factions used: Dark Angels` | 1 |
-| `Factions Used: Drukhari` | 1 |
-| `Factions Used: EC` | 1 |
-| `Factions Used: Genestealer Cult` | 1 |
-| `Factions used: Leagues of Votann` | 1 |
-| … 97 more | |
 
 ## Unresolved names: `leader-attachment-inferred`
 
 | raw name | count |
 |---|--:|
-| `Technomancer` | 36 |
-| `Painboy` | 18 |
-| `Hospitaller` | 11 |
-| `Orikan the Diviner` | 10 |
-| `Sanguinary Priest` | 10 |
-| `Skitarii Marshal` | 8 |
-| `Cato Sicarius` | 7 |
-| `Chronomancer` | 7 |
-| `Lieutenant` | 7 |
-| `Castellan` | 6 |
-| `Plasmancer` | 6 |
-| `Bannernob` | 5 |
-| `Cybernetica Datasmith` | 4 |
-| `Biophagus` | 2 |
-| `Lieutenant in Phobos Armour` | 2 |
-| `Locus` | 2 |
-| `Master of Executions` | 2 |
-| `Nexos` | 2 |
-| `Ancient` | 1 |
-| `Apothecary` | 1 |
-| `Dialogus` | 1 |
-| `Dogmata` | 1 |
-| `Imagifier` | 1 |
-| `Warlock` | 1 |
+| `Mek` | 3 |
+| `Bannernob` | 2 |
+| `Bigboss` | 1 |
+| `Ravenwing Command Squad` | 1 |
+| `Skitarii Marshal` | 1 |
+| `Technomancer` | 1 |
+| `Weirdboy` | 1 |
 
 ## Unresolved names: `loadout-illegal`
 
 | raw name | count |
 |---|--:|
-| `Rhino` | 4 |
+| `Boyz` | 37 |
+| `Storm Speeder Hammerstrike` | 17 |
+| `Death Company Marines with Jump Packs` | 15 |
+| `Impulsor` | 7 |
+| `Telemon Heavy Dreadnought` | 3 |
+| `Grey Hunters` | 2 |
+| `Indomitor Kill Team` | 2 |
 | `Khorne Berzerkers` | 2 |
+| `Rhino` | 2 |
+| `Spectrus Kill Team` | 2 |
+| `Fortis Kill Team` | 1 |
+| `Prince Yriel` | 1 |
+| `Sword Brethren Squad` | 1 |
+| `Warlock Conclave` | 1 |
 
 ## Unresolved names: `unit-unresolved`
 
 | raw name | count |
 |---|--:|
-| `10x Vigilators` | 3 |
+| `Lootas` | 5 |
+| `Uriel Ventris` | 3 |
+| `Venerable Contemptor Dreadnought` | 3 |
 | `10x Poxwalkers` | 2 |
 | `1x Foetid Bloat-drone` | 2 |
 | `1x Foetid Bloat-drone with heavy blight launcher` | 2 |
-| `4x Witchseekers` | 2 |
-| `**Beetle exterminator of the occult**` | 1 |
-| `*ATC Yellow knights` | 1 |
-| `11x Storm Guardians` | 1 |
+| `Aleya` | 2 |
+| `Burna Boyz` | 2 |
+| `Centurion Devastator Squad` | 2 |
+| `Rukkatrukk Squigbuggy` | 2 |
+| `Suppressor Squad` | 2 |
+| `10x Inquisitorial Agents` | 1 |
 | `1x Defiler` | 1 |
 | `2x Chaos Spawn` | 1 |
 | `3x Deathshroud Terminators` | 1 |
-| `5x Corsair Voidreavers` | 1 |
 | `6x Deathshroud Terminators` | 1 |
-| `ATC FINAL` | 1 |
-| `ATC Necron SSA` | 1 |
-| `ATC test (Final Day/Purestrain)` | 1 |
 | `Awakened Dynasty` | 1 |
 | `Char1: 1x Daemon Prince of Nurgle` | 1 |
 | `Char2: 1x Lord of Contagion` | 1 |
@@ -312,120 +322,137 @@ partition solver could not decompose — bad `replaces` data or genuinely illega
 | `Char4: 1x Tallyman` | 1 |
 | `CHARACTERS` | 1 |
 | `Commander in Enforcer Bdattlesuit` | 1 |
-| `Draigo will be back, he just went to get milk and cigarettes...` | 1 |
+| `Devastator Squad` | 1 |
 | `Drukhari` | 1 |
 | `eating ghazzz` | 1 |
 | `I hit on 2s, stop asking why.  idk man, GW made Psychic weapons dumb.` | 1 |
 | `Keep Rolling` | 1 |
-| `khroneocalypse` | 1 |
-| `The Maurauders` | 1 |
-| `This is America, We just wanna party!` | 1 |
+| `Shokkjump Dragsta` | 1 |
 | `Triarch Stalker (Green)` | 1 |
+| `Venerable Land Raider` | 1 |
 
 ## Unresolved names: `weapon-unresolved`
 
 | raw name | count |
 |---|--:|
-| `Missile Drone` | 67 |
-| `Panspectral Scanner` | 42 |
-| `Medi-pack` | 31 |
-| `MV15 Gun Drone` | 29 |
-| `Icon of Despair (Aura)` | 25 |
-| `Leader’s bio-weapons` | 21 |
-| `Praesidium Shield` | 21 |
-| `Blade tail and whip coils` | 19 |
-| `Character` | 19 |
-| `Nullstone Field Generator (Aura)` | 19 |
-| `Rollbar Searchlight` | 19 |
-| `Bomb Squig` | 18 |
-| `Shadowfield` | 16 |
-| `Collar of Khorne` | 15 |
-| `Remote Mine` | 14 |
-| `Weapons of the Final Triarch` | 14 |
-| `Melta Mine` | 13 |
-| `Twin killsaws` | 12 |
-| `Death Korps Medi-pack` | 11 |
-| `Tyrant’s Claw heavy flamer` | 11 |
-| `Multiwave Comms Array` | 9 |
-| `The Lion Helm` | 9 |
-| `Vox‑relay Beacon` | 8 |
-| `Macro-scalpel` | 7 |
-| `Stimm-needler` | 7 |
-| `Choppas` | 6 |
-| `Hover Drone` | 6 |
+| `Repulsor Executioner defensive array` | 26 |
+| `Sanguinary Banner` | 23 |
+| `Scout sniper rifle` | 22 |
+| `Black Knight combat weapon` | 17 |
+| `Vanguard Veteran weapon` | 15 |
+| `Sternguard bolt pistol` | 13 |
+| `Sternguard bolt rifle` | 13 |
+| `Sternguard heavy bolter` | 12 |
+| `Lancer laser destroyer` | 8 |
+| `Infiltrator Comms Array` | 7 |
+| `Boss Nob` | 6 |
 | `Refractor Field` | 6 |
-| `Advanced Guardian Drone` | 5 |
-| `Command-link Drone (Aura)` | 5 |
-| `Flip Belt` | 5 |
-| `Force-orb cane` | 5 |
-| `Tome‐skull` | 5 |
-| `Endurant Shield` | 4 |
-| `Fabricator Claw Array (Aura)` | 4 |
-| `Gloom Prism (Aura)` | 4 |
-| `Nurgle` | 4 |
-| `Preymark Crest` | 4 |
-| `Serpent shield` | 4 |
-| `Alchemyk Counteragents` | 3 |
-| `Aquiline Prow` | 3 |
-| `Forceshield` | 3 |
-| `Grot Assistant` | 3 |
-| `Grot Oiler` | 3 |
+| `Repulsor defensive array` | 6 |
+| `Deffgun` | 5 |
+| `Reiver Grav-chute` | 5 |
+| `Stormfury missiles` | 5 |
+| `Twin Icarus rocket pod` | 5 |
+| `Saddlegit weapons` | 4 |
+| `Astartes shotgun` | 3 |
+| `Contemptor combat weapon` | 3 |
 | `Gyro-optimised actuators [+15 points]` | 3 |
-| `Pech’ra` | 3 |
-| `Reaper chain-cleaver and Thermal spear` | 3 |
-| `Servo-scribes` | 3 |
-| `Vigilator Sister Superior: Executioner greatblade` | 3 |
-| `Vigilator: 9 with Executioner greatblade` | 3 |
-| `2 Armiger autocannons` | 2 |
-| `Alchemicus Familiar` | 2 |
-| `Antimatter Meteor` | 2 |
-| `Armoured feet and Questoris heavy stubber` | 2 |
-| `Atomiser beams` | 2 |
+| `Invictus` | 3 |
+| `Sword of Idaeus` | 3 |
+| `Accelerator autocannon` | 2 |
+| `Armiger autocannons, Armoured feet and Questoris heavy stubber` | 2 |
 | `Augury halo [+20 points]` | 2 |
 | `Bannernob` | 2 |
-| `Broadside Shas’ui` | 2 |
-| `Cadian Veteran Guardsman` | 2 |
-| `Cavalry sabre & clawed limbs` | 2 |
-| … 74 more | |
+| `Brutalis bolt rifles` | 2 |
+| `Burna Boy` | 2 |
+| `Centurion fists` | 2 |
+| `Centurion missile launcher` | 2 |
+| `Cuttin’ flames` | 2 |
+| `Gun Drone, 2x Shield Drone` | 2 |
+| `Hot-shot laspistol (ORANGE)` | 2 |
+| `Hot-shot marksman rifle (RED)` | 2 |
+| `Melta Mine (ORANGE/same guy as pistol)` | 2 |
+| `Screamer-Killer talons` | 2 |
+| `Somnus` | 2 |
+| `Spanner` | 2 |
+| `Steed's savage claws` | 2 |
+| `Twin fragstorm grenade launcher` | 2 |
+| `Vox-caster (BLUE)` | 2 |
+| `2 with Manreaper` | 1 |
+| `5 with Manreaper` | 1 |
+| `Additional Plaguespurt Gauntlet` | 1 |
+| `Agent firearm` | 1 |
+| `allarus` | 1 |
+| `Chirugeon's tools` | 1 |
+| `Gauntlets of Ultramar in` | 1 |
+| `Kustom shokk rifle` | 1 |
+| `Missile Drone, 2x Weapon support system` | 1 |
+| `Missile Drone, Weapon support system` | 1 |
+| `Prosperine kopesh` | 1 |
+| `Purgation’s hand [+20 points]` | 1 |
+| `Questoris heavy stubber, Rapid-fire battle cannon, Reaper chainsword and Stormspear rocket pod` | 1 |
+| `Shieldbreaker missile launchers, 2 Twin meltaguns, Archeotech autoloaders [+25 points], Plasma decimator, Titanic feet, Twin siegebreaker cannon and Volcano lance` | 1 |
+| `Shuriken Pistol Enhancement: Camouflaged Snipers` | 1 |
+| `Tempest bolter` | 1 |
+| `Terropulse missiles` | 1 |
+| `Trygon Character upgrade` | 1 |
 
 ## Composition drift (dataset-wide)
 
 Units whose composition `default_weapon_ids` reference ids unreachable from
 `weapon_ids` ∪ wargear-option grants (stale defaults under a newer loadout).
 
+- `adepta-sororitas/sanctifiers` — unreachable: salvationist-medikit
+- `adeptus-astartes/azrael` — unreachable: the-lion-helm
+- `adeptus-astartes/captain-on-bike` — unreachable: heavy-bolt-pistol-captain-on-bike, master-crafted-power-weapon-captain-on-bike
+- `adeptus-astartes/corvus-blackstar` — unreachable: auspex-array
 - `adeptus-astartes/drop-pod` — unreachable: drop-pod
-- `adeptus-astartes/terminator-assault-squad` — unreachable: storm-shield
-- `adeptus-astartes/thunderhawk-gunship` — unreachable: thunderhawk-cluster-bombs
-- `adeptus-astartes/wardens-of-ultramar` — unreachable: storm-shield
-- `adeptus-astartes/wolf-guard-battle-leader` — unreachable: storm-shield
-- `adeptus-astartes/wolf-guard-headtakers` — unreachable: storm-shield
+- `adeptus-astartes/victrix-honour-guard` — unreachable: banner-of-macragge
 - `adeptus-astartes/wulfen` — unreachable: death-totem
-- `adeptus-astartes/wulfen-with-storm-shields` — unreachable: death-totem
+- `adeptus-custodes/gilded-blades-custodian-guard` — unreachable: praesidium-shield
+- `adeptus-custodes/shield-captain` — unreachable: praesidium-shield
 - `adeptus-mechanicus/archaeopter-fusilave` — unreachable: command-uplink
 - `adeptus-mechanicus/archaeopter-stratoraptor` — unreachable: command-uplink
 - `adeptus-mechanicus/archaeopter-transvector` — unreachable: command-uplink
+- `aeldari/corsair-voidscarred` — unreachable: channeller-stones
+- `aeldari/death-jester` — unreachable: flip-belt
+- `aeldari/leystalker` — unreachable: drakolithe-once-per-battle-per-token
+- `aeldari/shadowseer` — unreachable: flip-belt
+- `aeldari/solitaire` — unreachable: flip-belt
+- `aeldari/storm-guardians` — unreachable: serpent-shield
+- `aeldari/troupe` — unreachable: flip-belt
+- `aeldari/troupe-master` — unreachable: flip-belt
 - `aeldari/wraithknight` — unreachable: scattershield
 - `aeldari/wraithknight-with-ghostglaive` — unreachable: scattershield
-- `agents-of-the-imperium/aquila-kill-team` — unreachable: boltgun, plasma-pistol
+- `aeldari/ynnari-archon` — unreachable: shadow-field
+- `agents-of-the-imperium/corvus-blackstar` — unreachable: auspex-array
 - `agents-of-the-imperium/inquisitor` — unreachable: blessed-wardings
-- `astra-militarum/aegis-defence-line` — unreachable: aegis-defence-line
+- `agents-of-the-imperium/inquisitor-coteaz` — unreachable: glovodan-psyber-eagle
+- `agents-of-the-imperium/rogue-trader-entourage` — unreachable: healing-serum
+- `agents-of-the-imperium/sanctifiers` — unreachable: salvationist-medikit
 - `astra-militarum/bullgryn-squad` — unreachable: slabshield
-- `astra-militarum/cadian-command-squad` — unreachable: master-vox, regimental-standard
-- `astra-militarum/cyclops-demolition-vehicle` — unreachable: cyclops-demolition-vehicle
-- `chaos-daemons/feculent-gnarlmaw` — unreachable: feculent-gnarlmaw
-- `chaos-daemons/skull-altar` — unreachable: skull-altar
+- `astra-militarum/cadian-command-squad` — unreachable: master-vox, medi-pack, regimental-standard
+- `astra-militarum/commissar-graves` — unreachable: aquiline-prow
+- `chaos-daemons/flesh-hounds` — unreachable: collar-of-khorne
+- `chaos-daemons/karanak` — unreachable: brass-collar-of-bloody-vengeance
 - `chaos-space-marines/dark-commune` — unreachable: chaos-icon
+- `drukhari/archon` — unreachable: shadowfield
 - `genestealer-cults/achilles-ridgerunners` — unreachable: flare-launcher
+- `genestealer-cults/biophagus` — unreachable: alchemicus-familiar
 - `grey-knights/grey-knights-thunderhawk-gunship` — unreachable: thunderhawk-cluster-bombs
 - `leagues-of-votann/einhyr-champion` — unreachable: weavefield-crest
 - `leagues-of-votann/einhyr-hearthguard` — unreachable: weavefield-crest
 - `leagues-of-votann/hearthkyn-warriors` — unreachable: weavefield-crest
-- `leagues-of-votann/hekaton-land-fortress` — unreachable: pan-spectral-scanner
+- `leagues-of-votann/hekaton-land-fortress` — unreachable: panspectral-scanner
+- `leagues-of-votann/ironkin-steeljacks-with-heavy-volkanite-disintegrators` — unreachable: preymark-crest
+- `leagues-of-votann/ironkin-steeljacks-with-melee-weapons` — unreachable: preymark-crest
 - `leagues-of-votann/kahl` — unreachable: rampart-crest
 - `leagues-of-votann/uthar-the-destined` — unreachable: rampart-crest
+- `necrons/nekrosor-ammentar` — unreachable: nullstone-field-generator-aura
 - `necrons/overlord-with-translocation-shroud` — unreachable: resurrection-orb
-- `necrons/tesseract-vault` — unreachable: tesla-sphere
+- `tau-empire/commander-shadowsun` — unreachable: advanced-guardian-drone, command-link-drone-aura
+- `tau-empire/the-twin-lance` — unreachable: mv15-gun-drone
 - `tau-empire/tiger-shark` — unreachable: transport-bay
+- `world-eaters/flesh-hounds` — unreachable: collar-of-khorne
 
 ## Parse failures
 
@@ -434,14 +461,12 @@ Units whose composition `default_weapon_ids` reference ids unreachable from
 - [Necrons] “I need Matt Estrada to notice me.” (`examples/atc-viewer/src/data/atc-2026.json`) — no-adapter-matched: tried 10 formats, none recognised the input
 - [Thousand Sons] “Player Name: Daniel Sansone” (`examples/atc-viewer/src/data/atc-2026.json`) — no-adapter-matched: tried 10 formats, none recognised the input
 - [Leagues of Votann] “Player Name: David Clark” (`examples/atc-viewer/src/data/atc-2026.json`) — no-adapter-matched: tried 10 formats, none recognised the input
-- [T'au Empire] “https://youtu.be/73zK-PjmyKY?is=05-jrq1kNXnTIqSL” (`examples/atc-viewer/src/data/atc-2026.json`) — decode-failed: failed to decode ListForge payload: decodeListForge: input is not a ListForge payload (expected raw JSON, or a gzip+base64 segment beginning with "H4sIA…")
 - [Space Marines (Astartes)] “Player Name: Stephen Boone” (`examples/atc-viewer/src/data/atc-2026.json`) — no-adapter-matched: tried 10 formats, none recognised the input
 - [Adeptus Custodes] “Player Name: Casey Espich” (`examples/atc-viewer/src/data/atc-2026.json`) — no-adapter-matched: tried 10 formats, none recognised the input
 - [Leagues of Votann] “Player Name: Alex Mann” (`examples/atc-viewer/src/data/atc-2026.json`) — no-adapter-matched: tried 10 formats, none recognised the input
 - [T'au Empire] “Player Name: Alexander Standeven” (`examples/atc-viewer/src/data/atc-2026.json`) — no-adapter-matched: tried 10 formats, none recognised the input
 - [World Eaters] “+ PLAYER NAME: Will Mitchell” (`examples/atc-viewer/src/data/atc-2026.json`) — no-adapter-matched: tried 10 formats, none recognised the input
 - [Astra Militarum] “Player Name:  Mike "Big Daddy" V” (`examples/atc-viewer/src/data/atc-2026.json`) — no-adapter-matched: tried 10 formats, none recognised the input
-- [Space Marines (Astartes)] “https://youtu.be/8VIVGgzMWsc?is=PIVpfzbejnmHjRjU (2000 po…” (`examples/atc-viewer/src/data/atc-5s.json`) — decode-failed: failed to decode ListForge payload: decodeListForge: input is not a ListForge payload (expected raw JSON, or a gzip+base64 segment beginning with "H4sIA…")
 - [Thousand Sons] ““Be that word our sign of parting, bird or fiend!” I shri…” (`examples/atc-viewer/src/data/atc-5s.json`) — no-adapter-matched: tried 10 formats, none recognised the input
 - [Space Marines (Astartes)] “Player Name: Luke Henderson” (`examples/atc-viewer/src/data/atc-5s.json`) — no-adapter-matched: tried 10 formats, none recognised the input
 - [Dark Angels] “[  ] Player name: John trotter” (`examples/atc-viewer/src/data/atc-5s.json`) — decode-failed: input looks like JSON but failed to parse: Unexpected non-whitespace character after JSON at position 5 (line 1 column 6)

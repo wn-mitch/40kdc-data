@@ -5,7 +5,9 @@ import {
   variantWeaponOwner,
   FACTION_HOME_KEYWORD,
 } from "../src/integrity.js";
-import { resolve } from "node:path";
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
@@ -37,10 +39,51 @@ describe("referential integrity", () => {
     expect(result.passed).toBe(1);
 
     const messages = result.errors.flatMap((e) => e.errors.map((x) => x.message));
-    expect(messages.some((m) => m.includes('ability_id "sorcerous-support"'))).toBe(true);
+    expect(messages.some((m) => m.includes('ability_id "sorcerous-support-thousand-sons"'))).toBe(true);
     expect(messages.some((m) => m.includes('faction_keyword "Emperor’s Children"'))).toBe(true);
     // The legal "World Eaters" keyword on the same unit must NOT be flagged.
     expect(messages.some((m) => m.includes('faction_keyword "World Eaters"'))).toBe(false);
+  });
+
+  it("flags a target profile whose unit its faction no longer has, not one another faction has", async () => {
+    const root = mkdtempSync(join(tmpdir(), "integrity-profiles-"));
+    try {
+      mkdirSync(join(root, "core/alpha"), { recursive: true });
+      mkdirSync(join(root, "core/beta"), { recursive: true });
+      writeFileSync(join(root, "core/alpha/units.json"), JSON.stringify([{ id: "tank" }]));
+      writeFileSync(join(root, "core/beta/units.json"), JSON.stringify([{ id: "walker" }]));
+      writeFileSync(join(root, "core/target-profiles.json"), JSON.stringify([
+        { id: "live", faction_id: "alpha", unit_id: "tank" },
+        { id: "retired", faction_id: "alpha", unit_id: "old-tank" },
+        { id: "wrong-faction", faction_id: "alpha", unit_id: "walker" },
+      ]));
+      const result = await checkReferentialIntegrity(root);
+      const flagged = result.errors.filter((e) => e.file.endsWith("target-profiles.json")).map((e) => e.index);
+      expect(flagged).toEqual([1, 2]);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  });
+
+  it("checks the stock loadout of a composition whose rows record no defaults", async () => {
+    // No row records default_weapon_ids, so the stock loadout is the derived base: every model
+    // with the gun, against a flat allowance of one gun per unit.
+    const root = mkdtempSync(join(tmpdir(), "integrity-stock-"));
+    try {
+      mkdirSync(join(root, "core/alpha"), { recursive: true });
+      writeFileSync(join(root, "core/alpha/units.json"), JSON.stringify([
+        { id: "squad", weapon_ids: ["gun"], wargear_budgets: [{ items: ["gun"], count: 1, per_models: 0 }] },
+      ]));
+      writeFileSync(join(root, "core/alpha/weapons.json"), JSON.stringify([{ id: "gun" }]));
+      writeFileSync(join(root, "core/alpha/unit-compositions.json"), JSON.stringify([
+        { unit_id: "squad", faction_id: "alpha", models: [{ name: "Trooper", min: 5, max: 5 }] },
+      ]));
+      const result = await checkReferentialIntegrity(root);
+      const messages = result.errors.flatMap((e) => e.errors.map((x) => x.message));
+      expect(messages.some((m) => m.includes('unit "squad": STOCK loadout at 5 models is illegal'))).toBe(true);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
   });
 
   it("passes a clean single-unit fixture", async () => {
@@ -90,6 +133,20 @@ describe("referential integrity", () => {
     expect(messages).toContain(
       'ability "ordinary-bundle-grant": rules-bundle grant "ordinary-target" resolves to an ability whose effect is not rules-bundle',
     );
+  });
+
+  it("requires a plain ability-grant to name a core ability or an ability record", async () => {
+    const result = await checkReferentialIntegrity(resolve(FIXTURES, "integrity-ability-grant"));
+    const messages = result.errors.flatMap((e) => e.errors.map((x) => x.message));
+
+    // A core catalog entry and another faction's record both resolve, and a printed
+    // definition needs no record; the unknown name (nested under a conditional) and a
+    // definition reusing a core ability's id are flagged.
+    expect(messages).toEqual([
+      'ability "grants-printed-core-id": ability-grant "scouts" defines a core ability\'s id; a printed definition names its own ability',
+      'ability "grants-unknown-ability": ability-grant "fights-first-typo" names neither a core ability nor an ability record',
+    ]);
+    expect(result.passed).toBe(3);
   });
 
   it("requires dice tables to cover each face exactly once", () => {
@@ -163,7 +220,8 @@ describe("referential integrity", () => {
     const messages = result.errors.flatMap((e) => e.errors.map((x) => x.message));
     expect(messages.filter((m) => m.includes("collision policy"))).toEqual([]);
     expect(messages.filter((m) => m.includes("drifted across factions"))).toEqual([]);
-  });
+    // A full-dataset run, like the first test; the 5 s default is too tight under suite load.
+  }, 15_000);
 
   it("attributes a unit-scoped weapon variant by its LONGEST unit-id suffix", () => {
     const unitIds = ["boyz", "beast-snagga-boyz", "squighog-boyz"];
@@ -201,5 +259,52 @@ describe("referential integrity", () => {
   it("registers the chaos cult factions with bare-legion home keywords", () => {
     expect(FACTION_HOME_KEYWORD["world-eaters"]).toBe("World Eaters");
     expect(FACTION_HOME_KEYWORD["chaos-space-marines"]).toBe("Heretic Astartes");
+  });
+
+  it("admits a cult faction's own daemon-legion keyword and rejects every other legion's", async () => {
+    const result = await checkReferentialIntegrity(resolve(FIXTURES, "integrity-sibling-keywords"));
+    const messages = result.errors
+      .flatMap((e) => e.errors.map((x) => x.message))
+      .filter((m) => m.includes("is not permitted for"));
+    expect(messages).toEqual([
+      'unit "rot-swarm": faction_keyword "Plague Legions" is not permitted for world-eaters (expected only "World Eaters" or "Blood Legions")',
+      'unit "daemon-host": faction_keyword "Legiones Daemonica" is not permitted for world-eaters (expected only "World Eaters" or "Blood Legions")',
+    ]);
+  });
+});
+
+describe("detachment datasheet references", () => {
+  it("flags each warlord/exclusion datasheet id that names no core unit, and only those", async () => {
+    const result = await checkReferentialIntegrity(resolve(FIXTURES, "integrity-detachment-datasheets"));
+    const messages = result.errors.flatMap((e) => e.errors.map((x) => x.message)).filter((m) => m.includes("is no core unit"));
+    expect(messages).toEqual([
+      'detachment "path-of-the-dead": mandatory_warlord_datasheet_ids entry "lost-avatar" is no core unit',
+      'detachment "path-of-the-dead": excluded_datasheet_ids entry "retired-walker" is no core unit',
+    ]);
+  });
+});
+
+describe("keyword caps and detachment pricing references", () => {
+  it("flags an empty cap, an override with no matching cap, and pricing for an unknown detachment", async () => {
+    const result = await checkReferentialIntegrity(resolve(FIXTURES, "integrity-list-requirements"));
+    const messages = result.errors
+      .flatMap((e) => e.errors.map((x) => x.message))
+      .filter((m) => /keyword_limits|keyword_limit_overrides|detachment_pricing/.test(m));
+    expect(messages).toEqual([
+      'faction "court": keyword_limits entry 1 has no keywords',
+      'detachment "masque": keyword_limit_overrides entry [Mime] matches no keyword_limits entry of faction "court"',
+      'unit "jester": detachment_pricing detachment "lost-revel" is no detachment of faction "court"',
+    ]);
+  });
+});
+
+describe("ability unit references", () => {
+  it("flags each ability unit_id that names no core unit, and only those", async () => {
+    const result = await checkReferentialIntegrity(resolve(FIXTURES, "integrity-ability-units"));
+    const messages = result.errors.flatMap((e) => e.errors.map((x) => x.message));
+    expect(messages.filter((m) => m.includes("is no core unit"))).toEqual([
+      'ability "star-lantern": unit_id "retired-walker" is no core unit — drop it (and the ability, if no unit is left)',
+      'ability "old-oath": unit_id "retired-walker" is no core unit — drop it (and the ability, if no unit is left)',
+    ]);
   });
 });

@@ -17,7 +17,9 @@
 //! prices from it; [`base_unit_points`] stays native-only for callers without
 //! army context. Mirror of `tools/src/data/pricing.ts`.
 
-use crate::generated::{Faction, Unit, UnitAlliedPointsItem, UnitPointsItem};
+use crate::generated::{
+    Faction, Unit, UnitAlliedPointsItem, UnitDetachmentPricingItem, UnitPointsItem,
+};
 use std::collections::{HashMap, HashSet};
 
 /// True when `ordinal` (1-based army copy) falls within `tier`'s ordinal band.
@@ -76,6 +78,17 @@ impl From<&UnitAlliedPointsItem> for CostTier {
     }
 }
 
+impl From<&UnitDetachmentPricingItem> for CostTier {
+    fn from(t: &UnitDetachmentPricingItem) -> Self {
+        CostTier {
+            models: t.models.get(),
+            cost: t.cost,
+            unit_count_min: t.unit_count_min.map(|m| m.get()),
+            unit_count_max: t.unit_count_max.map(|m| m.get()),
+        }
+    }
+}
+
 impl CostTier {
     fn covers_ordinal(&self, ordinal: u64) -> bool {
         let Some(min) = self.unit_count_min else {
@@ -125,8 +138,23 @@ fn keyword_slug(name: &str) -> String {
 /// `host_faction` names the army's faction id exactly win (a chapter reprice);
 /// otherwise entries naming a super-faction keyword the army's faction carries
 /// apply (an Agents unit's `imperium` price). With no matching entry — or no
-/// army context at all — the native table stands.
-pub(crate) fn host_points_tiers(unit: &Unit, host_faction: Option<&Faction>) -> Vec<CostTier> {
+/// army context at all — the native table stands. Before all of that,
+/// `detachment_pricing` entries naming any of `detachment_ids` are the table (a
+/// C'tan Shard under Pantheon of Woe). Mirror of TS `hostPointsTiers`.
+pub(crate) fn host_points_tiers(
+    unit: &Unit,
+    host_faction: Option<&Faction>,
+    detachment_ids: &[String],
+) -> Vec<CostTier> {
+    let selected: Vec<CostTier> = unit
+        .detachment_pricing
+        .iter()
+        .filter(|t| detachment_ids.iter().any(|d| d == t.detachment_id.as_str()))
+        .map(CostTier::from)
+        .collect();
+    if !selected.is_empty() {
+        return selected;
+    }
     let native = || unit.points.iter().map(CostTier::from).collect::<Vec<_>>();
     let Some(host) = host_faction else {
         return native();
@@ -171,8 +199,21 @@ pub fn host_unit_points(
     ordinal: u64,
     host_faction: Option<&Faction>,
 ) -> u64 {
+    army_unit_points(unit, model_count, ordinal, host_faction, &[])
+}
+
+/// [`host_unit_points`] with the army's selected detachments, so a
+/// `detachment_pricing` entry for one of them prices the unit (see
+/// [`host_points_tiers`]). Mirror of TS `hostUnitPoints(..., detachmentIds)`.
+pub fn army_unit_points(
+    unit: &Unit,
+    model_count: u64,
+    ordinal: u64,
+    host_faction: Option<&Faction>,
+    detachment_ids: &[String],
+) -> u64 {
     tier_cost(
-        host_points_tiers(unit, host_faction).into_iter(),
+        host_points_tiers(unit, host_faction, detachment_ids).into_iter(),
         model_count,
         ordinal,
     )
@@ -235,16 +276,16 @@ mod tests {
     fn ordinal_bands_we_chaos_terminators() {
         let ct = we_chaos_terminators();
         // 1st–2nd copy: lower band.
-        assert_eq!(base_unit_points(ct, 5, 1), 165);
-        assert_eq!(base_unit_points(ct, 5, 2), 165);
-        assert_eq!(base_unit_points(ct, 10, 1), 330);
+        assert_eq!(base_unit_points(ct, 5, 1), 175);
+        assert_eq!(base_unit_points(ct, 5, 2), 175);
+        assert_eq!(base_unit_points(ct, 10, 1), 350);
         // 3rd+ copy: higher band (open-ended top).
-        assert_eq!(base_unit_points(ct, 5, 3), 175);
-        assert_eq!(base_unit_points(ct, 10, 3), 340);
-        assert_eq!(base_unit_points(ct, 5, 7), 175);
-        // The second build is a 6–10 range tier, so 7 models prices at it (330),
+        assert_eq!(base_unit_points(ct, 5, 3), 185);
+        assert_eq!(base_unit_points(ct, 10, 3), 360);
+        assert_eq!(base_unit_points(ct, 5, 7), 185);
+        // The second build is a 6–10 range tier, so 7 models prices at it (350),
         // not the 5-model tier — a count inside a range resolves to that range.
-        assert_eq!(base_unit_points(ct, 7, 1), 330);
+        assert_eq!(base_unit_points(ct, 7, 1), 350);
     }
 
     #[test]
@@ -262,21 +303,21 @@ mod tests {
         assert!(points_tier_missing(ct, 4, 1));
     }
 
-    /// Venatari Custodians: 3 models @150 for the first two copies (160
-    /// thereafter), or 4–6 @300 (310 thereafter).
+    /// Reavers: 3 models @75 for the first two copies (85 thereafter), or 4–6
+    /// @150 (160 thereafter).
     #[test]
-    fn range_priced_tier_venatari() {
+    fn range_priced_tier_reavers() {
         let ds = Dataset::embedded();
         let ven = ds
             .units
-            .by_faction("adeptus-custodes")
+            .by_faction("drukhari")
             .into_iter()
-            .find(|u| u.id.as_str() == "venatari-custodians")
-            .expect("venatari custodians in dataset");
-        assert_eq!(base_unit_points(ven, 3, 1), 150);
-        assert_eq!(base_unit_points(ven, 4, 1), 300);
-        assert_eq!(base_unit_points(ven, 5, 1), 300);
-        assert_eq!(base_unit_points(ven, 6, 1), 300);
+            .find(|u| u.id.as_str() == "reavers")
+            .expect("reavers in dataset");
+        assert_eq!(base_unit_points(ven, 3, 1), 75);
+        assert_eq!(base_unit_points(ven, 4, 1), 150);
+        assert_eq!(base_unit_points(ven, 5, 1), 150);
+        assert_eq!(base_unit_points(ven, 6, 1), 150);
         // Outside every tier range → missing (below the floor, above the ceiling).
         assert!(points_tier_missing(ven, 2, 1));
         assert!(!points_tier_missing(ven, 4, 1));

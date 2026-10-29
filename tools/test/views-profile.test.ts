@@ -51,8 +51,8 @@ describe("WeaponKeywordView", () => {
 describe("WeaponView profile accessors", () => {
   it("profileAt(0) returns the schema profile directly", () => {
     const bolt = ds.weapons.getAny("bolt-rifle")!;
-    const profile = bolt.profileAt(0);
-    expect(profile.stats.S).toBe(4);
+    const profile = bolt.profileAt(0); // Focused Fire
+    expect(profile.stats.S).toBe(6);
     expect(profile.stats.AP).toBe(-1);
   });
 
@@ -76,14 +76,17 @@ describe("WeaponView profile accessors", () => {
   it("keywordsAt(0) resolves each reference against the catalog", () => {
     const bolt = ds.weapons.getAny("bolt-rifle")!;
     const kws = bolt.keywordsAt(0);
-    expect(kws.map((k) => k.keyword.id).sort()).toEqual(["assault", "heavy"]);
+    expect(kws.map((k) => k.keyword.id).sort()).toEqual(["heavy", "rapid-fire"]);
   });
 
   it("profileBuffs(0, context) honours engine context for conditionals", () => {
     const bolt = ds.weapons.getAny("bolt-rifle")!;
-    const off = bolt.profileBuffs(0, { ...baseCtx, attackerStationary: false });
-    expect(off).toEqual([]); // Heavy gated off; Assault contributes nothing.
-    const on = bolt.profileBuffs(0, { ...baseCtx, attackerStationary: true });
+    // Rapid Fire passes through as a keyword the engine gates; Heavy's hit bonus is gated here.
+    const heavy = (context: EngineContext) =>
+      bolt.profileBuffs(0, context).filter((buff) => buff.source.kind === "weapon-keyword" && buff.source.keywordId === "heavy");
+    const off = heavy({ ...baseCtx, attackerStationary: false });
+    expect(off).toEqual([]);
+    const on = heavy({ ...baseCtx, attackerStationary: true });
     expect(on).toHaveLength(1);
     expect(on[0].contribution).toEqual({ type: "hit-mod", value: 1 });
     expect(on[0].source).toMatchObject({
@@ -149,19 +152,23 @@ describe("AbilityView.getBuffs (M1 stub)", () => {
 });
 
 describe("Dataset.buffsFor", () => {
+  // No unit is selected: only the weapon profiles contribute.
+  const weaponsOnly = (weaponProfiles: { weaponId: string; profileIndex: number }[]) => ({ weaponProfiles });
+
   it("collects buffs from the weapon profile keywords on the input", () => {
     const buffs = ds.buffsFor(
-      { weaponProfiles: [{ weaponId: "bolt-rifle", profileIndex: 0 }] },
+      weaponsOnly([{ weaponId: "bolt-rifle", profileIndex: 0 }]),
       { ...baseCtx, attackerStationary: true },
     );
-    expect(buffs).toHaveLength(1);
-    expect(buffs[0].contribution).toEqual({ type: "hit-mod", value: 1 });
+    // Focused Fire: Heavy's +1 to hit and Rapid Fire 1.
+    expect(buffs.map((buff) => buff.contribution)).toEqual([
+      { type: "hit-mod", value: 1 },
+      { type: "extra-keyword", keywordRef: { keyword_id: "rapid-fire", parameters: { value: 1 } } },
+    ]);
   });
 
   it("applies target-keyword gates through linked buff APIs", () => {
-    const input = {
-      weaponProfiles: [{ weaponId: "big-shoota", profileIndex: 0 }],
-    };
+    const input = weaponsOnly([{ weaponId: "big-shoota", profileIndex: 0 }]);
     const matches = ds.buffsFor(input, { ...baseCtx, targetKeywords: ["infantry"] });
     expect(matches.some((buff) =>
       buff.contribution.type === "extra-keyword"
@@ -183,7 +190,7 @@ describe("Dataset.buffsFor", () => {
 
   it("skips unknown weapon ids without throwing", () => {
     const buffs = ds.buffsFor(
-      { weaponProfiles: [{ weaponId: "no-such-weapon", profileIndex: 0 }] },
+      weaponsOnly([{ weaponId: "no-such-weapon", profileIndex: 0 }]),
       baseCtx,
     );
     expect(buffs).toEqual([]);

@@ -41,7 +41,6 @@ const LIVERY: Record<string, [string, string]> = {
   "space-wolves": ["#7da7bd", "#1d2c35"],
   "black-templars": ["#cfcadb", "#191921"], // black livery, bone trim
   "imperial-fists": ["#e8b923", "#3a2f0d"],
-  "crimson-fists": ["#27418f", "#101a36"],
   "iron-hands": ["#8e9499", "#1d2023"],
   salamanders: ["#3f9e57", "#11301c"],
   "white-scars": ["#e6e2d8", "#2a2a26"],

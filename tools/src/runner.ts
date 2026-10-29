@@ -21,12 +21,14 @@ import { fileURLToPath } from "node:url";
 import process from "node:process";
 
 import { Dataset } from "./data/dataset.js";
+import { GAME_MODE_VIEWS, type GameModeView } from "./data/collection.js";
 import { normalizeName } from "./data/normalize.js";
 import {
   baseLoadout,
   maximalLoadout,
   checkUnitLegality,
   loadoutCandidates,
+  weaponBounds,
 } from "./data/loadout.js";
 import { validateRosterCore, type NormRoster } from "./data/roster-resolve.js";
 import {
@@ -48,9 +50,11 @@ import {
 import { selectAdapter } from "./import/adapter.js";
 import { createValidator } from "./schema-loader.js";
 import {
+  allocate,
   attributeStages,
   crunch,
   type Buff,
+  type DamageZeroing,
   type EngineContext,
   type EngineInput,
 } from "./cruncher/index.js";
@@ -601,8 +605,21 @@ function handleLinkedQuery(state: RunnerState, args: unknown): RunnerResponse {
       detail: "linked_query.query must be a string",
     });
   }
-  const ds = getDataset(state);
   const input = (a.input ?? {}) as Record<string, string>;
+  // `gameMode` picks the dataset view the query runs against (default: the
+  // matched-play view); listings skip records outside it, id lookups do not.
+  let ds = getDataset(state);
+  if (input.gameMode !== undefined) {
+    if (
+      typeof input.gameMode !== "string" ||
+      !(GAME_MODE_VIEWS as readonly string[]).includes(input.gameMode)
+    ) {
+      return err("INVALID_INPUT", {
+        detail: `linked_query.input.gameMode must be one of ${GAME_MODE_VIEWS.join(", ")}`,
+      });
+    }
+    ds = ds.forGameMode(input.gameMode as GameModeView);
+  }
   // A shared chassis (same unit id in several factions) diverges per faction in
   // its options/composition/profiles; when the case pins `factionId`, resolve
   // that faction's copy, else fall back to first-wins `getAny` (back-compat).
@@ -652,6 +669,20 @@ function handleLinkedQuery(state: RunnerState, args: unknown): RunnerResponse {
         );
         // Encode the id→count map as sorted "id:count" strings for set compare.
         return ok([...lo.counts].map(([id, n]) => `${id}:${n}`).sort());
+      }
+      case "weapon_bounds": {
+        const u = resolveUnit(input.unitId);
+        if (!u)
+          return err("UNKNOWN_ENTITY", { kind: "unit", id: input.unitId });
+        const comp = ds.unitCompositionOf(u.raw);
+        const bounds = weaponBounds(
+          u.raw,
+          Number(input.modelCount),
+          ds.wargearOptionsOf(u.raw),
+          comp?.models,
+        );
+        // Encode each id's inclusive range as sorted "id:min-max" strings for set compare.
+        return ok([...bounds].map(([id, b]) => `${id}:${b.min}-${b.max}`).sort());
       }
       case "maximal_loadout": {
         const u = resolveUnit(input.unitId);
@@ -770,6 +801,20 @@ function handleLinkedQuery(state: RunnerState, args: unknown): RunnerResponse {
         // Returns the resolved enhancement's current id (or null). Exercises
         // renamed-id resolution: a since-renamed id resolves to its new record.
         return ok(ds.enhancements.get(input.id ?? "")?.id ?? null);
+      case "units_of_faction":
+        return ok(ds.units.byFaction(input.factionId ?? "").map((u) => u.id));
+      case "detachments_of_faction":
+        return ok(
+          ds.detachments.byFaction(input.factionId ?? "").map((d) => d.id),
+        );
+      case "get_unit":
+        return ok(ds.units.getAny(input.unitId ?? "")?.id ?? null);
+      case "get_detachment":
+        return ok(ds.detachments.getAny(input.detachmentId ?? "")?.id ?? null);
+      case "find_enhancement":
+        return ok(ds.enhancements.find(input.query ?? "")?.id ?? null);
+      case "find_detachment":
+        return ok(ds.detachments.find(input.query ?? "")?.id ?? null);
       default:
         return err("INVALID_INPUT", {
           detail: `unknown linked_query: ${a.query}`,
@@ -788,6 +833,7 @@ const VALIDATOR_TARGETS: Record<string, string> = {
     "https://40kdc.dev/schemas/enrichment/ability-dsl/ability.schema.json",
   wargear: "https://40kdc.dev/schemas/core/wargear.schema.json",
   "wargear-option": "https://40kdc.dev/schemas/core/wargear-option.schema.json",
+  stratagem: "https://40kdc.dev/schemas/core/stratagem.schema.json",
 };
 
 function ajvKeywordToCode(keyword: string): string {
@@ -992,6 +1038,23 @@ function handleAttribution(state: RunnerState, args: unknown): RunnerResponse {
   }
 }
 
+function handleAllocate(state: RunnerState, args: unknown): RunnerResponse {
+  if (typeof args !== "object" || args === null) {
+    return err("INVALID_INPUT", { detail: "allocate args must be an object" });
+  }
+  const built = buildEngineInput(state, args as CrunchArgs, "allocate");
+  if (!built.ok) return built.response;
+  const zeroing = (args as { zeroing?: unknown }).zeroing;
+  if (zeroing !== undefined && (typeof zeroing !== "object" || zeroing === null)) {
+    return err("INVALID_INPUT", { detail: "allocate.zeroing must be an object" });
+  }
+  try {
+    return ok(allocate(built.input, getDataset(state), zeroing === undefined ? {} : { zeroing: zeroing as DamageZeroing }));
+  } catch (e) {
+    return err("CRUNCH_ERROR", { detail: (e as Error).message });
+  }
+}
+
 function handleCompare(state: RunnerState, args: unknown): RunnerResponse {
   if (typeof args !== "object" || args === null) {
     return err("INVALID_INPUT", { detail: "compare args must be an object" });
@@ -1105,6 +1168,7 @@ function handleTranslateEffect(args: unknown): RunnerResponse {
     usage?: unknown;
     trigger?: unknown;
     applies_to?: unknown;
+    optional?: unknown;
   };
   if (typeof a.effect !== "object" || a.effect === null) {
     return err("INVALID_INPUT", {
@@ -1134,6 +1198,7 @@ function handleTranslateEffect(args: unknown): RunnerResponse {
       ...(usage ? { usage } : {}),
       ...(trigger ? { trigger } : {}),
       ...(appliesTo ? { applies_to: appliesTo } : {}),
+      ...(a.optional === true ? { optional: true } : {}),
     }),
   });
 }
@@ -1566,6 +1631,8 @@ export function dispatch(
       return handleLoadout(state, req.args);
     case "attribution":
       return handleAttribution(state, req.args);
+    case "allocate":
+      return handleAllocate(state, req.args);
     case "translate_scoring":
       return handleTranslateScoring(state, req.args);
     case "translate_effect":

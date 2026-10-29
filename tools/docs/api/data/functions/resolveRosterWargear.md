@@ -8,7 +8,7 @@
 
 > **resolveRosterWargear**(`wargear`, `dataset`): `object`[]
 
-Defined in: [data/roster-resolve.ts:38](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/roster-resolve.ts#L38)
+Defined in: [data/roster-resolve.ts:58](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/roster-resolve.ts#L58)
 
 Resolve every wargear entry on a roster unit to a [WeaponView](../classes/WeaponView.md),
 keeping each entry's count alongside. Unresolved entries are dropped

@@ -142,5 +142,979 @@
     "expected_errors": [
       { "path": "/profiles/0/Sv", "code": "RANGE_VIOLATION" }
     ]
+  },
+  {
+    "name": "ability: move-started trigger with a move type",
+    "target": "ability",
+    "input": {
+      "ability_id": "warden-shield-wall",
+      "name": "Shield Wall",
+      "authored_by": "40kdc-community",
+      "game_version": {
+        "edition": "10th",
+        "dataslate": "2025-q3"
+      },
+      "version": "2025-q3",
+      "unit_ids": [
+        "ironclad-sentinels"
+      ],
+      "ability_type": "unit",
+      "behavior": "reactive",
+      "scope": {
+        "duration": "permanent"
+      },
+      "effect": {
+        "type": "feel-no-pain",
+        "target": "this-unit",
+        "modifier": {
+          "threshold": 6
+        }
+      },
+      "trigger": {
+        "event": "move-started",
+        "filter": {
+          "move_types": [
+            "consolidation"
+          ]
+        }
+      }
+    },
+    "expected_errors": []
+  },
+  {
+    "name": "ability: disembarked trigger naming the Transport",
+    "target": "ability",
+    "input": {
+      "ability_id": "warden-shield-wall",
+      "name": "Shield Wall",
+      "authored_by": "40kdc-community",
+      "game_version": {
+        "edition": "10th",
+        "dataslate": "2025-q3"
+      },
+      "version": "2025-q3",
+      "unit_ids": [
+        "ironclad-sentinels"
+      ],
+      "ability_type": "unit",
+      "behavior": "reactive",
+      "scope": {
+        "duration": "permanent"
+      },
+      "effect": {
+        "type": "feel-no-pain",
+        "target": "this-unit",
+        "modifier": {
+          "threshold": 6
+        }
+      },
+      "trigger": {
+        "event": "disembarked",
+        "filter": {
+          "transport": "this-unit"
+        }
+      }
+    },
+    "expected_errors": []
+  },
+  {
+    "name": "ability: before a Deadly Demise roll",
+    "target": "ability",
+    "input": {
+      "ability_id": "warden-shield-wall",
+      "name": "Shield Wall",
+      "authored_by": "40kdc-community",
+      "game_version": {
+        "edition": "10th",
+        "dataslate": "2025-q3"
+      },
+      "version": "2025-q3",
+      "unit_ids": [
+        "ironclad-sentinels"
+      ],
+      "ability_type": "unit",
+      "behavior": "reactive",
+      "scope": {
+        "duration": "permanent"
+      },
+      "effect": {
+        "type": "feel-no-pain",
+        "target": "this-unit",
+        "modifier": {
+          "threshold": 6
+        }
+      },
+      "trigger": {
+        "event": "before-roll",
+        "filter": {
+          "roll": "deadly-demise"
+        }
+      }
+    },
+    "expected_errors": []
+  },
+  {
+    "name": "ability: permission as if it were the Command phase",
+    "target": "ability",
+    "input": {
+      "ability_id": "warden-shield-wall",
+      "name": "Shield Wall",
+      "authored_by": "40kdc-community",
+      "game_version": {
+        "edition": "10th",
+        "dataslate": "2025-q3"
+      },
+      "version": "2025-q3",
+      "unit_ids": [
+        "ironclad-sentinels"
+      ],
+      "ability_type": "unit",
+      "behavior": "passive",
+      "scope": {
+        "duration": "permanent"
+      },
+      "effect": {
+        "type": "permission",
+        "target": "this-unit",
+        "modifier": {
+          "activity": "shoot",
+          "allow": true,
+          "as_if": "command-phase"
+        }
+      }
+    },
+    "expected_errors": []
+  },
+  {
+    "name": "ability: copied unit into Cult Ambush",
+    "target": "ability",
+    "input": {
+      "ability_id": "warden-shield-wall",
+      "name": "Shield Wall",
+      "authored_by": "40kdc-community",
+      "game_version": {
+        "edition": "10th",
+        "dataslate": "2025-q3"
+      },
+      "version": "2025-q3",
+      "unit_ids": [
+        "ironclad-sentinels"
+      ],
+      "ability_type": "unit",
+      "behavior": "passive",
+      "scope": {
+        "duration": "permanent"
+      },
+      "effect": {
+        "type": "add-unit",
+        "target": "this-unit",
+        "modifier": {
+          "copy_of": "event-object",
+          "count": 1,
+          "excluded_keywords": [
+            "CHARACTER"
+          ],
+          "at_starting_strength": true,
+          "reset_one_shot": true,
+          "placement": "cult-ambush"
+        }
+      }
+    },
+    "expected_errors": []
+  },
+  {
+    "name": "ability: mortal wounds with a cap",
+    "target": "ability",
+    "input": {
+      "ability_id": "warden-shield-wall",
+      "name": "Shield Wall",
+      "authored_by": "40kdc-community",
+      "game_version": {
+        "edition": "10th",
+        "dataslate": "2025-q3"
+      },
+      "version": "2025-q3",
+      "unit_ids": [
+        "ironclad-sentinels"
+      ],
+      "ability_type": "unit",
+      "behavior": "passive",
+      "scope": {
+        "duration": "permanent"
+      },
+      "effect": {
+        "type": "mortal-wounds",
+        "target": "this-unit",
+        "modifier": {
+          "count": "2D6",
+          "max": 6
+        }
+      }
+    },
+    "expected_errors": []
+  },
+  {
+    "name": "ability: filter with negated states and an all-of exclusion",
+    "target": "ability",
+    "input": {
+      "ability_id": "warden-shield-wall",
+      "name": "Shield Wall",
+      "authored_by": "40kdc-community",
+      "game_version": {
+        "edition": "10th",
+        "dataslate": "2025-q3"
+      },
+      "version": "2025-q3",
+      "unit_ids": [
+        "ironclad-sentinels"
+      ],
+      "ability_type": "unit",
+      "behavior": "passive",
+      "scope": {
+        "duration": "permanent"
+      },
+      "effect": {
+        "type": "mortal-wounds",
+        "target": {
+          "owner": "enemy",
+          "not_states": [
+            "engaged",
+            "battle-shocked"
+          ],
+          "not_all_of": [
+            "MONSTER",
+            "CHARACTER"
+          ]
+        },
+        "modifier": {
+          "count": 1
+        }
+      }
+    },
+    "expected_errors": []
+  },
+  {
+    "name": "ability: condition on a unit in Cult Ambush or in Strategic Reserves",
+    "target": "ability",
+    "input": {
+      "ability_id": "warden-shield-wall",
+      "name": "Shield Wall",
+      "authored_by": "40kdc-community",
+      "game_version": {
+        "edition": "10th",
+        "dataslate": "2025-q3"
+      },
+      "version": "2025-q3",
+      "unit_ids": [
+        "ironclad-sentinels"
+      ],
+      "ability_type": "unit",
+      "behavior": "passive",
+      "scope": {
+        "duration": "permanent"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "operator": "or",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "state": "in-cult-ambush"
+                }
+              }
+            },
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "state": "in-strategic-reserves"
+                }
+              }
+            }
+          ]
+        },
+        "effect": {
+          "type": "feel-no-pain",
+          "target": "this-unit",
+          "modifier": {
+            "threshold": 6
+          }
+        }
+      }
+    },
+    "expected_errors": []
+  },
+  {
+    "name": "stratagem: up to one target (an optional extra target)",
+    "target": "stratagem",
+    "input": {
+      "id": "fabricated-ploy",
+      "name": "Fabricated Ploy",
+      "category": "core",
+      "type": "strategic-ploy",
+      "cp_cost": 1,
+      "phases": [
+        "movement"
+      ],
+      "player_turn": "your-turn",
+      "timing": "once-per-phase",
+      "game_version": {
+        "edition": "11th",
+        "dataslate": "pre-launch-provisional"
+      },
+      "target_restrictions": {
+        "count": "up-to",
+        "count_max": 1,
+        "side": "your-army",
+        "selects": "unit"
+      }
+    },
+    "expected_errors": []
+  },
+  {
+    "name": "stratagem: the Warlord as a typed target, with keywords it must also carry",
+    "target": "stratagem",
+    "input": {
+      "id": "fabricated-warlord-ploy",
+      "name": "Fabricated Warlord Ploy",
+      "category": "core",
+      "type": "epic-deed",
+      "cp_cost": 1,
+      "phases": [
+        "command"
+      ],
+      "player_turn": "your-turn",
+      "timing": "once-per-phase",
+      "game_version": {
+        "edition": "11th",
+        "dataslate": "pre-launch-provisional"
+      },
+      "target_restrictions": {
+        "count": "one",
+        "side": "your-army",
+        "selects": "model",
+        "warlord": true,
+        "required_keywords": [
+          "ALPHA"
+        ]
+      }
+    },
+    "expected_errors": []
+  },
+  {
+    "name": "stratagem: warlord is only ever true (absent when the target need not be the Warlord)",
+    "target": "stratagem",
+    "input": {
+      "id": "fabricated-warlord-ploy",
+      "name": "Fabricated Warlord Ploy",
+      "category": "core",
+      "type": "epic-deed",
+      "cp_cost": 1,
+      "phases": [
+        "command"
+      ],
+      "player_turn": "your-turn",
+      "timing": "once-per-phase",
+      "game_version": {
+        "edition": "11th",
+        "dataslate": "pre-launch-provisional"
+      },
+      "target_restrictions": {
+        "count": "one",
+        "side": "your-army",
+        "selects": "model",
+        "warlord": false
+      }
+    },
+    "expected_errors": [
+      {
+        "path": "/target_restrictions",
+        "code": "TYPE_MISMATCH"
+      },
+      {
+        "path": "/target_restrictions/warlord",
+        "code": "ENUM_VIOLATION"
+      }
+    ]
+  },
+  {
+    "name": "stratagem: two named targets, the second optional and gated on the first",
+    "target": "stratagem",
+    "input": {
+      "id": "fabricated-pair-ploy",
+      "name": "Fabricated Ploy",
+      "category": "core",
+      "type": "strategic-ploy",
+      "cp_cost": 1,
+      "phases": [
+        "movement"
+      ],
+      "player_turn": "your-turn",
+      "timing": "once-per-phase",
+      "game_version": {
+        "edition": "11th",
+        "dataslate": "pre-launch-provisional"
+      },
+      "target_restrictions": [
+        {
+          "name": "first",
+          "count": "one",
+          "side": "your-army",
+          "selects": "unit",
+          "required_keywords": [
+            "ALPHA"
+          ]
+        },
+        {
+          "name": "second",
+          "count": "up-to",
+          "count_max": 1,
+          "side": "your-army",
+          "selects": "unit",
+          "required_keywords": [
+            "BETA"
+          ],
+          "eligibility": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": {
+                    "stratagem_target": "first"
+                  },
+                  "filter": {
+                    "all_of": [
+                      "BATTLELINE"
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "within": {
+                      "range": {
+                        "inches": 6
+                      },
+                      "of": {
+                        "stratagem_target": "first"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "expected_errors": []
+  },
+  {
+    "name": "ability: grant printed with its definition",
+    "target": "ability",
+    "input": {
+      "ability_id": "warden-shade-pact",
+      "name": "Shade Pact",
+      "authored_by": "40kdc-community",
+      "game_version": {
+        "edition": "10th",
+        "dataslate": "2025-q3"
+      },
+      "version": "2025-q3",
+      "unit_ids": [
+        "ironclad-sentinels"
+      ],
+      "ability_type": "unit",
+      "behavior": "passive",
+      "scope": {
+        "duration": "permanent"
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": {
+          "owner": "friendly",
+          "all_of": [
+            "GLOOM WARDENS"
+          ]
+        },
+        "modifier": {
+          "ability": "shade-ward",
+          "definition": {
+            "type": "ability-part",
+            "name": "Shade Ward",
+            "effect": {
+              "type": "aura",
+              "target": "friendly-within-aura",
+              "modifier": {
+                "range": { "inches": 6 },
+                "effect": {
+                  "type": "stat-modifier",
+                  "target": "recipient",
+                  "modifier": {
+                    "stat": "WS",
+                    "operation": "improve",
+                    "value": 1,
+                    "weapons": { "type": "melee" }
+                  }
+                },
+                "eligible": {
+                  "all_of": [
+                    "GLOOM HOUND"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "expected_errors": []
+  },
+  {
+    "name": "ability: unnamed grant printed with its definition",
+    "target": "ability",
+    "input": {
+      "ability_id": "warden-dusk-pact",
+      "name": "Dusk Pact",
+      "authored_by": "40kdc-community",
+      "game_version": {
+        "edition": "10th",
+        "dataslate": "2025-q3"
+      },
+      "version": "2025-q3",
+      "unit_ids": [
+        "ironclad-sentinels"
+      ],
+      "ability_type": "unit",
+      "behavior": "passive",
+      "scope": {
+        "duration": "permanent"
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": {
+          "owner": "friendly",
+          "all_of": [
+            "GLOOM WARDENS"
+          ]
+        },
+        "modifier": {
+          "definition": {
+            "type": "ability-part",
+            "effect": {
+              "type": "re-roll",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "hit",
+                "subset": "ones"
+              }
+            }
+          }
+        }
+      }
+    },
+    "expected_errors": []
+  },
+  {
+    "name": "stratagem: two exclusive target modes, mode b with a cost",
+    "target": "stratagem",
+    "input": {
+      "id": "fabricated-modal-ploy",
+      "name": "Fabricated Ploy",
+      "category": "core",
+      "type": "strategic-ploy",
+      "cp_cost": 1,
+      "phases": [
+        "movement"
+      ],
+      "player_turn": "your-turn",
+      "timing": "once-per-phase",
+      "game_version": {
+        "edition": "11th",
+        "dataslate": "pre-launch-provisional"
+      },
+      "target_restrictions": [
+        {
+          "name": "first",
+          "mode": "a",
+          "count": "up-to",
+          "count_max": 2,
+          "side": "your-army",
+          "selects": "unit",
+          "required_keywords": [
+            "ALPHA"
+          ]
+        },
+        {
+          "name": "second",
+          "mode": "b",
+          "count": "one",
+          "side": "your-army",
+          "selects": "unit",
+          "required_keywords": [
+            "BETA"
+          ],
+          "mode_cost": {
+            "label": "yp-pool",
+            "amount": 2
+          }
+        }
+      ]
+    },
+    "expected_errors": []
+  },
+  {
+    "name": "stratagem: target mode outside a and b",
+    "target": "stratagem",
+    "input": {
+      "id": "fabricated-modal-ploy",
+      "name": "Fabricated Ploy",
+      "category": "core",
+      "type": "strategic-ploy",
+      "cp_cost": 1,
+      "phases": [
+        "movement"
+      ],
+      "player_turn": "your-turn",
+      "timing": "once-per-phase",
+      "game_version": {
+        "edition": "11th",
+        "dataslate": "pre-launch-provisional"
+      },
+      "target_restrictions": [
+        {
+          "name": "first",
+          "mode": "a",
+          "count": "one",
+          "side": "your-army",
+          "selects": "unit"
+        },
+        {
+          "name": "second",
+          "mode": "b",
+          "count": "one",
+          "side": "your-army",
+          "selects": "unit"
+        },
+        {
+          "name": "third",
+          "mode": "c",
+          "count": "one",
+          "side": "your-army",
+          "selects": "unit"
+        }
+      ]
+    },
+    "expected_errors": [
+      {
+        "path": "/target_restrictions",
+        "code": "TYPE_MISMATCH"
+      },
+      {
+        "path": "/target_restrictions/2/mode",
+        "code": "ENUM_VIOLATION"
+      }
+    ]
+  },
+  {
+    "name": "ability: eligible to embark within a named Transport",
+    "target": "ability",
+    "input": {
+      "ability_id": "fabricated-transport-embark",
+      "name": "Fabricated Transport Embark",
+      "authored_by": "40kdc-community",
+      "game_version": {
+        "edition": "10th",
+        "dataslate": "2025-q3"
+      },
+      "version": "2025-q3",
+      "unit_ids": [
+        "fabricated-unit"
+      ],
+      "ability_type": "unit",
+      "behavior": "passive",
+      "scope": {
+        "duration": "permanent"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "eligible",
+          "parameters": {
+            "subject": "this-unit",
+            "to": "embark-within",
+            "transport": "ability-unit"
+          }
+        },
+        "effect": {
+          "type": "feel-no-pain",
+          "target": "this-unit",
+          "modifier": {
+            "threshold": 6
+          }
+        }
+      }
+    },
+    "expected_errors": []
+  },
+  {
+    "name": "ability: select one objective marker within a range of this model",
+    "target": "ability",
+    "input": {
+      "ability_id": "warden-claim-line",
+      "name": "Claim Line",
+      "authored_by": "40kdc-community",
+      "game_version": {
+        "edition": "10th",
+        "dataslate": "2025-q3"
+      },
+      "version": "2025-q3",
+      "unit_ids": [
+        "ironclad-sentinels"
+      ],
+      "ability_type": "unit",
+      "behavior": "passive",
+      "scope": {
+        "duration": "permanent"
+      },
+      "effect": {
+        "type": "select-objective",
+        "selector": {
+          "filter": {
+            "within": {
+              "range": {
+                "inches": 12
+              },
+              "of": "this-model"
+            }
+          },
+          "bind_as": "claimed-marker",
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        },
+        "effect": {
+          "type": "ability-grant",
+          "target": "this-model",
+          "modifier": {
+            "ability": "fights-first"
+          }
+        }
+      }
+    },
+    "expected_errors": []
+  },
+  {
+    "name": "stratagem: up to N targets without the N (only an if/then rule rejects it)",
+    "target": "stratagem",
+    "input": {
+      "id": "fabricated-ploy",
+      "name": "Fabricated Ploy",
+      "category": "core",
+      "type": "strategic-ploy",
+      "cp_cost": 1,
+      "phases": [
+        "movement"
+      ],
+      "player_turn": "your-turn",
+      "timing": "once-per-phase",
+      "game_version": {
+        "edition": "11th",
+        "dataslate": "pre-launch-provisional"
+      },
+      "target_restrictions": {
+        "count": "up-to",
+        "side": "your-army",
+        "selects": "unit"
+      }
+    },
+    "expected_errors": [
+      {
+        "path": "/target_restrictions",
+        "code": "TYPE_MISMATCH"
+      },
+      {
+        "path": "/target_restrictions/count_max",
+        "code": "REQUIRED_MISSING"
+      }
+    ]
+  },
+  {
+    "name": "stratagem: a target mode cost without a mode (only an if/then rule rejects it)",
+    "target": "stratagem",
+    "input": {
+      "id": "fabricated-ploy",
+      "name": "Fabricated Ploy",
+      "category": "core",
+      "type": "strategic-ploy",
+      "cp_cost": 1,
+      "phases": [
+        "movement"
+      ],
+      "player_turn": "your-turn",
+      "timing": "once-per-phase",
+      "game_version": {
+        "edition": "11th",
+        "dataslate": "pre-launch-provisional"
+      },
+      "target_restrictions": {
+        "count": "one",
+        "side": "your-army",
+        "selects": "unit",
+        "mode_cost": {
+          "label": "yp-pool",
+          "amount": 2
+        }
+      }
+    },
+    "expected_errors": [
+      {
+        "path": "/target_restrictions",
+        "code": "TYPE_MISMATCH"
+      },
+      {
+        "path": "/target_restrictions/mode",
+        "code": "REQUIRED_MISSING"
+      }
+    ]
+  },
+  {
+    "name": "stratagem: targets in modes a and b and one without a mode (only an if/then rule rejects it)",
+    "target": "stratagem",
+    "input": {
+      "id": "fabricated-ploy",
+      "name": "Fabricated Ploy",
+      "category": "core",
+      "type": "strategic-ploy",
+      "cp_cost": 1,
+      "phases": [
+        "movement"
+      ],
+      "player_turn": "your-turn",
+      "timing": "once-per-phase",
+      "game_version": {
+        "edition": "11th",
+        "dataslate": "pre-launch-provisional"
+      },
+      "target_restrictions": [
+        {
+          "name": "first",
+          "mode": "a",
+          "count": "one",
+          "side": "your-army",
+          "selects": "unit"
+        },
+        {
+          "name": "second",
+          "mode": "b",
+          "count": "one",
+          "side": "your-army",
+          "selects": "unit"
+        },
+        {
+          "name": "third",
+          "count": "one",
+          "side": "your-army",
+          "selects": "unit"
+        }
+      ]
+    },
+    "expected_errors": [
+      {
+        "path": "/target_restrictions",
+        "code": "TYPE_MISMATCH"
+      },
+      {
+        "path": "/target_restrictions/2/mode",
+        "code": "REQUIRED_MISSING"
+      }
+    ]
+  },
+  {
+    "name": "wargear-option with neither a replacement nor a replacement choice (only an if/then rule rejects it)",
+    "target": "wargear-option",
+    "input": {
+      "id": "bad-no-replacement",
+      "unit_id": "khorne-berzerkers",
+      "faction_id": "world-eaters",
+      "replaces": [
+        "chainblade"
+      ],
+      "is_free": true,
+      "game_version": {
+        "edition": "10th",
+        "dataslate": "2025-q3"
+      }
+    },
+    "expected_errors": [
+      {
+        "path": "/replacement_choice",
+        "code": "REQUIRED_MISSING"
+      }
+    ]
+  },
+  {
+    "name": "wargear id that is not kebab-case (only a pattern rejects it)",
+    "target": "wargear",
+    "input": {
+      "id": "Icon_Of_Khorne",
+      "name": "Icon of Khorne",
+      "category": "icon",
+      "game_version": {
+        "edition": "10th",
+        "dataslate": "2025-q3"
+      }
+    },
+    "expected_errors": [
+      {
+        "path": "/id",
+        "code": "PATTERN_MISMATCH"
+      }
+    ]
+  },
+  {
+    "name": "wargear edition that is not a number (only a pattern rejects it)",
+    "target": "wargear",
+    "input": {
+      "id": "icon-of-khorne",
+      "name": "Icon of Khorne",
+      "category": "icon",
+      "game_version": {
+        "edition": "tenth",
+        "dataslate": "2025-q3"
+      }
+    },
+    "expected_errors": [
+      {
+        "path": "/game_version/edition",
+        "code": "PATTERN_MISMATCH"
+      }
+    ]
+  },
+  {
+    "name": "wargear dataslate that is neither a quarter tag nor a slug (only a pattern rejects it)",
+    "target": "wargear",
+    "input": {
+      "id": "icon-of-khorne",
+      "name": "Icon of Khorne",
+      "category": "icon",
+      "game_version": {
+        "edition": "10th",
+        "dataslate": "2025 Q3"
+      }
+    },
+    "expected_errors": [
+      {
+        "path": "/game_version/dataslate",
+        "code": "PATTERN_MISMATCH"
+      }
+    ]
   }
 ]

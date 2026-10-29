@@ -133,26 +133,54 @@
       "reason": "The flag is derived from the absence of an eligible resolved warlord. The allowed-warlord association table (allied_faction_allowed_warlord_miniature) was emptied by the data_version 895 export; the extractor still consumes it, so its rows re-enter this derivation when a future snapshot repopulates the table."
     },
     "/cannot_take_enhancements": {
-      "provenance": "direct",
+      "provenance": "derived",
       "coverage": "implemented",
       "sources": [
-        "data.allied_faction.canTakeEnhancements"
+        "data.allied_faction.canTakeEnhancements",
+        "data.enhancement.detachmentId",
+        "data.enhancement_required_keyword_group_keyword.keywordId",
+        "data.enhancement_required_keyword_group_faction_keyword.factionKeywordId"
       ],
-      "joins": [],
+      "joins": [
+        {
+          "relation": "allied_faction_required_detachment.alliedFactionId",
+          "direction": "children",
+          "purpose": "eligibility"
+        },
+        {
+          "relation": "enhancement_required_keyword_group.enhancementId",
+          "direction": "children",
+          "purpose": "eligibility"
+        },
+        {
+          "relation": "enhancement_required_keyword_group_keyword.enhancementRequiredKeywordGroupId",
+          "direction": "children",
+          "purpose": "eligibility"
+        },
+        {
+          "relation": "enhancement_required_keyword_group_faction_keyword.enhancementRequiredKeywordGroupId",
+          "direction": "children",
+          "purpose": "eligibility"
+        }
+      ],
       "transforms": [
         {
           "symbol": "tools/src/mfm/allies.ts#runAllies",
           "operation": "Invert the dump permission into the cannot-take flag."
+        },
+        {
+          "symbol": "tools/src/mfm/allies.ts#detachmentOffersPoolEnhancement",
+          "operation": "Drop the lock when the pool's required detachment prints an enhancement a pool datasheet satisfies."
         }
       ],
       "filters": [
-        "Emit only when enhancements are not permitted."
+        "Emit only when enhancements are not permitted and no required-detachment enhancement targets the pool's datasheets."
       ],
       "precedence": [],
       "consumers": [
         "tools/src/mfm/allies.ts#runAllies"
       ],
-      "reason": "The extractor directly converts the structured enhancement permission."
+      "reason": "The structured permission is contradicted by the pool's own detachment enhancements for the daemon-detachment and Ynnari pools, so those rows govern."
     },
     "/detachment_ids": {
       "provenance": "joined",
@@ -920,6 +948,35 @@
         "tools/src/mfm/allies.ts#runAllies"
       ],
       "reason": "This host-warlord rule is repository-authored context."
+    },
+    "/exclusive": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": [
+        "data.allied_faction.isSiblingFaction",
+        "data.allied_faction_required_detachment.detachmentId"
+      ],
+      "joins": [
+        {
+          "relation": "allied_faction_required_detachment.alliedFactionId",
+          "direction": "children",
+          "purpose": "eligibility"
+        }
+      ],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/allies.ts#runAllies",
+          "operation": "Flag a sibling-faction pool with a required detachment and a single resolved source faction."
+        }
+      ],
+      "filters": [
+        "Emit only when true."
+      ],
+      "precedence": [],
+      "consumers": [
+        "tools/src/mfm/allies.ts#runAllies"
+      ],
+      "reason": "A detachment-gated sibling pool lists datasheets printed in the host's own codex that exist only for the pool, so they are not ordinary picks of the source faction."
     }
   },
   "unmapped_mfm_fields": [
@@ -927,11 +984,6 @@
       "source": "data.allied_faction.isMutuallyExclusiveKeywordLimit",
       "candidate_pointer": "/keyword_limits",
       "reason": "Structured mutual-exclusivity semantics have no corresponding core field or extractor behavior."
-    },
-    {
-      "source": "data.allied_faction.isSiblingFaction",
-      "candidate_pointer": null,
-      "reason": "Sibling-faction classification has no allied-rule destination."
     },
     {
       "source": "data.allied_faction.replacesRosterFactionKeyword",

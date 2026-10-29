@@ -325,7 +325,8 @@ def enumerate_loadouts(ds: Dataset, faction_id: str, unit_id: str) -> Enumerated
     unit = ds.units.get_in_faction(unit_id, faction_id)
     if unit is None:
         raise ValueError(f"unit {unit_id!r} not found in faction {faction_id!r}")
-    weapon_ids = {w.raw["id"] for w in ds.weapons.all}
+    # Membership test for wargear refs (a lookup), so every mode's weapons count.
+    weapon_ids = {w.raw["id"] for w in ds.for_game_mode("all").weapons.all}
 
     def is_ranged(wid: str) -> bool:
         w = ds.weapons.get_in_faction(wid, faction_id) or ds.weapons.get_any(wid)

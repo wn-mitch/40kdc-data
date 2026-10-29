@@ -6,6 +6,7 @@ import {
   keywordLabels,
   factionKeywordLabels,
 } from "../src/mfm/keywords.js";
+import { partialDump } from "./mfm-fixture.js";
 
 /**
  * WS0 keyword resolver: dump `keyword`/`faction_keyword` id → the Title-Case repo
@@ -15,7 +16,7 @@ import {
  * `null` so a consumer stores the schema's "no restriction" shape, not `[]`.
  */
 function dump(): MfmDump {
-  return new MfmDump({
+  return partialDump({
     data: {
       keyword: [
         { id: "k-veh", localisations: { en: { name: "Vehicle" } } },

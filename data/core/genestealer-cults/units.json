@@ -35,7 +35,7 @@
       {
         "models": 6,
         "models_max": 9,
-        "cost": 160,
+        "cost": 150,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
@@ -54,7 +54,7 @@
       {
         "models": 6,
         "models_max": 9,
-        "cost": 170,
+        "cost": 160,
         "unit_count_min": 3,
         "unit_count_max": null
       },
@@ -93,14 +93,17 @@
       "mining-laser"
     ],
     "ability_ids": [
-      "demolition-run",
-      "outrider-gangs",
-      "scouts-9",
+      "demolition-run-genestealer-cults",
+      "outrider-gangs-genestealer-cults",
+      {
+        "id": "scouts",
+        "value": 9
+      },
       "stealth"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -165,13 +168,13 @@
     ],
     "ability_ids": [
       "deep-strike",
-      "heroic-fusillade",
-      "hypersensory-abilities",
+      "heroic-fusillade-genestealer-cults",
+      "hypersensory-abilities-genestealer-cults",
       "lone-operative"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -251,13 +254,16 @@
       "webber"
     ],
     "ability_ids": [
-      "a-plan-generations-in-the-making",
-      "cult-icon",
+      "a-plan-generations-in-the-making-genestealer-cults",
+      {
+        "id": "cult-icon-neophyte-hybrids-genestealer-cults",
+        "wargear": "cult-icon"
+      },
       "deep-strike"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -350,14 +356,14 @@
       "close-combat-weapon-clamavus"
     ],
     "ability_ids": [
-      "leader",
-      "scrambler-array",
-      "voice-of-new-truths",
-      "deep-strike"
+      "scrambler-array-genestealer-cults",
+      "voice-of-new-truths-genestealer-cults",
+      "deep-strike",
+      "support"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -434,15 +440,15 @@
     ],
     "ability_ids": [
       "infiltrators",
-      "planted-explosives",
-      "primed-and-ready",
+      "planted-explosives-genestealer-cults",
+      "primed-and-ready-genestealer-cults",
       "deep-strike",
       "lone-operative",
       "stealth"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -506,17 +512,17 @@
       "patriarchs-claws"
     ],
     "ability_ids": [
-      "cosmic-horror-psychic",
+      "cosmic-horror-genestealer-cults",
       "leader",
-      "might-from-beyond",
-      "psychic-familiar",
-      "supreme-commander",
+      "might-from-beyond-genestealer-cults",
+      "psychic-familiar-patriarch-genestealer-cults",
+      "supreme-commander-genestealer-cults",
       "deep-strike",
       "infiltrators"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -572,7 +578,8 @@
       "Transport",
       "Dedicated Transport",
       "Great Devourer",
-      "Goliath Truck"
+      "Goliath Truck",
+      "Frame"
     ],
     "faction_keywords": [
       "Genestealer Cults"
@@ -592,16 +599,22 @@
       "twin-autocannon"
     ],
     "ability_ids": [
-      "deadly-demise-d3",
-      "fire-support",
-      "firing-deck-6"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "fire-support-genestealer-cults",
+      {
+        "id": "firing-deck",
+        "value": 6
+      }
     ],
     "transport_capacity": {
       "capacity": 12
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -666,15 +679,18 @@
       "injector-goad"
     ],
     "ability_ids": [
-      "alchemicus-familiar",
-      "biological-warfare",
-      "leader",
-      "twisted-science",
-      "deep-strike"
+      {
+        "id": "alchemicus-familiar-genestealer-cults",
+        "wargear": "alchemicus-familiar"
+      },
+      "biological-warfare-genestealer-cults",
+      "twisted-science-genestealer-cults",
+      "deep-strike",
+      "support"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -741,14 +757,17 @@
     ],
     "ability_ids": [
       "leader",
-      "nexus-of-devotion",
-      "scouts-6",
-      "summon-the-cult",
+      "nexus-of-devotion-genestealer-cults",
+      {
+        "id": "scouts",
+        "value": 6
+      },
+      "summon-the-cult-genestealer-cults",
       "deep-strike"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -835,16 +854,31 @@
       "twin-heavy-stubber"
     ],
     "ability_ids": [
-      "crossfire",
-      "deadly-demise-1",
-      "flare-launcher",
-      "spotter",
-      "survey-augur",
-      "scouts-9"
+      "crossfire-genestealer-cults",
+      {
+        "id": "deadly-demise",
+        "value": 1
+      },
+      {
+        "id": "flare-launcher-genestealer-cults",
+        "wargear": "flare-launcher"
+      },
+      {
+        "id": "spotter-genestealer-cults",
+        "wargear": "spotter"
+      },
+      {
+        "id": "survey-augur-genestealer-cults",
+        "wargear": "survey-augur"
+      },
+      {
+        "id": "scouts",
+        "value": 9
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -889,7 +923,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 70
+        "cost": 60
       }
     ],
     "keywords": [
@@ -915,14 +949,14 @@
       "toxin-injector-claw"
     ],
     "ability_ids": [
-      "cult-demagogue",
-      "decoys-and-misdirection",
+      "cult-demagogue-genestealer-cults",
+      "decoys-and-misdirection-genestealer-cults",
       "leader",
       "deep-strike"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -994,15 +1028,18 @@
       "power-sledgehammer"
     ],
     "ability_ids": [
-      "feel-no-pain-5",
+      {
+        "id": "feel-no-pain",
+        "value": 5
+      },
       "leader",
-      "regenerating-gene-mass",
-      "the-chosen-one",
+      "regenerating-gene-mass-genestealer-cults",
+      "the-chosen-one-genestealer-cults",
       "deep-strike"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1042,7 +1079,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 60
+        "cost": 50
       }
     ],
     "keywords": [
@@ -1067,14 +1104,14 @@
       "close-combat-weapon-nexos"
     ],
     "ability_ids": [
-      "battlefield-analysis",
-      "cult-infiltration",
-      "leader",
-      "deep-strike"
+      "battlefield-analysis-genestealer-cults",
+      "cult-infiltration-genestealer-cults",
+      "deep-strike",
+      "support"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1114,7 +1151,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 65
+        "cost": 60
       }
     ],
     "keywords": [
@@ -1140,9 +1177,9 @@
       "sanctus-bio-dagger"
     ],
     "ability_ids": [
-      "cloaked-assassin",
-      "creeping-shadow",
-      "psychic-spoor",
+      "cloaked-assassin-genestealer-cults",
+      "creeping-shadow-genestealer-cults",
+      "psychic-spoor-genestealer-cults",
       "deep-strike",
       "infiltrators",
       "lone-operative",
@@ -1150,7 +1187,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1218,14 +1255,17 @@
     ],
     "ability_ids": [
       "leader",
-      "master-outrider",
-      "priority-target",
+      "master-outrider-genestealer-cults",
+      "priority-target-genestealer-cults",
       "stealth",
-      "scouts-9"
+      {
+        "id": "scouts",
+        "value": 9
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1309,13 +1349,16 @@
       "aberrant-weapons"
     ],
     "ability_ids": [
-      "hulking-bodyguards",
+      "hulking-bodyguards-genestealer-cults",
       "deep-strike",
-      "feel-no-pain-5"
+      {
+        "id": "feel-no-pain",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1354,12 +1397,12 @@
     "points": [
       {
         "models": 5,
-        "cost": 70
+        "cost": 65
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 130
+        "cost": 120
       }
     ],
     "keywords": [
@@ -1388,16 +1431,27 @@
       "leaders-cult-weapons"
     ],
     "ability_ids": [
-      "claimed-for-the-cult",
-      "deep-strike"
+      "claimed-for-the-cult-genestealer-cults",
+      "deep-strike",
+      {
+        "id": "cult-icon-genestealer-cults",
+        "wargear": "cult-icon"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
     "wargear_budgets": [
+      {
+        "items": [
+          "heavy-mining-tool"
+        ],
+        "count": 6,
+        "per_models": 10
+      },
       {
         "items": [
           "cult-icon"
@@ -1489,14 +1543,24 @@
       "metamorph-mutations"
     ],
     "ability_ids": [
-      "brood-surge",
+      "brood-surge-genestealer-cults",
       "deep-strike",
-      "scouts-6",
-      "feel-no-pain-5"
+      {
+        "id": "scouts",
+        "value": 6
+      },
+      {
+        "id": "feel-no-pain",
+        "value": 5
+      },
+      {
+        "id": "cult-icon-genestealer-cults",
+        "wargear": "cult-icon"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1578,12 +1642,16 @@
       "leaders-cult-weapons"
     ],
     "ability_ids": [
-      "industrialised-destruction",
-      "deep-strike"
+      "industrialised-destruction-genestealer-cults",
+      "deep-strike",
+      {
+        "id": "cult-icon-genestealer-cults",
+        "wargear": "cult-icon"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1662,15 +1730,15 @@
       "locus-blades"
     ],
     "ability_ids": [
-      "bodyguard",
+      "bodyguard-genestealer-cults",
       "fights-first",
-      "leader",
-      "sudden-assault",
-      "deep-strike"
+      "sudden-assault-genestealer-cults",
+      "deep-strike",
+      "support"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1709,13 +1777,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 120,
+        "cost": 110,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 130,
+        "cost": 120,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -1724,7 +1792,8 @@
       "Vehicle",
       "Transport",
       "Great Devourer",
-      "Goliath Rockgrinder"
+      "Goliath Rockgrinder",
+      "Frame"
     ],
     "faction_keywords": [
       "Genestealer Cults"
@@ -1746,16 +1815,26 @@
       "heavy-stubber-goliath-rockgrinder"
     ],
     "ability_ids": [
-      "grinding-line-breaker",
-      "deadly-demise-d3",
-      "firing-deck-6"
+      "grinding-line-breaker-genestealer-cults",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "firing-deck",
+        "value": 6
+      },
+      {
+        "id": "damaged",
+        "value": 3
+      }
     ],
     "transport_capacity": {
       "capacity": 6
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1820,14 +1899,14 @@
       "psionic-cascade"
     ],
     "ability_ids": [
-      "bio-horror-disruption-psychic",
+      "bio-horror-disruption-genestealer-cults",
       "leader",
-      "psionic-shield-psychic",
+      "psionic-shield-genestealer-cults",
       "deep-strike"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1911,13 +1990,13 @@
       "cult-claws-and-talons"
     ],
     "ability_ids": [
-      "swift-and-deadly",
+      "swift-and-deadly-genestealer-cults",
       "deep-strike",
       "infiltrators"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1983,13 +2062,14 @@
     ],
     "ability_ids": [
       "leader",
-      "mind-control-psychic",
-      "spiritual-leader",
-      "deep-strike"
+      "mind-control-genestealer-cults",
+      "spiritual-leader-genestealer-cults",
+      "deep-strike",
+      "psychic-familiar-genestealer-cults"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2034,7 +2114,8 @@
     "keywords": [
       "Claw of Ascension",
       "Great Devourer",
-      "Vehicle"
+      "Vehicle",
+      "Claw of Ascension Achilles Ridgerunner"
     ],
     "faction_keywords": [
       "Genestealer Cults"
@@ -2044,17 +2125,17 @@
       "max": 1
     },
     "weapon_ids": [
-      "armoured-hull-achilles-ridgerunners",
       "missile-launcher",
-      "twin-heavy-stubber"
+      "twin-heavy-stubber",
+      "armoured-hull-claw-of-ascension-achilles-ridgerunner"
     ],
     "ability_ids": [
-      "claw-of-ascension-crossfire",
-      "claw-of-ascension-survey-augur"
+      "crossfire-claw-of-ascension-achilles-ridgerunner-genestealer-cults",
+      "survey-augur-claw-of-ascension-achilles-ridgerunner-genestealer-cults"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"
@@ -2109,7 +2190,8 @@
       "Claw of Ascension",
       "Explosives",
       "Great Devourer",
-      "Mounted"
+      "Mounted",
+      "Claw of Ascension Atalan Jackals"
     ],
     "faction_keywords": [
       "Genestealer Cults"
@@ -2119,17 +2201,17 @@
       "max": 5
     },
     "weapon_ids": [
-      "atalan-power-weapon",
       "mining-laser",
-      "stolen-blade",
-      "stolen-firearms"
+      "stolen-blade-claw-of-ascension-atalan-jackals",
+      "stolen-firearms",
+      "power-weapon-claw-of-ascension-atalan-jackals"
     ],
     "ability_ids": [
-      "claw-of-ascension-adaptable-fighters"
+      "adaptable-fighters-genestealer-cults"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"
@@ -2169,7 +2251,8 @@
       "Claw of Ascension",
       "Explosives",
       "Great Devourer",
-      "Infantry"
+      "Infantry",
+      "Claw of Ascension Hybrid Metamorphs"
     ],
     "faction_keywords": [
       "Genestealer Cults"
@@ -2184,12 +2267,10 @@
       "leaders-weapon-symbiote",
       "metamorph-mutations"
     ],
-    "ability_ids": [
-      "claw-of-ascension-brood-claim"
-    ],
+    "ability_ids": [],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "game_modes": [
       "combat-patrol"
@@ -2230,7 +2311,8 @@
       "Explosives",
       "Great Devourer",
       "Jackal Alphus",
-      "Mounted"
+      "Mounted",
+      "Shanus Daskovian"
     ],
     "faction_keywords": [
       "Genestealer Cults"
@@ -2240,18 +2322,17 @@
       "max": 1
     },
     "weapon_ids": [
-      "autopistol-jackal-alphus",
-      "cult-sniper-rifle-jackal-alphus",
-      "stolen-blade"
+      "stolen-blade",
+      "autopistol-shanus-daskovian",
+      "cult-sniper-rifle-shanus-daskovian"
     ],
     "ability_ids": [
-      "claw-of-ascension-master-outrider",
-      "claw-of-ascension-priority-target",
-      "leader"
+      "master-outrider-shanus-daskovian-genestealer-cults",
+      "priority-target-shanus-daskovian-genestealer-cults"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"

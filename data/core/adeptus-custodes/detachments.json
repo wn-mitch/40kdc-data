@@ -3,290 +3,80 @@
     "id": "lions-of-the-emperor",
     "name": "Lions of the Emperor",
     "faction_id": "adeptus-custodes",
-    "detachment_rule_id": "against-all-odds",
+    "detachment_rule_id": "on-gilded-wings-adeptus-custodes",
     "enhancement_ids": [
-      "superior-creation-lions-of-the-emperor",
-      "praesidius-lions-of-the-emperor",
-      "fierce-conqueror-lions-of-the-emperor",
-      "admonimortis-lions-of-the-emperor"
+      "lightning-descent-lions-of-the-emperor-adeptus-custodes",
+      "leonine-ferocity-lions-of-the-emperor-adeptus-custodes"
     ],
     "stratagem_ids": [
-      "peerless-warrior-lions-of-the-emperor",
-      "gilded-champion-lions-of-the-emperor",
-      "defiant-to-the-last-lions-of-the-emperor",
-      "unleash-the-lions-lions-of-the-emperor",
-      "manoeuvre-and-fire-lions-of-the-emperor",
-      "swift-as-the-eagle-lions-of-the-emperor"
+      "vigil-unending-lions-of-the-emperor-adeptus-custodes",
+      "unleash-the-lions-lions-of-the-emperor-adeptus-custodes",
+      "fury-of-the-emperor-lions-of-the-emperor-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "detachment_points": 3,
+    "detachment_points": 1,
     "force_dispositions": [
-      "take-and-hold"
+      "disruption"
     ],
-    "tags": [
-      "lions"
-    ],
+    "tags": [],
     "external_refs": [
       {
         "namespace": "mfm",
-        "id": "16f0256d-a6ba-4d12-963f-2b8874eb17a5"
+        "id": "64ce831b-8894-4e0d-bc69-2ccb92ff37d9"
       }
+    ],
+    "detachment_rule_ids": [
+      "on-gilded-wings-adeptus-custodes"
     ]
   },
   {
     "id": "auric-champions",
     "name": "Auric Champions",
     "faction_id": "adeptus-custodes",
-    "detachment_rule_id": "assemblage-of-might",
+    "detachment_rule_id": "assemblage-of-might-adeptus-custodes",
     "enhancement_ids": [
-      "blade-imperator-auric-champions",
-      "inspirational-exemplar-auric-champions",
-      "veiled-blade-auric-champions",
-      "martial-philosopher-auric-champions"
+      "shroud-of-the-hidden-blade-auric-champions-adeptus-custodes",
+      "inspirational-exemplar-auric-champions-adeptus-custodes",
+      "superior-creation-auric-champions-adeptus-custodes"
     ],
     "stratagem_ids": [
-      "slayer-of-champions-auric-champions",
-      "the-emperors-auspice-auric-champions",
-      "earning-of-a-name-auric-champions",
-      "shoulder-the-mantle-auric-champions",
-      "superhuman-reserves-auric-champions",
-      "vigil-unending-auric-champions"
+      "gilded-champion-auric-champions-adeptus-custodes",
+      "duty-unto-death-auric-champions-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "detachment_points": 2,
-    "force_dispositions": [
-      "priority-assets"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "2ed9481a-9f80-4e78-8931-b8070fef82e3"
-      }
-    ]
-  },
-  {
-    "id": "solar-spearhead",
-    "name": "Solar Spearhead",
-    "faction_id": "adeptus-custodes",
-    "detachment_rule_id": null,
-    "enhancement_ids": [
-      "adamantine-talisman-solar-spearhead",
-      "augury-uplink-solar-spearhead",
-      "honoured-fallen-aura-solar-spearhead",
-      "veteran-of-the-kataphraktoi-solar-spearhead"
-    ],
-    "stratagem_ids": [
-      "flawless-construction-solar-spearhead",
-      "emperors-vengeance-solar-spearhead",
-      "wrathful-advance-solar-spearhead",
-      "unstoppable-solar-spearhead",
-      "relentless-persecution-solar-spearhead",
-      "punishment-inescapable-solar-spearhead"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 2,
-    "force_dispositions": [
-      "take-and-hold"
-    ],
-    "detachment_rule_ids": [
-      "auric-armour",
-      "moritoi-ancients"
-    ],
-    "tags": [
-      "armoury"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "3cb02267-28e0-4dab-9ff3-976caa1b7a31"
-      }
-    ]
-  },
-  {
-    "id": "shield-host",
-    "name": "Shield Host",
-    "faction_id": "adeptus-custodes",
-    "detachment_rule_id": "martial-mastery",
-    "enhancement_ids": [
-      "from-the-hall-of-armouries-shield-host",
-      "castellans-mark-shield-host",
-      "auric-mantle-shield-host",
-      "panoptispex-shield-host"
-    ],
-    "stratagem_ids": [
-      "arcane-genetic-alchemy-shield-host",
-      "avenge-the-fallen-shield-host",
-      "unwavering-sentinels-shield-host",
-      "multipotentiality-shield-host",
-      "vigilance-eternal-shield-host",
-      "archeotech-munitions-shield-host"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 2,
+    "detachment_points": 1,
     "force_dispositions": [
       "purge-the-foe"
     ],
     "external_refs": [
       {
         "namespace": "mfm",
-        "id": "71a22085-3750-4339-bd18-7b7511e831ee"
+        "id": "7a1892ae-2d7b-4d1e-8f14-d64c3461be66"
       }
+    ],
+    "detachment_rule_ids": [
+      "assemblage-of-might-adeptus-custodes"
     ]
   },
   {
     "id": "null-maiden-vigil",
     "name": "Null Maiden Vigil",
     "faction_id": "adeptus-custodes",
-    "detachment_rule_id": "creeping-dread-aura",
+    "detachment_rule_id": "silent-sisterhood-adeptus-custodes",
     "enhancement_ids": [
-      "raptor-blade-null-maiden-vigil",
-      "enhanced-voidsheen-cloak-null-maiden-vigil",
-      "huntress-eye-null-maiden-vigil",
-      "oblivion-knight-null-maiden-vigil"
+      "oblivion-knight-null-maiden-vigil-adeptus-custodes",
+      "huntress-eye-null-maiden-vigil-adeptus-custodes"
     ],
     "stratagem_ids": [
-      "witch-hunters-null-maiden-vigil",
-      "anathema-blademastery-null-maiden-vigil",
-      "purgation-sweep-null-maiden-vigil",
-      "desperations-price-null-maiden-vigil",
-      "psy-chaff-volley-null-maiden-vigil",
-      "psychic-abominations-null-maiden-vigil"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 2,
-    "force_dispositions": [
-      "reconnaissance"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "b70a6b14-333a-4f04-a3c3-b3341e48c08c"
-      }
-    ]
-  },
-  {
-    "id": "talons-of-the-emperor",
-    "name": "Talons of the Emperor",
-    "faction_id": "adeptus-custodes",
-    "detachment_rule_id": "revered-companions",
-    "enhancement_ids": [
-      "radiant-mantle-talons-of-the-emperor",
-      "gift-of-terran-artifice-talons-of-the-emperor",
-      "champion-of-the-imperium-talons-of-the-emperor",
-      "aegis-projector-talons-of-the-emperor"
-    ],
-    "stratagem_ids": [
-      "talons-interlocked-talons-of-the-emperor",
-      "empyric-severance-talons-of-the-emperor",
-      "taloned-pincer-talons-of-the-emperor",
-      "emperors-executioners-talons-of-the-emperor",
-      "shield-of-honour-talons-of-the-emperor",
-      "hunt-as-one-talons-of-the-emperor"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 3,
-    "force_dispositions": [
-      "take-and-hold"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "f0e490e7-c6e3-4c51-9162-93dca988eee5"
-      }
-    ]
-  },
-  {
-    "id": "might-of-the-moritoi",
-    "name": "Might of the Moritoi",
-    "faction_id": "adeptus-custodes",
-    "detachment_rule_id": "march-of-the-honoured-dead",
-    "enhancement_ids": [
-      "interred-expertise-upgrade-might-of-the-moritoi",
-      "auramite-sarcophagus-upgrade-might-of-the-moritoi"
-    ],
-    "stratagem_ids": [
-      "flawless-construction-might-of-the-moritoi",
-      "unstoppable-advance-might-of-the-moritoi",
-      "prioritised-eradication-might-of-the-moritoi"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 1,
-    "force_dispositions": [
-      "take-and-hold"
-    ],
-    "tags": [
-      "armoury"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "4edac749-d510-4161-b3c3-1fd31e91cfcf"
-      }
-    ]
-  },
-  {
-    "id": "silent-hunters",
-    "name": "Silent Hunters",
-    "faction_id": "adeptus-custodes",
-    "detachment_rule_id": "skin-crawling-disorientation",
-    "enhancement_ids": [
-      "encircling-hunter-silent-hunters",
-      "psyk-out-grenades-upgrade-silent-hunters"
-    ],
-    "stratagem_ids": [
-      "deathsong-scythes-silent-hunters",
-      "umbral-prosecution-silent-hunters",
-      "synchronised-inferno-silent-hunters"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "detachment_points": 1,
-    "force_dispositions": [
-      "reconnaissance"
-    ],
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "58dd1c38-27e6-4ccf-a7f5-53068e61b838"
-      }
-    ]
-  },
-  {
-    "id": "tharanatoi-hammerblow",
-    "name": "Tharanatoi Hammerblow",
-    "faction_id": "adeptus-custodes",
-    "detachment_rule_id": "the-hammer-falls",
-    "enhancement_ids": [
-      "mnemo-locked-shrine-cipher-tharanatoi-hammerblow",
-      "efficient-aggression-tharanatoi-hammerblow"
-    ],
-    "stratagem_ids": [
-      "hardened-resolve-tharanatoi-hammerblow",
-      "unleash-the-lions-tharanatoi-hammerblow",
-      "electroexorcist-saturation-tharanatoi-hammerblow"
+      "anathema-blademastery-null-maiden-vigil-adeptus-custodes",
+      "psy-chaff-volley-null-maiden-vigil-adeptus-custodes",
+      "purgation-sweep-null-maiden-vigil-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
@@ -296,14 +86,50 @@
     "force_dispositions": [
       "disruption"
     ],
-    "tags": [
-      "lions"
-    ],
     "external_refs": [
       {
         "namespace": "mfm",
-        "id": "92ae3afb-c5d5-41a9-80da-8db33c91ed41"
+        "id": "e4176ff6-33ba-4413-8df6-f80f1f9e418b"
       }
+    ],
+    "detachment_rule_ids": [
+      "silent-sisterhood-adeptus-custodes"
+    ],
+    "granted_warlord_datasheet_ids": [
+      "knight-centura"
+    ]
+  },
+  {
+    "id": "might-of-the-moritoi",
+    "name": "Might of the Moritoi",
+    "faction_id": "adeptus-custodes",
+    "detachment_rule_id": "moritoi-ancients-adeptus-custodes",
+    "enhancement_ids": [
+      "memento-moritoi-one-per-army-upgrade-might-of-the-moritoi-adeptus-custodes",
+      "augury-uplink-one-per-army-upgrade-might-of-the-moritoi-adeptus-custodes"
+    ],
+    "stratagem_ids": [
+      "unceasing-onslaught-might-of-the-moritoi-adeptus-custodes",
+      "honoured-interred-might-of-the-moritoi-adeptus-custodes",
+      "unstoppable-momentum-might-of-the-moritoi-adeptus-custodes"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "take-and-hold"
+    ],
+    "tags": [],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "628c8037-f95d-4627-9255-2088b3eb9349"
+      }
+    ],
+    "detachment_rule_ids": [
+      "moritoi-ancients-adeptus-custodes"
     ]
   },
   {
@@ -311,12 +137,12 @@
     "name": "Tristraen’s Gilded Blades",
     "faction_id": "adeptus-custodes",
     "enhancement_ids": [
-      "comrades-in-wrath-tristraens-gilded-blades",
-      "shattering-charge-tristraens-gilded-blades"
+      "comrades-in-wrath-tristraens-gilded-blades-adeptus-custodes",
+      "shattering-charge-tristraens-gilded-blades-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "pre-launch-provisional"
     },
     "game_modes": [
       "combat-patrol"
@@ -330,6 +156,385 @@
         "namespace": "mfm",
         "id": "9c579f51-d8f2-461a-8a99-ec7deace8303"
       }
+    ],
+    "detachment_rule_ids": [
+      "fearless-and-unrelenting-adeptus-custodes",
+      "martial-katah-tristraens-gilded-blades-adeptus-custodes"
+    ],
+    "stratagem_ids": [
+      "gilded-spear-tristraens-gilded-blades-adeptus-custodes",
+      "inevitable-wrath-tristraens-gilded-blades-adeptus-custodes",
+      "never-outmatched-tristraens-gilded-blades-adeptus-custodes"
+    ]
+  },
+  {
+    "id": "aquilan-shield",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "e3458c3f-13e3-4d66-81a9-287e06320b93"
+      }
+    ],
+    "name": "Aquilan Shield",
+    "faction_id": "adeptus-custodes",
+    "enhancement_ids": [
+      "pareldors-caducatrix-aquilan-shield-adeptus-custodes",
+      "not-a-shell-wasted-aquilan-shield-adeptus-custodes"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "take-and-hold"
+    ],
+    "detachment_rule_ids": [
+      "gilded-guardians-adeptus-custodes"
+    ],
+    "stratagem_ids": [
+      "rapid-reactions-aquilan-shield-adeptus-custodes",
+      "manoeuvre-and-fire-aquilan-shield-adeptus-custodes",
+      "tip-of-the-talon-aquilan-shield-adeptus-custodes"
+    ],
+    "tags": [
+      "shield-host"
+    ]
+  },
+  {
+    "id": "aquilan-talon",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "5263f09d-8a14-4a9d-b3ea-7f27e44e5f02"
+      }
+    ],
+    "name": "Aquilan Talon",
+    "faction_id": "adeptus-custodes",
+    "enhancement_ids": [
+      "coronal-plate-aquilan-talon-adeptus-custodes",
+      "goldenwrath-upgrade-aquilan-talon-adeptus-custodes"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "take-and-hold"
+    ],
+    "game_modes": [
+      "combat-patrol"
+    ],
+    "detachment_rule_ids": [
+      "resolute-stride-adeptus-custodes"
+    ],
+    "stratagem_ids": [
+      "terrible-might-aquilan-talon-adeptus-custodes",
+      "relentless-destroyers-aquilan-talon-adeptus-custodes",
+      "unstoppable-champion-aquilan-talon-adeptus-custodes"
+    ]
+  },
+  {
+    "id": "aquilan-wing",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "1223e490-8ad4-42f1-a1e1-52d17f1e257e"
+      }
+    ],
+    "name": "Aquilan Wing",
+    "faction_id": "adeptus-custodes",
+    "enhancement_ids": [
+      "eagles-pinions-upgrade-aquilan-wing-adeptus-custodes",
+      "will-of-auramite-aquilan-wing-adeptus-custodes"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "take-and-hold"
+    ],
+    "game_modes": [
+      "combat-patrol"
+    ],
+    "detachment_rule_ids": [
+      "indomitable-avatars-adeptus-custodes"
+    ],
+    "stratagem_ids": [
+      "vengeance-inescapable-aquilan-wing-adeptus-custodes",
+      "on-gilded-wings-aquilan-wing-adeptus-custodes",
+      "driven-by-duty-aquilan-wing-adeptus-custodes"
+    ]
+  },
+  {
+    "id": "dread-host",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "70fd52da-7f4b-4979-9b52-6dfa8e5b37b0"
+      }
+    ],
+    "name": "Dread Host",
+    "faction_id": "adeptus-custodes",
+    "enhancement_ids": [
+      "auric-exemplar-dread-host-adeptus-custodes",
+      "flawless-bladework-dread-host-adeptus-custodes"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "purge-the-foe"
+    ],
+    "detachment_rule_ids": [
+      "instruments-of-the-emperors-wrath-adeptus-custodes"
+    ],
+    "stratagem_ids": [
+      "lightning-wrath-dread-host-adeptus-custodes",
+      "golden-light-of-the-moiraides-dread-host-adeptus-custodes",
+      "preternatural-rapidity-dread-host-adeptus-custodes"
+    ],
+    "tags": [
+      "shield-host"
+    ]
+  },
+  {
+    "id": "emissaries-imperatus",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "9324ed01-8acf-4aa4-95a9-8c40084daafc"
+      }
+    ],
+    "name": "Emissaries Imperatus",
+    "faction_id": "adeptus-custodes",
+    "enhancement_ids": [
+      "auriferous-orb-emissaries-imperatus-adeptus-custodes",
+      "edge-of-the-blade-emissaries-imperatus-adeptus-custodes"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "priority-assets"
+    ],
+    "detachment_rule_ids": [
+      "heralds-of-the-throne-adeptus-custodes"
+    ],
+    "stratagem_ids": [
+      "bearers-of-his-light-emissaries-imperatus-adeptus-custodes",
+      "selfless-service-emissaries-imperatus-adeptus-custodes",
+      "slayers-of-nightmares-emissaries-imperatus-adeptus-custodes"
+    ],
+    "tags": [
+      "shield-host"
+    ]
+  },
+  {
+    "id": "emperors-chosen",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "3bbf927d-73fb-4a49-bc0c-3ab6dff01a9a"
+      }
+    ],
+    "name": "Emperor’s Chosen",
+    "faction_id": "adeptus-custodes",
+    "enhancement_ids": [
+      "radiant-mantle-emperors-chosen-adeptus-custodes",
+      "from-the-hall-of-armouries-emperors-chosen-adeptus-custodes"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "priority-assets"
+    ],
+    "detachment_rule_ids": [
+      "magna-imperator-adeptus-custodes"
+    ],
+    "stratagem_ids": [
+      "impenetrable-bastion-emperors-chosen-adeptus-custodes",
+      "in-auramite-clad-emperors-chosen-adeptus-custodes",
+      "superhuman-focus-emperors-chosen-adeptus-custodes"
+    ],
+    "tags": [
+      "shield-host"
+    ]
+  },
+  {
+    "id": "grav-assault-force",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "38fa6bc0-d9f0-49e6-b4a9-12d3c8ec93ac"
+      }
+    ],
+    "name": "Grav‑Assault Force",
+    "faction_id": "adeptus-custodes",
+    "enhancement_ids": [
+      "combat-deployment-upgrade-grav-assault-force-adeptus-custodes",
+      "anti-gravitic-mobility-upgrade-grav-assault-force-adeptus-custodes"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "reconnaissance"
+    ],
+    "detachment_rule_ids": [
+      "flare-shields-adeptus-custodes"
+    ],
+    "stratagem_ids": [
+      "advanced-stabilisers-grav-assault-force-adeptus-custodes",
+      "inevitable-annihilation-grav-assault-force-adeptus-custodes",
+      "victory-before-death-grav-assault-force-adeptus-custodes"
+    ]
+  },
+  {
+    "id": "guardians-of-the-throne",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "dd1d4660-c602-467b-b306-f9e5e815d02d"
+      }
+    ],
+    "name": "Guardians of the Throne",
+    "faction_id": "adeptus-custodes",
+    "enhancement_ids": [
+      "bane-of-abominations-guardians-of-the-throne-adeptus-custodes",
+      "emperors-light-guardians-of-the-throne-adeptus-custodes",
+      "castellans-mark-guardians-of-the-throne-adeptus-custodes",
+      "eagles-eye-guardians-of-the-throne-adeptus-custodes"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "detachment_points": 3,
+    "force_dispositions": [
+      "priority-assets"
+    ],
+    "detachment_rule_ids": [
+      "martial-mastery-adeptus-custodes"
+    ],
+    "stratagem_ids": [
+      "prime-target-guardians-of-the-throne-adeptus-custodes",
+      "shield-of-honour-guardians-of-the-throne-adeptus-custodes",
+      "swift-as-the-eagle-guardians-of-the-throne-adeptus-custodes",
+      "superhuman-focus-guardians-of-the-throne-adeptus-custodes",
+      "in-auramite-clad-guardians-of-the-throne-adeptus-custodes",
+      "unlimited-endurance-guardians-of-the-throne-adeptus-custodes"
+    ]
+  },
+  {
+    "id": "honoured-companions",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "1b487980-1f44-497e-a39d-6479ebca992d"
+      }
+    ],
+    "name": "Honoured Companions",
+    "faction_id": "adeptus-custodes",
+    "enhancement_ids": [
+      "arae-shrike-honoured-companions-adeptus-custodes",
+      "celeritous-sentries-upgrade-honoured-companions-adeptus-custodes"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "take-and-hold"
+    ],
+    "detachment_rule_ids": [
+      "companions-watch-adeptus-custodes"
+    ],
+    "stratagem_ids": [
+      "emperors-domain-honoured-companions-adeptus-custodes",
+      "avenge-the-fallen-honoured-companions-adeptus-custodes",
+      "swift-as-the-eagle-honoured-companions-adeptus-custodes"
+    ]
+  },
+  {
+    "id": "shadowkeepers",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "03357e89-c78a-4cbe-b0ea-ecb85696246a"
+      }
+    ],
+    "name": "Shadowkeepers",
+    "faction_id": "adeptus-custodes",
+    "enhancement_ids": [
+      "genalchemic-warding-shadowkeepers-adeptus-custodes",
+      "unstoppable-destroyer-shadowkeepers-adeptus-custodes"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "purge-the-foe"
+    ],
+    "detachment_rule_ids": [
+      "wardens-of-the-dark-cells-adeptus-custodes"
+    ],
+    "stratagem_ids": [
+      "grim-responsibility-shadowkeepers-adeptus-custodes",
+      "no-escape-shadowkeepers-adeptus-custodes",
+      "indomitable-guardians-shadowkeepers-adeptus-custodes"
+    ],
+    "tags": [
+      "shield-host"
+    ]
+  },
+  {
+    "id": "solar-watch",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "712e2b4d-b39e-43e1-9cc9-29c2aed8aee8"
+      }
+    ],
+    "name": "Solar Watch",
+    "faction_id": "adeptus-custodes",
+    "enhancement_ids": [
+      "sally-forth-solar-watch-adeptus-custodes",
+      "auric-eagle-upgrade-solar-watch-adeptus-custodes"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "reconnaissance"
+    ],
+    "detachment_rule_ids": [
+      "talon-sortie-adeptus-custodes"
+    ],
+    "stratagem_ids": [
+      "inexorable-solar-watch-adeptus-custodes",
+      "gravimetric-grenade-solar-watch-adeptus-custodes",
+      "at-spears-length-solar-watch-adeptus-custodes"
+    ],
+    "tags": [
+      "shield-host"
     ]
   }
 ]

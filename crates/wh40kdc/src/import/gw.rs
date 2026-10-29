@@ -15,7 +15,9 @@
 //! - A top-level `• Nx Thing` *without* children is plain **wargear**.
 //! - A bullet *without* an `Nx` count is an **annotation**: `… Character` flags
 //!   a character, `Warlord` flags the warlord, `Name (+N pts)` is the
-//!   enhancement.
+//!   enhancement, `Attached as: Leader|Support|Bodyguard` marks a member of an
+//!   `Attached Unit N` group.
+//! - A hollow `◦` bullet is one level deeper than a `•` at the same indent.
 //!
 //! **Disjointness from the WTC matchers**: the GW format always carries `•`
 //! bullets and never the WTC `N with` lines. wtc-full always has `N with` (so
@@ -29,8 +31,11 @@ use regex::Regex;
 use serde_json::Value;
 
 use super::adapter::{FormatAdapter, ParseError};
+use super::attached_groups::{attached_as_role, AttachedAs};
 use super::newrecruit_text::{faction_from_keyword, infer_battle_size_raw, strip_parenthetical};
-use super::types::{ParsedRoster, ParsedUnit, ParsedWargear, RosterFormat};
+use super::types::{
+    AttachmentRole, ParsedLeaderAttachment, ParsedRoster, ParsedUnit, ParsedWargear, RosterFormat,
+};
 
 const FACTION_KEYWORD_PREFIX: &str = "+ FACTION KEYWORD:";
 const ALLIED_SECTION: &str = "ALLIED UNITS";
@@ -42,19 +47,38 @@ static RE_FACTION: Lazy<Regex> =
     Lazy::new(|| Regex::new(r"(?i)^\+\s*FACTION KEYWORD:\s*(.+?)\s*$").unwrap());
 static RE_DETACHMENT: Lazy<Regex> =
     Lazy::new(|| Regex::new(r"(?i)^\+\s*DETACHMENT:\s*(.+?)\s*$").unwrap());
+static RE_DISPOSITION: Lazy<Regex> =
+    Lazy::new(|| Regex::new(r"(?i)^\+\s*(?:FORCE DISPOSITION|DISPO):\s*(.+?)\s*$").unwrap());
 static RE_TOTAL_PTS: Lazy<Regex> =
     Lazy::new(|| Regex::new(r"(?i)^\+\s*TOTAL ARMY POINTS:\s*(\d+)\s*pts?\s*$").unwrap());
 static RE_FENCE: Lazy<Regex> = Lazy::new(|| Regex::new(r"^\++\s*$").unwrap());
 static RE_SECTION_HEADER: Lazy<Regex> = Lazy::new(|| Regex::new(r"^[A-Z][A-Z0-9 \-/&]+$").unwrap());
 static RE_UNIT_HEADER: Lazy<Regex> =
-    Lazy::new(|| Regex::new(r"(?i)^(.+?)\s*\(\s*(\d+)\s*pts?\s*\)\s*$").unwrap());
-static RE_BULLET_LINE: Lazy<Regex> = Lazy::new(|| Regex::new(r"^([\t ]*)•\s*(.+?)\s*$").unwrap());
+    Lazy::new(|| Regex::new(r"(?i)^(.+?)\s*\(\s*(\d+)\s*(?:pts?|points?)\s*\)\s*$").unwrap());
+static RE_BULLET_LINE: Lazy<Regex> =
+    Lazy::new(|| Regex::new(r"^([\t ]*)([•◦])\s*(.+?)\s*$").unwrap());
+// The "Attached Units" preamble groups a Leader/Support character with its
+// bodyguard unit under `Attached Unit N` before the ALL-CAPS role sections
+// begin. The marker is mixed case (never a section header) and has no
+// `(N pts)` suffix (never a unit header): it is purely a pairing fence.
+static RE_ATTACHED_UNIT_HEADER: Lazy<Regex> =
+    Lazy::new(|| Regex::new(r"(?i)^Attached Unit\s+\d+\s*$").unwrap());
+static RE_ATTACHED_AS: Lazy<Regex> =
+    Lazy::new(|| Regex::new(r"(?i)^Attached as:\s*(Leader|Support|Bodyguard)\b").unwrap());
 static RE_NX_PREFIX: Lazy<Regex> = Lazy::new(|| Regex::new(r"^(\d+)x\s+(.+)$").unwrap());
 static RE_ENHANCEMENT_ANNOT: Lazy<Regex> =
     Lazy::new(|| Regex::new(r"(?i)^(.+?)\s*\(\+\s*(\d+)\s*pts?\s*\)\s*$").unwrap());
 static RE_WITH_LINE: Lazy<Regex> = Lazy::new(|| Regex::new(r"(?m)^[\t ]*\d+\s+with\b").unwrap());
 static RE_BULLET_ANYWHERE: Lazy<Regex> = Lazy::new(|| Regex::new(r"(?m)^[\t ]*•").unwrap());
 static RE_SERIALIZED_WTC: Lazy<Regex> = Lazy::new(|| Regex::new(r"(?im)^\+\s*LIST NAME:").unwrap());
+static RE_WTC_COMPACT_UNIT: Lazy<Regex> =
+    Lazy::new(|| Regex::new(r"(?im)^(?:Char\d+:\s*)?\d+x\s+.+?\(\s*\d+\s*pts?\s*\)\s*:").unwrap());
+static RE_EMBEDDED_APP_BATTLE_SIZE: Lazy<Regex> = Lazy::new(|| {
+    Regex::new(
+        r"(?im)^\s*(?:Combat Patrol|Incursion|Strike Force|Onslaught)\s*\(\s*[\d.,]+\s*Points?\s*\)\s*$",
+    )
+    .unwrap()
+});
 
 /// Accept the input only when it carries the FACTION KEYWORD summary header,
 /// has `•` bullets, and lacks the WTC `N with` body lines.
@@ -69,8 +93,17 @@ fn is_gw_text(decoded: &Value) -> Option<&str> {
     if RE_WITH_LINE.is_match(s) {
         return None; // that's wtc-full
     }
+    if RE_WTC_COMPACT_UNIT.is_match(s) {
+        return None;
+    }
     if RE_SERIALIZED_WTC.is_match(s) {
         return None; // serialized WTC must be claimed by its own adapter
+    }
+    // BCP sometimes wraps a complete modern GW app export in the older `+`
+    // summary fence. The body then carries its own faction/detachment/battle-size
+    // preamble and belongs to gw-headerless, which strips the wrapper first.
+    if RE_EMBEDDED_APP_BATTLE_SIZE.is_match(s) {
+        return None;
     }
     Some(s)
 }
@@ -79,6 +112,7 @@ struct GwHeader {
     name: String,
     faction_raw_name: Option<String>,
     detachment_raw_name: Option<String>,
+    force_disposition_raw_name: Option<String>,
     total_reported: Option<u64>,
     declared_limit: Option<u64>,
     battle_size_raw: Option<String>,
@@ -88,6 +122,7 @@ fn parse_header(lines: &[&str]) -> Option<(GwHeader, usize)> {
     let mut faction_raw_name: Option<String> = None;
     let mut detachment_raw_name: Option<String> = None;
     let mut total_reported: Option<u64> = None;
+    let mut force_disposition_raw_name: Option<String> = None;
 
     let mut fence_indices: Vec<usize> = Vec::new();
     for (i, line) in lines.iter().enumerate() {
@@ -113,6 +148,10 @@ fn parse_header(lines: &[&str]) -> Option<(GwHeader, usize)> {
             detachment_raw_name = Some(strip_parenthetical(&c[1]).to_string());
             continue;
         }
+        if let Some(c) = RE_DISPOSITION.captures(line) {
+            force_disposition_raw_name = Some(c[1].to_string());
+            continue;
+        }
         if let Some(c) = RE_TOTAL_PTS.captures(line) {
             total_reported = c[1].parse().ok();
         }
@@ -135,6 +174,7 @@ fn parse_header(lines: &[&str]) -> Option<(GwHeader, usize)> {
             name: "Imported roster".to_string(),
             faction_raw_name,
             detachment_raw_name,
+            force_disposition_raw_name,
             total_reported,
             declared_limit,
             battle_size_raw: infer_battle_size_raw(declared_limit),
@@ -156,7 +196,8 @@ struct UnitAcc {
     bullets: Vec<Bullet>,
 }
 
-fn finish_unit(acc: UnitAcc) -> ParsedUnit {
+/// Build the parsed unit plus its `Attached as:` role, if any.
+fn finish_unit(acc: UnitAcc) -> (ParsedUnit, Option<AttachedAs>) {
     let top_indent = acc.bullets.iter().map(|b| b.indent).min().unwrap_or(0);
 
     // Insertion-ordered wargear with duplicate-name merge (mirrors the TS Map).
@@ -177,6 +218,7 @@ fn finish_unit(acc: UnitAcc) -> ParsedUnit {
     let mut is_character = acc.section.as_deref() == Some(CHARACTERS_SECTION);
     let mut enhancement_raw_name: Option<String> = None;
     let mut enhancement_points: Option<u64> = None;
+    let mut attached_role: Option<AttachedAs> = None;
 
     for (i, b) in acc.bullets.iter().enumerate() {
         // A child bullet (deeper than the unit's top level) is a model group's
@@ -189,13 +231,23 @@ fn finish_unit(acc: UnitAcc) -> ParsedUnit {
         }
 
         // Top-level annotation (no `Nx` count): enhancement / character /
-        // warlord.
+        // warlord / attached-as (from the "Attached Units" preamble).
         if b.count.is_none() {
             if let Some(c) = RE_ENHANCEMENT_ANNOT.captures(&b.text) {
                 if enhancement_raw_name.is_none() {
                     enhancement_raw_name = Some(c[1].trim().to_string());
                     enhancement_points = c[2].parse().ok();
                 }
+                continue;
+            }
+            if let Some(role) = RE_ATTACHED_AS
+                .captures(&b.text)
+                .and_then(|c| attached_as_role(&c[1]))
+            {
+                if role != AttachedAs::Bodyguard {
+                    is_character = true;
+                }
+                attached_role = Some(role);
                 continue;
             }
             for token in b.text.split(',').map(str::trim).filter(|t| !t.is_empty()) {
@@ -233,7 +285,7 @@ fn finish_unit(acc: UnitAcc) -> ParsedUnit {
         (displayed, _) => displayed,
     };
 
-    ParsedUnit {
+    let unit = ParsedUnit {
         raw_name: acc.raw_name,
         is_character,
         keyword_overrides: None,
@@ -245,7 +297,34 @@ fn finish_unit(acc: UnitAcc) -> ParsedUnit {
         wargear,
         loadout_groups: None,
         leader_attachment: None,
+    };
+    (unit, attached_role)
+}
+
+/// Pair the first Leader/Support member of a closed `Attached Unit N` group
+/// with its first Bodyguard member, then clear the group.
+fn resolve_attached_group(units: &mut [ParsedUnit], group: &mut Vec<(usize, AttachedAs)>) {
+    let character = group
+        .iter()
+        .find(|(_, role)| *role != AttachedAs::Bodyguard)
+        .copied();
+    let bodyguard = group
+        .iter()
+        .find(|(_, role)| *role == AttachedAs::Bodyguard)
+        .copied();
+    if let (Some((ci, role)), Some((bi, _))) = (character, bodyguard) {
+        let bodyguard_raw_name = units[bi].raw_name.clone();
+        units[ci].leader_attachment = Some(Some(ParsedLeaderAttachment {
+            bodyguard_raw_name,
+            role: if role == AttachedAs::Support {
+                AttachmentRole::Support
+            } else {
+                AttachmentRole::Leader
+            },
+            provisional: false,
+        }));
     }
+    group.clear();
 }
 
 fn parse_body(lines: &[&str], body_start: usize) -> (Vec<ParsedUnit>, bool) {
@@ -253,6 +332,20 @@ fn parse_body(lines: &[&str], body_start: usize) -> (Vec<ParsedUnit>, bool) {
     let mut current: Option<UnitAcc> = None;
     let mut section: Option<String> = None;
     let mut allied_units = 0u64;
+    // Units finished inside an "Attached Unit N" fence, paired once the fence
+    // closes (a new `Attached Unit N`, a real section header, or end of input).
+    let mut attached_group: Vec<(usize, AttachedAs)> = Vec::new();
+    let finalize = |current: &mut Option<UnitAcc>,
+                    units: &mut Vec<ParsedUnit>,
+                    group: &mut Vec<(usize, AttachedAs)>| {
+        if let Some(acc) = current.take() {
+            let (unit, role) = finish_unit(acc);
+            if let Some(role) = role {
+                group.push((units.len(), role));
+            }
+            units.push(unit);
+        }
+    };
 
     for raw in &lines[body_start.min(lines.len())..] {
         let line = raw.trim();
@@ -260,10 +353,18 @@ fn parse_body(lines: &[&str], body_start: usize) -> (Vec<ParsedUnit>, bool) {
             continue;
         }
 
+        if RE_ATTACHED_UNIT_HEADER.is_match(line) {
+            finalize(&mut current, &mut units, &mut attached_group);
+            resolve_attached_group(&mut units, &mut attached_group);
+            continue;
+        }
+
         if let Some(c) = RE_BULLET_LINE.captures(raw) {
             if let Some(unit) = current.as_mut() {
-                let indent = c[1].len();
-                let rest = &c[2];
+                // A hollow `◦` bullet is one level deeper than a `•` at the same
+                // indent, so it is a child even without leading whitespace.
+                let indent = c[1].len() + usize::from(&c[2] == "◦");
+                let rest = &c[3];
                 let (count, text) = match RE_NX_PREFIX.captures(rest) {
                     Some(nx) => (nx[1].parse::<u64>().ok(), nx[2].trim().to_string()),
                     None => (None, rest.trim().to_string()),
@@ -295,9 +396,7 @@ fn parse_body(lines: &[&str], body_start: usize) -> (Vec<ParsedUnit>, bool) {
         }
 
         if let Some(c) = RE_UNIT_HEADER.captures(line) {
-            if let Some(unit) = current.take() {
-                units.push(finish_unit(unit));
-            }
+            finalize(&mut current, &mut units, &mut attached_group);
             current = Some(UnitAcc {
                 raw_name: c[1].trim().to_string(),
                 displayed_pts: c[2].parse().ok(),
@@ -311,16 +410,14 @@ fn parse_body(lines: &[&str], body_start: usize) -> (Vec<ParsedUnit>, bool) {
         }
 
         if RE_SECTION_HEADER.is_match(line) {
-            if let Some(unit) = current.take() {
-                units.push(finish_unit(unit));
-            }
+            finalize(&mut current, &mut units, &mut attached_group);
+            resolve_attached_group(&mut units, &mut attached_group);
             section = Some(line.to_string());
         }
     }
 
-    if let Some(unit) = current.take() {
-        units.push(finish_unit(unit));
-    }
+    finalize(&mut current, &mut units, &mut attached_group);
+    resolve_attached_group(&mut units, &mut attached_group);
 
     (units, allied_units > 0)
 }
@@ -359,7 +456,7 @@ impl FormatAdapter for GwAdapter {
             detachment_raw_names: header.detachment_raw_name.into_iter().collect(),
             battle_size_raw: header.battle_size_raw,
             force_disposition: None,
-            force_disposition_raw_name: Some(None),
+            force_disposition_raw_name: Some(header.force_disposition_raw_name),
             declared_limit: header.declared_limit,
             total_reported: header.total_reported,
             total_computed,

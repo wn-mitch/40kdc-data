@@ -51,8 +51,7 @@
               "blaster",
               "splinter-pistol",
               "bladevanes"
-            ],
-            "max_count": 1
+            ]
           },
           {
             "name": "Reaver with Heat Lance",
@@ -60,11 +59,26 @@
               "splinter-pistol",
               "heat-lance",
               "bladevanes"
-            ],
-            "max_count": 1
+            ]
           }
         ],
         "loadout_variant_budgets": [
+          {
+            "variant_names": [
+              "Reaver with Blaster"
+            ],
+            "count": 1,
+            "per_models": 3,
+            "scope": "unit"
+          },
+          {
+            "variant_names": [
+              "Reaver with Heat Lance"
+            ],
+            "count": 1,
+            "per_models": 3,
+            "scope": "unit"
+          },
           {
             "variant_names": [
               "Reaver",
@@ -74,13 +88,22 @@
             "count": 5,
             "per_models": 0,
             "scope": "model-row"
+          },
+          {
+            "variant_names": [
+              "Reaver with Blaster",
+              "Reaver with Heat Lance"
+            ],
+            "count": 1,
+            "per_models": 3,
+            "scope": "unit"
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -137,7 +160,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -180,7 +203,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -232,7 +255,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -290,7 +313,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -340,7 +363,8 @@
           {
             "name": "Scourge with Special Weapon",
             "weapon_ids": [
-              "close-combat-weapon"
+              "close-combat-weapon",
+              "shardcarbine"
             ],
             "max_count": 1
           },
@@ -368,7 +392,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -479,7 +503,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -522,7 +546,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -556,7 +580,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -595,7 +619,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -645,7 +669,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -689,7 +713,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -786,6 +810,7 @@
         "loadout_variant_budgets": [
           {
             "variant_names": [
+              "Wrack",
               "Wrack with Hexrifle",
               "Wrack with Liquifier Gun",
               "Wrack with Ossefactor",
@@ -794,13 +819,45 @@
             "count": 9,
             "per_models": 0,
             "scope": "model-row"
+          },
+          {
+            "variant_names": [
+              "Wrack with Hexrifle"
+            ],
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
+          },
+          {
+            "variant_names": [
+              "Wrack with Liquifier Gun"
+            ],
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
+          },
+          {
+            "variant_names": [
+              "Wrack with Ossefactor"
+            ],
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
+          },
+          {
+            "variant_names": [
+              "Wrack with Stinger Pistol"
+            ],
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -868,7 +925,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -893,7 +950,7 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 25
+          "diameter": 32
         },
         "default_weapon_ids": [
           "shadowfield",
@@ -904,7 +961,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -939,7 +996,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -979,7 +1036,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1057,7 +1114,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1111,7 +1168,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1153,7 +1210,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1187,7 +1244,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1234,7 +1291,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1303,7 +1360,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1355,13 +1412,13 @@
         "default_weapon_ids": [
           "spirit-leech-tentacles",
           "spirit-syphon",
-          "spirit-vortex"
+          "spirit-vortex-coven-of-agonies-cronos"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1373,6 +1430,9 @@
           }
         ]
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -1400,7 +1460,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1412,6 +1472,9 @@
           }
         ]
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -1464,7 +1527,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1486,6 +1549,9 @@
           }
         ]
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -1509,7 +1575,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1521,6 +1587,9 @@
           }
         ]
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   }
 ]

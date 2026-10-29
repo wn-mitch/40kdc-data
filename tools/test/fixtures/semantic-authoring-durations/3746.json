@@ -1,0 +1,100 @@
+{
+ "id": 3746,
+ "source_text": "wwww wwww w **xxxx xxxxxxx xxxxxxx** xxxx xxxx xxxx xxxx xxxxxxxx, xx xxx xxxx xx xxxxxxx xxxx xxx xx; xxxxx xxx xxx xx xxx xxxxx, xxx 6\" xx xxx xxxx xxxxxxxxxxxxxx xx xxxxxx xx xxxx xxxx, and xxxxx xxx xxx xx xxx xxxx, xxxxxx xxxxxxx xxxxxxxx xx xxxxxx xx xxxx xxxx xxxx xxx **[xxxxxxx]** xxxxxxx.",
+ "leaves": [
+  {
+   "role": "CONDITION",
+   "family_id": "unit-filter",
+   "family_version": 8,
+   "parameters": {
+    "side": "friendly",
+    "keywords": [
+     "GREY KNIGHTS",
+     "VEHICLE"
+    ]
+   },
+   "start_byte": 14,
+   "end_byte": 41,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "EVENT",
+   "family_id": "event",
+   "family_version": 18,
+   "parameters": {
+    "kind": "move-started",
+    "owner": "friendly",
+    "move_types": [
+     "advance"
+    ]
+   },
+   "start_byte": 42,
+   "end_byte": 65,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "EFFECT",
+   "family_id": "no-advance-roll",
+   "family_version": 4,
+   "parameters": {
+    "subject": "antecedent"
+   },
+   "start_byte": 67,
+   "end_byte": 101,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "DURATION",
+   "family_id": "duration",
+   "family_version": 3,
+   "parameters": {
+    "endpoint": "end-of-phase"
+   },
+   "start_byte": 103,
+   "end_byte": 129,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "EFFECT",
+   "family_id": "characteristic-modifier",
+   "family_version": 14,
+   "parameters": {
+    "subject": "antecedent",
+    "characteristics": [
+     "M"
+    ],
+    "operation": "add",
+    "value": 6,
+    "weapon_type": "all"
+   },
+   "start_byte": 131,
+   "end_byte": 187,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "DURATION",
+   "family_id": "duration",
+   "family_version": 3,
+   "parameters": {
+    "endpoint": "end-of-turn"
+   },
+   "start_byte": 193,
+   "end_byte": 218,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "EFFECT",
+   "family_id": "weapon-ability-grant",
+   "family_version": 9,
+   "parameters": {
+    "subject": "antecedent",
+    "keyword": "Assault",
+    "weapon_type": "ranged"
+   },
+   "start_byte": 220,
+   "end_byte": 297,
+   "fragment": "RAW_TEXT"
+  }
+ ],
+ "edits": "C2: move-ended -> move-started (leaf 1); \"it\" and \"that unit\" bind to the advancing unit (antecedent), not this unit"
+}

@@ -13,7 +13,7 @@ describe("scrubDefensiveFlags", () => {
         ability_type: "unit",
         effect: {
           type: "invulnerable-save",
-          target: "self",
+          target: "this-model",
           modifier: { invuln_sv: 4 },
         },
         community_notes: STALE_FLAG,
@@ -30,7 +30,7 @@ describe("scrubDefensiveFlags", () => {
         ability_type: "unit",
         effect: {
           type: "damage-reduction",
-          target: "self",
+          target: "this-model",
           modifier: { reduction: "half" },
         },
         community_notes: STALE_FLAG,
@@ -40,23 +40,19 @@ describe("scrubDefensiveFlags", () => {
     expect(abilities[0].community_notes).toBe(STALE_FLAG);
   });
 
-  it("leaves the flag on an ability-grant entry (genuinely outside the buff layer)", () => {
-    // Grants are not stat mods — the buff layer doesn't model them, and they
-    // legitimately remain in the residue worklist for downstream consumers.
-    const abilities = [
-      {
-        ability_id: "test-grant",
-        ability_type: "unit",
-        effect: {
-          type: "ability-grant",
-          target: "unit",
-          modifier: { grant_type: "label", value: "stealth" },
-        },
-        community_notes: STALE_FLAG,
-      },
-    ];
-    expect(scrubDefensiveFlags(abilities)).toBe(0);
+  it("leaves the flag on an ability-grant the buff layer does not model, and clears it on a Stealth grant", () => {
+    // A grant of a core ability with no combat buff (Deep Strike) legitimately stays in the residue
+    // worklist; Stealth is the cover the defender gets, so its flag is stale.
+    const grantOf = (ability: string) => ({
+      ability_id: `test-grant-${ability}`,
+      ability_type: "unit",
+      effect: { type: "ability-grant", target: "this-unit", modifier: { ability } },
+      community_notes: STALE_FLAG,
+    });
+    const abilities = [grantOf("deep-strike"), grantOf("stealth")];
+    expect(scrubDefensiveFlags(abilities)).toBe(1);
     expect(abilities[0].community_notes).toBe(STALE_FLAG);
+    expect(abilities[1].community_notes).toBeUndefined();
   });
 
   it("respects non-matching community_notes — only the exact sentinel scrubs", () => {
@@ -66,7 +62,7 @@ describe("scrubDefensiveFlags", () => {
         ability_type: "unit",
         effect: {
           type: "invulnerable-save",
-          target: "self",
+          target: "this-model",
           modifier: { invuln_sv: 4 },
         },
         community_notes: "some authored note about this ability",
@@ -83,7 +79,7 @@ describe("scrubDefensiveFlags", () => {
         ability_type: "unit",
         effect: {
           type: "damage-reduction",
-          target: "unit",
+          target: "this-unit",
           modifier: { reduction: 1 },
         },
         community_notes: STALE_FLAG,
@@ -104,7 +100,7 @@ describe("scrubDefensiveFlags", () => {
           condition: { type: "phase-is", parameters: { phase: "fight" } },
           effect: {
             type: "damage-reduction",
-            target: "unit",
+            target: "this-unit",
             modifier: { reduction: 1 },
           },
         },
@@ -135,8 +131,8 @@ describe("producesDefensiveBuff", () => {
         ability_type: "unit",
         effect: {
           type: "feel-no-pain",
-          target: "unit",
-          modifier: { threshold: 5, scope: "mortal" },
+          target: "this-unit",
+          modifier: { threshold: 5, against: "mortal" },
         },
       }),
     ).toBe(true);
@@ -149,7 +145,7 @@ describe("producesDefensiveBuff", () => {
         ability_type: "unit",
         effect: {
           type: "stat-modifier",
-          target: "self",
+          target: "this-model",
           modifier: { stat: "A", operation: "add", value: 1 },
         },
       }),

@@ -17,13 +17,23 @@
             </profile>
             <profile name="Aquilon Optics" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">You can re-roll the Damage roll.</characteristic>
+                <characteristic name="Description">You can re-roll a failed Damage roll.</characteristic>
               </characteristics>
             </profile>
-            <profile name="Deadly Demise D3" typeName="Abilities">
+            <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, each enemy unit within 6" suffers D3 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Aquilon Optics" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Nothing happens.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Damaged" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -33,6 +43,7 @@
             <category name="Frame"/>
             <category name="Imperium"/>
             <category name="Smoke"/>
+            <category name="Gladiator Lancer"/>
           </categories>
           <selections>
             <selection id="unit0-m0" name="Gladiator Lancer" type="model" number="1">
@@ -67,7 +78,7 @@
                     </profile>
                   </profiles>
                 </selection>
-                <selection id="unit0-m0-w2" name="Lancer laser destroyer" type="upgrade" number="1">
+                <selection id="unit0-m0-w2" name="Laser Destroyer" type="upgrade" number="1">
                   <profiles>
                     <profile name="Laser Destroyer" typeName="Ranged Weapons">
                       <characteristics>
@@ -75,7 +86,7 @@
                         <characteristic name="A">2</characteristic>
                         <characteristic name="BS">3+</characteristic>
                         <characteristic name="S">14</characteristic>
-                        <characteristic name="AP">-5</characteristic>
+                        <characteristic name="AP">-3</characteristic>
                         <characteristic name="D">D6+3</characteristic>
                         <characteristic name="Keywords">Heavy</characteristic>
                       </characteristics>
@@ -105,13 +116,18 @@
             </profile>
             <profile name="Ballistus Strike" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">During the Shooting phase, while the unit is below half strength against A targets, you can re-roll the Hit roll.</characteristic>
+                <characteristic name="Description">While the target is within 24" of the unit, ranged weapons equipped by models in this unit gain [SUSTAINED HITS 1].</characteristic>
               </characteristics>
             </profile>
-            <profile name="Deadly Demise D3" typeName="Abilities">
+            <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, each enemy unit within 6" suffers D3 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Damaged" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -121,6 +137,7 @@
             <category name="Dreadnought"/>
             <category name="Imperium"/>
             <category name="Walker"/>
+            <category name="Ballistus Dreadnought"/>
           </categories>
           <selections>
             <selection id="unit1-m0" name="Ballistus Dreadnought" type="model" number="1">

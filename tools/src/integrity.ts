@@ -3,6 +3,16 @@ import { glob } from "glob";
 import { resolve, basename, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import type { ValidationResult } from "./validate.js";
+import { checkModelNames } from "./integrity-model-names.js";
+import { checkTargetProfiles } from "./integrity-target-profiles.js";
+import { checkWeaponGrantRefs } from "./integrity-weapon-grant.js";
+import { checkOfAbilityRollRefs } from "./integrity-of-ability-roll.js";
+import { checkStratagemTargetKeywords, checkTargetingAndAppliesToRefs } from "./integrity-targeting-refs.js";
+import { checkArmyFactionRefs } from "./integrity-army-faction.js";
+import { checkLeaderKeywordClauses } from "./integrity-leader-keywords.js";
+import { checkDslShapes } from "./integrity-shapes.js";
+import { checkDslContract } from "./integrity-dsl-contract.js";
+import { checkAuraRangeRefs } from "./integrity-aura-ranges.js";
 import { baseLoadout, checkUnitLegality, type LoadoutModel, type LoadoutTier } from "./data/loadout.js";
 import type { Unit, WargearOption } from "./generated.js";
 
@@ -29,6 +39,22 @@ export const FACTION_HOME_KEYWORD: Record<string, string> = {
   "death-guard": "Death Guard",
   "thousand-sons": "Thousand Sons",
   "emperors-children": "Emperor’s Children",
+};
+
+/**
+ * The daemon cult-legion faction keyword each single-token Chaos faction may also
+ * carry. GW prints a legion's daemons as separate datasheets in that legion's codex
+ * (Bloodletters in Codex: World Eaters carry `Blood Legions`, not `Legiones
+ * Daemonica`); the army takes them through the legion's daemon detachment (the
+ * dump's sibling `allied_faction` pool, gated by `allied_faction_required_detachment`).
+ * These per-faction views live in the host faction dir with this keyword, so the
+ * home-keyword guard admits it alongside {@link FACTION_HOME_KEYWORD}.
+ */
+export const FACTION_SIBLING_KEYWORDS: Record<string, readonly string[]> = {
+  "world-eaters": ["Blood Legions"],
+  "death-guard": ["Plague Legions"],
+  "thousand-sons": ["Scintillating Legions"],
+  "emperors-children": ["Legions of Excess"],
 };
 
 /**
@@ -66,7 +92,8 @@ export const COLLISION_POLICIES: Record<string, CollisionPolicy> = {
   detachments: { policy: "faction-scoped", idKey: "id" },
   "wargear-options": { policy: "faction-scoped", idKey: "id" },
   "unit-compositions": { policy: "faction-scoped", idKey: "unit_id" },
-  abilities: { policy: "faction-scoped", idKey: "ability_id" },
+  // Ability ids carry their faction (`<name>-<faction>`) and are unique across the dataset.
+  abilities: { policy: "unique", idKey: "ability_id" },
   // Attachment records are keyed by leader; a shared leader chassis carries a
   // distinct bodyguard list per faction, and consumers scan (never collapse).
   "leader-attachments": { policy: "faction-scoped", idKey: "leader_id" },
@@ -108,7 +135,7 @@ interface PointsTierLike {
 }
 interface UnitLike {
   id?: string;
-  ability_ids?: string[];
+  ability_ids?: (string | { id: string; value?: string | number; wargear?: string })[];
   faction_keywords?: string[];
   weapon_ids?: string[];
   points?: PointsTierLike[];
@@ -354,6 +381,170 @@ export function diceTableInvariantErrors(effect: unknown): string[] {
   return errors;
 }
 
+/**
+ * Every ability `unit_ids` entry must name a core unit (in any faction dir: a chapter's
+ * enrichment can list its parent roster's units). A unit the live game dropped takes its
+ * abilities with it (`ingest-mfm cull-legends`), so a dangling id is a missed prune.
+ */
+async function checkAbilityUnitRefs(root: string, result: ValidationResult): Promise<void> {
+  const units = new Set<string>();
+  for (const f of await glob("core/*/units.json", { cwd: root, absolute: true })) {
+    if (basename(dirname(f)).startsWith("_")) continue;
+    try {
+      for (const u of readArray<{ id?: string }>(f)) if (u.id) units.add(u.id);
+    } catch {
+      // structural problems are the AJV pass's job
+    }
+  }
+  const files = await glob("enrichment/*/abilities.json", { cwd: root, absolute: true });
+  for (const file of files.sort()) {
+    const faction = basename(dirname(file));
+    if (faction.startsWith("_") && faction !== "_core") continue;
+    let abilities: Array<{ ability_id?: string; id?: string; unit_ids?: string[] }>;
+    try {
+      abilities = readArray(file);
+    } catch {
+      continue;
+    }
+    abilities.forEach((a, index) => {
+      const dangling = (a.unit_ids ?? []).filter((u) => !units.has(u));
+      if (!dangling.length) return;
+      result.failed++;
+      result.errors.push({
+        file,
+        index,
+        errors: dangling.map((u) => ({
+          path: `/${index}/unit_ids`,
+          message: `ability "${a.ability_id ?? a.id}": unit_id "${u}" is no core unit — drop it (and the ability, if no unit is left)`,
+        })),
+      });
+    });
+  }
+}
+
+/**
+ * A detachment's datasheet lists (`mandatory_warlord_datasheet_ids`,
+ * `granted_warlord_datasheet_ids`, `excluded_datasheet_ids`) must each name a core
+ * unit in some faction dir: a dangling id would silently make a Warlord requirement
+ * unsatisfiable or an exclusion a no-op.
+ */
+async function checkDetachmentDatasheetRefs(root: string, result: ValidationResult): Promise<void> {
+  const units = new Set<string>();
+  for (const f of await glob("core/*/units.json", { cwd: root, absolute: true })) {
+    if (basename(dirname(f)).startsWith("_")) continue;
+    try {
+      for (const u of readArray<{ id?: string }>(f)) if (u.id) units.add(u.id);
+    } catch {
+      // structural problems are the AJV pass's job
+    }
+  }
+  const fields = ["mandatory_warlord_datasheet_ids", "granted_warlord_datasheet_ids", "excluded_datasheet_ids"] as const;
+  const files = await glob("core/*/detachments.json", { cwd: root, absolute: true });
+  for (const file of files.sort()) {
+    if (basename(dirname(file)).startsWith("_")) continue;
+    let dets: Array<{ id?: string } & Partial<Record<(typeof fields)[number], string[]>>>;
+    try {
+      dets = readArray(file);
+    } catch {
+      continue;
+    }
+    dets.forEach((d, index) => {
+      const errors = fields.flatMap((field) =>
+        (d[field] ?? [])
+          .filter((u) => !units.has(u))
+          .map((u) => ({ path: `/${index}/${field}`, message: `detachment "${d.id}": ${field} entry "${u}" is no core unit` })),
+      );
+      if (!errors.length) return;
+      result.failed++;
+      result.errors.push({ file, index, errors });
+    });
+  }
+}
+
+/**
+ * Keyword caps and detachment pricing must point at something real:
+ *  - a faction `keyword_limits` entry needs at least one keyword;
+ *  - a detachment `keyword_limit_overrides` entry must name the exact keyword set of
+ *    a `keyword_limits` entry on its own faction (otherwise it overrides nothing);
+ *  - a unit `detachment_pricing` entry must name a detachment of the unit's faction.
+ */
+async function checkListRequirementRefs(root: string, result: ValidationResult): Promise<void> {
+  const keyOf = (keywords: readonly string[]): string => [...keywords].sort().join("+");
+  const capsByFaction = new Map<string, Set<string>>();
+  for (const file of (await glob("core/*/factions.json", { cwd: root, absolute: true })).sort()) {
+    if (basename(dirname(file)).startsWith("_")) continue;
+    let factions: Array<{ id?: string; keyword_limits?: Array<{ keywords?: string[] }> }>;
+    try {
+      factions = readArray(file);
+    } catch {
+      continue;
+    }
+    factions.forEach((f, index) => {
+      const caps = new Set<string>();
+      const errors: Array<{ path: string; message: string }> = [];
+      (f.keyword_limits ?? []).forEach((kl, i) => {
+        if (!kl.keywords?.length)
+          errors.push({ path: `/${index}/keyword_limits/${i}/keywords`, message: `faction "${f.id}": keyword_limits entry ${i} has no keywords` });
+        else caps.add(keyOf(kl.keywords));
+      });
+      if (f.id) capsByFaction.set(f.id, caps);
+      if (errors.length) {
+        result.failed++;
+        result.errors.push({ file, index, errors });
+      }
+    });
+  }
+  const detachmentsByFaction = new Map<string, Set<string>>();
+  for (const file of (await glob("core/*/detachments.json", { cwd: root, absolute: true })).sort()) {
+    if (basename(dirname(file)).startsWith("_")) continue;
+    let dets: Array<{ id?: string; faction_id?: string; keyword_limit_overrides?: Array<{ keywords?: string[] }> }>;
+    try {
+      dets = readArray(file);
+    } catch {
+      continue;
+    }
+    dets.forEach((d, index) => {
+      if (d.faction_id && d.id)
+        (detachmentsByFaction.get(d.faction_id) ?? detachmentsByFaction.set(d.faction_id, new Set()).get(d.faction_id)!).add(d.id);
+      const caps = capsByFaction.get(d.faction_id ?? "") ?? new Set<string>();
+      const errors = (d.keyword_limit_overrides ?? [])
+        .map((o, i) => ({ o, i }))
+        .filter(({ o }) => !caps.has(keyOf(o.keywords ?? [])))
+        .map(({ o, i }) => ({
+          path: `/${index}/keyword_limit_overrides/${i}`,
+          message: `detachment "${d.id}": keyword_limit_overrides entry [${(o.keywords ?? []).join(", ")}] matches no keyword_limits entry of faction "${d.faction_id}"`,
+        }));
+      if (errors.length) {
+        result.failed++;
+        result.errors.push({ file, index, errors });
+      }
+    });
+  }
+  for (const file of (await glob("core/*/units.json", { cwd: root, absolute: true })).sort()) {
+    if (basename(dirname(file)).startsWith("_")) continue;
+    let units: Array<{ id?: string; faction_id?: string; detachment_pricing?: Array<{ detachment_id?: string }> }>;
+    try {
+      units = readArray(file);
+    } catch {
+      continue;
+    }
+    units.forEach((u, index) => {
+      const known = detachmentsByFaction.get(u.faction_id ?? "") ?? new Set<string>();
+      const errors = (u.detachment_pricing ?? [])
+        .map((t, i) => ({ t, i }))
+        .filter(({ t }) => !known.has(t.detachment_id ?? ""))
+        .map(({ t, i }) => ({
+          path: `/${index}/detachment_pricing/${i}/detachment_id`,
+          message: `unit "${u.id}": detachment_pricing detachment "${t.detachment_id}" is no detachment of faction "${u.faction_id}"`,
+        }));
+      if (errors.length) {
+        result.failed++;
+        result.errors.push({ file, index, errors });
+      }
+    });
+  }
+}
+
 function checkMissionCardLinks(root: string, result: ValidationResult): void {
   const missionsFile = resolve(root, "core/missions.json");
   const missionCardsFile = resolve(root, "core/mission-cards.json");
@@ -512,10 +703,45 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
   };
 
   checkMissionCardLinks(root, result);
+  await checkAbilityUnitRefs(root, result);
+  await checkDetachmentDatasheetRefs(root, result);
+  await checkListRequirementRefs(root, result);
+  await checkDslShapes(root, result);
+  await checkDslContract(root, result);
+  await checkAuraRangeRefs(root, result);
+  await checkTargetProfiles(root, result);
+  await checkWeaponGrantRefs(root, result);
+  await checkModelNames(root, result);
 
   // Shared core ability pool, available to every faction (optional).
   const coreAbilities = new Set<string>();
   loadAbilityIds(resolve(root, "enrichment/_core/abilities.json"), coreAbilities);
+  // Every ability record id (unique across dirs), and those whose DSL reads the unit's rating.
+  const abilityRecordIds = new Set<string>();
+  const ratedAbilityIds = new Set<string>();
+  // A stub awaits authoring, so a rating on a ref to it has nothing to read yet.
+  const stubAbilityIds = new Set<string>();
+  for (const f of await glob("enrichment/*/abilities.json", { cwd: root, absolute: true })) {
+    if (basename(dirname(f)).startsWith("_") && basename(dirname(f)) !== "_core") continue;
+    try {
+      for (const a of readArray<AbilityLike & { effect?: unknown }>(f)) {
+        if (!a.ability_id) continue;
+        abilityRecordIds.add(a.ability_id);
+        if (/"rating":true/.test(JSON.stringify(a.effect ?? null))) ratedAbilityIds.add(a.ability_id);
+        if ((a as { stub?: unknown }).stub === true) stubAbilityIds.add(a.ability_id);
+      }
+    } catch {
+      // unreadable file: reported by schema validation
+    }
+  }
+  // A roll a named ability makes (of_ability) must name one of these ids.
+  await checkOfAbilityRollRefs(root, result, new Set([...abilityRecordIds, ...coreAbilities]));
+  // A targeting effect's ability/stratagem must resolve too, and applies_to must name real keywords.
+  await checkTargetingAndAppliesToRefs(root, result, new Set([...abilityRecordIds, ...coreAbilities]));
+  await checkStratagemTargetKeywords(root, result);
+  // An army-faction condition must name a faction id, the value the engine compares.
+  await checkArmyFactionRefs(root, result);
+  await checkLeaderKeywordClauses(root, result);
   const coreAbilityById = new Map<string, AbilityLike & { id?: string; effect?: unknown }>();
   try {
     for (const ability of readArray<AbilityLike & { id?: string; effect?: unknown }>(
@@ -564,8 +790,6 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
       });
     }
 
-    const defined = new Set<string>(coreAbilities);
-    loadAbilityIds(resolve(root, `enrichment/${faction}/abilities.json`), defined);
     const home = FACTION_HOME_KEYWORD[faction];
 
     result.totalFiles++;
@@ -574,21 +798,26 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
       result.totalItems++;
       const errs: Array<{ path: string; message: string }> = [];
 
-      for (const aid of u.ability_ids ?? []) {
-        if (!defined.has(aid)) {
-          errs.push({
-            path: `/${i}/ability_ids`,
-            message: `unit "${u.id}": ability_id "${aid}" is not defined in ${faction} enrichment`,
-          });
+      // Ability ids are unique across the dataset: a ref resolves to the one record carrying it,
+      // wherever it lives (a chapter unit names the supplement's record).
+      for (const ref of u.ability_ids ?? []) {
+        const aid = typeof ref === "string" ? ref : ref.id;
+        const rated = typeof ref !== "string" && ref.value !== undefined;
+        if (!abilityRecordIds.has(aid)) {
+          errs.push({ path: `/${i}/ability_ids`, message: `unit "${u.id}": ability_id "${aid}" resolves to no ability record` });
+        } else if (ratedAbilityIds.has(aid) && !rated) {
+          errs.push({ path: `/${i}/ability_ids`, message: `unit "${u.id}": "${aid}" reads the unit's rating ({rating: true}); list it as {"id": "${aid}", "value": …}` });
+        } else if (rated && !ratedAbilityIds.has(aid) && !stubAbilityIds.has(aid)) {
+          errs.push({ path: `/${i}/ability_ids`, message: `unit "${u.id}": "${aid}" carries a value but its record reads no rating` });
         }
       }
 
       if (home !== undefined) {
         for (const fk of u.faction_keywords ?? []) {
-          if (fk !== home) {
+          if (fk !== home && !(FACTION_SIBLING_KEYWORDS[faction] ?? []).includes(fk)) {
             errs.push({
               path: `/${i}/faction_keywords`,
-              message: `unit "${u.id}": faction_keyword "${fk}" is not permitted for ${faction} (expected only "${home}")`,
+              message: `unit "${u.id}": faction_keyword "${fk}" is not permitted for ${faction} (expected only "${home}"${(FACTION_SIBLING_KEYWORDS[faction] ?? []).map((k) => ` or "${k}"`).join("")})`,
             });
           }
         }
@@ -612,7 +841,12 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
   // (e.g. negating an enemy's Lone Operative); a same-faction check would falsely
   // fail those cross-faction references. faction-rule slugs resolve against the
   // `faction_rule_ids` set declared on the factions.
-  const allAbilityIds = new Set<string>(coreAbilities);
+  // Core abilities (Deep Strike, Scouts, …) are catalog entries rather than ability records.
+  // A root without the catalog (a partial fixture tree) has no core abilities to resolve against.
+  const coreCatalogFile = resolve(root, "core/unit-keywords.json");
+  const coreCatalog = existsSync(coreCatalogFile) ? readArray<{ id: string }>(coreCatalogFile) : [];
+  const coreCatalogIds = new Set(coreCatalog.map((k) => k.id));
+  const allAbilityIds = new Set<string>([...coreAbilities, ...coreCatalogIds]);
   const abilityIdsByFaction = new Map<string, Set<string>>();
   const abilityRecordsByFaction = new Map<string, Map<string, AbilityLike & { id?: string; effect?: unknown }>>();
   const abilityFiles = await glob("enrichment/*/abilities.json", { cwd: root, absolute: true });
@@ -679,16 +913,15 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
     }
   };
 
-  /** Collect entity-backed ability grants, including reusable rules bundles. */
-  const collectAbilityGrantRefs = (node: unknown, out: string[]): void => {
+  /** Collect every ability grant's named ability, and whether it grants a reusable rules bundle. */
+  const collectAbilityGrantRefs = (node: unknown, out: Array<{ abilityId: string; bundle: boolean; defined: boolean }>): void => {
     if (Array.isArray(node)) {
       for (const value of node) collectAbilityGrantRefs(value, out);
     } else if (node !== null && typeof node === "object") {
       const effect = node as Record<string, unknown>;
       if (effect.type === "ability-grant" && effect.modifier !== null && typeof effect.modifier === "object") {
         const modifier = effect.modifier as Record<string, unknown>;
-        const abilityId = modifier.ability_id;
-        if (modifier.rules_bundle === true && typeof abilityId === "string") out.push(abilityId);
+        if (typeof modifier.ability === "string") out.push({ abilityId: modifier.ability, bundle: modifier.rules_bundle === true, defined: modifier.definition !== undefined });
       }
       for (const value of Object.values(effect)) collectAbilityGrantRefs(value, out);
     }
@@ -712,7 +945,7 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
       collectSourceAbilityRefs(a, sourceAbilityRefs);
       const refs: Array<{ kind: string; rule: string }> = [];
       collectRuleStateRefs(a.effect, refs);
-      const abilityGrantRefs: string[] = [];
+      const abilityGrantRefs: Array<{ abilityId: string; bundle: boolean; defined: boolean }> = [];
       collectAbilityGrantRefs(a.effect, abilityGrantRefs);
       const diceTableErrors: string[] = [];
       collectDiceTableErrors(a.effect, diceTableErrors);
@@ -751,7 +984,24 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
         });
       }
 
-      for (const abilityId of abilityGrantRefs) {
+      for (const { abilityId, bundle, defined } of abilityGrantRefs) {
+        // A grant printed with its definition is that ability; its id names no separate record,
+        // but a core ability's id is core-ability-grant's to name.
+        if (defined) {
+          if (coreCatalogIds.has(abilityId)) errs.push({
+            path: `/${i}/effect`,
+            message: `ability "${a.id ?? a.ability_id}": ability-grant "${abilityId}" defines a core ability's id; a printed definition names its own ability`,
+          });
+          continue;
+        }
+        if (!bundle) {
+          // A plain grant names a core ability or any ability record.
+          if (!allAbilityIds.has(abilityId)) errs.push({
+            path: `/${i}/effect`,
+            message: `ability "${a.id ?? a.ability_id}": ability-grant "${abilityId}" names neither a core ability nor an ability record`,
+          });
+          continue;
+        }
         const grantedAbility = factionAbilityRecords?.get(abilityId) ?? coreAbilityById.get(abilityId);
         if (!grantedAbility) {
           errs.push({
@@ -963,38 +1213,36 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
         new Set(weaponIdsByUnit.get(c.unit_id ?? "") ?? []),
         factionUnitIds,
       );
-      // Populated = every model row carries a non-empty default loadout.
+      // Populated = every model row carries a non-empty default loadout. The
+      // orphan check needs recorded defaults; an unpopulated composition falls
+      // back to the loadout layer's derived base and is out of its scope.
       const populated = models.length > 0 && models.every((m) => (m.default_weapon_ids?.length ?? 0) > 0);
-      if (!populated) {
-        if (errs.length > 0) {
-          result.failed++;
-          result.errors.push({ file, index: i, errors: errs });
-        } else {
-          result.passed++;
+      if (populated) {
+        const defaults = new Set<string>();
+        for (const m of models) for (const id of m.default_weapon_ids ?? []) defaults.add(id);
+        const reachable = reachableByUnit.get(c.unit_id ?? "") ?? new Set<string>();
+        const variantEquipment = new Set<string>();
+        for (const m of models) for (const variant of m.loadout_variants ?? []) for (const id of variant.weapon_ids ?? []) variantEquipment.add(id);
+        for (const wid of weaponIdsByUnit.get(c.unit_id ?? "") ?? []) {
+          if (defaults.has(wid) || variantEquipment.has(wid) || reachable.has(wid)) continue;
+          const key = `${faction}/${c.unit_id}/${wid}`;
+          if (KNOWN_LOADOUT_ORPHANS.has(key)) {
+            seenAllowed.add(key);
+            continue;
+          }
+          errs.push({
+            path: `/${i}`,
+            message: `unit "${c.unit_id}": weapon "${wid}" is an orphan — neither a default_weapon_ids entry nor reachable via a wargear-option`,
+          });
         }
-        continue;
-      }
-      const defaults = new Set<string>();
-      for (const m of models) for (const id of m.default_weapon_ids ?? []) defaults.add(id);
-      const reachable = reachableByUnit.get(c.unit_id ?? "") ?? new Set<string>();
-      const variantEquipment = new Set<string>();
-      for (const m of models) for (const variant of m.loadout_variants ?? []) for (const id of variant.weapon_ids ?? []) variantEquipment.add(id);
-      for (const wid of weaponIdsByUnit.get(c.unit_id ?? "") ?? []) {
-        if (defaults.has(wid) || variantEquipment.has(wid) || reachable.has(wid)) continue;
-        const key = `${faction}/${c.unit_id}/${wid}`;
-        if (KNOWN_LOADOUT_ORPHANS.has(key)) {
-          seenAllowed.add(key);
-          continue;
-        }
-        errs.push({
-          path: `/${i}`,
-          message: `unit "${c.unit_id}": weapon "${wid}" is an orphan — neither a default_weapon_ids entry nor reachable via a wargear-option`,
-        });
       }
 
       // ── Stock-loadout legality: the out-of-the-box build is legal by ──
       // ── construction — GW never prints a datasheet whose default build ──
       // ── violates its own wargear rules. ──
+      //
+      // It runs on every composition: an unpopulated one ships the base the
+      // loadout layer derives (baseLoadout), which must validate just the same.
       //
       // This is the semantic gate the ATC false-positive classes slipped past:
       // AJV checks shape, the orphan check above checks reachability, and the

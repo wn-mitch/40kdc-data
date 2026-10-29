@@ -1,7 +1,9 @@
 import { describe, it, expect } from "vitest";
 import Ajv from "ajv";
 import addFormats from "ajv-formats";
+import { readFileSync } from "node:fs";
 import { bundle } from "../src/bundle-schemas.js";
+import { findSchemaFiles, SCHEMAS_ROOT } from "../src/schema-loader.js";
 
 /** Collect every `$ref` string anywhere in a JSON value. */
 function collectRefs(node: unknown, out: string[] = []): string[] {
@@ -47,6 +49,20 @@ describe("bundle-schemas", () => {
     // addSchema throws if any internal $ref fails to resolve.
     expect(() => ajv.addSchema(bundled, "bundled")).not.toThrow();
     expect(ajv.getSchema("bundled#/$defs/unit")).toBeDefined();
+  });
+
+  it("keeps every if/then/else in the validation bundle and none in the codegen bundle", () => {
+    const count = (node: unknown): number =>
+      Array.isArray(node)
+        ? node.reduce((n: number, item) => n + count(item), 0)
+        : node && typeof node === "object"
+          ? Object.entries(node).reduce((n, [key, value]) => n + (key === "if" ? 1 : 0) + count(value), 0)
+          : 0;
+    const files = findSchemaFiles(SCHEMAS_ROOT).filter((f) => !f.endsWith("roster.schema.json"));
+    const source = files.reduce((n, f) => n + count(JSON.parse(readFileSync(f, "utf-8"))), 0);
+    expect(source).toBeGreaterThan(0);
+    expect(count(bundle(true))).toBe(source);
+    expect(count(bundled)).toBe(0);
   });
 
   it("rewrites the effect alias to the hoisted, flat effect-node", () => {

@@ -5,7 +5,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -24,7 +24,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -45,87 +45,57 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
-      "heavy-baleflamer"
+      "heavy-baleflamer",
+      "heavy-missile-launcher"
     ],
     "replacement_choice": [
       [
-        "heavy-reaper-autocannon"
+        "heavy-reaper-autocannon",
+        "heavy-missile-launcher"
       ],
-      [
-        "hades-lascannon"
-      ],
-      [
-        "electroscourge"
-      ]
-    ],
-    "model_constraint": {
-      "any_number": true
-    }
-  },
-  {
-    "id": "defiler-wgo-mfm-4",
-    "unit_id": "defiler",
-    "faction_id": "death-guard",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replaces": [
-      "heavy-missile-launcher",
-      "heavy-baleflamer"
-    ],
-    "replacement_choice": [
       [
         "heavy-reaper-autocannon",
         "heavy-reaper-autocannon"
       ],
       [
-        "hades-lascannon",
-        "heavy-reaper-autocannon"
-      ],
-      [
-        "electroscourge",
+        "heavy-missile-launcher",
         "hades-lascannon"
       ],
       [
-        "electroscourge",
-        "heavy-reaper-autocannon"
-      ],
-      [
-        "hades-lascannon",
-        "hades-lascannon"
-      ]
-    ],
-    "model_constraint": {
-      "any_number": true
-    }
-  },
-  {
-    "id": "defiler-wgo-mfm-5",
-    "unit_id": "defiler",
-    "faction_id": "death-guard",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replaces": [
-      "heavy-missile-launcher"
-    ],
-    "replacement_choice": [
-      [
-        "heavy-reaper-autocannon"
-      ],
-      [
+        "heavy-reaper-autocannon",
         "hades-lascannon"
       ],
       [
+        "heavy-missile-launcher",
         "electroscourge"
+      ],
+      [
+        "heavy-baleflamer",
+        "heavy-reaper-autocannon"
+      ],
+      [
+        "heavy-baleflamer",
+        "hades-lascannon"
+      ],
+      [
+        "electroscourge",
+        "hades-lascannon"
+      ],
+      [
+        "electroscourge",
+        "heavy-reaper-autocannon"
+      ],
+      [
+        "electroscourge",
+        "heavy-baleflamer"
+      ],
+      [
+        "hades-lascannon",
+        "hades-lascannon"
       ]
     ],
     "model_constraint": {
@@ -138,12 +108,12 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
       [
-        "combi-weapon"
+        "combi-weapon-chaos-predator-annihilator"
       ],
       [
         "combi-bolter"
@@ -159,7 +129,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -175,7 +145,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -198,7 +168,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -214,12 +184,12 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
       [
-        "combi-weapon"
+        "combi-weapon-chaos-predator-destructor"
       ],
       [
         "combi-bolter"
@@ -235,7 +205,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -258,7 +228,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -279,7 +249,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -298,11 +268,11 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
-      "boltgun"
+      "boltgun-plague-marines"
     ],
     "replacement_choice": [
       [
@@ -326,7 +296,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -351,11 +321,11 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
-      "boltgun"
+      "boltgun-plague-marines"
     ],
     "replacement": [
       "plague-spewer"
@@ -371,11 +341,11 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
-      "boltgun"
+      "boltgun-plague-marines"
     ],
     "replacement_choice": [
       [
@@ -405,11 +375,32 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
-      "boltgun"
+      "boltgun-plague-marines"
+    ],
+    "replacement": [
+      "boltgun-plague-marines",
+      "icon-of-despair-aura"
+    ],
+    "model_constraint": {
+      "model_name": "Plague Marine",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "plague-marines-wgo-mfm-6",
+    "unit_id": "plague-marines",
+    "faction_id": "death-guard",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "boltgun-plague-marines"
     ],
     "replacement": [
       "blight-launcher"
@@ -420,29 +411,12 @@
     }
   },
   {
-    "id": "plague-marines-wgo-mfm-6",
-    "unit_id": "plague-marines",
-    "faction_id": "death-guard",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replacement": [
-      "icon-of-despair-aura"
-    ],
-    "model_constraint": {
-      "model_name": "Plague Marine",
-      "any_number": true
-    }
-  },
-  {
     "id": "deathshroud-terminators-wgo-mfm-1",
     "unit_id": "deathshroud-terminators",
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -459,7 +433,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -476,7 +450,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -496,155 +470,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replaces": [
-      "multi-melta"
-    ],
-    "replacement_choice": [
-      [
-        "combi-bolter",
-        "helbrute-fist",
-        "heavy-flamer"
-      ],
-      [
-        "helbrute-hammer",
-        "combi-bolter"
-      ],
-      [
-        "combi-bolter",
-        "twin-lascannon"
-      ],
-      [
-        "helbrute-fist"
-      ],
-      [
-        "combi-bolter",
-        "twin-autocannon"
-      ],
-      [
-        "helbrute-hammer",
-        "heavy-flamer"
-      ],
-      [
-        "missile-launcher",
-        "heavy-flamer"
-      ],
-      [
-        "power-scourge",
-        "combi-bolter"
-      ],
-      [
-        "heavy-flamer",
-        "twin-heavy-bolter"
-      ],
-      [
-        "power-scourge"
-      ],
-      [
-        "combi-bolter",
-        "helbrute-fist"
-      ],
-      [
-        "combi-bolter",
-        "twin-heavy-bolter"
-      ],
-      [
-        "twin-autocannon"
-      ],
-      [
-        "combi-bolter",
-        "missile-launcher"
-      ],
-      [
-        "heavy-flamer",
-        "twin-autocannon"
-      ],
-      [
-        "twin-heavy-bolter"
-      ],
-      [
-        "helbrute-hammer"
-      ],
-      [
-        "plasma-cannon"
-      ],
-      [
-        "heavy-flamer",
-        "heavy-flamer",
-        "helbrute-fist"
-      ],
-      [
-        "power-scourge",
-        "heavy-flamer"
-      ],
-      [
-        "missile-launcher"
-      ],
-      [
-        "twin-lascannon"
-      ],
-      [
-        "combi-bolter",
-        "plasma-cannon"
-      ],
-      [
-        "heavy-flamer",
-        "helbrute-fist"
-      ],
-      [
-        "twin-lascannon",
-        "heavy-flamer"
-      ],
-      [
-        "combi-bolter",
-        "combi-bolter",
-        "helbrute-fist"
-      ],
-      [
-        "heavy-flamer",
-        "plasma-cannon"
-      ]
-    ],
-    "model_constraint": {
-      "any_number": true
-    }
-  },
-  {
-    "id": "helbrute-wgo-mfm-2",
-    "unit_id": "helbrute",
-    "faction_id": "death-guard",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replaces": [
-      "helbrute-fist"
-    ],
-    "replacement_choice": [
-      [
-        "missile-launcher"
-      ],
-      [
-        "power-scourge"
-      ],
-      [
-        "helbrute-hammer"
-      ]
-    ],
-    "model_constraint": {
-      "any_number": true
-    }
-  },
-  {
-    "id": "helbrute-wgo-mfm-3",
-    "unit_id": "helbrute",
-    "faction_id": "death-guard",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -653,12 +479,31 @@
     ],
     "replacement_choice": [
       [
+        "combi-bolter",
+        "helbrute-fist",
+        "helbrute-fist",
+        "heavy-flamer"
+      ],
+      [
+        "helbrute-hammer",
+        "combi-bolter",
+        "helbrute-fist"
+      ],
+      [
+        "multi-melta",
+        "missile-launcher"
+      ],
+      [
         "twin-heavy-bolter",
         "missile-launcher"
       ],
       [
         "missile-launcher",
         "twin-autocannon"
+      ],
+      [
+        "power-scourge",
+        "multi-melta"
       ],
       [
         "missile-launcher",
@@ -669,12 +514,87 @@
         "twin-lascannon"
       ],
       [
+        "helbrute-fist",
+        "combi-bolter",
+        "twin-lascannon"
+      ],
+      [
+        "helbrute-fist",
+        "helbrute-fist"
+      ],
+      [
+        "combi-bolter",
+        "helbrute-fist",
+        "twin-autocannon"
+      ],
+      [
+        "helbrute-hammer",
+        "heavy-flamer",
+        "helbrute-fist"
+      ],
+      [
+        "missile-launcher",
+        "heavy-flamer",
+        "helbrute-fist"
+      ],
+      [
+        "power-scourge",
+        "combi-bolter",
+        "helbrute-fist"
+      ],
+      [
+        "helbrute-fist",
+        "heavy-flamer",
+        "twin-heavy-bolter"
+      ],
+      [
+        "helbrute-fist",
+        "power-scourge"
+      ],
+      [
+        "combi-bolter",
+        "helbrute-fist",
+        "helbrute-fist"
+      ],
+      [
+        "combi-bolter",
+        "helbrute-fist",
+        "twin-heavy-bolter"
+      ],
+      [
         "missile-launcher",
         "power-scourge"
       ],
       [
+        "twin-autocannon",
+        "helbrute-fist"
+      ],
+      [
+        "helbrute-fist",
+        "combi-bolter",
+        "missile-launcher"
+      ],
+      [
+        "heavy-flamer",
+        "helbrute-fist",
+        "twin-autocannon"
+      ],
+      [
+        "helbrute-fist",
+        "twin-heavy-bolter"
+      ],
+      [
         "missile-launcher",
         "helbrute-hammer"
+      ],
+      [
+        "helbrute-fist",
+        "helbrute-hammer"
+      ],
+      [
+        "helbrute-fist",
+        "multi-melta",
+        "combi-bolter"
       ],
       [
         "plasma-cannon",
@@ -685,16 +605,48 @@
         "twin-heavy-bolter"
       ],
       [
+        "helbrute-fist",
+        "plasma-cannon"
+      ],
+      [
+        "helbrute-hammer",
+        "multi-melta"
+      ],
+      [
         "twin-heavy-bolter",
         "power-scourge"
+      ],
+      [
+        "heavy-flamer",
+        "heavy-flamer",
+        "helbrute-fist",
+        "helbrute-fist"
       ],
       [
         "plasma-cannon",
         "helbrute-hammer"
       ],
       [
+        "helbrute-fist",
+        "power-scourge",
+        "heavy-flamer"
+      ],
+      [
+        "missile-launcher",
+        "helbrute-fist"
+      ],
+      [
+        "twin-lascannon",
+        "helbrute-fist"
+      ],
+      [
         "twin-autocannon",
         "helbrute-hammer"
+      ],
+      [
+        "combi-bolter",
+        "plasma-cannon",
+        "helbrute-fist"
       ],
       [
         "helbrute-hammer",
@@ -705,29 +657,34 @@
         "missile-launcher"
       ],
       [
-        "twin-autocannon",
-        "power-scourge"
-      ]
-    ],
-    "model_constraint": {
-      "any_number": true
-    }
-  },
-  {
-    "id": "helbrute-wgo-mfm-4",
-    "unit_id": "helbrute",
-    "faction_id": "death-guard",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replacement_choice": [
-      [
-        "combi-bolter"
+        "heavy-flamer",
+        "helbrute-fist",
+        "helbrute-fist"
       ],
       [
-        "heavy-flamer"
+        "twin-autocannon",
+        "power-scourge"
+      ],
+      [
+        "twin-lascannon",
+        "heavy-flamer",
+        "helbrute-fist"
+      ],
+      [
+        "combi-bolter",
+        "combi-bolter",
+        "helbrute-fist",
+        "helbrute-fist"
+      ],
+      [
+        "heavy-flamer",
+        "plasma-cannon",
+        "helbrute-fist"
+      ],
+      [
+        "heavy-flamer",
+        "multi-melta",
+        "helbrute-fist"
       ]
     ],
     "model_constraint": {
@@ -740,39 +697,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replacement_choice": [
-      [
-        "combi-bolter"
-      ],
-      [
-        "combi-weapon"
-      ],
-      [
-        "havoc-launcher"
-      ],
-      [
-        "combi-weapon",
-        "havoc-launcher"
-      ],
-      [
-        "combi-bolter",
-        "havoc-launcher"
-      ]
-    ],
-    "model_constraint": {
-      "any_number": true
-    }
-  },
-  {
-    "id": "chaos-rhino-wgo-mfm-2",
-    "unit_id": "chaos-rhino",
-    "faction_id": "death-guard",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -780,11 +705,33 @@
     ],
     "replacement_choice": [
       [
+        "combi-bolter",
+        "combi-bolter"
+      ],
+      [
+        "havoc-launcher"
+      ],
+      [
+        "combi-bolter",
+        "combi-weapon-chaos-rhino"
+      ],
+      [
+        "combi-bolter",
+        "havoc-launcher"
+      ],
+      [
+        "combi-weapon-chaos-rhino",
+        "combi-bolter",
+        "havoc-launcher"
+      ],
+      [
+        "combi-bolter",
+        "combi-bolter",
         "havoc-launcher"
       ],
       [
         "havoc-launcher",
-        "combi-weapon"
+        "combi-weapon-chaos-rhino"
       ]
     ],
     "model_constraint": {
@@ -797,7 +744,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -805,7 +752,7 @@
         "combi-bolter"
       ],
       [
-        "combi-weapon"
+        "combi-weapon-chaos-land-raider"
       ]
     ],
     "model_constraint": {
@@ -818,7 +765,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -834,7 +781,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -854,7 +801,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -876,7 +823,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -897,7 +844,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -917,7 +864,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -937,7 +884,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -957,7 +904,7 @@
     "faction_id": "death-guard",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -969,6 +916,112 @@
     "model_constraint": {
       "model_name": "Blightlord Terminator",
       "any_number": true
+    }
+  },
+  {
+    "id": "great-unclean-one-wgo-mfm-1",
+    "unit_id": "great-unclean-one",
+    "faction_id": "death-guard",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "plague-flail"
+    ],
+    "replacement": [
+      "bileblade"
+    ],
+    "model_constraint": {
+      "any_number": true
+    }
+  },
+  {
+    "id": "great-unclean-one-wgo-mfm-2",
+    "unit_id": "great-unclean-one",
+    "faction_id": "death-guard",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "bilesword"
+    ],
+    "replacement": [
+      "doomsday-bell"
+    ],
+    "model_constraint": {
+      "any_number": true
+    }
+  },
+  {
+    "id": "plague-drones-wgo-mfm-1",
+    "unit_id": "plague-drones",
+    "faction_id": "death-guard",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replacement": [
+      "instrument-of-chaos"
+    ],
+    "model_constraint": {
+      "model_name": "Plague Drone",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "plague-drones-wgo-mfm-2",
+    "unit_id": "plague-drones",
+    "faction_id": "death-guard",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replacement": [
+      "daemonic-icon"
+    ],
+    "model_constraint": {
+      "model_name": "Plague Drone",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "plaguebearers-wgo-mfm-1",
+    "unit_id": "plaguebearers",
+    "faction_id": "death-guard",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replacement": [
+      "daemonic-icon"
+    ],
+    "model_constraint": {
+      "model_name": "Plaguebearer",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "plaguebearers-wgo-mfm-2",
+    "unit_id": "plaguebearers",
+    "faction_id": "death-guard",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replacement": [
+      "instrument-of-chaos"
+    ],
+    "model_constraint": {
+      "model_name": "Plaguebearer",
+      "max_count": 1
     }
   }
 ]

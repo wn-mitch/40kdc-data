@@ -5,7 +5,7 @@
     "faction_id": "genestealer-cults",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -25,7 +25,7 @@
     "faction_id": "genestealer-cults",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -45,7 +45,7 @@
     "faction_id": "genestealer-cults",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -70,15 +70,19 @@
     "faction_id": "genestealer-cults",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
+    "replaces": [
+      "hybrid-firearm"
+    ],
     "replacement": [
+      "hybrid-firearm",
       "cult-icon"
     ],
     "model_constraint": {
       "model_name": "Neophyte Hybrid",
-      "any_number": true
+      "max_count": 1
     }
   },
   {
@@ -87,7 +91,7 @@
     "faction_id": "genestealer-cults",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -124,7 +128,7 @@
     "faction_id": "genestealer-cults",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -152,7 +156,7 @@
     "faction_id": "genestealer-cults",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -176,7 +180,7 @@
     "faction_id": "genestealer-cults",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -200,7 +204,7 @@
     "faction_id": "genestealer-cults",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -220,7 +224,7 @@
     "faction_id": "genestealer-cults",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -240,7 +244,7 @@
     "faction_id": "genestealer-cults",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -261,7 +265,7 @@
     "faction_id": "genestealer-cults",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -281,19 +285,14 @@
     "faction_id": "genestealer-cults",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
       "autopistol"
     ],
-    "replacement_choice": [
-      [
-        "hand-flamer"
-      ],
-      [
-        "cult-icon"
-      ]
+    "replacement": [
+      "hand-flamer"
     ],
     "model_constraint": {
       "model_name": "Hybrid Metamorph",
@@ -306,7 +305,27 @@
     "faction_id": "genestealer-cults",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "autopistol"
+    ],
+    "replacement": [
+      "cult-icon"
+    ],
+    "model_constraint": {
+      "model_name": "Hybrid Metamorph",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "hybrid-metamorphs-wgo-mfm-3",
+    "unit_id": "hybrid-metamorphs",
+    "faction_id": "genestealer-cults",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -326,19 +345,14 @@
     "faction_id": "genestealer-cults",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
       "hand-flamer"
     ],
-    "replacement_choice": [
-      [
-        "demolition-charges-acolyte-hybrids-with-hand-flamers"
-      ],
-      [
-        "cult-icon"
-      ]
+    "replacement": [
+      "demolition-charges-acolyte-hybrids-with-hand-flamers"
     ],
     "model_constraint": {
       "model_name": "Acolyte Hybrid",
@@ -351,7 +365,27 @@
     "faction_id": "genestealer-cults",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "hand-flamer"
+    ],
+    "replacement": [
+      "cult-icon"
+    ],
+    "model_constraint": {
+      "model_name": "Acolyte Hybrid",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "acolyte-hybrids-with-hand-flamers-wgo-mfm-3",
+    "unit_id": "acolyte-hybrids-with-hand-flamers",
+    "faction_id": "genestealer-cults",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -371,7 +405,7 @@
     "faction_id": "genestealer-cults",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [

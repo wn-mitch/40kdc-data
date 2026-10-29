@@ -6,7 +6,7 @@
 
 # Interface: ForceDisposition
 
-Defined in: [generated.ts:396](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L396)
+Defined in: [generated.ts:3112](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3112)
 
 A 11e strategic-intent tag granted by detachments. Players compare dispositions at game start to determine the shared mission; asymmetric primary objectives result.
 
@@ -19,7 +19,7 @@ via the `definition` "force-disposition".
 
 > **id**: `"take-and-hold"` \| `"disruption"` \| `"purge-the-foe"` \| `"priority-assets"` \| `"reconnaissance"`
 
-Defined in: [generated.ts:400](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L400)
+Defined in: [generated.ts:3116](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3116)
 
 One of the five confirmed launch Force Dispositions.
 
@@ -29,7 +29,7 @@ One of the five confirmed launch Force Dispositions.
 
 > **name**: `string`
 
-Defined in: [generated.ts:401](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L401)
+Defined in: [generated.ts:3117](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3117)
 
 ***
 
@@ -37,7 +37,7 @@ Defined in: [generated.ts:401](https://github.com/wn-mitch/40kdc-data/blob/0b695
 
 > `optional` **text?**: `string`
 
-Defined in: [generated.ts:405](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L405)
+Defined in: [generated.ts:3121](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3121)
 
 Community-authored description of the disposition's effect (original prose only — no reproduced rules text).
 
@@ -47,4 +47,4 @@ Community-authored description of the disposition's effect (original prose only 
 
 > **game\_version**: [`GameVersionReference`](GameVersionReference.md)
 
-Defined in: [generated.ts:406](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L406)
+Defined in: [generated.ts:3122](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3122)

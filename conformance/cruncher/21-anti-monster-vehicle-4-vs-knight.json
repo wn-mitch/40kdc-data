@@ -1,0 +1,49 @@
+{
+  "name": "bolt-rifle (saturation) x5 vs Knight, manual Anti-Monster/Vehicle 4+ buff (VEHICLE target matches)",
+  "attacker": {
+    "weaponId": "bolt-rifle",
+    "profileIndex": 1
+  },
+  "modelsFiring": 5,
+  "target": {
+    "unitId": "questoris-knight-magaera",
+    "profileIndex": 0
+  },
+  "context": {
+    "phase": "shooting",
+    "attackerStationary": false,
+    "withinHalfRange": false
+  },
+  "buffs": [
+    {
+      "source": {
+        "kind": "manual",
+        "label": "Anti-Monster/Vehicle 4+ (test)"
+      },
+      "contribution": {
+        "type": "extra-keyword",
+        "keywordRef": {
+          "keyword_id": "anti",
+          "parameters": {
+            "required_target_keywords_any": [
+              "MONSTER",
+              "VEHICLE"
+            ],
+            "threshold": 4
+          }
+        }
+      }
+    }
+  ],
+  "expected": {
+    "stages": {
+      "attacks": 10,
+      "hits": 6.6667,
+      "wounds": 3.3333,
+      "unsaved": 1.6667,
+      "damage": 1.6667,
+      "after-fnp": 1.6667,
+      "models-killed": 0.0641
+    }
+  }
+}

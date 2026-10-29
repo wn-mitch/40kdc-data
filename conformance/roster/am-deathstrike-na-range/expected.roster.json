@@ -1,0 +1,126 @@
+{
+  "name": "Deathstrike Battery",
+  "source": {
+    "format": "roster-json",
+    "generated_by": "List Forge"
+  },
+  "faction_id": "astra-militarum",
+  "detachments": [
+    {
+      "ref": {
+        "id": "combined-arms",
+        "raw_name": "Combined Arms",
+        "resolved": true,
+        "candidates": []
+      },
+      "dp_cost": 2
+    }
+  ],
+  "battle_size": "strike-force",
+  "force_disposition": "take-and-hold",
+  "points": {
+    "declared_limit": 2000,
+    "detachment_cap": 3,
+    "total_reported": 185,
+    "total_computed": 185
+  },
+  "units": [
+    {
+      "ref": {
+        "id": "primaris-psyker",
+        "raw_name": "Primaris Psyker",
+        "resolved": true,
+        "candidates": []
+      },
+      "model_count": 1,
+      "points": 60,
+      "is_warlord": true,
+      "enhancement": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "ref": {
+            "id": "force-weapon",
+            "raw_name": "Force weapon",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        },
+        {
+          "ref": {
+            "id": "laspistol",
+            "raw_name": "Laspistol",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        },
+        {
+          "ref": {
+            "id": "psychic-maelstrom",
+            "raw_name": "Psychic Maelstrom",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        }
+      ],
+      "leader_attachment": null
+    },
+    {
+      "ref": {
+        "id": "deathstrike",
+        "raw_name": "Deathstrike",
+        "resolved": true,
+        "candidates": []
+      },
+      "model_count": 1,
+      "points": 125,
+      "is_warlord": false,
+      "enhancement": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "ref": {
+            "id": "armoured-tracks-deathstrike",
+            "raw_name": "Armoured tracks",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        },
+        {
+          "ref": {
+            "id": "deathstrike-missile",
+            "raw_name": "Deathstrike missile",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        },
+        {
+          "ref": {
+            "id": "heavy-bolter",
+            "raw_name": "Heavy bolter",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        }
+      ],
+      "leader_attachment": null
+    }
+  ],
+  "game_version": {
+    "edition": "11th",
+    "dataslate": "pre-launch-provisional"
+  },
+  "diagnostics": {
+    "resolved_units": 2,
+    "unresolved_units": 0,
+    "resolved_weapons": 6,
+    "unresolved_weapons": 0,
+    "warnings": []
+  }
+}

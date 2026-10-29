@@ -15,15 +15,15 @@ def _we_chaos_terminators(dataset: Any) -> dict[str, Any]:
 def test_ordinal_bands(dataset: Any) -> None:
     ct = _we_chaos_terminators(dataset)
     # 1st-2nd army copy: lower band.
-    assert base_unit_points(ct, 5, 1) == 165
-    assert base_unit_points(ct, 5, 2) == 165
-    assert base_unit_points(ct, 10, 1) == 330
+    assert base_unit_points(ct, 5, 1) == 175
+    assert base_unit_points(ct, 5, 2) == 175
+    assert base_unit_points(ct, 10, 1) == 350
     # 3rd+ copy: higher band (open-ended top).
-    assert base_unit_points(ct, 5, 3) == 175
-    assert base_unit_points(ct, 10, 3) == 340
-    assert base_unit_points(ct, 5, 7) == 175
+    assert base_unit_points(ct, 5, 3) == 185
+    assert base_unit_points(ct, 10, 3) == 360
+    assert base_unit_points(ct, 5, 7) == 185
     # Defaults to the 1st copy.
-    assert base_unit_points(ct, 5) == 165
+    assert base_unit_points(ct, 5) == 175
 
 
 def test_unbanded_unit_ignores_ordinal(dataset: Any) -> None:
@@ -38,19 +38,19 @@ def test_points_tier_missing(dataset: Any) -> None:
     assert points_tier_missing(ct, 4, 1)
 
 
-def test_range_priced_tier_venatari(dataset: Any) -> None:
-    # 3 @150 for the first two copies (160 thereafter), or 4-6 @300 (310 thereafter).
-    ven = dataset.units.get_in_faction("venatari-custodians", "adeptus-custodes").raw
+def test_range_priced_tier_reavers(dataset: Any) -> None:
+    # 3 @75 for the first two copies (85 thereafter), or 4-6 @150 (160 thereafter).
+    ven = dataset.units.get_in_faction("reavers", "drukhari").raw
     assert ven["points"] == [
-        {"models": 3, "cost": 150, "unit_count_min": 1, "unit_count_max": 2},
-        {"models": 4, "models_max": 6, "cost": 300, "unit_count_min": 1, "unit_count_max": 2},
-        {"models": 3, "cost": 160, "unit_count_min": 3, "unit_count_max": None},
-        {"models": 4, "models_max": 6, "cost": 310, "unit_count_min": 3, "unit_count_max": None},
+        {"models": 3, "cost": 75, "unit_count_min": 1, "unit_count_max": 2},
+        {"models": 4, "models_max": 6, "cost": 150, "unit_count_min": 1, "unit_count_max": 2},
+        {"models": 3, "cost": 85, "unit_count_min": 3, "unit_count_max": None},
+        {"models": 4, "models_max": 6, "cost": 160, "unit_count_min": 3, "unit_count_max": None},
     ]
-    assert base_unit_points(ven, 3) == 150
-    assert base_unit_points(ven, 4) == 300
-    assert base_unit_points(ven, 5) == 300
-    assert base_unit_points(ven, 6) == 300
+    assert base_unit_points(ven, 3) == 75
+    assert base_unit_points(ven, 4) == 150
+    assert base_unit_points(ven, 5) == 150
+    assert base_unit_points(ven, 6) == 150
     # Outside every tier range → missing (below floor, above ceiling).
     assert points_tier_missing(ven, 2)
     assert not points_tier_missing(ven, 4)
@@ -63,5 +63,5 @@ def test_base_loadout_is_legal_default(dataset: Any) -> None:
     options = dataset.wargear_options_of(bz.raw)
     assert base_loadout(bz.raw, 10, options) == {
         "bolt-pistol-khorne-berzerkers": 10,
-        "chainblade": 10,
+        "chainblade-khorne-berzerkers": 10,
     }

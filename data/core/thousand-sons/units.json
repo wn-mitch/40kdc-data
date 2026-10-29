@@ -54,17 +54,16 @@
       "twin-lascannon"
     ],
     "ability_ids": [
-      "dark-ascension-aura",
-      "deadly-demise-1",
-      "devoted-to-destruction",
-      "diseased-malice",
-      "frenzy",
-      "froth-spattered-frenzy",
-      "terrifying-assault"
+      {
+        "id": "deadly-demise",
+        "value": 1
+      },
+      "devoted-to-destruction-thousand-sons",
+      "terrifying-assault-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -138,14 +137,24 @@
       "warp-vortex"
     ],
     "ability_ids": [
-      "deadly-demise-d6",
-      "feel-no-pain-5",
-      "immaterial-flare-aura",
-      "mutating-vortex-aura"
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      {
+        "id": "feel-no-pain",
+        "value": 5
+      },
+      "immaterial-flare-thousand-sons",
+      "mutating-vortex-thousand-sons",
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -200,7 +209,9 @@
       "Smoke",
       "Chaos",
       "Tzeentch",
-      "Land Raider"
+      "Land Raider",
+      "Frame",
+      "Chaos Land Raider"
     ],
     "faction_keywords": [
       "Thousand Sons"
@@ -222,15 +233,22 @@
       "twin-inferno-heavy-bolter"
     ],
     "ability_ids": [
-      "assault-ramp",
-      "deadly-demise-d6"
+      "assault-ramp-thousand-sons",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      {
+        "id": "damaged",
+        "value": 5
+      }
     ],
     "transport_capacity": {
       "capacity": 14
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -299,13 +317,13 @@
       "force-stave"
     ],
     "ability_ids": [
-      "bestial-prophet",
+      "bestial-prophet-thousand-sons",
       "leader",
-      "sacrificial-blessing"
+      "sacrificial-blessing-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -369,19 +387,15 @@
       "hideous-mutations"
     ],
     "ability_ids": [
-      "deadly-demise-1",
-      "feel-no-pain-5",
-      "lethal-ichor",
-      "mind-breaking-mutations-aura",
-      "regenerating-monstrosities",
-      "scouts-6",
-      "scouts-8",
-      "scuttling-horrors",
-      "to-slake-its-rage"
+      {
+        "id": "feel-no-pain",
+        "value": 5
+      },
+      "regenerating-monstrosities-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -428,13 +442,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 95,
+        "cost": 100,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 105,
+        "cost": 110,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -466,17 +480,13 @@
       "prosperine-khopesh"
     ],
     "ability_ids": [
-      "empyric-guidance-psychic",
-      "gift-of-chaos-psychic",
+      "empyric-guidance-thousand-sons",
       "leader",
-      "prescience-psychic",
-      "twisted-sorceries-psychic",
-      "warped-interference-psychic",
-      "wracking-agonies-psychic"
+      "twisted-sorceries-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -531,7 +541,9 @@
       "Smoke",
       "Chaos",
       "Tzeentch",
-      "Vindicator"
+      "Vindicator",
+      "Frame",
+      "Chaos Vindicator"
     ],
     "faction_keywords": [
       "Thousand Sons"
@@ -552,12 +564,19 @@
       "inferno-combi-weapon"
     ],
     "ability_ids": [
-      "deadly-demise-d3",
-      "siege-shield"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "siege-shield-thousand-sons",
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -614,7 +633,9 @@
       "Smoke",
       "Chaos",
       "Tzeentch",
-      "Rhino"
+      "Rhino",
+      "Frame",
+      "Chaos Rhino"
     ],
     "faction_keywords": [
       "Thousand Sons"
@@ -634,20 +655,22 @@
       "inferno-combi-weapon"
     ],
     "ability_ids": [
-      "assault-vehicle",
-      "fire-support",
-      "firing-deck-2",
-      "meet-any-challenge",
-      "self-repair",
-      "sorcerous-support",
-      "deadly-demise-d3"
+      {
+        "id": "firing-deck",
+        "value": 2
+      },
+      "sorcerous-support-thousand-sons",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      }
     ],
     "transport_capacity": {
       "capacity": 12
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -686,7 +709,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 100
+        "cost": 105
       }
     ],
     "keywords": [
@@ -717,13 +740,13 @@
       "transmogrifying-blast"
     ],
     "ability_ids": [
-      "arch-sorcerer-of-tzeentch-psychic",
+      "arch-sorcerer-of-tzeentch-thousand-sons",
       "leader",
-      "scryer-of-fates-psychic"
+      "scryer-of-fates-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -773,27 +796,27 @@
     "points": [
       {
         "models": 5,
-        "cost": 100,
+        "cost": 115,
         "unit_count_min": 1,
         "unit_count_max": 3
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 190,
+        "cost": 210,
         "unit_count_min": 1,
         "unit_count_max": 3
       },
       {
         "models": 5,
-        "cost": 110,
+        "cost": 125,
         "unit_count_min": 4,
         "unit_count_max": null
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 200,
+        "cost": 220,
         "unit_count_min": 4,
         "unit_count_max": null
       }
@@ -822,19 +845,22 @@
       "close-combat-weapon-rubric-marines",
       "force-weapon-rubric-marines",
       "inferno-bolt-pistol",
-      "inferno-boltgun",
+      "inferno-boltgun-rubric-marines",
       "malefic-curse",
       "soulreaper-cannon",
       "warpflame-pistol",
       "warpflamer"
     ],
     "ability_ids": [
-      "bringers-of-change",
-      "icon-of-flame"
+      "bringers-of-change-thousand-sons",
+      {
+        "id": "icon-of-flame-thousand-sons",
+        "wargear": "icon-of-flame"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -889,7 +915,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 100
+        "cost": 105
       }
     ],
     "keywords": [
@@ -918,13 +944,13 @@
       "inferno-bolt-pistol-infernal-master"
     ],
     "ability_ids": [
-      "glimpse-of-eternity-psychic",
+      "glimpse-of-eternity-thousand-sons",
       "leader",
-      "malefic-maelstrom-psychic"
+      "malefic-maelstrom-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -996,11 +1022,11 @@
       "divining-spear"
     ],
     "ability_ids": [
-      "prophesied-doom"
+      "prophesied-doom-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1071,11 +1097,11 @@
       "fatecaster-greatbow"
     ],
     "ability_ids": [
-      "malign-trickery"
+      "malign-trickery-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1123,27 +1149,27 @@
     "points": [
       {
         "models": 5,
-        "cost": 180,
+        "cost": 200,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 385,
+        "cost": 425,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 5,
-        "cost": 195,
+        "cost": 240,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 400,
+        "cost": 465,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -1155,7 +1181,8 @@
       "Tzeentch",
       "Rubricae",
       "Scarab Occult",
-      "Psyker"
+      "Psyker",
+      "Scarab Occult Terminators"
     ],
     "faction_keywords": [
       "Thousand Sons"
@@ -1179,11 +1206,11 @@
     ],
     "ability_ids": [
       "deep-strike",
-      "rites-of-coalescence"
+      "rites-of-coalescence-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1264,15 +1291,22 @@
       "tzeentchs-firestorm"
     ],
     "ability_ids": [
-      "lord-of-the-planet-of-the-sorcerers-psychic",
-      "supreme-commander",
-      "unearthly-power",
+      "lord-of-the-planet-of-the-sorcerers-thousand-sons",
+      "supreme-commander-thousand-sons",
+      "unearthly-power-thousand-sons",
       "deep-strike",
-      "deadly-demise-d6"
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      {
+        "id": "damaged",
+        "value": 6
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1326,7 +1360,9 @@
       "Smoke",
       "Chaos",
       "Tzeentch",
-      "Predator Destructor"
+      "Predator Destructor",
+      "Frame",
+      "Chaos Predator Destructor"
     ],
     "faction_keywords": [
       "Thousand Sons"
@@ -1349,15 +1385,19 @@
       "predator-autocannon"
     ],
     "ability_ids": [
-      "destructor",
-      "ensorcelled-destruction",
-      "hail-of-corrosive-disease",
-      "punishing-suppression",
-      "deadly-demise-d3"
+      "ensorcelled-destruction-thousand-sons",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1410,7 +1450,6 @@
       "Vehicle",
       "Walker",
       "Daemon",
-      "Smoke",
       "Chaos",
       "Tzeentch",
       "Defiler"
@@ -1439,14 +1478,20 @@
       "hades-lascannon"
     ],
     "ability_ids": [
-      "deadly-demise-d6",
-      "destroyer-of-futures",
-      "feel-no-pain-6",
-      "scuttling-walker"
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "destroyer-of-futures-thousand-sons",
+      "scuttling-walker-thousand-sons",
+      {
+        "id": "damaged",
+        "value": 6
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1514,7 +1559,8 @@
       "Psyker",
       "Chaos",
       "Tzeentch",
-      "Daemon Prince"
+      "Daemon Prince",
+      "Daemon Prince of Tzeentch with Wings"
     ],
     "faction_keywords": [
       "Thousand Sons"
@@ -1533,14 +1579,17 @@
       "infernal-cannon"
     ],
     "ability_ids": [
-      "aetherstride-psychic",
-      "hunter-of-souls",
+      "aetherstride-thousand-sons",
+      "hunter-of-souls-thousand-sons",
       "deep-strike",
-      "deadly-demise-d3"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1610,14 +1659,23 @@
       "tzaangor-blades"
     ],
     "ability_ids": [
-      "ambushing-hunters",
-      "brayhorn",
-      "herd-banner",
-      "scouts-6"
+      "ambushing-hunters-thousand-sons",
+      {
+        "id": "brayhorn-thousand-sons",
+        "wargear": "brayhorn"
+      },
+      {
+        "id": "herd-banner-thousand-sons",
+        "wargear": "herd-banner"
+      },
+      {
+        "id": "scouts",
+        "value": 6
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1734,12 +1792,12 @@
     ],
     "ability_ids": [
       "infiltrators",
-      "prophetic-sentinels",
+      "prophetic-sentinels-thousand-sons",
       "stealth"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1778,7 +1836,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 90
+        "cost": 95
       }
     ],
     "keywords": [
@@ -1790,7 +1848,8 @@
       "Psyker",
       "Chaos",
       "Tzeentch",
-      "Exalted Sorcerer"
+      "Exalted Sorcerer",
+      "Exalted Sorcerer on Disc of Tzeentch"
     ],
     "faction_keywords": [
       "Thousand Sons"
@@ -1810,13 +1869,13 @@
       "prosperine-khopesh-exalted-sorcerer-on-disc-of-tzeentch"
     ],
     "ability_ids": [
-      "binding-tendrils-psychic",
-      "illusions-of-tzeentch-psychic",
+      "binding-tendrils-thousand-sons",
+      "illusions-of-tzeentch-thousand-sons",
       "leader"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1892,16 +1951,19 @@
       "maulerfiend-fists"
     ],
     "ability_ids": [
-      "glutton-for-punishment",
-      "savage-exaltation",
-      "siege-crawler",
-      "snarling-protector",
-      "the-scent-of-blood",
-      "deadly-demise-d3"
+      "snarling-protector-thousand-sons",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1940,7 +2002,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 95
+        "cost": 100
       }
     ],
     "keywords": [
@@ -1970,13 +2032,13 @@
       "prosperine-khopesh-exalted-sorcerer"
     ],
     "ability_ids": [
-      "arcane-shield-psychic",
+      "arcane-shield-thousand-sons",
       "leader",
-      "rebind-rubricae-psychic"
+      "rebind-rubricae-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2016,13 +2078,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 100,
+        "cost": 110,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 110,
+        "cost": 120,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -2034,7 +2096,8 @@
       "Terminator",
       "Chaos",
       "Tzeentch",
-      "Sorcerer"
+      "Sorcerer",
+      "Sorcerer in Terminator Armour"
     ],
     "faction_keywords": [
       "Thousand Sons"
@@ -2054,17 +2117,14 @@
       "inferno-combi-weapon"
     ],
     "ability_ids": [
-      "chaos-familiar",
-      "death-hex-psychic",
-      "empyric-guidance-psychic",
+      "empyric-guidance-thousand-sons",
       "leader",
-      "marked-by-fate-psychic",
-      "warptime-psychic",
+      "marked-by-fate-thousand-sons",
       "deep-strike"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2119,7 +2179,9 @@
       "Smoke",
       "Chaos",
       "Tzeentch",
-      "Predator Annihilator"
+      "Predator Annihilator",
+      "Frame",
+      "Chaos Predator Annihilator"
     ],
     "faction_keywords": [
       "Thousand Sons"
@@ -2142,15 +2204,19 @@
       "predator-twin-lascannon"
     ],
     "ability_ids": [
-      "annihilator",
-      "blood-hungry-annihilator",
-      "ensorcelled-annihilation",
-      "metalophagic-infection",
-      "deadly-demise-d3"
+      "ensorcelled-annihilation-thousand-sons",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2227,14 +2293,19 @@
       "hades-autocannon"
     ],
     "ability_ids": [
-      "blazing-salvoes",
-      "daemonic-ordnance",
-      "furious-onslaught",
-      "deadly-demise-d3"
+      "blazing-salvoes-thousand-sons",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2307,14 +2378,19 @@
       "heldrake-claws"
     ],
     "ability_ids": [
-      "airborne-predator",
-      "flame-wreathed",
-      "hover",
-      "deadly-demise-d3"
+      "flame-wreathed-thousand-sons",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2363,7 +2439,8 @@
       "Psyker",
       "Chaos",
       "Tzeentch",
-      "Daemon Prince"
+      "Daemon Prince",
+      "Daemon Prince of Tzeentch"
     ],
     "faction_keywords": [
       "Thousand Sons"
@@ -2382,14 +2459,17 @@
       "infernal-cannon"
     ],
     "ability_ids": [
-      "glamour-of-tzeentch-aura-psychic",
-      "servile-pawns",
-      "spirit-snare",
-      "deadly-demise-d3"
+      "glamour-of-tzeentch-thousand-sons",
+      "servile-pawns-thousand-sons",
+      "spirit-snare-thousand-sons",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2441,7 +2521,8 @@
       "Prism of Zadophon",
       "Psyker",
       "Tzaangor Shaman",
-      "Tzeentch"
+      "Tzeentch",
+      "Kaa'skrek"
     ],
     "faction_keywords": [
       "Thousand Sons"
@@ -2451,15 +2532,16 @@
       "max": 1
     },
     "weapon_ids": [
-      "baleful-devolution",
+      "baleful-devolution-kaaskrek",
       "force-stave"
     ],
     "ability_ids": [
-      "bestial-prophet"
+      "bestial-prophet-kaaskrek-thousand-sons",
+      "sacrificial-blessing-kaaskrek-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"
@@ -2537,7 +2619,8 @@
       "Prism of Zadophon",
       "Psyker",
       "Rubricae",
-      "Tzeentch"
+      "Tzeentch",
+      "Prism of Zadophon Rubric Marines"
     ],
     "faction_keywords": [
       "Thousand Sons"
@@ -2547,20 +2630,21 @@
       "max": 10
     },
     "weapon_ids": [
-      "force-weapon-rubric-marines",
-      "inferno-bolt-pistol-prism-of-zadophon",
       "malefic-curse",
       "soulreaper-cannon",
       "stocks-and-fists",
       "inferno-boltgun",
-      "warpflamer"
+      "warpflamer-prism-of-zadophon-rubric-marines",
+      "force-weapon-prism-of-zadophon-rubric-marines",
+      "inferno-bolt-pistol-prism-of-zadophon-rubric-marines"
     ],
     "ability_ids": [
-      "bringers-of-change-prism-of-zadophon"
+      "bringers-of-change-prism-of-zadophon-rubric-marines-thousand-sons",
+      "icon-of-flame-prism-of-zadophon-rubric-marines-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"
@@ -2606,7 +2690,8 @@
       "Mounted",
       "Mutant",
       "Prism of Zadophon",
-      "Tzeentch"
+      "Tzeentch",
+      "Prism of Zadophon Tzaangor Enlightened"
     ],
     "faction_keywords": [
       "Thousand Sons"
@@ -2620,7 +2705,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"
@@ -2636,6 +2721,9 @@
         "namespace": "mfm",
         "id": "25946f4d-d31c-45e8-b832-4f2437363dd2"
       }
+    ],
+    "ability_ids": [
+      "prophesied-doom-prism-of-zadophon-tzaangor-enlightened-thousand-sons"
     ]
   },
   {
@@ -2669,7 +2757,8 @@
       "Monster",
       "Prism of Zadophon",
       "Psyker",
-      "Tzeentch"
+      "Tzeentch",
+      "Zadophon the Soul Eater"
     ],
     "faction_keywords": [
       "Thousand Sons"
@@ -2683,11 +2772,12 @@
       "infernal-cannon"
     ],
     "ability_ids": [
-      "glamour-of-tzeentch-aura-psychic"
+      "glamour-of-tzeentch-zadophon-the-soul-eater-thousand-sons",
+      "spirit-snare-zadophon-the-soul-eater-thousand-sons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"
@@ -2703,6 +2793,477 @@
         "namespace": "mfm",
         "id": "20616a2c-f945-4068-9f3b-314b8a98ab15"
       }
+    ]
+  },
+  {
+    "id": "blue-horrors",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "3b144e84-8928-4347-b3d1-2962a5131988"
+      }
+    ],
+    "name": "Blue Horrors",
+    "faction_id": "thousand-sons",
+    "role": "battleline",
+    "profiles": [
+      {
+        "name": "Brimstone Horror",
+        "M": 6,
+        "T": 3,
+        "W": 1,
+        "Sv": 7,
+        "invuln_sv": 4,
+        "Ld": 8,
+        "OC": 0
+      }
+    ],
+    "points": [
+      {
+        "models": 10,
+        "cost": 90
+      }
+    ],
+    "keywords": [
+      "Infantry",
+      "Battleline",
+      "Chaos",
+      "Daemon",
+      "Tzeentch",
+      "Summoned",
+      "Horrors",
+      "Blue",
+      "Brimstone",
+      "Blue Horrors"
+    ],
+    "faction_keywords": [
+      "Scintillating Legions"
+    ],
+    "model_count": {
+      "min": 10,
+      "max": 10
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "weapon_ids": [
+      "coruscating-blue-flames",
+      "blue-claws"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 25
+    },
+    "ability_ids": [
+      "deep-strike",
+      "exploding-horrors-thousand-sons",
+      "infiltrators",
+      "split-thousand-sons",
+      "sullen-malevolence-thousand-sons"
+    ]
+  },
+  {
+    "id": "flamers",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "bc8697a1-99e4-4293-9677-576dc20e024e"
+      }
+    ],
+    "name": "Flamers",
+    "faction_id": "thousand-sons",
+    "profiles": [
+      {
+        "name": "Flamer",
+        "M": 9,
+        "T": 4,
+        "W": 3,
+        "Sv": 7,
+        "invuln_sv": 4,
+        "Ld": 7,
+        "OC": 1
+      }
+    ],
+    "points": [
+      {
+        "models": 3,
+        "cost": 65
+      },
+      {
+        "models": 4,
+        "models_max": 6,
+        "cost": 130
+      }
+    ],
+    "keywords": [
+      "Infantry",
+      "Fly",
+      "Chaos",
+      "Daemon",
+      "Tzeentch",
+      "Summoned",
+      "Flamers"
+    ],
+    "faction_keywords": [
+      "Scintillating Legions"
+    ],
+    "model_count": {
+      "min": 3,
+      "max": 6
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "weapon_ids": [
+      "flickering-flames",
+      "flamer-mouths"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
+    "ability_ids": [
+      "bounding-leaps-thousand-sons",
+      "deep-strike"
+    ]
+  },
+  {
+    "id": "kairos-fateweaver",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "4d987664-7ac1-448b-9cd4-715be7646fd3"
+      }
+    ],
+    "name": "Kairos Fateweaver",
+    "faction_id": "thousand-sons",
+    "role": "epic-hero",
+    "profiles": [
+      {
+        "name": "Kairos Fateweaver",
+        "M": 12,
+        "T": 10,
+        "W": 20,
+        "Sv": 6,
+        "invuln_sv": 4,
+        "Ld": 6,
+        "OC": 5
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 305
+      }
+    ],
+    "keywords": [
+      "Monster",
+      "Character",
+      "Epic Hero",
+      "Fly",
+      "Psyker",
+      "Chaos",
+      "Daemon",
+      "Tzeentch",
+      "Summoned",
+      "Kairos Fateweaver"
+    ],
+    "faction_keywords": [
+      "Scintillating Legions"
+    ],
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "weapon_ids": [
+      "infernal-gateway",
+      "staff-of-tomorrow"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 100
+    },
+    "ability_ids": [
+      {
+        "id": "damaged",
+        "value": 7
+      },
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "deep-strike",
+      "one-head-looks-back-thousand-sons",
+      "one-head-looks-forward-thousand-sons"
+    ]
+  },
+  {
+    "id": "lord-of-change",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "b2b8e02b-e2f5-4d5b-8712-d53aff660882"
+      }
+    ],
+    "name": "Lord of Change",
+    "faction_id": "thousand-sons",
+    "role": "character",
+    "profiles": [
+      {
+        "name": "Lord of Change",
+        "M": 12,
+        "T": 10,
+        "W": 18,
+        "Sv": 6,
+        "invuln_sv": 4,
+        "Ld": 6,
+        "OC": 5
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 320,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 1,
+        "cost": 340,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Monster",
+      "Character",
+      "Fly",
+      "Psyker",
+      "Chaos",
+      "Daemon",
+      "Tzeentch",
+      "Summoned",
+      "Lord of Change"
+    ],
+    "faction_keywords": [
+      "Scintillating Legions"
+    ],
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "weapon_ids": [
+      "bolt-of-change",
+      "staff-of-tzeentch",
+      "rod-of-sorcery",
+      "baleful-sword"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 100
+    },
+    "conditional_keywords": [
+      {
+        "keyword": "Shadow Legion",
+        "required_detachment_id": "shadow-legion"
+      }
+    ],
+    "ability_ids": [
+      "daemon-lord-of-tzeentch-thousand-sons",
+      {
+        "id": "damaged",
+        "value": 7
+      },
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "deep-strike",
+      "master-of-magicks-thousand-sons"
+    ]
+  },
+  {
+    "id": "pink-horrors",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "7665a8b0-d762-447a-aaff-3b54ebf6b2ce"
+      }
+    ],
+    "name": "Pink Horrors",
+    "faction_id": "thousand-sons",
+    "role": "battleline",
+    "profiles": [
+      {
+        "name": "Pink Horror",
+        "M": 6,
+        "T": 3,
+        "W": 1,
+        "Sv": 7,
+        "invuln_sv": 4,
+        "Ld": 7,
+        "OC": 1
+      },
+      {
+        "name": "Brimstone Horror",
+        "M": 6,
+        "T": 3,
+        "W": 1,
+        "Sv": 7,
+        "invuln_sv": 4,
+        "Ld": 8,
+        "OC": 0
+      }
+    ],
+    "points": [
+      {
+        "models": 10,
+        "cost": 115
+      }
+    ],
+    "keywords": [
+      "Infantry",
+      "Battleline",
+      "Chaos",
+      "Daemon",
+      "Tzeentch",
+      "Horrors",
+      "Summoned",
+      "Pink",
+      "Blue",
+      "Brimstone",
+      "Pink Horrors"
+    ],
+    "faction_keywords": [
+      "Scintillating Legions"
+    ],
+    "model_count": {
+      "min": 10,
+      "max": 10
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "weapon_ids": [
+      "coruscating-pink-flames",
+      "pink-claws"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
+    "wargear_budgets": [
+      {
+        "items": [
+          "daemonic-icon"
+        ],
+        "count": 1,
+        "per_models": 0
+      },
+      {
+        "items": [
+          "instrument-of-chaos"
+        ],
+        "count": 1,
+        "per_models": 0
+      }
+    ],
+    "ability_ids": [
+      {
+        "id": "daemonic-icon-thousand-sons",
+        "wargear": "daemonic-icon"
+      },
+      "deep-strike",
+      "horrors-are-pink-horrors-are-blue-where-once-there-was-one-now-there-are-two-thousand-sons",
+      {
+        "id": "instrument-of-chaos-thousand-sons",
+        "wargear": "instrument-of-chaos"
+      },
+      "split-pink-horrors-thousand-sons"
+    ]
+  },
+  {
+    "id": "screamers",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "7a236482-4a5b-4b76-9757-11a31b06a4c0"
+      }
+    ],
+    "name": "Screamers",
+    "faction_id": "thousand-sons",
+    "profiles": [
+      {
+        "name": "Screamer",
+        "M": 14,
+        "T": 4,
+        "W": 3,
+        "Sv": 6,
+        "invuln_sv": 4,
+        "Ld": 7,
+        "OC": 1
+      }
+    ],
+    "points": [
+      {
+        "models": 3,
+        "cost": 80
+      },
+      {
+        "models": 4,
+        "models_max": 6,
+        "cost": 160
+      }
+    ],
+    "keywords": [
+      "Beast",
+      "Fly",
+      "Chaos",
+      "Daemon",
+      "Tzeentch",
+      "Summoned",
+      "Screamers"
+    ],
+    "faction_keywords": [
+      "Scintillating Legions"
+    ],
+    "model_count": {
+      "min": 3,
+      "max": 6
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "weapon_ids": [
+      "lamprey-bite"
+    ],
+    "ability_ids": [
+      "deep-strike",
+      "slashing-dive-thousand-sons"
     ]
   }
 ]

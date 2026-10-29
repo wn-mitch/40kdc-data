@@ -22,7 +22,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -57,7 +57,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -94,7 +94,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -129,7 +129,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -164,7 +164,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -189,7 +189,7 @@
         "max": 1,
         "default_weapon_ids": [
           "nemesis-force-weapon-purifier-squad",
-          "storm-bolter",
+          "storm-bolter-purifier-squad",
           "purifying-flame"
         ],
         "is_leader_model": true,
@@ -203,7 +203,7 @@
         "min": 4,
         "max": 9,
         "default_weapon_ids": [
-          "storm-bolter",
+          "storm-bolter-purifier-squad",
           "purifying-flame",
           "nemesis-force-weapon-purifier-squad"
         ],
@@ -216,9 +216,9 @@
           {
             "name": "Purifier",
             "weapon_ids": [
-              "storm-bolter",
-              "purifying-flame",
-              "nemesis-force-weapon-purifier-squad"
+              "nemesis-force-weapon-purifier-squad",
+              "storm-bolter-purifier-squad",
+              "purifying-flame"
             ],
             "max_count": 9
           },
@@ -257,16 +257,17 @@
               "Purifier w/ psilencer",
               "Purifier w/ psycannon"
             ],
-            "count": 4,
-            "per_models": 0,
-            "scope": "model-row"
+            "count": 2,
+            "per_models": 5,
+            "scope": "unit",
+            "stepped": true
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -320,7 +321,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -362,7 +363,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -390,14 +391,14 @@
           "draft": true
         },
         "default_weapon_ids": [
-          "storm-bolter",
+          "storm-bolter-rhino",
           "armoured-tracks-rhino"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -432,7 +433,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -461,14 +462,14 @@
         },
         "default_weapon_ids": [
           "dreadnought-combat-weapon",
-          "storm-bolter",
+          "storm-bolter-venerable-dreadnought",
           "assault-cannon"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -504,7 +505,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -528,7 +529,7 @@
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
-          "storm-bolter",
+          "storm-bolter-strike-squad",
           "nemesis-force-weapon-strike-squad"
         ],
         "is_leader_model": true,
@@ -542,7 +543,7 @@
         "min": 4,
         "max": 9,
         "default_weapon_ids": [
-          "storm-bolter",
+          "storm-bolter-strike-squad",
           "nemesis-force-weapon-strike-squad"
         ],
         "is_leader_model": false,
@@ -555,22 +556,48 @@
             "name": "Grey Knight",
             "weapon_ids": [
               "nemesis-force-weapon-strike-squad",
-              "storm-bolter"
+              "storm-bolter-strike-squad"
             ]
           },
           {
-            "name": "Grey Knight with Heavy Weapon",
+            "name": "Grey Knight with Heavy Weapon (Incinerator)",
             "weapon_ids": [
-              "close-combat-weapon"
-            ],
-            "max_count": 1
+              "close-combat-weapon",
+              "incinerator"
+            ]
+          },
+          {
+            "name": "Grey Knight with Heavy Weapon (Psycannon)",
+            "weapon_ids": [
+              "close-combat-weapon",
+              "psycannon-strike-squad"
+            ]
+          },
+          {
+            "name": "Grey Knight with Heavy Weapon (Psilencer)",
+            "weapon_ids": [
+              "close-combat-weapon",
+              "psilencer-strike-squad"
+            ]
           }
         ],
         "loadout_variant_budgets": [
           {
             "variant_names": [
+              "Grey Knight with Heavy Weapon (Incinerator)",
+              "Grey Knight with Heavy Weapon (Psycannon)",
+              "Grey Knight with Heavy Weapon (Psilencer)"
+            ],
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
+          },
+          {
+            "variant_names": [
               "Grey Knight",
-              "Grey Knight with Heavy Weapon"
+              "Grey Knight with Heavy Weapon (Incinerator)",
+              "Grey Knight with Heavy Weapon (Psycannon)",
+              "Grey Knight with Heavy Weapon (Psilencer)"
             ],
             "count": 9,
             "per_models": 0,
@@ -581,7 +608,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -625,7 +652,7 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32
+          "diameter": 40
         },
         "default_weapon_ids": [
           "servo-arm",
@@ -637,7 +664,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -672,7 +699,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -707,7 +734,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -735,7 +762,7 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "storm-bolter",
+          "storm-bolter-purgation-squad",
           "nemesis-force-weapon-purgation-squad"
         ]
       },
@@ -744,7 +771,7 @@
         "min": 4,
         "max": 9,
         "default_weapon_ids": [
-          "storm-bolter",
+          "storm-bolter-purgation-squad",
           "nemesis-force-weapon-purgation-squad"
         ],
         "is_leader_model": false,
@@ -756,8 +783,8 @@
           {
             "name": "Purgator",
             "weapon_ids": [
-              "storm-bolter",
-              "nemesis-force-weapon-purgation-squad"
+              "nemesis-force-weapon-purgation-squad",
+              "storm-bolter-purgation-squad"
             ],
             "max_count": 9
           },
@@ -802,7 +829,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -858,7 +885,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -886,7 +913,7 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "storm-bolter",
+          "storm-bolter-interceptor-squad",
           "nemesis-force-weapon-interceptor-squad"
         ]
       },
@@ -895,7 +922,7 @@
         "min": 4,
         "max": 9,
         "default_weapon_ids": [
-          "storm-bolter",
+          "storm-bolter-interceptor-squad",
           "nemesis-force-weapon-interceptor-squad"
         ],
         "is_leader_model": false,
@@ -907,8 +934,8 @@
           {
             "name": "Interceptor",
             "weapon_ids": [
-              "storm-bolter",
-              "nemesis-force-weapon-interceptor-squad"
+              "nemesis-force-weapon-interceptor-squad",
+              "storm-bolter-interceptor-squad"
             ],
             "max_count": 9
           },
@@ -945,15 +972,15 @@
               "Interceptor w/ psycannon"
             ],
             "count": 1,
-            "per_models": 0,
-            "scope": "model-row"
+            "per_models": 5,
+            "scope": "unit"
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1000,14 +1027,14 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "storm-bolter",
+          "storm-bolter-brotherhood-chaplain",
           "crozius-arcanum"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1065,21 +1092,38 @@
           {
             "name": "Paladin with Ancient's Banner",
             "weapon_ids": [
-              "nemesis-force-weapon-paladin-squad"
+              "nemesis-force-weapon-paladin-squad",
+              "ancients-banner",
+              "storm-bolter-paladin-squad"
             ],
             "max_count": 1
           },
           {
-            "name": "Paladin with Heavy Weapon",
+            "name": "Paladin with Heavy Weapon (Incinerator)",
             "weapon_ids": [
-              "nemesis-force-weapon-paladin-squad"
-            ],
-            "max_count": 2
+              "nemesis-force-weapon-paladin-squad",
+              "incinerator"
+            ]
+          },
+          {
+            "name": "Paladin with Heavy Weapon (Psycannon)",
+            "weapon_ids": [
+              "nemesis-force-weapon-paladin-squad",
+              "psycannon"
+            ]
+          },
+          {
+            "name": "Paladin with Heavy Weapon (Psilencer)",
+            "weapon_ids": [
+              "nemesis-force-weapon-paladin-squad",
+              "psilencer"
+            ]
           },
           {
             "name": "Paladin with Narthecium",
             "weapon_ids": [
-              "nemesis-force-weapon-paladin-squad"
+              "nemesis-force-weapon-paladin-squad",
+              "apothecarys-narthecium"
             ],
             "max_count": 1
           }
@@ -1087,9 +1131,22 @@
         "loadout_variant_budgets": [
           {
             "variant_names": [
+              "Paladin with Heavy Weapon (Incinerator)",
+              "Paladin with Heavy Weapon (Psycannon)",
+              "Paladin with Heavy Weapon (Psilencer)"
+            ],
+            "count": 2,
+            "per_models": 5,
+            "scope": "unit",
+            "stepped": true
+          },
+          {
+            "variant_names": [
               "Paladin",
               "Paladin with Ancient's Banner",
-              "Paladin with Heavy Weapon",
+              "Paladin with Heavy Weapon (Incinerator)",
+              "Paladin with Heavy Weapon (Psycannon)",
+              "Paladin with Heavy Weapon (Psilencer)",
               "Paladin with Narthecium"
             ],
             "count": 9,
@@ -1115,7 +1172,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1275,7 +1332,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1311,7 +1368,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1335,7 +1392,7 @@
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
-          "storm-bolter",
+          "storm-bolter-brotherhood-terminator-squad",
           "nemesis-force-weapon-brotherhood-terminator-squad"
         ],
         "is_leader_model": true,
@@ -1349,7 +1406,7 @@
         "min": 2,
         "max": 9,
         "default_weapon_ids": [
-          "storm-bolter",
+          "storm-bolter-brotherhood-terminator-squad",
           "nemesis-force-weapon-brotherhood-terminator-squad"
         ],
         "is_leader_model": false,
@@ -1362,39 +1419,68 @@
             "name": "Terminator",
             "weapon_ids": [
               "nemesis-force-weapon-brotherhood-terminator-squad",
-              "storm-bolter"
+              "storm-bolter-brotherhood-terminator-squad"
             ],
             "max_count": 9
           },
           {
             "name": "Terminator with Ancient's Banner",
             "weapon_ids": [
-              "nemesis-force-weapon-brotherhood-terminator-squad"
+              "nemesis-force-weapon-brotherhood-terminator-squad",
+              "ancients-banner",
+              "storm-bolter-brotherhood-terminator-squad"
             ],
             "max_count": 1
           },
           {
             "name": "Terminator with Narthecium",
             "weapon_ids": [
-              "nemesis-force-weapon-brotherhood-terminator-squad"
+              "nemesis-force-weapon-brotherhood-terminator-squad",
+              "apothecarys-narthecium"
             ],
             "max_count": 1
           },
           {
-            "name": "Terminator with Heavy Weapon",
+            "name": "Terminator with Heavy Weapon (Incinerator)",
             "weapon_ids": [
-              "nemesis-force-weapon-brotherhood-terminator-squad"
-            ],
-            "max_count": 1
+              "nemesis-force-weapon-brotherhood-terminator-squad",
+              "incinerator"
+            ]
+          },
+          {
+            "name": "Terminator with Heavy Weapon (Psilencer)",
+            "weapon_ids": [
+              "nemesis-force-weapon-brotherhood-terminator-squad",
+              "psilencer-brotherhood-terminator-squad"
+            ]
+          },
+          {
+            "name": "Terminator with Heavy Weapon (Psycannon)",
+            "weapon_ids": [
+              "nemesis-force-weapon-brotherhood-terminator-squad",
+              "psycannon-brotherhood-terminator-squad"
+            ]
           }
         ],
         "loadout_variant_budgets": [
           {
             "variant_names": [
+              "Terminator with Heavy Weapon (Incinerator)",
+              "Terminator with Heavy Weapon (Psilencer)",
+              "Terminator with Heavy Weapon (Psycannon)"
+            ],
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
+          },
+          {
+            "variant_names": [
               "Terminator",
               "Terminator with Ancient's Banner",
               "Terminator with Narthecium",
-              "Terminator with Heavy Weapon"
+              "Terminator with Heavy Weapon (Incinerator)",
+              "Terminator with Heavy Weapon (Psilencer)",
+              "Terminator with Heavy Weapon (Psycannon)"
             ],
             "count": 9,
             "per_models": 0,
@@ -1413,13 +1499,13 @@
         },
         "default_weapon_ids": [
           "nemesis-force-weapon-brotherhood-terminator-squad",
-          "storm-bolter"
+          "storm-bolter-brotherhood-terminator-squad"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1580,7 +1666,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1619,7 +1705,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1647,7 +1733,7 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "nemesis-force-weapon",
+          "nemesis-force-weapon-crowes-sanctifiers-brotherhood-terminator-squad",
           "storm-bolter"
         ]
       },
@@ -1661,8 +1747,8 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "nemesis-force-weapon",
-          "psycannon"
+          "nemesis-force-weapon-crowes-sanctifiers-brotherhood-terminator-squad",
+          "psycannon-crowes-sanctifiers-brotherhood-terminator-squad"
         ]
       },
       {
@@ -1675,14 +1761,14 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "nemesis-force-weapon",
+          "nemesis-force-weapon-crowes-sanctifiers-brotherhood-terminator-squad",
           "storm-bolter"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1704,6 +1790,9 @@
           }
         ]
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -1735,7 +1824,7 @@
         },
         "default_weapon_ids": [
           "ceramite-fists",
-          "psycannon"
+          "psycannon-crowes-sanctifiers-strike-squad"
         ]
       },
       {
@@ -1748,7 +1837,7 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "nemesis-force-weapon",
+          "nemesis-force-weapon-crowes-sanctifiers-strike-squad",
           "storm-bolter"
         ]
       },
@@ -1762,14 +1851,14 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "nemesis-force-weapon",
+          "nemesis-force-weapon-crowes-sanctifiers-strike-squad",
           "storm-bolter"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1796,6 +1885,9 @@
           }
         ]
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -1820,7 +1912,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1832,6 +1924,9 @@
           }
         ]
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -1849,14 +1944,14 @@
         },
         "default_weapon_ids": [
           "black-blade-of-antwyr",
-          "purifying-flame-castellan-crowe",
-          "storm-bolter-castellan-crowe"
+          "purifying-flame-sanctifiers-castellan-crowe",
+          "storm-bolter-sanctifiers-castellan-crowe"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1868,6 +1963,9 @@
           }
         ]
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   }
 ]

@@ -17,16 +17,16 @@
     },
     {
       "ref": {
-        "id": "1st-company-task-force",
+        "id": null,
         "raw_name": "1st Company Task Force",
-        "resolved": true,
+        "resolved": false,
         "candidates": []
       },
-      "dp_cost": 2
+      "dp_cost": null
     }
   ],
   "battle_size": "strike-force",
-  "force_disposition": null,
+  "force_disposition": "priority-assets",
   "points": {
     "declared_limit": 2000,
     "detachment_cap": 3,
@@ -67,8 +67,8 @@
         },
         {
           "ref": {
-            "id": "lancer-laser-destroyer",
-            "raw_name": "Lancer laser destroyer",
+            "id": "laser-destroyer",
+            "raw_name": "Laser Destroyer",
             "resolved": true,
             "candidates": []
           },
@@ -92,7 +92,7 @@
       "wargear": [
         {
           "ref": {
-            "id": "fragstorm-grenade-launchers-redemptor-dreadnought",
+            "id": "fragstorm-grenade-launcher-redemptor-dreadnought",
             "raw_name": "Fragstorm Grenade Launchers",
             "resolved": true,
             "candidates": []
@@ -125,15 +125,6 @@
             "candidates": []
           },
           "count": 1
-        },
-        {
-          "ref": {
-            "id": "storm-bolters-redemptor-dreadnought",
-            "raw_name": "Storm Bolters",
-            "resolved": true,
-            "candidates": []
-          },
-          "count": 1
         }
       ],
       "leader_attachment": null
@@ -146,13 +137,13 @@
   "diagnostics": {
     "resolved_units": 2,
     "unresolved_units": 0,
-    "resolved_weapons": 8,
+    "resolved_weapons": 7,
     "unresolved_weapons": 0,
     "warnings": [
       {
-        "code": "detachment-points-exceeded",
-        "message": "Detachments cost 5 detachment points but the strike-force budget is 3.",
-        "raw_name": null
+        "code": "detachment-unresolved",
+        "message": "Detachment name did not match any 40kdc detachment.",
+        "raw_name": "1st Company Task Force"
       }
     ]
   }

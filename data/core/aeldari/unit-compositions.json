@@ -22,7 +22,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -58,7 +58,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -108,7 +108,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -163,7 +163,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -199,7 +199,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -238,7 +238,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -274,7 +274,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -420,7 +420,7 @@
           "diameter": 28.5
         },
         "default_weapon_ids": [
-          "close-combat-weapon",
+          "close-combat-weapon-corsair-voidscarred",
           "paired-hekatarii-blades",
           "shuriken-pistol"
         ]
@@ -435,7 +435,7 @@
           "diameter": 28.5
         },
         "default_weapon_ids": [
-          "close-combat-weapon",
+          "close-combat-weapon-corsair-voidscarred",
           "shuriken-pistol",
           "power-sword",
           "channeller-stones"
@@ -451,7 +451,7 @@
           "diameter": 28.5
         },
         "default_weapon_ids": [
-          "close-combat-weapon",
+          "close-combat-weapon-corsair-voidscarred",
           "shuriken-pistol",
           "witch-staff",
           "executioner"
@@ -460,7 +460,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -691,7 +691,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -726,7 +726,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -773,7 +773,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -841,7 +841,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -895,7 +895,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -932,42 +932,63 @@
             "weapon_ids": [
               "close-combat-weapon",
               "shuriken-pistol"
-            ]
+            ],
+            "max_count": 10
           },
           {
             "name": "Storm Guardian with Flamer",
             "weapon_ids": [
               "close-combat-weapon",
               "flamer"
-            ]
+            ],
+            "max_count": 2
           },
           {
             "name": "Storm Guardian with Fusion Gun",
             "weapon_ids": [
               "close-combat-weapon",
               "fusion-gun"
-            ]
+            ],
+            "max_count": 2
           },
           {
             "name": "Storm Guardian with Power Sword",
             "weapon_ids": [
               "shuriken-pistol",
               "power-sword-storm-guardians"
-            ]
+            ],
+            "max_count": 2
           },
           {
             "name": "Storm Guardian with Flamer & Power Sword",
             "weapon_ids": [
               "flamer",
               "power-sword-storm-guardians"
-            ]
+            ],
+            "max_count": 2
           },
           {
             "name": "Storm Guardian with Fusion Gun & Power Sword",
             "weapon_ids": [
               "power-sword-storm-guardians",
               "fusion-gun"
-            ]
+            ],
+            "max_count": 2
+          }
+        ],
+        "loadout_variant_budgets": [
+          {
+            "variant_names": [
+              "Storm Guardian",
+              "Storm Guardian with Flamer",
+              "Storm Guardian with Fusion Gun",
+              "Storm Guardian with Power Sword",
+              "Storm Guardian with Flamer & Power Sword",
+              "Storm Guardian with Fusion Gun & Power Sword"
+            ],
+            "count": 10,
+            "per_models": 0,
+            "scope": "model-row"
           }
         ]
       },
@@ -983,20 +1004,12 @@
         "base_size_mm": {
           "shape": "round",
           "diameter": 40
-        },
-        "loadout_variants": [
-          {
-            "name": "Serpent’s Scale Platform",
-            "weapon_ids": [
-              "close-combat-weapon"
-            ]
-          }
-        ]
+        }
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1037,7 +1050,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1108,7 +1121,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1153,7 +1166,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1189,7 +1202,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1225,7 +1238,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1260,7 +1273,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1298,7 +1311,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1333,7 +1346,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1367,7 +1380,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1414,10 +1427,10 @@
         ],
         "loadout_variants": [
           {
-            "name": "Skyreaver w/ Corsair blade",
+            "name": "Skyreaver w/ pistol and blade",
             "weapon_ids": [
-              "corsair-blade",
-              "shuriken-pistol"
+              "shuriken-pistol",
+              "corsair-blade"
             ],
             "max_count": 9
           },
@@ -1426,35 +1439,63 @@
             "weapon_ids": [
               "close-combat-weapon-corsair-skyreavers",
               "blaster"
-            ],
-            "max_count": 2
+            ]
           },
           {
             "name": "Skyreaver w/ flamer",
             "weapon_ids": [
               "close-combat-weapon-corsair-skyreavers",
               "flamer"
-            ],
-            "max_count": 2
+            ]
           },
           {
             "name": "Skyreaver w/ fusion gun",
             "weapon_ids": [
               "close-combat-weapon-corsair-skyreavers",
               "fusion-gun"
-            ],
-            "max_count": 2
+            ]
           },
           {
             "name": "Skyreaver w/ shredder",
             "weapon_ids": [
               "close-combat-weapon-corsair-skyreavers",
               "shredder"
-            ],
-            "max_count": 2
+            ]
           }
         ],
         "loadout_variant_budgets": [
+          {
+            "variant_names": [
+              "Skyreaver w/ blaster"
+            ],
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
+          },
+          {
+            "variant_names": [
+              "Skyreaver w/ flamer"
+            ],
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
+          },
+          {
+            "variant_names": [
+              "Skyreaver w/ fusion gun"
+            ],
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
+          },
+          {
+            "variant_names": [
+              "Skyreaver w/ shredder"
+            ],
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
+          },
           {
             "variant_names": [
               "Skyreaver w/ blaster",
@@ -1464,14 +1505,15 @@
             ],
             "count": 2,
             "per_models": 5,
-            "scope": "unit"
+            "scope": "unit",
+            "stepped": true
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1539,7 +1581,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1582,7 +1624,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1616,7 +1658,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1652,7 +1694,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1696,7 +1738,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1733,7 +1775,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1770,7 +1812,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1836,8 +1878,7 @@
               "blaster",
               "splinter-pistol",
               "bladevanes"
-            ],
-            "max_count": 1
+            ]
           },
           {
             "name": "Reaver with Heat Lance",
@@ -1845,11 +1886,26 @@
               "splinter-pistol",
               "heat-lance",
               "bladevanes"
-            ],
-            "max_count": 1
+            ]
           }
         ],
         "loadout_variant_budgets": [
+          {
+            "variant_names": [
+              "Reaver with Blaster"
+            ],
+            "count": 1,
+            "per_models": 3,
+            "scope": "unit"
+          },
+          {
+            "variant_names": [
+              "Reaver with Heat Lance"
+            ],
+            "count": 1,
+            "per_models": 3,
+            "scope": "unit"
+          },
           {
             "variant_names": [
               "Reaver",
@@ -1859,13 +1915,22 @@
             "count": 5,
             "per_models": 0,
             "scope": "model-row"
+          },
+          {
+            "variant_names": [
+              "Reaver with Blaster",
+              "Reaver with Heat Lance"
+            ],
+            "count": 1,
+            "per_models": 3,
+            "scope": "unit"
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1933,7 +1998,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1987,7 +2052,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2022,7 +2087,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2056,7 +2121,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2111,7 +2176,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2164,7 +2229,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2215,7 +2280,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2270,7 +2335,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2306,7 +2371,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2341,7 +2406,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2390,7 +2455,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2458,7 +2523,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2583,7 +2648,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2628,7 +2693,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2668,7 +2733,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2713,7 +2778,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2749,7 +2814,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2799,7 +2864,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2871,7 +2936,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2916,7 +2981,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2955,7 +3020,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2990,7 +3055,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -3039,7 +3104,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -3107,7 +3172,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -3166,7 +3231,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -3240,7 +3305,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -3285,7 +3350,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -3321,7 +3386,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -3368,7 +3433,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -3406,7 +3471,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -3443,7 +3508,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -3491,7 +3556,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -3525,7 +3590,7 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 25
+          "diameter": 32
         },
         "default_weapon_ids": [
           "shadow-field",
@@ -3536,7 +3601,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -3571,7 +3636,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -3605,7 +3670,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -3781,7 +3846,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -3867,7 +3932,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -3891,11 +3956,9 @@
         "max": 2,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "flying-base",
-          "size": "large",
-          "draft": true,
-          "width": 120,
-          "length": 92
+          "shape": "oval",
+          "width": 105,
+          "length": 70
         },
         "default_weapon_ids": [
           "shuriken-cannon-vyper",
@@ -3906,7 +3969,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -3950,7 +4013,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -3989,7 +4052,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -4012,20 +4075,52 @@
         "min": 1,
         "max": 1,
         "is_leader_model": true,
-        "base_size_mm": { "shape": "round", "diameter": 28.5 },
-        "default_weapon_ids": ["power-glaive"]
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        },
+        "default_weapon_ids": [
+          "power-glaive"
+        ]
       },
       {
         "name": "Dire Avenger",
         "min": 4,
         "max": 4,
         "is_leader_model": false,
-        "base_size_mm": { "shape": "round", "diameter": 28.5 },
-        "default_weapon_ids": ["avenger-shuriken-catapult", "weapon-strike"]
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        },
+        "default_weapon_ids": [
+          "avenger-shuriken-catapult",
+          "weapon-strike"
+        ]
       }
     ],
-    "game_version": { "edition": "11th", "dataslate": "launch" },
-    "tiers": [{ "models": [{ "name": "Dire Avengers Exarch", "min": 1, "max": 1 }, { "name": "Dire Avenger", "min": 4, "max": 4 }] }]
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Dire Avengers Exarch",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Dire Avenger",
+            "min": 4,
+            "max": 4
+          }
+        ]
+      }
+    ],
+    "game_modes": [
+      "combat-patrol"
+    ]
   },
   {
     "unit_id": "kygharils-protectors-warp-spiders",
@@ -4036,20 +4131,53 @@
         "min": 1,
         "max": 1,
         "is_leader_model": true,
-        "base_size_mm": { "shape": "round", "diameter": 28.5 },
-        "default_weapon_ids": ["death-weavers", "powerblades"]
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        },
+        "default_weapon_ids": [
+          "death-weavers",
+          "powerblades"
+        ]
       },
       {
         "name": "Warp Spider",
         "min": 4,
         "max": 4,
         "is_leader_model": false,
-        "base_size_mm": { "shape": "round", "diameter": 28.5 },
-        "default_weapon_ids": ["death-spinner", "weapon-strike"]
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        },
+        "default_weapon_ids": [
+          "death-spinner",
+          "weapon-strike"
+        ]
       }
     ],
-    "game_version": { "edition": "11th", "dataslate": "launch" },
-    "tiers": [{ "models": [{ "name": "Warp Spider Exarch", "min": 1, "max": 1 }, { "name": "Warp Spider", "min": 4, "max": 4 }] }]
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Warp Spider Exarch",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Warp Spider",
+            "min": 4,
+            "max": 4
+          }
+        ]
+      }
+    ],
+    "game_modes": [
+      "combat-patrol"
+    ]
   },
   {
     "unit_id": "kygharils-protectors-wraithblades",
@@ -4060,12 +4188,33 @@
         "min": 5,
         "max": 5,
         "is_leader_model": false,
-        "base_size_mm": { "shape": "round", "diameter": 40 },
-        "default_weapon_ids": ["ghostaxe"]
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
+        "default_weapon_ids": [
+          "ghostaxe"
+        ]
       }
     ],
-    "game_version": { "edition": "11th", "dataslate": "launch" },
-    "tiers": [{ "models": [{ "name": "Wraithblade", "min": 5, "max": 5 }] }]
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Wraithblade",
+            "min": 5,
+            "max": 5
+          }
+        ]
+      }
+    ],
+    "game_modes": [
+      "combat-patrol"
+    ]
   },
   {
     "unit_id": "spiritseer-kygharil",
@@ -4076,42 +4225,195 @@
         "min": 1,
         "max": 1,
         "is_leader_model": false,
-        "base_size_mm": { "shape": "round", "diameter": 25 },
-        "default_weapon_ids": ["shuriken-pistol-spiritseer", "witch-staff"]
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        },
+        "default_weapon_ids": [
+          "shuriken-pistol-spiritseer-kygharil",
+          "witch-staff"
+        ]
       }
     ],
-    "game_version": { "edition": "11th", "dataslate": "launch" },
-    "tiers": [{ "models": [{ "name": "Spiritseer Kygharil", "min": 1, "max": 1 }] }]
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Spiritseer Kygharil",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ],
+    "game_modes": [
+      "combat-patrol"
+    ]
   },
   {
     "unit_id": "clanblade",
     "faction_id": "aeldari",
-    "models": [{ "name": "Clanblade", "min": 1, "max": 1, "is_leader_model": false, "default_weapon_ids": ["drakesteed-fangs-and-talons", "moonblades", "solar-carbine"] }],
-    "game_version": { "edition": "11th", "dataslate": "launch" },
-    "tiers": [{ "models": [{ "name": "Clanblade", "min": 1, "max": 1 }] }]
+    "models": [
+      {
+        "name": "Clanblade",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "default_weapon_ids": [
+          "drakesteed-fangs-and-talons",
+          "moonblades",
+          "solar-carbine"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Clanblade",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
   },
   {
     "unit_id": "dragon-knights",
     "faction_id": "aeldari",
     "models": [
-      { "name": "Dragon Knight Leader", "min": 1, "max": 1, "is_leader_model": true, "default_weapon_ids": ["drakesteed-fangs-and-talons", "laser-lance", "solar-carbine"] },
-      { "name": "Dragon Knight", "min": 2, "max": 5, "is_leader_model": false, "default_weapon_ids": ["drakesteed-fangs-and-talons", "laser-lance", "solar-carbine"] }
+      {
+        "name": "Dragon Knight Leader",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": true,
+        "default_weapon_ids": [
+          "drakesteed-fangs-and-talons",
+          "laser-lance-dragon-knights",
+          "solar-carbine"
+        ]
+      },
+      {
+        "name": "Dragon Knight",
+        "min": 2,
+        "max": 5,
+        "is_leader_model": false,
+        "default_weapon_ids": [
+          "drakesteed-fangs-and-talons",
+          "laser-lance-dragon-knights",
+          "solar-carbine"
+        ]
+      }
     ],
-    "game_version": { "edition": "11th", "dataslate": "launch" },
-    "tiers": [{ "models": [{ "name": "Dragon Knight Leader", "min": 1, "max": 1 }, { "name": "Dragon Knight", "min": 2, "max": 5 }] }]
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Dragon Knight Leader",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Dragon Knight",
+            "min": 2,
+            "max": 2
+          }
+        ]
+      },
+      {
+        "models": [
+          {
+            "name": "Dragon Knight Leader",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Dragon Knight",
+            "min": 3,
+            "max": 5
+          }
+        ]
+      }
+    ]
   },
   {
     "unit_id": "leystalker",
     "faction_id": "aeldari",
-    "models": [{ "name": "Leystalker", "min": 1, "max": 1, "is_leader_model": false, "default_weapon_ids": ["drakesteed-fangs-and-talons", "hunting-blades", "long-rifle"] }],
-    "game_version": { "edition": "11th", "dataslate": "launch" },
-    "tiers": [{ "models": [{ "name": "Leystalker", "min": 1, "max": 1 }] }]
+    "models": [
+      {
+        "name": "Leystalker",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "default_weapon_ids": [
+          "drakolithe-once-per-battle-per-token",
+          "drakolithe-once-per-battle-per-token",
+          "drakesteed-fangs-and-talons",
+          "long-rifle-leystalker",
+          "hunting-blades"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Leystalker",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
   },
   {
     "unit_id": "stonesinger",
     "faction_id": "aeldari",
-    "models": [{ "name": "Stonesinger", "min": 1, "max": 1, "is_leader_model": false, "default_weapon_ids": ["drakesteed-fangs-and-talons", "song-of-waning", "solar-carbine", "stone-stave", "venomcrest-spit"] }],
-    "game_version": { "edition": "11th", "dataslate": "launch" },
-    "tiers": [{ "models": [{ "name": "Stonesinger", "min": 1, "max": 1 }] }]
+    "models": [
+      {
+        "name": "Stonesinger",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "default_weapon_ids": [
+          "drakesteed-fangs-and-talons",
+          "song-of-waning",
+          "solar-carbine",
+          "stone-stave",
+          "venomcrest-spit"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Stonesinger",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
   }
 ]

@@ -7,14 +7,11 @@
       "company-heroes",
       "infernus-squad",
       "intercessor-squad",
-      "tactical-squad"
-    ],
-    "eligible_bodyguard_keywords": [
-      "Sternguard Veteran Squad"
+      "sternguard-veteran-squad"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -25,21 +22,17 @@
       "deathwatch-veterans",
       "decimus-kill-team",
       "desolation-squad",
-      "devastator-squad",
       "fortis-kill-team",
       "hellblaster-squad",
       "infernus-squad",
       "inner-circle-companions",
       "intercessor-squad",
-      "sword-brethren-squad",
-      "tactical-squad"
-    ],
-    "eligible_bodyguard_keywords": [
-      "Sternguard Veteran Squad"
+      "sternguard-veteran-squad",
+      "sword-brethren-squad"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -49,11 +42,12 @@
       "deathwing-knights",
       "deathwing-terminator-squad",
       "terminator-assault-squad",
-      "terminator-squad"
+      "terminator-squad",
+      "wolf-guard-terminators"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -61,50 +55,48 @@
     "eligible_bodyguard_ids": [
       "assault-intercessor-squad",
       "bladeguard-veteran-squad",
+      "company-heroes",
       "crusader-squad",
       "deathwatch-veterans",
       "decimus-kill-team",
       "desolation-squad",
-      "devastator-squad",
       "fortis-kill-team",
       "hellblaster-squad",
       "infernus-squad",
       "inner-circle-companions",
       "intercessor-squad",
-      "sword-brethren-squad",
-      "tactical-squad"
-    ],
-    "eligible_bodyguard_keywords": [
-      "Sternguard Veteran Squad"
+      "sternguard-veteran-squad",
+      "sword-brethren-squad"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
     "leader_id": "apothecary-biologis",
     "eligible_bodyguard_ids": [
       "aggressor-squad",
+      "eradicator-squad-with-heavy-bolters",
+      "eradicator-squad-with-melta-rifles",
       "heavy-intercessor-squad",
       "indomitor-kill-team"
     ],
-    "eligible_bodyguard_keywords": [
-      "Eradicator Squad"
-    ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
     "leader_id": "arjac-rockfist",
     "eligible_bodyguard_ids": [
+      "terminator-assault-squad",
+      "terminator-squad",
       "wolf-guard-terminators"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -116,14 +108,11 @@
       "infernus-squad",
       "inner-circle-companions",
       "intercessor-squad",
-      "tactical-squad"
-    ],
-    "eligible_bodyguard_keywords": [
-      "Sternguard Veteran Squad"
+      "sternguard-veteran-squad"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -133,7 +122,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -141,18 +130,16 @@
     "eligible_bodyguard_ids": [
       "assault-intercessor-squad",
       "bladeguard-veteran-squad",
+      "company-heroes",
       "hellblaster-squad",
       "infernus-squad",
       "inner-circle-companions",
       "intercessor-squad",
-      "tactical-squad"
-    ],
-    "eligible_bodyguard_keywords": [
-      "Sternguard Veteran Squad"
+      "sternguard-veteran-squad"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -163,12 +150,9 @@
       "terminator-assault-squad",
       "terminator-squad"
     ],
-    "eligible_bodyguard_keywords": [
-      "Terminator Squad"
-    ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -178,7 +162,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -188,14 +172,11 @@
       "company-heroes",
       "infernus-squad",
       "intercessor-squad",
-      "tactical-squad"
-    ],
-    "eligible_bodyguard_keywords": [
-      "Sternguard Veteran Squad"
+      "sternguard-veteran-squad"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -204,12 +185,9 @@
       "terminator-assault-squad",
       "terminator-squad"
     ],
-    "eligible_bodyguard_keywords": [
-      "Terminator Squad"
-    ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -221,36 +199,33 @@
       "crusader-squad",
       "deathwatch-veterans",
       "decimus-kill-team",
+      "desolation-squad",
       "fortis-kill-team",
       "hellblaster-squad",
       "infernus-squad",
       "inner-circle-companions",
       "intercessor-squad",
+      "sternguard-veteran-squad",
       "sword-brethren-squad",
-      "tactical-squad",
       "victrix-honour-guard"
-    ],
-    "eligible_bodyguard_keywords": [
-      "Sternguard Veteran Squad"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
     "leader_id": "captain-in-gravis-armour",
     "eligible_bodyguard_ids": [
       "aggressor-squad",
+      "eradicator-squad-with-heavy-bolters",
+      "eradicator-squad-with-melta-rifles",
       "heavy-intercessor-squad",
       "indomitor-kill-team"
     ],
-    "eligible_bodyguard_keywords": [
-      "Eradicator Squad"
-    ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -261,11 +236,12 @@
       "infiltrator-squad",
       "reiver-squad",
       "scout-squad",
-      "spectrus-kill-team"
+      "spectrus-kill-team",
+      "wolf-scouts"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -274,14 +250,24 @@
       "deathwatch-terminator-squad",
       "deathwing-knights",
       "deathwing-terminator-squad",
-      "terminator-assault-squad"
-    ],
-    "eligible_bodyguard_keywords": [
-      "Terminator Squad"
+      "terminator-assault-squad",
+      "terminator-squad",
+      "wolf-guard-terminators"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
+    }
+  },
+  {
+    "leader_id": "captain-on-bike",
+    "eligible_bodyguard_ids": [
+      "outrider-squad",
+      "ravenwing-black-knights"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -289,19 +275,14 @@
     "eligible_bodyguard_ids": [
       "assault-intercessor-squad",
       "bladeguard-veteran-squad",
-      "company-heroes",
       "hellblaster-squad",
       "infernus-squad",
       "intercessor-squad",
-      "victrix-honour-guard",
-      "wardens-of-ultramar"
-    ],
-    "eligible_bodyguard_keywords": [
-      "Sternguard Veteran Squad"
+      "sternguard-veteran-squad"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -314,34 +295,52 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
     "leader_id": "castellan",
     "eligible_bodyguard_ids": [
       "assault-intercessor-squad",
+      "bladeguard-veteran-squad",
+      "company-heroes",
       "crusader-squad",
       "infernus-squad",
       "intercessor-squad",
+      "sternguard-veteran-squad",
       "sword-brethren-squad"
-    ],
-    "eligible_bodyguard_keywords": [
-      "Sternguard Veteran Squad"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
     "leader_id": "cato-sicarius",
-    "eligible_bodyguard_ids": [
-      "victrix-honour-guard"
+    "eligible_bodyguard_ids": [],
+    "conditional_groups": [
+      {
+        "role": "support",
+        "eligible_bodyguard_ids": [
+          "victrix-honour-guard"
+        ],
+        "required_roster_unit_ids": [
+          "marneus-calgar"
+        ]
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "victrix-honour-guard"
+        ],
+        "excluded_roster_unit_ids": [
+          "marneus-calgar"
+        ]
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -351,7 +350,6 @@
       "bladeguard-veteran-squad",
       "crusader-squad",
       "death-company-marines",
-      "death-company-marines-with-bolt-rifles",
       "deathwatch-veterans",
       "decimus-kill-team",
       "fortis-kill-team",
@@ -359,15 +357,12 @@
       "infernus-squad",
       "inner-circle-companions",
       "intercessor-squad",
-      "sword-brethren-squad",
-      "tactical-squad"
-    ],
-    "eligible_bodyguard_keywords": [
-      "Sternguard Veteran Squad"
+      "sternguard-veteran-squad",
+      "sword-brethren-squad"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -381,7 +376,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -390,14 +385,13 @@
       "deathwatch-terminator-squad",
       "deathwing-knights",
       "deathwing-terminator-squad",
-      "terminator-assault-squad"
-    ],
-    "eligible_bodyguard_keywords": [
-      "Terminator Squad"
+      "terminator-assault-squad",
+      "terminator-squad",
+      "wolf-guard-terminators"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -408,7 +402,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -421,7 +415,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -430,16 +424,13 @@
       "assault-intercessor-squad",
       "bladeguard-veteran-squad",
       "desolation-squad",
-      "devastator-squad",
+      "infernus-squad",
       "intercessor-squad",
-      "tactical-squad"
-    ],
-    "eligible_bodyguard_keywords": [
-      "Sternguard Veteran Squad"
+      "sternguard-veteran-squad"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -451,7 +442,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -462,7 +453,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -471,23 +462,19 @@
       "terminator-assault-squad",
       "terminator-squad"
     ],
-    "eligible_bodyguard_keywords": [
-      "Terminator Squad"
-    ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
     "leader_id": "death-company-captain",
     "eligible_bodyguard_ids": [
-      "death-company-marines",
-      "death-company-marines-with-bolt-rifles"
+      "death-company-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -497,7 +484,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -506,14 +493,12 @@
       "assault-intercessor-squad",
       "crusader-squad",
       "intercessor-squad",
+      "sternguard-veteran-squad",
       "sword-brethren-squad"
-    ],
-    "eligible_bodyguard_keywords": [
-      "Sternguard Veteran Squad"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -524,7 +509,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -536,53 +521,53 @@
       "infernus-squad",
       "inner-circle-companions",
       "intercessor-squad",
-      "tactical-squad"
-    ],
-    "eligible_bodyguard_keywords": [
-      "Sternguard Veteran Squad"
+      "sternguard-veteran-squad"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
     "leader_id": "high-marshal-helbrecht",
     "eligible_bodyguard_ids": [
       "assault-intercessor-squad",
+      "bladeguard-veteran-squad",
+      "company-heroes",
       "crusader-squad",
       "intercessor-squad",
       "sword-brethren-squad"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
     "leader_id": "iron-father-feirros",
     "eligible_bodyguard_ids": [
       "aggressor-squad",
+      "eradicator-squad-with-heavy-bolters",
+      "eradicator-squad-with-melta-rifles",
       "heavy-intercessor-squad"
-    ],
-    "eligible_bodyguard_keywords": [
-      "Eradicator Squad"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
     "leader_id": "iron-priest",
     "eligible_bodyguard_ids": [
+      "assault-intercessor-squad",
       "blood-claws",
       "grey-hunters",
+      "intercessor-squad",
       "wolf-guard-headtakers"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -597,15 +582,25 @@
       "infernus-squad",
       "inner-circle-companions",
       "intercessor-squad",
-      "sword-brethren-squad",
-      "tactical-squad"
-    ],
-    "eligible_bodyguard_keywords": [
-      "Sternguard Veteran Squad"
+      "sternguard-veteran-squad",
+      "sword-brethren-squad"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
+    }
+  },
+  {
+    "leader_id": "kaius-konorius",
+    "eligible_bodyguard_ids": [
+      "assault-intercessor-squad",
+      "bladeguard-veteran-squad",
+      "sternguard-veteran-squad",
+      "victrix-honour-guard"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -616,7 +611,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -626,14 +621,11 @@
       "bladeguard-veteran-squad",
       "company-heroes",
       "intercessor-squad",
-      "tactical-squad"
-    ],
-    "eligible_bodyguard_keywords": [
-      "Sternguard Veteran Squad"
+      "sternguard-veteran-squad"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -641,17 +633,15 @@
     "eligible_bodyguard_ids": [
       "assault-intercessor-squad",
       "bladeguard-veteran-squad",
+      "company-heroes",
       "infernus-squad",
       "inner-circle-companions",
       "intercessor-squad",
-      "tactical-squad"
-    ],
-    "eligible_bodyguard_keywords": [
-      "Sternguard Veteran Squad"
+      "sternguard-veteran-squad"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -661,7 +651,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -671,20 +661,16 @@
       "deathwatch-veterans",
       "decimus-kill-team",
       "desolation-squad",
-      "devastator-squad",
       "fortis-kill-team",
       "hellblaster-squad",
       "infernus-squad",
       "inner-circle-companions",
       "intercessor-squad",
-      "tactical-squad"
-    ],
-    "eligible_bodyguard_keywords": [
-      "Sternguard Veteran Squad"
+      "sternguard-veteran-squad"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -694,11 +680,13 @@
       "incursor-squad",
       "infiltrator-squad",
       "reiver-squad",
-      "spectrus-kill-team"
+      "scout-squad",
+      "spectrus-kill-team",
+      "wolf-scouts"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -707,14 +695,13 @@
       "deathwatch-terminator-squad",
       "deathwing-knights",
       "deathwing-terminator-squad",
-      "terminator-assault-squad"
-    ],
-    "eligible_bodyguard_keywords": [
-      "Terminator Squad"
+      "terminator-assault-squad",
+      "terminator-squad",
+      "wolf-guard-terminators"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -726,122 +713,98 @@
       "crusader-squad",
       "deathwatch-veterans",
       "decimus-kill-team",
+      "desolation-squad",
       "fortis-kill-team",
       "hellblaster-squad",
       "infernus-squad",
       "inner-circle-companions",
       "intercessor-squad",
-      "sword-brethren-squad",
-      "tactical-squad"
-    ],
-    "eligible_bodyguard_keywords": [
-      "Sternguard Veteran Squad"
+      "sternguard-veteran-squad",
+      "sword-brethren-squad"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
     "leader_id": "lieutenant-in-phobos-armour",
     "eligible_bodyguard_ids": [
+      "eliminator-squad",
       "incursor-squad",
       "infiltrator-squad",
       "reiver-squad",
-      "spectrus-kill-team"
+      "spectrus-kill-team",
+      "wolf-scouts"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
-    }
-  },
-  {
-    "leader_id": "lieutenant-in-reiver-armour",
-    "eligible_bodyguard_ids": [
-      "reiver-squad"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
     "leader_id": "logan-grimnar",
     "eligible_bodyguard_ids": [
+      "terminator-assault-squad",
+      "terminator-squad",
       "wolf-guard-terminators"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
-    "leader_id": "marneus-calgar-in-armour-of-antilochus",
+    "leader_id": "marneus-calgar",
     "eligible_bodyguard_ids": [
       "aggressor-squad",
       "assault-intercessor-squad",
       "bladeguard-veteran-squad",
       "company-heroes",
+      "eradicator-squad-with-heavy-bolters",
+      "eradicator-squad-with-melta-rifles",
       "heavy-intercessor-squad",
       "infernus-squad",
       "intercessor-squad",
-      "tactical-squad",
+      "sternguard-veteran-squad",
       "terminator-assault-squad",
       "terminator-squad",
       "victrix-honour-guard"
     ],
-    "eligible_bodyguard_keywords": [
-      "Eradicator Squad",
-      "Sternguard Veteran Squad",
-      "Terminator Squad"
-    ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
     "leader_id": "marshal",
     "eligible_bodyguard_ids": [
       "assault-intercessor-squad",
+      "bladeguard-veteran-squad",
       "crusader-squad",
       "infernus-squad",
       "intercessor-squad",
+      "sternguard-veteran-squad",
       "sword-brethren-squad"
-    ],
-    "eligible_bodyguard_keywords": [
-      "Sternguard Veteran Squad"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
     "leader_id": "njal-stormcaller",
     "eligible_bodyguard_ids": [
+      "assault-intercessor-squad",
+      "bladeguard-veteran-squad",
       "blood-claws",
       "grey-hunters",
+      "intercessor-squad",
       "wolf-guard-headtakers"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
-    }
-  },
-  {
-    "leader_id": "pedro-kantor",
-    "eligible_bodyguard_ids": [
-      "bladeguard-veteran-squad",
-      "company-heroes",
-      "tactical-squad"
-    ],
-    "eligible_bodyguard_keywords": [
-      "Sternguard Veteran Squad"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -852,7 +815,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -863,7 +826,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -874,7 +837,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -882,19 +845,16 @@
     "eligible_bodyguard_ids": [
       "assault-intercessor-squad",
       "bladeguard-veteran-squad",
+      "company-heroes",
       "desolation-squad",
-      "devastator-squad",
       "hellblaster-squad",
       "infernus-squad",
       "intercessor-squad",
-      "tactical-squad"
-    ],
-    "eligible_bodyguard_keywords": [
-      "Sternguard Veteran Squad"
+      "sternguard-veteran-squad"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -904,7 +864,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -914,72 +874,55 @@
       "crusader-squad",
       "decimus-kill-team",
       "desolation-squad",
-      "devastator-squad",
       "fortis-kill-team",
       "intercessor-squad",
-      "sword-brethren-squad",
-      "tactical-squad"
+      "sword-brethren-squad"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
     "leader_id": "tor-garadon",
     "eligible_bodyguard_ids": [
       "aggressor-squad",
+      "eradicator-squad-with-heavy-bolters",
+      "eradicator-squad-with-melta-rifles",
       "heavy-intercessor-squad"
-    ],
-    "eligible_bodyguard_keywords": [
-      "Eradicator Squad"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
     "leader_id": "ulrik-the-slayer",
     "eligible_bodyguard_ids": [
+      "assault-intercessor-squad",
+      "bladeguard-veteran-squad",
       "blood-claws",
       "grey-hunters",
+      "intercessor-squad",
       "wolf-guard-headtakers"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
-    }
-  },
-  {
-    "leader_id": "uriel-ventris",
-    "eligible_bodyguard_ids": [
-      "assault-intercessor-squad",
-      "bladeguard-veteran-squad",
-      "company-heroes",
-      "intercessor-squad",
-      "tactical-squad",
-      "victrix-honour-guard"
-    ],
-    "eligible_bodyguard_keywords": [
-      "Sternguard Veteran Squad"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
     "leader_id": "vulkan-hestan",
     "eligible_bodyguard_ids": [
       "assault-intercessor-squad",
+      "bladeguard-veteran-squad",
       "company-heroes",
-      "infernus-squad",
-      "tactical-squad"
+      "eradicator-squad-with-melta-rifles",
+      "infernus-squad"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -987,14 +930,12 @@
     "eligible_bodyguard_ids": [
       "assault-intercessor-squad",
       "bladeguard-veteran-squad",
-      "intercessor-squad"
-    ],
-    "eligible_bodyguard_keywords": [
-      "Sternguard Veteran Squad"
+      "intercessor-squad",
+      "sternguard-veteran-squad"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -1006,7 +947,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -1018,31 +959,37 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
     "leader_id": "wolf-guard-battle-leader",
     "eligible_bodyguard_ids": [
+      "assault-intercessor-squad",
+      "bladeguard-veteran-squad",
       "blood-claws",
       "grey-hunters",
+      "intercessor-squad",
       "wolf-guard-headtakers"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
     "leader_id": "wolf-priest",
     "eligible_bodyguard_ids": [
+      "assault-intercessor-squad",
+      "bladeguard-veteran-squad",
       "blood-claws",
       "grey-hunters",
+      "intercessor-squad",
       "wolf-guard-headtakers"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   }
 ]

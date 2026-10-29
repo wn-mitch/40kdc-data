@@ -1,6 +1,6 @@
 [
   {
-    "source_id": "scouts-6",
+    "source_id": "scouts",
     "source_type": "ability",
     "phases": [
       "command"
@@ -12,67 +12,80 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "ministorum-sermon",
+    "source_id": "ministorum-sermon-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "fight"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "cherub",
+    "source_id": "cherub-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "command"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "salvationist-medikit",
+    "source_id": "salvationist-medikit-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "command"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "simulacrum-imperialis",
+    "source_id": "simulacrum-imperialis-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "command"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "tactical-instinct",
+    "source_id": "tactical-instinct-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "shooting"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "unstoppable-champion",
+    "source_id": "unstoppable-champion-agents-of-the-imperium",
+    "source_type": "ability",
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "deadly-demise",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -85,20 +98,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "deadly-demise-d3",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "firing-deck-2",
+    "source_id": "firing-deck",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -111,7 +111,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "rapid-deployment",
+    "source_id": "rapid-deployment-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -131,7 +131,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "authored_by": "40kdc-community"
   },
@@ -143,7 +143,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "authored_by": "40kdc-community"
   },
@@ -160,19 +160,19 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "acrobatic-escape",
+    "source_id": "acrobatic-escape-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "fight"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "lord-of-deceit-aura",
+    "source_id": "shadow-assignment-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "command"
@@ -184,43 +184,31 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "shadow-assignment",
-    "source_type": "ability",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "authority-of-the-inquisition",
+    "source_id": "authority-of-the-inquisition-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "movement"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "psyoculum",
+    "source_id": "psyoculum-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "shooting"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "no-mercy",
+    "source_id": "no-mercy-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -228,24 +216,24 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "purge-and-cleanse",
+    "source_id": "purge-and-cleanse-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "shooting"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "tome-skull",
+    "source_id": "tome-skull-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "command",
@@ -261,43 +249,43 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "inquisitorial-henchmen",
+    "source_id": "inquisitorial-henchmen-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "command"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "power-of-the-rosette",
+    "source_id": "power-of-the-rosette-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "command"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "psychic-gifts",
+    "source_id": "psychic-gifts-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "command"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "hammerhand-psychic",
+    "source_id": "hammerhand-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "charge",
@@ -305,36 +293,24 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "ancients-banner",
+    "source_id": "narthecium-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "command"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "narthecium",
-    "source_type": "ability",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "rites-of-teleportation",
+    "source_id": "rites-of-teleportation-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "command",
@@ -347,31 +323,31 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "masters-of-close-confines",
+    "source_id": "masters-of-close-confines-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "shooting"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "navy-bodyguard",
+    "source_id": "navy-bodyguard-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "command"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "death-to-the-alien",
+    "source_id": "death-to-the-alien-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -379,24 +355,12 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "scouts-9",
-    "source_type": "ability",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "frenzon",
+    "source_id": "frenzon-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -405,12 +369,12 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "overkill",
+    "source_id": "overkill-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "movement",
@@ -418,39 +382,27 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "self-repair",
+    "source_id": "self-repair-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "command"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "kill-team",
+    "source_id": "kill-team-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "attached-unit",
-    "source_type": "ability",
-    "phases": [
-      "command"
     ],
     "game_version": {
       "edition": "11th",
@@ -466,12 +418,12 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "dead-shot",
+    "source_id": "dead-shot-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -483,7 +435,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "shieldbreaker",
+    "source_id": "shieldbreaker-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -496,7 +448,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "imperial-law",
+    "source_id": "imperial-law-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -504,12 +456,12 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "nuncio-acquila",
+    "source_id": "nuncio-acquila-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "command"
@@ -521,31 +473,31 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "arbites-medi-kit",
+    "source_id": "arbites-medi-kit-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "command"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "soulguilt-scanner",
+    "source_id": "soulguilt-scanner-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "shooting"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "breaching-team",
+    "source_id": "breaching-team-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -553,12 +505,12 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "gheistskull",
+    "source_id": "gheistskull-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "command"
@@ -570,19 +522,19 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "cat-unit",
+    "source_id": "cat-unit-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "shooting"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "etheric-emergence",
+    "source_id": "etheric-emergence-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "command",
@@ -591,60 +543,60 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "soulless-horror-aura",
+    "source_id": "soulless-horror-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "command"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "merciless-judgement",
+    "source_id": "merciless-judgement-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "shooting"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "dedication-to-duty",
+    "source_id": "dedication-to-duty-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "fight"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "third-eye-psychic",
+    "source_id": "third-eye-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "shooting"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "xenos-hunter",
+    "source_id": "xenos-hunter-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -652,12 +604,12 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "psychic-veil-psychic",
+    "source_id": "psychic-veil-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "command",
@@ -665,38 +617,12 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "strategic-knowledge",
-    "source_type": "ability",
-    "phases": [
-      "movement",
-      "shooting",
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "rites-of-battle",
-    "source_type": "ability",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "spy-network",
+    "source_id": "spy-network-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "command",
@@ -712,51 +638,38 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "glovodan-psyber-eagle",
+    "source_id": "glovodan-psyber-eagle-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "command"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "defenders-of-the-faith",
+    "source_id": "defenders-of-the-faith-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "command"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "incensor-cherub",
+    "source_id": "incensor-cherub-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "command"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "deadly-demise-d6",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "authored_by": "40kdc-community"
   },
@@ -768,24 +681,24 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "blackstar-cluster-launcher",
+    "source_id": "blackstar-cluster-launcher-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "movement"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "auspex-array",
+    "source_id": "auspex-array-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "shooting"
@@ -797,7 +710,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "holy-hatred",
+    "source_id": "holy-hatred-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "shooting",
@@ -805,48 +718,24 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "zealot",
+    "source_id": "zealot-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "fight"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "backroom-deals",
-    "source_type": "ability",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "warrant-of-trade",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "healing-serum",
+    "source_id": "backroom-deals-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "command"
@@ -858,19 +747,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "grim-spectres",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "that-redeploy-units-roll-off",
+    "source_id": "warrant-of-trade-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
       "movement"
@@ -882,596 +759,19 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "the-third-eye-psychic",
+    "source_id": "healing-serum-agents-of-the-imperium",
     "source_type": "ability",
     "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "evade-and-survive",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "close-quarters-barrage",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "dispense-justice",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "prime-target",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "armour-of-contempt",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "hyperstimms",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "masters-of-the-void",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "selfless-bodyguard",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "execution-order",
-    "source_type": "stratagem",
-    "phases": [
       "command"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "emperors-will",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "line-of-fire",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "exact-punishment",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "inviolate-jurisdiction",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "will-sapping-salvo",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "orbital-oversight",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "blind-grenades",
-    "source_type": "stratagem",
-    "phases": [
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "ensnaring-trap",
-    "source_type": "stratagem",
-    "phases": [
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "adaptive-tactics",
-    "source_type": "stratagem",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "rapid-tactical-relocation",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "ritual-of-warding",
-    "source_type": "stratagem",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "rites-of-exorcism",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "steel-heart",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "violent-acquisition",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "displacer-field",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "stun-grenades",
-    "source_type": "stratagem",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "hellfire-rounds",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "dragonfire-rounds",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "kraken-rounds",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "truesilver-armour",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "hexagrammic-wards",
-    "source_type": "stratagem",
-    "phases": [
-      "fight",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "psybolt-ammunition",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "universal-anathema",
-    "source_type": "enhancement",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "beacon-angelis",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "amulet-of-auto-chastisement",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "liber-heresius",
-    "source_type": "enhancement",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "no-escape-aura",
-    "source_type": "enhancement",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "witch-hunter",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "ignis-judicium",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "formidable-resolve",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "daemon-slayer",
-    "source_type": "enhancement",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "grimoire-of-true-names-aura",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "gift-of-the-prescient",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "digital-weapons",
-    "source_type": "enhancement",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "clandestine-operation",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "fleetmaster",
-    "source_type": "enhancement",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "combat-landers",
-    "source_type": "enhancement",
-    "phases": [
-      "command",
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "at-all-costs",
+    "source_id": "at-all-costs-agents-of-the-imperium",
     "source_type": "detachment-rule",
     "phases": [
       "command",
@@ -1485,7 +785,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "root-out-heresy",
+    "source_id": "root-out-heresy-agents-of-the-imperium",
     "source_type": "detachment-rule",
     "phases": [
       "shooting",
@@ -1493,12 +793,12 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "extremis-sanction",
+    "source_id": "extremis-sanction-agents-of-the-imperium",
     "source_type": "detachment-rule",
     "phases": [
       "command",
@@ -1513,7 +813,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "deathwatch-mission-tactics",
+    "source_id": "deathwatch-mission-tactics-agents-of-the-imperium",
     "source_type": "detachment-rule",
     "phases": [
       "command",
@@ -1527,7 +827,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "destroy-the-daemonic",
+    "source_id": "destroy-the-daemonic-agents-of-the-imperium",
     "source_type": "detachment-rule",
     "phases": [
       "shooting",
@@ -1535,7 +835,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "authored_by": "40kdc-community"
   }

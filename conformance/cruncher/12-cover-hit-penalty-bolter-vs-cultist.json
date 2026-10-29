@@ -2,7 +2,7 @@
   "name": "bolter x10 vs cultist mob, target in cover (-1 to hit)",
   "attacker": {
     "weaponId": "bolt-rifle",
-    "profileIndex": 0
+    "profileIndex": 1
   },
   "modelsFiring": 10,
   "target": {

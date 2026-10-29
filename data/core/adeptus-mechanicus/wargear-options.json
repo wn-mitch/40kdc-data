@@ -5,7 +5,7 @@
     "faction_id": "adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -24,7 +24,7 @@
     "faction_id": "adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -40,7 +40,7 @@
     "faction_id": "adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -71,23 +71,11 @@
       [
         "icarus-array",
         "daedalus-missile-launcher"
+      ],
+      [
+        "cognis-heavy-stubber",
+        "eradication-beamer"
       ]
-    ],
-    "model_constraint": {
-      "any_number": true
-    }
-  },
-  {
-    "id": "onager-dunecrawler-wgo-mfm-3",
-    "unit_id": "onager-dunecrawler",
-    "faction_id": "adeptus-mechanicus",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replacement": [
-      "cognis-heavy-stubber"
     ],
     "model_constraint": {
       "any_number": true
@@ -99,7 +87,7 @@
     "faction_id": "adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -118,7 +106,7 @@
     "faction_id": "adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -137,7 +125,7 @@
     "faction_id": "adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -156,7 +144,7 @@
     "faction_id": "adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -175,7 +163,7 @@
     "faction_id": "adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -200,7 +188,7 @@
     "faction_id": "adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -219,7 +207,7 @@
     "faction_id": "adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -238,7 +226,7 @@
     "faction_id": "adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -260,7 +248,7 @@
     "faction_id": "adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -282,7 +270,7 @@
     "faction_id": "adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -301,7 +289,7 @@
     "faction_id": "adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -318,14 +306,19 @@
     "faction_id": "adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
+    "replaces": [
+      "radium-carbine"
+    ],
     "replacement_choice": [
       [
+        "radium-carbine",
         "enhanced-data-tether"
       ],
       [
+        "radium-carbine",
         "omnispex"
       ]
     ],
@@ -340,26 +333,18 @@
     "faction_id": "adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
       "radium-carbine"
     ],
-    "replacement_choice": [
-      [
-        "transuranic-arquebus"
-      ],
-      [
-        "plasma-caliver"
-      ],
-      [
-        "arc-rifle"
-      ]
+    "replacement": [
+      "transuranic-arquebus"
     ],
     "model_constraint": {
       "model_name": "Skitarii Vanguard",
-      "max_count": 3
+      "max_count": 1
     }
   },
   {
@@ -368,7 +353,47 @@
     "faction_id": "adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "radium-carbine"
+    ],
+    "replacement": [
+      "plasma-caliver"
+    ],
+    "model_constraint": {
+      "model_name": "Skitarii Vanguard",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "skitarii-vanguard-wgo-mfm-5",
+    "unit_id": "skitarii-vanguard",
+    "faction_id": "adeptus-mechanicus",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "radium-carbine"
+    ],
+    "replacement": [
+      "arc-rifle"
+    ],
+    "model_constraint": {
+      "model_name": "Skitarii Vanguard",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "skitarii-vanguard-wgo-mfm-6",
+    "unit_id": "skitarii-vanguard",
+    "faction_id": "adeptus-mechanicus",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -388,7 +413,7 @@
     "faction_id": "adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -407,7 +432,7 @@
     "faction_id": "adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -426,7 +451,7 @@
     "faction_id": "adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -445,7 +470,7 @@
     "faction_id": "adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -464,7 +489,7 @@
     "faction_id": "adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -484,7 +509,7 @@
     "faction_id": "adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -504,7 +529,7 @@
     "faction_id": "adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -512,7 +537,7 @@
     ],
     "model_constraint": {
       "model_name": "Serberys Raider",
-      "any_number": true
+      "max_count": 1
     }
   },
   {
@@ -521,7 +546,7 @@
     "faction_id": "adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -541,7 +566,7 @@
     "faction_id": "adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -567,7 +592,7 @@
     "faction_id": "adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -586,7 +611,7 @@
     "faction_id": "adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -605,7 +630,7 @@
     "faction_id": "adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -625,7 +650,7 @@
     "faction_id": "adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -642,14 +667,19 @@
     "faction_id": "adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
+    "replaces": [
+      "galvanic-rifle"
+    ],
     "replacement_choice": [
       [
+        "galvanic-rifle",
         "omnispex"
       ],
       [
+        "galvanic-rifle",
         "enhanced-data-tether"
       ]
     ],
@@ -664,26 +694,58 @@
     "faction_id": "adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
       "galvanic-rifle"
     ],
-    "replacement_choice": [
-      [
-        "arc-rifle"
-      ],
-      [
-        "transuranic-arquebus"
-      ],
-      [
-        "plasma-caliver"
-      ]
+    "replacement": [
+      "arc-rifle"
     ],
     "model_constraint": {
       "model_name": "Skitarii Ranger",
-      "max_count": 3
+      "max_count": 1
+    }
+  },
+  {
+    "id": "skitarii-rangers-wgo-mfm-5",
+    "unit_id": "skitarii-rangers",
+    "faction_id": "adeptus-mechanicus",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "galvanic-rifle"
+    ],
+    "replacement": [
+      "transuranic-arquebus"
+    ],
+    "model_constraint": {
+      "model_name": "Skitarii Ranger",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "skitarii-rangers-wgo-mfm-6",
+    "unit_id": "skitarii-rangers",
+    "faction_id": "adeptus-mechanicus",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "galvanic-rifle"
+    ],
+    "replacement": [
+      "plasma-caliver"
+    ],
+    "model_constraint": {
+      "model_name": "Skitarii Ranger",
+      "max_count": 1
     }
   },
   {
@@ -692,11 +754,11 @@
     "faction_id": "adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
-      "phosphor-pistol"
+      "phosphor-pistol-purge-corps-serberys-sulphurhounds"
     ],
     "model_constraint": {
       "model_name": "Serberys Sulphurhound",

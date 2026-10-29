@@ -3,6 +3,7 @@
   import { resolveRosterUnit, resolveAttachmentPartners } from "@alpaca-software/40kdc-data";
   import type { UnitView } from "@alpaca-software/40kdc-data";
   import EmptyState from "./EmptyState.svelte";
+  import { supportProviders } from "./defender.js";
 
   type AttachmentPartner = { unit: UnitView; role: "leader" | "bodyguard" };
 
@@ -139,6 +140,17 @@
     salvo.attachedUnitIds = next;
   });
 
+  // Units whose abilities could reach the combined unit if the player places them nearby.
+  const providers = $derived(
+    selectedUnit
+      ? supportProviders(ds, selectedUnit.factionId, [selectedUnit.id, ...salvo.attachedUnitIds])
+      : [],
+  );
+  function toggleSupport(id: string, on: boolean): void {
+    const rest = salvo.supportUnitIds.filter((item) => item !== id);
+    salvo.supportUnitIds = on ? [...rest, id] : rest;
+  }
+
   // Only weapons usable in the current phase: ranged in shooting, melee in fight.
   const weapons = $derived(
     (selectedUnit?.weapons ?? []).filter(
@@ -175,13 +187,14 @@
 
 {#if rosterUnits.length > 0}
   <div class="row">
-    <label>From roster</label>
+    <label for="atk-roster-unit">From roster</label>
     <select
+      id="atk-roster-unit"
       class="grow"
       value={salvo.selectedUnitId ?? ""}
       onchange={(e) => pickUnit((e.currentTarget as HTMLSelectElement).value)}
     >
-      <option value="">— pick a unit —</option>
+      <option value="">Pick a unit</option>
       {#each rosterUnits as { ru, view, index } (index)}
         <option value={view!.id}>
           {view!.name}{sharedRosterNames.has(view!.name) && view!.faction
@@ -194,8 +207,9 @@
 {/if}
 
 <div class="row">
-  <label>Faction</label>
+  <label for="atk-faction">Faction</label>
   <select
+    id="atk-faction"
     class="grow"
     value={salvo.selectedFactionId ?? ""}
     onchange={(e) => {
@@ -212,8 +226,9 @@
 
 {#if detachments.length > 0}
   <div class="row">
-    <label>Detachment</label>
+    <label for="atk-detachment">Detachment</label>
     <select
+      id="atk-detachment"
       class="grow"
       value={salvo.selectedDetachmentId ?? ""}
       onchange={(e) => {
@@ -229,13 +244,14 @@
 {/if}
 
 <div class="row">
-  <label>Unit</label>
+  <label for="atk-unit">Unit</label>
   <select
+    id="atk-unit"
     class="grow"
     value={salvo.selectedUnitId ?? ""}
     onchange={(e) => pickUnit((e.currentTarget as HTMLSelectElement).value)}
   >
-    <option value="">— pick a unit —</option>
+    <option value="">Pick a unit</option>
     {#each datasetUnits as u (`${u.raw.faction_id}/${u.id}`)}
       <option value={u.id}>
         {u.name}{sharedDatasetNames.has(u.name)
@@ -248,8 +264,9 @@
 
 {#if attachmentPartners.length > 0}
   <div class="row">
-    <label>Attached to</label>
+    <label for="atk-attached">Attached to</label>
     <select
+      id="atk-attached"
       class="grow"
       value={salvo.attachedUnitIds[0] ?? ""}
       onchange={(e) => {
@@ -284,11 +301,33 @@
   </div>
 {/if}
 
+{#if providers.length > 0}
+  <details class="support">
+    <summary>
+      Nearby support
+      ({providers.filter((u) => salvo.supportUnitIds.includes(u.id)).length} of {providers.length} chosen)
+    </summary>
+    <p class="dim">Tick the units close enough for their auras and unit selections to reach this one.</p>
+    <div class="ability-list">
+      {#each providers as u (u.id)}
+        <label class="ability-row" class:active={salvo.supportUnitIds.includes(u.id)}>
+          <input
+            type="checkbox"
+            checked={salvo.supportUnitIds.includes(u.id)}
+            onchange={(e) => toggleSupport(u.id, (e.currentTarget as HTMLInputElement).checked)}
+          />
+          <span class="name">{u.name}</span>
+        </label>
+      {/each}
+    </div>
+  </details>
+{/if}
+
 <div class="row">
-  <label>Phase</label>
-  <div class="tabs">
+  <span class="label" id="atk-phase-label">Phase</span>
+  <div class="tabs grow" role="group" aria-labelledby="atk-phase-label">
     {#each PHASE_CHOICES as p (p)}
-      <button class:active={salvo.phase === p} onclick={() => (salvo.phase = p)}>{p}</button>
+      <button class:active={salvo.phase === p} aria-pressed={salvo.phase === p} onclick={() => (salvo.phase = p)}>{p}</button>
     {/each}
   </div>
 </div>
@@ -298,5 +337,5 @@
     <EmptyState>No {salvo.phase}-phase weapons for {selectedUnit.name}.</EmptyState>
   {/if}
 {:else}
-  <EmptyState>Pick a faction + unit, or import a roster.</EmptyState>
+  <EmptyState>Pick a faction and unit, or import a roster above.</EmptyState>
 {/if}

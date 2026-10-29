@@ -1,0 +1,315 @@
+{
+ "id": 8554,
+ "source_text": "xxxxx xx xxxx xxxxxxxxxxxx xxxxxxxx xxxxx.\nxxx **xxxx xxxxxxx xxxxxxxx** xxxx xxxx xxxx xxxx.\nxxxxx xxx xxx xx xxx xxxxx, wwww wwww ww xxxxx xxxx ww xxx xx or xxxx x xxxxxx, xxxxxxx xx xxxx xxxx xxxx xxxxxx 6\" xx xxxx xxxx, xxxx xxx x6, xxxxxx 2 xx xxx xxxxxx ww xxxx xxxx xx xxxxxx xxxxxx xxxx xxxxxxxx xxxxxxxx xxxxxx: xx x 4+, xxxx xxxxx xxxx xxxxxxx x3 xxxxxx xxxxxx.",
+ "leaves": [
+  {
+   "role": "EVENT",
+   "family_id": "event",
+   "family_version": 18,
+   "parameters": {
+    "kind": "phase-start",
+    "phase": "movement",
+    "turn": "opponent"
+   },
+   "start_byte": 0,
+   "end_byte": 41,
+   "fragment": "WHEN"
+  },
+  {
+   "role": "RESTRICTION",
+   "family_id": "stratagem-target",
+   "family_version": 4,
+   "parameters": {
+    "count": "one"
+   },
+   "start_byte": 43,
+   "end_byte": 46,
+   "fragment": "TARGET"
+  },
+  {
+   "role": "CONDITION",
+   "family_id": "unit-filter",
+   "family_version": 8,
+   "parameters": {
+    "side": "friendly",
+    "keywords": [
+     "GREY KNIGHTS",
+     "INFANTRY"
+    ]
+   },
+   "start_byte": 49,
+   "end_byte": 77,
+   "fragment": "TARGET"
+  },
+  {
+   "role": "CONDITION",
+   "family_id": "unit-owner",
+   "family_version": 1,
+   "parameters": {
+    "owner": "friendly"
+   },
+   "start_byte": 78,
+   "end_byte": 92,
+   "fragment": "TARGET"
+  },
+  {
+   "role": "DURATION",
+   "family_id": "duration",
+   "family_version": 3,
+   "parameters": {
+    "endpoint": "end-of-phase"
+   },
+   "start_byte": 94,
+   "end_byte": 120,
+   "fragment": "EFFECT"
+  },
+  {
+   "role": "CONDITION",
+   "family_id": "unit-filter",
+   "family_version": 8,
+   "parameters": {
+    "side": "enemy"
+   },
+   "start_byte": 135,
+   "end_byte": 145,
+   "fragment": "EFFECT"
+  },
+  {
+   "role": "EVENT",
+   "family_id": "event",
+   "family_version": 18,
+   "parameters": {
+    "kind": "set-up",
+    "owner": "enemy"
+   },
+   "start_byte": 149,
+   "end_byte": 155,
+   "fragment": "EFFECT"
+  },
+  {
+   "role": "EVENT",
+   "family_id": "event",
+   "family_version": 18,
+   "parameters": {
+    "kind": "move-ended",
+    "move_types": [
+     "normal",
+     "advance",
+     "fall-back"
+    ]
+   },
+   "start_byte": 159,
+   "end_byte": 199,
+   "fragment": "EFFECT"
+  },
+  {
+   "role": "CONDITION",
+   "family_id": "unit-position",
+   "family_version": 14,
+   "parameters": {
+    "kind": "within",
+    "inches": 6,
+    "of": "this-unit",
+    "subject": "event-subject",
+    "negated": false
+   },
+   "start_byte": 200,
+   "end_byte": 222,
+   "fragment": "EFFECT"
+  },
+  {
+   "role": "EVENT",
+   "family_id": "dice-roll",
+   "family_version": 5,
+   "parameters": {
+    "dice": "D6"
+   },
+   "start_byte": 224,
+   "end_byte": 235,
+   "fragment": "EFFECT"
+  },
+  {
+   "role": "EFFECT",
+   "family_id": "roll-modifier",
+   "family_version": 5,
+   "parameters": {
+    "roll": "preceding",
+    "operation": "add",
+    "value": 2
+   },
+   "start_byte": 237,
+   "end_byte": 259,
+   "fragment": "EFFECT"
+  },
+  {
+   "role": "CONDITION",
+   "family_id": "in-region",
+   "family_version": 3,
+   "parameters": {
+    "subject": "this-unit",
+    "region_kind": "rule-region",
+    "wholly": true,
+    "region_id": "hallowed-ground",
+    "owner_faction": "grey-knights"
+   },
+   "start_byte": 263,
+   "end_byte": 319,
+   "fragment": "EFFECT"
+  },
+  {
+   "role": "CONDITION",
+   "family_id": "roll-result",
+   "family_version": 2,
+   "parameters": {
+    "from": 4
+   },
+   "start_byte": 321,
+   "end_byte": 328,
+   "fragment": "EFFECT"
+  },
+  {
+   "role": "EFFECT",
+   "family_id": "mortal-wounds",
+   "family_version": 5,
+   "parameters": {
+    "recipient": "event-subject",
+    "count": "D3"
+   },
+   "start_byte": 330,
+   "end_byte": 370,
+   "fragment": "EFFECT"
+  }
+ ],
+ "edits": null,
+ "baseline_mechanics": {
+  "effect": {
+   "type": "conditional",
+   "condition": {
+    "type": "matches",
+    "parameters": {
+     "subject": "event-subject",
+     "filter": {
+      "within": {
+       "of": "this-unit",
+       "range": {
+        "inches": 6
+       }
+      }
+     }
+    }
+   },
+   "effect": {
+    "type": "sequence",
+    "steps": [
+     {
+      "type": "conditional",
+      "condition": {
+       "type": "in-region",
+       "parameters": {
+        "subject": "this-unit",
+        "region": {
+         "rule_region": {
+          "region_id": "hallowed-ground",
+          "owner_faction": "grey-knights"
+         }
+        },
+        "wholly": true
+       }
+      },
+      "effect": {
+       "type": "dice-gated",
+       "dice": "D6+2",
+       "threshold": 4,
+       "comparison": "gte",
+       "on_success": {
+        "type": "mortal-wounds",
+        "target": "event-subject",
+        "modifier": {
+         "count": "D3"
+        }
+       },
+       "on_fail": null
+      }
+     },
+     {
+      "type": "conditional",
+      "condition": {
+       "operator": "not",
+       "operands": [
+        {
+         "type": "in-region",
+         "parameters": {
+          "subject": "this-unit",
+          "region": {
+           "rule_region": {
+            "region_id": "hallowed-ground",
+            "owner_faction": "grey-knights"
+           }
+          },
+          "wholly": true
+         }
+        }
+       ]
+      },
+      "effect": {
+       "type": "dice-gated",
+       "dice": "D6",
+       "threshold": 4,
+       "comparison": "gte",
+       "on_success": {
+        "type": "mortal-wounds",
+        "target": "event-subject",
+        "modifier": {
+         "count": "D3"
+        }
+       },
+       "on_fail": null
+      }
+     }
+    ]
+   }
+  },
+  "scope": {
+   "duration": "phase"
+  },
+  "behavior": "reactive",
+  "trigger": [
+   {
+    "event": "phase-started",
+    "condition": {
+     "operator": "and",
+     "operands": [
+      {
+       "type": "phase-is",
+       "parameters": {
+        "phase": "movement"
+       }
+      },
+      {
+       "type": "player-turn-is",
+       "parameters": {
+        "turn": "opponent-turn"
+       }
+      }
+     ]
+    }
+   },
+   {
+    "event": "set-up",
+    "subject": {
+     "owner": "enemy"
+    }
+   },
+   {
+    "event": "move-ended",
+    "filter": {
+     "move_types": [
+      "normal",
+      "advance",
+      "fall-back"
+     ]
+    }
+   }
+  ]
+ }
+}

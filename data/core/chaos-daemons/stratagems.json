@@ -1,6 +1,6 @@
 [
   {
-    "id": "sheathed-in-brass-blood-legion",
+    "id": "sheathed-in-brass-blood-legion-chaos-daemons",
     "name": "SHEATHED IN BRASS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -11,11 +11,28 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Khorne",
+        "Legiones Daemonica"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "sheathed-in-brass-blood-legion-chaos-daemons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -29,7 +46,7 @@
     ]
   },
   {
-    "id": "draught-of-terror-daemonic-incursion",
+    "id": "draught-of-terror-daemonic-incursion-chaos-daemons",
     "name": "DRAUGHT OF TERROR",
     "category": "detachment",
     "type": "battle-tactic",
@@ -41,11 +58,61 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Legiones Daemonica"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "operator": "or",
+                "operands": [
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "fight"
+                      },
+                      "window": "phase"
+                    }
+                  },
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "shoot"
+                      },
+                      "window": "phase"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "draught-of-terror-daemonic-incursion-chaos-daemons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -59,7 +126,7 @@
     ]
   },
   {
-    "id": "the-realm-of-chaos-daemonic-incursion",
+    "id": "the-realm-of-chaos-daemonic-incursion-chaos-daemons",
     "name": "THE REALM OF CHAOS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -70,8 +137,86 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": [
+      {
+        "required_keywords": [
+          "Legiones Daemonica"
+        ],
+        "name": "first",
+        "count": "up-to",
+        "count_max": 2,
+        "mode": "a",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "in-region",
+              "parameters": {
+                "subject": "selected-unit",
+                "region": {
+                  "rule_region": {
+                    "region_id": "the-shadow-of-chaos",
+                    "owner_faction": "chaos-daemons"
+                  }
+                }
+              }
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "filter": {
+                      "state": "engaged"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "required_keywords": [
+          "Legiones Daemonica"
+        ],
+        "name": "second",
+        "count": "one",
+        "mode": "b",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "owner": "friendly"
+                }
+              }
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "filter": {
+                      "state": "engaged"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "ability_id": "the-realm-of-chaos-daemonic-incursion-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -88,7 +233,7 @@
     ]
   },
   {
-    "id": "daemonic-invulnerability-daemonic-incursion",
+    "id": "daemonic-invulnerability-daemonic-incursion-chaos-daemons",
     "name": "DAEMONIC INVULNERABILITY",
     "category": "detachment",
     "type": "battle-tactic",
@@ -99,11 +244,27 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Legiones Daemonica"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "daemonic-invulnerability-daemonic-incursion-chaos-daemons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -117,7 +278,7 @@
     ]
   },
   {
-    "id": "seeping-virulence-plague-legion",
+    "id": "seeping-virulence-plague-legion-chaos-daemons",
     "name": "SEEPING VIRULENCE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -128,11 +289,47 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Legiones Daemonica",
+        "Nurgle"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "fight"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "seeping-virulence-plague-legion-chaos-daemons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -146,7 +343,7 @@
     ]
   },
   {
-    "id": "fever-visions-plague-legion",
+    "id": "fever-visions-plague-legion-chaos-daemons",
     "name": "FEVER VISIONS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -158,11 +355,62 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Legiones Daemonica",
+        "Nurgle"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "operator": "or",
+                "operands": [
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "fight"
+                      },
+                      "window": "phase"
+                    }
+                  },
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "shoot"
+                      },
+                      "window": "phase"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "fever-visions-plague-legion-chaos-daemons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -176,7 +424,7 @@
     ]
   },
   {
-    "id": "murkshadows-plague-legion",
+    "id": "murkshadows-plague-legion-chaos-daemons",
     "name": "MURKSHADOWS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -187,11 +435,28 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Infantry",
+        "Legiones Daemonica",
+        "Nurgle"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "murkshadows-plague-legion-chaos-daemons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -205,7 +470,7 @@
     ]
   },
   {
-    "id": "death-denied-shadow-legion",
+    "id": "death-denied-shadow-legion-chaos-daemons",
     "name": "DEATH DENIED",
     "category": "detachment",
     "type": "battle-tactic",
@@ -216,11 +481,26 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Shadow Legion"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "death-denied-shadow-legion-chaos-daemons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -234,7 +514,7 @@
     ]
   },
   {
-    "id": "encroaching-darkness-shadow-legion",
+    "id": "encroaching-darkness-shadow-legion-chaos-daemons",
     "name": "ENCROACHING DARKNESS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -246,7 +526,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "encroaching-darkness-shadow-legion-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -263,7 +543,7 @@
     ]
   },
   {
-    "id": "pyrogenesis-scintillating-legion",
+    "id": "pyrogenesis-scintillating-legion-chaos-daemons",
     "name": "PYROGENESIS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -276,7 +556,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "pyrogenesis-scintillating-legion-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -293,7 +573,7 @@
     ]
   },
   {
-    "id": "cavalcade-of-blades-legion-of-excess",
+    "id": "cavalcade-of-blades-legion-of-excess-chaos-daemons",
     "name": "CAVALCADE OF BLADES",
     "category": "detachment",
     "type": "battle-tactic",
@@ -305,7 +585,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "cavalcade-of-blades-legion-of-excess-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -322,7 +602,7 @@
     ]
   },
   {
-    "id": "overwhelming-excess-legion-of-excess",
+    "id": "overwhelming-excess-legion-of-excess-chaos-daemons",
     "name": "OVERWHELMING EXCESS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -332,13 +612,30 @@
       "fight",
       "shooting"
     ],
-    "player_turn": "opponent-turn",
+    "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Legiones Daemonica",
+        "Slaanesh"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "overwhelming-excess-legion-of-excess-chaos-daemons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -352,7 +649,7 @@
     ]
   },
   {
-    "id": "shade-path-shadow-legion",
+    "id": "shade-path-shadow-legion-chaos-daemons",
     "name": "SHADE PATH",
     "category": "detachment",
     "type": "battle-tactic",
@@ -363,11 +660,18 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Shadow Legion"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit"
+    },
+    "ability_id": "shade-path-shadow-legion-chaos-daemons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -381,7 +685,7 @@
     ]
   },
   {
-    "id": "archagonists-legion-of-excess",
+    "id": "archagonists-legion-of-excess-chaos-daemons",
     "name": "ARCHAGONISTS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -392,11 +696,82 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": [
+      {
+        "required_keywords": [
+          "Legiones Daemonica",
+          "Monster",
+          "Slaanesh"
+        ],
+        "name": "first",
+        "count": "one",
+        "mode": "a",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "operator": "not",
+          "operands": [
+            {
+              "type": "happened",
+              "parameters": {
+                "event": "selected",
+                "filter": {
+                  "to": "fight"
+                },
+                "window": "phase"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "required_keywords": [
+          "Legiones Daemonica",
+          "Slaanesh"
+        ],
+        "excluded_keywords": [
+          "Monster"
+        ],
+        "name": "second",
+        "count": "up-to",
+        "count_max": 2,
+        "mode": "b",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "owner": "friendly"
+                }
+              }
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "happened",
+                  "parameters": {
+                    "event": "selected",
+                    "filter": {
+                      "to": "fight"
+                    },
+                    "window": "phase"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "ability_id": "archagonists-legion-of-excess-chaos-daemons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -410,7 +785,7 @@
     ]
   },
   {
-    "id": "blood-begets-skulls-blood-legion",
+    "id": "blood-begets-skulls-blood-legion-chaos-daemons",
     "name": "BLOOD BEGETS SKULLS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -421,11 +796,47 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Khorne",
+        "Legiones Daemonica"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "targets-selected",
+                  "filter": {
+                    "kind": "charge"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "blood-begets-skulls-blood-legion-chaos-daemons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -439,7 +850,7 @@
     ]
   },
   {
-    "id": "wrath-undeniable-blood-legion",
+    "id": "wrath-undeniable-blood-legion-chaos-daemons",
     "name": "WRATH UNDENIABLE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -450,11 +861,28 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Khorne",
+        "Legiones Daemonica"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "wrath-undeniable-blood-legion-chaos-daemons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -468,7 +896,7 @@
     ]
   },
   {
-    "id": "gore-hungry-onslaught-blood-legion",
+    "id": "gore-hungry-onslaught-blood-legion-chaos-daemons",
     "name": "GORE-HUNGRY ONSLAUGHT",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -480,11 +908,27 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Khorne",
+        "Legiones Daemonica"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "gore-hungry-onslaught-blood-legion-chaos-daemons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -498,7 +942,7 @@
     ]
   },
   {
-    "id": "skulls-beget-blood-blood-legion",
+    "id": "skulls-beget-blood-blood-legion-chaos-daemons",
     "name": "SKULLS BEGET BLOOD",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -509,11 +953,65 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Khorne",
+        "Legiones Daemonica"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "INFANTRY",
+                  "MOUNTED"
+                ]
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "move-ended",
+                  "filter": {
+                    "move_types": [
+                      "fall-back"
+                    ]
+                  },
+                  "window": "turn"
+                }
+              }
+            ]
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "state": "engaged"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "skulls-beget-blood-blood-legion-chaos-daemons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -527,7 +1025,7 @@
     ]
   },
   {
-    "id": "corrupt-realspace-daemonic-incursion",
+    "id": "corrupt-realspace-daemonic-incursion-chaos-daemons",
     "name": "CORRUPT REALSPACE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -539,7 +1037,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "corrupt-realspace-daemonic-incursion-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -556,7 +1054,7 @@
     ]
   },
   {
-    "id": "warp-surge-daemonic-incursion",
+    "id": "warp-surge-daemonic-incursion-chaos-daemons",
     "name": "WARP SURGE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -567,11 +1065,37 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Legiones Daemonica"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "rule-active",
+            "parameters": {
+              "rule": "the-shadow-of-chaos-chaos-daemons"
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "warp-surge-daemonic-incursion-chaos-daemons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -585,7 +1109,7 @@
     ]
   },
   {
-    "id": "denizens-of-the-warp-daemonic-incursion",
+    "id": "denizens-of-the-warp-daemonic-incursion-chaos-daemons",
     "name": "DENIZENS OF THE WARP",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -596,11 +1120,54 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Legiones Daemonica"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "set-up",
+                  "window": "phase"
+                }
+              },
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "used",
+                  "filter": {
+                    "kind": "ability",
+                    "id": "deep-strike"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "denizens-of-the-warp-daemonic-incursion-chaos-daemons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -614,7 +1181,7 @@
     ]
   },
   {
-    "id": "rot-and-renewal-plague-legion",
+    "id": "rot-and-renewal-plague-legion-chaos-daemons",
     "name": "ROT AND RENEWAL",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -626,11 +1193,27 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Legiones Daemonica",
+        "Nurgle"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "rot-and-renewal-plague-legion-chaos-daemons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -644,7 +1227,7 @@
     ]
   },
   {
-    "id": "plague-of-woes-plague-legion",
+    "id": "plague-of-woes-plague-legion-chaos-daemons",
     "name": "PLAGUE OF WOES",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -656,7 +1239,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "plague-of-woes-plague-legion-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -673,7 +1256,7 @@
     ]
   },
   {
-    "id": "spiteful-demise-shadow-legion",
+    "id": "spiteful-demise-shadow-legion-chaos-daemons",
     "name": "SPITEFUL DEMISE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -689,7 +1272,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "spiteful-demise-shadow-legion-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -706,7 +1289,7 @@
     ]
   },
   {
-    "id": "channelled-wrath-shadow-legion",
+    "id": "channelled-wrath-shadow-legion-chaos-daemons",
     "name": "CHANNELLED WRATH",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -717,11 +1300,46 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Shadow Legion"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "fight"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "channelled-wrath-shadow-legion-chaos-daemons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -735,7 +1353,7 @@
     ]
   },
   {
-    "id": "binding-shadow-shadow-legion",
+    "id": "binding-shadow-shadow-legion-chaos-daemons",
     "name": "BINDING SHADOW",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -747,7 +1365,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "binding-shadow-shadow-legion-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -764,7 +1382,7 @@
     ]
   },
   {
-    "id": "impossible-eclipse-scintillating-legion",
+    "id": "impossible-eclipse-scintillating-legion-chaos-daemons",
     "name": "IMPOSSIBLE ECLIPSE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -780,7 +1398,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "impossible-eclipse-scintillating-legion-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -797,7 +1415,7 @@
     ]
   },
   {
-    "id": "flickering-reality-scintillating-legion",
+    "id": "flickering-reality-scintillating-legion-chaos-daemons",
     "name": "FLICKERING REALITY",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -809,7 +1427,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "flickering-reality-scintillating-legion-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -826,7 +1444,7 @@
     ]
   },
   {
-    "id": "fateborne-nightmares-scintillating-legion",
+    "id": "fateborne-nightmares-scintillating-legion-chaos-daemons",
     "name": "FATEBORNE NIGHTMARES",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -838,11 +1456,27 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Legiones Daemonica",
+        "Tzeentch"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "fateborne-nightmares-scintillating-legion-chaos-daemons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -856,7 +1490,7 @@
     ]
   },
   {
-    "id": "ficklefire-scintillating-legion",
+    "id": "ficklefire-scintillating-legion-chaos-daemons",
     "name": "FICKLEFIRE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -868,7 +1502,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "ficklefire-scintillating-legion-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -885,7 +1519,7 @@
     ]
   },
   {
-    "id": "delirium-unmade-scintillating-legion",
+    "id": "delirium-unmade-scintillating-legion-chaos-daemons",
     "name": "DELIRIUM UNMADE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -897,7 +1531,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "delirium-unmade-scintillating-legion-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -914,26 +1548,42 @@
     ]
   },
   {
-    "id": "thieves-of-pain-legion-of-excess",
+    "id": "rapturous-agony-legion-of-excess-chaos-daemons",
     "name": "THIEVES OF PAIN",
     "category": "detachment",
     "type": "strategic-ploy",
     "detachment_id": "legion-of-excess",
     "cp_cost": 1,
     "phases": [
-      "command",
-      "movement",
       "shooting",
-      "charge",
       "fight"
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Legiones Daemonica",
+        "Slaanesh"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "none_of": [
+              "MONSTER",
+              "VEHICLE"
+            ]
+          }
+        }
+      }
+    },
+    "ability_id": "rapturous-agony-legion-of-excess-chaos-daemons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -947,7 +1597,7 @@
     ]
   },
   {
-    "id": "sensory-excruciation-legion-of-excess",
+    "id": "sensory-excruciation-legion-of-excess-chaos-daemons",
     "name": "SENSORY EXCRUCIATION",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -958,11 +1608,41 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Legiones Daemonica",
+        "Monster",
+        "Slaanesh"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "state": "on-battlefield"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "sensory-excruciation-legion-of-excess-chaos-daemons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -976,7 +1656,7 @@
     ]
   },
   {
-    "id": "phantasmal-longing-legion-of-excess",
+    "id": "phantasmal-longing-legion-of-excess-chaos-daemons",
     "name": "PHANTASMAL LONGING",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -988,11 +1668,27 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Legiones Daemonica",
+        "Slaanesh"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "phantasmal-longing-legion-of-excess-chaos-daemons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1006,7 +1702,7 @@
     ]
   },
   {
-    "id": "fools-flight-blood-legion",
+    "id": "fools-flight-blood-legion-chaos-daemons",
     "name": "FOOL’S FLIGHT",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1017,11 +1713,47 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Khorne",
+        "Legiones Daemonica"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "not_states": [
+                  "engaged"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": "event-subject",
+                  "range": {
+                    "inches": 6
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "fools-flight-blood-legion-chaos-daemons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1035,7 +1767,7 @@
     ]
   },
   {
-    "id": "foetid-resurgence-plague-legion",
+    "id": "foetid-resurgence-plague-legion-chaos-daemons",
     "name": "FOETID RESURGENCE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1046,11 +1778,40 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Legiones Daemonica",
+        "Nurgle"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "state": "on-battlefield"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "foetid-resurgence-plague-legion-chaos-daemons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1064,18 +1825,18 @@
     ]
   },
   {
-    "id": "from-beyond-the-veil-cavalcade-of-chaos",
+    "id": "from-beyond-the-veil-cavalcade-of-chaos-chaos-daemons",
     "name": "FROM BEYOND THE VEIL",
     "category": "detachment",
     "detachment_id": "cavalcade-of-chaos",
-    "cp_cost": 1,
+    "cp_cost": 2,
     "phases": [
       "movement"
     ],
-    "player_turn": "your-turn",
+    "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "from-beyond-the-veil-cavalcade-of-chaos",
+    "ability_id": "from-beyond-the-veil-cavalcade-of-chaos-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1092,7 +1853,7 @@
     ]
   },
   {
-    "id": "warp-riders-cavalcade-of-chaos",
+    "id": "warp-riders-cavalcade-of-chaos-chaos-daemons",
     "name": "WARP-RIDERS",
     "category": "detachment",
     "detachment_id": "cavalcade-of-chaos",
@@ -1102,11 +1863,19 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "warp-riders-cavalcade-of-chaos",
+    "target_restrictions": {
+      "required_keywords": [
+        "Legiones Daemonica",
+        "Mounted"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "warp-riders-cavalcade-of-chaos-chaos-daemons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1120,7 +1889,7 @@
     ]
   },
   {
-    "id": "inescapable-manifestations-cavalcade-of-chaos",
+    "id": "inescapable-manifestations-cavalcade-of-chaos-chaos-daemons",
     "name": "INESCAPABLE MANIFESTATIONS",
     "category": "detachment",
     "detachment_id": "cavalcade-of-chaos",
@@ -1130,11 +1899,26 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "inescapable-manifestations-cavalcade-of-chaos",
+    "target_restrictions": {
+      "required_keywords": [
+        "Legiones Daemonica",
+        "Mounted"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "unit-state",
+        "parameters": {
+          "state": "engaged",
+          "with": "event-subject"
+        }
+      }
+    },
+    "ability_id": "inescapable-manifestations-cavalcade-of-chaos-chaos-daemons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1148,7 +1932,7 @@
     ]
   },
   {
-    "id": "carnival-of-excess-lords-of-the-warp",
+    "id": "carnival-of-excess-lords-of-the-warp-chaos-daemons",
     "name": "CARNIVAL OF EXCESS",
     "category": "detachment",
     "detachment_id": "lords-of-the-warp",
@@ -1159,7 +1943,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "carnival-of-excess-lords-of-the-warp",
+    "ability_id": "carnival-of-excess-lords-of-the-warp-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1176,7 +1960,7 @@
     ]
   },
   {
-    "id": "call-to-murder-lords-of-the-warp",
+    "id": "call-to-murder-lords-of-the-warp-chaos-daemons",
     "name": "CALL TO MURDER",
     "category": "detachment",
     "detachment_id": "lords-of-the-warp",
@@ -1186,11 +1970,20 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "call-to-murder-lords-of-the-warp",
+    "target_restrictions": {
+      "required_keywords": [
+        "Character",
+        "Khorne",
+        "Legiones Daemonica"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "call-to-murder-lords-of-the-warp-chaos-daemons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1204,7 +1997,7 @@
     ]
   },
   {
-    "id": "bilious-blessing-lords-of-the-warp",
+    "id": "bilious-blessing-lords-of-the-warp-chaos-daemons",
     "name": "BILIOUS BLESSING",
     "category": "detachment",
     "detachment_id": "lords-of-the-warp",
@@ -1214,11 +2007,23 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "bilious-blessing-lords-of-the-warp",
+    "target_restrictions": {
+      "required_keywords": [
+        "Character",
+        "Legiones Daemonica",
+        "Nurgle"
+      ],
+      "excluded_keywords": [
+        "Monster"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit"
+    },
+    "ability_id": "bilious-blessing-lords-of-the-warp-chaos-daemons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1232,7 +2037,7 @@
     ]
   },
   {
-    "id": "skirling-magicks-lords-of-the-warp",
+    "id": "skirling-magicks-lords-of-the-warp-chaos-daemons",
     "name": "SKIRLING MAGICKS",
     "category": "detachment",
     "detachment_id": "lords-of-the-warp",
@@ -1242,11 +2047,20 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "skirling-magicks-lords-of-the-warp",
+    "target_restrictions": {
+      "required_keywords": [
+        "Character",
+        "Legiones Daemonica",
+        "Tzeentch"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "skirling-magicks-lords-of-the-warp-chaos-daemons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1260,7 +2074,7 @@
     ]
   },
   {
-    "id": "daemonic-infestation-warptide",
+    "id": "daemonic-infestation-warptide-chaos-daemons",
     "name": "DAEMONIC INFESTATION",
     "category": "detachment",
     "detachment_id": "warptide",
@@ -1270,11 +2084,22 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "daemonic-infestation-warptide",
+    "target_restrictions": {
+      "required_keywords": [
+        "Battleline",
+        "Legiones Daemonica"
+      ],
+      "excluded_keywords": [
+        "Pink Horrors"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit"
+    },
+    "ability_id": "daemonic-infestation-warptide-chaos-daemons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1288,7 +2113,7 @@
     ]
   },
   {
-    "id": "soulseeing-warptide",
+    "id": "soulseeing-warptide-chaos-daemons",
     "name": "SOULSEEING",
     "category": "detachment",
     "detachment_id": "warptide",
@@ -1298,11 +2123,19 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "soulseeing-warptide",
+    "target_restrictions": {
+      "required_keywords": [
+        "Battleline",
+        "Legiones Daemonica"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit"
+    },
+    "ability_id": "soulseeing-warptide-chaos-daemons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1316,7 +2149,7 @@
     ]
   },
   {
-    "id": "incorporeal-entities-warptide",
+    "id": "incorporeal-entities-warptide-chaos-daemons",
     "name": "INCORPOREAL ENTITIES",
     "category": "detachment",
     "detachment_id": "warptide",
@@ -1326,8 +2159,16 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "incorporeal-entities-warptide",
+    "target_restrictions": {
+      "required_keywords": [
+        "Battleline",
+        "Legiones Daemonica"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit"
+    },
+    "ability_id": "incorporeal-entities-warptide-chaos-daemons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"

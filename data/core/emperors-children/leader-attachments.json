@@ -7,7 +7,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -18,7 +18,17 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
+    }
+  },
+  {
+    "leader_id": "lord-kaphrael-of-the-callous-blades",
+    "eligible_bodyguard_ids": [
+      "callous-blades-infractors"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
     }
   },
   {
@@ -28,7 +38,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -40,17 +50,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
-    }
-  },
-  {
-    "leader_id": "lord-kaphrael-of-the-callous-blades",
-    "eligible_bodyguard_ids": [
-      "callous-blades-infractors"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   }
 ]

@@ -3,8 +3,8 @@
     "id": "shimmershield",
     "name": "shimmershield",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -17,8 +17,8 @@
     "id": "aspect-shrine-token",
     "name": "Aspect Shrine token",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-995"
     },
     "category": "token",
     "external_refs": [
@@ -32,8 +32,8 @@
     "id": "soul-trap",
     "name": "soul trap",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -62,8 +62,8 @@
     "id": "kabalite-icon",
     "name": "Kabalite icon",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-995"
     },
     "category": "icon",
     "external_refs": [
@@ -77,8 +77,8 @@
     "id": "phantasm-grenade-launcher",
     "name": "phantasm grenade launcher",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -107,8 +107,8 @@
     "id": "incubi-shrine-token",
     "name": "Incubi Shrine token",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-995"
     },
     "category": "token",
     "external_refs": [
@@ -122,8 +122,8 @@
     "id": "cluster-caltrops",
     "name": "cluster caltrops",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -136,8 +136,8 @@
     "id": "grav-talon",
     "name": "grav-talon",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -154,8 +154,8 @@
     "id": "mistshield",
     "name": "mistshield",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -168,8 +168,8 @@
     "id": "scattershield",
     "name": "scattershield",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -183,7 +183,7 @@
     "name": "Flip Belt",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -197,7 +197,7 @@
     "name": "Serpent shield",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -211,7 +211,7 @@
     "name": "Faolchú",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -225,7 +225,7 @@
     "name": "Channeller Stones",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -239,7 +239,7 @@
     "name": "Forceshield",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -253,7 +253,7 @@
     "name": "Shadow Field",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -267,7 +267,7 @@
     "name": "Drakolithe (Once per battle, per token)",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {

@@ -1,0 +1,82 @@
+{
+  "name": "Canonical attack comparison: gated-strength-feeds-no-comparison",
+  "attacker": {
+    "weaponId": "bolt-rifle",
+    "profileIndex": 0
+  },
+  "target": {
+    "unitId": "intercessor-squad",
+    "profileIndex": 0
+  },
+  "modelsFiring": 5,
+  "context": {
+    "phase": "shooting",
+    "withinHalfRange": true,
+    "attackerStationary": false
+  },
+  "buffs": [
+    {
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-attack-compare",
+        "abilityKind": "unit"
+      },
+      "contribution": {
+        "type": "strength-mod",
+        "value": 1
+      },
+      "applicableWhen": {
+        "attackComparisons": [
+          {
+            "left": {
+              "of": "attacker",
+              "stat": "S"
+            },
+            "comparison": "gte",
+            "right": {
+              "of": "defender",
+              "stat": "T"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-attack-compare",
+        "abilityKind": "unit"
+      },
+      "contribution": {
+        "type": "wound-mod",
+        "value": 1
+      },
+      "applicableWhen": {
+        "attackComparisons": [
+          {
+            "left": {
+              "of": "attacker",
+              "stat": "S"
+            },
+            "comparison": "gt",
+            "right": {
+              "of": "defender",
+              "stat": "T"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "expected": {
+    "stages": {
+      "attacks": 10,
+      "hits": 6.6667,
+      "wounds": 5.5556,
+      "unsaved": 2.7778,
+      "damage": 5.5556,
+      "after-fnp": 5.5556,
+      "models-killed": 2.7778
+    }
+  }
+}

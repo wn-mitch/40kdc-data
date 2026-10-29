@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8"?>
+<roster id="roster0" name="Imported roster" gameSystemId="sys-352e-adc2-7639-d6a9" gameSystemName="Warhammer 40,000">
+  <forces>
+    <force id="force0" name="Adeptus Custodes" catalogueName="Adeptus Custodes">
+      <selections>
+        <selection id="unit0" name="Witchseekers" type="unit" number="1">
+          <profiles>
+            <profile name="Witchseeker" typeName="Unit">
+              <characteristics>
+                <characteristic name="M">6"</characteristic>
+                <characteristic name="T">3</characteristic>
+                <characteristic name="SV">3+</characteristic>
+                <characteristic name="W">1</characteristic>
+                <characteristic name="LD">6+</characteristic>
+                <characteristic name="OC">1</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Sanctified Flames" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">After the unit resolves its attacks, you may use this ability, during the Shooting phase, in your turn, until the end of the phase:
+  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence:
+    -&gt; If the selected unit has the PSYKER keyword, that unit must take a Battle-shock test, applying -1 to that test.
+    -&gt; Unless the selected unit has the PSYKER keyword, that unit must take a Battle-shock test.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Scouts" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">The unit gains the Scouts X" ability, X being its rating.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Daughters of the Abyss" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">All friendly ANATHEMA PSYKANA units have the Feel No Pain 3+ ability against Psychic Attacks.
+All friendly ANATHEMA PSYKANA units gain the Psychic Null ability:
+  -&gt; While a friendly ADEPTUS CUSTODES unit is within 6" of this unit, that unit has the Feel No Pain 5+ ability against Psychic Attacks.
+Your army can include ANATHEMA PSYKANA units.
+You cannot select Anathema Psykana as your Army Faction.
+All friendly ANATHEMA PSYKANA units cannot be your Warlord.</characteristic>
+              </characteristics>
+            </profile>
+          </profiles>
+          <categories>
+            <category name="Faction: Anathema Psykana"/>
+            <category name="Infantry"/>
+            <category name="Imperium"/>
+            <category name="Witchseeker Squad"/>
+            <category name="Anathema Psykana"/>
+          </categories>
+          <selections>
+            <selection id="unit0-m0" name="Witchseeker Squad" type="model" number="1">
+              <selections>
+                <selection id="unit0-m0-w0" name="Close combat weapon" type="upgrade" number="4">
+                  <profiles>
+                    <profile name="Close combat weapon" typeName="Melee Weapons">
+                      <characteristics>
+                        <characteristic name="Range">Melee</characteristic>
+                        <characteristic name="A">2</characteristic>
+                        <characteristic name="WS">3+</characteristic>
+                        <characteristic name="S">3</characteristic>
+                        <characteristic name="AP">0</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords"></characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+                <selection id="unit0-m0-w1" name="Witchseeker flamer" type="upgrade" number="4">
+                  <profiles>
+                    <profile name="Witchseeker flamer" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">12"</characteristic>
+                        <characteristic name="A">D6</characteristic>
+                        <characteristic name="BS">N/A</characteristic>
+                        <characteristic name="S">4</characteristic>
+                        <characteristic name="AP">0</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords">Ignores Cover, Torrent</characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+              </selections>
+            </selection>
+          </selections>
+        </selection>
+        <selection id="unit1" name="Prosecutors" type="unit" number="1">
+          <profiles>
+            <profile name="Prosecutor" typeName="Unit">
+              <characteristics>
+                <characteristic name="M">6"</characteristic>
+                <characteristic name="T">3</characteristic>
+                <characteristic name="SV">3+</characteristic>
+                <characteristic name="W">1</characteristic>
+                <characteristic name="LD">6+</characteristic>
+                <characteristic name="OC">2</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Purity of Execution" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">You can: During the Shooting phase, in your turn, until the end of the phase:
+  -&gt; Select one enemy unit within 18" of the unit visible to this model:
+    -&gt; That unit is detected.
+    -&gt; While the selected unit is detected, add 3 to that unit's detection range characteristic.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Daughters of the Abyss" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">All friendly ANATHEMA PSYKANA units have the Feel No Pain 3+ ability against Psychic Attacks.
+All friendly ANATHEMA PSYKANA units gain the Psychic Null ability:
+  -&gt; While a friendly ADEPTUS CUSTODES unit is within 6" of this unit, that unit has the Feel No Pain 5+ ability against Psychic Attacks.
+Your army can include ANATHEMA PSYKANA units.
+You cannot select Anathema Psykana as your Army Faction.
+All friendly ANATHEMA PSYKANA units cannot be your Warlord.</characteristic>
+              </characteristics>
+            </profile>
+          </profiles>
+          <categories>
+            <category name="Faction: Anathema Psykana"/>
+            <category name="Infantry"/>
+            <category name="Imperium"/>
+            <category name="Prosecutor Squad"/>
+            <category name="Anathema Psykana"/>
+          </categories>
+          <selections>
+            <selection id="unit1-m0" name="Prosecutor Squad" type="model" number="1">
+              <selections>
+                <selection id="unit1-m0-w0" name="Boltgun" type="upgrade" number="4">
+                  <profiles>
+                    <profile name="Boltgun" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">24"</characteristic>
+                        <characteristic name="A">1</characteristic>
+                        <characteristic name="BS">3+</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">-1</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords">Anti-Psyker 4+, Assault, Rapid Fire 1</characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+                <selection id="unit1-m0-w1" name="Close combat weapon" type="upgrade" number="4">
+                  <profiles>
+                    <profile name="Close combat weapon" typeName="Melee Weapons">
+                      <characteristics>
+                        <characteristic name="Range">Melee</characteristic>
+                        <characteristic name="A">2</characteristic>
+                        <characteristic name="WS">3+</characteristic>
+                        <characteristic name="S">3</characteristic>
+                        <characteristic name="AP">0</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords"></characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+              </selections>
+            </selection>
+          </selections>
+        </selection>
+        <selection id="unit2" name="Vigilators" type="unit" number="1">
+          <profiles>
+            <profile name="Vigilator" typeName="Unit">
+              <characteristics>
+                <characteristic name="M">6"</characteristic>
+                <characteristic name="T">3</characteristic>
+                <characteristic name="SV">3+</characteristic>
+                <characteristic name="W">1</characteristic>
+                <characteristic name="LD">6+</characteristic>
+                <characteristic name="OC">1</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Daughters of the Abyss" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">All friendly ANATHEMA PSYKANA units have the Feel No Pain 3+ ability against Psychic Attacks.
+All friendly ANATHEMA PSYKANA units gain the Psychic Null ability:
+  -&gt; While a friendly ADEPTUS CUSTODES unit is within 6" of this unit, that unit has the Feel No Pain 5+ ability against Psychic Attacks.
+Your army can include ANATHEMA PSYKANA units.
+You cannot select Anathema Psykana as your Army Faction.
+All friendly ANATHEMA PSYKANA units cannot be your Warlord.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Deft Parry" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Against melee attacks, the attacking unit gets -1 to Hit rolls.</characteristic>
+              </characteristics>
+            </profile>
+          </profiles>
+          <categories>
+            <category name="Faction: Anathema Psykana"/>
+            <category name="Infantry"/>
+            <category name="Imperium"/>
+            <category name="Vigilator Squad"/>
+            <category name="Anathema Psykana"/>
+          </categories>
+          <selections>
+            <selection id="unit2-m0" name="Vigilator Squad" type="model" number="1">
+              <selections>
+                <selection id="unit2-m0-w0" name="Executioner greatblade" type="upgrade" number="10">
+                  <profiles>
+                    <profile name="Executioner Greatblade" typeName="Melee Weapons">
+                      <characteristics>
+                        <characteristic name="Range">Melee</characteristic>
+                        <characteristic name="A">3</characteristic>
+                        <characteristic name="WS">3+</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">-2</characteristic>
+                        <characteristic name="D">2</characteristic>
+                        <characteristic name="Keywords">Anti-Psyker 5+, Devastating Wounds</characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+              </selections>
+            </selection>
+          </selections>
+        </selection>
+        <selection id="unit3" name="Venatari Custodians" type="unit" number="1">
+          <profiles>
+            <profile name="Venatari Custodians" typeName="Unit">
+              <characteristics>
+                <characteristic name="M">10"</characteristic>
+                <characteristic name="T">6</characteristic>
+                <characteristic name="SV">2+</characteristic>
+                <characteristic name="W">3</characteristic>
+                <characteristic name="LD">6+</characteristic>
+                <characteristic name="OC">2</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Invulnerable Save" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">4+ invulnerable save</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Deep Strike" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Neutronium Cascade Mine (Once per battle, per unit)" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">At the start of each phase, you may use this ability, once per battle per unit:
+  -&gt; Select one enemy unit within 3" of the unit:
+    -&gt; Roll one D6: on a 2+, unless the selected unit has the MONSTER or VEHICLE keyword, that unit suffers D3 mortal wounds; if the selected unit has the MONSTER or VEHICLE keyword, that unit suffers 2D3 mortal wounds.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Swift Ruin (Once per phase, per army)" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Nothing happens.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Take Wing" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">At the end of your opponent's Fight phase, you may use this ability, while the unit is unengaged, the unit can be placed into Strategic Reserves.</characteristic>
+              </characteristics>
+            </profile>
+          </profiles>
+          <categories>
+            <category name="Faction: Adeptus Custodes"/>
+            <category name="Infantry"/>
+            <category name="Fly"/>
+            <category name="Jump Pack"/>
+            <category name="Imperium"/>
+            <category name="Explosives"/>
+            <category name="Venatari with Verutum Lances"/>
+          </categories>
+          <selections>
+            <selection id="unit3-m0" name="Venatari with Verutum Lances" type="model" number="1">
+              <selections>
+                <selection id="unit3-m0-w0" name="Venatari lance" type="upgrade" number="3">
+                  <profiles>
+                    <profile name="Venatari lance" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">24"</characteristic>
+                        <characteristic name="A">2</characteristic>
+                        <characteristic name="BS">2+</characteristic>
+                        <characteristic name="S">4</characteristic>
+                        <characteristic name="AP">-1</characteristic>
+                        <characteristic name="D">2</characteristic>
+                        <characteristic name="Keywords">Assault</characteristic>
+                      </characteristics>
+                    </profile>
+                    <profile name="Venatari lance" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">Melee"</characteristic>
+                        <characteristic name="A">5</characteristic>
+                        <characteristic name="BS">N/A</characteristic>
+                        <characteristic name="S">7</characteristic>
+                        <characteristic name="AP">-2</characteristic>
+                        <characteristic name="D">2</characteristic>
+                        <characteristic name="Keywords">Lance</characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+              </selections>
+            </selection>
+          </selections>
+        </selection>
+      </selections>
+    </force>
+  </forces>
+</roster>

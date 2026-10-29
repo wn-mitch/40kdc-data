@@ -28,13 +28,15 @@ describe("kebab", () => {
 });
 
 describe("seedFaction", () => {
-  it("creates an empty-modifier stub per datasheet ability, with no source text", () => {
+  it("creates a marked no-effect stub per datasheet ability, with no source text", () => {
     const r = seedFaction("necrons", archive, [{ id: "land-raider", name: "Land Raider" }], []);
     expect(r.created).toBe(2);
     const explodes = r.abilities.find((a) => a.ability_id === "explodes");
     expect(explodes).toBeDefined();
     expect(explodes.unit_ids).toEqual(["land-raider"]);
-    expect(explodes.effect).toEqual({ type: "stat-modifier", target: "unit", modifier: {} });
+    expect(explodes.effect).toEqual({ type: "no-effect" });
+    expect(explodes.stub).toBe(true);
+    expect(explodes.scope).toEqual({ duration: "permanent" });
     // IP guard: the archive description must never be written to the repo.
     expect(JSON.stringify(r.abilities)).not.toContain("GW TEXT");
     for (const a of r.abilities) expect(a).not.toHaveProperty("description");

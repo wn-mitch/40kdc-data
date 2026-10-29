@@ -1,0 +1,749 @@
+[
+  {
+    "ability_id": "chogorian-huntmaster-upgrade-spearpoint-task-force-white-scars",
+    "name": "Chogorian Huntmaster",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "white-scars",
+    "detachment_id": "spearpoint-task-force",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "set-up",
+      "target": "this-unit",
+      "modifier": {
+        "to": "battlefield",
+        "round_offset": 1
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "move_types": [
+          "ingress"
+        ],
+        "to": "move"
+      }
+    },
+    "source_digest": "c9f86af59900ab98fbd8aa274d83955c0aa2924fbb0ee39fe1308e3b9dffa8e6"
+  },
+  {
+    "ability_id": "hunters-eye-spearpoint-task-force-white-scars",
+    "name": "Hunter’s Eye",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "white-scars",
+    "detachment_id": "spearpoint-task-force",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "keywords": [
+          {
+            "keyword_id": "ignores-cover"
+          },
+          {
+            "keyword_id": "sustained-hits",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ],
+        "weapons": {
+          "type": "ranged"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "passive",
+    "source_digest": "b2c85ff8c9e2cabfd1054f18d153ac945fb1413e5fbf56c2f1849e8fb1887749"
+  },
+  {
+    "ability_id": "hunters-instincts-spearpoint-task-force-white-scars",
+    "name": "Hunter’s Instincts",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "white-scars",
+    "detachment_id": "spearpoint-task-force",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "event-subject",
+          "filter": {
+            "within": {
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "ADEPTUS ASTARTES"
+                ],
+                "any_of": [
+                  "INFANTRY",
+                  "MOUNTED",
+                  "SPEEDER"
+                ],
+                "not_states": [
+                  "engaged"
+                ]
+              },
+              "range": {
+                "inches": 8
+              }
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "move",
+        "target": "this-unit",
+        "modifier": {
+          "move_type": "normal",
+          "distance": "D3+3"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      }
+    },
+    "source_digest": "0aa150bde609b4321ffc8bf7e20d4e2f30982eb9870d0f70a0fde53551a66d26"
+  },
+  {
+    "ability_id": "mobile-lethality-spearpoint-task-force-white-scars",
+    "name": "Mobile Lethality",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "white-scars",
+    "detachment_id": "spearpoint-task-force",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "shoot",
+            "allow": true,
+            "despite": [
+              "fell-back"
+            ]
+          }
+        },
+        {
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "assault"
+              }
+            ],
+            "weapons": {
+              "type": "ranged"
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS ASTARTES"
+        ]
+      },
+      "filter": {
+        "move_types": [
+          "advance",
+          "fall-back"
+        ],
+        "to": "move"
+      }
+    },
+    "source_digest": "08ad4bce2b5e43741d41656bc361fcb43d3a77092a41e47a91d9a1b0a5859d7b"
+  },
+  {
+    "ability_id": "spear-thrust-and-sabre-swing-spearpoint-task-force-white-scars",
+    "name": "Spear Thrust and Sabre Swing",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "white-scars",
+    "detachment_id": "spearpoint-task-force",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "choice",
+          "options": [
+            {
+              "type": "weapon-ability-grant",
+              "target": "this-unit",
+              "modifier": {
+                "keywords": [
+                  {
+                    "keyword_id": "lethal-hits"
+                  }
+                ],
+                "weapons": {
+                  "type": "melee"
+                }
+              }
+            },
+            {
+              "type": "weapon-ability-grant",
+              "target": "this-unit",
+              "modifier": {
+                "keywords": [
+                  {
+                    "keyword_id": "lance"
+                  }
+                ],
+                "weapons": {
+                  "type": "melee"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "all_of": [
+                  "MOUNTED"
+                ]
+              }
+            }
+          },
+          "effect": {
+            "type": "weapon-ability-grant",
+            "target": "this-unit",
+            "modifier": {
+              "keywords": [
+                {
+                  "keyword_id": "lethal-hits"
+                },
+                {
+                  "keyword_id": "lance"
+                }
+              ],
+              "weapons": {
+                "type": "melee"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "fight"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS ASTARTES"
+        ]
+      }
+    },
+    "source_digest": "773f8ea1ce0c4d5df0142076cfd57b8c8e9351033c70bfae3868bb7e6b2952d5"
+  },
+  {
+    "ability_id": "spearpoint-paragon-spearpoint-task-force-white-scars",
+    "name": "Spearpoint Paragon",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "white-scars",
+    "detachment_id": "spearpoint-task-force",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "stat-modifier",
+              "target": "this-model",
+              "modifier": {
+                "stat": "S",
+                "operation": "add",
+                "value": 1,
+                "weapons": {
+                  "type": "melee"
+                }
+              }
+            },
+            {
+              "type": "stat-modifier",
+              "target": "this-model",
+              "modifier": {
+                "stat": "AP",
+                "operation": "add",
+                "value": 1,
+                "weapons": {
+                  "type": "melee"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "happened",
+            "parameters": {
+              "event": "move-ended",
+              "filter": {
+                "move_types": [
+                  "charge"
+                ]
+              },
+              "window": "turn"
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "stat-modifier",
+                "target": "this-model",
+                "modifier": {
+                  "stat": "S",
+                  "operation": "add",
+                  "value": 2,
+                  "weapons": {
+                    "type": "melee"
+                  }
+                }
+              },
+              {
+                "type": "stat-modifier",
+                "target": "this-model",
+                "modifier": {
+                  "stat": "AP",
+                  "operation": "add",
+                  "value": 2,
+                  "weapons": {
+                    "type": "melee"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "passive",
+    "source_digest": "bbd5cce16fb14b94f879fde6e8879d2a437723477234a6b61d82c0fc571938f1"
+  },
+  {
+    "ability_id": "storm-swift-onslaught-white-scars",
+    "name": "Storm-swift Onslaught",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "white-scars",
+    "detachment_id": "spearpoint-task-force",
+    "ability_type": "detachment",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "stance-selection-capacity",
+              "modifier": {
+                "ability_id": "combat-doctrines-adeptus-astartes",
+                "additional_selections": 1,
+                "allocation": "choose-one-option",
+                "options": [
+                  {
+                    "ability_id": "combat-doctrines-adeptus-astartes",
+                    "option_id": "assault-doctrine"
+                  },
+                  {
+                    "ability_id": "combat-doctrines-adeptus-astartes",
+                    "option_id": "tactical-doctrine"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "roll-modifier",
+              "target": {
+                "owner": "friendly",
+                "all_of": [
+                  "ADEPTUS ASTARTES"
+                ],
+                "any_of": [
+                  "MOUNTED",
+                  "SPEEDER"
+                ]
+              },
+              "modifier": {
+                "roll": "advance",
+                "operation": "add",
+                "value": 1
+              }
+            },
+            {
+              "type": "ability-grant",
+              "target": {
+                "owner": "friendly",
+                "all_of": [
+                  "SUBODEN KHAN"
+                ]
+              },
+              "modifier": {
+                "ability": {
+                  "ability_id": "storm-swift-onslaught-white-scars",
+                  "definition_id": "wrath-of-the-first-khan"
+                },
+                "definition": {
+                  "type": "ability-part",
+                  "name": "Wrath of the First Khan",
+                  "effect": {
+                    "type": "conditional",
+                    "condition": {
+                      "type": "eligible",
+                      "parameters": {
+                        "subject": "this-unit",
+                        "to": "fight"
+                      }
+                    },
+                    "effect": {
+                      "type": "choice",
+                      "options": [
+                        {
+                          "type": "conditional",
+                          "condition": {
+                            "operator": "not",
+                            "operands": [
+                              {
+                                "type": "matches",
+                                "parameters": {
+                                  "filter": {
+                                    "state": "engaged"
+                                  }
+                                }
+                              }
+                            ]
+                          },
+                          "effect": {
+                            "type": "move",
+                            "target": "this-unit",
+                            "modifier": {
+                              "move_type": "normal"
+                            }
+                          }
+                        },
+                        {
+                          "type": "conditional",
+                          "condition": {
+                            "type": "matches",
+                            "parameters": {
+                              "filter": {
+                                "state": "engaged"
+                              }
+                            }
+                          },
+                          "effect": {
+                            "type": "move",
+                            "target": "this-unit",
+                            "modifier": {
+                              "move_type": "fall-back"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "trigger": {
+                    "event": "phase-ended",
+                    "condition": {
+                      "type": "phase-is",
+                      "parameters": {
+                        "phase": "fight"
+                      }
+                    },
+                    "optional": true
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "army-rule",
+              "target": "this-unit",
+              "modifier": {
+                "rule": "composition",
+                "with": {
+                  "all_of": [
+                    "WHITE SCARS"
+                  ]
+                }
+              }
+            },
+            {
+              "type": "army-rule",
+              "target": "this-unit",
+              "modifier": {
+                "rule": "single-chapter"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "activated",
+    "source_digest": "9505cd4242ce90772d7add62e20189023d8c41d3ba7c08fb6d5f29034fc8fb46"
+  },
+  {
+    "ability_id": "stormseers-wisdom-spearpoint-task-force-white-scars",
+    "name": "Stormseers' Wisdom",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "white-scars",
+    "detachment_id": "spearpoint-task-force",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "re-roll",
+      "target": "this-unit",
+      "modifier": {
+        "roll": "advance",
+        "result_scope": "any-result"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "passive",
+    "source_digest": "5693c71ad9a39c3351a7f47dcd8aad2f0264acd2eff88acbe8d75bc2213d21c9"
+  },
+  {
+    "ability_id": "withdraw-and-regroup-spearpoint-task-force-white-scars",
+    "name": "Withdraw and Regroup",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "white-scars",
+    "detachment_id": "spearpoint-task-force",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "set-up",
+      "target": "this-unit",
+      "modifier": {
+        "to": "strategic-reserves"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
+    },
+    "source_digest": "7eabb72774f9f29cfc16ff3bbe5e227140207ba2cfe375bc4790fe522cccaec5"
+  },
+  {
+    "ability_id": "evasive-manoeuvers-spearpoint-task-force-white-scars",
+    "name": "Evasive Manoeuvers",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "white-scars",
+    "detachment_id": "spearpoint-task-force",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "attack-is",
+        "parameters": {
+          "attack_type": "ranged"
+        }
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "attacker",
+        "modifier": {
+          "roll": "wound",
+          "operation": "subtract",
+          "value": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS ASTARTES"
+        ],
+        "any_of": [
+          "MOUNTED",
+          "SPEEDER"
+        ]
+      }
+    },
+    "source_digest": "497bc3cb404e11315e3f68d492954ae87cec79a29cb90270cead19b35a99f4a8"
+  },
+  {
+    "ability_id": "flawless-riders-spearpoint-task-force-white-scars",
+    "name": "Flawless Riders",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "white-scars",
+    "detachment_id": "spearpoint-task-force",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "keyword-grant",
+      "target": "this-unit",
+      "modifier": {
+        "keywords": [
+          "MOBILE"
+        ]
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": [
+      {
+        "event": "selected",
+        "filter": {
+          "to": "move"
+        },
+        "subject": {
+          "owner": "friendly",
+          "all_of": [
+            "ADEPTUS ASTARTES",
+            "MOUNTED"
+          ]
+        }
+      },
+      {
+        "event": "targets-selected",
+        "filter": {
+          "kind": "charge"
+        },
+        "subject": {
+          "owner": "friendly",
+          "all_of": [
+            "ADEPTUS ASTARTES",
+            "MOUNTED"
+          ]
+        }
+      }
+    ],
+    "source_digest": "642fb324e35738f9aef82fd3495f7f1062d666274969b97119b4093d02f713d3"
+  }
+]

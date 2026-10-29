@@ -12,8 +12,11 @@
     "required_parameters": [],
     "effect": {
       "type": "re-roll",
-      "target": "self",
-      "modifier": { "roll": "wound", "subset": "all-failures" }
+      "target": "this-model",
+      "modifier": {
+        "roll": "wound",
+        "subset": "all-failures"
+      }
     },
     "game_version": { "edition": "10th", "dataslate": "2025-q3" }
   },

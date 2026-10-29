@@ -46,13 +46,13 @@
       "plasma-pistol"
     ],
     "ability_ids": [
-      "gift-of-poxes",
+      "gift-of-poxes-death-guard",
       "leader",
-      "shroud-of-disease"
+      "shroud-of-disease-death-guard"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -105,7 +105,6 @@
     "keywords": [
       "Vehicle",
       "Walker",
-      "Smoke",
       "Chaos",
       "Nurgle",
       "Daemon",
@@ -135,13 +134,20 @@
       "electroscourge"
     ],
     "ability_ids": [
-      "barrage-of-filth",
-      "deadly-demise-d6",
-      "scuttling-walker"
+      "barrage-of-filth-death-guard",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "scuttling-walker-death-guard",
+      {
+        "id": "damaged",
+        "value": 6
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -196,7 +202,8 @@
       "Beast",
       "Chaos",
       "Nurgle",
-      "Spawn"
+      "Spawn",
+      "Chaos Spawn"
     ],
     "faction_keywords": [
       "Death Guard"
@@ -213,19 +220,23 @@
       "hideous-mutations"
     ],
     "ability_ids": [
-      "deadly-demise-1",
-      "feel-no-pain-5",
-      "lethal-ichor",
-      "mind-breaking-mutations-aura",
-      "regenerating-monstrosities",
-      "scouts-6",
-      "scouts-8",
-      "scuttling-horrors",
-      "to-slake-its-rage"
+      {
+        "id": "deadly-demise",
+        "value": 1
+      },
+      {
+        "id": "feel-no-pain",
+        "value": 5
+      },
+      "lethal-ichor-death-guard",
+      {
+        "id": "scouts",
+        "value": 6
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -295,12 +306,12 @@
     ],
     "ability_ids": [
       "leader",
-      "malicious-calculations",
-      "sevenfold-chant"
+      "malicious-calculations-death-guard",
+      "sevenfold-chant-death-guard"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -368,13 +379,16 @@
       "improvised-weapon"
     ],
     "ability_ids": [
-      "curse-of-the-walking-pox",
+      "curse-of-the-walking-pox-death-guard",
       "infiltrators",
-      "feel-no-pain-5"
+      {
+        "id": "feel-no-pain",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -419,7 +433,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 120
+        "cost": 110
       }
     ],
     "keywords": [
@@ -448,12 +462,12 @@
     "ability_ids": [
       "deep-strike",
       "leader",
-      "unholy-resilience",
-      "vector-of-disease"
+      "unholy-resilience-death-guard",
+      "vector-of-disease-death-guard"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -492,13 +506,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 135,
+        "cost": 130,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 145,
+        "cost": 140,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -508,7 +522,9 @@
       "Smoke",
       "Chaos",
       "Nurgle",
-      "Predator Annihilator"
+      "Predator Annihilator",
+      "Frame",
+      "Chaos Predator Annihilator"
     ],
     "faction_keywords": [
       "Death Guard"
@@ -524,22 +540,26 @@
     "weapon_ids": [
       "armoured-tracks",
       "combi-bolter",
-      "combi-weapon",
+      "combi-weapon-chaos-predator-annihilator",
       "havoc-launcher",
       "heavy-bolter",
       "lascannon",
       "predator-twin-lascannon"
     ],
     "ability_ids": [
-      "annihilator",
-      "blood-hungry-annihilator",
-      "ensorcelled-annihilation",
-      "metalophagic-infection",
-      "deadly-demise-d3"
+      "metalophagic-infection-death-guard",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -577,13 +597,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 145,
+        "cost": 140,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 155,
+        "cost": 150,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -593,7 +613,9 @@
       "Smoke",
       "Chaos",
       "Nurgle",
-      "Predator Destructor"
+      "Predator Destructor",
+      "Frame",
+      "Chaos Predator Destructor"
     ],
     "faction_keywords": [
       "Death Guard"
@@ -609,22 +631,26 @@
     "weapon_ids": [
       "armoured-tracks",
       "combi-bolter",
-      "combi-weapon",
+      "combi-weapon-chaos-predator-destructor",
       "havoc-launcher",
       "heavy-bolter",
       "lascannon",
       "predator-autocannon"
     ],
     "ability_ids": [
-      "destructor",
-      "ensorcelled-destruction",
-      "hail-of-corrosive-disease",
-      "punishing-suppression",
-      "deadly-demise-d3"
+      "hail-of-corrosive-disease-death-guard",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -697,12 +723,15 @@
       "plague-probe"
     ],
     "ability_ids": [
-      "explosive-blight",
-      "deadly-demise-d3"
+      "explosive-blight-death-guard",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -748,12 +777,12 @@
         "models": 1,
         "cost": 170,
         "unit_count_min": 1,
-        "unit_count_max": 1
+        "unit_count_max": 2
       },
       {
         "models": 1,
         "cost": 200,
-        "unit_count_min": 2,
+        "unit_count_min": 3,
         "unit_count_max": null
       }
     ],
@@ -762,7 +791,8 @@
       "Chaos",
       "Nurgle",
       "Daemon",
-      "Plagueburst Crawler"
+      "Plagueburst Crawler",
+      "Frame"
     ],
     "faction_keywords": [
       "Death Guard"
@@ -784,12 +814,19 @@
       "rothail-volley-gun"
     ],
     "ability_ids": [
-      "spore-laced-shock-waves",
-      "deadly-demise-d3"
+      "spore-laced-shock-waves-death-guard",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -856,14 +893,17 @@
       "plague-knives"
     ],
     "ability_ids": [
-      "extraction-of-fresh-disease",
-      "foul-infusion",
+      "extraction-of-fresh-disease-death-guard",
+      "foul-infusion-death-guard",
       "leader",
-      "deadly-demise-1"
+      {
+        "id": "deadly-demise",
+        "value": 1
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -913,7 +953,7 @@
       {
         "models": 8,
         "models_max": 10,
-        "cost": 180
+        "cost": 175
       }
     ],
     "keywords": [
@@ -938,7 +978,7 @@
     "weapon_ids": [
       "blight-launcher",
       "bolt-pistol",
-      "boltgun",
+      "boltgun-plague-marines",
       "bubotic-weapons",
       "heavy-plague-weapon",
       "meltagun",
@@ -950,12 +990,15 @@
       "power-fist"
     ],
     "ability_ids": [
-      "icon-of-despair-aura",
-      "infused-with-the-blessings-of-nurgle"
+      {
+        "id": "icon-of-despair-death-guard",
+        "wargear": "icon-of-despair-aura"
+      },
+      "infused-with-the-blessings-of-nurgle-death-guard"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -966,6 +1009,13 @@
         ],
         "count": 1,
         "per_models": 0
+      },
+      {
+        "items": [
+          "heavy-plague-weapon"
+        ],
+        "count": 4,
+        "per_models": 10
       },
       {
         "items": [
@@ -1037,13 +1087,13 @@
       "bolt-pistol"
     ],
     "ability_ids": [
-      "inflamed-infections",
+      "inflamed-infections-death-guard",
       "leader",
-      "tainted-narthecium"
+      "tainted-narthecium-death-guard"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1083,7 +1133,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 195
+        "cost": 185
       }
     ],
     "keywords": [
@@ -1092,7 +1142,8 @@
       "Chaos",
       "Nurgle",
       "Daemon",
-      "Daemon Prince"
+      "Daemon Prince",
+      "Daemon Prince of Nurgle"
     ],
     "faction_keywords": [
       "Death Guard"
@@ -1110,14 +1161,17 @@
       "infernal-cannon"
     ],
     "ability_ids": [
-      "death-guard-defenders",
-      "fevered-strategist",
-      "miasma-of-pestilence-aura",
-      "deadly-demise-d3"
+      "death-guard-defenders-death-guard",
+      "fevered-strategist-death-guard",
+      "miasma-of-pestilence-death-guard",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1155,7 +1209,7 @@
     "points": [
       {
         "models": 3,
-        "cost": 160,
+        "cost": 150,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
@@ -1168,7 +1222,7 @@
       },
       {
         "models": 3,
-        "cost": 170,
+        "cost": 160,
         "unit_count_min": 3,
         "unit_count_max": null
       },
@@ -1203,13 +1257,17 @@
       "plaguespurt-gauntlet"
     ],
     "ability_ids": [
-      "death-approaches",
-      "silent-bodyguard",
-      "deep-strike"
+      "death-approaches-death-guard",
+      "silent-bodyguard-death-guard",
+      "deep-strike",
+      {
+        "id": "icon-of-despair-death-guard",
+        "wargear": "icon-of-despair-aura"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1248,7 +1306,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 100
+        "cost": 90
       }
     ],
     "keywords": [
@@ -1275,14 +1333,14 @@
       "twin-plague-spewer"
     ],
     "ability_ids": [
-      "blight-bombardment",
+      "blight-bombardment-death-guard",
       "leader",
-      "virulent-aura",
+      "virulent-aura-death-guard",
       "deep-strike"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1357,12 +1415,15 @@
       "plaguespitter"
     ],
     "ability_ids": [
-      "hovering-death",
-      "deadly-demise-d3"
+      "hovering-death-death-guard",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1434,12 +1495,12 @@
     ],
     "ability_ids": [
       "leader",
-      "sickening-vitality",
-      "tocsin-of-misery-aura"
+      "sickening-vitality-death-guard",
+      "tocsin-of-misery-death-guard"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1479,7 +1540,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 170
+        "cost": 160
       }
     ],
     "keywords": [
@@ -1489,7 +1550,8 @@
       "Chaos",
       "Nurgle",
       "Daemon",
-      "Daemon Prince with Wings"
+      "Daemon Prince with Wings",
+      "Daemon Prince of Nurgle with Wings"
     ],
     "faction_keywords": [
       "Death Guard"
@@ -1507,14 +1569,17 @@
       "infernal-cannon-daemon-prince-of-nurgle-with-wings"
     ],
     "ability_ids": [
-      "enfeebling-miasma",
-      "horrifying-visage",
+      "enfeebling-miasma-death-guard",
+      "horrifying-visage-death-guard",
       "deep-strike",
-      "deadly-demise-d3"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1559,7 +1624,8 @@
       "Fortification",
       "Chaos",
       "Nurgle",
-      "Miasmic Malignifier"
+      "Miasmic Malignifier",
+      "Frame"
     ],
     "faction_keywords": [
       "Death Guard"
@@ -1576,14 +1642,17 @@
       "miasmic-gouts"
     ],
     "ability_ids": [
-      "diseased-cover",
-      "fortification",
-      "putrescent-fog",
-      "deadly-demise-d3"
+      "diseased-cover-death-guard",
+      "fortification-death-guard",
+      "putrescent-fog-death-guard",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1621,7 +1690,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 110
+        "cost": 105
       }
     ],
     "keywords": [
@@ -1657,17 +1726,16 @@
       "twin-lascannon"
     ],
     "ability_ids": [
-      "dark-ascension-aura",
-      "deadly-demise-1",
-      "devoted-to-destruction",
-      "diseased-malice",
-      "frenzy",
-      "froth-spattered-frenzy",
-      "terrifying-assault"
+      {
+        "id": "deadly-demise",
+        "value": 1
+      },
+      "diseased-malice-death-guard",
+      "froth-spattered-frenzy-death-guard"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1724,7 +1792,8 @@
       "Chaos",
       "Nurgle",
       "Daemon",
-      "Myphitic Blight-Hauler"
+      "Myphitic Blight-Hauler",
+      "Myphitic Blight-haulers"
     ],
     "faction_keywords": [
       "Death Guard"
@@ -1744,11 +1813,15 @@
       "multi-melta"
     ],
     "ability_ids": [
-      "tank-hunters"
+      "tank-hunters-death-guard",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1822,16 +1895,26 @@
       "silence"
     ],
     "ability_ids": [
-      "deadly-demise-d6",
-      "host-of-plagues",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "host-of-plagues-death-guard",
       "lord-of-the-death-guard",
-      "supreme-commander",
+      "supreme-commander-death-guard",
       "deep-strike",
-      "feel-no-pain-5"
+      {
+        "id": "feel-no-pain",
+        "value": 5
+      },
+      {
+        "id": "damaged",
+        "value": 6
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1898,13 +1981,13 @@
       "plague-wind"
     ],
     "ability_ids": [
-      "gift-of-contagion-psychic",
+      "gift-of-contagion-death-guard",
       "leader",
-      "pestilent-fallout-psychic"
+      "pestilent-fallout-death-guard"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1962,7 +2045,9 @@
       "Nurgle",
       "Transport",
       "Dedicated Transport",
-      "Rhino"
+      "Rhino",
+      "Frame",
+      "Chaos Rhino"
     ],
     "faction_keywords": [
       "Death Guard"
@@ -1978,24 +2063,26 @@
     "weapon_ids": [
       "armoured-tracks",
       "combi-bolter",
-      "combi-weapon",
+      "combi-weapon-chaos-rhino",
       "havoc-launcher"
     ],
     "ability_ids": [
-      "assault-vehicle",
-      "fire-support",
-      "firing-deck-2",
-      "meet-any-challenge",
-      "self-repair",
-      "sorcerous-support",
-      "deadly-demise-d3"
+      "fire-support-death-guard",
+      {
+        "id": "firing-deck",
+        "value": 2
+      },
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      }
     ],
     "transport_capacity": {
       "capacity": 12
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2050,7 +2137,9 @@
       "Smoke",
       "Chaos",
       "Nurgle",
-      "Land Raider"
+      "Land Raider",
+      "Frame",
+      "Chaos Land Raider"
     ],
     "faction_keywords": [
       "Death Guard"
@@ -2066,21 +2155,28 @@
     "weapon_ids": [
       "armoured-tracks-chaos-land-raider",
       "combi-bolter",
-      "combi-weapon",
+      "combi-weapon-chaos-land-raider",
       "havoc-launcher",
       "soulshatter-lascannon",
       "twin-heavy-bolter"
     ],
     "ability_ids": [
-      "assault-ramp",
-      "deadly-demise-d6"
+      "assault-ramp-death-guard",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      {
+        "id": "damaged",
+        "value": 5
+      }
     ],
     "transport_capacity": {
       "capacity": 14
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2146,13 +2242,13 @@
       "plague-sprayer"
     ],
     "ability_ids": [
-      "blinding-spray",
+      "blinding-spray-death-guard",
       "leader",
-      "putrefying-stink"
+      "putrefying-stink-death-guard"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2215,17 +2311,17 @@
       "max": 1
     },
     "weapon_ids": [
-      "boltgun",
+      "boltgun-icon-bearer",
       "plague-knife"
     ],
     "ability_ids": [
-      "blessed-icon-of-disease",
+      "blessed-icon-of-disease-death-guard",
       "leader",
-      "unclean-icon"
+      "unclean-icon-death-guard"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2265,7 +2361,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 100
+        "cost": 90
       }
     ],
     "keywords": [
@@ -2293,14 +2389,14 @@
       "lakrimae"
     ],
     "ability_ids": [
-      "destroyer-hive",
-      "eater-plague-psychic",
+      "destroyer-hive-death-guard",
+      "eater-plague-death-guard",
       "leader",
       "deep-strike"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2339,17 +2435,43 @@
     "points": [
       {
         "models": 3,
-        "cost": 115
+        "cost": 115,
+        "unit_count_min": 1,
+        "unit_count_max": 2
       },
       {
         "models": 4,
         "models_max": 5,
-        "cost": 180
+        "cost": 185,
+        "unit_count_min": 1,
+        "unit_count_max": 2
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 360
+        "cost": 370,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 3,
+        "cost": 145,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      },
+      {
+        "models": 4,
+        "models_max": 5,
+        "cost": 215,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      },
+      {
+        "models": 6,
+        "models_max": 10,
+        "cost": 400,
+        "unit_count_min": 3,
+        "unit_count_max": null
       }
     ],
     "keywords": [
@@ -2381,12 +2503,12 @@
       "reaper-autocannon"
     ],
     "ability_ids": [
-      "blistering-fusillade",
+      "blistering-fusillade-death-guard",
       "deep-strike"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2444,7 +2566,8 @@
       "Nurgle",
       "Smoke",
       "Transport",
-      "Vehicle"
+      "Vehicle",
+      "Maggot Lords Chaos Rhino"
     ],
     "faction_keywords": [
       "Death Guard"
@@ -2455,7 +2578,7 @@
     },
     "weapon_ids": [
       "armoured-tracks",
-      "havoc-launcher"
+      "havoc-launcher-maggot-lords-chaos-rhino"
     ],
     "ability_ids": [],
     "transport_capacity": {
@@ -2463,7 +2586,7 @@
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"
@@ -2504,7 +2627,8 @@
       "Infantry",
       "Maggot Lords",
       "Nurgle",
-      "Terminator"
+      "Terminator",
+      "Maggot Lords Deathshroud Terminators"
     ],
     "faction_keywords": [
       "Death Guard"
@@ -2514,15 +2638,15 @@
       "max": 3
     },
     "weapon_ids": [
-      "manreaper-strike-maggot-lords",
-      "plaguespurt-gauntlet-maggot-lords"
+      "manreaper-maggot-lords-deathshroud-terminators",
+      "plaguespurt-gauntlet-maggot-lords-deathshroud-terminators"
     ],
     "ability_ids": [
-      "obstinate-resistance-maggot-lords"
+      "obstinate-resistance-death-guard"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"
@@ -2569,7 +2693,8 @@
       "Explosives",
       "Infantry",
       "Maggot Lords",
-      "Nurgle"
+      "Nurgle",
+      "Maggot Lords Plague Marines"
     ],
     "faction_keywords": [
       "Death Guard"
@@ -2579,19 +2704,19 @@
       "max": 7
     },
     "weapon_ids": [
-      "blight-launcher",
+      "blight-launcher-maggot-lords-plague-marines",
       "boltgun",
-      "plague-knives-plague-marines",
       "plague-spewer",
-      "plasma-pistol-maggot-lords",
-      "power-fist"
+      "power-fist",
+      "plasma-pistol-maggot-lords-plague-marines",
+      "plague-knives-maggot-lords-plague-marines"
     ],
     "ability_ids": [
-      "infused-with-the-blessings-of-nurgle-maggot-lords"
+      "infused-with-the-blessings-of-nurgle-maggot-lords-plague-marines-death-guard"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"
@@ -2638,7 +2763,8 @@
       "Infantry",
       "Maggot Lords",
       "Nurgle",
-      "Tallyman"
+      "Tallyman",
+      "Septimol Fulg, Maggot Lords Tallyman"
     ],
     "faction_keywords": [
       "Death Guard"
@@ -2649,14 +2775,15 @@
     },
     "weapon_ids": [
       "numerological-artefacts",
-      "plasma-pistol-maggot-lords"
+      "plasma-pistol-septimol-fulg-maggot-lords-tallyman"
     ],
     "ability_ids": [
-      "malicious-calculations-maggot-lords"
+      "malicious-calculations-septimol-fulg-maggot-lords-tallyman-death-guard",
+      "sevenfold-chant-septimol-fulg-maggot-lords-tallyman-death-guard"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"
@@ -2704,7 +2831,8 @@
       "Lord of Virulence",
       "Maggot Lords",
       "Nurgle",
-      "Terminator"
+      "Terminator",
+      "Sholgor the Putrid"
     ],
     "faction_keywords": [
       "Death Guard"
@@ -2718,11 +2846,11 @@
       "twin-plague-spewer"
     ],
     "ability_ids": [
-      "enemy-spotted-maggot-lords"
+      "enemy-spotted-death-guard"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"
@@ -2738,6 +2866,496 @@
         "namespace": "mfm",
         "id": "0037a838-5993-4cfe-8d14-064f0bb4d9e0"
       }
+    ]
+  },
+  {
+    "id": "beasts-of-nurgle",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "3c21511d-aa1d-45fd-aa09-4c0b7fc1f052"
+      }
+    ],
+    "name": "Beasts of Nurgle",
+    "faction_id": "death-guard",
+    "profiles": [
+      {
+        "name": "Beast of Nurgle",
+        "M": 6,
+        "T": 9,
+        "W": 7,
+        "Sv": 6,
+        "invuln_sv": 5,
+        "Ld": 7,
+        "OC": 3
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 70
+      },
+      {
+        "models": 2,
+        "cost": 140
+      }
+    ],
+    "keywords": [
+      "Beast",
+      "Chaos",
+      "Nurgle",
+      "Daemon",
+      "Summoned",
+      "Beasts of Nurgle"
+    ],
+    "faction_keywords": [
+      "Plague Legions"
+    ],
+    "model_count": {
+      "min": 1,
+      "max": 2
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "weapon_ids": [
+      "putrid-appendages"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 60
+    },
+    "ability_ids": [
+      {
+        "id": "deadly-demise",
+        "value": 1
+      },
+      "deep-strike",
+      "grotesque-regeneration-death-guard",
+      {
+        "id": "scouts",
+        "value": 6
+      }
+    ]
+  },
+  {
+    "id": "great-unclean-one",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "9515922a-ddf1-4503-b48c-a0cfb72db6ca"
+      }
+    ],
+    "name": "Great Unclean One",
+    "faction_id": "death-guard",
+    "role": "character",
+    "profiles": [
+      {
+        "name": "Great Unclean One",
+        "M": 7,
+        "T": 12,
+        "W": 20,
+        "Sv": 5,
+        "invuln_sv": 4,
+        "Ld": 6,
+        "OC": 5
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 265,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 1,
+        "cost": 280,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Monster",
+      "Character",
+      "Psyker",
+      "Chaos",
+      "Nurgle",
+      "Daemon",
+      "Summoned",
+      "Great Unclean One"
+    ],
+    "faction_keywords": [
+      "Plague Legions"
+    ],
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "weapon_ids": [
+      "plague-flail",
+      "putrid-vomit",
+      "bilesword",
+      "bileblade",
+      "doomsday-bell"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 130
+    },
+    "conditional_keywords": [
+      {
+        "keyword": "Shadow Legion",
+        "required_detachment_id": "shadow-legion"
+      }
+    ],
+    "ability_ids": [
+      "daemon-lord-of-nurgle-death-guard",
+      {
+        "id": "damaged",
+        "value": 7
+      },
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "deep-strike",
+      {
+        "id": "feel-no-pain",
+        "value": 6
+      },
+      "nurgles-rot-death-guard"
+    ]
+  },
+  {
+    "id": "nurglings",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "2d118322-ade2-48f8-af17-f1b3609f3fb8"
+      }
+    ],
+    "name": "Nurglings",
+    "faction_id": "death-guard",
+    "profiles": [
+      {
+        "name": "Nurgling Swarm",
+        "M": 5,
+        "T": 3,
+        "W": 4,
+        "Sv": 7,
+        "invuln_sv": 5,
+        "Ld": 8,
+        "OC": 0
+      }
+    ],
+    "points": [
+      {
+        "models": 3,
+        "cost": 45
+      },
+      {
+        "models": 4,
+        "models_max": 6,
+        "cost": 90
+      }
+    ],
+    "keywords": [
+      "Swarm",
+      "Chaos",
+      "Nurgle",
+      "Daemon",
+      "Summoned",
+      "Nurglings"
+    ],
+    "faction_keywords": [
+      "Plague Legions"
+    ],
+    "model_count": {
+      "min": 3,
+      "max": 6
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "weapon_ids": [
+      "diseased-claws-and-teeth"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 40
+    },
+    "ability_ids": [
+      "deep-strike",
+      "infiltrators",
+      "mischief-makers-death-guard"
+    ]
+  },
+  {
+    "id": "plague-drones",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "15580b19-8d83-4398-87c2-c163d37e3a28"
+      }
+    ],
+    "name": "Plague Drones",
+    "faction_id": "death-guard",
+    "profiles": [
+      {
+        "name": "Plague Drone",
+        "M": 10,
+        "T": 8,
+        "W": 5,
+        "Sv": 6,
+        "invuln_sv": 5,
+        "Ld": 7,
+        "OC": 2
+      }
+    ],
+    "points": [
+      {
+        "models": 3,
+        "cost": 110
+      },
+      {
+        "models": 4,
+        "models_max": 6,
+        "cost": 220
+      }
+    ],
+    "keywords": [
+      "Mounted",
+      "Fly",
+      "Chaos",
+      "Nurgle",
+      "Daemon",
+      "Summoned",
+      "Plague Drones"
+    ],
+    "faction_keywords": [
+      "Plague Legions"
+    ],
+    "model_count": {
+      "min": 3,
+      "max": 6
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "weapon_ids": [
+      "deaths-heads",
+      "foul-mouthparts",
+      "plaguesword"
+    ],
+    "wargear_budgets": [
+      {
+        "items": [
+          "daemonic-icon"
+        ],
+        "count": 1,
+        "per_models": 0
+      },
+      {
+        "items": [
+          "instrument-of-chaos"
+        ],
+        "count": 1,
+        "per_models": 0
+      }
+    ],
+    "ability_ids": [
+      {
+        "id": "daemonic-icon-death-guard",
+        "wargear": "daemonic-icon"
+      },
+      "deaths-heads-death-guard",
+      "deep-strike",
+      {
+        "id": "instrument-of-chaos-death-guard",
+        "wargear": "instrument-of-chaos"
+      }
+    ]
+  },
+  {
+    "id": "plaguebearers",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "24af7758-52d7-4260-a41c-5a88e685306c"
+      }
+    ],
+    "name": "Plaguebearers",
+    "faction_id": "death-guard",
+    "role": "battleline",
+    "profiles": [
+      {
+        "name": "Plaguebearer",
+        "M": 5,
+        "T": 5,
+        "W": 2,
+        "Sv": 7,
+        "invuln_sv": 5,
+        "Ld": 7,
+        "OC": 2
+      }
+    ],
+    "points": [
+      {
+        "models": 10,
+        "cost": 115
+      }
+    ],
+    "keywords": [
+      "Infantry",
+      "Battleline",
+      "Chaos",
+      "Nurgle",
+      "Daemon",
+      "Summoned",
+      "Plaguebearers"
+    ],
+    "faction_keywords": [
+      "Plague Legions"
+    ],
+    "model_count": {
+      "min": 10,
+      "max": 10
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "weapon_ids": [
+      "plaguesword"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
+    "wargear_budgets": [
+      {
+        "items": [
+          "daemonic-icon"
+        ],
+        "count": 1,
+        "per_models": 0
+      },
+      {
+        "items": [
+          "instrument-of-chaos"
+        ],
+        "count": 1,
+        "per_models": 0
+      }
+    ],
+    "ability_ids": [
+      {
+        "id": "daemonic-icon-death-guard",
+        "wargear": "daemonic-icon"
+      },
+      "deep-strike",
+      "infected-outbreak-death-guard",
+      {
+        "id": "instrument-of-chaos-death-guard",
+        "wargear": "instrument-of-chaos"
+      }
+    ]
+  },
+  {
+    "id": "rotigus",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "71f1dac7-11cc-4f1e-a47c-5a100781e7cd"
+      }
+    ],
+    "name": "Rotigus",
+    "faction_id": "death-guard",
+    "role": "epic-hero",
+    "profiles": [
+      {
+        "name": "Rotigus",
+        "M": 7,
+        "T": 12,
+        "W": 22,
+        "Sv": 5,
+        "invuln_sv": 4,
+        "Ld": 6,
+        "OC": 5
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 280
+      }
+    ],
+    "keywords": [
+      "Monster",
+      "Character",
+      "Epic Hero",
+      "Psyker",
+      "Chaos",
+      "Nurgle",
+      "Daemon",
+      "Summoned",
+      "Rotigus"
+    ],
+    "faction_keywords": [
+      "Plague Legions"
+    ],
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "weapon_ids": [
+      "streams-of-brackish-filth",
+      "gnarlrod"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 130
+    },
+    "ability_ids": [
+      {
+        "id": "damaged",
+        "value": 7
+      },
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "deep-strike",
+      "deluge-of-nurgle-death-guard",
+      {
+        "id": "feel-no-pain",
+        "value": 6
+      },
+      "virulent-blessing-death-guard"
     ]
   }
 ]

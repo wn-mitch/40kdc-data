@@ -21,7 +21,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -86,7 +86,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -137,7 +137,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -182,7 +182,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -250,7 +250,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -295,7 +295,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -326,7 +326,7 @@
         "is_leader_model": true,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 28.5
+          "diameter": 32
         }
       },
       {
@@ -350,15 +350,15 @@
               "farstalker-firearm",
               "kroot-pistol",
               "close-combat-weapon"
-            ],
-            "max_count": 8
+            ]
           },
           {
             "name": "Kroot Farstalker w/ Farstalker firearm and Pech'ra",
             "weapon_ids": [
               "kroot-pistol",
               "farstalker-firearm",
-              "close-combat-weapon"
+              "close-combat-weapon",
+              "pechra"
             ],
             "max_count": 1
           },
@@ -382,7 +382,6 @@
         "loadout_variant_budgets": [
           {
             "variant_names": [
-              "Kroot Farstalker",
               "Kroot Farstalker w/ Farstalker firearm and Pech'ra"
             ],
             "count": 9,
@@ -416,7 +415,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -473,7 +472,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -525,7 +524,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -614,7 +613,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -672,7 +671,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -728,7 +727,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -774,7 +773,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -827,7 +826,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -873,7 +872,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -907,7 +906,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -941,7 +940,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -984,7 +983,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1021,7 +1020,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1056,7 +1055,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1107,23 +1106,12 @@
             ],
             "max_count": 3
           }
-        ],
-        "loadout_variant_budgets": [
-          {
-            "variant_names": [
-              "Krootox Rider w/ repeater cannon",
-              "Krootox Rider w/ tanglecannon"
-            ],
-            "count": 3,
-            "per_models": 0,
-            "scope": "model-row"
-          }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1182,7 +1170,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1219,7 +1207,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1258,7 +1246,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1298,7 +1286,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1348,7 +1336,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1402,7 +1390,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1437,7 +1425,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1480,7 +1468,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1543,7 +1531,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1606,7 +1594,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1641,7 +1629,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1680,7 +1668,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1720,7 +1708,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1755,7 +1743,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1795,7 +1783,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1829,7 +1817,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1880,7 +1868,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1921,7 +1909,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1972,7 +1960,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2027,7 +2015,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2064,7 +2052,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2099,7 +2087,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2127,15 +2115,15 @@
           "diameter": 60
         },
         "default_weapon_ids": [
-          "airbursting-fragmentation-projector",
-          "battlesuit-fists-commander-in-enforcer-battlesuit",
-          "plasma-rifle-commander-in-enforcer-battlesuit"
+          "airbursting-fragmentation-projector-commander-cloudspear",
+          "battlesuit-fists-commander-cloudspear",
+          "plasma-rifle-commander-cloudspear"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2147,6 +2135,9 @@
           }
         ]
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -2165,7 +2156,7 @@
         "default_weapon_ids": [
           "gun-stocks",
           "pulse-blaster",
-          "pulse-pistol"
+          "pulse-pistol-sudden-dawn-cadre-breacher-team"
         ]
       },
       {
@@ -2180,13 +2171,13 @@
         "default_weapon_ids": [
           "gun-stocks",
           "pulse-blaster",
-          "pulse-pistol"
+          "pulse-pistol-sudden-dawn-cadre-breacher-team"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2203,6 +2194,9 @@
           }
         ]
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -2223,14 +2217,14 @@
         },
         "default_weapon_ids": [
           "accelerator-burst-cannon",
-          "armoured-hull-devilfish",
+          "armoured-hull-sudden-dawn-cadre-devilfish",
           "twin-pulse-carbine"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2242,6 +2236,9 @@
           }
         ]
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -2260,7 +2257,7 @@
         "default_weapon_ids": [
           "gun-stocks",
           "pulse-carbine",
-          "pulse-pistol"
+          "pulse-pistol-sudden-dawn-cadre-pathfinder-team"
         ]
       },
       {
@@ -2274,7 +2271,7 @@
         },
         "default_weapon_ids": [
           "gun-stocks",
-          "pulse-pistol",
+          "pulse-pistol-sudden-dawn-cadre-pathfinder-team",
           "rail-rifle"
         ]
       },
@@ -2290,13 +2287,13 @@
         "default_weapon_ids": [
           "gun-stocks",
           "pulse-carbine",
-          "pulse-pistol"
+          "pulse-pistol-sudden-dawn-cadre-pathfinder-team"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2318,6 +2315,9 @@
           }
         ]
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   }
 ]

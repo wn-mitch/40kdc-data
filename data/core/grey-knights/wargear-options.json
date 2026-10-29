@@ -5,11 +5,11 @@
     "faction_id": "grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
-      "storm-bolter"
+      "storm-bolter-land-raider-redeemer"
     ],
     "model_constraint": {
       "any_number": true
@@ -21,7 +21,7 @@
     "faction_id": "grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -37,7 +37,7 @@
     "faction_id": "grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -53,7 +53,7 @@
     "faction_id": "grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -104,7 +104,7 @@
     "faction_id": "grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -134,7 +134,7 @@
     "faction_id": "grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -150,7 +150,7 @@
     "faction_id": "grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -166,11 +166,11 @@
     "faction_id": "grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
-      "storm-bolter"
+      "storm-bolter-land-raider-crusader"
     ],
     "model_constraint": {
       "any_number": true
@@ -182,7 +182,7 @@
     "faction_id": "grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -198,7 +198,7 @@
     "faction_id": "grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -225,7 +225,7 @@
     "faction_id": "grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -244,11 +244,11 @@
     "faction_id": "grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
-      "storm-bolter"
+      "storm-bolter-razorback"
     ],
     "model_constraint": {
       "any_number": true
@@ -260,7 +260,7 @@
     "faction_id": "grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -276,11 +276,11 @@
     "faction_id": "grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
-      "storm-bolter",
+      "storm-bolter-purifier-squad",
       "nemesis-force-weapon-purifier-squad"
     ],
     "replacement_choice": [
@@ -308,7 +308,7 @@
     "faction_id": "grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -324,7 +324,7 @@
     "faction_id": "grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -340,7 +340,7 @@
     "faction_id": "grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -356,7 +356,7 @@
     "faction_id": "grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -380,7 +380,7 @@
     "faction_id": "grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -399,7 +399,7 @@
     "faction_id": "grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -418,7 +418,7 @@
     "faction_id": "grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -434,11 +434,11 @@
     "faction_id": "grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
-      "storm-bolter"
+      "storm-bolter-rhino"
     ],
     "model_constraint": {
       "any_number": true
@@ -450,7 +450,7 @@
     "faction_id": "grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -477,7 +477,7 @@
     "faction_id": "grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -501,11 +501,11 @@
     "faction_id": "grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
-      "storm-bolter"
+      "storm-bolter-venerable-dreadnought"
     ],
     "replacement": [
       "heavy-flamer"
@@ -520,11 +520,11 @@
     "faction_id": "grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
-      "storm-bolter",
+      "storm-bolter-strike-squad",
       "nemesis-force-weapon-strike-squad"
     ],
     "replacement_choice": [
@@ -552,12 +552,12 @@
     "faction_id": "grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
       [
-        "storm-bolter"
+        "storm-bolter-brotherhood-librarian"
       ],
       [
         "combi-weapon"
@@ -573,11 +573,11 @@
     "faction_id": "grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
-      "storm-bolter",
+      "storm-bolter-purgation-squad",
       "nemesis-force-weapon-purgation-squad"
     ],
     "replacement_choice": [
@@ -605,7 +605,7 @@
     "faction_id": "grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -632,11 +632,11 @@
     "faction_id": "grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
-      "storm-bolter",
+      "storm-bolter-interceptor-squad",
       "nemesis-force-weapon-interceptor-squad"
     ],
     "replacement_choice": [
@@ -664,7 +664,7 @@
     "faction_id": "grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -674,6 +674,10 @@
       [
         "incinerator",
         "ancients-banner"
+      ],
+      [
+        "ancients-banner",
+        "storm-bolter-paladin-squad"
       ],
       [
         "ancients-banner",
@@ -695,24 +699,7 @@
     "faction_id": "grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replacement": [
-      "ancients-banner"
-    ],
-    "model_constraint": {
-      "model_name": "Paladin Ancient",
-      "any_number": true
-    }
-  },
-  {
-    "id": "paladin-squad-wgo-mfm-3",
-    "unit_id": "paladin-squad",
-    "faction_id": "grey-knights",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -743,11 +730,11 @@
     "faction_id": "grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
-      "storm-bolter"
+      "storm-bolter-land-raider"
     ],
     "model_constraint": {
       "any_number": true
@@ -759,7 +746,7 @@
     "faction_id": "grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -775,7 +762,7 @@
     "faction_id": "grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -791,11 +778,11 @@
     "faction_id": "grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
-      "storm-bolter"
+      "storm-bolter-brotherhood-terminator-squad"
     ],
     "replacement_choice": [
       [
@@ -822,16 +809,20 @@
     "faction_id": "grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
-      "storm-bolter"
+      "storm-bolter-brotherhood-terminator-squad"
     ],
     "replacement_choice": [
       [
         "incinerator",
         "ancients-banner"
+      ],
+      [
+        "ancients-banner",
+        "storm-bolter-brotherhood-terminator-squad"
       ],
       [
         "psilencer-brotherhood-terminator-squad",
@@ -848,29 +839,12 @@
     }
   },
   {
-    "id": "brotherhood-terminator-squad-wgo-mfm-3",
-    "unit_id": "brotherhood-terminator-squad",
-    "faction_id": "grey-knights",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replacement": [
-      "ancients-banner"
-    ],
-    "model_constraint": {
-      "model_name": "Ancient",
-      "any_number": true
-    }
-  },
-  {
     "id": "stormhawk-interceptor-wgo-mfm-1",
     "unit_id": "stormhawk-interceptor",
     "faction_id": "grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -889,7 +863,7 @@
     "faction_id": "grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -913,7 +887,7 @@
     "faction_id": "grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -930,7 +904,7 @@
     "faction_id": "grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -954,7 +928,7 @@
     "faction_id": "grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [

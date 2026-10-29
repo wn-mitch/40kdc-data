@@ -1,0 +1,324 @@
+package wh40kdc
+
+import (
+	"regexp"
+	"strings"
+)
+
+// Single effects on the permission axis: what the target is eligible to do
+// and whom it can target. Mirror of the permission half of
+// tools/src/translate/effect-leaf.ts.
+
+var permissionActivities = map[string]string{
+	"shoot": "shoot", "declare-charge": "declare a charge", "fight": "fight", "start-action": "start an Action", "embark": "embark",
+	"disembark": "disembark", "fall-back": "Fall Back", "advance": "Advance", "use-stratagem": "be targeted with Stratagems",
+	"issue-order": "issue Orders", "attempt-ritual": "attempt Rituals", "use-enhancement": "use Enhancements", "move": "move", "observe": "act as an Observer",
+}
+var permissionAfter = map[string]string{
+	"advance": "Advanced", "fall-back": "Fell Back", "disembark": "disembarked", "normal": "made a Normal move",
+	"charge": "made a Charge move", "remain-stationary": "Remained Stationary", "set-up": "was set up",
+}
+var permissionDespite = map[string]string{
+	"engaged": "within Engagement Range of enemy units", "battle-shocked": "Battle-shocked", "shot-this-phase": "has already shot this phase",
+	"fought-this-phase": "has already fought this phase", "disembarked-this-turn": "disembarked this turn",
+	"stratagem-used-this-phase": "has already been targeted with that Stratagem this phase", "performing-action": "performing an Action",
+	"advanced": "Advanced this turn", "fell-back": "Fell Back this turn", "destroyed": "has just been destroyed",
+}
+var permissionIsState = map[string]bool{"engaged": true, "battle-shocked": true, "performing-action": true}
+var permissionAsIf = map[string]string{
+	"shooting-phase": " as if it were your Shooting phase", "fight-phase": " as if it were the Fight phase", "snap-shooting": " using the Snap Shooting rules",
+	"movement-phase": " as if it were your Movement phase", "charge-phase": " as if it were your Charge phase", "command-phase": " as if it were your Command phase",
+}
+
+func lookupOr(table map[string]string, key string) string {
+	if v, ok := table[key]; ok {
+		return v
+	}
+	return key
+}
+
+// permissionWeapons renders " with its sentry flamer or sentry grenade launcher": the weapons a
+// shoot permission allows, any one of them. Bare names read as the model's own weapons; any other
+// filter reads as a weapon noun.
+func permissionWeapons(m map[string]any, plural bool) string {
+	scopes, ok := asList(m["weapons"])
+	if !ok {
+		return ""
+	}
+	names := make([]string, 0, len(scopes))
+	for _, scope := range scopes {
+		o, isMap := scope.(map[string]any)
+		name, isName := o["name"].(string)
+		if !isMap || len(o) != 1 || !isName {
+			names = nil
+			break
+		}
+		names = append(names, name)
+	}
+	if names != nil {
+		own := "its"
+		if plural {
+			own = "their"
+		}
+		return " with " + own + " " + orList(names)
+	}
+	nouns := make([]string, len(scopes))
+	for i, scope := range scopes {
+		nouns[i] = weaponNoun(map[string]any{"weapons": scope})
+	}
+	return " with " + orList(nouns)
+}
+
+// permissionConsequences is "; if it does, it counts as having made a Normal move that phase, and
+// cannot declare a charge this turn": what using the permission does to its subject
+// (counts_as_move, its counts_as_until window, and the activities then_cannot forbids for the rest
+// of the turn).
+func permissionConsequences(m map[string]any, it string) string {
+	does, counts := "does", "counts"
+	if it == "they" {
+		does, counts = "do", "count"
+	}
+	lead := "; if " + it + " " + does + ", " + it
+	cannot := ""
+	if acts, ok := asList(m["then_cannot"]); ok {
+		parts := make([]string, len(acts))
+		for i, a := range acts {
+			parts[i] = lookupOr(permissionActivities, ejstr(a))
+		}
+		cannot = "cannot " + orList(parts) + " this turn"
+	}
+	if m["counts_as_move"] != nil {
+		period := "this turn"
+		if m["counts_as_until"] == "end-of-phase" {
+			period = "that phase"
+		}
+		tail := ""
+		if cannot != "" {
+			tail = ", and " + cannot
+		}
+		return lead + " " + counts + " as having made " + movedPhrase(m["counts_as_move"]) + " " + period + tail
+	}
+	if cannot != "" {
+		return lead + " " + cannot
+	}
+	return ""
+}
+
+func permissionLeaf(m map[string]any, subj string, ctx effCtx) string {
+	it := "it"
+	if strings.HasPrefix(subj, "all ") || unitsWordRe.MatchString(subj) {
+		it = "they"
+	}
+	act := lookupOr(permissionActivities, ejstr(m["activity"]))
+	if m["activity"] == "use-stratagem" && m["stratagem"] != nil {
+		act = "be targeted with the " + abilityLabel(m["stratagem"]) + " Stratagem"
+	}
+	into := ""
+	if m["into"] != nil {
+		prep := "into"
+		if m["activity"] == "shoot" {
+			prep = "at"
+		} else if m["activity"] == "declare-charge" {
+			prep = "against"
+		}
+		into = " " + prep + " " + noneOf(effectSubject(m["into"], ctx))
+	}
+	reach := ""
+	if m["reach"] != nil {
+		reach = " from up to " + rangePhrase(m["reach"]) + " away"
+	}
+	weapons := permissionWeapons(m, isPlural(subj))
+	var s string
+	if m["allow"] == false {
+		s = noneOf(subj) + " cannot " + act + weapons + into
+	} else {
+		s = subj + " " + ev(subj, "is") + " eligible to " + act + weapons + into + reach
+	}
+	if after, ok := asList(m["after"]); ok {
+		parts := make([]string, len(after))
+		for i, a := range after {
+			parts[i] = lookupOr(permissionAfter, ejstr(a))
+		}
+		s += " in a turn in which " + it + " " + orList(parts)
+	}
+	if despite, ok := asList(m["despite"]); ok {
+		clauses := make([]string, len(despite))
+		for i, d := range despite {
+			ds := ejstr(d)
+			phrase := lookupOr(permissionDespite, ds)
+			if ds == "transport-advanced" {
+				// The Transport the subject disembarks from Advanced, not the subject.
+				its := "its"
+				if it == "they" {
+					its = "their"
+				}
+				clauses[i] = its + " Transport Advanced this turn"
+			} else if permissionIsState[ds] {
+				pre := "it is "
+				if it == "they" {
+					pre = "they are "
+				}
+				clauses[i] = pre + phrase
+			} else if it == "they" {
+				// "they has already shot" -> "they have already shot".
+				clauses[i] = it + " " + replaceFirst(leadingHasRe, phrase, "have ")
+			} else {
+				clauses[i] = it + " " + phrase
+			}
+		}
+		s += " even if " + orList(clauses)
+	}
+	if m["as_if"] != nil {
+		if p, ok := permissionAsIf[ejstr(m["as_if"])]; ok {
+			s += p
+		} else {
+			s += " as if " + ejstr(m["as_if"])
+		}
+	}
+	if m["next"] == true {
+		s += ", and must be the next unit selected to " + act
+	}
+	s += permissionConsequences(m, it)
+	if m["consumes_shared_use"] == false {
+		s += "; this use does not count toward that Stratagem's once-per-phase limit for other units"
+	}
+	return s
+}
+
+var targetKinds = map[string]string{
+	"attack": " with attacks", "shoot": " with ranged attacks", "fight": " with melee attacks", "charge": " with a charge",
+	"stratagem": " with Stratagems", "ability": " with abilities",
+}
+
+func targetingLeaf(m map[string]any, subj string, ctx effCtx) string {
+	who := "units"
+	if m["by"] != nil {
+		who = effectSubject(m["by"], ctx)
+	} else if m["target"] != nil {
+		who = subj
+	}
+	who = leadingAllRe.ReplaceAllString(who, "")
+	_, byObject := asMap(m["by"])
+	attacking := who
+	if byObject || who == "units" || isPlural(who) {
+		attacking = "the attacking unit"
+		if modelsWordRe.MatchString(who) {
+			attacking = "the attacking model"
+		}
+	}
+	whom := subj
+	if m["target"] == "every-eligible" {
+		whom = "every eligible target"
+	} else if m["target"] != nil {
+		whom = effectSubject(m["target"], ctx)
+	}
+	// "That unit cannot be selected by the Noospheric Transference ability": one named ability's
+	// selection, by no named unit.
+	if m["kind"] == "ability" && m["ability"] != nil && m["by"] == nil && m["may"] != "redirect" {
+		modal := "can"
+		switch m["may"] {
+		case "cannot-target":
+			modal = "cannot"
+		case "must-target":
+			modal = "must"
+		}
+		return whom + " " + modal + " be selected by the " + abilityLabel(m["ability"]) + " ability"
+	}
+	verb := "can target"
+	switch m["may"] {
+	case "cannot-target":
+		verb = "cannot target"
+	case "must-target":
+		verb = "must target"
+	}
+	kind := targetKinds[ejstr(m["kind"])]
+	if m["kind"] == "stratagem" && m["stratagem"] != nil {
+		kind = " with the " + abilityLabel(m["stratagem"]) + " Stratagem"
+	} else if m["kind"] == "ability" && m["ability"] != nil {
+		kind = " with the " + abilityLabel(m["ability"]) + " ability"
+	} else if hasWeapon(m) {
+		kind = " with " + weaponNoun(m)
+	}
+	rng := ""
+	if m["range"] != nil {
+		if m["may"] == "cannot-target" {
+			rng = " unless " + attacking + " is within " + rangePhrase(m["range"])
+		} else {
+			rng = " within " + rangePhrase(m["range"])
+		}
+	}
+	unless := ""
+	if m["only_if_none"] != nil {
+		other := leadingAllRe.ReplaceAllString(effectSubject(m["only_if_none"], ctx), "")
+		unless = ", unless there is no other eligible " + replaceFirst(unitsWordRe, other, " unit")
+	}
+	if m["may"] == "redirect" {
+		return redirectPhrase(m, who, whom, ctx)
+	}
+	except := ""
+	if m["except"] == "core-stratagems" {
+		except = " (Core Stratagems can still target it)"
+	}
+	// "cannot target enemy units … if the target unit was engaged with this unit at the start of the turn".
+	if cond, ok := asMap(m["target_condition"]); ok && cond != nil {
+		condition := describeCondition(asTargetCandidate(cond).(map[string]any))
+		return who + " " + verb + " " + strings.TrimPrefix(whom, "all ") + kind + rng + unless + except + " if " + condition
+	}
+	return who + " " + verb + " " + whom + kind + rng + unless + except
+}
+
+// asTargetCandidate: a target_condition's this-unit is the unit checked as a target, so it reads as the target unit (defender).
+func asTargetCandidate(node any) any {
+	switch value := node.(type) {
+	case string:
+		if value == "this-unit" {
+			return "defender"
+		}
+		return value
+	case []any:
+		out := make([]any, len(value))
+		for i, item := range value {
+			out[i] = asTargetCandidate(item)
+		}
+		return out
+	case map[string]any:
+		out := make(map[string]any, len(value))
+		for key, item := range value {
+			out[key] = asTargetCandidate(item)
+		}
+		return out
+	}
+	return node
+}
+
+var leadingAVowelRe = regexp.MustCompile(`(?i)^a ([aeiou])`)
+
+// redirectPhrase renders a targeting redirect: "Attacks made by the triggering
+// unit that target a friendly X unit must target the unit instead".
+func redirectPhrase(m map[string]any, who, whom string, ctx effCtx) string {
+	to := effectSubject(m["to"], ctx)
+	what := "attacks"
+	switch m["kind"] {
+	case "stratagem":
+		what = "Stratagems"
+	case "shoot":
+		what = "ranged attacks"
+	case "fight":
+		what = "melee attacks"
+	}
+	// One unit is targeted at a time: "that target a friendly ANATHEMA PSYKANA unit".
+	one := whom
+	if strings.HasPrefix(whom, "all ") || isPlural(whom) {
+		single := replaceFirst(modelsWordFirstRe, replaceFirst(unitsWordFirstRe, strings.TrimPrefix(whom, "all "), " unit"), " model")
+		one = leadingAVowelRe.ReplaceAllString("a "+single, "an $1")
+	}
+	by := ""
+	if m["by"] != nil {
+		by = " made by " + who
+	}
+	eligible := ""
+	if m["if_eligible"] == true {
+		eligible = ", if " + to + " is an eligible target"
+	}
+	return what + by + " that target " + one + " must target " + to + " instead" + eligible
+}

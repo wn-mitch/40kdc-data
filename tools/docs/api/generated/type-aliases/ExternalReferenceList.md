@@ -8,7 +8,7 @@
 
 > **ExternalReferenceList** = [`ExternalReference`](../interfaces/ExternalReference.md)[]
 
-Defined in: [generated.ts:54](https://github.com/wn-mitch/40kdc-data/blob/c9c88e6391023daf41c88513e9ecb21950c56b1c/tools/src/generated.ts#L54)
+Defined in: [generated.ts:160](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L160)
 
 Known external source identities. More than one id per namespace and cross-entity fan-out are valid.
 

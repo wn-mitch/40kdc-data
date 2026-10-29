@@ -5,7 +5,7 @@
     "faction_id": "thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -172,7 +172,7 @@
     "faction_id": "thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -207,7 +207,7 @@
     "faction_id": "thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -248,7 +248,7 @@
     "faction_id": "thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -264,7 +264,7 @@
     "faction_id": "thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -285,7 +285,7 @@
     "faction_id": "thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -301,7 +301,7 @@
     "faction_id": "thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -317,7 +317,7 @@
     "faction_id": "thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -338,39 +338,7 @@
     "faction_id": "thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replacement_choice": [
-      [
-        "inferno-combi-weapon"
-      ],
-      [
-        "havoc-launcher"
-      ],
-      [
-        "havoc-launcher",
-        "inferno-combi-bolter"
-      ],
-      [
-        "inferno-combi-weapon",
-        "havoc-launcher"
-      ],
-      [
-        "inferno-combi-bolter"
-      ]
-    ],
-    "model_constraint": {
-      "any_number": true
-    }
-  },
-  {
-    "id": "chaos-rhino-wgo-mfm-2",
-    "unit_id": "chaos-rhino",
-    "faction_id": "thousand-sons",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -378,11 +346,33 @@
     ],
     "replacement_choice": [
       [
+        "inferno-combi-weapon",
+        "inferno-combi-bolter"
+      ],
+      [
         "havoc-launcher",
         "inferno-combi-weapon"
       ],
       [
+        "havoc-launcher",
+        "inferno-combi-bolter"
+      ],
+      [
         "havoc-launcher"
+      ],
+      [
+        "havoc-launcher",
+        "inferno-combi-bolter",
+        "inferno-combi-bolter"
+      ],
+      [
+        "inferno-combi-bolter",
+        "inferno-combi-weapon",
+        "havoc-launcher"
+      ],
+      [
+        "inferno-combi-bolter",
+        "inferno-combi-bolter"
       ]
     ],
     "model_constraint": {
@@ -395,7 +385,7 @@
     "faction_id": "thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -415,23 +405,18 @@
     "faction_id": "thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
-      "inferno-boltgun"
+      "inferno-boltgun-rubric-marines"
     ],
-    "replacement_choice": [
-      [
-        "soulreaper-cannon"
-      ],
-      [
-        "warpflamer"
-      ]
+    "replacement": [
+      "soulreaper-cannon"
     ],
     "model_constraint": {
       "model_name": "Rubric Marine",
-      "any_number": true
+      "max_count": 1
     }
   },
   {
@@ -440,7 +425,27 @@
     "faction_id": "thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "inferno-boltgun-rubric-marines"
+    ],
+    "replacement": [
+      "warpflamer"
+    ],
+    "model_constraint": {
+      "model_name": "Rubric Marine",
+      "any_number": true
+    }
+  },
+  {
+    "id": "rubric-marines-wgo-mfm-4",
+    "unit_id": "rubric-marines",
+    "faction_id": "thousand-sons",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -448,7 +453,7 @@
     ],
     "model_constraint": {
       "model_name": "Rubric Marine",
-      "any_number": true
+      "max_count": 1
     }
   },
   {
@@ -457,7 +462,7 @@
     "faction_id": "thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -478,7 +483,7 @@
     "faction_id": "thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -499,7 +504,7 @@
     "faction_id": "thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -516,7 +521,7 @@
     "faction_id": "thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -541,7 +546,7 @@
     "faction_id": "thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -561,7 +566,7 @@
     "faction_id": "thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -582,7 +587,7 @@
     "faction_id": "thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -598,7 +603,7 @@
     "faction_id": "thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -621,7 +626,7 @@
     "faction_id": "thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -640,7 +645,7 @@
     "faction_id": "thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -661,34 +666,7 @@
     "faction_id": "thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replaces": [
-      "heavy-missile-launcher"
-    ],
-    "replacement_choice": [
-      [
-        "electroscourge"
-      ],
-      [
-        "heavy-reaper-autocannon"
-      ],
-      [
-        "hades-lascannon"
-      ]
-    ],
-    "model_constraint": {
-      "any_number": true
-    }
-  },
-  {
-    "id": "defiler-wgo-mfm-4",
-    "unit_id": "defiler",
-    "faction_id": "thousand-sons",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -697,8 +675,20 @@
     ],
     "replacement_choice": [
       [
+        "electroscourge",
+        "heavy-baleflamer"
+      ],
+      [
+        "heavy-baleflamer",
+        "heavy-reaper-autocannon"
+      ],
+      [
         "hades-lascannon",
         "heavy-reaper-autocannon"
+      ],
+      [
+        "hades-lascannon",
+        "heavy-missile-launcher"
       ],
       [
         "heavy-reaper-autocannon",
@@ -713,34 +703,19 @@
         "electroscourge"
       ],
       [
-        "electroscourge",
-        "heavy-reaper-autocannon"
-      ]
-    ],
-    "model_constraint": {
-      "any_number": true
-    }
-  },
-  {
-    "id": "defiler-wgo-mfm-5",
-    "unit_id": "defiler",
-    "faction_id": "thousand-sons",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replaces": [
-      "heavy-baleflamer"
-    ],
-    "replacement_choice": [
-      [
+        "heavy-baleflamer",
         "hades-lascannon"
       ],
       [
+        "heavy-reaper-autocannon",
         "electroscourge"
       ],
       [
+        "heavy-missile-launcher",
+        "electroscourge"
+      ],
+      [
+        "heavy-missile-launcher",
         "heavy-reaper-autocannon"
       ]
     ],
@@ -754,7 +729,7 @@
     "faction_id": "thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -775,27 +750,15 @@
     "faction_id": "thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
       "tzaangor-blades"
     ],
-    "replacement_choice": [
-      [
-        "autopistol",
-        "chainsword-tzaangors"
-      ],
-      [
-        "autopistol",
-        "chainsword-tzaangors",
-        "brayhorn"
-      ],
-      [
-        "chainsword-tzaangors",
-        "herd-banner",
-        "autopistol"
-      ]
+    "replacement": [
+      "autopistol",
+      "chainsword-tzaangors"
     ],
     "model_constraint": {
       "model_name": "Tzaangor",
@@ -808,20 +771,54 @@
     "faction_id": "thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
+    "replaces": [
+      "tzaangor-blades"
+    ],
     "replacement_choice": [
       [
-        "herd-banner"
+        "herd-banner",
+        "tzaangor-blades"
       ],
       [
+        "chainsword-tzaangors",
+        "herd-banner",
+        "autopistol"
+      ]
+    ],
+    "model_constraint": {
+      "model_name": "Tzaangor",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "tzaangors-wgo-mfm-4",
+    "unit_id": "tzaangors",
+    "faction_id": "thousand-sons",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "tzaangor-blades"
+    ],
+    "replacement_choice": [
+      [
+        "autopistol",
+        "chainsword-tzaangors",
+        "brayhorn"
+      ],
+      [
+        "tzaangor-blades",
         "brayhorn"
       ]
     ],
     "model_constraint": {
       "model_name": "Tzaangor",
-      "any_number": true
+      "max_count": 1
     }
   },
   {
@@ -830,7 +827,7 @@
     "faction_id": "thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -850,7 +847,7 @@
     "faction_id": "thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -866,7 +863,7 @@
     "faction_id": "thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -886,7 +883,7 @@
     "faction_id": "thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -902,7 +899,7 @@
     "faction_id": "thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -921,7 +918,7 @@
     "faction_id": "thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -937,7 +934,7 @@
     "faction_id": "thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -960,7 +957,7 @@
     "faction_id": "thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -981,7 +978,7 @@
     "faction_id": "thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1005,7 +1002,7 @@
     "faction_id": "thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1026,7 +1023,7 @@
     "faction_id": "thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1046,7 +1043,7 @@
     "faction_id": "thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1057,6 +1054,59 @@
     ],
     "model_constraint": {
       "any_number": true
+    }
+  },
+  {
+    "id": "lord-of-change-wgo-mfm-1",
+    "unit_id": "lord-of-change",
+    "faction_id": "thousand-sons",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replacement_choice": [
+      [
+        "rod-of-sorcery"
+      ],
+      [
+        "baleful-sword"
+      ]
+    ],
+    "model_constraint": {
+      "any_number": true
+    }
+  },
+  {
+    "id": "pink-horrors-wgo-mfm-1",
+    "unit_id": "pink-horrors",
+    "faction_id": "thousand-sons",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replacement": [
+      "instrument-of-chaos"
+    ],
+    "model_constraint": {
+      "max_count": 1
+    }
+  },
+  {
+    "id": "pink-horrors-wgo-mfm-2",
+    "unit_id": "pink-horrors",
+    "faction_id": "thousand-sons",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replacement": [
+      "daemonic-icon"
+    ],
+    "model_constraint": {
+      "max_count": 1
     }
   }
 ]

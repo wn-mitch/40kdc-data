@@ -1,0 +1,328 @@
+[
+  {
+    "name": "bolt-rifle (saturation) x5 vs intercessor (vanilla, not stationary)",
+    "cruncher_case": "01-bolter-vs-intercessor.json",
+    "expected": {
+      "damageDealt": 1.6666666666666672,
+      "modelsDestroyed": 0.5876687158122916,
+      "modelsDestroyedDistribution": [
+        0.4845167486695373,
+        0.4457554087759743,
+        0.06728968605522534,
+        0.0024187076093583294,
+        0.000019432351733306228,
+        1.6538171687920194e-8
+      ]
+    }
+  },
+  {
+    "name": "chainsword x5 vs cultist mob (melee, vanilla)",
+    "cruncher_case": "03-chainsword-vs-cultist.json",
+    "expected": {
+      "damageDealt": 5.542962093852818,
+      "modelsDestroyed": 5.542962093852817,
+      "modelsDestroyedDistribution": [
+        0.0014907916242121134,
+        0.011467627878554718,
+        0.0419009480177961,
+        0.0966944954256833,
+        0.15805830983044386,
+        0.19453330440670014,
+        0.18705125423721164,
+        0.14388558018247047,
+        0.08992848761404405,
+        0.04611717313540721,
+        0.02887202764747641
+      ]
+    }
+  },
+  {
+    "name": "multi-melta x1 vs questoris knight, stationary, within half range",
+    "cruncher_case": "04-multi-melta-half-range-stationary-vs-knight.json",
+    "expected": {
+      "damageDealt": 1.6296296296296298,
+      "modelsDestroyed": 0,
+      "modelsDestroyedDistribution": [
+        1.0000000000000002,
+        0
+      ]
+    }
+  },
+  {
+    "name": "astartes-chainsword x5 (assault intercessors, sustained hits 1) vs cultist mob",
+    "cruncher_case": "06-sustained-hits-chainsword-vs-cultist.json",
+    "expected": {
+      "damageDealt": 9.999330472967081,
+      "modelsDestroyed": 9.999330472967081,
+      "modelsDestroyedDistribution": [
+        1.9992524181341963e-12,
+        7.633509232876018e-11,
+        1.419634444347851e-9,
+        1.713649221451973e-8,
+        1.5096071937801835e-7,
+        0.000001034604763019162,
+        0.000005742716176167343,
+        0.00002653713193667967,
+        0.0001041496571663287,
+        0.0003524346504294675,
+        0.9995099316443499
+      ]
+    }
+  },
+  {
+    "name": "devastating-wounds lascannon vs cultists with 5+ FNP all + 4+ FNP vs mortals",
+    "cruncher_case": "10-fnp-vs-mortal-devastating-lascannon-vs-cultists.json",
+    "expected": {
+      "damageDealt": 0.5374688817761519,
+      "modelsDestroyed": 0.5374688817761519,
+      "modelsDestroyedDistribution": [
+        0.46253111822384807,
+        0.5374688817761519,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  {
+    "name": "The Wailing Doom (ranged profile) vs intercessor — dual-profile weapon, shooting phase",
+    "cruncher_case": "15-wailing-doom-ranged-vs-intercessor.json",
+    "expected": {
+      "damageDealt": 1.9444444444444435,
+      "modelsDestroyed": 0.9722222222222218,
+      "modelsDestroyedDistribution": [
+        0.27962105624142675,
+        0.5757030178326472,
+        0.06430041152263373,
+        0.05358367626886143,
+        0.026791838134430708,
+        0
+      ]
+    }
+  },
+  {
+    "name": "The Wailing Doom (Sweep melee profile) vs intercessor — melee profile of a ranged-typed weapon, fight phase (uses WS, does not throw)",
+    "cruncher_case": "16-wailing-doom-sweep-melee-vs-intercessor.json",
+    "expected": {
+      "damageDealt": 8.054707746943016,
+      "modelsDestroyed": 4.027353873471508,
+      "modelsDestroyedDistribution": [
+        0.0038816992764391604,
+        0.027400230186629366,
+        0.08864780354497737,
+        0.1738192226372105,
+        0.23005485349042562,
+        0.47619619086431797
+      ]
+    }
+  },
+  {
+    "name": "The Wailing Doom (Strike melee profile) vs intercessor — second melee profile of a ranged-typed weapon, fight phase",
+    "cruncher_case": "17-wailing-doom-strike-melee-vs-intercessor.json",
+    "expected": {
+      "damageDealt": 8.1090200237641,
+      "modelsDestroyed": 4.05451001188205,
+      "modelsDestroyedDistribution": [
+        0.0008138438881562131,
+        0.01109787120213017,
+        0.06305608637573958,
+        0.19107904962345312,
+        0.3257029254945221,
+        0.4082502234159985
+      ]
+    }
+  },
+  {
+    "name": "bolt-rifle (saturation) x5 vs intercessor, critical hits on 5+ with Lethal Hits",
+    "cruncher_case": "24-crit-threshold-hit-5-lethal-bolter-vs-intercessor.json",
+    "expected": {
+      "damageDealt": 2.500000000000003,
+      "modelsDestroyed": 1.000244140625001,
+      "modelsDestroyedDistribution": [
+        0.2440252304077152,
+        0.5318498611450202,
+        0.20439720153808613,
+        0.019311904907226576,
+        0.00041484832763671886,
+        9.5367431640625e-7
+      ]
+    }
+  },
+  {
+    "name": "Canonical critical wound: ap",
+    "cruncher_case": "canonical-critical-wound-ap.json",
+    "expected": {
+      "damageDealt": 5.128075358102957,
+      "modelsDestroyed": 2.5640376790514785,
+      "modelsDestroyedDistribution": [
+        0.04973502207609718,
+        0.17407257726634012,
+        0.27416430919448564,
+        0.2558866885815199,
+        0.1567305967561809,
+        0.08941080612537677
+      ]
+    }
+  },
+  {
+    "name": "Canonical critical wound: damage",
+    "cruncher_case": "canonical-critical-wound-damage.json",
+    "expected": {
+      "damageDealt": 4.418834418205261,
+      "modelsDestroyed": 2.20941720910263,
+      "modelsDestroyedDistribution": [
+        0.08101311022241219,
+        0.23146602920689185,
+        0.297599180408861,
+        0.22674223269246543,
+        0.11337111634623268,
+        0.0498083311231379
+      ]
+    }
+  },
+  {
+    "name": "Canonical critical wound: devastating-damage",
+    "cruncher_case": "canonical-critical-wound-devastating-damage.json",
+    "expected": {
+      "damageDealt": 5.474397497209788,
+      "modelsDestroyed": 2.737198748604894,
+      "modelsDestroyedDistribution": [
+        0.03861077083162306,
+        0.14850296473701174,
+        0.257024362044828,
+        0.2636147303023877,
+        0.177432991549684,
+        0.11481418053446539
+      ]
+    }
+  },
+  {
+    "name": "multi-melta x1 vs questoris knight, stationary, within half range + damage zeroing (1 use per unit)",
+    "cruncher_case": "04-multi-melta-half-range-stationary-vs-knight.json",
+    "zeroing": {
+      "uses": 1,
+      "per": "unit"
+    },
+    "expected": {
+      "damageDealt": 0.12071330589849108,
+      "modelsDestroyed": 0,
+      "modelsDestroyedDistribution": [
+        1.0000000000000002,
+        0
+      ]
+    }
+  },
+  {
+    "name": "The Wailing Doom (ranged profile) vs intercessor — dual-profile weapon, shooting phase + damage zeroing (1 use per model)",
+    "cruncher_case": "15-wailing-doom-ranged-vs-intercessor.json",
+    "zeroing": {
+      "uses": 1,
+      "per": "model"
+    },
+    "expected": {
+      "damageDealt": 0.34293552812071315,
+      "modelsDestroyed": 0.17146776406035658,
+      "modelsDestroyedDistribution": [
+        0.8553240740740741,
+        0.11788408779149517,
+        0.026791838134430708,
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  {
+    "name": "The Wailing Doom (Sweep melee profile) vs intercessor — melee profile of a ranged-typed weapon, fight phase (uses WS, does not throw) + damage zeroing (2 uses per unit)",
+    "cruncher_case": "16-wailing-doom-sweep-melee-vs-intercessor.json",
+    "zeroing": {
+      "uses": 2,
+      "per": "unit"
+    },
+    "expected": {
+      "damageDealt": 4.866543553690116,
+      "modelsDestroyed": 2.433271776845058,
+      "modelsDestroyedDistribution": [
+        0.1199297330080459,
+        0.1738192226372105,
+        0.23005485349042562,
+        0.21652221504981234,
+        0.14859367699496925,
+        0.11108029881953639
+      ]
+    }
+  },
+  {
+    "name": "devastating-wounds lascannon vs cultists with 5+ FNP all + 4+ FNP vs mortals + damage zeroing (2 uses per unit)",
+    "cruncher_case": "10-fnp-vs-mortal-devastating-lascannon-vs-cultists.json",
+    "zeroing": {
+      "uses": 2,
+      "per": "unit"
+    },
+    "expected": {
+      "damageDealt": 0.09566631102982269,
+      "modelsDestroyed": 0.09566631102982269,
+      "modelsDestroyedDistribution": [
+        0.9043336889701774,
+        0.09566631102982269,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  {
+    "name": "The Wailing Doom (Sweep melee profile) vs intercessor — melee profile of a ranged-typed weapon, fight phase (uses WS, does not throw) + damage zeroing (2 uses per unit from buffs)",
+    "cruncher_case": "16-wailing-doom-sweep-melee-vs-intercessor.json",
+    "buffs": [
+      {
+        "source": {
+          "kind": "ability",
+          "abilityId": "fabricated-plating",
+          "abilityKind": "unit"
+        },
+        "contribution": {
+          "type": "damage-zeroing",
+          "uses": 1,
+          "per": "unit"
+        }
+      },
+      {
+        "source": {
+          "kind": "ability",
+          "abilityId": "fabricated-shroud",
+          "abilityKind": "unit"
+        },
+        "contribution": {
+          "type": "damage-zeroing",
+          "uses": 1,
+          "per": "unit"
+        }
+      }
+    ],
+    "expected": {
+      "damageDealt": 4.866543553690116,
+      "modelsDestroyed": 2.433271776845058,
+      "modelsDestroyedDistribution": [
+        0.1199297330080459,
+        0.1738192226372105,
+        0.23005485349042562,
+        0.21652221504981234,
+        0.14859367699496925,
+        0.11108029881953639
+      ]
+    }
+  }
+]

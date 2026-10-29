@@ -9,7 +9,7 @@
 //! infantry squads and is exactly what the conformance corpus pins. Mirror of
 //! `tools/src/data/loadout.ts`.
 
-use std::collections::{BTreeMap, HashMap, HashSet};
+use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
 use std::num::NonZeroU64;
 
 use crate::generated::{
@@ -216,8 +216,12 @@ pub struct LoadoutVariantBudget {
     pub count: u64,
     pub per_models: u64,
     pub unit_scope: bool,
+    pub stepped: bool,
 }
 
+/// A variant budget's allowance: flat `count` when `per_models` is 0, else
+/// `count * floor(models / per_models)` when `stepped`, else the proportional
+/// `floor(models * count / per_models)`, over the unit's or the row's models.
 pub fn variant_budget_cap(
     budget: &LoadoutVariantBudget,
     unit_model_count: u64,
@@ -231,6 +235,9 @@ pub fn variant_budget_cap(
     } else {
         row_model_count
     };
+    if budget.stepped {
+        return budget.count * (models / budget.per_models);
+    }
     models * budget.count / budget.per_models
 }
 
@@ -245,10 +252,28 @@ mod variant_tests {
             count: 1,
             per_models,
             unit_scope,
+            stepped: false,
         };
         assert_eq!(variant_budget_cap(&budget(10, true), 20, 5), 2);
         assert_eq!(variant_budget_cap(&budget(5, false), 20, 5), 1);
         assert_eq!(variant_budget_cap(&budget(0, true), 20, 5), 1);
+    }
+
+    #[test]
+    fn stepped_caps_grow_per_full_block_of_models() {
+        let budget = |stepped| LoadoutVariantBudget {
+            variant_names: vec!["A".to_owned()],
+            count: 2,
+            per_models: 5,
+            unit_scope: true,
+            stepped,
+        };
+        let caps: Vec<u64> = [4, 5, 8, 9, 10]
+            .iter()
+            .map(|&models| variant_budget_cap(&budget(true), models, 0))
+            .collect();
+        assert_eq!(caps, vec![0, 2, 2, 2, 4]);
+        assert_eq!(variant_budget_cap(&budget(false), 8, 0), 3);
     }
 }
 
@@ -281,6 +306,7 @@ impl From<&UnitCompositionModelsItem> for LoadoutModel {
                     count: budget.count.get(),
                     per_models: budget.per_models,
                     unit_scope: budget.scope.to_string() == "unit",
+                    stepped: budget.stepped == Some(true),
                 })
                 .collect(),
         }
@@ -694,6 +720,49 @@ fn clamp_flat_budgets(unit: &Unit, counts: &mut BTreeMap<String, i64>) {
     }
 }
 
+/// The most times a swap scoped to a model name several composition rows share can be
+/// taken: the named rows' models carrying what it replaces. Same-named rows split one
+/// miniature by default loadout (Imperial Navy Breachers' Navis Armsmen), and each row's
+/// swap is scoped to the whole name, so [`option_cap`]'s eligible-model count would let
+/// one row's swap be taken by every model of the name. `None` for any other option.
+fn shared_row_swap_cap(
+    option: &WargearOption,
+    model_count: u64,
+    models: Option<&[LoadoutModel]>,
+) -> Option<u64> {
+    let name = option.model_constraint.as_ref()?.model_name.as_ref()?;
+    let rows = models?;
+    if option.replaces.is_empty() || !has_recorded_defaults(models) {
+        return None;
+    }
+    if rows
+        .iter()
+        .filter(|m| m.name.as_deref() == Some(name.as_str()))
+        .count()
+        < 2
+    {
+        return None;
+    }
+    let mut carried: BTreeMap<&str, u64> = BTreeMap::new();
+    for (model, count) in allocate_models(rows, model_count) {
+        if model.name.as_deref() != Some(name.as_str()) {
+            continue;
+        }
+        for id in &model.default_weapon_ids {
+            *carried.entry(id.as_str()).or_insert(0) += count;
+        }
+    }
+    let replaces: Vec<String> = option
+        .replaces
+        .iter()
+        .map(|id| id.as_str().to_string())
+        .collect();
+    to_multiset(&replaces)
+        .iter()
+        .map(|(id, n)| carried.get(id.as_str()).copied().unwrap_or(0) / n)
+        .min()
+}
+
 /// Inclusive valid count range for each weapon/wargear id, used to clamp a UI's
 /// per-weapon inputs so invalid loadouts are unreachable.
 pub fn weapon_bounds(
@@ -708,7 +777,8 @@ pub fn weapon_bounds(
         bounds.insert(id, WeaponBound { min: n, max: n });
     }
     for option in options {
-        let cap = option_cap(option, model_count, models);
+        let cap = option_cap(option, model_count, models)
+            .min(shared_row_swap_cap(option, model_count, models).unwrap_or(u64::MAX));
         for id in &option.replaces {
             let b = bounds
                 .entry(id.to_string())
@@ -910,8 +980,8 @@ fn option_bundles(option: &WargearOption) -> Vec<Vec<String>> {
         .collect()
 }
 
-/// Unit abilities printed in an aggregate loadout are carried as synthetic pure-add
-/// options when no ordinary option reaches them. This lets the exact-cover solver
+/// Wargear whose ability the datasheet prints, present in an aggregate loadout, is carried as
+/// a synthetic pure-add option when no ordinary option reaches it. This lets the exact-cover solver
 /// assign them to models without treating source-printed abilities as global noise.
 fn options_with_printed_unit_abilities(
     unit: &Unit,
@@ -928,8 +998,10 @@ fn options_with_printed_unit_abilities(
     }
     let mut effective: Vec<WargearOption> =
         options.iter().map(|option| (*option).clone()).collect();
-    for ability_id in &unit.ability_ids {
-        let id = ability_id.as_str().to_owned();
+    // A wargear item whose rule the datasheet prints ({id, wargear} in ability_ids) is stock
+    // equipment even when no option reaches it.
+    for wargear_id in super::printed_wargear_ids(unit) {
+        let id = wargear_id.to_owned();
         let Some(&count) = counts.get(&id) else {
             continue;
         };
@@ -952,7 +1024,9 @@ fn options_with_printed_unit_abilities(
                 model_name: None,
                 per_n_models: None,
             }),
-            replacement: vec![ability_id.clone()],
+            replacement: vec![wargear_id
+                .parse::<EntityId>()
+                .expect("a wargear id is a valid entity id")],
             replacement_choice: Vec::new(),
             replaces: Vec::new(),
             unit_id: unit.id.clone(),
@@ -1406,6 +1480,14 @@ fn solve_assignment(
         variant_usage: BTreeMap<String, i64>,
         picks: Vec<(usize, usize, u64)>,
         visitor: &'a mut F,
+        /// States whose subtree reached no complete assignment.
+        dead: HashSet<String>,
+        reached: u64,
+        item_ids: Vec<String>,
+        /// Per row, per candidate index: (min, max) per-model count of each item over candidates `ci..`.
+        suffix_extremes: Vec<Vec<(Vec<i64>, Vec<i64>)>>,
+        /// Per row: (min, max) total of each item rows `ri..` supply at full count.
+        tail: Vec<(Vec<i64>, Vec<i64>)>,
     }
     impl<F: FnMut(&[(usize, usize, u64)]) -> bool> Search<'_, F> {
         fn assign_row(&mut self, row_index: usize) -> bool {
@@ -1413,11 +1495,66 @@ fn solve_assignment(
                 if self.lower.values().any(|count| *count > 0) {
                     return false;
                 }
+                self.reached += 1;
                 return (self.visitor)(&self.picks);
             }
             self.distribute(row_index, 0, self.rows[row_index].count)
         }
+        /// Whether the unplaced models can still field every item's remaining bounds.
+        fn reachable(&self, row_index: usize, candidate_index: usize, left: u64) -> bool {
+            let (here_min, here_max) = &self.suffix_extremes[row_index][candidate_index];
+            let (tail_min, tail_max) = &self.tail[row_index + 1];
+            let left = left as i64;
+            self.item_ids.iter().enumerate().all(|(at, id)| {
+                let (mut most, mut least) = (tail_max[at], tail_min[at]);
+                if left > 0 {
+                    most = most.saturating_add(left.saturating_mul(here_max[at]));
+                    least = least.saturating_add(left.saturating_mul(here_min[at]));
+                }
+                self.lower.get(id).copied().unwrap_or(0) <= most
+                    && self.upper.get(id).copied().unwrap_or(0) >= least
+            })
+        }
+        /// Remaining lower bounds are fixed by remaining upper bounds: both start from
+        /// fixed bags and every pick subtracts the same amount from each.
+        fn state_key(&self, row_index: usize, candidate_index: usize, left: u64) -> String {
+            let mut key = format!("{row_index}|{candidate_index}|{left}|");
+            for (id, count) in &self.upper {
+                if *count != 0 {
+                    key.push_str(&format!("{id}:{count},"));
+                }
+            }
+            key.push('|');
+            for count in &self.option_usage {
+                key.push_str(&format!("{count},"));
+            }
+            key.push('|');
+            for (id, count) in &self.variant_usage {
+                if *count != 0 {
+                    key.push_str(&format!("{id}:{count},"));
+                }
+            }
+            key
+        }
         fn distribute(&mut self, row_index: usize, candidate_index: usize, left: u64) -> bool {
+            if left > 0 && candidate_index == self.rows[row_index].candidates.len() {
+                return false;
+            }
+            if !self.reachable(row_index, candidate_index, left) {
+                return false;
+            }
+            let key = self.state_key(row_index, candidate_index, left);
+            if self.dead.contains(&key) {
+                return false;
+            }
+            let before = self.reached;
+            let found = self.distribute_from(row_index, candidate_index, left);
+            if !found && self.reached == before {
+                self.dead.insert(key);
+            }
+            found
+        }
+        fn distribute_from(&mut self, row_index: usize, candidate_index: usize, left: u64) -> bool {
             if candidate_index == self.rows[row_index].candidates.len() {
                 return left == 0 && self.assign_row(row_index + 1);
             }
@@ -1483,6 +1620,65 @@ fn solve_assignment(
             false
         }
     }
+    let mut item_set: BTreeSet<String> = lower.keys().chain(upper.keys()).cloned().collect();
+    for row in rows {
+        for candidate in &row.candidates {
+            item_set.extend(candidate.weapons.keys().cloned());
+        }
+    }
+    let item_ids: Vec<String> = item_set.into_iter().collect();
+    let per_model =
+        |candidate: &RowCandidate, id: &String| candidate.weapons.get(id).copied().unwrap_or(0);
+    let suffix_extremes: Vec<Vec<(Vec<i64>, Vec<i64>)>> = rows
+        .iter()
+        .map(|row| {
+            let mut out = vec![(
+                vec![i64::MAX; item_ids.len()],
+                vec![i64::MIN; item_ids.len()],
+            )];
+            for candidate in row.candidates.iter().rev() {
+                let (next_min, next_max) = out.last().unwrap();
+                let here = (
+                    item_ids
+                        .iter()
+                        .enumerate()
+                        .map(|(at, id)| next_min[at].min(per_model(candidate, id)))
+                        .collect(),
+                    item_ids
+                        .iter()
+                        .enumerate()
+                        .map(|(at, id)| next_max[at].max(per_model(candidate, id)))
+                        .collect(),
+                );
+                out.push(here);
+            }
+            out.reverse();
+            out
+        })
+        .collect();
+    let mut tail = vec![(vec![0i64; item_ids.len()], vec![0i64; item_ids.len()])];
+    for row_index in (0..rows.len()).rev() {
+        let (full_min, full_max) = &suffix_extremes[row_index][0];
+        let (tail_min, tail_max) = tail.last().unwrap();
+        let count = rows[row_index].count as i64;
+        let scale = |base: i64, per: i64| {
+            if count > 0 {
+                base.saturating_add(count.saturating_mul(per))
+            } else {
+                base
+            }
+        };
+        let here = (
+            (0..item_ids.len())
+                .map(|at| scale(tail_min[at], full_min[at]))
+                .collect(),
+            (0..item_ids.len())
+                .map(|at| scale(tail_max[at], full_max[at]))
+                .collect(),
+        );
+        tail.push(here);
+    }
+    tail.reverse();
     let mut search = Search {
         rows,
         option_caps,
@@ -1493,6 +1689,11 @@ fn solve_assignment(
         variant_usage: BTreeMap::new(),
         picks: Vec::new(),
         visitor: &mut on_solution,
+        dead: HashSet::new(),
+        reached: 0,
+        item_ids,
+        suffix_extremes,
+        tail,
     };
     if search.assign_row(0) {
         Some(search.picks)
@@ -1713,50 +1914,148 @@ pub fn complete_loadout(
     models: Option<&[LoadoutModel]>,
     explicit_counts: &BTreeMap<String, i64>,
 ) -> Option<CompletedLoadout> {
-    if model_count == 0 || !has_recorded_loadout_bases(models) {
-        return None;
-    }
-    let models = models.expect("recorded bases imply Some");
+    complete_loadout_relaxing(unit, model_count, options, models, explicit_counts, None)
+}
+
+/// The lower bounds [`complete_loadout`] tries in turn: every explicit count,
+/// then the same with the secondary items several multi-item choice branches
+/// share left free.
+fn completion_lower_bounds(
+    options: &[&WargearOption],
+    models: &[LoadoutModel],
+    explicit_counts: &BTreeMap<String, i64>,
+) -> Vec<BTreeMap<String, i64>> {
     let strict_lower: BTreeMap<String, i64> = explicit_counts
         .iter()
         .filter(|(_, count)| **count > 0)
         .map(|(id, count)| (id.clone(), *count))
         .collect();
     let mut lower_variants = vec![strict_lower.clone()];
+    let mut relaxed_lower = strict_lower.clone();
+    for id in repeated_co_items(options, models) {
+        relaxed_lower.remove(&id);
+    }
+    if relaxed_lower.len() != strict_lower.len() {
+        lower_variants.push(relaxed_lower);
+    }
+    lower_variants
+}
+
+/// Items [`complete_loadout`]'s second pass leaves free. Some source exporters
+/// double-count a secondary item shared by several branches of one choice (the
+/// primary selections are still exact). A weapon repeated in at least two
+/// multi-item branches, and never a pick on its own, is mechanically determined
+/// by those primary selections, so the pass may derive its count rather than
+/// requiring the duplicated aggregate. Defaults are never relaxed. A branch is
+/// read net of the option's own `replaces`: an item a branch hands back is kept,
+/// not picked (a whole-menu option re-adds the boltgun a champion keeps).
+fn repeated_co_items(options: &[&WargearOption], models: &[LoadoutModel]) -> HashSet<String> {
     let default_ids: HashSet<String> = models
         .iter()
         .flat_map(|model| model.default_weapon_ids.iter().cloned())
         .collect();
-    let mut repeated_co_items = HashSet::new();
+    let mut out = HashSet::new();
     for option in options {
         let mut occurrences: HashMap<String, u64> = HashMap::new();
         for branch in &option.replacement_choice {
+            let branch = net_of_replaces(branch, &option.replaces);
             if branch.len() < 2 {
                 continue;
             }
-            let unique: HashSet<&str> = branch.iter().map(|id| id.as_str()).collect();
+            let unique: HashSet<&str> = branch.iter().copied().collect();
             for id in unique {
                 *occurrences.entry(id.to_owned()).or_insert(0) += 1;
             }
         }
         for (id, occurrences) in occurrences {
             if occurrences >= 2 && !default_ids.contains(&id) {
-                repeated_co_items.insert(id);
+                out.insert(id);
             }
         }
     }
-    let mut relaxed_lower = strict_lower.clone();
-    for id in repeated_co_items {
-        relaxed_lower.remove(&id);
+    for option in options {
+        let branches: Vec<&Vec<EntityId>> = if option.replacement.is_empty() {
+            option.replacement_choice.iter().collect()
+        } else {
+            vec![&option.replacement]
+        };
+        for branch in branches {
+            let branch = net_of_replaces(branch, &option.replaces);
+            if branch.len() == 1 {
+                out.remove(branch[0]);
+            }
+        }
     }
-    if relaxed_lower.len() != strict_lower.len() {
-        lower_variants.push(relaxed_lower);
-    }
+    out
+}
 
+/// `branch` without one copy of each id in `replaces` (the items it keeps).
+fn net_of_replaces<'a>(branch: &'a [EntityId], replaces: &[EntityId]) -> Vec<&'a str> {
+    let mut kept: HashMap<&str, usize> = HashMap::new();
+    for id in replaces {
+        *kept.entry(id.as_str()).or_insert(0) += 1;
+    }
+    branch
+        .iter()
+        .map(|id| id.as_str())
+        .filter(|id| match kept.get_mut(id) {
+            Some(left) if *left > 0 => {
+                *left -= 1;
+                false
+            }
+            _ => true,
+        })
+        .collect()
+}
+
+/// [`complete_loadout`] with one variant cap token (see `row_candidates`) lifted, or none.
+fn complete_loadout_relaxing(
+    unit: &Unit,
+    model_count: u64,
+    options: &[&WargearOption],
+    models: Option<&[LoadoutModel]>,
+    explicit_counts: &BTreeMap<String, i64>,
+    relaxed: Option<&str>,
+) -> Option<CompletedLoadout> {
+    if model_count == 0 || !has_recorded_loadout_bases(models) {
+        return None;
+    }
+    let models = models.expect("recorded bases imply Some");
     let effective_options = options_with_printed_unit_abilities(unit, options, explicit_counts);
     let option_refs: Vec<&WargearOption> = effective_options.iter().collect();
+    search_completion(
+        unit,
+        model_count,
+        &option_refs,
+        models,
+        &completion_lower_bounds(options, models, explicit_counts),
+        |defaults| {
+            let mut upper = defaults.clone();
+            for (id, explicit) in explicit_counts {
+                let current = upper.entry(id.clone()).or_insert(0);
+                *current = (*current).max(*explicit);
+            }
+            upper
+        },
+        relaxed,
+    )
+}
+
+/// The first legal whole-model assignment, over every composition allocation,
+/// that fields at least `lower` of each item and at most `upper_for(defaults)`,
+/// where `defaults` is the allocation's aggregate default equipment. A
+/// `relaxed` variant cap token is treated as unbounded.
+fn search_completion(
+    unit: &Unit,
+    model_count: u64,
+    option_refs: &[&WargearOption],
+    models: &[LoadoutModel],
+    lower_variants: &[BTreeMap<String, i64>],
+    upper_for: impl Fn(&BTreeMap<String, i64>) -> BTreeMap<String, i64>,
+    relaxed: Option<&str>,
+) -> Option<CompletedLoadout> {
     for lower in lower_variants {
-        for row_counts in candidate_row_counts(models, model_count, &lower) {
+        for row_counts in candidate_row_counts(models, model_count, lower) {
             let fixed_models: Vec<LoadoutModel> = models
                 .iter()
                 .zip(&row_counts)
@@ -1767,16 +2066,13 @@ pub fn complete_loadout(
                     fixed
                 })
                 .collect();
-            let mut upper = BTreeMap::new();
+            let mut defaults = BTreeMap::new();
             for (index, model) in fixed_models.iter().enumerate() {
                 for id in &model.default_weapon_ids {
-                    *upper.entry(id.clone()).or_insert(0) += row_counts[index] as i64;
+                    *defaults.entry(id.clone()).or_insert(0) += row_counts[index] as i64;
                 }
             }
-            for (id, explicit) in explicit_counts {
-                let current = upper.entry(id.clone()).or_insert(0);
-                *current = (*current).max(*explicit);
-            }
+            let upper = upper_for(&defaults);
             let option_caps: Vec<i64> = option_refs
                 .iter()
                 .map(|option| option_cap(option, model_count, Some(&fixed_models)) as i64)
@@ -1788,8 +2084,15 @@ pub fn complete_loadout(
                 if count == 0 {
                     continue;
                 }
-                let mut prepared = row_candidates(model, index, count, model_count, &option_refs);
-                variant_caps.extend(prepared.variant_caps);
+                let mut prepared = row_candidates(model, index, count, model_count, option_refs);
+                for (token, cap) in prepared.variant_caps {
+                    let cap = if relaxed == Some(token.as_str()) {
+                        i64::MAX
+                    } else {
+                        cap
+                    };
+                    variant_caps.insert(token, cap);
+                }
                 prepared.candidates.retain(|candidate| {
                     candidate
                         .weapons
@@ -1800,7 +2103,7 @@ pub fn complete_loadout(
                             .iter()
                             .all(|&option_index| option_caps[option_index] >= 1)
                 });
-                sort_completion_candidates(&mut prepared.candidates, &lower);
+                sort_completion_candidates(&mut prepared.candidates, lower);
                 rows.push(SolverRow {
                     name: model.name.clone(),
                     count,
@@ -1907,10 +2210,39 @@ pub fn validate_loadout(
             out.sort_by(|a, b| a.id.cmp(&b.id).then(a.code.as_str().cmp(b.code.as_str())));
             return out;
         }
-        if counts.values().all(|count| *count >= 0)
-            && complete_loadout(unit, model_count, options, models, &count_tree).is_some()
-        {
-            return out;
+        if counts.values().all(|count| *count >= 0) {
+            let rows = models.expect("recorded bases imply Some");
+            if let Some(completed) =
+                complete_loadout(unit, model_count, options, models, &count_tree)
+            {
+                // A completion may field fewer copies of a relaxed co-item than
+                // the source claims (exporter tolerance); a claim no legal
+                // loadout reaches is still over its cap.
+                let relaxed = repeated_co_items(options, rows);
+                let underfielded: Vec<String> = count_tree
+                    .iter()
+                    .filter(|(id, count)| {
+                        relaxed.contains(id.as_str())
+                            && **count > completed.counts.get(id.as_str()).copied().unwrap_or(0)
+                    })
+                    .map(|(id, _)| id.clone())
+                    .collect();
+                let mut solo = solo_cap_violations(
+                    unit,
+                    model_count,
+                    options,
+                    rows,
+                    &count_tree,
+                    &underfielded,
+                );
+                solo.sort_by(|a, b| a.id.cmp(&b.id).then(a.code.as_str().cmp(b.code.as_str())));
+                return solo;
+            }
+            let mut capped = variant_cap_violations(unit, model_count, options, rows, &count_tree);
+            if !capped.is_empty() {
+                capped.sort_by(|a, b| a.id.cmp(&b.id).then(a.code.as_str().cmp(b.code.as_str())));
+                return capped;
+            }
         }
         out.push(Violation {
             id: unit.id.to_string(),
@@ -1964,75 +2296,269 @@ pub fn validate_loadout(
     out
 }
 
-/// Shared-allowance violations: each [`Unit::wargear_budgets`] entry lets its
+/// `count` copies scaled by a budget's ratio at `model_count` (flat when `per_models` is 0).
+fn budget_cap(per_models: u64, model_count: u64, count: u64) -> i64 {
+    if per_models == 0 {
+        count as i64
+    } else {
+        (model_count * count / per_models) as i64
+    }
+}
+
+fn budget_limit_text(per_models: u64, count: u64) -> String {
+    if per_models == 0 {
+        format!("{count} per unit")
+    } else {
+        format!("{count} per {per_models} models")
+    }
+}
+
+/// Wargear-budget violations: each [`Unit::wargear_budgets`] entry lets its
 /// listed items take at most `floor(model_count * count / per_models)` copies
-/// between them. Summing the final counts is robust to *how* the items are
-/// equipped — unlike per-option caps, which the dump's cross-product loadout
-/// branches defeat. The violation `id` is the budget's sorted items joined by `+`.
+/// between them (`per_models == 0` is a flat per-unit cap), and its optional
+/// `duplicate_limit` caps any one item on the same scale. Summing the final
+/// counts is robust to *how* the items are equipped — unlike per-option caps,
+/// which the dump's cross-product loadout branches defeat.
+///
+/// An item's own cap is the least of every budget's allowance and duplicate cap
+/// that lists it; an item over it is `exceeds-max` on that item, in id order. A
+/// budget whose items are each within their own caps but overdraw it together is
+/// `exceeds-allowance` on its sorted items joined by `+`, in budget order.
 /// Mirror of `tools/src/data/loadout.ts`.
 fn budget_violations(
     unit: &Unit,
     model_count: u64,
     counts: &HashMap<String, i64>,
 ) -> Vec<Violation> {
+    let budgets: Vec<_> = unit
+        .wargear_budgets
+        .iter()
+        .filter(|budget| !budget.items.is_empty())
+        .collect();
+    let mut item_caps: BTreeMap<String, (i64, String)> = BTreeMap::new();
+    let mut tighten = |id: &str, cap: i64, limit: String| {
+        if item_caps.get(id).is_none_or(|(current, _)| cap < *current) {
+            item_caps.insert(id.to_owned(), (cap, limit));
+        }
+    };
+    for budget in &budgets {
+        let count = budget.count.get();
+        for item in &budget.items {
+            tighten(
+                item,
+                budget_cap(budget.per_models, model_count, count),
+                budget_limit_text(budget.per_models, count),
+            );
+            if let Some(dup) = budget.duplicate_limit {
+                let dup = dup.get();
+                tighten(
+                    item,
+                    budget_cap(budget.per_models, model_count, dup),
+                    format!("{} of one item", budget_limit_text(budget.per_models, dup)),
+                );
+            }
+        }
+    }
+    let used_of = |id: &str| counts.get(id).copied().unwrap_or(0);
+    let over = |id: &str| item_caps.get(id).is_some_and(|(cap, _)| used_of(id) > *cap);
     let mut out = Vec::new();
-    for budget in &unit.wargear_budgets {
-        if budget.items.is_empty() {
+    for (id, (cap, limit)) in &item_caps {
+        if !over(id) {
             continue;
         }
-        let used: i64 = budget
-            .items
-            .iter()
-            .map(|id| counts.get(&***id).copied().unwrap_or(0))
-            .sum();
-        // `per_models == 0` is a flat per-unit cap of `count`; otherwise a ratio.
-        let (cap, limit) = if budget.per_models == 0 {
-            (
-                budget.count.get() as i64,
-                format!("{} per unit", budget.count.get()),
-            )
-        } else {
-            (
-                (model_count * budget.count.get() / budget.per_models) as i64,
-                format!("{} per {} models", budget.count.get(), budget.per_models),
-            )
-        };
-        if used > cap {
-            let mut items: Vec<String> = budget.items.iter().map(|i| i.to_string()).collect();
-            items.sort();
-            let id = items.join("+");
+        out.push(Violation {
+            id: id.clone(),
+            code: ViolationCode::ExceedsMax,
+            message: format!("{id}: {} exceeds allowance {cap} ({limit})", used_of(id)),
+        });
+    }
+    for budget in &budgets {
+        let used: i64 = budget.items.iter().map(|id| used_of(id)).sum();
+        let cap = budget_cap(budget.per_models, model_count, budget.count.get());
+        if used <= cap || budget.items.iter().any(|id| over(id)) {
+            continue;
+        }
+        let mut items: Vec<String> = budget.items.iter().map(|i| i.to_string()).collect();
+        items.sort();
+        let id = items.join("+");
+        out.push(Violation {
+            code: ViolationCode::ExceedsAllowance,
+            message: format!(
+                "{id}: {used} exceeds shared allowance {cap} ({})",
+                budget_limit_text(budget.per_models, budget.count.get())
+            ),
+            id,
+        });
+    }
+    out
+}
+
+/// `exceeds-max` on each of `ids` (in id order) whose submitted count no legal
+/// build fields: every option, variant and budget cap applied, other submitted
+/// items free up to their envelope.
+fn solo_cap_violations(
+    unit: &Unit,
+    model_count: u64,
+    options: &[&WargearOption],
+    models: &[LoadoutModel],
+    counts: &BTreeMap<String, i64>,
+    ids: &[String],
+) -> Vec<Violation> {
+    let mut wanted: Vec<&String> = ids
+        .iter()
+        .filter(|id| counts.get(id.as_str()).copied().unwrap_or(0) > 0)
+        .collect();
+    wanted.sort();
+    wanted.dedup();
+    if wanted.is_empty() {
+        return Vec::new();
+    }
+    let effective_options = options_with_printed_unit_abilities(unit, options, counts);
+    let option_refs: Vec<&WargearOption> = effective_options.iter().collect();
+    let mut envelope: BTreeMap<String, i64> =
+        weapon_bounds(unit, model_count, options, Some(models))
+            .into_iter()
+            .map(|(id, bound)| (id, bound.max as i64))
+            .collect();
+    for budget in &unit.wargear_budgets {
+        for item in &budget.items {
+            let mut cap = budget_cap(budget.per_models, model_count, budget.count.get());
+            if let Some(dup) = budget.duplicate_limit {
+                cap = cap.min(budget_cap(budget.per_models, model_count, dup.get()));
+            }
+            let current = envelope.get(&***item).copied().unwrap_or(cap);
+            envelope.insert(item.to_string(), current.min(cap));
+        }
+    }
+    let mut out = Vec::new();
+    for &id in &wanted {
+        let count = counts[id.as_str()];
+        let mut upper = envelope.clone();
+        for (other, &explicit) in counts {
+            upper.entry(other.clone()).or_insert(explicit);
+        }
+        let current = upper.get(id.as_str()).copied().unwrap_or(0);
+        upper.insert(id.clone(), current.max(count));
+        let lower = BTreeMap::from([(id.clone(), count)]);
+        if search_completion(
+            unit,
+            model_count,
+            &option_refs,
+            models,
+            &[lower],
+            |_| upper.clone(),
+            None,
+        )
+        .is_none()
+        {
             out.push(Violation {
-                code: ViolationCode::ExceedsAllowance,
-                message: format!("{id}: {used} exceeds shared allowance {cap} ({limit})"),
-                id,
+                id: id.clone(),
+                code: ViolationCode::ExceedsMax,
+                message: format!(
+                    "{id}: {count} exceeds the most any legal loadout of {model_count} models fields"
+                ),
             });
         }
-        // Per-item sub-cap: at most `duplicate_limit` copies of any ONE item, on top
-        // of the shared allowance. Mirror of `tools/src/data/loadout.ts`.
-        if let Some(dup) = budget.duplicate_limit {
-            let dup = dup.get();
-            let (dup_cap, dup_limit) = if budget.per_models == 0 {
-                (dup as i64, format!("{dup} per unit"))
-            } else {
-                (
-                    (model_count * dup / budget.per_models) as i64,
-                    format!("{dup} per {} models", budget.per_models),
-                )
-            };
-            let mut items: Vec<String> = budget.items.iter().map(|i| i.to_string()).collect();
-            items.sort();
-            for id in items {
-                let n = counts.get(&id).copied().unwrap_or(0);
-                if n > dup_cap {
-                    out.push(Violation {
-                        code: ViolationCode::ExceedsAllowance,
-                        message: format!(
-                            "{id}: {n} exceeds per-item duplicate cap {dup_cap} ({dup_limit})"
-                        ),
-                        id,
-                    });
+    }
+    out
+}
+
+/// The caps a variant-row selection with no legal whole-model completion breaks.
+/// Each submitted item, in id order, is tried alone: when no legal build fields
+/// that many copies of it (every option, variant and budget cap applied, other
+/// items free up to their envelope) it is `exceeds-max` on that item. Otherwise,
+/// per variant row in order, each variant budget and then each capped variant is
+/// lifted in turn; a cap whose lifting alone makes the selection completable is
+/// `exceeds-allowance` on the equipment its variants add over the row's baseline
+/// (its defaults, else what every variant shares), sorted and joined by `+`.
+/// Empty when no single cap explains the failure. Mirror of `tools/src/data/loadout.ts`.
+fn variant_cap_violations(
+    unit: &Unit,
+    model_count: u64,
+    options: &[&WargearOption],
+    models: &[LoadoutModel],
+    counts: &BTreeMap<String, i64>,
+) -> Vec<Violation> {
+    let ids: Vec<String> = counts.keys().cloned().collect();
+    let mut out = solo_cap_violations(unit, model_count, options, models, counts, &ids);
+    if !out.is_empty() {
+        return out;
+    }
+
+    let mut reported = HashSet::new();
+    for (row_index, row) in models.iter().enumerate() {
+        let variants = &row.loadout_variants;
+        if variants.is_empty() {
+            continue;
+        }
+        let baseline: HashSet<&str> = if row.default_weapon_ids.is_empty() {
+            variants[0]
+                .weapon_ids
+                .iter()
+                .filter(|id| {
+                    variants
+                        .iter()
+                        .all(|variant| variant.weapon_ids.contains(id))
+                })
+                .map(String::as_str)
+                .collect()
+        } else {
+            row.default_weapon_ids.iter().map(String::as_str).collect()
+        };
+        let mut caps: Vec<(String, Vec<&str>)> = Vec::new();
+        for (index, budget) in row.loadout_variant_budgets.iter().enumerate() {
+            caps.push((
+                format!("{row_index}:{index}"),
+                budget.variant_names.iter().map(String::as_str).collect(),
+            ));
+        }
+        for (index, variant) in variants.iter().enumerate() {
+            if variant.max_count.is_some() {
+                caps.push((
+                    format!("{row_index}:variant:{index}"),
+                    vec![variant.name.as_str()],
+                ));
+            }
+        }
+        for (token, names) in caps {
+            let mut added = BTreeSet::new();
+            for variant in variants {
+                if !names.contains(&variant.name.as_str()) {
+                    continue;
+                }
+                for id in &variant.weapon_ids {
+                    if !baseline.contains(id.as_str()) {
+                        added.insert(id.as_str());
+                    }
                 }
             }
+            if added.is_empty() {
+                continue;
+            }
+            let id = added.into_iter().collect::<Vec<_>>().join("+");
+            if reported.contains(&id) {
+                continue;
+            }
+            if complete_loadout_relaxing(
+                unit,
+                model_count,
+                options,
+                Some(models),
+                counts,
+                Some(&token),
+            )
+            .is_none()
+            {
+                continue;
+            }
+            reported.insert(id.clone());
+            out.push(Violation {
+                message: format!(
+                    "{id}: the selection overdraws the shared allowance of these whole-model alternatives"
+                ),
+                code: ViolationCode::ExceedsAllowance,
+                id,
+            });
         }
     }
     out
@@ -2104,8 +2630,9 @@ fn tier_models(tier: &LoadoutTier, base: &[LoadoutModel]) -> Vec<LoadoutModel> {
 /// total range `[Σmin, Σmax]` contains it and run [`validate_loadout`] against
 /// each tier's allocation. The unit is legal iff **some** containing tier
 /// validates clean. Deterministic reporting: the empty result of the first clean
-/// tier (in tier order), else the violations of the first containing tier; an
-/// `invalid-model-count` violation when the size matches no tier. With no tiers it
+/// tier (in tier order), else the violations of the containing tier with the
+/// fewest (the first in tier order on a tie), the size the selection comes
+/// nearest; an `invalid-model-count` violation when the size matches no tier. With no tiers it
 /// falls back to a plain [`validate_loadout`]. Mirror of `tools/src/data/loadout.ts`.
 pub fn check_unit_legality(
     unit: &Unit,
@@ -2137,17 +2664,20 @@ pub fn check_unit_legality(
             id,
         }];
     }
-    let mut first: Option<Vec<Violation>> = None;
+    let mut nearest: Option<Vec<Violation>> = None;
     for tm in &candidates {
         let violations = validate_loadout(unit, model_count, options, counts, Some(tm));
         if violations.is_empty() {
             return Vec::new();
         }
-        if first.is_none() {
-            first = Some(violations);
+        if nearest
+            .as_ref()
+            .is_none_or(|current| violations.len() < current.len())
+        {
+            nearest = Some(violations);
         }
     }
-    first.unwrap_or_default()
+    nearest.unwrap_or_default()
 }
 
 /// Swap-conservation violations the independent per-id [`weapon_bounds`] can't
@@ -2274,6 +2804,65 @@ mod tests {
         serde_json::from_value(j).expect("synthetic option deserializes")
     }
 
+    /// Ten models that each swap a gun for one of six ranged picks and a knife for
+    /// one of six melee picks: 49 per-model candidates.
+    fn many_candidate_bag(
+        melee_counts: [i64; 6],
+    ) -> (Vec<WargearOption>, Vec<LoadoutModel>, BTreeMap<String, i64>) {
+        let gv = serde_json::json!({ "edition": "10th", "dataslate": "2025-q3" });
+        let ranged: Vec<String> = (0..6).map(|i| format!("r{i}")).collect();
+        let melee: Vec<String> = (0..6).map(|i| format!("m{i}")).collect();
+        let choice = |ids: &[String]| ids.iter().map(|id| vec![id.clone()]).collect::<Vec<_>>();
+        let options = vec![
+            syn_opt(
+                serde_json::json!({ "id": "swap-gun", "unit_id": "syn-unit", "game_version": gv,
+                "replaces": ["gun"], "replacement_choice": choice(&ranged), "model_constraint": { "any_number": true } }),
+            ),
+            syn_opt(
+                serde_json::json!({ "id": "swap-knife", "unit_id": "syn-unit", "game_version": gv,
+                "replaces": ["knife"], "replacement_choice": choice(&melee), "model_constraint": { "any_number": true } }),
+            ),
+        ];
+        let models = vec![LoadoutModel {
+            name: Some("Trooper".into()),
+            min: 10,
+            max: 10,
+            default_weapon_ids: vec!["gun".into(), "knife".into()],
+            is_leader_model: false,
+            loadout_variants: Vec::new(),
+            loadout_variant_budgets: Vec::new(),
+        }];
+        let mut counts = BTreeMap::new();
+        for (i, id) in ranged.iter().enumerate() {
+            counts.insert(id.clone(), if i < 4 { 2 } else { 1 });
+        }
+        for (id, count) in melee.iter().zip(melee_counts) {
+            if count > 0 {
+                counts.insert(id.clone(), count);
+            }
+        }
+        (options, models, counts)
+    }
+
+    /// Eleven melee picks for ten models: exhausting every split of the models
+    /// across the candidates took seconds; failed sub-states are now cut. Mirror
+    /// of the TS/Python/Go tests.
+    #[test]
+    fn group_loadout_rejects_an_infeasible_bag_over_many_candidates() {
+        let unit = syn_unit(&["gun", "knife"]);
+        let (options, models, counts) = many_candidate_bag([2, 2, 2, 2, 2, 1]);
+        let refs: Vec<&WargearOption> = options.iter().collect();
+        let started = std::time::Instant::now();
+        assert!(group_loadout(&unit, 10, &refs, Some(&models), &counts).is_none());
+        assert!(started.elapsed() < std::time::Duration::from_secs(5));
+        let (options, models, counts) = many_candidate_bag([2, 2, 2, 2, 2, 0]);
+        let refs: Vec<&WargearOption> = options.iter().collect();
+        let groups =
+            group_loadout(&unit, 10, &refs, Some(&models), &counts).expect("feasible bag groups");
+        assert_eq!(groups.iter().map(|group| group.count).sum::<u64>(), 10);
+        assert!(groups.iter().all(|group| group.weapons.len() == 2));
+    }
+
     #[test]
     fn maximal_loadout_applies_every_swap_at_cap_plus_addon() {
         // 10-model squad: bolt-pistol + chainblade base, two per-5 swaps, one add-on.
@@ -2312,7 +2901,10 @@ mod tests {
             lo.counts.get("bolt-pistol-khorne-berzerkers").copied(),
             Some(10)
         );
-        assert_eq!(lo.counts.get("chainblade").copied(), Some(10));
+        assert_eq!(
+            lo.counts.get("chainblade-khorne-berzerkers").copied(),
+            Some(10)
+        );
         assert_eq!(lo.counts.get("plasma-pistol").copied(), None);
         assert_eq!(lo.counts.len(), 2);
         // The legal default validates clean (the maximal set is what gets edited).
@@ -2560,10 +3152,16 @@ mod tests {
             loadout_candidates(&unit, 2, &[], Some(&models), None, None),
             vec!["A×1;B×1 => alpha:1,beta:1", "B×2 => beta:2"]
         );
+        // Two alphas exceed the one model variant A may field: an item cap, not a
+        // whole-model assignment conflict.
         let invalid = HashMap::from([("alpha".to_owned(), 2)]);
-        assert!(validate_loadout(&unit, 2, &[], &invalid, Some(&models))
-            .iter()
-            .any(|violation| violation.code == ViolationCode::SwapConflict));
+        assert_eq!(
+            validate_loadout(&unit, 2, &[], &invalid, Some(&models))
+                .iter()
+                .map(|violation| (violation.id.clone(), violation.code))
+                .collect::<Vec<_>>(),
+            vec![("alpha".to_owned(), ViolationCode::ExceedsMax)]
+        );
         let options = [
             syn_opt(serde_json::json!({
                 "id": "swap-option", "unit_id": unit.id, "game_version": unit.game_version,
@@ -2576,11 +3174,14 @@ mod tests {
             })),
         ];
         let refs: Vec<_> = options.iter().collect();
+        // The swap reaches variant A's equipment, so it is charged to A's cap.
         let with_scanner = HashMap::from([("alpha".to_owned(), 2), ("scanner".to_owned(), 1)]);
-        assert!(
+        assert_eq!(
             validate_loadout(&unit, 2, &refs, &with_scanner, Some(&models))
                 .iter()
-                .any(|violation| violation.code == ViolationCode::SwapConflict)
+                .map(|violation| (violation.id.clone(), violation.code))
+                .collect::<Vec<_>>(),
+            vec![("alpha".to_owned(), ViolationCode::ExceedsMax)]
         );
         let legal = HashMap::from([
             ("alpha".to_owned(), 1),
@@ -2675,7 +3276,7 @@ mod tests {
                 .iter()
                 .map(|violation| (violation.id.clone(), violation.code))
                 .collect::<Vec<_>>(),
-            vec![("plasma".to_owned(), ViolationCode::ExceedsAllowance)]
+            vec![("plasma".to_owned(), ViolationCode::ExceedsMax)]
         );
     }
 }

@@ -1,0 +1,23 @@
++++++++++++++++++++++++++++++++++++++++++++++++
++ LIST NAME: Exact Groups Test
++ FACTION KEYWORD: Adeptus Astartes
++ DETACHMENT: Gladius Task Force
++ FORCE DISPOSITION: Priority Assets
++ TOTAL ARMY POINTS: 500pts
++ POINTS LIMIT: 500pts
++
++ WARLORD: —
++ ENHANCEMENT: —
++ NUMBER OF UNITS: 4
++++++++++++++++++++++++++++++++++++++++++++++++
+
+5x Intercessor Squad (85 pts): 
+• 5x Intercessor: Bolt Pistol, Bolt Rifle, Knives and Fists
+5x Assault Intercessor Squad (85 pts): 
+• 1x Assault Intercessor Sergeant: Chainsword, Heavy Bolt Pistol
+• 4x Assault Intercessor: Chainsword, Heavy Bolt Pistol
+5x Intercessor Squad (85 pts): 
+• 1x Intercessor Sergeant: Bolt Pistol, Bolt Rifle, Knives and Fists
+• 4x Intercessor: Bolt Pistol, Bolt Rifle, Knives and Fists
+1x Land Raider (245 pts): 
+• 1x Land Raider: Armoured tracks, 2x Godhammer lascannon, Twin Heavy Bolter

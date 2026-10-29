@@ -1,0 +1,51 @@
+{
+  "name": "bolt-rifle (saturation) x5 vs cultists, two Save improvements sum to 3 and stop at the stricter 4+ cap",
+  "attacker": {
+    "weaponId": "bolt-rifle",
+    "profileIndex": 1
+  },
+  "modelsFiring": 5,
+  "target": {
+    "unitId": "cultist-mob",
+    "profileIndex": 0
+  },
+  "context": {
+    "phase": "shooting"
+  },
+  "buffs": [
+    {
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-capped-armour-rule",
+        "abilityKind": "unit"
+      },
+      "contribution": {
+        "type": "save-improve",
+        "value": 1,
+        "best": 2
+      }
+    },
+    {
+      "source": {
+        "kind": "manual",
+        "label": "stricter cap"
+      },
+      "contribution": {
+        "type": "save-improve",
+        "value": 2,
+        "best": 4
+      }
+    }
+  ],
+  "expected": {
+    "stages": {
+      "attacks": 10,
+      "hits": 6.6667,
+      "wounds": 4.4444,
+      "unsaved": 2.963,
+      "damage": 2.963,
+      "after-fnp": 2.963,
+      "models-killed": 2.963
+    }
+  }
+}

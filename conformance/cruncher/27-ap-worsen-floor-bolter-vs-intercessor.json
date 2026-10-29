@@ -1,0 +1,39 @@
+{
+  "name": "bolt-rifle (saturation) x5 vs intercessor, AP worsened by 2 stops at AP 0",
+  "attacker": {
+    "weaponId": "bolt-rifle",
+    "profileIndex": 1
+  },
+  "modelsFiring": 5,
+  "target": {
+    "unitId": "intercessor-squad",
+    "profileIndex": 0
+  },
+  "context": {
+    "phase": "shooting"
+  },
+  "buffs": [
+    {
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-ap-rule",
+        "abilityKind": "unit"
+      },
+      "contribution": {
+        "type": "ap-mod",
+        "value": 2
+      }
+    }
+  ],
+  "expected": {
+    "stages": {
+      "attacks": 10,
+      "hits": 6.6667,
+      "wounds": 3.3333,
+      "unsaved": 1.1111,
+      "damage": 1.1111,
+      "after-fnp": 1.1111,
+      "models-killed": 0.5556
+    }
+  }
+}

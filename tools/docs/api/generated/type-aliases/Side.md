@@ -8,7 +8,7 @@
 
 > **Side** = `"attacker"` \| `"defender"`
 
-Defined in: [generated.ts:151](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L151)
+Defined in: [generated.ts:651](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L651)
 
 Which player a zone or territory belongs to.
 

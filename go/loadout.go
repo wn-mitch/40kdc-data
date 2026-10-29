@@ -801,6 +801,11 @@ func enumerateRowCandidates(base map[string]int, rowName any, options []any, use
 	}
 	return result
 }
+
+// variantBudgetCap is a variant budget's allowance: flat `count` when
+// `per_models` is 0, else `count * floor(models / per_models)` when `stepped`,
+// else the proportional `floor(models * count / per_models)`, over the unit's
+// or the row's models.
 func variantBudgetCap(budget map[string]any, unitCount, rowCount int) int {
 	perModels := asInt(budget["per_models"])
 	if perModels == 0 {
@@ -809,6 +814,9 @@ func variantBudgetCap(budget map[string]any, unitCount, rowCount int) int {
 	models := rowCount
 	if getStr(budget, "scope") == "unit" {
 		models = unitCount
+	}
+	if stepped, ok := budget["stepped"].(bool); ok && stepped {
+		return asInt(budget["count"]) * (models / perModels)
 	}
 	return models * asInt(budget["count"]) / perModels
 }
@@ -935,8 +943,107 @@ func solveAssignment(rows []solverRow, lower, upper map[string]int, optionCaps [
 	remainingLower, remainingUpper := cloneCounts(lower), cloneCounts(upper)
 	usage, variantUsage := make([]int, len(optionCaps)), map[string]int{}
 	picks := []pick{}
+	// A state whose subtree reached no complete assignment is recorded and never
+	// searched again; a state whose unplaced models cannot field an item's
+	// remaining bounds is cut. Neither skips a callback.
+	dead := map[string]bool{}
+	reached := 0
+	// Per-model item extremes over candidates ci.. of row ri, and the totals
+	// rows ri.. supply at full count, bound what the unplaced models can field.
+	itemSet := map[string]bool{}
+	for id := range lower {
+		itemSet[id] = true
+	}
+	for id := range upper {
+		itemSet[id] = true
+	}
+	for _, row := range rows {
+		for _, candidate := range row.candidates {
+			for id := range candidate.weapons {
+				itemSet[id] = true
+			}
+		}
+	}
+	itemIDs := sortedKeys(itemSet)
+	const unbounded = math.MaxInt32
+	type extremes struct{ min, max []int }
+	suffixExtremes := make([][]extremes, len(rows))
+	for ri, row := range rows {
+		out := make([]extremes, len(row.candidates)+1)
+		last := extremes{make([]int, len(itemIDs)), make([]int, len(itemIDs))}
+		for at := range itemIDs {
+			last.min[at], last.max[at] = unbounded, -unbounded
+		}
+		out[len(row.candidates)] = last
+		for ci := len(row.candidates) - 1; ci >= 0; ci-- {
+			next := out[ci+1]
+			here := extremes{make([]int, len(itemIDs)), make([]int, len(itemIDs))}
+			for at, id := range itemIDs {
+				here.min[at] = minInt(next.min[at], row.candidates[ci].weapons[id])
+				here.max[at] = maxInt(next.max[at], row.candidates[ci].weapons[id])
+			}
+			out[ci] = here
+		}
+		suffixExtremes[ri] = out
+	}
+	tail := make([]extremes, len(rows)+1)
+	tail[len(rows)] = extremes{make([]int, len(itemIDs)), make([]int, len(itemIDs))}
+	for ri := len(rows) - 1; ri >= 0; ri-- {
+		full, count := suffixExtremes[ri][0], rows[ri].count
+		here := extremes{make([]int, len(itemIDs)), make([]int, len(itemIDs))}
+		for at := range itemIDs {
+			here.min[at], here.max[at] = tail[ri+1].min[at], tail[ri+1].max[at]
+			if count > 0 {
+				here.min[at] = saturatingAdd(here.min[at], count, full.min[at])
+				here.max[at] = saturatingAdd(here.max[at], count, full.max[at])
+			}
+		}
+		tail[ri] = here
+	}
+	reachable := func(ri, ci, left int) bool {
+		here := suffixExtremes[ri][ci]
+		for at, id := range itemIDs {
+			most, least := tail[ri+1].max[at], tail[ri+1].min[at]
+			if left > 0 {
+				most = saturatingAdd(most, left, here.max[at])
+				least = saturatingAdd(least, left, here.min[at])
+			}
+			if remainingLower[id] > most || remainingUpper[id] < least {
+				return false
+			}
+		}
+		return true
+	}
+	// Remaining lower bounds are fixed by remaining upper bounds: both start from
+	// fixed bags and every pick subtracts the same amount from each.
+	stateKey := func(ri, ci, left int) string {
+		var b strings.Builder
+		for _, n := range []int{ri, ci, left} {
+			b.WriteString(strconv.Itoa(n))
+			b.WriteByte('|')
+		}
+		writeNonZero := func(counts map[string]int) {
+			for _, id := range sortedKeys(counts) {
+				if counts[id] != 0 {
+					b.WriteString(id)
+					b.WriteByte(':')
+					b.WriteString(strconv.Itoa(counts[id]))
+					b.WriteByte(',')
+				}
+			}
+			b.WriteByte('|')
+		}
+		writeNonZero(remainingUpper)
+		for _, n := range usage {
+			b.WriteString(strconv.Itoa(n))
+			b.WriteByte(',')
+		}
+		b.WriteByte('|')
+		writeNonZero(variantUsage)
+		return b.String()
+	}
 	var assignRow func(int) bool
-	var distribute func(int, int, int) bool
+	var distribute, distributeFrom func(int, int, int) bool
 	assignRow = func(ri int) bool {
 		if ri == len(rows) {
 			for _, count := range remainingLower {
@@ -944,6 +1051,7 @@ func solveAssignment(rows []solverRow, lower, upper map[string]int, optionCaps [
 					return false
 				}
 			}
+			reached++
 			if onSolution != nil {
 				return onSolution(append([]pick(nil), picks...))
 			}
@@ -952,6 +1060,24 @@ func solveAssignment(rows []solverRow, lower, upper map[string]int, optionCaps [
 		return distribute(ri, 0, rows[ri].count)
 	}
 	distribute = func(ri, ci, left int) bool {
+		if left > 0 && ci == len(rows[ri].candidates) {
+			return false
+		}
+		if !reachable(ri, ci, left) {
+			return false
+		}
+		key := stateKey(ri, ci, left)
+		if dead[key] {
+			return false
+		}
+		before := reached
+		found := distributeFrom(ri, ci, left)
+		if !found && reached == before {
+			dead[key] = true
+		}
+		return found
+	}
+	distributeFrom = func(ri, ci, left int) bool {
 		row := rows[ri]
 		if ci == len(row.candidates) {
 			return left == 0 && assignRow(ri+1)
@@ -1016,6 +1142,30 @@ func solveAssignment(rows []solverRow, lower, upper map[string]int, optionCaps [
 	}
 	return append([]pick(nil), picks...)
 }
+
+// sortedKeys returns a map's keys in ascending order.
+func sortedKeys[V any](m map[string]V) []string {
+	keys := make([]string, 0, len(m))
+	for key := range m {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+	return keys
+}
+
+// saturatingAdd returns base + count*per, clamped to ±math.MaxInt32 so the
+// solver's unbounded extremes stay unbounded.
+func saturatingAdd(base, count, per int) int {
+	sum := base + count*per
+	if base >= math.MaxInt32 || per >= math.MaxInt32 || sum > math.MaxInt32 {
+		return math.MaxInt32
+	}
+	if base <= -math.MaxInt32 || per <= -math.MaxInt32 || sum < -math.MaxInt32 {
+		return -math.MaxInt32
+	}
+	return sum
+}
+
 func optionsWithPrintedUnitAbilities(unit map[string]any, options []any, counts map[string]int) []any {
 	reachable := map[string]bool{}
 	for _, optionAny := range options {
@@ -1033,7 +1183,9 @@ func optionsWithPrintedUnitAbilities(unit map[string]any, options []any, counts 
 		}
 	}
 	effective := append([]any(nil), options...)
-	for _, id := range getStrList(unit, "ability_ids") {
+	// A wargear item whose rule the datasheet prints ({id, wargear} in ability_ids) is stock
+	// equipment even when no option reaches it.
+	for _, id := range printedWargearIDs(unit) {
 		if counts[id] > 0 && !reachable[id] {
 			effective = append(effective, map[string]any{
 				"id":               getStr(unit, "id") + "-printed-ability-" + id,
@@ -1192,9 +1344,13 @@ func sortCompletionCandidates(candidates []rowCandidate, lower map[string]int) {
 
 // completeLoadout adds only composition defaults omitted by a source format.
 func completeLoadout(unit map[string]any, modelCount int, options []any, models []any, explicitCounts map[string]int) *completedLoadout {
-	if modelCount <= 0 || !hasRecordedLoadoutBases(models) {
-		return nil
-	}
+	return completeLoadoutRelaxing(unit, modelCount, options, models, explicitCounts, "")
+}
+
+// completionLowerBounds is the lower bounds completeLoadout tries in turn:
+// every explicit count, then the same with the secondary items several
+// multi-item choice branches share left free.
+func completionLowerBounds(options []any, models []any, explicitCounts map[string]int) []map[string]int {
 	strictLower := map[string]int{}
 	for id, count := range explicitCounts {
 		if count > 0 {
@@ -1202,6 +1358,26 @@ func completeLoadout(unit map[string]any, modelCount int, options []any, models 
 		}
 	}
 	lowerVariants := []map[string]int{strictLower}
+	relaxedLower := cloneCounts(strictLower)
+	for id := range repeatedCoItems(options, models) {
+		delete(relaxedLower, id)
+	}
+	if len(relaxedLower) != len(strictLower) {
+		lowerVariants = append(lowerVariants, relaxedLower)
+	}
+	return lowerVariants
+}
+
+// repeatedCoItems lists the items completeLoadout's second pass leaves free.
+// Some source exporters double-count a secondary item shared by several
+// branches of one choice (the primary selections are still exact). A weapon
+// repeated in at least two multi-item branches, and never a pick on its own,
+// is mechanically determined by those primary selections, so the pass may
+// derive its count rather than requiring the duplicated aggregate. Defaults
+// are never relaxed. A branch is read net of the option's own replaces: an
+// item a branch hands back is kept, not picked (a whole-menu option re-adds
+// the boltgun a champion keeps).
+func repeatedCoItems(options []any, models []any) map[string]bool {
 	defaultIDs := map[string]bool{}
 	for _, modelAny := range models {
 		model, _ := asMap(modelAny)
@@ -1209,12 +1385,13 @@ func completeLoadout(unit map[string]any, modelCount int, options []any, models 
 			defaultIDs[id] = true
 		}
 	}
-	repeatedCoItems := map[string]bool{}
+	out := map[string]bool{}
 	for _, optionAny := range options {
 		option, _ := asMap(optionAny)
 		occurrences := map[string]int{}
+		replaces := getStrList(option, "replaces")
 		for _, branchAny := range getList(option, "replacement_choice") {
-			branch := toStrList(branchAny)
+			branch := netOfReplaces(toStrList(branchAny), replaces)
 			if len(branch) < 2 {
 				continue
 			}
@@ -1228,18 +1405,75 @@ func completeLoadout(unit map[string]any, modelCount int, options []any, models 
 		}
 		for id, count := range occurrences {
 			if count >= 2 && !defaultIDs[id] {
-				repeatedCoItems[id] = true
+				out[id] = true
 			}
 		}
 	}
-	relaxedLower := cloneCounts(strictLower)
-	for id := range repeatedCoItems {
-		delete(relaxedLower, id)
+	for _, optionAny := range options {
+		option, _ := asMap(optionAny)
+		branches := getList(option, "replacement_choice")
+		if replacement := getList(option, "replacement"); len(replacement) > 0 {
+			branches = []any{replacement}
+		}
+		replaces := getStrList(option, "replaces")
+		for _, branchAny := range branches {
+			if branch := netOfReplaces(toStrList(branchAny), replaces); len(branch) == 1 {
+				delete(out, branch[0])
+			}
+		}
 	}
-	if len(relaxedLower) != len(strictLower) {
-		lowerVariants = append(lowerVariants, relaxedLower)
+	return out
+}
+
+// netOfReplaces is branch without one copy of each id in replaces (the items
+// it keeps).
+func netOfReplaces(branch []string, replaces []string) []string {
+	kept := map[string]int{}
+	for _, id := range replaces {
+		kept[id]++
 	}
-	effectiveOptions := optionsWithPrintedUnitAbilities(unit, options, explicitCounts)
+	out := []string{}
+	for _, id := range branch {
+		if kept[id] > 0 {
+			kept[id]--
+			continue
+		}
+		out = append(out, id)
+	}
+	return out
+}
+
+// completeLoadoutRelaxing is completeLoadout with one variant cap token (see
+// rowCandidates) lifted, or none when relaxed is "".
+func completeLoadoutRelaxing(unit map[string]any, modelCount int, options []any, models []any, explicitCounts map[string]int, relaxed string) *completedLoadout {
+	if modelCount <= 0 || !hasRecordedLoadoutBases(models) {
+		return nil
+	}
+	return searchCompletion(
+		unit,
+		modelCount,
+		optionsWithPrintedUnitAbilities(unit, options, explicitCounts),
+		models,
+		completionLowerBounds(options, models, explicitCounts),
+		func(defaultCounts map[string]int) map[string]int {
+			upper := cloneCounts(defaultCounts)
+			for id, count := range explicitCounts {
+				upper[id] = maxInt(upper[id], count)
+			}
+			return upper
+		},
+		relaxed,
+	)
+}
+
+// unboundedCap stands in for a lifted variant cap.
+const unboundedCap = math.MaxInt32
+
+// searchCompletion is the first legal whole-model assignment, over every
+// composition allocation, that fields at least lower of each item and at most
+// upperFor(defaults), where defaults is the allocation's aggregate default
+// equipment. A relaxed variant cap token is treated as unbounded.
+func searchCompletion(unit map[string]any, modelCount int, effectiveOptions []any, models []any, lowerVariants []map[string]int, upperFor func(map[string]int) map[string]int, relaxed string) *completedLoadout {
 	for _, lower := range lowerVariants {
 		for _, rowCounts := range candidateRowCounts(models, modelCount, lower) {
 			fixedModels := make([]any, len(models))
@@ -1253,10 +1487,7 @@ func completeLoadout(unit map[string]any, modelCount int, options []any, models 
 					defaultCounts[id] += rowCounts[i]
 				}
 			}
-			upper := cloneCounts(defaultCounts)
-			for id, count := range explicitCounts {
-				upper[id] = maxInt(upper[id], count)
-			}
+			upper := upperFor(defaultCounts)
 			optionCaps := make([]int, len(effectiveOptions))
 			for i, optionAny := range effectiveOptions {
 				option, _ := asMap(optionAny)
@@ -1270,6 +1501,9 @@ func completeLoadout(unit map[string]any, modelCount int, options []any, models 
 				fixed, _ := asMap(fixedAny)
 				prepared := rowCandidates(fixed, i, rowCounts[i], modelCount, effectiveOptions)
 				for token, cap := range prepared.variantCaps {
+					if token == relaxed {
+						cap = unboundedCap
+					}
 					variantCaps[token] = cap
 				}
 				candidates := filterRowCandidates(prepared.candidates, upper, optionCaps)
@@ -1333,6 +1567,48 @@ func clampFlatBudgets(unit map[string]any, counts map[string]int) {
 
 type intRange struct{ min, max int }
 
+// sharedRowSwapCap is the most times a swap scoped to a model name several
+// composition rows share can be taken: the named rows' models carrying what it
+// replaces. Same-named rows split one miniature by default loadout (Imperial Navy
+// Breachers' Navis Armsmen), and each row's swap is scoped to the whole name, so
+// optionCap's eligible-model count would let one row's swap be taken by every model
+// of the name. (0, false) for any other option.
+func sharedRowSwapCap(option map[string]any, modelCount int, models []any) (int, bool) {
+	c, _ := getMap(option, "model_constraint")
+	name, _ := c["model_name"].(string)
+	replaces := getStrList(option, "replaces")
+	if name == "" || len(replaces) == 0 || !hasRecordedDefaults(models) {
+		return 0, false
+	}
+	rows := 0
+	for _, mAny := range models {
+		if m, ok := asMap(mAny); ok {
+			if n, _ := m["name"].(string); n == name {
+				rows++
+			}
+		}
+	}
+	if rows < 2 {
+		return 0, false
+	}
+	carried := map[string]int{}
+	for _, row := range allocateModels(models, modelCount) {
+		if rn, _ := row.model["name"].(string); rn != name {
+			continue
+		}
+		for _, id := range getStrList(row.model, "default_weapon_ids") {
+			carried[id] += row.count
+		}
+	}
+	cap := -1
+	for id, n := range toMultiset(replaces) {
+		if v := carried[id] / n; cap < 0 || v < cap {
+			cap = v
+		}
+	}
+	return cap, true
+}
+
 func weaponBounds(unit map[string]any, modelCount int, options []any, models []any) map[string]intRange {
 	bounds := map[string]intRange{}
 	for id, count := range baseCounts(unit, modelCount, options, models) {
@@ -1341,6 +1617,9 @@ func weaponBounds(unit map[string]any, modelCount int, options []any, models []a
 	for _, oAny := range options {
 		o, _ := asMap(oAny)
 		cap := optionCap(o, modelCount, models)
+		if shared, ok := sharedRowSwapCap(o, modelCount, models); ok {
+			cap = minInt(cap, shared)
+		}
 		for _, id := range getStrList(o, "replaces") {
 			b := bounds[id]
 			bounds[id] = intRange{maxInt(0, b.min-cap), b.max}
@@ -1485,8 +1764,34 @@ func validateLoadout(unit map[string]any, modelCount int, options []any, counts 
 			})
 			return out
 		}
-		if completeLoadout(unit, modelCount, options, models, counts) != nil {
-			return budgets
+		if completed := completeLoadout(unit, modelCount, options, models, counts); completed != nil {
+			// A completion may field fewer copies of a relaxed co-item than the
+			// source claims (exporter tolerance); a claim no legal loadout
+			// reaches is still over its cap.
+			relaxed := repeatedCoItems(options, models)
+			var underfielded []string
+			for id, count := range counts {
+				if relaxed[id] && count > completed.counts[id] {
+					underfielded = append(underfielded, id)
+				}
+			}
+			solo := soloCapViolations(unit, modelCount, options, models, counts, underfielded)
+			sort.SliceStable(solo, func(i, j int) bool {
+				if solo[i]["id"] != solo[j]["id"] {
+					return solo[i]["id"] < solo[j]["id"]
+				}
+				return solo[i]["code"] < solo[j]["code"]
+			})
+			return append(budgets, solo...)
+		}
+		if capped := variantCapViolations(unit, modelCount, options, models, counts); len(capped) > 0 {
+			sort.SliceStable(capped, func(i, j int) bool {
+				if capped[i]["id"] != capped[j]["id"] {
+					return capped[i]["id"] < capped[j]["id"]
+				}
+				return capped[i]["code"] < capped[j]["code"]
+			})
+			return capped
 		}
 		uid := getStr(unit, "id")
 		return []map[string]string{{"id": uid, "code": "swap-conflict", "message": uid + ": equipment cannot be assigned to legal whole-model loadouts"}}
@@ -1590,68 +1895,272 @@ func swapConflicts(unit map[string]any, modelCount int, options []any, counts ma
 	return out
 }
 
-// budgetViolations reports shared-allowance violations: each wargear_budgets
-// entry lets its listed items take at most floor(modelCount * count / per_models)
-// copies between them (per_models == 0 is a flat per-unit cap of count). The
-// violation id is the budget's sorted items joined by "+". Mirror of the TS ref.
+// budgetCap is count copies scaled by a budget's ratio at modelCount (flat when
+// per_models is 0).
+func budgetCap(budget map[string]any, modelCount, count int) int {
+	perModels := asInt(budget["per_models"])
+	if perModels > 0 {
+		return int(math.Floor(float64(modelCount) * float64(count) / float64(perModels)))
+	}
+	return count
+}
+
+// budgetLimitText renders a budget's scale for count copies.
+func budgetLimitText(budget map[string]any, count int) string {
+	perModels := asInt(budget["per_models"])
+	if perModels > 0 {
+		return itoa(count) + " per " + itoa(perModels) + " models"
+	}
+	return itoa(count) + " per unit"
+}
+
+// budgetViolations reports wargear-budget violations: each wargear_budgets
+// entry lets its listed items take at most floor(modelCount * count /
+// per_models) copies between them (per_models == 0 is a flat per-unit cap), and
+// its optional duplicate_limit caps any one item on the same scale.
+//
+// An item's own cap is the least of every budget's allowance and duplicate cap
+// that lists it; an item over it is exceeds-max on that item, in id order. A
+// budget whose items are each within their own caps but overdraw it together is
+// exceeds-allowance on its sorted items joined by "+", in budget order. Mirror
+// of the TS reference.
 func budgetViolations(unit map[string]any, modelCount int, counts map[string]int) []map[string]string {
-	var out []map[string]string
+	type itemCap struct {
+		cap   int
+		limit string
+	}
+	itemCaps := map[string]itemCap{}
+	tighten := func(id string, cap int, limit string) {
+		if current, ok := itemCaps[id]; !ok || cap < current.cap {
+			itemCaps[id] = itemCap{cap, limit}
+		}
+	}
+	var budgets []map[string]any
 	for _, bAny := range getList(unit, "wargear_budgets") {
 		budget, _ := asMap(bAny)
-		items := getStrList(budget, "items")
-		if len(items) == 0 {
+		if len(getStrList(budget, "items")) == 0 {
 			continue
 		}
+		budgets = append(budgets, budget)
+		count := asInt(budget["count"])
+		for _, id := range getStrList(budget, "items") {
+			tighten(id, budgetCap(budget, modelCount, count), budgetLimitText(budget, count))
+			if budget["duplicate_limit"] != nil {
+				dup := asInt(budget["duplicate_limit"])
+				tighten(id, budgetCap(budget, modelCount, dup), budgetLimitText(budget, dup)+" of one item")
+			}
+		}
+	}
+	over := func(id string) bool {
+		c, ok := itemCaps[id]
+		return ok && counts[id] > c.cap
+	}
+	ids := make([]string, 0, len(itemCaps))
+	for id := range itemCaps {
+		ids = append(ids, id)
+	}
+	sort.Strings(ids)
+	var out []map[string]string
+	for _, id := range ids {
+		if !over(id) {
+			continue
+		}
+		c := itemCaps[id]
+		out = append(out, map[string]string{
+			"id":      id,
+			"code":    "exceeds-max",
+			"message": id + ": " + itoa(counts[id]) + " exceeds allowance " + itoa(c.cap) + " (" + c.limit + ")",
+		})
+	}
+	for _, budget := range budgets {
+		items := getStrList(budget, "items")
 		used := 0
+		anyOver := false
 		for _, id := range items {
 			used += counts[id]
+			if over(id) {
+				anyOver = true
+			}
 		}
 		count := asInt(budget["count"])
-		perModels := asInt(budget["per_models"])
-		var capN int
-		var limit string
-		if perModels > 0 {
-			capN = int(math.Floor(float64(modelCount) * float64(count) / float64(perModels)))
-			limit = itoa(count) + " per " + itoa(perModels) + " models"
-		} else {
-			capN = count
-			limit = itoa(count) + " per unit"
+		capN := budgetCap(budget, modelCount, count)
+		if used <= capN || anyOver {
+			continue
 		}
-		if used > capN {
-			sorted := append([]string(nil), items...)
+		sorted := append([]string(nil), items...)
+		sort.Strings(sorted)
+		id := joinStrings(sorted, "+")
+		out = append(out, map[string]string{
+			"id":      id,
+			"code":    "exceeds-allowance",
+			"message": id + ": " + itoa(used) + " exceeds shared allowance " + itoa(capN) + " (" + budgetLimitText(budget, count) + ")",
+		})
+	}
+	return out
+}
+
+// variantCapViolations reports the caps a variant-row selection with no legal
+// whole-model completion breaks. Each submitted item, in id order, is tried
+// alone: when no legal build fields that many copies of it (every option,
+// variant and budget cap applied, other items free up to their envelope) it is
+// exceeds-max on that item. Otherwise, per variant row in order, each variant
+// budget and then each capped variant is lifted in turn; a cap whose lifting
+// alone makes the selection completable is exceeds-allowance on the equipment
+// its variants add over the row's baseline (its defaults, else what every
+// variant shares), sorted and joined by "+". Empty when no single cap explains
+// the failure. Mirror of the TS reference.
+// soloCapViolations reports exceeds-max on each of ids (in id order) whose
+// submitted count no legal build fields: every option, variant and budget cap
+// applied, other submitted items free up to their envelope.
+func soloCapViolations(unit map[string]any, modelCount int, options []any, models []any, counts map[string]int, ids []string) []map[string]string {
+	seen := map[string]bool{}
+	var wanted []string
+	for _, id := range ids {
+		if counts[id] > 0 && !seen[id] {
+			seen[id] = true
+			wanted = append(wanted, id)
+		}
+	}
+	if len(wanted) == 0 {
+		return nil
+	}
+	sort.Strings(wanted)
+	n := modelCount
+	if n < 0 {
+		n = 0
+	}
+	effectiveOptions := optionsWithPrintedUnitAbilities(unit, options, counts)
+	envelope := map[string]int{}
+	for id, bound := range weaponBounds(unit, n, options, models) {
+		envelope[id] = bound.max
+	}
+	for _, bAny := range getList(unit, "wargear_budgets") {
+		budget, _ := asMap(bAny)
+		for _, id := range getStrList(budget, "items") {
+			cap := budgetCap(budget, n, asInt(budget["count"]))
+			if budget["duplicate_limit"] != nil {
+				cap = minInt(cap, budgetCap(budget, n, asInt(budget["duplicate_limit"])))
+			}
+			if current, ok := envelope[id]; ok {
+				envelope[id] = minInt(current, cap)
+			} else {
+				envelope[id] = cap
+			}
+		}
+	}
+	var out []map[string]string
+	for _, id := range wanted {
+		count := counts[id]
+		upper := cloneCounts(envelope)
+		for other, explicit := range counts {
+			if _, ok := upper[other]; !ok {
+				upper[other] = explicit
+			}
+		}
+		upper[id] = maxInt(count, upper[id])
+		lower := map[string]int{id: count}
+		if searchCompletion(unit, n, effectiveOptions, models, []map[string]int{lower}, func(map[string]int) map[string]int { return upper }, "") == nil {
+			out = append(out, map[string]string{
+				"id":      id,
+				"code":    "exceeds-max",
+				"message": id + ": " + itoa(count) + " exceeds the most any legal loadout of " + itoa(modelCount) + " models fields",
+			})
+		}
+	}
+	return out
+}
+
+func variantCapViolations(unit map[string]any, modelCount int, options []any, models []any, counts map[string]int) []map[string]string {
+	n := modelCount
+	if n < 0 {
+		n = 0
+	}
+	ids := make([]string, 0, len(counts))
+	for id := range counts {
+		ids = append(ids, id)
+	}
+	out := soloCapViolations(unit, modelCount, options, models, counts, ids)
+	if len(out) > 0 {
+		return out
+	}
+
+	reported := map[string]bool{}
+	for rowIndex, modelAny := range models {
+		row, _ := asMap(modelAny)
+		variants := getList(row, "loadout_variants")
+		if len(variants) == 0 {
+			continue
+		}
+		baseline := map[string]bool{}
+		if defaults := getStrList(row, "default_weapon_ids"); len(defaults) > 0 {
+			for _, id := range defaults {
+				baseline[id] = true
+			}
+		} else {
+			first, _ := asMap(variants[0])
+			for _, id := range getStrList(first, "weapon_ids") {
+				shared := true
+				for _, vAny := range variants {
+					v, _ := asMap(vAny)
+					if !contains(getStrList(v, "weapon_ids"), id) {
+						shared = false
+						break
+					}
+				}
+				if shared {
+					baseline[id] = true
+				}
+			}
+		}
+		type capToken struct {
+			token string
+			names []string
+		}
+		var caps []capToken
+		for index, bAny := range getList(row, "loadout_variant_budgets") {
+			budget, _ := asMap(bAny)
+			caps = append(caps, capToken{itoa(rowIndex) + ":" + itoa(index), getStrList(budget, "variant_names")})
+		}
+		for index, vAny := range variants {
+			v, _ := asMap(vAny)
+			if v["max_count"] != nil {
+				caps = append(caps, capToken{itoa(rowIndex) + ":variant:" + itoa(index), []string{getStr(v, "name")}})
+			}
+		}
+		for _, c := range caps {
+			added := map[string]bool{}
+			for _, vAny := range variants {
+				v, _ := asMap(vAny)
+				if !contains(c.names, getStr(v, "name")) {
+					continue
+				}
+				for _, id := range getStrList(v, "weapon_ids") {
+					if !baseline[id] {
+						added[id] = true
+					}
+				}
+			}
+			if len(added) == 0 {
+				continue
+			}
+			sorted := make([]string, 0, len(added))
+			for id := range added {
+				sorted = append(sorted, id)
+			}
 			sort.Strings(sorted)
 			id := joinStrings(sorted, "+")
+			if reported[id] {
+				continue
+			}
+			if completeLoadoutRelaxing(unit, n, options, models, counts, c.token) == nil {
+				continue
+			}
+			reported[id] = true
 			out = append(out, map[string]string{
 				"id":      id,
 				"code":    "exceeds-allowance",
-				"message": id + ": " + itoa(used) + " exceeds shared allowance " + itoa(capN) + " (" + limit + ")",
+				"message": id + ": the selection overdraws the shared allowance of these whole-model alternatives",
 			})
-		}
-		// Per-item sub-cap: at most duplicate_limit copies of any ONE item, on top
-		// of the shared allowance. Mirror of the TS reference.
-		if _, ok := budget["duplicate_limit"]; ok {
-			dup := asInt(budget["duplicate_limit"])
-			var dupCap int
-			var dupLimit string
-			if perModels > 0 {
-				dupCap = int(math.Floor(float64(modelCount) * float64(dup) / float64(perModels)))
-				dupLimit = itoa(dup) + " per " + itoa(perModels) + " models"
-			} else {
-				dupCap = dup
-				dupLimit = itoa(dup) + " per unit"
-			}
-			sorted := append([]string(nil), items...)
-			sort.Strings(sorted)
-			for _, id := range sorted {
-				n := counts[id]
-				if n > dupCap {
-					out = append(out, map[string]string{
-						"id":      id,
-						"code":    "exceeds-allowance",
-						"message": id + ": " + itoa(n) + " exceeds per-item duplicate cap " + itoa(dupCap) + " (" + dupLimit + ")",
-					})
-				}
-			}
 		}
 	}
 	return out
@@ -1691,7 +2200,8 @@ func tierModels(tier map[string]any, base []any) []any {
 // whose total range [Σmin, Σmax] contains it and run validateLoadout against each
 // tier's allocation; the unit is legal iff some containing tier validates clean.
 // Deterministic reporting: the empty result of the first clean tier (in tier
-// order), else the violations of the first containing tier; an
+// order), else the violations of the containing tier with the fewest (the first
+// in tier order on a tie), the size the selection comes nearest; an
 // invalid-model-count violation when the size matches no tier. With no tiers it
 // falls back to a plain validateLoadout. Mirror of the TS reference.
 func checkUnitLegality(unit map[string]any, modelCount int, options []any, counts map[string]int, models []any, tiers []any) []map[string]string {
@@ -1720,17 +2230,17 @@ func checkUnitLegality(unit map[string]any, modelCount int, options []any, count
 			"message": uid + ": " + itoa(modelCount) + " models matches no composition tier",
 		}}
 	}
-	var first []map[string]string
+	var nearest []map[string]string
 	for _, tm := range candidates {
 		violations := validateLoadout(unit, modelCount, options, counts, tm)
 		if len(violations) == 0 {
 			return []map[string]string{}
 		}
-		if first == nil {
-			first = violations
+		if nearest == nil || len(violations) < len(nearest) {
+			nearest = violations
 		}
 	}
-	return first
+	return nearest
 }
 
 func joinStrings(parts []string, sep string) string {

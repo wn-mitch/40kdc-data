@@ -1,0 +1,295 @@
+import { readFileSync } from "node:fs";
+import { dirname, join, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+
+import { describe, expect, it } from "vitest";
+import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
+import { currentFamilyVersion, familyRole, normalizeFingerprintParameters, REVIEWED_FAMILY_REGISTRY } from "../src/semantic-authoring/contracts.js";
+import { checkEntry, entryWithMechanics } from "../src/semantic-authoring/entries.js";
+import { mapToLatest } from "../src/semantic-authoring/family-versions.js";
+import { prefillFromSource, type PrefillFamily } from "../src/semantic-authoring/leaf-prefill.js";
+import { previewLeaf } from "../src/semantic-authoring/leaf-preview.js";
+
+/**
+ * Batch 1 (dice & rolls): ignore-modifiers, roll-auto-result, end-attack-sequence, and the
+ * extended re-roll@2. Split out of semantic-authoring-compile.test.ts so this batch's cases live in their
+ * own file, per the leaf-family batching brief.
+ */
+
+const dataRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../../data/enrichment");
+
+function authored(factionId: string, abilityId: string): Record<string, unknown> {
+  const entries = JSON.parse(readFileSync(join(dataRoot, factionId, "abilities.json"), "utf8")) as Array<Record<string, unknown>>;
+  const entry = entries.find((item) => item.ability_id === abilityId);
+  if (!entry) throw new Error(`Missing ${factionId}/${abilityId}`);
+  return entry;
+}
+
+let offset = 0;
+function leaf(role: string, familyId: string, parameters: Record<string, unknown>, familyVersion = 1): CompileLeaf {
+  offset += 10;
+  return { role, family_id: familyId, family_version: familyVersion, parameters, start_byte: offset };
+}
+
+function compiled(leaves: CompileLeaf[]) {
+  const result = compileLeaves(leaves);
+  if (!result.ok) throw new Error(result.errors.join("; "));
+  return result;
+}
+
+/** The compiled entry on a real authored base must validate against the ability schema, lint, and render. */
+function rendered(base: Record<string, unknown>, leaves: CompileLeaf[]): string {
+  const entry = entryWithMechanics(base, compiled(leaves).mechanics);
+  const check = checkEntry(entry);
+  expect(check.errors).toEqual([]);
+  return check.rendered_text!;
+}
+
+describe("Semantic authoring dice-family compiler", () => {
+  const base = () => authored("adeptus-mechanicus", "control-edict-adeptus-mechanicus");
+
+  it("compiles ignore-modifiers, roll-auto-result and end-attack-sequence to the DSL's fixed shapes", () => {
+    const cases: Array<[CompileLeaf, Record<string, unknown>]> = [
+      [leaf("EFFECT", "ignore-modifiers", { subject: "this-unit", what: "characteristics" }),
+        { type: "ignore-modifiers", target: "this-unit", modifier: { what: "characteristics" } }],
+      [leaf("EFFECT", "ignore-modifiers", { subject: "this-unit", what: "characteristics", stats: ["WS", "BS"] }),
+        { type: "ignore-modifiers", target: "this-unit", modifier: { what: "characteristics", stats: ["WS", "BS"] } }],
+      [leaf("EFFECT", "ignore-modifiers", { subject: "this-model", what: "rolls", rolls: ["hit"], only: "worsening", weapon_type: "ranged" }),
+        { type: "ignore-modifiers", target: "this-model", modifier: { what: "rolls", rolls: ["hit"], only: "worsening", weapons: { type: "ranged" } } }],
+      [leaf("EFFECT", "roll-auto-result", { roll: "hit", outcome: "succeeds-on", value: 4, weapon_type: "ranged" }),
+        { type: "roll-result", target: "this-unit", modifier: { roll: "hit", succeeds_on: 4, weapons: { type: "ranged" } } }],
+      [leaf("EFFECT", "roll-auto-result", { roll: "hit", outcome: "counts-as-6" }),
+        { type: "roll-result", target: "this-unit", modifier: { roll: "hit", result: 6 } }],
+      [leaf("EFFECT", "roll-auto-result", { roll: "battle-shock", outcome: "auto-pass" }),
+        { type: "roll-result", target: "this-unit", modifier: { roll: "battle-shock", result: "pass" } }],
+      [leaf("EFFECT", "end-attack-sequence", {}), { type: "end-attack-sequence", target: "attacker" }],
+    ];
+    for (const [input, expected] of cases) {
+      expect(compiled([input]).mechanics.effect).toEqual(expected);
+      expect(rendered(base(), [input]).length).toBeGreaterThan(0);
+    }
+  });
+
+  it("keeps the rolls/stats fields apart from what they belong to, in every render", () => {
+    expect(previewLeaf({ family_id: "ignore-modifiers", family_version: 1, parameters: { subject: "this-unit", what: "rolls", rolls: ["hit", "wound"] } }).text)
+      .toBe("The unit ignores any modifiers to its Hit and Wound rolls.");
+    expect(previewLeaf({ family_id: "ignore-modifiers", family_version: 1, parameters: { subject: "this-model", what: "characteristics", stats: ["M"] } }).text)
+      .toBe("This model ignores any modifiers to its Move characteristics.");
+    expect(previewLeaf({ family_id: "ignore-modifiers", parameters: { subject: "this-unit", what: ["rolls"], rolls: ["hit", "wound"] } }).text)
+      .toBe("The unit ignores any modifiers to its Hit and Wound rolls.");
+  });
+
+  it("lowers one list of characteristics and rolls to one ignore-modifiers effect per kind, each with only its own list", () => {
+    const both = leaf("EFFECT", "ignore-modifiers", { subject: "this-unit", what: ["characteristics", "rolls"], stats: ["BS"], rolls: ["hit", "wound"], weapon_type: "ranged" }, 2);
+    const effects = JSON.stringify(compiled([both]).mechanics);
+    expect(effects).toContain('{"type":"ignore-modifiers","target":"this-unit","modifier":{"what":"characteristics","stats":["BS"],"weapons":{"type":"ranged"}}}');
+    expect(effects).toContain('{"type":"ignore-modifiers","target":"this-unit","modifier":{"what":"rolls","rolls":["hit","wound"],"weapons":{"type":"ranged"}}}');
+    expect(previewLeaf({ family_id: "ignore-modifiers", parameters: both.parameters }).text).toMatch(/Ballistic Skill.*Hit and Wound rolls/su);
+  });
+
+  it("re-rolls every roll of an each list, and still picks one roll without each", () => {
+    const each = compiled([leaf("EFFECT", "reroll", { rolls: ["hit", "wound"], each: true, subset: "all", weapon_type: "all" }, 4)]).mechanics.effect;
+    expect(each).toEqual({ type: "sequence", steps: [
+      { type: "re-roll", target: "this-unit", modifier: { roll: "hit", result_scope: "any-result" } },
+      { type: "re-roll", target: "this-unit", modifier: { roll: "wound", result_scope: "any-result" } },
+    ] });
+    const pick = compiled([leaf("EFFECT", "reroll", { rolls: ["hit", "wound"], subset: "all", weapon_type: "all", count: 1 }, 4)]).mechanics.effect as { type: string };
+    expect(pick.type).toBe("choice");
+    expect(() => normalizeFingerprintParameters("reroll", { roll: "hit", each: true, subset: "all", weapon_type: "all" }, 4)).toThrow(/qualifies a rolls list/u);
+  });
+
+  it("moves version 1 ignore-modifiers to a one-kind list", () => {
+    expect(mapToLatest("ignore-modifiers", 1, { subject: "this-unit", what: "rolls", rolls: ["hit"] })).toEqual({ family: "ignore-modifiers", version: currentFamilyVersion("ignore-modifiers"), parameters: { subject: "this-unit", what: ["rolls"], rolls: ["hit"] } });
+  });
+
+  it("moves the attacker's rolls to the attacker when the effect targets this unit", () => {
+    const attack = leaf("EVENT", "event", { kind: "attack-made" }, 2);
+    const targeted = compiled([attack, leaf("EFFECT", "roll-auto-result", { roll: "hit", outcome: "auto-pass" })]);
+    expect(targeted.mechanics.effect).toEqual({ type: "roll-result", target: "this-unit", modifier: { roll: "hit", result: "pass" } });
+  });
+
+  it("extends re-roll with an optional count and a weapon_type that defaults to omitted", () => {
+    // Version 1 leaves have neither field and compile exactly as before.
+    expect(compiled([leaf("EFFECT", "reroll", { roll: "hit", subset: "failed" })]).mechanics.effect)
+      .toEqual({ type: "re-roll", target: "this-unit", modifier: { roll: "hit", subset: "all-failures" } });
+    // Version 2 adds them; "all" weapon_type is the DSL's default and is left off the fragment.
+    expect(compiled([leaf("EFFECT", "reroll", { roll: "hit", subset: "ones", weapon_type: "all" }, 2)]).mechanics.effect)
+      .toEqual({ type: "re-roll", target: "this-unit", modifier: { roll: "hit", subset: "ones" } });
+    expect(compiled([leaf("EFFECT", "reroll", { roll: "psychic", subset: "all", weapon_type: "melee", count: 1 }, 2)]).mechanics.effect)
+      .toEqual({ type: "re-roll", target: "this-unit", modifier: { roll: "psychic", result_scope: "any-result", weapons: { type: "melee" }, count: 1 } });
+    expect(rendered(base(), [leaf("EFFECT", "reroll", { roll: "surge", subset: "ones", weapon_type: "all" }, 2)]).length).toBeGreaterThan(0);
+  });
+
+  it("widens re-roll's roll enum to the values the old proposal named", () => {
+    for (const roll of ["attacks", "psychic", "surge", "hazard", "any", "resource-die", "blessings-of-khorne"]) {
+      expect(() => normalizeFingerprintParameters("reroll", { roll, subset: "all", weapon_type: "all" }, 2)).not.toThrow();
+    }
+  });
+
+  it("refuses a weapon_type on a roll that is a test, not an attack", () => {
+    expect(() => normalizeFingerprintParameters("roll-auto-result", { roll: "leadership", outcome: "auto-pass", weapon_type: "melee" }, 1))
+      .toThrow(/no meaning for the leadership test/u);
+    expect(() => normalizeFingerprintParameters("roll-auto-result", { roll: "desperate-escape", outcome: "auto-pass", weapon_type: "ranged" }, 1))
+      .toThrow(/no meaning for the desperate-escape test/u);
+  });
+
+  it("refuses rolls and stats on the wrong side of what, and a rolls leaf with no rolls named", () => {
+    expect(() => normalizeFingerprintParameters("ignore-modifiers", { subject: "this-unit", what: "rolls", stats: ["M"] }, 1)).toThrow(/must be subject, what/u);
+    expect(() => normalizeFingerprintParameters("ignore-modifiers", { subject: "this-unit", what: "characteristics", rolls: ["hit"] }, 1)).toThrow(/must be subject, what/u);
+    expect(() => normalizeFingerprintParameters("ignore-modifiers", { subject: "this-unit", what: "rolls" }, 1)).toThrow(/ignore-modifiers.rolls/u);
+    expect(() => normalizeFingerprintParameters("ignore-modifiers", { subject: "this-unit", what: ["rolls"], stats: ["M"] }, 2)).toThrow(/must be subject, what/u);
+    expect(() => normalizeFingerprintParameters("ignore-modifiers", { subject: "this-unit", what: ["characteristics", "rolls"], stats: ["BS"] }, 2)).toThrow(/ignore-modifiers.rolls/u);
+  });
+
+  it("previews end-attack-sequence with no modifier at all", () => {
+    expect(compiled([leaf("EFFECT", "end-attack-sequence", {})]).mechanics.effect).toEqual({ type: "end-attack-sequence", target: "attacker" });
+    expect(previewLeaf({ family_id: "end-attack-sequence", parameters: {} }).text).toBeTruthy();
+  });
+
+  it("extends fight-on-death with a shoot act that is a plain grant, no timing or roll", () => {
+    // Version 1 (fight only) still compiles exactly as before.
+    expect(compiled([leaf("EFFECT", "fight-on-death", { timing: "when-its-unit-fights" })]).mechanics.effect)
+      .toEqual({ type: "act-on-death", target: "event-object", modifier: { act: "fight", resolution: "when-unit-fights", removal: "after-unit-fights-or-phase-end" } });
+    // Version 2's shoot act names a subject instead of a timing, and carries no resolution/removal.
+    expect(compiled([leaf("EFFECT", "fight-on-death", { act: "shoot", subject: "this-model" }, 2)]).mechanics.effect)
+      .toEqual({ type: "act-on-death", target: "this-model", modifier: { act: "shoot" } });
+    expect(compiled([leaf("EFFECT", "fight-on-death", { act: "shoot", subject: "this-unit" }, 2)]).mechanics.effect)
+      .toEqual({ type: "act-on-death", target: "this-unit", modifier: { act: "shoot" } });
+    // Version 2's fight act is unchanged from version 1.
+    expect(compiled([leaf("EFFECT", "fight-on-death", { act: "fight", timing: "after-the-attacking-unit-finishes" }, 2)]).mechanics.effect)
+      .toEqual({ type: "act-on-death", target: "event-object", modifier: { act: "fight", resolution: "after-attacking-unit-finishes", removal: "after-destroyed-model-fights" } });
+    expect(rendered(base(), [leaf("EFFECT", "fight-on-death", { act: "shoot", subject: "this-unit" }, 2)])).toMatch(/can shoot before being removed/u);
+  });
+
+  it("migrates a fight-on-death@1 leaf to @2 by naming its act as fight", () => {
+    expect(normalizeFingerprintParameters("fight-on-death", { timing: "when-its-unit-fights" }, 1)).toEqual({ timing: "when-its-unit-fights" });
+    expect(mapToLatest("fight-on-death", 1, { timing: "when-its-unit-fights" })).toEqual({
+      family: "fight-on-death", version: 2, parameters: { timing: "when-its-unit-fights", act: "fight" },
+    });
+  });
+
+  it("refuses timing on a shoot act and a subject on a fight act", () => {
+    expect(() => normalizeFingerprintParameters("fight-on-death", { act: "shoot", timing: "when-its-unit-fights" }, 2)).toThrow(/exactly: act, subject/u);
+    expect(() => normalizeFingerprintParameters("fight-on-death", { act: "fight", subject: "this-model" }, 2)).toThrow(/exactly: act, timing/u);
+  });
+});
+
+describe("Semantic authoring reusable minimum roll results", () => {
+  const resultLeaf = (text: string) => {
+    const family = REVIEWED_FAMILY_REGISTRY.find((item) => item.id === "roll-result" && !item.deprecated)!;
+    const parameters = normalizeFingerprintParameters("roll-result", prefillFromSource(family, text), family.version);
+    return leaf("CONDITION", "roll-result", parameters, family.version);
+  };
+  const wound = () => leaf("EFFECT", "mortal-wounds", { recipient: "this-unit", count: "1" });
+
+  it.each(["D3", "D6", "2D6"])("uses the same minimum wording with %s without inventing an upper bound", (dice) => {
+    expect(compiled([leaf("EVENT", "dice-roll", { dice }, 4), resultLeaf("on a 2+"), wound()]).mechanics.effect)
+      .toEqual({ type: "dice-gated", dice, threshold: 2, comparison: "gte",
+        on_success: { type: "mortal-wounds", target: "this-unit", modifier: { count: 1 } }, on_fail: null });
+  });
+
+  it("keeps the minimum for each die in a multi-die success roll", () => {
+    expect(compiled([leaf("EVENT", "dice-roll", { dice: "D6", count: 6 }, 4), resultLeaf("on a 2+"), wound()]).mechanics.effect)
+      .toEqual({ type: "mortal-wounds", target: "this-unit", modifier: {
+        count: 1, per: "success", roll: { dice: 6, threshold: 2 },
+      } });
+  });
+
+  it("rejects a minimum the named die cannot reach", () => {
+    expect(compileLeaves([leaf("EVENT", "dice-roll", { dice: "D3" }, 4), resultLeaf("on a 4+"), wound()]).ok).toBe(false);
+  });
+
+  it("preserves explicit bands and exact results when upgrading existing leaves", () => {
+    for (const parameters of [{ from: 2, to: 5 }, { from: 6, to: 6 }]) {
+      expect(mapToLatest("roll-result", 1, parameters)).toEqual({ family: "roll-result", version: 2, parameters });
+    }
+    expect(normalizeFingerprintParameters("roll-result", { from: 2 }, 2)).toEqual({ from: 2 });
+    expect(() => normalizeFingerprintParameters("roll-result", { from: 4, to: 3 }, 2)).toThrow();
+  });
+});
+
+describe("Semantic authoring dice-family prefill", () => {
+  const family = (id: string) => REVIEWED_FAMILY_REGISTRY.find((item) => item.id === id && item.version === currentFamilyVersion(id)) as unknown as PrefillFamily;
+  const prefill = (id: string, text: string) => prefillFromSource(family(id), text);
+
+  it("reads how many rolls a re-roll allows, when the wording names one", () => {
+    expect(prefill("reroll", "you can re-roll one Hit roll")).toMatchObject({ count: 1 });
+    expect(prefill("reroll", "you can re-roll a single Wound roll")).toMatchObject({ count: 1 });
+    expect(prefill("reroll", "you can re-roll the Hit roll")).not.toHaveProperty("count");
+  });
+
+  it("reads ignore-modifiers' subject, what, and only from regular wording", () => {
+    expect(prefill("ignore-modifiers", "This model's characteristics cannot be modified")).toMatchObject({ subject: "this-model", what: ["characteristics"] });
+    expect(prefill("ignore-modifiers", "This unit's hit rolls cannot be modified")).toMatchObject({ subject: "this-unit", what: ["rolls"] });
+    expect(prefill("ignore-modifiers", "the bearer's rolls cannot be affected by any negative modifiers")).toMatchObject({ subject: "this-model", what: ["rolls"], only: "worsening" });
+    expect(prefill("ignore-modifiers", "ignore any or all modifiers to its Move characteristic and to Advance rolls")).toMatchObject({ what: ["characteristics", "rolls"] });
+  });
+
+  it("reads roll-auto-result's outcome and its value when it succeeds only on an unmodified N+", () => {
+    expect(prefill("roll-auto-result", "Hit rolls of 1 always automatically fail")).toEqual({});
+    expect(prefill("roll-auto-result", "This model automatically passes Battle-shock tests")).toMatchObject({ outcome: "auto-pass" });
+    expect(prefill("roll-auto-result", "This unit's hit rolls succeed only on an unmodified 5+")).toMatchObject({ outcome: "succeeds-on", value: 5 });
+    expect(prefill("roll-auto-result", "This unit's hit rolls of 6 always count as an unmodified 6")).toMatchObject({ outcome: "counts-as-6" });
+  });
+
+  it("reads fight-on-death's act and, for shoot, its subject", () => {
+    expect(prefill("fight-on-death", "When its unit fights, this model can fight")).toMatchObject({ act: "fight", timing: "when-its-unit-fights" });
+    expect(prefill("fight-on-death", "This model can shoot before being removed from play")).toEqual({ act: "shoot", subject: "this-model" });
+    expect(prefill("fight-on-death", "This unit can shoot before being removed from play")).toEqual({ act: "shoot", subject: "this-unit" });
+  });
+});
+
+describe("a roll whose result an effect takes as its amount", () => {
+  const base = () => authored("adeptus-mechanicus", "control-edict-adeptus-mechanicus");
+  const versioned = (family: string, parameters: Record<string, unknown>) =>
+    leaf(familyRole(family, currentFamilyVersion(family)), family, normalizeFingerprintParameters(family, parameters, currentFamilyVersion(family)), currentFamilyVersion(family));
+
+  // Hunts: "roll one D3: … mortal wounds equal to the result" was refused for having no result band.
+  it("binds the roll once and reads it in the effect, leaving the effects that do not read it outside", () => {
+    const leaves = [
+      versioned("dice-roll", { dice: "D3" }),
+      versioned("mortal-wounds", { recipient: "this-unit", count: "D3" }),
+      versioned("battle-shock-state", { recipient: "this-unit", set: false }),
+    ];
+    const effect = compiled(leaves).mechanics.effect as Record<string, any>;
+    expect(effect.steps[0]).toEqual({ type: "roll", dice: "D3", roll_var: "result", effect: { type: "mortal-wounds", target: "this-unit", modifier: { count: { roll_var: "result" } } } });
+    expect(effect.steps[1].type).toBe("state-change");
+    expect(rendered(base(), leaves)).toMatch(/result of that roll/u);
+  });
+
+  it("still refuses a band-less roll no effect reads", () => {
+    const result = compileLeaves([
+      versioned("dice-roll", { dice: "D3" }),
+      versioned("mortal-wounds", { recipient: "this-unit", count: "D6" }),
+    ]);
+    expect(result.ok).toBe(false);
+    expect(result.ok ? [] : result.errors).toContainEqual(expect.stringMatching(/no result band/u));
+  });
+});
+
+describe("Semantic authoring several dice counted per success", () => {
+  const base = () => authored("adeptus-mechanicus", "control-edict-adeptus-mechanicus");
+  // Fabricated shape: "Roll five D6. For each 4+, that unit suffers 1 mortal wound and your unit regains up to 1 lost wound."
+  const leaves = (heal: Record<string, unknown>) => ([
+    ["dice-roll", { dice: "D6", count: 5 }, 6],
+    ["roll-result", { from: 4 }, 2],
+    ["mortal-wounds", { recipient: "this-unit", count: "1" }, 5],
+    ["regain-wounds", heal, 4],
+  ] as const).map(([family, parameters, version]) => leaf(familyRole(family, version), family, parameters, version));
+
+  it("rolls once and counts the successes for every effect done per success", () => {
+    expect(compiled(leaves({ subject: "this-unit", amount: "1", per: "unit" })).mechanics.effect).toEqual({
+      type: "roll", dice: "5D6", roll_var: "result",
+      effect: { type: "sequence", steps: [
+        { type: "mortal-wounds", target: "this-unit", modifier: { count: { roll_var: "result", successes_on: 4 } } },
+        { type: "heal", target: "this-unit", modifier: { amount: { roll_var: "result", successes_on: 4 }, per: "unit" } },
+      ] },
+    });
+    expect(rendered(base(), leaves({ subject: "this-unit", amount: "1", per: "unit" }))).toContain("the number of those dice that rolled a 4+");
+  });
+
+  it("refuses an amount other than 1 per success, which a count of successes cannot scale", () => {
+    const result = compileLeaves(leaves({ subject: "this-unit", amount: "D3", per: "unit" }));
+    expect(result.ok ? [] : result.errors).toEqual([expect.stringContaining("needs an amount of 1")]);
+  });
+});

@@ -5,13 +5,21 @@
     MANUAL_BUFF_TOGGLES,
     CONTEXT_FLAG_TOGGLES,
   } from "./store.svelte.js";
+  import { isLegalLeverSelection } from "@alpaca-software/40kdc-data";
   import type {
     Buff,
+    AbilityNeed,
     EngineContext,
     StackableBuff,
     StackableBuffGroup,
   } from "@alpaca-software/40kdc-data";
   import EmptyState from "./EmptyState.svelte";
+  import { scenarioContext } from "./scenario.js";
+  import { memberLevers, memberMortalSources, unionLevers } from "./output-model.js";
+  import { defenderNeeds } from "./defender.js";
+  import { needToggles } from "./scenario.js";
+  import NeedsList from "./needs-list.svelte";
+  import MortalSourcesList from "./mortal-sources-list.svelte";
 
   // EngineContext for the DSL→Buff translator. Without this the translator
   // defaults to `{ phase: "shooting" }`, so phase-gated branches misfire when
@@ -36,30 +44,59 @@
     attackerCharged: salvo.contextFlags.attackerCharged,
     attackerKeywords,
     targetKeywords: salvo.manualTarget.keywords.map((k) => k.toLowerCase()),
+    attackerAttached: salvo.attachedUnitIds.length > 0,
+    ...(salvo.targetDistance !== null ? { distanceInches: salvo.targetDistance } : {}),
+    ...scenarioContext(salvo.scenario),
   });
 
   // Every buff the attacker could stack, as toggleable levers. The package
   // does the DSL walk once and hands back (buff, enabled) pairs plus the
   // activation groups (dice-pool / choice) that cap how many fire at once.
-  const stackable = $derived.by<{ buffs: StackableBuff[]; groups: StackableBuffGroup[] }>(() => {
-    if (!salvo.selectedUnitId) return { buffs: [], groups: [] };
+  const stackable = $derived.by<{ buffs: StackableBuff[]; groups: StackableBuffGroup[]; needs: AbilityNeed[]; error?: string }>(() =>
+    unionLevers(memberLevers(
+      ds,
+      {
+        unitId: salvo.selectedUnitId,
+        factionId: salvo.selectedFactionId,
+        detachmentId: salvo.selectedDetachmentId,
+        attachedUnitIds: salvo.attachedUnitIds,
+        supportUnitIds: salvo.supportUnitIds,
+      },
+      engineContext,
+      salvo.selectedWeaponId ? [{ weaponId: salvo.selectedWeaponId, profileIndex: salvo.selectedProfileIndex }] : [],
+    )));
+
+  // The defending unit's undecided conditions, read with the same build the projection uses.
+  const targetNeeds = $derived.by<AbilityNeed[]>(() => {
+    const unit = salvo.targetUnitId ? ds.units.getAny(salvo.targetUnitId) : undefined;
+    if (!unit) return [];
     try {
-      return ds.stackableBuffsFor(
-        {
-          unitId: salvo.selectedUnitId,
-          factionId: salvo.selectedFactionId ?? undefined,
-          detachmentId: salvo.selectedDetachmentId ?? undefined,
-          attachedUnitIds: salvo.attachedUnitIds,
-          weaponProfiles: salvo.selectedWeaponId
-            ? [{ weaponId: salvo.selectedWeaponId, profileIndex: salvo.selectedProfileIndex }]
-            : [],
-        },
-        engineContext,
-      );
+      return defenderNeeds(ds, unit, {
+        detachmentId: salvo.defenderDetachmentId,
+        stratagemIds: salvo.defenderStratagemIds,
+        enhancementId: salvo.defenderEnhancementId,
+        wargear: salvo.targetWargear,
+      }, engineContext);
     } catch {
-      return { buffs: [], groups: [] };
+      // The projection pane reports a defender build that fails; here it only hides its needs.
+      return [];
     }
   });
+  // Mortal wounds the combined unit's abilities inflict outside its attacks.
+  const mortal = $derived(memberMortalSources(
+    ds,
+    {
+      unitId: salvo.selectedUnitId,
+      factionId: salvo.selectedFactionId,
+      detachmentId: salvo.selectedDetachmentId,
+      attachedUnitIds: salvo.attachedUnitIds,
+      supportUnitIds: salvo.supportUnitIds,
+    },
+    { ...engineContext, targetModelCount: salvo.manualTarget.modelCount },
+  ));
+  // One toggle per undecided condition across the attacker's levers, its mortal-wound sources and
+  // the defender's rules.
+  const needs = $derived(needToggles([...stackable.needs, ...mortal.needs, ...targetNeeds]));
 
   // Free-standing levers (always-on abilities, stratagems, weapon keywords).
   const ungrouped = $derived(stackable.buffs.filter((b) => !b.group));
@@ -83,11 +120,21 @@
   }
 
   function activeInGroup(groupId: string): number {
-    return stackable.buffs.filter((b) => b.group === groupId && enabled(b)).length;
+    return stackable.buffs.filter(
+      (b) => (b.group === groupId || b.groups?.includes(groupId)) && enabled(b),
+    ).length;
+  }
+
+  function canToggle(b: StackableBuff): boolean {
+    // Removing a selection is always available, including recovery from stale state.
+    if (enabled(b)) return true;
+    const selected = new Set(stackable.buffs.filter(enabled).map((lever) => lever.id));
+    selected.add(b.id);
+    return isLegalLeverSelection(stackable.buffs, stackable.groups, selected);
   }
 
   function toggle(b: StackableBuff) {
-    salvo.setBuffEnabled(b.id, !enabled(b));
+    if (canToggle(b)) salvo.setBuffEnabled(b.id, !enabled(b));
   }
 
   function toggleManual(id: string) {
@@ -97,18 +144,12 @@
     salvo.manualBuffsActive = next;
   }
 
-  // A combined-unit member is a leader if it can itself lead something;
-  // otherwise it's the bodyguard half. Derived from the attachment graph so it
-  // holds regardless of which half is the selected/firing unit.
-  function attachedRole(unitId: string): "leader" | "bodyguard" {
-    return ds.bodyguardsAttachableFrom(unitId).length > 0 ? "leader" : "bodyguard";
-  }
 
   function sourceChip(b: StackableBuff): string {
     if (b.source.kind === "weapon-keyword") return "weapon";
     if (b.source.kind === "manual") return "manual";
     if (b.source.abilityKind === "attached") {
-      return b.source.sourceUnitId ? attachedRole(b.source.sourceUnitId) : "attached";
+      return "attached";
     }
     return b.source.abilityKind === "detachment-stratagem" ? "stratagem" : b.source.abilityKind;
   }
@@ -139,13 +180,15 @@
 
 {#if !salvo.selectedUnitId}
   <EmptyState>Pick an attacker unit to see eligible buffs.</EmptyState>
+{:else if stackable.error}
+  <p class="error" role="alert">Abilities could not be read: {stackable.error}</p>
 {:else if stackable.buffs.length === 0}
   <EmptyState>No buffs available in the {salvo.phase} phase.</EmptyState>
 {:else}
   <div class="ability-list">
     {#each ungrouped as b (b.id)}
       <label class="ability-row" class:active={enabled(b)}>
-        <input type="checkbox" checked={enabled(b)} onchange={() => toggle(b)} />
+        <input type="checkbox" checked={enabled(b)} disabled={!canToggle(b)} onchange={() => toggle(b)} />
         <span class="name">
           {b.label}
           <small>· {summary(b)}</small>
@@ -156,12 +199,11 @@
 
     {#each pools as p (p.group.id)}
       <div class="section-label">
-        {p.group.label} · pick up to {p.group.maxActivations}
-        ({activeInGroup(p.group.id)}/{p.group.maxActivations})
+        {p.group.label} · base allowance {p.group.maxActivations}
+        ({activeInGroup(p.group.id)} selected)
       </div>
       {#each p.levers as b (b.id)}
-        {@const atCap =
-          !enabled(b) && activeInGroup(p.group.id) >= p.group.maxActivations}
+        {@const atCap = !canToggle(b)}
         <label class="ability-row" class:active={enabled(b)} class:dim={atCap}>
           <input
             type="checkbox"
@@ -179,6 +221,10 @@
     {/each}
   </div>
 {/if}
+
+<MortalSourcesList sources={mortal.sources} unverified={mortal.unverified} error={mortal.error} />
+
+<NeedsList toggles={needs} />
 
 <hr />
 

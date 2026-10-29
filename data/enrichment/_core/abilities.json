@@ -11,15 +11,15 @@
     "ability_type": "core",
     "behavior": "passive",
     "effect": {
-      "type": "bs-modifier",
+      "type": "stat-modifier",
       "target": "attacker",
       "modifier": {
+        "stat": "BS",
         "operation": "subtract",
         "value": 1
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     }
   },
@@ -36,21 +36,20 @@
     "behavior": "activated",
     "effect": {
       "type": "re-roll",
-      "target": "unit",
+      "target": "this-unit",
       "modifier": {
         "roll": "any",
         "result_scope": "any-result"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "Re-roll one Advance, Charge, Damage, Hazard, Hit, Save or Wound roll, or a roll determining a weapon's number of attacks, just after making it; for multi-dice rolls re-roll one chosen die, except Charge rolls which are re-rolled in full"
   },
   {
-    "ability_id": "counter-offensive",
-    "name": "Counter-Offensive",
+    "ability_id": "counteroffensive",
+    "name": "Counteroffensive",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -60,15 +59,19 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "after-unit-resolves-attacks",
-      "subject": "enemy-unit"
+      "event": "attacks-resolved",
+      "subject": {
+        "owner": "enemy"
+      }
     },
     "effect": {
-      "type": "fight-first",
-      "target": "unit"
+      "type": "ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "fights-first"
+      }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "Used in the Fight step just after an enemy unit resolves its attacks: your unit gains Fights First and must be the next unit you select to fight"
@@ -85,8 +88,12 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "end-of-charge-move",
-      "subject": "self"
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "charge"
+        ]
+      }
     },
     "effect": {
       "type": "dice-gated",
@@ -95,7 +102,7 @@
       "comparison": "gte",
       "on_success": {
         "type": "mortal-wounds",
-        "target": "target",
+        "target": "stratagem-target",
         "modifier": {
           "count": 1
         }
@@ -103,10 +110,9 @@
       "on_fail": null
     },
     "scope": {
-      "range": "engagement-range",
       "duration": "phase"
     },
-    "community_notes": "Monster/Vehicle unit after a Charge move: select one engaged enemy unit and one engaged model in your unit, roll D6 equal to that model's Toughness \u2014 each 5+ inflicts 1 mortal wound on the enemy unit (max 6), and each 1 inflicts 1 mortal wound on your own unit"
+    "community_notes": "Monster/Vehicle unit after a Charge move: select one engaged enemy unit and one engaged model in your unit, roll D6 equal to that model's Toughness — each 5+ inflicts 1 mortal wound on the enemy unit (max 6), and each 1 inflicts 1 mortal wound on your own unit"
   },
   {
     "ability_id": "epic-challenge",
@@ -114,26 +120,58 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "a682b4dd0382eddf0b47cc69493e1dd59867a81bac0196fe3f760ccfd8c6aa6e",
+    "source_digest": "5d77eb43aa43d67a081b76d862ab25c86faa42f258da5dac871967d5b331a0f6",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "keyword-grant",
-      "target": "unit",
-      "modifier": {
-        "keywords": [
-          "Precision"
-        ],
-        "weapon_type": "melee"
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "CHARACTER"
+          ],
+          "level": "model",
+          "member_of": "stratagem-target"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "effect": {
+        "type": "weapon-ability-grant",
+        "target": "selected-unit",
+        "modifier": {
+          "keywords": [
+            {
+              "keyword_id": "precision"
+            }
+          ],
+          "weapons": {
+            "type": "melee"
+          }
+        }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
-    "community_notes": "Used when a Character unit is selected to fight: one Character model's melee weapons gain [PRECISION]"
+    "community_notes": "Used when a Character unit is selected to fight: one Character model's melee weapons gain [PRECISION]",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "fight"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "CHARACTER"
+        ]
+      }
+    }
   },
   {
     "ability_id": "explosives",
@@ -141,30 +179,75 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "1d594e074ac98350add4be6c6dc1232514a542c9adee982278db1962bf2cad9c",
+    "source_digest": "56abc872fb1afc36ae29742385a6b1cfefbf50661987dbc3bb7650578efb52bd",
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 4,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": "target",
-        "modifier": {
-          "count": 1
-        }
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "friendly",
+          "any_of": [
+            "EXPLOSIVES",
+            "GRENADES"
+          ],
+          "level": "model",
+          "member_of": "stratagem-target"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "bind_as": "outer"
       },
-      "on_fail": null
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy",
+            "not_states": [
+              "engaged"
+            ],
+            "within": {
+              "range": {
+                "inches": 8
+              },
+              "of": {
+                "selection_var": "outer"
+              }
+            },
+            "visible": {
+              "to": {
+                "selection_var": "outer"
+              }
+            }
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "bind_as": "inner"
+        },
+        "effect": {
+          "type": "mortal-wounds",
+          "target": "selected-unit",
+          "modifier": {
+            "count": 1,
+            "per": "success",
+            "roll": {
+              "dice": 6,
+              "threshold": 4
+            }
+          }
+        }
+      }
     },
     "scope": {
-      "range": "any-visible",
-      "duration": "phase"
+      "duration": "permanent"
     },
-    "community_notes": "One unengaged Explosives/Grenades unit that is eligible to shoot and did not Advance: select one such model and one unengaged enemy unit within 8\" and visible to it, then roll six D6 \u2014 each 4+ inflicts 1 mortal wound"
+    "community_notes": "One unengaged Explosives/Grenades unit that is eligible to shoot and did not Advance: select one such model and one unengaged enemy unit within 8\" and visible to it, then roll six D6 — each 4+ inflicts 1 mortal wound"
   },
   {
     "ability_id": "fire-overwatch",
@@ -172,25 +255,42 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "bea95724b46496478f24370dcc800b092ba6bc45e0e731c6b5f40024d2da10c9",
+    "source_digest": "b968092a382f755766c3ea8f65ffd616e5aa692e4a35b76586f2c473d9545c49",
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "end-of-phase",
-      "subject": "enemy-unit"
+      "event": "phase-ended",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
     },
     "effect": {
-      "type": "ability-grant",
-      "target": "unit",
+      "type": "permission",
+      "target": "this-unit",
       "modifier": {
-        "grant_type": "snap-shooting"
+        "activity": "shoot",
+        "allow": true,
+        "as_if": "snap-shooting"
       }
     },
     "scope": {
-      "range": "unit",
-      "duration": "phase"
+      "duration": "permanent"
     },
     "community_notes": "At the end of the opponent's Movement phase, one friendly unengaged unit (excluding Titanic) shoots using snap shooting"
   },
@@ -206,18 +306,33 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "end-of-phase",
-      "subject": "enemy-unit"
+      "event": "phase-ended",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "charge"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
     },
     "effect": {
-      "type": "ability-grant",
-      "target": "unit",
+      "type": "move",
+      "target": "this-unit",
       "modifier": {
-        "grant_type": "reactive-charge"
+        "move_type": "charge"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "At the end of the opponent's Charge phase, one friendly unengaged unit within 12\" of enemy units resolves a charge (Vehicles only if Character/Walker); a mode is selected before the charge roll, e.g. Leap to Defend restricts targets to units that charged this phase within maximum distance"
@@ -228,29 +343,51 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "706afe9d0c3b016337172548c2616c8c79cbd8cdfeb580b86e1fa360dd435739",
+    "source_digest": "3f2834bfcbe1abf9ec46fa60eadf075883db868bf3bf12cdf5d545cd7f1e9a2a",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "usage": {
       "frequency": "n-per-battle",
       "count": 1,
       "per": "army"
     },
     "effect": {
-      "type": "auto-result",
-      "target": "unit",
+      "type": "roll-result",
+      "target": "this-unit",
       "modifier": {
-        "test": "battle-shock",
+        "roll": "battle-shock",
         "result": "pass"
       }
     },
     "scope": {
-      "range": "unit",
-      "duration": "phase"
+      "duration": "permanent"
     },
-    "community_notes": "Used just before making a Battle-shock roll for the unit: that roll is automatically successful. Once per battle"
+    "community_notes": "Used just before making a Battle-shock roll for the unit: that roll is automatically successful. Once per battle",
+    "trigger": [
+      {
+        "event": "step-started",
+        "filter": {
+          "step": "battle-shock"
+        },
+        "condition": {
+          "type": "player-turn-is",
+          "parameters": {
+            "turn": "your-turn"
+          }
+        }
+      },
+      {
+        "event": "before-roll",
+        "filter": {
+          "roll": "battle-shock"
+        },
+        "subject": {
+          "owner": "friendly"
+        }
+      }
+    ]
   },
   {
     "ability_id": "rapid-ingress",
@@ -258,26 +395,46 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
-    "source_digest": "191cc24adc23d909959c1bd882fa9ea5f4fa814113c4f37b510b7123e2b4dc6d",
+    "source_digest": "8681f298657d16de7f6aac253243e681ee531500faabe840c33ad46ecf7bfd78",
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "end-of-phase",
-      "subject": "enemy-unit"
+      "event": "phase-ended",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          },
+          {
+            "type": "battle-round",
+            "parameters": {
+              "min": 2
+            }
+          }
+        ]
+      }
     },
     "effect": {
-      "type": "ability-grant",
-      "target": "unit",
+      "type": "move",
+      "target": "this-unit",
       "modifier": {
-        "grant_type": "ingress-move",
-        "from": "strategic-reserves"
+        "move_type": "ingress"
       }
     },
     "scope": {
-      "range": "unit",
-      "duration": "phase"
+      "duration": "permanent"
     },
     "community_notes": "At the end of the opponent's Movement phase, one friendly unit in Strategic Reserves (excluding Aircraft) makes an ingress move. Cannot be used in the first battle round"
   },
@@ -293,12 +450,28 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "trigger": {
-      "event": "start-of-phase",
-      "subject": "enemy-unit"
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
     },
     "effect": {
       "type": "rule-state",
-      "target": "unit",
+      "target": "this-unit",
       "modifier": {
         "direction": "granted",
         "rule_kind": "core-rule",
@@ -306,9 +479,547 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
-    "community_notes": "At the start of the opponent's Shooting phase, one friendly Smoke unit: attacks targeting it \u2014 or targeting units not fully visible because of its models \u2014 have the target benefiting from cover"
+    "community_notes": "At the start of the opponent's Shooting phase, one friendly Smoke unit: attacks targeting it — or targeting units not fully visible because of its models — have the target benefiting from cover"
+  },
+  {
+    "ability_id": "deadly-demise",
+    "name": "Deadly Demise",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
+    "version": "2025-q3",
+    "effect": {
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": {
+          "owner": "enemy",
+          "within": {
+            "range": {
+              "inches": 6
+            }
+          }
+        },
+        "modifier": {
+          "count": {
+            "rating": true
+          },
+          "range": {
+            "inches": 6
+          }
+        }
+      },
+      "on_fail": null
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [],
+    "ability_type": "core",
+    "behavior": "reactive",
+    "trigger": {
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
+    }
+  },
+  {
+    "ability_id": "deep-strike",
+    "name": "Deep Strike",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "source_digest": "7f180fb5e7f7d43eac9337cc29101f902ebdec6556e154c6785055d0dae9343d",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "this-unit",
+          "filter": {
+            "has_ability": [
+              "deep-strike"
+            ]
+          }
+        }
+      },
+      "effect": {
+        "type": "set-up",
+        "target": "event-subject",
+        "modifier": {
+          "to": "battlefield",
+          "min_enemy_distance": {
+            "inches": 8
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [],
+    "ability_type": "core",
+    "behavior": "reactive",
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "ingress"
+        ]
+      }
+    }
+  },
+  {
+    "ability_id": "feel-no-pain",
+    "name": "Feel No Pain",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "d063208539e576384bf82ff32c2bfcd0798fdea0539cee1305a013dc87ae09c1",
+    "version": "2025-q3",
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": {
+          "rating": true
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [],
+    "ability_type": "core",
+    "behavior": "passive"
+  },
+  {
+    "ability_id": "fights-first",
+    "name": "Fights First",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "source_digest": "71f22703f4d6f50fe5dcc81323a1ef66423412c6fd3beeaed0df9a9d9d0b26d9",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "this-unit",
+          "filter": {
+            "has_ability": [
+              "fights-first"
+            ]
+          }
+        }
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "this-unit",
+        "modifier": {
+          "ability": "fights-first"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [],
+    "ability_type": "core",
+    "behavior": "passive"
+  },
+  {
+    "ability_id": "firing-deck",
+    "name": "Firing Deck",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "28f041d457883078c161d2fe4f6622814a84f1b2f7c90ea87326dae646e61954",
+    "version": "2025-q3",
+    "effect": {
+      "type": "ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "firing-deck",
+        "value": {
+          "rating": true
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [],
+    "ability_type": "core",
+    "behavior": "passive"
+  },
+  {
+    "ability_id": "hover",
+    "name": "Hover",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "source_digest": "ca4b567df2eb67644dd49e42e986a2480bb39698b4c2e1baa8c672df61d7dd03",
+    "version": "2025-q3",
+    "effect": {
+      "type": "ability-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "takes-to-the-skies",
+        "aspect": "range",
+        "operation": "lift-limit",
+        "value": 2
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [],
+    "ability_type": "core",
+    "behavior": "reactive",
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "ability"
+      }
+    }
+  },
+  {
+    "ability_id": "infiltrators",
+    "name": "Infiltrators",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "2eb1b3aa65c0169d2409be3784721358669b3d84f8f704cd9a60b9ea4f58da43",
+    "version": "2025-q3",
+    "effect": {
+      "type": "ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "infiltrators"
+      }
+    },
+    "scope": {
+      "duration": "one-use"
+    },
+    "unit_ids": [],
+    "ability_type": "core",
+    "behavior": "activated"
+  },
+  {
+    "ability_id": "leader",
+    "name": "Leader",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "0f501f6eb8e6288aaf0dab321e97e20625cad30432251611a559069fc750f98d",
+    "version": "2025-q3",
+    "effect": {
+      "type": "ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "leader"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [],
+    "ability_type": "core",
+    "behavior": "passive"
+  },
+  {
+    "ability_id": "lone-operative",
+    "name": "Lone Operative",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "97e888af23148ae67829335b14b9e547038266533f8a93a670de3e06b8f14cf0",
+    "version": "2025-q3",
+    "effect": {
+      "type": "targeting",
+      "target": {
+        "owner": "enemy"
+      },
+      "modifier": {
+        "may": "cannot-target",
+        "target": "this-model",
+        "kind": "shoot",
+        "range": {
+          "inches": 12
+        },
+        "weapons": {
+          "type": "ranged"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [],
+    "ability_type": "core",
+    "behavior": "passive"
+  },
+  {
+    "ability_id": "scouts",
+    "name": "Scouts",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "2ff78b89dd5912f5a5624fdc4ae8ebcb3f665b86dd5e9949de1d58b7dd8ec138",
+    "version": "2025-q3",
+    "effect": {
+      "type": "ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "scouts",
+        "value": {
+          "rating": true
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [],
+    "ability_type": "core",
+    "behavior": "activated"
+  },
+  {
+    "ability_id": "stealth",
+    "name": "Stealth",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "source_digest": "259a208f3b74890127346efa737ed1ed0ecf3b6e96f57eb66b7ae867543fdc25",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-unit",
+              "filter": {
+                "has_ability": [
+                  "stealth"
+                ]
+              }
+            }
+          },
+          {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "ranged"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "this-unit",
+        "modifier": {
+          "ability": "benefit-of-cover"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [],
+    "ability_type": "core",
+    "behavior": "passive"
+  },
+  {
+    "ability_id": "super-heavy-walker",
+    "name": "Super-heavy Walker",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "3b050bffcccd4298397cb67be6b070a8ee3ea498e6461bd7c7f3b17d95253d2d",
+    "version": "2025-q3",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "move-modifier",
+          "target": "this-model",
+          "modifier": {
+            "applies_to_moves": [
+              "normal",
+              "advance",
+              "fall-back"
+            ],
+            "passthrough": [
+              "models-excluding-titanic",
+              "terrain"
+            ],
+            "no_end_in_engagement": true
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "happened",
+            "parameters": {
+              "event": "move-ended",
+              "subject": "this-model",
+              "filter": {
+                "through": "tall-terrain"
+              },
+              "window": "event"
+            }
+          },
+          "effect": {
+            "type": "dice-gated",
+            "dice": "D6",
+            "threshold": 1,
+            "comparison": "eq",
+            "on_success": {
+              "type": "state-change",
+              "target": "this-unit",
+              "modifier": {
+                "state": "battle-shocked",
+                "set": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "turn"
+    },
+    "unit_ids": [],
+    "ability_type": "core",
+    "behavior": "passive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+  },
+  {
+    "ability_id": "damaged",
+    "name": "Damaged",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "unit_ids": [],
+    "detachment_id": null,
+    "ability_type": "core",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "wounds",
+        "parameters": {
+          "subject": "this-model",
+          "remaining_max": {
+            "rating": true
+          }
+        }
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "this-model",
+        "modifier": {
+          "roll": "hit",
+          "operation": "subtract",
+          "value": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "support",
+    "name": "Support",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "detachment_id": null,
+    "ability_type": "core",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-objective-control",
+    "name": "Damaged Objective Control",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "unit_ids": [],
+    "detachment_id": null,
+    "ability_type": "core",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "wounds",
+        "parameters": {
+          "subject": "this-model",
+          "damaged": true
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "OC",
+          "operation": "subtract",
+          "value": {
+            "rating": true
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
   }
 ]

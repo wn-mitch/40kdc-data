@@ -1,4 +1,4 @@
-# MFM missions — APPLIED
+# MFM missions — DRY RUN
 
 Reconciles mission scoring-card numbers (vp/vp_per, vp_max, cumulative) from the
 GW MFM dump for both secondary cards and the 25 generic primary missions.
@@ -19,7 +19,7 @@ so the pack-global caps project per mission). Prose is never touched.
 | Shape mismatches (skipped) | 0 |
 | Repo cards with no dump match | 0 |
 | Dump cards with no repo match | 0 |
-| Primary reskins excluded (by design) | 24 |
+| Primary reskins excluded (by design) | 26 |
 | Mission-entity matched | 25 |
 | source filled | 0 |
 | source review (dump differs, kept) | 0 |

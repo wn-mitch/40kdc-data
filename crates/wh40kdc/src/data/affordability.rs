@@ -53,7 +53,7 @@ pub struct CandidateCost {
 /// `next_ordinal` — the minimum over the tiers in effect for `host_faction`'s
 /// army, taking it at its smallest legal size. Zero when there are no tiers.
 fn cheapest_next_copy(unit: &Unit, next_ordinal: u64, host_faction: Option<&Faction>) -> u64 {
-    host_points_tiers(unit, host_faction)
+    host_points_tiers(unit, host_faction, &[])
         .into_iter()
         .map(|t| host_unit_points(unit, t.models, next_ordinal, host_faction))
         .min()
@@ -71,13 +71,7 @@ pub fn candidate_affordability(spec: &AffordabilitySpec, dataset: &Dataset) -> V
             return None;
         }
         faction
-            .and_then(|f| {
-                dataset
-                    .units
-                    .by_faction(f)
-                    .into_iter()
-                    .find(|u| u.id.as_str() == unit_id)
-            })
+            .and_then(|f| dataset.units.get_in_faction(unit_id, f))
             .or_else(|| dataset.units.get_any(unit_id))
     };
 

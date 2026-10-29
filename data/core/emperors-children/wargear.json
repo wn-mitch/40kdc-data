@@ -60,13 +60,56 @@
     "name": "Icon of Excess",
     "category": "icon",
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
         "namespace": "mfm",
         "id": "d97fc83f-63b4-4659-a975-f57a35b322b7"
+      }
+    ]
+  },
+  {
+    "id": "shining-aegis",
+    "name": "Shining aegis",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "5579aa57-632e-42a7-a12a-7ebc8c69e24d"
+      }
+    ]
+  },
+  {
+    "id": "instrument-of-chaos",
+    "name": "Instrument of Chaos",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "e77cb7d8-d6cd-472a-a771-91fee3e48bcd"
+      }
+    ]
+  },
+  {
+    "id": "daemonic-icon",
+    "name": "Daemonic Icon",
+    "category": "icon",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "79b389ec-f1c4-42b1-833d-4e1b86817377"
       }
     ]
   }

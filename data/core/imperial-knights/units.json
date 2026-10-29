@@ -37,7 +37,9 @@
       "Towering",
       "Acastus",
       "Imperium",
-      "Knight Asterius"
+      "Knight Asterius",
+      "Frame",
+      "Acastus Knight Asterius"
     ],
     "faction_keywords": [
       "Imperial Knights"
@@ -57,12 +59,23 @@
       "twin-conversion-beam-cannon"
     ],
     "ability_ids": [
-      "deadly-demise-2d6",
-      "sunderer-of-fortresses"
+      {
+        "id": "deadly-demise",
+        "value": "2D6"
+      },
+      "sunderer-of-fortresses-imperial-knights",
+      {
+        "id": "damaged",
+        "value": 10
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -102,13 +115,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 400,
+        "cost": 385,
         "unit_count_min": 1,
         "unit_count_max": 1
       },
       {
         "models": 1,
-        "cost": 420,
+        "cost": 405,
         "unit_count_min": 2,
         "unit_count_max": null
       }
@@ -143,13 +156,24 @@
       "twin-incendine-combustor"
     ],
     "ability_ids": [
-      "deadly-demise-d6",
-      "defender-s-duty-bondsman",
-      "selfless-protector"
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "selfless-protector-imperial-knights",
+      {
+        "id": "damaged",
+        "value": 9
+      },
+      "defenders-duty-imperial-knights",
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -208,7 +232,8 @@
       "Towering",
       "Imperium",
       "Cerastus",
-      "Knight Acheron"
+      "Knight Acheron",
+      "Cerastus Knight Acheron"
     ],
     "faction_keywords": [
       "Imperial Knights"
@@ -228,13 +253,24 @@
       "twin-heavy-bolter"
     ],
     "ability_ids": [
-      "acheron-s-duty-bondsman",
-      "deadly-demise-d6-2",
-      "searing-flames"
+      {
+        "id": "deadly-demise",
+        "value": "D6+2"
+      },
+      "searing-flames-imperial-knights",
+      "acherons-duty-imperial-knights",
+      {
+        "id": "damaged",
+        "value": 10
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -291,7 +327,9 @@
       "Towering",
       "Imperium",
       "Acastus",
-      "Knight Porphyrion"
+      "Knight Porphyrion",
+      "Frame",
+      "Acastus Knight Porphyrion"
     ],
     "faction_keywords": [
       "Imperial Knights"
@@ -313,12 +351,23 @@
       "twin-magna-lascannon"
     ],
     "ability_ids": [
-      "bastion-of-firepower",
-      "deadly-demise-2d6"
+      "bastion-of-firepower-imperial-knights",
+      {
+        "id": "deadly-demise",
+        "value": "2D6"
+      },
+      {
+        "id": "damaged",
+        "value": 10
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -377,7 +426,8 @@
       "Towering",
       "Imperium",
       "Cerastus",
-      "Knight Castigator"
+      "Knight Castigator",
+      "Cerastus Knight Castigator"
     ],
     "faction_keywords": [
       "Imperial Knights"
@@ -396,13 +446,24 @@
       "tempest-warblade"
     ],
     "ability_ids": [
-      "castigator-s-duty-bondsman",
-      "storm-of-bolts",
-      "deadly-demise-d6-2"
+      "storm-of-bolts-imperial-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D6+2"
+      },
+      "castigators-duty-imperial-knights",
+      {
+        "id": "damaged",
+        "value": 10
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -486,13 +547,24 @@
       "twin-icarus-autocannon"
     ],
     "ability_ids": [
-      "paladin-s-duty-bondsman",
-      "seasoned-noble",
-      "deadly-demise-d6"
+      "seasoned-noble-imperial-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      {
+        "id": "damaged",
+        "value": 9
+      },
+      "paladins-duty-imperial-knights",
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -576,13 +648,24 @@
       "twin-icarus-autocannon"
     ],
     "ability_ids": [
-      "aggressive-assault",
-      "errant-s-duty-bondsman",
-      "deadly-demise-d6"
+      "aggressive-assault-imperial-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      {
+        "id": "damaged",
+        "value": 9
+      },
+      "errants-duty-imperial-knights",
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -668,13 +751,24 @@
       "twin-icarus-autocannon"
     ],
     "ability_ids": [
-      "crusader-s-duty-bondsman",
-      "punishing-salvoes",
-      "deadly-demise-d6"
+      "punishing-salvoes-imperial-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "crusaders-duty-imperial-knights",
+      {
+        "id": "damaged",
+        "value": 9
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -720,13 +814,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 375,
+        "cost": 365,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 390,
+        "cost": 380,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -765,13 +859,24 @@
       "twin-icarus-autocannon"
     ],
     "ability_ids": [
-      "thin-their-ranks-spearhead-at-arms",
-      "warden-s-duty-bondsman",
-      "deadly-demise-d6"
+      "thin-their-ranks-imperial-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      {
+        "id": "damaged",
+        "value": 9
+      },
+      "wardens-duty-imperial-knights",
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -856,13 +961,24 @@
       "twin-icarus-autocannon"
     ],
     "ability_ids": [
-      "exemplar-of-the-code",
-      "mentor-bondsman",
-      "deadly-demise-d6"
+      "exemplar-of-the-code-imperial-knights",
+      "mentor-imperial-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      {
+        "id": "damaged",
+        "value": 9
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -920,7 +1036,8 @@
       "Towering",
       "Imperium",
       "Cerastus",
-      "Knight Lancer"
+      "Knight Lancer",
+      "Cerastus Knight Lancer"
     ],
     "faction_keywords": [
       "Imperial Knights"
@@ -938,13 +1055,24 @@
       "cerastus-shock-lance"
     ],
     "ability_ids": [
-      "lancer-s-duty-bondsman",
-      "shock-charge",
-      "deadly-demise-d6-2"
+      "shock-charge-imperial-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D6+2"
+      },
+      {
+        "id": "damaged",
+        "value": 10
+      },
+      "lancers-duty-imperial-knights",
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -999,7 +1127,8 @@
       "Walker",
       "Imperium",
       "Armiger",
-      "Moirax"
+      "Moirax",
+      "Armiger Moirax"
     ],
     "faction_keywords": [
       "Imperial Knights"
@@ -1022,12 +1151,23 @@
       "volkite-veuglaire"
     ],
     "ability_ids": [
-      "deadly-demise-d3",
-      "protection-protocols"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "protection-protocols-imperial-knights",
+      {
+        "id": "damaged",
+        "value": 5
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 3
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1116,13 +1256,24 @@
       "twin-icarus-autocannon"
     ],
     "ability_ids": [
-      "gallant-s-duty-bondsman",
-      "martial-pride",
-      "deadly-demise-d6"
+      "martial-pride-imperial-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      {
+        "id": "damaged",
+        "value": 9
+      },
+      "gallants-duty-imperial-knights",
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1168,7 +1319,8 @@
       "Walker",
       "Imperium",
       "Armiger",
-      "Warglaive"
+      "Warglaive",
+      "Armiger Warglaive"
     ],
     "faction_keywords": [
       "Imperial Knights"
@@ -1188,12 +1340,23 @@
       "thermal-spear"
     ],
     "ability_ids": [
-      "impetuous-glory",
-      "deadly-demise-d3"
+      "impetuous-glory-imperial-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 5
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 3
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1239,13 +1402,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 400,
+        "cost": 390,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 415,
+        "cost": 405,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -1281,13 +1444,24 @@
       "twin-siegebreaker-cannon"
     ],
     "ability_ids": [
-      "ion-aegis-aura",
-      "thundershock",
-      "deadly-demise-d6-2"
+      "ion-aegis-imperial-knights",
+      "thundershock-imperial-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D6+2"
+      },
+      {
+        "id": "damaged",
+        "value": 10
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1348,7 +1522,7 @@
     ],
     "ability_ids": [
       "lone-operative",
-      "using-sir-hekhtur"
+      "using-sir-hekhtur-imperial-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -1424,13 +1598,25 @@
       "las-impulsor-canis-rex"
     ],
     "ability_ids": [
-      "chainbreaker",
-      "legendary-freeblade",
-      "deadly-demise-d6"
+      "chainbreaker-imperial-knights",
+      "legendary-freeblade-imperial-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      {
+        "id": "damaged",
+        "value": 9
+      },
+      "using-sir-hekhtur-imperial-knights",
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1516,12 +1702,24 @@
       "volcano-lance"
     ],
     "ability_ids": [
-      "titan-hunter",
-      "deadly-demise-d6-2"
+      "titan-hunter-imperial-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D6+2"
+      },
+      {
+        "id": "damaged",
+        "value": 10
+      },
+      "ion-aegis-imperial-knights",
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1568,7 +1766,8 @@
       "Walker",
       "Imperium",
       "Armiger",
-      "Helverin"
+      "Helverin",
+      "Armiger Helverin"
     ],
     "faction_keywords": [
       "Imperial Knights"
@@ -1588,12 +1787,23 @@
       "questoris-heavy-stubber"
     ],
     "ability_ids": [
-      "suppression-protocols",
-      "deadly-demise-d3"
+      "suppression-protocols-imperial-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 5
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 3
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1657,7 +1867,8 @@
       "Towering",
       "Imperium",
       "Questoris",
-      "Knight Magaera"
+      "Knight Magaera",
+      "Questoris Knight Magaera"
     ],
     "faction_keywords": [
       "Imperial Knights"
@@ -1679,13 +1890,24 @@
       "twin-rad-cleanser"
     ],
     "ability_ids": [
-      "magaera-s-duty-bondsman",
-      "repair-auto-simulacra",
-      "deadly-demise-d6"
+      "repair-auto-simulacra-imperial-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      {
+        "id": "damaged",
+        "value": 9
+      },
+      "magaeras-duty-imperial-knights",
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1743,7 +1965,8 @@
       "Towering",
       "Imperium",
       "Questoris",
-      "Knight Styrix"
+      "Knight Styrix",
+      "Questoris Knight Styrix"
     ],
     "faction_keywords": [
       "Imperial Knights"
@@ -1765,13 +1988,24 @@
       "volkite-chierovile"
     ],
     "ability_ids": [
-      "grav-pinned",
-      "styrix-s-duty-bondsman",
-      "deadly-demise-d6"
+      "grav-pinned-imperial-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      {
+        "id": "damaged",
+        "value": 9
+      },
+      "styrixs-duty-imperial-knights",
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1810,13 +2044,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 405,
+        "cost": 420,
         "unit_count_min": 1,
         "unit_count_max": 1
       },
       {
         "models": 1,
-        "cost": 425,
+        "cost": 440,
         "unit_count_min": 2,
         "unit_count_max": null
       }
@@ -1829,7 +2063,8 @@
       "Towering",
       "Imperium",
       "Cerastus",
-      "Knight Atrapos"
+      "Knight Atrapos",
+      "Cerastus Knight Atrapos"
     ],
     "faction_keywords": [
       "Imperial Knights"
@@ -1848,13 +2083,24 @@
       "graviton-singularity-cannon"
     ],
     "ability_ids": [
-      "atrapos-duty-bondsman",
-      "macro-extinction-protocols",
-      "deadly-demise-d6-2"
+      "atrapos-duty-imperial-knights",
+      "macro-extinction-protocols-imperial-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D6+2"
+      },
+      {
+        "id": "damaged",
+        "value": 10
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1930,20 +2176,31 @@
     "weapon_ids": [
       "chastiser-gatling-cannon",
       "frag-bombard",
-      "questoris-heavy-stubber",
+      "questoris-heavy-stubber-knight-destrier",
       "titanic-feet-knight-destrier",
       "bellatus-reaper-chainsword",
       "thundershock-spear"
     ],
     "ability_ids": [
-      "ram-jets",
-      "thundercharge",
-      "saturation-fire",
-      "deadly-demise-d6"
+      "ram-jets-imperial-knights",
+      "thundercharge-imperial-knights",
+      "saturation-fire-imperial-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      {
+        "id": "damaged",
+        "value": 6
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,

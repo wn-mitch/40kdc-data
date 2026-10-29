@@ -1,6 +1,6 @@
 [
   {
-    "id": "arcane-focus-grand-coven",
+    "id": "arcane-focus-grand-coven-thousand-sons",
     "name": "ARCANE FOCUS",
     "category": "detachment",
     "type": "epic-deed",
@@ -12,7 +12,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "arcane-focus-grand-coven",
+    "ability_id": "arcane-focus-grand-coven-thousand-sons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -29,7 +29,7 @@
     ]
   },
   {
-    "id": "arcane-venting-sekhetar-cohort",
+    "id": "arcane-venting-sekhetar-cohort-thousand-sons",
     "name": "ARCANE VENTING",
     "category": "detachment",
     "detachment_id": "sekhetar-cohort",
@@ -39,11 +39,18 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "arcane-venting-sekhetar-cohort",
+    "target_restrictions": {
+      "required_keywords": [
+        "Sekhetar Robots"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit"
+    },
+    "ability_id": "arcane-venting-sekhetar-cohort-thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -57,7 +64,7 @@
     ]
   },
   {
-    "id": "ardent-automata-rubricae-phalanx",
+    "id": "ardent-automata-rubricae-phalanx-thousand-sons",
     "name": "ARDENT AUTOMATA",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -68,11 +75,18 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "ardent-automata-rubricae-phalanx",
+    "target_restrictions": {
+      "required_keywords": [
+        "Rubricae"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "ardent-automata-rubricae-phalanx-thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -86,7 +100,7 @@
     ]
   },
   {
-    "id": "blessed-transmutations-warpmeld-pact",
+    "id": "blessed-transmutations-warpmeld-pact-thousand-sons",
     "name": "BLESSED TRANSMUTATIONS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -97,11 +111,81 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "blessed-transmutations-warpmeld-pact",
+    "target_restrictions": [
+      {
+        "required_keywords": [
+          "Psyker",
+          "Thousand Sons"
+        ],
+        "name": "first",
+        "count": "one",
+        "side": "your-army",
+        "selects": "model",
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "filter": {
+              "owner": "friendly"
+            }
+          }
+        }
+      },
+      {
+        "required_keywords": [
+          "Tzaangors"
+        ],
+        "name": "second",
+        "count": "one",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "strength",
+              "parameters": {
+                "subject": {
+                  "stratagem_target": "first"
+                },
+                "below": "starting"
+              }
+            },
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "within": {
+                    "of": {
+                      "stratagem_target": "first"
+                    },
+                    "range": {
+                      "inches": 12
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "same-unit",
+                  "parameters": {
+                    "as": {
+                      "stratagem_target": "first"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "ability_id": "blessed-transmutations-warpmeld-pact-thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -115,7 +199,7 @@
     ]
   },
   {
-    "id": "chronosorcerous-bleed-changehost-of-deceit",
+    "id": "chronosorcerous-bleed-changehost-of-deceit-thousand-sons",
     "name": "CHRONOSORCEROUS BLEED",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -126,11 +210,44 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "chronosorcerous-bleed-changehost-of-deceit",
+    "target_restrictions": {
+      "required_keywords": [
+        "Thousand Sons"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "PSYKER",
+                  "SCINTILLATING LEGIONS"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "not_states": [
+                  "engaged"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "chronosorcerous-bleed-changehost-of-deceit-thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -144,7 +261,7 @@
     ]
   },
   {
-    "id": "cyberspirit-machinations-warpforged-cabal",
+    "id": "cyberspirit-machinations-warpforged-cabal-thousand-sons",
     "name": "CYBERSPIRIT MACHINATIONS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -155,11 +272,64 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "cyberspirit-machinations-warpforged-cabal",
+    "target_restrictions": [
+      {
+        "required_keywords": [
+          "Vehicle"
+        ],
+        "name": "first",
+        "count": "one",
+        "selects": "unit",
+        "bound_to": "triggering-unit"
+      },
+      {
+        "required_keywords": [
+          "Psyker",
+          "Thousand Sons"
+        ],
+        "name": "second",
+        "count": "one",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "within": {
+                    "of": {
+                      "stratagem_target": "first"
+                    },
+                    "range": {
+                      "inches": 6
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "same-unit",
+                  "parameters": {
+                    "as": {
+                      "stratagem_target": "first"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "ability_id": "cyberspirit-machinations-warpforged-cabal-thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -173,7 +343,7 @@
     ]
   },
   {
-    "id": "deceptive-glamour-changehost-of-deceit",
+    "id": "deceptive-glamour-changehost-of-deceit-thousand-sons",
     "name": "DECEPTIVE GLAMOUR",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -185,7 +355,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "deceptive-glamour-changehost-of-deceit",
+    "ability_id": "deceptive-glamour-changehost-of-deceit-thousand-sons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -202,7 +372,7 @@
     ]
   },
   {
-    "id": "deranged-ferocity-warpmeld-pact",
+    "id": "deranged-ferocity-warpmeld-pact-thousand-sons",
     "name": "DERANGED FEROCITY",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -214,7 +384,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "deranged-ferocity-warpmeld-pact",
+    "ability_id": "deranged-ferocity-warpmeld-pact-thousand-sons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -231,7 +401,7 @@
     ]
   },
   {
-    "id": "desecration-of-worlds-grand-coven",
+    "id": "desecration-of-worlds-grand-coven-thousand-sons",
     "name": "DESECRATION OF WORLDS",
     "category": "detachment",
     "type": "epic-deed",
@@ -242,11 +412,47 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "desecration-of-worlds-grand-coven",
+    "target_restrictions": {
+      "required_keywords": [
+        "Psyker",
+        "Thousand Sons"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": {
+                    "objective": {
+                      "controlled_by": "friendly"
+                    }
+                  },
+                  "range": "objective-control"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "desecration-of-worlds-grand-coven-thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -260,7 +466,7 @@
     ]
   },
   {
-    "id": "destined-by-fate-grand-coven",
+    "id": "destined-by-fate-grand-coven-thousand-sons",
     "name": "DESTINED BY FATE",
     "category": "detachment",
     "type": "epic-deed",
@@ -275,11 +481,18 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "destined-by-fate-grand-coven",
+    "target_restrictions": {
+      "required_keywords": [
+        "Psyker"
+      ],
+      "count": "one",
+      "selects": "model",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "destined-by-fate-grand-coven-thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -293,7 +506,7 @@
     ]
   },
   {
-    "id": "devastating-sorcery-grand-coven",
+    "id": "devastating-sorcery-grand-coven-thousand-sons",
     "name": "DEVASTATING SORCERY",
     "category": "detachment",
     "type": "battle-tactic",
@@ -304,11 +517,47 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "devastating-sorcery-grand-coven",
+    "target_restrictions": {
+      "required_keywords": [
+        "Psyker",
+        "Thousand Sons"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "shoot"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "devastating-sorcery-grand-coven-thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -322,7 +571,7 @@
     ]
   },
   {
-    "id": "ectoplasmic-extrusion-sekhetar-cohort",
+    "id": "ectoplasmic-extrusion-sekhetar-cohort-thousand-sons",
     "name": "ECTOPLASMIC EXTRUSION",
     "category": "detachment",
     "detachment_id": "sekhetar-cohort",
@@ -332,11 +581,18 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "ectoplasmic-extrusion-sekhetar-cohort",
+    "target_restrictions": {
+      "required_keywords": [
+        "Sekhetar Robots"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "ectoplasmic-extrusion-sekhetar-cohort-thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -350,7 +606,7 @@
     ]
   },
   {
-    "id": "egotistical-power-grand-coven",
+    "id": "egotistical-power-grand-coven-thousand-sons",
     "name": "EGOTISTICAL POWER",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -362,7 +618,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "egotistical-power-grand-coven",
+    "ability_id": "egotistical-power-grand-coven-thousand-sons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -379,7 +635,7 @@
     ]
   },
   {
-    "id": "embroiling-energies-prism-of-zadophon",
+    "id": "embroiling-energies-prism-of-zadophon-thousand-sons",
     "name": "Embroiling Energies",
     "category": "detachment",
     "detachment_id": "prism-of-zadophon",
@@ -390,7 +646,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "embroiling-energies-prism-of-zadophon",
+    "ability_id": "embroiling-energies-prism-of-zadophon-thousand-sons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -403,7 +659,7 @@
     ]
   },
   {
-    "id": "ensorcelled-infusion-warpforged-cabal",
+    "id": "ensorcelled-infusion-warpforged-cabal-thousand-sons",
     "name": "ENSORCELLED INFUSION",
     "category": "detachment",
     "type": "battle-tactic",
@@ -419,12 +675,61 @@
         "Thousand Sons",
         "Vehicle"
       ],
-      "notes": "Has not been selected to shoot this phase; within 6\" of one or more friendly THOUSAND SONS PSYKER units."
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "shoot"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "PSYKER",
+                      "THOUSAND SONS"
+                    ]
+                  },
+                  "range": {
+                    "inches": 6
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
     },
-    "ability_id": "ensorcelled-infusion-warpforged-cabal",
+    "ability_id": "ensorcelled-infusion-warpforged-cabal-thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -438,7 +743,7 @@
     ]
   },
   {
-    "id": "ethereal-phantasm-changehost-of-deceit",
+    "id": "ethereal-phantasm-changehost-of-deceit-thousand-sons",
     "name": "ETHEREAL PHANTASM",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -449,11 +754,57 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "ethereal-phantasm-changehost-of-deceit",
+    "target_restrictions": {
+      "required_keywords": [
+        "Scintillating Legions"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": "event-subject",
+                  "range": {
+                    "inches": 8
+                  }
+                }
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "state": "engaged"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "ethereal-phantasm-changehost-of-deceit-thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -467,7 +818,7 @@
     ]
   },
   {
-    "id": "fractal-disjunction-changehost-of-deceit",
+    "id": "fractal-disjunction-changehost-of-deceit-thousand-sons",
     "name": "FRACTAL DISJUNCTION",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -478,11 +829,30 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "fractal-disjunction-changehost-of-deceit",
+    "target_restrictions": {
+      "required_keywords": [
+        "Scintillating Legions"
+      ],
+      "excluded_keywords": [
+        "Monster"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "fractal-disjunction-changehost-of-deceit-thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -496,7 +866,7 @@
     ]
   },
   {
-    "id": "gift-of-change-warpmeld-pact",
+    "id": "gift-of-change-warpmeld-pact-thousand-sons",
     "name": "GIFT OF CHANGE",
     "category": "detachment",
     "type": "epic-deed",
@@ -512,7 +882,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "gift-of-change-warpmeld-pact",
+    "ability_id": "gift-of-change-warpmeld-pact-thousand-sons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -529,7 +899,7 @@
     ]
   },
   {
-    "id": "glimmershift-portal-changehost-of-deceit",
+    "id": "glimmershift-portal-changehost-of-deceit-thousand-sons",
     "name": "GLIMMERSHIFT PORTAL",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -540,11 +910,90 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "glimmershift-portal-changehost-of-deceit",
+    "target_restrictions": [
+      {
+        "required_keywords": [
+          "Scintillating Legions"
+        ],
+        "excluded_keywords": [
+          "Monster"
+        ],
+        "name": "first",
+        "count": "up-to",
+        "count_max": 2,
+        "mode": "a",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "operator": "not",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "within": {
+                    "of": {
+                      "owner": "enemy"
+                    },
+                    "range": {
+                      "inches": 3
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "required_keywords": [
+          "Monster",
+          "Scintillating Legions"
+        ],
+        "name": "second",
+        "count": "one",
+        "mode": "b",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "owner": "friendly"
+                }
+              }
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "filter": {
+                      "within": {
+                        "of": {
+                          "owner": "enemy"
+                        },
+                        "range": {
+                          "inches": 3
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "ability_id": "glimmershift-portal-changehost-of-deceit-thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -558,7 +1007,7 @@
     ]
   },
   {
-    "id": "hex-marked-armour-warpforged-cabal",
+    "id": "hex-marked-armour-warpforged-cabal-thousand-sons",
     "name": "HEX-MARKED ARMOUR",
     "category": "detachment",
     "type": "battle-tactic",
@@ -570,11 +1019,28 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "hex-marked-armour-warpforged-cabal",
+    "target_restrictions": {
+      "required_keywords": [
+        "Thousand Sons",
+        "Vehicle"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "hex-marked-armour-warpforged-cabal-thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -588,7 +1054,7 @@
     ]
   },
   {
-    "id": "implacable-guardians-rubricae-phalanx",
+    "id": "implacable-guardians-rubricae-phalanx-thousand-sons",
     "name": "IMPLACABLE GUARDIANS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -600,7 +1066,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "implacable-guardians-rubricae-phalanx",
+    "ability_id": "implacable-guardians-rubricae-phalanx-thousand-sons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -617,7 +1083,7 @@
     ]
   },
   {
-    "id": "inexorable-advance-rubricae-phalanx",
+    "id": "inexorable-advance-rubricae-phalanx-thousand-sons",
     "name": "INEXORABLE ADVANCE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -628,11 +1094,26 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "inexorable-advance-rubricae-phalanx",
+    "target_restrictions": {
+      "required_keywords": [
+        "Rubricae"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "inexorable-advance-rubricae-phalanx-thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -646,22 +1127,58 @@
     ]
   },
   {
-    "id": "infernal-fusillade-rubricae-phalanx",
+    "id": "infernal-fusillade-rubricae-phalanx-thousand-sons",
     "name": "INFERNAL FUSILLADE",
     "category": "detachment",
     "type": "wargear",
     "detachment_id": "rubricae-phalanx",
-    "cp_cost": 2,
+    "cp_cost": 1,
     "phases": [
       "shooting"
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "infernal-fusillade-rubricae-phalanx",
+    "target_restrictions": {
+      "required_keywords": [
+        "Psyker",
+        "Thousand Sons"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "shoot"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "infernal-fusillade-rubricae-phalanx-thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -675,7 +1192,7 @@
     ]
   },
   {
-    "id": "kaleidoscopic-tempest-hexwarp-thrallband",
+    "id": "kaleidoscopic-tempest-hexwarp-thrallband-thousand-sons",
     "name": "KALEIDOSCOPIC TEMPEST",
     "category": "detachment",
     "type": "battle-tactic",
@@ -686,8 +1203,25 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "kaleidoscopic-tempest-hexwarp-thrallband",
+    "target_restrictions": {
+      "required_keywords": [
+        "Psyker",
+        "Thousand Sons"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "kaleidoscopic-tempest-hexwarp-thrallband-thousand-sons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -704,7 +1238,7 @@
     ]
   },
   {
-    "id": "malevolent-animus-warpforged-cabal",
+    "id": "malevolent-animus-warpforged-cabal-thousand-sons",
     "name": "MALEVOLENT ANIMUS",
     "category": "detachment",
     "type": "epic-deed",
@@ -715,11 +1249,51 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "malevolent-animus-warpforged-cabal",
+    "target_restrictions": {
+      "required_keywords": [
+        "Thousand Sons",
+        "Vehicle"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "PSYKER",
+                      "THOUSAND SONS"
+                    ]
+                  },
+                  "range": {
+                    "inches": 6
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "malevolent-animus-warpforged-cabal-thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -733,7 +1307,7 @@
     ]
   },
   {
-    "id": "multitudinous-limbs-ritual-of-regeneration",
+    "id": "multitudinous-limbs-ritual-of-regeneration-thousand-sons",
     "name": "MULTITUDINOUS LIMBS",
     "category": "detachment",
     "detachment_id": "ritual-of-regeneration",
@@ -743,11 +1317,30 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "multitudinous-limbs-ritual-of-regeneration",
+    "target_restrictions": {
+      "required_keywords": [
+        "Psyker",
+        "Thousand Sons"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "any_of": [
+              "INFANTRY",
+              "MOUNTED"
+            ]
+          }
+        }
+      }
+    },
+    "ability_id": "multitudinous-limbs-ritual-of-regeneration-thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -761,7 +1354,7 @@
     ]
   },
   {
-    "id": "mutagenic-magicks-ritual-of-regeneration",
+    "id": "mutagenic-magicks-ritual-of-regeneration-thousand-sons",
     "name": "MUTAGENIC MAGICKS",
     "category": "detachment",
     "detachment_id": "ritual-of-regeneration",
@@ -771,11 +1364,27 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "mutagenic-magicks-ritual-of-regeneration",
+    "target_restrictions": {
+      "required_keywords": [
+        "Psyker",
+        "Thousand Sons"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "state": "engaged"
+          }
+        }
+      }
+    },
+    "ability_id": "mutagenic-magicks-ritual-of-regeneration-thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -789,7 +1398,7 @@
     ]
   },
   {
-    "id": "mutate-landscape-warpforged-cabal",
+    "id": "mutate-landscape-warpforged-cabal-thousand-sons",
     "name": "MUTATE LANDSCAPE",
     "category": "detachment",
     "type": "epic-deed",
@@ -800,11 +1409,47 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "mutate-landscape-warpforged-cabal",
+    "target_restrictions": {
+      "required_keywords": [
+        "Psyker",
+        "Thousand Sons"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": {
+                    "objective": {
+                      "controlled_by": "friendly"
+                    }
+                  },
+                  "range": "objective-control"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "mutate-landscape-warpforged-cabal-thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -818,7 +1463,7 @@
     ]
   },
   {
-    "id": "prismatic-displacement-servants-of-change",
+    "id": "prismatic-displacement-servants-of-change-thousand-sons",
     "name": "PRISMATIC DISPLACEMENT",
     "category": "detachment",
     "detachment_id": "servants-of-change",
@@ -828,11 +1473,29 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "prismatic-displacement-servants-of-change",
+    "target_restrictions": {
+      "required_keywords": [
+        "Mutant"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "any_of": [
+              "INFANTRY",
+              "MOUNTED"
+            ]
+          }
+        }
+      }
+    },
+    "ability_id": "prismatic-displacement-servants-of-change-thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -846,7 +1509,7 @@
     ]
   },
   {
-    "id": "psychic-dominion-grand-coven",
+    "id": "psychic-dominion-grand-coven-thousand-sons",
     "name": "PSYCHIC DOMINION",
     "category": "detachment",
     "type": "epic-deed",
@@ -862,7 +1525,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "psychic-dominion-grand-coven",
+    "ability_id": "psychic-dominion-grand-coven-thousand-sons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -879,7 +1542,7 @@
     ]
   },
   {
-    "id": "relentless-rebirth-ritual-of-regeneration",
+    "id": "relentless-rebirth-ritual-of-regeneration-thousand-sons",
     "name": "RELENTLESS REBIRTH",
     "category": "detachment",
     "detachment_id": "ritual-of-regeneration",
@@ -893,11 +1556,30 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "relentless-rebirth-ritual-of-regeneration",
+    "target_restrictions": {
+      "required_keywords": [
+        "Psyker",
+        "Thousand Sons"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "any_of": [
+              "INFANTRY",
+              "MOUNTED"
+            ]
+          }
+        }
+      }
+    },
+    "ability_id": "relentless-rebirth-ritual-of-regeneration-thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -911,7 +1593,7 @@
     ]
   },
   {
-    "id": "revenge-of-the-rubricae-rubricae-phalanx",
+    "id": "revenge-of-the-rubricae-rubricae-phalanx-thousand-sons",
     "name": "REVENGE OF THE RUBRICAE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -922,11 +1604,44 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "revenge-of-the-rubricae-rubricae-phalanx",
+    "target_restrictions": {
+      "required_keywords": [
+        "Rubricae"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": "event-object",
+                  "range": {
+                    "inches": 6
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "revenge-of-the-rubricae-rubricae-phalanx-thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -940,7 +1655,7 @@
     ]
   },
   {
-    "id": "scouring-warpflame-hexwarp-thrallband",
+    "id": "scouring-warpflame-hexwarp-thrallband-thousand-sons",
     "name": "SCOURING WARPFLAME",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -951,11 +1666,60 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "scouring-warpflame-hexwarp-thrallband",
+    "target_restrictions": {
+      "required_keywords": [
+        "Psyker",
+        "Thousand Sons"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "shoot"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          },
+          {
+            "type": "in-region",
+            "parameters": {
+              "subject": "this-unit",
+              "region": {
+                "rule_region": {
+                  "region_id": "flow-of-magic",
+                  "owner_faction": "thousand-sons"
+                }
+              },
+              "wholly": true
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "scouring-warpflame-hexwarp-thrallband-thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -969,7 +1733,7 @@
     ]
   },
   {
-    "id": "spell-warded-armour-prism-of-zadophon",
+    "id": "spell-warded-armour-prism-of-zadophon-thousand-sons",
     "name": "Spell-warded Armour",
     "category": "detachment",
     "detachment_id": "prism-of-zadophon",
@@ -979,11 +1743,26 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "spell-warded-armour-prism-of-zadophon",
+    "target_restrictions": {
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "all_of": [
+              "PRISM OF ZADOPHON",
+              "RUBRIC MARINES"
+            ]
+          }
+        }
+      }
+    },
+    "ability_id": "spell-warded-armour-prism-of-zadophon-thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -993,7 +1772,7 @@
     ]
   },
   {
-    "id": "strands-of-time-hexwarp-thrallband",
+    "id": "strands-of-time-hexwarp-thrallband-thousand-sons",
     "name": "STRANDS OF TIME",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1004,11 +1783,19 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "strands-of-time-hexwarp-thrallband",
+    "target_restrictions": {
+      "required_keywords": [
+        "Psyker",
+        "Thousand Sons"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "strands-of-time-hexwarp-thrallband-thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1022,7 +1809,7 @@
     ]
   },
   {
-    "id": "sulphurous-veil-changehost-of-deceit",
+    "id": "sulphurous-veil-changehost-of-deceit-thousand-sons",
     "name": "SULPHUROUS VEIL",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1034,11 +1821,40 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "sulphurous-veil-changehost-of-deceit",
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "SCINTILLATING LEGIONS",
+                  "THOUSAND SONS"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "sulphurous-veil-changehost-of-deceit-thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1052,7 +1868,7 @@
     ]
   },
   {
-    "id": "temporal-instability-servants-of-change",
+    "id": "temporal-instability-servants-of-change-thousand-sons",
     "name": "TEMPORAL INSTABILITY",
     "category": "detachment",
     "detachment_id": "servants-of-change",
@@ -1062,11 +1878,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "temporal-instability-servants-of-change",
+    "target_restrictions": {
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "temporal-instability-servants-of-change-thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1080,7 +1900,7 @@
     ]
   },
   {
-    "id": "the-land-writhes-servants-of-change",
+    "id": "the-land-writhes-servants-of-change-thousand-sons",
     "name": "THE LAND WRITHES",
     "category": "detachment",
     "detachment_id": "servants-of-change",
@@ -1090,11 +1910,19 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "the-land-writhes-servants-of-change",
+    "target_restrictions": {
+      "required_keywords": [
+        "Monster",
+        "Mutant"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "the-land-writhes-servants-of-change-thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1108,7 +1936,7 @@
     ]
   },
   {
-    "id": "through-the-veil-hexwarp-thrallband",
+    "id": "through-the-veil-hexwarp-thrallband-thousand-sons",
     "name": "THROUGH THE VEIL",
     "category": "detachment",
     "type": "epic-deed",
@@ -1120,7 +1948,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "through-the-veil-hexwarp-thrallband",
+    "ability_id": "through-the-veil-hexwarp-thrallband-thousand-sons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1137,7 +1965,7 @@
     ]
   },
   {
-    "id": "touched-by-tzeentch-warpmeld-pact",
+    "id": "touched-by-tzeentch-warpmeld-pact-thousand-sons",
     "name": "TOUCHED BY TZEENTCH",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1148,11 +1976,27 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "touched-by-tzeentch-warpmeld-pact",
+    "target_restrictions": {
+      "required_keywords": [
+        "Mutant",
+        "Tzeentch"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "touched-by-tzeentch-warpmeld-pact-thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1166,7 +2010,7 @@
     ]
   },
   {
-    "id": "twist-of-fate-prism-of-zadophon",
+    "id": "twist-of-fate-prism-of-zadophon-thousand-sons",
     "name": "Twist of Fate",
     "category": "detachment",
     "detachment_id": "prism-of-zadophon",
@@ -1177,11 +2021,19 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "twist-of-fate-prism-of-zadophon",
+    "target_restrictions": {
+      "required_keywords": [
+        "Mutant",
+        "Prism of Zadophon"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit"
+    },
+    "ability_id": "twist-of-fate-prism-of-zadophon-thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1191,7 +2043,7 @@
     ]
   },
   {
-    "id": "twisted-mirage-warpmeld-pact",
+    "id": "twisted-mirage-warpmeld-pact-thousand-sons",
     "name": "TWISTED MIRAGE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1202,11 +2054,42 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "twisted-mirage-warpmeld-pact",
+    "target_restrictions": {
+      "required_keywords": [
+        "Mutant",
+        "Tzeentch"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "set-up",
+              "filter": {
+                "from": "strategic-reserves"
+              },
+              "window": "phase"
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "twisted-mirage-warpmeld-pact-thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1220,7 +2103,7 @@
     ]
   },
   {
-    "id": "unwavering-phalanx-rubricae-phalanx",
+    "id": "unwavering-phalanx-rubricae-phalanx-thousand-sons",
     "name": "UNWAVERING PHALANX",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1231,8 +2114,36 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "unwavering-phalanx-rubricae-phalanx",
+    "target_restrictions": {
+      "required_keywords": [
+        "Rubric Marines"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "engaged_with": "event-subject"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "unwavering-phalanx-rubricae-phalanx-thousand-sons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1249,7 +2160,7 @@
     ]
   },
   {
-    "id": "warding-hex-hexwarp-thrallband",
+    "id": "warding-hex-hexwarp-thrallband-thousand-sons",
     "name": "WARDING HEX",
     "category": "detachment",
     "type": "epic-deed",
@@ -1261,7 +2172,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "warding-hex-hexwarp-thrallband",
+    "ability_id": "warding-hex-hexwarp-thrallband-thousand-sons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1278,7 +2189,7 @@
     ]
   },
   {
-    "id": "warp-fields-sekhetar-cohort",
+    "id": "warp-fields-sekhetar-cohort-thousand-sons",
     "name": "WARP FIELDS",
     "category": "detachment",
     "detachment_id": "sekhetar-cohort",
@@ -1288,11 +2199,18 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "warp-fields-sekhetar-cohort",
+    "target_restrictions": {
+      "required_keywords": [
+        "Sekhetar Robots"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit"
+    },
+    "ability_id": "warp-fields-sekhetar-cohort-thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1306,7 +2224,7 @@
     ]
   },
   {
-    "id": "warped-vicissitude-warpmeld-pact",
+    "id": "warped-vicissitude-warpmeld-pact-thousand-sons",
     "name": "WARPED VICISSITUDE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1318,11 +2236,27 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "warped-vicissitude-warpmeld-pact",
+    "target_restrictions": {
+      "required_keywords": [
+        "Tzaangors"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "warped-vicissitude-warpmeld-pact-thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1336,7 +2270,7 @@
     ]
   },
   {
-    "id": "warpflame-gargoyles-warpforged-cabal",
+    "id": "warpflame-gargoyles-warpforged-cabal-thousand-sons",
     "name": "WARPFLAME GARGOYLES",
     "category": "detachment",
     "type": "wargear",
@@ -1347,11 +2281,40 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "warpflame-gargoyles-warpforged-cabal",
+    "target_restrictions": {
+      "required_keywords": [
+        "Thousand Sons",
+        "Vehicle"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "engaged_with": "event-subject"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "warpflame-gargoyles-warpforged-cabal-thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1365,7 +2328,7 @@
     ]
   },
   {
-    "id": "wrath-of-the-doomed-hexwarp-thrallband",
+    "id": "wrath-of-the-doomed-hexwarp-thrallband-thousand-sons",
     "name": "WRATH OF THE DOOMED",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1376,11 +2339,27 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "wrath-of-the-doomed-hexwarp-thrallband",
+    "target_restrictions": {
+      "required_keywords": [
+        "Thousand Sons"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "wrath-of-the-doomed-hexwarp-thrallband-thousand-sons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {

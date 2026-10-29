@@ -9,7 +9,7 @@
       "disposition": null,
       "units": []
     },
-    "token": "ARgAAgEAAAA"
+    "token": "ASQAAgEAAAA"
   },
   {
     "name": "warlord-enhancement-grants",
@@ -17,7 +17,7 @@
       "name": "Strîke Force 🔨",
       "factionId": "adeptus-astartes",
       "detachmentIds": [
-        "1st-company-task-force"
+        "assault-brethren"
       ],
       "battleSize": "strike-force",
       "disposition": "disruption",
@@ -26,7 +26,7 @@
           "datasheetId": "adrax-agatone",
           "modelCount": 5,
           "isWarlord": true,
-          "enhancementId": "a-chink-in-their-armour-host-of-ascension",
+          "enhancementId": "a-chink-in-their-armour-host-of-ascension-genestealer-cults",
           "allyFactionId": null,
           "allyRuleId": null,
           "attachedToOrdinal": null,
@@ -39,7 +39,7 @@
               2
             ],
             [
-              "absolver-bolt-pistol",
+              "absolvor-bolt-pistol",
               1
             ]
           ]
@@ -62,7 +62,7 @@
         }
       ]
     },
-    "token": "ARgSU3Ryw65rZSBGb3JjZSDwn5SoAgEBAQACCgUT4AYBCUNoYXJhY3RlcgIPAhABDgoAAREK"
+    "token": "ASQSU3Ryw65rZSBGb3JjZSDwn5SoAgEBAasCAgoFE7EPAQlDaGFyYWN0ZXICDwIRAQ4KAAERCg"
   },
   {
     "name": "allies-attachment",
@@ -70,8 +70,8 @@
       "name": "Soup",
       "factionId": "adeptus-astartes",
       "detachmentIds": [
-        "1st-company-task-force",
-        "anvil-siege-force"
+        "assault-brethren",
+        "assault-force"
       ],
       "battleSize": "incursion",
       "disposition": "disruption",
@@ -104,21 +104,21 @@
           "isWarlord": false,
           "enhancementId": null,
           "allyFactionId": "chaos-daemons",
-          "allyRuleId": "aeldari-harlequins",
+          "allyRuleId": "adeptus-astartes-allies",
           "attachedToOrdinal": null,
           "grants": [
             "Battleline"
           ],
           "loadout": [
             [
-              "absolvor-bolt-pistol",
+              "absolvor-bolt-pistol-apothecary",
               1
             ]
           ]
         }
       ]
     },
-    "token": "ARgEU291cAIAAQIABQMKAQUBAA4FAAAQARgKDgEKQmF0dGxlbGluZQERAQ"
+    "token": "ASQEU291cAIAAQKrAo0CAwoBBQEADgUAABABGAoZAQpCYXR0bGVsaW5lAeUaAQ"
   },
   {
     "name": "malformed-bad-format-byte",
@@ -130,7 +130,7 @@
   },
   {
     "name": "stale-future-index",
-    "decode_token": "ARgAgIl6",
+    "decode_token": "ASQAgIl6",
     "expected_decode": {
       "ok": false,
       "reason": "stale-registry"

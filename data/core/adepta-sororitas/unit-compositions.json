@@ -35,7 +35,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -90,7 +90,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -133,7 +133,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -168,7 +168,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -260,7 +260,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -314,7 +314,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -373,7 +373,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -414,7 +414,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -450,7 +450,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -512,12 +512,21 @@
             "name": "Seraphim with Special Weapons",
             "weapon_ids": [
               "close-combat-weapon",
+              "ministorum-hand-flamer",
               "ministorum-hand-flamer"
-            ],
-            "max_count": 2
+            ]
           }
         ],
         "loadout_variant_budgets": [
+          {
+            "variant_names": [
+              "Seraphim with Special Weapons"
+            ],
+            "count": 2,
+            "per_models": 5,
+            "scope": "unit",
+            "stepped": true
+          },
           {
             "variant_names": [
               "Seraphim",
@@ -532,7 +541,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -599,7 +608,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -653,7 +662,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -688,7 +697,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -724,7 +733,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -759,7 +768,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -795,7 +804,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -847,7 +856,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -903,7 +912,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -957,7 +966,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -997,7 +1006,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1050,7 +1059,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1093,7 +1102,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1129,7 +1138,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1164,7 +1173,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1208,7 +1217,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1242,7 +1251,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1292,7 +1301,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1383,7 +1392,8 @@
             "name": "Dominion w/ Special Weapon",
             "weapon_ids": [
               "bolt-pistol",
-              "close-combat-weapon-dominion-squad"
+              "close-combat-weapon-dominion-squad",
+              "artificer-crafted-storm-bolter"
             ],
             "max_count": 4
           }
@@ -1404,7 +1414,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1457,7 +1467,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1531,18 +1541,83 @@
             "max_count": 1
           },
           {
-            "name": "Battle Sister w/ Special or Heavy Weapon",
+            "name": "Battle Sister w/ Special or Heavy Weapon (Meltagun)",
             "weapon_ids": [
               "bolt-pistol",
-              "close-combat-weapon-battle-sisters-squad"
+              "close-combat-weapon-battle-sisters-squad",
+              "meltagun-battle-sisters-squad"
             ],
             "max_count": 1
           },
           {
-            "name": "Battle Sister w/ Special Weapon",
+            "name": "Battle Sister w/ Special or Heavy Weapon (Artificer-crafted storm bolter)",
             "weapon_ids": [
               "bolt-pistol",
-              "close-combat-weapon-battle-sisters-squad"
+              "close-combat-weapon-battle-sisters-squad",
+              "artificer-crafted-storm-bolter-battle-sisters-squad"
+            ],
+            "max_count": 1
+          },
+          {
+            "name": "Battle Sister w/ Special or Heavy Weapon (Ministorum flamer)",
+            "weapon_ids": [
+              "bolt-pistol",
+              "close-combat-weapon-battle-sisters-squad",
+              "ministorum-flamer"
+            ],
+            "max_count": 1
+          },
+          {
+            "name": "Battle Sister w/ Special or Heavy Weapon (Heavy bolter)",
+            "weapon_ids": [
+              "bolt-pistol",
+              "close-combat-weapon-battle-sisters-squad",
+              "heavy-bolter-battle-sisters-squad"
+            ],
+            "max_count": 1
+          },
+          {
+            "name": "Battle Sister w/ Special or Heavy Weapon (Ministorum heavy flamer)",
+            "weapon_ids": [
+              "bolt-pistol",
+              "close-combat-weapon-battle-sisters-squad",
+              "ministorum-heavy-flamer"
+            ],
+            "max_count": 1
+          },
+          {
+            "name": "Battle Sister w/ Special or Heavy Weapon (Multi-melta)",
+            "weapon_ids": [
+              "bolt-pistol",
+              "close-combat-weapon-battle-sisters-squad",
+              "multi-melta"
+            ],
+            "max_count": 1
+          },
+          {
+            "name": "Battle Sister w/ Special Weapon (Meltagun)",
+            "weapon_ids": [
+              "bolt-pistol",
+              "close-combat-weapon-battle-sisters-squad",
+              "meltagun-battle-sisters-squad"
+            ],
+            "max_count": 1
+          },
+          {
+            "name": "Battle Sister w/ Special Weapon (Artificer-crafted storm bolter)",
+            "weapon_ids": [
+              "bolt-pistol",
+              "close-combat-weapon-battle-sisters-squad",
+              "artificer-crafted-storm-bolter-battle-sisters-squad"
+            ],
+            "max_count": 1
+          },
+          {
+            "name": "Battle Sister w/ Special Weapon (Ministorum flamer)",
+            "weapon_ids": [
+              "bolt-pistol",
+              "close-combat-weapon-battle-sisters-squad",
+              "ministorum-flamer"
             ],
             "max_count": 1
           }
@@ -1550,10 +1625,40 @@
         "loadout_variant_budgets": [
           {
             "variant_names": [
+              "Battle Sister w/ Special or Heavy Weapon (Meltagun)",
+              "Battle Sister w/ Special or Heavy Weapon (Artificer-crafted storm bolter)",
+              "Battle Sister w/ Special or Heavy Weapon (Ministorum flamer)",
+              "Battle Sister w/ Special or Heavy Weapon (Heavy bolter)",
+              "Battle Sister w/ Special or Heavy Weapon (Ministorum heavy flamer)",
+              "Battle Sister w/ Special or Heavy Weapon (Multi-melta)"
+            ],
+            "count": 1,
+            "per_models": 0,
+            "scope": "model-row"
+          },
+          {
+            "variant_names": [
+              "Battle Sister w/ Special Weapon (Meltagun)",
+              "Battle Sister w/ Special Weapon (Artificer-crafted storm bolter)",
+              "Battle Sister w/ Special Weapon (Ministorum flamer)"
+            ],
+            "count": 1,
+            "per_models": 0,
+            "scope": "model-row"
+          },
+          {
+            "variant_names": [
               "Battle Sister",
               "Battle Sister w/ Simulacrum Imperialis",
-              "Battle Sister w/ Special or Heavy Weapon",
-              "Battle Sister w/ Special Weapon"
+              "Battle Sister w/ Special or Heavy Weapon (Meltagun)",
+              "Battle Sister w/ Special or Heavy Weapon (Artificer-crafted storm bolter)",
+              "Battle Sister w/ Special or Heavy Weapon (Ministorum flamer)",
+              "Battle Sister w/ Special or Heavy Weapon (Heavy bolter)",
+              "Battle Sister w/ Special or Heavy Weapon (Ministorum heavy flamer)",
+              "Battle Sister w/ Special or Heavy Weapon (Multi-melta)",
+              "Battle Sister w/ Special Weapon (Meltagun)",
+              "Battle Sister w/ Special Weapon (Artificer-crafted storm bolter)",
+              "Battle Sister w/ Special Weapon (Ministorum flamer)"
             ],
             "count": 9,
             "per_models": 0,
@@ -1564,7 +1669,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1604,7 +1709,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1653,7 +1758,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1688,18 +1793,285 @@
           "melta-missile-array",
           "mace-of-saint-praxedes",
           "throne-of-blame"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 60
+        }
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
         "models": [
           {
             "name": "Intranzia Fraye",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "sanctuary-guardians-celestian-sacresants",
+    "faction_id": "adepta-sororitas",
+    "models": [
+      {
+        "name": "Sacresant Superior",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "bolt-pistol-sanctuary-guardians-celestian-sacresants",
+          "hallowed-mace"
+        ]
+      },
+      {
+        "name": "Celestian Sacresants",
+        "min": 4,
+        "max": 4,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "bolt-pistol-sanctuary-guardians-celestian-sacresants",
+          "hallowed-mace"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "game_modes": [
+      "combat-patrol"
+    ],
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Sacresant Superior",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Celestian Sacresants",
+            "min": 4,
+            "max": 4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "sanctuary-guardians-arco-flagellants",
+    "faction_id": "adepta-sororitas",
+    "models": [
+      {
+        "name": "Arco-Flagellents",
+        "min": 10,
+        "max": 10,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        },
+        "default_weapon_ids": [
+          "arco-flails"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "game_modes": [
+      "combat-patrol"
+    ],
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Arco-Flagellents",
+            "min": 10,
+            "max": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "sanctuary-canoness-adalya",
+    "faction_id": "adepta-sororitas",
+    "models": [
+      {
+        "name": "Canoness Adalya",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "condemnor-boltgun-sanctuary-canoness-adalya",
+          "hallowed-chainsword"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "game_modes": [
+      "combat-patrol"
+    ],
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Canoness Adalya",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "sanctuary-guardians-battle-sisters-squad",
+    "faction_id": "adepta-sororitas",
+    "models": [
+      {
+        "name": "Battle Sister with Simulacrum Imperialis",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "boltgun",
+          "bolt-pistol",
+          "simulacrum-imperialis",
+          "stocks-and-fists"
+        ]
+      },
+      {
+        "name": "Battle Sister with Ministorum Flamer",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "bolt-pistol",
+          "ministorum-flamer",
+          "stocks-and-fists"
+        ]
+      },
+      {
+        "name": "Battle Sister",
+        "min": 6,
+        "max": 6,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "boltgun",
+          "bolt-pistol",
+          "bolt-pistol",
+          "bolt-pistol",
+          "bolt-pistol",
+          "bolt-pistol",
+          "bolt-pistol",
+          "stocks-and-fists",
+          "stocks-and-fists",
+          "stocks-and-fists",
+          "stocks-and-fists",
+          "stocks-and-fists",
+          "stocks-and-fists"
+        ]
+      },
+      {
+        "name": "Battle Sister with Ministorum Heavy Flamer",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "ministorum-heavy-flamer",
+          "bolt-pistol",
+          "stocks-and-fists"
+        ]
+      },
+      {
+        "name": "Sister Superior",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "bolt-pistol",
+          "combi-weapon",
+          "power-weapon-sanctuary-guardians-battle-sisters-squad",
+          "stocks-and-fists"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "game_modes": [
+      "combat-patrol"
+    ],
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Battle Sister with Simulacrum Imperialis",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Battle Sister with Ministorum Flamer",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Battle Sister",
+            "min": 6,
+            "max": 6
+          },
+          {
+            "name": "Battle Sister with Ministorum Heavy Flamer",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Sister Superior",
             "min": 1,
             "max": 1
           }

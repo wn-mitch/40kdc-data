@@ -136,7 +136,7 @@
       "transforms": [],
       "filters": [],
       "precedence": [
-        "Use the source unit's authored game_version; fall back to the repository launch default."
+        "Use the source unit's authored game_version; fall back to the current dump dataslate."
       ],
       "consumers": ["tools/src/mfm/gear-projection.ts#mintWeapon"],
       "reason": "The minted weapon inherits repository game-version context rather than translating dump metadata."
@@ -149,7 +149,7 @@
       "transforms": [],
       "filters": [],
       "precedence": [
-        "Use the source unit's authored game_version; fall back to the repository launch default."
+        "Use the source unit's authored game_version; fall back to the current dump dataslate."
       ],
       "consumers": ["tools/src/mfm/gear-projection.ts#mintWeapon"],
       "reason": "The minted weapon inherits repository game-version context rather than translating dump metadata."
@@ -162,7 +162,7 @@
       "transforms": [],
       "filters": [],
       "precedence": [
-        "Use the source unit's authored game_version; fall back to the repository launch default."
+        "Use the source unit's authored game_version; fall back to the current dump dataslate."
       ],
       "consumers": ["tools/src/mfm/gear-projection.ts#mintWeapon"],
       "reason": "The minted weapon inherits repository game-version context rather than translating dump metadata."
@@ -447,7 +447,7 @@
     "/profiles/*/keywords/*/parameters/target_keyword": {
       "provenance": "derived",
       "coverage": "partial",
-      "sources": ["data.wargear_ability.localisations.*.name"],
+      "sources": ["data.wargear_ability.localisations.*.name", "data.wargear_item_profile.localisations.*.hunterProfileKeyword"],
       "joins": [
         {
           "relation": "wargear_item_profile_wargear_ability.wargearItemProfileId",
@@ -464,14 +464,16 @@
         {
           "symbol": "tools/src/mfm/gear-projection.ts#mapWeaponKeyword",
           "operation": "Split supported Anti target labels into title-cased target_keyword values."
+        },
+        {
+          "symbol": "tools/src/mfm/gear-projection.ts#hunterKeywords",
+          "operation": "Split a Hunter profile's keyword into title-cased target_keyword values, one hunter keyword each."
         }
       ],
-      "filters": [
-        "Only supported Anti ability-name forms emit target_keyword."
-      ],
+      "filters": ["Only supported Anti ability-name forms and Hunter profiles emit target_keyword."],
       "precedence": [],
       "consumers": ["tools/src/mfm/gear-projection.ts#mintWeapon"],
-      "reason": "Only the Anti parser branch produces this reference-site parameter."
+      "reason": "The Anti parser branch and the Hunter profile keyword produce this reference-site parameter."
     },
     "/profiles/*/keywords/*/parameters/threshold": {
       "provenance": "derived",
@@ -501,48 +503,112 @@
       "reason": "Only the Anti parser branch produces this reference-site parameter."
     },
     "/profiles/*/keywords/*/parameters/required_target_keywords_any": {
-      "provenance": "repo-authored",
-      "coverage": "unimplemented",
-      "sources": [],
-      "joins": [],
-      "transforms": [],
-      "filters": [],
+      "provenance": "derived",
+      "coverage": "partial",
+      "sources": ["data.wargear_ability.localisations.*.name"],
+      "joins": [
+        {
+          "relation": "wargear_item_profile_wargear_ability.wargearItemProfileId",
+          "direction": "children",
+          "purpose": "applicability"
+        },
+        {
+          "relation": "wargear_item_profile_wargear_ability.wargearAbilityId",
+          "direction": "parent",
+          "purpose": "applicability"
+        }
+      ],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/gear-projection.ts#mapWeaponKeyword",
+          "operation": "Parse a qualified name \"X: A/B\" into required target keywords and \"X: non-A/B\" into excluded ones, title-cased."
+        }
+      ],
+      "filters": ["Only qualified names whose base form maps to exactly one keyword emit these parameters.", "A negative Anti (\"ANTI-non-X\") stays unparsed."],
       "precedence": [],
-      "consumers": [],
-      "reason": "Conditional keyword applicability is retained from reviewed source material; the current MFM projection does not derive it."
+      "consumers": ["tools/src/mfm/gear-projection.ts#mintWeapon"],
+      "reason": "Qualified keyword applicability is parsed from the ability display name; other conditional applicability stays repo-authored."
     },
     "/profiles/*/keywords/*/parameters/required_target_keywords_any/*": {
-      "provenance": "repo-authored",
-      "coverage": "unimplemented",
-      "sources": [],
-      "joins": [],
-      "transforms": [],
-      "filters": [],
+      "provenance": "derived",
+      "coverage": "partial",
+      "sources": ["data.wargear_ability.localisations.*.name"],
+      "joins": [
+        {
+          "relation": "wargear_item_profile_wargear_ability.wargearItemProfileId",
+          "direction": "children",
+          "purpose": "applicability"
+        },
+        {
+          "relation": "wargear_item_profile_wargear_ability.wargearAbilityId",
+          "direction": "parent",
+          "purpose": "applicability"
+        }
+      ],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/gear-projection.ts#mapWeaponKeyword",
+          "operation": "Parse a qualified name \"X: A/B\" into required target keywords and \"X: non-A/B\" into excluded ones, title-cased."
+        }
+      ],
+      "filters": ["Only qualified names whose base form maps to exactly one keyword emit these parameters.", "A negative Anti (\"ANTI-non-X\") stays unparsed."],
       "precedence": [],
-      "consumers": [],
-      "reason": "Conditional keyword applicability is retained from reviewed source material; the current MFM projection does not derive it."
+      "consumers": ["tools/src/mfm/gear-projection.ts#mintWeapon"],
+      "reason": "Qualified keyword applicability is parsed from the ability display name; other conditional applicability stays repo-authored."
     },
     "/profiles/*/keywords/*/parameters/excluded_target_keywords": {
-      "provenance": "repo-authored",
-      "coverage": "unimplemented",
-      "sources": [],
-      "joins": [],
-      "transforms": [],
-      "filters": [],
+      "provenance": "derived",
+      "coverage": "partial",
+      "sources": ["data.wargear_ability.localisations.*.name"],
+      "joins": [
+        {
+          "relation": "wargear_item_profile_wargear_ability.wargearItemProfileId",
+          "direction": "children",
+          "purpose": "applicability"
+        },
+        {
+          "relation": "wargear_item_profile_wargear_ability.wargearAbilityId",
+          "direction": "parent",
+          "purpose": "applicability"
+        }
+      ],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/gear-projection.ts#mapWeaponKeyword",
+          "operation": "Parse a qualified name \"X: A/B\" into required target keywords and \"X: non-A/B\" into excluded ones, title-cased."
+        }
+      ],
+      "filters": ["Only qualified names whose base form maps to exactly one keyword emit these parameters.", "A negative Anti (\"ANTI-non-X\") stays unparsed."],
       "precedence": [],
-      "consumers": [],
-      "reason": "Conditional keyword applicability is retained from reviewed source material; the current MFM projection does not derive it."
+      "consumers": ["tools/src/mfm/gear-projection.ts#mintWeapon"],
+      "reason": "Qualified keyword applicability is parsed from the ability display name; other conditional applicability stays repo-authored."
     },
     "/profiles/*/keywords/*/parameters/excluded_target_keywords/*": {
-      "provenance": "repo-authored",
-      "coverage": "unimplemented",
-      "sources": [],
-      "joins": [],
-      "transforms": [],
-      "filters": [],
+      "provenance": "derived",
+      "coverage": "partial",
+      "sources": ["data.wargear_ability.localisations.*.name"],
+      "joins": [
+        {
+          "relation": "wargear_item_profile_wargear_ability.wargearItemProfileId",
+          "direction": "children",
+          "purpose": "applicability"
+        },
+        {
+          "relation": "wargear_item_profile_wargear_ability.wargearAbilityId",
+          "direction": "parent",
+          "purpose": "applicability"
+        }
+      ],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/gear-projection.ts#mapWeaponKeyword",
+          "operation": "Parse a qualified name \"X: A/B\" into required target keywords and \"X: non-A/B\" into excluded ones, title-cased."
+        }
+      ],
+      "filters": ["Only qualified names whose base form maps to exactly one keyword emit these parameters.", "A negative Anti (\"ANTI-non-X\") stays unparsed."],
       "precedence": [],
-      "consumers": [],
-      "reason": "Conditional keyword applicability is retained from reviewed source material; the current MFM projection does not derive it."
+      "consumers": ["tools/src/mfm/gear-projection.ts#mintWeapon"],
+      "reason": "Qualified keyword applicability is parsed from the ability display name; other conditional applicability stays repo-authored."
     },
     "/profiles/*/keywords/*/parameters/value": {
       "provenance": "derived",
@@ -573,38 +639,161 @@
       "consumers": ["tools/src/mfm/gear-projection.ts#mintWeapon"],
       "reason": "Only supported parameterized keyword forms produce value."
     },
-    "/profiles/*/target_restrictions": {
+    "/profiles/*/keywords/*/parameters/value/count_of": {
       "provenance": "repo-authored",
       "coverage": "unimplemented",
-      "sources": [],
+      "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": [], "consumers": [],
+      "reason": "Context-dependent keyword ratings are reviewed enrichment; the MFM weapon projection emits only flat or dice ratings."
+    },
+    "/profiles/*/keywords/*/parameters/value/incursion": {
+      "provenance": "repo-authored",
+      "coverage": "unimplemented",
+      "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": [], "consumers": [],
+      "reason": "Battle-size keyword ratings are reviewed enrichment; the MFM weapon projection emits only flat or dice ratings."
+    },
+    "/profiles/*/keywords/*/parameters/value/keyword": {
+      "provenance": "repo-authored",
+      "coverage": "unimplemented",
+      "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": [], "consumers": [],
+      "reason": "Context-dependent keyword ratings are reviewed enrichment; the MFM weapon projection emits only flat or dice ratings."
+    },
+    "/profiles/*/keywords/*/parameters/value/onslaught": {
+      "provenance": "repo-authored",
+      "coverage": "unimplemented",
+      "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": [], "consumers": [],
+      "reason": "Battle-size keyword ratings are reviewed enrichment; the MFM weapon projection emits only flat or dice ratings."
+    },
+    "/profiles/*/keywords/*/parameters/value/rating": {
+      "provenance": "repo-authored",
+      "coverage": "unimplemented",
+      "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": [], "consumers": [],
+      "reason": "Context-dependent keyword ratings are reviewed enrichment; the MFM weapon projection emits only flat or dice ratings."
+    },
+    "/profiles/*/keywords/*/parameters/value/roll_var": {
+      "provenance": "repo-authored",
+      "coverage": "unimplemented",
+      "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": [], "consumers": [],
+      "reason": "Bound-roll keyword ratings are reviewed enrichment; the MFM weapon projection emits only flat or dice ratings."
+    },
+    "/profiles/*/keywords/*/parameters/value/strike-force": {
+      "provenance": "repo-authored",
+      "coverage": "unimplemented",
+      "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": [], "consumers": [],
+      "reason": "Battle-size keyword ratings are reviewed enrichment; the MFM weapon projection emits only flat or dice ratings."
+    },
+    "/profiles/*/keywords/*/parameters/value/successes_on": {
+      "provenance": "repo-authored",
+      "coverage": "unimplemented",
+      "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": [], "consumers": [],
+      "reason": "Bound-roll keyword ratings are reviewed enrichment; the MFM weapon projection emits only flat or dice ratings."
+    },
+    "/profiles/*/keywords/*/parameters/value/wargear": {
+      "provenance": "repo-authored",
+      "coverage": "unimplemented",
+      "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": [], "consumers": [],
+      "reason": "Context-dependent keyword ratings are reviewed enrichment; the MFM weapon projection emits only flat or dice ratings."
+    },
+    "/profiles/*/keywords/*/parameters/value/within": {
+      "provenance": "repo-authored",
+      "coverage": "unimplemented",
+      "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": [], "consumers": [],
+      "reason": "Range-filtered keyword ratings are reviewed enrichment; the MFM weapon projection emits only flat or dice ratings."
+    },
+    "/profiles/*/keywords/*/parameters/value/within/aura_of": {
+      "provenance": "repo-authored",
+      "coverage": "unimplemented",
+      "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": [], "consumers": [],
+      "reason": "Range-filtered keyword ratings are reviewed enrichment; the MFM weapon projection emits only flat or dice ratings."
+    },
+    "/profiles/*/keywords/*/parameters/value/within/inches": {
+      "provenance": "repo-authored",
+      "coverage": "unimplemented",
+      "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": [], "consumers": [],
+      "reason": "Range-filtered keyword ratings are reviewed enrichment; the MFM weapon projection emits only flat or dice ratings."
+    },
+    "/profiles/*/keywords/*/parameters/value/within/per_battle_round": {
+      "provenance": "repo-authored",
+      "coverage": "unimplemented",
+      "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": [], "consumers": [],
+      "reason": "Tiered range-filtered ratings are reviewed enrichment; the MFM weapon projection emits only flat or dice ratings."
+    },
+    "/profiles/*/keywords/*/parameters/value/within/per_battle_round/*": {
+      "provenance": "repo-authored",
+      "coverage": "unimplemented",
+      "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": [], "consumers": [],
+      "reason": "Tiered range-filtered ratings are reviewed enrichment; the MFM weapon projection emits only flat or dice ratings."
+    },
+    "/profiles/*/keywords/*/parameters/value/within/per_battle_round/*/aura_of": {
+      "provenance": "repo-authored",
+      "coverage": "unimplemented",
+      "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": [], "consumers": [],
+      "reason": "Tiered range-filtered ratings are reviewed enrichment; the MFM weapon projection emits only flat or dice ratings."
+    },
+    "/profiles/*/keywords/*/parameters/value/within/per_battle_round/*/inches": {
+      "provenance": "repo-authored",
+      "coverage": "unimplemented",
+      "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": [], "consumers": [],
+      "reason": "Tiered range-filtered ratings are reviewed enrichment; the MFM weapon projection emits only flat or dice ratings."
+    },
+    "/profiles/*/target_restrictions": {
+      "provenance": "derived",
+      "coverage": "partial",
+      "sources": ["data.wargear_item_profile.localisations.*.hunterProfileKeyword"],
       "joins": [],
-      "transforms": [],
-      "filters": [],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/gear-projection.ts#hunterKeywords",
+          "operation": "Strip emphasis markers, split on / and comma, and title-case each target keyword."
+        },
+        {
+          "symbol": "tools/src/mfm/gear-projection.ts#mintWeapon",
+          "operation": "Restrict a Hunter profile to targets with any of its keywords."
+        }
+      ],
+      "filters": ["A Hunter profile with no keyword stays unrestricted and is reported as a warning."],
       "precedence": [],
-      "consumers": [],
-      "reason": "Hunter profile target legality is retained from reviewed source material; the current MFM projection does not derive it."
+      "consumers": ["tools/src/mfm/gear-projection.ts#mintWeapon"],
+      "reason": "Only Hunter profiles derive a required-keyword restriction; profile exclusions stay repo-authored."
     },
     "/profiles/*/target_restrictions/required_keywords_any": {
-      "provenance": "repo-authored",
-      "coverage": "unimplemented",
-      "sources": [],
+      "provenance": "derived",
+      "coverage": "partial",
+      "sources": ["data.wargear_item_profile.localisations.*.hunterProfileKeyword"],
       "joins": [],
-      "transforms": [],
-      "filters": [],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/gear-projection.ts#hunterKeywords",
+          "operation": "Strip emphasis markers, split on / and comma, and title-case each target keyword."
+        },
+        {
+          "symbol": "tools/src/mfm/gear-projection.ts#mintWeapon",
+          "operation": "Restrict a Hunter profile to targets with any of its keywords."
+        }
+      ],
+      "filters": ["A Hunter profile with no keyword stays unrestricted and is reported as a warning."],
       "precedence": [],
-      "consumers": [],
-      "reason": "Hunter profile target legality is retained from reviewed source material; the current MFM projection does not derive it."
+      "consumers": ["tools/src/mfm/gear-projection.ts#mintWeapon"],
+      "reason": "Only Hunter profiles derive a required-keyword restriction; profile exclusions stay repo-authored."
     },
     "/profiles/*/target_restrictions/required_keywords_any/*": {
-      "provenance": "repo-authored",
-      "coverage": "unimplemented",
-      "sources": [],
+      "provenance": "derived",
+      "coverage": "partial",
+      "sources": ["data.wargear_item_profile.localisations.*.hunterProfileKeyword"],
       "joins": [],
-      "transforms": [],
-      "filters": [],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/gear-projection.ts#hunterKeywords",
+          "operation": "Strip emphasis markers, split on / and comma, and title-case each target keyword."
+        },
+        {
+          "symbol": "tools/src/mfm/gear-projection.ts#mintWeapon",
+          "operation": "Restrict a Hunter profile to targets with any of its keywords."
+        }
+      ],
+      "filters": ["A Hunter profile with no keyword stays unrestricted and is reported as a warning."],
       "precedence": [],
-      "consumers": [],
-      "reason": "Hunter profile target legality is retained from reviewed source material; the current MFM projection does not derive it."
+      "consumers": ["tools/src/mfm/gear-projection.ts#mintWeapon"],
+      "reason": "Only Hunter profiles derive a required-keyword restriction; profile exclusions stay repo-authored."
     },
     "/profiles/*/target_restrictions/excluded_keywords": {
       "provenance": "repo-authored",
@@ -837,11 +1026,6 @@
       "source": "data.wargear_item.noMultiProfileIcon",
       "candidate_pointer": null,
       "reason": "Presentation metadata has no core weapon destination."
-    },
-    {
-      "source": "data.wargear_item_profile.localisations.*.hunterProfileKeyword",
-      "candidate_pointer": "/profiles/*/keywords",
-      "reason": "The current keyword parser does not consume this localized source field."
     },
     {
       "source": "data.wargear_item_profile_wargear_ability.displayOrder",

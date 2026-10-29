@@ -5,6 +5,8 @@
  *
  * @packageDocumentation
  */
+import { mortalWoundSourcesFor } from "./dataset-mortals.js";
+import { unitAbilityIds } from "./ability-refs.js";
 import type {
   AlliedRule,
   DeploymentPattern,
@@ -32,7 +34,13 @@ import type {
   WeaponKeyword,
   UnitKeyword,
 } from "../generated.js";
-import { Collection } from "./collection.js";
+import {
+  assertGameModeView,
+  Collection,
+  DEFAULT_GAME_MODE,
+  inGameMode,
+  type GameModeView,
+} from "./collection.js";
 import {
   AbilityView,
   FactionView,
@@ -41,68 +49,65 @@ import {
   WeaponView,
 } from "./entities.js";
 import { emptyRawData, type RawData } from "./types.js";
+import { collectBuffs, stackableBuffsFor } from "./dataset-buffs.js";
+import * as attachments from "./dataset-attachments.js";
+import { reactiveTriggersOf, triggerIndexOf } from "./dataset-triggers.js";
 import { RAW_DATA } from "./bundle.generated.js";
 // Renamed-id map (old id → current id) so id lookups of a since-renamed entity
 // (e.g. an enhancement id normalized to the RAW GW form) still resolve — the
 // same authored rename map the share codec applies on decode.
 import { SHARE_REGISTRY } from "../share/registry.generated.js";
 import { resolveLayout, type ResolvedPiece } from "../terrain/resolve.js";
-import type { Buff, BuffSource, EngineContext } from "../cruncher/buffs.js";
+import type { Buff, EngineContext } from "../cruncher/buffs.js";
+import type { AbilityNeed } from "./lever-providers.js";
 import {
   resolveEligibleAbilities,
   type EligibilityInput,
   type EligibleAbility,
 } from "../abilities-resolver/index.js";
 
-/**
- * One toggleable buff lever for damage analysis: the contributions it adds and
- * whether it's on by default. `enabled` is `true` for buffs that always apply
- * (intrinsic keywords, unconditional abilities) and `false` for player
- * decisions — stratagems (CP cost) and activatable gates (dice-pool options,
- * `choice` branches, timing-gated activations). A consumer flips `enabled`,
- * then crunches the enabled subset; an optimizer searches it.
- *
- * @see {@link Dataset.stackableBuffsFor}
- */
-export type StackableBuff = {
-  /** Stable toggle id (stable across re-enumeration of the same input). */
-  id: string;
-  /** Human label for the lever. */
-  label: string;
-  /** Contributions this lever adds when enabled (≥1). */
-  buffs: Buff[];
-  /** Default selection state. */
-  enabled: boolean;
-  /** Where the lever came from. */
-  source: BuffSource;
-  /** Id of the mutually-limited {@link StackableBuffGroup} this belongs to, if any. */
-  group?: string;
-};
+export type {
+  BuffInput,
+  StackableBuff,
+  StackableBuffGroup,
+} from "./dataset-buffs.js";
+import type {
+  BuffInput,
+  StackableBuff,
+  StackableBuffGroup,
+} from "./dataset-buffs.js";
 
-/** A pool of {@link StackableBuff} levers limited to `maxActivations` at once. */
-export type StackableBuffGroup = {
-  id: string;
-  label: string;
-  maxActivations: number;
-};
+export type { ReactiveTrigger } from "./dataset-triggers.js";
+import type { ReactiveTrigger } from "./dataset-triggers.js";
 
 /**
- * One reactive ability resolved for event dispatch: the ability's id, the
- * {@link GameEvent} it fires on, the units that carry it (sorted; empty for
- * faction/detachment rules), and the full (non-null) `trigger` block.
- *
- * @see {@link Dataset.reactiveTriggers}
- * @see {@link Dataset.triggerIndex}
+ * Record types that carry `game_modes` and whose collections a game-mode view
+ * filters. Every other collection lists all of its records in every view.
  */
-export type ReactiveTrigger = {
-  abilityId: string;
-  event: GameEvent;
-  unitIds: string[];
-  trigger: NonNullable<RawData["abilities"][number]["trigger"]>;
-};
+type ModeScoped = { game_modes?: readonly string[] | null };
 
-/** The whole dataset, with linked accessors over every entity collection. */
+/**
+ * The whole dataset, with linked accessors over every entity collection.
+ *
+ * A dataset is a **game-mode view**: {@link gameMode} is the mode its listings
+ * show. `Dataset.embedded()` and `new Dataset(raw)` are the matched-play view;
+ * {@link forGameMode} returns another view over the same records and indexes.
+ * In a view, listings of mode-scoped records (units, weapons, detachments,
+ * enhancements, stratagems, wargear options, unit compositions) skip those whose
+ * effective `game_modes` (absent → matched play) lack the mode — collection
+ * `all`/iteration/`size`/`byFaction`/`find`/`findAll`, the `unitCompositions`
+ * array, and the reverse listings ({@link unitsWithKeyword} and kin). Id lookups
+ * (`get`, `getAny`, `getInFaction`, `has`, `byExternalRef`) and per-record links
+ * ({@link wargearOptionsOf}, {@link unitCompositionOf}, a unit's weapons and
+ * abilities) resolve every record in every view, so share tokens, saved rosters
+ * and references keep resolving. `"all"` lists everything.
+ */
 export class Dataset {
+  /** The game mode this view lists (`"all"` lists every record). */
+  readonly gameMode: GameModeView;
+  /** Views of the same data by mode, shared by every view of one dataset. */
+  private readonly views: Map<GameModeView, Dataset>;
+
   // Richly-linked collections.
   readonly units: Collection<Unit, UnitView>;
   readonly weapons: Collection<RawData["weapons"][number], WeaponView>;
@@ -151,11 +156,22 @@ export class Dataset {
   private readonly unitsByKeyword = new Map<string, Unit[]>();
   /** `faction_id::unit_id` → wargear options authored for it (declared order preserved). */
   private readonly wargearOptionsByUnit = new Map<string, WargearOption[]>();
+  /** Every unit composition, whatever the mode; {@link unitCompositions} filters it. */
+  private readonly everyUnitComposition: readonly UnitComposition[];
   /** `faction_id::unit_id` → the unit-composition authored for it. */
   private readonly compositionByUnit = new Map<string, UnitComposition>();
 
-  constructor(raw: RawData = emptyRawData()) {
+  constructor(
+    raw: RawData = emptyRawData(),
+    gameMode: GameModeView = DEFAULT_GAME_MODE,
+  ) {
+    assertGameModeView(gameMode);
+    this.gameMode = gameMode;
+    this.views = new Map([[gameMode, this]]);
+    const modesOf = (r: ModeScoped) => r.game_modes;
     this.units = new Collection({
+      gameMode,
+      gameModesOf: modesOf,
       items: raw.units,
       idOf: (u) => u.id,
       externalRefsOf: (u) => u.external_refs,
@@ -172,6 +188,8 @@ export class Dataset {
       wrap: (u) => new UnitView(u, this),
     });
     this.weapons = new Collection({
+      gameMode,
+      gameModesOf: modesOf,
       items: raw.weapons,
       idOf: (w) => w.id,
       externalRefsOf: (w) => w.external_refs,
@@ -200,25 +218,19 @@ export class Dataset {
       idOf: (f) => f.id,
       externalRefsOf: (f) => f.external_refs,
       nameOf: (f) => f.name,
+      // Factions answer to alternate names ("Space Marines" for Adeptus
+      // Astartes) as exact matches, ahead of the substring fallback.
+      aliasesOf: (f) => f.aliases,
       idAliases: SHARE_REGISTRY.aliases,
       wrap: (f) => new FactionView(f, this),
     });
     this.abilities = new Collection({
       items: raw.abilities,
+      // Ability ids are unique across the dataset (`<name>-<faction>`; core rules bare),
+      // so a plain get() is exact. An old bare faction id resolves to nothing.
       idOf: (a) => a.ability_id,
-      // An ability_id is shared across factions (each faction's enrichment
-      // authors its own copy of e.g. "deadly-demise-d3", and the copies
-      // legitimately diverge); key on (faction_id, id) so every faction's copy
-      // is retained and a unit resolves its own faction's ability — the same
-      // scheme as weapons (issue #59). `faction_id` is stamped at bundle time
-      // from the enrichment directory; only the shared `_core` pool stays
-      // faction-less, reachable through the getAny fallback.
-      dedupeKeyOf: (a) => `${a.faction_id ?? ""}::${a.ability_id}`,
       nameOf: (a) => a.name,
       factionOf: (a) => a.faction_id,
-      // Per-faction copies diverge (DSL fidelity, unit_ids), so a
-      // faction-less get() of a shared id is a bug — same guard as weapons.
-      guardUnscoped: true,
       entityLabel: "ability",
       wrap: (a) => new AbilityView(a, this),
     });
@@ -233,6 +245,8 @@ export class Dataset {
     // faction context is known; bare {@link Collection.get} returns whichever
     // copy was registered first.
     this.detachments = new Collection({
+      gameMode,
+      gameModesOf: modesOf,
       items: raw.detachments,
       idOf: (d) => d.id,
       externalRefsOf: (d) => d.external_refs,
@@ -250,9 +264,9 @@ export class Dataset {
     // Allied rules aren't owned by one faction (Daemonic Pact is shared by
     // Chaos Knights and CSM); `alliesFor` matches on `army_keywords_any` instead.
     this.alliedRules = idCollection(raw.alliedRules);
-    this.enhancements = idCollection(raw.enhancements);
-    this.stratagems = idCollection(raw.stratagems);
-    this.wargearOptions = idCollection(raw.wargearOptions);
+    this.enhancements = idCollection(raw.enhancements, undefined, gameMode);
+    this.stratagems = idCollection(raw.stratagems, undefined, gameMode);
+    this.wargearOptions = idCollection(raw.wargearOptions, undefined, gameMode);
     this.wargear = idCollection(raw.wargear);
     this.missions = idCollection(raw.missions);
     this.missionMatchups = idCollection(raw.missionMatchups);
@@ -265,7 +279,10 @@ export class Dataset {
     this.resourcePools = idCollection(raw.resourcePools);
 
     this.leaderAttachments = raw.leaderAttachments;
-    this.unitCompositions = raw.unitCompositions;
+    this.everyUnitComposition = raw.unitCompositions;
+    this.unitCompositions = raw.unitCompositions.filter((c) =>
+      inGameMode(c.game_modes, gameMode),
+    );
     this.gameVersions = raw.gameVersions;
     this.interactionFlags = raw.interactionFlags;
     this.phaseMappings = raw.phaseMappings;
@@ -273,9 +290,54 @@ export class Dataset {
     this.buildIndexes(raw);
   }
 
-  /** The dataset built from the package's embedded data. */
+  /** The dataset built from the package's embedded data: the matched-play view. */
   static embedded(): Dataset {
     return new Dataset(RAW_DATA);
+  }
+
+  /**
+   * This dataset's view listing `mode` (a game-mode id, or `"all"` for every
+   * record). The view shares this dataset's records and indexes; views are
+   * cached, so repeated calls return the same object. Throws on an unknown mode.
+   */
+  forGameMode(mode: GameModeView): Dataset {
+    assertGameModeView(mode);
+    const cached = this.views.get(mode);
+    if (cached) return cached;
+    const view = Object.create(Dataset.prototype) as Dataset;
+    Object.assign(view, this);
+    const v = view as unknown as Record<string, unknown>;
+    v.gameMode = mode;
+    // Linked views wrap against the view, so `unit.faction.units` lists in it.
+    v.units = this.units.withGameMode(mode, (u) => new UnitView(u, view));
+    v.weapons = this.weapons.withGameMode(mode, (w) => new WeaponView(w, view));
+    v.weaponKeywords = this.weaponKeywords.withGameMode(
+      mode,
+      (k) => new WeaponKeywordView(k, view),
+    );
+    v.factions = this.factions.withGameMode(
+      mode,
+      (f) => new FactionView(f, view),
+    );
+    v.abilities = this.abilities.withGameMode(
+      mode,
+      (a) => new AbilityView(a, view),
+    );
+    v.detachments = this.detachments.withGameMode(mode);
+    v.enhancements = this.enhancements.withGameMode(mode);
+    v.stratagems = this.stratagems.withGameMode(mode);
+    v.wargearOptions = this.wargearOptions.withGameMode(mode);
+    v.unitCompositions = this.everyUnitComposition.filter((c) =>
+      inGameMode(c.game_modes, mode),
+    );
+    this.views.set(mode, view);
+    return view;
+  }
+
+
+  /** Whether this view lists a mode-scoped record. */
+  private listsMode(record: ModeScoped): boolean {
+    return inGameMode(record.game_modes, this.gameMode);
   }
 
   /** Phases a source acts in, unioned across its phase-mappings. */
@@ -307,44 +369,20 @@ export class Dataset {
 
   /** Units that list the given ability id. */
   unitsWithAbility(abilityId: string): UnitView[] {
-    return (this.unitsByAbility.get(abilityId) ?? []).map(
-      (u) => new UnitView(u, this),
-    );
+    return (this.unitsByAbility.get(abilityId) ?? [])
+      .filter((u) => this.listsMode(u))
+      .map((u) => new UnitView(u, this));
   }
 
   /**
-   * Every ability carrying a reactive {@link AbilityTrigger}, sorted by ability
+   * Every ability carrying a reactive event trigger, sorted by ability
    * id. Each entry names the units that list the ability (sorted; empty for
    * faction/detachment-rule abilities no unit references directly).
    */
   reactiveTriggers(): ReactiveTrigger[] {
-    const out: ReactiveTrigger[] = [];
-    // The abilities collection retains one copy per faction of a shared
-    // ability_id; this aggregation is faction-less (ReactiveTrigger carries no
-    // faction), so emit each ability id once — first registered copy wins,
-    // matching the collection's own byId index.
-    const seenIds = new Set<string>();
-    for (const a of this.abilities.all) {
-      if (seenIds.has(a.id)) continue;
-      seenIds.add(a.id);
-      const raw = a.raw.trigger;
-      if (!raw) continue;
-      // `trigger` may be a single object or an array (the ability fires on any);
-      // emit one ReactiveTrigger per event so the dispatch index keys them all.
-      const triggers = Array.isArray(raw) ? raw : [raw];
-      const unitIds = (this.unitsByAbility.get(a.id) ?? [])
-        .map((u) => u.id)
-        .sort();
-      for (const trigger of triggers) {
-        if (trigger?.event == null) continue;
-        out.push({ abilityId: a.id, event: trigger.event, unitIds, trigger });
-      }
-    }
-    out.sort((x, y) =>
-      x.abilityId < y.abilityId ? -1 : x.abilityId > y.abilityId ? 1 : 0,
-    );
-    return out;
+    return reactiveTriggersOf(this.abilities.all, this.unitsByAbility);
   }
+
 
   /**
    * Dispatch index for event-driven consumers: {@link GameEvent} → the reactive
@@ -352,29 +390,22 @@ export class Dataset {
    * sorted by ability id, so the structure is deterministic across runs.
    */
   triggerIndex(): Map<GameEvent, ReactiveTrigger[]> {
-    const grouped = new Map<GameEvent, ReactiveTrigger[]>();
-    for (const rt of this.reactiveTriggers()) {
-      const bucket = grouped.get(rt.event);
-      if (bucket) bucket.push(rt);
-      else grouped.set(rt.event, [rt]);
-    }
-    return new Map(
-      [...grouped.entries()].sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0)),
-    );
+    return triggerIndexOf(this.reactiveTriggers());
   }
+
 
   /** Units that list the given weapon id. */
   unitsWithWeapon(weaponId: string): UnitView[] {
-    return (this.unitsByWeapon.get(weaponId) ?? []).map(
-      (u) => new UnitView(u, this),
-    );
+    return (this.unitsByWeapon.get(weaponId) ?? [])
+      .filter((u) => this.listsMode(u))
+      .map((u) => new UnitView(u, this));
   }
 
   /** Weapons whose profiles reference the given weapon-keyword id. */
   weaponsWithKeyword(keywordId: string): WeaponView[] {
-    return (this.weaponsByKeyword.get(keywordId) ?? []).map(
-      (w) => new WeaponView(w, this),
-    );
+    return (this.weaponsByKeyword.get(keywordId) ?? [])
+      .filter((w) => this.listsMode(w))
+      .map((w) => new WeaponView(w, this));
   }
 
   /**
@@ -385,9 +416,9 @@ export class Dataset {
    * Returns each faction's copy of a shared unit id separately.
    */
   unitsWithKeyword(keyword: string): UnitView[] {
-    return (this.unitsByKeyword.get(keyword.toLowerCase()) ?? []).map(
-      (u) => new UnitView(u, this),
-    );
+    return (this.unitsByKeyword.get(keyword.toLowerCase()) ?? [])
+      .filter((u) => this.listsMode(u))
+      .map((u) => new UnitView(u, this));
   }
 
   /**
@@ -401,23 +432,7 @@ export class Dataset {
    * `Dataset::allies_for`; pinned by the `allies_for` conformance query.
    */
   alliesFor(factionId: string, detachmentIds: string[] = []): AlliedRule[] {
-    const faction = this.factions.get(factionId);
-    if (!faction) return [];
-    const factionKeywords = new Set(
-      (faction.raw.keywords ?? []).map((k) => k.toLowerCase()),
-    );
-    const detachmentSet = new Set(detachmentIds);
-    return this.alliedRules.all.filter((rule) => {
-      const armyGate =
-        (rule.army_keywords_any ?? []).length === 0 ||
-        (rule.army_keywords_any ?? []).some((k) =>
-          factionKeywords.has(k.toLowerCase()),
-        );
-      const detachmentGate =
-        (rule.detachment_ids ?? []).length === 0 ||
-        (rule.detachment_ids ?? []).some((id) => detachmentSet.has(id));
-      return armyGate && detachmentGate;
-    });
+    return attachments.alliesFor(this, factionId, detachmentIds);
   }
 
   /**
@@ -431,31 +446,7 @@ export class Dataset {
    * `ally_units_for` conformance query.
    */
   allyUnitsFor(ruleId: string): UnitView[] {
-    const rule = this.alliedRules.get(ruleId);
-    if (!rule) return [];
-    const base = rule.source_faction_id
-      ? this.units.byFaction(rule.source_faction_id)
-      : this.units.all;
-    const sourceKeywords = (rule.source_keywords ?? []).map((k) =>
-      k.toLowerCase(),
-    );
-    const required = (rule.required_keywords ?? []).map((k) => k.toLowerCase());
-    const excluded = (rule.excluded_keywords ?? []).map((k) => k.toLowerCase());
-    const roles = new Set(rule.roles ?? []);
-    const datasheetIds = new Set(rule.source_datasheet_ids ?? []);
-    const out = base.filter((u) => {
-      const have = unitKeywordSet(u.raw);
-      if (datasheetIds.size > 0 && !datasheetIds.has(u.raw.id)) return false;
-      if (sourceKeywords.length > 0 && !sourceKeywords.some((k) => have.has(k)))
-        return false;
-      if (required.length > 0 && !required.every((k) => have.has(k)))
-        return false;
-      if (excluded.some((k) => have.has(k))) return false;
-      if (roles.size > 0 && !(u.raw.role && roles.has(u.raw.role)))
-        return false;
-      return true;
-    });
-    return out.sort((a, b) => a.name.localeCompare(b.name));
+    return attachments.allyUnitsFor(this, ruleId);
   }
 
   /**
@@ -484,76 +475,41 @@ export class Dataset {
   }
 
   /**
-   * Leaders whose leader-attachment data lists `bodyguardUnitId` among its
-   * eligible body units, sorted by name. The attachment is stored on the
-   * leader pointing down to its bodyguards, so answering "which leaders can
-   * attach to this unit?" means scanning the attachment list. Returns an empty
-   * array for a unit that no leader can attach to (including leader units).
+   * Leaders eligible for `bodyguardUnitId`, sorted by name. Without roster
+   * context this includes every possible conditional group; with a roster set
+   * it includes only groups whose required units are present and excluded
+   * units absent. Unconditional id and keyword eligibility always applies.
    */
-  leadersAttachableTo(bodyguardUnitId: string): UnitView[] {
-    const bodyguard = this.units.getAny(bodyguardUnitId);
-    return (
-      this.leaderAttachments
-        .filter(
-          (la) =>
-            la.eligible_bodyguard_ids.includes(bodyguardUnitId) ||
-            // Keyword eligibility (e.g. an Inquisitor leading any Imperium
-            // Battleline Infantry unit): match on the bodyguard's keyword set.
-            (bodyguard !== undefined &&
-              matchesBodyguardKeywords(la, bodyguard.raw)),
-        )
-        // Attachment data is faction-agnostic (no faction context here); accept
-        // first-wins for a shared leader/bodyguard chassis via getAny.
-        .map((la) => this.units.getAny(la.leader_id))
-        .filter((u): u is UnitView => u !== undefined)
-        .sort((a, b) => a.name.localeCompare(b.name))
-    );
+  leadersAttachableTo(bodyguardUnitId: string, rosterUnitIds?: ReadonlySet<string>): UnitView[] {
+    return attachments.leadersAttachableTo(this, bodyguardUnitId, rosterUnitIds);
   }
 
   /**
-   * The inverse of {@link leadersAttachableTo}: the body units the given
-   * leader can attach to, sorted by name. Scans the same leader-attachment
-   * data from the leader's side (`leader_id` matches; resolve each
-   * `eligible_bodyguard_ids` entry), deduped by id. Empty for a non-leader
-   * unit. Together the two queries give the bidirectional attachment graph the
-   * SPA needs to offer a partner dropdown from either end.
+   * Bodyguards eligible for `leaderUnitId`, deduped by id and sorted by name.
+   * Without roster context this includes every possible conditional group;
+   * with a roster set it applies each group's required/excluded unit conditions.
+   * `factionId` scopes the resolved bodyguard views when provided.
    */
   bodyguardsAttachableFrom(
     leaderUnitId: string,
     factionId?: string,
+    rosterUnitIds?: ReadonlySet<string>,
   ): UnitView[] {
-    const seen = new Set<string>();
-    const out: UnitView[] = [];
-    const add = (unit: UnitView | undefined) => {
-      if (!unit || seen.has(unit.id)) return;
-      seen.add(unit.id);
-      out.push(unit);
-    };
-    for (const la of this.leaderAttachments) {
-      if (la.leader_id !== leaderUnitId) continue;
-      const bodyguards = la.eligible_bodyguard_ids.map((id) =>
-        factionId
-          ? this.units.getInFaction(id, factionId)
-          : this.units.getAny(id),
-      );
-      if (
-        factionId &&
-        bodyguards.every((unit) => unit === undefined) &&
-        !la.eligible_bodyguard_keywords?.length
-      )
-        continue;
-      for (const bodyguard of bodyguards) add(bodyguard);
-      if (la.eligible_bodyguard_keywords?.length) {
-        for (const view of this.units.all) {
-          if (
-            (!factionId || view.raw.faction_id === factionId) &&
-            matchesBodyguardKeywords(la, view.raw)
-          )
-            add(view);
-        }
+    return attachments.bodyguardsAttachableFrom(this, leaderUnitId, factionId, rosterUnitIds);
+  }
+
+  /** Conditional roster groups override the flat role; leader wins on overlap. */
+  conditionalAttachmentRole(leaderUnitId: string, rosterUnitIds: ReadonlySet<string>): "leader" | "support" | undefined {
+    let supportApplies = false;
+    for (const attachment of this.leaderAttachments) {
+      if (attachment.leader_id !== leaderUnitId) continue;
+      for (const group of attachment.conditional_groups ?? []) {
+        if (!attachments.attachmentGroupApplies(group, rosterUnitIds)) continue;
+        if (group.role === "leader") return "leader";
+        supportApplies = true;
       }
     }
-    return out.sort((a, b) => a.name.localeCompare(b.name));
+    return supportApplies ? "support" : undefined;
   }
 
   /**
@@ -576,16 +532,26 @@ export class Dataset {
    * {@link AbilityView.describeBuffs} when you need the diagnostics for an
    * individual ability. Symmetric to {@link defensiveBuffsFor}, which walks
    * the same eligibility set under target perspective.
+   *
+   * Persistent recipient effects after an attachment changes are resolved only
+   * from caller-attested `context.recipientSnapshots` captured at activation
+   * time. The caller supplies live event-time evidence and asserts
+   * activation/equipment; this dataset has no internal history or clock.
+   * Discovery accepts an intrinsic source or an eligible enhancement with the
+   * matching detachment; legality alone does not prove that a source was
+   * equipped. Missing, mismatched, or conflicting snapshots are unsupported,
+   * `selected: false` produces no effect, and a named parent trigger remains
+   * distinct from unrelated effect guards.
    */
   buffsFor(
-    input: EligibilityInput & {
+    input: BuffInput & {
       weaponProfiles?: { weaponId: string; profileIndex: number }[];
       /** Stratagem ids the caller has opted into spending CP on. */
       optedInStratagemIds?: string[];
     },
     context: EngineContext,
   ): Buff[] {
-    return this.collectBuffs(input, context, "attacker");
+    return collectBuffs(this, input, context, "attacker");
   }
 
   /**
@@ -602,17 +568,44 @@ export class Dataset {
    * effects ride with the firing weapon, not the receiving unit.
    *
    * Abilities pooled in from `attachedUnitIds` obey core rule 19.04: an effect
-   * targeting a single model (DSL `self`/`bearer`, e.g. an attached character's
+   * targeting a single model (DSL `this-model`, e.g. an attached character's
    * personal invulnerable save) is *not* returned as a buff on the combined
    * unit — it stays on its own model and surfaces in
    * {@link AbilityView.describeBuffs}'s `unsupported` list instead. Effects
-   * targeting the unit (`unit`/`attached-unit`) do reach the whole unit.
+   * targeting the unit (`this-unit`) do reach the whole unit.
    */
   defensiveBuffsFor(
     input: EligibilityInput & { optedInStratagemIds?: string[] },
     context: EngineContext,
   ): Buff[] {
-    return this.collectBuffs(input, context, "target");
+    return collectBuffs(this, input, context, "target");
+  }
+
+  /**
+   * The leaf conditions {@link defensiveBuffsFor} leaves undecided for the
+   * defending unit, each with the ability that raised it. Answering one in
+   * `context.conditionFacts` under its `key` decides it.
+   */
+  defensiveNeedsFor(
+    input: EligibilityInput & { optedInStratagemIds?: string[] },
+    context: EngineContext,
+  ): AbilityNeed[] {
+    const needs: AbilityNeed[] = [];
+    collectBuffs(this, input, context, "target", needs);
+    return needs;
+  }
+
+  /**
+   * The mortal wounds a unit's abilities inflict on an enemy unit outside its attacks: after a
+   * Charge move, at the start of a phase, when it is selected to shoot. Each source gives the
+   * expected mortal wounds per occurrence of its moment, before Feel No Pain, assuming each of its
+   * `needs` holds (answer one false in `context.conditionFacts` to remove it). `phase-is`
+   * conditions never gate a source, so the context's phase does not filter them. Mortal wounds an
+   * attack's own rolls inflict are buffs ({@link buffsFor}), not sources; mortal wounds the unit
+   * inflicts on itself are not reported.
+   */
+  mortalWoundSourcesFor(input: EligibilityInput, context: EngineContext): ReturnType<typeof mortalWoundSourcesFor> {
+    return mortalWoundSourcesFor(this, input, context);
   }
 
   /**
@@ -636,140 +629,18 @@ export class Dataset {
    * Target/phase conditions a lever still carries (e.g. "vs Infantry") ride on
    * each buff's `applicableWhen`, so toggling it on is always safe — the
    * resolver gates it per-target.
+   *
+   * `needs` lists the leaf conditions the context leaves undecided, each with
+   * the ability that raised it. Answering one in `context.conditionFacts` under
+   * its `key` decides it on the next call.
    */
   stackableBuffsFor(
-    input: EligibilityInput & {
+    input: BuffInput & {
       weaponProfiles?: { weaponId: string; profileIndex: number }[];
     },
     context: EngineContext,
-  ): { buffs: StackableBuff[]; groups: StackableBuffGroup[] } {
-    const buffs: StackableBuff[] = [];
-    const groups = new Map<string, StackableBuffGroup>();
-
-    // Surface the attachment fact to the DSL translator so `is-attached` /
-    // `model-is-leader` conditions can evaluate. Clone — never mutate the
-    // caller's context. An explicitly-set flag wins over the derivation.
-    const ctx: EngineContext = {
-      ...context,
-      attackerAttached:
-        context.attackerAttached ?? (input.attachedUnitIds?.length ?? 0) > 0,
-    };
-
-    // Intrinsic weapon-profile keywords — always on. Weapon ids are shared
-    // across factions with divergent stats, so resolve within the input
-    // unit's faction (getAny fallback for a genuinely cross-faction id).
-    const weaponFaction =
-      input.factionId ?? this.units.getAny(input.unitId)?.raw.faction_id;
-    for (const ref of input.weaponProfiles ?? []) {
-      const weapon =
-        (weaponFaction
-          ? this.weapons.getInFaction(ref.weaponId, weaponFaction)
-          : undefined) ?? this.weapons.getAny(ref.weaponId);
-      if (!weapon) continue;
-      const wk = weapon.profileBuffs(ref.profileIndex, ctx);
-      if (wk.length === 0) continue;
-      buffs.push({
-        id: `weapon:${ref.weaponId}:${ref.profileIndex}`,
-        label: `${weapon.name} keywords`,
-        buffs: wk,
-        enabled: true,
-        source: wk[0].source,
-      });
-    }
-
-    for (const entry of this.eligibleAbilities(input, ctx.phase)) {
-      const source = bufferSourceFromEligible(entry);
-      const { applied, activatable } = entry.ability.describeBuffs(
-        source,
-        ctx,
-        "attacker",
-      );
-      // Stratagems cost CP — opt-in, not on by default.
-      const isStratagem = entry.source.kind === "detachment-stratagem";
-
-      if (applied.length > 0) {
-        buffs.push({
-          id: `${entry.source.kind}:${entry.ability.id}`,
-          label: entry.ability.name,
-          buffs: applied,
-          enabled: !isStratagem,
-          source,
-        });
-      }
-
-      for (const act of activatable) {
-        let groupId: string | undefined;
-        if (act.group) {
-          groupId = act.group.id;
-          if (!groups.has(groupId)) {
-            groups.set(groupId, {
-              id: groupId,
-              label: entry.ability.name,
-              maxActivations: act.group.maxActivations,
-            });
-          }
-        }
-        buffs.push({
-          id: act.id,
-          label: `${entry.ability.name} — ${act.label}`,
-          buffs: act.buffs,
-          enabled: false,
-          source,
-          group: groupId,
-        });
-      }
-    }
-
-    return { buffs, groups: [...groups.values()] };
-  }
-
-  /** Shared implementation for buffsFor / defensiveBuffsFor. */
-  private collectBuffs(
-    input: EligibilityInput & {
-      weaponProfiles?: { weaponId: string; profileIndex: number }[];
-      optedInStratagemIds?: string[];
-    },
-    context: EngineContext,
-    perspective: "attacker" | "target",
-  ): Buff[] {
-    const out: Buff[] = [];
-
-    // Surface the attachment fact to the DSL translator (see stackableBuffsFor).
-    // Clone — never mutate the caller's context; explicit flag wins.
-    const ctx: EngineContext = {
-      ...context,
-      attackerAttached:
-        context.attackerAttached ?? (input.attachedUnitIds?.length ?? 0) > 0,
-    };
-
-    // Weapon-profile keywords are attacker-only. Faction-scoped like
-    // stackableBuffsFor — first-wins here would crunch the wrong faction's stats.
-    if (perspective === "attacker") {
-      const weaponFaction =
-        input.factionId ?? this.units.getAny(input.unitId)?.raw.faction_id;
-      for (const ref of input.weaponProfiles ?? []) {
-        const weapon =
-          (weaponFaction
-            ? this.weapons.getInFaction(ref.weaponId, weaponFaction)
-            : undefined) ?? this.weapons.getAny(ref.weaponId);
-        if (!weapon) continue;
-        out.push(...weapon.profileBuffs(ref.profileIndex, ctx));
-      }
-    }
-
-    const optedIn = new Set(input.optedInStratagemIds ?? []);
-    for (const entry of this.eligibleAbilities(input, ctx.phase)) {
-      if (
-        entry.source.kind === "detachment-stratagem" &&
-        !optedIn.has(entry.source.stratagemId)
-      ) {
-        continue;
-      }
-      const source = bufferSourceFromEligible(entry);
-      out.push(...entry.ability.getBuffs(source, ctx, perspective));
-    }
-
-    return out;
+  ): { buffs: StackableBuff[]; groups: StackableBuffGroup[]; needs: AbilityNeed[] } {
+    return stackableBuffsFor(this, input, context);
   }
 
   private buildIndexes(raw: RawData): void {
@@ -782,7 +653,7 @@ export class Dataset {
       this.phaseIndex.set(key, existing);
     }
     for (const unit of raw.units) {
-      for (const abilityId of unit.ability_ids ?? [])
+      for (const abilityId of unitAbilityIds(unit.ability_ids))
         push(this.unitsByAbility, abilityId, unit);
       for (const weaponId of unit.weapon_ids ?? [])
         push(this.unitsByWeapon, weaponId, unit);
@@ -835,9 +706,15 @@ export class Dataset {
 function idCollection<T extends { id: string }>(
   items: T[],
   factionOf?: (item: T) => string | null | undefined,
+  gameMode?: GameModeView,
 ): Collection<T, T> {
   return new Collection<T, T>({
     items,
+    // Passing a mode marks the record type as mode-scoped (it carries
+    // `game_modes`); collections built without one list every record.
+    ...(gameMode !== undefined
+      ? { gameMode, gameModesOf: (i: T) => (i as ModeScoped).game_modes }
+      : {}),
     idOf: (i) => i.id,
     nameOf: (i) => (i as { name?: string }).name,
     externalRefsOf: (i) =>
@@ -855,53 +732,4 @@ function push<T>(map: Map<string, T[]>, key: string, value: T): void {
   const existing = map.get(key);
   if (existing) existing.push(value);
   else map.set(key, [value]);
-}
-
-/** Lowercased union of a unit's `keywords` and `faction_keywords`, for membership tests. */
-function unitKeywordSet(unit: Unit): Set<string> {
-  const out = new Set<string>();
-  for (const k of unit.keywords ?? []) out.add(k.toLowerCase());
-  for (const k of unit.faction_keywords ?? []) out.add(k.toLowerCase());
-  return out;
-}
-
-/**
- * Does `unit` satisfy an attachment entry's optional keyword eligibility — i.e.
- * its keyword set (keywords ∪ faction_keywords, case-insensitive) contains ALL
- * of `eligible_bodyguard_keywords`? Absent/empty keywords never match (the entry
- * then relies solely on `eligible_bodyguard_ids`).
- */
-function matchesBodyguardKeywords(la: LeaderAttachment, unit: Unit): boolean {
-  const req = la.eligible_bodyguard_keywords;
-  if (!req || req.length === 0) return false;
-  const have = unitKeywordSet(unit);
-  return req.every((k) => have.has(k.toLowerCase()));
-}
-
-/** Map an EligibleAbility back to the BuffSource the translator expects. */
-function bufferSourceFromEligible(entry: EligibleAbility): BuffSource {
-  const abilityId = entry.ability.id;
-  switch (entry.source.kind) {
-    case "army":
-      return { kind: "ability", abilityId, abilityKind: "army" };
-    case "detachment":
-      return { kind: "ability", abilityId, abilityKind: "detachment" };
-    case "detachment-stratagem":
-      return {
-        kind: "ability",
-        abilityId,
-        abilityKind: "detachment-stratagem",
-      };
-    case "unit":
-      return { kind: "ability", abilityId, abilityKind: "unit" };
-    case "attached":
-      return {
-        kind: "ability",
-        abilityId,
-        abilityKind: "attached",
-        sourceUnitId: entry.source.unitId,
-      };
-    case "support":
-      return { kind: "ability", abilityId, abilityKind: "support" };
-  }
 }

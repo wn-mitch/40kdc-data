@@ -77,6 +77,103 @@
       "consumers": ["tools/src/mfm/enhancements.ts#runEnhancements"],
       "reason": "The reconciliation pass applies non-null MFM costs only to existing entities whose derived ids match."
     },
+    "/datasheet_restriction_groups": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": [
+        "data.enhancement_required_keyword_group.enhancementId",
+        "data.enhancement_required_keyword_group.datasheetId",
+        "data.enhancement_required_keyword_group_keyword.keywordId",
+        "data.enhancement_required_keyword_group_faction_keyword.factionKeywordId"
+      ],
+      "joins": [],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/enhancements.ts#buildEnhFieldCanon",
+          "operation": "Emit one entry for each distinct datasheet-scoped required-keyword group, as alternatives to the keyword groups."
+        }
+      ],
+      "filters": [
+        "Do not write eligibility when a source datasheet maps to no single core unit or any source keyword id is unresolved."
+      ],
+      "precedence": [
+        "Resolved MFM groups replace the field on matched entities and populate newly seeded matched-play entities."
+      ],
+      "consumers": ["tools/src/mfm/enhancements.ts#runEnhancements"],
+      "reason": "A datasheet-scoped group admits that datasheet only; writing the datasheet name as a keyword would admit other units carrying that keyword."
+    },
+    "/datasheet_restriction_groups/*": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": ["data.enhancement_required_keyword_group.id"],
+      "joins": [],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/enhancement-datasheets.ts#canonicalDatasheetGroups",
+          "operation": "Deduplicate groups and order them by unit id, then keywords."
+        }
+      ],
+      "filters": [],
+      "precedence": [],
+      "consumers": ["tools/src/mfm/enhancements.ts#runEnhancements"],
+      "reason": "Each entry is one alternative bearer-eligibility conjunction scoped to one datasheet."
+    },
+    "/datasheet_restriction_groups/*/unit_id": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": ["data.enhancement_required_keyword_group.datasheetId"],
+      "joins": [],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/enhancement-datasheets.ts#coreUnitIdsByDatasheet",
+          "operation": "Resolve the datasheet id to the one core unit whose mfm external reference names it."
+        }
+      ],
+      "filters": ["A datasheet several distinct core units claim is unresolved."],
+      "precedence": [],
+      "consumers": ["tools/src/mfm/enhancements.ts#runEnhancements"],
+      "reason": "The unit id is the bearer's identity, unlike its keywords."
+    },
+    "/datasheet_restriction_groups/*/keywords": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": [
+        "data.enhancement_required_keyword_group_keyword.keywordId",
+        "data.enhancement_required_keyword_group_faction_keyword.factionKeywordId"
+      ],
+      "joins": [],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/enhancements.ts#buildEnhFieldCanon",
+          "operation": "Collect the group's keyword and faction-keyword members; omitted when the group has none."
+        }
+      ],
+      "filters": [],
+      "precedence": [],
+      "consumers": ["tools/src/mfm/enhancements.ts#runEnhancements"],
+      "reason": "Keywords the datasheet group requires together with the datasheet."
+    },
+    "/datasheet_restriction_groups/*/keywords/*": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": [
+        "data.enhancement_required_keyword_group_keyword.keywordId",
+        "data.enhancement_required_keyword_group_faction_keyword.factionKeywordId",
+        "data.keyword.localisations.*.name",
+        "data.faction_keyword.localisations.*.name"
+      ],
+      "joins": [],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/keywords.ts#keywordLabel",
+          "operation": "Resolve keyword and faction-keyword ids to repo labels."
+        }
+      ],
+      "filters": [],
+      "precedence": [],
+      "consumers": ["tools/src/mfm/enhancements.ts#runEnhancements"],
+      "reason": "Each keyword is required together with the datasheet."
+    },
     "/detachment_id": {
       "provenance": "joined",
       "coverage": "implemented",
@@ -288,17 +385,17 @@
       "transforms": [
         {
           "symbol": "tools/src/mfm/enhancements.ts#runEnhancements",
-          "operation": "Stamp the confirmed repository launch game-version on a matched enhancement."
+          "operation": "Stamp the game-version tools/src/mfm/dataslate.ts maps the dump's data_version to on a matched enhancement."
         }
       ],
       "filters": [
         "Only existing entities matched by the derived enhancement id are reconciled."
       ],
       "precedence": [
-        "The reconciliation pass sets both game-version members to its confirmed launch constants."
+        "The reconciliation pass sets both game-version members to the current dump's dataslate."
       ],
       "consumers": ["tools/src/mfm/enhancements.ts#runEnhancements"],
-      "reason": "The game-version value is a repository confirmation stamp triggered by a matched MFM row, not a conversion of dump version metadata."
+      "reason": "The game-version value is a repository confirmation stamp triggered by a matched MFM row, looked up from the dump's data_version, not a conversion of it."
     },
     "/game_version/dataslate": {
       "provenance": "derived",
@@ -308,14 +405,14 @@
       "transforms": [
         {
           "symbol": "tools/src/mfm/enhancements.ts#runEnhancements",
-          "operation": "Stamp the confirmed repository launch dataslate on a matched enhancement."
+          "operation": "Stamp the dataslate tools/src/mfm/dataslate.ts maps the dump's data_version to on a matched enhancement."
         }
       ],
       "filters": [
         "Only existing entities matched by the derived enhancement id are reconciled."
       ],
       "precedence": [
-        "The reconciliation pass replaces the existing dataslate with its confirmed launch constant."
+        "The reconciliation pass replaces the existing dataslate with the current dump's dataslate."
       ],
       "consumers": ["tools/src/mfm/enhancements.ts#runEnhancements"],
       "reason": "This is repository confirmation metadata, not an implicit translation of the dump snapshot version."
@@ -396,12 +493,10 @@
       "coverage": "implemented",
       "sources": [
         "data.enhancement_required_keyword_group.enhancementId",
-        "data.enhancement_required_keyword_group.datasheetId",
         "data.enhancement_required_keyword_group_keyword.keywordId",
         "data.enhancement_required_keyword_group_faction_keyword.factionKeywordId",
         "data.keyword.localisations.*.name",
-        "data.faction_keyword.localisations.*.name",
-        "data.datasheet.localisations.*.name"
+        "data.faction_keyword.localisations.*.name"
       ],
       "joins": [],
       "transforms": [
@@ -439,18 +534,16 @@
       "provenance": "derived",
       "coverage": "implemented",
       "sources": [
-        "data.enhancement_required_keyword_group.datasheetId",
         "data.enhancement_required_keyword_group_keyword.keywordId",
         "data.enhancement_required_keyword_group_faction_keyword.factionKeywordId",
         "data.keyword.localisations.*.name",
-        "data.faction_keyword.localisations.*.name",
-        "data.datasheet.localisations.*.name"
+        "data.faction_keyword.localisations.*.name"
       ],
       "joins": [],
       "transforms": [
         {
           "symbol": "tools/src/mfm/enhancements.ts#buildEnhFieldCanon",
-          "operation": "Resolve each keyword, faction keyword, or datasheet member to its repository label."
+          "operation": "Resolve each keyword or faction keyword member to its repository label; a datasheet-scoped group goes to datasheet_restriction_groups instead."
         }
       ],
       "filters": [
@@ -465,12 +558,10 @@
       "coverage": "partial",
       "sources": [
         "data.enhancement_required_keyword_group.enhancementId",
-        "data.enhancement_required_keyword_group.datasheetId",
         "data.enhancement_required_keyword_group_keyword.keywordId",
         "data.enhancement_required_keyword_group_faction_keyword.factionKeywordId",
         "data.keyword.localisations.*.name",
-        "data.faction_keyword.localisations.*.name",
-        "data.datasheet.localisations.*.name"
+        "data.faction_keyword.localisations.*.name"
       ],
       "joins": [],
       "transforms": [
@@ -496,16 +587,14 @@
       "sources": [
         "data.enhancement_required_keyword_group_keyword.keywordId",
         "data.enhancement_required_keyword_group_faction_keyword.factionKeywordId",
-        "data.enhancement_required_keyword_group.datasheetId",
         "data.keyword.localisations.*.name",
-        "data.faction_keyword.localisations.*.name",
-        "data.datasheet.localisations.*.name"
+        "data.faction_keyword.localisations.*.name"
       ],
       "joins": [],
       "transforms": [
         {
           "symbol": "tools/src/mfm/keywords.ts#keywordLabel",
-          "operation": "Each group member (keyword, faction-keyword, or datasheet) resolves to one repo label."
+          "operation": "Each group member (keyword or faction-keyword) resolves to one repo label."
         }
       ],
       "filters": [
@@ -627,7 +716,7 @@
     {
       "source": "data.enhancement.localisations.*.rules",
       "candidate_pointer": null,
-      "reason": "Localized rules prose is routed to the private raw-text store rather than copied into core data."
+      "reason": "Localized rules prose stays in the private MFM dump rather than being copied into core data."
     },
     {
       "source": "data.enhancement.publicationId",

@@ -282,8 +282,8 @@ def test_variant_validation_reports_bounds_and_budgets_before_swap_conflict() ->
         },
         {
             "id": "scanner",
-            "code": "exceeds-allowance",
-            "message": "scanner: 2 exceeds shared allowance 1 (1 per unit)",
+            "code": "exceeds-max",
+            "message": "scanner: 2 exceeds allowance 1 (1 per unit)",
         },
     ]
 
@@ -338,3 +338,60 @@ def test_zero_candidate_limit_cancels_large_variant_search() -> None:
     ]
 
     assert loadout_candidates({"id": "u"}, 5, [], models, limit=0) == ["…truncated"]
+
+
+def test_stepped_variant_budget_grants_count_per_full_block() -> None:
+    from wh40kdc.data.loadout import _variant_budget_cap
+
+    stepped = {
+        "variant_names": ["A"],
+        "count": 2,
+        "per_models": 5,
+        "scope": "unit",
+        "stepped": True,
+    }
+    # The proportional 2-per-5 would give 1 at four models and 3 at eight.
+    assert [_variant_budget_cap(stepped, n, n) for n in (4, 5, 8, 9, 10)] == [0, 2, 2, 2, 4]
+    assert _variant_budget_cap({**stepped, "stepped": False}, 8, 8) == 3
+
+
+def _many_candidate_bag(
+    melee_counts: list[int],
+) -> tuple[list[dict], list[dict], dict[str, int]]:
+    ranged = [f"r{i}" for i in range(6)]
+    melee = [f"m{i}" for i in range(6)]
+
+    def swap(base: str, picks: list[str]) -> dict:
+        return {
+            "replaces": [base],
+            "replacement_choice": [[id_] for id_ in picks],
+            "model_constraint": {"any_number": True},
+        }
+
+    options = [swap("gun", ranged), swap("knife", melee)]
+    models = [{"name": "Trooper", "min": 10, "max": 10, "default_weapon_ids": ["gun", "knife"]}]
+    counts = {id_: (2 if i < 4 else 1) for i, id_ in enumerate(ranged)}
+    counts.update({id_: n for id_, n in zip(melee, melee_counts, strict=True) if n > 0})
+    return options, models, counts
+
+
+def test_infeasible_exact_bag_fails_without_exhausting_splits() -> None:
+    import time
+
+    from wh40kdc.data.loadout import group_loadout
+
+    # Eleven melee picks for ten models, across 49 per-model candidates.
+    options, models, counts = _many_candidate_bag([2, 2, 2, 2, 2, 1])
+    started = time.monotonic()
+    assert group_loadout({"id": "fabricated-unit"}, 10, options, models, counts) is None
+    assert time.monotonic() - started < 5
+
+
+def test_feasible_exact_bag_over_many_candidates_still_groups() -> None:
+    from wh40kdc.data.loadout import group_loadout
+
+    options, models, counts = _many_candidate_bag([2, 2, 2, 2, 2, 0])
+    groups = group_loadout({"id": "fabricated-unit"}, 10, options, models, counts)
+    assert groups is not None
+    assert sum(group["count"] for group in groups) == 10
+    assert all(len(group["weapons"]) == 2 for group in groups)

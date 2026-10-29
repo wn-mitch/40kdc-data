@@ -1,0 +1,232 @@
+{
+  "slug": "",
+  "key": "",
+  "visible": "hidden",
+  "locked": false,
+  "rulebook": {
+    "name": "40kdc",
+    "game": "Warhammer 40,000",
+    "publisher": "Alpaca Software",
+    "url": "https://40kdc.dev",
+    "genre": "wargame"
+  },
+  "snapshot": {
+    "item": "Roster§Roster",
+    "name": "Exact Groups Test",
+    "quantity": 1,
+    "stats": {
+      "Points": {
+        "value": 500
+      }
+    },
+    "assets": {
+      "included": [
+        {
+          "item": "Faction§Adeptus Astartes",
+          "name": "Adeptus Astartes",
+          "quantity": 1
+        },
+        {
+          "item": "Detachment§Gladius Task Force",
+          "name": "Gladius Task Force",
+          "quantity": 1
+        },
+        {
+          "item": "Force Disposition§Priority Assets",
+          "name": "Priority Assets",
+          "quantity": 1
+        },
+        {
+          "item": "Unit§Intercessor Squad",
+          "name": "Intercessor Squad",
+          "quantity": 5,
+          "stats": {
+            "Points": {
+              "value": 85
+            }
+          },
+          "assets": {
+            "included": [
+              {
+                "item": "Model§Intercessor",
+                "name": "Intercessor",
+                "quantity": 5,
+                "assets": {
+                  "included": [
+                    {
+                      "item": "Weapon§Bolt Pistol",
+                      "name": "Bolt Pistol",
+                      "quantity": 5
+                    },
+                    {
+                      "item": "Weapon§Bolt Rifle",
+                      "name": "Bolt Rifle",
+                      "quantity": 5
+                    },
+                    {
+                      "item": "Weapon§Knives and Fists",
+                      "name": "Knives and Fists",
+                      "quantity": 5
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "item": "Unit§Assault Intercessor Squad",
+          "name": "Assault Intercessor Squad",
+          "quantity": 5,
+          "stats": {
+            "Points": {
+              "value": 85
+            }
+          },
+          "assets": {
+            "included": [
+              {
+                "item": "Model§Assault Intercessor Sergeant",
+                "name": "Assault Intercessor Sergeant",
+                "quantity": 1,
+                "assets": {
+                  "included": [
+                    {
+                      "item": "Weapon§Chainsword",
+                      "name": "Chainsword",
+                      "quantity": 1
+                    },
+                    {
+                      "item": "Weapon§Heavy Bolt Pistol",
+                      "name": "Heavy Bolt Pistol",
+                      "quantity": 1
+                    }
+                  ]
+                }
+              },
+              {
+                "item": "Model§Assault Intercessor",
+                "name": "Assault Intercessor",
+                "quantity": 4,
+                "assets": {
+                  "included": [
+                    {
+                      "item": "Weapon§Chainsword",
+                      "name": "Chainsword",
+                      "quantity": 4
+                    },
+                    {
+                      "item": "Weapon§Heavy Bolt Pistol",
+                      "name": "Heavy Bolt Pistol",
+                      "quantity": 4
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "item": "Unit§Intercessor Squad",
+          "name": "Intercessor Squad",
+          "quantity": 5,
+          "stats": {
+            "Points": {
+              "value": 85
+            }
+          },
+          "assets": {
+            "included": [
+              {
+                "item": "Model§Intercessor Sergeant",
+                "name": "Intercessor Sergeant",
+                "quantity": 1,
+                "assets": {
+                  "included": [
+                    {
+                      "item": "Weapon§Bolt Pistol",
+                      "name": "Bolt Pistol",
+                      "quantity": 1
+                    },
+                    {
+                      "item": "Weapon§Bolt Rifle",
+                      "name": "Bolt Rifle",
+                      "quantity": 1
+                    },
+                    {
+                      "item": "Weapon§Knives and Fists",
+                      "name": "Knives and Fists",
+                      "quantity": 1
+                    }
+                  ]
+                }
+              },
+              {
+                "item": "Model§Intercessor",
+                "name": "Intercessor",
+                "quantity": 4,
+                "assets": {
+                  "included": [
+                    {
+                      "item": "Weapon§Bolt Pistol",
+                      "name": "Bolt Pistol",
+                      "quantity": 4
+                    },
+                    {
+                      "item": "Weapon§Bolt Rifle",
+                      "name": "Bolt Rifle",
+                      "quantity": 4
+                    },
+                    {
+                      "item": "Weapon§Knives and Fists",
+                      "name": "Knives and Fists",
+                      "quantity": 4
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "item": "Unit§Land Raider",
+          "name": "Land Raider",
+          "quantity": 1,
+          "stats": {
+            "Points": {
+              "value": 245
+            }
+          },
+          "assets": {
+            "included": [
+              {
+                "item": "Model§Land Raider",
+                "name": "Land Raider",
+                "quantity": 1,
+                "assets": {
+                  "included": [
+                    {
+                      "item": "Weapon§Armoured tracks",
+                      "name": "Armoured tracks",
+                      "quantity": 1
+                    },
+                    {
+                      "item": "Weapon§Godhammer lascannon",
+                      "name": "Godhammer lascannon",
+                      "quantity": 2
+                    },
+                    {
+                      "item": "Weapon§Twin Heavy Bolter",
+                      "name": "Twin Heavy Bolter",
+                      "quantity": 1
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

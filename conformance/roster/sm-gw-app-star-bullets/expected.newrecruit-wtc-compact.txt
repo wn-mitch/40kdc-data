@@ -1,0 +1,16 @@
++++++++++++++++++++++++++++++++++++++++++++++++
++ LIST NAME: Star Bullets Test
++ FACTION KEYWORD: Adeptus Astartes
++ DETACHMENT: Gladius Task Force
++ FORCE DISPOSITION: Priority Assets
++ TOTAL ARMY POINTS: 85pts
++ POINTS LIMIT: 85pts
++
++ WARLORD: —
++ ENHANCEMENT: —
++ NUMBER OF UNITS: 1
++++++++++++++++++++++++++++++++++++++++++++++++
+
+5x Intercessor Squad (85 pts): 
+• 1x Intercessor Sergeant: Bolt Pistol, Bolt Rifle, Knives and Fists
+• 4x Intercessor: Bolt Pistol, Bolt Rifle, Knives and Fists

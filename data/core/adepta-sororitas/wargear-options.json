@@ -5,7 +5,7 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -30,7 +30,7 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -50,7 +50,7 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -78,14 +78,14 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
       "anchorite-sarcophagus"
     ],
     "model_constraint": {
-      "any_number": true
+      "max_count": 1
     }
   },
   {
@@ -94,7 +94,7 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -119,7 +119,7 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -138,7 +138,7 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -159,7 +159,7 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -184,7 +184,7 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -203,7 +203,7 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -224,7 +224,7 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -244,7 +244,7 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -271,18 +271,25 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
-      "condemnor-bolt-pistol"
+      "condemnor-bolt-pistol",
+      "null-mace"
     ],
     "replacement_choice": [
       [
-        "denuncia-oratory"
+        "denuncia-oratory",
+        "null-mace"
       ],
       [
-        "ministorum-hand-flamer"
+        "simulacrum-imperialis",
+        "null-mace",
+        "condemnor-bolt-pistol"
+      ],
+      [
+        "virge-of-admonition"
       ]
     ],
     "model_constraint": {
@@ -296,15 +303,20 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
+    "replaces": [
+      "condemnor-bolt-pistol",
+      "null-mace"
+    ],
     "replacement": [
-      "simulacrum-imperialis"
+      "ministorum-hand-flamer",
+      "null-mace"
     ],
     "model_constraint": {
       "model_name": "Celestian Insidiant",
-      "any_number": true
+      "max_count": 2
     }
   },
   {
@@ -313,24 +325,19 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
       "condemnor-bolt-pistol",
       "null-mace"
     ],
-    "replacement_choice": [
-      [
-        "virge-of-admonition"
-      ],
-      [
-        "blessed-sword"
-      ]
+    "replacement": [
+      "blessed-sword"
     ],
     "model_constraint": {
       "model_name": "Celestian Insidiant",
-      "any_number": true
+      "max_count": 2
     }
   },
   {
@@ -339,7 +346,7 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -359,7 +366,7 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -387,7 +394,7 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -415,7 +422,7 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -443,7 +450,7 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -459,7 +466,7 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -483,7 +490,7 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -520,7 +527,7 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -545,7 +552,7 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -567,7 +574,7 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -589,7 +596,7 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -609,7 +616,7 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -630,7 +637,7 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -658,7 +665,7 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -674,7 +681,7 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -699,7 +706,7 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -724,7 +731,7 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -744,7 +751,7 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -764,7 +771,7 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -784,7 +791,7 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -804,7 +811,7 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -820,7 +827,7 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -839,7 +846,7 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -855,7 +862,7 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -871,7 +878,7 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -890,7 +897,7 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -915,7 +922,7 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -935,7 +942,7 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -952,7 +959,7 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -972,7 +979,7 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1009,7 +1016,7 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -1031,7 +1038,7 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1042,28 +1049,15 @@
         "meltagun-dominion-squad"
       ],
       [
+        "simulacrum-imperialis",
+        "boltgun-dominion-squad"
+      ],
+      [
         "artificer-crafted-storm-bolter"
       ],
       [
         "ministorum-flamer-dominion-squad"
       ]
-    ],
-    "model_constraint": {
-      "model_name": "Dominion",
-      "max_count": 4
-    }
-  },
-  {
-    "id": "dominion-squad-wgo-mfm-4",
-    "unit_id": "dominion-squad",
-    "faction_id": "adepta-sororitas",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replacement": [
-      "simulacrum-imperialis"
     ],
     "model_constraint": {
       "model_name": "Dominion",
@@ -1076,7 +1070,7 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1113,7 +1107,7 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -1135,7 +1129,7 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1158,25 +1152,12 @@
         "meltagun-battle-sisters-squad"
       ],
       [
+        "boltgun",
+        "simulacrum-imperialis"
+      ],
+      [
         "artificer-crafted-storm-bolter-battle-sisters-squad"
       ]
-    ],
-    "model_constraint": {
-      "model_name": "Battle Sister",
-      "max_count": 2
-    }
-  },
-  {
-    "id": "battle-sisters-squad-wgo-mfm-4",
-    "unit_id": "battle-sisters-squad",
-    "faction_id": "adepta-sororitas",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replacement": [
-      "simulacrum-imperialis"
     ],
     "model_constraint": {
       "model_name": "Battle Sister",
@@ -1189,58 +1170,7 @@
     "faction_id": "adepta-sororitas",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replaces": [
-      "bolt-pistol-canoness"
-    ],
-    "replacement_choice": [
-      [
-        "null-rod",
-        "condemnor-boltgun-canoness"
-      ],
-      [
-        "plasma-pistol-canoness"
-      ],
-      [
-        "inferno-pistol-canoness"
-      ],
-      [
-        "plasma-pistol-canoness",
-        "null-rod"
-      ],
-      [
-        "condemnor-boltgun-canoness",
-        "brazier-of-holy-fire"
-      ],
-      [
-        "null-rod",
-        "inferno-pistol-canoness"
-      ],
-      [
-        "inferno-pistol-canoness",
-        "brazier-of-holy-fire"
-      ],
-      [
-        "condemnor-boltgun-canoness"
-      ],
-      [
-        "brazier-of-holy-fire",
-        "plasma-pistol-canoness"
-      ]
-    ],
-    "model_constraint": {
-      "any_number": true
-    }
-  },
-  {
-    "id": "canoness-wgo-mfm-2",
-    "unit_id": "canoness",
-    "faction_id": "adepta-sororitas",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1249,8 +1179,17 @@
     ],
     "replacement_choice": [
       [
+        "null-rod",
+        "hallowed-chainsword",
+        "condemnor-boltgun-canoness"
+      ],
+      [
         "inferno-pistol-canoness",
         "power-weapon"
+      ],
+      [
+        "plasma-pistol-canoness",
+        "hallowed-chainsword"
       ],
       [
         "power-weapon",
@@ -1265,62 +1204,68 @@
         "inferno-pistol-canoness"
       ],
       [
+        "inferno-pistol-canoness",
+        "hallowed-chainsword"
+      ],
+      [
         "blessed-blade",
         "plasma-pistol-canoness"
+      ],
+      [
+        "hallowed-chainsword",
+        "bolt-pistol-canoness",
+        "null-rod"
+      ],
+      [
+        "hallowed-chainsword",
+        "plasma-pistol-canoness",
+        "null-rod"
       ],
       [
         "blessed-blade",
         "condemnor-boltgun-canoness"
       ],
       [
-        "plasma-pistol-canoness",
-        "power-weapon",
-        "rod-of-office"
-      ]
-    ],
-    "model_constraint": {
-      "any_number": true
-    }
-  },
-  {
-    "id": "canoness-wgo-mfm-3",
-    "unit_id": "canoness",
-    "faction_id": "adepta-sororitas",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replacement_choice": [
-      [
-        "null-rod"
+        "bolt-pistol-canoness",
+        "brazier-of-holy-fire",
+        "hallowed-chainsword"
       ],
       [
+        "condemnor-boltgun-canoness",
+        "hallowed-chainsword",
         "brazier-of-holy-fire"
-      ]
-    ],
-    "model_constraint": {
-      "any_number": true
-    }
-  },
-  {
-    "id": "canoness-wgo-mfm-4",
-    "unit_id": "canoness",
-    "faction_id": "adepta-sororitas",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replaces": [
-      "hallowed-chainsword"
-    ],
-    "replacement_choice": [
+      ],
       [
+        "bolt-pistol-canoness",
         "blessed-blade"
       ],
       [
-        "power-weapon"
+        "plasma-pistol-canoness",
+        "power-weapon",
+        "rod-of-office"
+      ],
+      [
+        "null-rod",
+        "hallowed-chainsword",
+        "inferno-pistol-canoness"
+      ],
+      [
+        "power-weapon",
+        "bolt-pistol-canoness"
+      ],
+      [
+        "inferno-pistol-canoness",
+        "brazier-of-holy-fire",
+        "hallowed-chainsword"
+      ],
+      [
+        "condemnor-boltgun-canoness",
+        "hallowed-chainsword"
+      ],
+      [
+        "brazier-of-holy-fire",
+        "hallowed-chainsword",
+        "plasma-pistol-canoness"
       ]
     ],
     "model_constraint": {

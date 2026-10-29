@@ -1,0 +1,26 @@
+{
+  "name": "Purge Corps Skitarii Vanguard (adeptus-mechanicus) in Purge Corps Deltic-9, shooting: the patrol's own Doctrina Imperatives replaces the codex army rule",
+  "input": {
+    "unitId": "purge-corps-skitarii-vanguard",
+    "factionId": "adeptus-mechanicus",
+    "detachmentId": "purge-corps-deltic-9"
+  },
+  "phase": "shooting",
+  "expected": {
+    "army": [
+      "doctrina-imperatives-purge-corps-deltic-9-adeptus-mechanicus"
+    ],
+    "detachment": [
+      "imperative-overload-adeptus-mechanicus"
+    ],
+    "detachment-stratagem": [
+      "lockdown-protocols-purge-corps-deltic-9-adeptus-mechanicus",
+      "optimised-targeting-purge-corps-deltic-9-adeptus-mechanicus",
+      "preservation-imperatives-purge-corps-deltic-9-adeptus-mechanicus"
+    ],
+    "unit": [
+      "omnispex-purge-corps-skitarii-vanguard-adeptus-mechanicus",
+      "rad-saturation-purge-corps-skitarii-vanguard-adeptus-mechanicus"
+    ]
+  }
+}

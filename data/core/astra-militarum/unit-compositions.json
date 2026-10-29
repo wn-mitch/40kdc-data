@@ -20,7 +20,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -64,7 +64,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -173,7 +173,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -233,7 +233,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -277,12 +277,49 @@
         "default_weapon_ids": [
           "lasgun",
           "close-combat-weapon-cadian-shock-troops"
+        ],
+        "loadout_variants": [
+          {
+            "name": "Shock Trooper",
+            "weapon_ids": [
+              "lasgun",
+              "close-combat-weapon-cadian-shock-troops"
+            ],
+            "max_count": 18
+          },
+          {
+            "name": "Shock Trooper w/ Vox Caster",
+            "weapon_ids": [
+              "lasgun",
+              "close-combat-weapon-cadian-shock-troops",
+              "vox-caster"
+            ],
+            "max_count": 2
+          }
+        ],
+        "loadout_variant_budgets": [
+          {
+            "variant_names": [
+              "Shock Trooper w/ Vox Caster"
+            ],
+            "count": 2,
+            "per_models": 0,
+            "scope": "model-row"
+          },
+          {
+            "variant_names": [
+              "Shock Trooper w/ Vox Caster"
+            ],
+            "count": 1,
+            "per_models": 5,
+            "scope": "model-row"
+          }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -350,8 +387,8 @@
           {
             "name": "Tempestus Scion",
             "weapon_ids": [
-              "hot-shot-lasgun",
-              "close-combat-weapon-militarum-tempestus-command-squad"
+              "close-combat-weapon-militarum-tempestus-command-squad",
+              "hot-shot-lasgun"
             ],
             "max_count": 4
           },
@@ -378,7 +415,8 @@
             "weapon_ids": [
               "close-combat-weapon-militarum-tempestus-command-squad",
               "hot-shot-laspistol",
-              "hot-shot-lasgun"
+              "hot-shot-lasgun",
+              "medi-pack"
             ],
             "max_count": 1
           }
@@ -400,7 +438,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -441,7 +479,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -500,6 +538,7 @@
             "name": "Tempestus Aquilon w/ 2 Hot-shot laspistols",
             "weapon_ids": [
               "hot-shot-laspistol",
+              "hot-shot-laspistol",
               "close-combat-weapon-tempestus-aquilons"
             ],
             "max_count": 1
@@ -521,9 +560,18 @@
             "max_count": 1
           },
           {
-            "name": "Tempestus Aquilon w/ Special weapon",
+            "name": "Tempestus Aquilon w/ Special weapon (Plasma carbine)",
             "weapon_ids": [
-              "close-combat-weapon-tempestus-aquilons"
+              "close-combat-weapon-tempestus-aquilons",
+              "plasma-carbine"
+            ],
+            "max_count": 1
+          },
+          {
+            "name": "Tempestus Aquilon w/ Special weapon (Melta carbine)",
+            "weapon_ids": [
+              "close-combat-weapon-tempestus-aquilons",
+              "melta-carbine"
             ],
             "max_count": 1
           }
@@ -531,11 +579,21 @@
         "loadout_variant_budgets": [
           {
             "variant_names": [
+              "Tempestus Aquilon w/ Special weapon (Plasma carbine)",
+              "Tempestus Aquilon w/ Special weapon (Melta carbine)"
+            ],
+            "count": 1,
+            "per_models": 0,
+            "scope": "model-row"
+          },
+          {
+            "variant_names": [
               "Tempestus Aquilon",
               "Tempestus Aquilon w/ 2 Hot-shot laspistols",
               "Tempestus Aquilon w/ 1 Hot-shot laspistol",
               "Tempestus Aquilon w/ Hot-shot long-las",
-              "Tempestus Aquilon w/ Special weapon"
+              "Tempestus Aquilon w/ Special weapon (Plasma carbine)",
+              "Tempestus Aquilon w/ Special weapon (Melta carbine)"
             ],
             "count": 9,
             "per_models": 0,
@@ -560,7 +618,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -620,7 +678,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -660,7 +718,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -705,7 +763,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -745,7 +803,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -781,7 +839,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -862,7 +920,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -894,7 +952,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -931,7 +989,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -967,7 +1025,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1018,7 +1076,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1073,7 +1131,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1109,7 +1167,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1206,7 +1264,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1249,7 +1307,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1281,7 +1339,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1316,7 +1374,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1360,7 +1418,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1396,7 +1454,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1451,7 +1509,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1506,7 +1564,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1542,7 +1600,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1666,15 +1724,16 @@
               "Tempestus Scion w/ Plasma gun"
             ],
             "count": 2,
-            "per_models": 0,
-            "scope": "model-row"
+            "per_models": 5,
+            "scope": "unit",
+            "stepped": true
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1735,7 +1794,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1766,12 +1825,13 @@
           "huge-knife-ogryn-bodyguard",
           "ripper-gun-ogryn-bodyguard",
           "close-combat-weapon-ogryn-bodyguard"
-        ]
+        ],
+        "excluded_from_enhancements": true
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1821,7 +1881,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1872,36 +1932,7 @@
         "base_size_mm": {
           "shape": "round",
           "diameter": 28.5
-        },
-        "loadout_variants": [
-          {
-            "name": "Cadian Veteran Guardsman w/ Regimental standard",
-            "weapon_ids": [
-              "close-combat-weapon-cadian-command-squad",
-              "regimental-standard",
-              "lasgun"
-            ],
-            "max_count": 1
-          },
-          {
-            "name": "Cadian Veteran Guardsman w/ Master vox",
-            "weapon_ids": [
-              "close-combat-weapon-cadian-command-squad",
-              "lasgun",
-              "master-vox"
-            ],
-            "max_count": 1
-          },
-          {
-            "name": "Cadian Veteran Guardsman w/ Medi-pack",
-            "weapon_ids": [
-              "medi-pack",
-              "close-combat-weapon-cadian-command-squad",
-              "lasgun"
-            ],
-            "max_count": 1
-          }
-        ]
+        }
       },
       {
         "name": "Cadian Veteran Guardsman",
@@ -1926,6 +1957,7 @@
         "max": 1,
         "default_weapon_ids": [
           "lasgun",
+          "medi-pack",
           "close-combat-weapon-cadian-command-squad"
         ],
         "is_leader_model": false,
@@ -1952,7 +1984,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -2112,7 +2144,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2157,7 +2189,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2194,7 +2226,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2228,7 +2260,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2283,6 +2315,15 @@
             "max_count": 18
           },
           {
+            "name": "Death Korps Trooper w/ Death Korps medi-pack",
+            "weapon_ids": [
+              "lasgun",
+              "close-combat-weapon-death-korps-of-krieg",
+              "death-korps-medi-pack"
+            ],
+            "max_count": 2
+          },
+          {
             "name": "Death Korps Trooper w/ Vox-caster",
             "weapon_ids": [
               "lasgun",
@@ -2335,30 +2376,42 @@
         "loadout_variant_budgets": [
           {
             "variant_names": [
-              "Death Korps Trooper w/ Vox-caster"
+              "Death Korps Trooper w/ Death Korps medi-pack"
             ],
-            "count": 1,
-            "per_models": 10,
-            "scope": "unit"
+            "count": 2,
+            "per_models": 0,
+            "scope": "model-row"
           },
           {
             "variant_names": [
-              "Death Korps Trooper w/ Flamer",
-              "Death Korps Trooper w/ Grenade launcher",
-              "Death Korps Trooper w/ Long-las",
-              "Death Korps Trooper w/ Meltagun",
-              "Death Korps Trooper w/ Plasma gun"
+              "Death Korps Trooper w/ Death Korps medi-pack"
+            ],
+            "count": 1,
+            "per_models": 5,
+            "scope": "model-row"
+          },
+          {
+            "variant_names": [
+              "Death Korps Trooper w/ Vox-caster"
             ],
             "count": 2,
-            "per_models": 10,
-            "scope": "unit"
+            "per_models": 0,
+            "scope": "model-row"
+          },
+          {
+            "variant_names": [
+              "Death Korps Trooper w/ Vox-caster"
+            ],
+            "count": 1,
+            "per_models": 5,
+            "scope": "model-row"
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2417,7 +2470,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2453,7 +2506,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2542,7 +2595,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2597,7 +2650,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2633,7 +2686,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2662,7 +2715,7 @@
         "is_leader_model": true,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32
+          "diameter": 25
         }
       },
       {
@@ -2738,7 +2791,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -2762,7 +2815,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2798,7 +2851,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2833,7 +2886,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2880,7 +2933,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2936,7 +2989,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2972,7 +3025,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -3012,7 +3065,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -3059,14 +3112,6 @@
         ],
         "loadout_variants": [
           {
-            "name": "Jungle Fighter",
-            "weapon_ids": [
-              "lasgun",
-              "close-combat-weapon-catachan-jungle-fighters"
-            ],
-            "max_count": 18
-          },
-          {
             "name": "Jungle Fighter w/ Vox-caster",
             "weapon_ids": [
               "close-combat-weapon-catachan-jungle-fighters",
@@ -3082,23 +3127,47 @@
               "flamer"
             ],
             "max_count": 4
+          },
+          {
+            "name": "Jungle Fighter",
+            "weapon_ids": [
+              "lasgun",
+              "close-combat-weapon-catachan-jungle-fighters"
+            ],
+            "max_count": 18
           }
         ],
         "loadout_variant_budgets": [
           {
             "variant_names": [
-              "Jungle Fighter w/ Flamer"
+              "Jungle Fighter w/ Vox-caster"
+            ],
+            "count": 2,
+            "per_models": 0,
+            "scope": "model-row"
+          },
+          {
+            "variant_names": [
+              "Jungle Fighter w/ Vox-caster"
             ],
             "count": 1,
             "per_models": 5,
-            "scope": "unit"
+            "scope": "model-row"
+          },
+          {
+            "variant_names": [
+              "Jungle Fighter w/ Flamer"
+            ],
+            "count": 1,
+            "per_models": 4,
+            "scope": "model-row"
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -3153,7 +3222,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -3190,7 +3259,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -3225,7 +3294,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -3265,7 +3334,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -3301,7 +3370,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -3338,7 +3407,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -3377,7 +3446,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -3413,7 +3482,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -3449,7 +3518,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -3492,7 +3561,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -3566,7 +3635,8 @@
             "name": "Krieg Combat Engineer w/ Remote mine",
             "weapon_ids": [
               "autopistol",
-              "close-combat-weapon-krieg-combat-engineers"
+              "close-combat-weapon-krieg-combat-engineers",
+              "remote-mine"
             ],
             "max_count": 1
           }
@@ -3588,7 +3658,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -3643,7 +3713,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -3679,7 +3749,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -3703,8 +3773,12 @@
         "max": 1,
         "default_weapon_ids": [
           "close-combat-weapon-cadian-recon-squad",
-          "lasgun"
-        ]
+          "lasgun-cadian-recon-squad"
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28
+        }
       },
       {
         "name": "Recon Trooper",
@@ -3712,13 +3786,17 @@
         "max": 9,
         "default_weapon_ids": [
           "close-combat-weapon-cadian-recon-squad",
-          "lasgun"
+          "lasgun-cadian-recon-squad"
         ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28
+        },
         "loadout_variants": [
           {
             "name": "Recon Trooper w/ Lasgun",
             "weapon_ids": [
-              "lasgun",
+              "lasgun-cadian-recon-squad",
               "close-combat-weapon-cadian-recon-squad"
             ],
             "max_count": 9
@@ -3734,9 +3812,10 @@
           {
             "name": "Recon Trooper w/ Vox-caster",
             "weapon_ids": [
-              "lasgun",
+              "lasgun-cadian-recon-squad",
               "close-combat-weapon-cadian-recon-squad",
-              "vox-caster"
+              "vox-caster",
+              "vox-relay-beacon"
             ],
             "max_count": 1
           },
@@ -3817,7 +3896,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -3852,7 +3931,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -3875,10 +3954,10 @@
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
-          "chiron-gatling-cannon",
+          "chiron-gatling-cannon-commissar-graves",
           "prefectus-heavy-stubber",
           "prefectus-heavy-stubber",
-          "power-sword-and-manus-mortis",
+          "power-sword-and-manus-mortis-commissar-graves",
           "enforcer-crew",
           "armoured-hull-commissar-graves",
           "aquiline-prow"
@@ -3887,7 +3966,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -3912,12 +3991,16 @@
         "default_weapon_ids": [
           "bolt-pistol-commissar-graves-on-foot",
           "power-sword-and-manus-mortis"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -3945,12 +4028,16 @@
           "bale-eye",
           "power-klaw",
           "power-sword"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -4001,7 +4088,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
   },
   {
@@ -4021,8 +4108,8 @@
         "default_weapon_ids": [
           "hunting-lance",
           "lasgun",
-          "laspistol-attilan-rough-riders",
-          "power-sabre-attilan-rough-riders",
+          "laspistol",
+          "power-sabre",
           "steeds-hooves"
         ]
       },
@@ -4038,7 +4125,7 @@
         },
         "default_weapon_ids": [
           "goad-lance",
-          "laspistol-attilan-rough-riders",
+          "laspistol",
           "steeds-hooves"
         ]
       },
@@ -4055,7 +4142,7 @@
         "default_weapon_ids": [
           "hunting-lance",
           "lasgun",
-          "laspistol-attilan-rough-riders",
+          "laspistol",
           "steeds-hooves"
         ]
       }
@@ -4083,8 +4170,11 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
-    }
+      "dataslate": "mfm-995"
+    },
+    "game_modes": [
+      "combat-patrol"
+    ]
   },
   {
     "unit_id": "draydens-lance-command-squad",
@@ -4100,8 +4190,8 @@
           "diameter": 28.5
         },
         "default_weapon_ids": [
-          "plasma-pistol",
-          "power-weapon"
+          "plasma-pistol-draydens-lance-command-squad",
+          "power-weapon-draydens-lance-command-squad"
         ]
       },
       {
@@ -4128,8 +4218,8 @@
           "diameter": 28.5
         },
         "default_weapon_ids": [
-          "bolt-pistol",
-          "power-fist"
+          "bolt-pistol-draydens-lance-command-squad",
+          "power-fist-draydens-lance-command-squad"
         ]
       },
       {
@@ -4143,8 +4233,7 @@
         },
         "default_weapon_ids": [
           "gun-stocks",
-          "lasgun",
-          "medi-pack"
+          "lasgun"
         ]
       }
     ],
@@ -4176,8 +4265,11 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
-    }
+      "dataslate": "mfm-995"
+    },
+    "game_modes": [
+      "combat-patrol"
+    ]
   },
   {
     "unit_id": "draydens-lance-kasrkin",
@@ -4193,8 +4285,8 @@
           "diameter": 28.5
         },
         "default_weapon_ids": [
-          "chainsword-kasrkin",
-          "plasma-pistol"
+          "chainsword-draydens-lance-kasrkin",
+          "plasma-pistol-draydens-lance-kasrkin"
         ]
       },
       {
@@ -4235,7 +4327,7 @@
           "diameter": 28.5
         },
         "default_weapon_ids": [
-          "grenade-launcher-kasrkin",
+          "grenade-launcher-draydens-lance-kasrkin",
           "gun-stocks"
         ]
       },
@@ -4278,8 +4370,7 @@
         },
         "default_weapon_ids": [
           "gun-stocks",
-          "hot-shot-laspistol",
-          "melta-mine"
+          "hot-shot-laspistol-draydens-lance-kasrkin"
         ]
       },
       {
@@ -4293,7 +4384,7 @@
         },
         "default_weapon_ids": [
           "gun-stocks",
-          "plasma-gun-kasrkin"
+          "plasma-gun-draydens-lance-kasrkin"
         ]
       }
     ],
@@ -4345,7 +4436,10 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
-    }
+      "dataslate": "mfm-995"
+    },
+    "game_modes": [
+      "combat-patrol"
+    ]
   }
 ]

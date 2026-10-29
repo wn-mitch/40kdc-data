@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { effectToBuffs, parseKeywordGrant } from "../src/cruncher/from-dsl.js";
-import type { BuffSource, EngineContext } from "../src/cruncher/buffs.js";
+import { effectToBuffs } from "../src/cruncher/from-dsl.js";
+import { resolveBuffs, type BuffSource, type EngineContext } from "../src/cruncher/buffs.js";
 
 const armyRule: BuffSource = {
   kind: "ability",
@@ -19,7 +19,7 @@ describe("effectToBuffs: leaves", () => {
     const result = effectToBuffs(
       {
         type: "re-roll",
-        target: "unit",
+        target: "this-unit",
         modifier: { roll: "hit", subset: "all-failures" },
       },
       armyRule,
@@ -40,7 +40,7 @@ describe("effectToBuffs: leaves", () => {
     const result = effectToBuffs(
       {
         type: "re-roll",
-        target: "unit",
+        target: "this-unit",
         modifier: { roll: "hit", value: 1, subset: "all-failures" },
       },
       armyRule,
@@ -53,27 +53,50 @@ describe("effectToBuffs: leaves", () => {
     });
   });
 
-  it("rejects count-capped rerolls instead of applying them as unlimited", () => {
-    const effect = {
-      type: "re-roll",
-      target: "unit",
-      modifier: { roll: "hit", result_scope: "any-result", count: 1 },
-    };
-    const result = effectToBuffs(effect, armyRule, ctx);
-    expect(result.applied).toEqual([]);
-    expect(result.unsupported).toEqual([
+  it("re-roll with result_scope: any-result (no subset) resolves as an all-failures reroll", () => {
+    // "you can re-roll the Wound roll" (no "of 1"/"failed" qualifier) compiles to
+    // `result_scope: "any-result"` with no `subset` (compile-fragments.ts). An optional reroll
+    // is only ever rationally used on a fail, so it applies exactly like "all-failures".
+    const result = effectToBuffs(
       {
-        reason: "re-roll: count-capped permissions are not modelled by the expected-value engine",
-        effectFragment: effect,
+        type: "re-roll",
+        target: "this-unit",
+        modifier: { roll: "wound", result_scope: "any-result" },
       },
+      armyRule,
+      ctx,
+    );
+    expect(result.applied).toHaveLength(1);
+    expect(result.applied[0].contribution).toEqual({
+      type: "reroll",
+      roll: "wound",
+      subset: "all-failures",
+    });
+    expect(result.unsupported).toEqual([]);
+  });
+
+  it("prices a re-roll of one die as one die, never as an unlimited re-roll", () => {
+    const one = effectToBuffs({ type: "re-roll", target: "this-unit", modifier: { roll: "hit", result_scope: "any-result", count: 1 } }, armyRule, ctx);
+    expect(one.applied.map((buff) => buff.contribution)).toEqual([{ type: "reroll-one", roll: "hit" }]);
+    expect(one.unsupported).toEqual([]);
+    const two = { type: "re-roll", target: "this-unit", modifier: { roll: "hit", result_scope: "any-result", count: 2 } };
+    const refused = effectToBuffs(two, armyRule, ctx);
+    expect(refused.applied).toEqual([]);
+    expect(refused.unsupported).toEqual([
+      { reason: "re-roll: a count-capped permission other than one die of any result is not modelled by the expected-value engine", effectFragment: two, scope: "unresolved" },
     ]);
+    // A roll off the damage path stays outside it, whatever its count.
+    const charge = effectToBuffs({ type: "re-roll", target: "this-unit", modifier: { roll: "charge", result_scope: "any-result", count: 1 } }, armyRule, ctx);
+    expect(charge.applied).toEqual([]);
+    expect(charge.unsupported[0]!.reason).toMatch(/outside the damage path/u);
+    expect(charge.unsupported[0]!.scope).toBe("out-of-scope");
   });
 
   it("roll-modifier add → matching mod buff", () => {
     const result = effectToBuffs(
       {
         type: "roll-modifier",
-        target: "unit",
+        target: "this-unit",
         modifier: { roll: "wound", operation: "add", value: 1 },
       },
       unitRule,
@@ -87,7 +110,7 @@ describe("effectToBuffs: leaves", () => {
     const result = effectToBuffs(
       {
         type: "roll-modifier",
-        target: "unit",
+        target: "this-unit",
         modifier: { roll: "hit", operation: "subtract", value: 1 },
       },
       unitRule,
@@ -100,7 +123,7 @@ describe("effectToBuffs: leaves", () => {
     const result = effectToBuffs(
       {
         type: "stat-modifier",
-        target: "unit",
+        target: "this-unit",
         modifier: { stat: "S", operation: "add", value: 1 },
       },
       unitRule,
@@ -113,7 +136,7 @@ describe("effectToBuffs: leaves", () => {
     const result = effectToBuffs(
       {
         type: "stat-modifier",
-        target: "unit",
+        target: "this-unit",
         modifier: { stat: "A", operation: "add", value: 1 },
       },
       unitRule,
@@ -122,9 +145,26 @@ describe("effectToBuffs: leaves", () => {
     expect(result.applied[0].contribution).toEqual({ type: "attacks-mod", value: 1 });
   });
 
+  it("stat-modifier D on the buffed unit → damage-mod; on attacks against it → damage-reduction", () => {
+    const own = effectToBuffs({ type: "stat-modifier", target: "this-unit", modifier: { stat: "D", operation: "add", value: 1 } }, unitRule, ctx);
+    expect(own.applied.map((buff) => buff.contribution)).toEqual([{ type: "damage-mod", value: 1 }]);
+    // Each time an attack is allocated to this model, subtract 1 from its Damage.
+    const incoming = { type: "stat-modifier", target: "attacker", modifier: { stat: "D", operation: "subtract", value: 1 } };
+    const asTarget = effectToBuffs(incoming, unitRule, ctx, "target");
+    expect(asTarget.applied.map((buff) => buff.contribution)).toEqual([{ type: "damage-reduction", value: 1 }]);
+    expect(asTarget.unsupported).toEqual([]);
+    // Never a penalty on the buffed unit's own attacks, and never silently dropped as off the damage path.
+    const asAttacker = effectToBuffs(incoming, unitRule, ctx);
+    expect(asAttacker.applied).toEqual([]);
+    expect(asAttacker.unsupported).toEqual([]);
+    const raised = effectToBuffs({ ...incoming, modifier: { stat: "D", operation: "add", value: 1 } }, unitRule, ctx, "target");
+    expect(raised.applied).toEqual([]);
+    expect(raised.unsupported.map((item) => item.reason)).toEqual(["stat-modifier D: raising the Damage of incoming attacks is not modelled"]);
+  });
+
   it("feel-no-pain → FNP buff under target perspective", () => {
     const result = effectToBuffs(
-      { type: "feel-no-pain", target: "unit", modifier: { threshold: 5 } },
+      { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 5 } },
       unitRule,
       ctx,
       "target",
@@ -134,7 +174,7 @@ describe("effectToBuffs: leaves", () => {
 
   it("feel-no-pain drops silently under attacker perspective", () => {
     const result = effectToBuffs(
-      { type: "feel-no-pain", target: "unit", modifier: { threshold: 5 } },
+      { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 5 } },
       unitRule,
       ctx,
     );
@@ -142,12 +182,12 @@ describe("effectToBuffs: leaves", () => {
     expect(result.unsupported).toEqual([]);
   });
 
-  it("keyword-grant 'Sustained Hits 1' → extra-keyword buff", () => {
+  it("weapon-ability-grant 'Sustained Hits 1' → extra-keyword buff", () => {
     const result = effectToBuffs(
       {
-        type: "keyword-grant",
-        target: "unit",
-        modifier: { keywords: ["Sustained Hits 1"] },
+        type: "weapon-ability-grant",
+        target: "this-unit",
+        modifier: { keywords: [{keyword_id: "sustained-hits", parameters: {value: 1}}] },
       },
       unitRule,
       ctx,
@@ -163,17 +203,17 @@ describe("effectToBuffs: leaves", () => {
 describe("effectToBuffs: nested relationship containers", () => {
   it("does not apply a leader-model grant without resolving its attached beneficiary", () => {
     const effect = {
-      type: "leader-model-ability-grant",
-      grant: {
-        effect: { type: "feel-no-pain", modifier: { threshold: 4 } },
-      },
+      type: "ability-grant",
+      target: { level: "model", member_of: "this-unit", attachment_role: "leader" },
+      modifier: { definition: { type: "ability-part", effect: { type: "feel-no-pain", target: "this-model", modifier: { threshold: 4 } } } },
     };
     const result = effectToBuffs(effect, unitRule, ctx, "target");
     expect(result.applied).toEqual([]);
     expect(result.unsupported).toEqual([
       {
-        reason: "leader-model-ability-grant: attached leader beneficiary is not resolved by the buff engine",
+        reason: "unit-filter target: identity, state or model membership is unresolved",
         effectFragment: effect,
+        scope: "unresolved",
       },
     ]);
   });
@@ -184,7 +224,7 @@ describe("effectToBuffs: nested relationship containers", () => {
       consumer: {
         effect: {
           type: "re-roll",
-          target: "bearer",
+          target: "this-model",
           modifier: { roll: "hit", subset: "all-failures" },
         },
       },
@@ -195,6 +235,7 @@ describe("effectToBuffs: nested relationship containers", () => {
       {
         reason: "persistent-designation: retained selection state is not resolved by the buff engine",
         effectFragment: effect,
+        scope: "unresolved",
       },
     ]);
   });
@@ -206,13 +247,13 @@ describe("effectToBuffs: nested relationship containers", () => {
         target: "friendly-within-aura",
         modifier: {
           range: 6,
-          recipient_filter: { required_keywords: ["ALLY"] },
+          recipient_filter: { all_of: ["ALLY"] },
           effect: {
             type: "conditional",
-            condition: { type: "attack-is-type", parameters: { attack_type: "ranged" } },
+            condition: { type: "attack-is", parameters: { attack_type: "ranged" } },
             effect: {
               type: "re-roll",
-              target: "unit",
+              target: "recipient",
               modifier: { roll: "hit", subset: "ones" },
             },
           },
@@ -230,6 +271,19 @@ describe("effectToBuffs: nested relationship containers", () => {
     });
     expect(result.unsupported).toEqual([]);
   });
+  it("an enemy aura never buffs the attacker, and reaches the buffed unit only as the target", () => {
+    const aura = {
+      type: "aura",
+      target: "enemy-within-aura",
+      modifier: {
+        range: 6,
+        effect: { type: "roll-modifier", target: "recipient", modifier: { roll: "save", operation: "add", value: 1 } },
+      },
+    };
+    expect(effectToBuffs(aura, unitRule, ctx).applied).toEqual([]);
+    const tgt = effectToBuffs(aura, unitRule, ctx, "target");
+    expect(tgt.applied.map((b) => b.contribution)).toEqual([{ type: "save-mod", value: 1 }]);
+  });
 });
 
 describe("effectToBuffs: named-region-state", () => {
@@ -239,10 +293,10 @@ describe("effectToBuffs: named-region-state", () => {
     modifier: { roll: "hit", subset: "ones" },
   }) => ({
     type: "named-region-state",
-    target: "all-friendly",
+    target: { owner: "friendly" },
     modifier: {
       consumer: {
-        beneficiary_gate: { operator, keywords },
+        beneficiary_filter: operator === "and" ? { all_of: keywords } : { any_of: keywords },
         default_branch: { effect: defaultEffect },
         qualified_branch: {
           effect: {
@@ -293,7 +347,7 @@ describe("effectToBuffs: named-region-state", () => {
     );
   });
 
-  it("keeps Flow of Magic weapon narrowing unsupported", () => {
+  it("gates Flow of Magic's re-roll on the weapon keyword it names", () => {
     const result = effectToBuffs(
       namedRegion(
         ["THOUSAND SONS"],
@@ -301,52 +355,52 @@ describe("effectToBuffs: named-region-state", () => {
         {
           type: "re-roll",
           target: "attacker",
-          modifier: { roll: "wound", subset: "ones", weapon_keyword: "Psychic" },
+          modifier: { roll: "wound", subset: "ones", weapons: { keyword: { keyword_id: "psychic" } } },
         },
       ),
       unitRule,
       { phase: "shooting", attackerKeywords: ["thousand sons"] },
     );
-    expect(result.applied).toEqual([]);
-    expect(result.unsupported.map((entry) => entry.reason)).toContain(
-      're-roll: narrows by "weapon_keyword" which the cruncher can\'t resolve here',
-    );
+    expect(result.unsupported.map((entry) => entry.reason)).toEqual(["named-region-state qualified branch: region membership is unavailable in EngineContext; qualified replacement is unsupported"]);
+    expect(result.applied.map((buff) => buff.applicableWhen?.weaponKeywords)).toEqual([[{ keyword_id: "psychic" }]]);
   });
 });
 
 describe("effectToBuffs: unhonorable narrowing filters fail safe", () => {
   // A weapon-name / model filter the cruncher can't resolve here must NOT apply
   // the buff unfiltered (silent over-apply); it surfaces as `unsupported`.
-  it("stat-modifier with weapon_name → unsupported, not applied", () => {
+  it("stat-modifier with a weapon name gates that weapon's attacks", () => {
     const r = effectToBuffs(
-      { type: "stat-modifier", target: "unit", modifier: { stat: "A", operation: "add", value: 1, weapon_name: "power fist" } },
+      { type: "stat-modifier", target: "this-unit", modifier: { stat: "A", operation: "add", value: 1, weapons: { name: "Power Fist" } } },
       unitRule, { phase: "fight", attackerStationary: false },
     );
-    expect(r.applied).toEqual([]);
-    expect(r.unsupported).toHaveLength(1);
-    expect(r.unsupported[0].reason).toContain("weapon_name");
+    expect(r.unsupported).toEqual([]);
+    expect(r.applied).toEqual([{ source: unitRule, applicableWhen: { weaponName: "power fist" }, contribution: { type: "attacks-mod", value: 1 } }]);
+    const ctx = { phase: "fight" as const };
+    expect(resolveBuffs(r.applied, { ...ctx, weaponNames: ["power fist"] }).attacksMod.value).toBe(1);
+    expect(resolveBuffs(r.applied, { ...ctx, weaponNames: ["close combat weapon"] }).attacksMod.value).toBe(0);
   });
 
-  it("roll-modifier with model_filter → unsupported", () => {
+  it("roll-modifier with a model filter stays unresolved", () => {
     const r = effectToBuffs(
-      { type: "roll-modifier", target: "unit", modifier: { roll: "hit", operation: "add", value: 1, model_filter: "not-character" } },
+      { type: "roll-modifier", target: { level: "model", member_of: "this-unit", none_of: ["CHARACTER"] }, modifier: { roll: "hit", operation: "add", value: 1 } },
       unitRule, ctx,
     );
     expect(r.applied).toEqual([]);
-    expect(r.unsupported[0].reason).toContain("model_filter");
+    expect(r.unsupported[0].reason).toContain("unit-filter");
   });
 
-  it("re-roll with weapon_profile → unsupported", () => {
+  it("re-roll with a bound weapon reference stays unresolved", () => {
     const r = effectToBuffs(
-      { type: "re-roll", target: "unit", modifier: { roll: "hit", subset: "all-failures", weapon_profile: "macro-scalpels" } },
+      { type: "re-roll", target: "this-unit", modifier: { roll: "hit", subset: "all-failures", weapons: { ref: { weapon_var: "selected" } } } },
       unitRule, ctx,
     );
     expect(r.applied).toEqual([]);
-    expect(r.unsupported[0].reason).toContain("weapon_profile");
+    expect(r.unsupported[0].reason).toContain("weapons.ref");
   });
 
-  it("weapon_type is honorable — phase-gates the stat-modifier rather than blocking it", () => {
-    const eff = { type: "stat-modifier", target: "unit", modifier: { stat: "A", operation: "add", value: 1, weapon_type: "melee" } };
+  it("weapon type phase-gates the stat-modifier rather than blocking it", () => {
+    const eff = { type: "stat-modifier", target: "this-unit", modifier: { stat: "A", operation: "add", value: 1, weapons: { type: "melee" } } };
     const r = effectToBuffs(eff, unitRule, { phase: "fight", attackerStationary: false });
     expect(r.applied).toHaveLength(1);
     expect(r.unsupported).toEqual([]);
@@ -361,12 +415,12 @@ describe("effectToBuffs: compound", () => {
       steps: [
         {
           type: "re-roll",
-          target: "unit",
+          target: "this-unit",
           modifier: { roll: "hit", subset: "all-failures" },
         },
         {
           type: "re-roll",
-          target: "unit",
+          target: "this-unit",
           modifier: { roll: "wound", subset: "all-failures" },
         },
       ],
@@ -382,8 +436,8 @@ describe("effectToBuffs: compound", () => {
       {
         type: "rules-bundle",
         steps: [
-          { type: "stat-modifier", target: "unit", modifier: { stat: "A", operation: "add", value: 1 } },
-          { type: "stat-modifier", target: "unit", modifier: { stat: "S", operation: "add", value: 1 } },
+          { type: "stat-modifier", target: "this-unit", modifier: { stat: "A", operation: "add", value: 1 } },
+          { type: "stat-modifier", target: "this-unit", modifier: { stat: "S", operation: "add", value: 1 } },
         ],
       },
       armyRule,
@@ -403,7 +457,7 @@ describe("effectToBuffs: compound", () => {
       condition: { type: "phase-is", parameters: { phase: "fight" } },
       effect: {
         type: "roll-modifier",
-        target: "unit",
+        target: "this-unit",
         modifier: { roll: "wound", operation: "add", value: 1 },
       },
     };
@@ -418,8 +472,8 @@ describe("effectToBuffs: compound", () => {
       {
         type: "choice",
         options: [
-          { type: "re-roll", target: "unit", modifier: { roll: "hit", subset: "ones" } },
-          { type: "re-roll", target: "unit", modifier: { roll: "wound", subset: "ones" } },
+          { type: "re-roll", target: "this-unit", modifier: { roll: "hit", subset: "ones" } },
+          { type: "re-roll", target: "this-unit", modifier: { roll: "wound", subset: "ones" } },
         ],
       },
       unitRule,
@@ -458,10 +512,10 @@ describe("effectToBuffs: compound", () => {
     const result = effectToBuffs(
       {
         type: "conditional",
-        condition: { type: "is-attached" },
+        condition: { type: "matches", parameters: { subject: "this-model", filter: { level: "model", member_of: "this-unit", attachment_role: "leader" } } },
         effect: {
           type: "roll-modifier",
-          target: "unit",
+          target: "this-unit",
           modifier: { roll: "wound", operation: "add", value: 1 },
         },
       },
@@ -472,6 +526,36 @@ describe("effectToBuffs: compound", () => {
     expect(result.unsupported[0].reason).toMatch(/cannot evaluate condition/);
   });
 
+  it.each([
+    ["known true", { withinHalfRange: true }, { range: "half-weapon", of: "attacker" }, 1, 0],
+    ["known false", { withinHalfRange: false }, { range: "half-weapon", of: "attacker" }, 0, 0],
+    ["missing", {}, { range: "half-weapon", of: "attacker" }, 0, 1],
+    ["wholly", { withinHalfRange: true }, { range: "half-weapon", of: "attacker", wholly: true }, 0, 1],
+    ["unrelated", { withinHalfRange: true }, { range: "half-weapon", of: "defender" }, 0, 1],
+  ])("matches defender within half-weapon range: %s", (_name, context, within, applied, unsupported) => {
+    const result = effectToBuffs(
+      {
+        type: "conditional",
+        condition: {
+          type: "matches",
+          parameters: {
+            subject: "defender",
+            filter: { owner: "enemy", level: "unit", within },
+          },
+        },
+        effect: {
+          type: "stat-modifier",
+          target: "this-unit",
+          modifier: { stat: "S", operation: "add", value: 1 },
+        },
+      },
+      unitRule,
+      { phase: "shooting", ...context },
+    );
+    expect(result.applied).toHaveLength(applied);
+    expect(result.unsupported).toHaveLength(unsupported);
+  });
+
   it("was-hit-by-attack reactive trigger is surfaced, never silently applied", () => {
     // A static damage calc can't know whether the buffed unit was hit, so the
     // condition stays "unknown" and the gated buff routes to `unsupported`
@@ -480,10 +564,13 @@ describe("effectToBuffs: compound", () => {
     const result = effectToBuffs(
       {
         type: "conditional",
-        condition: { type: "was-hit-by-attack", parameters: { subject: "self" } },
+        condition: {
+          type: "happened",
+          parameters: { event: "after-roll", object: "this-unit", filter: { roll: "hit", result: "success" }, window: "phase" },
+        },
         effect: {
           type: "roll-modifier",
-          target: "unit",
+          target: "this-unit",
           modifier: { roll: "hit", operation: "subtract", value: 1 },
         },
       },
@@ -513,7 +600,15 @@ describe("effectToBuffs: target filtering", () => {
   });
 
   it("attacker-perspective targets are accepted", () => {
-    for (const target of ["self", "bearer", "unit", "attacker", "attached-unit", "friendly-within-aura"]) {
+    const targets: unknown[] = [
+      "this-model",
+      "this-unit",
+      "selected-unit",
+      "recipient",
+      "attacker",
+      { owner: "friendly" },
+    ];
+    for (const target of targets) {
       const result = effectToBuffs(
         {
           type: "roll-modifier",
@@ -523,7 +618,36 @@ describe("effectToBuffs: target filtering", () => {
         unitRule,
         ctx,
       );
-      expect(result.applied, `target ${target}`).toHaveLength(1);
+      expect(result.applied, `target ${JSON.stringify(target)}`).toHaveLength(1);
+    }
+  });
+
+  it("does not assume a friendly target satisfies an unresolved range filter", () => {
+    const effect = {
+      type: "roll-modifier",
+      target: { owner: "friendly", within: { range: { inches: 6 } } },
+      modifier: { roll: "hit", operation: "add", value: 1 },
+    };
+    const result = effectToBuffs(effect, unitRule, ctx);
+    expect(result.applied).toEqual([]);
+    expect(result.unsupported).toEqual([{
+      reason: "unit-filter target: identity, state or model membership is unresolved",
+      effectFragment: effect,
+      scope: "unresolved",
+    }]);
+  });
+
+  it("enemy-side and unbound unit-refs are not the attacker", () => {
+    // An enemy unit filter is the other side; an event or stratagem binding is not
+    // known to be the buffed unit, so it must not buff the attack either.
+    const targets: unknown[] = ["defender", { owner: "enemy" }, { owner: "enemy", within: { range: { inches: 6 } } }, "event-subject", "stratagem-target"];
+    for (const target of targets) {
+      const result = effectToBuffs(
+        { type: "roll-modifier", target, modifier: { roll: "hit", operation: "add", value: 1 } },
+        unitRule,
+        ctx,
+      );
+      expect(result.applied, `target ${JSON.stringify(target)}`).toEqual([]);
     }
   });
 });
@@ -535,12 +659,12 @@ describe("oath-of-moment full effect", () => {
       steps: [
         {
           type: "re-roll",
-          target: "unit",
+          target: "this-unit",
           modifier: { roll: "hit", subset: "all-failures" },
         },
         {
           type: "re-roll",
-          target: "unit",
+          target: "this-unit",
           modifier: { roll: "wound", subset: "all-failures" },
         },
       ],
@@ -561,7 +685,7 @@ describe("effectToBuffs: target perspective", () => {
     const result = effectToBuffs(
       {
         type: "stat-modifier",
-        target: "unit",
+        target: "this-unit",
         modifier: { stat: "T", operation: "add", value: 1 },
       },
       unitRule,
@@ -576,7 +700,7 @@ describe("effectToBuffs: target perspective", () => {
     const improve = effectToBuffs(
       {
         type: "stat-modifier",
-        target: "unit",
+        target: "this-unit",
         modifier: { stat: "Sv", operation: "add", value: 1 },
       },
       unitRule,
@@ -589,7 +713,7 @@ describe("effectToBuffs: target perspective", () => {
     const worsen = effectToBuffs(
       {
         type: "stat-modifier",
-        target: "unit",
+        target: "this-unit",
         modifier: { stat: "Sv", operation: "subtract", value: 1 },
       },
       unitRule,
@@ -602,7 +726,7 @@ describe("effectToBuffs: target perspective", () => {
   it("roll-modifier save translates under target perspective only", () => {
     const node = {
       type: "roll-modifier",
-      target: "unit",
+      target: "this-unit",
       modifier: { roll: "save", operation: "add", value: 1 },
     };
     const tgt = effectToBuffs(node, unitRule, ctxT, "target");
@@ -612,7 +736,7 @@ describe("effectToBuffs: target perspective", () => {
   });
 
   it('roll-modifier {target:"attacker", roll:"hit"} translates to hit-mod (incoming-hit penalty)', () => {
-    // Functionally identical to bs-modifier {target:"attacker"} — both shapes
+    // Functionally identical to stat-modifier BS {target:"attacker"} — both shapes
     // appear in the corpus for "-1 to hit rolls targeting this unit". The
     // translator now accepts both.
     const result = effectToBuffs(
@@ -659,12 +783,12 @@ describe("effectToBuffs: target perspective", () => {
     expect(result.applied).toEqual([]);
   });
 
-  it("bs-modifier on target: attacker translates to hit-mod under target perspective", () => {
+  it("stat-modifier BS on target: attacker translates to hit-mod under target perspective", () => {
     const result = effectToBuffs(
       {
-        type: "bs-modifier",
+        type: "stat-modifier",
         target: "attacker",
-        modifier: { operation: "subtract", value: 1 },
+        modifier: { stat: "BS", operation: "subtract", value: 1 },
       },
       unitRule,
       ctxT,
@@ -677,7 +801,7 @@ describe("effectToBuffs: target perspective", () => {
     const result = effectToBuffs(
       {
         type: "re-roll",
-        target: "unit",
+        target: "this-unit",
         modifier: { roll: "hit", subset: "all-failures" },
       },
       armyRule,
@@ -691,7 +815,7 @@ describe("effectToBuffs: target perspective", () => {
     const result = effectToBuffs(
       {
         type: "re-roll",
-        target: "unit",
+        target: "this-unit",
         modifier: { roll: "save", subset: "ones" },
       },
       unitRule,
@@ -705,12 +829,12 @@ describe("effectToBuffs: target perspective", () => {
     });
   });
 
-  it("keyword-grant is attacker-side, drops under target perspective", () => {
+  it("weapon-ability-grant is attacker-side, drops under target perspective", () => {
     const result = effectToBuffs(
       {
-        type: "keyword-grant",
-        target: "unit",
-        modifier: { keywords: ["Lethal Hits"] },
+        type: "weapon-ability-grant",
+        target: "this-unit",
+        modifier: { keywords: [{keyword_id: "lethal-hits"}] },
       },
       unitRule,
       ctxT,
@@ -723,7 +847,7 @@ describe("effectToBuffs: target perspective", () => {
     const result = effectToBuffs(
       {
         type: "damage-reduction",
-        target: "unit",
+        target: "this-unit",
         modifier: { reduction: 1 },
       },
       unitRule,
@@ -740,7 +864,7 @@ describe("effectToBuffs: target perspective", () => {
     const result = effectToBuffs(
       {
         type: "damage-reduction",
-        target: "unit",
+        target: "this-unit",
         modifier: { reduction: 1 },
       },
       unitRule,
@@ -755,7 +879,7 @@ describe("effectToBuffs: target perspective", () => {
     const result = effectToBuffs(
       {
         type: "invulnerable-save",
-        target: "self",
+        target: "this-model",
         modifier: { invuln_sv: 4 },
       },
       unitRule,
@@ -770,7 +894,7 @@ describe("effectToBuffs: target perspective", () => {
     const result = effectToBuffs(
       {
         type: "invulnerable-save",
-        target: "self",
+        target: "this-model",
         modifier: { invuln_sv: 4 },
       },
       unitRule,
@@ -786,7 +910,7 @@ describe("effectToBuffs: target perspective", () => {
       const result = effectToBuffs(
         {
           type: "invulnerable-save",
-          target: "self",
+          target: "this-model",
           modifier: { invuln_sv },
         },
         unitRule,
@@ -798,12 +922,12 @@ describe("effectToBuffs: target perspective", () => {
     }
   });
 
-  it('feel-no-pain modifier.scope:"mortal" carries through to the buff', () => {
+  it('feel-no-pain modifier.against:"mortal" carries through to the buff', () => {
     const result = effectToBuffs(
       {
         type: "feel-no-pain",
-        target: "self",
-        modifier: { threshold: 5, scope: "mortal" },
+        target: "this-model",
+        modifier: { threshold: 5, against: "mortal" },
       },
       unitRule,
       ctxT,
@@ -816,12 +940,12 @@ describe("effectToBuffs: target perspective", () => {
     });
   });
 
-  it("feel-no-pain with unrecognised scope routes to unsupported", () => {
+  it("feel-no-pain with unrecognised against routes to unsupported", () => {
     const result = effectToBuffs(
       {
         type: "feel-no-pain",
-        target: "self",
-        modifier: { threshold: 5, scope: "mortals" }, // typo
+        target: "this-model",
+        modifier: { threshold: 5, against: "mortals" }, // typo
       },
       unitRule,
       ctxT,
@@ -829,32 +953,36 @@ describe("effectToBuffs: target perspective", () => {
     );
     expect(result.applied).toEqual([]);
     expect(result.unsupported).toHaveLength(1);
-    expect(result.unsupported[0].reason).toContain("scope");
+    expect(result.unsupported[0].reason).toContain("against");
   });
 
-  it('damage-reduction "half" and "to-zero" route to unsupported', () => {
-    for (const reduction of ["half", "to-zero"]) {
-      const result = effectToBuffs(
-        {
-          type: "damage-reduction",
-          target: "unit",
-          modifier: { reduction },
-        },
-        unitRule,
-        ctxT,
-        "target",
-      );
-      expect(result.applied).toEqual([]);
-      expect(result.unsupported).toHaveLength(1);
-      expect(result.unsupported[0].reason).toContain(reduction);
-    }
+  it('damage-reduction "half" routes to unsupported', () => {
+    const result = effectToBuffs({ type: "damage-reduction", target: "this-unit", modifier: { reduction: "half" } }, unitRule, ctxT, "target");
+    expect(result.applied).toEqual([]);
+    expect(result.unsupported.map((u) => u.reason)).toEqual(["damage-reduction: halving Damage is not modelled by the buff layer"]);
+  });
+
+  it('damage-reduction "to-zero" zeroes as many attacks as its usage limit allows', () => {
+    const zeroing = { type: "damage-reduction", target: "this-unit", modifier: { reduction: "to-zero" } };
+    const contributions = (usage: unknown) => {
+      const result = effectToBuffs(zeroing, unitRule, ctxT, "target", usage === undefined ? undefined : { usage });
+      return [...result.applied, ...result.activatable.flatMap((lever) => lever.buffs)].map((b) => b.contribution);
+    };
+    expect(contributions(undefined)).toEqual([{ type: "damage-zeroing", uses: 1, per: "unit" }]);
+    expect(contributions({ frequency: "n-per-battle", count: 2, per: "unit" })).toEqual([{ type: "damage-zeroing", uses: 2, per: "unit" }]);
+    expect(contributions({ frequency: "once-per-battle-round", per: "model" })).toEqual([{ type: "damage-zeroing", uses: 1, per: "model" }]);
+    expect(contributions([{ frequency: "n-per-battle", count: 3, per: "model" }, { frequency: "once-per-turn", per: "unit" }])).toEqual([{ type: "damage-zeroing", uses: 1, per: "unit" }]);
+    // A part's own usage limit counts for the zeroing inside it.
+    const part = effectToBuffs({ type: "ability-part", usage: { frequency: "n-per-battle", count: 2, per: "unit" }, effect: zeroing }, unitRule, ctxT, "target");
+    expect([...part.applied, ...part.activatable.flatMap((lever) => lever.buffs)].map((b) => b.contribution)).toEqual([{ type: "damage-zeroing", uses: 2, per: "unit" }]);
+    expect(effectToBuffs(zeroing, unitRule, ctx, "attacker").applied).toEqual([]);
   });
 });
 
 describe("effectToBuffs: compound conditions", () => {
   const woundEffect = {
     type: "roll-modifier",
-    target: "unit",
+    target: "this-unit",
     modifier: { roll: "wound", operation: "add", value: 1 },
   };
   function conditional(condition: unknown) {
@@ -867,7 +995,7 @@ describe("effectToBuffs: compound conditions", () => {
         operator: "and",
         operands: [
           { type: "phase-is", parameters: { phase: "fight" } },
-          { type: "remained-stationary" },
+          { type: "happened", parameters: { event: "move-ended", filter: { move_types: ["remain-stationary"] }, window: "turn" } },
         ],
       }),
       unitRule,
@@ -883,7 +1011,7 @@ describe("effectToBuffs: compound conditions", () => {
         operator: "and",
         operands: [
           { type: "phase-is", parameters: { phase: "fight" } },
-          { type: "remained-stationary" },
+          { type: "happened", parameters: { event: "move-ended", filter: { move_types: ["remain-stationary"] }, window: "turn" } },
         ],
       }),
       unitRule,
@@ -899,7 +1027,7 @@ describe("effectToBuffs: compound conditions", () => {
         operator: "and",
         operands: [
           { type: "phase-is", parameters: { phase: "fight" } }, // false
-          { type: "is-attached" }, // unknown
+          { type: "matches", parameters: { subject: "this-model", filter: { level: "model", member_of: "this-unit", attachment_role: "leader" } } }, // unknown
         ],
       }),
       unitRule,
@@ -915,7 +1043,7 @@ describe("effectToBuffs: compound conditions", () => {
         operator: "and",
         operands: [
           { type: "phase-is", parameters: { phase: "fight" } }, // true
-          { type: "is-attached" }, // unknown
+          { type: "matches", parameters: { subject: "this-model", filter: { level: "model", member_of: "this-unit", attachment_role: "leader" } } }, // unknown
         ],
       }),
       unitRule,
@@ -992,7 +1120,7 @@ describe("effectToBuffs: compound conditions", () => {
               { type: "phase-is", parameters: { phase: "fight" } },
             ],
           },
-          { type: "remained-stationary" },
+          { type: "happened", parameters: { event: "move-ended", filter: { move_types: ["remain-stationary"] }, window: "turn" } },
         ],
       }),
       unitRule,
@@ -1005,10 +1133,10 @@ describe("effectToBuffs: compound conditions", () => {
 describe("effectToBuffs: timing-is condition", () => {
   const effect = {
     type: "conditional",
-    condition: { type: "timing-is", parameters: { timing: "end-of-phase" } },
+    condition: { type: "timing-is", parameters: { timing: "phase-ended" } },
     effect: {
       type: "roll-modifier",
-      target: "unit",
+      target: "this-unit",
       modifier: { roll: "wound", operation: "add", value: 1 },
     },
   };
@@ -1016,7 +1144,7 @@ describe("effectToBuffs: timing-is condition", () => {
   it("fires when context timing matches", () => {
     const result = effectToBuffs(effect, unitRule, {
       phase: "fight",
-      timing: "end-of-phase",
+      timing: "phase-ended",
     });
     expect(result.applied).toHaveLength(1);
   });
@@ -1024,7 +1152,7 @@ describe("effectToBuffs: timing-is condition", () => {
   it("drops cleanly when context timing differs", () => {
     const result = effectToBuffs(effect, unitRule, {
       phase: "fight",
-      timing: "start-of-phase",
+      timing: "phase-started",
     });
     expect(result.applied).toEqual([]);
     expect(result.unsupported).toEqual([]);
@@ -1037,7 +1165,7 @@ describe("effectToBuffs: timing-is condition", () => {
     expect(result.applied).toEqual([]);
     expect(result.unsupported).toEqual([]);
     expect(result.activatable).toHaveLength(1);
-    expect(result.activatable[0].id).toBe("fury@end-of-phase");
+    expect(result.activatable[0].id).toBe("fury@phase-ended");
     expect(result.activatable[0].buffs[0].contribution).toEqual({ type: "wound-mod", value: 1 });
   });
 });
@@ -1054,18 +1182,18 @@ describe("effectToBuffs: activatable gates", () => {
             name: "Martial Excellence",
             requirement: { type: "pair", min_value: 4 },
             effect: {
-              type: "keyword-grant",
-              target: "all-friendly",
-              modifier: { keywords: ["Sustained Hits 1"] },
+              type: "weapon-ability-grant",
+              target: { owner: "friendly" },
+              modifier: { keywords: [{keyword_id: "sustained-hits", parameters: {value: 1}}] },
             },
           },
           {
             name: "Warp Blades",
             requirement: { type: "pair", min_value: 5 },
             effect: {
-              type: "keyword-grant",
-              target: "all-friendly",
-              modifier: { keywords: ["Lethal Hits"] },
+              type: "weapon-ability-grant",
+              target: { owner: "friendly" },
+              modifier: { keywords: [{keyword_id: "lethal-hits"}] },
             },
           },
         ],
@@ -1099,7 +1227,7 @@ describe("effectToBuffs: activatable gates", () => {
           {
             name: "Rage-Fuelled Invigoration",
             requirement: { type: "pair", min_value: 2 },
-            effect: { type: "movement-modifier", target: "all-friendly", modifier: {} },
+            effect: { type: "roll-modifier", target: { owner: "friendly" }, modifier: { roll: "advance", operation: "add", value: 1 } },
           },
         ],
       },
@@ -1126,14 +1254,14 @@ describe("effectToBuffs: activatable gates", () => {
               condition: {
                 operator: "and",
                 operands: [
-                  { type: "target-has-keyword", parameters: { keyword: "Infantry" } },
-                  { type: "attack-is-type", parameters: { attack_type: "melee" } },
+                  { type: "matches", parameters: { subject: "defender", filter: {all_of: ["INFANTRY"]} } },
+                  { type: "attack-is", parameters: { attack_type: "melee" } },
                 ],
               },
               effect: {
-                type: "keyword-grant",
-                target: "all-friendly",
-                modifier: { keywords: ["Devastating Wounds"] },
+                type: "weapon-ability-grant",
+                target: { owner: "friendly" },
+                modifier: { keywords: [{keyword_id: "devastating-wounds"}] },
               },
             },
           },
@@ -1150,7 +1278,7 @@ describe("effectToBuffs: activatable gates", () => {
     });
     // The "vs Infantry, in the fight phase" gate rides on the buff so the
     // resolver applies it per-target rather than the lever vanishing.
-    expect(buff.applicableWhen).toEqual({ requiresTargetKeyword: "Infantry", phases: ["fight"] });
+    expect(buff.applicableWhen).toEqual({ requiresTargetKeyword: "INFANTRY", phases: ["fight"] });
   });
 
   it("a timing gate around a sequence yields one lever bundling its buffs", () => {
@@ -1158,12 +1286,12 @@ describe("effectToBuffs: activatable gates", () => {
     const result = effectToBuffs(
       {
         type: "conditional",
-        condition: { type: "timing-is", parameters: { timing: "start-of-phase" } },
+        condition: { type: "timing-is", parameters: { timing: "phase-started" } },
         effect: {
           type: "sequence",
           steps: [
-            { type: "stat-modifier", target: "unit", modifier: { stat: "A", operation: "add", value: 3 } },
-            { type: "keyword-grant", target: "unit", modifier: { keywords: ["Devastating Wounds"] } },
+            { type: "stat-modifier", target: "this-unit", modifier: { stat: "A", operation: "add", value: 3 } },
+            { type: "weapon-ability-grant", target: "this-unit", modifier: { keywords: [{keyword_id: "devastating-wounds"}] } },
           ],
         },
       },
@@ -1171,7 +1299,7 @@ describe("effectToBuffs: activatable gates", () => {
       { phase: "fight" },
     );
     expect(result.activatable).toHaveLength(1);
-    expect(result.activatable[0].id).toBe("fury@start-of-phase");
+    expect(result.activatable[0].id).toBe("fury@phase-started");
     expect(result.activatable[0].buffs.map((b) => b.contribution.type)).toEqual([
       "attacks-mod",
       "extra-keyword",
@@ -1179,18 +1307,18 @@ describe("effectToBuffs: activatable gates", () => {
   });
 
   it("a timing gate whose body has no combat buff yields no lever", () => {
-    // Berzerker Frenzy shape: on-destroyed → dice-gated → resurrection.
+    // Berzerker Frenzy shape: on-destroyed → dice-gated → return-models.
     const gate = {
       type: "dice-gated",
       dice: "D6",
       threshold: 2,
-      on_success: { type: "resurrection", target: "self", modifier: {} },
+      on_success: { type: "return-models", target: "this-unit", modifier: { count: 1 } },
       on_fail: null,
     };
     const result = effectToBuffs(
       {
         type: "conditional",
-        condition: { type: "timing-is", parameters: { timing: "on-destroyed" } },
+        condition: { type: "timing-is", parameters: { timing: "destroyed" } },
         effect: gate,
       },
       unitRule,
@@ -1205,7 +1333,7 @@ describe("effectToBuffs: activatable gates", () => {
 describe("effectToBuffs: AP stat-modifier", () => {
   const apEffect = {
     type: "stat-modifier",
-    target: "unit",
+    target: "this-unit",
     modifier: { stat: "AP", operation: "add", value: -1 },
   };
 
@@ -1241,8 +1369,8 @@ describe("effectToBuffs: AP stat-modifier", () => {
     const result = effectToBuffs(
       {
         type: "stat-modifier",
-        target: "unit",
-        modifier: { stat: "AP", operation: "improve", value: 1, attack_type: "melee" },
+        target: "this-unit",
+        modifier: { stat: "AP", operation: "improve", value: 1, weapons: { type: "melee" } },
       },
       unitRule,
       { phase: "fight" },
@@ -1250,7 +1378,7 @@ describe("effectToBuffs: AP stat-modifier", () => {
     );
     expect(result.applied).toHaveLength(1);
     expect(result.applied[0].contribution).toEqual({ type: "ap-mod", value: -1 });
-    // melee attack_type rides on the buff as a fight-phase gate.
+    // The melee weapon scope rides on the buff as a fight-phase gate.
     expect(result.applied[0].applicableWhen).toEqual({ phases: ["fight"] });
     expect(result.unsupported).toEqual([]);
   });
@@ -1270,7 +1398,11 @@ describe("effectToBuffs: AP stat-modifier", () => {
     );
     expect(result.applied).toEqual([]);
     expect(result.unsupported).toHaveLength(1);
-    expect(result.unsupported[0].reason).toMatch(/defender-side AP reduction/);
+    expect(result.unsupported[0].reason).toMatch(/defender-side stat; applies when the buffed unit is the target/);
+    // The same rule worsens the AP of attacks against the buffed unit.
+    const asTarget = effectToBuffs({ type: "stat-modifier", target: "attacker", modifier: { stat: "AP", operation: "worsen", value: 1 } }, unitRule, ctx, "target");
+    expect(asTarget.unsupported).toEqual([]);
+    expect(asTarget.applied.map((buff) => buff.contribution)).toEqual([{ type: "ap-mod", value: 1 }]);
   });
 });
 
@@ -1279,7 +1411,7 @@ describe("effectToBuffs: improve/worsen on symmetric stats", () => {
     const improve = effectToBuffs(
       {
         type: "stat-modifier",
-        target: "unit",
+        target: "this-unit",
         modifier: { stat: "A", operation: "improve", value: 2 },
       },
       unitRule,
@@ -1290,7 +1422,7 @@ describe("effectToBuffs: improve/worsen on symmetric stats", () => {
     const worsen = effectToBuffs(
       {
         type: "stat-modifier",
-        target: "unit",
+        target: "this-unit",
         modifier: { stat: "S", operation: "worsen", value: 1 },
       },
       unitRule,
@@ -1304,12 +1436,12 @@ describe("effectToBuffs: charged-this-turn condition", () => {
   // Relentless Rage shape: charged this turn → +1 A, +2 S in melee.
   const relentlessRage = {
     type: "conditional",
-    condition: { type: "charged-this-turn" },
+    condition: { type: "happened", parameters: { event: "move-ended", filter: { move_types: ["charge"] }, window: "turn" } },
     effect: {
       type: "sequence",
       steps: [
-        { type: "stat-modifier", target: "unit", modifier: { stat: "A", operation: "add", value: 1, attack_type: "melee" } },
-        { type: "stat-modifier", target: "unit", modifier: { stat: "S", operation: "add", value: 2, attack_type: "melee" } },
+        { type: "stat-modifier", target: "this-unit", modifier: { stat: "A", operation: "add", value: 1, weapons: { type: "melee" } } },
+        { type: "stat-modifier", target: "this-unit", modifier: { stat: "S", operation: "add", value: 2, weapons: { type: "melee" } } },
       ],
     },
   };
@@ -1344,19 +1476,19 @@ describe("effectToBuffs: charged-this-turn condition", () => {
 });
 
 describe("effectToBuffs: named activations", () => {
-  const hit = { type: "roll-modifier", target: "unit", modifier: { roll: "hit", operation: "add", value: 1 } };
-  const wound = { type: "roll-modifier", target: "unit", modifier: { roll: "wound", operation: "add", value: 1 } };
+  const hit = { type: "roll-modifier", target: "this-unit", modifier: { roll: "hit", operation: "add", value: 1 } };
+  const wound = { type: "roll-modifier", target: "this-unit", modifier: { roll: "wound", operation: "add", value: 1 } };
 
   it("keeps passive buffs separate from paid buffs and reports unsupported riders", () => {
     const result = effectToBuffs({
       type: "sequence",
       steps: [
-        { type: "named-effect", name: "Steady Aim", effect: hit },
+        { type: "ability-part", name: "Steady Aim", effect: hit },
         {
-          type: "named-effect",
+          type: "ability-part",
           name: "Empowered Strike",
           optional: true,
-          cost: { type: "resource-spend", target: "self", modifier: { pool_id: "example-pool", amount: 1 } },
+          cost: { type: "resource-spend", target: "this-model", modifier: { pool: "example-pool", amount: 1 } },
           effect: { type: "sequence", steps: [wound, { type: "unit-division" }] },
         },
       ],
@@ -1369,9 +1501,9 @@ describe("effectToBuffs: named activations", () => {
 
   it("does not offer an activation whose trigger condition is false", () => {
     const effect = {
-      type: "named-effect",
+      type: "ability-part",
       name: "Close Combat",
-      trigger: { event: "unit-selected-to-fight", condition: { type: "phase-is", parameters: { phase: "fight" } } },
+      trigger: { event: "selected", filter: { to: "fight" }, condition: { type: "phase-is", parameters: { phase: "fight" } } },
       effect: hit,
     };
     expect(effectToBuffs(effect, unitRule, ctx).activatable).toEqual([]);
@@ -1387,8 +1519,8 @@ describe("effectToBuffs: named activations", () => {
       min_choices: 0,
       max_choices: 2,
       options: [
-        { type: "named-effect", name: "Accurate", effect: hit },
-        { type: "named-effect", name: "Lethal", effect: wound },
+        { type: "ability-part", name: "Accurate", effect: hit },
+        { type: "ability-part", name: "Lethal", effect: wound },
       ],
     }, unitRule, ctx);
     expect(result.applied).toEqual([]);
@@ -1399,19 +1531,50 @@ describe("effectToBuffs: named activations", () => {
   });
 });
 
-describe("parseKeywordGrant", () => {
+describe("structured weapon grants", () => {
   it.each([
-    ["Lethal Hits", { keyword_id: "lethal-hits" }],
-    ["Sustained Hits 1", { keyword_id: "sustained-hits", parameters: { value: 1 } }],
-    ["Sustained Hits 2", { keyword_id: "sustained-hits", parameters: { value: 2 } }],
-    ["Twin-linked", { keyword_id: "twin-linked" }],
-    ["Precision", { keyword_id: "precision" }],
-    ["Rapid Fire 1", { keyword_id: "rapid-fire", parameters: { value: 1 } }],
-    [
-      "Anti-INFANTRY 4+",
-      { keyword_id: "anti", parameters: { target_keyword: "INFANTRY", threshold: 4 } },
-    ],
-  ])("%s → %j", (input, expected) => {
-    expect(parseKeywordGrant(input)).toEqual(expected);
+    { keyword_id: "lethal-hits" },
+    { keyword_id: "sustained-hits", parameters: { value: 2 } },
+    { keyword_id: "anti", parameters: { required_target_keywords_any: ["MONSTER", "VEHICLE"], threshold: 4 } },
+  ])("preserves a catalog reference %j", (keyword) => {
+    const result = effectToBuffs({ type: "weapon-ability-grant", target: "this-unit", modifier: { keywords: [keyword] } }, unitRule, ctx);
+    expect(result.applied[0].contribution).toEqual({ type: "extra-keyword", keywordRef: keyword });
+  });
+  it("diagnoses structured removals instead of dropping them", () => {
+    const removes = [{ keyword_id: "heavy" }];
+    const result = effectToBuffs({ type: "weapon-ability-grant", target: "this-unit", modifier: { removes } }, unitRule, ctx);
+    expect(result.applied).toEqual([]);
+    expect(result.unsupported).toEqual([{ reason: 'weapon-ability-removal: the cruncher does not model removing a weapon ability ("Heavy")', effectFragment: { removes }, scope: "unresolved" }]);
+  });
+});
+
+describe("incoming changes (attacks made against the target)", () => {
+  const src: BuffSource = { kind: "ability", abilityId: "veil", abilityKind: "unit" };
+  const minusOneToBeHit = {
+    type: "roll-modifier",
+    target: "this-unit",
+    modifier: { roll: "hit", operation: "subtract", value: 1, incoming: true },
+  };
+
+  it("never penalises the buffed unit's own attacks", () => {
+    const result = effectToBuffs(minusOneToBeHit, src, ctx, "attacker");
+    expect(result.applied).toEqual([]);
+    expect(result.unsupported).toEqual([]);
+  });
+
+  it("penalises the hit rolls of attacks against the buffed unit", () => {
+    const result = effectToBuffs(minusOneToBeHit, src, ctx, "target");
+    expect(result.applied.map((b) => b.contribution)).toEqual([{ type: "hit-mod", value: -1 }]);
+  });
+
+  it("reports an incoming change it cannot model instead of applying it", () => {
+    const result = effectToBuffs(
+      { type: "weapon-ability-grant", target: "this-unit", modifier: { keywords: [{ keyword_id: "lethal-hits" }], incoming: true } },
+      src,
+      ctx,
+      "target",
+    );
+    expect(result.applied).toEqual([]);
+    expect(result.unsupported).toHaveLength(1);
   });
 });

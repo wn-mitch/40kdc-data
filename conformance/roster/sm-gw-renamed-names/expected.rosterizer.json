@@ -1,0 +1,92 @@
+{
+  "slug": "",
+  "key": "",
+  "visible": "hidden",
+  "locked": false,
+  "rulebook": {
+    "name": "40kdc",
+    "game": "Warhammer 40,000",
+    "publisher": "Alpaca Software",
+    "url": "https://40kdc.dev",
+    "genre": "wargame"
+  },
+  "snapshot": {
+    "item": "Roster§Roster",
+    "name": "Imported roster",
+    "quantity": 1,
+    "stats": {
+      "Points": {
+        "value": 310
+      }
+    },
+    "assets": {
+      "included": [
+        {
+          "item": "Faction§Adeptus Astartes",
+          "name": "Adeptus Astartes",
+          "quantity": 1
+        },
+        {
+          "item": "Detachment§Gladius Task Force",
+          "name": "Gladius Task Force",
+          "quantity": 1
+        },
+        {
+          "item": "Force Disposition§Priority Assets",
+          "name": "Priority Assets",
+          "quantity": 1
+        },
+        {
+          "item": "Unit§Marneus Calgar in Armour of Antilochus",
+          "name": "Marneus Calgar in Armour of Antilochus",
+          "quantity": 1,
+          "stats": {
+            "Points": {
+              "value": 180
+            }
+          },
+          "assets": {
+            "included": [
+              {
+                "item": "Weapon§Gauntlets of Ultramar",
+                "name": "Gauntlets of Ultramar",
+                "quantity": 1
+              }
+            ],
+            "traits": [
+              {
+                "item": "Trait§Warlord",
+                "name": "Warlord",
+                "quantity": 1
+              }
+            ]
+          }
+        },
+        {
+          "item": "Unit§Death Company Marines with Jump Packs",
+          "name": "Death Company Marines with Jump Packs",
+          "quantity": 1,
+          "stats": {
+            "Points": {
+              "value": 130
+            }
+          },
+          "assets": {
+            "included": [
+              {
+                "item": "Weapon§Astartes chainsword",
+                "name": "Astartes chainsword",
+                "quantity": 5
+              },
+              {
+                "item": "Weapon§Heavy bolt pistol",
+                "name": "Heavy bolt pistol",
+                "quantity": 5
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

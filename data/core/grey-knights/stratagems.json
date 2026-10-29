@@ -1,6 +1,6 @@
 [
   {
-    "id": "a-threat-ended-argent-assault",
+    "id": "a-threat-ended-argent-assault-grey-knights",
     "name": "A Threat Ended",
     "category": "detachment",
     "detachment_id": "argent-assault",
@@ -10,11 +10,18 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Paladin Squad"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "a-threat-ended-argent-assault-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -28,7 +35,7 @@
     ]
   },
   {
-    "id": "abominus-class-targets-sanctic-spearhead",
+    "id": "abominus-class-targets-sanctic-spearhead-grey-knights",
     "name": "ABOMINUS-CLASS TARGETS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -40,11 +47,61 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Grey Knights"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "operator": "or",
+                "operands": [
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "fight"
+                      },
+                      "window": "phase"
+                    }
+                  },
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "shoot"
+                      },
+                      "window": "phase"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "abominus-class-targets-sanctic-spearhead-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -58,7 +115,7 @@
     ]
   },
   {
-    "id": "aegis-eternal-warpbane-task-force",
+    "id": "aegis-eternal-warpbane-task-force-grey-knights",
     "name": "Aegis Eternal",
     "category": "detachment",
     "type": "battle-tactic",
@@ -70,7 +127,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "aegis-eternal-warpbane-task-force-grey-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -87,7 +144,7 @@
     ]
   },
   {
-    "id": "aggressive-anticipation-augurium-task-force",
+    "id": "aggressive-anticipation-augurium-task-force-grey-knights",
     "name": "AGGRESSIVE ANTICIPATION",
     "category": "detachment",
     "type": "battle-tactic",
@@ -99,11 +156,62 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Grey Knights",
+        "Psyker"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "operator": "or",
+                "operands": [
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "fight"
+                      },
+                      "window": "phase"
+                    }
+                  },
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "shoot"
+                      },
+                      "window": "phase"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "aggressive-anticipation-augurium-task-force-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -117,7 +225,7 @@
     ]
   },
   {
-    "id": "appointed-hour-augurium-task-force",
+    "id": "appointed-hour-augurium-task-force-grey-knights",
     "name": "APPOINTED HOUR",
     "category": "detachment",
     "type": "battle-tactic",
@@ -129,11 +237,62 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Grey Knights",
+        "Psyker"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "operator": "or",
+                "operands": [
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "fight"
+                      },
+                      "window": "phase"
+                    }
+                  },
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "shoot"
+                      },
+                      "window": "phase"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "appointed-hour-augurium-task-force-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -147,7 +306,7 @@
     ]
   },
   {
-    "id": "argent-wrath-sanctic-spearhead",
+    "id": "argent-wrath-sanctic-spearhead-grey-knights",
     "name": "ARGENT WRATH",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -158,11 +317,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "argent-wrath-sanctic-spearhead-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -176,7 +339,7 @@
     ]
   },
   {
-    "id": "armoured-aegis-sanctic-spearhead",
+    "id": "armoured-aegis-sanctic-spearhead-grey-knights",
     "name": "ARMOURED AEGIS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -187,11 +350,20 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Grey Knights",
+        "Psyker",
+        "Vehicle"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit"
+    },
+    "ability_id": "armoured-aegis-sanctic-spearhead-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -205,7 +377,7 @@
     ]
   },
   {
-    "id": "aura-of-vengeance-argent-assault",
+    "id": "aura-of-vengeance-argent-assault-grey-knights",
     "name": "Aura of Vengeance",
     "category": "detachment",
     "detachment_id": "argent-assault",
@@ -215,11 +387,18 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Paladin Squad"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit"
+    },
+    "ability_id": "aura-of-vengeance-argent-assault-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -233,7 +412,7 @@
     ]
   },
   {
-    "id": "blades-from-the-beyond-immaterial-interdiction",
+    "id": "blades-from-the-beyond-immaterial-interdiction-grey-knights",
     "name": "Blades From the Beyond",
     "category": "detachment",
     "detachment_id": "immaterial-interdiction",
@@ -243,11 +422,18 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Interceptor Squad"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "blades-from-the-beyond-immaterial-interdiction-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -261,7 +447,7 @@
     ]
   },
   {
-    "id": "by-thought-alone-immaterial-interdiction",
+    "id": "by-thought-alone-immaterial-interdiction-grey-knights",
     "name": "By Thought Alone",
     "category": "detachment",
     "detachment_id": "immaterial-interdiction",
@@ -271,11 +457,18 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Interceptor Squad"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "by-thought-alone-immaterial-interdiction-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -289,7 +482,7 @@
     ]
   },
   {
-    "id": "celerity-banishers",
+    "id": "celerity-banishers-grey-knights",
     "name": "CELERITY",
     "category": "detachment",
     "type": "epic-deed",
@@ -300,11 +493,28 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Grey Knights",
+        "Infantry",
+        "Psyker"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "celerity-banishers-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -318,7 +528,7 @@
     ]
   },
   {
-    "id": "chaos-bane-banishers",
+    "id": "chaos-bane-banishers-grey-knights",
     "name": "CHAOS BANE",
     "category": "detachment",
     "type": "epic-deed",
@@ -329,11 +539,47 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Grey Knights",
+        "Psyker"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "shoot"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "chaos-bane-banishers-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -347,7 +593,7 @@
     ]
   },
   {
-    "id": "circle-of-sanctuary-banishers",
+    "id": "circle-of-sanctuary-banishers-grey-knights",
     "name": "CIRCLE OF SANCTUARY",
     "category": "detachment",
     "type": "epic-deed",
@@ -358,11 +604,27 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Character",
+        "Grey Knights"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "model",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "circle-of-sanctuary-banishers-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -376,7 +638,7 @@
     ]
   },
   {
-    "id": "combat-manifestation-brotherhood-strike",
+    "id": "combat-manifestation-brotherhood-strike-grey-knights",
     "name": "COMBAT MANIFESTATION",
     "category": "detachment",
     "type": "epic-deed",
@@ -387,11 +649,54 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Grey Knights"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "set-up",
+                  "window": "phase"
+                }
+              },
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "used",
+                  "filter": {
+                    "kind": "ability",
+                    "id": "deep-strike"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "combat-manifestation-brotherhood-strike-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -405,7 +710,7 @@
     ]
   },
   {
-    "id": "duty-unending-brotherhood-strike",
+    "id": "duty-unending-brotherhood-strike-grey-knights",
     "name": "DUTY UNENDING",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -417,7 +722,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "duty-unending-brotherhood-strike-grey-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -434,7 +739,7 @@
     ]
   },
   {
-    "id": "exigent-assignments-crowes-sanctifiers",
+    "id": "exigent-assignments-crowes-sanctifiers-grey-knights",
     "name": "Exigent Assignments",
     "category": "detachment",
     "detachment_id": "crowes-sanctifiers",
@@ -445,7 +750,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "exigent-assignments-crowes-sanctifiers",
+    "ability_id": "exigent-assignments-crowes-sanctifiers-grey-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -458,7 +763,7 @@
     ]
   },
   {
-    "id": "expeditious-exit-brotherhood-strike",
+    "id": "expeditious-exit-brotherhood-strike-grey-knights",
     "name": "EXPEDITIOUS EXIT",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -469,11 +774,28 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Grey Knights",
+        "Infantry",
+        "Psyker"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "expeditious-exit-brotherhood-strike-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -487,7 +809,7 @@
     ]
   },
   {
-    "id": "fires-of-covenant-warpbane-task-force",
+    "id": "fires-of-covenant-warpbane-task-force-grey-knights",
     "name": "Fires of Covenant",
     "category": "detachment",
     "type": "battle-tactic",
@@ -498,11 +820,27 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Grey Knights",
+        "Infantry"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "fires-of-covenant-warpbane-task-force-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -516,7 +854,7 @@
     ]
   },
   {
-    "id": "flames-of-sanctity-warpbane-task-force",
+    "id": "flames-of-sanctity-warpbane-task-force-grey-knights",
     "name": "Flames of Sanctity",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -528,7 +866,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "flames-of-sanctity-warpbane-task-force-grey-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -545,7 +883,7 @@
     ]
   },
   {
-    "id": "focused-immolation-fires-of-purgation",
+    "id": "focused-immolation-fires-of-purgation-grey-knights",
     "name": "Focused Immolation",
     "category": "detachment",
     "detachment_id": "fires-of-purgation",
@@ -555,11 +893,18 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Purgation Squad"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "focused-immolation-fires-of-purgation-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -573,7 +918,7 @@
     ]
   },
   {
-    "id": "force-wave-sanctic-spearhead",
+    "id": "force-wave-sanctic-spearhead-grey-knights",
     "name": "FORCE WAVE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -585,11 +930,64 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Grey Knights",
+        "Vehicle"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "operator": "or",
+                "operands": [
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "move-ended",
+                      "filter": {
+                        "move_types": [
+                          "charge"
+                        ]
+                      },
+                      "window": "turn"
+                    }
+                  },
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "move"
+                      },
+                      "window": "phase"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "force-wave-sanctic-spearhead-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -603,7 +1001,7 @@
     ]
   },
   {
-    "id": "forewarned-evasion-augurium-task-force",
+    "id": "forewarned-evasion-augurium-task-force-grey-knights",
     "name": "FOREWARNED EVASION",
     "category": "detachment",
     "type": "epic-deed",
@@ -615,11 +1013,28 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Grey Knights",
+        "Walker"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "forewarned-evasion-augurium-task-force-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -633,7 +1048,7 @@
     ]
   },
   {
-    "id": "giants-of-the-battlefield-hallowed-conclave",
+    "id": "giants-of-the-battlefield-hallowed-conclave-grey-knights",
     "name": "GIANTS OF THE BATTLEFIELD",
     "category": "detachment",
     "type": "battle-tactic",
@@ -644,11 +1059,47 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Grey Knights",
+        "Terminator"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "fight"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "giants-of-the-battlefield-hallowed-conclave-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -662,7 +1113,7 @@
     ]
   },
   {
-    "id": "grind-them-underfoot-hallowed-conclave",
+    "id": "grind-them-underfoot-hallowed-conclave-grey-knights",
     "name": "GRIND THEM UNDERFOOT",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -673,11 +1124,18 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Grey Knights"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "grind-them-underfoot-hallowed-conclave-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -691,7 +1149,7 @@
     ]
   },
   {
-    "id": "hallowed-beacon-warpbane-task-force",
+    "id": "hallowed-beacon-warpbane-task-force-grey-knights",
     "name": "Hallowed Beacon",
     "category": "detachment",
     "type": "battle-tactic",
@@ -702,11 +1160,45 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Grey Knights",
+        "Infantry"
+      ],
+      "excluded_keywords": [
+        "Terminator"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "set-up",
+              "window": "phase"
+            }
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "used",
+              "filter": {
+                "kind": "ability",
+                "id": "deep-strike"
+              },
+              "window": "phase"
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "hallowed-beacon-warpbane-task-force-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -720,7 +1212,7 @@
     ]
   },
   {
-    "id": "hexwrought-reprisal-banishers",
+    "id": "hexwrought-reprisal-banishers-grey-knights",
     "name": "HEXWROUGHT REPRISAL",
     "category": "detachment",
     "type": "epic-deed",
@@ -736,7 +1228,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "hexwrought-reprisal-banishers-grey-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -753,7 +1245,7 @@
     ]
   },
   {
-    "id": "mirage-of-echoes-augurium-task-force",
+    "id": "mirage-of-echoes-augurium-task-force-grey-knights",
     "name": "MIRAGE OF ECHOES",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -764,11 +1256,58 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Grey Knights",
+        "Psyker"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": "event-subject",
+                  "range": {
+                    "inches": 12
+                  }
+                }
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "state": "engaged"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "mirage-of-echoes-augurium-task-force-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -782,7 +1321,7 @@
     ]
   },
   {
-    "id": "necessary-end-augurium-task-force",
+    "id": "necessary-end-augurium-task-force-grey-knights",
     "name": "NECESSARY END",
     "category": "detachment",
     "type": "epic-deed",
@@ -794,7 +1333,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "necessary-end-augurium-task-force-grey-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -811,7 +1350,7 @@
     ]
   },
   {
-    "id": "point-blank-purgation-hallowed-conclave",
+    "id": "point-blank-purgation-hallowed-conclave-grey-knights",
     "name": "POINT-BLANK PURGATION",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -822,11 +1361,47 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Grey Knights",
+        "Infantry"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "shoot"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "point-blank-purgation-hallowed-conclave-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -840,7 +1415,7 @@
     ]
   },
   {
-    "id": "precognitive-strategies-hallowed-conclave",
+    "id": "precognitive-strategies-hallowed-conclave-grey-knights",
     "name": "PRECOGNITIVE STRATEGIES",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -851,11 +1426,58 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Grey Knights",
+        "Infantry"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": "event-subject",
+                  "range": {
+                    "inches": 8
+                  }
+                }
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "state": "engaged"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "precognitive-strategies-hallowed-conclave-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -869,7 +1491,7 @@
     ]
   },
   {
-    "id": "psi-reactive-ammunition-crowes-sanctifiers",
+    "id": "psi-reactive-ammunition-crowes-sanctifiers-grey-knights",
     "name": "Psi-reactive Ammunition",
     "category": "detachment",
     "detachment_id": "crowes-sanctifiers",
@@ -879,11 +1501,18 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "psi-reactive-ammunition-crowes-sanctifiers",
+    "target_restrictions": {
+      "required_keywords": [
+        "Crowe's Sanctifiers"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "psi-reactive-ammunition-crowes-sanctifiers-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -893,7 +1522,7 @@
     ]
   },
   {
-    "id": "purgation-pattern-brotherhood-strike",
+    "id": "purgation-pattern-brotherhood-strike-grey-knights",
     "name": "PURGATION PATTERN",
     "category": "detachment",
     "type": "battle-tactic",
@@ -904,11 +1533,69 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Grey Knights"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "set-up",
+                  "window": "turn"
+                }
+              },
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "used",
+                  "filter": {
+                    "kind": "ability",
+                    "id": "deep-strike"
+                  },
+                  "window": "turn"
+                }
+              }
+            ]
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "shoot"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "purgation-pattern-brotherhood-strike-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -922,7 +1609,7 @@
     ]
   },
   {
-    "id": "redirected-strike-augurium-task-force",
+    "id": "redirected-strike-augurium-task-force-grey-knights",
     "name": "REDIRECTED STRIKE",
     "category": "detachment",
     "type": "epic-deed",
@@ -933,11 +1620,45 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Grey Knights",
+        "Psyker"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "state": "engaged"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "redirected-strike-augurium-task-force-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -951,7 +1672,7 @@
     ]
   },
   {
-    "id": "redoubled-assault-sanctic-spearhead",
+    "id": "redoubled-assault-sanctic-spearhead-grey-knights",
     "name": "REDOUBLED ASSAULT",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -962,11 +1683,19 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Grey Knights",
+        "Vehicle"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "redoubled-assault-sanctic-spearhead-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -980,7 +1709,7 @@
     ]
   },
   {
-    "id": "refusal-to-yield-crowes-sanctifiers",
+    "id": "refusal-to-yield-crowes-sanctifiers-grey-knights",
     "name": "Refusal to Yield",
     "category": "detachment",
     "detachment_id": "crowes-sanctifiers",
@@ -990,11 +1719,19 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "refusal-to-yield-crowes-sanctifiers",
+    "target_restrictions": {
+      "required_keywords": [
+        "Crowe's Sanctifiers",
+        "Strike Squad"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit"
+    },
+    "ability_id": "refusal-to-yield-crowes-sanctifiers-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1004,7 +1741,7 @@
     ]
   },
   {
-    "id": "repelling-sphere-warpbane-task-force",
+    "id": "repelling-sphere-warpbane-task-force-grey-knights",
     "name": "Repelling Sphere",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1015,11 +1752,27 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Grey Knights",
+        "Infantry"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "repelling-sphere-warpbane-task-force-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1033,7 +1786,7 @@
     ]
   },
   {
-    "id": "responsive-displacement-immaterial-interdiction",
+    "id": "responsive-displacement-immaterial-interdiction-grey-knights",
     "name": "Responsive Displacement",
     "category": "detachment",
     "detachment_id": "immaterial-interdiction",
@@ -1043,11 +1796,26 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Interceptor Squad"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "unit-state",
+        "parameters": {
+          "state": "engaged",
+          "with": "event-subject",
+          "at": "phase-start"
+        }
+      }
+    },
+    "ability_id": "responsive-displacement-immaterial-interdiction-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1061,7 +1829,7 @@
     ]
   },
   {
-    "id": "sanctified-kill-zone-warpbane-task-force",
+    "id": "sanctified-kill-zone-warpbane-task-force-grey-knights",
     "name": "Sanctified Kill Zone",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1073,11 +1841,74 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Grey Knights"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "operator": "or",
+                "operands": [
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "fight"
+                      },
+                      "window": "phase"
+                    }
+                  },
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "shoot"
+                      },
+                      "window": "phase"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "in-region",
+            "parameters": {
+              "subject": "this-unit",
+              "region": {
+                "rule_region": {
+                  "region_id": "hallowed-ground",
+                  "owner_faction": "grey-knights"
+                }
+              },
+              "wholly": true
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "sanctified-kill-zone-warpbane-task-force-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1091,7 +1922,7 @@
     ]
   },
   {
-    "id": "shadow-of-anarch-banishers",
+    "id": "shadow-of-anarch-banishers-grey-knights",
     "name": "SHADOW OF ANARCH",
     "category": "detachment",
     "type": "epic-deed",
@@ -1102,11 +1933,58 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Grey Knights",
+        "Psyker"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": "event-subject",
+                  "range": {
+                    "inches": 8
+                  }
+                }
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "state": "engaged"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "shadow-of-anarch-banishers-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1120,7 +1998,7 @@
     ]
   },
   {
-    "id": "shining-resolve-hallowed-conclave",
+    "id": "shining-resolve-hallowed-conclave-grey-knights",
     "name": "SHINING RESOLVE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1131,11 +2009,28 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Grey Knights",
+        "Infantry"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "shining-resolve-hallowed-conclave-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1149,7 +2044,7 @@
     ]
   },
   {
-    "id": "shining-veil-brotherhood-strike",
+    "id": "shining-veil-brotherhood-strike-grey-knights",
     "name": "SHINING VEIL",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1160,11 +2055,19 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Grey Knights"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit"
+    },
+    "ability_id": "shining-veil-brotherhood-strike-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1178,7 +2081,7 @@
     ]
   },
   {
-    "id": "soul-locked-fires-of-purgation",
+    "id": "soul-locked-fires-of-purgation-grey-knights",
     "name": "Soul-locked",
     "category": "detachment",
     "detachment_id": "fires-of-purgation",
@@ -1188,11 +2091,18 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Purgation Squad"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "soul-locked-fires-of-purgation-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1206,7 +2116,7 @@
     ]
   },
   {
-    "id": "spiritsear-fires-of-purgation",
+    "id": "spiritsear-fires-of-purgation-grey-knights",
     "name": "Spiritsear",
     "category": "detachment",
     "detachment_id": "fires-of-purgation",
@@ -1216,11 +2126,18 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Purgation Squad"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "spiritsear-fires-of-purgation-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1234,7 +2151,7 @@
     ]
   },
   {
-    "id": "truesilver-aegis-argent-assault",
+    "id": "truesilver-aegis-argent-assault-grey-knights",
     "name": "Truesilver Aegis",
     "category": "detachment",
     "detachment_id": "argent-assault",
@@ -1248,11 +2165,18 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Paladin Squad"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "truesilver-aegis-argent-assault-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1266,7 +2190,7 @@
     ]
   },
   {
-    "id": "truesilver-channelling-brotherhood-strike",
+    "id": "truesilver-channelling-brotherhood-strike-grey-knights",
     "name": "TRUESILVER CHANNELLING",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1277,11 +2201,47 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Grey Knights",
+        "Infantry"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "fight"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "truesilver-channelling-brotherhood-strike-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1295,7 +2255,7 @@
     ]
   },
   {
-    "id": "truesilver-will-sanctic-spearhead",
+    "id": "truesilver-will-sanctic-spearhead-grey-knights",
     "name": "TRUESILVER WILL",
     "category": "detachment",
     "type": "epic-deed",
@@ -1310,11 +2270,20 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Grey Knights",
+        "Psyker",
+        "Vehicle"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "truesilver-will-sanctic-spearhead-grey-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1328,7 +2297,7 @@
     ]
   },
   {
-    "id": "unending-fidelity-hallowed-conclave",
+    "id": "unending-fidelity-hallowed-conclave-grey-knights",
     "name": "UNENDING FIDELITY",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1341,7 +2310,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "unending-fidelity-hallowed-conclave-grey-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1358,7 +2327,7 @@
     ]
   },
   {
-    "id": "warding-chant-banishers",
+    "id": "warding-chant-banishers-grey-knights",
     "name": "WARDING CHANT",
     "category": "detachment",
     "type": "epic-deed",
@@ -1371,7 +2340,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "warding-chant-banishers-grey-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"

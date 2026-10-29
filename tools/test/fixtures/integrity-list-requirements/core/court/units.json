@@ -1,0 +1,3 @@
+[
+  { "id": "jester", "faction_id": "court", "detachment_pricing": [{ "detachment_id": "masque", "models": 1, "cost": 10 }, { "detachment_id": "lost-revel", "models": 1, "cost": 12 }] }
+]

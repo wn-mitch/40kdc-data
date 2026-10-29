@@ -14,6 +14,8 @@
  * - `conformance/roster/<case>/input.newrecruit-{wtc-compact,wtc-full,simple}.txt`
  *   — text inputs derived from the seed by the exporter, so a re-import
  *   regression in either implementation surfaces immediately.
+ * - Canonical recipient-snapshot rows in `abilities-resolver/*from-dsl.json`,
+ *   preserving the other seeded rows, and `cruncher/canonical-weapon-scope-*.json`.
  *
  * Seeding: each `<case>/` carries one canonical input — either the legacy
  * `input.json` (ListForge) or `input.newrecruit-json.json` (NewRecruit). Other
@@ -30,7 +32,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { Dataset } from "./data/dataset.js";
-import { baseLoadout, loadoutCandidates } from "./data/loadout.js";
+import { baseLoadout, loadoutCandidates, weaponBounds } from "./data/loadout.js";
 import { normalizeName } from "./data/normalize.js";
 import {
   describeScoringCard,
@@ -40,6 +42,9 @@ import {
   type AbilityTrigger,
 } from "./translate/index.js";
 import type { GameEvent } from "./generated.js";
+import { effectToBuffs } from "./cruncher/from-dsl.js";
+import type { BuffSource, EngineContext } from "./cruncher/buffs.js";
+import { withRating } from "./data/ability-refs.js";
 import { awardsOf } from "./scoring/index.js";
 import { createRunnerState, dispatch } from "./runner.js";
 import { exportRoster, type ExportFormat } from "./export/index.js";
@@ -54,6 +59,9 @@ import { selectAdapter } from "./import/adapter.js";
 import type { ParsedRoster, Roster } from "./import/types.js";
 import { encodeBase } from "./runner.js";
 import { attributeStages } from "./cruncher/attribution.js";
+import { allocate, type AllocationOutput, type DamageZeroing } from "./cruncher/allocation.js";
+import type { GrantedRecord } from "./cruncher/granted-records.js";
+import type { Buff } from "./cruncher/buffs.js";
 import type { EngineInput } from "./cruncher/index.js";
 import {
   resolveLayout,
@@ -61,6 +69,31 @@ import {
   type TerrainLayout as ResolverLayout,
 } from "./terrain/resolve.js";
 import { keystoneMeasurements, BOARD_INCHES } from "./terrain/keystones.js";
+import {
+  canonicalAttackCompareCases,
+  canonicalCriticalWoundCases,
+  canonicalHalfWeaponRangeCases,
+  canonicalScenarioCases,
+  canonicalTriggerSubjectCases,
+  TRIGGER_SUBJECT_CASE_PREFIX,
+  canonicalStratagemModelCases,
+  STRATAGEM_MODEL_CASE_PREFIX,
+  canonicalRecipientCases,
+  canonicalWeaponScopeCases,
+  HALF_WEAPON_RANGE_CASE_PREFIX,
+  SCENARIO_CASE_PREFIX,
+  RECIPIENT_CASE_PREFIX,
+  stanceOptionFields,
+  needKeys,
+} from "./gen-conformance-cruncher-cases.js";
+import {
+  GAME_MODE_LINKED_QUERIES,
+  runGameModeQuery,
+} from "./gen-conformance-game-mode-cases.js";
+import { canonicalMortalSourceCases } from "./gen-conformance-mortal-cases.js";
+import { canonicalDamageZeroingCases, DAMAGE_ZEROING_CASE_PREFIX } from "./gen-conformance-zeroing-cases.js";
+import { canonicalIgnoreModifiersCases, IGNORE_MODIFIERS_CASE_PREFIX } from "./gen-conformance-ignore-cases.js";
+import { canonicalGrantedRecordCases, GRANTED_RECORD_CASE_PREFIX, withGrantedRecords } from "./gen-conformance-granted-cases.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = join(__dirname, "../..");
@@ -417,6 +450,12 @@ type LinkedApiQuery =
     }
   | {
       name: string;
+      query: "weapon_bounds";
+      args: { unitId: string; modelCount: string };
+      comparison: "set";
+    }
+  | {
+      name: string;
       query: "loadout_candidates";
       args: {
         unitId: string;
@@ -509,6 +548,14 @@ const LINKED_API_QUERIES: LinkedApiQuery[] = [
     args: { query: "World Eaters" },
     comparison: "scalar",
   },
+  // find_faction: a faction alias is an exact match, so "Space Marines" is
+  // Adeptus Astartes, not a substring hit on Chaos Space Marines.
+  {
+    name: "find_faction by alias",
+    query: "find_faction",
+    args: { query: "Space Marines" },
+    comparison: "scalar",
+  },
   // find_ability: ability name lookup.
   {
     name: "find_ability by name",
@@ -523,7 +570,7 @@ const LINKED_API_QUERIES: LinkedApiQuery[] = [
   {
     name: "get_enhancement direct hit",
     query: "get_enhancement",
-    args: { id: "a-chink-in-their-armour-host-of-ascension" },
+    args: { id: "a-chink-in-their-armour-host-of-ascension-genestealer-cults" },
     comparison: "scalar",
   },
   {
@@ -568,7 +615,7 @@ const LINKED_API_QUERIES: LinkedApiQuery[] = [
   {
     name: "phases_of berzerker-frenzy",
     query: "phases_of",
-    args: { abilityId: "berzerker-frenzy" },
+    args: { abilityId: "berzerker-frenzy-world-eaters" },
     comparison: "set",
   },
   // faction_of(unit): scalar id or null.
@@ -769,6 +816,12 @@ const LINKED_API_QUERIES: LinkedApiQuery[] = [
     args: { bodyguardId: "kasrkin" },
     comparison: "set",
   },
+  {
+    name: "leaders_attachable_to sanctifiers (leader shared across factions listed once)",
+    query: "leaders_attachable_to",
+    args: { bodyguardId: "sanctifiers" },
+    comparison: "set",
+  },
   // base_loadout(unit, modelCount): the pinned legal default loadout, encoded as a
   // sorted "weaponId:count" multiset. chaos-terminators is a uniform squad (per-model
   // scaling); crusader-squad exercises leader+bulk per-figure allocation.
@@ -791,6 +844,21 @@ const LINKED_API_QUERIES: LinkedApiQuery[] = [
     comparison: "set",
   },
   {
+    name: "base_loadout imperial-navy-breachers @10 sums same-named split rows",
+    query: "base_loadout",
+    args: { unitId: "imperial-navy-breachers", modelCount: "10" },
+    comparison: "set",
+  },
+  // weapon_bounds(unit, modelCount): each id's inclusive count range, encoded as a
+  // sorted "id:min-max" set. Breachers' Navis Armsmen are three same-named rows, so
+  // each row's swap is capped by the models carrying what it replaces.
+  {
+    name: "weapon_bounds imperial-navy-breachers @10 caps split-row swaps by their carriers",
+    query: "weapon_bounds",
+    args: { unitId: "imperial-navy-breachers", modelCount: "10" },
+    comparison: "set",
+  },
+  {
     name: "loadout_candidates chaos-terminators @5 matches the base allocation",
     query: "loadout_candidates",
     args: {
@@ -801,9 +869,9 @@ const LINKED_API_QUERIES: LinkedApiQuery[] = [
     comparison: "ordered",
   },
   {
-    name: "loadout_candidates crusader-squad @10 enumerates legal allocations",
+    name: "loadout_candidates scarab-occult-terminators @10 enumerates allocations under a pooled heavy budget",
     query: "loadout_candidates",
-    args: { unitId: "crusader-squad", modelCount: "10" },
+    args: { unitId: "scarab-occult-terminators", factionId: "thousand-sons", modelCount: "10" },
     comparison: "ordered",
   },
   {
@@ -839,25 +907,28 @@ const LINKED_API_QUERIES: LinkedApiQuery[] = [
     comparison: "ordered",
   },
   {
-    name: "triggers_for_event start-of-phase",
+    name: "triggers_for_event phase-started",
     query: "triggers_for_event",
-    args: { event: "start-of-phase" },
+    args: { event: "phase-started" },
     comparison: "ordered",
   },
   {
-    name: "triggers_for_event on-unit-selected",
+    name: "triggers_for_event targets-selected",
     query: "triggers_for_event",
-    args: { event: "on-unit-selected" },
+    args: { event: "targets-selected" },
     comparison: "ordered",
   },
 ];
 
 function genLinkedApi(): void {
   const ds = Dataset.embedded();
-  const cases = LINKED_API_QUERIES.map((q) => {
-    const expected = runLinkedQuery(ds, q);
-    return { ...q, expected };
-  });
+  const cases = [
+    ...LINKED_API_QUERIES.map((q) => ({ ...q, expected: runLinkedQuery(ds, q) })),
+    ...GAME_MODE_LINKED_QUERIES.map((q) => ({
+      ...q,
+      expected: runGameModeQuery(ds, q),
+    })),
+  ];
   writeJson(join(CONFORMANCE, "linked-api", "cases.json"), cases);
   console.log(`linked-api/cases.json: ${cases.length} cases`);
 }
@@ -930,17 +1001,26 @@ function runLinkedQuery(
     case "model_bases_of": {
       const u = ds.units.getAny(q.args.unitId);
       if (!u) throw new Error(`model_bases_of: unknown unit ${q.args.unitId}`);
-      const comp = ds.unitCompositions.find((c) => c.unit_id === q.args.unitId);
+      const comp = ds.unitCompositionOf(u.raw);
       return (comp?.models ?? []).map(
         (m) => `${m.name}=${encodeBase(m.base_size_mm) ?? "none"}`,
       );
+    }
+    case "weapon_bounds": {
+      // Mirrors the runner's weapon_bounds op: each id's inclusive range as a sorted
+      // "id:min-max" set.
+      const u = ds.units.getAny(q.args.unitId);
+      if (!u) throw new Error(`weapon_bounds: unknown unit ${q.args.unitId}`);
+      const comp = ds.unitCompositionOf(u.raw);
+      const bounds = weaponBounds(u.raw, Number(q.args.modelCount), ds.wargearOptionsOf(u.raw), comp?.models);
+      return [...bounds].map(([id, b]) => `${id}:${b.min}-${b.max}`).sort();
     }
     case "base_loadout": {
       // Mirrors the runner's base_loadout op: the legal default loadout encoded as
       // a sorted "id:count" multiset (set-compared).
       const u = ds.units.getAny(q.args.unitId);
       if (!u) throw new Error(`base_loadout: unknown unit ${q.args.unitId}`);
-      const comp = ds.unitCompositions.find((c) => c.unit_id === q.args.unitId);
+      const comp = ds.unitCompositionOf(u.raw);
       const lo = baseLoadout(
         u.raw,
         Number(q.args.modelCount),
@@ -1081,6 +1161,66 @@ function genAttribution(): void {
   const serialised = cases.map(({ _order: _o, ...rest }) => rest);
   writeJson(join(CONFORMANCE, "attribution", "cases.json"), serialised);
   console.log(`attribution/cases.json: ${cases.length} cases`);
+}
+
+/**
+ * Discrete allocation corpus: the exact distribution of wounds removed and
+ * models destroyed when one crunch's attacks are allocated into the target's
+ * models. Cases reference cruncher inputs and are chosen to cover overkill,
+ * partial kills on multi-wound models, Sustained/Lethal Hits, Devastating
+ * Wounds with mortal-only Feel No Pain, and variable Damage.
+ */
+const ALLOCATION_CASE_FILES = [
+  "01-bolter-vs-intercessor.json",
+  "03-chainsword-vs-cultist.json",
+  "04-multi-melta-half-range-stationary-vs-knight.json",
+  "06-sustained-hits-chainsword-vs-cultist.json",
+  "10-fnp-vs-mortal-devastating-lascannon-vs-cultists.json",
+  "15-wailing-doom-ranged-vs-intercessor.json",
+  "16-wailing-doom-sweep-melee-vs-intercessor.json",
+  "17-wailing-doom-strike-melee-vs-intercessor.json",
+  "24-crit-threshold-hit-5-lethal-bolter-vs-intercessor.json",
+  // Critical wounds with their own save (AP) or Damage, and as Devastating Wounds mortal wounds.
+  "canonical-critical-wound-ap.json",
+  "canonical-critical-wound-damage.json",
+  "canonical-critical-wound-devastating-damage.json",
+];
+
+/**
+ * Allocation cases with a damage-zeroing defence: a single big model spending a unit-wide use,
+ * multi-wound models each with their own use, and Devastating Wounds whose mortal wounds the
+ * defence never zeroes.
+ */
+const ALLOCATION_ZEROING_CASES: Array<{ cruncher_case: string; label: string; zeroing?: DamageZeroing; buffs?: Buff[] }> = [
+  { cruncher_case: "04-multi-melta-half-range-stationary-vs-knight.json", label: "1 use per unit", zeroing: { uses: 1, per: "unit" } },
+  { cruncher_case: "15-wailing-doom-ranged-vs-intercessor.json", label: "1 use per model", zeroing: { uses: 1, per: "model" } },
+  { cruncher_case: "16-wailing-doom-sweep-melee-vs-intercessor.json", label: "2 uses per unit", zeroing: { uses: 2, per: "unit" } },
+  { cruncher_case: "10-fnp-vs-mortal-devastating-lascannon-vs-cultists.json", label: "2 uses per unit", zeroing: { uses: 2, per: "unit" } },
+  // The defence comes from the defender's buffs, uses from two sources adding up.
+  { cruncher_case: "16-wailing-doom-sweep-melee-vs-intercessor.json", label: "2 uses per unit from buffs", buffs: [
+    { source: { kind: "ability", abilityId: "fabricated-plating", abilityKind: "unit" }, contribution: { type: "damage-zeroing", uses: 1, per: "unit" } },
+    { source: { kind: "ability", abilityId: "fabricated-shroud", abilityKind: "unit" }, contribution: { type: "damage-zeroing", uses: 1, per: "unit" } },
+  ] },
+];
+
+function genAllocation(): void {
+  const ds = Dataset.embedded();
+  const cases: Array<{ name: string; cruncher_case: string; zeroing?: DamageZeroing; buffs?: Buff[]; expected: AllocationOutput }> = ALLOCATION_CASE_FILES.map((filename) => {
+    const { name, input } = loadAttributionInput(ds, filename);
+    return { name, cruncher_case: filename, expected: allocate(input, ds) };
+  });
+  for (const { cruncher_case, label, zeroing, buffs } of ALLOCATION_ZEROING_CASES) {
+    const { name, input } = loadAttributionInput(ds, cruncher_case);
+    // `buffs` are appended to the cruncher case's own buffs.
+    const withBuffs = buffs ? { ...input, buffs: [...input.buffs, ...buffs] } : input;
+    cases.push({
+      name: `${name} + damage zeroing (${label})`, cruncher_case,
+      ...(zeroing ? { zeroing } : {}), ...(buffs ? { buffs } : {}),
+      expected: allocate(withBuffs, ds, zeroing ? { zeroing } : {}),
+    });
+  }
+  writeJson(join(CONFORMANCE, "allocation", "cases.json"), cases);
+  console.log(`allocation/cases.json: ${cases.length} cases`);
 }
 
 /**
@@ -1861,6 +2001,10 @@ function genEffectTranslation(): void {
         const per = m.count_per_pool != null ? "@per-pool" : "";
         out.add(`pool-add-die@${kind}${per}`);
       }
+      // A shoot permission limited to named weapons renders its own weapon clause.
+      if (rec.type === "permission" && Array.isArray(m.weapons)) {
+        out.add("permission@weapons");
+      }
     }
     for (const key of [
       "effect",
@@ -1914,6 +2058,7 @@ function genEffectTranslation(): void {
     if (a.raw.applies_to != null) entry.applies_to = a.raw.applies_to;
     if (a.raw.usage != null) entry.usage = a.raw.usage;
     if (a.raw.trigger != null) entry.trigger = a.raw.trigger;
+    if (a.raw.optional === true) entry.optional = true;
     entry.expected = {
       text: describeAbility({
         effect: a.raw.effect as Effect,
@@ -1921,24 +2066,25 @@ function genEffectTranslation(): void {
         usage: a.raw.usage as AbilityUsage | undefined,
         trigger: a.raw.trigger as AbilityTrigger | undefined,
         applies_to: a.raw.applies_to,
+        optional: a.raw.optional,
       }),
     };
     cases.push(entry);
   }
-  // Pin the scouts movement-modifier — movement-modifier caps out before scouts-6
-  // sorts in alphabetically, so force-include one case to keep the new
-  // "Before the first battle round, …" phrasing pinned cross-impl.
+  // Pin the Scouts ability-grant — ability-grant caps out before scouts-6 sorts
+  // in alphabetically, so force-include one case to keep the rated Scouts
+  // phrasing pinned cross-impl.
   {
     const fc = {
       effect: {
-        type: "movement-modifier",
-        target: "unit",
-        modifier: { move_type: "scout", distance: 6 },
+        type: "ability-grant",
+        target: "this-unit",
+        modifier: { ability: "scouts", value: 6 },
       },
-      scope: { range: "unit", duration: "permanent" },
+      scope: { duration: "permanent" },
     };
     cases.push({
-      caseId: `movement-modifier-scouts#${cases.length}`,
+      caseId: `ability-grant-scouts#${cases.length}`,
       effect: fc.effect,
       scope: fc.scope,
       expected: {
@@ -1946,37 +2092,38 @@ function genEffectTranslation(): void {
       },
     });
   }
-  // Pin the curated ability-grant label overrides for the sibling ids — they
-  // rarely surface in the capped sample above (ability-grant caps out on the
-  // common `charge-after-advance`). Shapes mirror real enrichment data; expected
+  // Pin the charge permission's `after` clause for the sibling moves — they
+  // rarely surface in the capped sample above (permission caps out on the
+  // common charge-after-Advance). Shapes mirror real enrichment data; expected
   // text still comes from the reference describer, so a second impl must
-  // independently reproduce it. See ABILITY_GRANT_LABELS in translate/effect.ts.
+  // independently reproduce it. See AFTER in translate/effect-leaf.ts.
   const FORCED_GRANT_CASES: {
+    id: string;
     effect: Record<string, unknown>;
     scope: Record<string, unknown>;
   }[] = [
     {
+      id: "disembark",
       effect: {
-        type: "ability-grant",
-        target: "unit",
-        modifier: { grant_type: "charge-after-disembark" },
+        type: "permission",
+        target: "this-unit",
+        modifier: { activity: "declare-charge", allow: true, after: ["disembark"] },
       },
-      scope: { range: "unit", duration: "permanent" },
+      scope: { duration: "permanent" },
     },
     {
+      id: "fall-back",
       effect: {
-        type: "ability-grant",
-        target: "self",
-        modifier: { grant_type: "charge-after-fallback" },
+        type: "permission",
+        target: "this-model",
+        modifier: { activity: "declare-charge", allow: true, after: ["fall-back"] },
       },
-      scope: { range: "self", duration: "turn" },
+      scope: { duration: "turn" },
     },
   ];
   for (const fc of FORCED_GRANT_CASES) {
-    const id = (fc.effect.modifier as Record<string, unknown>)
-      .grant_type as string;
     cases.push({
-      caseId: `grant-label-${id}#${cases.length}`,
+      caseId: `permission-charge-after-${fc.id}#${cases.length}`,
       effect: fc.effect,
       scope: fc.scope,
       expected: {
@@ -1997,119 +2144,134 @@ function genEffectTranslation(): void {
     scope: Record<string, unknown>;
   }[] = [
     {
-      id: "engagement-state-engaged",
+      id: "unit-state-engaged",
+      effect: {
+        type: "conditional",
+        condition: { type: "matches", parameters: { filter: { state: "engaged" } } },
+        effect: {
+          type: "ability-grant",
+          target: "this-unit",
+          modifier: { ability: "fights-first" },
+        },
+      },
+      scope: { duration: "permanent" },
+    },
+    {
+      id: "unit-state-on-battlefield",
+      effect: {
+        type: "conditional",
+        condition: { type: "matches", parameters: { filter: { state: "on-battlefield" } } },
+        effect: {
+          type: "ability-grant",
+          target: "this-unit",
+          modifier: { ability: "deep-strike" },
+        },
+      },
+      scope: { duration: "permanent" },
+    },
+    {
+      id: "unit-state-embarked",
+      effect: {
+        type: "conditional",
+        condition: { type: "matches", parameters: { filter: { state: "embarked" } } },
+        effect: {
+          type: "ability-grant",
+          target: "this-unit",
+          modifier: { ability: "deep-strike" },
+        },
+      },
+      scope: { duration: "permanent" },
+    },
+    {
+      id: "unit-state-unengaged",
       effect: {
         type: "conditional",
         condition: {
-          type: "engagement-state",
-          parameters: { state: "within-engagement-range" },
+          operator: "not",
+          operands: [{ type: "matches", parameters: { filter: { state: "engaged" } } }],
         },
-        effect: { type: "fight-first", target: "unit" },
+        effect: {
+          type: "ability-grant",
+          target: "this-unit",
+          modifier: { ability: "deep-strike" },
+        },
       },
-      scope: { range: "unit", duration: "permanent" },
+      scope: { duration: "permanent" },
     },
     {
-      id: "engagement-state-on-battlefield",
+      id: "unit-state-negated",
       effect: {
         type: "conditional",
         condition: {
-          type: "engagement-state",
-          parameters: { state: "on-battlefield" },
+          operator: "not",
+          operands: [{ type: "matches", parameters: { filter: { state: "embarked" } } }],
         },
-        effect: { type: "deep-strike", target: "unit" },
+        effect: {
+          type: "ability-grant",
+          target: "this-unit",
+          modifier: { ability: "deep-strike" },
+        },
       },
-      scope: { range: "unit", duration: "permanent" },
+      scope: { duration: "permanent" },
     },
     {
-      id: "engagement-state-embarked",
+      id: "unit-state-in-strategic-reserves",
       effect: {
         type: "conditional",
-        condition: {
-          type: "engagement-state",
-          parameters: { state: "embarked" },
+        condition: { type: "matches", parameters: { filter: { state: "in-strategic-reserves" } } },
+        effect: {
+          type: "ability-grant",
+          target: "this-unit",
+          modifier: { ability: "deep-strike" },
         },
-        effect: { type: "deep-strike", target: "unit" },
       },
-      scope: { range: "unit", duration: "permanent" },
+      scope: { duration: "permanent" },
     },
     {
-      id: "engagement-state-empty",
+      id: "owned-by-enemy",
       effect: {
         type: "conditional",
-        condition: { type: "engagement-state", parameters: {} },
-        effect: { type: "deep-strike", target: "unit" },
-      },
-      scope: { range: "unit", duration: "permanent" },
-    },
-    {
-      id: "engagement-state-negated",
-      effect: {
-        type: "conditional",
-        condition: {
-          type: "engagement-state",
-          negated: true,
-          parameters: { state: "embarked" },
+        condition: { type: "matches", parameters: { subject: "attacker", filter: { owner: "enemy" } } },
+        effect: {
+          type: "ability-grant",
+          target: "this-unit",
+          modifier: { ability: "deep-strike" },
         },
-        effect: { type: "deep-strike", target: "unit" },
       },
-      scope: { range: "unit", duration: "permanent" },
-    },
-    {
-      id: "disposition-matches-reserves",
-      effect: {
-        type: "conditional",
-        condition: {
-          type: "disposition-matches",
-          parameters: { disposition: "strategic-reserves" },
-        },
-        effect: { type: "deep-strike", target: "unit" },
-      },
-      scope: { range: "unit", duration: "permanent" },
-    },
-    {
-      id: "disposition-matches-enemy",
-      effect: {
-        type: "conditional",
-        condition: {
-          type: "disposition-matches",
-          parameters: { disposition: "enemy" },
-        },
-        effect: { type: "deep-strike", target: "unit" },
-      },
-      scope: { range: "unit", duration: "permanent" },
+      scope: { duration: "permanent" },
     },
     {
       id: "fights-first-cond",
       effect: {
         type: "conditional",
-        condition: { type: "fights-first", parameters: {} },
+        condition: { type: "matches", parameters: { filter: { state: "fights-first" } } },
         effect: {
           type: "stat-modifier",
-          target: "unit",
+          target: "this-unit",
           modifier: { stat: "A", operation: "add", value: 1 },
         },
       },
-      scope: { range: "unit", duration: "permanent" },
+      scope: { duration: "permanent" },
     },
     {
       id: "scaling-attacks-per-models",
       effect: {
         type: "stat-modifier",
-        target: "unit",
+        target: "this-unit",
         modifier: { stat: "A", operation: "add", value: 1 },
-        scaling: { per: 5, of: "enemy-models-in-range", within_inches: 6 },
+        scaling: { per: 5, of: "enemy-models-in-range", within: { inches: 6 } },
       },
-      scope: { range: "unit", duration: "permanent" },
+      scope: { duration: "permanent" },
     },
     {
       id: "scaling-strength-wounds-lost",
       effect: {
         type: "stat-modifier",
-        target: "self",
+        target: "this-model",
         modifier: { stat: "S", operation: "add", value: 1 },
         scaling: { per: 1, of: "wounds-lost", round: "up", max_value: 3 },
       },
-      scope: { range: "self", duration: "permanent" },
+      scope: { duration: "permanent" },
     },
     {
       id: "dice-pool-inline-label",
@@ -2122,39 +2284,39 @@ function genEffectTranslation(): void {
             max_activations: 1,
             options: [
               {
+                id: "carnage",
                 name: "Carnage",
                 requirement: { type: "pair", min_value: 4 },
                 effect: {
                   type: "mortal-wounds",
-                  target: "all-enemy",
+                  target: { owner: "enemy" },
                   modifier: { count: 3 },
                 },
               },
             ],
           },
-          { type: "fight-first", target: "unit" },
+          { type: "ability-grant", target: "this-unit", modifier: { ability: "fights-first" } },
         ],
       },
-      scope: { range: "unit", duration: "permanent" },
+      scope: { duration: "permanent" },
     },
     {
       // closest-eligible target with a range bound — pins the `within N"` clause
-      // (blood-hungry-annihilator's targeting); the auto-sample caps the
-      // unit-within-range-of condition before a ranged closest-eligible surfaces.
-      id: "unit-within-range-closest-eligible",
+      // (blood-hungry-annihilator's targeting).
+      id: "closest-eligible-within-range",
       effect: {
         type: "conditional",
         condition: {
-          type: "unit-within-range-of",
-          parameters: { range: 18, target_type: "closest-eligible" },
+          type: "closest",
+          parameters: { subject: "defender", among: "eligible-targets", range: { inches: 18 } },
         },
         effect: {
           type: "re-roll",
-          target: "self",
+          target: "this-model",
           modifier: { roll: "wound", subset: "all-failures" },
         },
       },
-      scope: { range: "self", duration: "permanent" },
+      scope: { duration: "permanent" },
     },
     {
       // dice-pool requirement with an `any_of` alternative (double X OR triple Y) —
@@ -2166,22 +2328,20 @@ function genEffectTranslation(): void {
         max_activations: 2,
         options: [
           {
+            id: "martial-excellence",
             name: "Martial Excellence",
             requirement: {
-              any_of: [
-                { type: "pair", min_value: 4 },
-                { type: "triple", min_value: 1 },
-              ],
+              any_of: [{ type: "pair", min_value: 4 }, { type: "triple", min_value: 1 }],
             },
             effect: {
-              type: "keyword-grant",
-              target: "all-friendly",
-              modifier: { keyword: "Sustained Hits 1", weapon_type: "melee" },
+              type: "weapon-ability-grant",
+              target: { owner: "friendly" },
+              modifier: { keywords: [{ keyword_id: "sustained-hits", parameters: { value: 1 } }], weapons: { type: "melee" } },
             },
           },
         ],
       },
-      scope: { range: "any-on-battlefield", duration: "battle-round" },
+      scope: { duration: "battle-round" },
     },
   ];
   for (const fc of FORCED_DESCRIBER_CASES) {
@@ -2196,11 +2356,12 @@ function genEffectTranslation(): void {
   }
   // rule-state: the auto-sample caps each node type at 5, so alphabetically-late
   // abilities (Angron's reborn-in-blood faction-rule forgo) and the no-enrichment
-  // branches (faction-rule granted, keyword kind, desperate-escape, advance) fall
-  // out. Force-include one exemplar per distinct describer branch — most
-  // importantly the faction-rule + suppressed path, which reproduces the retired
-  // forgo-faction-rule wording (scope + cost) verbatim. Expected text comes from
-  // the reference describer, so a second impl must reproduce it.
+  // branches (faction-rule granted, keyword kind, desperate-escape, a forbidden
+  // Advance) fall out. Force-include one exemplar per distinct describer branch —
+  // most importantly the faction-rule + suppressed path, carried as an
+  // ability-part whose cost and duration give the forgo its price and length.
+  // Expected text comes from the reference describer, so a second impl must
+  // reproduce it.
   const FORCED_RULE_STATE_CASES: {
     id: string;
     effect: Record<string, unknown>;
@@ -2209,121 +2370,100 @@ function genEffectTranslation(): void {
     {
       id: "rule-state-forgo-faction-rule",
       effect: {
-        type: "rule-state",
-        target: "self",
-        modifier: {
-          direction: "suppressed",
-          rule_kind: "faction-rule",
-          rule: "blessings-of-khorne",
-          scope: "battle-round",
-          cost: { dice: "triple-6", from: "blessings-of-khorne" },
+        type: "ability-part",
+        cost: {
+          type: "resource-spend",
+          target: "this-unit",
+          modifier: { pool: "blessings-of-khorne", amount: 3 },
         },
+        effect: {
+          type: "rule-state",
+          target: "this-model",
+          modifier: {
+            direction: "suppressed",
+            rule_kind: "faction-rule",
+            rule: "blessings-of-khorne-world-eaters",
+          },
+        },
+        duration: "battle-round",
       },
-      scope: { range: "self", duration: "permanent" },
+      scope: { duration: "permanent" },
     },
     {
       id: "rule-state-faction-rule-granted",
       effect: {
         type: "rule-state",
-        target: "self",
-        modifier: {
-          direction: "granted",
-          rule_kind: "faction-rule",
-          rule: "oath-of-moment",
-        },
+        target: "this-model",
+        modifier: { direction: "granted", rule_kind: "faction-rule", rule: "combat-doctrines-assault-force-adeptus-astartes" },
       },
-      scope: { range: "self", duration: "phase" },
+      scope: { duration: "phase" },
     },
     {
       id: "rule-state-cover-granted",
       effect: {
         type: "rule-state",
-        target: "self",
-        modifier: {
-          direction: "granted",
-          rule_kind: "core-rule",
-          rule: "benefit-of-cover",
-        },
+        target: "this-model",
+        modifier: { direction: "granted", rule_kind: "core-rule", rule: "benefit-of-cover" },
       },
-      scope: { range: "self", duration: "phase" },
+      scope: { duration: "phase" },
     },
     {
-      id: "rule-state-advance-suppressed",
+      id: "permission-advance-forbidden",
       effect: {
-        type: "rule-state",
-        target: "unit",
-        modifier: {
-          direction: "suppressed",
-          rule_kind: "core-rule",
-          rule: "advance",
-        },
+        type: "permission",
+        target: "this-unit",
+        modifier: { activity: "advance", allow: false },
       },
-      scope: { range: "unit", duration: "turn" },
+      scope: { duration: "turn" },
     },
     {
       id: "rule-state-overwatch-against-bearer",
       effect: {
         type: "rule-state",
-        target: "unit",
+        target: "this-unit",
         modifier: {
           direction: "suppressed",
           rule_kind: "core-rule",
           rule: "overwatch-against-bearer",
         },
       },
-      scope: { range: "unit", duration: "phase" },
+      scope: { duration: "phase" },
     },
     {
       id: "rule-state-desperate-escape-granted",
       effect: {
         type: "rule-state",
-        target: "all-enemy",
-        modifier: {
-          direction: "granted",
-          rule_kind: "core-rule",
-          rule: "desperate-escape",
-        },
+        target: { owner: "enemy", within: { range: "engagement" } },
+        modifier: { direction: "granted", rule_kind: "core-rule", rule: "desperate-escape" },
       },
-      scope: { range: "engagement-range", duration: "phase" },
+      scope: { duration: "phase" },
     },
     {
       id: "rule-state-desperate-escape-suppressed",
       effect: {
         type: "rule-state",
-        target: "self",
-        modifier: {
-          direction: "suppressed",
-          rule_kind: "core-rule",
-          rule: "desperate-escape",
-        },
+        target: "this-model",
+        modifier: { direction: "suppressed", rule_kind: "core-rule", rule: "desperate-escape" },
       },
-      scope: { range: "self", duration: "turn" },
+      scope: { duration: "turn" },
     },
     {
       id: "rule-state-ability-granted",
       effect: {
         type: "rule-state",
-        target: "unit",
-        modifier: {
-          direction: "granted",
-          rule_kind: "ability",
-          rule: "lone-operative",
-        },
+        target: "this-unit",
+        modifier: { direction: "granted", rule_kind: "ability", rule: "lone-operative" },
       },
-      scope: { range: "unit", duration: "permanent" },
+      scope: { duration: "permanent" },
     },
     {
       id: "rule-state-keyword-suppressed",
       effect: {
         type: "rule-state",
-        target: "unit",
-        modifier: {
-          direction: "suppressed",
-          rule_kind: "keyword",
-          rule: "infantry",
-        },
+        target: "this-unit",
+        modifier: { direction: "suppressed", rule_kind: "keyword", rule: "infantry" },
       },
-      scope: { range: "unit", duration: "phase" },
+      scope: { duration: "phase" },
     },
     {
       // ordered-retreat: the lever the 11e Fall-Back move (09.07) actually
@@ -2333,27 +2473,19 @@ function genEffectTranslation(): void {
       id: "rule-state-ordered-retreat-suppressed",
       effect: {
         type: "rule-state",
-        target: "enemy-within-aura",
-        modifier: {
-          direction: "suppressed",
-          rule_kind: "core-rule",
-          rule: "ordered-retreat",
-        },
+        target: { owner: "enemy", within: { range: { inches: 9 } } },
+        modifier: { direction: "suppressed", rule_kind: "core-rule", rule: "ordered-retreat" },
       },
-      scope: { range: "aura-9", duration: "permanent" },
+      scope: { duration: "permanent" },
     },
     {
       id: "rule-state-ordered-retreat-granted",
       effect: {
         type: "rule-state",
-        target: "unit",
-        modifier: {
-          direction: "granted",
-          rule_kind: "core-rule",
-          rule: "ordered-retreat",
-        },
+        target: "this-unit",
+        modifier: { direction: "granted", rule_kind: "core-rule", rule: "ordered-retreat" },
       },
-      scope: { range: "unit", duration: "phase" },
+      scope: { duration: "phase" },
     },
   ];
   for (const fc of FORCED_RULE_STATE_CASES) {
@@ -2366,9 +2498,10 @@ function genEffectTranslation(): void {
       },
     });
   }
-  // Batch B (structured modifiers): parameterized weapon keywords (Anti-X / rated),
-  // auto-result, transport (firing-deck / disembark-after-move), and the ability-level
-  // `usage` limit. Shapes 3/5/6 have no enrichment usage yet; pin them synthetically.
+  // Batch B (structured modifiers): parameterized weapon abilities (Anti-X / rated),
+  // roll-result, transport (Firing Deck / disembark after a move), and the
+  // ability-level `usage` limit. Shapes 3/5/6 have no enrichment usage yet; pin
+  // them synthetically.
   const FORCED_BATCH_B_CASES: {
     id: string;
     effect: Record<string, unknown>;
@@ -2376,74 +2509,78 @@ function genEffectTranslation(): void {
     usage?: Record<string, unknown>;
   }[] = [
     {
-      id: "keyword-grant-anti-string",
+      id: "weapon-ability-grant-anti-titanic",
       effect: {
-        type: "keyword-grant",
-        target: "unit",
-        modifier: { keyword: "anti-titanic-3plus" },
+        type: "weapon-ability-grant",
+        target: "this-unit",
+        modifier: { keywords: [{ keyword_id: "anti", parameters: { target_keyword: "TITANIC", threshold: 3 } }] },
       },
-      scope: { range: "unit", duration: "permanent" },
+      scope: { duration: "permanent" },
     },
     {
-      id: "keyword-grant-anti-structured",
+      id: "weapon-ability-grant-anti-infantry",
       effect: {
-        type: "keyword-grant",
-        target: "unit",
-        modifier: { anti_keyword: "infantry", anti_threshold: 4 },
+        type: "weapon-ability-grant",
+        target: "this-unit",
+        modifier: { keywords: [{ keyword_id: "anti", parameters: { target_keyword: "INFANTRY", threshold: 4 } }] },
       },
-      scope: { range: "unit", duration: "permanent" },
+      scope: { duration: "permanent" },
     },
     {
-      id: "keyword-grant-rated-value",
+      id: "weapon-ability-grant-rated-value",
       effect: {
-        type: "keyword-grant",
-        target: "unit",
-        modifier: { keyword: "sustained-hits", value: 2 },
+        type: "weapon-ability-grant",
+        target: "this-unit",
+        modifier: { keywords: [{ keyword_id: "sustained-hits", parameters: { value: 2 } }] },
       },
-      scope: { range: "unit", duration: "permanent" },
+      scope: { duration: "permanent" },
     },
     {
-      id: "auto-result-battle-shock-pass",
+      id: "roll-result-battle-shock-pass",
       effect: {
-        type: "auto-result",
-        target: "unit",
-        modifier: { test: "battle-shock", result: "pass" },
+        type: "roll-result",
+        target: "this-unit",
+        modifier: { roll: "battle-shock", result: "pass" },
       },
-      scope: { range: "unit", duration: "permanent" },
+      scope: { duration: "permanent" },
     },
     {
-      id: "auto-result-hit-six",
+      id: "roll-result-hit-six",
+      effect: { type: "roll-result", target: "this-unit", modifier: { roll: "hit", result: 6 } },
+      scope: { duration: "phase" },
+    },
+    {
+      id: "ability-grant-firing-deck",
       effect: {
-        type: "auto-result",
-        target: "unit",
-        modifier: { roll: "hit", result: 6 },
+        type: "ability-grant",
+        target: "this-model",
+        modifier: { ability: "firing-deck", value: 2 },
       },
-      scope: { range: "unit", duration: "phase" },
+      scope: { duration: "permanent" },
     },
     {
-      id: "firing-deck",
-      effect: { type: "firing-deck", target: "self", modifier: { value: 2 } },
-      scope: { range: "self", duration: "permanent" },
-    },
-    {
-      id: "disembark-after-move",
-      effect: { type: "disembark-after-move", target: "self", modifier: {} },
-      scope: { range: "self", duration: "permanent" },
+      id: "permission-disembark-after-move",
+      effect: {
+        type: "permission",
+        target: "this-model",
+        modifier: { activity: "disembark", allow: true, after: ["normal"] },
+      },
+      scope: { duration: "permanent" },
     },
     {
       id: "usage-once-per-turn",
-      effect: { type: "cp-gain", target: "self", modifier: { amount: 1 } },
-      scope: { range: "self", duration: "permanent" },
+      effect: { type: "cp-gain", target: "this-model", modifier: { amount: 1 } },
+      scope: { duration: "permanent" },
       usage: { frequency: "once-per-turn" },
     },
     {
       id: "usage-n-per-battle-per-unit",
       effect: {
         type: "stat-modifier",
-        target: "unit",
+        target: "this-unit",
         modifier: { stat: "A", operation: "add", value: 1 },
       },
-      scope: { range: "unit", duration: "phase" },
+      scope: { duration: "phase" },
       usage: { frequency: "n-per-battle", count: 2, per: "unit" },
     },
   ];
@@ -2464,7 +2601,7 @@ function genEffectTranslation(): void {
     cases.push(entry);
   }
   // Batch C (reactive trigger): pin the trigger lead-in across the event vocabulary
-  // (no ability carries a trigger yet — forward-looking, like usage/auto-result).
+  // (no ability carries a trigger yet — forward-looking, like usage/roll-result).
   const FORCED_TRIGGER_CASES: {
     id: string;
     effect: Record<string, unknown>;
@@ -2474,39 +2611,39 @@ function genEffectTranslation(): void {
     {
       id: "trigger-enemy-ended-move",
       effect: {
-        type: "movement-modifier",
-        target: "self",
-        modifier: { move_type: "reactive", distance: "D6" },
+        type: "move",
+        target: "this-model",
+        modifier: { move_type: "normal", distance: "D6" },
       },
-      scope: { range: "self", duration: "one-use" },
+      scope: { duration: "one-use" },
       trigger: {
-        event: "enemy-unit-ended-move",
-        subject: "enemy-unit",
-        proximity: { of: "bearer", range: 9 },
+        event: "move-ended",
+        subject: { owner: "enemy" },
+        proximity: { of: "this-model", range: { inches: 9 } },
       },
     },
     {
       id: "trigger-on-model-destroyed",
       effect: {
         type: "mortal-wounds",
-        target: "all-enemy",
+        target: { owner: "enemy", within: { range: { inches: 6 } } },
         modifier: { count: 1 },
       },
-      scope: { range: "aura-6", duration: "one-use", range_inches: 6 },
-      trigger: { event: "on-model-destroyed" },
+      scope: { duration: "one-use" },
+      trigger: { event: "model-destroyed", object: "model-in-this-unit" },
     },
     {
       id: "trigger-before-save-with-condition",
       effect: {
         type: "re-roll",
-        target: "unit",
+        target: "this-unit",
         modifier: { roll: "save", subset: "all-failures" },
       },
-      scope: { range: "unit", duration: "phase" },
+      scope: { duration: "phase" },
       trigger: {
-        event: "before-save-roll",
-        subject: "self",
-        condition: { type: "is-battle-shocked" },
+        event: "before-roll",
+        filter: { roll: "save" },
+        condition: { type: "matches", parameters: { filter: { state: "battle-shocked" } } },
       },
     },
   ];
@@ -2525,12 +2662,12 @@ function genEffectTranslation(): void {
       },
     });
   }
-  // Batch D (movement-modifier full closure + generic aura): pin one exemplar of
-  // every new closed shape — move kinds, the optional-move_type passthrough
-  // capability, redeploy/marker, the generic aura (range-bonus + tiered+effect),
-  // and the re-homed deep-strike-range / engagement-no-end records. Several have
-  // no enrichment usage (aura with nested effect, tiered range), so force them;
-  // expected text still flows from the reference describer.
+  // Batch D (moves + generic aura): pin one exemplar of every move shape — move
+  // kinds, move-modifier passthrough / distance / vertical capabilities, set-up
+  // redeploys and marker relocation, the generic aura (range-bonus +
+  // tiered+effect), and the Deep Strike distance / engagement-no-end records.
+  // Several have no enrichment usage (aura with nested effect, tiered range), so
+  // force them; expected text still flows from the reference describer.
   const FORCED_BATCH_D_CASES: {
     id: string;
     effect: Record<string, unknown>;
@@ -2539,160 +2676,242 @@ function genEffectTranslation(): void {
     {
       id: "move-passthrough-models-terrain",
       effect: {
-        type: "movement-modifier",
-        target: "self",
+        type: "move-modifier",
+        target: "this-model",
         modifier: { passthrough: ["non-titanic-models", "terrain-le-4"] },
       },
-      scope: { range: "self", duration: "permanent" },
+      scope: { duration: "permanent" },
     },
     {
-      id: "move-passthrough-applies-excludes",
+      id: "move-passthrough-applies",
       effect: {
-        type: "movement-modifier",
-        target: "unit",
+        type: "move-modifier",
+        target: "this-unit",
         modifier: {
           passthrough: ["terrain-le-4"],
-          vertical_limit: 4,
-          excludes_keyword: "titanic",
           applies_to_moves: ["normal", "advance", "fall-back"],
         },
       },
-      scope: { range: "unit", duration: "permanent" },
+      scope: { duration: "permanent" },
     },
     {
       id: "move-ignore-vertical",
       effect: {
-        type: "movement-modifier",
-        target: "unit",
+        type: "move-modifier",
+        target: "this-unit",
         modifier: { ignore_vertical: true },
       },
-      scope: { range: "unit", duration: "permanent" },
+      scope: { duration: "permanent" },
     },
     {
-      id: "move-normal-applies",
+      id: "move-modifier-distance-bonus",
       effect: {
-        type: "movement-modifier",
-        target: "unit",
-        modifier: {
-          move_type: "normal",
-          distance: 3,
-          applies_to_moves: ["normal", "advance", "fall-back"],
-        },
+        type: "move-modifier",
+        target: "this-unit",
+        modifier: { applies_to_moves: ["normal", "advance", "fall-back"], distance_bonus: 3 },
       },
-      scope: { range: "unit", duration: "permanent" },
+      scope: { duration: "permanent" },
     },
     {
-      id: "move-normal-negative",
+      id: "stat-modifier-move-negative",
       effect: {
-        type: "movement-modifier",
+        type: "stat-modifier",
         target: "defender",
-        modifier: { move_type: "normal", distance: -2 },
+        modifier: { stat: "M", operation: "subtract", value: 2 },
       },
-      scope: { range: "unit", duration: "turn" },
+      scope: { duration: "turn" },
     },
     {
-      id: "move-advance-bonus",
+      id: "roll-modifier-advance-bonus",
       effect: {
-        type: "movement-modifier",
-        target: "unit",
-        modifier: { move_type: "advance", distance: 6 },
+        type: "roll-modifier",
+        target: "this-unit",
+        modifier: { roll: "advance", operation: "add", value: 6 },
       },
-      scope: { range: "unit", duration: "permanent" },
+      scope: { duration: "permanent" },
     },
     {
       id: "move-pile-in",
       effect: {
-        type: "movement-modifier",
-        target: "unit",
-        modifier: { move_type: "pile-in", distance: 3, replaces_default: true },
+        type: "move",
+        target: "this-unit",
+        modifier: { move_type: "pile-in", distance: 3 },
       },
-      scope: { range: "unit", duration: "permanent" },
+      scope: { duration: "permanent" },
     },
     {
       id: "move-consolidation",
       effect: {
-        type: "movement-modifier",
-        target: "unit",
-        modifier: {
-          move_type: "consolidation",
-          distance: 6,
-          replaces_default: true,
-        },
+        type: "move",
+        target: "this-unit",
+        modifier: { move_type: "consolidation", distance: 6 },
       },
-      scope: { range: "unit", duration: "permanent" },
+      scope: { duration: "permanent" },
     },
     {
       id: "move-surge",
       effect: {
-        type: "movement-modifier",
-        target: "unit",
+        type: "move",
+        target: "this-unit",
         modifier: { move_type: "surge", distance: "D6" },
       },
-      scope: { range: "unit", duration: "phase" },
+      scope: { duration: "phase" },
     },
     {
-      id: "move-shoot-and-scoot",
+      id: "move-normal-after-shooting",
       effect: {
-        type: "movement-modifier",
-        target: "unit",
-        modifier: { move_type: "shoot-and-scoot", distance: "D6" },
+        type: "move",
+        target: "this-unit",
+        modifier: { move_type: "normal", distance: "D6" },
       },
-      scope: { range: "unit", duration: "turn" },
+      scope: { duration: "turn" },
     },
     {
-      id: "move-redeploy-reserves-max",
+      id: "set-up-reserves-max-units",
       effect: {
-        type: "movement-modifier",
-        target: "unit",
-        modifier: { move_type: "redeploy", to_reserves: true, max_units: 3 },
-      },
-      scope: { range: "unit", duration: "permanent" },
-    },
-    {
-      id: "move-redeploy-marker",
-      effect: {
-        type: "movement-modifier",
-        target: "unit",
-        modifier: {
-          move_type: "redeploy",
-          marker: { affected: "Cult Ambush markers" },
-          distance: 6,
+        type: "select-units",
+        selector: { filter: { owner: "friendly" }, count: { min: 0, max: 3 } },
+        effect: {
+          type: "set-up",
+          target: "selected-unit",
+          modifier: { to: "strategic-reserves" },
         },
       },
-      scope: { range: "unit", duration: "turn" },
+      scope: { duration: "permanent" },
     },
     {
-      id: "move-redeploy-placement",
+      id: "marker-relocate",
       effect: {
-        type: "movement-modifier",
-        target: "unit",
-        modifier: {
-          move_type: "redeploy",
-          marker: {
-            location: "floor sections",
-            unit_filter: "Genestealer Cult Infantry",
-          },
-        },
+        type: "marker",
+        target: "this-unit",
+        modifier: { label: "Cult Ambush", operation: "relocate", distance: { inches: 6 } },
       },
-      scope: { range: "unit", duration: "permanent" },
+      scope: { duration: "turn" },
     },
     {
-      id: "move-infiltrate",
+      id: "set-up-redeploy-filtered",
       effect: {
-        type: "movement-modifier",
-        target: "unit",
-        modifier: { move_type: "infiltrate" },
+        type: "set-up",
+        target: { owner: "friendly", all_of: ["GENESTEALER CULTS", "INFANTRY"] },
+        modifier: { to: "battlefield", from: "battlefield" },
       },
-      scope: { range: "unit", duration: "permanent" },
+      scope: { duration: "permanent" },
+    },
+    {
+      id: "ability-grant-infiltrators",
+      effect: {
+        type: "ability-grant",
+        target: "this-unit",
+        modifier: { ability: "infiltrators" },
+      },
+      scope: { duration: "permanent" },
     },
     {
       id: "aura-range-bonus",
       effect: {
         type: "aura",
         target: "enemy-within-aura",
-        modifier: { of: "contagion", range_bonus: 3 },
+        modifier: { of: "contagion", range_bonus: { inches: 3 } },
       },
-      scope: { range: "self", duration: "permanent" },
+      scope: { duration: "permanent" },
+    },
+    {
+      // Orders reach only units matching the eligible keyword predicate.
+      id: "issue-orders-eligible-keywords",
+      effect: {
+        type: "issue-orders",
+        count: 1,
+        range: { inches: 6 },
+        eligible: { all_of: ["INFANTRY"], none_of: ["TITANIC"] },
+        options: [{ name: "Take Aim!", effect: { type: "no-effect" } }],
+      },
+      scope: { duration: "permanent" },
+    },
+    {
+      // An officer's datasheet issues one Order from its army rule's menu, limited to two of them.
+      id: "issue-orders-menu-from",
+      effect: {
+        type: "issue-orders",
+        count: 1,
+        eligible: { any_of: ["INFANTRY", "MOUNTED"] },
+        menu_from: "orders-menu-example",
+        only_options: ["take-aim", "fix-bayonets"],
+      },
+      scope: { duration: "permanent" },
+    },
+    {
+      // An army-wide emitter: the aura is measured from any friendly model with the keywords.
+      id: "aura-army-emitter-tiered-capped",
+      effect: {
+        type: "aura",
+        target: "enemy-within-aura",
+        modifier: {
+          range: { per_battle_round: [{ inches: 3 }, { inches: 6 }, { inches: 9 }] },
+          range_cap: { inches: 12 },
+          emitter_filter: { owner: "friendly", all_of: ["DEATH GUARD"] },
+          eligible: { owner: "enemy" },
+          effect: { type: "designate", target: "recipient", modifier: { tag: "afflicted" } },
+        },
+      },
+      scope: { duration: "permanent" },
+    },
+    {
+      // Owner any names no side; the keywords after all_of keep their own clauses.
+      id: "aura-any-emitter-keyword-clauses",
+      effect: {
+        type: "aura",
+        target: "friendly-within-aura",
+        modifier: {
+          range: { inches: 6 },
+          emitter_filter: { owner: "any", all_of: ["PLAGUE", "SWARM"], any_of: ["MONSTER", "TITANIC"], none_of: ["VEHICLE"] },
+          effect: { type: "stat-modifier", target: "recipient", modifier: { stat: "OC", operation: "add", value: 1 } },
+        },
+      },
+      scope: { duration: "permanent" },
+    },
+    {
+      // No owner: the filter narrows this model, as before.
+      id: "aura-model-emitter-keywords",
+      effect: {
+        type: "aura",
+        target: "friendly-within-aura",
+        modifier: {
+          range: { inches: 6 },
+          emitter_filter: { all_of: ["PSYKER"] },
+          effect: { type: "stat-modifier", target: "recipient", modifier: { stat: "OC", operation: "add", value: 1 } },
+        },
+      },
+      scope: { duration: "permanent" },
+    },
+    {
+      // of this-unit: the range is measured from any model of this unit.
+      id: "aura-unit-origin",
+      effect: {
+        type: "aura",
+        target: "enemy-within-aura",
+        modifier: {
+          range: { inches: 6 },
+          of: "this-unit",
+          eligible: { owner: "enemy" },
+          effect: { type: "stat-modifier", target: "recipient", modifier: { stat: "OC", operation: "subtract", value: 1 } },
+        },
+      },
+      scope: { duration: "permanent" },
+    },
+    {
+      // An owner-less emitter filter narrows the unit origin, not this model.
+      id: "aura-unit-origin-emitter-keywords",
+      effect: {
+        type: "aura",
+        target: "friendly-within-aura",
+        modifier: {
+          range: { inches: 6 },
+          of: "this-unit",
+          emitter_filter: { all_of: ["PSYKER"] },
+          effect: { type: "stat-modifier", target: "recipient", modifier: { stat: "OC", operation: "add", value: 1 } },
+        },
+      },
+      scope: { duration: "permanent" },
     },
     {
       id: "aura-tiered-effect",
@@ -2700,33 +2919,33 @@ function genEffectTranslation(): void {
         type: "aura",
         target: "enemy-within-aura",
         modifier: {
-          range: [3, 6, 9],
+          range: { per_battle_round: [{ inches: 3 }, { inches: 6 }, { inches: 9 }] },
           effect: {
             type: "stat-modifier",
-            target: "enemy-within-aura",
+            target: "recipient",
             modifier: { stat: "T", operation: "subtract", value: 1 },
           },
         },
       },
-      scope: { range: "self", duration: "permanent" },
+      scope: { duration: "permanent" },
     },
     {
-      id: "rehome-deep-strike-min-distance",
+      id: "set-up-deep-strike-min-distance",
       effect: {
-        type: "deep-strike",
-        target: "unit",
-        modifier: { min_distance: 6, replaces_default: true },
+        type: "set-up",
+        target: "this-unit",
+        modifier: { to: "battlefield", via: "deep-strike", min_enemy_distance: { inches: 6 } },
       },
-      scope: { range: "unit", duration: "phase" },
+      scope: { duration: "phase" },
     },
     {
-      id: "rehome-engagement-no-end",
+      id: "move-modifier-engagement-no-end",
       effect: {
-        type: "engagement-passthrough",
-        target: "self",
-        modifier: { no_end_in_engagement: true },
+        type: "move-modifier",
+        target: "this-model",
+        modifier: { passthrough: ["models"], no_end_in_engagement: true },
       },
-      scope: { range: "self", duration: "permanent" },
+      scope: { duration: "permanent" },
     },
   ];
   for (const fc of FORCED_BATCH_D_CASES) {
@@ -2740,7 +2959,7 @@ function genEffectTranslation(): void {
     });
   }
 
-  // Audit-corpus describer fixes (fallback-and-act default, re-roll "any",
+  // Audit-corpus describer fixes (shoot after Falling Back, re-roll "any",
   // player-turn opponent, opponent-unit-within-range within_inches, and the
   // compound unit-has-keyword lead-in). These exact shapes come from the human-
   // corrected aeldari audit oracle; every string is engine-authored, so a second
@@ -2751,48 +2970,65 @@ function genEffectTranslation(): void {
     scope: Record<string, unknown>;
   }[] = [
     {
-      id: "fallback-and-act-shoot-only",
-      effect: { type: "fallback-and-act", target: "unit", modifier: {} },
-      scope: { range: "unit", duration: "permanent" },
-    },
-    {
-      id: "fallback-and-act-can-charge",
+      id: "permission-shoot-after-fall-back",
       effect: {
-        type: "fallback-and-act",
-        target: "unit",
-        modifier: { can_charge: true },
+        type: "permission",
+        target: "this-unit",
+        modifier: { activity: "shoot", allow: true, after: ["fall-back"] },
       },
-      scope: { range: "unit", duration: "permanent" },
+      scope: { duration: "permanent" },
     },
     {
-      id: "superlative-strategist",
+      id: "permission-shoot-and-charge-after-fall-back",
+      effect: {
+        type: "sequence",
+        steps: [
+          {
+            type: "permission",
+            target: "this-unit",
+            modifier: { activity: "shoot", allow: true, after: ["fall-back"] },
+          },
+          {
+            type: "permission",
+            target: "this-unit",
+            modifier: { activity: "declare-charge", allow: true, after: ["fall-back"] },
+          },
+        ],
+      },
+      scope: { duration: "permanent" },
+    },
+    {
+      id: "superlative-strategist-aeldari",
       effect: {
         type: "conditional",
-        condition: { type: "model-is-leader" },
+        condition: {
+          type: "attachment",
+          parameters: { subject: "this-model", role: "leading" },
+        },
         effect: {
           type: "sequence",
           steps: [
             {
               type: "re-roll",
-              target: "unit",
+              target: "this-unit",
               modifier: { roll: "advance", subset: "all-failures" },
             },
             {
               type: "conditional",
               condition: {
-                type: "timing-is",
-                parameters: { timing: "agile-manoeuvre" },
+                type: "happened",
+                parameters: { event: "used", filter: { kind: "manoeuvre" }, window: "phase" },
               },
               effect: {
                 type: "re-roll",
-                target: "unit",
+                target: "this-unit",
                 modifier: { roll: "any", subset: "all-failures" },
               },
             },
           ],
         },
       },
-      scope: { range: "unit", duration: "turn" },
+      scope: { duration: "turn" },
     },
     {
       id: "deceptive-feint",
@@ -2802,83 +3038,76 @@ function genEffectTranslation(): void {
           operator: "and",
           operands: [
             { type: "phase-is", parameters: { phase: "movement" } },
-            { type: "player-turn-is", parameters: { turn: "opponent" } },
+            { type: "player-turn-is", parameters: { turn: "opponent-turn" } },
+            { type: "matches", parameters: { filter: { within: { of: { owner: "enemy" }, range: { inches: 8 } } } } },
             {
-              type: "opponent-unit-within-range",
-              parameters: { within_inches: 8 },
+              operator: "not",
+              operands: [{ type: "matches", parameters: { filter: { state: "engaged" } } }],
             },
-            { operator: "not", operands: [{ type: "engagement-state" }] },
-            { type: "unit-has-keyword", parameters: { keyword: "HARLEQUINS" } },
-            { type: "unit-has-keyword", parameters: { keyword: "INFANTRY" } },
+            { type: "matches", parameters: { filter: { all_of: ["HARLEQUINS"] } } },
+            { type: "matches", parameters: { filter: { all_of: ["INFANTRY"] } } },
           ],
         },
         effect: {
-          type: "movement-modifier",
-          target: "unit",
+          type: "move",
+          target: "this-unit",
           modifier: { move_type: "normal", distance: "D3+3" },
         },
       },
-      scope: { range: "unit", duration: "turn" },
+      scope: { duration: "turn" },
     },
     {
       id: "heal-selected-model",
       effect: {
         type: "select-units",
         selector: {
-          owner: "friendly",
-          count: 1,
-          target_kind: "model",
-          within_inches: 3,
-          keywords: ["ORKS", "VEHICLE"],
+          filter: { owner: "friendly", level: "model", within: { range: { inches: 3 }, of: "this-model" }, all_of: ["ORKS", "VEHICLE"] },
+          count: { min: 1, max: 1 },
         },
         effect: {
           type: "sequence",
           steps: [
-            { type: "heal-wounds", target: "unit", modifier: { amount: "D3" } },
+            { type: "heal", target: "selected-unit", modifier: { amount: "D3" } },
             {
-              type: "stat-modifier",
-              target: "unit",
-              modifier: { stat: "hit", operation: "add", value: 1 },
+              type: "roll-modifier",
+              target: "selected-unit",
+              modifier: { roll: "hit", operation: "add", value: 1 },
             },
           ],
         },
       },
-      scope: { range: "unit", duration: "until-next-movement-phase" },
+      scope: { duration: "until-next-movement-phase" },
     },
     {
-      id: "tracking-token",
+      id: "marker-next-to-target",
       effect: {
         type: "sequence",
         steps: [
           {
             type: "select-units",
-            selector: { owner: "enemy", count: 1, within_inches: 12 },
+            selector: { filter: { owner: "enemy", within: { range: { inches: 12 }, of: "this-model" } }, count: { min: 1, max: 1 } },
             effect: {
-              type: "detection-range-modifier",
-              target: "unit",
-              modifier: { operation: "add", value: 3 },
+              type: "stat-modifier",
+              target: "selected-unit",
+              modifier: { stat: "detection-range", operation: "add", value: 3 },
             },
           },
           {
-            type: "tracking-token",
-            target: "unit",
-            modifier: { token: "Kommandos Grot", placement: "next-to-target" },
+            type: "marker",
+            target: "this-unit",
+            modifier: { label: "Kommandos Grot", placement: "next-to-target" },
           },
         ],
       },
-      scope: { range: "unit", duration: "turn" },
+      scope: { duration: "turn" },
     },
     {
       id: "psychic-model-bundle",
       effect: {
         type: "for-each-unit",
-        selector: {
-          owner: "friendly",
-          keywords: ["ORKS", "PSYKER"],
-          target_kind: "model",
-        },
+        selector: { filter: { owner: "friendly", all_of: ["ORKS", "PSYKER"], level: "model" } },
         effect: {
-          type: "named-effect",
+          type: "ability-part",
           name: "Roar of Mork",
           kind: "psychic",
           level: 1,
@@ -2892,92 +3121,86 @@ function genEffectTranslation(): void {
                 threshold: 1,
                 comparison: "eq",
                 on_success: {
-                  type: "set-battle-shock",
-                  target: "selected-models-unit",
-                  modifier: {},
+                  type: "state-change",
+                  target: "selected-unit",
+                  modifier: { state: "battle-shocked", set: true },
                 },
               },
               {
                 type: "select-units",
-                selector: { owner: "enemy", count: 1, within_inches: 12 },
+                selector: { filter: { owner: "enemy", within: { range: { inches: 12 }, of: "selected-unit" } }, count: { min: 1, max: 1 } },
                 effect: {
-                  type: "battle-shock-test",
-                  target: "unit",
-                  modifier: { operation: "subtract", value: 1 },
-                  scaling: {
-                    per: 10,
-                    of: "models-in-bearer-unit",
-                    round: "down",
-                  },
+                  type: "test",
+                  target: "selected-unit",
+                  modifier: { test: "battle-shock", modifier: -1 },
+                  scaling: { per: 10, of: "models-in-bearer-unit", round: "down" },
                 },
               },
             ],
           },
         },
       },
-      scope: { range: "unit", duration: "battle" },
+      scope: { duration: "battle" },
     },
     {
       id: "designate-bearer-target-with-eligibility",
       effect: {
-        type: "designate-target",
-        designation: "pulsa-rokkit-target",
-        select: {
-          scope: "enemy-unit",
-          count: 1,
-          timing: "when-selected-to-shoot",
-          within_inches: 24,
-          keywords: ["MONSTER", "VEHICLE"],
-          keyword_match: "any",
-        },
-        applies: {
-          to: "bearer-attacks-target",
-          effect: {
-            type: "sequence",
-            steps: [
-              {
-                type: "stat-modifier",
-                target: "unit",
-                modifier: {
-                  stat: "AP",
-                  operation: "add",
-                  value: 1,
-                  attack_type: "ranged",
-                },
-              },
-              {
-                type: "keyword-grant",
-                target: "unit",
-                modifier: { keywords: ["Lethal Hits"], weapon_type: "ranged" },
-              },
-            ],
+        type: "ability-part",
+        trigger: { event: "selected", subject: "this-model", filter: { to: "shoot" } },
+        effect: {
+          type: "designate-target",
+          designation: "pulsa-rokkit-target",
+          select: {
+            kind: "unit",
+            selector: {
+              filter: { owner: "enemy", level: "unit", within: { range: { inches: 24 }, of: "this-model" }, any_of: ["MONSTER", "VEHICLE"] },
+              count: { min: 1, max: 1 },
+            },
           },
+          applies: {
+            to: "bearer-attacks-target",
+            effect: {
+              type: "sequence",
+              steps: [
+                {
+                  type: "stat-modifier",
+                  target: "this-unit",
+                  modifier: { stat: "AP", operation: "add", value: 1, weapons: { type: "ranged" } },
+                },
+                {
+                  type: "weapon-ability-grant",
+                  target: "this-unit",
+                  modifier: { keywords: [{ keyword_id: "lethal-hits" }], weapons: { type: "ranged" } },
+                },
+              ],
+            },
+          },
+          duration: "phase",
         },
-        duration: "phase",
       },
-      scope: { range: "unit", duration: "phase" },
+      scope: { duration: "phase" },
     },
     {
-      id: "conditional-when-selected-to-shoot-alias",
+      id: "conditional-selected-to-shoot-this-phase",
       effect: {
         type: "conditional",
         condition: {
-          type: "timing-is",
-          parameters: { timing: "when-selected-to-shoot" },
+          type: "happened",
+          parameters: { event: "selected", filter: { to: "shoot" }, window: "phase" },
         },
         effect: {
           type: "roll-modifier",
-          target: "unit",
+          target: "this-unit",
           modifier: { roll: "hit", operation: "add", value: 1 },
         },
       },
-      scope: { range: "unit", duration: "phase" },
+      scope: { duration: "phase" },
     },
     {
-      id: "transport-capacity-conversion",
+      id: "transport-capacity",
       effect: {
-        type: "transport-capacity-conversion",
-        target: "unit",
+        type: "transport-capacity",
+        target: "this-unit",
         modifier: {
           occupancy_kind: "grouped-models",
           subject_kind: "unit-models",
@@ -2987,13 +3210,13 @@ function genEffectTranslation(): void {
           rounding: "up",
         },
       },
-      scope: { range: "unit", duration: "permanent" },
+      scope: { duration: "permanent" },
     },
     {
       id: "transport-grouped-single-keyword-model",
       effect: {
-        type: "transport-capacity-conversion",
-        target: "self",
+        type: "transport-capacity",
+        target: "this-model",
         modifier: {
           occupancy_kind: "grouped-models",
           subject_kind: "single-model",
@@ -3003,13 +3226,13 @@ function genEffectTranslation(): void {
           rounding: "up",
         },
       },
-      scope: { range: "self", duration: "permanent" },
+      scope: { duration: "permanent" },
     },
     {
       id: "transport-fixed-model-spaces-with-capacity-eligibility",
       effect: {
-        type: "transport-capacity-conversion",
-        target: "self",
+        type: "transport-capacity",
+        target: "this-model",
         modifier: {
           occupancy_kind: "fixed-model-spaces",
           subject_kind: "single-model",
@@ -3017,13 +3240,13 @@ function genEffectTranslation(): void {
           transport_eligibility: { requires_capacity_keyword: "TERMINATOR" },
         },
       },
-      scope: { range: "self", duration: "permanent" },
+      scope: { duration: "permanent" },
     },
     {
       id: "transport-fixed-model-spaces-with-embark-as",
       effect: {
-        type: "transport-capacity-conversion",
-        target: "self",
+        type: "transport-capacity",
+        target: "this-model",
         modifier: {
           occupancy_kind: "fixed-model-spaces",
           subject_kind: "single-model",
@@ -3031,13 +3254,13 @@ function genEffectTranslation(): void {
           transport_eligibility: { embark_as_keyword: "INFANTRY" },
         },
       },
-      scope: { range: "self", duration: "permanent" },
+      scope: { duration: "permanent" },
     },
     {
       id: "transport-equivalent-model-keyword",
       effect: {
-        type: "transport-capacity-conversion",
-        target: "unit",
+        type: "transport-capacity",
+        target: "this-unit",
         modifier: {
           occupancy_kind: "equivalent-model",
           subject_kind: "unit-models",
@@ -3045,20 +3268,20 @@ function genEffectTranslation(): void {
           equivalent_model_keyword: "TERMINATOR",
         },
       },
-      scope: { range: "unit", duration: "permanent" },
+      scope: { duration: "permanent" },
     },
     {
       id: "transport-equivalent-model-count",
       effect: {
-        type: "transport-capacity-conversion",
-        target: "self",
+        type: "transport-capacity",
+        target: "this-model",
         modifier: {
           occupancy_kind: "equivalent-model",
           subject_kind: "single-model",
           equivalent_model_count: 2,
         },
       },
-      scope: { range: "self", duration: "permanent" },
+      scope: { duration: "permanent" },
     },
   ];
   for (const fc of FORCED_AUDIT_CASES) {
@@ -3072,14 +3295,10 @@ function genEffectTranslation(): void {
     });
   }
 
-  // moved-through-tall-terrain canonical game-event: pins the new timing-is
-  // negation arm (inline conditional lead-in AND trigger-condition predicate
-  // form), the event dispatched directly as a trigger.event, the two legacy
-  // TIMING_ALIASES strings resolving onto the same canonical phrase, and a
-  // generic moved-through-terrain control case proving the new alias doesn't
-  // bleed onto the untouched sibling timing. No enrichment ability exercises
-  // the trigger-condition/negated/legacy-alias forms directly, so these are
-  // forced synthetic exemplars; expected text still comes from the reference
+  // A move through tall terrain, as history and as a trigger: the inline lead-in and the
+  // trigger-condition form, each plain and negated, the move-ended trigger itself, and the
+  // generic through-terrain filter as a control. No enrichment ability exercises every form,
+  // so these are forced synthetic exemplars; expected text still comes from the reference
   // describer, so a second impl must independently reproduce it.
   const FORCED_MOVED_THROUGH_TALL_TERRAIN_CASES: {
     id: string;
@@ -3092,127 +3311,91 @@ function genEffectTranslation(): void {
       effect: {
         type: "conditional",
         condition: {
-          type: "timing-is",
-          parameters: { timing: "moved-through-tall-terrain" },
+          type: "happened",
+          parameters: {
+            event: "move-ended",
+            filter: { through: "tall-terrain" },
+            window: "turn",
+          },
         },
         effect: {
-          type: "keyword-grant",
-          target: "self",
-          modifier: { keywords: ["stealth"] },
+          type: "ability-grant",
+          target: "this-model",
+          modifier: { ability: "stealth" },
         },
       },
-      scope: { range: "self", duration: "permanent" },
+      scope: { duration: "permanent" },
     },
     {
       id: "moved-through-tall-terrain-trigger-condition",
       effect: {
-        type: "keyword-grant",
-        target: "self",
-        modifier: { keywords: ["stealth"] },
+        type: "ability-grant",
+        target: "this-model",
+        modifier: { ability: "stealth" },
       },
-      scope: { range: "self", duration: "permanent" },
-      trigger: {
-        event: "before-hit-roll",
-        condition: {
-          type: "timing-is",
-          parameters: { timing: "moved-through-tall-terrain" },
-        },
-      },
+      scope: { duration: "permanent" },
+      trigger: { event: "before-roll", filter: { roll: "hit" }, condition: { type: "happened", parameters: { event: "move-ended", filter: { through: "tall-terrain" }, window: "turn" } } },
     },
     {
       id: "moved-through-tall-terrain-negated-inline",
       effect: {
         type: "conditional",
         condition: {
-          type: "timing-is",
-          parameters: { timing: "moved-through-tall-terrain" },
-          negated: true,
+          operator: "not",
+          operands: [
+            {
+              type: "happened",
+              parameters: {
+                event: "move-ended",
+                filter: { through: "tall-terrain" },
+                window: "turn",
+              },
+            },
+          ],
         },
         effect: {
-          type: "keyword-grant",
-          target: "self",
-          modifier: { keywords: ["stealth"] },
+          type: "ability-grant",
+          target: "this-model",
+          modifier: { ability: "stealth" },
         },
       },
-      scope: { range: "self", duration: "permanent" },
+      scope: { duration: "permanent" },
     },
     {
       id: "moved-through-tall-terrain-negated-trigger-condition",
       effect: {
-        type: "keyword-grant",
-        target: "self",
-        modifier: { keywords: ["stealth"] },
+        type: "ability-grant",
+        target: "this-model",
+        modifier: { ability: "stealth" },
       },
-      scope: { range: "self", duration: "permanent" },
-      trigger: {
-        event: "before-hit-roll",
-        condition: {
-          type: "timing-is",
-          parameters: { timing: "moved-through-tall-terrain" },
-          negated: true,
-        },
-      },
+      scope: { duration: "permanent" },
+      trigger: { event: "before-roll", filter: { roll: "hit" }, condition: { operator: "not", operands: [{ type: "happened", parameters: { event: "move-ended", filter: { through: "tall-terrain" }, window: "turn" } }] } },
     },
     {
       id: "moved-through-tall-terrain-trigger-event",
       effect: {
-        type: "keyword-grant",
-        target: "self",
-        modifier: { keywords: ["stealth"] },
+        type: "ability-grant",
+        target: "this-model",
+        modifier: { ability: "stealth" },
       },
-      scope: { range: "self", duration: "permanent" },
-      trigger: { event: "moved-through-tall-terrain" },
+      scope: { duration: "permanent" },
+      trigger: { event: "move-ended", filter: { through: "tall-terrain" } },
     },
     {
-      id: "moved-through-tall-terrain-legacy-aliases",
-      effect: {
-        type: "sequence",
-        steps: [
-          {
-            type: "conditional",
-            condition: {
-              type: "timing-is",
-              parameters: {
-                timing: "after-move-through-terrain-over-4-inches",
-              },
-            },
-            effect: {
-              type: "keyword-grant",
-              target: "self",
-              modifier: { keywords: ["stealth"] },
-            },
-          },
-          {
-            type: "conditional",
-            condition: {
-              type: "timing-is",
-              parameters: { timing: "after-moving-through-tall-terrain" },
-            },
-            effect: {
-              type: "keyword-grant",
-              target: "self",
-              modifier: { keywords: ["stealth"] },
-            },
-          },
-        ],
-      },
-      scope: { range: "self", duration: "permanent" },
-    },
-    {
-      id: "moved-through-terrain-generic-unaffected",
+      id: "moved-through-terrain-generic",
       effect: {
         type: "conditional",
         condition: {
-          type: "timing-is",
-          parameters: { timing: "moved-through-terrain" },
+          type: "happened",
+          parameters: { event: "move-ended", filter: { through: "terrain" }, window: "turn" },
         },
         effect: {
-          type: "keyword-grant",
-          target: "self",
-          modifier: { keywords: ["stealth"] },
+          type: "ability-grant",
+          target: "this-model",
+          modifier: { ability: "stealth" },
         },
       },
-      scope: { range: "self", duration: "permanent" },
+      scope: { duration: "permanent" },
     },
   ];
   for (const fc of FORCED_MOVED_THROUGH_TALL_TERRAIN_CASES) {
@@ -3235,17 +3418,17 @@ function genEffectTranslation(): void {
     type: "aura",
     target: "friendly-within-aura",
     modifier: {
-      range: 6,
-      emitter_filter: { required_keywords: ["EMITTER"] },
-      recipient_filter: { required_keywords: ["ALLY"] },
+      range: { inches: 6 },
+      emitter_filter: { all_of: ["EMITTER"] },
+      recipient_filter: { all_of: ["ALLY"] },
       effect: {
         type: "re-roll",
-        target: "unit",
+        target: "recipient",
         modifier: { roll: "hit", subset: "ones" },
       },
     },
   };
-  const filteredAuraScope = { range: "self", duration: "permanent" };
+  const filteredAuraScope = { duration: "permanent" };
   cases.push({
     caseId: `aura-role-filtered-effect#${cases.length}`,
     effect: filteredAuraEffect,
@@ -3260,14 +3443,97 @@ function genEffectTranslation(): void {
   // Faction-scoped worklist pins: the global by-id index can resolve another
   // faction's copy of shared names such as Blessing of the Omnissiah.
   const fidelityWorklists: Array<[string, string[]]> = [
-    ["grey-knights", ["dauntless-champions","attuned-onslaught-psychic","blessing-of-the-omnissiah","guardians-of-the-machine","techmarine","force-edge-psychic","champion-of-the-order-of-purifiers-psychic","might-of-titan-psychic","warrior-strategist","surge-of-wrath-psychic","sanctuary-psychic","hammer-aflame-psychic","personal-teleporters","indomitable-spirit-psychic","righteous-persecution","sanctity-of-purpose","sanctifying-ritual-psychic","guidance-of-the-ancients-psychic","litanies-of-sanctity","prescient-redeployment","channelled-force","hallowed-ground","fury-of-titan","searing-soulflame"]],
-    ["adepta-sororitas", ["sworn-protectors","anguish-of-the-unredeemed","anchorite-sarcophagus","sacred-command","divine-deliverance","rapturous-blows","ministorum-sermon","cherub","salvationist-medikit","simulacrum-imperialis","attached-unit","extremis-trigger-word","rituale-nullificatus","virtue-of-intolerance","denuncia-oratory","litany-of-deeds","stanchion-of-holy-martyrs","relics-of-the-matriarchs","solemn-procession","overseer-of-redemption","laud-hailer","stirring-rhetoric","purge-and-cleanse","sacred-healing","righteous-repugnance","cherubs","storm-of-retribution","impetuous-fervour","sacred-banner","holy-judgement","mysterious-saviours","self-repair","righteous-paragons","rites-of-castigation","devastating-refrain","fiery-conviction","zealot","holy-mission","holy-hatred","embodied-prophecy","righteous-awareness","lifewards","defenders-of-the-faith","null-rod","emergency-combat-embarkation","judged-for-execution","angelic-judgement","clarion-of-urgency-chorus-of-condemnation","inspirational-battle-canticles-chorus-of-condemnation","harmonised-exorcism-chorus-of-condemnation","devastating-reprise-chorus-of-condemnation","holy-quest"]],
-    ["adeptus-astartes", ["techmarine", "blessing-of-the-omnissiah", "wisdom-of-the-ancients-aura"]],
+    ["grey-knights", ["dauntless-champions-grey-knights","attuned-onslaught-grey-knights","blessing-of-the-omnissiah-grey-knights","guardians-of-the-machine-grey-knights","techmarine-grey-knights","force-edge-grey-knights","champion-of-the-order-of-purifiers-grey-knights","might-of-titan-grey-knights","warrior-strategist-grey-knights","surge-of-wrath-grey-knights","sanctuary-grey-knights","hammer-aflame-grey-knights","personal-teleporters-grey-knights","indomitable-spirit-grey-knights","righteous-persecution-grey-knights","sanctity-of-purpose-grey-knights","sanctifying-ritual-grey-knights","guidance-of-the-ancients-grey-knights","litanies-of-sanctity-grey-knights","prescient-redeployment-grey-knights","channelled-force-grey-knights","hallowed-ground-grey-knights","fury-of-titan-grey-knights","searing-soulflame-grey-knights"]],
+    ["adepta-sororitas", ["sworn-protectors-adepta-sororitas","anguish-of-the-unredeemed-adepta-sororitas","anchorite-sarcophagus-adepta-sororitas","sacred-command-adepta-sororitas","divine-deliverance-adepta-sororitas","rapturous-blows-adepta-sororitas","ministorum-sermon-adepta-sororitas","cherub-adepta-sororitas","salvationist-medikit-adepta-sororitas","simulacrum-imperialis-adepta-sororitas","attached-unit-sanctifiers-adepta-sororitas","extremis-trigger-word-adepta-sororitas","rituale-nullificatus-adepta-sororitas","virtue-of-intolerance-adepta-sororitas","denuncia-oratory-adepta-sororitas","litany-of-deeds-adepta-sororitas","stanchion-of-holy-martyrs-adepta-sororitas","relics-of-the-matriarchs-adepta-sororitas","solemn-procession-adepta-sororitas","overseer-of-redemption-adepta-sororitas","laud-hailer-adepta-sororitas","stirring-rhetoric-adepta-sororitas","purge-and-cleanse-adepta-sororitas","sacred-healing-adepta-sororitas","righteous-repugnance-adepta-sororitas","cherubs-adepta-sororitas","storm-of-retribution-adepta-sororitas","impetuous-fervour-adepta-sororitas","sacred-banner-adepta-sororitas","holy-judgement-adepta-sororitas","mysterious-saviours-adepta-sororitas","self-repair-adepta-sororitas","righteous-paragons-adepta-sororitas","rites-of-castigation-adepta-sororitas","devastating-refrain-adepta-sororitas","fiery-conviction-adepta-sororitas","zealot-adepta-sororitas","holy-mission-adepta-sororitas","embodied-prophecy-adepta-sororitas","righteous-awareness-adepta-sororitas","lifewards-adepta-sororitas","defenders-of-the-faith-adepta-sororitas","null-rod-adepta-sororitas","judged-for-execution-adepta-sororitas","angelic-judgement-adepta-sororitas","clarion-of-urgency-chorus-of-condemnation-adepta-sororitas","inspirational-battle-canticles-chorus-of-condemnation-adepta-sororitas","harmonised-exorcism-chorus-of-condemnation-adepta-sororitas","devastating-reprise-chorus-of-condemnation-adepta-sororitas","holy-quest-adepta-sororitas"]],
+    ["adeptus-astartes", ["techmarine-adeptus-astartes", "blessing-of-the-omnissiah-adeptus-astartes", "wisdom-of-the-ancients-adeptus-astartes"]],
   ];
+  fidelityWorklists.push(
+    ["adeptus-astartes", ["prescience-adeptus-astartes"]],
+    ["adeptus-custodes", ["superhuman-reserves-auric-champions-adeptus-custodes", "gilded-champion-auric-champions-adeptus-custodes", "synchronised-inferno-silent-hunters-adeptus-custodes"]],
+    ["adeptus-mechanicus", ["neurostatic-interference-adeptus-mechanicus", "precision-onslaught-eradication-cohort-adeptus-mechanicus"]],
+    ["aeldari", ["shepherds-of-the-dead-aeldari"]],
+    ["agents-of-the-imperium", ["micromelta-rounds-veiled-blade-elimination-force-agents-of-the-imperium"]],
+    ["chaos-daemons", ["harmonic-alignment-chaos-daemons"]],
+    ["chaos-space-marines", ["enhanced-warriors-chaos-space-marines"]],
+    ["death-guard", ["tainted-narthecium-death-guard", "lord-of-the-death-guard", "host-of-the-hybridised-pox-paragons-of-putrescence-death-guard"]],
+    ["imperial-knights", ["heroes-of-legend-imperial-knights", "knightly-teachings-imperial-knights"]],
+    ["leagues-of-votann", ["prioritised-efficiency-leagues-of-votann", "ruthless-reinvestment-leagues-of-votann"]],
+    ["necrons", ["transdimensional-displacement-necrons"]],
+    ["orks", ["krushin-impetus-orks"]],
+    ["space-wolves", ["slayers-oath-space-wolves"]],
+    ["tau-empire", ["autoreactive-camouflage-advanced-acquisition-cadre-tau-empire", "titan-hunter-tau-empire"]],
+    ["thousand-sons", ["unearthly-power-thousand-sons"]],
+    ["tyranids", ["domination-of-the-hive-mind-tyranids"]],
+    ["world-eaters", ["idols-of-khorne-world-eaters", "rage-eternal-world-eaters"]],
+  );
+  // Pins whose ability has left the dataset (its datasheet was removed by an MFM release) keep
+  // their frozen DSL here, so the describer shape they pin stays covered.
+  const retiredFidelityAbilities: Record<string, Record<string, unknown>> = {
+    // The Dreadnought datasheet left the dump at MFM data version 963.
+    "adeptus-astartes/wisdom-of-the-ancients-adeptus-astartes": {
+      effect: {
+        type: "re-roll",
+        target: { owner: "friendly", all_of: ["ADEPTUS ASTARTES", "INFANTRY"], within: { range: { inches: 6 } } },
+        modifier: { roll: "hit", subset: "ones" },
+      },
+      scope: { duration: "permanent" },
+    },
+    // The codex Techmarine datasheet stopped printing it at MFM data version 963.
+    "adeptus-astartes/blessing-of-the-omnissiah-adeptus-astartes": {
+      effect: {
+        type: "conditional",
+        condition: { operator: "and", operands: [{ type: "phase-is", parameters: { phase: "command" } }, { type: "player-turn-is", parameters: { turn: "your-turn" } }] },
+        effect: {
+          type: "select-units",
+          selector: { filter: { owner: "friendly", level: "model", all_of: ["ADEPTUS ASTARTES", "VEHICLE"], within: { range: { inches: 3 }, of: "this-model" } }, count: { min: 0, max: 1 }, limit: { count: 1, period: "turn" } },
+          effect: {
+            type: "sequence",
+            steps: [
+              { type: "heal", target: "selected-unit", modifier: { amount: "D3" } },
+              { type: "roll-modifier", target: "selected-unit", modifier: { roll: "hit", operation: "add", value: 1 } },
+            ],
+          },
+        },
+      },
+      scope: { duration: "until-next-command-phase" },
+    },
+    // Auric Champions stopped printing this stratagem at MFM data version 995.
+    "adeptus-custodes/superhuman-reserves-auric-champions-adeptus-custodes": {
+      effect: {
+        type: "ability-modifier",
+        target: "this-model",
+        modifier: { ability: { event: "used", event_var: "used-ability" }, aspect: "uses", operation: "add", value: 1, not_same: "phase" },
+      },
+      scope: { duration: "battle" },
+      trigger: {
+        event: "used",
+        filter: { kind: "ability", source: ["unit", "enhancement"], usage: { frequency: "n-per-battle", count: 1 } },
+        binds_event_variable: "used-ability",
+        subject: { owner: "friendly", all_of: ["ADEPTUS CUSTODES"], level: "model", designated: "warlord" },
+      },
+      usage: { frequency: "n-per-battle", count: 1, per: "army" },
+      applies_to: { all_of: ["ADEPTUS CUSTODES", "Warlord"] },
+    },
+    // The Silent Hunters detachment left the dump at MFM data version 995.
+    "adeptus-custodes/synchronised-inferno-silent-hunters-adeptus-custodes": {
+      effect: {
+        type: "conditional",
+        condition: { type: "attack-is", parameters: { attack_type: "ranged" } },
+        effect: {
+          type: "weapon-ability-grant",
+          target: "this-unit",
+          modifier: { keywords: [{ keyword_id: "blast", parameters: { value: 1 } }], weapons: { type: "ranged", keyword: { keyword_id: "torrent" } } },
+        },
+      },
+      scope: { duration: "phase" },
+      trigger: { event: "selected", filter: { to: "shoot" }, subject: { owner: "friendly", all_of: ["WITCHSEEKERS"] } },
+      applies_to: { all_of: ["WITCHSEEKERS"] },
+    },
+  };
   for (const [faction, ids] of fidelityWorklists) {
     const abilities = JSON.parse(readFileSync(join(REPO_ROOT, `data/enrichment/${faction}/abilities.json`), "utf8")) as Array<Record<string, unknown>>;
     for (const id of ids) {
-      const raw = abilities.find((ability) => ability.ability_id === id);
+      const raw = abilities.find((ability) => ability.ability_id === id) ?? retiredFidelityAbilities[`${faction}/${id}`];
       if (!raw) throw new Error(`Missing fidelity case ability: ${faction}/${id}`);
       cases.push({
         caseId: `${faction}-fidelity/${id}`,
@@ -3275,6 +3541,7 @@ function genEffectTranslation(): void {
         ...(raw.trigger ? { trigger: raw.trigger } : {}),
         ...(raw.usage ? { usage: raw.usage } : {}),
         ...(raw.applies_to != null ? { applies_to: raw.applies_to } : {}),
+        ...(raw.optional === true ? { optional: true } : {}),
         expected: { text: describeAbility(raw as Parameters<typeof describeAbility>[0]) },
       });
     }
@@ -3283,87 +3550,653 @@ function genEffectTranslation(): void {
     { caseId: "fidelity/no-effect", effect: { type: "no-effect" } },
     { caseId: "fidelity/leadership-model-with-failure", effect: {
       type: "dice-gated", dice: "2D6", threshold: "leadership", comparison: "gte",
-      test: { kind: "leadership", subject: "self" },
+      test: { kind: "leadership", subject: "this-model" },
       on_success: { type: "no-effect" }, on_fail: { type: "no-effect" },
     } },
     { caseId: "fidelity/friendly-selected-target", trigger: {
-      event: "ability-target-selected", subject: "friendly-unit",
+      event: "targets-selected", filter: { kind: "ability" }, subject: { owner: "friendly" },
       source_ability: { ability_id: "example-selection", owner: "friendly", keywords: ["SOURCE"] },
     }, effect: { type: "no-effect" } },
     { caseId: "fidelity/non-numeric-weapon-characteristic", effect: {
-      type: "stat-modifier", target: "self", modifier: {
-        stat: "A", operation: "add", value: "D3", weapon_type: "melee", weapon_name: "Example blade", weapon_keyword: "Psychic",
+      type: "stat-modifier",
+      target: "this-model",
+      modifier: {
+        stat: "A",
+        operation: "add",
+        value: "D3",
+        weapons: { type: "melee", name: "Example blade", keyword: { keyword_id: "psychic" } },
       },
     } },
     { caseId: "fidelity/model-advance-reroll", effect: {
-      type: "re-roll", target: "self", modifier: { roll: "advance", result_scope: "any-result" },
+      type: "re-roll",
+      target: "this-model",
+      modifier: { roll: "advance", result_scope: "any-result" },
     } },
-    { caseId: "fidelity/condition-of-charged-this-turn", effect: {
+    { caseId: "fidelity/condition-subject-charged", effect: {
       type: "conditional",
-      condition: { type: "charged-this-turn", of: "target" },
+      condition: { type: "happened", parameters: { subject: "defender", event: "move-ended", filter: { move_types: ["charge"] }, window: "turn" } },
       effect: { type: "no-effect" },
     } },
-    { caseId: "fidelity/condition-of-unit-below-half-strength", effect: {
+    { caseId: "fidelity/condition-subject-below-half-strength", effect: {
       type: "conditional",
-      condition: { type: "unit-below-half-strength", of: "target" },
+      condition: { type: "strength", parameters: { subject: "defender", below: "half" } },
       effect: { type: "no-effect" },
     } },
-    { caseId: "fidelity/condition-of-is-battle-shocked", effect: {
+    { caseId: "fidelity/condition-subject-battle-shocked", effect: {
       type: "conditional",
-      condition: { type: "is-battle-shocked", of: "target" },
+      condition: { type: "matches", parameters: { subject: "defender", filter: { state: "battle-shocked" } } },
       effect: { type: "no-effect" },
     } },
     { caseId: "fidelity/reroll-count-one-hit", effect: {
-      type: "re-roll", target: "unit",
+      type: "re-roll",
+      target: "this-unit",
       modifier: { roll: "hit", result_scope: "any-result", count: 1 },
     } },
     { caseId: "fidelity/reroll-count-one-failed-wound", effect: {
-      type: "re-roll", target: "unit",
+      type: "re-roll",
+      target: "this-unit",
       modifier: { roll: "wound", subset: "all-failures", count: 1 },
     } },
     { caseId: "fidelity/reroll-count-two-any", effect: {
-      type: "re-roll", target: "unit",
+      type: "re-roll",
+      target: "this-unit",
       modifier: { roll: "any", result_scope: "any-result", count: 2 },
     } },
     { caseId: "fidelity/named-region-reroll-count-two-any", effect: {
       type: "named-region-state",
-      target: "all-friendly",
+      target: { owner: "friendly" },
       modifier: {
-        region_ref: { region_id: "example-region" },
-        producer: {},
+        region_ref: { region_id: "example-region", owner_faction: "example-faction" },
+        producer: {
+          region_ref: { region_id: "example-region", owner_faction: "example-faction" },
+          mode: "complete",
+          parent_ref: null,
+          baseline: [{ region: { territory: "your-deployment-zone" }, duration: "permanent" }],
+          phase_extensions: ["no-mans-land", "enemy-deployment-zone"].map((territory) => ({
+            region: { territory },
+            condition: { type: "controls", parameters: { by: "friendly", objective: { territory: territory === "no-mans-land" ? "no-mans-land" : "enemy-territory" }, proportion: { comparison: "gte", fraction: 0.5 } } },
+            trigger: { event: "phase-started" },
+            duration: "phase",
+            evaluation: "snapshot-once",
+          })),
+          additive_extensions: [],
+        },
         consumer: {
-          beneficiary_gate: { faction: "example-faction", keywords: ["EXAMPLE"] },
+          state_ref: { region_id: "example-region", owner_faction: "example-faction" },
+          beneficiary_filter: { owner: "friendly", all_of: ["example-faction", "EXAMPLE"] },
           membership: { unit_scope: "whole-unit", relation: "wholly-within" },
+          qualified_condition: { type: "matches", parameters: { filter: { all_of: ["EXAMPLE"] } } },
           default_branch: {
-            effect: { type: "re-roll", modifier: { roll: "any", result_scope: "any-result", count: 2 } },
+            effect: {
+              type: "ability-part",
+              duration: "resolution",
+              effect: {
+                type: "re-roll",
+                target: "attacker",
+                modifier: { roll: "any", result_scope: "any-result", count: 2 },
+              },
+              optional: true,
+            },
           },
           qualified_branch: {
-            effect: { type: "re-roll", modifier: { roll: "any", result_scope: "any-result", count: 2 } },
+            effect: {
+              type: "ability-part",
+              duration: "resolution",
+              effect: {
+                type: "re-roll",
+                target: "attacker",
+                modifier: { roll: "any", result_scope: "any-result", count: 2 },
+              },
+              optional: true,
+            },
           },
         },
+        branch_precedence: "qualified-replaces-default",
       },
     } },
     { caseId: "fidelity/reroll-count-one-of-one", effect: {
-      type: "re-roll", target: "unit",
+      type: "re-roll",
+      target: "this-unit",
       modifier: { roll: "hit", subset: "ones", count: 1 },
+    } },
+    { caseId: "fidelity/stance-selection-capacity-fixed-option", effect: {
+      type: "stance-selection-capacity",
+      modifier: {
+        ability_id: "combat-doctrines-assault-force-adeptus-astartes",
+        option: { ability_id: "combat-doctrines-assault-force-adeptus-astartes", option_id: "assault-doctrine" },
+        additional_selections: 1,
+        allocation: "fixed-option",
+      },
+    } },
+    { caseId: "fidelity/permission-despite-restrictions", effect: {
+      type: "permission",
+      target: "this-unit",
+      modifier: { activity: "declare-charge", allow: true, despite: ["advanced", "fell-back"] },
+    } },
+    { caseId: "fidelity/resource-action-menu-capacity", effect: {
+      type: "resource-action-menu",
+      menu_id: "chief-librarian-psychic-abilities",
+      pool_id: "psychic-level",
+      capacity: {
+        amount: 3,
+        resource_label: "Psychic Level",
+        ability_noun: "Psychic",
+        refresh: "battle-round",
+      },
+      actions: [
+        {
+          id: "prescience",
+          label: "Prescience",
+          when: { event: "phase-started" },
+          cost: { pool_id: "psychic-level", amount: 2, resource_label: "Psychic Level" },
+          effect: {
+            type: "stat-modifier",
+            target: "this-unit",
+            modifier: { stat: "Sv", operation: "improve", value: 1 },
+          },
+        },
+      ],
+    } },
+    { caseId: "fidelity/roll-with-rider", effect: {
+      type: "sequence",
+      steps: [
+        {
+          type: "dice-gated",
+          rider: true,
+          dice: "D6",
+          threshold: 1,
+          comparison: "eq",
+          on_success: {
+            type: "state-change",
+            target: "this-unit",
+            modifier: { state: "battle-shocked", set: true },
+          },
+        },
+        {
+          type: "stat-modifier",
+          target: "this-unit",
+          modifier: { stat: "Sv", operation: "improve", value: 1 },
+        },
+      ],
+    } },
+    { caseId: "fidelity/roll-with-rider-absent-is-a-gate", effect: {
+      type: "sequence",
+      steps: [
+        {
+          type: "dice-gated",
+          dice: "D6",
+          threshold: 1,
+          comparison: "eq",
+          on_success: {
+            type: "state-change",
+            target: "this-unit",
+            modifier: { state: "battle-shocked", set: true },
+          },
+        },
+        {
+          type: "stat-modifier",
+          target: "this-unit",
+          modifier: { stat: "Sv", operation: "improve", value: 1 },
+        },
+      ],
+    } },
+    { caseId: "fidelity/designate-objective-self-clearing", effect: {
+      type: "sequence",
+      steps: [
+        { type: "mortal-wounds", target: "event-subject", modifier: { count: "D3" } },
+        {
+          type: "designate",
+          target: "this-model",
+          modifier: { subject: { objective: {} }, tag: "Mortis Snares", clear: true },
+        },
+      ],
+    } },
+    { caseId: "fidelity/designate-objective-persistent", effect: {
+      type: "designate",
+      target: "this-model",
+      modifier: { subject: { objective: {} }, tag: "Mortis Snares", clears_on: "permanent" },
+    } },
+    { caseId: "fidelity/marker-place-consumed", effect: {
+      type: "marker",
+      target: "this-model",
+      modifier: {
+        label: "Teleport Homer",
+        operation: "place",
+        placement: "next-to-this-model",
+        consume: "on-use",
+      },
+    } },
+    { caseId: "fidelity/marker-place-battlefield", effect: {
+      type: "marker",
+      target: "this-model",
+      modifier: { label: "Teleport Homer", operation: "place", placement: "anywhere-on-the-battlefield" },
+    } },
+    { caseId: "fidelity/reference-bearer-transport", effect: {
+      type: "select-units",
+      selector: { filter: { owner: "friendly", within: { range: { inches: 6 }, of: "bearer-transport" } }, count: { min: 1, max: 1 } },
+      effect: {
+        type: "stat-modifier",
+        target: "selected-unit",
+        modifier: { stat: "Ld", operation: "add", value: 1 },
+      },
+    } },
+    { caseId: "fidelity/keyword-match-all-default", effect: {
+      type: "for-each-unit",
+      selector: { filter: { owner: "friendly", all_of: ["adeptus-astartes", "black-templars"] } },
+      effect: {
+        type: "stat-modifier",
+        target: "selected-unit",
+        modifier: { stat: "Ld", operation: "add", value: 1 },
+      },
+    } },
+    { caseId: "fidelity/keyword-match-any", effect: {
+      type: "for-each-unit",
+      selector: { filter: { owner: "friendly", any_of: ["adeptus-astartes", "black-templars"] } },
+      effect: {
+        type: "stat-modifier",
+        target: "selected-unit",
+        modifier: { stat: "Ld", operation: "add", value: 1 },
+      },
+    } },
+    { caseId: "fidelity/move-type-ingress", effect: {
+      type: "move",
+      target: "this-unit",
+      modifier: { move_type: "ingress", distance: 6 },
+    } },
+    { caseId: "fidelity/act-on-death-gate-plain", effect: {
+      type: "act-on-death",
+      target: "event-object",
+      modifier: {
+        act: "fight",
+        eligibility: {
+          operator: "not",
+          operands: [
+            {
+              type: "happened",
+              parameters: { event: "selected", filter: { to: "fight" }, window: "phase" },
+            },
+          ],
+        },
+        gate: { dice: "D6", threshold: 4, comparison: "gte", modifiers: [] },
+        resolution: "when-unit-fights",
+        removal: "after-unit-fights-or-phase-end",
+      },
+    } },
+    { caseId: "fidelity/act-on-death-gate-modified-roll", effect: {
+      type: "act-on-death",
+      target: "event-object",
+      modifier: {
+        act: "fight",
+        eligibility: {
+          operator: "not",
+          operands: [
+            {
+              type: "happened",
+              parameters: { event: "selected", filter: { to: "fight" }, window: "phase" },
+            },
+          ],
+        },
+        gate: {
+          dice: "D6",
+          threshold: 4,
+          comparison: "gte",
+          modifiers: [
+            {
+              condition: { type: "rule-active", parameters: { rule: { ability_id: "combat-doctrines-assault-force-adeptus-astartes", option_id: "assault-doctrine" } } },
+              value: 1,
+            },
+          ],
+        },
+        resolution: "when-unit-fights",
+        removal: "after-unit-fights-or-phase-end",
+      },
+    } },
+    { caseId: "fidelity/selected-to-move-condition", effect: {
+      type: "conditional",
+      condition: {
+        operator: "not",
+        operands: [
+          {
+            type: "happened",
+            parameters: { event: "selected", filter: { to: "move" }, window: "phase" },
+          },
+        ],
+      },
+      effect: {
+        type: "ability-grant",
+        target: "this-unit",
+        modifier: { ability: "fights-first" },
+      },
+    } },
+    { caseId: "fidelity/weapon-grant-curated-label", effect: {
+      type: "weapon-grant",
+      target: "this-model",
+      modifier: { weapon_id: "imperiums-sword", count: 1 },
+    } },
+    { caseId: "fidelity/weapon-grant-slug-fallback", effect: {
+      type: "weapon-grant",
+      target: "this-unit",
+      modifier: { weapon_id: "some-new-blade" },
     } },
     { caseId: "fidelity/for-each-unit-engaged-with-bearer-unit", effect: {
       type: "for-each-unit",
-      selector: {
-        owner: "enemy",
-        engagement_relation: "engaged-with-bearer",
-        reference: "bearer-unit",
-      },
-      effect: {
-        type: "mortal-wounds",
-        target: "unit",
-        modifier: { count: 1 },
+      selector: { filter: { owner: "enemy", engaged_with: "this-unit" } },
+      effect: { type: "mortal-wounds", target: "selected-unit", modifier: { count: 1 } },
+    } },
+    // An aura reaching only units wholly within it, in a state, with one of several keywords.
+    { caseId: "fidelity/aura-wholly-states-any-keywords", effect: {
+      type: "aura",
+      target: "friendly-within-aura",
+      modifier: {
+        range: { inches: 6 },
+        wholly: true,
+        eligible: { state: "battle-shocked", all_of: ["NECRONS"], any_of: ["MOUNTED", "VEHICLE"] },
+        effect: { type: "roll-modifier", target: "this-unit", modifier: { roll: "hit", operation: "add", value: 1 } },
       },
     } },
+    // A Stratagem that can still target a unit just destroyed ("even though it was just destroyed").
+    { caseId: "fidelity/permission-despite-destroyed", effect: {
+      type: "permission",
+      target: "this-unit",
+      modifier: { activity: "use-stratagem", allow: true, despite: ["destroyed"] },
+    } },
+    // One roll the player picks gets the result ("change the result of one Hit roll to a 6").
+    { caseId: "fidelity/roll-result-count-one", effect: {
+      type: "roll-result",
+      target: "this-unit",
+      modifier: { roll: "hit", count: 1, result: 6, unmodified: true },
+    } },
+    // A move that must end where a condition holds ("… either wholly within your deployment zone
+    // or within range of an objective marker"): the move's ends_when.
+    { caseId: "fidelity/move-ends-when-either", effect: {
+      type: "move",
+      target: "this-unit",
+      modifier: {
+        move_type: "fall-back",
+        distance: 6,
+        ends_when: {
+          operator: "or",
+          operands: [
+            { type: "in-region", parameters: { subject: "this-unit", region: { territory: "your-deployment-zone" }, wholly: true } },
+            { type: "matches", parameters: { filter: { within: { of: { objective: {} }, range: "objective-control" } } } },
+          ],
+        },
+      },
+    } },
+    // DSL extension round (SPEC 149): a move starting, Reserves states, negated filter states,
+    // an all-of exclusion, a mortal-wound cap, the Transport disembarked from, Deadly Demise rolls,
+    // as-if phases, a copied unit's fields, and describer readings for fields earlier rounds hid.
+    { caseId: "fidelity/trigger-move-started", trigger: { event: "move-started", filter: { move_types: ["normal"] } }, effect: { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 6 } } },
+    { caseId: "fidelity/trigger-move-started-enemy-consolidation", trigger: { event: "move-started", subject: { owner: "enemy" }, filter: { move_types: ["consolidation"] } }, effect: { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 6 } } },
+    { caseId: "fidelity/permission-as-if-charge-phase", effect: { type: "permission", target: "this-unit", modifier: { activity: "declare-charge", allow: true, as_if: "charge-phase" } } },
+    { caseId: "fidelity/permission-as-if-command-phase", effect: { type: "permission", target: "this-unit", modifier: { activity: "shoot", allow: true, as_if: "command-phase" } } },
+    { caseId: "fidelity/permission-as-if-movement-phase", effect: { type: "permission", target: "this-unit", modifier: { activity: "shoot", allow: true, as_if: "movement-phase" } } },
+    { caseId: "fidelity/set-up-cult-ambush-marker-range", effect: { type: "set-up", target: "this-unit", modifier: { to: "battlefield", via: "cult-ambush", marker_range: { range: { inches: 6 }, wholly: true } } } },
+    { caseId: "fidelity/marker-relocate-not-moved", effect: { type: "marker", target: "this-unit", modifier: { label: "cult-ambush-marker", operation: "relocate", distance: { inches: 6 }, not_moved_this_turn: true } } },
+    { caseId: "fidelity/move-as-if-movement-phase", effect: { type: "move", target: "this-unit", modifier: { move_type: "normal", distance: 6, as_if: "movement-phase" } } },
+    { caseId: "fidelity/add-unit-copy-cult-ambush", effect: { type: "add-unit", target: "this-unit", modifier: { copy_of: "event-object", count: 1, excluded_keywords: ["CHARACTER"], at_starting_strength: true, reset_one_shot: true, placement: "cult-ambush" } } },
+    { caseId: "fidelity/condition-in-cult-ambush", effect: { type: "conditional", condition: { type: "matches", parameters: { filter: { state: "in-cult-ambush" } } }, effect: { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 6 } } } },
+    { caseId: "fidelity/filter-not-states-not-all-of", effect: { type: "mortal-wounds", target: { owner: "enemy", not_states: ["engaged", "battle-shocked"], not_all_of: ["MONSTER", "CHARACTER"] }, modifier: { count: 1 } } },
+    // Unit-filter alternatives (any_of_filters): keyword-only alternatives read "A or B C units";
+    // any other alternatives are named one by one; the outer level reaches every alternative.
+    { caseId: "fidelity/filter-any-of-filters-keywords", effect: { type: "keyword-grant", target: { owner: "friendly", any_of_filters: [{ all_of: ["ALPHA"] }, { all_of: ["BETA", "GAMMA"] }] }, modifier: { keywords: ["DELTA"] } } },
+    { caseId: "fidelity/filter-any-of-filters-state", effect: { type: "mortal-wounds", target: { owner: "enemy", any_of_filters: [{ all_of: ["ALPHA"] }, { state: "battle-shocked" }, { all_of: ["BETA"], not_states: ["engaged"] }] }, modifier: { count: 1 } } },
+    { caseId: "fidelity/filter-any-of-filters-shared-keywords", effect: { type: "keyword-grant", target: { owner: "friendly", all_of: ["ALPHA"], any_of_filters: [{ all_of: ["BETA"], none_of: ["DELTA"] }, { all_of: ["GAMMA", "EPSILON"] }] }, modifier: { keywords: ["ZETA"] } } },
+    { caseId: "fidelity/filter-any-of-filters-models", effect: { type: "re-roll", target: { owner: "friendly", level: "model", any_of_filters: [{ all_of: ["ALPHA"] }, { all_of: ["BETA", "GAMMA"] }] }, modifier: { roll: "hit", result_scope: "any-result" } } },
+    { caseId: "fidelity/within-any-of-filters", effect: { type: "conditional", condition: { type: "matches", parameters: { filter: { within: { of: { owner: "friendly", level: "model", any_of_filters: [{ all_of: ["ALPHA"] }, { all_of: ["BETA"], state: "battle-shocked" }] }, range: { inches: 3 } } } } }, effect: { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 6 } } } },
+    { caseId: "fidelity/trigger-subject-any-of-filters", trigger: { event: "destroyed", subject: { owner: "friendly", level: "model", any_of_filters: [{ all_of: ["ALPHA"] }, { all_of: ["BETA", "GAMMA"] }] } }, effect: { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 6 } } },
+    { caseId: "fidelity/trigger-subject-not-states", trigger: { event: "move-ended", subject: { owner: "enemy", not_states: ["engaged"] } }, effect: { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 6 } } },
+    { caseId: "fidelity/mortal-wounds-max", effect: { type: "mortal-wounds", target: "event-subject", modifier: { count: "2D6", max: 6 } } },
+    { caseId: "fidelity/mortal-wounds-roll-max", effect: { type: "mortal-wounds", target: "this-unit", modifier: { count: 1, roll: { dice: "3D6", threshold: 4 }, max: 3 } } },
+    { caseId: "fidelity/trigger-disembarked-from-this-transport", trigger: { event: "disembarked", filter: { transport: "this-unit" } }, effect: { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 6 } } },
+    { caseId: "fidelity/happened-disembarked-from-this-transport", effect: { type: "conditional", condition: { type: "happened", parameters: { event: "disembarked", filter: { transport: "this-unit" }, window: "turn" } }, effect: { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 6 } } } },
+    { caseId: "fidelity/trigger-before-deadly-demise", trigger: { event: "before-roll", filter: { roll: "deadly-demise" } }, effect: { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 6 } } },
+    { caseId: "fidelity/happened-set-up-deep-strike", effect: { type: "conditional", condition: { type: "happened", parameters: { event: "set-up", filter: { from: "deep-strike" }, window: "turn" } }, effect: { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 6 } } } },
+    { caseId: "fidelity/dice-table-two-dice-distinct", effect: { type: "dice-table", dice: "D6", count: 2, distinct: true, outcomes: [{ results: [1, 2, 3], effect: { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 6 } } }, { results: [4, 5, 6], effect: { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 5 } } }] } },
+    { caseId: "fidelity/army-rule-allied-faction", effect: { type: "army-rule", target: "this-unit", modifier: { rule: "composition", max: 500, measure: "points", faction: "chaos-daemons" } } },
+    { caseId: "fidelity/condition-attached-to-keywords", effect: { type: "conditional", condition: { type: "attachment", parameters: { role: "attached", with: { all_of: ["DOMINION SQUAD"] } } }, effect: { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 6 } } } },
+    { caseId: "fidelity/trigger-used-by-opponent", trigger: { event: "used", subject: { owner: "enemy" }, filter: { kind: "stratagem" } }, effect: { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 6 } } },
+    { caseId: "fidelity/trigger-after-roll-failed-test", trigger: { event: "after-roll", filter: { roll: "battle-shock", result: "failure" } }, effect: { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 6 } } },
+    { caseId: "fidelity/trigger-after-roll-save-failed-for-model", trigger: { event: "after-roll", subject: "this-model", filter: { roll: "save", result: "failure" } }, effect: { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 6 } } },
+    { caseId: "fidelity/trigger-after-roll-successful-charge", trigger: { event: "after-roll", filter: { roll: "charge", result: "success" } }, effect: { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 6 } } },
+    { caseId: "fidelity/trigger-destroyed-by-this-unit", trigger: { event: "destroyed", subject: "this-unit", object: { owner: "enemy" } }, effect: { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 6 } } },
+    // A named rule used: which one (filter.id) and who used it; a use in progress now (window event).
+    { caseId: "fidelity/trigger-used-named-ability-by-model", trigger: { event: "used", subject: "this-model", filter: { kind: "ability", id: "crude-surgery-orks" } }, effect: { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 6 } } },
+    { caseId: "fidelity/trigger-used-named-ability-holder", trigger: { event: "used", filter: { kind: "ability", id: "reanimation-protocols-necrons" } }, effect: { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 6 } } },
+    { caseId: "fidelity/trigger-used-named-manoeuvre", trigger: { event: "used", subject: { owner: "friendly" }, filter: { kind: "manoeuvre", id: "swift-as-the-wind" } }, effect: { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 6 } } },
+    { caseId: "fidelity/trigger-used-named-stratagem-by-opponent", trigger: { event: "used", subject: { owner: "enemy" }, filter: { kind: "stratagem", id: "fire-overwatch" } }, effect: { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 6 } } },
+    { caseId: "fidelity/trigger-used-named-ability-aura-proximity", trigger: { event: "used", subject: { owner: "friendly", all_of: ["NECRONS"] }, filter: { kind: "ability", id: "reanimation-protocols-necrons" }, proximity: { of: "this-model", range: { inches: 3 } } }, effect: { type: "heal", target: "event-subject", modifier: { amount: "D3" } } },
+    { caseId: "fidelity/happened-used-manoeuvre-now", effect: { type: "conditional", condition: { type: "happened", parameters: { event: "used", filter: { kind: "manoeuvre" }, window: "event" } }, effect: { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 6 } } } },
+    { caseId: "fidelity/happened-used-named-ability-now-negated", effect: { type: "conditional", condition: { operator: "not", operands: [{ type: "happened", parameters: { event: "used", subject: "event-subject", filter: { kind: "ability", id: "reanimation-protocols-necrons" }, window: "event" } }] }, effect: { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 6 } } } },
+    { caseId: "fidelity/happened-used-named-ability-turn", effect: { type: "conditional", condition: { type: "happened", parameters: { event: "used", filter: { kind: "ability", id: "flickerjump-aeldari" }, window: "turn" } }, effect: { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 6 } } } },
+    // What a model set back up, a returned model or a split unit comes back with.
+    { caseId: "fidelity/set-up-wounds-remaining-full", effect: { type: "set-up", target: "this-model", modifier: { to: "battlefield", placement: "closest-to-destruction", wounds_remaining: "full" } } },
+    { caseId: "fidelity/set-up-wounds-remaining-number", effect: { type: "set-up", target: "this-model", modifier: { to: "battlefield", via: "deep-strike", wounds_remaining: 3 } } },
+    { caseId: "fidelity/set-up-wounds-remaining-dice", effect: { type: "set-up", target: "this-model", modifier: { to: "battlefield", placement: "closest-to-destruction", wounds_remaining: "D3" } } },
+    { caseId: "fidelity/set-up-half-starting-detach", effect: { type: "set-up", target: "this-model", modifier: { to: "battlefield", placement: ["closest-to-destruction", "unengaged"], wounds_remaining: "half-starting", detach: true, starting_strength: 1 } } },
+    { caseId: "fidelity/set-up-starting-strength", effect: { type: "set-up", target: "this-model", modifier: { to: "battlefield", placement: "closest-to-destruction", starting_strength: 1 } } },
+    { caseId: "fidelity/return-models-half-starting", effect: { type: "return-models", target: "this-unit", modifier: { count: 1, wounds_remaining: "half-starting" } } },
+    { caseId: "fidelity/split-unit-starting-strength", effect: { type: "split-unit", target: "this-unit", modifier: { by: "model", starting_strength: 1 } } },
+    // "Those attacks": a hidden suppression naming the attacks a shooting trigger bound, against
+    // the same suppression unbound.
+    { caseId: "fidelity/rule-state-hidden-bound-attacks-resolved", trigger: { event: "attacks-resolved", subject: { owner: "friendly", all_of: ["ALPHA"] }, filter: { kind: "shoot" }, binds_event_variable: "those-attacks" }, effect: { type: "rule-state", target: "this-unit", modifier: { direction: "suppressed", rule_kind: "core-rule", rule: "attacking-ends-hidden", attacks: { event_var: "those-attacks" } } } },
+    { caseId: "fidelity/rule-state-hidden-bound-selected-to-shoot", trigger: { event: "selected", subject: { owner: "friendly", all_of: ["BETA"] }, filter: { to: "shoot" }, binds_event_variable: "those-attacks" }, effect: { type: "rule-state", target: "event-subject", modifier: { direction: "suppressed", rule_kind: "core-rule", rule: "attacking-ends-hidden", attacks: { event_var: "those-attacks" } } } },
+    { caseId: "fidelity/rule-state-hidden-unbound", trigger: { event: "selected", subject: { owner: "friendly", all_of: ["BETA"] }, filter: { to: "shoot" } }, effect: { type: "rule-state", target: "event-subject", modifier: { direction: "suppressed", rule_kind: "core-rule", rule: "attacking-ends-hidden" } } },
+    // List-building rules (wave 8): permissions and bans, datasheet groups, groups as subjects,
+    // Enhancement sourcing, limit exemptions, Leader attachment eligibility, army contents.
+    { caseId: "fidelity/army-rule-composition-permission", effect: { type: "army-rule", target: "this-unit", modifier: { rule: "composition", with: { owner: "friendly", all_of: ["ALPHA"] } } } },
+    { caseId: "fidelity/army-rule-composition-forbidden", effect: { type: "army-rule", target: "this-unit", modifier: { rule: "composition", max: 0, with: { owner: "friendly", all_of: ["ALPHA"], none_of: ["BETA"] } } } },
+    { caseId: "fidelity/army-rule-composition-datasheets", effect: { type: "army-rule", target: "this-unit", modifier: { rule: "composition", max: 0, datasheets: ["alpha-squad", "beta-squad"] } } },
+    { caseId: "fidelity/army-rule-composition-datasheets-with", effect: { type: "army-rule", target: "this-unit", modifier: { rule: "composition", max: 2, with: { owner: "friendly", all_of: ["ALPHA"] }, datasheets: ["alpha-squad"] } } },
+    { caseId: "fidelity/army-rule-unique-with", effect: { type: "army-rule", target: "this-unit", modifier: { rule: "unique", with: { owner: "friendly", all_of: ["ALPHA"], level: "model" } } } },
+    { caseId: "fidelity/army-rule-warlord-forbidden-group", effect: { type: "army-rule", target: { owner: "friendly", any_of: ["ALPHA", "BETA"], level: "model" }, modifier: { rule: "warlord-forbidden" } } },
+    { caseId: "fidelity/army-rule-enhancement-source", effect: { type: "army-rule", target: { owner: "friendly", all_of: ["ALPHA"] }, modifier: { rule: "enhancement-source" } } },
+    { caseId: "fidelity/army-rule-limit-exemption-enhancements", effect: { type: "army-rule", target: "this-unit", modifier: { rule: "limit-exemption", exempt_from: ["enhancement-limit"] } } },
+    { caseId: "fidelity/army-rule-limit-exemption-unit-enhancements", effect: { type: "army-rule", target: { owner: "friendly", all_of: ["ALPHA"] }, modifier: { rule: "limit-exemption", exempt_from: ["enhancement-limit"] } } },
+    { caseId: "fidelity/army-rule-limit-exemption-reserves", effect: { type: "army-rule", target: { owner: "friendly", all_of: ["ALPHA"] }, modifier: { rule: "limit-exemption", exempt_from: ["strategic-reserves-points"] } } },
+    { caseId: "fidelity/army-rule-attachment-transfer", effect: { type: "army-rule", target: "this-unit", modifier: { rule: "attachment", with: { owner: "friendly", all_of: ["CHARACTER"], none_of: ["EPIC HERO"], has_ability: ["leader"] }, attach_as: { owner: "friendly", all_of: ["ALPHA"] } } } },
+    { caseId: "fidelity/army-rule-attachment-transfer-models", effect: { type: "army-rule", target: "this-unit", modifier: { rule: "attachment", with: { owner: "friendly", all_of: ["ADEPTUS"], level: "model", has_ability: ["leader"] }, attach_as: { owner: "friendly", all_of: ["ALPHA"] } } } },
+    { caseId: "fidelity/army-rule-attachment-can-lead", effect: { type: "army-rule", target: "this-model", modifier: { rule: "attachment", can_lead: { owner: "friendly", any_of: ["ALPHA", "BETA"] } } } },
+    { caseId: "fidelity/condition-army-includes", effect: { type: "conditional", condition: { type: "army-includes", parameters: { filter: { owner: "friendly", all_of: ["ALPHA"], none_of: ["BETA"] } } }, effect: { type: "army-rule", target: "this-unit", modifier: { rule: "composition", max: 0, with: { owner: "friendly", all_of: ["GAMMA"] } } } } },
+    { caseId: "fidelity/condition-army-includes-min", effect: { type: "conditional", condition: { type: "army-includes", parameters: { filter: { owner: "friendly", all_of: ["ALPHA"] }, min: 2 } }, effect: { type: "army-rule", target: "this-unit", modifier: { rule: "composition", max: 0, with: { owner: "friendly", all_of: ["GAMMA"] } } } } },
+    { caseId: "fidelity/condition-army-includes-every", effect: { type: "conditional", condition: { type: "army-includes", parameters: { filter: { owner: "friendly", any_of: ["ALPHA", "BETA"], level: "model" }, every: true } }, effect: { type: "army-rule", target: "this-unit", modifier: { rule: "composition", max: 1, with: { owner: "friendly", all_of: ["GAMMA"] } } } } },
+    { caseId: "fidelity/condition-army-includes-every-all", effect: { type: "conditional", condition: { type: "army-includes", parameters: { filter: { owner: "friendly", all_of: ["ALPHA", "BETA"], level: "model" }, every: true } }, effect: { type: "army-rule", target: "this-unit", modifier: { rule: "composition", max: 1, with: { owner: "friendly", all_of: ["GAMMA"] } } } } },
+    { caseId: "fidelity/condition-army-includes-negated", effect: { type: "conditional", condition: { operator: "not", operands: [{ type: "army-includes", parameters: { filter: { owner: "friendly", all_of: ["ALPHA"] } } }] }, effect: { type: "army-rule", target: "this-unit", modifier: { rule: "composition", max: 0, with: { owner: "friendly", all_of: ["GAMMA"] } } } } },
+    { caseId: "fidelity/condition-army-includes-every-negated", effect: { type: "conditional", condition: { operator: "not", operands: [{ type: "army-includes", parameters: { filter: { owner: "friendly", all_of: ["ALPHA"], level: "model" }, every: true } }] }, effect: { type: "army-rule", target: "this-unit", modifier: { rule: "composition", max: 0, with: { owner: "friendly", all_of: ["GAMMA"] } } } } },
+    { caseId: "fidelity/condition-army-faction-negated", effect: { type: "conditional", condition: { operator: "not", operands: [{ type: "army-faction", parameters: { faction: "alpha-legion" } }] }, effect: { type: "army-rule", target: "this-unit", modifier: { rule: "composition", max: 1, with: { owner: "friendly", all_of: ["GAMMA"] }, per: { owner: "friendly", all_of: ["ALPHA"] }, exempt_from: ["retinue-limit"] } } } },
+    // Destruction qualified by its weapon or attack type (wave 10): the trigger and the happened
+    // condition carry the destroying attacks' shared weapons scope or attack_type.
+    { caseId: "fidelity/trigger-destroyed-weapon-name", trigger: { event: "model-destroyed", subject: "this-model", object: { owner: "enemy", level: "model" }, filter: { weapons: { name: "quake cannon" } } }, effect: { type: "resource-gain", target: "this-model", modifier: { pool: "blood-tithe-pool", amount: 1 } } },
+    { caseId: "fidelity/trigger-destroyed-weapon-keyword", trigger: { event: "destroyed", subject: "this-unit", object: { owner: "enemy" }, filter: { weapons: { keyword: { keyword_id: "psychic" } } } }, effect: { type: "resource-gain", target: "this-model", modifier: { pool: "blood-tithe-pool", amount: 1 } } },
+    { caseId: "fidelity/condition-destroyed-melee-event", effect: { type: "conditional", condition: { type: "happened", parameters: { event: "destroyed", object: { owner: "enemy" }, filter: { by: "this-unit", attack_type: "melee" }, window: "event" } }, effect: { type: "resource-gain", target: "this-model", modifier: { pool: "blood-tithe-pool", amount: 1 } } } },
+    { caseId: "fidelity/condition-destroyed-melee-phase", effect: { type: "conditional", condition: { type: "happened", parameters: { event: "destroyed", object: { owner: "enemy" }, filter: { by: "this-unit", attack_type: "melee" }, window: "phase" } }, effect: { type: "resource-gain", target: "this-model", modifier: { pool: "blood-tithe-pool", amount: 1 } } } },
+    // An attack condition gating a defensive effect is the incoming attack ("against ranged attacks");
+    // gating anything else it stays the unit's own attacks ("while making ranged attacks").
+    { caseId: "fidelity/condition-attack-is-defensive-invuln", effect: { type: "conditional", condition: { type: "attack-is", parameters: { attack_type: "ranged" } }, effect: { type: "invulnerable-save", target: { owner: "friendly", all_of: ["ALPHA"] }, modifier: { invuln_sv: 4 } } } },
+    { caseId: "fidelity/condition-attack-is-defensive-fnp-weapons", effect: { type: "conditional", condition: { type: "attack-is", parameters: { attack_type: "ranged", weapons: { keyword: { keyword_id: "blast" } } } }, effect: { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 5 } } } },
+    { caseId: "fidelity/condition-attack-is-defensive-save-and", effect: { type: "conditional", condition: { operator: "and", operands: [{ type: "matches", parameters: { filter: { within: { of: { objective: {} }, range: "objective-control" } } } }, { type: "attack-is", parameters: { attack_type: "ranged" } }] }, effect: { type: "stat-modifier", target: "this-unit", modifier: { stat: "Sv", operation: "improve", value: 1 } } } },
+    { caseId: "fidelity/condition-attack-is-defensive-or-block", effect: { type: "sequence", steps: [{ type: "invulnerable-save", target: "this-unit", modifier: { invuln_sv: 6 } }, { type: "conditional", condition: { operator: "or", operands: [{ type: "attack-is", parameters: { attack_type: "psychic" } }, { type: "matches", parameters: { subject: "attacker", filter: { all_of: ["DAEMON"] } } }] }, effect: { type: "invulnerable-save", target: "this-unit", modifier: { invuln_sv: 4 } } }] } },
+    // A modifier that hinders the attacker is resolved from the attacked unit's side too; one that helps it is not.
+    { caseId: "fidelity/condition-attack-is-attacker-damage", effect: { type: "conditional", condition: { type: "attack-is", parameters: { attack_type: "ranged" } }, effect: { type: "stat-modifier", target: "attacker", modifier: { stat: "D", operation: "subtract", value: 1 } } } },
+    { caseId: "fidelity/condition-attack-is-attacker-hit-trigger", trigger: { event: "targets-selected", filter: { kind: "attack" }, subject: { owner: "enemy" }, object: { owner: "friendly", all_of: ["ALPHA"] } }, effect: { type: "conditional", condition: { type: "attack-is", parameters: { attack_type: "ranged" } }, effect: { type: "roll-modifier", target: "attacker", modifier: { roll: "hit", operation: "subtract", value: 1 } } } },
+    { caseId: "fidelity/condition-attack-is-attacker-negated", effect: { type: "conditional", condition: { operator: "not", operands: [{ type: "attack-is", parameters: { attack_type: "psychic" } }] }, effect: { type: "stat-modifier", target: "attacker", modifier: { stat: "AP", operation: "worsen", value: 1 } } } },
+    { caseId: "fidelity/condition-attack-is-attacker-reroll", effect: { type: "conditional", condition: { type: "attack-is", parameters: { attack_type: "ranged" } }, effect: { type: "re-roll", target: "attacker", modifier: { roll: "hit", subset: "ones" } } } },
+    { caseId: "fidelity/condition-attack-is-attacker-bs-subtract", effect: { type: "conditional", condition: { type: "attack-is", parameters: { attack_type: "melee" } }, effect: { type: "stat-modifier", target: "attacker", modifier: { stat: "WS", operation: "subtract", value: 1 } } } },
+    { caseId: "fidelity/condition-attack-is-offensive", effect: { type: "conditional", condition: { type: "attack-is", parameters: { attack_type: "ranged" } }, effect: { type: "stat-modifier", target: "this-unit", modifier: { stat: "AP", operation: "improve", value: 1 } } } },
+    // An objective selection's reach: your unit's own control, a bearer's control range, an explicit distance.
+    { caseId: "fidelity/select-objective-unit-controls", effect: { type: "select-objective", selector: { filter: { controlled_by: "friendly", within: { range: "objective-control", of: "this-unit" } }, bind_as: "objective", count: { min: 1, max: 1 } }, effect: { type: "objective-sticky", target: "this-unit" } } },
+    { caseId: "fidelity/select-objective-model-range", effect: { type: "select-objective", selector: { filter: { controlled_by: "friendly", within: { range: "objective-control", of: "this-model" } }, bind_as: "objective", count: { min: 1, max: 1 } }, effect: { type: "objective-sticky", target: "this-unit" } } },
+    { caseId: "fidelity/select-objective-within-inches", effect: { type: "select-objective", selector: { filter: { within: { range: { inches: 18 }, of: "this-model" } }, bind_as: "objective", count: { min: 1, max: 1 } }, effect: { type: "objective-sticky", target: "this-unit" } } },
+    // An Advance with no roll that adds 8" instead of the core 6".
+    { caseId: "fidelity/move-modifier-advance-fixed-8", effect: { type: "move-modifier", target: "this-unit", modifier: { advance: "fixed-8" } } },
+    // Modifiers to every roll but the listed ones are ignored ("excluding modifiers to saving throws").
+    { caseId: "fidelity/ignore-modifiers-rolls-except-save", effect: { type: "ignore-modifiers", target: "this-unit", modifier: { what: "rolls", rolls: ["all"], except_rolls: ["save"] } } },
+    // Registered designations print their own term ("is in defence stance", "is rotted").
+    ...["defence-stance", "rotted"].map((tag) => ({ caseId: `fidelity/designate-${tag}`, effect: { type: "designate", target: "this-unit", modifier: { tag } } })),
+    // A used Stratagem's object filter names the unit it targets; a role reads "the unit".
+    ...[
+      ["any", { kind: "stratagem" }, undefined],
+      ["named", { kind: "stratagem", id: "example-gambit" }, undefined],
+      ["opponent", { kind: "stratagem" }, { owner: "enemy" }],
+      ["opponent-named", { kind: "stratagem", id: "example-gambit" }, { owner: "enemy" }],
+    ].map(([name, filter, subject]) => ({
+      caseId: `fidelity/used-stratagem-object-filter-${name as string}`,
+      trigger: { event: "used", filter, ...(subject ? { subject } : {}), object: { owner: "friendly", all_of: ["EXAMPLE HOST"], within: { of: "this-model", range: { inches: 12 } } }, optional: true },
+      effect: { type: "cp-gain", target: "this-model", modifier: { amount: 1 } },
+    })),
+    // An event's phase filter leads the history window, and follows a trigger's event.
+    ...[
+      ["destroyed-by", { event: "destroyed", object: { owner: "enemy" }, filter: { by: "this-unit", phase: "fight" }, window: "battle" }],
+      ["destroyed-by-melee", { event: "destroyed", object: { owner: "enemy" }, filter: { by: "this-unit", attack_type: "melee", phase: "fight" }, window: "battle" }],
+      ["destroyed", { event: "destroyed", object: { owner: "enemy" }, filter: { phase: "shooting" }, window: "turn" }],
+      ["charged", { event: "move-ended", filter: { move_types: ["charge"], phase: "charge" }, window: "turn" }],
+      ["disembarked", { event: "disembarked", filter: { phase: "movement" }, window: "turn" }],
+    ].map(([name, parameters]) => ({
+      caseId: `fidelity/happened-phase-filter-${name as string}`,
+      effect: { type: "conditional", condition: { type: "happened", parameters }, effect: { type: "cp-gain", target: "this-model", modifier: { amount: 1 } } },
+    })),
+    // A destruction's subject names who destroyed the units when the filter names no attacker.
+    ...[
+      ["subject-phase", { type: "happened", parameters: { event: "destroyed", subject: "this-unit", object: { owner: "enemy" }, filter: { phase: "fight" }, window: "battle" } }],
+      ["subject-phase-negated", { operator: "not", operands: [{ type: "happened", parameters: { event: "destroyed", subject: "this-unit", object: { owner: "enemy" }, filter: { phase: "fight" }, window: "battle" } }] }],
+      ["subject-event-window", { type: "happened", parameters: { event: "destroyed", subject: "this-model", object: { owner: "enemy" }, window: "event" } }],
+    ].map(([name, condition]) => ({
+      caseId: `fidelity/happened-destroyed-${name as string}`,
+      effect: { type: "conditional", condition, effect: { type: "cp-gain", target: "this-model", modifier: { amount: 1 } } },
+    })),
+    { caseId: "fidelity/trigger-phase-filter-destroyed", trigger: { event: "destroyed", subject: "this-unit", object: { owner: "enemy" }, filter: { phase: "fight" } },
+      effect: { type: "cp-gain", target: "this-model", modifier: { amount: 1 } } },
+    // A faction rule granted whatever the army's faction is.
+    { caseId: "fidelity/rule-state-faction-rule-any-army-faction", effect: { type: "rule-state", target: "this-unit", modifier: { direction: "granted", rule_kind: "faction-rule", rule: "example-pact-rule", any_army_faction: true } } },
+    // A destruction resolved once the attacking unit has finished its attacks.
+    { caseId: "fidelity/trigger-model-destroyed-after-attacks", trigger: { event: "model-destroyed", object: { owner: "friendly", all_of: ["FABLED SPRITE"], level: "model", member_of: "this-unit" }, filter: { timing: "after-attacks" } },
+      effect: { type: "cp-gain", target: "this-model", modifier: { amount: 1 } } },
+    // One or more of this unit's own models selected after an enemy unit: a roll per model, and wounds on the bound enemy unit.
+    { caseId: "fidelity/own-models-after-unit-selection", effect: { type: "select-units",
+      selector: { filter: { owner: "enemy" }, count: { min: 1, max: 1 }, eligibility: { type: "matches", parameters: { subject: "selected-unit", filter: { engaged_with: "this-unit" } } }, bind_as: "enemy" },
+      effect: { type: "select-units", selector: { filter: { owner: "friendly", all_of: ["EMBER SPRITE"], level: "model", member_of: "this-unit" }, count: { min: 1 }, bind_as: "sprites" },
+        effect: { type: "dice-gated", dice: "D6", threshold: 4, comparison: "gte", on_fail: null, on_success: { type: "sequence", steps: [
+          { type: "destroy-models", target: "selected-unit", modifier: { count: 1 } },
+          { type: "mortal-wounds", target: { selection_var: "enemy" }, modifier: { count: 1 } },
+        ] } } } } },
+    // A consolidation mode the unit could not otherwise select, regardless of the move's Before Moving restrictions.
+    { caseId: "fidelity/move-modifier-mode-choice-any", effect: { type: "move-modifier", target: "this-unit", modifier: { applies_to_moves: ["consolidation"], mode_choice: { modes: "any", ignore_before_moving: true } } } },
+    // An objective marker the unit was controlling when the rule was triggered, clear of enemy units, then secured.
+    { caseId: "fidelity/select-objective-controlled-by-unit-clear-of", effect: { type: "select-objective",
+      selector: { filter: { controlled_by_unit: "this-unit", clear_of: { owner: "enemy", none_of: ["AIRCRAFT"] } }, bind_as: "objective", count: { min: 1, max: 1 } },
+      effect: { type: "objective-sticky", target: "this-unit", modifier: { objective: { selection_var: "objective" } } } } },
+    // A move's distance ceiling as printed: "can move up to 4\"".
+    { caseId: "fidelity/move-modifier-maximum-inches", effect: { type: "move-modifier", target: "this-unit", modifier: { applies_to_moves: ["consolidation"], maximum: 4 } } },
+    // A targeting restriction that covers only targets meeting a condition (this-unit is the checked target).
+    { caseId: "fidelity/targeting-target-condition-engaged-at-turn-start", effect: { type: "targeting", target: "this-unit", modifier: { by: "this-unit", may: "cannot-target", kind: "attack", target: { owner: "enemy" },
+      target_condition: { type: "unit-state", parameters: { subject: "this-unit", state: "engaged", with: "ability-unit", at: "turn-start" } } } } },
+    { caseId: "fidelity/targeting-target-condition-targeted-by-another", effect: { type: "targeting", target: "this-unit", modifier: { by: "this-unit", may: "cannot-target", kind: "attack", target: { owner: "enemy" },
+      target_condition: { type: "happened", parameters: { event: "targets-selected", subject: { owner: "any", excluding: "ability-unit" }, object: "this-unit", filter: { kind: "attack" }, window: "phase" } } } } },
+    // Targeted by another unit's attack or by its charge: the two histories read apart.
+    { caseId: "fidelity/targeting-target-condition-attack-or-charge-target", effect: { type: "targeting", target: "this-unit", modifier: { by: "this-unit", may: "cannot-target", kind: "attack", target: { owner: "enemy" },
+      target_condition: { operator: "or", operands: [
+        { type: "happened", parameters: { event: "targets-selected", subject: { owner: "any", excluding: "ability-unit" }, object: "this-unit", filter: { kind: "attack" }, window: "phase" } },
+        { type: "happened", parameters: { event: "targets-selected", subject: { owner: "any", excluding: "ability-unit" }, object: "this-unit", filter: { kind: "charge" }, window: "phase" } }] } } } },
+    // A disembark permission despite the Transport having Advanced, not the disembarking unit.
+    { caseId: "fidelity/disembark-despite-transport-advanced", effect: { type: "permission", target: "this-unit", modifier: { activity: "disembark", allow: true, despite: ["transport-advanced"] } } },
+    // Two for-each passes: the first secures and tags markers, a later part with its own duration reads them back.
+    { caseId: "fidelity/for-each-passes-secured-markers-later-part", effect: { type: "sequence", steps: [
+      { type: "for-each-unit", selector: { filter: { owner: "friendly", all_of: ["SPRITE"] } }, effect: { type: "sequence", steps: [
+        { type: "objective-sticky", target: "recipient" },
+        { type: "designate", target: "recipient", modifier: { subject: { objective: { controlled_by_unit: "recipient" } }, tag: "secured" } }] } },
+      { type: "ability-part", duration: "control-lost", effect: { type: "for-each-unit", selector: { filter: { owner: "enemy" } }, effect: { type: "conditional",
+        condition: { type: "matches", parameters: { subject: "recipient", filter: { within: { of: { objective: { controlled_by: "friendly", designated: "secured" } }, range: "objective-control" } } } },
+        effect: { type: "designate", target: "recipient", modifier: { tag: "spotted" } } } } }] } },
+    // A part lasting until the end of the turn after this one, whoever's turn that is.
+    { caseId: "fidelity/part-until-end-of-next-turn", effect: { type: "ability-part", duration: "until-end-of-next-turn",
+      effect: { type: "designate", target: { owner: "friendly", all_of: ["SPRITE"] }, modifier: { tag: "riled-up" } } } },
+    // A stance menu with an option in force from the start of the battle, before any selection.
+    { caseId: "fidelity/stance-select-initial-option", effect: { type: "stance-select", mode: "re-selectable", initial: "guard-stance", options: [
+      { id: "guard-stance", name: "Guard Stance", effect: { type: "stat-modifier", target: "this-unit", modifier: { stat: "T", operation: "add", value: 1 } } },
+      { id: "strike-stance", name: "Strike Stance", effect: { type: "stat-modifier", target: "this-unit", modifier: { stat: "A", operation: "add", value: 1 } } }] } },
+    // One enemy unit among those that lost a model to the triggering attacks takes the test.
+    { caseId: "fidelity/select-unit-that-lost-models-to-triggering-attacks", effect: { type: "ability-part", trigger: { event: "attacks-resolved", filter: { attack_type: "melee" } },
+      effect: { type: "select-units", selector: { filter: { owner: "enemy" }, count: { min: 1, max: 1 },
+        eligibility: { type: "happened", parameters: { event: "model-destroyed", object: { level: "model", member_of: "selected-unit" }, filter: { by: "this-unit" }, window: "event" } } },
+        effect: { type: "test", target: "selected-unit", modifier: { test: "battle-shock" } } } } },
+    // A move the unit can end at the closest objective marker in place of the closest enemy unit: either end is legal.
+    { caseId: "fidelity/move-end-nearest-objective-optional-instead", effect: { type: "move-modifier", target: "this-unit",
+      modifier: { applies_to_moves: ["normal"], ends_nearest: { of: { objective: {} }, instead_of: "closest-enemy-unit", optional: true } } } },
+    // The option the triggering use of another ability selected becomes active for this unit.
+    { caseId: "fidelity/activate-option-the-triggering-use-selected", effect: { type: "ability-activate", target: "this-unit",
+      modifier: { ability: "rite-of-wards", select: { by: "event" } } } },
+    // A pick that cannot be the option already active for the army.
+    { caseId: "fidelity/activate-player-pick-excluding-army-active", effect: { type: "ability-activate", target: "this-unit",
+      modifier: { ability: "rite-of-wards", select: { by: "player", excluding: "army-active" }, exclusive: true } } },
+    // The same pick, made once and shared across two targets, still excludes the army's option.
+    { caseId: "fidelity/activate-shared-pick-excluding-army-active", effect: { type: "sequence", steps: ["first", "second"].map((which) => ({ type: "ability-activate", target: { stratagem_target: which },
+      modifier: { ability: "rite-of-wards", select: { by: "player", excluding: "army-active", option_var: "picked-option" } } })) } },
+    // Two friendly groups hold opposite designations: tagging one group tags the other with the opposite and clears each stale tag.
+    { caseId: "fidelity/opposed-designations-on-unit-groups", effect: { type: "sequence", steps: [
+      { type: "designate", target: { owner: "friendly", all_of: ["CRIMSON"] }, modifier: { tag: "winning-the-wager" } },
+      { type: "designate", target: { owner: "friendly", all_of: ["CRIMSON"] }, modifier: { tag: "losing-the-wager", clear: true } },
+      { type: "designate", target: { owner: "friendly", all_of: ["AZURE"] }, modifier: { tag: "losing-the-wager" } },
+      { type: "designate", target: { owner: "friendly", all_of: ["AZURE"] }, modifier: { tag: "winning-the-wager", clear: true } }] } },
+    // The unit's controlled markers are tagged; a reaction while tagged clears the tag from the one near the triggering unit.
+    { caseId: "fidelity/tag-controlled-objective-then-clear-near-trigger", effect: { type: "sequence", steps: [
+      { type: "designate", target: "this-unit", modifier: { subject: { objective: { controlled_by_unit: "this-unit" } }, tag: "snared" } },
+      { type: "ability-part", trigger: { event: "move-ended", subject: { owner: "enemy" },
+        condition: { type: "matches", parameters: { subject: "event-subject", filter: { within: { of: { objective: { designated: "snared" } }, range: "objective-control" } } } } },
+      effect: { type: "sequence", steps: [
+        { type: "mortal-wounds", target: "event-subject", modifier: { count: "D3" } },
+        { type: "designate", target: "this-unit", modifier: { subject: { objective: { designated: "snared", within: { range: "objective-control", of: "event-subject" } } }, tag: "snared", clear: true } }] } }] } },
+    // A named region declared with nothing reading it here (a producer-only named-region-state).
+    { caseId: "fidelity/named-region-producer-only", effect: { type: "conditional", condition: { type: "army-faction", parameters: { faction: "example-faction" } },
+      effect: { type: "named-region-state", target: { owner: "friendly" }, modifier: {
+        region_ref: { region_id: "the-fabled-glade", owner_faction: "example-faction" },
+        producer: { region_ref: { region_id: "the-fabled-glade", owner_faction: "example-faction" }, mode: "complete", parent_ref: null,
+          baseline: [{ region: { territory: "your-deployment-zone" }, duration: "permanent" }],
+          phase_extensions: [{ region: { territory: "no-mans-land" }, condition: { type: "controls", parameters: { by: "friendly", objective: { territory: "no-mans-land" }, proportion: { comparison: "gte", fraction: 0.5 } } },
+            trigger: { event: "phase-started" }, duration: "phase", evaluation: "snapshot-once" }],
+          additive_extensions: [] } } } } },
+    // Half the objective markers in the opponent's deployment zone, and those in your own.
+    { caseId: "fidelity/controls-objectives-in-deployment-zones", effect: { type: "conditional",
+      condition: { operator: "and", operands: [
+        { type: "controls", parameters: { by: "friendly", objective: { territory: "enemy-deployment-zone" }, proportion: { comparison: "gte", fraction: 0.5 } } },
+        { type: "controls", parameters: { by: "friendly", objective: { territory: "your-deployment-zone" }, count: { min: 1 } } },
+      ] },
+      effect: { type: "cp-gain", target: "this-model", modifier: { amount: 1 } } } },
+    // A unit selected to make a disembark move of a named mode.
+    { caseId: "fidelity/trigger-selected-disembark-mode", trigger: { event: "selected", subject: { owner: "friendly", all_of: ["FABLED SPRITE"], embarked_in: "this-unit" }, filter: { to: "move", move_types: ["disembark"], mode: "tactical" } },
+      effect: { type: "cp-gain", target: "this-model", modifier: { amount: 1 } } },
+    // The cruncher's generated leaf for one outcome of a dice table, as a Needs toggle reads it.
+    { caseId: "fidelity/dice-table-result-run", effect: { type: "conditional",
+      condition: { type: "dice-table-result", parameters: { ability: "fabricated-barrier", dice: "D6", results: [2, 3, 4, 5, 6] } },
+      effect: { type: "invulnerable-save", target: "this-unit", modifier: { invuln_sv: 4 } } } },
+    { caseId: "fidelity/dice-table-result-negated-list", effect: { type: "conditional",
+      condition: { operator: "not", operands: [{ type: "dice-table-result", parameters: { ability: "fabricated-barrier", dice: "D6", results: [1, 3] } }] },
+      effect: { type: "cp-gain", target: "this-model", modifier: { amount: 1 } } } },
+    { caseId: "fidelity/move-modifier-mode-choice-named-beside-clause", effect: { type: "move-modifier", target: "this-unit", modifier: { applies_to_moves: ["consolidation"], no_end_in_engagement: true, mode_choice: { modes: ["objective"], ignore_before_moving: true } } } },
   ];
   for (const example of fidelityBoundaryCases) {
-    const scope = { range: "unit", duration: "resolution" };
+    const scope = { duration: "resolution" };
     cases.push({ ...example, scope, expected: { text: describeAbility({ ...example, scope } as Parameters<typeof describeAbility>[0]) } });
+  }
+  // Additional lifetime boundaries on one plain effect, independent of corpus sampling.
+  const durationValues = [
+    "while-leading",
+    "after-resolving",
+    "until-end-of-your-next-fight-phase",
+    "until-end-of-your-next-shooting-phase",
+    "until-end-of-your-next-movement-phase",
+    "until-end-of-opponent-next-movement-phase",
+    "until-start-of-opponent-next-command-phase",
+  ];
+  for (const duration of durationValues) {
+    const effect = { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 5 } };
+    const scope = { duration };
+    cases.push({ caseId: `fidelity/duration-${duration}`, effect, scope, expected: { text: describeAbility({ effect, scope } as Parameters<typeof describeAbility>[0]) } });
+  }
+  // Hand-written cases pinned by individual compiler and describer changes (fabricated wording):
+  // their inputs live beside this generator so a regeneration keeps them.
+  const appended = JSON.parse(readFileSync(join(dirname(fileURLToPath(import.meta.url)), "gen-conformance-appended-cases.json"), "utf8")) as Record<string, unknown>[];
+  for (const example of appended) {
+    cases.push({ ...example, expected: { text: describeAbility(example as Parameters<typeof describeAbility>[0]) } });
   }
   writeJson(join(CONFORMANCE, "effect-translation", "cases.json"), cases);
   console.log(
@@ -3402,7 +4235,9 @@ function bytesToBase64url(bytes: number[]): string {
  */
 function genShare(): void {
   mkdirSync(join(CONFORMANCE, "share"), { recursive: true });
-  const ds = Dataset.embedded();
+  // Every game mode: the share registry and codec cover every record, and the
+  // fixture lists are drawn from the full catalog, Combat Patrol included.
+  const ds = Dataset.embedded().forGameMode("all");
   const f = "adeptus-astartes";
   const dets = ds.detachments.all
     .filter((d) => d.faction_id === f)
@@ -3541,12 +4376,110 @@ function genShare(): void {
   );
 }
 
+type ResolverDslCase = {
+  abilityId: string;
+  rating?: string | number;
+  effect?: unknown;
+  /** Ability records the effect grants, resolved as printed definitions before translation. */
+  grantedRecords?: Record<string, GrantedRecord>;
+  source: BuffSource;
+  context: EngineContext;
+  perspective?: "attacker" | "target";
+  expected?: {
+    applied: unknown[];
+    unsupportedReasons: string[];
+    /** Each unsupported fragment's scope, parallel to `unsupportedReasons`. */
+    unsupportedScopes?: string[];
+    needKeys?: string[];
+    activatable?: unknown[];
+  };
+};
+
+/** Refresh every seeded DSL expectation through the same public translation boundary as adapters. */
+function genResolverDslCases(): void {
+  const ds = Dataset.embedded();
+  for (const filename of ["from-dsl.json", "defensive-from-dsl.json"] as const) {
+    const path = join(CONFORMANCE, "abilities-resolver", filename);
+    const corpus = JSON.parse(readFileSync(path, "utf8")) as { cases: ResolverDslCase[] };
+    for (const row of corpus.cases) {
+      const perspective = row.perspective ?? "attacker";
+      const result = row.effect === undefined
+        ? ds.abilities.getAny(row.abilityId)?.describeBuffs(
+          row.source,
+          row.context,
+          perspective,
+          row.rating,
+        )
+        : effectToBuffs(
+          withRating(withGrantedRecords(row), row.rating),
+          row.source,
+          row.context,
+          perspective,
+        );
+      if (!result) throw new Error(`resolver conformance references unknown ability ${row.abilityId}`);
+      row.expected = {
+        applied: result.applied.map((buff) => buff.contribution),
+        unsupportedReasons: result.unsupported.map((entry) => entry.reason),
+        unsupportedScopes: result.unsupported.map((entry) => entry.scope ?? "unresolved"),
+        needKeys: needKeys(result),
+        activatable: result.activatable.map((lever) => ({
+          id: lever.id,
+          label: lever.label,
+          group: lever.group ?? null,
+          requires: lever.requires ?? null,
+          capRaise: lever.capRaise ?? null,
+          ...stanceOptionFields(lever),
+          buffs: lever.buffs.map((buff) => buff.contribution),
+        })),
+      };
+    }
+    writeJson(path, corpus);
+    console.log(`abilities-resolver/${filename}: ${corpus.cases.length} DSL cases`);
+  }
+}
+
+/** The mortal-sources corpus: every row regenerated from the TS reference. */
+function genMortalSourceCases(): void {
+  const cases = canonicalMortalSourceCases(Dataset.embedded());
+  writeJson(join(CONFORMANCE, "abilities-resolver", "mortal-sources.json"), { cases });
+  console.log(`abilities-resolver/mortal-sources.json: ${cases.length} cases`);
+}
+
+/** Append fabricated direct-API cases without duplicating their stable identities on regen. */
+function genCanonicalCruncherCases(): void {
+  const appended = [...canonicalRecipientCases(), ...canonicalHalfWeaponRangeCases(), ...canonicalScenarioCases(), ...canonicalGrantedRecordCases(), ...canonicalDamageZeroingCases(), ...canonicalIgnoreModifiersCases(), ...canonicalTriggerSubjectCases(), ...canonicalStratagemModelCases()];
+  for (const [filename, perspective] of [
+    ["from-dsl.json", "attacker"],
+    ["defensive-from-dsl.json", "target"],
+  ] as const) {
+    const path = join(CONFORMANCE, "abilities-resolver", filename);
+    const corpus = JSON.parse(readFileSync(path, "utf8")) as { cases: Record<string, unknown>[] };
+    corpus.cases = [
+      ...corpus.cases.filter((row) => typeof row.caseId !== "string" ||
+        (!row.caseId.startsWith(RECIPIENT_CASE_PREFIX) && !row.caseId.startsWith(HALF_WEAPON_RANGE_CASE_PREFIX) &&
+          !row.caseId.startsWith(SCENARIO_CASE_PREFIX) && !row.caseId.startsWith(GRANTED_RECORD_CASE_PREFIX) &&
+          !row.caseId.startsWith(DAMAGE_ZEROING_CASE_PREFIX) && !row.caseId.startsWith(IGNORE_MODIFIERS_CASE_PREFIX) &&
+          !row.caseId.startsWith(TRIGGER_SUBJECT_CASE_PREFIX) && !row.caseId.startsWith(STRATAGEM_MODEL_CASE_PREFIX))),
+      ...appended.filter((row) => row.perspective === perspective),
+    ];
+    writeJson(path, corpus);
+    console.log(`abilities-resolver/${filename}: ${corpus.cases.length} cases`);
+  }
+  for (const { filename, value } of [...canonicalWeaponScopeCases(Dataset.embedded()), ...canonicalAttackCompareCases(Dataset.embedded()), ...canonicalCriticalWoundCases(Dataset.embedded())]) {
+    writeJson(join(CONFORMANCE, "cruncher", filename), value);
+  }
+}
+
 genNormalize();
 genRosters();
 genLinkedApi();
 genAttribution();
+genAllocation();
 genScoringTranslation();
 genEffectTranslation();
+genResolverDslCases();
+genCanonicalCruncherCases();
+genMortalSourceCases();
 genScoring();
 genTerrainResolver();
 genTerrainKeystones();

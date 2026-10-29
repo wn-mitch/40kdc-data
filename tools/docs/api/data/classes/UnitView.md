@@ -6,7 +6,7 @@
 
 # Class: UnitView
 
-Defined in: [data/entities.ts:27](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/entities.ts#L27)
+Defined in: [data/entities.ts:35](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/entities.ts#L35)
 
 A unit, linked to its faction, weapons, and abilities.
 
@@ -16,7 +16,7 @@ A unit, linked to its faction, weapons, and abilities.
 
 > **new UnitView**(`raw`, `ds`): `UnitView`
 
-Defined in: [data/entities.ts:28](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/entities.ts#L28)
+Defined in: [data/entities.ts:36](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/entities.ts#L36)
 
 #### Parameters
 
@@ -40,7 +40,7 @@ The full generated `Unit` record.
 
 > `readonly` **raw**: [`Unit`](../../generated/interfaces/Unit.md)
 
-Defined in: [data/entities.ts:30](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/entities.ts#L30)
+Defined in: [data/entities.ts:38](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/entities.ts#L38)
 
 The full generated `Unit` record.
 
@@ -52,7 +52,7 @@ The full generated `Unit` record.
 
 > **get** **id**(): `string`
 
-Defined in: [data/entities.ts:34](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/entities.ts#L34)
+Defined in: [data/entities.ts:42](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/entities.ts#L42)
 
 ##### Returns
 
@@ -66,11 +66,129 @@ Defined in: [data/entities.ts:34](https://github.com/wn-mitch/40kdc-data/blob/0b
 
 > **get** **name**(): `string`
 
-Defined in: [data/entities.ts:38](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/entities.ts#L38)
+Defined in: [data/entities.ts:46](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/entities.ts#L46)
 
 ##### Returns
 
 `string`
+
+***
+
+### factionId
+
+#### Get Signature
+
+> **get** **factionId**(): `string`
+
+Defined in: [data/entities.ts:50](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/entities.ts#L50)
+
+##### Returns
+
+`string`
+
+***
+
+### role
+
+#### Get Signature
+
+> **get** **role**(): `"character"` \| `"battleline"` \| `"dedicated-transport"` \| `"fortification"` \| `"allied"` \| `"epic-hero"` \| `undefined`
+
+Defined in: [data/entities.ts:54](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/entities.ts#L54)
+
+##### Returns
+
+`"character"` \| `"battleline"` \| `"dedicated-transport"` \| `"fortification"` \| `"allied"` \| `"epic-hero"` \| `undefined`
+
+***
+
+### keywords
+
+#### Get Signature
+
+> **get** **keywords**(): readonly `string`[]
+
+Defined in: [data/entities.ts:58](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/entities.ts#L58)
+
+##### Returns
+
+readonly `string`[]
+
+***
+
+### factionKeywords
+
+#### Get Signature
+
+> **get** **factionKeywords**(): readonly `string`[]
+
+Defined in: [data/entities.ts:62](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/entities.ts#L62)
+
+##### Returns
+
+readonly `string`[]
+
+***
+
+### modelCount
+
+#### Get Signature
+
+> **get** **modelCount**(): \{\[`k`: `string`\]: `unknown`; `min`: `number`; `max`: `number`; \} \| `undefined`
+
+Defined in: [data/entities.ts:66](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/entities.ts#L66)
+
+##### Returns
+
+\{\[`k`: `string`\]: `unknown`; `min`: `number`; `max`: `number`; \} \| `undefined`
+
+***
+
+### points
+
+#### Get Signature
+
+> **get** **points**(): `object`[] \| `undefined`
+
+Defined in: [data/entities.ts:70](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/entities.ts#L70)
+
+##### Returns
+
+`object`[]
+
+***
+
+`undefined`
+
+***
+
+### profiles
+
+#### Get Signature
+
+> **get** **profiles**(): readonly (\{\[`k`: `string`\]: `unknown`; `name?`: `string`; `M`: [`StatValue`](../../generated/type-aliases/StatValue.md); `T`: `number`; `W`: `number`; `Sv`: `number`; `invuln_sv?`: `number` \| `null`; `invuln_sv_ranged?`: `number` \| `null`; `invuln_sv_melee?`: `number` \| `null`; `Ld`: `number`; `OC`: `number`; \} \| \{\[`k`: `string`\]: `unknown`; `name?`: `string`; `M`: [`StatValue`](../../generated/type-aliases/StatValue.md); `T`: `number`; `W`: `number`; `Sv`: `number`; `invuln_sv?`: `number` \| `null`; `invuln_sv_ranged?`: `number` \| `null`; `invuln_sv_melee?`: `number` \| `null`; `Ld`: `number`; `OC`: `number`; \})[]
+
+Defined in: [data/entities.ts:75](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/entities.ts#L75)
+
+All stat profiles for this unit (at least one is always present).
+
+##### Returns
+
+readonly (\{\[`k`: `string`\]: `unknown`; `name?`: `string`; `M`: [`StatValue`](../../generated/type-aliases/StatValue.md); `T`: `number`; `W`: `number`; `Sv`: `number`; `invuln_sv?`: `number` \| `null`; `invuln_sv_ranged?`: `number` \| `null`; `invuln_sv_melee?`: `number` \| `null`; `Ld`: `number`; `OC`: `number`; \} \| \{\[`k`: `string`\]: `unknown`; `name?`: `string`; `M`: [`StatValue`](../../generated/type-aliases/StatValue.md); `T`: `number`; `W`: `number`; `Sv`: `number`; `invuln_sv?`: `number` \| `null`; `invuln_sv_ranged?`: `number` \| `null`; `invuln_sv_melee?`: `number` \| `null`; `Ld`: `number`; `OC`: `number`; \})[]
+
+***
+
+### profileCount
+
+#### Get Signature
+
+> **get** **profileCount**(): `number`
+
+Defined in: [data/entities.ts:79](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/entities.ts#L79)
+
+##### Returns
+
+`number`
 
 ***
 
@@ -80,7 +198,7 @@ Defined in: [data/entities.ts:38](https://github.com/wn-mitch/40kdc-data/blob/0b
 
 > **get** **faction**(): [`FactionView`](FactionView.md) \| `undefined`
 
-Defined in: [data/entities.ts:43](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/entities.ts#L43)
+Defined in: [data/entities.ts:84](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/entities.ts#L84)
 
 The unit's faction, or `undefined` if its `faction_id` is unknown.
 
@@ -96,9 +214,12 @@ The unit's faction, or `undefined` if its `faction_id` is unknown.
 
 > **get** **weapons**(): [`WeaponView`](WeaponView.md)[]
 
-Defined in: [data/entities.ts:48](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/entities.ts#L48)
+Defined in: [data/entities.ts:94](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/entities.ts#L94)
 
-Weapons referenced by `weapon_ids`; unresolved ids are skipped.
+Weapons referenced by `weapon_ids`, resolved within the unit's own faction —
+a bare id shared across factions (e.g. `close-combat-weapon`) resolves to the
+wielder's own copy (issue #59), falling back to global first-wins only for a
+genuinely cross-faction id. Unresolved ids are skipped.
 
 ##### Returns
 
@@ -112,7 +233,7 @@ Weapons referenced by `weapon_ids`; unresolved ids are skipped.
 
 > **get** **abilities**(): [`AbilityView`](AbilityView.md)[]
 
-Defined in: [data/entities.ts:53](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/entities.ts#L53)
+Defined in: [data/entities.ts:102](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/entities.ts#L102)
 
 Abilities referenced by `ability_ids`; unresolved ids are skipped.
 
@@ -128,7 +249,7 @@ Abilities referenced by `ability_ids`; unresolved ids are skipped.
 
 > **get** **wargearOptions**(): [`WargearOption`](../../generated/interfaces/WargearOption.md)[]
 
-Defined in: [data/entities.ts:58](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/entities.ts#L58)
+Defined in: [data/entities.ts:117](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/entities.ts#L117)
 
 Wargear options (weapon swaps, add-ons, choices) authored for this unit.
 
@@ -138,11 +259,31 @@ Wargear options (weapon swaps, add-ons, choices) authored for this unit.
 
 ## Methods
 
+### ratingOf()
+
+> **ratingOf**(`abilityId`): `string` \| `number` \| `undefined`
+
+Defined in: [data/entities.ts:111](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/entities.ts#L111)
+
+The rating this unit's datasheet prints for a rated rule (the D3 of Deadly Demise D3), if any.
+
+#### Parameters
+
+##### abilityId
+
+`string`
+
+#### Returns
+
+`string` \| `number` \| `undefined`
+
+***
+
 ### profileAt()
 
-> **profileAt**(`i?`): \{\[`k`: `string`\]: `unknown`; `name?`: `string`; `M`: [`StatValue`](../../generated/type-aliases/StatValue.md); `T`: `number`; `W`: `number`; `Sv`: `number`; `invuln_sv?`: `number` \| `null`; `Ld`: `number`; `OC`: `number`; \} \| \{\[`k`: `string`\]: `unknown`; `name?`: `string`; `M`: [`StatValue`](../../generated/type-aliases/StatValue.md); `T`: `number`; `W`: `number`; `Sv`: `number`; `invuln_sv?`: `number` \| `null`; `Ld`: `number`; `OC`: `number`; \}
+> **profileAt**(`i?`): \{\[`k`: `string`\]: `unknown`; `name?`: `string`; `M`: [`StatValue`](../../generated/type-aliases/StatValue.md); `T`: `number`; `W`: `number`; `Sv`: `number`; `invuln_sv?`: `number` \| `null`; `invuln_sv_ranged?`: `number` \| `null`; `invuln_sv_melee?`: `number` \| `null`; `Ld`: `number`; `OC`: `number`; \} \| \{\[`k`: `string`\]: `unknown`; `name?`: `string`; `M`: [`StatValue`](../../generated/type-aliases/StatValue.md); `T`: `number`; `W`: `number`; `Sv`: `number`; `invuln_sv?`: `number` \| `null`; `invuln_sv_ranged?`: `number` \| `null`; `invuln_sv_melee?`: `number` \| `null`; `Ld`: `number`; `OC`: `number`; \}
 
-Defined in: [data/entities.ts:67](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/entities.ts#L67)
+Defined in: [data/entities.ts:126](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/entities.ts#L126)
 
 The stat profile at index `i` (default 0). Returns the schema-generated
 profile object directly so callers can feed it straight to the engine
@@ -158,7 +299,7 @@ without an intermediate wrapper.
 
 ##### Type Literal
 
-\{\[`k`: `string`\]: `unknown`; `name?`: `string`; `M`: [`StatValue`](../../generated/type-aliases/StatValue.md); `T`: `number`; `W`: `number`; `Sv`: `number`; `invuln_sv?`: `number` \| `null`; `Ld`: `number`; `OC`: `number`; \}
+\{\[`k`: `string`\]: `unknown`; `name?`: `string`; `M`: [`StatValue`](../../generated/type-aliases/StatValue.md); `T`: `number`; `W`: `number`; `Sv`: `number`; `invuln_sv?`: `number` \| `null`; `invuln_sv_ranged?`: `number` \| `null`; `invuln_sv_melee?`: `number` \| `null`; `Ld`: `number`; `OC`: `number`; \}
 
 ##### Index Signature
 
@@ -189,6 +330,18 @@ Profile name (e.g., 'Wounded' for degrading)
 ###### invuln\_sv?
 
 > `optional` **invuln\_sv?**: `number` \| `null`
+
+###### invuln\_sv\_ranged?
+
+> `optional` **invuln\_sv\_ranged?**: `number` \| `null`
+
+Attack-scoped invulnerable save that applies only to ranged attacks.
+
+###### invuln\_sv\_melee?
+
+> `optional` **invuln\_sv\_melee?**: `number` \| `null`
+
+Attack-scoped invulnerable save that applies only to melee attacks.
 
 ###### Ld
 
@@ -202,7 +355,7 @@ Profile name (e.g., 'Wounded' for degrading)
 
 ##### Type Literal
 
-\{\[`k`: `string`\]: `unknown`; `name?`: `string`; `M`: [`StatValue`](../../generated/type-aliases/StatValue.md); `T`: `number`; `W`: `number`; `Sv`: `number`; `invuln_sv?`: `number` \| `null`; `Ld`: `number`; `OC`: `number`; \}
+\{\[`k`: `string`\]: `unknown`; `name?`: `string`; `M`: [`StatValue`](../../generated/type-aliases/StatValue.md); `T`: `number`; `W`: `number`; `Sv`: `number`; `invuln_sv?`: `number` \| `null`; `invuln_sv_ranged?`: `number` \| `null`; `invuln_sv_melee?`: `number` \| `null`; `Ld`: `number`; `OC`: `number`; \}
 
 ##### Index Signature
 
@@ -233,6 +386,18 @@ Profile name (e.g., 'Wounded' for degrading)
 ###### invuln\_sv?
 
 > `optional` **invuln\_sv?**: `number` \| `null`
+
+###### invuln\_sv\_ranged?
+
+> `optional` **invuln\_sv\_ranged?**: `number` \| `null`
+
+Attack-scoped invulnerable save that applies only to ranged attacks.
+
+###### invuln\_sv\_melee?
+
+> `optional` **invuln\_sv\_melee?**: `number` \| `null`
+
+Attack-scoped invulnerable save that applies only to melee attacks.
 
 ###### Ld
 

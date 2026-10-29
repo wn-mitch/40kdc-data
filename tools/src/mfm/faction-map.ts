@@ -46,7 +46,6 @@ export const SHARED_ROSTERS: Record<string, string[]> = {
   "dark-angels": ["adeptus-astartes"],
   deathwatch: ["adeptus-astartes"],
   "space-wolves": ["adeptus-astartes"],
-  "crimson-fists": ["adeptus-astartes"],
   "imperial-fists": ["adeptus-astartes"],
   "iron-hands": ["adeptus-astartes"],
   "raven-guard": ["adeptus-astartes"],
@@ -58,6 +57,20 @@ export const SHARED_ROSTERS: Record<string, string[]> = {
   "world-eaters": ["chaos-daemons", "chaos-space-marines"],
   "emperors-children": ["chaos-daemons", "chaos-space-marines"],
 };
+
+/**
+ * Codex chapters: Space Marine chapters that take the generic Adeptus Astartes roster plus a
+ * supplement, as opposed to the chapters with their own codex (Blood Angels, Dark Angels, Space
+ * Wolves, Black Templars, Deathwatch). A detachment a codex chapter owns is locked to it.
+ */
+export const CODEX_CHAPTERS: ReadonlySet<string> = new Set([
+  "imperial-fists",
+  "iron-hands",
+  "raven-guard",
+  "salamanders",
+  "ultramarines",
+  "white-scars",
+]);
 
 let repoDirsCache: Set<string> | null = null;
 /** The set of faction dirs that actually exist under data/core/ (excludes _meta dirs). */

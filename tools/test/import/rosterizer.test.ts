@@ -137,7 +137,7 @@ describe("rosterizer resolution against the embedded dataset", () => {
   it("preserves the warlord flag and resolves the enhancement", () => {
     const gm = roster.units.find((u) => u.ref.id === "grand-master-in-nemesis-dreadknight")!;
     expect(gm.is_warlord).toBe(true);
-    expect(gm.enhancement?.id).toBe("pyresoul-psychic-banishers");
+    expect(gm.enhancement?.id).toBe("pyresoul-psychic-banishers-grey-knights");
     expect(gm.enhancement_points).toBe(20);
   });
 

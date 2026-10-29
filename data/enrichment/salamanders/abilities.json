@@ -1,0 +1,425 @@
+[
+  {
+    "ability_id": "adamantine-mantle-forgefathers-seekers-salamanders",
+    "name": "Adamantine Mantle",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "source_digest": "212ae484eba841f92ccce67493791f0f203f494c01eb34c85df18147c0cf00fc",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "salamanders",
+    "detachment_id": "forgefathers-seekers",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "damage-reduction",
+      "target": "this-model",
+      "modifier": {
+        "reduction": 1
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "all_of": [
+        "ADEPTUS ASTARTES"
+      ]
+    },
+    "community_notes": "Attacks allocated to the bearer lose 1 Damage; attacks made with Melta or Torrent weapons have their Damage changed to 1 instead (weapon-keyword gate not modeled)"
+  },
+  {
+    "ability_id": "blazing-earth-forgefathers-seekers-salamanders",
+    "name": "Blazing Earth",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "salamanders",
+    "detachment_id": "forgefathers-seekers",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "burning-vengeance-forgefathers-seekers-salamanders",
+    "name": "Burning Vengeance",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "fdf2e70507b067d3ad65b2fb1224d9138980275aa78f37f1120ff9e384a4a5cc",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "salamanders",
+    "detachment_id": "forgefathers-seekers",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "trigger": {
+      "event": "attacks-resolved",
+      "subject": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "kind": "shoot"
+      }
+    },
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "select-units",
+          "selector": {
+            "filter": {
+              "owner": "friendly"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            },
+            "eligibility": {
+              "type": "unit-state",
+              "parameters": {
+                "state": "embarked",
+                "with": "this-unit"
+              }
+            }
+          },
+          "effect": {
+            "type": "move",
+            "target": "selected-unit",
+            "modifier": {
+              "move_type": "disembark"
+            }
+          }
+        },
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "shoot",
+            "allow": true,
+            "as_if": "shooting-phase"
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "community_notes": "Used on a Transport targeted by the attacking unit: one embarked unit disembarks as if it were your Movement phase and shoots as if it were your Shooting phase, targeting only that enemy unit (if eligible)"
+  },
+  {
+    "ability_id": "crucible-of-battle-forgefathers-seekers-salamanders",
+    "name": "Crucible Of Battle",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "280f09be68fa22d254bc508b4673051f9749a4feb31e8baf7170d7f56b4a632d",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "salamanders",
+    "detachment_id": "forgefathers-seekers",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "roll-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "roll": "wound",
+        "operation": "add",
+        "value": 1
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "community_notes": "Applies to attacks against the closest eligible target within 6\". Infantry unit not yet selected to shoot or fight this phase"
+  },
+  {
+    "ability_id": "forged-in-battle-forgefathers-seekers-salamanders",
+    "name": "Forged in Battle",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "source_digest": "2c6e9b70c4bab356a3218498436ab01104bfd96b330dac784dadc2ce33de7d27",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "salamanders",
+    "detachment_id": "forgefathers-seekers",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ignore-modifiers",
+          "target": "this-unit",
+          "modifier": {
+            "what": "characteristics",
+            "stats": [
+              "WS",
+              "BS"
+            ]
+          }
+        },
+        {
+          "type": "ignore-modifiers",
+          "target": "this-unit",
+          "modifier": {
+            "what": "rolls",
+            "rolls": [
+              "hit"
+            ]
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "all_of": [
+        "ADEPTUS ASTARTES"
+      ]
+    },
+    "community_notes": "Once per turn, after making a Hit roll or a saving throw for a model in the led unit, change the result to an unmodified 6"
+  },
+  {
+    "ability_id": "immolation-protocols-forgefathers-seekers-salamanders",
+    "name": "Immolation Protocols",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "source_digest": "6bd4abc9278bdbb98e8953237810285f37e90745b76d80acc3505ded44303553",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "salamanders",
+    "detachment_id": "forgefathers-seekers",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "attack-is",
+        "parameters": {
+          "weapons": {
+            "keyword": {
+              "keyword_id": "torrent"
+            }
+          },
+          "attack_type": "ranged"
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "stat": "AP",
+          "operation": "improve",
+          "value": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "community_notes": "Torrent weapons only. Target must not have been selected to shoot this phase",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "attack"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS ASTARTES",
+          "INFANTRY"
+        ]
+      }
+    }
+  },
+  {
+    "ability_id": "immolator-forgefathers-seekers-salamanders",
+    "name": "Immolator",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "salamanders",
+    "detachment_id": "forgefathers-seekers",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "stat": "A",
+        "operation": "improve",
+        "value": 1,
+        "weapons": {
+          "type": "ranged",
+          "keyword": {
+            "keyword_id": "torrent"
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "passive",
+    "source_digest": "7995c38a13c48edb4355a43faa5a8a17c771a5a1232094bfc8dc1ba03c5361d7"
+  },
+  {
+    "ability_id": "vulkans-quest-salamanders",
+    "name": "Vulkan’s Quest",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "salamanders",
+    "detachment_id": "forgefathers-seekers",
+    "ability_type": "detachment",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "war-tempered-artifice-forgefathers-seekers-salamanders",
+    "name": "War-tempered Artifice",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "source_digest": "efa9ad350dfd023d6d8238fccb710360ac0e7ed2ef71c56c3490cabe1d689304",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "salamanders",
+    "detachment_id": "forgefathers-seekers",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "this-model",
+          "modifier": {
+            "stat": "S",
+            "operation": "improve",
+            "value": 1,
+            "weapons": {
+              "type": "melee"
+            }
+          }
+        },
+        {
+          "type": "stat-modifier",
+          "target": "this-model",
+          "modifier": {
+            "stat": "D",
+            "operation": "improve",
+            "value": 1,
+            "weapons": {
+              "type": "melee"
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "all_of": [
+        "ADEPTUS ASTARTES",
+        "INFANTRY"
+      ]
+    }
+  },
+  {
+    "ability_id": "forged-in-fire-forgefathers-seekers-salamanders",
+    "name": "Forged in Fire",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "salamanders",
+    "detachment_id": "forgefathers-seekers",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "wrath-and-ruin-forgefathers-seekers-salamanders",
+    "name": "Wrath and Ruin",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "unit_ids": [],
+    "faction_id": "salamanders",
+    "detachment_id": "forgefathers-seekers",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "ability-activate",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "combat-doctrines-adeptus-astartes",
+        "select": {
+          "by": "player",
+          "from": [
+            "assault-doctrine",
+            "tactical-doctrine"
+          ]
+        },
+        "exclusive": true
+      }
+    },
+    "scope": {
+      "duration": "until-next-command-phase"
+    },
+    "behavior": "activated",
+    "source_digest": "39e8786c156ec873bfbee39ad14e3ff3113e891684ad45739678a9b46b8580b8"
+  }
+]

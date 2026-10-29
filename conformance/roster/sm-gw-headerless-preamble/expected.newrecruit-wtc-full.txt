@@ -1,0 +1,25 @@
++++++++++++++++++++++++++++++++++++++++++++++++
++ LIST NAME: Preamble Sweep
++ FACTION KEYWORD: Adeptus Astartes
++ DETACHMENT: Gladius Task Force
++ FORCE DISPOSITION: Take And Hold
++ TOTAL ARMY POINTS: 1995pts
++ POINTS LIMIT: 2000pts
++
++ WARLORD: Char2: Lieutenant
++ ENHANCEMENT: Artificer Armour (on Char1: Captain)
++ NUMBER OF UNITS: 3
++++++++++++++++++++++++++++++++++++++++++++++++
+
+BATTLELINE
+
+Char1: 1x Captain (110 pts)
+1 with Master-crafted power weapon, Heavy bolt pistol, Master-crafted bolter
+Enhancement: Artificer Armour
+
+Char2: 1x Lieutenant (70 pts)
+1 with Master-crafted power weapon, Bolt pistol, Ceramite Fists, Warlord, 40kdc Keyword: Adeptus Astartes
+Enhancement: Adept of the Codex (+20 pts)
+
+1x Land Raider (245 pts)
+• 1x Land Raider: Armoured tracks, 2x Godhammer lascannon, Twin Heavy Bolter

@@ -22,7 +22,11 @@
             </profile>
             <profile name="Glimpse of Eternity (Psychic)" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Once per turn, this model can change Any rolls to a 6.</characteristic>
+                <characteristic name="Description">You can: Once per turn per unit:
+  Select one of the following:
+    - One of the unit's Hit rolls counts as 6.
+    - One of the unit's Wound rolls counts as 6.
+    - One of the unit's saving throw rolls counts as 6.</characteristic>
               </characteristics>
             </profile>
             <profile name="Leader" typeName="Abilities">
@@ -97,8 +101,8 @@
                         <characteristic name="Range">12"</characteristic>
                         <characteristic name="A">1</characteristic>
                         <characteristic name="BS">2+</characteristic>
-                        <characteristic name="S">4</characteristic>
-                        <characteristic name="AP">-1</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">-2</characteristic>
                         <characteristic name="D">1</characteristic>
                         <characteristic name="Keywords">Pistol</characteristic>
                       </characteristics>

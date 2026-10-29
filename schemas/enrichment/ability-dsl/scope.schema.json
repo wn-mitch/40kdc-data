@@ -2,33 +2,13 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://40kdc.dev/schemas/enrichment/ability-dsl/scope.schema.json",
   "title": "Ability Scope",
-  "type": "object",
+  "additionalProperties": false,
   "properties": {
-    "range": {
-      "type": "string",
-      "enum": [
-        "self",
-        "unit",
-        "attached",
-        "aura-6",
-        "aura-9",
-        "aura-12",
-        "aura-custom",
-        "engagement-range",
-        "any-visible",
-        "any-on-battlefield",
-        "terrain-within-range"
-      ]
-    },
     "duration": {
       "$ref": "#/$defs/scope-duration"
-    },
-    "range_inches": {
-      "type": "number"
     }
   },
   "required": [
-    "range",
     "duration"
   ],
   "$defs": {
@@ -46,9 +26,22 @@
         "one-use",
         "permanent",
         "attack-sequence",
-        "resolution"
+        "resolution",
+        "while-leading",
+        "after-resolving",
+        "until-next-shooting-phase",
+        "until-end-of-your-next-turn",
+        "until-end-of-opponent-next-turn",
+        "until-end-of-next-turn",
+        "until-this-unit-has-shot",
+        "control-lost",
+        "until-end-of-your-next-fight-phase",
+        "until-end-of-your-next-shooting-phase",
+        "until-end-of-your-next-movement-phase",
+        "until-end-of-opponent-next-movement-phase",
+        "until-start-of-opponent-next-command-phase"
       ],
-      "description": "attack-sequence expires when the currently selected unit finishes resolving its shooting or fighting attacks; resolution lasts only while resolving this activation and is not a battle/phase usage limit."
+      "description": "How long an effect, a part or a designation lasts; resolution lasts only while resolving this activation; while-leading ends when the bearer stops leading; after-resolving ends after this activation resolves. The remaining values are phase, turn, battle-round, battle, explicit phase edges, attack-sequence, permanent, and domain-specific expiry windows."
     }
   }
 }

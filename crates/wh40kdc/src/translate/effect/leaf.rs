@@ -1,0 +1,613 @@
+//! Single effects on the characteristic, roll, ability and permission axes, as one
+//! lowercase-initial clause with no period. The board axes (protection, models, moves,
+//! placement, tests, resources, designation, army) are in `leaf_board.rs`. Mirrors
+//! `tools/src/translate/effect-leaf.ts`.
+
+use serde_json::Value;
+
+use super::leaf_ability::*;
+use super::leaf_board::describe_board_leaf;
+use super::leaf_shapes::describe_shape_leaf;
+use super::words::*;
+use crate::translate::condition::{and_list, nn, obj, or_list, P};
+
+/// Every single-effect type; anything else is a container.
+pub(crate) const LEAF_TYPES: &[&str] = &[
+    "stat-modifier",
+    "ignore-modifiers",
+    "roll-modifier",
+    "re-roll",
+    "roll-result",
+    "end-attack-sequence",
+    "ability-grant",
+    "keyword-grant",
+    "weapon-ability-grant",
+    "weapon-ability-range",
+    "weapon-grant",
+    "ability-modifier",
+    "ability-activate",
+    "oath-modifier",
+    "permission",
+    "targeting",
+    "counts-as",
+    "rule-state",
+    "mortal-wounds",
+    "damage-reduction",
+    "feel-no-pain",
+    "invulnerable-save",
+    "heal",
+    "return-models",
+    "destroy-models",
+    "act-on-death",
+    "split-unit",
+    "add-unit",
+    "destruction-rule",
+    "move",
+    "move-modifier",
+    "set-up",
+    "marker",
+    "transport-capacity",
+    "test",
+    "state-change",
+    "cp-gain",
+    "cost-modifier",
+    "resource-gain",
+    "resource-spend",
+    "resource-die",
+    "objective-sticky",
+    "designate",
+    "army-rule",
+    "test-exemption",
+    "datasheet-swap",
+    "characteristic-resolution",
+    "borrow-weapons",
+    "select-weapon",
+];
+
+/// "each time an attack targets the unit, " — the lead of an `incoming` change.
+pub(crate) fn incoming_lead(m: &P, subj: &str) -> String {
+    let scope = obj(m.get("weapons"));
+    let attack = if nn(m, "weapons").is_some() && scope.len() == 1 && nn(scope, "type").is_some() {
+        format!("a {} attack", jv(scope.get("type").unwrap()))
+    } else if has_weapon(m) {
+        format!("an attack with {}", weapon_noun(m))
+    } else {
+        "an attack".to_string()
+    };
+    format!("each time {attack} targets {subj}, ")
+}
+
+/// A stat change as a verb phrase over `what` ("add 1 to the unit's Toughness characteristic").
+fn stat_change(m: &P, what: &str) -> String {
+    let op = jstr(m.get("operation"));
+    match op.as_str() {
+        "set" => return format!("set {what} to {}", dice_case(m.get("value"))),
+        "halve" => return format!("halve {what}"),
+        "multiply" => return format!("multiply {what} by {}", dice_case(m.get("value"))),
+        "improve" | "worsen" => return format!("{op} {what} by {}", dice_case(m.get("value"))),
+        _ => {}
+    }
+    let mut verb = if op == "subtract" { "subtract" } else { "add" };
+    let n = num(m.get("value"));
+    let val = if !n.is_nan() && n < 0.0 {
+        verb = if verb == "add" { "subtract" } else { "add" };
+        fnum(n.abs())
+    } else {
+        dice_case(m.get("value"))
+    };
+    let prep = if verb == "add" { "to" } else { "from" };
+    format!("{verb} {val} {prep} {what}")
+}
+
+/// Characteristics a model rolls against, where a better value is a lower number ("3+").
+const ROLL_TARGET_STATS: [&str; 4] = ["Sv", "WS", "BS", "Ld"];
+
+fn bounds(m: &P) -> String {
+    // An improved roll target is capped from below: "this cannot improve a model's Save to better than 3+".
+    let roll_target = m
+        .get("stat")
+        .and_then(Value::as_str)
+        .is_some_and(|stat| ROLL_TARGET_STATS.contains(&stat));
+    if m.get("operation").and_then(Value::as_str) == Some("improve")
+        && roll_target
+        && nn(m, "maximum").is_none()
+    {
+        if let Some(minimum) = nn(m, "minimum") {
+            return format!(" (to no better than {}+)", jv(minimum));
+        }
+    }
+    let min = nn(m, "minimum")
+        .map(|v| format!(" (to a minimum of {})", jv(v)))
+        .unwrap_or_default();
+    let max = nn(m, "maximum")
+        .map(|v| format!(" (to a maximum of {})", jv(v)))
+        .unwrap_or_default();
+    min + &max
+}
+
+fn stat_modifier(target: Option<&Value>, m: &P, subj: &str, ctx: &Ctx) -> String {
+    // AP is printed negative; the DSL stores its magnitude.
+    let mut owned;
+    let mut m = m;
+    if sv(m, "stat") == Some("AP")
+        && sv(m, "operation") == Some("set")
+        && m.get("value")
+            .and_then(Value::as_f64)
+            .is_some_and(|v| v > 0.0)
+    {
+        owned = m.clone();
+        owned.insert(
+            "value".into(),
+            Value::String(format!("-{}", jstr(m.get("value")))),
+        );
+        m = &owned;
+    }
+    let stat = format!("{} characteristic", stat_name(m.get("stat")));
+    if is_true(m, "incoming") {
+        return format!(
+            "{}{}{}",
+            incoming_lead(m, subj),
+            stat_change(m, &format!("the {stat} of that attack")),
+            bounds(m)
+        );
+    }
+    if has_weapon(m) {
+        let what = format!(
+            "the {stat} of {} equipped by {}",
+            weapon_noun(m),
+            weapon_holder(target, ctx)
+        );
+        return format!("{}{}", stat_change(m, &what), bounds(m));
+    }
+    format!(
+        "{}{}",
+        stat_change(m, &of_or_possessive(subj, &stat)),
+        bounds(m)
+    )
+}
+
+fn ignore_modifiers(m: &P, subj: &str) -> String {
+    let kind = match sv(m, "only") {
+        Some("worsening") => "negative ",
+        Some("improving") => "positive ",
+        _ => "",
+    };
+    let things = if sv(m, "what") == Some("rolls") {
+        match arr(m, "rolls") {
+            Some(rolls)
+                if !rolls
+                    .iter()
+                    .any(|r| r.as_str() == Some("all") || r.as_str() == Some("any")) =>
+            {
+                let names: Vec<String> = rolls.iter().map(|r| roll_name(Some(r))).collect();
+                format!("{} rolls", and_list(&names))
+            }
+            _ => "rolls".to_string(),
+        }
+    } else {
+        match map_arr(m, "stats", |s| stat_name(Some(s))) {
+            Some(names) => format!("{} characteristics", and_list(&names)),
+            None => "characteristics".to_string(),
+        }
+    };
+    // "any roll (excluding modifiers to saving throws)": the rolls whose modifiers still apply.
+    let except = match map_arr(m, "except_rolls", |r| roll_name(Some(r))) {
+        Some(names) if sv(m, "what") == Some("rolls") && !names.is_empty() => {
+            format!(" (except {} rolls)", and_list(&names))
+        }
+        _ => String::new(),
+    };
+    if is_true(m, "incoming") {
+        return format!(
+            "{}ignore any {kind}modifiers to that attack's {things}{except}",
+            incoming_lead(m, subj)
+        );
+    }
+    format!(
+        "{subj} {} any {kind}modifiers to {} {things}{except}{}",
+        v(subj, "ignores"),
+        pronoun(subj),
+        weapon_roll_scope(m)
+    )
+}
+
+fn roll_modifier(m: &P, subj: &str) -> String {
+    let value = (sv(m, "value_from") == Some("previous-roll")).then_some("the result of that roll");
+    let cap = nn(m, "cap")
+        .map(|c| format!(" (to a maximum of {})", signed(m.get("operation"), Some(c))))
+        .unwrap_or_default();
+    let rolls = format!("{} rolls", roll_name(m.get("roll")));
+    let subtract = sv(m, "operation") == Some("subtract");
+    let (verb, prep) = if subtract {
+        ("subtract", "from")
+    } else {
+        ("add", "to")
+    };
+    if is_true(m, "incoming") {
+        let change = match value {
+            Some(value) => format!("{verb} {value} {prep}"),
+            None => format!("apply {} to", signed(m.get("operation"), m.get("value"))),
+        };
+        return format!(
+            "{}{change} the {} roll{cap}",
+            incoming_lead(m, subj),
+            roll_name(m.get("roll"))
+        );
+    }
+    if let Some(value) = value {
+        return format!(
+            "{verb} {value} {prep} {}{}{cap}",
+            of_or_possessive(subj, &rolls),
+            weapon_roll_scope(m)
+        );
+    }
+    format!(
+        "{subj} {} {} to {rolls}{}{cap}",
+        v(subj, "gets"),
+        signed(m.get("operation"), m.get("value")),
+        weapon_roll_scope(m)
+    )
+}
+
+fn re_roll(target: Option<&Value>, m: &P, subj: &str, ctx: &Ctx) -> String {
+    let rn = jstr(m.get("roll"));
+    let any = rn == "any";
+    let noun = if any {
+        "roll".to_string()
+    } else {
+        format!("{} roll", roll_name(m.get("roll")))
+    };
+    let cnt = m.get("count").filter(|c| c.is_number());
+    let failed = if sv(m, "subset") == Some("all-failures") {
+        "failed "
+    } else {
+        ""
+    };
+    let ones = sv(m, "subset") == Some("ones");
+    // A counted allowance ("one for each model equipped with …") reads as a number of rolls.
+    let counted = nn(m, "count").filter(|c| c.is_object() || c.is_array());
+    let which = match cnt {
+        _ if counted.is_some() => {
+            let failed_noun = match sv(m, "subset") {
+                Some("all-failures") => format!("failed {noun}"),
+                Some("ones") => format!("{noun} of 1"),
+                _ => noun.clone(),
+            };
+            format!("a number of {failed_noun}s equal to {}", dice_case(counted))
+        }
+        Some(c) => {
+            let one = c.as_f64() == Some(1.0);
+            format!(
+                "{} {failed}{noun}{}{}",
+                if one {
+                    "one".to_string()
+                } else {
+                    format!("up to {}", jv(c))
+                },
+                if one { "" } else { "s" },
+                if ones { " of 1" } else { "" }
+            )
+        }
+        None if ones => format!("{} {noun} of 1", if any { "any" } else { "a" }),
+        None if sv(m, "subset") == Some("all-failures") => format!("a failed {noun}"),
+        None if any => "any roll".to_string(),
+        None => format!("the {noun}"),
+    };
+    let pool = nn(m, "pool")
+        .map(|p| format!(" by spending a die from your {}", title_case(&jv(p))))
+        .unwrap_or_default();
+    let can = if is_true(m, "mandatory") {
+        "must"
+    } else {
+        "can"
+    };
+    if is_true(m, "incoming") {
+        return format!(
+            "{}the attacking player {can} re-roll {which}{pool}",
+            incoming_lead(m, subj)
+        );
+    }
+    // "you can re-roll …" names whose roll it is unless that is the ability's own unit.
+    let t = target.and_then(Value::as_str);
+    let own = target.map_or(true, Value::is_null)
+        || t == Some("this-unit")
+        || t == Some("attacker")
+        || (t == Some("recipient") && !ctx.aura_recipient);
+    let model = t == Some("this-model") || (t == Some("selected-unit") && ctx.selected_model);
+    let holder = if model {
+        weapon_holder(target, ctx)
+    } else {
+        subj.to_string()
+    };
+    let owner = if own {
+        String::new()
+    } else {
+        let attacks = if ["hit", "wound", "damage"].contains(&rn.as_str()) {
+            "attacks made by "
+        } else {
+            ""
+        };
+        format!(" for {attacks}{holder}")
+    };
+    format!(
+        "you {can} re-roll {which}{owner}{}{pool}",
+        weapon_roll_scope(m)
+    )
+}
+
+fn roll_result(m: &P, subj: &str) -> String {
+    let roll = roll_name(m.get("roll"));
+    let lead = if is_true(m, "incoming") {
+        incoming_lead(m, subj)
+    } else {
+        String::new()
+    };
+    let led = !lead.is_empty();
+    let scope = weapon_roll_scope(m);
+    if let Some(crit_on) = nn(m, "critical_on") {
+        let crit = if sv(m, "roll") == Some("wound") {
+            "Critical Wound"
+        } else {
+            "Critical Hit"
+        };
+        if crit_on.as_str() == Some("success") {
+            let made_by = if led {
+                String::new()
+            } else {
+                format!(" made by {subj}")
+            };
+            return format!("{lead}each successful {roll} roll{made_by}{scope} is a {crit}");
+        }
+        let who = if led {
+            "a".to_string()
+        } else {
+            format!("{subj} {}", v(subj, "scores"))
+        };
+        return format!(
+            "{lead}{who} {crit}{} on {roll} rolls of {}+{scope}{}",
+            if led { "" } else { "s" },
+            jv(crit_on),
+            if led { " for that attack" } else { "" }
+        );
+    }
+    if let Some(f) = nn(m, "fails_on") {
+        let n = num(Some(f));
+        let range = if n == 1.0 {
+            "1".to_string()
+        } else {
+            format!("1-{}", fnum(n))
+        };
+        if led {
+            return format!(
+                "{lead}an unmodified {roll} roll of {range} for that attack always fails"
+            );
+        }
+        return format!(
+            "{}{scope} always fail on an unmodified {range}",
+            of_or_possessive(subj, &format!("{roll} rolls"))
+        );
+    }
+    if let Some(on) = nn(m, "succeeds_on") {
+        let rolls = if led {
+            format!("the {roll} roll for that attack")
+        } else {
+            of_or_possessive(subj, &format!("{roll} rolls"))
+        };
+        return format!(
+            "{lead}{rolls}{} {} only on an unmodified {}+",
+            if led { "" } else { scope.as_str() },
+            if led { "succeeds" } else { "succeed" },
+            jv(on)
+        );
+    }
+    let r = jstr(m.get("roll"));
+    let tests = ["battle-shock", "leadership", "desperate-escape"].contains(&r.as_str());
+    let result = sv(m, "result");
+    if tests && !led {
+        if result == Some("pass") {
+            return format!("{subj} automatically {} {roll} tests", v(subj, "passes"));
+        }
+        if result == Some("fail") {
+            return format!("{subj} automatically {} {roll} tests", v(subj, "fails"));
+        }
+    }
+    // count 1: one roll the player picks ("change the result of one Hit roll … to an unmodified 6").
+    if !led && nn(m, "count").and_then(|c| c.as_f64()) == Some(1.0) {
+        let outcome = match result {
+            Some("pass") => "automatically succeeds".to_string(),
+            Some("fail") => "automatically fails".to_string(),
+            _ => format!(
+                "counts as {}{}",
+                if is_true(m, "unmodified") {
+                    "an unmodified "
+                } else {
+                    ""
+                },
+                jstr(m.get("result"))
+            ),
+        };
+        return format!(
+            "one of {}{scope} {outcome}",
+            of_or_possessive(subj, &format!("{roll} rolls"))
+        );
+    }
+    let whose = if led {
+        format!("the {roll} roll for that attack")
+    } else {
+        of_or_possessive(subj, &format!("{roll} rolls"))
+    };
+    if result == Some("pass") || result == Some("fail") {
+        let pass = result == Some("pass");
+        let verb = match (led, pass) {
+            (true, true) => "automatically succeeds",
+            (true, false) => "automatically fails",
+            (false, true) => "automatically succeed",
+            (false, false) => "automatically fail",
+        };
+        return format!(
+            "{lead}{whose}{} {verb}",
+            if led { "" } else { scope.as_str() }
+        );
+    }
+    let counts = if led {
+        " counts".to_string()
+    } else {
+        format!("{scope} count")
+    };
+    let unmod = if is_true(m, "unmodified") {
+        "an unmodified "
+    } else {
+        ""
+    };
+    format!("{lead}{whose}{counts} as {unmod}{}", jstr(m.get("result")))
+}
+
+/// One single effect as a lowercase-initial clause.
+pub(crate) fn describe_leaf(e: &P, ctx: &Ctx) -> String {
+    let m = obj(e.get("modifier"));
+    let target = e.get("target");
+    let subj = effect_subject(target, ctx);
+    let subj = subj.as_str();
+    match sv(e, "type").unwrap_or("") {
+        "stat-modifier" => stat_modifier(target, m, subj, ctx),
+        "ignore-modifiers" => ignore_modifiers(m, subj),
+        "roll-modifier" => roll_modifier(m, subj),
+        "re-roll" => re_roll(target, m, subj, ctx),
+        "roll-result" => roll_result(m, subj),
+        "end-attack-sequence" => "the attack sequence ends".to_string(),
+        "ability-grant" => ability_grant(e, m, subj, ctx),
+        "keyword-grant" => keyword_grant(m, subj),
+        "weapon-ability-grant" => weapon_ability_grant(target, m, subj, ctx),
+        "weapon-grant" => {
+            let n = num(Some(
+                m.get("count")
+                    .filter(|c| !c.is_null())
+                    .unwrap_or(&Value::from(1)),
+            ));
+            let count = if n.is_nan() || n == 0.0 { 1.0 } else { n };
+            format!(
+                "{subj} {} {} {} weapon{}",
+                v(subj, "gains"),
+                fnum(count),
+                weapon_label(m.get("weapon_id")),
+                if count == 1.0 { "" } else { "s" }
+            )
+        }
+        "ability-modifier" => ability_modifier(m, subj, ctx),
+        "ability-activate" => ability_activate(m, subj),
+        "oath-modifier" => oath_modifier(m, subj, ctx),
+        "permission" => permission(m, subj, ctx),
+        "targeting" => targeting(m, subj, ctx),
+        "weapon-ability-range" => weapon_ability_range(m, subj),
+        "counts-as" => counts_as(m, subj, ctx),
+        "rule-state" => rule_state(m, subj),
+        _ => describe_shape_leaf(e, m, subj, ctx)
+            .unwrap_or_else(|| describe_board_leaf(e, m, subj, ctx)),
+    }
+}
+
+fn ability_activate(m: &P, subj: &str) -> String {
+    let label = ability_label(m.get("ability"));
+    if sv(m, "procedure") == Some("oath") {
+        return format!(
+            "{subj} {} the {label} Oath procedure again",
+            v(subj, "resolves")
+        );
+    }
+    let consumed = if is_true(m, "ignore_consumed") {
+        ", even if it has already been selected this battle"
+    } else {
+        ""
+    };
+    let exclusive = if is_true(m, "exclusive") {
+        " (and no other option is)"
+    } else {
+        ""
+    };
+    // The option another ability's triggering use selected.
+    if nn(m, "select").is_some_and(|sel| jstr(obj(Some(sel)).get("by")) == "event") {
+        return format!(
+            "the {label} option the triggering use selected is active for {subj}{exclusive}{consumed}"
+        );
+    }
+    if let Some(sel) = nn(m, "select") {
+        let sel = obj(Some(sel));
+        let n = num(sel.get("count"));
+        let n = if n.is_nan() || n == 0.0 { 1.0 } else { n };
+        let from = option_names(sel, "from");
+        let how = if sv(sel, "by") == Some("roll") {
+            let results = if n == 1.0 {
+                "one result".to_string()
+            } else {
+                format!("{} results", fnum(n))
+            };
+            let among = if from.is_empty() {
+                String::new()
+            } else {
+                format!(" among the {} options", or_list(&from))
+            };
+            format!("make a new {label} roll and activate {results} it allows{among}")
+        } else {
+            let count = if n == 1.0 { "one".to_string() } else { fnum(n) };
+            let what = if !from.is_empty() {
+                format!("of the {} options", or_list(&from))
+            } else if n == 1.0 {
+                "option".to_string()
+            } else {
+                "options".to_string()
+            };
+            format!("select {count} {what} of {label}")
+        };
+        let join = if is_true(m, "exclusive") {
+            "in place of"
+        } else {
+            "in addition to"
+        };
+        // A bound pick is made once and shared by every unit the surrounding aura or loop reaches.
+        let shared = if nn(&sel, "option_var").is_some() {
+            " (picked once and shared)"
+        } else {
+            ""
+        };
+        let other = if jstr(sel.get("excluding")) == "army-active" {
+            ", other than the one active for your army,"
+        } else {
+            ""
+        };
+        return format!("{how}{shared}{other} for {subj}, {join} any already active{consumed}");
+    }
+    let instead = nn(m, "override")
+        .map(|o| {
+            format!(
+                ", using {} in place of its usual amount",
+                dice_case(obj(Some(o)).get("amount"))
+            )
+        })
+        .unwrap_or_default();
+    if is_true(m, "all_options") {
+        return format!("every option of {label} is active for {subj}{consumed}");
+    }
+    if arr(m, "options").is_some() {
+        return format!(
+            "the {} options of {label} are active for {subj}{exclusive}{consumed}",
+            and_list(&option_names(m, "options"))
+        );
+    }
+    match nn(m, "option") {
+        None => format!(
+            "{subj} {} the {label} ability now{instead}",
+            v(subj, "resolves")
+        ),
+        Some(opt) => format!(
+            "the {} option of {label} is active for {subj}{exclusive}{consumed}",
+            title_case(&jv(opt))
+        ),
+    }
+}
+
+/// Option ids as their display names.
+fn option_names(m: &P, k: &str) -> Vec<String> {
+    arr(m, k)
+        .map(|list| list.iter().map(|o| title_case(&jv(o))).collect())
+        .unwrap_or_default()
+}

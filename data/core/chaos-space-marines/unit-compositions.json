@@ -20,7 +20,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -55,7 +55,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -91,7 +91,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -119,7 +119,7 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "bolt-pistol",
+          "bolt-pistol-nemesis-claw",
           "nostraman-chainblade"
         ]
       },
@@ -133,16 +133,16 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "bolt-pistol",
-          "boltgun",
+          "bolt-pistol-nemesis-claw",
+          "boltgun-nemesis-claw",
           "close-combat-weapon"
         ],
         "loadout_variants": [
           {
             "name": "Legionary w/ boltgun",
             "weapon_ids": [
-              "boltgun",
-              "bolt-pistol",
+              "boltgun-nemesis-claw",
+              "bolt-pistol-nemesis-claw",
               "close-combat-weapon"
             ],
             "max_count": 9
@@ -151,31 +151,58 @@
             "name": "Legionary w/ chainsword",
             "weapon_ids": [
               "astartes-chainsword",
-              "bolt-pistol",
+              "bolt-pistol-nemesis-claw",
               "close-combat-weapon"
             ],
             "max_count": 9
           },
           {
-            "name": "Legionary w/ heavy weapon",
+            "name": "Legionary w/ heavy weapon (Heavy bolter)",
             "weapon_ids": [
-              "bolt-pistol",
-              "close-combat-weapon"
+              "bolt-pistol-nemesis-claw",
+              "close-combat-weapon",
+              "heavy-bolter"
+            ]
+          },
+          {
+            "name": "Legionary w/ heavy weapon (Missile launcher)",
+            "weapon_ids": [
+              "bolt-pistol-nemesis-claw",
+              "close-combat-weapon",
+              "missile-launcher"
+            ]
+          },
+          {
+            "name": "Legionary w/ special weapon (Flamer)",
+            "weapon_ids": [
+              "bolt-pistol-nemesis-claw",
+              "close-combat-weapon",
+              "flamer"
             ],
             "max_count": 1
           },
           {
-            "name": "Legionary w/ special weapon",
+            "name": "Legionary w/ special weapon (Plasma gun)",
             "weapon_ids": [
-              "bolt-pistol",
-              "close-combat-weapon"
+              "bolt-pistol-nemesis-claw",
+              "close-combat-weapon",
+              "plasma-gun"
+            ],
+            "max_count": 1
+          },
+          {
+            "name": "Legionary w/ special weapon (Meltagun)",
+            "weapon_ids": [
+              "bolt-pistol-nemesis-claw",
+              "close-combat-weapon",
+              "meltagun"
             ],
             "max_count": 1
           },
           {
             "name": "Legionary w/ accursed weapon",
             "weapon_ids": [
-              "bolt-pistol",
+              "bolt-pistol-nemesis-claw",
               "accursed-weapon",
               "close-combat-weapon"
             ],
@@ -184,7 +211,7 @@
           {
             "name": "Legionary w/ Nostraman chainglaive",
             "weapon_ids": [
-              "bolt-pistol",
+              "bolt-pistol-nemesis-claw",
               "close-combat-weapon",
               "nostraman-chainglaive"
             ],
@@ -193,7 +220,7 @@
           {
             "name": "Legionary w/ paired accursed weapons",
             "weapon_ids": [
-              "bolt-pistol",
+              "bolt-pistol-nemesis-claw",
               "paired-accursed-weapons",
               "close-combat-weapon"
             ],
@@ -203,8 +230,9 @@
             "name": "Legionary w/ voice eater",
             "weapon_ids": [
               "astartes-chainsword",
-              "bolt-pistol",
-              "close-combat-weapon"
+              "bolt-pistol-nemesis-claw",
+              "close-combat-weapon",
+              "voice-eater"
             ],
             "max_count": 1
           }
@@ -212,10 +240,32 @@
         "loadout_variant_budgets": [
           {
             "variant_names": [
+              "Legionary w/ heavy weapon (Heavy bolter)",
+              "Legionary w/ heavy weapon (Missile launcher)"
+            ],
+            "count": 1,
+            "per_models": 9,
+            "scope": "unit"
+          },
+          {
+            "variant_names": [
+              "Legionary w/ special weapon (Flamer)",
+              "Legionary w/ special weapon (Plasma gun)",
+              "Legionary w/ special weapon (Meltagun)"
+            ],
+            "count": 1,
+            "per_models": 0,
+            "scope": "model-row"
+          },
+          {
+            "variant_names": [
               "Legionary w/ boltgun",
               "Legionary w/ chainsword",
-              "Legionary w/ heavy weapon",
-              "Legionary w/ special weapon",
+              "Legionary w/ heavy weapon (Heavy bolter)",
+              "Legionary w/ heavy weapon (Missile launcher)",
+              "Legionary w/ special weapon (Flamer)",
+              "Legionary w/ special weapon (Plasma gun)",
+              "Legionary w/ special weapon (Meltagun)",
               "Legionary w/ accursed weapon",
               "Legionary w/ Nostraman chainglaive",
               "Legionary w/ paired accursed weapons",
@@ -230,7 +280,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -274,18 +324,18 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32
+          "diameter": 40
         },
         "default_weapon_ids": [
           "force-weapon",
           "infernal-gaze",
-          "bolt-pistol"
+          "bolt-pistol-sorcerer"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -364,7 +414,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -408,14 +458,14 @@
         },
         "default_weapon_ids": [
           "staff-of-possession",
-          "bolt-pistol",
+          "bolt-pistol-master-of-possession",
           "rite-of-possession"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -450,7 +500,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -489,7 +539,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -539,7 +589,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -593,7 +643,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -630,7 +680,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -658,7 +708,7 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "hideous-mutations"
+          "hideous-mutations-possessed"
         ]
       },
       {
@@ -671,13 +721,13 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "hideous-mutations"
+          "hideous-mutations-possessed"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -744,7 +794,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -772,7 +822,7 @@
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
-          "bolt-pistol",
+          "bolt-pistol-dark-apostle",
           "accursed-crozius"
         ],
         "is_leader_model": true,
@@ -797,7 +847,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -836,7 +886,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -871,7 +921,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -907,7 +957,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -945,7 +995,7 @@
         "min": 4,
         "max": 4,
         "default_weapon_ids": [
-          "close-combat-weapon",
+          "close-combat-weapon-havocs",
           "havoc-autocannon"
         ],
         "is_leader_model": false,
@@ -957,7 +1007,7 @@
           {
             "name": "Havoc w/ autocannon",
             "weapon_ids": [
-              "close-combat-weapon",
+              "close-combat-weapon-havocs",
               "havoc-autocannon"
             ],
             "max_count": 4
@@ -965,7 +1015,7 @@
           {
             "name": "Havoc w/ lascannon",
             "weapon_ids": [
-              "close-combat-weapon",
+              "close-combat-weapon-havocs",
               "havoc-lascannon"
             ],
             "max_count": 4
@@ -973,7 +1023,7 @@
           {
             "name": "Havoc w/ missile launcher",
             "weapon_ids": [
-              "close-combat-weapon",
+              "close-combat-weapon-havocs",
               "havoc-missile-launcher"
             ],
             "max_count": 4
@@ -981,7 +1031,7 @@
           {
             "name": "Havoc w/ reaper chaincannon",
             "weapon_ids": [
-              "close-combat-weapon",
+              "close-combat-weapon-havocs",
               "havoc-reaper-chaincannon"
             ],
             "max_count": 4
@@ -989,7 +1039,7 @@
           {
             "name": "Havoc w/ heavy bolter",
             "weapon_ids": [
-              "close-combat-weapon",
+              "close-combat-weapon-havocs",
               "havoc-heavy-bolter"
             ],
             "max_count": 4
@@ -1013,7 +1063,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1052,7 +1102,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1077,7 +1127,7 @@
         "max": 1,
         "default_weapon_ids": [
           "astartes-chainsword",
-          "bolt-pistol"
+          "bolt-pistol-raptors"
         ],
         "is_leader_model": true,
         "base_size_mm": {
@@ -1091,7 +1141,7 @@
         "max": 9,
         "default_weapon_ids": [
           "astartes-chainsword",
-          "bolt-pistol"
+          "bolt-pistol-raptors"
         ],
         "is_leader_model": false,
         "base_size_mm": {
@@ -1102,7 +1152,7 @@
           {
             "name": "Raptor",
             "weapon_ids": [
-              "bolt-pistol",
+              "bolt-pistol-raptors",
               "astartes-chainsword"
             ],
             "max_count": 9
@@ -1112,52 +1162,98 @@
             "weapon_ids": [
               "astartes-chainsword",
               "plasma-pistol"
-            ],
-            "max_count": 4
+            ]
           },
           {
             "name": "Raptor w/ heavy melee weapon",
             "weapon_ids": [
               "heavy-melee-weapon",
-              "bolt-pistol"
-            ],
-            "max_count": 4
+              "bolt-pistol-raptors"
+            ]
           },
           {
             "name": "Raptor w/ mutations",
             "weapon_ids": [
-              "bolt-pistol",
+              "bolt-pistol-raptors",
               "mutations"
-            ],
-            "max_count": 2
+            ]
           },
           {
             "name": "Raptor w/ meltagun",
             "weapon_ids": [
-              "close-combat-weapon",
-              "bolt-pistol",
+              "close-combat-weapon-raptors",
+              "bolt-pistol-raptors",
               "meltagun"
-            ],
-            "max_count": 2
+            ]
           },
           {
             "name": "Raptor w/ plasma gun",
             "weapon_ids": [
-              "close-combat-weapon",
-              "bolt-pistol"
-            ],
-            "max_count": 2
+              "close-combat-weapon-raptors",
+              "bolt-pistol-raptors",
+              "plasma-gun"
+            ]
           },
           {
             "name": "Raptor w/ flamer",
             "weapon_ids": [
-              "close-combat-weapon",
-              "bolt-pistol"
-            ],
-            "max_count": 2
+              "close-combat-weapon-raptors",
+              "bolt-pistol-raptors",
+              "flamer"
+            ]
           }
         ],
         "loadout_variant_budgets": [
+          {
+            "variant_names": [
+              "Raptor w/ plasma pistol"
+            ],
+            "count": 2,
+            "per_models": 5,
+            "scope": "unit",
+            "stepped": true
+          },
+          {
+            "variant_names": [
+              "Raptor w/ heavy melee weapon"
+            ],
+            "count": 2,
+            "per_models": 5,
+            "scope": "unit",
+            "stepped": true
+          },
+          {
+            "variant_names": [
+              "Raptor w/ mutations"
+            ],
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
+          },
+          {
+            "variant_names": [
+              "Raptor w/ meltagun"
+            ],
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
+          },
+          {
+            "variant_names": [
+              "Raptor w/ plasma gun"
+            ],
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
+          },
+          {
+            "variant_names": [
+              "Raptor w/ flamer"
+            ],
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
+          },
           {
             "variant_names": [
               "Raptor",
@@ -1175,16 +1271,17 @@
               "Raptor w/ plasma gun",
               "Raptor w/ flamer"
             ],
-            "count": 4,
-            "per_models": 0,
-            "scope": "model-row"
+            "count": 2,
+            "per_models": 5,
+            "scope": "unit",
+            "stepped": true
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1238,7 +1335,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1262,8 +1359,8 @@
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
-          "bolt-pistol",
-          "boltgun",
+          "bolt-pistol-chosen",
+          "boltgun-chosen",
           "accursed-weapon"
         ],
         "is_leader_model": true,
@@ -1277,8 +1374,8 @@
         "min": 4,
         "max": 9,
         "default_weapon_ids": [
-          "bolt-pistol",
-          "boltgun",
+          "bolt-pistol-chosen",
+          "boltgun-chosen",
           "accursed-weapon"
         ],
         "is_leader_model": false,
@@ -1290,8 +1387,8 @@
           {
             "name": "Chosen w/ boltgun",
             "weapon_ids": [
-              "bolt-pistol",
-              "boltgun",
+              "bolt-pistol-chosen",
+              "boltgun-chosen",
               "accursed-weapon"
             ],
             "max_count": 9
@@ -1301,7 +1398,7 @@
             "weapon_ids": [
               "plasma-pistol",
               "accursed-weapon",
-              "boltgun"
+              "boltgun-chosen"
             ],
             "max_count": 4
           },
@@ -1309,8 +1406,8 @@
             "name": "Chosen w/ combi-weapon and bolt pistol",
             "weapon_ids": [
               "accursed-weapon",
-              "bolt-pistol",
-              "combi-weapon"
+              "bolt-pistol-chosen",
+              "combi-weapon-chosen"
             ],
             "max_count": 4
           },
@@ -1325,8 +1422,8 @@
           {
             "name": "Chosen w/ power fist and bolt pistol",
             "weapon_ids": [
-              "boltgun",
-              "bolt-pistol",
+              "boltgun-chosen",
+              "bolt-pistol-chosen",
               "power-fist-chosen"
             ],
             "max_count": 2
@@ -1336,14 +1433,14 @@
             "weapon_ids": [
               "accursed-weapon",
               "plasma-pistol",
-              "combi-weapon"
+              "combi-weapon-chosen"
             ],
             "max_count": 4
           },
           {
             "name": "Chosen w/ paired accursed weapons and bolt pistol",
             "weapon_ids": [
-              "bolt-pistol",
+              "bolt-pistol-chosen",
               "paired-accursed-weapons-chosen"
             ],
             "max_count": 2
@@ -1351,7 +1448,7 @@
           {
             "name": "Chosen w/ power fist and plasma pistol",
             "weapon_ids": [
-              "boltgun",
+              "boltgun-chosen",
               "plasma-pistol",
               "power-fist-chosen"
             ],
@@ -1379,7 +1476,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1448,7 +1545,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1489,7 +1586,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1524,7 +1621,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1561,7 +1658,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1599,7 +1696,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1634,7 +1731,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1662,8 +1759,8 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "boltgun",
-          "bolt-pistol",
+          "boltgun-red-corsairs-raiders",
+          "bolt-pistol-red-corsairs-raiders",
           "reavers-blade"
         ]
       },
@@ -1677,16 +1774,16 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "boltgun",
-          "bolt-pistol",
+          "boltgun-red-corsairs-raiders",
+          "bolt-pistol-red-corsairs-raiders",
           "reavers-blade"
         ],
         "loadout_variants": [
           {
-            "name": "Red Corsairs Raider w/ boltgun",
+            "name": "Red Corsairs Raider",
             "weapon_ids": [
-              "boltgun",
-              "bolt-pistol",
+              "boltgun-red-corsairs-raiders",
+              "bolt-pistol-red-corsairs-raiders",
               "reavers-blade"
             ],
             "max_count": 9
@@ -1695,7 +1792,7 @@
             "name": "Red Corsairs Raider w/ meltagun",
             "weapon_ids": [
               "meltagun",
-              "bolt-pistol",
+              "bolt-pistol-red-corsairs-raiders",
               "reavers-blade"
             ],
             "max_count": 2
@@ -1703,23 +1800,40 @@
           {
             "name": "Red Corsairs Raider w/ power fist",
             "weapon_ids": [
-              "boltgun",
-              "bolt-pistol",
+              "boltgun-red-corsairs-raiders",
+              "bolt-pistol-red-corsairs-raiders",
               "power-fist"
-            ],
-            "max_count": 2
+            ]
           },
           {
             "name": "Red Corsairs Raider w/ power fist and meltagun",
             "weapon_ids": [
               "meltagun",
-              "bolt-pistol",
+              "bolt-pistol-red-corsairs-raiders",
               "power-fist"
             ],
             "max_count": 2
           }
         ],
         "loadout_variant_budgets": [
+          {
+            "variant_names": [
+              "Red Corsairs Raider w/ power fist"
+            ],
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
+          },
+          {
+            "variant_names": [
+              "Red Corsairs Raider w/ meltagun",
+              "Red Corsairs Raider w/ power fist",
+              "Red Corsairs Raider w/ power fist and meltagun"
+            ],
+            "count": 4,
+            "per_models": 0,
+            "scope": "model-row"
+          },
           {
             "variant_names": [
               "Red Corsairs Raider w/ power fist",
@@ -1743,7 +1857,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1791,13 +1905,13 @@
         },
         "default_weapon_ids": [
           "axe-of-dismemberment",
-          "bolt-pistol"
+          "bolt-pistol-master-of-executions"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1844,7 +1958,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1913,7 +2027,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1948,7 +2062,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1998,7 +2112,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2052,7 +2166,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2076,9 +2190,9 @@
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
-          "bolt-pistol",
+          "bolt-pistol-chaos-bikers",
           "combi-bolter",
-          "close-combat-weapon"
+          "close-combat-weapon-chaos-bikers"
         ],
         "is_leader_model": true,
         "base_size_mm": {
@@ -2093,8 +2207,8 @@
         "max": 5,
         "default_weapon_ids": [
           "combi-bolter",
-          "close-combat-weapon",
-          "bolt-pistol"
+          "close-combat-weapon-chaos-bikers",
+          "bolt-pistol-chaos-bikers"
         ],
         "is_leader_model": false,
         "base_size_mm": {
@@ -2106,7 +2220,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2173,7 +2287,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2242,7 +2356,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2283,7 +2397,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2318,7 +2432,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2342,9 +2456,9 @@
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
-          "boltgun",
-          "close-combat-weapon",
-          "bolt-pistol"
+          "boltgun-legionaries",
+          "close-combat-weapon-legionaries",
+          "bolt-pistol-legionaries"
         ],
         "is_leader_model": true,
         "base_size_mm": {
@@ -2357,9 +2471,9 @@
         "min": 4,
         "max": 9,
         "default_weapon_ids": [
-          "boltgun",
-          "close-combat-weapon",
-          "bolt-pistol"
+          "boltgun-legionaries",
+          "close-combat-weapon-legionaries",
+          "bolt-pistol-legionaries"
         ],
         "is_leader_model": false,
         "base_size_mm": {
@@ -2370,9 +2484,9 @@
           {
             "name": "Legionary w/ boltgun",
             "weapon_ids": [
-              "boltgun",
-              "bolt-pistol",
-              "close-combat-weapon"
+              "boltgun-legionaries",
+              "bolt-pistol-legionaries",
+              "close-combat-weapon-legionaries"
             ],
             "max_count": 9
           },
@@ -2380,45 +2494,135 @@
             "name": "Legionary w/ chainsword",
             "weapon_ids": [
               "astartes-chainsword",
-              "bolt-pistol",
-              "close-combat-weapon"
+              "bolt-pistol-legionaries",
+              "close-combat-weapon-legionaries"
             ],
             "max_count": 9
           },
           {
             "name": "Legionary w/ heavy melee weapon",
             "weapon_ids": [
-              "bolt-pistol",
-              "close-combat-weapon"
+              "bolt-pistol-legionaries",
+              "close-combat-weapon-legionaries",
+              "heavy-melee-weapon"
             ],
             "max_count": 1
           },
           {
             "name": "Legionary w/ balefire tome",
             "weapon_ids": [
-              "bolt-pistol",
-              "close-combat-weapon",
+              "bolt-pistol-legionaries",
+              "close-combat-weapon-legionaries",
               "balefire-tome"
             ],
             "max_count": 1
           },
           {
-            "name": "Legionary w/ other weapon",
+            "name": "Legionary w/ other weapon (Flamer)",
             "weapon_ids": [
-              "bolt-pistol",
-              "close-combat-weapon"
-            ],
-            "max_count": 2
+              "bolt-pistol-legionaries",
+              "close-combat-weapon-legionaries",
+              "flamer"
+            ]
+          },
+          {
+            "name": "Legionary w/ other weapon (Havoc autocannon)",
+            "weapon_ids": [
+              "bolt-pistol-legionaries",
+              "close-combat-weapon-legionaries",
+              "havoc-autocannon-legionaries"
+            ]
+          },
+          {
+            "name": "Legionary w/ other weapon (Heavy bolter)",
+            "weapon_ids": [
+              "bolt-pistol-legionaries",
+              "close-combat-weapon-legionaries",
+              "heavy-bolter"
+            ]
+          },
+          {
+            "name": "Legionary w/ other weapon (Lascannon)",
+            "weapon_ids": [
+              "bolt-pistol-legionaries",
+              "close-combat-weapon-legionaries",
+              "lascannon-legionaries"
+            ]
+          },
+          {
+            "name": "Legionary w/ other weapon (Missile launcher)",
+            "weapon_ids": [
+              "bolt-pistol-legionaries",
+              "close-combat-weapon-legionaries",
+              "missile-launcher"
+            ]
+          },
+          {
+            "name": "Legionary w/ other weapon (Plasma gun)",
+            "weapon_ids": [
+              "bolt-pistol-legionaries",
+              "close-combat-weapon-legionaries",
+              "plasma-gun"
+            ]
+          },
+          {
+            "name": "Legionary w/ other weapon (Reaper chaincannon)",
+            "weapon_ids": [
+              "bolt-pistol-legionaries",
+              "close-combat-weapon-legionaries",
+              "reaper-chaincannon"
+            ]
+          },
+          {
+            "name": "Legionary w/ other weapon (Plasma pistol and Astartes chainsword)",
+            "weapon_ids": [
+              "bolt-pistol-legionaries",
+              "close-combat-weapon-legionaries",
+              "astartes-chainsword",
+              "plasma-pistol"
+            ]
+          },
+          {
+            "name": "Legionary w/ other weapon (Meltagun)",
+            "weapon_ids": [
+              "bolt-pistol-legionaries",
+              "close-combat-weapon-legionaries",
+              "meltagun"
+            ]
           }
         ],
         "loadout_variant_budgets": [
+          {
+            "variant_names": [
+              "Legionary w/ other weapon (Flamer)",
+              "Legionary w/ other weapon (Havoc autocannon)",
+              "Legionary w/ other weapon (Heavy bolter)",
+              "Legionary w/ other weapon (Lascannon)",
+              "Legionary w/ other weapon (Missile launcher)",
+              "Legionary w/ other weapon (Plasma gun)",
+              "Legionary w/ other weapon (Reaper chaincannon)",
+              "Legionary w/ other weapon (Plasma pistol and Astartes chainsword)",
+              "Legionary w/ other weapon (Meltagun)"
+            ],
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
+          },
           {
             "variant_names": [
               "Legionary w/ boltgun",
               "Legionary w/ chainsword",
               "Legionary w/ heavy melee weapon",
               "Legionary w/ balefire tome",
-              "Legionary w/ other weapon"
+              "Legionary w/ other weapon (Flamer)",
+              "Legionary w/ other weapon (Havoc autocannon)",
+              "Legionary w/ other weapon (Heavy bolter)",
+              "Legionary w/ other weapon (Lascannon)",
+              "Legionary w/ other weapon (Missile launcher)",
+              "Legionary w/ other weapon (Plasma gun)",
+              "Legionary w/ other weapon (Reaper chaincannon)",
+              "Legionary w/ other weapon (Plasma pistol and Astartes chainsword)",
+              "Legionary w/ other weapon (Meltagun)"
             ],
             "count": 9,
             "per_models": 0,
@@ -2429,7 +2633,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2483,7 +2687,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2568,13 +2772,13 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 40
+          "diameter": 32
         }
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2629,7 +2833,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2654,7 +2858,7 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32
+          "diameter": 50
         },
         "default_weapon_ids": [
           "tyrants-claw-and-exalted-power-weapon",
@@ -2664,7 +2868,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2699,7 +2903,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2734,7 +2938,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2783,7 +2987,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2823,7 +3027,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2859,7 +3063,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2893,7 +3097,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2920,12 +3124,16 @@
           "combi-bolter-kravek-morne",
           "last-argument-and-power-fist",
           "servo-harness"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 50
+        }
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2954,12 +3162,16 @@
           "excruciator-cannon",
           "heavy-missile-launcher",
           "heavy-baleflamer"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 160
+        }
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -2987,15 +3199,15 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "bolt-pistol",
-          "rite-of-possession",
+          "bolt-pistol-aranis-zarkan",
+          "rite-of-possession-aranis-zarkan",
           "staff-of-possession"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -3007,6 +3219,9 @@
           }
         ]
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -3024,7 +3239,7 @@
         },
         "default_weapon_ids": [
           "blades-and-cudgels",
-          "bolt-pistol"
+          "bolt-pistol-zarkans-daemonkin-cultist-mob"
         ]
       },
       {
@@ -3037,14 +3252,14 @@
           "diameter": 25
         },
         "default_weapon_ids": [
-          "autopistol",
+          "autopistol-zarkans-daemonkin-cultist-mob",
           "blades-and-cudgels"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -3061,6 +3276,9 @@
           }
         ]
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -3079,7 +3297,7 @@
         },
         "default_weapon_ids": [
           "accursed-weapon",
-          "plasma-pistol"
+          "plasma-pistol-zarkans-daemonkin-legionaries"
         ]
       },
       {
@@ -3093,7 +3311,7 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "bolt-pistol",
+          "bolt-pistol-zarkans-daemonkin-legionaries",
           "fists-and-knives",
           "heavy-bolter"
         ]
@@ -3109,7 +3327,7 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "bolt-pistol",
+          "bolt-pistol-zarkans-daemonkin-legionaries",
           "fists-and-knives",
           "meltagun"
         ]
@@ -3125,14 +3343,14 @@
         },
         "default_weapon_ids": [
           "boltgun",
-          "bolt-pistol",
+          "bolt-pistol-zarkans-daemonkin-legionaries",
           "fists-and-knives"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -3159,6 +3377,9 @@
           }
         ]
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -3194,7 +3415,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -3211,6 +3432,9 @@
           }
         ]
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   }
 ]

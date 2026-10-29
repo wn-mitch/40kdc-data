@@ -6,167 +6,172 @@ abilities that translate into cruncher buffs via the real `effectToBuffs`
 
 | faction | total | offensive | defensive | inert | stub* | notes-stub | gw-leak | def-skipped |
 |---|--:|--:|--:|--:|--:|--:|--:|--:|
-| _core | 11 | 1 | 1 | 9 | 0 | 0 | 0 | 0 |
-| adepta-sororitas | 155 | 46 | 14 | 98 | 2 | 7 | 0 | 1 |
-| adeptus-astartes | 489 | 143 | 43 | 319 | 6 | 16 | 0 | 7 |
-| adeptus-custodes | 155 | 41 | 18 | 101 | 4 | 3 | 0 | 3 |
-| adeptus-mechanicus | 111 | 27 | 10 | 78 | 0 | 0 | 0 | 2 |
-| aeldari | 180 | 40 | 13 | 132 | 2 | 7 | 0 | 5 |
-| agents-of-the-imperium | 133 | 34 | 12 | 90 | 0 | 0 | 0 | 2 |
-| astra-militarum | 205 | 43 | 16 | 148 | 1 | 3 | 0 | 5 |
-| blood-angels | 69 | 21 | 3 | 45 | 0 | 0 | 0 | 0 |
-| chaos-daemons | 157 | 39 | 13 | 112 | 0 | 7 | 0 | 4 |
-| chaos-knights | 115 | 27 | 9 | 80 | 0 | 2 | 0 | 0 |
-| chaos-space-marines | 236 | 69 | 17 | 157 | 5 | 17 | 0 | 6 |
-| dark-angels | 70 | 25 | 4 | 44 | 1 | 0 | 0 | 0 |
-| death-guard | 119 | 24 | 6 | 91 | 4 | 7 | 0 | 3 |
-| drukhari | 100 | 25 | 7 | 70 | 1 | 5 | 0 | 1 |
-| emperors-children | 162 | 38 | 5 | 120 | 3 | 8 | 0 | 1 |
-| genestealer-cults | 88 | 21 | 7 | 63 | 1 | 1 | 0 | 1 |
-| grey-knights | 60 | 9 | 5 | 47 | 0 | 1 | 0 | 0 |
-| imperial-knights | 77 | 29 | 6 | 44 | 0 | 5 | 0 | 1 |
-| leagues-of-votann | 77 | 23 | 7 | 49 | 0 | 0 | 0 | 0 |
-| necrons | 158 | 31 | 23 | 112 | 1 | 2 | 0 | 1 |
-| orks | 290 | 49 | 13 | 232 | 4 | 3 | 0 | 2 |
-| tau-empire | 183 | 45 | 8 | 132 | 0 | 3 | 0 | 3 |
-| thousand-sons | 185 | 43 | 14 | 133 | 6 | 12 | 0 | 2 |
-| tyranids | 115 | 21 | 7 | 89 | 1 | 5 | 0 | 5 |
-| world-eaters | 133 | 17 | 10 | 107 | 3 | 0 | 0 | 0 |
-| **TOTAL** | **3833** | **931** | **291** | **2702** | **45** | **114** | **0** | **55** |
+| _core | 26 | 1 | 2 | 23 | 1 | 0 | 0 | 0 |
+| adepta-sororitas | 148 | 36 | 8 | 104 | 11 | 7 | 0 | 1 |
+| adeptus-astartes | 250 | 19 | 8 | 223 | 155 | 1 | 0 | 3 |
+| adeptus-custodes | 154 | 30 | 17 | 107 | 3 | 3 | 0 | 3 |
+| adeptus-mechanicus | 167 | 20 | 10 | 137 | 27 | 0 | 0 | 2 |
+| aeldari | 300 | 26 | 14 | 261 | 139 | 7 | 0 | 5 |
+| agents-of-the-imperium | 138 | 18 | 4 | 116 | 54 | 0 | 0 | 2 |
+| astra-militarum | 251 | 23 | 17 | 212 | 83 | 2 | 0 | 5 |
+| black-templars | 63 | 2 | 0 | 61 | 47 | 0 | 0 | 0 |
+| blood-angels | 61 | 9 | 1 | 51 | 15 | 1 | 0 | 0 |
+| chaos-daemons | 195 | 13 | 10 | 172 | 65 | 7 | 0 | 4 |
+| chaos-knights | 110 | 16 | 18 | 76 | 0 | 2 | 0 | 0 |
+| chaos-space-marines | 281 | 50 | 18 | 215 | 30 | 7 | 0 | 3 |
+| dark-angels | 77 | 9 | 6 | 62 | 21 | 0 | 0 | 2 |
+| death-guard | 160 | 13 | 5 | 142 | 32 | 1 | 0 | 3 |
+| deathwatch | 36 | 4 | 1 | 31 | 23 | 1 | 0 | 0 |
+| drukhari | 164 | 20 | 7 | 138 | 73 | 5 | 0 | 1 |
+| emperors-children | 146 | 24 | 10 | 112 | 13 | 3 | 0 | 1 |
+| genestealer-cults | 147 | 12 | 2 | 134 | 74 | 1 | 0 | 1 |
+| grey-knights | 134 | 7 | 2 | 125 | 87 | 0 | 0 | 0 |
+| imperial-fists | 11 | 2 | 0 | 9 | 2 | 0 | 0 | 0 |
+| imperial-knights | 118 | 19 | 6 | 93 | 58 | 3 | 0 | 1 |
+| iron-hands | 11 | 2 | 2 | 8 | 4 | 0 | 0 | 0 |
+| leagues-of-votann | 155 | 16 | 5 | 134 | 82 | 0 | 0 | 0 |
+| necrons | 230 | 18 | 13 | 199 | 102 | 1 | 0 | 1 |
+| orks | 206 | 30 | 10 | 168 | 34 | 0 | 0 | 0 |
+| raven-guard | 11 | 0 | 0 | 11 | 10 | 0 | 0 | 0 |
+| salamanders | 11 | 3 | 0 | 8 | 5 | 0 | 0 | 0 |
+| space-wolves | 87 | 6 | 3 | 78 | 47 | 5 | 0 | 0 |
+| tau-empire | 166 | 23 | 9 | 134 | 4 | 3 | 0 | 3 |
+| thousand-sons | 158 | 24 | 10 | 125 | 21 | 3 | 0 | 1 |
+| tyranids | 186 | 8 | 5 | 173 | 84 | 4 | 0 | 5 |
+| ultramarines | 11 | 0 | 0 | 11 | 11 | 0 | 0 | 0 |
+| white-scars | 11 | 0 | 0 | 11 | 11 | 0 | 0 | 0 |
+| world-eaters | 147 | 14 | 10 | 123 | 24 | 0 | 0 | 0 |
+| **TOTAL** | **4527** | **517** | **233** | **3787** | **1452** | **67** | **0** | **47** |
 
 `stub*` = structural (empty-modifier placeholder node) — the authoring worklist. `notes-stub` = flagged in community_notes.
 
 ## Unsupported-effect reasons (offensive walk)
 
-- `572` — effect type "ability-grant" is not modelled by the buff layer
-- `224` — effect type "movement-modifier" is not modelled by the buff layer
-- `131` — conditional: cannot evaluate condition "undefined" against current context
-- `126` — effect type "mortal-wounds" is not modelled by the buff layer
-- `82` — effect type "leadership-modifier" is not modelled by the buff layer
-- `67` — effect type "attack-restriction" is not modelled by the buff layer
-- `64` — effect type "objective-control-modifier" is not modelled by the buff layer
-- `58` — effect type "resurrection" is not modelled by the buff layer
-- `54` — effect type "cp-refund" is not modelled by the buff layer
-- `44` — effect type "rule-state" is not modelled by the buff layer
-- `42` — re-roll on "charge" (subset …) is outside the damage path
-- `39` — effect type "deep-strike" is not modelled by the buff layer
-- `38` — effect type "fallback-and-act" is not modelled by the buff layer
-- `35` — stat-modifier: operation "set" not supported
-- `33` — effect type "unit-keyword" is not modelled by the buff layer
+- `1461` — effect type "no-effect" is not modelled by the buff layer
+- `263` — conditional: cannot evaluate condition "and" against current context
+- `190` — conditional: cannot evaluate condition "attachment" against current context
+- `157` — effect type "permission" is not modelled by the buff layer
+- `148` — conditional: cannot evaluate condition "matches" against current context
+- `106` — unit-filter target: identity, state or model membership is unresolved
+- `91` — effect type "mortal-wounds" is not modelled by the buff layer
+- `70` — conditional: cannot evaluate condition "not" against current context
+- `68` — effect type "move" is not modelled by the buff layer
+- `60` — conditional: cannot evaluate condition "happened" against current context
+- `57` — effect type "ability-grant" is not modelled by the buff layer
+- `55` — effect type "set-up" is not modelled by the buff layer
+- `53` — effect type "army-rule" is not modelled by the buff layer
+- `42` — effect type "move-modifier" is not modelled by the buff layer
+- `41` — effect type "cost-modifier" is not modelled by the buff layer
+- `40` — dice-gated effect: stochastic; not expressible as a buff
+- `39` — conditional: cannot evaluate condition "strength" against current context
+- `35` — effect type "ability-modifier" is not modelled by the buff layer
+- `34` — effect type "keyword-grant" is not modelled by the buff layer
+- `33` — stat-modifier on "M" is outside the damage path
+- `33` — effect type "test" is not modelled by the buff layer
 - `32` — effect type "cp-gain" is not modelled by the buff layer
-- `32` — effect type "disembark-after-move" is not modelled by the buff layer
-- `29` — dice-gated effect: stochastic; not expressible as a buff
-- `28` — stat-modifier on "M" is outside the damage path
-- `27` — stat-modifier on "D" is outside the damage path
-- `26` — effect type "fight-first" is not modelled by the buff layer
-- `26` — stat-modifier: operation "undefined" not supported
-- `24` — effect type "fight-on-death" is not modelled by the buff layer
-- `24` — effect type "targeting-permission" is not modelled by the buff layer
-- `22` — roll-modifier: operation "ignore-modifiers" not supported
-- `21` — designate-target debuff on the marked unit: not a buff on the bearer
-- `20` — conditional: cannot evaluate condition "unit-below-starting-strength" against current context
-- `19` — roll-modifier: operation "set" not supported
-- `19` — conditional: cannot evaluate condition "unit-within-range-of" against current context
-- `16` — roll-modifier on "charge" is outside the damage path
-- `13` — effect type "resource-spend" is not modelled by the buff layer
-- `13` — effect type "engagement-passthrough" is not modelled by the buff layer
-- `12` — effect type "auto-result" is not modelled by the buff layer
-- `12` — conditional: cannot evaluate condition "unit-below-half-strength" against current context
-- `12` — conditional: cannot evaluate condition "attack-stat-compare" against current context
-- `12` — stat-modifier T: defender-side stat; applies when the buffed unit is the target
-- `11` — re-roll on "advance" (subset …) is outside the damage path
-- `11` — conditional: cannot evaluate condition "is-battle-shocked" against current context
-- `11` — conditional: cannot evaluate condition "within-range-of-objective" against current context
-- `10` — effect type "unit-attachment" is not modelled by the buff layer
-- `9` — stat-modifier on "W" is outside the damage path
-- `9` — conditional: cannot evaluate condition "advanced-this-turn" against current context
-- `9` — selection/history/model/attack predicates are not resolved by the buff engine
-- `8` — effect type "resource-gain" is not modelled by the buff layer
-- `8` — stat-modifier on "Ld" is outside the damage path
-- `8` — stat-modifier AP on the attacker: defender-side AP reduction is not modelled by the buff layer
-- `7` — conditional: cannot evaluate condition "disembarked-from-transport" against current context
-- `7` — stat-modifier: narrows by "weapon_keyword" which the cruncher can't resolve here
-- `7` — effect type "unit-keyword-grant" is not modelled by the buff layer
-- `7` — effect type "battle-shock-test" is not modelled by the buff layer
-- `7` — effect type "charge-roll-modifier" is not modelled by the buff layer
-- `6` — effect type "unit-tag" is not modelled by the buff layer
-- `6` — conditional: cannot evaluate condition "opponent-unit-within-range" against current context
-- `6` — roll-modifier: operation "undefined" not supported
-- `6` — effect type "modifier-immunity" is not modelled by the buff layer
-- `6` — effect type "objective-tag" is not modelled by the buff layer
-- `6` — conditional: cannot evaluate condition "faction-rule-active" against current context
-- `6` — effect type "stratagem-cost-modifier" is not modelled by the buff layer
-- `5` — stat-modifier: narrows by "weapon_name" which the cruncher can't resolve here
-- `4` — conditional: cannot evaluate condition "units-destroyed" against current context
-- `4` — effect type "disembark" is not modelled by the buff layer
-- `4` — roll-modifier: operation "crit-on" not supported
-- `4` — roll-modifier: operation "ignore-engagement-penalty" not supported
-- `4` — effect type "detection-range-modifier" is not modelled by the buff layer
-- `4` — conditional: cannot evaluate condition "unit-has-tag" against current context
-- `4` — stat-modifier on "OC" is outside the damage path
-- `4` — conditional: cannot evaluate condition "engagement-state" against current context
+- `31` — stat-modifier on "D" is outside the damage path
+- `27` — selection/history/model/attack predicates are not resolved by the buff engine
+- `25` — re-roll on "charge" (subset …) is outside the damage path
+- `25` — effect type "heal" is not modelled by the buff layer
+- `25` — effect type "objective-sticky" is not modelled by the buff layer
+- `24` — effect type "designate" is not modelled by the buff layer
+- `24` — target "event-subject" is not resolved by the buff engine
+- `22` — effect type "rule-state" is not modelled by the buff layer
+- `21` — stat-modifier on "OC" is outside the damage path
+- `20` — effect type "resource-gain" is not modelled by the buff layer
+- `20` — effect type "resource-spend" is not modelled by the buff layer
+- `19` — conditional: cannot evaluate condition "attack-compare" against current context
+- `18` — activation condition cannot be evaluated against current context
+- `17` — post-attack moment: applies only to attacks made after the triggering unit's
+- `17` — stat-modifier on "detection-range" is outside the damage path
+- `16` — effect type "targeting" is not modelled by the buff layer
+- `16` — stat-modifier on "W" is outside the damage path
+- `14` — effect type "act-on-death" is not modelled by the buff layer
+- `14` — roll-modifier on "charge" is outside the damage path
+- `14` — stat-modifier T: defender-side stat; applies when the buffed unit is the target
+- `14` — target "event-object" is not resolved by the buff engine
+- `13` — conditional: cannot evaluate condition "attack-is" against current context
+- `12` — conditional: cannot evaluate condition "or" against current context
+- `10` — effect type "return-models" is not modelled by the buff layer
+- `10` — stat-modifier AP on the attacker: defender-side stat; applies when the buffed unit is the target
+- `10` — ignore-modifiers: only hit and wound rolls and WS/BS are modelled
+- `10` — stat-modifier Sv: defender-side stat; applies when the buffed unit is the target
+- `9` — effect type "weapon-grant" is not modelled by the buff layer
+- `9` — stat-modifier on "Range" is outside the damage path
+- `8` — re-roll on "advance" (subset …) is outside the damage path
+- `8` — conditional: cannot evaluate condition "in-region" against current context
+- `8` — effect type "dice-table" is not modelled by the buff layer
+- `7` — target "stratagem-target" is not resolved by the buff engine
+- `7` — roll-result on "hit": only a critical threshold on hit or wound rolls is modelled
+- `6` — effect type "resource-die" is not modelled by the buff layer
+- `6` — roll-modifier on "battle-shock" is outside the damage path
+- `6` — effect type "marker" is not modelled by the buff layer
+- `6` — roll-result on "wound": only a critical threshold on hit or wound rolls is modelled
+- `6` — conditional: cannot evaluate condition "model-count" against current context
+- `6` — conditional: cannot evaluate condition "battle-round" against current context
+- `6` — conditional: cannot evaluate condition "roll-result" against current context
+- `6` — stat-modifier on "Ld" is outside the damage path
+- `6` — effect type "transport-capacity" is not modelled by the buff layer
+- `6` — designate-target debuff on the marked unit: not a buff on the bearer
+- `5` — stat-modifier: operation "set" not supported
+- `5` — re-roll on "attacks" (subset …) is outside the damage path
+- `5` — roll-modifier on "advance" is outside the damage path
+- `5` — effect type "ability-activate" is not modelled by the buff layer
+- `5` — re-roll: count-capped permissions are not modelled by the expected-value engine
+- `5` — conditional: cannot evaluate condition "closest" against current context
+- `5` — roll-result on "desperate-escape" is outside the damage path
+- `5` — effect type "add-unit" is not modelled by the buff layer
+- `4` — roll-result on "deadly-demise" is outside the damage path
+- `4` — roll-result on "save": only a critical threshold on hit or wound rolls is modelled
+- `4` — effect type "split-unit" is not modelled by the buff layer
 - `4` — re-roll on "leadership" (subset …) is outside the damage path
-- `4` — stat-modifier on "WS" is outside the damage path
-- `3` — effect type "shoot-on-death" is not modelled by the buff layer
-- `3` — stat-modifier on "BS" is outside the damage path
-- `3` — effect type "strategic-reserves-arrival" is not modelled by the buff layer
-- `3` — re-roll on "hit" (subset …) is outside the damage path
-- `3` — conditional: cannot evaluate condition "has-lost-wounds" against current context
-- `3` — effect type "remove-battle-shock" is not modelled by the buff layer
-- `3` — conditional: cannot evaluate condition "battle-round" against current context
-- `3` — re-roll on "battle-shock" (subset …) is outside the damage path
-- `3` — effect type "terrain-area-tag" is not modelled by the buff layer
-- `3` — conditional: cannot evaluate condition "terrain-area-control" against current context
-- `2` — effect type "replace-roll-from-pool" is not modelled by the buff layer
-- `2` — re-roll on "attacks-characteristic" (subset …) is outside the damage path
-- `2` — effect type "pool-add-die" is not modelled by the buff layer
-- `2` — roll-modifier on "advance" is outside the damage path
-- `2` — effect type "model-destruction" is not modelled by the buff layer
-- `2` — re-roll on "damage" (subset …) is outside the damage path
-- `2` — re-roll on "attacks" (subset …) is outside the damage path
-- `2` — leader-model-ability-grant: attached leader beneficiary is not resolved by the buff engine
-- `2` — stat-modifier on "Range" is outside the damage path
-- `2` — roll-modifier: operation "guarantee-crit" not supported
-- `2` — re-roll on "eviscerating-fly-by-wounds" (subset …) is outside the damage path
-- `2` — stat-modifier on "detection-range" is outside the damage path
-- `2` — stat-modifier: operation "multiply" not supported
-- `2` — persistent-designation: retained selection state is not resolved by the buff engine
-- `2` — re-roll: narrows by "weapon_keyword" which the cruncher can't resolve here
-- `2` — re-roll on "blood-surge" (subset …) is outside the damage path
-- `2` — conditional: cannot evaluate condition "destroyed-by-attack-type" against current context
-- `2` — aura without nested effect: not a combat buff
-- `2` — effect type "stratagem-targeting-permission" is not modelled by the buff layer
-- `2` — effect type "for-each-unit" is not modelled by the buff layer
-- `2` — effect type "dice-table" is not modelled by the buff layer
-- `2` — effect type "fight-eligibility-extension" is not modelled by the buff layer
-- `1` — re-roll on "any" (subset …) is outside the damage path
-- `1` — re-roll on "miracle-dice" (subset …) is outside the damage path
-- `1` — effect type "cp-on-destroy" is not modelled by the buff layer
-- `1` — effect type "heal-wounds" is not modelled by the buff layer
-- `1` — stat-modifier: operation "improve-vs-D1" not supported
-- `1` — stat-modifier on "aura-range" is outside the damage path
-- `1` — roll-modifier: narrows by "weapon_keyword" which the cruncher can't resolve here
-- `1` — re-roll on "wound" (subset …) is outside the damage path
-- `1` — conditional: cannot evaluate condition "attack-is-type" against current context
-- `1` — conditional: cannot evaluate condition "was-hit-by-attack" against current context
-- `1` — stat-modifier: narrows by "weapon_filter" which the cruncher can't resolve here
-- `1` — re-roll on "dread-ability-selection" (subset …) is outside the damage path
-- `1` — re-roll on "desperate-escape" (subset …) is outside the damage path
-- `1` — re-roll on "hazardous" (subset …) is outside the damage path
-- `1` — stat-modifier on "range" is outside the damage path
-- `1` — conditional: cannot evaluate condition "has-fought-this-phase" against current context
-- `1` — re-roll on "weapon-attacks" (subset …) is outside the damage path
-- `1` — conditional: cannot evaluate condition "territory-control" against current context
+- `3` — re-roll on "any" (subset …) is outside the damage path
+- `3` — ability-grant: its value is set by the battle size; not resolved by the buff engine
+- `3` — conditional: cannot evaluate condition "wounds" against current context
+- `3` — conditional: cannot evaluate condition "eligible" against current context
+- `3` — conditional: cannot evaluate condition "rule-active" against current context
+- `3` — persistent-designation: retained selection state is not resolved by the buff engine
+- `3` — conditional: cannot evaluate condition "controls" against current context
+- `3` — conditional: cannot evaluate condition "unit-wargear" against current context
+- `2` — stat-modifier BS: operation "subtract" not supported
+- `2` — effect type "state-change" is not modelled by the buff layer
+- `2` — re-roll on "desperate-escape" (subset …) is outside the damage path
+- `2` — re-roll on "hazard" (subset …) is outside the damage path
+- `2` — re-roll on "battle-shock" (subset …) is outside the damage path
+- `2` — conditional: cannot evaluate condition "within" against current context
+- `2` — select-objective: the bound objective marker is not resolved by the buff engine
+- `2` — effect type "counts-as" is not modelled by the buff layer
+- `1` — roll-result on "battle-shock" is outside the damage path
+- `1` — re-roll on "resource-die" (subset …) is outside the damage path
+- `1` — trigger-time recipient snapshot is unavailable; current membership cannot establish historical recipients
+- `1` — conditional: cannot evaluate condition "has-keyword" against current context
+- `1` — stat-modifier AP: operation "set" not supported
+- `1` — conditional: cannot evaluate condition "same-unit" against current context
+- `1` — roll-result on "advance" is outside the damage path
+- `1` — select-units: a dice gate with a failure branch is not a single lever
+- `1` — re-roll on "dark-pact" (subset …) is outside the damage path
+- `1` — stat-modifier: the value scales with models-in-or-embarked-in-bearer; not resolved by the buff engine
+- `1` — model-in-this-unit: individual model identity is unresolved
+- `1` — stat-modifier WS: operation "subtract" not supported
+- `1` — conditional: cannot evaluate condition "unit-state" against current context
+- `1` — conditional: cannot evaluate condition "happened-compare" against current context
+- `1` — stat-modifier BS: operation "set" not supported
+- `1` — effect type "destruction-rule" is not modelled by the buff layer
+- `1` — conditional: cannot evaluate condition "oath-state" against current context
+- `1` — effect type "oath-modifier" is not modelled by the buff layer
 - `1` — stat-modifier: operation "add" not supported
-- `1` — re-roll on "reanimation-protocols" (subset …) is outside the damage path
-- `1` — roll-modifier on "reanimation-protocols" is outside the damage path
-- `1` — roll-modifier: narrows by "weapon_name" which the cruncher can't resolve here
-- `1` — effect type "transport-capacity-conversion" is not modelled by the buff layer
-- `1` — re-roll: narrows by "weapon_name" which the cruncher can't resolve here
-- `1` — conditional: cannot evaluate condition "disposition-matches" against current context
-- `1` — stat-modifier AP: operation "set-on-crit-wound" not supported
-- `1` — stat-modifier on "R" is outside the damage path
-- `1` — re-roll on "psychic-test" (subset …) is outside the damage path
-- `1` — roll-modifier on "psychic-test" is outside the damage path
-- `1` — effect type "flyover" is not modelled by the buff layer
+- `1` — conditional: cannot evaluate condition "army-faction" against current context
+- `1` — conditional: cannot evaluate condition "resource" against current context
+- `1` — stat-modifier: operation "multiply" not supported
+- `1` — conditional: cannot evaluate condition "model-profile" against current context
+- `1` — conditional: cannot evaluate condition "visible" against current context
+- `1` — conditional: cannot evaluate condition "loadout" against current context
+- `1` — conditional: cannot evaluate condition "army-includes" against current context
+- `1` — roll-result on "any" is outside the damage path
+- `1` — re-roll on "psychic" (subset …) is outside the damage path
+- `1` — roll-modifier on "psychic" is outside the damage path
+- `1` — roll-modifier: operation "add" not supported
+- `1` — aura emitter filter requires the source unit's keywords
 - `1` — re-roll on "blessings-of-khorne" (subset …) is outside the damage path
+- `1` — aura without nested effect: not a combat buff
+- `1` — stat-modifier WS: operation "add" not supported

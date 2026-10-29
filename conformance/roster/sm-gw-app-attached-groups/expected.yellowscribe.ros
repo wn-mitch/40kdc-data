@@ -1,0 +1,616 @@
+<?xml version="1.0" encoding="utf-8"?>
+<roster id="roster0" name="Attached Groups Test" gameSystemId="sys-352e-adc2-7639-d6a9" gameSystemName="Warhammer 40,000">
+  <forces>
+    <force id="force0" name="Adeptus Astartes" catalogueName="Adeptus Astartes">
+      <selections>
+        <selection id="unit0" name="Captain" type="unit" number="1">
+          <profiles>
+            <profile name="Captain" typeName="Unit">
+              <characteristics>
+                <characteristic name="M">6"</characteristic>
+                <characteristic name="T">5</characteristic>
+                <characteristic name="SV">3+</characteristic>
+                <characteristic name="W">5</characteristic>
+                <characteristic name="LD">6+</characteristic>
+                <characteristic name="OC">1</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Invulnerable Save" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">4+ invulnerable save</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Leader" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">The unit gains the Leader ability.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Finest Hour" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">When the unit is selected to fight, you may use this ability, during the Fight phase, until the end of the phase:
+  -&gt; Improve the Attacks characteristic of melee weapons equipped by this model by 3.
+  -&gt; Melee weapons equipped by this model gain [DEVASTATING WOUNDS].</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Relic Shield" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Add 1 to this model's Wounds characteristic.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Strategic Acumen" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">You can: During the Command phase, in your turn, until the start of your next Command phase, select one option of Combat Doctrines for the unit, in place of any already active.</characteristic>
+              </characteristics>
+            </profile>
+          </profiles>
+          <categories>
+            <category name="Faction: Adeptus Astartes"/>
+            <category name="Infantry"/>
+            <category name="Character"/>
+            <category name="Explosives"/>
+            <category name="Imperium"/>
+            <category name="Tacticus"/>
+            <category name="Captain"/>
+          </categories>
+          <selections>
+            <selection id="unit0-m0" name="Captain" type="model" number="1">
+              <selections>
+                <selection id="unit0-m0-w0" name="Heavy Bolt Pistol" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Heavy Bolt Pistol" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">18"</characteristic>
+                        <characteristic name="A">1</characteristic>
+                        <characteristic name="BS">2+</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">-1</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords">Close-quarters</characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+                <selection id="unit0-m0-w1" name="Master-crafted bolter" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Master-crafted Bolter" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">24"</characteristic>
+                        <characteristic name="A">2</characteristic>
+                        <characteristic name="BS">2+</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">-1</characteristic>
+                        <characteristic name="D">2</characteristic>
+                        <characteristic name="Keywords">Assault, Rapid Fire 1</characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+                <selection id="unit0-m0-w2" name="Master-crafted power weapon" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Master-crafted Power Weapon" typeName="Melee Weapons">
+                      <characteristics>
+                        <characteristic name="Range">Melee</characteristic>
+                        <characteristic name="A">6</characteristic>
+                        <characteristic name="WS">2+</characteristic>
+                        <characteristic name="S">6</characteristic>
+                        <characteristic name="AP">-2</characteristic>
+                        <characteristic name="D">2</characteristic>
+                        <characteristic name="Keywords"></characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+              </selections>
+            </selection>
+          </selections>
+        </selection>
+        <selection id="unit1" name="Intercessor Squad" type="unit" number="1">
+          <profiles>
+            <profile name="Intercessor" typeName="Unit">
+              <characteristics>
+                <characteristic name="M">6"</characteristic>
+                <characteristic name="T">5</characteristic>
+                <characteristic name="SV">3+</characteristic>
+                <characteristic name="W">2</characteristic>
+                <characteristic name="LD">6+</characteristic>
+                <characteristic name="OC">2</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Bolter Discipline" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">During the Shooting phase, in your turn, while the unit is within range of an objective marker or while the target is within range of an objective marker, the unit gets +1 to Hit rolls with ranged weapons.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Tactical Mainstay" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">The unit is eligible to start an Action even if it is within Engagement Range of enemy units or it is Battle-shocked.
+-&gt; Each time the unit uses action: the unit is eligible to shoot even if it is performing an Action.</characteristic>
+              </characteristics>
+            </profile>
+          </profiles>
+          <categories>
+            <category name="Faction: Adeptus Astartes"/>
+            <category name="Infantry"/>
+            <category name="Battleline"/>
+            <category name="Explosives"/>
+            <category name="Imperium"/>
+            <category name="Tacticus"/>
+            <category name="Intercessor Squad"/>
+          </categories>
+          <selections>
+            <selection id="unit1-m0" name="Intercessor Sergeant" type="model" number="1">
+              <selections>
+                <selection id="unit1-m0-w0" name="Bolt Pistol" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Bolt Pistol" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">12"</characteristic>
+                        <characteristic name="A">1</characteristic>
+                        <characteristic name="BS">3+</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">-1</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords">Close-quarters</characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+                <selection id="unit1-m0-w1" name="Bolt Rifle" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Focused Fire" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">24"</characteristic>
+                        <characteristic name="A">1</characteristic>
+                        <characteristic name="BS">3+</characteristic>
+                        <characteristic name="S">6</characteristic>
+                        <characteristic name="AP">-1</characteristic>
+                        <characteristic name="D">2</characteristic>
+                        <characteristic name="Keywords">Heavy, Rapid Fire 1</characteristic>
+                      </characteristics>
+                    </profile>
+                    <profile name="Saturation" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">24"</characteristic>
+                        <characteristic name="A">2</characteristic>
+                        <characteristic name="BS">3+</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">-1</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords">Assault, Rapid Fire 1</characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+                <selection id="unit1-m0-w2" name="Knives and Fists" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Knives and Fists" typeName="Melee Weapons">
+                      <characteristics>
+                        <characteristic name="Range">Melee</characteristic>
+                        <characteristic name="A">3</characteristic>
+                        <characteristic name="WS">3+</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">0</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords"></characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+              </selections>
+            </selection>
+            <selection id="unit1-m1" name="Intercessor" type="model" number="4">
+              <selections>
+                <selection id="unit1-m1-w0" name="Bolt Pistol" type="upgrade" number="4">
+                  <profiles>
+                    <profile name="Bolt Pistol" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">12"</characteristic>
+                        <characteristic name="A">1</characteristic>
+                        <characteristic name="BS">3+</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">-1</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords">Close-quarters</characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+                <selection id="unit1-m1-w1" name="Bolt Rifle" type="upgrade" number="4">
+                  <profiles>
+                    <profile name="Focused Fire" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">24"</characteristic>
+                        <characteristic name="A">1</characteristic>
+                        <characteristic name="BS">3+</characteristic>
+                        <characteristic name="S">6</characteristic>
+                        <characteristic name="AP">-1</characteristic>
+                        <characteristic name="D">2</characteristic>
+                        <characteristic name="Keywords">Heavy, Rapid Fire 1</characteristic>
+                      </characteristics>
+                    </profile>
+                    <profile name="Saturation" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">24"</characteristic>
+                        <characteristic name="A">2</characteristic>
+                        <characteristic name="BS">3+</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">-1</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords">Assault, Rapid Fire 1</characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+                <selection id="unit1-m1-w2" name="Knives and Fists" type="upgrade" number="4">
+                  <profiles>
+                    <profile name="Knives and Fists" typeName="Melee Weapons">
+                      <characteristics>
+                        <characteristic name="Range">Melee</characteristic>
+                        <characteristic name="A">3</characteristic>
+                        <characteristic name="WS">3+</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">0</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords"></characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+              </selections>
+            </selection>
+          </selections>
+        </selection>
+        <selection id="unit2" name="Assault Intercessor Squad" type="unit" number="1">
+          <profiles>
+            <profile name="Assault Intercessor" typeName="Unit">
+              <characteristics>
+                <characteristic name="M">6"</characteristic>
+                <characteristic name="T">5</characteristic>
+                <characteristic name="SV">3+</characteristic>
+                <characteristic name="W">2</characteristic>
+                <characteristic name="LD">6+</characteristic>
+                <characteristic name="OC">2</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Targeted Intercession" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">If the unit charged this turn:
+  -&gt; Improve the Strength characteristic of melee weapons equipped by models in this unit by 1.
+  -&gt; Improve the Armour Penetration characteristic of melee weapons equipped by models in this unit by 1.</characteristic>
+              </characteristics>
+            </profile>
+          </profiles>
+          <categories>
+            <category name="Faction: Adeptus Astartes"/>
+            <category name="Infantry"/>
+            <category name="Battleline"/>
+            <category name="Explosives"/>
+            <category name="Imperium"/>
+            <category name="Tacticus"/>
+            <category name="Assault Intercessor Squad"/>
+          </categories>
+          <selections>
+            <selection id="unit2-m0" name="Assault Intercessor Sergeant" type="model" number="1">
+              <selections>
+                <selection id="unit2-m0-w0" name="Chainsword" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Chainsword" typeName="Melee Weapons">
+                      <characteristics>
+                        <characteristic name="Range">Melee</characteristic>
+                        <characteristic name="A">4</characteristic>
+                        <characteristic name="WS">3+</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">-1</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords"></characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+                <selection id="unit2-m0-w1" name="Heavy Bolt Pistol" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Heavy Bolt Pistol" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">18"</characteristic>
+                        <characteristic name="A">1</characteristic>
+                        <characteristic name="BS">3+</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">-1</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords">Close-quarters</characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+              </selections>
+            </selection>
+            <selection id="unit2-m1" name="Assault Intercessor" type="model" number="4">
+              <selections>
+                <selection id="unit2-m1-w0" name="Chainsword" type="upgrade" number="4">
+                  <profiles>
+                    <profile name="Chainsword" typeName="Melee Weapons">
+                      <characteristics>
+                        <characteristic name="Range">Melee</characteristic>
+                        <characteristic name="A">4</characteristic>
+                        <characteristic name="WS">3+</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">-1</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords"></characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+                <selection id="unit2-m1-w1" name="Heavy Bolt Pistol" type="upgrade" number="4">
+                  <profiles>
+                    <profile name="Heavy Bolt Pistol" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">18"</characteristic>
+                        <characteristic name="A">1</characteristic>
+                        <characteristic name="BS">3+</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">-1</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords">Close-quarters</characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+              </selections>
+            </selection>
+          </selections>
+        </selection>
+        <selection id="unit3" name="Lieutenant" type="unit" number="1">
+          <profiles>
+            <profile name="Lieutenant" typeName="Unit">
+              <characteristics>
+                <characteristic name="M">6"</characteristic>
+                <characteristic name="T">5</characteristic>
+                <characteristic name="SV">3+</characteristic>
+                <characteristic name="W">4</characteristic>
+                <characteristic name="LD">6+</characteristic>
+                <characteristic name="OC">1</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Tactical Precision" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Against a unit that is not a MONSTER or VEHICLE, the unit's weapons gain [LETHAL HITS].</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Storm Shield" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">This model has a 4+ invulnerable save.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Support" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Nothing happens.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Demi-company Commander (Once per turn, per unit)" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Each time a friendly unit uses Strategic Acumen (the triggering unit must have CAPTAIN), you may use this ability, until the start of your next Command phase, the Combat Doctrines option the triggering use selected is active for the unit (and no other option is).</characteristic>
+              </characteristics>
+            </profile>
+          </profiles>
+          <categories>
+            <category name="Faction: Adeptus Astartes"/>
+            <category name="Infantry"/>
+            <category name="Character"/>
+            <category name="Imperium"/>
+            <category name="Tacticus"/>
+            <category name="Lieutenant"/>
+            <category name="Explosives"/>
+          </categories>
+          <selections>
+            <selection id="unit3-m0" name="Lieutenant" type="model" number="1">
+              <selections>
+                <selection id="unit3-m0-w0" name="Bolt Pistol" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Bolt Pistol" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">12"</characteristic>
+                        <characteristic name="A">1</characteristic>
+                        <characteristic name="BS">2+</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">-1</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords">Close-quarters</characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+                <selection id="unit3-m0-w1" name="Ceramite Fists" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Ceramite Fists" typeName="Melee Weapons">
+                      <characteristics>
+                        <characteristic name="Range">Melee</characteristic>
+                        <characteristic name="A">5</characteristic>
+                        <characteristic name="WS">2+</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">0</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords"></characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+                <selection id="unit3-m0-w2" name="Master-crafted bolter" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Master-crafted Bolter" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">24"</characteristic>
+                        <characteristic name="A">2</characteristic>
+                        <characteristic name="BS">2+</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">-1</characteristic>
+                        <characteristic name="D">2</characteristic>
+                        <characteristic name="Keywords"></characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+              </selections>
+            </selection>
+          </selections>
+        </selection>
+        <selection id="unit4" name="Intercessor Squad" type="unit" number="1">
+          <profiles>
+            <profile name="Intercessor" typeName="Unit">
+              <characteristics>
+                <characteristic name="M">6"</characteristic>
+                <characteristic name="T">5</characteristic>
+                <characteristic name="SV">3+</characteristic>
+                <characteristic name="W">2</characteristic>
+                <characteristic name="LD">6+</characteristic>
+                <characteristic name="OC">2</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Bolter Discipline" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">During the Shooting phase, in your turn, while the unit is within range of an objective marker or while the target is within range of an objective marker, the unit gets +1 to Hit rolls with ranged weapons.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Tactical Mainstay" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">The unit is eligible to start an Action even if it is within Engagement Range of enemy units or it is Battle-shocked.
+-&gt; Each time the unit uses action: the unit is eligible to shoot even if it is performing an Action.</characteristic>
+              </characteristics>
+            </profile>
+          </profiles>
+          <categories>
+            <category name="Faction: Adeptus Astartes"/>
+            <category name="Infantry"/>
+            <category name="Battleline"/>
+            <category name="Explosives"/>
+            <category name="Imperium"/>
+            <category name="Tacticus"/>
+            <category name="Intercessor Squad"/>
+          </categories>
+          <selections>
+            <selection id="unit4-m0" name="Intercessor Sergeant" type="model" number="1">
+              <selections>
+                <selection id="unit4-m0-w0" name="Bolt Pistol" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Bolt Pistol" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">12"</characteristic>
+                        <characteristic name="A">1</characteristic>
+                        <characteristic name="BS">3+</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">-1</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords">Close-quarters</characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+                <selection id="unit4-m0-w1" name="Bolt Rifle" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Focused Fire" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">24"</characteristic>
+                        <characteristic name="A">1</characteristic>
+                        <characteristic name="BS">3+</characteristic>
+                        <characteristic name="S">6</characteristic>
+                        <characteristic name="AP">-1</characteristic>
+                        <characteristic name="D">2</characteristic>
+                        <characteristic name="Keywords">Heavy, Rapid Fire 1</characteristic>
+                      </characteristics>
+                    </profile>
+                    <profile name="Saturation" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">24"</characteristic>
+                        <characteristic name="A">2</characteristic>
+                        <characteristic name="BS">3+</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">-1</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords">Assault, Rapid Fire 1</characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+                <selection id="unit4-m0-w2" name="Knives and Fists" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Knives and Fists" typeName="Melee Weapons">
+                      <characteristics>
+                        <characteristic name="Range">Melee</characteristic>
+                        <characteristic name="A">3</characteristic>
+                        <characteristic name="WS">3+</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">0</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords"></characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+              </selections>
+            </selection>
+            <selection id="unit4-m1" name="Intercessor" type="model" number="4">
+              <selections>
+                <selection id="unit4-m1-w0" name="Bolt Pistol" type="upgrade" number="4">
+                  <profiles>
+                    <profile name="Bolt Pistol" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">12"</characteristic>
+                        <characteristic name="A">1</characteristic>
+                        <characteristic name="BS">3+</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">-1</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords">Close-quarters</characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+                <selection id="unit4-m1-w1" name="Bolt Rifle" type="upgrade" number="4">
+                  <profiles>
+                    <profile name="Focused Fire" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">24"</characteristic>
+                        <characteristic name="A">1</characteristic>
+                        <characteristic name="BS">3+</characteristic>
+                        <characteristic name="S">6</characteristic>
+                        <characteristic name="AP">-1</characteristic>
+                        <characteristic name="D">2</characteristic>
+                        <characteristic name="Keywords">Heavy, Rapid Fire 1</characteristic>
+                      </characteristics>
+                    </profile>
+                    <profile name="Saturation" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">24"</characteristic>
+                        <characteristic name="A">2</characteristic>
+                        <characteristic name="BS">3+</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">-1</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords">Assault, Rapid Fire 1</characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+                <selection id="unit4-m1-w2" name="Knives and Fists" type="upgrade" number="4">
+                  <profiles>
+                    <profile name="Knives and Fists" typeName="Melee Weapons">
+                      <characteristics>
+                        <characteristic name="Range">Melee</characteristic>
+                        <characteristic name="A">3</characteristic>
+                        <characteristic name="WS">3+</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">0</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords"></characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+              </selections>
+            </selection>
+          </selections>
+        </selection>
+      </selections>
+    </force>
+  </forces>
+</roster>

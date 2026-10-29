@@ -1,0 +1,20 @@
+Adeptus Astartes - Exact Groups Test - [500 pts]
+
+# ++ Army Roster ++ [500 pts]
+## Configuration
+List Name: Exact Groups Test
+Faction: Adeptus Astartes
+Detachment: Gladius Task Force
+Force Disposition: Priority Assets
+
+## Battleline [500 pts]
+Intercessor Squad [85 pts]:
+• 5x Intercessor: Bolt Pistol, Bolt Rifle, Knives and Fists
+Assault Intercessor Squad [85 pts]:
+• 1x Assault Intercessor Sergeant: Chainsword, Heavy Bolt Pistol
+• 4x Assault Intercessor: Chainsword, Heavy Bolt Pistol
+Intercessor Squad [85 pts]:
+• 1x Intercessor Sergeant: Bolt Pistol, Bolt Rifle, Knives and Fists
+• 4x Intercessor: Bolt Pistol, Bolt Rifle, Knives and Fists
+Land Raider [245 pts]:
+• 1x Land Raider: Armoured tracks, 2x Godhammer lascannon, Twin Heavy Bolter

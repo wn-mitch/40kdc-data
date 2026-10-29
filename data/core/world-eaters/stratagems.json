@@ -1,6 +1,6 @@
 [
   {
-    "id": "a-trophy-for-the-throne-butchers-of-khorne",
+    "id": "a-trophy-for-the-throne-butchers-of-khorne-world-eaters",
     "name": "A TROPHY FOR THE THRONE",
     "category": "detachment",
     "detachment_id": "butchers-of-khorne",
@@ -10,11 +10,18 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "a-trophy-for-the-throne-butchers-of-khorne",
+    "target_restrictions": {
+      "required_keywords": [
+        "Terminator Squad"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "a-trophy-for-the-throne-butchers-of-khorne-world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -28,7 +35,7 @@
     ]
   },
   {
-    "id": "a-worthy-skull-khorne-daemonkin",
+    "id": "a-worthy-skull-khorne-daemonkin-world-eaters",
     "name": "A WORTHY SKULL",
     "category": "detachment",
     "type": "epic-deed",
@@ -39,11 +46,19 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "a-worthy-skull-khorne-daemonkin",
+    "target_restrictions": {
+      "required_keywords_any": [
+        "Blood Legions",
+        "World Eaters"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "a-worthy-skull-khorne-daemonkin-world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -57,7 +72,7 @@
     ]
   },
   {
-    "id": "aggressive-disembarkation-goretrack-onslaught",
+    "id": "aggressive-disembarkation-goretrack-onslaught-world-eaters",
     "name": "AGGRESSIVE DISEMBARKATION",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -69,7 +84,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "aggressive-disembarkation-goretrack-onslaught",
+    "ability_id": "aggressive-disembarkation-goretrack-onslaught-world-eaters",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -86,7 +101,7 @@
     ]
   },
   {
-    "id": "apoplectic-clarity-brazen-engines",
+    "id": "apoplectic-clarity-brazen-engines-world-eaters",
     "name": "APOPLECTIC CLARITY",
     "category": "detachment",
     "detachment_id": "brazen-engines",
@@ -97,11 +112,19 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "apoplectic-clarity-brazen-engines",
+    "target_restrictions": {
+      "required_keywords": [
+        "Daemon",
+        "Vehicle"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "apoplectic-clarity-brazen-engines-world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -115,7 +138,7 @@
     ]
   },
   {
-    "id": "apoplectic-frenzy-berzerker-warband",
+    "id": "apoplectic-frenzy-berzerker-warband-world-eaters",
     "name": "APOPLECTIC FRENZY",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -126,11 +149,19 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "apoplectic-frenzy-berzerker-warband",
+    "target_restrictions": {
+      "required_keywords": [
+        "Berzerkers",
+        "Khorne"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "apoplectic-frenzy-berzerker-warband-world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -144,7 +175,7 @@
     ]
   },
   {
-    "id": "aspire-to-infamy-vessels-of-wrath",
+    "id": "aspire-to-infamy-vessels-of-wrath-world-eaters",
     "name": "ASPIRE TO INFAMY",
     "category": "detachment",
     "type": "battle-tactic",
@@ -155,11 +186,19 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "aspire-to-infamy-vessels-of-wrath",
+    "target_restrictions": {
+      "required_keywords": [
+        "Character",
+        "World Eaters"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "aspire-to-infamy-vessels-of-wrath-world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -173,7 +212,7 @@
     ]
   },
   {
-    "id": "berserk-resilience-frenzied-reavers",
+    "id": "berserk-resilience-frenzied-reavers-world-eaters",
     "name": "Berserk Resilience",
     "category": "detachment",
     "detachment_id": "frenzied-reavers",
@@ -183,11 +222,19 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "berserk-resilience-frenzied-reavers",
+    "target_restrictions": {
+      "required_keywords": [
+        "Frenzied Reavers",
+        "Infantry"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit"
+    },
+    "ability_id": "berserk-resilience-frenzied-reavers-world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -197,7 +244,7 @@
     ]
   },
   {
-    "id": "berzerkers-wrath-berzerker-warband",
+    "id": "berzerkers-wrath-berzerker-warband-world-eaters",
     "name": "BERZERKER’S WRATH",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -209,7 +256,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "berzerkers-wrath-berzerker-warband",
+    "ability_id": "berzerkers-wrath-berzerker-warband-world-eaters",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -226,7 +273,7 @@
     ]
   },
   {
-    "id": "blessing-of-burning-blood-khorne-daemonkin",
+    "id": "blessing-of-burning-blood-khorne-daemonkin-world-eaters",
     "name": "BLESSING OF BURNING BLOOD",
     "category": "detachment",
     "type": "battle-tactic",
@@ -238,11 +285,72 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "blessing-of-burning-blood-khorne-daemonkin",
+    "target_restrictions": [
+      {
+        "required_keywords": [
+          "Blood Legions"
+        ],
+        "name": "first",
+        "count": "one",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "owner": "friendly"
+                }
+              }
+            },
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "within": {
+                    "of": {
+                      "stratagem_target": "second"
+                    },
+                    "range": {
+                      "inches": 6
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "required_keywords": [
+          "World Eaters"
+        ],
+        "name": "second",
+        "count": "one",
+        "side": "your-army",
+        "selects": "unit",
+        "bound_to": "attacked-unit",
+        "eligibility": {
+          "operator": "not",
+          "operands": [
+            {
+              "type": "same-unit",
+              "parameters": {
+                "as": {
+                  "stratagem_target": "first"
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "ability_id": "blessing-of-burning-blood-khorne-daemonkin-world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -256,7 +364,7 @@
     ]
   },
   {
-    "id": "blood-offering-berzerker-warband",
+    "id": "blood-offering-berzerker-warband-world-eaters",
     "name": "BLOOD OFFERING",
     "category": "detachment",
     "type": "epic-deed",
@@ -272,7 +380,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "blood-offering-berzerker-warband",
+    "ability_id": "blood-offering-berzerker-warband-world-eaters",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -289,7 +397,7 @@
     ]
   },
   {
-    "id": "bloodthirsty-horde-cult-of-blood",
+    "id": "bloodthirsty-horde-cult-of-blood-world-eaters",
     "name": "BLOODTHIRSTY HORDE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -301,7 +409,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "bloodthirsty-horde-cult-of-blood",
+    "ability_id": "bloodthirsty-horde-cult-of-blood-world-eaters",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -318,7 +426,7 @@
     ]
   },
   {
-    "id": "bloody-vengeance-cult-of-blood",
+    "id": "bloody-vengeance-cult-of-blood-world-eaters",
     "name": "BLOODY VENGEANCE",
     "category": "detachment",
     "type": "epic-deed",
@@ -333,11 +441,42 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "bloody-vengeance-cult-of-blood",
+    "target_restrictions": {
+      "required_keywords": [
+        "World Eaters"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "MONSTER",
+                  "TITANIC"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "bloody-vengeance-cult-of-blood-world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -351,7 +490,7 @@
     ]
   },
   {
-    "id": "brazen-idol-cult-of-blood",
+    "id": "brazen-idol-cult-of-blood-world-eaters",
     "name": "BRAZEN IDOL",
     "category": "detachment",
     "type": "epic-deed",
@@ -363,7 +502,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "brazen-idol-cult-of-blood",
+    "ability_id": "brazen-idol-cult-of-blood-world-eaters",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -380,7 +519,7 @@
     ]
   },
   {
-    "id": "daemonic-fury-khorne-daemonkin",
+    "id": "daemonic-fury-khorne-daemonkin-world-eaters",
     "name": "DAEMONIC FURY",
     "category": "detachment",
     "type": "battle-tactic",
@@ -391,11 +530,26 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "daemonic-fury-khorne-daemonkin",
+    "target_restrictions": {
+      "required_keywords": [
+        "Blood Legions"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "daemonic-fury-khorne-daemonkin-world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -409,7 +563,7 @@
     ]
   },
   {
-    "id": "daemonic-resistance-possessed-slaughterband",
+    "id": "daemonic-resistance-possessed-slaughterband-world-eaters",
     "name": "DAEMONIC RESISTANCE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -421,11 +575,28 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "daemonic-resistance-possessed-slaughterband",
+    "target_restrictions": {
+      "required_keywords": [
+        "Possessed",
+        "World Eaters"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "daemonic-resistance-possessed-slaughterband-world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -439,7 +610,7 @@
     ]
   },
   {
-    "id": "daemonic-strength-possessed-slaughterband",
+    "id": "daemonic-strength-possessed-slaughterband-world-eaters",
     "name": "DAEMONIC STRENGTH",
     "category": "detachment",
     "type": "battle-tactic",
@@ -450,11 +621,47 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "daemonic-strength-possessed-slaughterband",
+    "target_restrictions": {
+      "required_keywords": [
+        "Possessed",
+        "World Eaters"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "fight"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "daemonic-strength-possessed-slaughterband-world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -468,7 +675,7 @@
     ]
   },
   {
-    "id": "daemontide-khorne-daemonkin",
+    "id": "daemontide-khorne-daemonkin-world-eaters",
     "name": "DAEMONTIDE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -480,7 +687,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "daemontide-khorne-daemonkin",
+    "ability_id": "daemontide-khorne-daemonkin-world-eaters",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -497,7 +704,7 @@
     ]
   },
   {
-    "id": "drawn-to-the-slaughter-cult-of-blood",
+    "id": "drawn-to-the-slaughter-cult-of-blood-world-eaters",
     "name": "DRAWN TO THE SLAUGHTER",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -513,7 +720,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "drawn-to-the-slaughter-cult-of-blood",
+    "ability_id": "drawn-to-the-slaughter-cult-of-blood-world-eaters",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -530,7 +737,7 @@
     ]
   },
   {
-    "id": "endless-pursuit-of-violence-goretrack-onslaught",
+    "id": "endless-pursuit-of-violence-goretrack-onslaught-world-eaters",
     "name": "ENDLESS PURSUIT OF VIOLENCE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -541,11 +748,67 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "endless-pursuit-of-violence-goretrack-onslaught",
+    "target_restrictions": [
+      {
+        "required_keywords": [
+          "Infantry",
+          "World Eaters"
+        ],
+        "name": "first",
+        "count": "one",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "filter": {
+              "owner": "friendly"
+            }
+          }
+        }
+      },
+      {
+        "required_keywords": [
+          "Transport"
+        ],
+        "name": "second",
+        "count": "one",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "eligible",
+              "parameters": {
+                "subject": {
+                  "stratagem_target": "first"
+                },
+                "to": "embark-within",
+                "transport": "this-unit"
+              }
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "same-unit",
+                  "parameters": {
+                    "as": {
+                      "stratagem_target": "first"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "ability_id": "endless-pursuit-of-violence-goretrack-onslaught-world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -559,7 +822,7 @@
     ]
   },
   {
-    "id": "fail-not-the-blood-god-cult-of-blood",
+    "id": "fail-not-the-blood-god-cult-of-blood-world-eaters",
     "name": "FAIL NOT THE BLOOD GOD",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -570,11 +833,39 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "fail-not-the-blood-god-cult-of-blood",
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "GOREMONGERS",
+                  "JAKHALS"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "fail-not-the-blood-god-cult-of-blood-world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -588,7 +879,7 @@
     ]
   },
   {
-    "id": "focused-ferocity-butchers-of-khorne",
+    "id": "focused-ferocity-butchers-of-khorne-world-eaters",
     "name": "FOCUSED FEROCITY",
     "category": "detachment",
     "detachment_id": "butchers-of-khorne",
@@ -598,11 +889,18 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "focused-ferocity-butchers-of-khorne",
+    "target_restrictions": {
+      "required_keywords": [
+        "Terminator Squad"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "focused-ferocity-butchers-of-khorne-world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -616,7 +914,7 @@
     ]
   },
   {
-    "id": "frenzied-resilience-berzerker-warband",
+    "id": "frenzied-resilience-berzerker-warband-world-eaters",
     "name": "FRENZIED RESILIENCE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -627,11 +925,27 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "frenzied-resilience-berzerker-warband",
+    "target_restrictions": {
+      "required_keywords": [
+        "World Eaters"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "frenzied-resilience-berzerker-warband-world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -645,7 +959,7 @@
     ]
   },
   {
-    "id": "full-throttle-assault-goretrack-onslaught",
+    "id": "full-throttle-assault-goretrack-onslaught-world-eaters",
     "name": "FULL-THROTTLE ASSAULT",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -657,7 +971,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "full-throttle-assault-goretrack-onslaught",
+    "ability_id": "full-throttle-assault-goretrack-onslaught-world-eaters",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -674,7 +988,7 @@
     ]
   },
   {
-    "id": "fury-unleashed-goretrack-onslaught",
+    "id": "fury-unleashed-goretrack-onslaught-world-eaters",
     "name": "FURY UNLEASHED",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -686,7 +1000,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "fury-unleashed-goretrack-onslaught",
+    "ability_id": "fury-unleashed-goretrack-onslaught-world-eaters",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -703,7 +1017,7 @@
     ]
   },
   {
-    "id": "goaded-to-fury-brazen-engines",
+    "id": "goaded-to-fury-brazen-engines-world-eaters",
     "name": "GOADED TO FURY",
     "category": "detachment",
     "detachment_id": "brazen-engines",
@@ -713,11 +1027,44 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "goaded-to-fury-brazen-engines",
+    "target_restrictions": {
+      "required_keywords": [
+        "Daemon",
+        "Vehicle"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "none_of": [
+                  "TITANIC"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "not_states": [
+                  "engaged"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "goaded-to-fury-brazen-engines-world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -731,7 +1078,7 @@
     ]
   },
   {
-    "id": "hack-and-slash-berzerker-warband",
+    "id": "hack-and-slash-berzerker-warband-world-eaters",
     "name": "HACK AND SLASH",
     "category": "detachment",
     "type": "battle-tactic",
@@ -742,11 +1089,58 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "hack-and-slash-berzerker-warband",
+    "target_restrictions": {
+      "required_keywords": [
+        "World Eaters"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "fight"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "move-ended",
+              "filter": {
+                "move_types": [
+                  "charge"
+                ]
+              },
+              "window": "turn"
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "hack-and-slash-berzerker-warband-world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -760,7 +1154,7 @@
     ]
   },
   {
-    "id": "horrifying-butchery-frenzied-reavers",
+    "id": "horrifying-butchery-frenzied-reavers-world-eaters",
     "name": "Horrifying Butchery",
     "category": "detachment",
     "detachment_id": "frenzied-reavers",
@@ -770,11 +1164,27 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "horrifying-butchery-frenzied-reavers",
+    "target_restrictions": {
+      "required_keywords": [
+        "Frenzied Reavers",
+        "Khorne Berzerkers"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "state": "engaged"
+          }
+        }
+      }
+    },
+    "ability_id": "horrifying-butchery-frenzied-reavers-world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -784,7 +1194,7 @@
     ]
   },
   {
-    "id": "horrifying-violence-possessed-slaughterband",
+    "id": "horrifying-violence-possessed-slaughterband-world-eaters",
     "name": "HORRIFYING VIOLENCE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -795,11 +1205,27 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "horrifying-violence-possessed-slaughterband",
+    "target_restrictions": {
+      "required_keywords": [
+        "Possessed",
+        "World Eaters"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "horrifying-violence-possessed-slaughterband-world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -813,7 +1239,7 @@
     ]
   },
   {
-    "id": "immortal-fury-possessed-slaughterband",
+    "id": "immortal-fury-possessed-slaughterband-world-eaters",
     "name": "IMMORTAL FURY",
     "category": "detachment",
     "type": "battle-tactic",
@@ -824,11 +1250,28 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "immortal-fury-possessed-slaughterband",
+    "target_restrictions": {
+      "required_keywords": [
+        "Possessed",
+        "World Eaters"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "immortal-fury-possessed-slaughterband-world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -842,7 +1285,7 @@
     ]
   },
   {
-    "id": "in-the-shadow-of-brass-idols-cult-of-blood",
+    "id": "in-the-shadow-of-brass-idols-cult-of-blood-world-eaters",
     "name": "IN THE SHADOW OF BRASS IDOLS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -854,11 +1297,40 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "in-the-shadow-of-brass-idols-cult-of-blood",
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "GOREMONGERS",
+                  "JAKHALS"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "in-the-shadow-of-brass-idols-cult-of-blood-world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -872,7 +1344,7 @@
     ]
   },
   {
-    "id": "murder-call-khorne-daemonkin",
+    "id": "murder-call-khorne-daemonkin-world-eaters",
     "name": "MURDER-CALL",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -883,11 +1355,52 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "murder-call-khorne-daemonkin",
+    "target_restrictions": {
+      "required_keywords": [
+        "Blood Legions"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "state": "on-battlefield"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "state": "engaged"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "murder-call-khorne-daemonkin-world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -901,7 +1414,7 @@
     ]
   },
   {
-    "id": "punish-the-craven-vessels-of-wrath",
+    "id": "punish-the-craven-vessels-of-wrath-world-eaters",
     "name": "PUNISH THE CRAVEN",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -913,7 +1426,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "punish-the-craven-vessels-of-wrath",
+    "ability_id": "punish-the-craven-vessels-of-wrath-world-eaters",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -930,7 +1443,7 @@
     ]
   },
   {
-    "id": "rabid-response-frenzied-reavers",
+    "id": "rabid-response-frenzied-reavers-world-eaters",
     "name": "Rabid Response",
     "category": "detachment",
     "detachment_id": "frenzied-reavers",
@@ -940,11 +1453,29 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "rabid-response-frenzied-reavers",
+    "target_restrictions": {
+      "required_keywords": [
+        "Frenzied Reavers",
+        "Jakhals"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "not_states": [
+              "engaged"
+            ]
+          }
+        }
+      }
+    },
+    "ability_id": "rabid-response-frenzied-reavers-world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -954,7 +1485,7 @@
     ]
   },
   {
-    "id": "rapid-manifestation-possessed-slaughterband",
+    "id": "rapid-manifestation-possessed-slaughterband-world-eaters",
     "name": "RAPID MANIFESTATION",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -965,11 +1496,54 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "rapid-manifestation-possessed-slaughterband",
+    "target_restrictions": {
+      "required_keywords": [
+        "Exalted Eightbound"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "set-up",
+                  "window": "phase"
+                }
+              },
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "used",
+                  "filter": {
+                    "kind": "ability",
+                    "id": "deep-strike"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "rapid-manifestation-possessed-slaughterband-world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -983,7 +1557,7 @@
     ]
   },
   {
-    "id": "scorn-the-witch-vessels-of-wrath",
+    "id": "scorn-the-witch-vessels-of-wrath-world-eaters",
     "name": "SCORN THE WITCH",
     "category": "detachment",
     "detachment_id": "vessels-of-wrath",
@@ -997,11 +1571,19 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "scorn-the-witch-vessels-of-wrath",
+    "target_restrictions": {
+      "required_keywords": [
+        "Character",
+        "World Eaters"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "scorn-the-witch-vessels-of-wrath-world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1015,7 +1597,7 @@
     ]
   },
   {
-    "id": "skulls-for-the-skull-throne-berzerker-warband",
+    "id": "skulls-for-the-skull-throne-berzerker-warband-world-eaters",
     "name": "SKULLS FOR THE SKULL THRONE!",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1027,7 +1609,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "skulls-for-the-skull-throne-berzerker-warband",
+    "ability_id": "skulls-for-the-skull-throne-berzerker-warband-world-eaters",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1044,7 +1626,7 @@
     ]
   },
   {
-    "id": "smash-through-goretrack-onslaught",
+    "id": "smash-through-goretrack-onslaught-world-eaters",
     "name": "SMASH THROUGH",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1055,11 +1637,47 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "smash-through-goretrack-onslaught",
+    "target_restrictions": {
+      "required_keywords": [
+        "Vehicle",
+        "World Eaters"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "model",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "move"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "smash-through-goretrack-onslaught-world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1073,7 +1691,7 @@
     ]
   },
   {
-    "id": "summoned-by-slaughter-khorne-daemonkin",
+    "id": "summoned-by-slaughter-khorne-daemonkin-world-eaters",
     "name": "SUMMONED BY SLAUGHTER",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1088,11 +1706,39 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "summoned-by-slaughter-khorne-daemonkin",
+    "target_restrictions": {
+      "required_keywords": [
+        "Bloodletters"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "state": "in-strategic-reserves"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "summoned-by-slaughter-khorne-daemonkin-world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1106,7 +1752,7 @@
     ]
   },
   {
-    "id": "trail-of-destruction-brazen-engines",
+    "id": "trail-of-destruction-brazen-engines-world-eaters",
     "name": "TRAIL OF DESTRUCTION",
     "category": "detachment",
     "detachment_id": "brazen-engines",
@@ -1116,11 +1762,19 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "trail-of-destruction-brazen-engines",
+    "target_restrictions": {
+      "required_keywords": [
+        "Daemon",
+        "Vehicle"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "trail-of-destruction-brazen-engines-world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1134,7 +1788,7 @@
     ]
   },
   {
-    "id": "unrelenting-advance-goretrack-onslaught",
+    "id": "unrelenting-advance-goretrack-onslaught-world-eaters",
     "name": "UNRELENTING ADVANCE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1145,11 +1799,45 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "unrelenting-advance-goretrack-onslaught",
+    "target_restrictions": {
+      "required_keywords": [
+        "Vehicle",
+        "World Eaters"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "model",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "after-roll",
+              "subject": "event-subject",
+              "object": "this-unit",
+              "filter": {
+                "roll": "hit",
+                "result": "success"
+              },
+              "window": "event"
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "unrelenting-advance-goretrack-onslaught-world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1163,7 +1851,7 @@
     ]
   },
   {
-    "id": "warp-stalkers-possessed-slaughterband",
+    "id": "warp-stalkers-possessed-slaughterband-world-eaters",
     "name": "WARP STALKERS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1175,11 +1863,62 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "warp-stalkers-possessed-slaughterband",
+    "target_restrictions": {
+      "required_keywords": [
+        "Possessed",
+        "World Eaters"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "operator": "or",
+                "operands": [
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "targets-selected",
+                      "filter": {
+                        "kind": "charge"
+                      },
+                      "window": "phase"
+                    }
+                  },
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "move"
+                      },
+                      "window": "phase"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "warp-stalkers-possessed-slaughterband-world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1193,7 +1932,7 @@
     ]
   },
   {
-    "id": "wrath-beyond-reason-butchers-of-khorne",
+    "id": "wrath-beyond-reason-butchers-of-khorne-world-eaters",
     "name": "WRATH BEYOND REASON",
     "category": "detachment",
     "detachment_id": "butchers-of-khorne",
@@ -1203,11 +1942,18 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "wrath-beyond-reason-butchers-of-khorne",
+    "target_restrictions": {
+      "required_keywords": [
+        "Terminator Squad"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit"
+    },
+    "ability_id": "wrath-beyond-reason-butchers-of-khorne-world-eaters",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {

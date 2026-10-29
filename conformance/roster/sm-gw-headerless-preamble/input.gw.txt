@@ -1,0 +1,34 @@
+++++++++++++++++++++++++++++++++
++ Player Name: Fabricated Player
++ Army Points: 1995
++ WARLORD: Lieutenant
+++++++++++++++++++++++++++++++++
+
+Preamble Sweep (1 995 points)
+
+IMPERIUM
+Space Marines
+Gladius Task Force (2 Detachment Points)
+(1.995 points)
+Take and Hold
+Strike Force (2 000 points)
+
+CHARACTERS
+
+Captain (110 points)
+  • Warlord
+  • Verbesserung: Artificer Armour
+  • 1× Master-crafted power weapon
+    1× Heavy bolt pistol
+
+Lieutenant (70 points)
+  • Adept of the Codex [+20 points]
+  • This Datasheet also has the Adeptus Astartes keyword
+  • This Datasheet also has the Adeptus Astartes keyword
+  • 1x Master-crafted power weapon
+    1x Bolt pistol
+
+OTHER DATASHEETS
+
+Land Raider (245 points)
+  • 1 Land Raider with Armoured tracks, 2x Godhammer lascannon and Twin Heavy Bolter

@@ -4,15 +4,15 @@
     "name": "Dup One",
     "authored_by": "test",
     "game_version": { "edition": "11th", "dataslate": "test" },
-    "effect": { "type": "custom", "target": "unit" },
-    "scope": { "range": "unit", "duration": "permanent" }
+    "effect": { "type": "ability-grant", "target": "this-unit", "modifier": { "ability": "deep-strike" } },
+    "scope": { "duration": "permanent" }
   },
   {
     "ability_id": "dup-ability",
     "name": "Dup Two",
     "authored_by": "test",
     "game_version": { "edition": "11th", "dataslate": "test" },
-    "effect": { "type": "custom", "target": "unit" },
-    "scope": { "range": "unit", "duration": "permanent" }
+    "effect": { "type": "ability-grant", "target": "this-unit", "modifier": { "ability": "deep-strike" } },
+    "scope": { "duration": "permanent" }
   }
 ]

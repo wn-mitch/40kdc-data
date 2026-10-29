@@ -8,7 +8,7 @@
 
 > **AttackProfileRef** = `object`
 
-Defined in: [cruncher/engine.ts:23](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/engine.ts#L23)
+Defined in: [cruncher/engine.ts:27](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/engine.ts#L27)
 
 ## Properties
 
@@ -16,7 +16,7 @@ Defined in: [cruncher/engine.ts:23](https://github.com/wn-mitch/40kdc-data/blob/
 
 > **weapon**: [`Weapon`](../../generated/interfaces/Weapon.md)
 
-Defined in: [cruncher/engine.ts:23](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/engine.ts#L23)
+Defined in: [cruncher/engine.ts:27](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/engine.ts#L27)
 
 ***
 
@@ -24,4 +24,4 @@ Defined in: [cruncher/engine.ts:23](https://github.com/wn-mitch/40kdc-data/blob/
 
 > **profileIndex**: `number`
 
-Defined in: [cruncher/engine.ts:23](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/engine.ts#L23)
+Defined in: [cruncher/engine.ts:27](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/engine.ts#L27)

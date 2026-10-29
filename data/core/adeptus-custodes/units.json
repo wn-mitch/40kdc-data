@@ -18,13 +18,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 225,
+        "cost": 280,
         "unit_count_min": 1,
         "unit_count_max": 1
       },
       {
         "models": 1,
-        "cost": 245,
+        "cost": 310,
         "unit_count_min": 2,
         "unit_count_max": null
       }
@@ -33,7 +33,8 @@
       "Vehicle",
       "Walker",
       "Imperium",
-      "Telemon Heavy Dreadnought"
+      "Telemon Heavy Dreadnought",
+      "Dreadnought"
     ],
     "faction_keywords": [
       "Adeptus Custodes"
@@ -48,20 +49,27 @@
     },
     "weapon_ids": [
       "arachnus-storm-cannon",
-      "armoured-feet",
       "iliastus-accelerator-culverin",
       "spiculus-bolt-launcher",
-      "telemon-caestus",
-      "twin-plasma-projector"
+      "dual-caestus-fists",
+      "twin-neutronium-cascade-projectors",
+      "caestus-fist",
+      "adrathic-desolator"
     ],
     "ability_ids": [
-      "deadly-demise-d3",
-      "devoted-to-destruction",
-      "guardian-eternal"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "guardian-eternal-adeptus-custodes",
+      {
+        "id": "damaged",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -99,13 +107,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 155,
+        "cost": 230,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 170,
+        "cost": 260,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -114,6 +122,7 @@
       "Vehicle",
       "Walker",
       "Imperium",
+      "Dreadnought",
       "Contemptor-Achillus Dreadnought"
     ],
     "faction_keywords": [
@@ -128,18 +137,25 @@
       "max": 1
     },
     "weapon_ids": [
-      "achillus-dreadspear",
-      "infernus-incinerator",
       "lastrum-storm-bolter",
-      "twin-adrathic-destructor"
+      "dreadspear",
+      "adrathic-combi-destructor",
+      "twin-infernus-incinerator"
     ],
     "ability_ids": [
-      "deadly-demise-1",
-      "dread-foe"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      },
+      "unyielding-ancient-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -177,13 +193,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 165,
+        "cost": 220,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 180,
+        "cost": 250,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -192,6 +208,7 @@
       "Vehicle",
       "Walker",
       "Imperium",
+      "Dreadnought",
       "Contemptor-Galatus Dreadnought"
     ],
     "faction_keywords": [
@@ -206,15 +223,22 @@
       "max": 1
     },
     "weapon_ids": [
-      "galatus-warblade"
+      "warblade"
     ],
     "ability_ids": [
-      "galatus-shield",
-      "deadly-demise-1"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      },
+      "unyielding-ancient-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -230,84 +254,6 @@
       {
         "namespace": "mfm",
         "id": "cb56eefe-2137-4e94-9f5b-5285b522d8dd"
-      }
-    ]
-  },
-  {
-    "id": "venerable-contemptor-dreadnought",
-    "name": "Venerable Contemptor Dreadnought",
-    "faction_id": "adeptus-custodes",
-    "profiles": [
-      {
-        "name": "Venerable Contemptor Dreadnought",
-        "M": 6,
-        "T": 9,
-        "W": 10,
-        "Sv": 2,
-        "invuln_sv": 5,
-        "Ld": 6,
-        "OC": 3
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 170,
-        "unit_count_min": 1,
-        "unit_count_max": 2
-      },
-      {
-        "models": 1,
-        "cost": 185,
-        "unit_count_min": 3,
-        "unit_count_max": null
-      }
-    ],
-    "keywords": [
-      "Vehicle",
-      "Walker",
-      "Imperium",
-      "Venerable Contemptor Dreadnought"
-    ],
-    "faction_keywords": [
-      "Adeptus Custodes"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 60
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "combi-bolter",
-      "contemptor-combat-weapon",
-      "kheres-pattern-assault-cannon",
-      "multi-melta"
-    ],
-    "ability_ids": [
-      "unyielding-ancient",
-      "deadly-demise-1"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "188b-e48b-29f-1456"
-      },
-      {
-        "namespace": "game-datacards",
-        "id": "cf2b9789-37cf-5eaf-bd1f-6b126b5173b2"
-      },
-      {
-        "namespace": "mfm",
-        "id": "69d0337d-97aa-427f-843f-f39dc8aa2954"
       }
     ]
   },
@@ -331,14 +277,14 @@
     "points": [
       {
         "models": 1,
-        "cost": 110,
+        "cost": 175,
         "unit_count_min": 1,
-        "unit_count_max": 1
+        "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 125,
-        "unit_count_min": 2,
+        "cost": 195,
+        "unit_count_min": 3,
         "unit_count_max": null
       }
     ],
@@ -360,17 +306,17 @@
       "max": 1
     },
     "weapon_ids": [
-      "vaultswords"
+      "vaultswords-blade-champion"
     ],
     "ability_ids": [
       "deep-strike",
       "leader",
-      "martial-inspiration",
-      "swift-onslaught"
+      "swift-onslaught-adeptus-custodes",
+      "sword-of-the-throne-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -409,13 +355,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 210,
+        "cost": 230,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 225,
+        "cost": 260,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -424,15 +370,18 @@
       "Vehicle",
       "Fly",
       "Imperium",
-      "Caladius Grav-tank"
+      "Caladius",
+      "Frame",
+      "Grav-assault",
+      "Caladius Grav-Tank"
     ],
     "faction_keywords": [
       "Adeptus Custodes"
     ],
     "base_size_mm": {
       "shape": "oval",
-      "width": 170,
-      "length": 109
+      "width": 150,
+      "length": 95
     },
     "model_count": {
       "min": 1,
@@ -440,26 +389,28 @@
     },
     "weapon_ids": [
       "armoured-hull",
-      "twin-arachnus-heavy-blaze-cannon",
-      "twin-iliastus-accelerator-cannon",
-      "twin-lastrum-bolt-cannon"
+      "twin-lastrum-bolt-cannon",
+      "twin-neutronium-cascade-projectors",
+      "iliastus-accelerator-cannon"
     ],
     "ability_ids": [
-      "advanced-firepower",
-      "deadly-demise-d3"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 5
+      },
+      "deep-strike",
+      "destructor-optics-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
-    "wargear_costs": [
-      {
-        "item_id": "twin-arachnus-heavy-blaze-cannon",
-        "cost": 15
-      }
-    ],
     "external_refs": [
       {
         "namespace": "bsdata",
@@ -494,51 +445,25 @@
     "points": [
       {
         "models": 2,
-        "cost": 110,
+        "cost": 180,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 3,
-        "cost": 165,
-        "unit_count_min": 1,
-        "unit_count_max": 2
-      },
-      {
-        "models": 4,
-        "models_max": 5,
-        "cost": 280,
-        "unit_count_min": 1,
-        "unit_count_max": 2
-      },
-      {
-        "models": 6,
-        "cost": 340,
+        "cost": 270,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 2,
-        "cost": 140,
+        "cost": 210,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
         "models": 3,
-        "cost": 195,
-        "unit_count_min": 3,
-        "unit_count_max": null
-      },
-      {
-        "models": 4,
-        "models_max": 5,
-        "cost": 310,
-        "unit_count_min": 3,
-        "unit_count_max": null
-      },
-      {
-        "models": 6,
-        "cost": 370,
+        "cost": 300,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -558,36 +483,27 @@
     },
     "model_count": {
       "min": 2,
-      "max": 6
+      "max": 3
     },
     "weapon_ids": [
       "balistus-grenade-launcher",
       "castellan-axe",
-      "guardian-spear",
-      "misericordia"
+      "guardian-spear-allarus-custodians"
     ],
     "ability_ids": [
-      "from-golden-light",
-      "slayers-of-tyrants",
-      "vexilla",
-      "deep-strike"
+      {
+        "id": "vexilla-adeptus-custodes",
+        "wargear": "vexilla"
+      },
+      "deep-strike",
+      "slayer-of-tyrants-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
-    "wargear_budgets": [
-      {
-        "items": [
-          "misericordia",
-          "vexilla"
-        ],
-        "count": 2,
-        "per_models": 0
-      }
-    ],
     "external_refs": [
       {
         "namespace": "bsdata",
@@ -623,7 +539,15 @@
     "points": [
       {
         "models": 1,
-        "cost": 140
+        "cost": 205,
+        "unit_count_min": 1,
+        "unit_count_max": 1
+      },
+      {
+        "models": 1,
+        "cost": 225,
+        "unit_count_min": 2,
+        "unit_count_max": null
       }
     ],
     "keywords": [
@@ -631,8 +555,8 @@
       "Character",
       "Fly",
       "Imperium",
-      "Dawneagle Jetbike",
-      "Shield-Captain"
+      "Shield-Captain",
+      "Shield-Captain on Dawneagle Jetbike"
     ],
     "faction_keywords": [
       "Adeptus Custodes"
@@ -649,16 +573,17 @@
     "weapon_ids": [
       "interceptor-lance",
       "salvo-launcher",
-      "vertus-hurricane-bolter"
+      "hurricane-bolter"
     ],
     "ability_ids": [
       "leader",
-      "strategic-mastery",
-      "sweeping-advance"
+      "sweeping-advance-adeptus-custodes",
+      "deep-strike",
+      "master-of-katahs-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -679,8 +604,11 @@
     ]
   },
   {
-    "id": "vigilators",
-    "name": "Vigilators",
+    "id": "vigilator-squad",
+    "name": "Vigilator Squad",
+    "aliases": [
+      "Vigilators"
+    ],
     "faction_id": "adeptus-custodes",
     "profiles": [
       {
@@ -704,8 +632,7 @@
         "cost": 55
       },
       {
-        "models": 6,
-        "models_max": 9,
+        "models": 9,
         "cost": 90
       },
       {
@@ -716,11 +643,11 @@
     "keywords": [
       "Infantry",
       "Imperium",
-      "Anathema Psykana",
-      "Vigilators"
+      "Vigilator Squad",
+      "Anathema Psykana"
     ],
     "faction_keywords": [
-      "Adeptus Custodes"
+      "Anathema Psykana"
     ],
     "base_size_mm": {
       "shape": "round",
@@ -734,12 +661,12 @@
       "executioner-greatblade"
     ],
     "ability_ids": [
-      "daughters-of-the-abyss",
-      "deft-parry"
+      "daughters-of-the-abyss-adeptus-custodes",
+      "deft-parry-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -759,77 +686,11 @@
     ]
   },
   {
-    "id": "sagittarum-custodians",
-    "name": "Sagittarum Custodians",
-    "faction_id": "adeptus-custodes",
-    "profiles": [
-      {
-        "name": "Sagittarum Custodians",
-        "M": 6,
-        "T": 6,
-        "W": 3,
-        "Sv": 2,
-        "invuln_sv": 4,
-        "Ld": 6,
-        "OC": 2
-      }
+    "id": "witchseeker-squad",
+    "name": "Witchseeker Squad",
+    "aliases": [
+      "Witchseekers"
     ],
-    "points": [
-      {
-        "models": 5,
-        "cost": 225
-      }
-    ],
-    "keywords": [
-      "Infantry",
-      "Imperium",
-      "Sagittarum Custodians"
-    ],
-    "faction_keywords": [
-      "Adeptus Custodes"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 40
-    },
-    "model_count": {
-      "min": 5,
-      "max": 5
-    },
-    "weapon_ids": [
-      "adrastus-bolt-caliver",
-      "misericordia-sagittarum-custodians"
-    ],
-    "ability_ids": [
-      "custodian-guard",
-      "disintegration-beams",
-      "saturation-volleys",
-      "deep-strike"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "6f9f-e6aa-ba13-aab1"
-      },
-      {
-        "namespace": "game-datacards",
-        "id": "6faae4f4-5ef4-5bba-9bd3-17a82eb610f9"
-      },
-      {
-        "namespace": "mfm",
-        "id": "e2076df2-2db5-4a75-b6fe-62bdcba57587"
-      }
-    ]
-  },
-  {
-    "id": "witchseekers",
-    "name": "Witchseekers",
     "faction_id": "adeptus-custodes",
     "profiles": [
       {
@@ -846,30 +707,29 @@
     "points": [
       {
         "models": 4,
-        "cost": 50
-      },
-      {
-        "models": 5,
         "cost": 55
       },
       {
-        "models": 6,
-        "models_max": 9,
-        "cost": 90
+        "models": 5,
+        "cost": 60
+      },
+      {
+        "models": 9,
+        "cost": 100
       },
       {
         "models": 10,
-        "cost": 100
+        "cost": 110
       }
     ],
     "keywords": [
       "Infantry",
       "Imperium",
-      "Anathema Psykana",
-      "Witchseekers"
+      "Witchseeker Squad",
+      "Anathema Psykana"
     ],
     "faction_keywords": [
-      "Adeptus Custodes"
+      "Anathema Psykana"
     ],
     "base_size_mm": {
       "shape": "round",
@@ -880,16 +740,20 @@
       "max": 10
     },
     "weapon_ids": [
-      "close-combat-weapon",
-      "witchseeker-flamer"
+      "flamer",
+      "gun-stock"
     ],
     "ability_ids": [
-      "sanctified-flames",
-      "scouts-6"
+      "sanctified-flames-adeptus-custodes",
+      {
+        "id": "scouts",
+        "value": 7
+      },
+      "daughters-of-the-abyss-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -962,13 +826,19 @@
       "armoured-hull-ares-gunship"
     ],
     "ability_ids": [
-      "deadly-demise-d6",
-      "hover",
-      "infernus-firebombs"
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "infernus-firebombs-adeptus-custodes",
+      {
+        "id": "damaged",
+        "value": 7
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -988,8 +858,8 @@
     ]
   },
   {
-    "id": "custodian-guard",
-    "name": "Custodian Guard",
+    "id": "custodian-guard-sodality",
+    "name": "Custodian Guard Sodality",
     "faction_id": "adeptus-custodes",
     "role": "battleline",
     "profiles": [
@@ -1006,26 +876,14 @@
     ],
     "points": [
       {
-        "models": 4,
-        "cost": 170,
+        "models": 3,
+        "cost": 240,
         "unit_count_min": 1,
         "unit_count_max": 3
       },
       {
-        "models": 5,
-        "cost": 215,
-        "unit_count_min": 1,
-        "unit_count_max": 3
-      },
-      {
-        "models": 4,
-        "cost": 180,
-        "unit_count_min": 4,
-        "unit_count_max": null
-      },
-      {
-        "models": 5,
-        "cost": 225,
+        "models": 3,
+        "cost": 270,
         "unit_count_min": 4,
         "unit_count_max": null
       }
@@ -1034,7 +892,8 @@
       "Infantry",
       "Battleline",
       "Imperium",
-      "Custodian Guard"
+      "Trusted Sentinel",
+      "Custodian Guard Sodality"
     ],
     "faction_keywords": [
       "Adeptus Custodes"
@@ -1044,36 +903,30 @@
       "diameter": 40
     },
     "model_count": {
-      "min": 4,
-      "max": 5
+      "min": 3,
+      "max": 3
     },
     "weapon_ids": [
-      "guardian-spear",
-      "misericordia",
-      "sentinel-blade"
+      "guardian-spear-custodian-guard-sodality"
     ],
     "ability_ids": [
-      "praesidium-shield",
-      "sentinel-storm",
-      "stand-vigil",
-      "deep-strike"
+      "deep-strike",
+      {
+        "id": "vexilla-adeptus-custodes",
+        "wargear": "vexilla"
+      },
+      "impenetrable-defence-adeptus-custodes",
+      {
+        "id": "vexilla-wargear-adeptus-custodes",
+        "wargear": "vexilla"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
-    "wargear_budgets": [
-      {
-        "items": [
-          "misericordia",
-          "vexilla"
-        ],
-        "count": 2,
-        "per_models": 0
-      }
-    ],
     "external_refs": [
       {
         "namespace": "bsdata",
@@ -1122,7 +975,6 @@
     "keywords": [
       "Vehicle",
       "Transport",
-      "Aircraft",
       "Fly",
       "Imperium",
       "Orion Assault Dropship"
@@ -1145,16 +997,23 @@
       "twin-lastrum-bolt-cannon"
     ],
     "ability_ids": [
-      "assault-dropship",
+      "assault-dropship-adeptus-custodes",
       "hover",
-      "deadly-demise-d6"
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      {
+        "id": "damaged",
+        "value": 7
+      }
     ],
     "transport_capacity": {
       "capacity": 12
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1200,11 +1059,11 @@
       "Infantry",
       "Character",
       "Imperium",
-      "Anathema Psykana",
-      "Knight-Centura"
+      "Knight-Centura",
+      "Anathema Psykana"
     ],
     "faction_keywords": [
-      "Adeptus Custodes"
+      "Anathema Psykana"
     ],
     "base_size_mm": {
       "shape": "round",
@@ -1215,25 +1074,27 @@
       "max": 1
     },
     "weapon_ids": [
-      "close-combat-weapon-knight-centura",
       "executioner-greatblade-knight-centura",
       "master-crafted-boltgun",
-      "witchseeker-flamer"
+      "master-crafted-flamer",
+      "gun-stock-knight-centura"
     ],
     "ability_ids": [
-      "corner-the-quarry",
-      "daughter-of-the-abyss",
-      "leader",
-      "seeker-s-instincts",
-      "scouts-6"
+      "corner-the-quarry-adeptus-custodes",
+      "seekers-instincts-adeptus-custodes",
+      {
+        "id": "scouts",
+        "value": 7
+      },
+      "support"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
-    "attachment_role": "leader",
+    "attachment_role": "support",
     "external_refs": [
       {
         "namespace": "bsdata",
@@ -1269,13 +1130,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 65,
+        "cost": 70,
         "unit_count_min": 1,
         "unit_count_max": 3
       },
       {
         "models": 1,
-        "cost": 75,
+        "cost": 80,
         "unit_count_min": 4,
         "unit_count_max": null
       }
@@ -1286,11 +1147,12 @@
       "Dedicated Transport",
       "Smoke",
       "Imperium",
-      "Anathema Psykana",
-      "Rhino"
+      "Frame",
+      "Anathema Psykana Rhino",
+      "Anathema Psykana"
     ],
     "faction_keywords": [
-      "Adeptus Custodes"
+      "Anathema Psykana"
     ],
     "base_size_mm": {
       "shape": "hull",
@@ -1306,16 +1168,23 @@
       "storm-bolter"
     ],
     "ability_ids": [
-      "firing-deck-2",
-      "self-repair",
-      "deadly-demise-d3"
+      {
+        "id": "firing-deck",
+        "value": 2
+      },
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "daughters-of-the-abyss-adeptus-custodes",
+      "assault-vehicle-adeptus-custodes"
     ],
     "transport_capacity": {
       "capacity": 12
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1335,82 +1204,8 @@
     ]
   },
   {
-    "id": "aleya",
-    "name": "Aleya",
-    "faction_id": "adeptus-custodes",
-    "role": "epic-hero",
-    "profiles": [
-      {
-        "name": "Aleya",
-        "M": 6,
-        "T": 3,
-        "W": 4,
-        "Sv": 3,
-        "invuln_sv": 5,
-        "Ld": 6,
-        "OC": 1
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 55
-      }
-    ],
-    "keywords": [
-      "Infantry",
-      "Character",
-      "Epic Hero",
-      "Imperium",
-      "Anathema Psykana",
-      "Aleya"
-    ],
-    "faction_keywords": [
-      "Adeptus Custodes"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 32
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "somnus"
-    ],
-    "ability_ids": [
-      "feel-no-pain-5",
-      "leader",
-      "tactical-perception",
-      "tenacious-spirit",
-      "scouts-6"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "attachment_role": "leader",
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "9e42-7207-9c30-6122"
-      },
-      {
-        "namespace": "game-datacards",
-        "id": "2973a1e7-49ab-5c6f-a61f-0abefe87bfe5"
-      },
-      {
-        "namespace": "mfm",
-        "id": "bf3e8f52-2e65-4ad8-9131-72184cf9548b"
-      }
-    ]
-  },
-  {
-    "id": "agamatus-custodians",
-    "name": "Agamatus Custodians",
+    "id": "gyrfalcon-jetbike-sodality",
+    "name": "Gyrfalcon Jetbike Sodality",
     "faction_id": "adeptus-custodes",
     "profiles": [
       {
@@ -1426,20 +1221,23 @@
     ],
     "points": [
       {
-        "models": 3,
-        "cost": 225
+        "models": 2,
+        "cost": 260,
+        "unit_count_min": 1,
+        "unit_count_max": 1
       },
       {
-        "models": 4,
-        "models_max": 6,
-        "cost": 450
+        "models": 2,
+        "cost": 280,
+        "unit_count_min": 2,
+        "unit_count_max": null
       }
     ],
     "keywords": [
       "Mounted",
       "Fly",
       "Imperium",
-      "Agamatus Custodians"
+      "Gyrfalcon Jetbike Sodality"
     ],
     "faction_keywords": [
       "Adeptus Custodes"
@@ -1450,23 +1248,23 @@
       "length": 42
     },
     "model_count": {
-      "min": 3,
-      "max": 6
+      "min": 2,
+      "max": 2
     },
     "weapon_ids": [
       "adrathic-devastator",
-      "interceptor-lance-agamatus-custodians",
       "lastrum-bolt-cannon",
-      "twin-las-pulsar"
+      "solarite-power-lance",
+      "arachnus-volley-cannon",
+      "twin-corvae-las-pulser"
     ],
     "ability_ids": [
-      "implacable-vanguard",
-      "jetbike-outriders",
-      "turbo-boost"
+      "death-blow-adeptus-custodes",
+      "deep-strike"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1482,89 +1280,6 @@
       {
         "namespace": "mfm",
         "id": "5ba22e74-9fdb-485a-9a6f-a0b4be8c83b6"
-      }
-    ]
-  },
-  {
-    "id": "venerable-land-raider",
-    "name": "Venerable Land Raider",
-    "faction_id": "adeptus-custodes",
-    "profiles": [
-      {
-        "name": "Venerable Land Raider",
-        "M": 10,
-        "T": 12,
-        "W": 16,
-        "Sv": 2,
-        "invuln_sv": null,
-        "Ld": 6,
-        "OC": 5
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 220,
-        "unit_count_min": 1,
-        "unit_count_max": 1
-      },
-      {
-        "models": 1,
-        "cost": 240,
-        "unit_count_min": 2,
-        "unit_count_max": null
-      }
-    ],
-    "keywords": [
-      "Vehicle",
-      "Imperium",
-      "Transport",
-      "Smoke",
-      "Venerable Land Raider"
-    ],
-    "faction_keywords": [
-      "Adeptus Custodes"
-    ],
-    "base_size_mm": {
-      "shape": "hull",
-      "draft": true
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "armoured-tracks-venerable-land-raider",
-      "godhammer-lascannon",
-      "hunter-killer-missile",
-      "storm-bolter-venerable-land-raider",
-      "twin-heavy-bolter"
-    ],
-    "ability_ids": [
-      "assault-ramp",
-      "deadly-demise-d6"
-    ],
-    "transport_capacity": {
-      "capacity": 6
-    },
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "76be-3bcb-cf4-bcbd"
-      },
-      {
-        "namespace": "game-datacards",
-        "id": "bf47a8d1-d746-5e58-a1f7-46863e3c0f38"
-      },
-      {
-        "namespace": "mfm",
-        "id": "9ad38e41-8435-45c5-8bca-4baaa19fa084"
       }
     ]
   },
@@ -1586,26 +1301,26 @@
     ],
     "points": [
       {
-        "models": 4,
+        "models": 2,
         "cost": 200,
         "unit_count_min": 1,
         "unit_count_max": 1
       },
       {
-        "models": 5,
-        "cost": 250,
+        "models": 3,
+        "cost": 295,
         "unit_count_min": 1,
         "unit_count_max": 1
       },
       {
-        "models": 4,
-        "cost": 220,
+        "models": 2,
+        "cost": 230,
         "unit_count_min": 2,
         "unit_count_max": null
       },
       {
-        "models": 5,
-        "cost": 270,
+        "models": 3,
+        "cost": 325,
         "unit_count_min": 2,
         "unit_count_max": null
       }
@@ -1613,7 +1328,8 @@
     "keywords": [
       "Infantry",
       "Imperium",
-      "Custodian Wardens"
+      "Custodian Wardens",
+      "Trusted Sentinel"
     ],
     "faction_keywords": [
       "Adeptus Custodes"
@@ -1623,33 +1339,27 @@
       "diameter": 40
     },
     "model_count": {
-      "min": 4,
-      "max": 5
+      "min": 2,
+      "max": 3
     },
     "weapon_ids": [
       "castellan-axe",
-      "guardian-spear"
+      "guardian-spear-custodian-wardens"
     ],
     "ability_ids": [
-      "living-fortress",
-      "resolute-will",
-      "deep-strike"
+      "living-fortress-adeptus-custodes",
+      "deep-strike",
+      {
+        "id": "vexilla-adeptus-custodes",
+        "wargear": "vexilla"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
-    "wargear_budgets": [
-      {
-        "items": [
-          "vexilla"
-        ],
-        "count": 1,
-        "per_models": 0
-      }
-    ],
     "external_refs": [
       {
         "namespace": "bsdata",
@@ -1684,14 +1394,16 @@
     "points": [
       {
         "models": 1,
-        "cost": 100
+        "cost": 135
       }
     ],
     "keywords": [
       "Vehicle",
       "Fly",
       "Imperium",
-      "Pallas Grav-attack"
+      "Frame",
+      "Grav-assault",
+      "Pallas Grav-Attack"
     ],
     "faction_keywords": [
       "Adeptus Custodes"
@@ -1707,15 +1419,20 @@
     },
     "weapon_ids": [
       "armoured-hull-pallas-grav-attack",
-      "twin-arachnus-blaze-cannon"
+      "twin-arachnus-blaze-cannon",
+      "twin-iliastus-accelerator-fusil"
     ],
     "ability_ids": [
-      "merciless-hunter",
-      "deadly-demise-d3"
+      {
+        "id": "deadly-demise",
+        "value": 1
+      },
+      "deep-strike",
+      "mobile-hunter-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1753,26 +1470,26 @@
     "points": [
       {
         "models": 2,
-        "cost": 145,
+        "cost": 220,
         "unit_count_min": 1,
-        "unit_count_max": 2
+        "unit_count_max": 1
       },
       {
         "models": 3,
-        "cost": 215,
+        "cost": 330,
         "unit_count_min": 1,
-        "unit_count_max": 2
+        "unit_count_max": 1
       },
       {
         "models": 2,
-        "cost": 170,
-        "unit_count_min": 3,
+        "cost": 240,
+        "unit_count_min": 2,
         "unit_count_max": null
       },
       {
         "models": 3,
-        "cost": 240,
-        "unit_count_min": 3,
+        "cost": 350,
+        "unit_count_min": 2,
         "unit_count_max": null
       }
     ],
@@ -1797,14 +1514,15 @@
     "weapon_ids": [
       "interceptor-lance-vertus-praetors",
       "salvo-launcher",
-      "vertus-hurricane-bolter"
+      "hurricane-bolter"
     ],
     "ability_ids": [
-      "quicksilver-execution"
+      "quicksilver-execution-adeptus-custodes",
+      "deep-strike"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1824,82 +1542,11 @@
     ]
   },
   {
-    "id": "valerian",
-    "name": "Valerian",
-    "faction_id": "adeptus-custodes",
-    "role": "epic-hero",
-    "profiles": [
-      {
-        "name": "Valerian",
-        "M": 6,
-        "T": 6,
-        "W": 6,
-        "Sv": 2,
-        "invuln_sv": 4,
-        "Ld": 6,
-        "OC": 2
-      }
+    "id": "venatari-with-verutum-lances",
+    "name": "Venatari with Verutum Lances",
+    "aliases": [
+      "Venatari Custodians"
     ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 110
-      }
-    ],
-    "keywords": [
-      "Infantry",
-      "Character",
-      "Epic Hero",
-      "Imperium",
-      "Shield-Captain",
-      "Valerian"
-    ],
-    "faction_keywords": [
-      "Adeptus Custodes"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 40
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "gnosis"
-    ],
-    "ability_ids": [
-      "feel-no-pain-6",
-      "golden-laurels",
-      "hero-of-lion-s-gate",
-      "leader",
-      "deep-strike"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "attachment_role": "leader",
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "8103-2e01-5d6a-b761"
-      },
-      {
-        "namespace": "game-datacards",
-        "id": "12edb3d1-de71-5dce-8515-c95f86fa9b05"
-      },
-      {
-        "namespace": "mfm",
-        "id": "bac43b52-54eb-41b0-bff0-3b4c6bab9cfc"
-      }
-    ]
-  },
-  {
-    "id": "venatari-custodians",
-    "name": "Venatari Custodians",
     "faction_id": "adeptus-custodes",
     "profiles": [
       {
@@ -1916,27 +1563,13 @@
     "points": [
       {
         "models": 3,
-        "cost": 150,
-        "unit_count_min": 1,
-        "unit_count_max": 2
-      },
-      {
-        "models": 4,
-        "models_max": 6,
-        "cost": 300,
+        "cost": 270,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 3,
-        "cost": 160,
-        "unit_count_min": 3,
-        "unit_count_max": null
-      },
-      {
-        "models": 4,
-        "models_max": 6,
-        "cost": 310,
+        "cost": 300,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -1946,7 +1579,8 @@
       "Fly",
       "Jump Pack",
       "Imperium",
-      "Venatari Custodians"
+      "Explosives",
+      "Venatari with Verutum Lances"
     ],
     "faction_keywords": [
       "Adeptus Custodes"
@@ -1957,31 +1591,23 @@
     },
     "model_count": {
       "min": 3,
-      "max": 6
+      "max": 3
     },
     "weapon_ids": [
-      "kinetic-destroyer",
-      "venatari-lance"
+      "verutum-lance"
     ],
     "ability_ids": [
-      "jump-packs",
-      "strike-from-the-skies",
-      "swooping-dive",
-      "tarsis-buckler",
-      "deep-strike"
+      "deep-strike",
+      "neutronium-cascade-mine-adeptus-custodes",
+      "swift-ruin-adeptus-custodes",
+      "take-wing-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
-    "wargear_costs": [
-      {
-        "item_id": "venatari-lance",
-        "cost": 5
-      }
-    ],
     "external_refs": [
       {
         "namespace": "bsdata",
@@ -2017,7 +1643,15 @@
     "points": [
       {
         "models": 1,
-        "cost": 130
+        "cost": 185,
+        "unit_count_min": 1,
+        "unit_count_max": 1
+      },
+      {
+        "models": 1,
+        "cost": 205,
+        "unit_count_min": 2,
+        "unit_count_max": null
       }
     ],
     "keywords": [
@@ -2025,7 +1659,8 @@
       "Character",
       "Terminator",
       "Imperium",
-      "Shield-Captain"
+      "Shield-Captain",
+      "Shield-Captain in Allarus Terminator Armour"
     ],
     "faction_keywords": [
       "Adeptus Custodes"
@@ -2044,13 +1679,14 @@
       "guardian-spear-shield-captain-in-allarus-terminator-armour"
     ],
     "ability_ids": [
-      "auramite-and-adamantine",
       "leader",
-      "deep-strike"
+      "deep-strike",
+      "archeotech-teleport-shunter-adeptus-custodes",
+      "master-of-katahs-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2071,8 +1707,8 @@
     ]
   },
   {
-    "id": "aquilon-custodians",
-    "name": "Aquilon Custodians",
+    "id": "aquilon-terminators-with-solarite-power-gauntlets",
+    "name": "Aquilon Terminators with Solarite Power Gauntlets",
     "faction_id": "adeptus-custodes",
     "profiles": [
       {
@@ -2089,19 +1725,22 @@
     "points": [
       {
         "models": 3,
-        "cost": 195
+        "cost": 285,
+        "unit_count_min": 1,
+        "unit_count_max": 2
       },
       {
-        "models": 4,
-        "models_max": 6,
-        "cost": 390
+        "models": 3,
+        "cost": 315,
+        "unit_count_min": 3,
+        "unit_count_max": null
       }
     ],
     "keywords": [
       "Infantry",
       "Terminator",
       "Imperium",
-      "Aquilon Custodians"
+      "Aquilon Terminators with Solarite Power Gauntlets"
     ],
     "faction_keywords": [
       "Adeptus Custodes"
@@ -2112,23 +1751,19 @@
     },
     "model_count": {
       "min": 3,
-      "max": 6
+      "max": 3
     },
     "weapon_ids": [
-      "infernus-firepike",
-      "lastrum-storm-bolter",
       "solerite-power-gauntlet",
-      "solerite-power-talon",
-      "twin-adrathic-destructor"
+      "adrathic-combi-destructor"
     ],
     "ability_ids": [
-      "heavy-assault-infantry",
-      "lions-of-the-emperor",
-      "deep-strike"
+      "deep-strike",
+      "dread-foe-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2144,81 +1779,6 @@
       {
         "namespace": "mfm",
         "id": "9d794b20-4afb-4e62-a229-1cd248101930"
-      }
-    ]
-  },
-  {
-    "id": "custodian-guard-with-adrasite-and-pyrithite-spears",
-    "name": "Custodian Guard with Adrasite and Pyrithite Spears",
-    "faction_id": "adeptus-custodes",
-    "profiles": [
-      {
-        "name": "Custodian Guard with Adrasite and Pyrithite Spears",
-        "M": 6,
-        "T": 6,
-        "W": 3,
-        "Sv": 2,
-        "invuln_sv": 4,
-        "Ld": 6,
-        "OC": 2
-      }
-    ],
-    "points": [
-      {
-        "models": 5,
-        "cost": 250,
-        "unit_count_min": 1,
-        "unit_count_max": 3
-      },
-      {
-        "models": 5,
-        "cost": 260,
-        "unit_count_min": 4,
-        "unit_count_max": null
-      }
-    ],
-    "keywords": [
-      "Infantry",
-      "Imperium",
-      "Custodian Guard with Adrasite and Pyrithite Spears"
-    ],
-    "faction_keywords": [
-      "Adeptus Custodes"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 40
-    },
-    "model_count": {
-      "min": 5,
-      "max": 5
-    },
-    "weapon_ids": [
-      "adrasite-spear",
-      "pyrithite-spear"
-    ],
-    "ability_ids": [
-      "no-foe-shall-stand",
-      "deep-strike"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "af0f-5212-907e-7125"
-      },
-      {
-        "namespace": "game-datacards",
-        "id": "1f8acce4-6284-5da7-bdae-85ba7d424c25"
-      },
-      {
-        "namespace": "mfm",
-        "id": "6e20e60e-55d3-479f-98b0-196957b8291e"
       }
     ]
   },
@@ -2241,13 +1801,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 180,
+        "cost": 225,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 200,
+        "cost": 245,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -2257,15 +1817,17 @@
       "Transport",
       "Fly",
       "Imperium",
-      "Coronus Grav-carrier"
+      "Frame",
+      "Grav-assault",
+      "Coronus Grav-Carrier"
     ],
     "faction_keywords": [
       "Adeptus Custodes"
     ],
     "base_size_mm": {
       "shape": "oval",
-      "width": 170,
-      "length": 109
+      "width": 150,
+      "length": 95
     },
     "model_count": {
       "min": 1,
@@ -2274,18 +1836,28 @@
     "weapon_ids": [
       "armoured-hull-coronus-grav-carrier",
       "twin-arachnus-blaze-cannon",
-      "twin-lastrum-bolt-cannon"
+      "twin-lastrum-bolt-cannon",
+      "twin-neutronium-cascade-projectors"
     ],
     "ability_ids": [
-      "fire-support",
-      "deadly-demise-d6"
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      {
+        "id": "damaged",
+        "value": 6
+      },
+      "assault-vehicle-adeptus-custodes",
+      "deep-strike",
+      "repulsor-suspensor-technology-adeptus-custodes"
     ],
     "transport_capacity": {
       "capacity": 8
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2305,8 +1877,11 @@
     ]
   },
   {
-    "id": "prosecutors",
-    "name": "Prosecutors",
+    "id": "prosecutor-squad",
+    "name": "Prosecutor Squad",
+    "aliases": [
+      "Prosecutors"
+    ],
     "faction_id": "adeptus-custodes",
     "profiles": [
       {
@@ -2330,23 +1905,22 @@
         "cost": 50
       },
       {
-        "models": 6,
-        "models_max": 9,
-        "cost": 75
+        "models": 9,
+        "cost": 80
       },
       {
         "models": 10,
-        "cost": 85
+        "cost": 90
       }
     ],
     "keywords": [
       "Infantry",
       "Imperium",
-      "Anathema Psykana",
-      "Prosecutors"
+      "Prosecutor Squad",
+      "Anathema Psykana"
     ],
     "faction_keywords": [
-      "Adeptus Custodes"
+      "Anathema Psykana"
     ],
     "base_size_mm": {
       "shape": "round",
@@ -2358,14 +1932,15 @@
     },
     "weapon_ids": [
       "boltgun",
-      "close-combat-weapon"
+      "gun-stock"
     ],
     "ability_ids": [
-      "purity-of-execution"
+      "purity-of-execution-adeptus-custodes",
+      "daughters-of-the-abyss-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2410,7 +1985,15 @@
     "points": [
       {
         "models": 1,
-        "cost": 110
+        "cost": 180,
+        "unit_count_min": 1,
+        "unit_count_max": 1
+      },
+      {
+        "models": 1,
+        "cost": 200,
+        "unit_count_min": 2,
+        "unit_count_max": null
       }
     ],
     "keywords": [
@@ -2434,16 +2017,21 @@
       "castellan-axe-shield-captain",
       "guardian-spear-shield-captain",
       "pyrithite-spear-shield-captain",
-      "sentinel-blade-shield-captain"
+      "eternity-pattern-paragon-blade"
     ],
     "ability_ids": [
       "leader",
-      "master-of-the-stances",
-      "deep-strike"
+      "deep-strike",
+      "master-of-katahs-adeptus-custodes",
+      {
+        "id": "praesidium-shield-shield-captain-adeptus-custodes",
+        "wargear": "praesidium-shield"
+      },
+      "vengeful-surge-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2460,6 +2048,12 @@
       {
         "namespace": "mfm",
         "id": "ee075c03-bc58-414d-8124-32feba88554b"
+      }
+    ],
+    "wargear_costs": [
+      {
+        "item_id": "praesidium-shield",
+        "cost": 25
       }
     ]
   },
@@ -2483,7 +2077,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 135
+        "cost": 265
       }
     ],
     "keywords": [
@@ -2509,16 +2103,19 @@
       "watchers-axe"
     ],
     "ability_ids": [
-      "captain-general",
+      "captain-general-adeptus-custodes",
       "leader",
-      "moment-shackle",
-      "supreme-commander",
+      "moment-shackle-adeptus-custodes",
+      "supreme-commander-adeptus-custodes",
       "deep-strike",
-      "feel-no-pain-5"
+      {
+        "id": "feel-no-pain",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2564,7 +2161,8 @@
       "Imperium",
       "Infantry",
       "Terminator",
-      "Tristraen's Gilded Blades"
+      "Tristraen's Gilded Blades",
+      "Gilded Blades Allarus Custodians"
     ],
     "faction_keywords": [
       "Adeptus Custodes"
@@ -2574,16 +2172,16 @@
       "max": 2
     },
     "weapon_ids": [
-      "balistus-grenade-launcher-gilded-blades",
-      "guardian-spear"
+      "guardian-spear",
+      "balistus-grenade-launcher-gilded-blades-allarus-custodians"
     ],
     "ability_ids": [
-      "from-golden-light-gilded-blades",
-      "slayers-of-tyrants-gilded-blades"
+      "from-golden-light-adeptus-custodes",
+      "slayers-of-tyrants-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"
@@ -2628,7 +2226,8 @@
       "Battleline",
       "Imperium",
       "Infantry",
-      "Tristraen's Gilded Blades"
+      "Tristraen's Gilded Blades",
+      "Gilded Blades Custodian Guard"
     ],
     "faction_keywords": [
       "Adeptus Custodes"
@@ -2641,13 +2240,17 @@
       "sentinel-blade"
     ],
     "ability_ids": [
-      "praesidium-shield-gilded-blades",
-      "sentinel-storm-gilded-blades",
-      "stand-vigil-gilded-blades"
+      "sentinel-storm-adeptus-custodes",
+      "stand-vigil-gilded-blades-custodian-guard-adeptus-custodes",
+      "praesidium-shield-tristraens-gilded-blades-adeptus-custodes",
+      {
+        "id": "praesidium-shield-wargear-adeptus-custodes",
+        "wargear": "praesidium-shield"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"
@@ -2690,7 +2293,8 @@
     "keywords": [
       "Imperium",
       "Infantry",
-      "Tristraen's Gilded Blades"
+      "Tristraen's Gilded Blades",
+      "Gilded Blades Custodian Wardens"
     ],
     "faction_keywords": [
       "Adeptus Custodes"
@@ -2700,15 +2304,15 @@
       "max": 3
     },
     "weapon_ids": [
-      "castellan-axe-gilded-blades",
-      "guardian-spear"
+      "guardian-spear",
+      "castellan-axe-gilded-blades-custodian-wardens"
     ],
     "ability_ids": [
-      "divine-protection-gilded-blades"
+      "divine-protection-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"
@@ -2754,7 +2358,8 @@
       "Character",
       "Imperium",
       "Infantry",
-      "Tristraen's Gilded Blades"
+      "Tristraen's Gilded Blades",
+      "Tristraen of the Gilded Blades"
     ],
     "faction_keywords": [
       "Adeptus Custodes"
@@ -2767,11 +2372,11 @@
       "vaultswords"
     ],
     "ability_ids": [
-      "rapid-strike-gilded-blades"
+      "rapid-strike-adeptus-custodes"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"
@@ -2787,6 +2392,709 @@
         "namespace": "mfm",
         "id": "7938debf-5a7f-4aaa-8364-5a507b382091"
       }
+    ]
+  },
+  {
+    "id": "aquilan-talon-contemptor-achillus-dreadnought",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "c5750e97-71f5-40e8-8ed4-f72a22315ee1"
+      }
+    ],
+    "name": "Aquilan Talon Contemptor-Achillus Dreadnought",
+    "faction_id": "adeptus-custodes",
+    "profiles": [
+      {
+        "name": "Contemptor-Achillus Dreadnought",
+        "M": 9,
+        "T": 10,
+        "W": 12,
+        "Sv": 2,
+        "invuln_sv": null,
+        "Ld": 5,
+        "OC": 3
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 0
+      }
+    ],
+    "keywords": [
+      "Aquilan Talon",
+      "Contemptor-Achillus Dreadnought",
+      "Dreadnought",
+      "Imperium",
+      "Vehicle",
+      "Walker",
+      "Aquilan Talon Contemptor-Achillus Dreadnought"
+    ],
+    "faction_keywords": [
+      "Adeptus Custodes"
+    ],
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "game_modes": [
+      "combat-patrol"
+    ],
+    "is_legend": false,
+    "points_provisional": false,
+    "ability_ids": [
+      {
+        "id": "damaged",
+        "value": 4
+      },
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "intimidating-presence-adeptus-custodes"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 60
+    },
+    "weapon_ids": [
+      "dreadspear",
+      "lastrum-storm-bolter"
+    ]
+  },
+  {
+    "id": "aquilan-talon-sentinel-guard-sodality",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "6fcc8f7b-f311-4b37-a438-28999e05af53"
+      }
+    ],
+    "name": "Aquilan Talon Sentinel Guard Sodality",
+    "faction_id": "adeptus-custodes",
+    "role": "battleline",
+    "profiles": [
+      {
+        "name": "Sentinel Guard",
+        "M": 8,
+        "T": 7,
+        "W": 5,
+        "Sv": 2,
+        "invuln_sv": null,
+        "Ld": 5,
+        "OC": 3
+      }
+    ],
+    "points": [
+      {
+        "models": 3,
+        "cost": 0
+      }
+    ],
+    "keywords": [
+      "Aquilan Talon",
+      "Battleline",
+      "Imperium",
+      "Infantry",
+      "Sentinel Guard Sodality",
+      "Trusted Sentinel",
+      "Aquilan Talon Sentinel Guard Sodality"
+    ],
+    "faction_keywords": [
+      "Adeptus Custodes"
+    ],
+    "model_count": {
+      "min": 3,
+      "max": 3
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "game_modes": [
+      "combat-patrol"
+    ],
+    "is_legend": false,
+    "points_provisional": false,
+    "ability_ids": [
+      "deep-strike",
+      "resolute-will-adeptus-custodes"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 40
+    },
+    "weapon_ids": [
+      "sentinel-blade-aquilan-talon-sentinel-guard-sodality"
+    ]
+  },
+  {
+    "id": "aquilan-talon-shield-captain",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "5777eb2d-4c83-4f31-a0a8-6b6f7800e334"
+      }
+    ],
+    "name": "Aquilan Talon Shield-Captain",
+    "faction_id": "adeptus-custodes",
+    "role": "character",
+    "profiles": [
+      {
+        "name": "Shield-Captain",
+        "M": 8,
+        "T": 7,
+        "W": 8,
+        "Sv": 2,
+        "invuln_sv": null,
+        "Ld": 5,
+        "OC": 2
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 0
+      }
+    ],
+    "keywords": [
+      "Aquilan Talon",
+      "Character",
+      "Imperium",
+      "Infantry",
+      "Shield-Captain",
+      "Aquilan Talon Shield-Captain"
+    ],
+    "faction_keywords": [
+      "Adeptus Custodes"
+    ],
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "game_modes": [
+      "combat-patrol"
+    ],
+    "is_legend": false,
+    "points_provisional": false,
+    "ability_ids": [
+      "deep-strike",
+      "fight-to-the-death-adeptus-custodes",
+      "leader"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 40
+    },
+    "weapon_ids": [
+      "eternity-pattern-paragon-blade"
+    ]
+  },
+  {
+    "id": "aquilan-wing-sentinel-guard-sodality",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "0fc12fd1-5fc7-44cb-834d-a14ce5f4b150"
+      }
+    ],
+    "name": "Aquilan Wing Sentinel Guard Sodality",
+    "faction_id": "adeptus-custodes",
+    "role": "battleline",
+    "profiles": [
+      {
+        "name": "Sentinel Guard",
+        "M": 8,
+        "T": 7,
+        "W": 5,
+        "Sv": 2,
+        "invuln_sv": null,
+        "Ld": 5,
+        "OC": 3
+      }
+    ],
+    "points": [
+      {
+        "models": 3,
+        "cost": 0
+      }
+    ],
+    "keywords": [
+      "Aquilan Wing",
+      "Battleline",
+      "Imperium",
+      "Infantry",
+      "Sentinel Guard Sodality",
+      "Trusted Sentinel",
+      "Aquilan Wing Sentinel Guard Sodality"
+    ],
+    "faction_keywords": [
+      "Adeptus Custodes"
+    ],
+    "model_count": {
+      "min": 3,
+      "max": 3
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "game_modes": [
+      "combat-patrol"
+    ],
+    "is_legend": false,
+    "points_provisional": false,
+    "ability_ids": [
+      "deep-strike",
+      "resolute-will-adeptus-custodes",
+      {
+        "id": "vexilla-adeptus-custodes",
+        "wargear": "vexilla"
+      }
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 40
+    },
+    "weapon_ids": [
+      "sentinel-blade-aquilan-wing-sentinel-guard-sodality"
+    ]
+  },
+  {
+    "id": "aquilan-wing-shield-captain",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "e30bfcc0-91d6-4baa-b522-b4cfaa5ba0e6"
+      }
+    ],
+    "name": "Aquilan Wing Shield-Captain",
+    "faction_id": "adeptus-custodes",
+    "role": "character",
+    "profiles": [
+      {
+        "name": "Shield-Captain",
+        "M": 8,
+        "T": 7,
+        "W": 8,
+        "Sv": 2,
+        "invuln_sv": null,
+        "Ld": 5,
+        "OC": 2
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 0
+      }
+    ],
+    "keywords": [
+      "Aquilan Wing",
+      "Character",
+      "Imperium",
+      "Infantry",
+      "Shield-Captain",
+      "Aquilan Wing Shield-Captain"
+    ],
+    "faction_keywords": [
+      "Adeptus Custodes"
+    ],
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "game_modes": [
+      "combat-patrol"
+    ],
+    "is_legend": false,
+    "points_provisional": false,
+    "ability_ids": [
+      "deep-strike",
+      "leader",
+      "unstoppable-will-adeptus-custodes"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 40
+    }
+  },
+  {
+    "id": "aquilan-wing-venatari-with-kinetic-destroyers",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "cfa9df88-02f8-40ae-8200-024dd9943374"
+      }
+    ],
+    "name": "Aquilan Wing Venatari with Kinetic Destroyers",
+    "faction_id": "adeptus-custodes",
+    "profiles": [
+      {
+        "name": "Venatari",
+        "M": 12,
+        "T": 7,
+        "W": 5,
+        "Sv": 2,
+        "invuln_sv": null,
+        "Ld": 5,
+        "OC": 2
+      }
+    ],
+    "points": [
+      {
+        "models": 3,
+        "cost": 0
+      }
+    ],
+    "keywords": [
+      "Aquilan Wing",
+      "Explosives",
+      "Fly",
+      "Imperium",
+      "Infantry",
+      "Jump Pack",
+      "Venatari with Kinetic Destroyers",
+      "Aquilan Wing Venatari with Kinetic Destroyers"
+    ],
+    "faction_keywords": [
+      "Adeptus Custodes"
+    ],
+    "model_count": {
+      "min": 3,
+      "max": 3
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "game_modes": [
+      "combat-patrol"
+    ],
+    "is_legend": false,
+    "points_provisional": false,
+    "ability_ids": [
+      "deep-strike",
+      "strike-from-the-skies-adeptus-custodes"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 40
+    },
+    "weapon_ids": [
+      "kinetic-destroyer"
+    ]
+  },
+  {
+    "id": "aquilon-terminators-with-solarite-power-talons",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "4e845261-134c-48ad-b586-8e149f02bf51"
+      }
+    ],
+    "name": "Aquilon Terminators with Solarite Power Talons",
+    "faction_id": "adeptus-custodes",
+    "profiles": [
+      {
+        "name": "Aquilon Custodians",
+        "M": 7,
+        "T": 8,
+        "W": 6,
+        "Sv": 2,
+        "invuln_sv": null,
+        "Ld": 5,
+        "OC": 2
+      }
+    ],
+    "points": [
+      {
+        "models": 3,
+        "cost": 275,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 3,
+        "cost": 305,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Imperium",
+      "Infantry",
+      "Terminator",
+      "Aquilon Terminators with Solarite Power Talons"
+    ],
+    "faction_keywords": [
+      "Adeptus Custodes"
+    ],
+    "model_count": {
+      "min": 3,
+      "max": 3
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "ability_ids": [
+      "deep-strike",
+      "reap-a-terrible-tally-adeptus-custodes"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 50
+    },
+    "weapon_ids": [
+      "lastrum-storm-bolter",
+      "infernus-firepike",
+      "solerite-power-talon"
+    ]
+  },
+  {
+    "id": "caladius-annihilator-grav-tank",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "686b8a4a-86d7-4c6e-9c69-d8feb96ee762"
+      }
+    ],
+    "name": "Caladius Annihilator Grav‑Tank",
+    "faction_id": "adeptus-custodes",
+    "profiles": [
+      {
+        "name": "Caladius Annihilator Grav Tank",
+        "M": 10,
+        "T": 11,
+        "W": 14,
+        "Sv": 2,
+        "invuln_sv": null,
+        "Ld": 5,
+        "OC": 4
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 250,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 1,
+        "cost": 280,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Caladius",
+      "Fly",
+      "Grav-assault",
+      "Imperium",
+      "Vehicle",
+      "Frame",
+      "Caladius Annihilator Grav-Tank"
+    ],
+    "faction_keywords": [
+      "Adeptus Custodes"
+    ],
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "ability_ids": [
+      "advanced-firepower-adeptus-custodes",
+      {
+        "id": "damaged",
+        "value": 5
+      },
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "deep-strike"
+    ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 150,
+      "length": 95
+    },
+    "weapon_ids": [
+      "twin-lastrum-bolt-cannon",
+      "twin-neutronium-cascade-projectors",
+      "arachnus-blaze-carronade",
+      "armoured-hull"
+    ]
+  },
+  {
+    "id": "sentinel-guard-sodality",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "ff63c25a-979c-4b79-961c-912c2347b4c1"
+      }
+    ],
+    "name": "Sentinel Guard Sodality",
+    "faction_id": "adeptus-custodes",
+    "role": "battleline",
+    "profiles": [
+      {
+        "name": "Custodian Guard",
+        "M": 8,
+        "T": 7,
+        "W": 5,
+        "Sv": 2,
+        "invuln_sv": null,
+        "Ld": 5,
+        "OC": 3
+      }
+    ],
+    "points": [
+      {
+        "models": 3,
+        "cost": 240,
+        "unit_count_min": 1,
+        "unit_count_max": 3
+      },
+      {
+        "models": 3,
+        "cost": 270,
+        "unit_count_min": 4,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Battleline",
+      "Imperium",
+      "Infantry",
+      "Trusted Sentinel",
+      "Sentinel Guard Sodality"
+    ],
+    "faction_keywords": [
+      "Adeptus Custodes"
+    ],
+    "model_count": {
+      "min": 3,
+      "max": 3
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "ability_ids": [
+      "deep-strike",
+      {
+        "id": "praesidium-shield-adeptus-custodes",
+        "wargear": "praesidium-shield"
+      },
+      "stand-vigil-adeptus-custodes",
+      {
+        "id": "vexilla-adeptus-custodes",
+        "wargear": "vexilla"
+      }
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 40
+    },
+    "weapon_ids": [
+      "sentinel-blade-sentinel-guard-sodality"
+    ]
+  },
+  {
+    "id": "venatari-with-kinetic-destroyers",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "2a1c5d96-3107-413a-a9a5-70b26250450e"
+      }
+    ],
+    "name": "Venatari with Kinetic Destroyers",
+    "faction_id": "adeptus-custodes",
+    "profiles": [
+      {
+        "name": "Venatari",
+        "M": 12,
+        "T": 7,
+        "W": 5,
+        "Sv": 2,
+        "invuln_sv": null,
+        "Ld": 5,
+        "OC": 2
+      }
+    ],
+    "points": [
+      {
+        "models": 3,
+        "cost": 255,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 3,
+        "cost": 280,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Explosives",
+      "Fly",
+      "Imperium",
+      "Infantry",
+      "Jump Pack",
+      "Venatari with Kinetic Destroyers"
+    ],
+    "faction_keywords": [
+      "Adeptus Custodes"
+    ],
+    "model_count": {
+      "min": 3,
+      "max": 3
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "ability_ids": [
+      "deep-strike",
+      "neutronium-cascade-mine-adeptus-custodes",
+      "strike-from-the-skies-adeptus-custodes",
+      "take-wing-adeptus-custodes"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 40
+    },
+    "weapon_ids": [
+      "kinetic-destroyer"
     ]
   }
 ]

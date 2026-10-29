@@ -8,6 +8,7 @@ conformance corpus. See the repository's CONFORMANCE.md.
 from wh40kdc._version import __version__
 from wh40kdc.abilities_resolver import resolve_eligible_abilities
 from wh40kdc.cruncher import (
+    allocate,
     attribute_stages,
     buffs_from_keyword,
     crunch,
@@ -61,6 +62,7 @@ __all__ = [
     "SchemaValidator",
     "__version__",
     "ability_applies_to_unit",
+    "allocate",
     "attribute_stages",
     "base_loadout",
     "base_unit_points",

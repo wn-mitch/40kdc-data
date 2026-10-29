@@ -5,6 +5,7 @@
   import TargetPane from "./lib/target-pane.svelte";
   import OutputPane from "./lib/output-pane.svelte";
   import ComparePane from "./lib/compare-pane.svelte";
+  import ScenarioPane from "./lib/scenario-pane.svelte";
   import Pane from "../../_shared/Pane.svelte";
   import SupportModal from "../../_shared/SupportModal.svelte";
   import AppHeader from "../../_shared/AppHeader.svelte";
@@ -15,17 +16,28 @@
   // Auto-open panes once the user has put real content into them. Each Pane
   // also tracks an explicit user override (sticky once they click), so these
   // are *defaults*, not forced states.
-  const attackerOpen = $derived(salvo.selectedUnitId !== null);
-  const targetOpen = $derived(
+  const attackerHasUnit = $derived(salvo.selectedUnitId !== null);
+  const targetHasUnit = $derived(
     (salvo.targetMode === "dataset" && salvo.datasetTargetUnitId !== null) ||
       (salvo.targetMode === "roster" && salvo.rosterTargetUnitIndex !== null),
   );
+  // The unit pickers live inside these panes, and changing a faction clears the unit, so their
+  // auto-open latches: once open for a unit, a pane stays open while the user picks another.
+  let attackerLatched = $state(false);
+  let targetLatched = $state(false);
+  $effect(() => {
+    if (attackerHasUnit && !attackerLatched) attackerLatched = true;
+    if (targetHasUnit && !targetLatched) targetLatched = true;
+  });
+  const attackerOpen = $derived(attackerHasUnit || attackerLatched);
+  const targetOpen = $derived(targetHasUnit || targetLatched);
   const abilitiesOpen = $derived(
     Object.keys(salvo.buffOverrides).length > 0 ||
       salvo.manualBuffsActive.size > 0 ||
       salvo.contextFlags.attackerStationary ||
       salvo.contextFlags.withinHalfRange,
   );
+  const scenarioOpen = $derived(Object.keys(salvo.scenario).length > 0);
   const importOpen = $derived(
     salvo.attackerRoster !== null || salvo.targetRoster !== null,
   );
@@ -34,12 +46,14 @@
 <div class="app">
   <AppHeader title="Salvo" tag="40k damage calculator" appId="salvo" />
 
-  <nav class="view-tabs">
+  <nav class="view-tabs" aria-label="View">
     <button
+      aria-pressed={salvo.appView === "calculator"}
       class:active={salvo.appView === "calculator"}
       onclick={() => (salvo.appView = "calculator")}>Calculator</button
     >
     <button
+      aria-pressed={salvo.appView === "compare"}
       class:active={salvo.appView === "compare"}
       onclick={() => (salvo.appView = "compare")}>Compare</button
     >
@@ -57,12 +71,13 @@
       <Pane id="import" storagePrefix="salvo" title="Import roster" defaultOpen={importOpen}><ImportPane /></Pane>
       <Pane id="attacker" storagePrefix="salvo" title="Attacker" defaultOpen={attackerOpen}><AttackerPane /></Pane>
       <Pane id="target" storagePrefix="salvo" title="Target" defaultOpen={targetOpen}><TargetPane /></Pane>
+      <Pane id="scenario" storagePrefix="salvo" title="Scenario" defaultOpen={scenarioOpen}><ScenarioPane /></Pane>
       <Pane id="abilities" storagePrefix="salvo" title="Abilities & buffs" defaultOpen={abilitiesOpen}><AbilitiesPane /></Pane>
     </section>
 
     <main class="column output">
-      <section class="pane projection">
-        <h2>Projection</h2>
+      <section class="pane projection" id="projection" aria-labelledby="projection-title" tabindex="-1">
+        <h2 id="projection-title">Projection</h2>
         <OutputPane />
       </section>
     </main>

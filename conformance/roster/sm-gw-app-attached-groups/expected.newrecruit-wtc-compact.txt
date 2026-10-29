@@ -1,0 +1,26 @@
++++++++++++++++++++++++++++++++++++++++++++++++
++ LIST NAME: Attached Groups Test
++ FACTION KEYWORD: Adeptus Astartes
++ DETACHMENT: Gladius Task Force
++ FORCE DISPOSITION: Priority Assets
++ TOTAL ARMY POINTS: 395pts
++ POINTS LIMIT: 395pts
++
++ WARLORD: Char1: Captain
++ ENHANCEMENT: —
++ NUMBER OF UNITS: 5
++++++++++++++++++++++++++++++++++++++++++++++++
+
+Char1: 1x Captain (90 pts): Heavy Bolt Pistol, Master-crafted bolter, Master-crafted power weapon, Warlord
+Attachment: leader -> Intercessor Squad
+5x Intercessor Squad (85 pts): 
+• 1x Intercessor Sergeant: Bolt Pistol, Bolt Rifle, Knives and Fists
+• 4x Intercessor: Bolt Pistol, Bolt Rifle, Knives and Fists
+5x Assault Intercessor Squad (85 pts): 
+• 1x Assault Intercessor Sergeant: Chainsword, Heavy Bolt Pistol
+• 4x Assault Intercessor: Chainsword, Heavy Bolt Pistol
+Char2: 1x Lieutenant (50 pts): Bolt Pistol, Ceramite Fists, Master-crafted bolter
+Attachment: leader -> Assault Intercessor Squad
+5x Intercessor Squad (85 pts): 
+• 1x Intercessor Sergeant: Bolt Pistol, Bolt Rifle, Knives and Fists
+• 4x Intercessor: Bolt Pistol, Bolt Rifle, Knives and Fists

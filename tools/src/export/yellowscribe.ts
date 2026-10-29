@@ -189,7 +189,8 @@ function weaponProfiles(weapon: WeaponView): XmlEl[] {
   const typeName = ranged ? "Ranged Weapons" : "Melee Weapons";
   return weapon.raw.profiles.map((p, i) => {
     const stats = p.stats;
-    const range = ranged ? fmtMove(p.range ?? 0) : "Melee";
+    // An "N/A" range is printed as-is, without the inch mark.
+    const range = !ranged ? "Melee" : p.range === "N/A" ? "N/A" : fmtMove(p.range ?? 0);
     const skillName = ranged ? "BS" : "WS";
     const skill = ranged ? stats.BS : stats.WS;
     const keywords = weapon

@@ -1,0 +1,512 @@
+import { readFileSync } from "node:fs";
+import { dirname, join, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+
+import { describe, expect, it } from "vitest";
+import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
+import { currentFamilyVersion, normalizeFingerprintParameters, REVIEWED_FAMILY_REGISTRY } from "../src/semantic-authoring/contracts.js";
+import { checkEntry, entryWithMechanics } from "../src/semantic-authoring/entries.js";
+import { prefillFromSource, type PrefillFamily } from "../src/semantic-authoring/leaf-prefill.js";
+import { previewLeaf } from "../src/semantic-authoring/leaf-preview.js";
+
+/**
+ * Batch 5 (containers): the wrapping leaves (aura-range, leader-target, for-each-unit-select,
+ * rules-bundle-marker) and the leading containers (choice-open, stance-select-open,
+ * issue-orders-open, dice-pool-allocation-open, with named-option), plus the roll_var binding
+ * on dice-roll@2. Split out per the leaf-family batching brief.
+ */
+
+const dataRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../../data/enrichment");
+
+function authored(factionId: string, abilityId: string): Record<string, unknown> {
+  const entries = JSON.parse(readFileSync(join(dataRoot, factionId, "abilities.json"), "utf8")) as Array<Record<string, unknown>>;
+  const entry = entries.find((item) => item.ability_id === abilityId);
+  if (!entry) throw new Error(`Missing ${factionId}/${abilityId}`);
+  return entry;
+}
+
+let offset = 0;
+function leaf(role: string, familyId: string, parameters: Record<string, unknown>, familyVersion = 1, fragment?: string): CompileLeaf {
+  offset += 10;
+  return { role, family_id: familyId, family_version: familyVersion, parameters, start_byte: offset, ...(fragment !== undefined ? { fragment } : {}) };
+}
+
+function compiled(leaves: CompileLeaf[]) {
+  const result = compileLeaves(leaves);
+  if (!result.ok) throw new Error(result.errors.join("; "));
+  return result;
+}
+
+/** The compiled entry on a real authored base must validate against the ability schema, lint, and render. */
+function rendered(base: Record<string, unknown>, leaves: CompileLeaf[]): string {
+  const entry = entryWithMechanics(base, compiled(leaves).mechanics);
+  const check = checkEntry(entry);
+  expect(check.errors).toEqual([]);
+  return check.rendered_text!;
+}
+
+describe("Semantic authoring container-wrap compiler", () => {
+  const base = () => authored("adeptus-mechanicus", "control-edict-adeptus-mechanicus");
+
+  it("reports invalid nested recipients without overflowing diagnostic argument limits", () => {
+    let effect: Record<string, unknown> = { type: "stat-modifier", target: "invalid-target",
+      modifier: { stat: "S", operation: "add", value: 1 } };
+    for (let depth = 0; depth < 3; depth += 1) effect = { type: "sequence", steps: [effect] };
+    const result = checkEntry({ ...base(), effect });
+    expect(result.errors.some((error) => error.startsWith("/effect/steps/0/steps/0/steps/0/target "))).toBe(true);
+  });
+
+  it("wraps a plain effect in an aura, side and keywords folded in only when authored", () => {
+    expect(compiled([
+      leaf("CONDITION", "aura-range", { side: "enemy", inches: 6 }),
+      leaf("EFFECT", "characteristic-modifier", { subject: "attack", characteristics: ["S"], operation: "add", value: 1, weapon_type: "all" }, 3),
+    ]).mechanics.effect).toEqual({
+      type: "aura", target: "enemy-within-aura",
+      modifier: { range: { inches: 6 }, eligible: { owner: "enemy" }, effect: { type: "stat-modifier", target: "this-unit", modifier: { stat: "S", operation: "add", value: 1 } } },
+    });
+    expect(compiled([
+      leaf("CONDITION", "aura-range", { side: "friendly", inches: 3, keywords: ["CHARACTER"] }),
+      leaf("EFFECT", "regain-wounds", { subject: "this-unit", amount: "1" }, 3),
+    ]).mechanics.effect).toEqual({
+      type: "aura", target: "friendly-within-aura",
+      modifier: { range: { inches: 3 }, eligible: { owner: "friendly", all_of: ["CHARACTER"] }, effect: { type: "heal", target: "this-unit", modifier: { amount: 1 } } },
+    });
+    expect(rendered(base(), [
+      leaf("CONDITION", "aura-range", { side: "enemy", inches: 6 }),
+      leaf("EFFECT", "regain-wounds", { subject: "this-unit", amount: "1" }, 3),
+    ]).length).toBeGreaterThan(0);
+  });
+
+  it("reads the ability's behavior as aura when an aura-range leaf is present", () => {
+    expect(compiled([
+      leaf("CONDITION", "aura-range", { side: "enemy", inches: 6 }),
+      leaf("EFFECT", "regain-wounds", { subject: "this-unit", amount: "1" }, 3),
+    ]).mechanics.behavior).toBe("aura");
+  });
+
+  it("wraps a plain effect onto the attached leader model", () => {
+    expect(compiled([
+      leaf("CONDITION", "leader-target", {}),
+      leaf("EFFECT", "fights-first", { subject: "this-model" }),
+    ]).mechanics.effect).toEqual({
+      type: "ability-grant", target: { level: "model", member_of: "this-unit", attachment_role: "leader" },
+      modifier: { definition: { type: "ability-part", duration: "while-leading",
+        effect: { type: "ability-grant", target: "this-model", modifier: { ability: "fights-first" } } } },
+    });
+    expect(compiled([
+      leaf("CONDITION", "leader-target", { leader_keywords: ["INFANTRY"] }),
+      leaf("EFFECT", "fights-first", { subject: "this-model" }),
+    ]).mechanics.effect).toMatchObject({ target: { all_of: ["INFANTRY"], attachment_role: "leader" } });
+    expect(rendered(base(), [
+      leaf("CONDITION", "leader-target", {}),
+      leaf("EFFECT", "fights-first", { subject: "this-model" }),
+    ]).length).toBeGreaterThan(0);
+  });
+
+  it("wraps the whole body in a rules-bundle when the marker is present", () => {
+    expect(compiled([
+      leaf("RESTRICTION", "rules-bundle-marker", {}),
+      leaf("EFFECT", "fights-first", { subject: "this-model" }),
+    ]).mechanics.effect).toEqual({ type: "rules-bundle", steps: [{ type: "ability-grant", target: "this-model", modifier: { ability: "fights-first" } }] });
+    expect(compiled([
+      leaf("RESTRICTION", "rules-bundle-marker", {}),
+      leaf("EFFECT", "fights-first", { subject: "this-model" }),
+      leaf("EFFECT", "invulnerable-save", { subject: "this-model", threshold: 4 }),
+    ]).mechanics.effect).toEqual({
+      type: "rules-bundle",
+      steps: [
+        { type: "ability-grant", target: "this-model", modifier: { ability: "fights-first" } },
+        { type: "invulnerable-save", target: "this-model", modifier: { invuln_sv: 4 } },
+      ],
+    });
+    expect(rendered(base(), [
+      leaf("RESTRICTION", "rules-bundle-marker", {}),
+      leaf("EFFECT", "fights-first", { subject: "this-model" }),
+    ]).length).toBeGreaterThan(0);
+  });
+
+  it("loops an effect for each matching unit instead of selecting one", () => {
+    expect(compiled([
+      leaf("EVENT", "for-each-unit-select", { scope: "enemy", distance: "any" }),
+      leaf("EFFECT", "mortal-wounds", { recipient: "this-unit", count: "1" }),
+    ]).mechanics.effect).toEqual({
+      type: "for-each-unit", selector: { filter: { owner: "enemy" } },
+      effect: { type: "mortal-wounds", target: "this-unit", modifier: { count: 1 } },
+    });
+    expect(compiled([
+      leaf("EVENT", "for-each-unit-select", { scope: "friendly", distance: "within", inches: 6 }),
+      leaf("EFFECT", "mortal-wounds", { recipient: "this-unit", count: "1" }),
+    ]).mechanics.effect).toMatchObject({ selector: { filter: { owner: "friendly", within: { range: { inches: 6 }, of: "this-model" } } } });
+    expect(rendered(base(), [
+      leaf("EVENT", "for-each-unit-select", { scope: "enemy", distance: "any" }),
+      leaf("EFFECT", "mortal-wounds", { recipient: "this-unit", count: "1" }),
+    ]).length).toBeGreaterThan(0);
+  });
+
+  it("refuses a for-each-unit-select alongside a select-unit", () => {
+    const result = compileLeaves([
+      leaf("EVENT", "for-each-unit-select", { scope: "enemy", distance: "any" }),
+      leaf("EVENT", "select-unit", { scope: "enemy", distance: "any", visible: false }),
+      leaf("EFFECT", "mortal-wounds", { recipient: "that-unit", count: "1" }),
+    ]);
+    expect(result.ok).toBe(false);
+  });
+});
+
+describe("Semantic authoring leading-container compiler", () => {
+  const base = () => authored("adeptus-mechanicus", "control-edict-adeptus-mechanicus");
+
+  it("compiles choice-open into a choice of the option effects, one per sentence", () => {
+    expect(compiled([
+      leaf("EFFECT", "choice-open", {}, 1, "A"),
+      leaf("EFFECT", "fights-first", { subject: "this-model" }, 1, "B"),
+      leaf("EFFECT", "invulnerable-save", { subject: "this-model", threshold: 4 }, 1, "C"),
+    ]).mechanics.effect).toEqual({
+      type: "choice",
+      options: [
+        { type: "ability-grant", target: "this-model", modifier: { ability: "fights-first" } },
+        { type: "invulnerable-save", target: "this-model", modifier: { invuln_sv: 4 } },
+      ],
+    });
+    expect(compiled([
+      leaf("EFFECT", "choice-open", { choice_label: "Doctrine", min_choices: 1, max_choices: 2 }, 1, "A"),
+      leaf("EFFECT", "fights-first", { subject: "this-model" }, 1, "B"),
+      leaf("EFFECT", "invulnerable-save", { subject: "this-model", threshold: 4 }, 1, "C"),
+    ]).mechanics.effect).toMatchObject({ choice_label: "Doctrine", min_choices: 1, max_choices: 2 });
+    expect(rendered(base(), [
+      leaf("EFFECT", "choice-open", {}, 1, "A"),
+      leaf("EFFECT", "fights-first", { subject: "this-model" }, 1, "B"),
+      leaf("EFFECT", "invulnerable-save", { subject: "this-model", threshold: 4 }, 1, "C"),
+    ]).length).toBeGreaterThan(0);
+  });
+
+  it("refuses a choice-open with fewer than two options", () => {
+    const result = compileLeaves([leaf("EFFECT", "choice-open", {}, 1, "A"), leaf("EFFECT", "fights-first", { subject: "this-model" }, 1, "A")]);
+    expect(result.ok).toBe(false);
+  });
+
+  it("compiles stance-select-open into stable-id named options without scope timing", () => {
+    expect(compiled([
+      leaf("EFFECT", "stance-select-open", { scope: "army", mode: "re-selectable" }, 1, "A"),
+      leaf("EVENT", "named-option", { label: "Conqueror Doctrine", option_id: "conqueror-doctrine" }, 3, "B"),
+      leaf("EFFECT", "fights-first", { subject: "this-model" }, 1, "B"),
+      leaf("EVENT", "named-option", { label: "Ballistic Doctrine", option_id: "ballistic-doctrine" }, 3, "C"),
+      leaf("EFFECT", "invulnerable-save", { subject: "this-model", threshold: 4 }, 1, "C"),
+    ]).mechanics.effect).toEqual({
+      type: "stance-select", mode: "re-selectable",
+      options: [
+        { id: "conqueror-doctrine", name: "Conqueror Doctrine", effect: { type: "ability-grant", target: "this-model", modifier: { ability: "fights-first" } } },
+        { id: "ballistic-doctrine", name: "Ballistic Doctrine", effect: { type: "invulnerable-save", target: "this-model", modifier: { invuln_sv: 4 } } },
+      ],
+    });
+    expect(rendered(base(), [
+      leaf("EFFECT", "stance-select-open", { scope: "army", mode: "consumable" }, 1, "A"),
+      leaf("EVENT", "named-option", { label: "Conqueror Doctrine", option_id: "conqueror-doctrine" }, 3, "B"),
+      leaf("EFFECT", "fights-first", { subject: "this-model" }, 1, "B"),
+      leaf("EVENT", "named-option", { label: "Ballistic Doctrine", option_id: "ballistic-doctrine" }, 3, "C"),
+      leaf("EFFECT", "invulnerable-save", { subject: "this-model", threshold: 4 }, 1, "C"),
+    ]).length).toBeGreaterThan(0);
+  });
+
+  it("refuses a named option with no reviewed option_id instead of numbering it by position", () => {
+    const result = compileLeaves([
+      leaf("EFFECT", "stance-select-open", { scope: "unit", mode: "consumable" }, 1, "A"),
+      leaf("EVENT", "named-option", { label: "Conqueror Doctrine", option_id: "conqueror-doctrine" }, 3, "B"),
+      leaf("EFFECT", "fights-first", { subject: "this-model" }, 1, "B"),
+      leaf("EVENT", "named-option", { label: "Ballistic Doctrine" }, 3, "C"),
+      leaf("EFFECT", "invulnerable-save", { subject: "this-model", threshold: 4 }, 1, "C"),
+    ]);
+    expect(result.ok).toBe(false);
+    expect(JSON.stringify(result)).toMatch(/Option 2's named-option leaf needs a reviewed option_id/u);
+  });
+
+  it("refuses a stance-select-open option with no leading named-option leaf", () => {
+    const result = compileLeaves([
+      leaf("EFFECT", "stance-select-open", { scope: "unit", mode: "consumable" }, 1, "A"),
+      leaf("EFFECT", "fights-first", { subject: "this-model" }, 1, "B"),
+      leaf("EVENT", "named-option", { label: "Ballistic Doctrine", option_id: "ballistic-doctrine" }, 1, "C"),
+      leaf("EFFECT", "invulnerable-save", { subject: "this-model", threshold: 4 }, 1, "C"),
+    ]);
+    expect(result.ok).toBe(false);
+  });
+
+  it("compiles issue-orders-open into named Orders", () => {
+    expect(compiled([
+      leaf("EFFECT", "issue-orders-open", { count: 1, range: 6, eligible_keyword: "INFANTRY" }, 1, "A"),
+      leaf("EVENT", "named-option", { label: "First Rank, Fire!", option_id: "first-rank-fire" }, 1, "B"),
+      leaf("EFFECT", "fights-first", { subject: "this-model" }, 1, "B"),
+      leaf("EVENT", "named-option", { label: "Take Aim!", option_id: "take-aim" }, 1, "C"),
+      leaf("EFFECT", "invulnerable-save", { subject: "this-model", threshold: 4 }, 1, "C"),
+    ]).mechanics.effect).toEqual({
+      type: "issue-orders", count: 1, range: { inches: 6 }, eligible: { all_of: ["INFANTRY"] },
+      options: [
+        { id: "first-rank-fire", name: "First Rank, Fire!", effect: { type: "ability-grant", target: "this-model", modifier: { ability: "fights-first" } } },
+        { id: "take-aim", name: "Take Aim!", effect: { type: "invulnerable-save", target: "this-model", modifier: { invuln_sv: 4 } } },
+      ],
+    });
+    expect(rendered(base(), [
+      leaf("EFFECT", "issue-orders-open", {}, 1, "A"),
+      leaf("EVENT", "named-option", { label: "First Rank, Fire!", option_id: "first-rank-fire" }, 1, "B"),
+      leaf("EFFECT", "fights-first", { subject: "this-model" }, 1, "B"),
+      leaf("EVENT", "named-option", { label: "Take Aim!", option_id: "take-aim" }, 1, "C"),
+      leaf("EFFECT", "invulnerable-save", { subject: "this-model", threshold: 4 }, 1, "C"),
+    ]).length).toBeGreaterThan(0);
+  });
+
+  // Voice of Command's shape: who issues Orders before the opener, when they are issued and how long one lasts
+  // between it and the first Order, the rules of Orders after that, and a capped Save inside one Order.
+  const ordersRecord = () => [
+    leaf("RESTRICTION", "order-rule", { rule: "issuer", keywords: ["OFFICER"] }, 1, "A0"),
+    leaf("EFFECT", "issue-orders-open", { range: 6 }, 1, "A"),
+    leaf("CONDITION", "phase-window", { phase: "command", turn: "your" }, 2, "T"),
+    leaf("EVENT", "event", { kind: "phase-end", phase: "any", turn: "either" }, 34, "T"),
+    leaf("CONDITION", "unit-activity", { activities: ["disembarked-this-phase", "set-up-this-phase"], subject: "this-unit", negated: false }, 23, "T"),
+    leaf("DURATION", "duration", { endpoint: "start-of-next-command-phase" }, 5, "D"),
+    leaf("EFFECT", "apply-mark", { subject: "selected-unit", tag: "affected-by-order" }, 5, "D"),
+    leaf("RESTRICTION", "order-rule", { rule: "one-at-a-time" }, 1, "R1"),
+    leaf("RESTRICTION", "order-rule", { rule: "ineligible-state", state: "battle-shocked" }, 1, "R2"),
+    leaf("RESTRICTION", "order-rule", { rule: "ends-on-state", state: "battle-shocked" }, 1, "R3"),
+    leaf("RESTRICTION", "order-rule", { rule: "benefit", keywords: ["ASTRA MILITARUM"] }, 1, "R4"),
+    leaf("EVENT", "named-option", { label: "Take Aim!", option_id: "take-aim" }, 3, "B"),
+    leaf("EFFECT", "characteristic-modifier", { subject: "this-unit", characteristics: ["BS"], operation: "improve", value: 1, weapon_type: "ranged" }, 19, "B"),
+    leaf("EVENT", "named-option", { label: "Take Cover!", option_id: "take-cover" }, 3, "C"),
+    leaf("EFFECT", "characteristic-modifier", { subject: "this-unit", characteristics: ["Sv"], operation: "improve", value: 1, weapon_type: "all" }, 19, "C"),
+    leaf("CONDITION", "characteristic-floor", { characteristics: ["Sv"], minimum: 3 }, 2, "C"),
+  ];
+
+  it("compiles the rules of Orders, their timing and a capped Save onto issue-orders", () => {
+    expect(compiled(ordersRecord()).mechanics.effect).toEqual({
+      type: "ability-part",
+      trigger: [
+        { event: "phase-started", condition: { operator: "and", operands: [{ type: "phase-is", parameters: { phase: "command" } }, { type: "player-turn-is", parameters: { turn: "your-turn" } }] } },
+        { event: "phase-ended", condition: { operator: "or", operands: [{ type: "happened", parameters: { event: "disembarked", window: "phase" } }, { type: "happened", parameters: { event: "set-up", window: "phase" } }] } },
+      ],
+      duration: "until-next-command-phase",
+      effect: {
+        type: "issue-orders",
+        options: [
+          { id: "take-aim", name: "Take Aim!", effect: { type: "stat-modifier", target: "this-unit", modifier: { stat: "BS", operation: "improve", value: 1, weapons: { type: "ranged" } } } },
+          { id: "take-cover", name: "Take Cover!", effect: { type: "stat-modifier", target: "this-unit", modifier: { stat: "Sv", operation: "improve", value: 1, minimum: 3 } } },
+        ],
+        range: { inches: 6 },
+        issuer: { all_of: ["OFFICER"] },
+        one_at_a_time: true,
+        ineligible_states: ["battle-shocked"],
+        ends_on: ["battle-shocked"],
+        benefit: { all_of: ["ASTRA MILITARUM"] },
+      },
+    });
+    const text = rendered(authored("astra-militarum", "voice-of-command-astra-militarum"), ordersRecord());
+    expect(text).toContain("OFFICER models can issue up to one or more Orders to eligible friendly units within 6\" that are not Battle-shocked, each one of:");
+    expect(text).toContain("improve the unit's Save characteristic by 1 (to no better than 3+)");
+    expect(text).toContain("A unit holds at most one Order; a newer Order replaces it.");
+    expect(text).toContain("An Order ends when its unit becomes Battle-shocked.");
+    expect(text).toContain("Only ASTRA MILITARUM models in that unit benefit from its Order.");
+  });
+
+  it("refuses an order-rule with no issue-orders, and two issuers that disagree", () => {
+    const orphan = compileLeaves([
+      leaf("RESTRICTION", "order-rule", { rule: "one-at-a-time" }, 1, "A"),
+      leaf("EFFECT", "fights-first", { subject: "this-model" }, 1, "B"),
+    ]);
+    expect(orphan.ok ? [] : orphan.errors).toEqual([expect.stringContaining("exactly one issue-orders-open")]);
+    const clash = compileLeaves([...ordersRecord(), leaf("RESTRICTION", "order-rule", { rule: "issuer", keywords: ["SERGEANT"] }, 1, "Z")]);
+    expect(clash.ok ? [] : clash.errors).toEqual([expect.stringContaining("different issuer keywords")]);
+  });
+
+  it("caps an improvement only under characteristic-floor@2, and only on a roll-target characteristic", () => {
+    const leaves = ordersRecord();
+    leaves[15] = { ...leaves[15]!, family_version: 1 };
+    expect(compileLeaves(leaves).ok).toBe(false);
+    const toughness = ordersRecord();
+    toughness[14] = { ...toughness[14]!, parameters: { ...toughness[14]!.parameters, characteristics: ["T"] } };
+    toughness[15] = { ...toughness[15]!, parameters: { characteristics: ["T"], minimum: 3 } };
+    expect(compileLeaves(toughness).ok).toBe(false);
+  });
+
+  it("compiles dice-pool-allocation-open into options gated by a dice requirement", () => {
+    expect(compiled([
+      leaf("EFFECT", "dice-pool-allocation-open", { pool_count: 6, pool_die: "D6", max_activations: 1 }, 1, "A"),
+      leaf("EVENT", "named-option", { label: "Path of Slaughter", option_id: "path-of-slaughter", requirement_type: "pair", requirement_min_value: 3 }, 1, "B"),
+      leaf("EFFECT", "fights-first", { subject: "this-model" }, 1, "B"),
+      leaf("EVENT", "named-option", { label: "Path of Rage", option_id: "path-of-rage", requirement_type: "triple", requirement_min_value: 4 }, 1, "C"),
+      leaf("EFFECT", "invulnerable-save", { subject: "this-model", threshold: 4 }, 1, "C"),
+    ]).mechanics.effect).toEqual({
+      type: "dice-pool-allocation", pool: { count: 6, die: "D6" }, max_activations: 1,
+      options: [
+        { id: "path-of-slaughter", name: "Path of Slaughter", requirement: { type: "pair", min_value: 3 }, effect: { type: "ability-grant", target: "this-model", modifier: { ability: "fights-first" } } },
+        { id: "path-of-rage", name: "Path of Rage", requirement: { type: "triple", min_value: 4 }, effect: { type: "invulnerable-save", target: "this-model", modifier: { invuln_sv: 4 } } },
+      ],
+    });
+    expect(rendered(base(), [
+      leaf("EFFECT", "dice-pool-allocation-open", { pool_count: 6, pool_die: "D6", max_activations: 1 }, 1, "A"),
+      leaf("EVENT", "named-option", { label: "Path of Slaughter", option_id: "path-of-slaughter", requirement_type: "pair", requirement_min_value: 3 }, 1, "B"),
+      leaf("EFFECT", "fights-first", { subject: "this-model" }, 1, "B"),
+      leaf("EVENT", "named-option", { label: "Path of Rage", option_id: "path-of-rage", requirement_type: "triple", requirement_min_value: 4 }, 1, "C"),
+      leaf("EFFECT", "invulnerable-save", { subject: "this-model", threshold: 4 }, 1, "C"),
+    ]).length).toBeGreaterThan(0);
+  });
+
+  it("refuses a dice-pool-allocation option whose named-option leaf carries no requirement", () => {
+    const result = compileLeaves([
+      leaf("EFFECT", "dice-pool-allocation-open", { pool_count: 6, pool_die: "D6", max_activations: 1 }, 1, "A"),
+      leaf("EVENT", "named-option", { label: "Path of Slaughter", option_id: "path-of-slaughter" }, 1, "B"),
+      leaf("EFFECT", "fights-first", { subject: "this-model" }, 1, "B"),
+      leaf("EVENT", "named-option", { label: "Path of Rage", option_id: "path-of-rage", requirement_type: "triple", requirement_min_value: 4 }, 1, "C"),
+      leaf("EFFECT", "invulnerable-save", { subject: "this-model", threshold: 4 }, 1, "C"),
+    ]);
+    expect(result.ok).toBe(false);
+  });
+
+  it("composes with an earlier select-unit, wrapping the choice in select-units (Master of Deceit's shape)", () => {
+    expect(compiled([
+      leaf("EVENT", "select-unit", { scope: "friendly", distance: "any", visible: false }, 1, "A"),
+      leaf("EFFECT", "choice-open", {}, 1, "A"),
+      leaf("EFFECT", "set-up", { subject: "selected-unit", to: "battlefield", from: "battlefield" }, 1, "B"),
+      leaf("EFFECT", "set-up", { subject: "selected-unit", to: "strategic-reserves", from: "battlefield" }, 1, "C"),
+    ]).mechanics.effect).toEqual({
+      type: "select-units",
+      selector: { filter: { owner: "friendly" }, count: { min: 1, max: 1 } },
+      effect: {
+        type: "choice",
+        options: [
+          { type: "set-up", target: "selected-unit", modifier: { to: "battlefield", from: "battlefield" } },
+          { type: "set-up", target: "selected-unit", modifier: { to: "strategic-reserves", from: "battlefield" } },
+        ],
+      },
+    });
+  });
+
+  it("composes with an earlier roll, the result band gating the whole choice (Channelled Force's shape)", () => {
+    expect(compiled([
+      leaf("EVENT", "dice-roll", { dice: "D6" }, 2, "A"),
+      leaf("CONDITION", "roll-result", { from: 4, to: 6 }, 1, "A"),
+      leaf("EFFECT", "choice-open", {}, 1, "A"),
+      leaf("EFFECT", "fights-first", { subject: "this-model" }, 1, "B"),
+      leaf("EFFECT", "invulnerable-save", { subject: "this-model", threshold: 4 }, 1, "C"),
+    ]).mechanics.effect).toEqual({
+      type: "dice-gated", dice: "D6", threshold: 4, comparison: "gte", on_fail: null,
+      on_success: {
+        type: "choice",
+        options: [
+          { type: "ability-grant", target: "this-model", modifier: { ability: "fights-first" } },
+          { type: "invulnerable-save", target: "this-model", modifier: { invuln_sv: 4 } },
+        ],
+      },
+    });
+  });
+});
+
+describe("Semantic authoring dice-roll@2 roll_var binding", () => {
+  const base = () => authored("adeptus-mechanicus", "control-edict-adeptus-mechanicus");
+
+  it("binds a single result band's dice-gated to the roll instead of rolling fresh dice", () => {
+    expect(compiled([
+      leaf("EVENT", "dice-roll", { dice: "D6", roll_var: "blast_roll" }, 2),
+      leaf("CONDITION", "roll-result", { from: 4, to: 6 }),
+      leaf("EFFECT", "mortal-wounds", { recipient: "this-unit", count: "1" }),
+    ]).mechanics.effect).toEqual({
+      type: "roll", dice: "D6", roll_var: "blast_roll",
+      effect: {
+        type: "dice-gated", from: { roll_var: "blast_roll" }, threshold: 4, comparison: "gte",
+        on_success: { type: "mortal-wounds", target: "this-unit", modifier: { count: 1 } }, on_fail: null,
+      },
+    });
+    expect(rendered(base(), [
+      leaf("EVENT", "dice-roll", { dice: "D6", roll_var: "blast_roll" }, 2),
+      leaf("CONDITION", "roll-result", { from: 4, to: 6 }),
+      leaf("EFFECT", "mortal-wounds", { recipient: "this-unit", count: "1" }),
+    ]).length).toBeGreaterThan(0);
+  });
+
+  it("still compiles a plain roll with no roll_var to a bare dice-gated, as dice-roll@1 always did", () => {
+    expect(compiled([
+      leaf("EVENT", "dice-roll", { dice: "D6" }, 2),
+      leaf("CONDITION", "roll-result", { from: 4, to: 6 }),
+      leaf("EFFECT", "mortal-wounds", { recipient: "this-unit", count: "1" }),
+    ]).mechanics.effect).toEqual({
+      type: "dice-gated", dice: "D6", threshold: 4, comparison: "gte",
+      on_success: { type: "mortal-wounds", target: "this-unit", modifier: { count: 1 } }, on_fail: null,
+    });
+  });
+
+  it("folds several dice with a per-die success band into mortal wounds per success, counts them for a healing amount, and refuses an effect with no quantity", () => {
+    const roll = () => leaf("EVENT", "dice-roll", { dice: "D6", count: 6 }, 4);
+    const band = () => leaf("CONDITION", "roll-result", { from: 5, to: 6 });
+    expect(compiled([roll(), band(), leaf("EFFECT", "mortal-wounds", { recipient: "this-unit", count: "1" })]).mechanics.effect)
+      .toEqual({ type: "mortal-wounds", target: "this-unit", modifier: { count: 1, per: "success", roll: { dice: 6, threshold: 5 } } });
+    // A heal of 1 per success is a heal of as many wounds as there are successes.
+    expect(compiled([roll(), band(), leaf("EFFECT", "regain-wounds", { subject: "this-model", amount: "1" }, 3)]).mechanics.effect)
+      .toEqual({ type: "roll", dice: "6D6", roll_var: "result", effect: { type: "heal", target: "this-model", modifier: { amount: { roll_var: "result", successes_on: 5 } } } });
+    // A Command point gain takes no quantity, so a count of successes has no DSL shape there: an error, not a guess.
+    expect(compileLeaves([roll(), band(), leaf("EFFECT", "resource-gain", { pool: "command-point", amount: 1 }, 4)]).ok).toBe(false);
+    expect(() => normalizeFingerprintParameters("dice-roll", { dice: "D6", count: 1 }, 4)).toThrow(/count/u);
+  });
+
+  it("normalizes an order-rule to exactly the fields its rule takes", () => {
+    expect(normalizeFingerprintParameters("order-rule", { rule: "issuer", keywords: [" OFFICER", "OFFICER"] }, 1)).toEqual({ rule: "issuer", keywords: ["OFFICER"] });
+    expect(normalizeFingerprintParameters("order-rule", { rule: "ends-on-state", state: "battle-shocked" }, 1)).toEqual({ rule: "ends-on-state", state: "battle-shocked" });
+    expect(normalizeFingerprintParameters("order-rule", { rule: "one-at-a-time" }, 1)).toEqual({ rule: "one-at-a-time" });
+    expect(() => normalizeFingerprintParameters("order-rule", { rule: "benefit", keywords: [] }, 1)).toThrow(/keywords/u);
+    expect(() => normalizeFingerprintParameters("order-rule", { rule: "one-at-a-time", state: "battle-shocked" }, 1)).toThrow();
+    expect(() => normalizeFingerprintParameters("order-rule", { rule: "ineligible-state", state: "engaged" }, 1)).toThrow(/state/u);
+  });
+
+  it("accepts a dice expression outside the sampled enum unchanged", () => {
+    expect(() => normalizeFingerprintParameters("dice-roll", { dice: "D6", roll_var: "x" }, 2)).not.toThrow();
+    expect(() => normalizeFingerprintParameters("dice-roll", { dice: "D6", roll_var: "" }, 2)).toThrow(/roll_var/u);
+  });
+});
+
+describe("Semantic authoring stance-selection-capacity", () => {
+  it("compiles the pooled and fixed-option allocation shapes", () => {
+    expect(compiled([leaf("EFFECT", "stance-selection-capacity", { stance_id: "gladius-combat-doctrines", additional_selections: 1, allocation: "choose-one-option" })]).mechanics.effect)
+      .toEqual({ type: "stance-selection-capacity", modifier: { ability_id: "gladius-combat-doctrines", additional_selections: 1, allocation: "choose-one-option" } });
+    expect(() => normalizeFingerprintParameters("stance-selection-capacity", { stance_id: "gladius-combat-doctrines", additional_selections: 1, allocation: "fixed-option" }))
+      .toThrow(/option_id is required/u);
+    expect(() => normalizeFingerprintParameters("stance-selection-capacity", { stance_id: "gladius-combat-doctrines", additional_selections: 1, allocation: "fixed-option", option_id: "conqueror-doctrine" }))
+      .not.toThrow();
+  });
+});
+
+describe("Semantic authoring container-family previews and prefill", () => {
+  const family = (id: string) => REVIEWED_FAMILY_REGISTRY.find((item) => item.id === id && item.version === currentFamilyVersion(id)) as unknown as PrefillFamily;
+  const prefill = (id: string, text: string) => prefillFromSource(family(id), text);
+
+  it("renders each wrapping leaf as implicit text, since it belongs to the effects it wraps", () => {
+    expect(previewLeaf({ family_id: "aura-range", parameters: { side: "enemy", inches: 6 } }).text).toMatch(/No separate text/u);
+    expect(previewLeaf({ family_id: "leader-target", parameters: {} }).text).toMatch(/No separate text/u);
+    expect(previewLeaf({ family_id: "for-each-unit-select", parameters: { scope: "enemy", distance: "any" } }).text).toMatch(/No separate text/u);
+    expect(previewLeaf({ family_id: "rules-bundle-marker", parameters: {} }).text).toMatch(/rules bundle/u);
+    expect(previewLeaf({ family_id: "choice-open", parameters: {} }).text).toMatch(/No separate text/u);
+    expect(previewLeaf({ family_id: "named-option", parameters: { label: "Take Aim!" } }).text).toMatch(/No separate text/u);
+  });
+
+  it("reads aura-range's side and inches outright from prose", () => {
+    expect(prefill("aura-range", "enemy units within 6\" of this model suffer mortal wounds")).toEqual({ side: "enemy", inches: 6 });
+    expect(prefill("aura-range", "friendly PSYKER units within this model's aura")).toEqual({ side: "friendly" });
+  });
+
+  it("reads for-each-unit-select's scope and distance outright from prose", () => {
+    expect(prefill("for-each-unit-select", "for each enemy unit within 9\" of this model")).toEqual({ scope: "enemy", distance: "within", inches: 9 });
+    expect(prefill("for-each-unit-select", "for each friendly unit")).toEqual({ scope: "friendly", distance: "any" });
+  });
+
+  it("reads issue-orders-open's count and range outright from prose", () => {
+    expect(prefill("issue-orders-open", "this model can issue one order to a unit within 6\"")).toEqual({ count: 1, range: 6 });
+  });
+
+  it("reads dice-pool-allocation-open's pool outright from prose", () => {
+    expect(prefill("dice-pool-allocation-open", "roll 6D6 to form your dice pool")).toEqual({ pool_count: 6, pool_die: "D6" });
+  });
+
+  it("reads named-option's label from a leading capitalised phrase ended by a colon or dash", () => {
+    expect(prefill("named-option", "Conqueror Doctrine: melee weapons gain Sustained Hits 1")).toEqual({ label: "Conqueror Doctrine" });
+    expect(prefill("named-option", "this unit re-rolls Hit rolls of 1")).toEqual({});
+  });
+
+  it("makes no prefill claim about container parameters it cannot read from prose (falls back to the empty starter)", () => {
+    expect(prefill("leader-target", "while this model is leading a unit, the attached Character has Fights First")).toEqual({});
+    expect(prefill("rules-bundle-marker", "this bundle of rules is granted by Sacred Rites")).toEqual({});
+  });
+});

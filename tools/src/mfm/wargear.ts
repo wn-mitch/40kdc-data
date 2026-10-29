@@ -50,6 +50,7 @@ import { REPO_ROOT, readJsonArray, CORE_DIR } from "./repo-files.js";
 import { type GoldenMode, modeOfPublication, mergeMode } from "./game-mode.js";
 import { repoDirForFactionName, repoDirs, FACTION_ALIASES, SHARED_ROSTERS } from "./faction-map.js";
 import type { StagedWrite } from "./apply.js";
+import { currentGameVersion } from "./dataslate.js";
 import {
   mintWargear,
   mintWeapon,
@@ -58,8 +59,6 @@ import {
 
 
 const UNMATCHED_DIR = path.join(REPO_ROOT, "_private", "mfm");
-/** The game_version stamp every dump-sourced ingest writes (authoritative, launch dataslate). */
-export const CONFIRMED = { edition: "11th", dataslate: "launch" };
 
 interface ModelConstraint {
   model_name?: string;
@@ -73,9 +72,21 @@ interface DerivedOption {
   replacement_choice?: string[][];
   model_constraint: ModelConstraint | null;
 }
+/** One same-named composition row of a miniature whose default loadout differs by model. */
+export interface SplitDefault {
+  /** Per-model default weapon/wargear ids. */
+  ids: string[];
+  /** Models of the miniature that carry them. */
+  count: number;
+}
+
 export interface DerivedWargear {
   /** model-type display name → ordered default weapon/wargear ids (repeated by count). */
   defaultsByModel: Map<string, string[]>;
+  /** model-type display name → its default loadouts, one same-named row each. */
+  defaultsSplitByModel: Map<string, SplitDefault[]>;
+  /** A name several miniatures share with different loadouts → each miniature's loadout. */
+  defaultsBySharedName: Map<string, string[][]>;
   options: DerivedOption[];
   unresolved: { name: string; context: string }[];
   notes: string[];
@@ -120,7 +131,11 @@ interface CompModel {
   min: number;
   max: number;
   default_weapon_ids?: string[];
+  /** Whole-loadout variants (from BSData, not the dump); renames carry into them. */
+  loadout_variants?: Array<{ name: string; weapon_ids: string[]; [k: string]: unknown }>;
   is_leader_model?: boolean;
+  /** The dump's miniature.excludedFromEnhancements for this model row. */
+  excluded_from_enhancements?: boolean;
   [k: string]: unknown;
 }
 interface CompRecord {
@@ -168,6 +183,17 @@ export const WEAPON_ALIASES: Record<string, Record<string, string>> = {
     "screamer-killer-talons": "scream-killer-talons",
   },
 };
+
+/**
+ * Reviewed weapon-id pairs one edit apart that name DIFFERENT weapons, so the
+ * fuzzy fallback in {@link makeResolver} must never bridge them. Keyed
+ * `<dump-slug>|<repo-id>`. A Great Unclean One's `bilesword` (S9 AP-2) is not the
+ * Plague Surgeon's `balesword`; bridging them rewrote the Plague Surgeon's weapon
+ * name the first time a Death Guard Great Unclean One was projected.
+ */
+export const NOT_SPELLING_DRIFT: ReadonlySet<string> = new Set([
+  "bilesword|balesword",
+]);
 
 /**
  * Per-unit weapon-name overrides, by `faction → unit_id → dump-name-slug → repo-id`.
@@ -231,6 +257,16 @@ const MANUAL_DEFAULTS: Record<string, Record<string, Record<string, string[]>>> 
     "strike-team": { "Fire Warrior Shas’ui": ["support-turret"] },
   },
 };
+
+/**
+ * A model's {@link MANUAL_DEFAULTS}, each id replaced by the unit's own stat variant
+ * (`${id}-${unitId}`) when the faction vocabulary holds one, as {@link unitScopedResolver}
+ * does for dump names.
+ */
+function manualDefaults(dir: string, unitId: string, rowName: string, validIds: ReadonlySet<string>): string[] {
+  return (MANUAL_DEFAULTS[dir]?.[unitId]?.[rowName] ?? []).map((id) =>
+    validIds.has(`${id}-${unitId}`) ? `${id}-${unitId}` : id);
+}
 
 /** True when `a` and `b` differ by at most one insertion/deletion/substitution. */
 export function withinEditDistance1(a: string, b: string): boolean {
@@ -304,7 +340,9 @@ export function makeResolver(
       return aliased;
     }
     if (id.length < 6) return null;
-    const near = idList.filter((v) => withinEditDistance1(id, v));
+    const near = idList.filter(
+      (v) => withinEditDistance1(id, v) && !NOT_SPELLING_DRIFT.has(`${id}|${v}`),
+    );
     if (near.length === 1) {
       audit.push({ name, from: id, to: near[0] });
       return near[0];
@@ -349,6 +387,7 @@ export function unitScopedResolver(
 export function wargearItemsForDatasheet(
   dump: MfmDump,
   datasheetId: string,
+  { includeLimited = true }: { includeLimited?: boolean } = {},
 ): readonly WargearItemRow[] {
   const wargearItems = dump.byId("wargear_item");
   const options = dump.byId("wargear_option");
@@ -392,6 +431,7 @@ export function wargearItemsForDatasheet(
     }
   }
 
+  if (!includeLimited) return [...found.values()];
   for (const set of dump.groupBy("limited_wargear_choice_set", "datasheetId").get(datasheetId) ?? []) {
     for (const choice of dump
       .groupBy("limited_wargear_choice", "limitedWargearChoiceSetId")
@@ -538,7 +578,13 @@ function deriveDefaults(
   resolve: (name: string) => string | null,
   unresolved: { name: string; context: string }[],
   notes: string[],
-): { byName: Map<string, string[]>; byMiniId: Map<string, string[]> } {
+): {
+  byName: Map<string, string[]>;
+  byMiniId: Map<string, string[]>;
+  bySharedName: Map<string, string[][]>;
+  splitByMiniId: Map<string, SplitDefault[]>;
+  splitByName: Map<string, SplitDefault[]>;
+} {
   const miniById = dump.byId("miniature");
   const miniName = (id: string) => dump.enName(miniById.get(id)) ?? id;
   const wiName = dump.byId("wargear_item");
@@ -559,27 +605,14 @@ function deriveDefaults(
     }
   }
 
-  const byMiniId = new Map<string, string[]>();
-  for (const [miniId, gs] of baseGroupsByMini) {
-    // A miniature split across >1 default group has a non-uniform per-figure loadout
-    // no single row can express (e.g. Aquila Kill Team's Deathwatch Veteran built from
-    // choices, Voidsmen-at-Arms) — fall back to base_miniature_loadout below.
-    if (gs.length > 1) {
-      notes.push(`${miniName(miniId)}: ${gs.length} default loadout groups — base_miniature_loadout fallback`);
-      continue;
-    }
-    const mc = modelCounts.get(miniId) ?? 0;
-    if (!mc) {
-      notes.push(`${miniName(miniId)}: no model_count — base_miniature_loadout fallback`);
-      continue;
-    }
+  // One default group's per-model ids, each option's default divided by the models the
+  // group covers (`divisor`). `null` when a base *weapon* fails to resolve (a partial default
+  // would leave it a false orphan; a non-weapon item failing is harmless and only skipped);
+  // "non-uniform" when an option's share is not a whole number per model.
+  const groupIds = (group: WargearOptionGroupRow, divisor: number, miniId: string): string[] | null | "non-uniform" => {
     const ids: string[] = [];
-    // Don't half-populate a model whose base *weapon* fails to resolve (a partial
-    // default would leave the unresolved weapon a false orphan); a non-weapon item
-    // (medikit, banner) failing is harmless — skip just the item.
     let unresolvedWeapon = false;
-    let nonUniform = false;
-    for (const o of (woByGroup.get(gs[0].id) ?? []).slice().sort((a, b) => a.displayOrder - b.displayOrder)) {
+    for (const o of (woByGroup.get(group.id) ?? []).slice().sort((a, b) => a.displayOrder - b.displayOrder)) {
       if (o.defaultValue <= 0) continue;
       const item = wiName.get(o.wargearItemId);
       const name = dump.enName(item);
@@ -590,22 +623,40 @@ function deriveDefaults(
         if (item?.wargearType === "weapon") unresolvedWeapon = true;
         continue;
       }
-      // A checkbox is per-model (every model of the type carries it); a stepper is a
-      // squad-total count spread across the model_count (Breaka Boy hammer 5/5 = 1;
-      // Megatrakk twin big shoota 2/1 = 2). A fractional stepper share (only some
-      // models carry it by default) can't be a uniform per-model row → fall back.
-      const perModel = o.inputType === "stepper" ? o.defaultValue / mc : o.defaultValue;
-      if (!Number.isInteger(perModel) || perModel < 1) {
-        nonUniform = true;
-        break;
-      }
+      // A checkbox is per-model (every model the group covers carries it); a stepper is a
+      // total spread across the covered models (Breaka Boy hammer 5/5 = 1; Megatrakk twin
+      // big shoota 2/1 = 2).
+      const perModel = o.inputType === "stepper" ? o.defaultValue / divisor : o.defaultValue;
+      if (!Number.isInteger(perModel) || perModel < 1) return "non-uniform";
       for (let i = 0; i < perModel; i++) ids.push(id);
     }
-    if (nonUniform) {
+    return unresolvedWeapon ? null : ids;
+  };
+
+  const byMiniId = new Map<string, string[]>();
+  const multiGroup = new Map<string, WargearOptionGroupRow[]>();
+  for (const [miniId, gs] of baseGroupsByMini) {
+    // A miniature split across >1 default group has a non-uniform per-figure loadout
+    // no single row can express (e.g. Voidsmen-at-Arms: 3 lasguns and 1 rotor cannon) —
+    // fall back to base_miniature_loadout below, else split it into same-named rows.
+    if (gs.length > 1) {
+      notes.push(`${miniName(miniId)}: ${gs.length} default loadout groups — base_miniature_loadout fallback`);
+      multiGroup.set(miniId, gs);
+      continue;
+    }
+    const mc = modelCounts.get(miniId) ?? 0;
+    if (!mc) {
+      notes.push(`${miniName(miniId)}: no model_count — base_miniature_loadout fallback`);
+      continue;
+    }
+    // A fractional stepper share (only some models carry it by default) can't be a
+    // uniform per-model row → fall back.
+    const ids = groupIds(gs[0], mc, miniId);
+    if (ids === "non-uniform") {
       notes.push(`${miniName(miniId)}: non-uniform default count — base_miniature_loadout fallback`);
       continue;
     }
-    if (ids.length && !unresolvedWeapon) byMiniId.set(miniId, ids);
+    if (ids?.length) byMiniId.set(miniId, ids);
   }
 
   // Fallback for every miniature the option-group path did not cleanly populate —
@@ -615,22 +666,82 @@ function deriveDefaults(
     if (!byMiniId.has(miniId)) byMiniId.set(miniId, ids);
   }
 
+  // A multi-group miniature with no recorded base loadout (Imperial Navy Breachers' Navis
+  // Armsman: 1 heavy shotgun, 1 las-volley, 7 navis shotguns) keeps every group as its own
+  // default: one same-named row per group, sized by the models the group covers. A stepper
+  // group covers its (shared) default count, a checkbox group one model; the groups must
+  // cover the miniature's model count exactly, or the miniature stays unpopulated.
+  const splitByMiniId = new Map<string, SplitDefault[]>();
+  for (const [miniId, gs] of multiGroup) {
+    if (byMiniId.has(miniId)) continue;
+    const mc = modelCounts.get(miniId) ?? 0;
+    const split: SplitDefault[] = [];
+    for (const g of gs) {
+      const opts = (woByGroup.get(g.id) ?? []).filter((o) => o.defaultValue > 0);
+      const steppers = new Set(opts.filter((o) => o.inputType === "stepper").map((o) => o.defaultValue));
+      const covered = steppers.size === 0 ? 1 : steppers.size === 1 && opts.every((o) => o.inputType === "stepper") ? [...steppers][0]! : 0;
+      const ids = covered > 0 ? groupIds(g, covered, miniId) : "non-uniform";
+      if (ids === null || ids === "non-uniform" || ids.length === 0) {
+        split.length = 0;
+        break;
+      }
+      split.push({ ids, count: covered });
+    }
+    const total = split.reduce((sum, row) => sum + row.count, 0);
+    if (!split.length || total !== mc) {
+      notes.push(`${miniName(miniId)}: default loadout groups cover ${total} of ${mc} models — left unpopulated`);
+      continue;
+    }
+    splitByMiniId.set(miniId, split);
+    notes.push(`${miniName(miniId)}: default loadout groups split into same-named rows (${split.map((row) => row.count).join(" + ")})`);
+  }
+  const splitByName = new Map([...splitByMiniId].map(([miniId, rows]) => [miniName(miniId), rows]));
+
+  // Rows are matched to the repository by model name. Several miniatures can share a name with
+  // different loadouts (a command squad's veterans: one with the standard, one with the vox);
+  // one name cannot carry them all, so such names come back separately in `bySharedName` and
+  // are paired row by row (runWargear).
   const byName = new Map<string, string[]>();
-  for (const [miniId, ids] of byMiniId) byName.set(miniName(miniId), ids);
-  return { byName, byMiniId };
+  const ambiguous = new Set<string>();
+  for (const [miniId, ids] of byMiniId) {
+    const name = miniName(miniId);
+    const seen = byName.get(name);
+    if (seen && (seen.length !== ids.length || seen.some((id, index) => id !== ids[index]))) ambiguous.add(name);
+    byName.set(name, ids);
+  }
+  const bySharedName = new Map<string, string[][]>();
+  for (const name of ambiguous) {
+    byName.delete(name);
+    bySharedName.set(name, [...byMiniId].filter(([miniId]) => miniName(miniId) === name).map(([, ids]) => ids));
+  }
+  return { byName, byMiniId, bySharedName, splitByMiniId, splitByName };
+}
+
+/**
+ * A per-option cap from one mini-scoped single-weapon limited set: either a
+ * "1 per N models" ratio (`perN`) or, for a set whose only `wargear_limit` rows
+ * have `modelCount = 0`, a flat count of models of that miniature (`maxCount`).
+ */
+interface MiniCap {
+  perN: number | null;
+  maxCount: number | null;
+  setId: string;
 }
 
 /**
  * Per-weapon caps from the **mini-scoped single-weapon** limited sets only.
- * The set identity is retained as well as `per_n_models`: two independent
- * "1 per N" rules can be projected into one app choice menu, but remain two
- * independently usable swaps in the game contract.
+ * The set identity is retained as well as the cap: two independent "1 per N"
+ * rules can be projected into one app choice menu, but remain two
+ * independently usable swaps in the game contract. A flat set (Legionaries'
+ * heavy melee weapon, 1 per unit on the ordinary Legionary) caps the models of
+ * its miniature only, so it binds even when another miniature (the champion)
+ * may also take the weapon and the weapon therefore carries no unit budget.
  */
 function miniScopedSingleCaps(
   dump: MfmDump,
   datasheetId: string,
   resolve: (name: string) => string | null,
-): Map<string, { perN: number; setId: string }> {
+): Map<string, MiniCap> {
   const sets =
     dump.groupBy("limited_wargear_choice_set", "datasheetId").get(datasheetId) ?? [];
   const limitsBySet = dump.groupBy("wargear_limit", "limitedWargearChoiceSetId");
@@ -638,7 +749,7 @@ function miniScopedSingleCaps(
   const itemsByChoice = dump.groupBy("limited_wargear_choice_wargear_item", "limitedWargearChoiceId");
   const wiName = dump.byId("wargear_item");
 
-  const out = new Map<string, { perN: number; setId: string }>();
+  const out = new Map<string, MiniCap>();
   for (const s of sets) {
     if (!s.miniatureId) continue; // datasheet-wide → a budget, not a per-option cap
     const itemIds = new Set<string>();
@@ -650,13 +761,31 @@ function miniScopedSingleCaps(
     }
     if (itemIds.size !== 1) continue; // shared (≥2) sets are budgets
     let minRatio: number | null = null;
+    let flat: number | null = null;
     for (const l of limitsBySet.get(s.id) ?? []) {
-      if (l.modelCount > 0 && l.choiceLimit > 0) {
+      if (l.choiceLimit <= 0) continue;
+      if (l.modelCount > 0) {
         const ratio = l.choiceLimit / l.modelCount;
         if (minRatio == null || ratio < minRatio) minRatio = ratio;
+      } else if (flat == null || l.choiceLimit < flat) {
+        flat = l.choiceLimit;
       }
     }
-    if (minRatio == null) continue;
+    const [id] = [...itemIds];
+    const key = `${s.miniatureId}::${id}`;
+    if (minRatio == null) {
+      if (flat == null) continue;
+      const current = out.get(key);
+      // A ratio cap from another set wins; among flat caps the tightest binds.
+      if (
+        !current ||
+        (current.perN == null &&
+          (flat < current.maxCount! || (flat === current.maxCount && s.id.localeCompare(current.setId) < 0)))
+      ) {
+        out.set(key, { perN: null, maxCount: flat, setId: s.id });
+      }
+      continue;
+    }
     // Only an exactly-expressible "1 per N" ratio becomes a per-option cap:
     // `per_n_models` computes floor(models / N), so a k-per-N row with k > 1
     // (e.g. Plague Marines' "2 per 5" → 1/ratio = 2.5) has no faithful N —
@@ -664,15 +793,14 @@ function miniScopedSingleCaps(
     // squads. Those stay loose (any_number); under-enforcing beats false-illegal.
     const perN = 1 / minRatio;
     if (!Number.isInteger(perN)) continue;
-    const [id] = [...itemIds];
-    const key = `${s.miniatureId}::${id}`;
     const current = out.get(key);
     if (
       !current ||
+      current.perN == null ||
       perN < current.perN ||
       (perN === current.perN && s.id.localeCompare(current.setId) < 0)
     ) {
-      out.set(key, { perN, setId: s.id });
+      out.set(key, { perN, maxCount: null, setId: s.id });
     }
   }
   return out;
@@ -758,6 +886,25 @@ export function limitedSetBudgets(
   resolve: (name: string) => string | null,
   unitOptions: readonly WargearOptionRecord[] = [],
 ): WargearBudget[] {
+  return sourcedLimitedSetBudgets(dump, datasheetId, resolve, unitOptions).map((b) => b.budget);
+}
+
+/**
+ * A {@link limitedSetBudgets} budget paired with its source set's miniature
+ * (`null` for a datasheet-wide set). The persisted budget is unit-wide, but a
+ * consumer applying it as a per-option cap must scope it to that miniature.
+ */
+interface SourcedBudget {
+  budget: WargearBudget;
+  miniatureId: string | null;
+}
+
+function sourcedLimitedSetBudgets(
+  dump: MfmDump,
+  datasheetId: string,
+  resolve: (name: string) => string | null,
+  unitOptions: readonly WargearOptionRecord[],
+): SourcedBudget[] {
   const sets =
     dump.groupBy("limited_wargear_choice_set", "datasheetId").get(datasheetId) ?? [];
   if (sets.length === 0) return [];
@@ -783,9 +930,11 @@ export function limitedSetBudgets(
   // does); it then simply contributes no default exclusions.
   const defaultIds = new Set<string>();
   try {
-    for (const ids of deriveDefaults(dump, datasheetId, resolve, [], []).byMiniId.values()) {
+    const defaults = deriveDefaults(dump, datasheetId, resolve, [], []);
+    for (const ids of defaults.byMiniId.values()) {
       for (const id of ids) defaultIds.add(id);
     }
+    for (const rows of defaults.splitByMiniId.values()) for (const row of rows) for (const id of row.ids) defaultIds.add(id);
   } catch {
     /* fixture without default-loadout tables */
   }
@@ -853,9 +1002,11 @@ export function limitedSetBudgets(
     return n;
   };
 
-  const out: WargearBudget[] = [];
+  const out: SourcedBudget[] = [];
   for (const s of [...sets].sort((a, b) => a.id.localeCompare(b.id))) {
     const setMini = s.miniatureId ? miniNameOf(s.miniatureId) : null;
+    const emit = (budget: WargearBudget) =>
+      out.push({ budget, miniatureId: s.miniatureId ?? null });
 
     // Uncapped-branch leakage: a branch that grants some of this set's items
     // WITHOUT realizing one of the set's choices is an ungoverned path (the
@@ -933,8 +1084,14 @@ export function limitedSetBudgets(
     const sorted = [...items].sort();
     const splitAllowance =
       items.size === 1 && s.miniatureId != null && grantingRecords(sorted[0]) >= 2;
+    // A k-per-N ratio with no exact `per_n_models` form (Deathwatch storm
+    // shields: 2 per 5) never reaches a per-option cap (see
+    // miniScopedSingleCaps), so its swap stays any_number and only a budget
+    // can carry the allowance.
+    const inexpressibleRatio =
+      ratioCount != null && ratioPer != null && !Number.isInteger(ratioPer / ratioCount);
     if (ratioCount != null && ratioPer != null) {
-      if (items.size >= 2 || s.miniatureId == null || splitAllowance) {
+      if (items.size >= 2 || s.miniatureId == null || splitAllowance || inexpressibleRatio) {
         // Shared ratio allowances (≥2 items) AND datasheet-wide single-weapon ratio
         // sets become summed budgets: the dump scopes these to the whole unit, so the
         // squad-wide sum is the correct cap. A flat baseline that is looser than the
@@ -945,20 +1102,20 @@ export function limitedSetBudgets(
           defaultModelCount > 0 &&
           flat / defaultModelCount > ratioCount / ratioPer;
         if (hasOffsetBaseline) {
-          out.push({
+          emit({
             items: sorted,
             count: flat! * maxTake,
             per_models: defaultModelCount,
             ...(flatDup != null ? { duplicate_limit: flatDup } : {}),
           });
-          out.push({
+          emit({
             items: sorted,
             count: maximumCount * maxTake,
             per_models: 0,
             ...(maximumDup != null ? { duplicate_limit: maximumDup } : {}),
           });
         } else {
-          out.push({
+          emit({
             items: sorted,
             count: ratioCount * maxTake,
             per_models: ratioPer,
@@ -968,7 +1125,7 @@ export function limitedSetBudgets(
       }
     } else if (flat != null) {
       // Flat per-unit cap (shared or single) — the per-weapon bound can't express it.
-      out.push({
+      emit({
         items: sorted,
         count: flat * maxTake,
         per_models: 0,
@@ -1088,6 +1245,60 @@ function factorCrossProduct(
 }
 
 /**
+ * Guard a single-pick menu's removed-key grouping against stacking. The groups
+ * become independent options, and a model may take one option per disjoint
+ * slot, so two groups whose `removed` sets do not overlap combine on one model.
+ * The menu is one pick, so a combination is legal only when the dump enumerates
+ * it as its own branch (Legionaries' Aspiring Champion lists 19 pairs for its
+ * boltgun and bolt pistol but never two plasma pistols). When some combination
+ * of mutually disjoint groups is not a branch, every branch becomes one choice
+ * of a single option that replaces the union of the removed items; a branch
+ * that keeps one of those items re-adds it. Returns `groups` unchanged when
+ * every stack is enumerated.
+ */
+function guardUnsanctionedStacking(
+  groups: Map<string, { removed: string[]; added: string[][] }>,
+  branches: string[][],
+  baseSet: string[],
+): Map<string, { removed: string[]; added: string[][] }> {
+  const list = [...groups.values()].filter((g) => g.added.length > 0);
+  if (list.length < 2) return groups;
+  const key = (ids: string[]) => [...ids].sort().join("|");
+  const branchKeys = new Set(branches.map(key));
+  const disjoint = (a: string[], b: string[]) => a.every((id) => !b.includes(id));
+  // Every combination of ≥2 mutually disjoint groups, one added bundle each.
+  let unsanctioned = false;
+  const visit = (start: number, removed: string[], added: string[], depth: number): void => {
+    if (unsanctioned) return;
+    if (depth >= 2 && !branchKeys.has(key([...multisetDiff(baseSet, removed), ...added]))) {
+      unsanctioned = true;
+      return;
+    }
+    for (let i = start; i < list.length && !unsanctioned; i++) {
+      if (!disjoint(list[i].removed, removed)) continue;
+      for (const bundle of list[i].added) visit(i + 1, [...removed, ...list[i].removed], [...added, ...bundle], depth + 1);
+    }
+  };
+  visit(0, [], [], 0);
+  if (!unsanctioned) return groups;
+
+  const removed: string[] = [];
+  for (const g of list) for (const id of multisetDiff(g.removed, removed)) removed.push(id);
+  const kept = multisetDiff(baseSet, removed);
+  const added: string[][] = [];
+  const seen = new Set<string>();
+  for (const b of branches) {
+    const bundle = multisetDiff(b, kept);
+    if (bundle.length === 0 || sameMultiset(bundle, removed)) continue;
+    const k = key(bundle);
+    if (seen.has(k)) continue;
+    seen.add(k);
+    added.push(bundle);
+  }
+  return new Map([[key(removed), { removed, added }]]);
+}
+
+/**
  * Derive defaults + wargear-options for one datasheet. Pure over the dump + a
  * faction-scoped name resolver; the caller persists.
  */
@@ -1098,13 +1309,13 @@ export function deriveWargear(
 ): DerivedWargear {
   const unresolved: { name: string; context: string }[] = [];
   const notes: string[] = [];
-  const { byName: defaultsByModel, byMiniId: baseByMiniId } = deriveDefaults(
-    dump,
-    datasheetId,
-    resolve,
-    unresolved,
-    notes,
-  );
+  const {
+    byName: defaultsByModel,
+    byMiniId: baseByMiniId,
+    bySharedName: defaultsBySharedName,
+    splitByMiniId,
+    splitByName: defaultsSplitByModel,
+  } = deriveDefaults(dump, datasheetId, resolve, unresolved, notes);
 
   const miniName = (id: string) => dump.enName(dump.byId("miniature").get(id)) ?? id;
   const wiName = dump.byId("wargear_item");
@@ -1113,10 +1324,12 @@ export function deriveWargear(
   const sets = dump.groupBy("loadout_choice_set", "datasheetId")
     .get(datasheetId);
 
-  // Multi-model = the datasheet has >1 miniature type (drives whether an option is
-  // scoped with model_constraint.model_name). Read it from the dump composition, not
-  // defaultsByModel.size — a miniature the heterogeneity guard skipped still counts.
-  const multiModel = dumpComposition(dump, datasheetId).length > 1;
+  // Multi-model = the datasheet fields >1 miniature type in any buildable size (drives
+  // whether an option is scoped with model_constraint.model_name). Read it from every dump
+  // composition tier, not the default alone (Broadsides' default size is one Shas'vre, yet
+  // each miniature carries its own drone menu), nor defaultsByModel.size — a miniature the
+  // heterogeneity guard skipped still counts.
+  const multiModel = aggregateComposition(dump, datasheetId).envelope.size > 1;
   const miniCaps = miniScopedSingleCaps(dump, datasheetId, resolve);
 
   // Flat limited-set allowances: when a swap's granted weapons are all covered
@@ -1124,20 +1337,36 @@ export function deriveWargear(
   // Battle Sisters' TWO "1 model's boltgun can be replaced" rules collapse into
   // one dump menu — the flat budget carries the real total of 2, and a checkbox
   // cap of 1 would over-tighten the replaced weapon's floor).
-  const flatBudgetCap = new Map<string, { key: string; count: number }>();
-  limitedSetBudgets(dump, datasheetId, resolve).forEach((b, i) => {
+  // A miniature-scoped flat set (a trooper-only heavy weapon) binds only that
+  // miniature's swaps — another miniature's swap of the same weapon is outside
+  // the allowance — so each cap carries its source set's miniature.
+  const flatBudgetCap = new Map<string, { key: string; count: number; miniatureId: string | null }>();
+  sourcedLimitedSetBudgets(dump, datasheetId, resolve, []).forEach(({ budget: b, miniatureId }, i) => {
     if (b.per_models !== 0) return;
-    for (const id of b.items) flatBudgetCap.set(id, { key: `b${i}`, count: b.count });
+    for (const id of b.items) flatBudgetCap.set(id, { key: `b${i}`, count: b.count, miniatureId });
   });
+  const flatCapFor = (id: string, miniatureId: string | null) => {
+    const cap = flatBudgetCap.get(id);
+    return cap && (cap.miniatureId === null || cap.miniatureId === miniatureId) ? cap : undefined;
+  };
 
   const options: DerivedOption[] = [];
 
-  for (const set of (sets ?? []).slice().sort((a, b) => a.id.localeCompare(b.id))) {
+  // Base = the miniature's recorded base loadout (by id — robust to a dump↔repo model-name
+  // mismatch that would otherwise misidentify the no-swap branch). A miniature split into
+  // same-named rows has one base per row, so its sets are derived once against each.
+  const setPasses = (sets ?? [])
+    .slice()
+    .sort((a, b) => a.id.localeCompare(b.id))
+    .flatMap((set) => {
+      const split = set.miniatureId ? splitByMiniId.get(set.miniatureId) : undefined;
+      if (split) return split.map((row, index) => ({ set, base: row.ids as string[] | null, first: index === 0, split: true }));
+      return [{ set, base: (set.miniatureId && baseByMiniId.get(set.miniatureId)) || null, first: true, split: false }];
+    });
+  const seenOptions = new Set<string>();
+  for (const { set, base, first, split } of setPasses) {
     const mini = set.miniatureId ? miniName(set.miniatureId) : null;
-    // Base = the miniature's recorded base loadout (by id — robust to a dump↔repo
-    // model-name mismatch that would otherwise misidentify the no-swap branch).
-    const base = (set.miniatureId && baseByMiniId.get(set.miniatureId)) || null;
-    if (set.alternate) notes.push(`alternate loadout_choice_set ${set.id.slice(0, 8)} (${mini ?? "all"}) — review`);
+    if (set.alternate && first) notes.push(`alternate loadout_choice_set ${set.id.slice(0, 8)} (${mini ?? "all"}) — review`);
 
     // Resolve each choice branch to an id multiset; drop unresolved-emptied branches.
     const branches: string[][] = [];
@@ -1149,7 +1378,7 @@ export function deriveWargear(
         if (!name) continue;
         const id = resolve(name);
         if (!id) {
-          unresolved.push({ name, context: `loadout choice (${mini ?? "all"})` });
+          if (first) unresolved.push({ name, context: `loadout choice (${mini ?? "all"})` });
           dropped = true;
           continue;
         }
@@ -1212,12 +1441,12 @@ export function deriveWargear(
       setLimit === 1 && !allowDup && set.miniatureId
         ? factorCrossProduct(branches, baseSet)
         : null;
-    if (factored) {
+    if (factored && first) {
       notes.push(
         `cross-product loadout set ${set.id.slice(0, 8)} factored into ${factored.size} independent slot swap${factored.size === 1 ? "" : "s"} (${mini ?? "all"})`,
       );
     }
-    const groups = factored ?? new Map<string, { removed: string[]; added: string[][] }>();
+    let groups = factored ?? new Map<string, { removed: string[]; added: string[][] }>();
     const seenAdded = new Set<string>();
     if (!factored)
       for (const b of branches) {
@@ -1234,6 +1463,13 @@ export function deriveWargear(
         if (added.length > 0) g.added.push(added);
         groups.set(rKey, g);
       }
+    if (!factored && setLimit === 1 && !allowDup && set.miniatureId) {
+      const guarded = guardUnsanctionedStacking(groups, branches, baseSet);
+      if (guarded !== groups && first) {
+        notes.push(`loadout set ${set.id.slice(0, 8)} kept as one menu: its swaps do not stack freely (${mini ?? "all"})`);
+      }
+      groups = guarded;
+    }
 
     for (const { removed, added } of groups.values()) {
       if (added.length === 0) continue;
@@ -1249,6 +1485,12 @@ export function deriveWargear(
         if (removed.length > 0) opt.replaces = removed;
         if (branches_.length === 1) opt.replacement = branches_[0];
         else opt.replacement_choice = branches_;
+        // Split rows can share a swap (a slot every row carries); emit it once.
+        if (split) {
+          const key = JSON.stringify(opt);
+          if (seenOptions.has(key)) return;
+          seenOptions.add(key);
+        }
         options.push(opt);
       };
 
@@ -1292,7 +1534,10 @@ export function deriveWargear(
       //      the tightest ratio on every branch falsely caps the loose ones;
       //   2. flat budgets covering every granted weapon of the partition — the
       //      summed allowance (several GW rules can collapse into one dump
-      //      menu, so the flat budget's total bounds the swaps away).
+      //      menu, so the flat budget's total bounds the swaps away);
+      //   3. the mini-scoped single-weapon flat sets — a per-unit count of
+      //      models of this miniature, which binds where no unit budget exists
+      //      because another miniature may take the same weapon.
       // There is deliberately NO input-type (checkbox) heuristic: the app's
       // checkbox is a per-MODEL-card toggle ("any number of models can each be
       // equipped with 1 bio-plasma" ships as a checkbox), and every true
@@ -1302,9 +1547,9 @@ export function deriveWargear(
       // Branches partition by their source limited-set identity, not merely
       // their ratio. Separate "1 per 5" meltagun and plasma-gun rules may share
       // one app menu, but each grants one independently legal swap.
-      const branchCap = (
-        branch: string[],
-      ): { perN: number; setId: string } | null => {
+      // Ratio caps precede flat caps, so a branch that already carried a
+      // ratio keeps it; a flat cap binds only branches with no ratio.
+      const branchCap = (branch: string[]): MiniCap | null => {
         if (!set.miniatureId) return null;
         return branch
           .flatMap((id) => {
@@ -1313,17 +1558,19 @@ export function deriveWargear(
           })
           .sort(
             (a, b) =>
-              a.perN - b.perN ||
+              (a.perN == null ? 1 : 0) - (b.perN == null ? 1 : 0) ||
+              (a.perN ?? 0) - (b.perN ?? 0) ||
+              (a.maxCount ?? 0) - (b.maxCount ?? 0) ||
               a.setId.localeCompare(b.setId),
           )[0] ?? null;
       };
       const partitions = new Map<
         string,
-        { cap: { perN: number; setId: string } | null; branches: string[][] }
+        { cap: MiniCap | null; branches: string[][] }
       >();
       for (const branch of added) {
         const cap = branchCap(branch);
-        const key = cap ? `${cap.perN}:${cap.setId}` : "uncapped";
+        const key = cap ? `${cap.perN ?? "flat"}:${cap.maxCount ?? ""}:${cap.setId}` : "uncapped";
         const partition = partitions.get(key) ?? { cap, branches: [] };
         partition.branches.push(branch);
         partitions.set(key, partition);
@@ -1334,20 +1581,22 @@ export function deriveWargear(
         const flatCovered =
           removed.length > 0 &&
           grantedIds.length > 0 &&
-          grantedIds.every((id) => flatBudgetCap.has(id));
+          grantedIds.every((id) => flatCapFor(id, set.miniatureId ?? null) !== undefined);
         if (!set.miniatureId) {
           // A unit-scoped menu is selected once for the whole unit. Its
           // loadout_choice_set.limit is therefore a flat unit-wide cap.
           mc.max_count = setLimit;
-        } else if (cap) {
+        } else if (cap?.perN != null) {
           mc.per_n_models = cap.perN;
         } else if (flatCovered) {
           const byBudget = new Map<string, number>();
           for (const id of grantedIds) {
-            const budget = flatBudgetCap.get(id)!;
+            const budget = flatCapFor(id, set.miniatureId ?? null)!;
             byBudget.set(budget.key, budget.count);
           }
           mc.max_count = [...byBudget.values()].reduce((sum, count) => sum + count, 0);
+        } else if (cap?.maxCount != null) {
+          mc.max_count = cap.maxCount;
         } else {
           mc.any_number = true;
         }
@@ -1356,7 +1605,7 @@ export function deriveWargear(
     }
   }
 
-  return { defaultsByModel, options, unresolved, notes };
+  return { defaultsByModel, defaultsSplitByModel, defaultsBySharedName, options, unresolved, notes };
 }
 
 /** One miniature row of the dump's default unit composition. */
@@ -1628,6 +1877,8 @@ export interface DirWargearResult {
   newInDump: string[];
   /** repo unit not present in the dump → keeps its BSData-derived data (fallback). */
   repoOnlyFallback: string[];
+  /** Repo units matched to a dump datasheet; their options are rebuilt from the dump. */
+  matchedUnitIds: string[];
 }
 export interface WargearReport {
   dirs: DirWargearResult[];
@@ -1636,6 +1887,7 @@ export interface WargearReport {
 }
 
 export function runWargear(dump: MfmDump, write: boolean, onlyDir?: string): WargearReport {
+  const confirmed = currentGameVersion(dump);
   const dirs = repoDirs();
   // Bucket datasheets by candidate repo dir.
   const byDir = new Map<string, DatasheetRow[]>();
@@ -1649,6 +1901,14 @@ export function runWargear(dump: MfmDump, write: boolean, onlyDir?: string): War
 
   const results: DirWargearResult[] = [];
   const staged: StagedWrite[] = [];
+  // Equipment already recorded in some faction: a copy minted into another faction must be
+  // byte-identical (integrity.ts replicated-identical), so it reuses the recorded entity.
+  const recordedGear = new Map<string, CoreWargearRecord>();
+  for (const dir of [...dirs].sort()) {
+    for (const record of readJsonArray<CoreWargearRecord>(path.join(CORE_DIR, dir, "wargear.json"))) {
+      if (!recordedGear.has(record.id)) recordedGear.set(record.id, record);
+    }
+  }
   for (const dir of [...dirs].sort()) {
     if (onlyDir && dir !== onlyDir) continue;
     const upath = path.join(CORE_DIR, dir, "units.json");
@@ -1700,6 +1960,7 @@ export function runWargear(dump: MfmDump, write: boolean, onlyDir?: string): War
       notes: [],
       newInDump: [],
       repoOnlyFallback: [],
+      matchedUnitIds: [],
     };
     const matchedRepoIds = new Set<string>();
     const optionsByUnit = new Map<string, WargearOptionRecord[]>();
@@ -1764,7 +2025,8 @@ export function runWargear(dump: MfmDump, write: boolean, onlyDir?: string): War
                 ...profile,
                 name: profile.name === previousName ? itemName : profile.name,
               }));
-              existing.game_version = { ...CONFIRMED };
+              // A spelling sync checks no stats, so the weapon keeps its dataslate; the
+              // `dataslates` pass re-verifies it against the dump item.
               res.weaponNamesChanged++;
               res.notes.push({
                 id,
@@ -1775,7 +2037,7 @@ export function runWargear(dump: MfmDump, write: boolean, onlyDir?: string): War
           if (!existingId) {
             const warnings: string[] = [];
             try {
-              weapons.push(mintWeapon({ dump, gv: { ...CONFIRMED }, warnings }, item, itemId, itemName));
+              weapons.push(mintWeapon({ dump, gv: { ...confirmed }, warnings }, item, itemId, itemName));
               validIds.add(itemId);
               weaponEntityIds.add(itemId);
               weaponsById.set(itemId, weapons[weapons.length - 1]);
@@ -1789,7 +2051,8 @@ export function runWargear(dump: MfmDump, write: boolean, onlyDir?: string): War
         }
 
         if (item.wargearType !== "wargear" || existingId) continue;
-        gear.push(mintWargear({ dump, gv: { ...CONFIRMED }, warnings: [] }, item, itemId, itemName));
+        const recorded = recordedGear.get(itemId);
+        gear.push(recorded ? structuredClone(recorded) : mintWargear({ dump, gv: { ...confirmed }, warnings: [] }, item, itemId, itemName));
         validIds.add(itemId);
         res.wargearAdded++;
       }
@@ -1805,7 +2068,7 @@ export function runWargear(dump: MfmDump, write: boolean, onlyDir?: string): War
           for (const m of comp.models) {
             const ids = derived.defaultsByModel.get(m.name);
             if (!ids?.length) continue;
-            const manual = MANUAL_DEFAULTS[dir]?.[id]?.[m.name] ?? [];
+            const manual = manualDefaults(dir, id, m.name, validIds);
             const expected = [...ids, ...manual.filter((itemId) => !ids.includes(itemId))];
             const cur = Array.isArray(m.default_weapon_ids) ? m.default_weapon_ids : [];
             if (!sameMultiset(cur, expected)) {
@@ -1813,8 +2076,89 @@ export function runWargear(dump: MfmDump, write: boolean, onlyDir?: string): War
               res.defaultChanges.push({ id, model: m.name, from: cur, to: expected });
               m.default_weapon_ids = expected;
               compsChanged = true;
+              // A default that swapped exactly one id for another is the source renaming that
+              // item (astartes-chainsword → chainsword): the model's whole-loadout variants,
+              // which the dump does not carry, follow the rename instead of naming a retired id.
+              const removed = multisetDiff(cur, expected);
+              const added = multisetDiff(expected, cur);
+              if (removed.length === 1 && added.length === 1) {
+                for (const variant of m.loadout_variants ?? []) {
+                  if (!variant.weapon_ids.includes(removed[0]!)) continue;
+                  variant.weapon_ids = variant.weapon_ids.map((itemId) => (itemId === removed[0] ? added[0]! : itemId));
+                  res.notes.push({ id, note: `loadout variant "${variant.name}" follows rename ${removed[0]} → ${added[0]}` });
+                }
+              }
             }
           }
+        }
+      }
+
+      // ── same-named rows (a command squad's veterans): pair each repository row with the dump
+      // miniature whose loadout shares the most items with the row's current defaults ──
+      for (const [name, loadouts] of derived.defaultsBySharedName) {
+        for (const comp of compsByUnit.get(id) ?? []) {
+          const rows = comp.models.filter((m) => m.name === name);
+          if (rows.length !== loadouts.length) {
+            res.notes.push({ id, note: `${name}: ${rows.length} row(s) for ${loadouts.length} distinct dump loadouts — defaults left as they are` });
+            continue;
+          }
+          const overlap = (a: string[], b: string[]) => a.length - multisetDiff(a, b).length;
+          const pairs = rows.flatMap((row, r) => loadouts.map((loadout, l) => ({ r, l, score: overlap(row.default_weapon_ids ?? [], loadout) })))
+            .sort((a, b) => b.score - a.score || a.r - b.r || a.l - b.l);
+          const takenRows = new Set<number>();
+          const takenLoadouts = new Set<number>();
+          for (const pair of pairs) {
+            if (takenRows.has(pair.r) || takenLoadouts.has(pair.l)) continue;
+            takenRows.add(pair.r);
+            takenLoadouts.add(pair.l);
+            const row = rows[pair.r]!;
+            const expected = loadouts[pair.l]!;
+            const cur = Array.isArray(row.default_weapon_ids) ? row.default_weapon_ids : [];
+            if (!sameMultiset(cur, expected)) {
+              res.defaultsChanged++;
+              res.defaultChanges.push({ id, model: row.name, from: cur, to: expected });
+              row.default_weapon_ids = [...expected];
+              compsChanged = true;
+            }
+          }
+        }
+      }
+
+      // ── split rows (a miniature whose default loadout differs by model): one same-named row
+      // per default group, sized by the models it covers. Whole-loadout variants on the old row
+      // described the collapsed row and are dropped with it; tiers merge onto rows by name, so a
+      // tier naming the split miniature cannot describe its rows and is dropped too ──
+      for (const [name, split] of derived.defaultsSplitByModel) {
+        for (const comp of compsByUnit.get(id) ?? []) {
+          const rows = comp.models.filter((m) => m.name === name);
+          if (rows.length !== 1 && rows.length !== split.length) {
+            res.notes.push({ id, note: `${name}: ${rows.length} row(s) for ${split.length} default loadouts — defaults left as they are` });
+            continue;
+          }
+          const template = rows[0]!;
+          const next = split.map((row, index) => {
+            const { loadout_variants: _variants, loadout_variant_budgets: _budgets, default_weapon_ids: _defaults, ...rest } =
+              rows.length === split.length ? rows[index]! : template;
+            return { ...rest, name, min: row.count, max: row.count, default_weapon_ids: [...row.ids] };
+          });
+          const changed = rows.length !== next.length || rows.some((row, index) => JSON.stringify(row) !== JSON.stringify(next[index]));
+          if (!changed) continue;
+          for (let index = 0; index < next.length; index++) {
+            const from = rows.length === next.length ? rows[index]!.default_weapon_ids ?? [] : template.default_weapon_ids ?? [];
+            if (!sameMultiset(from, next[index]!.default_weapon_ids)) {
+              res.defaultsChanged++;
+              res.defaultChanges.push({ id, model: name, from, to: next[index]!.default_weapon_ids });
+            }
+          }
+          const at = comp.models.indexOf(template);
+          comp.models = [...comp.models.slice(0, at), ...next, ...comp.models.slice(at + 1).filter((m) => m.name !== name)];
+          const tiers = comp.tiers as { models?: { name?: string }[] }[] | undefined;
+          if (tiers?.some((tier) => tier.models?.some((m) => m.name === name))) {
+            delete comp.tiers;
+            res.notes.push({ id, note: `${name}: tiers dropped — they name a miniature split into ${next.length} rows` });
+          }
+          res.notes.push({ id, note: `${name}: split into ${next.length} same-named rows (${split.map((row) => row.count).join(" + ")})` });
+          compsChanged = true;
         }
       }
 
@@ -1856,7 +2200,7 @@ export function runWargear(dump: MfmDump, write: boolean, onlyDir?: string): War
           // chaos-terminators) thus gets a WE-scoped option here and an EC-scoped
           // one when the EC dir is processed — never a merged cross-faction set.
           faction_id: dir,
-          game_version: { ...CONFIRMED },
+          game_version: { ...confirmed },
           is_free: true,
         };
         if (o.replaces) rec.replaces = o.replaces;
@@ -1876,10 +2220,10 @@ export function runWargear(dump: MfmDump, write: boolean, onlyDir?: string): War
     // (faction → unit → model → ids). Applied here, after the dump pass, so it lands
     // whether or not the dump matched the datasheet, and APPENDS to the model's
     // current default loadout — never dropping a derived or pre-existing weapon.
-    for (const [unitId, perModel] of Object.entries(MANUAL_DEFAULTS[dir] ?? {})) {
+    for (const unitId of Object.keys(MANUAL_DEFAULTS[dir] ?? {})) {
       for (const comp of compsByUnit.get(unitId) ?? []) {
         for (const m of comp.models) {
-          const add = perModel[m.name];
+          const add = manualDefaults(dir, unitId, m.name, validIds);
           if (!add?.length) continue;
           const cur = Array.isArray(m.default_weapon_ids) ? m.default_weapon_ids : [];
           const merged = [...cur, ...add.filter((x) => !cur.includes(x))];
@@ -1902,6 +2246,10 @@ export function runWargear(dump: MfmDump, write: boolean, onlyDir?: string): War
         for (const model of comp.models) {
           for (const itemId of model.default_weapon_ids ?? []) {
             if (weaponEntityIds.has(itemId)) reachable.add(itemId);
+          }
+          // A whole-loadout variant is a legal build too: its weapons stay declared.
+          for (const variant of model.loadout_variants ?? []) {
+            for (const itemId of variant.weapon_ids) if (weaponEntityIds.has(itemId)) reachable.add(itemId);
           }
         }
       }
@@ -1954,6 +2302,7 @@ export function runWargear(dump: MfmDump, write: boolean, onlyDir?: string): War
       if (!matchedRepoIds.has(u.id)) res.repoOnlyFallback.push(u.id);
     }
     res.repoOnlyFallback.sort();
+    res.matchedUnitIds = [...matchedRepoIds].sort();
     res.newInDump.sort();
     res.unresolvedNames.sort((a, b) => a.id.localeCompare(b.id) || a.name.localeCompare(b.name));
     results.push(res);
@@ -2068,6 +2417,8 @@ export function weaponInventory(dump: MfmDump): Map<string, Map<string, GoldenMo
       m.set(id, mergeMode(m.get(id), mode));
     };
     for (const ids of dw.defaultsByModel.values()) for (const id of ids) add(id);
+    for (const loadouts of dw.defaultsBySharedName.values()) for (const ids of loadouts) for (const id of ids) add(id);
+    for (const rows of dw.defaultsSplitByModel.values()) for (const row of rows) for (const id of row.ids) add(id);
     for (const o of dw.options) {
       for (const id of o.replaces ?? []) add(id);
       for (const id of o.replacement ?? []) add(id);
@@ -2304,10 +2655,7 @@ export function runWargearCosts(dump: MfmDump, onlyDir?: string): WargearCostsRe
       matchedRepoIds.add(id);
       matched++;
 
-      const unitAliases = WEAPON_ALIASES_BY_UNIT[dir]?.[id];
-      const unitResolve = unitAliases
-        ? makeResolver(validIds, autoResolved, WEAPON_ALIASES[dir] ?? {}, unitAliases)
-        : resolve;
+      const unitResolve = unitScopedResolver(validIds, autoResolved, dir, id, resolve);
       const costs = pricedWargearItems(dump, ds.id!, unitResolve);
 
       const before = JSON.stringify(rec.wargear_costs ?? null);
@@ -2341,10 +2689,42 @@ export function runWargearCosts(dump: MfmDump, onlyDir?: string): WargearCostsRe
 }
 
 export interface CompNamesReport {
-  dirs: { dir: string; matched: number; rowsRenamed: number; unitsRebuilt: number }[];
+  dirs: { dir: string; matched: number; rowsRenamed: number; unitsRebuilt: number; unitsCreated: number }[];
   skipped: { dir: string; id: string; reason: string }[];
   notes: { dir: string; id: string; note: string }[];
   staged: StagedWrite[];
+}
+
+/**
+ * The weapon ids a composition rebuild leaves unreached: old default (and dropped-row variant)
+ * ids that neither the rebuilt rows nor the unit's wargear options still carry. A kept row
+ * reaches the dump's defaults when the dump prints any, since they replace the row's old
+ * ones, else its old defaults; a dropped row's defaults and whole-loadout variants go with it.
+ */
+export function strandedByRebuild(
+  models: readonly CompModel[],
+  view: readonly { name: string; defaults: readonly string[] | undefined }[],
+  unitOptions: readonly Pick<WargearOptionRecord, "replaces" | "replacement" | "replacement_choice">[],
+): string[] {
+  const oldByNorm = new Map(models.map((m) => [normModelName(m.name), m]));
+  const kept = new Set<string>();
+  for (const d of view) {
+    const old = oldByNorm.get(normModelName(d.name));
+    for (const wid of d.defaults?.length ? d.defaults : old?.default_weapon_ids ?? []) kept.add(wid);
+    for (const variant of old?.loadout_variants ?? []) for (const wid of variant.weapon_ids) kept.add(wid);
+  }
+  for (const o of unitOptions) {
+    for (const wid of o.replaces ?? []) kept.add(wid);
+    for (const wid of o.replacement ?? []) kept.add(wid);
+    for (const g of o.replacement_choice ?? []) for (const wid of g) kept.add(wid);
+  }
+  const inView = (m: CompModel): boolean => view.some((d) => normModelName(d.name) === normModelName(m.name));
+  const candidates = models.flatMap((m) =>
+    inView(m)
+      ? (m.default_weapon_ids ?? [])
+      : [...(m.default_weapon_ids ?? []), ...(m.loadout_variants ?? []).flatMap((variant) => variant.weapon_ids)],
+  );
+  return [...new Set(candidates.filter((wid) => !kept.has(wid)))].sort();
 }
 
 /**
@@ -2409,6 +2789,7 @@ export function runCompositionNames(dump: MfmDump, onlyDir?: string): CompNamesR
     let matched = 0;
     let rowsRenamed = 0;
     let unitsRebuilt = 0;
+    let unitsCreated = 0;
     let changed = false;
     let unitsFileChanged = false;
     for (const ds of dsList) {
@@ -2420,9 +2801,32 @@ export function runCompositionNames(dump: MfmDump, onlyDir?: string): CompNamesR
       } catch {
         continue;
       }
-      if (matchedRepoIds.has(id) || !compsByUnit.has(id)) continue;
+      // A unit with no composition yet (a freshly seeded datasheet) gets one built below.
+      if (matchedRepoIds.has(id) || (!compsByUnit.has(id) && !unitById.has(id))) continue;
       matchedRepoIds.add(id);
       matched++;
+      // Per-model Enhancement eligibility (miniature.excludedFromEnhancements),
+      // authoritative and matched by model name: set on the matching row, cleared
+      // when the dump drops it. Runs before the composition rebuild, which skips
+      // datasheets with no composition rows (Sir Hekhtur).
+      const excludedNames = new Set(
+        (dump.groupBy("miniature", "datasheetId").get(ds.id!) ?? [])
+          .filter((m) => m.excludedFromEnhancements)
+          .map((m) => dump.enName(m))
+          .filter((n): n is string => !!n),
+      );
+      for (const comp of compsByUnit.get(id) ?? []) {
+        for (const row of comp.models) {
+          const excluded = excludedNames.has(row.name);
+          if (excluded && row.excluded_from_enhancements !== true) {
+            row.excluded_from_enhancements = true;
+            changed = true;
+          } else if (!excluded && row.excluded_from_enhancements !== undefined) {
+            delete row.excluded_from_enhancements;
+            changed = true;
+          }
+        }
+      }
       const agg = aggregateComposition(dump, ds.id!);
       if (agg.skip === "duplicate-names") {
         skipped.push({ dir, id, reason: "kill-team duplicate-name shape — cannot rebuild" });
@@ -2434,24 +2838,58 @@ export function runCompositionNames(dump: MfmDump, onlyDir?: string): CompNamesR
       }));
       if (!view.length) continue;
       const unitResolve = unitScopedResolver(validIds, autoResolved, dir, id, resolve);
-      const { byName: defaultsByModel } = deriveDefaults(dump, ds.id!, unitResolve, [], []);
+      const { byName: defaultsByModel, splitByName } = deriveDefaults(dump, ds.id!, unitResolve, [], []);
       // Reviewed always-on additions ride on top of the dump defaults, exactly
       // as runWargear applies them (a refresh must not drop a support turret).
       const withManual = (rowName: string, ids: string[] | undefined): string[] | undefined => {
-        const add = MANUAL_DEFAULTS[dir]?.[id]?.[rowName] ?? [];
+        const add = manualDefaults(dir, id, rowName, validIds);
         if (!ids?.length) return add.length ? [...add] : ids;
         return [...ids, ...add.filter((x) => !ids.includes(x))];
       };
+      if (!compsByUnit.has(id)) {
+        // **Create** — the unit exists but no composition does: build one from the dump
+        // view as a rebuild would, counts from the all-tiers envelope (composition-tiers
+        // then adds the tiers), carrying the unit's faction and game modes.
+        const unit = unitById.get(id)!;
+        const models: CompModel[] = view.map((d) => {
+          const env = agg.envelope.get(d.name);
+          const row: CompModel = { name: d.name, min: env?.min ?? d.min, max: env?.max ?? d.max };
+          row.is_leader_model = view.length > 1 && d.max === 1 && view.some((x) => x.name !== d.name && x.max > 1);
+          const def = withManual(d.name, defaultsByModel.get(d.name));
+          if (def?.length) row.default_weapon_ids = def;
+          if (excludedNames.has(d.name)) row.excluded_from_enhancements = true;
+          return row;
+        });
+        const modes = (unit as { game_modes?: string[] }).game_modes;
+        comps.push({
+          unit_id: id,
+          faction_id: (unit as { faction_id?: string }).faction_id ?? dir,
+          models,
+          game_version: { ...currentGameVersion(dump) },
+          ...(modes?.length ? { game_modes: [...modes] } : {}),
+        });
+        compsByUnit.set(id, []);
+        unitsCreated++;
+        changed = true;
+        continue;
+      }
       for (const comp of compsByUnit.get(id) ?? []) {
         // Names map cleanly onto the dump view (identical, or drifting only by
         // pluralisation/punctuation) → rename + refresh defaults, leaving the
         // counts alone: composition-tiers owns min/max (it sets the envelope,
         // which deliberately differs from the default view — comparing counts
         // here would re-flag every tiered unit as diverged on each run).
-        const mapped = matchNamesNormalized(
-          comp.models.map((m) => m.name),
-          view.map((d) => d.name),
-        );
+        const rowNames = comp.models.map((m) => m.name);
+        let mapped = matchNamesNormalized(rowNames, view.map((d) => d.name));
+        // Same-named split rows (runWargear: one row per default group of a miniature) are
+        // one dump miniature; map them by name. Their defaults stay with runWargear, since
+        // `defaultsByModel` carries no single loadout for a split name.
+        const unique = [...new Set(rowNames)];
+        const repeats = (name: string) => rowNames.filter((n) => n === name).length;
+        if (!mapped && unique.length < rowNames.length && unique.every((n) => repeats(n) === 1 || splitByName.get(n)?.length === repeats(n))) {
+          const byUnique = matchNamesNormalized(unique, view.map((d) => d.name));
+          if (byUnique) mapped = rowNames.map((n) => byUnique[unique.indexOf(n)]!);
+        }
         if (mapped) {
           for (let i = 0; i < comp.models.length; i++) {
             if (comp.models[i].name !== mapped[i]) {
@@ -2508,26 +2946,11 @@ export function runCompositionNames(dump: MfmDump, onlyDir?: string): CompNamesR
         // Dropping a repo-only row must not orphan a weapon it alone reaches
         // (kill-team weapon-variant rows at min 0, the Horrors' split weapons):
         // such units model MORE than the dump's default view — skip, report.
-        const keptCoverage = new Set<string>();
-        for (const d of view) {
-          for (const wid of defaultsByModel.get(d.name) ?? []) keptCoverage.add(wid);
-          const old = oldByNorm.get(normModelName(d.name));
-          for (const wid of old?.default_weapon_ids ?? []) keptCoverage.add(wid);
-        }
-        for (const o of wopts) {
-          if (o.unit_id !== id) continue;
-          for (const wid of o.replaces ?? []) keptCoverage.add(wid);
-          for (const wid of o.replacement ?? []) keptCoverage.add(wid);
-          for (const g of o.replacement_choice ?? []) for (const wid of g) keptCoverage.add(wid);
-        }
-        const stranded = [
-          ...new Set(
-            comp.models
-              .filter((m) => !view.some((d) => normModelName(d.name) === normModelName(m.name)))
-              .flatMap((m) => m.default_weapon_ids ?? [])
-              .filter((wid) => !keptCoverage.has(wid)),
-          ),
-        ].sort();
+        const stranded = strandedByRebuild(
+          comp.models,
+          view.map((d) => ({ name: d.name, defaults: withManual(d.name, defaultsByModel.get(d.name)) })),
+          wopts.filter((o) => o.unit_id === id),
+        );
         if (stranded.length) {
           // The dump arbitrates: a stranded id the dump's datasheet KNOWS is a
           // deliberately-richer repo modeling (kill-team weapon-variant rows) —
@@ -2601,13 +3024,13 @@ export function runCompositionNames(dump: MfmDump, onlyDir?: string): CompNamesR
     }
     if (changed) staged.push({ path: cpath, value: comps });
     if (unitsFileChanged) staged.push({ path: upath, value: units });
-    reportDirs.push({ dir, matched, rowsRenamed, unitsRebuilt });
+    reportDirs.push({ dir, matched, rowsRenamed, unitsRebuilt, unitsCreated });
   }
   return { dirs: reportDirs, skipped, notes, staged };
 }
 
 export interface CompTiersReport {
-  dirs: { dir: string; matched: number; unitsTiered: number; rowsAdjusted: number; modelCountResynced: number }[];
+  dirs: { dir: string; matched: number; unitsTiered: number; rowsAdjusted: number; modelCountResynced: number; modesStamped: number }[];
   skipped: { dir: string; id: string; reason: string }[];
   notes: { dir: string; id: string; note: string }[];
   staged: StagedWrite[];
@@ -2662,6 +3085,28 @@ function matchNamesNormalized(repoNames: string[], dumpNames: string[]): string[
  * to the aggregate envelope, and re-syncs `units.json` `model_count` to the tier
  * span `{min: min Σtier-min, max: max Σtier-max}`. Everything else is preserved.
  */
+/**
+ * Copy a unit's `game_modes` onto the unit's compositions in the same faction file, so a
+ * Combat Patrol unit's composition is Combat Patrol too and a game-mode view lists the two
+ * together. A unit without `game_modes` leaves its composition's authored modes alone.
+ * Returns how many compositions changed.
+ */
+export function stampCompositionGameModes(
+  comps: { unit_id: string; [k: string]: unknown }[],
+  unitsById: ReadonlyMap<string, object>,
+): number {
+  let stamped = 0;
+  for (const comp of comps) {
+    const unit = unitsById.get(comp.unit_id) as { game_modes?: unknown } | undefined;
+    const modes = unit?.game_modes;
+    if (!Array.isArray(modes) || modes.length === 0) continue;
+    if (JSON.stringify(comp.game_modes ?? null) === JSON.stringify(modes)) continue;
+    comp.game_modes = [...(modes as string[])];
+    stamped++;
+  }
+  return stamped;
+}
+
 export function runCompositionTiers(dump: MfmDump, onlyDir?: string): CompTiersReport {
   const dirs = repoDirs();
   const byDir = new Map<string, DatasheetRow[]>();
@@ -2787,9 +3232,12 @@ export function runCompositionTiers(dump: MfmDump, onlyDir?: string): CompTiersR
         }
       }
     }
+    // Every composition, matched or not, carries its unit's game modes.
+    const modesStamped = stampCompositionGameModes(comps, unitsById);
+    if (modesStamped > 0) compsChanged = true;
     if (compsChanged) staged.push({ path: cpath, value: comps });
     if (unitsChanged) staged.push({ path: upath, value: units });
-    reportDirs.push({ dir, matched, unitsTiered, rowsAdjusted, modelCountResynced });
+    reportDirs.push({ dir, matched, unitsTiered, rowsAdjusted, modelCountResynced, modesStamped });
   }
   return { dirs: reportDirs, skipped, notes, staged };
 }

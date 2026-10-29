@@ -1084,7 +1084,7 @@
         "detachmentRuleId": {
           "description": "References the detachment-rule record associated with this ability.",
           "ip_class": "identifier",
-          "shape_review": "observed",
+          "shape_review": "null-only",
           "relation": "datasheet_ability.detachmentRuleId"
         },
         "id": {
@@ -1221,6 +1221,31 @@
         }
       }
     },
+    "datasheet_bodyguard_group_excluded_roster_datasheet": {
+      "description": "Connects a bodyguard eligibility group to a datasheet whose presence in the roster excludes the group.",
+      "row_shape": "observed",
+      "identity": {
+        "fields": [
+          "datasheetBodyguardGroupId",
+          "datasheetId"
+        ],
+        "status": "verified"
+      },
+      "fields": {
+        "datasheetBodyguardGroupId": {
+          "description": "Identifies the bodyguard eligibility group.",
+          "ip_class": "identifier",
+          "shape_review": "observed",
+          "relation": "datasheet_bodyguard_group_excluded_roster_datasheet.datasheetBodyguardGroupId"
+        },
+        "datasheetId": {
+          "description": "Identifies the datasheet that excludes the eligibility group when it is in the roster.",
+          "ip_class": "identifier",
+          "shape_review": "observed",
+          "relation": "datasheet_bodyguard_group_excluded_roster_datasheet.datasheetId"
+        }
+      }
+    },
     "datasheet_bodyguard_group_keyword": {
       "description": "Connects a bodyguard eligibility group to a required keyword.",
       "row_shape": "observed",
@@ -1243,6 +1268,31 @@
           "ip_class": "identifier",
           "shape_review": "observed",
           "relation": "datasheet_bodyguard_group_keyword.keywordId"
+        }
+      }
+    },
+    "datasheet_bodyguard_group_required_roster_datasheet": {
+      "description": "Connects a bodyguard eligibility group to a datasheet that must be in the roster for the group to apply.",
+      "row_shape": "observed",
+      "identity": {
+        "fields": [
+          "datasheetBodyguardGroupId",
+          "datasheetId"
+        ],
+        "status": "verified"
+      },
+      "fields": {
+        "datasheetBodyguardGroupId": {
+          "description": "Identifies the bodyguard eligibility group.",
+          "ip_class": "identifier",
+          "shape_review": "observed",
+          "relation": "datasheet_bodyguard_group_required_roster_datasheet.datasheetBodyguardGroupId"
+        },
+        "datasheetId": {
+          "description": "Identifies the datasheet the roster must include for the eligibility group to apply.",
+          "ip_class": "identifier",
+          "shape_review": "observed",
+          "relation": "datasheet_bodyguard_group_required_roster_datasheet.datasheetId"
         }
       }
     },
@@ -1444,7 +1494,7 @@
         "image": {
           "description": "Optionally references artwork associated with the rule.",
           "ip_class": "artwork-reference",
-          "shape_review": "observed"
+          "shape_review": "null-only"
         },
         "localisations": {
           "description": "Maps locale codes to rule presentation payloads.",
@@ -1699,30 +1749,12 @@
     },
     "detachment_faction_detachment_points_cost": {
       "description": "Associates a faction context with an overriding detachment point cost.",
-      "row_shape": "observed",
+      "row_shape": "unobserved",
       "identity": {
         "fields": [],
         "status": "none"
       },
-      "fields": {
-        "detachmentId": {
-          "description": "Identifies the detachment whose point cost is overridden.",
-          "ip_class": "identifier",
-          "shape_review": "observed",
-          "relation": "detachment_faction_detachment_points_cost.detachmentId"
-        },
-        "detachmentPointsCost": {
-          "description": "Sets the point cost for this detachment and faction association.",
-          "ip_class": "numeric",
-          "shape_review": "observed"
-        },
-        "factionKeywordId": {
-          "description": "Identifies the faction context for this detachment point-cost association.",
-          "ip_class": "identifier",
-          "shape_review": "observed",
-          "relation": "detachment_faction_detachment_points_cost.factionKeywordId"
-        }
-      }
+      "fields": {}
     },
     "detachment_faction_keyword": {
       "description": "Associates a detachment with a faction keyword to which it applies.",
@@ -2659,7 +2691,7 @@
         "miniatureId": {
           "description": "Optionally identifies the model profile receiving this invulnerable save.",
           "ip_class": "identifier",
-          "shape_review": "null-only",
+          "shape_review": "observed",
           "relation": "invulnerable_save.miniatureId"
         },
         "rangedSave": {
@@ -5582,6 +5614,28 @@
       "meaning": "eligibility",
       "edge_peer": "datasheet_bodyguard_group_datasheet.datasheetBodyguardGroupId"
     },
+    "datasheet_bodyguard_group_excluded_roster_datasheet.datasheetBodyguardGroupId": {
+      "source_table": "datasheet_bodyguard_group_excluded_roster_datasheet",
+      "source_field": "datasheetBodyguardGroupId",
+      "target_table": "datasheet_bodyguard_group",
+      "target_field": "id",
+      "cardinality": "many-to-many-edge",
+      "nullable": false,
+      "status": "verified",
+      "meaning": "eligibility",
+      "edge_peer": "datasheet_bodyguard_group_excluded_roster_datasheet.datasheetId"
+    },
+    "datasheet_bodyguard_group_excluded_roster_datasheet.datasheetId": {
+      "source_table": "datasheet_bodyguard_group_excluded_roster_datasheet",
+      "source_field": "datasheetId",
+      "target_table": "datasheet",
+      "target_field": "id",
+      "cardinality": "many-to-many-edge",
+      "nullable": false,
+      "status": "verified",
+      "meaning": "eligibility",
+      "edge_peer": "datasheet_bodyguard_group_excluded_roster_datasheet.datasheetBodyguardGroupId"
+    },
     "datasheet_bodyguard_group_keyword.datasheetBodyguardGroupId": {
       "source_table": "datasheet_bodyguard_group_keyword",
       "source_field": "datasheetBodyguardGroupId",
@@ -5603,6 +5657,28 @@
       "status": "verified",
       "meaning": "eligibility",
       "edge_peer": "datasheet_bodyguard_group_keyword.datasheetBodyguardGroupId"
+    },
+    "datasheet_bodyguard_group_required_roster_datasheet.datasheetBodyguardGroupId": {
+      "source_table": "datasheet_bodyguard_group_required_roster_datasheet",
+      "source_field": "datasheetBodyguardGroupId",
+      "target_table": "datasheet_bodyguard_group",
+      "target_field": "id",
+      "cardinality": "many-to-many-edge",
+      "nullable": false,
+      "status": "verified",
+      "meaning": "eligibility",
+      "edge_peer": "datasheet_bodyguard_group_required_roster_datasheet.datasheetId"
+    },
+    "datasheet_bodyguard_group_required_roster_datasheet.datasheetId": {
+      "source_table": "datasheet_bodyguard_group_required_roster_datasheet",
+      "source_field": "datasheetId",
+      "target_table": "datasheet",
+      "target_field": "id",
+      "cardinality": "many-to-many-edge",
+      "nullable": false,
+      "status": "verified",
+      "meaning": "eligibility",
+      "edge_peer": "datasheet_bodyguard_group_required_roster_datasheet.datasheetBodyguardGroupId"
     },
     "datasheet_damage.datasheetId": {
       "source_table": "datasheet_damage",
@@ -5739,28 +5815,6 @@
       "status": "verified",
       "meaning": "eligibility",
       "edge_peer": "detachment_excluded_datasheet.datasheetId"
-    },
-    "detachment_faction_detachment_points_cost.detachmentId": {
-      "source_table": "detachment_faction_detachment_points_cost",
-      "source_field": "detachmentId",
-      "target_table": "detachment",
-      "target_field": "id",
-      "cardinality": "many-to-many-edge",
-      "nullable": false,
-      "status": "verified",
-      "meaning": "applicability",
-      "edge_peer": "detachment_faction_detachment_points_cost.factionKeywordId"
-    },
-    "detachment_faction_detachment_points_cost.factionKeywordId": {
-      "source_table": "detachment_faction_detachment_points_cost",
-      "source_field": "factionKeywordId",
-      "target_table": "faction_keyword",
-      "target_field": "id",
-      "cardinality": "many-to-many-edge",
-      "nullable": false,
-      "status": "verified",
-      "meaning": "applicability",
-      "edge_peer": "detachment_faction_detachment_points_cost.detachmentId"
     },
     "detachment_faction_keyword.detachmentId": {
       "source_table": "detachment_faction_keyword",

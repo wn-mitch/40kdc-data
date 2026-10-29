@@ -31,15 +31,23 @@ mod types;
 #[cfg(feature = "import")]
 mod adapter;
 #[cfg(feature = "import")]
+mod attached_groups;
+#[cfg(feature = "import")]
 mod decode;
 #[cfg(feature = "import")]
 mod gw;
 #[cfg(feature = "import")]
 mod gw_headerless;
 #[cfg(feature = "import")]
+mod gw_headerless_bullets;
+#[cfg(feature = "import")]
+mod gw_headerless_preamble;
+#[cfg(feature = "import")]
 mod listforge;
 #[cfg(feature = "import")]
 mod listforge_text;
+#[cfg(feature = "import")]
+mod loadout_candidates;
 #[cfg(feature = "import")]
 mod newrecruit_json;
 #[cfg(feature = "import")]
@@ -54,6 +62,8 @@ mod resolve;
 mod roster_json;
 #[cfg(feature = "import")]
 mod rosterizer;
+#[cfg(feature = "import")]
+mod source_names;
 
 pub use types::{
     AttachmentRole, BattleSize, Candidate, Diagnostics, GameVersionRef, ParsedLoadoutGroup,

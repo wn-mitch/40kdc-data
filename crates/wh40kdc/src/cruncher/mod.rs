@@ -17,41 +17,70 @@
 //! let weapon = ds.find_weapon("bolt-rifle").expect("bolt-rifle is bundled");
 //! let target = ds.find_unit("intercessor-squad").expect("intercessor-squad is bundled");
 //!
+//! let mut context = EngineContext::new(Phase::Shooting);
+//! context.attacker_stationary = Some(false);
+//! context.within_half_range = Some(false);
 //! let input = EngineInput {
 //!     attacker: AttackProfileRef { weapon, profile_index: 0 },
 //!     target: TargetProfileRef { unit: target, profile_index: 0, model_count: None },
 //!     models_firing: 5,
 //!     buffs: Vec::new(),
-//!     context: EngineContext {
-//!         phase: Phase::Shooting,
-//!         attacker_stationary: Some(false),
-//!         attacker_charged: None,
-//!         within_half_range: Some(false),
-//!         distance_inches: None,
-//!         attacker_in_cover: None,
-//!         target_in_cover: None,
-//!         attacker_keywords: None,
-//!         target_keywords: None,
-//!         timing: None,
-//!         attacker_attached: None,
-//!     },
+//!     context,
 //! };
 //! let out = crunch(&input, None).expect("crunch succeeds");
 //! assert_eq!(out.stages.len(), 7);
 //! ```
 
+pub mod allocation;
+mod attack_compare;
 pub mod attribution;
 pub mod buffs;
+pub mod condition_facts;
+mod context;
+mod critical_wounds;
+mod damage_roll;
 pub mod engine;
+pub mod from_dsl;
 pub mod from_keyword;
+mod gates;
+pub mod granted_records;
+pub mod mortal_sources;
+pub mod recipient_snapshots;
+mod resolved;
+pub mod scenario;
+mod scenario_conditions;
+mod scenario_facts;
+pub mod unsupported_scope;
+mod weapon_bindings;
 
+pub use allocation::{
+    allocate, allocate_model, allocate_model_with, allocate_with, AllocationDefences,
+    AllocationError, AllocationOutput, DamageZeroing, ZeroingPer, MAX_EVENT_WORK,
+};
+pub use attack_compare::attack_comparison_holds;
 pub use attribution::{attribute_stages, AttributedStage, StageLift};
 pub use buffs::{
-    resolve_buffs, AbilityKind, Buff, BuffApplicability, BuffContribution, BuffSource,
-    EngineContext, RerollSubset, ResolvedModifiers, RollKind, WeaponKeywordRef,
+    combined_toughness, resolve_buffs, AbilityKind, AttachmentRole, Buff, BuffApplicability,
+    BuffContribution, BuffSource, EngineContext, RerollSubset, ResolvedModifiers, RollKind,
+    WeaponKeywordRef,
 };
+pub use buffs::{AttackComparison, AttackOperand, AttackSide, AttackStatOperand, Comparison};
+pub use condition_facts::{canonical_json, condition_fact_key, condition_needs, ConditionNeed};
 pub use engine::{
-    crunch, AttackProfileRef, CruncherError, EngineInput, EngineOutput, Stage, StageName,
-    TargetProfileRef,
+    crunch, crunch_model, AttackModel, AttackProfileRef, CruncherError, EngineInput, EngineOutput,
+    RollProbabilities, Stage, StageName, TargetProfileRef,
+};
+pub use from_dsl::{
+    apply_activation, effect_to_buffs, ActivatableBuff, ActivatableGroupRef, CapRaise,
+    EffectTranslation, StanceOptionRef, TranslationPerspective, UnsupportedFragment,
 };
 pub use from_keyword::buffs_from_keyword;
+pub use granted_records::resolve_granted_records;
+pub use mortal_sources::{mortal_wound_sources, MortalWoundSource, MortalWoundTranslation};
+pub use recipient_snapshots::RecipientSnapshot;
+pub use scenario::{
+    ActiveRule, AttachedMember, MemberRole, ModelWounds, NeighbourOwner, ObjectiveController,
+    ObjectiveTerritory, ObjectivesControlled, ScenarioNeighbour, ScenarioObjective, ScenarioRegion,
+    ScenarioSide, UnitState, UnitStrength,
+};
+pub use unsupported_scope::UnsupportedScope;

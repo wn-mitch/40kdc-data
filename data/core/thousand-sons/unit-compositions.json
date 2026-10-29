@@ -21,7 +21,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -58,7 +58,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -95,7 +95,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -130,7 +130,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -164,7 +164,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -200,7 +200,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -235,7 +235,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -270,7 +270,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -306,7 +306,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -344,7 +344,7 @@
         "min": 4,
         "max": 9,
         "default_weapon_ids": [
-          "inferno-boltgun",
+          "inferno-boltgun-rubric-marines",
           "close-combat-weapon-rubric-marines"
         ],
         "is_leader_model": false,
@@ -356,7 +356,7 @@
           {
             "name": "Rubric Marine w/ inferno boltgun",
             "weapon_ids": [
-              "inferno-boltgun",
+              "inferno-boltgun-rubric-marines",
               "close-combat-weapon-rubric-marines"
             ],
             "max_count": 9
@@ -394,7 +394,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -449,7 +449,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -496,7 +496,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -564,7 +564,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -631,7 +631,7 @@
         },
         "loadout_variants": [
           {
-            "name": "Scarab Occult Terminator w/ inferno combi-bolter and khopesh",
+            "name": "Scarab Occult Terminator",
             "weapon_ids": [
               "inferno-combi-bolter",
               "prosperine-khopesh"
@@ -661,16 +661,16 @@
               "Scarab Occult Terminator w/ heavy warpflamer",
               "Scarab Occult Terminator w/ soulreaper cannon"
             ],
-            "count": 2,
-            "per_models": 0,
-            "scope": "model-row"
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -725,7 +725,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -760,7 +760,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -796,7 +796,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -842,7 +842,7 @@
         },
         "loadout_variants": [
           {
-            "name": "Tzaangor w/ tzaangor blades",
+            "name": "Tzaangor w/ Tzaangor blades",
             "weapon_ids": [
               "tzaangor-blades"
             ],
@@ -855,31 +855,24 @@
               "chainsword-tzaangors"
             ],
             "max_count": 19
-          },
+          }
+        ],
+        "loadout_variant_budgets": [
           {
-            "name": "Tzaangor w/ pistol and chainsword and brayhorn",
-            "weapon_ids": [
-              "autopistol",
-              "chainsword-tzaangors",
-              "brayhorn"
+            "variant_names": [
+              "Tzaangor w/ Tzaangor blades",
+              "Tzaangor w/ pistol and chainsword"
             ],
-            "max_count": 1
-          },
-          {
-            "name": "Tzaangor w/ pistol and chainsword and herd banner",
-            "weapon_ids": [
-              "autopistol",
-              "chainsword-tzaangors",
-              "herd-banner"
-            ],
-            "max_count": 1
+            "count": 19,
+            "per_models": 0,
+            "scope": "model-row"
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -935,7 +928,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -980,7 +973,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1016,7 +1009,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1052,7 +1045,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1088,7 +1081,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1123,7 +1116,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1160,7 +1153,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1196,7 +1189,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1232,7 +1225,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1261,12 +1254,16 @@
           "excruciator-cannon",
           "heavy-missile-launcher",
           "heavy-baleflamer"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 160
+        }
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1294,14 +1291,14 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "baleful-devolution",
+          "baleful-devolution-kaaskrek",
           "force-stave"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1313,6 +1310,9 @@
           }
         ]
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -1329,8 +1329,8 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "force-weapon-rubric-marines",
-          "inferno-bolt-pistol-prism-of-zadophon",
+          "force-weapon-prism-of-zadophon-rubric-marines",
+          "inferno-bolt-pistol-prism-of-zadophon-rubric-marines",
           "malefic-curse"
         ]
       },
@@ -1372,14 +1372,14 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "warpflamer",
+          "warpflamer-prism-of-zadophon-rubric-marines",
           "stocks-and-fists"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1406,6 +1406,9 @@
           }
         ]
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -1428,7 +1431,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1440,6 +1443,9 @@
           }
         ]
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -1463,13 +1469,256 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
         "models": [
           {
             "name": "Zadophon the Soul Eater",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ],
+    "game_modes": [
+      "combat-patrol"
+    ]
+  },
+  {
+    "unit_id": "blue-horrors",
+    "faction_id": "thousand-sons",
+    "models": [
+      {
+        "name": "Blue Horror",
+        "min": 10,
+        "max": 10,
+        "default_weapon_ids": [
+          "coruscating-blue-flames",
+          "blue-claws"
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        }
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Blue Horror",
+            "min": 10,
+            "max": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "flamers",
+    "faction_id": "thousand-sons",
+    "models": [
+      {
+        "name": "Pyrocaster",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "flickering-flames",
+          "flamer-mouths"
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
+      },
+      {
+        "name": "Flamer",
+        "min": 2,
+        "max": 5,
+        "default_weapon_ids": [
+          "flickering-flames",
+          "flamer-mouths"
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
+      }
+    ],
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Pyrocaster",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Flamer",
+            "min": 2,
+            "max": 2
+          }
+        ]
+      },
+      {
+        "models": [
+          {
+            "name": "Pyrocaster",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Flamer",
+            "min": 3,
+            "max": 5
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    }
+  },
+  {
+    "unit_id": "kairos-fateweaver",
+    "faction_id": "thousand-sons",
+    "models": [
+      {
+        "name": "Kairos Fateweaver",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "infernal-gateway",
+          "staff-of-tomorrow"
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 100
+        }
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Kairos Fateweaver",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "pink-horrors",
+    "faction_id": "thousand-sons",
+    "models": [
+      {
+        "name": "Pink Horror",
+        "min": 10,
+        "max": 10,
+        "default_weapon_ids": [
+          "coruscating-pink-flames",
+          "pink-claws"
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Pink Horror",
+            "min": 10,
+            "max": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "screamers",
+    "faction_id": "thousand-sons",
+    "models": [
+      {
+        "name": "Screamer",
+        "min": 3,
+        "max": 6,
+        "default_weapon_ids": [
+          "lamprey-bite"
+        ]
+      }
+    ],
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Screamer",
+            "min": 3,
+            "max": 3
+          }
+        ]
+      },
+      {
+        "models": [
+          {
+            "name": "Screamer",
+            "min": 4,
+            "max": 6
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    }
+  },
+  {
+    "unit_id": "lord-of-change",
+    "faction_id": "thousand-sons",
+    "models": [
+      {
+        "name": "Lord of Change",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "bolt-of-change",
+          "staff-of-tzeentch"
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 100
+        }
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Lord of Change",
             "min": 1,
             "max": 1
           }

@@ -44,6 +44,7 @@ import { nameToId } from "../converters/id-generator.js";
 import { addExternalRef } from "../external-refs.js";
 import { repoDirs } from "./faction-map.js";
 import type { StagedWrite } from "./apply.js";
+import { currentGameVersion } from "./dataslate.js";
 
 export interface CoreWeapon {
   id: string;
@@ -63,11 +64,13 @@ interface UnitRow {
   faction_id?: string;
   weapon_ids?: string[];
   wargear_budgets?: WargearBudget[];
+  wargear_costs?: { item_id: string; [k: string]: unknown }[];
   game_version?: GameVersion;
   [k: string]: unknown;
 }
 interface CompModel {
   default_weapon_ids?: string[];
+  loadout_variants?: { weapon_ids: string[]; [k: string]: unknown }[];
   [k: string]: unknown;
 }
 interface CompRow {
@@ -168,31 +171,44 @@ const remap = (
   m: Map<string, string>,
 ): string[] | undefined => ids?.map((id) => m.get(id) ?? id);
 
-function rewireUnit(u: UnitRow, m: Map<string, string>): UnitRow {
-  const out: UnitRow = { ...u };
-  if (u.weapon_ids) out.weapon_ids = remap(u.weapon_ids, m);
+/** Rewire every weapon reference a unit row holds: weapon ids, budget items and wargear costs. */
+export function rewireUnit<T extends UnitRow>(u: T, m: Map<string, string>): T {
+  const out: T = { ...u };
+  // A reference renamed onto an id the list already holds is the same weapon: drop it
+  // rather than list it twice (deliberate repeats of one id are left alone).
+  const merge = (ids: string[]) => ids.filter((id) => !(m.has(id) && ids.includes(m.get(id)!)));
+  if (u.weapon_ids) out.weapon_ids = remap(merge(u.weapon_ids), m);
   if (u.wargear_budgets)
     out.wargear_budgets = u.wargear_budgets.map((b) => ({
       ...b,
-      items: remap(b.items, m) ?? b.items,
+      items: remap(merge(b.items), m) ?? b.items,
+    }));
+  if (u.wargear_costs)
+    out.wargear_costs = u.wargear_costs.map((cost) => ({
+      ...cost,
+      item_id: m.get(cost.item_id) ?? cost.item_id,
     }));
   return out;
 }
 
-function rewireComp(c: CompRow, m: Map<string, string>): CompRow {
+/** Rewire a composition's per-model default weapons and loadout variants. */
+export function rewireComp<T extends CompRow>(c: T, m: Map<string, string>): T {
   if (!c.models) return c;
   return {
     ...c,
-    models: c.models.map((mdl) =>
-      mdl.default_weapon_ids
-        ? { ...mdl, default_weapon_ids: remap(mdl.default_weapon_ids, m) }
-        : mdl,
-    ),
+    models: c.models.map((mdl) => ({
+      ...mdl,
+      ...(mdl.default_weapon_ids ? { default_weapon_ids: remap(mdl.default_weapon_ids, m) } : {}),
+      ...(mdl.loadout_variants
+        ? { loadout_variants: mdl.loadout_variants.map((variant) => ({ ...variant, weapon_ids: remap(variant.weapon_ids, m) ?? variant.weapon_ids })) }
+        : {}),
+    })),
   };
 }
 
-function rewireOption(o: OptionRow, m: Map<string, string>): OptionRow {
-  const out: OptionRow = { ...o };
+/** Rewire a wargear option's replaced and replacement weapons. */
+export function rewireOption<T extends OptionRow>(o: T, m: Map<string, string>): T {
+  const out: T = { ...o };
   if (o.replaces) out.replaces = remap(o.replaces, m);
   if (o.replacement) out.replacement = remap(o.replacement, m);
   if (o.replacement_choice)
@@ -310,10 +326,7 @@ export function runWeaponVariants(
         );
         continue;
       }
-      const gv: GameVersion = unit.game_version ?? {
-        edition: "11th",
-        dataslate: "launch",
-      };
+      const gv: GameVersion = unit.game_version ?? currentGameVersion(dump);
       const ctx = { dump, gv, warnings: [] as string[] };
 
       // baseId -> (fingerprint -> minted record) for this datasheet's weapons.

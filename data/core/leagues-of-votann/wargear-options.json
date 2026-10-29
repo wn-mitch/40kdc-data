@@ -5,7 +5,7 @@
     "faction_id": "leagues-of-votann",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -25,7 +25,7 @@
     "faction_id": "leagues-of-votann",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -45,7 +45,7 @@
     "faction_id": "leagues-of-votann",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -65,7 +65,7 @@
     "faction_id": "leagues-of-votann",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -85,7 +85,7 @@
     "faction_id": "leagues-of-votann",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -110,28 +110,67 @@
     "faction_id": "leagues-of-votann",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replacement": [
+      "rollbar-searchlight"
+    ],
+    "model_constraint": {
+      "max_count": 1
+    }
+  },
+  {
+    "id": "hernkyn-pioneers-wgo-mfm-2",
+    "unit_id": "hernkyn-pioneers",
+    "faction_id": "leagues-of-votann",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replacement": [
+      "panspectral-scanner"
+    ],
+    "model_constraint": {
+      "max_count": 1
+    }
+  },
+  {
+    "id": "hernkyn-pioneers-wgo-mfm-3",
+    "unit_id": "hernkyn-pioneers",
+    "faction_id": "leagues-of-votann",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
-      [
-        "rollbar-searchlight"
-      ],
-      [
-        "panspectral-scanner"
-      ],
       [
         "hylas-rotary-cannon"
       ],
       [
         "ion-beamer"
-      ],
-      [
-        "multiwave-comms-array"
       ]
     ],
     "model_constraint": {
       "any_number": true
+    }
+  },
+  {
+    "id": "hernkyn-pioneers-wgo-mfm-4",
+    "unit_id": "hernkyn-pioneers",
+    "faction_id": "leagues-of-votann",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replacement": [
+      "multiwave-comms-array"
+    ],
+    "model_constraint": {
+      "max_count": 1
     }
   },
   {
@@ -140,7 +179,7 @@
     "faction_id": "leagues-of-votann",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -159,7 +198,7 @@
     "faction_id": "leagues-of-votann",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -175,7 +214,7 @@
     "faction_id": "leagues-of-votann",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -197,7 +236,7 @@
     "faction_id": "leagues-of-votann",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -218,7 +257,7 @@
     "faction_id": "leagues-of-votann",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -237,7 +276,7 @@
     "faction_id": "leagues-of-votann",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -256,7 +295,7 @@
     "faction_id": "leagues-of-votann",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -280,7 +319,7 @@
     "faction_id": "leagues-of-votann",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -300,7 +339,7 @@
     "faction_id": "leagues-of-votann",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -320,7 +359,7 @@
     "faction_id": "leagues-of-votann",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -349,7 +388,7 @@
     "faction_id": "leagues-of-votann",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -370,7 +409,7 @@
     "faction_id": "leagues-of-votann",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -389,7 +428,7 @@
     "faction_id": "leagues-of-votann",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -408,7 +447,7 @@
     "faction_id": "leagues-of-votann",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -432,7 +471,7 @@
     "faction_id": "leagues-of-votann",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -451,7 +490,7 @@
     "faction_id": "leagues-of-votann",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -467,7 +506,7 @@
     "faction_id": "leagues-of-votann",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -486,7 +525,33 @@
     "faction_id": "leagues-of-votann",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "heavy-plasma-axe"
+    ],
+    "replacement_choice": [
+      [
+        "mole-grenade-launcher",
+        "heavy-plasma-axe"
+      ],
+      [
+        "mole-grenade-launcher",
+        "concussion-maul"
+      ]
+    ],
+    "model_constraint": {
+      "per_n_models": 5
+    }
+  },
+  {
+    "id": "cthonian-beserks-wgo-mfm-3",
+    "unit_id": "cthonian-beserks",
+    "faction_id": "leagues-of-votann",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -500,48 +565,12 @@
     }
   },
   {
-    "id": "cthonian-beserks-wgo-mfm-3",
-    "unit_id": "cthonian-beserks",
-    "faction_id": "leagues-of-votann",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replaces": [
-      "heavy-plasma-axe"
-    ],
-    "replacement": [
-      "mole-grenade-launcher",
-      "concussion-maul"
-    ],
-    "model_constraint": {
-      "per_n_models": 5
-    }
-  },
-  {
-    "id": "cthonian-beserks-wgo-mfm-4",
-    "unit_id": "cthonian-beserks",
-    "faction_id": "leagues-of-votann",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replacement": [
-      "mole-grenade-launcher"
-    ],
-    "model_constraint": {
-      "per_n_models": 5
-    }
-  },
-  {
     "id": "sagitaur-wgo-mfm-1",
     "unit_id": "sagitaur",
     "faction_id": "leagues-of-votann",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -566,7 +595,7 @@
     "faction_id": "leagues-of-votann",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -585,7 +614,7 @@
     "faction_id": "leagues-of-votann",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -604,7 +633,7 @@
     "faction_id": "leagues-of-votann",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -623,7 +652,7 @@
     "faction_id": "leagues-of-votann",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -640,7 +669,7 @@
     "faction_id": "leagues-of-votann",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -665,16 +694,33 @@
     "faction_id": "leagues-of-votann",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "autoch-pattern-bolter"
+    ],
+    "replacement": [
+      "plasma-knife"
+    ],
+    "model_constraint": {
+      "model_name": "Hearthkyn Warrior",
+      "max_count": 2
+    }
+  },
+  {
+    "id": "hearthkyn-warriors-wgo-mfm-4",
+    "unit_id": "hearthkyn-warriors",
+    "faction_id": "leagues-of-votann",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
       "autoch-pattern-bolter"
     ],
     "replacement_choice": [
-      [
-        "plasma-knife"
-      ],
       [
         "ion-blaster"
       ],

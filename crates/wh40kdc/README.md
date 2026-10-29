@@ -78,10 +78,11 @@ let units: Vec<Unit> = serde_json::from_str(&units_json)?;
 let weapons: Vec<Weapon> = serde_json::from_str(&weapons_json)?;
 ```
 
-The bundled schema is available as a string for downstream validation:
+The full schema, conditional rules included, is available as a string for
+downstream validation (`BUNDLED_SCHEMA` is the codegen copy without them):
 
 ```rust
-let schema: serde_json::Value = serde_json::from_str(wh40kdc::BUNDLED_SCHEMA)?;
+let schema: serde_json::Value = serde_json::from_str(wh40kdc::VALIDATION_SCHEMA)?;
 ```
 
 ## Damage projection
@@ -99,18 +100,9 @@ let ds = Dataset::embedded();
 let weapon = ds.find_weapon("bolt-rifle").unwrap();
 let target = ds.find_unit("intercessor-squad").unwrap();
 
-let ctx = EngineContext {
-    phase: Phase::Shooting,
-    attacker_stationary: Some(false),
-    attacker_charged: None,
-    within_half_range: Some(false),
-    attacker_in_cover: None,
-    target_in_cover: None,
-    attacker_keywords: None,
-    target_keywords: None,
-    timing: None,
-    attacker_attached: None,
-};
+let mut ctx = EngineContext::new(Phase::Shooting);
+ctx.attacker_stationary = Some(false);
+ctx.within_half_range = Some(false);
 let out = crunch(&EngineInput {
     attacker: AttackProfileRef { weapon, profile_index: 0 },
     target: TargetProfileRef { unit: target, profile_index: 0, model_count: None },
@@ -120,6 +112,24 @@ let out = crunch(&EngineInput {
 }, None).unwrap();
 // out.stages: attacks → hits → wounds → unsaved → damage → after-fnp → models-killed
 ```
+
+Persistent event-selected recipients require caller-supplied
+`EngineContext.recipient_snapshots`, plus `attacker_unit_id` or `target_unit_id`.
+Each typed `RecipientSnapshot` identifies the source ability and source unit,
+the exact canonical trigger (including its condition), selector and selection
+JSON pointer, the recipient perspective/unit, and whether it was selected.
+Current attachment roles never establish historical membership. Missing,
+mismatched or conflicting evidence remains explicitly unsupported.
+Current `unit_ids` filters use those same perspective-specific context identities,
+matching IDs exactly rather than matching names or keywords. Missing identity
+remains unknown.
+
+`Dataset.historical_snapshot_abilities` rediscovers an attested source after
+detachment, checking that its source unit owns the ability intrinsically or can
+legally carry its enhancement in the selected detachment. Pass those entries
+to `Dataset.describe_buffs` with the same context. Snapshot evidence binds only
+the original recipient pool; independent conditions, melee/ranged restrictions
+and model-only effects retain their normal evaluation.
 
 ## Cargo features
 

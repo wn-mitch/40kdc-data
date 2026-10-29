@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<roster id="roster0" name="Imported roster" gameSystemId="sys-352e-adc2-7639-d6a9" gameSystemName="Warhammer 40,000">
+  <forces>
+    <force id="force0" name="Adeptus Astartes" catalogueName="Adeptus Astartes">
+      <selections>
+        <selection id="unit0" name="Marneus Calgar in Armour of Antilochus" type="unit" number="1">
+          <profiles>
+            <profile name="Marneus Calgar" typeName="Unit">
+              <characteristics>
+                <characteristic name="M">6"</characteristic>
+                <characteristic name="T">6</characteristic>
+                <characteristic name="SV">2+</characteristic>
+                <characteristic name="W">6</characteristic>
+                <characteristic name="LD">6+</characteristic>
+                <characteristic name="OC">1</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Codex Adept" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">The unit gains Assault Doctrine (Combat Doctrines).
+The unit gains Devastator Doctrine (Combat Doctrines).
+The unit gains Tactical Doctrine (Combat Doctrines).</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Deep Strike" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Leader" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">The unit gains the Leader ability.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Master Tactician" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">You can: During the Movement phase, in your turn, until the start of your next Command phase:
+  -&gt; Select one friendly ADEPTUS ASTARTES unit within 9" of this model visible to this model: select one option of Combat Doctrines for that unit, in place of any already active.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Thunderhawk Insertion" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">When declaring Battle Formations, you may use this ability:
+  -&gt; Select one friendly unit with the GRAVIS, PHOBOS or TACTICUS keyword: that unit gains the Deep Strike ability.</characteristic>
+              </characteristics>
+            </profile>
+          </profiles>
+          <categories>
+            <category name="Faction: Adeptus Astartes"/>
+            <category name="Faction: Ultramarines"/>
+            <category name="Chapter Master"/>
+            <category name="Character"/>
+            <category name="Epic Hero"/>
+            <category name="Imperium"/>
+            <category name="Infantry"/>
+            <category name="Terminator"/>
+            <category name="Marneus Calgar"/>
+          </categories>
+          <selections>
+            <selection id="unit0-m0" name="Marneus Calgar" type="model" number="1">
+              <selections>
+                <selection id="unit0-m0-w0" name="Gauntlets of Ultramar" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Gauntlets of Ultramar" typeName="Melee Weapons">
+                      <characteristics>
+                        <characteristic name="Range">Melee</characteristic>
+                        <characteristic name="A">6</characteristic>
+                        <characteristic name="WS">2+</characteristic>
+                        <characteristic name="S">10</characteristic>
+                        <characteristic name="AP">-3</characteristic>
+                        <characteristic name="D">3</characteristic>
+                        <characteristic name="Keywords">Twin-linked</characteristic>
+                      </characteristics>
+                    </profile>
+                    <profile name="Gauntlets of Ultramar" typeName="Melee Weapons">
+                      <characteristics>
+                        <characteristic name="Range">Melee</characteristic>
+                        <characteristic name="A">4</characteristic>
+                        <characteristic name="WS">N/A</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">-2</characteristic>
+                        <characteristic name="D">2</characteristic>
+                        <characteristic name="Keywords">Close-quarters, Twin-linked</characteristic>
+                      </characteristics>
+                    </profile>
+                    <profile name="Overhead Smash" typeName="Melee Weapons">
+                      <characteristics>
+                        <characteristic name="Range">Melee</characteristic>
+                        <characteristic name="A">1</characteristic>
+                        <characteristic name="WS">2+</characteristic>
+                        <characteristic name="S">14</characteristic>
+                        <characteristic name="AP">-3</characteristic>
+                        <characteristic name="D">D3+3</characteristic>
+                        <characteristic name="Keywords">Extra Attacks, Twin-linked</characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+              </selections>
+            </selection>
+          </selections>
+        </selection>
+        <selection id="unit1" name="Death Company Marines with Jump Packs" type="unit" number="1">
+          <profiles>
+            <profile name="Death Company Marines with Jump Packs" typeName="Unit">
+              <characteristics>
+                <characteristic name="M">12"</characteristic>
+                <characteristic name="T">4</characteristic>
+                <characteristic name="SV">3+</characteristic>
+                <characteristic name="W">2</characteristic>
+                <characteristic name="LD">6+</characteristic>
+                <characteristic name="OC">1</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Black Rage" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">You can re-roll a Hit roll of 1 with melee weapons.
+While the unit is not within 6" of a friendly BLOOD ANGELS CHARACTER unit, while the unit is not within 12" of a friendly CHAPLAIN unit, the unit cannot Fall Back.
+While the unit is not within 6" of a friendly BLOOD ANGELS CHARACTER unit, while the unit is not within 12" of a friendly CHAPLAIN unit, set the unit's Objective Control characteristic to 0.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Savage Fury" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">The unit gets +1 to Charge rolls.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Deep Strike" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Feel No Pain" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">The unit has the Feel No Pain X+ ability, X being its rating.</characteristic>
+              </characteristics>
+            </profile>
+          </profiles>
+          <categories>
+            <category name="Faction: Adeptus Astartes"/>
+            <category name="Faction: Blood Angels"/>
+            <category name="Infantry"/>
+            <category name="Fly"/>
+            <category name="Jump Pack"/>
+            <category name="Imperium"/>
+            <category name="Tacticus"/>
+            <category name="Death Company"/>
+            <category name="Explosives"/>
+            <category name="Death Company Marines with Jump Packs"/>
+          </categories>
+          <selections>
+            <selection id="unit1-m0" name="Death Company Marines with Jump Packs" type="model" number="1">
+              <selections>
+                <selection id="unit1-m0-w0" name="Chainsword" type="upgrade" number="5">
+                  <profiles>
+                    <profile name="Chainsword" typeName="Melee Weapons">
+                      <characteristics>
+                        <characteristic name="Range">Melee</characteristic>
+                        <characteristic name="A">4</characteristic>
+                        <characteristic name="WS">3+</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">-1</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords"></characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+                <selection id="unit1-m0-w1" name="Heavy bolt pistol" type="upgrade" number="5">
+                  <profiles>
+                    <profile name="Heavy Bolt Pistol" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">18"</characteristic>
+                        <characteristic name="A">1</characteristic>
+                        <characteristic name="BS">3+</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">-1</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords">Close-quarters</characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+              </selections>
+            </selection>
+          </selections>
+        </selection>
+      </selections>
+    </force>
+  </forces>
+</roster>

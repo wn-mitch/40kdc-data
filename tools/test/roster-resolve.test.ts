@@ -1,11 +1,13 @@
 import { describe, expect, it } from "vitest";
 import { Dataset } from "../src/data/dataset.js";
+import { emptyRawData } from "../src/data/types.js";
 import {
   checkRosterLegality,
   primaryDetachment,
   primaryDetachmentId,
   resolveAttachedLeader,
   resolveAttachmentPartners,
+  resolveAttachmentRoles,
   resolveRosterUnit,
   resolveRosterWargear,
   validateRosterCore,
@@ -55,6 +57,7 @@ function rosterOf(units: RosterUnit[]): Roster {
     source: { format: "listforge", generated_by: null },
     faction_id: "adepta-sororitas",
     detachments: [],
+    force_disposition: null,
     battle_size: null,
     points: { declared_limit: null, detachment_cap: null, total_reported: null, total_computed: 0 },
     units,
@@ -73,6 +76,7 @@ function leaderUnit(leaderId: string, bodyguardId: string): RosterUnit {
   const u = rosterUnit(leaderId);
   u.leader_attachment = {
     bodyguard_ref: { id: bodyguardId, raw_name: bodyguardId, resolved: true, candidates: [] },
+    role: "leader",
     provisional: true,
   };
   return u;
@@ -121,6 +125,29 @@ describe("resolveAttachmentPartners", () => {
   it("returns an empty array when the unit is in no attachment", () => {
     const lone = rosterOf([rosterUnit("battle-sisters-squad"), rosterUnit("palatine")]);
     expect(resolveAttachmentPartners(lone, "battle-sisters-squad")).toEqual([]);
+  });
+
+  it("includes all co-leaders from either end without including unrelated units", () => {
+    const multi = rosterOf([
+      rosterUnit("character-bodyguard"),
+      leaderUnit("first-leader", "character-bodyguard"),
+      leaderUnit("second-leader", "character-bodyguard"),
+      rosterUnit("unattached-leader"),
+    ]);
+    expect(resolveAttachmentPartners(multi, "first-leader").map((unit) => unit.ref.id))
+      .toEqual(["character-bodyguard", "second-leader"]);
+    expect(resolveAttachmentRoles(multi, "first-leader")).toEqual({
+      "character-bodyguard": "bodyguard",
+      "first-leader": "leader",
+      "second-leader": "leader",
+    });
+    expect(resolveAttachmentRoles(multi, "unattached-leader")).toEqual({});
+  });
+
+  it("does not invent membership for unresolved or absent bodyguards", () => {
+    const unresolved = leaderUnit("first-leader", "missing-bodyguard");
+    expect(resolveAttachmentRoles(rosterOf([unresolved]), "first-leader")).toEqual({});
+    expect(resolveAttachmentPartners(rosterOf([unresolved]), "first-leader")).toEqual([]);
   });
 });
 
@@ -204,6 +231,7 @@ function worldEatersRoster(units: RosterUnit[]): Roster {
     source: { format: "listforge", generated_by: null },
     faction_id: "world-eaters",
     detachments: [],
+    force_disposition: null,
     battle_size: null,
     points: { declared_limit: null, detachment_cap: null, total_reported: null, total_computed: 0 },
     units,
@@ -232,8 +260,9 @@ describe("checkRosterLegality", () => {
     ]);
     const report = checkRosterLegality(roster, ds);
     expect(report).toHaveLength(1);
-    const allowance = report[0].violations.find((v) => v.code === "exceeds-allowance");
-    expect(allowance?.id).toContain("reaper-autocannon");
+    // 5 reapers alone exceed the shared 2-at-10 allowance, the most the unit can field.
+    const over = report[0].violations.find((v) => v.code === "exceeds-max");
+    expect(over?.id).toBe("reaper-autocannon-chaos-terminators");
   });
 
   it("flags 3× reaper-autocannon at 10 models (over the 2-per-squad allowance)", () => {
@@ -247,7 +276,7 @@ describe("checkRosterLegality", () => {
       ]),
     ]);
     const report = checkRosterLegality(roster, ds);
-    expect(report[0].violations.some((v) => v.code === "exceeds-allowance")).toBe(true);
+    expect(report[0].violations.some((v) => v.code === "exceeds-max" && v.id === "reaper-autocannon-chaos-terminators")).toBe(true);
   });
 
   it("passes 2× reaper-autocannon at 10 models (within the allowance)", () => {
@@ -319,5 +348,89 @@ describe("validateRosterCore — unit-excluded-from-faction", () => {
   it("allows a collapsed generic twin (Repulsor) in the chapter that excluded it", () => {
     const { army } = validateRosterCore(norm("black-templars", "repulsor"), ds);
     expect(army.map((v) => v.code)).not.toContain("unit-excluded-from-faction");
+  });
+});
+
+// --- validateRosterCore: datasheet-scoped enhancement eligibility -----------
+describe("validateRosterCore — datasheet-scoped enhancement eligibility", () => {
+  const norm = (unitId: string, enhancementId: string): NormRoster => ({
+    factionId: "orks",
+    battleSize: null,
+    forceDisposition: "purge-the-foe",
+    detachmentIds: ["wreckas"],
+    units: [{ unitId, modelCount: 1, isWarlord: true, enhancementId, leaderBodyguardId: null, counts: new Map() }],
+  });
+  const codes = (unitId: string) => validateRosterCore(norm(unitId, "kaptins-hat-wreckas-orks"), ds).army.map((v) => v.code);
+
+  // Kaptin's Hat's dump eligibility names the Big Mek datasheet; the Dakkarig carries BIG MEK but is not that datasheet.
+  it("refuses a unit that only shares the datasheet's name as a keyword", () => {
+    expect(codes("big-mek-dakkarig")).toContain("enhancement-keyword-mismatch");
+  });
+
+  it("accepts the named datasheet and the keyword groups beside it", () => {
+    expect(codes("big-mek")).not.toContain("enhancement-keyword-mismatch");
+    expect(codes("warboss")).not.toContain("enhancement-keyword-mismatch");
+  });
+});
+
+describe("roster-conditional leader attachments", () => {
+  const template = ds.units.getInFaction("palatine", "adepta-sororitas")!.raw;
+  const raw = emptyRawData();
+  raw.units = ["example-leader", "example-bodyguard-a", "example-bodyguard-b", "example-gate"].map(
+    (id) => ({ ...template, id, name: id }),
+  );
+  raw.leaderAttachments = [{
+    leader_id: "example-leader",
+    eligible_bodyguard_ids: [],
+    conditional_groups: [
+      { role: "leader", eligible_bodyguard_ids: ["example-bodyguard-a"], excluded_roster_unit_ids: ["example-gate"] },
+      { role: "support", eligible_bodyguard_ids: ["example-bodyguard-b"], required_roster_unit_ids: ["example-gate"] },
+    ],
+    game_version: { edition: "11th", dataslate: "launch" },
+  }];
+  const dataset = new Dataset(raw);
+  const attachmentErrors = (withGate: boolean, target: string | null): string[] => {
+    const unit = (unitId: string, leaderBodyguardId: string | null = null) => ({
+      unitId, modelCount: 1, isWarlord: false, enhancementId: null, leaderBodyguardId, counts: new Map<string, number>(),
+    });
+    const units = [
+      unit("example-leader", target),
+      unit("example-bodyguard-a"),
+      unit("example-bodyguard-b"),
+      ...(withGate ? [unit("example-gate")] : []),
+    ];
+    return validateRosterCore({
+      factionId: template.faction_id, battleSize: null, forceDisposition: null, detachmentIds: [], units,
+    }, dataset).army.filter((v) => v.id === "example-leader").map((v) => v.code);
+  };
+
+  it("selects the permitted bodyguard and role from the current roster", () => {
+    expect(dataset.bodyguardsAttachableFrom("example-leader").map((v) => v.id))
+      .toEqual(["example-bodyguard-a", "example-bodyguard-b"]);
+    expect(dataset.bodyguardsAttachableFrom("example-leader", template.faction_id, new Set(["example-leader"])).map((v) => v.id))
+      .toEqual(["example-bodyguard-a"]);
+    expect(dataset.bodyguardsAttachableFrom("example-leader", template.faction_id, new Set(["example-leader", "example-gate"])).map((v) => v.id))
+      .toEqual(["example-bodyguard-b"]);
+    expect(attachmentErrors(false, "example-bodyguard-a")).not.toContain("leader-attachment-illegal");
+    expect(attachmentErrors(false, "example-bodyguard-b")).toContain("leader-attachment-illegal");
+    expect(attachmentErrors(true, "example-bodyguard-a")).toContain("leader-attachment-illegal");
+    expect(attachmentErrors(true, "example-bodyguard-b")).not.toContain("leader-attachment-illegal");
+    expect(attachmentErrors(false, null)).not.toContain("leader-must-attach");
+    expect(attachmentErrors(true, null)).toContain("leader-must-attach");
+  });
+
+  it("keeps the leader role when conditional groups overlap", () => {
+    const overlapping = new Dataset({
+      ...raw,
+      leaderAttachments: [{
+        ...raw.leaderAttachments[0],
+        conditional_groups: [
+          ...raw.leaderAttachments[0].conditional_groups!,
+          { role: "leader", eligible_bodyguard_ids: ["example-bodyguard-b"], required_roster_unit_ids: ["example-gate"] },
+        ],
+      }],
+    });
+    expect(overlapping.conditionalAttachmentRole("example-leader", new Set(["example-gate"])))
+      .toBe("leader");
   });
 });

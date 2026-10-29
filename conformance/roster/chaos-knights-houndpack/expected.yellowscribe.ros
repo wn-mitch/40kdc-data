@@ -17,13 +17,24 @@
             </profile>
             <profile name="Karnivore" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">You can re-roll the Charge roll.</characteristic>
+                <characteristic name="Description">You can re-roll the Charge roll.
+You can re-roll the Advance roll.</characteristic>
               </characteristics>
             </profile>
-            <profile name="Deadly Demise D3" typeName="Abilities">
+            <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, each enemy unit within 6" suffers D3 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Damaged" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Damaged Objective Control" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">While the model is Damaged, subtract its rating from this model's Objective Control characteristic.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -34,6 +45,7 @@
             <category name="Chaos"/>
             <category name="War Dog"/>
             <category name="Karnivore"/>
+            <category name="War Dog Karnivore"/>
           </categories>
           <selections>
             <selection id="unit0-m0" name="War Dog Karnivore" type="model" number="1">
@@ -101,13 +113,24 @@
             </profile>
             <profile name="Karnivore" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">You can re-roll the Charge roll.</characteristic>
+                <characteristic name="Description">You can re-roll the Charge roll.
+You can re-roll the Advance roll.</characteristic>
               </characteristics>
             </profile>
-            <profile name="Deadly Demise D3" typeName="Abilities">
+            <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, each enemy unit within 6" suffers D3 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Damaged" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Damaged Objective Control" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">While the model is Damaged, subtract its rating from this model's Objective Control characteristic.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -118,6 +141,7 @@
             <category name="Chaos"/>
             <category name="War Dog"/>
             <category name="Karnivore"/>
+            <category name="War Dog Karnivore"/>
           </categories>
           <selections>
             <selection id="unit1-m0" name="War Dog Karnivore" type="model" number="1">
@@ -185,13 +209,24 @@
             </profile>
             <profile name="Executioner" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">While the unit is below half strength against A targets, the unit gets +1 to Hit rolls.</characteristic>
+                <characteristic name="Description">While the target unit is below half strength, the unit gets +1 to Hit rolls.
+If this model has destroyed 1+ enemy units with its just-resolved attacks, enemy units within 3" of that unit must take a Battle-shock test.</characteristic>
               </characteristics>
             </profile>
-            <profile name="Deadly Demise D3" typeName="Abilities">
+            <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, each enemy unit within 6" suffers D3 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Damaged" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Damaged Objective Control" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">While the model is Damaged, subtract its rating from this model's Objective Control characteristic.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -202,6 +237,7 @@
             <category name="Chaos"/>
             <category name="War Dog"/>
             <category name="Executioner"/>
+            <category name="War Dog Executioner"/>
           </categories>
           <selections>
             <selection id="unit2-m0" name="War Dog Executioner" type="model" number="1">
@@ -274,17 +310,17 @@
             </profile>
             <profile name="Infiltrators" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Once per battle, the unit has the Infiltrators ability.</characteristic>
+                <characteristic name="Description">The unit gains the Infiltrators ability.</characteristic>
               </characteristics>
             </profile>
             <profile name="Mischief Makers" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">During the Fight phase, until the end of the phase, the attacking unit gets -1 to Hit rolls.</characteristic>
+                <characteristic name="Description">When an enemy unit is selected to fight (the triggering unit must not have TITANIC), while the triggering unit is a unit within Engagement Range of a friendly unit with the Mischief Makers ability, while making melee attacks, until the end of the phase, the triggering unit gets -1 to Hit rolls.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deep Strike" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit has the Deep Strike ability.</characteristic>
+                <characteristic name="Description">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
               </characteristics>
             </profile>
           </profiles>

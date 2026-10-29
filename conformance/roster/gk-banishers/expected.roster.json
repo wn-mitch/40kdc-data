@@ -79,7 +79,7 @@
       "points": 225,
       "is_warlord": true,
       "enhancement": {
-        "id": "pyresoul-psychic-banishers",
+        "id": "pyresoul-psychic-banishers-grey-knights",
         "raw_name": "Pyresoul (Psychic)",
         "resolved": true,
         "candidates": []
@@ -140,7 +140,7 @@
         },
         {
           "ref": {
-            "id": "storm-bolter",
+            "id": "storm-bolter-purifier-squad",
             "raw_name": "Storm bolter",
             "resolved": true,
             "candidates": []
@@ -182,7 +182,7 @@
             },
             {
               "ref": {
-                "id": "storm-bolter",
+                "id": "storm-bolter-purifier-squad",
                 "raw_name": "Storm bolter",
                 "resolved": true,
                 "candidates": []
@@ -215,7 +215,7 @@
             },
             {
               "ref": {
-                "id": "storm-bolter",
+                "id": "storm-bolter-purifier-squad",
                 "raw_name": "Storm bolter",
                 "resolved": true,
                 "candidates": []

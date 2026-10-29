@@ -23,7 +23,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import { nameToId } from "../converters/id-generator.js";
-import { FACTION_HOME_KEYWORD } from "../integrity.js";
+import { FACTION_HOME_KEYWORD, FACTION_SIBLING_KEYWORDS } from "../integrity.js";
 import {
   MfmDump,
   type DatasheetRow,
@@ -49,8 +49,8 @@ import {
 } from "./points.js";
 import type { StagedWrite } from "./apply.js";
 import { type GoldenMode, isCombatPatrolPublication } from "./game-mode.js";
+import { currentGameVersion } from "./dataslate.js";
 
-const CONFIRMED = { edition: "11th", dataslate: "launch" };
 /** Combat-Patrol-only entities carry this so the golden files them on the
  *  combat-patrol coverage dimension instead of inflating competitive gaps. */
 const COMBAT_PATROL_ONLY: readonly GoldenMode[] = ["combat-patrol"];
@@ -153,15 +153,10 @@ function buildProfiles(
 }
 
 /**
- * Dump `miniature_keyword` names that are model-build / kit tags, not datasheet
- * game keywords — a GW datasheet's KEYWORDS line never lists them (e.g. "Frame",
- * the sprue designation shared by the Land Raider Crusader/Redeemer builds).
- * Filtered out so they never land in a unit's `keywords`.
+ * A datasheet's keywords: the union of its miniatures' keywords in display order, then its
+ * datasheet name, which the Core Rules make an additional keyword of every unit.
  */
-const NON_GAME_KEYWORDS = new Set(["Frame"]);
-
-/** Union of keyword names across the datasheet's miniatures, deduped, in display order. */
-function buildKeywords(dump: MfmDump, datasheetId: string): string[] {
+export function buildKeywords(dump: MfmDump, datasheetId: string, datasheetName: string): string[] {
   const minis = (
     dump.groupBy("miniature", "datasheetId").get(datasheetId) ?? []
   )
@@ -176,28 +171,24 @@ function buildKeywords(dump: MfmDump, datasheetId: string): string[] {
       .slice()
       .sort((a, b) => a.displayOrder - b.displayOrder);
     for (const mk of mks) {
-      const nm = dump.enName(kwById.get(mk.keywordId));
-      if (!nm || seen.has(nm) || NON_GAME_KEYWORDS.has(nm)) continue;
-      seen.add(nm);
+      const nm = plainHyphens(dump.enName(kwById.get(mk.keywordId)));
+      if (!nm || seen.has(nm.toLowerCase())) continue;
+      seen.add(nm.toLowerCase());
       out.push(nm);
     }
   }
+  const name = plainHyphens(datasheetName)!;
+  if (!seen.has(name.toLowerCase())) out.push(name);
   return out;
 }
 
-/**
- * faction_keywords. For the single-token Chaos factions in FACTION_HOME_KEYWORD,
- * the integrity check requires the set to be exactly `{home}` (shared-template
- * datasheets carry contaminant multi-legion lines), so we emit only `[home]`.
- * Every other faction takes the dump's list, deduped in display order.
- */
-function buildFactionKeywords(
-  dump: MfmDump,
-  datasheetId: string,
-  dir: string,
-): string[] {
-  const home = FACTION_HOME_KEYWORD[dir];
-  if (home) return [home];
+/** The dump prints some keywords with a non-breaking hyphen (U+2011, "Grav‑Tank"); keywords use "-". */
+function plainHyphens(name: string | null | undefined): string | null | undefined {
+  return name?.replace(/\u2011/gu, "-");
+}
+
+/** The datasheet's own faction keyword names (`datasheet_faction_keyword`), deduped in display order. */
+function datasheetFactionKeywords(dump: MfmDump, datasheetId: string): string[] {
   const rows = (
     dump.groupBy("datasheet_faction_keyword", "datasheetId").get(datasheetId) ??
     []
@@ -214,6 +205,48 @@ function buildFactionKeywords(
     out.push(nm);
   }
   return out;
+}
+
+/**
+ * The daemon cult-legion keyword (see FACTION_SIBLING_KEYWORDS) this datasheet
+ * carries for `dir`, if any. Such a datasheet — Codex: World Eaters' Bloodletters,
+ * faction keyword `Blood Legions` — is the host faction's own VIEW of a daemon
+ * unit: it differs from the Legiones Daemonica datasheet (faction ability, points,
+ * some stats), so it is seeded into `dir` rather than skipped as a reprint of the
+ * chaos-daemons unit.
+ */
+export function siblingKeywordOf(
+  dump: MfmDump,
+  datasheetId: string,
+  dir: string,
+): string | undefined {
+  const siblings = FACTION_SIBLING_KEYWORDS[dir] ?? [];
+  return datasheetFactionKeywords(dump, datasheetId).find((k) =>
+    siblings.includes(k),
+  );
+}
+
+/** Whether the datasheet prints `dir`'s home faction keyword (FACTION_HOME_KEYWORD): the faction's own datasheet. */
+export function carriesHomeKeyword(dump: MfmDump, datasheetId: string, dir: string): boolean {
+  const home = FACTION_HOME_KEYWORD[dir];
+  return home !== undefined && datasheetFactionKeywords(dump, datasheetId).includes(home);
+}
+
+/**
+ * faction_keywords. For the single-token Chaos factions in FACTION_HOME_KEYWORD,
+ * the integrity check requires the set to be exactly `{home}` (shared-template
+ * datasheets carry contaminant multi-legion lines), so we emit only `[home]` —
+ * or only the datasheet's daemon cult-legion keyword for a sibling view.
+ * Every other faction takes the dump's list, deduped in display order.
+ */
+function buildFactionKeywords(
+  dump: MfmDump,
+  datasheetId: string,
+  dir: string,
+): string[] {
+  const home = FACTION_HOME_KEYWORD[dir];
+  if (home) return [siblingKeywordOf(dump, datasheetId, dir) ?? home];
+  return datasheetFactionKeywords(dump, datasheetId);
 }
 
 /** Battlefield role derived from keywords; absent when none of the role keywords apply. */
@@ -272,7 +305,7 @@ export function buildSeedUnit(
     throw new SeedSkip(`${name}: name does not slug to a valid entity-id`);
   }
   const profiles = buildProfiles(dump, ds.id!, name);
-  const keywords = buildKeywords(dump, ds.id!);
+  const keywords = buildKeywords(dump, ds.id!, name);
   const faction_keywords = buildFactionKeywords(dump, ds.id!, dir);
   const role = deriveRole(keywords);
   const model_count = buildModelCount(dump, ds.id!);
@@ -306,7 +339,7 @@ export function buildSeedUnit(
     ...(keywords.length ? { keywords } : {}),
     ...(faction_keywords.length ? { faction_keywords } : {}),
     model_count,
-    game_version: { ...CONFIRMED },
+    game_version: currentGameVersion(dump),
     ...(cp ? { game_modes: [...COMBAT_PATROL_ONLY] } : {}),
     is_legend: false,
     points_provisional: !priced,
@@ -431,7 +464,11 @@ export function runSeedUnits(
       } catch {
         continue;
       }
-      if (effIds.has(id) || sharedIds.has(id)) continue; // matched, or a shared-roster dup
+      // Matched, or a shared-roster dup — except the host faction's own datasheet: a daemon
+      // cult-legion view (chaos-daemons has the name) or one carrying the faction's home
+      // keyword (Codex: Emperor's Children's Defiler, though chaos-space-marines has one).
+      if (effIds.has(id)) continue;
+      if (sharedIds.has(id) && !siblingKeywordOf(dump, ds.id!, effDir) && !carriesHomeKeyword(dump, ds.id!, effDir)) continue;
       const cp = pub.get(ds.publicationId)?.isCombatPatrol ?? false;
       const prev = bySlug.get(id);
       if (

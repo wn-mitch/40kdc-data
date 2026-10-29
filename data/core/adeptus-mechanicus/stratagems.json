@@ -1,6 +1,6 @@
 [
   {
-    "id": "aggressive-impulse-haloscreed-battle-clade",
+    "id": "aggressive-impulse-haloscreed-battle-clade-adeptus-mechanicus",
     "name": "AGGRESSIVE IMPULSE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -12,7 +12,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "aggressive-impulse-haloscreed-battle-clade-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -29,7 +29,7 @@
     ]
   },
   {
-    "id": "aggressor-imperative-rad-zone-corps",
+    "id": "aggressor-imperative-rad-zone-corps-adeptus-mechanicus",
     "name": "AGGRESSOR IMPERATIVE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -40,11 +40,108 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": [
+      {
+        "required_keywords": [
+          "Skitarii"
+        ],
+        "name": "first",
+        "count": "one",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "owner": "friendly"
+                }
+              }
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "happened",
+                  "parameters": {
+                    "event": "selected",
+                    "filter": {
+                      "to": "move"
+                    },
+                    "window": "phase"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "required_keywords": [
+          "Skitarii"
+        ],
+        "excluded_keywords": [
+          "Battleline"
+        ],
+        "name": "second",
+        "count": "up-to",
+        "count_max": 1,
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "subject": {
+                  "stratagem_target": "first"
+                },
+                "filter": {
+                  "all_of": [
+                    "BATTLELINE"
+                  ]
+                }
+              }
+            },
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "within": {
+                    "of": {
+                      "stratagem_target": "first"
+                    },
+                    "range": {
+                      "inches": 6
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "same-unit",
+                  "parameters": {
+                    "as": {
+                      "stratagem_target": "first"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "ability_id": "aggressor-imperative-rad-zone-corps-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -58,7 +155,7 @@
     ]
   },
   {
-    "id": "analytic-reprisals-eradication-cohort",
+    "id": "analytic-reprisals-eradication-cohort-adeptus-mechanicus",
     "name": "ANALYTIC REPRISALS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -69,11 +166,43 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "analytic-reprisals-eradication-cohort",
+    "target_restrictions": {
+      "required_keywords": [
+        "Infantry",
+        "Skitarii"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "model-destroyed",
+              "object": "model-in-this-unit",
+              "filter": {
+                "by": "event-subject"
+              },
+              "window": "event"
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "analytic-reprisals-eradication-cohort-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -87,7 +216,7 @@
     ]
   },
   {
-    "id": "analytical-divination-haloscreed-battle-clade",
+    "id": "analytical-divination-haloscreed-battle-clade-adeptus-mechanicus",
     "name": "ANALYTICAL DIVINATION",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -98,11 +227,61 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Mechanicus",
+        "Infantry"
+      ],
+      "excluded_keywords": [
+        "Kataphron"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": "event-subject",
+                  "range": {
+                    "inches": 8
+                  }
+                }
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "state": "engaged"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "analytical-divination-haloscreed-battle-clade-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -116,7 +295,7 @@
     ]
   },
   {
-    "id": "auto-divinatory-targeting-cohort-cybernetica",
+    "id": "auto-divinatory-targeting-cohort-cybernetica-adeptus-mechanicus",
     "name": "AUTO-DIVINATORY TARGETING",
     "category": "detachment",
     "type": "battle-tactic",
@@ -128,7 +307,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "auto-divinatory-targeting-cohort-cybernetica-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -145,7 +324,7 @@
     ]
   },
   {
-    "id": "auto-oracular-retrieval-explorator-maniple",
+    "id": "auto-oracular-retrieval-explorator-maniple-adeptus-mechanicus",
     "name": "AUTO-ORACULAR RETRIEVAL",
     "category": "detachment",
     "type": "battle-tactic",
@@ -156,11 +335,38 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Mechanicus"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "disembarked",
+              "window": "turn"
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "auto-oracular-retrieval-explorator-maniple-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -174,7 +380,7 @@
     ]
   },
   {
-    "id": "baleful-halo-rad-zone-corps",
+    "id": "baleful-halo-rad-zone-corps-adeptus-mechanicus",
     "name": "BALEFUL HALO",
     "category": "detachment",
     "type": "battle-tactic",
@@ -186,7 +392,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "baleful-halo-rad-zone-corps-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -203,7 +409,7 @@
     ]
   },
   {
-    "id": "benevolence-of-the-omnissiah-cohort-cybernetica",
+    "id": "benevolence-of-the-omnissiah-cohort-cybernetica-adeptus-mechanicus",
     "name": "BENEVOLENCE OF THE OMNISSIAH",
     "category": "detachment",
     "type": "battle-tactic",
@@ -214,11 +420,54 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "or",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "all_of": [
+                      "ADEPTUS MECHANICUS",
+                      "VEHICLE"
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "all_of": [
+                      "LEGIO CYBERNETICA"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "benevolence-of-the-omnissiah-cohort-cybernetica-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -232,7 +481,7 @@
     ]
   },
   {
-    "id": "binharic-offence-skitarii-hunter-cohort",
+    "id": "binharic-offence-skitarii-hunter-cohort-adeptus-mechanicus",
     "name": "BINHARIC OFFENCE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -244,11 +493,135 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": [
+      {
+        "required_keywords": [
+          "Skitarii"
+        ],
+        "name": "first",
+        "count": "one",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "owner": "friendly"
+                }
+              }
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "happened",
+                  "parameters": {
+                    "event": "selected",
+                    "filter": {
+                      "to": "shoot"
+                    },
+                    "window": "phase"
+                  }
+                }
+              ]
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "happened",
+                  "parameters": {
+                    "event": "selected",
+                    "filter": {
+                      "to": "fight"
+                    },
+                    "window": "phase"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "required_keywords": [
+          "Skitarii"
+        ],
+        "name": "second",
+        "count": "one",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "owner": "friendly"
+                }
+              }
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "happened",
+                  "parameters": {
+                    "event": "selected",
+                    "filter": {
+                      "to": "shoot"
+                    },
+                    "window": "phase"
+                  }
+                }
+              ]
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "happened",
+                  "parameters": {
+                    "event": "selected",
+                    "filter": {
+                      "to": "fight"
+                    },
+                    "window": "phase"
+                  }
+                }
+              ]
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "same-unit",
+                  "parameters": {
+                    "as": {
+                      "stratagem_target": "first"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "name": "third",
+        "count": "one",
+        "side": "enemy",
+        "selects": "unit"
+      }
+    ],
+    "ability_id": "binharic-offence-skitarii-hunter-cohort-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -262,7 +635,7 @@
     ]
   },
   {
-    "id": "bionic-endurance-skitarii-hunter-cohort",
+    "id": "bionic-endurance-skitarii-hunter-cohort-adeptus-mechanicus",
     "name": "BIONIC ENDURANCE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -274,11 +647,41 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "PTERAXII",
+                  "SICARIAN",
+                  "SYDONIAN"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "bionic-endurance-skitarii-hunter-cohort-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -292,7 +695,7 @@
     ]
   },
   {
-    "id": "bulwark-imperative-rad-zone-corps",
+    "id": "bulwark-imperative-rad-zone-corps-adeptus-mechanicus",
     "name": "BULWARK IMPERATIVE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -303,11 +706,89 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": [
+      {
+        "required_keywords": [
+          "Skitarii"
+        ],
+        "name": "first",
+        "count": "one",
+        "side": "your-army",
+        "selects": "unit",
+        "bound_to": "attacked-unit",
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "filter": {
+              "owner": "friendly"
+            }
+          }
+        }
+      },
+      {
+        "required_keywords": [
+          "Skitarii"
+        ],
+        "excluded_keywords": [
+          "Battleline"
+        ],
+        "name": "second",
+        "count": "up-to",
+        "count_max": 1,
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "subject": {
+                  "stratagem_target": "first"
+                },
+                "filter": {
+                  "all_of": [
+                    "BATTLELINE"
+                  ]
+                }
+              }
+            },
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "within": {
+                    "of": {
+                      "stratagem_target": "first"
+                    },
+                    "range": {
+                      "inches": 6
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "same-unit",
+                  "parameters": {
+                    "as": {
+                      "stratagem_target": "first"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "ability_id": "bulwark-imperative-rad-zone-corps-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -321,7 +802,7 @@
     ]
   },
   {
-    "id": "cached-acquisition-explorator-maniple",
+    "id": "cached-acquisition-explorator-maniple-adeptus-mechanicus",
     "name": "CACHED ACQUISITION",
     "category": "detachment",
     "type": "epic-deed",
@@ -336,11 +817,46 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Mechanicus"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": {
+                    "objective": {
+                      "controlled_by": "friendly"
+                    }
+                  },
+                  "range": "objective-control"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "cached-acquisition-explorator-maniple-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -354,7 +870,7 @@
     ]
   },
   {
-    "id": "chant-of-electrotraction-luminen-auto-choir",
+    "id": "chant-of-electrotraction-luminen-auto-choir-adeptus-mechanicus",
     "name": "CHANT OF ELECTROTRACTION",
     "category": "detachment",
     "detachment_id": "luminen-auto-choir",
@@ -364,11 +880,18 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "chant-of-electrotraction-luminen-auto-choir",
+    "target_restrictions": {
+      "required_keywords": [
+        "Electro-Priests"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "chant-of-electrotraction-luminen-auto-choir-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -382,7 +905,7 @@
     ]
   },
   {
-    "id": "chant-of-the-remorseless-fist-data-psalm-conclave",
+    "id": "chant-of-the-remorseless-fist-data-psalm-conclave-adeptus-mechanicus",
     "name": "CHANT OF THE REMORSELESS FIST",
     "category": "detachment",
     "type": "battle-tactic",
@@ -393,11 +916,46 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Cult Mechanicus"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "fight"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "chant-of-the-remorseless-fist-data-psalm-conclave-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -411,7 +969,7 @@
     ]
   },
   {
-    "id": "clandestine-reposition-cohort-acquisitus",
+    "id": "clandestine-reposition-cohort-acquisitus-adeptus-mechanicus",
     "name": "CLANDESTINE REPOSITION",
     "category": "detachment",
     "detachment_id": "cohort-acquisitus",
@@ -421,11 +979,41 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "clandestine-reposition-cohort-acquisitus",
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "INFILTRATORS",
+                  "PTERAXII"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "not_states": [
+                  "engaged"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "clandestine-reposition-cohort-acquisitus-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -439,7 +1027,7 @@
     ]
   },
   {
-    "id": "defect-scrutiny-cohort-acquisitus",
+    "id": "defect-scrutiny-cohort-acquisitus-adeptus-mechanicus",
     "name": "DEFECT SCRUTINY",
     "category": "detachment",
     "detachment_id": "cohort-acquisitus",
@@ -449,11 +1037,18 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "defect-scrutiny-cohort-acquisitus",
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Mechanicus"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "defect-scrutiny-cohort-acquisitus-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -467,7 +1062,7 @@
     ]
   },
   {
-    "id": "echoes-of-the-conduit-wars-luminen-auto-choir",
+    "id": "echoes-of-the-conduit-wars-luminen-auto-choir-adeptus-mechanicus",
     "name": "ECHOES OF THE CONDUIT WARS",
     "category": "detachment",
     "detachment_id": "luminen-auto-choir",
@@ -478,11 +1073,18 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "echoes-of-the-conduit-wars-luminen-auto-choir",
+    "target_restrictions": {
+      "required_keywords": [
+        "Electro-Priests"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "echoes-of-the-conduit-wars-luminen-auto-choir-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -496,7 +1098,7 @@
     ]
   },
   {
-    "id": "eradication-protocols-haloscreed-battle-clade",
+    "id": "eradication-protocols-haloscreed-battle-clade-adeptus-mechanicus",
     "name": "ERADICATION PROTOCOLS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -508,11 +1110,61 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Mechanicus"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "operator": "or",
+                "operands": [
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "fight"
+                      },
+                      "window": "phase"
+                    }
+                  },
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "shoot"
+                      },
+                      "window": "phase"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "eradication-protocols-haloscreed-battle-clade-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -526,7 +1178,7 @@
     ]
   },
   {
-    "id": "expedited-purge-protocol-skitarii-hunter-cohort",
+    "id": "expedited-purge-protocol-skitarii-hunter-cohort-adeptus-mechanicus",
     "name": "EXPEDITED PURGE PROTOCOL",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -537,11 +1189,26 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Skitarii"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "expedited-purge-protocol-skitarii-hunter-cohort-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -555,7 +1222,7 @@
     ]
   },
   {
-    "id": "extinction-order-rad-zone-corps",
+    "id": "extinction-order-rad-zone-corps-adeptus-mechanicus",
     "name": "EXTINCTION ORDER",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -567,7 +1234,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "extinction-order-rad-zone-corps-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -584,7 +1251,7 @@
     ]
   },
   {
-    "id": "guided-retreat-haloscreed-battle-clade",
+    "id": "guided-retreat-haloscreed-battle-clade-adeptus-mechanicus",
     "name": "GUIDED RETREAT",
     "category": "detachment",
     "type": "battle-tactic",
@@ -595,11 +1262,18 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Mechanicus"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "guided-retreat-haloscreed-battle-clade-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -613,7 +1287,7 @@
     ]
   },
   {
-    "id": "holy-avarice-lords-of-the-forge",
+    "id": "holy-avarice-lords-of-the-forge-adeptus-mechanicus",
     "name": "HOLY AVARICE",
     "category": "detachment",
     "detachment_id": "lords-of-the-forge",
@@ -623,11 +1297,18 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "holy-avarice-lords-of-the-forge",
+    "target_restrictions": {
+      "required_keywords": [
+        "Tech-Priest"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "holy-avarice-lords-of-the-forge-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -641,7 +1322,7 @@
     ]
   },
   {
-    "id": "incantation-of-the-iron-soul-data-psalm-conclave",
+    "id": "incantation-of-the-iron-soul-data-psalm-conclave-adeptus-mechanicus",
     "name": "INCANTATION OF THE IRON SOUL",
     "category": "detachment",
     "type": "battle-tactic",
@@ -656,11 +1337,18 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Cult Mechanicus"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "incantation-of-the-iron-soul-data-psalm-conclave-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -674,7 +1362,7 @@
     ]
   },
   {
-    "id": "incense-exhausts-explorator-maniple",
+    "id": "incense-exhausts-explorator-maniple-adeptus-mechanicus",
     "name": "INCENSE EXHAUSTS",
     "category": "detachment",
     "type": "wargear",
@@ -686,7 +1374,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "incense-exhausts-explorator-maniple-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -703,7 +1391,7 @@
     ]
   },
   {
-    "id": "infoslave-skull-explorator-maniple",
+    "id": "infoslave-skull-explorator-maniple-adeptus-mechanicus",
     "name": "INFOSLAVE SKULL",
     "category": "detachment",
     "type": "wargear",
@@ -715,7 +1403,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "infoslave-skull-explorator-maniple-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -732,7 +1420,7 @@
     ]
   },
   {
-    "id": "isolate-and-destroy-skitarii-hunter-cohort",
+    "id": "isolate-and-destroy-skitarii-hunter-cohort-adeptus-mechanicus",
     "name": "ISOLATE AND DESTROY",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -743,11 +1431,99 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "or",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "all_of": [
+                      "IRONSTRIDER BALLISTARII"
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "all_of": [
+                      "MOUNTED",
+                      "SKITARII"
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "all_of": [
+                      "PTERAXII"
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "all_of": [
+                      "SICARIAN"
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "all_of": [
+                      "SYDONIAN"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "shoot"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "isolate-and-destroy-skitarii-hunter-cohort-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -761,7 +1537,7 @@
     ]
   },
   {
-    "id": "lethal-dosage-rad-zone-corps",
+    "id": "lethal-dosage-rad-zone-corps-adeptus-mechanicus",
     "name": "LETHAL DOSAGE",
     "category": "detachment",
     "type": "wargear",
@@ -772,11 +1548,46 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Mechanicus"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "shoot"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "lethal-dosage-rad-zone-corps-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -790,7 +1601,7 @@
     ]
   },
   {
-    "id": "litany-of-the-electromancer-data-psalm-conclave",
+    "id": "litany-of-the-electromancer-data-psalm-conclave-adeptus-mechanicus",
     "name": "LITANY OF THE ELECTROMANCER",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -802,7 +1613,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "litany-of-the-electromancer-data-psalm-conclave-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -819,7 +1630,7 @@
     ]
   },
   {
-    "id": "lockdown-protocols-purge-corps-deltic-9",
+    "id": "lockdown-protocols-purge-corps-deltic-9-adeptus-mechanicus",
     "name": "Lockdown Protocols",
     "category": "detachment",
     "detachment_id": "purge-corps-deltic-9",
@@ -830,11 +1641,31 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "lockdown-protocols-purge-corps-deltic-9",
+    "target_restrictions": {
+      "required_keywords": [
+        "Purge Corps Deltic-9"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "within": {
+              "of": {
+                "objective": {}
+              },
+              "range": "objective-control"
+            }
+          }
+        }
+      }
+    },
+    "ability_id": "lockdown-protocols-purge-corps-deltic-9-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -844,7 +1675,7 @@
     ]
   },
   {
-    "id": "luminescent-blessing-data-psalm-conclave",
+    "id": "luminescent-blessing-data-psalm-conclave-adeptus-mechanicus",
     "name": "LUMINESCENT BLESSING",
     "category": "detachment",
     "type": "battle-tactic",
@@ -855,11 +1686,27 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Cult Mechanicus"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "luminescent-blessing-data-psalm-conclave-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -873,7 +1720,7 @@
     ]
   },
   {
-    "id": "machine-spirit-resurgent-cohort-cybernetica",
+    "id": "machine-spirit-resurgent-cohort-cybernetica-adeptus-mechanicus",
     "name": "MACHINE SPIRIT RESURGENT",
     "category": "detachment",
     "type": "epic-deed",
@@ -884,11 +1731,60 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "or",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "all_of": [
+                      "ADEPTUS MECHANICUS",
+                      "VEHICLE"
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "all_of": [
+                      "LEGIO CYBERNETICA"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "strength",
+            "parameters": {
+              "below": "starting"
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "machine-spirit-resurgent-cohort-cybernetica-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -902,7 +1798,7 @@
     ]
   },
   {
-    "id": "machine-superiority-cohort-cybernetica",
+    "id": "machine-superiority-cohort-cybernetica-adeptus-mechanicus",
     "name": "MACHINE SUPERIORITY",
     "category": "detachment",
     "type": "epic-deed",
@@ -913,11 +1809,54 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "or",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "all_of": [
+                      "ADEPTUS MECHANICUS",
+                      "VEHICLE"
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "all_of": [
+                      "LEGIO CYBERNETICA"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "machine-superiority-cohort-cybernetica-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -931,7 +1870,7 @@
     ]
   },
   {
-    "id": "momentum-feedback-luminen-auto-choir",
+    "id": "momentum-feedback-luminen-auto-choir-adeptus-mechanicus",
     "name": "MOMENTUM FEEDBACK",
     "category": "detachment",
     "detachment_id": "luminen-auto-choir",
@@ -941,11 +1880,28 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "momentum-feedback-luminen-auto-choir",
+    "target_restrictions": {
+      "required_keywords": [
+        "Electro-Priests"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "not_states": [
+              "engaged"
+            ]
+          }
+        }
+      }
+    },
+    "ability_id": "momentum-feedback-luminen-auto-choir-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -959,7 +1915,7 @@
     ]
   },
   {
-    "id": "motive-imperative-cohort-cybernetica",
+    "id": "motive-imperative-cohort-cybernetica-adeptus-mechanicus",
     "name": "MOTIVE IMPERATIVE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -970,11 +1926,27 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Mechanicus",
+        "Vehicle"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "motive-imperative-cohort-cybernetica-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -988,7 +1960,7 @@
     ]
   },
   {
-    "id": "neural-overload-haloscreed-battle-clade",
+    "id": "neural-overload-haloscreed-battle-clade-adeptus-mechanicus",
     "name": "NEURAL OVERLOAD",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1000,7 +1972,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "neural-overload-haloscreed-battle-clade-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1017,7 +1989,7 @@
     ]
   },
   {
-    "id": "optimised-targeting-purge-corps-deltic-9",
+    "id": "optimised-targeting-purge-corps-deltic-9-adeptus-mechanicus",
     "name": "Optimised Targeting",
     "category": "detachment",
     "detachment_id": "purge-corps-deltic-9",
@@ -1027,11 +1999,18 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "optimised-targeting-purge-corps-deltic-9",
+    "target_restrictions": {
+      "required_keywords": [
+        "Purge Corps Deltic-9"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "optimised-targeting-purge-corps-deltic-9-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1041,7 +2020,7 @@
     ]
   },
   {
-    "id": "overloaded-safeguards-lords-of-the-forge",
+    "id": "overloaded-safeguards-lords-of-the-forge-adeptus-mechanicus",
     "name": "OVERLOADED SAFEGUARDS",
     "category": "detachment",
     "detachment_id": "lords-of-the-forge",
@@ -1049,13 +2028,20 @@
     "phases": [
       "movement"
     ],
-    "player_turn": "either",
+    "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "overloaded-safeguards-lords-of-the-forge",
+    "target_restrictions": {
+      "required_keywords": [
+        "Tech-Priest"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "overloaded-safeguards-lords-of-the-forge-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1069,7 +2055,7 @@
     ]
   },
   {
-    "id": "pre-calibrated-purge-solution-rad-zone-corps",
+    "id": "pre-calibrated-purge-solution-rad-zone-corps-adeptus-mechanicus",
     "name": "PRE-CALIBRATED PURGE SOLUTION",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1080,11 +2066,108 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": [
+      {
+        "required_keywords": [
+          "Adeptus Mechanicus"
+        ],
+        "name": "first",
+        "count": "one",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "owner": "friendly"
+                }
+              }
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "happened",
+                  "parameters": {
+                    "event": "selected",
+                    "filter": {
+                      "to": "shoot"
+                    },
+                    "window": "phase"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "required_keywords": [
+          "Skitarii"
+        ],
+        "excluded_keywords": [
+          "Battleline"
+        ],
+        "name": "second",
+        "count": "up-to",
+        "count_max": 1,
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "subject": {
+                  "stratagem_target": "first"
+                },
+                "filter": {
+                  "all_of": [
+                    "BATTLELINE"
+                  ]
+                }
+              }
+            },
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "within": {
+                    "of": {
+                      "stratagem_target": "first"
+                    },
+                    "range": {
+                      "inches": 6
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "same-unit",
+                  "parameters": {
+                    "as": {
+                      "stratagem_target": "first"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "ability_id": "pre-calibrated-purge-solution-rad-zone-corps-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1098,7 +2181,7 @@
     ]
   },
   {
-    "id": "precision-onslaught-eradication-cohort",
+    "id": "precision-onslaught-eradication-cohort-adeptus-mechanicus",
     "name": "PRECISION ONSLAUGHT",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1109,11 +2192,18 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "precision-onslaught-eradication-cohort",
+    "target_restrictions": {
+      "required_keywords": [
+        "Sicarian"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "precision-onslaught-eradication-cohort-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1127,7 +2217,7 @@
     ]
   },
   {
-    "id": "preservation-imperatives-purge-corps-deltic-9",
+    "id": "preservation-imperatives-purge-corps-deltic-9-adeptus-mechanicus",
     "name": "Preservation Imperatives",
     "category": "detachment",
     "detachment_id": "purge-corps-deltic-9",
@@ -1137,11 +2227,18 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "preservation-imperatives-purge-corps-deltic-9",
+    "target_restrictions": {
+      "required_keywords": [
+        "Purge Corps Deltic-9"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "preservation-imperatives-purge-corps-deltic-9-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1151,7 +2248,7 @@
     ]
   },
   {
-    "id": "priority-reclamation-explorator-maniple",
+    "id": "priority-reclamation-explorator-maniple-adeptus-mechanicus",
     "name": "PRIORITY RECLAMATION",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1163,7 +2260,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "priority-reclamation-explorator-maniple-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1180,7 +2277,7 @@
     ]
   },
   {
-    "id": "programmed-withdrawal-skitarii-hunter-cohort",
+    "id": "programmed-withdrawal-skitarii-hunter-cohort-adeptus-mechanicus",
     "name": "PROGRAMMED WITHDRAWAL",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1191,11 +2288,97 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": [
+      {
+        "required_keywords": [
+          "Sicarian"
+        ],
+        "name": "first",
+        "count": "up-to",
+        "count_max": 2,
+        "mode": "a",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "operator": "not",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "within": {
+                    "of": {
+                      "owner": "enemy"
+                    },
+                    "range": {
+                      "inches": 3
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "required_keywords": [
+          "Skitarii"
+        ],
+        "name": "second",
+        "count": "one",
+        "mode": "b",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "any_of": [
+                    "INFANTRY",
+                    "MOUNTED"
+                  ]
+                }
+              }
+            },
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "owner": "friendly"
+                }
+              }
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "filter": {
+                      "within": {
+                        "of": {
+                          "owner": "enemy"
+                        },
+                        "range": {
+                          "inches": 3
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "ability_id": "programmed-withdrawal-skitarii-hunter-cohort-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1209,7 +2392,7 @@
     ]
   },
   {
-    "id": "reactive-safeguard-explorator-maniple",
+    "id": "reactive-safeguard-explorator-maniple-adeptus-mechanicus",
     "name": "REACTIVE SAFEGUARD",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1221,7 +2404,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "reactive-safeguard-explorator-maniple-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1238,7 +2421,7 @@
     ]
   },
   {
-    "id": "repolarised-augurs-cohort-acquisitus",
+    "id": "repolarised-augurs-cohort-acquisitus-adeptus-mechanicus",
     "name": "REPOLARISED AUGURS",
     "category": "detachment",
     "detachment_id": "cohort-acquisitus",
@@ -1248,11 +2431,28 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "repolarised-augurs-cohort-acquisitus",
+    "target_restrictions": {
+      "required_keywords": [
+        "RECON AUGURY"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "not_states": [
+              "engaged"
+            ]
+          }
+        }
+      }
+    },
+    "ability_id": "repolarised-augurs-cohort-acquisitus-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1266,7 +2466,7 @@
     ]
   },
   {
-    "id": "scriptural-prognosis-lords-of-the-forge",
+    "id": "scriptural-prognosis-lords-of-the-forge-adeptus-mechanicus",
     "name": "SCRIPTURAL PROGNOSIS",
     "category": "detachment",
     "detachment_id": "lords-of-the-forge",
@@ -1277,11 +2477,31 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "scriptural-prognosis-lords-of-the-forge",
+    "target_restrictions": {
+      "required_keywords": [
+        "Tech-Priest"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "within": {
+              "of": {
+                "objective": {}
+              },
+              "range": "objective-control"
+            }
+          }
+        }
+      }
+    },
+    "ability_id": "scriptural-prognosis-lords-of-the-forge-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1295,7 +2515,7 @@
     ]
   },
   {
-    "id": "servo-driven-charge-eradication-cohort",
+    "id": "servo-driven-charge-eradication-cohort-adeptus-mechanicus",
     "name": "SERVO-DRIVEN CHARGE",
     "category": "detachment",
     "detachment_id": "eradication-cohort",
@@ -1305,11 +2525,46 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "servo-driven-charge-eradication-cohort",
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Mechanicus"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "fight"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "servo-driven-charge-eradication-cohort-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "type": "wargear",
     "external_refs": [
@@ -1324,7 +2579,7 @@
     ]
   },
   {
-    "id": "shroud-protocols-skitarii-hunter-cohort",
+    "id": "shroud-protocols-skitarii-hunter-cohort-adeptus-mechanicus",
     "name": "SHROUD PROTOCOLS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1335,11 +2590,28 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Infantry",
+        "Skitarii"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "shroud-protocols-skitarii-hunter-cohort-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1353,7 +2625,7 @@
     ]
   },
   {
-    "id": "targeting-override-haloscreed-battle-clade",
+    "id": "targeting-override-haloscreed-battle-clade-adeptus-mechanicus",
     "name": "TARGETING OVERRIDE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1365,11 +2637,61 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Mechanicus"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "operator": "or",
+                "operands": [
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "fight"
+                      },
+                      "window": "phase"
+                    }
+                  },
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "shoot"
+                      },
+                      "window": "phase"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "targeting-override-haloscreed-battle-clade-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1383,7 +2705,7 @@
     ]
   },
   {
-    "id": "threat-cogitation-targeters-eradication-cohort",
+    "id": "threat-cogitation-targeters-eradication-cohort-adeptus-mechanicus",
     "name": "THREAT-COGITATION TARGETERS",
     "category": "detachment",
     "detachment_id": "eradication-cohort",
@@ -1393,11 +2715,47 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "threat-cogitation-targeters-eradication-cohort",
+    "target_restrictions": {
+      "required_keywords": [
+        "Skitarii",
+        "Vehicle"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "shoot"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "threat-cogitation-targeters-eradication-cohort-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "type": "wargear",
     "external_refs": [
@@ -1412,7 +2770,7 @@
     ]
   },
   {
-    "id": "transcendent-cogitation-cohort-cybernetica",
+    "id": "transcendent-cogitation-cohort-cybernetica-adeptus-mechanicus",
     "name": "TRANSCENDENT COGITATION",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1423,11 +2781,54 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "or",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "all_of": [
+                      "ADEPTUS MECHANICUS",
+                      "VEHICLE"
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "all_of": [
+                      "LEGIO CYBERNETICA"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "transcendent-cogitation-cohort-cybernetica-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1441,7 +2842,7 @@
     ]
   },
   {
-    "id": "tribute-of-emphatic-veneration-data-psalm-conclave",
+    "id": "tribute-of-emphatic-veneration-data-psalm-conclave-adeptus-mechanicus",
     "name": "TRIBUTE OF EMPHATIC VENERATION",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1452,11 +2853,50 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": [
+      {
+        "required_keywords": [
+          "Cult Mechanicus"
+        ],
+        "name": "first",
+        "count": "one",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "filter": {
+              "owner": "friendly"
+            }
+          }
+        }
+      },
+      {
+        "name": "second",
+        "count": "one",
+        "side": "enemy",
+        "selects": "unit",
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "filter": {
+              "within": {
+                "of": {
+                  "stratagem_target": "first"
+                },
+                "range": {
+                  "inches": 18
+                }
+              }
+            }
+          }
+        }
+      }
+    ],
+    "ability_id": "tribute-of-emphatic-veneration-data-psalm-conclave-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1470,7 +2910,7 @@
     ]
   },
   {
-    "id": "unrelenting-aggression-eradication-cohort",
+    "id": "unrelenting-aggression-eradication-cohort-adeptus-mechanicus",
     "name": "UNRELENTING AGGRESSION",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1481,11 +2921,18 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "unrelenting-aggression-eradication-cohort",
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Mechanicus"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "unrelenting-aggression-eradication-cohort-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1499,7 +2946,7 @@
     ]
   },
   {
-    "id": "unshackled-wrath-eradication-cohort",
+    "id": "unshackled-wrath-eradication-cohort-adeptus-mechanicus",
     "name": "UNSHACKLED WRATH",
     "category": "detachment",
     "detachment_id": "eradication-cohort",
@@ -1510,7 +2957,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "unshackled-wrath-eradication-cohort",
+    "ability_id": "unshackled-wrath-eradication-cohort-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1528,7 +2975,7 @@
     ]
   },
   {
-    "id": "verse-of-vengeance-data-psalm-conclave",
+    "id": "verse-of-vengeance-data-psalm-conclave-adeptus-mechanicus",
     "name": "VERSE OF VENGEANCE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1539,11 +2986,27 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Cult Mechanicus"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "verse-of-vengeance-data-psalm-conclave-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {

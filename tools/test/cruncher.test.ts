@@ -42,13 +42,38 @@ function inputFor(
   };
 }
 
+describe("weapon keyword quantity boundaries", () => {
+  it("refuses unresolved contextual profile ratings instead of silently using zero", () => {
+    for (const keyword_id of ["sustained-hits", "rapid-fire", "melta", "blast"]) {
+      for (const value of [{ rating: true }, { roll_var: "damage-roll" }, { count_of: "models-in-bearer-unit" }, { incursion: 1, "strike-force": 2, onslaught: 3 }]) {
+        const input = inputFor("bolt-rifle", 0, 1, "intercessor-squad", { phase: "shooting", withinHalfRange: true }, [], 10);
+        input.attacker.weapon = {
+          ...input.attacker.weapon,
+          profiles: input.attacker.weapon.profiles.map((profile) => ({ ...profile, keywords: [{ keyword_id, parameters: { value } }] })),
+        } as EngineInput["attacker"]["weapon"];
+        expect(() => crunch(input, ds)).toThrow(/unresolved quantity/);
+      }
+    }
+  });
+
+  it("does not invent a Blast rating for an unparameterized DSL grant", () => {
+    const input = inputFor("bolt-rifle", 0, 1, "intercessor-squad", { phase: "shooting" }, [], 10);
+    const baseline = stage(crunch(input, ds), "attacks");
+    input.buffs = [{ source: { kind: "manual", label: "Example grant" }, contribution: { type: "extra-keyword", keywordRef: { keyword_id: "blast" } } }];
+    expect(stage(crunch(input, ds), "attacks")).toBe(baseline);
+    input.buffs = [{ source: { kind: "manual", label: "Example rated grant" }, contribution: { type: "extra-keyword", keywordRef: { keyword_id: "blast", parameters: { value: 1 } } } }];
+    expect(stage(crunch(input, ds), "attacks")).toBe(baseline + 2);
+  });
+});
+
 describe("crunch: bolt-rifle vs intercessor", () => {
-  // bolt-rifle profile 0: A=2, S=4, AP=-1, D=1, BS=3; keywords [assault, heavy].
+  // bolt-rifle profile 1 (Saturation): A=2, S=5, AP=-1, D=1, BS=3; keywords [assault, rapid-fire 1].
+  // bolt-rifle profile 0 (Focused Fire): A=1, S=6, AP=-1, D=2, BS=3; keywords [heavy, rapid-fire 1].
   // intercessor-squad profile 0: T=5, W=2, Sv=3, OC=2, Ld=6.
-  // 5 firing models, not stationary (so Heavy is gated off).
+  // 5 firing models, not stationary (so Heavy is gated off) and not within half range.
   it("matches hand-derived numbers without rerolls or modifiers", () => {
     const out = crunch(
-      inputFor("bolt-rifle", 0, 5, "intercessor-squad", {
+      inputFor("bolt-rifle", 1, 5, "intercessor-squad", {
         phase: "shooting",
         attackerStationary: false,
         withinHalfRange: false,
@@ -58,10 +83,10 @@ describe("crunch: bolt-rifle vs intercessor", () => {
     near(stage(out, "attacks"), 10, "attacks");
     // hits: 10 × 4/6 = 6.6667
     near(stage(out, "hits"), 10 * 4 / 6, "hits");
-    // wound: S4 vs T5 → 5+, P(wound)=2/6=1/3
-    near(stage(out, "wounds"), (10 * 4 / 6) * (2 / 6), "wounds");
+    // wound: S5 vs T5 → 4+, P(wound)=3/6=1/2
+    near(stage(out, "wounds"), (10 * 4 / 6) * (3 / 6), "wounds");
     // save: Sv3 - AP(-1) = 4+, P(save)=3/6=0.5; unsaved = wounds × 0.5
-    const wounds = (10 * 4) / 6 * (2 / 6);
+    const wounds = (10 * 4) / 6 * (3 / 6);
     const unsaved = wounds * 0.5;
     near(stage(out, "unsaved"), unsaved, "unsaved");
     // damage: 1 per hit
@@ -82,8 +107,8 @@ describe("crunch: bolt-rifle vs intercessor", () => {
         withinHalfRange: false,
       }),
     );
-    // With +1 to hit, BS3 effectively → 2+, P(hit) = 5/6.
-    near(stage(out, "hits"), 10 * 5 / 6, "hits");
+    // Focused Fire (A1, Heavy) x5. With +1 to hit, BS3 effectively → 2+, P(hit) = 5/6.
+    near(stage(out, "hits"), 5 * 5 / 6, "hits");
   });
 });
 
@@ -94,7 +119,7 @@ describe("crunch: torrent + ignores-cover via manual buffs", () => {
     // manual torrent extra-keyword.
     const inp = inputFor(
       "bolt-rifle",
-      0,
+      1,
       1,
       "intercessor-squad",
       { phase: "shooting", attackerStationary: false, withinHalfRange: false },
@@ -114,10 +139,10 @@ describe("crunch: torrent + ignores-cover via manual buffs", () => {
 describe("crunch: rerolls", () => {
   it("reroll-failed-hits boosts the hit rate", () => {
     const baseline = crunch(
-      inputFor("bolt-rifle", 0, 5, "intercessor-squad", { phase: "shooting" }),
+      inputFor("bolt-rifle", 1, 5, "intercessor-squad", { phase: "shooting" }),
     );
     const buffed = crunch(
-      inputFor("bolt-rifle", 0, 5, "intercessor-squad", { phase: "shooting" }, [
+      inputFor("bolt-rifle", 1, 5, "intercessor-squad", { phase: "shooting" }, [
         {
           source: { kind: "ability", abilityId: "guide", abilityKind: "support" },
           contribution: { type: "reroll", roll: "hit", subset: "all-failures" },
@@ -131,7 +156,7 @@ describe("crunch: rerolls", () => {
 
   it("Kharn's Legendary Killer rerolls flow through the attachment API to a crunch", () => {
     // End-to-end: sourcing buffs via the public stackableBuffsFor API, attaching
-    // Kharn to Berzerkers surfaces his melee hit/wound rerolls (model-is-leader),
+    // Kharn's actual Leader membership surfaces his melee hit/wound rerolls,
     // which must lift both hits and wounds for the combined unit.
     const enabled = (input: Parameters<typeof ds.stackableBuffsFor>[0]) =>
       ds
@@ -143,14 +168,15 @@ describe("crunch: rerolls", () => {
       unitId: "khorne-berzerkers",
       factionId: "world-eaters",
       attachedUnitIds: ["kharn-the-betrayer"],
+      attachmentRoles: { "khorne-berzerkers": "bodyguard", "kharn-the-betrayer": "leader" } as const,
     };
     const alone = { unitId: "khorne-berzerkers", factionId: "world-eaters" };
 
     const baseline = crunch(
-      inputFor("chainblade", 0, 5, "khorne-berzerkers", { phase: "fight" }, enabled(alone)),
+      inputFor("chainblade-khorne-berzerkers", 0, 5, "khorne-berzerkers", { phase: "fight" }, enabled(alone)),
     );
     const attached = crunch(
-      inputFor("chainblade", 0, 5, "khorne-berzerkers", { phase: "fight" }, enabled(ledByKharn)),
+      inputFor("chainblade-khorne-berzerkers", 0, 5, "khorne-berzerkers", { phase: "fight" }, enabled(ledByKharn)),
     );
     expect(stage(attached, "hits")).toBeGreaterThan(stage(baseline, "hits"));
     expect(stage(attached, "wounds")).toBeGreaterThan(stage(baseline, "wounds"));
@@ -275,6 +301,7 @@ describe("Codex profile targeting", () => {
       inputFor("lobba", 0, 1, "cultist-mob", { phase: "shooting" }, [], 10),
     );
 
-    expect(stage(output, "attacks")).toBe(9.5);
+    // A3, plus Blast 3 for each five models in the ten-model target.
+    expect(stage(output, "attacks")).toBe(9);
   });
 });

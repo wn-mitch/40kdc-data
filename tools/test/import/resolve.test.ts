@@ -2,8 +2,10 @@ import { describe, it, expect } from "vitest";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { Dataset } from "../../src/data/dataset.js";
+import { emptyRawData } from "../../src/data/types.js";
 import { importRoster } from "../../src/import/import-roster.js";
-import type { Roster } from "../../src/import/types.js";
+import { resolve } from "../../src/import/resolve.js";
+import type { ParsedRoster, Roster } from "../../src/import/types.js";
 
 const ds = Dataset.embedded();
 
@@ -39,7 +41,7 @@ describe("resolve (against embedded grey-knights data)", () => {
   it("resolves the enhancement scoped to the detachment", () => {
     const gm = unitById(roster, "grand-master-in-nemesis-dreadknight")!;
     expect(gm.is_warlord).toBe(true);
-    expect(gm.enhancement?.id).toBe("pyresoul-psychic-banishers");
+    expect(gm.enhancement?.id).toBe("pyresoul-psychic-banishers-grey-knights");
     expect(gm.enhancement?.resolved).toBe(true);
   });
 
@@ -288,7 +290,7 @@ describe("name resolution: faction-prefixed shared chassis and unit aliases", ()
 describe("enhancement RAW-name resolution (import-correctness)", () => {
   it("resolves an Upgrade enhancement by its RAW '(Upgrade)' roster name", () => {
     const hit = ds.enhancements.find("Symphonic Payload (Upgrade)");
-    expect(hit?.id).toBe("symphonic-payload-upgrade-chorus-of-condemnation");
+    expect(hit?.id).toBe("symphonic-payload-upgrade-chorus-of-condemnation-adepta-sororitas");
     // The stored display name keeps the tag (what a roster line carries).
     expect(hit?.name).toBe("Symphonic Payload (Upgrade)");
   });
@@ -296,11 +298,66 @@ describe("enhancement RAW-name resolution (import-correctness)", () => {
   it("keeps every '(Upgrade)'/'(Aura)'/'(Psychic)'-tagged name in lockstep with its id", () => {
     const tagged = ds.enhancements.all.filter((e) => /\((Upgrade|Aura|Psychic)\)$/.test(e.name ?? ""));
     expect(tagged.length).toBeGreaterThan(90);
+    const sharing = new Map<string, string[]>();
+    for (const e of tagged) sharing.set(e.name!, [...(sharing.get(e.name!) ?? []), e.id]);
     for (const e of tagged) {
       const tag = (e.name!.match(/\((Upgrade|Aura|Psychic)\)$/)![1]).toLowerCase();
       // id embeds the same lowercased tag token, so find() round-trips the RAW name.
       expect(e.id).toContain(`-${tag}-`);
-      expect(ds.enhancements.find(e.name!)?.id).toBe(e.id);
+      // Two detachments can print the same enhancement name; a name alone then finds one of them.
+      const owners = sharing.get(e.name!)!;
+      if (owners.length === 1) expect(ds.enhancements.find(e.name!)?.id).toBe(e.id);
+      else expect(owners).toContain(ds.enhancements.find(e.name!)?.id);
     }
+  });
+});
+
+describe("roster-conditional support inference", () => {
+  it("chooses authored bodyguard order across repeated leader records", () => {
+    const template = ds.units.getInFaction("palatine", "adepta-sororitas")!.raw;
+    const raw = emptyRawData();
+    raw.units = [
+      { ...template, id: "example-support", name: "Example Support", attachment_role: "support" },
+      { ...template, id: "example-bodyguard-a", name: "A Bodyguard" },
+      { ...template, id: "example-bodyguard-z", name: "Z Bodyguard" },
+      { ...template, id: "example-gate", name: "Example Gate" },
+    ];
+    raw.leaderAttachments = [{
+      leader_id: "example-support",
+      eligible_bodyguard_ids: [],
+      conditional_groups: [{
+        role: "leader",
+        eligible_bodyguard_ids: ["example-bodyguard-a"],
+        excluded_roster_unit_ids: ["example-gate"],
+      }],
+      game_version: template.game_version,
+    }, {
+      leader_id: "example-support",
+      eligible_bodyguard_ids: [],
+      conditional_groups: [{
+        role: "support",
+        eligible_bodyguard_ids: ["example-bodyguard-z", "example-bodyguard-a"],
+        required_roster_unit_ids: ["example-gate"],
+      }],
+      game_version: template.game_version,
+    }];
+    const parsedUnit = (raw_name: string, is_character: boolean) => ({
+      raw_name, is_character, model_count: 1, points: 0, is_warlord: false,
+      enhancement_raw_name: null, enhancement_points: null, wargear: [],
+    });
+    const parsed: ParsedRoster = {
+      name: "Example", generated_by: null, faction_raw_name: null,
+      detachment_raw_names: [], battle_size_raw: null,
+      declared_limit: null, total_reported: 0, total_computed: 0, multi_force: false,
+      units: [
+        parsedUnit("Example Support", true),
+        parsedUnit("A Bodyguard", false),
+        parsedUnit("Z Bodyguard", false),
+        parsedUnit("Example Gate", true),
+      ],
+    };
+    const roster = resolve(parsed, new Dataset(raw));
+    expect(unitById(roster, "example-support")?.leader_attachment?.bodyguard_ref.id)
+      .toBe("example-bodyguard-z");
   });
 });

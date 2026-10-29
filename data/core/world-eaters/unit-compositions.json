@@ -22,7 +22,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -57,7 +57,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -92,7 +92,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -121,7 +121,7 @@
         },
         "default_weapon_ids": [
           "bolt-pistol-khorne-berzerkers",
-          "chainblade"
+          "chainblade-khorne-berzerkers"
         ]
       },
       {
@@ -130,18 +130,72 @@
         "max": 19,
         "default_weapon_ids": [
           "bolt-pistol-khorne-berzerkers",
-          "chainblade"
+          "chainblade-khorne-berzerkers"
         ],
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
           "diameter": 32
-        }
+        },
+        "loadout_variants": [
+          {
+            "name": "Khorne Berzerker",
+            "weapon_ids": [
+              "chainblade-khorne-berzerkers",
+              "bolt-pistol-khorne-berzerkers"
+            ],
+            "max_count": 19
+          },
+          {
+            "name": "Khorne Berzerker w/ eviscerator and bolt pistol",
+            "weapon_ids": [
+              "khornate-eviscerator",
+              "bolt-pistol-khorne-berzerkers"
+            ],
+            "max_count": 4
+          },
+          {
+            "name": "Khorne Berzerker w/ eviscerator and plasma pistol",
+            "weapon_ids": [
+              "khornate-eviscerator",
+              "plasma-pistol-khorne-berzerkers"
+            ],
+            "max_count": 4
+          },
+          {
+            "name": "Khorne Berzerker w/ chainblade and plasma pistol",
+            "weapon_ids": [
+              "chainblade-khorne-berzerkers",
+              "plasma-pistol-khorne-berzerkers"
+            ],
+            "max_count": 4
+          }
+        ],
+        "loadout_variant_budgets": [
+          {
+            "variant_names": [
+              "Khorne Berzerker w/ eviscerator and bolt pistol",
+              "Khorne Berzerker w/ eviscerator and plasma pistol"
+            ],
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
+          },
+          {
+            "variant_names": [
+              "Khorne Berzerker w/ eviscerator and plasma pistol",
+              "Khorne Berzerker w/ chainblade and plasma pistol"
+            ],
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
+          }
+        ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -221,16 +275,6 @@
             ],
             "max_count": 2
           }
-        ],
-        "loadout_variant_budgets": [
-          {
-            "variant_names": [
-              "Dishonoured w/ skullsmasher and mangler"
-            ],
-            "count": 1,
-            "per_models": 0,
-            "scope": "model-row"
-          }
         ]
       },
       {
@@ -250,7 +294,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -316,7 +360,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -351,7 +395,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -388,7 +432,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -424,7 +468,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -463,7 +507,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -499,7 +543,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -534,7 +578,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -582,7 +626,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -635,7 +679,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -683,7 +727,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -739,7 +783,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -774,7 +818,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -810,7 +854,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -845,7 +889,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -879,7 +923,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -914,7 +958,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -965,7 +1009,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1020,7 +1064,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1054,7 +1098,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1107,7 +1151,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -1143,8 +1187,8 @@
         "min": 7,
         "max": 7,
         "default_weapon_ids": [
-          "autopistol",
-          "chainblade"
+          "autopistol-frenzied-reavers-jakhals",
+          "chainblade-frenzied-reavers-jakhals"
         ]
       },
       {
@@ -1152,7 +1196,7 @@
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
-          "autopistol",
+          "autopistol-frenzied-reavers-jakhals",
           "mauler-chainblade"
         ]
       },
@@ -1161,16 +1205,45 @@
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
-          "autopistol",
-          "chainblade"
+          "autopistol-frenzied-reavers-jakhals",
+          "chainblade-frenzied-reavers-jakhals"
         ],
         "is_leader_model": true
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
-    }
+      "dataslate": "mfm-995"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Dishonoured",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Jakhal with Autopistol and Chainblade",
+            "min": 7,
+            "max": 7
+          },
+          {
+            "name": "Jakhal with Autopistol and Mauler Chainblade",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Jakhal Pack Leader",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ],
+    "game_modes": [
+      "combat-patrol"
+    ]
   },
   {
     "unit_id": "frenzied-reavers-khorne-berzerkers",
@@ -1181,9 +1254,13 @@
         "min": 5,
         "max": 5,
         "default_weapon_ids": [
-          "bolt-pistol",
+          "bolt-pistol-frenzied-reavers-khorne-berzerkers",
           "chainblade"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       },
       {
         "name": "Khorne Berzerker Champion",
@@ -1191,9 +1268,13 @@
         "max": 1,
         "default_weapon_ids": [
           "chainblade",
-          "plasma-pistol"
+          "plasma-pistol-frenzied-reavers-khorne-berzerkers"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       },
       {
         "name": "Khorne Berzerker with Plasma Pistol and Chainblade",
@@ -1201,23 +1282,60 @@
         "max": 2,
         "default_weapon_ids": [
           "chainblade",
-          "plasma-pistol"
-        ]
+          "plasma-pistol-frenzied-reavers-khorne-berzerkers"
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       },
       {
         "name": "Khorne Berzerker with Bolt Pistol and Khornate Eviscerator",
         "min": 2,
         "max": 2,
         "default_weapon_ids": [
-          "bolt-pistol",
+          "bolt-pistol-frenzied-reavers-khorne-berzerkers",
           "khornate-eviscerator"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
-    }
+      "dataslate": "mfm-995"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Khorne Berzerker with Bolt Pistol and Chainblade",
+            "min": 5,
+            "max": 5
+          },
+          {
+            "name": "Khorne Berzerker Champion",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Khorne Berzerker with Plasma Pistol and Chainblade",
+            "min": 2,
+            "max": 2
+          },
+          {
+            "name": "Khorne Berzerker with Bolt Pistol and Khornate Eviscerator",
+            "min": 2,
+            "max": 2
+          }
+        ]
+      }
+    ],
+    "game_modes": [
+      "combat-patrol"
+    ]
   },
   {
     "unit_id": "frenzied-reavers-master-of-executions",
@@ -1228,16 +1346,34 @@
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
-          "bolt-pistol",
+          "bolt-pistol-frenzied-reavers-master-of-executions",
           "axe-of-dismemberment"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
-    }
+      "dataslate": "mfm-995"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Master of Executions",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ],
+    "game_modes": [
+      "combat-patrol"
+    ]
   },
   {
     "unit_id": "vorrakh-lord-of-the-frenzied-reavers",
@@ -1248,14 +1384,288 @@
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
-          "hellforged-weapons",
+          "hellforged-weapons-vorrakh-lord-of-the-frenzied-reavers",
           "infernal-cannon"
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 60
+        }
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Vorrakh",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ],
+    "game_modes": [
+      "combat-patrol"
+    ]
+  },
+  {
+    "unit_id": "bloodcrushers",
+    "faction_id": "world-eaters",
+    "models": [
+      {
+        "name": "Bloodhunter",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "hellblade",
+          "juggernauts-bladed-horn"
+        ],
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 90,
+          "length": 52.5
+        }
+      },
+      {
+        "name": "Bloodcrusher",
+        "min": 2,
+        "max": 5,
+        "default_weapon_ids": [
+          "hellblade",
+          "juggernauts-bladed-horn"
+        ],
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 90,
+          "length": 52.5
+        }
+      }
+    ],
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Bloodhunter",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Bloodcrusher",
+            "min": 2,
+            "max": 2
+          }
+        ]
+      },
+      {
+        "models": [
+          {
+            "name": "Bloodhunter",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Bloodcrusher",
+            "min": 3,
+            "max": 5
+          }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     }
+  },
+  {
+    "unit_id": "bloodletters",
+    "faction_id": "world-eaters",
+    "models": [
+      {
+        "name": "Bloodreaper",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "hellblade"
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
+      },
+      {
+        "name": "Bloodletter",
+        "min": 9,
+        "max": 9,
+        "default_weapon_ids": [
+          "hellblade"
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Bloodreaper",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Bloodletter",
+            "min": 9,
+            "max": 9
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "flesh-hounds",
+    "faction_id": "world-eaters",
+    "models": [
+      {
+        "name": "Gore Hound",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "burning-roar",
+          "gore-drenched-fangs",
+          "collar-of-khorne"
+        ],
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 60,
+          "length": 35.5
+        }
+      },
+      {
+        "name": "Flesh Hound",
+        "min": 4,
+        "max": 9,
+        "default_weapon_ids": [
+          "gore-drenched-fangs",
+          "collar-of-khorne"
+        ],
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 60,
+          "length": 35.5
+        }
+      }
+    ],
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Gore Hound",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Flesh Hound",
+            "min": 4,
+            "max": 4
+          }
+        ]
+      },
+      {
+        "models": [
+          {
+            "name": "Gore Hound",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Flesh Hound",
+            "min": 5,
+            "max": 9
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    }
+  },
+  {
+    "unit_id": "skarbrand",
+    "faction_id": "world-eaters",
+    "models": [
+      {
+        "name": "Skarbrand",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "bellow-of-endless-fury",
+          "slaughter-and-carnage"
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 100
+        }
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Skarbrand",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "bloodthirster",
+    "faction_id": "world-eaters",
+    "models": [
+      {
+        "name": "Bloodthirster",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "hellfire-breath",
+          "great-axe-of-khorne"
+        ],
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 120,
+          "length": 92
+        }
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Bloodthirster",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
   }
 ]

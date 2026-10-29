@@ -1,0 +1,47 @@
+{
+ "id": 41,
+ "source_text": "xxxxx xx xxxxx xxxx xx xxxxxx 6\" of this xxxxx, xxxxxx the xxxxxxxxxx xxxxxxxxxxxxxx of xxxxxx in that xxxx xx 1.",
+ "leaves": [
+  {
+   "role": "CONDITION",
+   "family_id": "unit-filter",
+   "family_version": 8,
+   "parameters": {
+    "side": "enemy"
+   },
+   "start_byte": 9,
+   "end_byte": 19,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "CONDITION",
+   "family_id": "aura-range",
+   "family_version": 3,
+   "parameters": {
+    "inches": 6,
+    "of": "this-model"
+   },
+   "start_byte": 23,
+   "end_byte": 46,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "EFFECT",
+   "family_id": "characteristic-modifier",
+   "family_version": 14,
+   "parameters": {
+    "subject": "antecedent",
+    "characteristics": [
+     "Ld"
+    ],
+    "operation": "worsen",
+    "value": 1,
+    "weapon_type": "all"
+   },
+   "start_byte": 48,
+   "end_byte": 112,
+   "fragment": "RAW_TEXT"
+  }
+ ],
+ "edits": null
+}

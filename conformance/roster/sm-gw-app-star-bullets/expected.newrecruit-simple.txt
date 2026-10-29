@@ -1,0 +1,13 @@
+Adeptus Astartes - Star Bullets Test - [85 pts]
+
+# ++ Army Roster ++ [85 pts]
+## Configuration
+List Name: Star Bullets Test
+Faction: Adeptus Astartes
+Detachment: Gladius Task Force
+Force Disposition: Priority Assets
+
+## Battleline [85 pts]
+Intercessor Squad [85 pts]:
+• 1x Intercessor Sergeant: Bolt Pistol, Bolt Rifle, Knives and Fists
+• 4x Intercessor: Bolt Pistol, Bolt Rifle, Knives and Fists

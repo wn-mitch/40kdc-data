@@ -1,0 +1,15 @@
++++++++++++++++++++++++++++++++++++++++++++++++
++ FACTION KEYWORD: Imperium - Adeptus Astartes
++ DETACHMENT: Gladius Task Force
++ TOTAL ARMY POINTS: 310pts
++
++ NUMBER OF UNITS: 2
++++++++++++++++++++++++++++++++++++++++++++++++
+
+Marneus Calgar in Armour of Antilochus (180 pts)
+• Warlord
+• 1x Gauntlets of Ultramar
+
+Death Company Marines with Jump Packs (130 pts)
+• 5x Astartes chainsword
+• 5x Heavy bolt pistol

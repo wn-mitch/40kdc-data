@@ -2,10 +2,9 @@
  * stratagems.ts — Phase 6: reconcile stratagem numeric/structural fields against
  * the GW MFM dump.
  *
- * The repo stratagem id is `detachmentScopedId(name, detachment-name)` (bare
- * `nameToId(name)` for the 11 core stratagems with no detachment), which is how
- * the dump's (stratagem, detachment) pair slugs — so matching is a direct id
- * lookup, mirroring enhancements (Phase 3A).
+ * The repo stratagem id is the one `mfm:mirror` derives from the dump row
+ * (`<name>-<detachment>-<faction>`, bare for the core stratagems), so matching is
+ * a direct id lookup, mirroring enhancements (Phase 3A).
  *
  * APPLIED from the dump — only fields backed by a reliable FIRST-CLASS column:
  *   - cp_cost   ← `cpCost`   (authoritative numeric).
@@ -26,7 +25,8 @@
  *                   future dump upload introduces a mis-scoped record.
  *
  * `game_version` is left as-authored: the structural fields above are keyed off
- * the dump but `timing` is not, so stamping launch would over-claim.
+ * the dump but `timing` is not; the `dataslates` pass stamps a stratagem only once its
+ * structure and its ability both verify.
  *
  * DERIVED FOR REVIEW ONLY (reported, NOT written): `phases`, parsed from
  * `localisations.en.whenRules`. The structured `stratagem_phase` table is NOT
@@ -43,7 +43,7 @@
  */
 import * as fs from "fs";
 import * as path from "path";
-import { nameToId, detachmentScopedId } from "../converters/id-generator.js";
+import { mirrorIds } from "./mirror/ids.js";
 import { MfmDump, type DetachmentRow, type StratagemRow } from "./loader.js";
 import { readJsonArray, CORE_DIR } from "./repo-files.js";
 import { repoDirs, repoDirForFactionName } from "./faction-map.js";
@@ -56,6 +56,15 @@ type Phase = "command" | "movement" | "shooting" | "charge" | "fight";
 type PlayerTurn = "your-turn" | "opponent-turn" | "either";
 type StratType = "battle-tactic" | "strategic-ploy" | "epic-deed" | "wargear";
 type StratCategory = "core" | "detachment";
+
+/**
+ * Stratagems whose dump `key` disagrees with the dump's own whenRules for the same record; core
+ * follows the rules text, one entry per stratagem, keyed by the MFM stratagem id.
+ */
+export const RULES_TEXT_PLAYER_TURN: Readonly<Record<string, PlayerTurn>> = {
+  // Overloaded Safeguards: key eitherPlayer (and all five phases in stratagem_phase); the card prints "Your Movement phase".
+  "55efd318-ef65-4419-b499-d9dadbd42886": "your-turn",
+};
 
 /** Dump `stratagem.key` → the repo `player_turn` enum. A first-class column. */
 const KEY_TO_TURN: Record<string, PlayerTurn> = {
@@ -89,8 +98,10 @@ export interface StratagemCanon {
   cp_cost: number | null;
   /** Prose-derived phases — REVIEW ONLY (stratagem_phase is unreliable; see header). */
   phases_review: Phase[] | null;
-  /** From `stratagem.key` — APPLIED. */
+  /** From `stratagem.key` — APPLIED, unless the WHEN line names a phase in either turn. */
   player_turn: PlayerTurn | null;
+  /** The key's turn, when the WHEN line overrode it to either. */
+  turn_key_overridden?: PlayerTurn;
   /** From `stratagem.category` — FILL-ONLY (optional field). */
   type: StratType | null;
   /** From `detachmentId` presence — SET/confirm. */
@@ -102,13 +113,26 @@ function stripTags(s: string): string {
   return s.replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
 }
 
-const PHASE_WORDS: [Phase, RegExp][] = [
-  ["command", /\bcommand phase\b/i],
-  ["movement", /\bmovement phase\b/i],
-  ["shooting", /\bshooting phase\b/i],
-  ["charge", /\bcharge phase\b/i],
-  ["fight", /\bfight phase\b/i],
-];
+const PHASE_NAMES: Phase[] = ["command", "movement", "shooting", "charge", "fight"];
+const PHASE_WORD = `(?:${PHASE_NAMES.join("|")})`;
+/** A run of phase names sharing one "phase(s)": "movement or your charge phase",
+ * "movement/charge phase", "shooting phase or the fight phase" (two runs), "command phase". */
+const PHASE_RUN = new RegExp(
+  `(?:(excluding) (?:the )?)?(${PHASE_WORD}(?:\\s*(?:,|/|or|and)\\s*(?:your (?:opponent(?:'|’)s )?|the )?${PHASE_WORD})*)\\s+phases?\\b`,
+  "g",
+);
+
+/** The phases a when line names, in the canonical order. "Any phase" is every phase;
+ * "excluding the X phase" takes X out. */
+export function phasesOf(text: string): Phase[] {
+  const named = new Set<Phase>();
+  const excluded = new Set<Phase>();
+  for (const m of text.matchAll(PHASE_RUN)) {
+    for (const p of m[2]!.match(new RegExp(PHASE_WORD, "g")) ?? []) (m[1] ? excluded : named).add(p as Phase);
+  }
+  if (/\b(any|each|every) phase\b/.test(text)) PHASE_NAMES.forEach((p) => named.add(p));
+  return PHASE_NAMES.filter((p) => named.has(p) && !excluded.has(p));
+}
 
 /** Derive { phases, player_turn } from a stratagem's whenRules prose. Either field
  * is null when the prose doesn't determine it (→ keep the authored value). */
@@ -119,15 +143,15 @@ export function deriveTrigger(whenRulesRaw: string | undefined | null): {
   if (!whenRulesRaw) return { phases: null, player_turn: null };
   const t = stripTags(whenRulesRaw).toLowerCase();
 
-  const phases: Phase[] = [];
-  for (const [p, re] of PHASE_WORDS) if (re.test(t)) phases.push(p);
+  const phases = phasesOf(t);
 
-  // turn ownership: "your opponent's <phase>" → opponent; "your <phase>" → yours;
-  // both present, or "any/either" → either; nothing decisive → null.
+  // turn ownership: "your opponent's <phase>" → opponent; "your <phase>" → yours; an unlabeled
+  // phase ("the Fight phase"), both, or "any/either" → either; nothing decisive → null.
   const hasOpponent = /opponent('|’)s\b|opponent's\b/.test(t) || /\bopponent(’|')?s? \w*\s*phase/.test(t);
   const hasYours = /\byour (?!opponent)/.test(t);
   let player_turn: PlayerTurn | null = null;
   if (/\b(any|either)\b/.test(t) && phases.length) player_turn = "either";
+  else if (namesEitherTurnPhase(t)) player_turn = "either";
   else if (hasOpponent && hasYours) player_turn = "either";
   else if (hasOpponent) player_turn = "opponent-turn";
   else if (hasYours) player_turn = "your-turn";
@@ -135,22 +159,21 @@ export function deriveTrigger(whenRulesRaw: string | undefined | null): {
   return { phases: phases.length ? phases : null, player_turn };
 }
 
-/** Repo id for a dump stratagem: `detachmentScopedId` when detachment-scoped, bare
- *  `nameToId` for the coreless few. Null if the name can't be slugged. The single
- *  id rule shared by {@link buildStratCanon} and {@link stratagemInventory}. */
+/**
+ * Whether a WHEN line names a phase that is used in either player's turn. The rules label a phase
+ * "your" or "your opponent's"; an unlabeled one ("the Fight phase", "Start of the Command phase")
+ * is either player's. A key of yourTurn/opponentsTurn on such a Stratagem is coarser than its text.
+ */
+export function namesEitherTurnPhase(whenRulesRaw: string | undefined | null): boolean {
+  if (!whenRulesRaw) return false;
+  return new RegExp(`\\bthe ${PHASE_WORD} phase\\b`).test(stripTags(whenRulesRaw).toLowerCase());
+}
+
+/** Repo id for a dump stratagem: the id `mfm:mirror` gives the row (`<name>-<detachment>-<faction>`,
+ *  bare for a core stratagem). Null for a row no faction or detachment owns. The single id rule
+ *  shared by {@link buildStratCanon}, {@link stratagemInventory} and the seed. */
 export function stratagemRepoId(dump: MfmDump, s: StratagemRow): string | null {
-  const name = dump.enName(s);
-  if (!name) return null;
-  try {
-    if (s.detachmentId) {
-      const dn = dump.enName(dump.byId("detachment").get(s.detachmentId));
-      if (!dn) return null;
-      return detachmentScopedId(name, dn);
-    }
-    return nameToId(name);
-  } catch {
-    return null;
-  }
+  return mirrorIds(dump).idOf("stratagem", s.id) ?? null;
 }
 
 /** Stratagem repo-id → canon fields from the dump: cp_cost + first-class
@@ -164,10 +187,14 @@ export function buildStratCanon(dump: MfmDump): Map<string, StratagemCanon> {
     const { phases } = deriveTrigger(when); // phases only — player_turn now from `key`
     const cp = s.cpCost != null ? parseInt(String(s.cpCost), 10) : null;
     const row = s as { key?: string; category?: string | null; detachmentId?: string | null };
+    const keyTurn = (row.key && KEY_TO_TURN[row.key]) || null;
+    // The text wins where it names a phase in either turn and the key says only one player's.
+    const overridden = keyTurn && keyTurn !== "either" && namesEitherTurnPhase(when) ? keyTurn : undefined;
     m.set(id, {
       cp_cost: Number.isFinite(cp as number) ? (cp as number) : null,
       phases_review: phases,
-      player_turn: (row.key && KEY_TO_TURN[row.key]) || null,
+      player_turn: RULES_TEXT_PLAYER_TURN[s.id] ?? (overridden ? "either" : keyTurn),
+      ...(overridden ? { turn_key_overridden: overridden } : {}),
       type: (row.category && CATEGORY_TO_TYPE[row.category]) || null,
       category: row.detachmentId ? "detachment" : "core",
     });
@@ -201,6 +228,8 @@ export interface DirStratResult {
   cpChanged: { id: string; from: number; to: number }[];
   /** player_turn ← key: APPLIED. */
   turnApplied: { id: string; from?: PlayerTurn; to: PlayerTurn }[];
+  /** player_turn ← either although the key said one player: the WHEN line names a phase in either turn. */
+  turnKeyOverridden: { id: string; key: PlayerTurn }[];
   /** type ← category: FILLED (authored was unset). */
   typeFilled: { id: string; to: StratType }[];
   /** type ← category: both present and disagree — surfaced, NOT overwritten. */
@@ -240,6 +269,7 @@ export function runStratagems(dump: MfmDump, write: boolean): StratReport {
       matched: 0,
       cpChanged: [],
       turnApplied: [],
+      turnKeyOverridden: [],
       typeFilled: [],
       typeConflict: [],
       categoryChanged: [],
@@ -263,6 +293,7 @@ export function runStratagems(dump: MfmDump, write: boolean): StratReport {
       }
 
       // player_turn ← stratagem.key (first-class, whenRules-corroborated): APPLIED.
+      if (c.turn_key_overridden) res.turnKeyOverridden.push({ id: s.id, key: c.turn_key_overridden });
       if (c.player_turn && s.player_turn !== c.player_turn) {
         res.turnApplied.push({ id: s.id, from: s.player_turn, to: c.player_turn });
         s.player_turn = c.player_turn;
@@ -293,7 +324,7 @@ export function runStratagems(dump: MfmDump, write: boolean): StratReport {
         res.phasesReview.push({ id: s.id, from: s.phases ?? [], to: c.phases_review });
       }
       // game_version intentionally left as-authored: timing isn't dump-verified,
-      // so flipping provisional→launch would over-claim.
+      // so the `dataslates` pass, not this one, decides the stamp.
     }
     if (dirty) staged.push({ path: p, value: strats });
     dirs.push(res);
@@ -331,6 +362,7 @@ export function buildStratReport(report: StratReport, write: boolean): string {
     if (
       !d.cpChanged.length &&
       !d.turnApplied.length &&
+      !d.turnKeyOverridden.length &&
       !d.typeFilled.length &&
       !d.typeConflict.length &&
       !d.categoryChanged.length &&
@@ -345,6 +377,10 @@ export function buildStratReport(report: StratReport, write: boolean): string {
     if (d.turnApplied.length) {
       L.push("", "**Player-turn ← key (applied):**");
       d.turnApplied.forEach((c) => L.push(`- ${c.id}: ${c.from ?? "—"} → ${c.to}`));
+    }
+    if (d.turnKeyOverridden.length) {
+      L.push("", "**Player-turn ← either over the key (the WHEN line names a phase in either turn):**");
+      d.turnKeyOverridden.forEach((c) => L.push(`- ${c.id}: key said ${c.key}`));
     }
     if (d.typeFilled.length) {
       L.push("", "**Type ← category (filled — was unset):**");

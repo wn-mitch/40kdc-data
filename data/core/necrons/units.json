@@ -27,7 +27,8 @@
       "Fly",
       "Transport",
       "Dedicated Transport",
-      "Ghost Ark"
+      "Ghost Ark",
+      "Frame"
     ],
     "faction_keywords": [
       "Necrons"
@@ -48,15 +49,18 @@
       "gauss-flayer-array"
     ],
     "ability_ids": [
-      "deadly-demise-d3",
-      "repair-barge"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "repair-barge-necrons"
     ],
     "transport_capacity": {
       "capacity": 10
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -110,7 +114,8 @@
       "Walker",
       "Titanic",
       "Towering",
-      "Seraptek Heavy Construct"
+      "Seraptek Heavy Construct",
+      "Frame"
     ],
     "faction_keywords": [
       "Necrons"
@@ -130,13 +135,24 @@
       "transdimensional-projector"
     ],
     "ability_ids": [
-      "deadly-demise-d6-2",
-      "terrifying-monstrosity",
-      "titanic-walker"
+      {
+        "id": "deadly-demise",
+        "value": "D6+2"
+      },
+      "terrifying-monstrosity-necrons",
+      {
+        "id": "damaged",
+        "value": 9
+      },
+      "super-heavy-walker",
+      {
+        "id": "damaged-objective-control",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -186,7 +202,8 @@
       "Infantry",
       "Fly",
       "Triarch",
-      "Praetorians"
+      "Praetorians",
+      "Triarch Praetorians"
     ],
     "faction_keywords": [
       "Necrons"
@@ -206,11 +223,11 @@
     ],
     "ability_ids": [
       "deep-strike",
-      "relentless-combatants"
+      "relentless-combatants-necrons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -279,11 +296,11 @@
       "gauss-reaper"
     ],
     "ability_ids": [
-      "their-number-is-legion"
+      "their-number-is-legion-necrons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -328,7 +345,8 @@
       "Beasts",
       "Fly",
       "Canoptek",
-      "Macrocytes"
+      "Macrocytes",
+      "Canoptek Macrocytes"
     ],
     "faction_keywords": [
       "Necrons"
@@ -348,14 +366,23 @@
       "tesla-caster"
     ],
     "ability_ids": [
-      "accelerator-mandible",
-      "harassment-swarm-aura",
-      "nanoscarab-projector",
-      "scouts-8"
+      {
+        "id": "accelerator-mandible-necrons",
+        "wargear": "accelerator-mandible"
+      },
+      "harassment-swarm-necrons",
+      {
+        "id": "nanoscarab-projector-necrons",
+        "wargear": "nanoscarab-projector"
+      },
+      {
+        "id": "scouts",
+        "value": 8
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -427,13 +454,13 @@
       "staff-of-light"
     ],
     "ability_ids": [
-      "leader",
-      "rites-of-reanimation",
-      "technomancer"
+      "rites-of-reanimation-necrons",
+      "technomancer-necrons",
+      "support"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -499,17 +526,24 @@
     ],
     "ability_ids": [
       "hover",
-      "invasion-beams",
-      "quantum-invader",
+      "invasion-beams-necrons",
+      "quantum-invader-necrons",
       "deep-strike",
-      "deadly-demise-d3"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "transport_capacity": {
       "capacity": 1
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -575,14 +609,17 @@
       "voidscythe"
     ],
     "ability_ids": [
-      "implacable-resilience",
+      "implacable-resilience-necrons",
       "leader",
-      "my-will-be-done",
-      "resurrection-orb"
+      "my-will-be-done-necrons",
+      {
+        "id": "resurrection-orb-necrons",
+        "wargear": "resurrection-orb"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -646,13 +683,13 @@
       "relic-gauss-blaster"
     ],
     "ability_ids": [
-      "adaptive-strategy",
-      "engrammatic-logic",
+      "adaptive-strategy-necrons",
+      "engrammatic-logic-necrons",
       "leader"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -691,14 +728,15 @@
     "points": [
       {
         "models": 1,
-        "cost": 140
+        "cost": 130
       }
     ],
     "keywords": [
       "Vehicle",
       "Walker",
       "Canoptek",
-      "Doomstalker"
+      "Doomstalker",
+      "Canoptek Doomstalker"
     ],
     "faction_keywords": [
       "Necrons"
@@ -717,12 +755,19 @@
       "twin-gauss-flayer"
     ],
     "ability_ids": [
-      "sentinel-construct",
-      "deadly-demise-d3"
+      "sentinel-construct-necrons",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -761,12 +806,12 @@
     "points": [
       {
         "models": 5,
-        "cost": 70
+        "cost": 65
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 140
+        "cost": 130
       }
     ],
     "keywords": [
@@ -791,11 +836,11 @@
       "tesla-carbine"
     ],
     "ability_ids": [
-      "implacable-eradication"
+      "implacable-eradication-necrons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -856,13 +901,13 @@
       "scythed-limbs"
     ],
     "ability_ids": [
-      "bound-creation",
-      "cryptek-retinue",
-      "systematic-vigour"
+      "bound-creation-necrons",
+      "cryptek-retinue-necrons",
+      "systematic-vigour-necrons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -928,13 +973,13 @@
       "staff-of-tomorrow"
     ],
     "ability_ids": [
-      "leader",
-      "master-chronomancer",
-      "the-stars-are-right"
+      "master-chronomancer-necrons",
+      "the-stars-are-right-necrons",
+      "support"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -979,7 +1024,7 @@
       },
       {
         "models": 1,
-        "cost": 485,
+        "cost": 505,
         "unit_count_min": 2,
         "unit_count_max": null
       }
@@ -989,7 +1034,8 @@
       "Titanic",
       "Fly",
       "Towering",
-      "Tesseract Vault"
+      "Tesseract Vault",
+      "Frame"
     ],
     "faction_keywords": [
       "Necrons"
@@ -1006,18 +1052,22 @@
     "weapon_ids": [
       "armoured-bulk-tesseract-vault",
       "tesla-spheres",
-      "tesla-sphere",
+      "tesla-sphere-tesseract-vault",
       "cosmic-fire",
       "times-arrow",
       "antimatter-meteor"
     ],
     "ability_ids": [
-      "deadly-demise-d6-3",
-      "powers-of-the-c-tan"
+      {
+        "id": "deadly-demise",
+        "value": "D6+3"
+      },
+      "powers-of-the-ctan-necrons",
+      "damaged-1-8-wounds-remaining-necrons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1104,15 +1154,27 @@
       "twin-tesla-carbine"
     ],
     "ability_ids": [
-      "evasion-engrams",
-      "nebuloscope",
-      "scouts-9",
-      "shadowloom",
-      "shieldvanes"
+      "evasion-engrams-necrons",
+      {
+        "id": "nebuloscope-necrons",
+        "wargear": "nebuloscope"
+      },
+      {
+        "id": "scouts",
+        "value": 9
+      },
+      {
+        "id": "shadowloom-necrons",
+        "wargear": "shadowloom"
+      },
+      {
+        "id": "shieldvanes-necrons",
+        "wargear": "shieldvanes"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1151,7 +1213,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 55
+        "cost": 65
       }
     ],
     "keywords": [
@@ -1175,13 +1237,13 @@
       "abyssal-lance"
     ],
     "ability_ids": [
-      "harbinger-of-despair",
-      "leader",
-      "nightmare-shroud-aura"
+      "harbinger-of-despair-necrons",
+      "nightmare-shroud-necrons",
+      "support"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1278,11 +1340,11 @@
       "gauss-destructor"
     ],
     "ability_ids": [
-      "optimised-for-slaughter"
+      "optimised-for-slaughter-necrons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1365,12 +1427,15 @@
       "skorpekh-hyperphase-weapons"
     ],
     "ability_ids": [
-      "plasmacyte",
-      "whirling-onslaught"
+      {
+        "id": "plasmacyte-necrons",
+        "wargear": "plasmacyte"
+      },
+      "whirling-onslaught-necrons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1422,7 +1487,8 @@
     "keywords": [
       "Fortification",
       "Vehicle",
-      "Convergence of Dominion"
+      "Convergence of Dominion",
+      "Frame"
     ],
     "faction_keywords": [
       "Necrons"
@@ -1439,14 +1505,14 @@
       "transdimensional-abductor"
     ],
     "ability_ids": [
-      "ancient-cover",
-      "deployment",
-      "fortification",
-      "reanimation-nodes-aura"
+      "ancient-cover-necrons",
+      "deployment-necrons",
+      "fortification-necrons",
+      "reanimation-nodes-necrons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1519,13 +1585,13 @@
       "hyperphase-harvester"
     ],
     "ability_ids": [
-      "crimson-harvest",
+      "crimson-harvest-necrons",
       "leader",
-      "united-in-destruction"
+      "united-in-destruction-necrons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1609,12 +1675,12 @@
       "synaptic-disintegrator"
     ],
     "ability_ids": [
-      "hyperspace-hunters",
+      "hyperspace-hunters-necrons",
       "deep-strike"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1667,7 +1733,9 @@
       "Vehicle",
       "Walker",
       "Triarch",
-      "Stalker"
+      "Stalker",
+      "Frame",
+      "Triarch Stalker"
     ],
     "faction_keywords": [
       "Necrons"
@@ -1687,13 +1755,19 @@
       "stalkers-forelimbs"
     ],
     "ability_ids": [
-      "targeting-relay",
-      "scouts-8",
-      "deadly-demise-d3"
+      "targeting-relay-necrons",
+      {
+        "id": "scouts",
+        "value": 8
+      },
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1758,13 +1832,13 @@
       "staff-of-the-destroyer"
     ],
     "ability_ids": [
-      "grand-strategist",
+      "grand-strategist-necrons",
       "leader",
-      "lord-of-the-storm"
+      "lord-of-the-storm-necrons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1819,7 +1893,8 @@
       "Titanic",
       "Fly",
       "Towering",
-      "Obelisk"
+      "Obelisk",
+      "Frame"
     ],
     "faction_keywords": [
       "Necrons"
@@ -1838,13 +1913,24 @@
       "tesla-sphere"
     ],
     "ability_ids": [
-      "deadly-demise-d6",
-      "gravitic-pulse",
-      "deep-strike"
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "gravitic-pulse-necrons",
+      "deep-strike",
+      {
+        "id": "damaged",
+        "value": 8
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1889,7 +1975,8 @@
       "Vehicle",
       "Walker",
       "Canoptek",
-      "Reanimator"
+      "Reanimator",
+      "Canoptek Reanimator"
     ],
     "faction_keywords": [
       "Necrons"
@@ -1907,12 +1994,15 @@
       "reanimators-claws"
     ],
     "ability_ids": [
-      "feel-no-pain-4",
-      "nanoscarab-reanimation-beam-aura"
+      {
+        "id": "feel-no-pain",
+        "value": 4
+      },
+      "nanoscarab-reanimation-beam-necrons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1958,7 +2048,9 @@
       "Vehicle",
       "Character",
       "Fly",
-      "Catacomb Command Barge"
+      "Catacomb Command Barge",
+      "Frame",
+      "Noble"
     ],
     "faction_keywords": [
       "Necrons"
@@ -1981,13 +2073,20 @@
       "tesla-cannon"
     ],
     "ability_ids": [
-      "advanced-quantum-shielding",
-      "carrier-wave-aura",
-      "deadly-demise-1"
+      "advanced-quantum-shielding-necrons",
+      "carrier-wave-necrons",
+      {
+        "id": "deadly-demise",
+        "value": 1
+      },
+      {
+        "id": "resurrection-orb-catacomb-command-barge-necrons",
+        "wargear": "resurrection-orb"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2044,7 +2143,7 @@
       {
         "models": 4,
         "models_max": 6,
-        "cost": 175,
+        "cost": 190,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
@@ -2069,7 +2168,7 @@
       {
         "models": 4,
         "models_max": 6,
-        "cost": 205,
+        "cost": 220,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -2099,11 +2198,11 @@
       "gauss-cannon"
     ],
     "ability_ids": [
-      "hard-wired-for-destruction"
+      "hard-wired-for-destruction-necrons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2169,12 +2268,15 @@
       "warscythe"
     ],
     "ability_ids": [
-      "dispersion-shield",
-      "guardian-protocols"
+      {
+        "id": "dispersion-shield-necrons",
+        "wargear": "dispersion-shield"
+      },
+      "guardian-protocols-necrons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2232,7 +2334,8 @@
       "Titanic",
       "Fly",
       "Towering",
-      "Monolith"
+      "Monolith",
+      "Frame"
     ],
     "faction_keywords": [
       "Necrons"
@@ -2252,13 +2355,24 @@
       "portal-of-exile"
     ],
     "ability_ids": [
-      "eternity-gate",
+      "eternity-gate-necrons",
       "deep-strike",
-      "deadly-demise-d6"
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      {
+        "id": "damaged",
+        "value": 7
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2323,11 +2437,16 @@
     ],
     "ability_ids": [
       "leader",
-      "translocation-shroud"
+      "translocation-shroud-necrons",
+      "my-will-be-done-necrons",
+      {
+        "id": "resurrection-orb-necrons",
+        "wargear": "resurrection-orb"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2378,7 +2497,8 @@
       "Swarm",
       "Fly",
       "Canoptek",
-      "Scarab Swarms"
+      "Scarab Swarms",
+      "Canoptek Scarab Swarms"
     ],
     "faction_keywords": [
       "Necrons"
@@ -2395,12 +2515,12 @@
       "feeder-mandibles"
     ],
     "ability_ids": [
-      "chittering-swarm",
-      "self-destruction"
+      "chittering-swarm-necrons",
+      "self-destruction-necrons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2467,7 +2587,8 @@
       "Beasts",
       "Fly",
       "Canoptek",
-      "Wraiths"
+      "Wraiths",
+      "Canoptek Wraiths"
     ],
     "faction_keywords": [
       "Necrons"
@@ -2487,11 +2608,11 @@
       "whip-coils"
     ],
     "ability_ids": [
-      "wraith-form"
+      "wraith-form-necrons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2530,7 +2651,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 65
+        "cost": 60
       }
     ],
     "keywords": [
@@ -2555,13 +2676,13 @@
       "empathic-obliterator"
     ],
     "ability_ids": [
-      "ancient-collector",
+      "ancient-collector-necrons",
       "leader",
-      "surrogate-hosts"
+      "surrogate-hosts-necrons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2630,14 +2751,21 @@
       "staff-of-light-lokhust-lord"
     ],
     "ability_ids": [
-      "destroyer-cult",
-      "driven-by-hatred",
+      "destroyer-cult-necrons",
+      "driven-by-hatred-necrons",
       "leader",
-      "nanoscarab-amulet"
+      {
+        "id": "nanoscarab-amulet-necrons",
+        "wargear": "nanoscarab-amulet"
+      },
+      {
+        "id": "resurrection-orb-necrons",
+        "wargear": "resurrection-orb"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2692,7 +2820,7 @@
     ],
     "base_size_mm": {
       "shape": "round",
-      "diameter": 40
+      "diameter": 90
     },
     "model_count": {
       "min": 1,
@@ -2703,17 +2831,23 @@
       "scythe-of-the-nightbringer"
     ],
     "ability_ids": [
-      "deadly-demise-d6",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
       "deep-strike",
-      "drain-life",
-      "enslaved-star-god",
-      "feel-no-pain-5",
-      "necrodermis",
-      "reanimation-protocols"
+      "drain-life-necrons",
+      "enslaved-star-god-necrons",
+      {
+        "id": "feel-no-pain",
+        "value": 5
+      },
+      "necrodermis-necrons",
+      "reanimation-protocols-necrons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2729,6 +2863,13 @@
       {
         "namespace": "mfm",
         "id": "e95c1c74-6709-4575-b96c-fb2ad7133faa"
+      }
+    ],
+    "detachment_pricing": [
+      {
+        "models": 1,
+        "cost": 405,
+        "detachment_id": "pantheon-of-woe"
       }
     ]
   },
@@ -2778,13 +2919,13 @@
       "flayer-claws"
     ],
     "ability_ids": [
-      "flesh-hunger",
+      "flesh-hunger-necrons",
       "infiltrators",
       "stealth"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2822,13 +2963,14 @@
     "points": [
       {
         "models": 1,
-        "cost": 95
+        "cost": 100
       }
     ],
     "keywords": [
       "Vehicle",
       "Fly",
-      "Annihilation Barge"
+      "Annihilation Barge",
+      "Frame"
     ],
     "faction_keywords": [
       "Necrons"
@@ -2851,12 +2993,15 @@
       "twin-tesla-destructor"
     ],
     "ability_ids": [
-      "malevolent-arcing",
-      "deadly-demise-1"
+      "malevolent-arcing-necrons",
+      {
+        "id": "deadly-demise",
+        "value": 1
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2921,14 +3066,17 @@
       "impaling-legs"
     ],
     "ability_ids": [
-      "atomic-energy-manipulator",
-      "illuminor",
-      "mechanical-augmentation-aura",
-      "feel-no-pain-4"
+      "atomic-energy-manipulator-necrons",
+      "illuminor-necrons",
+      "mechanical-augmentation-necrons",
+      {
+        "id": "feel-no-pain",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2967,7 +3115,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 185
+        "cost": 195
       }
     ],
     "keywords": [
@@ -2996,14 +3144,17 @@
     "ability_ids": [
       "deep-strike",
       "fights-first",
-      "infectious-murder-madness-aura",
-      "nullstone-field-generator-aura",
-      "prophet-of-destruction",
-      "protective-disciples"
+      "infectious-murder-madness-necrons",
+      {
+        "id": "nullstone-field-generator-necrons",
+        "wargear": "nullstone-field-generator-aura"
+      },
+      "prophet-of-destruction-necrons",
+      "protective-disciples-necrons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3041,13 +3192,14 @@
     "points": [
       {
         "models": 2,
-        "cost": 50
+        "cost": 60
       }
     ],
     "keywords": [
       "Beasts",
       "Canoptek",
-      "Tomb Crawlers"
+      "Tomb Crawlers",
+      "Canoptek Tomb Crawlers"
     ],
     "faction_keywords": [
       "Necrons"
@@ -3066,12 +3218,12 @@
       "twin-gauss-reaper"
     ],
     "ability_ids": [
-      "canoptek-retinue",
-      "weapon-sentinels"
+      "canoptek-retinue-necrons",
+      "weapon-sentinels-necrons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3154,12 +3306,16 @@
       "ophydian-hyperphase-weapons"
     ],
     "ability_ids": [
-      "tunnelling-horrors",
-      "deep-strike"
+      "tunnelling-horrors-necrons",
+      "deep-strike",
+      {
+        "id": "plasmacyte-necrons",
+        "wargear": "plasmacyte"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3222,13 +3378,13 @@
       "plasmic-lance"
     ],
     "ability_ids": [
-      "harbinger-of-destruction",
-      "leader",
-      "living-lightning"
+      "harbinger-of-destruction-necrons",
+      "living-lightning-necrons",
+      "support"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3267,7 +3423,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 210,
+        "cost": 200,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
@@ -3281,7 +3437,8 @@
     "keywords": [
       "Vehicle",
       "Fly",
-      "Doomsday Ark"
+      "Doomsday Ark",
+      "Frame"
     ],
     "faction_keywords": [
       "Necrons"
@@ -3303,12 +3460,19 @@
       "gauss-flayer-array"
     ],
     "ability_ids": [
-      "overwhelming-obliteration",
-      "deadly-demise-d3"
+      "overwhelming-obliteration-necrons",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3372,14 +3536,14 @@
       "enmitic-disintegrator-pistols"
     ],
     "ability_ids": [
-      "inescapable-death",
+      "inescapable-death-necrons",
       "lone-operative",
-      "multi-threat-eliminator",
+      "multi-threat-eliminator-necrons",
       "deep-strike"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3445,17 +3609,23 @@
       "voltaic-storm"
     ],
     "ability_ids": [
-      "deadly-demise-d6",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
       "deep-strike",
-      "enslaved-star-god",
-      "feel-no-pain-5",
-      "matter-absorption",
-      "necrodermis",
-      "reanimation-protocols"
+      "enslaved-star-god-necrons",
+      {
+        "id": "feel-no-pain",
+        "value": 5
+      },
+      "matter-absorption-necrons",
+      "necrodermis-necrons",
+      "reanimation-protocols-necrons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3471,6 +3641,13 @@
       {
         "namespace": "mfm",
         "id": "bc0cfdf6-6607-447e-b1eb-94a4e23511ea"
+      }
+    ],
+    "detachment_pricing": [
+      {
+        "models": 1,
+        "cost": 380,
+        "detachment_id": "pantheon-of-woe"
       }
     ]
   },
@@ -3520,18 +3697,24 @@
       "golden-fists"
     ],
     "ability_ids": [
-      "deadly-demise-d6",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
       "deep-strike",
-      "enslaved-star-god",
-      "feel-no-pain-5",
-      "grand-illusion",
-      "necrodermis",
-      "reanimation-protocols",
+      "enslaved-star-god-necrons",
+      {
+        "id": "feel-no-pain",
+        "value": 5
+      },
+      "grand-illusion-necrons",
+      "necrodermis-necrons",
+      "reanimation-protocols-necrons",
       "stealth"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3547,6 +3730,13 @@
       {
         "namespace": "mfm",
         "id": "65f56806-cf8c-47ef-8470-13e3ac1fc66e"
+      }
+    ],
+    "detachment_pricing": [
+      {
+        "models": 1,
+        "cost": 375,
+        "detachment_id": "pantheon-of-woe"
       }
     ]
   },
@@ -3596,12 +3786,19 @@
       "twin-tesla-destructor"
     ],
     "ability_ids": [
-      "atavistic-instigation",
-      "deadly-demise-d3"
+      "atavistic-instigation-necrons",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3664,14 +3861,14 @@
       "tremorglaive"
     ],
     "ability_ids": [
-      "leader",
-      "obelisk-node-control",
-      "tectonic-reverberations",
-      "vanguard-protocols"
+      "obelisk-node-control-necrons",
+      "tectonic-reverberations-necrons",
+      "vanguard-protocols-necrons",
+      "support"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3751,15 +3948,19 @@
       "weapons-of-the-final-triarch"
     ],
     "ability_ids": [
-      "deadly-demise-d6-3-szarekh-model-only",
-      "supreme-commander",
-      "the-silent-king",
-      "triarch-abilities",
-      "triarchal-menhirs"
+      {
+        "id": "deadly-demise",
+        "value": "D6+3"
+      },
+      "supreme-commander-necrons",
+      "the-silent-king-necrons",
+      "triarch-abilities-necrons",
+      "triarchal-menhirs-necrons",
+      "damaged-1-6-wounds-remaining-necrons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3830,13 +4031,13 @@
       "chronomancers-stave"
     ],
     "ability_ids": [
-      "chronometron",
-      "leader",
-      "timesplinter-mantle"
+      "chronometron-necrons",
+      "timesplinter-mantle-necrons",
+      "support"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3909,18 +4110,24 @@
       "seismic-assault"
     ],
     "ability_ids": [
-      "ctan-shard",
-      "deadly-demise-d6",
+      "ctan-shard-necrons",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
       "deep-strike",
-      "enslaved-star-god",
-      "feel-no-pain-5",
-      "necrodermis",
-      "reanimation-protocols",
-      "transdimensional-displacement"
+      "enslaved-star-god-necrons",
+      {
+        "id": "feel-no-pain",
+        "value": 5
+      },
+      "necrodermis-necrons",
+      "reanimation-protocols-necrons",
+      "transdimensional-displacement-necrons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3936,6 +4143,22 @@
       {
         "namespace": "mfm",
         "id": "532d102e-9302-4ca0-afc0-ccc570b895d9"
+      }
+    ],
+    "detachment_pricing": [
+      {
+        "models": 1,
+        "cost": 380,
+        "unit_count_min": 1,
+        "unit_count_max": 1,
+        "detachment_id": "pantheon-of-woe"
+      },
+      {
+        "models": 1,
+        "cost": 400,
+        "unit_count_min": 2,
+        "unit_count_max": null,
+        "detachment_id": "pantheon-of-woe"
       }
     ]
   },
@@ -3969,7 +4192,8 @@
       "Vehicle",
       "Fly",
       "Canoptek",
-      "Spyders"
+      "Spyders",
+      "Canoptek Spyders"
     ],
     "faction_keywords": [
       "Necrons"
@@ -3987,14 +4211,23 @@
       "particle-beamer-canoptek-spyders"
     ],
     "ability_ids": [
-      "canoptek-swarm",
-      "fabricator-claw-array-aura",
-      "gloom-prism-aura",
-      "deadly-demise-1"
+      "canoptek-swarm-necrons",
+      {
+        "id": "fabricator-claw-array-necrons",
+        "wargear": "fabricator-claw-array-aura"
+      },
+      {
+        "id": "gloom-prism-necrons",
+        "wargear": "gloom-prism-aura"
+      },
+      {
+        "id": "deadly-demise",
+        "value": 1
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -4037,9 +4270,11 @@
     ],
     "keywords": [
       "Canoptek",
-      "Doomstalker",
       "Vehicle",
-      "Walker"
+      "Walker",
+      "Amonhotekh's Guard",
+      "Canoptek Doomstalker",
+      "Amonhotekh's Guard Canoptek Doomstalker"
     ],
     "faction_keywords": [
       "Necrons"
@@ -4049,17 +4284,14 @@
       "max": 1
     },
     "weapon_ids": [
-      "doomsday-blaster",
+      "doomsday-blaster-amonhotekhs-guard-canoptek-doomstalker",
       "twin-gauss-flayer",
       "doomstalker-limbs"
     ],
-    "ability_ids": [
-      "damaged-1-4-wounds-remaining-amonhotekhs-guard-doomstalker",
-      "reanimation-protocols"
-    ],
+    "ability_ids": [],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"
@@ -4102,8 +4334,9 @@
     "keywords": [
       "Canoptek",
       "Fly",
-      "Scarab Swarms",
-      "Swarm"
+      "Swarm",
+      "Amonhotekh's Guard",
+      "Amonhotekh's Guard Canoptek Scarab Swarms"
     ],
     "faction_keywords": [
       "Necrons"
@@ -4116,12 +4349,11 @@
       "feeder-mandibles"
     ],
     "ability_ids": [
-      "scarab-interference-amonhotekhs-guard",
-      "reanimation-protocols"
+      "scarab-interference-necrons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"
@@ -4165,7 +4397,8 @@
     "keywords": [
       "Battleline",
       "Infantry",
-      "Necron Warriors"
+      "Amonhotekh's Guard",
+      "Amonhotekh's Guard Necron Warriors"
     ],
     "faction_keywords": [
       "Necrons"
@@ -4177,15 +4410,14 @@
     "weapon_ids": [
       "gauss-flayer",
       "gauss-reaper",
-      "close-combat-weapon"
+      "combat-attachments"
     ],
     "ability_ids": [
-      "reanimation-protocols",
-      "their-number-is-legion"
+      "their-number-is-legion-amonhotekhs-guard-necron-warriors-necrons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"
@@ -4227,7 +4459,9 @@
     ],
     "keywords": [
       "Infantry",
-      "Skorpekh Destroyers"
+      "Amonhotekh's Guard",
+      "Destroyer Cult",
+      "Amonhotekh's Guard Skorpekh Destroyers"
     ],
     "faction_keywords": [
       "Necrons"
@@ -4237,16 +4471,15 @@
       "max": 3
     },
     "weapon_ids": [
-      "skorpekh-hyperphase-weapons"
+      "hyperphase-blades"
     ],
     "ability_ids": [
-      "plasmacyte-amonhotekhs-guard",
-      "whirling-onslaught",
-      "reanimation-protocols"
+      "plasmacyte-amonhotekhs-guard-skorpekh-destroyers-necrons",
+      "whirling-onslaught-amonhotekhs-guard-skorpekh-destroyers-necrons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"
@@ -4288,11 +4521,12 @@
       }
     ],
     "keywords": [
-      "Amonhotekh",
       "Character",
       "Infantry",
       "Noble",
-      "Overlord"
+      "Overlord",
+      "Amonhotekh's Guard",
+      "Overlord Amonhotekh"
     ],
     "faction_keywords": [
       "Necrons"
@@ -4306,12 +4540,11 @@
       "overlords-blade"
     ],
     "ability_ids": [
-      "iron-will-overlord-amonhotekh",
-      "reanimation-protocols"
+      "iron-will-necrons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"

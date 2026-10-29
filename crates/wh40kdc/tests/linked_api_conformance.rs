@@ -24,7 +24,42 @@ fn run_query(ds: &Dataset, query: &str, args: &Value) -> Value {
             .and_then(Value::as_str)
             .unwrap_or_else(|| panic!("missing arg {k} in args {args}"))
     };
+    let id_or_null = |id: Option<String>| id.map_or(Value::Null, Value::String);
     match query {
+        "units_of_faction" => Value::Array(
+            ds.units
+                .by_faction(arg_str("factionId"))
+                .into_iter()
+                .map(|u| Value::String(u.id.to_string()))
+                .collect(),
+        ),
+        "detachments_of_faction" => Value::Array(
+            ds.detachments
+                .by_faction(arg_str("factionId"))
+                .into_iter()
+                .map(|d| Value::String(d.id.to_string()))
+                .collect(),
+        ),
+        "get_unit" => id_or_null(
+            ds.units
+                .get_any(arg_str("unitId"))
+                .map(|u| u.id.to_string()),
+        ),
+        "get_detachment" => id_or_null(
+            ds.detachments
+                .get_any(arg_str("detachmentId"))
+                .map(|d| d.id.to_string()),
+        ),
+        "find_enhancement" => id_or_null(
+            ds.enhancements
+                .find(arg_str("query"))
+                .map(|e| e.id.to_string()),
+        ),
+        "find_detachment" => id_or_null(
+            ds.detachments
+                .find(arg_str("query"))
+                .map(|d| d.id.to_string()),
+        ),
         "find_unit" => ds
             .find_unit(arg_str("query"))
             .map(|u| Value::String(u.id.to_string()))
@@ -95,9 +130,7 @@ fn run_query(ds: &Dataset, query: &str, args: &Value) -> Value {
                 .get_any(id)
                 .unwrap_or_else(|| panic!("{query}: unknown unit {id}"));
             let models = ds
-                .unit_compositions
-                .iter()
-                .find(|c| c.unit_id.as_str() == id)
+                .unit_composition_of(u)
                 .map(|c| wh40kdc::loadout_models(&c.models));
             let lo = if query == "base_loadout" {
                 wh40kdc::base_loadout(u, model_count, &ds.wargear_options_of(u), models.as_deref())
@@ -117,6 +150,31 @@ fn run_query(ds: &Dataset, query: &str, args: &Value) -> Value {
             encoded.sort_by(|a, b| a.as_str().unwrap_or("").cmp(b.as_str().unwrap_or("")));
             Value::Array(encoded)
         }
+        "weapon_bounds" => {
+            let id = arg_str("unitId");
+            let model_count: u64 = arg_str("modelCount")
+                .parse()
+                .expect("modelCount is an integer");
+            let u = ds
+                .units
+                .get_any(id)
+                .unwrap_or_else(|| panic!("{query}: unknown unit {id}"));
+            let models = ds
+                .unit_composition_of(u)
+                .map(|c| wh40kdc::loadout_models(&c.models));
+            let bounds = wh40kdc::weapon_bounds(
+                u,
+                model_count,
+                &ds.wargear_options_of(u),
+                models.as_deref(),
+            );
+            let mut encoded: Vec<Value> = bounds
+                .iter()
+                .map(|(k, b)| Value::String(format!("{k}:{}-{}", b.min, b.max)))
+                .collect();
+            encoded.sort_by(|a, b| a.as_str().unwrap_or("").cmp(b.as_str().unwrap_or("")));
+            Value::Array(encoded)
+        }
         "loadout_candidates" => {
             let id = arg_str("unitId");
             let unit = args
@@ -125,9 +183,7 @@ fn run_query(ds: &Dataset, query: &str, args: &Value) -> Value {
                 .and_then(|faction| ds.units.get_in_faction(id, faction))
                 .or_else(|| ds.units.get_any(id))
                 .unwrap_or_else(|| panic!("loadout_candidates: unknown unit {id}"));
-            let composition = ds.unit_compositions.iter().find(|c| {
-                c.unit_id.as_str() == id && c.faction_id.as_str() == unit.faction_id.as_str()
-            });
+            let composition = ds.unit_composition_of(unit);
             let models = composition.map(|c| wh40kdc::loadout_models(&c.models));
             let tiers = composition.map(|c| wh40kdc::loadout_tiers(&c.tiers));
             serde_json::to_value(wh40kdc::loadout_candidates(
@@ -203,13 +259,11 @@ fn run_query(ds: &Dataset, query: &str, args: &Value) -> Value {
         }
         "model_bases_of" => {
             let id = arg_str("unitId");
-            if ds.units.get_any(id).is_none() {
-                panic!("model_bases_of: unknown unit {id}");
-            }
-            let comp = ds
-                .unit_compositions
-                .iter()
-                .find(|c| c.unit_id.as_str() == id);
+            let unit = ds
+                .units
+                .get_any(id)
+                .unwrap_or_else(|| panic!("model_bases_of: unknown unit {id}"));
+            let comp = ds.unit_composition_of(unit);
             let pairs: Vec<Value> = comp
                 .map(|c| {
                     c.models
@@ -315,7 +369,16 @@ fn linked_api_corpus_matches_reference() {
         let comparison = case["comparison"].as_str().expect("case.comparison");
         let args = &case["args"];
         let mut expected = case["expected"].clone();
-        let mut actual = run_query(ds, query, args);
+        // Optional `gameMode` runs the case against that game-mode view.
+        let view: &Dataset = match args.get("gameMode") {
+            None => ds,
+            Some(mode) => {
+                let mode = mode.as_str().expect("gameMode is a string");
+                ds.for_game_mode(mode)
+                    .unwrap_or_else(|e| panic!("linked-api/{query} ({name}): {e}"))
+            }
+        };
+        let mut actual = run_query(view, query, args);
 
         if comparison == "set" {
             sort_string_array(&mut actual);

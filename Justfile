@@ -20,7 +20,7 @@ set shell := ["bash", "-uc"]
 
 # The exact generated-artifact paths CI guards with `git diff --exit-code`.
 ARTIFACTS := "tools/src/generated.ts \
-crates/wh40kdc/schemas/bundled.schema.json crates/wh40kdc/src/generated.rs crates/wh40kdc/src/data/bundle.generated.json \
+crates/wh40kdc/schemas/bundled.schema.json crates/wh40kdc/schemas/validation.schema.json crates/wh40kdc/src/generated.rs crates/wh40kdc/src/data/bundle.generated.json \
 python/src/wh40kdc/_bundle.json python/src/wh40kdc/_spec.py python/src/wh40kdc/_types.py python/src/wh40kdc/schemas \
 go/bundle.json go/share_registry.json go/schemas go/spec.go data/_audit/external-refs.json \
 conformance"
@@ -46,7 +46,7 @@ regen:
     python3 python/codegen/sync_spec.py
     python3 python/codegen/gen_typeddicts.py
     bash go/codegen/sync.sh
-    cd tools && npm run codegen:data && npx tsc && npm run gen:conformance
+    cd tools && npm run codegen:data && npx tsc && npx tsc -p tsconfig.test.json && npm run gen:conformance
     cd tools && npm run audit:external-refs
 
 # Apply Rust + Go formatting (CI checks these; applying keeps a re-run clean).
@@ -95,7 +95,7 @@ test-dsl-campaign:
 # TS: build + unit tests + data validation.
 test-ts:
     @echo "▸ TS: build + unit tests + data validation"
-    cd tools && npm run codegen:data && npx tsc && npm test && npm run validate
+    cd tools && npm run codegen:data && npx tsc && npx tsc -p tsconfig.test.json && npm test && npm run validate
 
 # Rust: fmt-check + build + test.
 test-rust:

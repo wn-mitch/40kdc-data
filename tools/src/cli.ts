@@ -7,7 +7,6 @@ import { translateCommand } from "./commands/translate.js";
 import { importCommand } from "./commands/import.js";
 import { auditCoverageCommand } from "./audit-coverage.js";
 import { auditPhrasingCommand } from "./audit-phrasing.js";
-import { populateBaseSizesCommand } from "./commands/populate-base-sizes.js";
 
 const program = new Command();
 
@@ -40,7 +39,7 @@ program
   .argument("[path]", "Path to abilities.json file")
   .option(
     "--gw",
-    "Show source text from the private 40kdc-abilities store alongside each ability",
+    "Show GW source text from the private MFM dump (_private/dump.json) alongside each ability",
   )
   .option(
     "--gw-file <path>",
@@ -86,12 +85,5 @@ program
   .option("--reporter <mode>", "Output format: json or pretty", "json")
   .option("--out <file>", "Write roster JSON to a file instead of stdout")
   .action(importCommand);
-
-program
-  .command("populate-base-sizes")
-  .description(
-    "Populate base_size_mm on units + composition models from the GW base-size guide (+ bevy fallback)",
-  )
-  .action(populateBaseSizesCommand);
 
 program.parse();

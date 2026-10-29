@@ -7,40 +7,102 @@ import { applyWrites, type StagedWrite } from "./mfm/apply.js";
 import { REPO_ROOT } from "./mfm/repo-files.js";
 import { normModelName } from "./convert-bsdata-wargear.js";
 import { JjRevisionTree, parseRevision, resolveLinks } from "./mfm/bsdata-backstop.js";
+import { arr, children, constraint, constraints, fixedEquipment, str, type EquipmentAlternative, type JsonNode } from "./bsdata-equipment.js";
+import { dumpConflict, restoreCommittedRows, sameItems, type LoadoutVariant } from "./bsdata-variant-dump.js";
+import { compositionSizes, errorCountRules, evaluateMaxCap, fitCap, minCap, ruleCap, type CapForm, type CountRule, type SizeCap } from "./bsdata-caps.js";
 
-export type JsonNode = Record<string, unknown>;
-export interface LoadoutVariant { name: string; weapon_ids: string[]; max_count?: number }
-export interface LoadoutVariantBudget { variant_names: string[]; count: number; per_models: number; scope: "unit" | "model-row" }
+export type { JsonNode } from "./bsdata-equipment.js";
+
+export interface LoadoutVariantBudget { variant_names: string[]; count: number; per_models: number; scope: "unit" | "model-row"; stepped?: boolean }
 export interface VariantIssue { unit: string; model_row: string; variant: string; item: string; reason: string }
 
-const arr = (value: unknown): JsonNode[] => Array.isArray(value) ? value.filter((v): v is JsonNode => !!v && typeof v === "object" && !Array.isArray(v)) : [];
-const str = (value: unknown): string | undefined => typeof value === "string" && value.trim() ? value.trim() : undefined;
-const constraints = (node: JsonNode, type: string): JsonNode[] => arr(node.constraints).filter((c) => c.type === type && c.field === "selections");
-const constraint = (node: JsonNode, type: string): number | undefined => constraints(node, type).map((c) => c.value).find((v): v is number => typeof v === "number");
-const children = (node: JsonNode): JsonNode[] => [
-  ...arr(node.selectionEntries),
-  ...arr(node.sharedSelectionEntries),
-  ...arr(node.selectionEntryGroups),
-  ...arr(node.sharedSelectionEntryGroups),
-  ...arr(node.entryLinks),
-];
+/**
+ * One peer group's whole-model alternatives. `own` are the group's own model
+ * peers; `peers` adds the base model when the group is a nested block of
+ * alternatives whose plain model sits beside it in the parent (e.g. a "Heavy
+ * weapons" group under "4-9 Purifiers" holding "Purifier").
+ */
+export interface PeerFamily { group: JsonNode; own: JsonNode[]; peers: JsonNode[] }
 
-export function collectPeerGroups(unit: JsonNode): JsonNode[] {
-  const found: JsonNode[] = [];
-  const visit = (node: JsonNode): void => {
-    const peers = arr(node.selectionEntries).filter((entry) => entry.type === "model");
+export function collectPeerFamilies(unit: JsonNode, sourceNodes: ReadonlyMap<string, JsonNode> = new Map()): PeerFamily[] {
+  const found: PeerFamily[] = [];
+  // A model placed by a link to a shared entry (Catachan Jungle Fighters' plain
+  // trooper) is the target model under the link's own id, name and limits.
+  // Each link resolves once, so a peer keeps its identity across lookups.
+  const linked = new Map<JsonNode, JsonNode | undefined>();
+  const linkedModel = (link: JsonNode): JsonNode | undefined => {
+    if (!linked.has(link)) {
+      const target = sourceNodes.get(str(link.targetId) ?? "");
+      linked.set(link, target?.type === "model"
+        ? {
+            ...target,
+            id: link.id,
+            name: str(link.name) ?? target.name,
+            constraints: [...arr(link.constraints), ...arr(target.constraints)],
+            modifiers: [...arr(link.modifiers), ...arr(target.modifiers)],
+          }
+        : undefined);
+    }
+    return linked.get(link);
+  };
+  const models = (node: JsonNode): JsonNode[] => [
+    ...arr(node.selectionEntries).filter((entry) => entry.type === "model"),
+    ...arr(node.entryLinks).map(linkedModel).filter((entry): entry is JsonNode => !!entry),
+  ];
+  const isPeerGroup = (node: JsonNode): boolean => {
+    const peers = models(node);
     const sameModel = new Set(peers.map((entry) => normModelName(str(entry.name) ?? ""))).size === 1;
     const allOptional = peers.every((entry) => (constraint(entry, "min") ?? 0) === 0);
-    if (peers.length >= 2 && (sameModel || allOptional)) found.push(node);
-    for (const child of [...arr(node.selectionEntries), ...arr(node.selectionEntryGroups)]) visit(child);
+    return peers.length >= 2 && (sameModel || allOptional);
+  };
+  const claimed = new Set<JsonNode>();
+  const visit = (node: JsonNode, parent?: JsonNode): void => {
+    if (isPeerGroup(node)) {
+      const own = models(node);
+      const names = new Set(own.map((entry) => normModelName(str(entry.name) ?? "")));
+      // A base model joins only the first alternatives block beside it.
+      const siblings = parent && !isPeerGroup(parent) && names.size === 1
+        ? models(parent).filter((entry) => !claimed.has(entry) && names.has(normModelName(str(entry.name) ?? "")) && !own.some((peer) => str(peer.name) === str(entry.name)))
+        : [];
+      for (const sibling of siblings) claimed.add(sibling);
+      found.push({ group: node, own, peers: [...siblings, ...own] });
+    }
+    for (const child of [...arr(node.selectionEntries), ...arr(node.selectionEntryGroups)]) visit(child, node);
   };
   visit(unit);
   return found;
 }
 
+export function collectPeerGroups(unit: JsonNode, sourceNodes: ReadonlyMap<string, JsonNode> = new Map()): JsonNode[] {
+  return collectPeerFamilies(unit, sourceNodes).map((family) => family.group);
+}
+
 function externalId(entity: JsonNode): string | undefined {
   return arr(entity.external_refs).find((ref) => ref.namespace === "bsdata")?.id as string | undefined;
 }
+
+/**
+ * BSData equipment names that differ from the MFM name a repo id is minted
+ * from, by repo unit: BSData name → the datasheet's MFM item name. Each MFM
+ * name is the only dump item on that datasheet the BSData entry can mean.
+ */
+export const BSDATA_EQUIPMENT_NAMES: Readonly<Record<string, Readonly<Record<string, string>>>> = {
+  "acolyte-hybrids-with-hand-flamers": { "Demolition charge": "Demolition charges" },
+  "corsair-skyreavers": { "Corsair blaster": "Blaster" },
+  "corsair-voidscarred": { "Corsair blaster": "Blaster", "Corsair shredder": "Shredder" },
+  "cthonian-beserks": { "Twin concussion gauntlets": "Twin concussion gauntlet" },
+  "death-korps-of-krieg": { "Death Korps of Krieg Medi-pack": "Death Korps Medi-pack" },
+  "deathwatch-veterans": { "Astartes shield": "Storm Shield", "Deathwatch thunder hammer": "Heavy Thunder Hammer" },
+  "fortis-kill-team": {
+    "Astartes grenade launcher": "Grenade Launcher",
+    "Superfrag missile launcher": "Superfrag Rocket Launcher",
+    "Superkrak missile launcher": "Superkrak Rocket Launcher",
+  },
+  "hernkyn-pioneers": { "Pan-spectral scanner": "Panspectral Scanner" },
+  "plague-marines": { "Icon of Despair": "Icon of Despair (Aura)" },
+  "sisters-novitiate-squad": { "Novitiate autogun": "Autogun", "Novitiate melee weapon": "Novitiate melee weapons" },
+  "thunderwolf-cavalry": { "Crushing teeth and claws": "Teeth and Claws" },
+};
 
 export function makeEquipmentResolver(entities: JsonNode[], unitId: string, factionUnitIds: readonly string[] = []): (link: JsonNode) => string | undefined {
   const byExternal = new Map<string, string[]>();
@@ -59,80 +121,15 @@ export function makeEquipmentResolver(entities: JsonNode[], unitId: string, fact
     const exact = exactCandidates.find((id) => owner(id) === unitId)
       ?? exactCandidates.find((id) => owner(id) === undefined);
     if (exact) return exact;
-    const name = str(link.name);
-    if (!name) return undefined;
+    const sourceName = str(link.name);
+    if (!sourceName) return undefined;
+    // BSData joins a combined profile's parts with "&" where the MFM name says "and".
+    const name = (BSDATA_EQUIPMENT_NAMES[unitId]?.[sourceName] ?? sourceName).replace(/\s*&\s*/g, " and ");
     let slug: string;
     try { slug = nameToId(name); } catch { return undefined; }
     if (ids.has(`${slug}-${unitId}`)) return `${slug}-${unitId}`;
     return ids.has(slug) && owner(slug) === undefined ? slug : undefined;
   };
-}
-
-interface FixedEquipment {
-  links: JsonNode[];
-  item?: string;
-  reason?: string;
-}
-
-function fixedCopies(node: JsonNode): number | undefined {
-  const min = constraint(node, "min");
-  const max = constraint(node, "max");
-  if (min === undefined && max === undefined) return 1;
-  if (min === undefined) return max === 1 ? 1 : undefined;
-  if (max === undefined) return min === 1 ? 1 : undefined;
-  return min === max && min > 0 ? min : undefined;
-}
-
-function fixedEquipment(peer: JsonNode): FixedEquipment {
-  const links: JsonNode[] = [];
-  let item: string | undefined;
-  let reason: string | undefined;
-  const unsupported = (node: JsonNode, why: string): void => {
-    item ??= str(node.name) ?? "(unnamed equipment)";
-    reason ??= why;
-  };
-  const add = (node: JsonNode): void => {
-    const copies = fixedCopies(node);
-    if (copies === undefined) {
-      unsupported(node, "configurable equipment multiplicity");
-      return;
-    }
-    links.push(...Array.from({ length: copies }, () => node));
-  };
-  const visit = (node: JsonNode, includeNode = false): void => {
-    if (includeNode && node.type === "selectionEntry" && str(node.targetId)) add(node);
-    else if (includeNode && arr(node.profiles).some((profile) => / weapons$/i.test(str(profile.typeName) ?? ""))) add(node);
-    for (const link of arr(node.entryLinks)) {
-      const min = constraint(link, "min");
-      if (link.type === "selectionEntry" && (min === undefined || min > 0) && !/ upgrade$/i.test(str(link.name) ?? "")) add(link);
-    }
-    for (const entry of arr(node.selectionEntries)) {
-      if ((constraint(entry, "min") ?? 1) <= 0) continue;
-      visit(entry, true);
-    }
-    for (const group of arr(node.selectionEntryGroups)) {
-      const defaultId = str(group.defaultSelectionEntryId);
-      if (!defaultId) {
-        if ((constraint(group, "min") ?? 0) > 0) unsupported(group, "required equipment choice has no default selection");
-        continue;
-      }
-      const selected = children(group).find((candidate) => candidate.id === defaultId);
-      if (selected) visit(selected, true);
-      else unsupported(group, "default equipment selection is missing");
-    }
-  };
-  visit(peer);
-  return { links, item, reason };
-}
-
-function staticMaxCount(peer: JsonNode): number | undefined {
-  const max = constraint(peer, "max");
-  if (!max) return undefined;
-  const maxConstraintIds = new Set(constraints(peer, "max").map((entry) => str(entry.id)).filter((id): id is string => !!id));
-  return arr(peer.modifiers).some((modifier) => {
-    const field = str(modifier.field);
-    return field === "selections" || (field !== undefined && maxConstraintIds.has(field));
-  }) ? undefined : max;
 }
 
 export function projectBudget(group: JsonNode, names: string[]): LoadoutVariantBudget | undefined {
@@ -149,56 +146,225 @@ export function projectBudget(group: JsonNode, names: string[]): LoadoutVariantB
   return { variant_names: names, count, per_models: perModels, scope: "unit" };
 }
 
-export function projectUnit(unit: JsonNode, rows: JsonNode[], equipment: JsonNode[], unitId: string, factionUnitIds: readonly string[] = []): VariantIssue[] {
+/** A source cap as budget forms; `fallback` when the static `max` stands in for a cap no form reproduces. */
+interface ProjectedCap { forms: CapForm[]; fallback: boolean; pooledWith: string[] }
+
+const isWideScope = (c: JsonNode): boolean => c.scope !== undefined && c.scope !== "parent" && c.scope !== "self";
+
+/**
+ * A node's `max`, narrowed by structured count rules on the node itself,
+ * evaluated at every legal unit size and projected onto budget forms. When the
+ * cap depends on something other than the model count, or no flat/ratio form
+ * reproduces it exactly, the static `max` stands.
+ */
+function projectCap(node: JsonNode, sizes: readonly number[], rules: readonly CountRule[], accept: (c: JsonNode) => boolean = () => true): ProjectedCap | undefined {
+  const staticMax = arr(node.constraints).find((c) => c.type === "max" && c.field === "selections" && typeof c.value === "number" && accept(c))?.value as number | undefined;
+  const id = str(node.id);
+  const rule = id ? ruleCap(rules, id, sizes) : undefined;
+  if (staticMax === undefined && !rule) return undefined;
+  const fallback = (pooledWith: string[] = []): ProjectedCap | undefined =>
+    staticMax ? { forms: [{ count: staticMax, per_models: 0 }], fallback: true, pooledWith } : undefined;
+  const evaluated = staticMax === undefined ? undefined : evaluateMaxCap(node, sizes, accept);
+  if (staticMax !== undefined && !evaluated) return fallback();
+  const forms = sizes.length ? fitCap(minCap(sizes, evaluated?.cap, rule)) : undefined;
+  return forms ? { forms, fallback: false, pooledWith: evaluated?.pooledWith ?? [] } : fallback(evaluated?.pooledWith);
+}
+
+const flatOf = (forms: readonly CapForm[]): number | undefined => forms.find((form) => form.per_models === 0)?.count;
+const ratiosOf = (forms: readonly CapForm[]): CapForm[] => forms.filter((form) => form.per_models > 0);
+const budgetsFor = (names: string[], forms: readonly CapForm[]): LoadoutVariantBudget[] =>
+  forms.map((form) => ({
+    variant_names: names,
+    count: form.count,
+    per_models: form.per_models,
+    scope: form.per_models === 0 ? "model-row" : "unit",
+    ...(form.stepped ? { stepped: true } : {}),
+  }));
+
+/** Copies of source entry `target` in one alternative's equipment. */
+const copiesOf = (links: readonly JsonNode[], target: string): number =>
+  links.filter((link) => str(link.targetId) === target || str(link.id) === target).length;
+
+export function projectUnit(
+  unit: JsonNode,
+  rows: JsonNode[],
+  equipment: JsonNode[],
+  unitId: string,
+  factionUnitIds: readonly string[] = [],
+  sourceNodes: ReadonlyMap<string, JsonNode> = new Map(),
+  sizes: readonly number[] = compositionSizes({ models: rows }),
+  notes: string[] = [],
+  previous: readonly JsonNode[] = [],
+  wargearBudgets: readonly JsonNode[] = [],
+  wargearOptions?: readonly JsonNode[],
+): VariantIssue[] {
   const issues: VariantIssue[] = [];
   const resolve = makeEquipmentResolver(equipment, unitId, factionUnitIds);
-  const grouped = new Map<string, { rowName: string; variants: LoadoutVariant[]; budgets: LoadoutVariantBudget[] }>();
+  // Repo wargear (no weapon profiles): an upgrade resolving to one is equipment even when its own profile is an ability.
+  const wargearIds = new Set(equipment.filter((entity) => !Array.isArray(entity.profiles)).map((entity) => str(entity.id)).filter((id): id is string => !!id));
+  interface Bucket {
+    rowName: string;
+    variants: LoadoutVariant[];
+    budgets: LoadoutVariantBudget[];
+    /** Families that declare each variant name. */
+    sources: Map<string, Set<number>>;
+    /** Group-level budgets with the family whose constraint they project. */
+    groupBudgets: { budget: LoadoutVariantBudget; family: number; sizedOver?: string[] }[];
+    /** Each variant's source equipment, for count rules on equipment entries. */
+    links: Map<string, JsonNode[]>;
+    /** Variant names by source peer id, and peer pools to resolve against them. */
+    peerNames: Map<string, string[]>;
+    pools: { names: string[]; with: string[]; forms: CapForm[] }[];
+    /** Per variant, its cap in each fixed-size tier block (row count → max); `undefined` once any copy is unsized or uncapped. */
+    blockCaps: Map<string, Map<number, number> | undefined>;
+  }
+  const rules: CountRule[] = [];
+  const ruleSources = new Set<JsonNode>();
+  const addRules = (node: JsonNode | undefined): void => {
+    if (!node || ruleSources.has(node)) return;
+    ruleSources.add(node);
+    rules.push(...errorCountRules(node));
+  };
+  const walkRules = (node: JsonNode): void => { addRules(node); for (const child of children(node)) walkRules(child); };
+  walkRules(unit);
+  // Committed caps stand in for a size-dependent source cap no budget form
+  // reproduces, so a projection never loosens what is already enforced.
+  const previousRow = (rowName: string): JsonNode | undefined =>
+    previous.find((row) => normModelName(str(row.name) ?? "") === normModelName(rowName));
+  const previousMax = (rowName: string, names: readonly string[]): number | undefined =>
+    arr(previousRow(rowName)?.loadout_variants).filter((v) => names.includes(str(v.name) ?? "")).map((v) => v.max_count).find((n): n is number => typeof n === "number");
+  const previousBudgets = (rowName: string, names: readonly string[]): LoadoutVariantBudget[] =>
+    arr(previousRow(rowName)?.loadout_variant_budgets)
+      .filter((b) => Array.isArray(b.variant_names) && b.variant_names.length && b.variant_names.every((name) => names.includes(name)))
+      .map((b) => structuredClone(b) as unknown as LoadoutVariantBudget);
+  const covered = (items: readonly string[]): boolean =>
+    wargearBudgets.some((budget) => Array.isArray(budget.items) && budget.items.some((item) => typeof item === "string" && items.includes(item)));
+  // An MFM wargear option whose branches include both this choice and a budgeted
+  // pick is one dump menu: the dump's limited set owns its duplicate limits even
+  // where the summed budget leaves the item out because another model type also
+  // takes it (the Aspiring Champion's own plasma pistol).
+  const menuGoverned = (rowBase: string, items: readonly string[]): boolean =>
+    (wargearOptions ?? []).some((option) => {
+      const modelName = str((option.model_constraint as JsonNode | null | undefined)?.model_name);
+      if (modelName && normModelName(modelName) !== rowBase) return false;
+      const branches = (Array.isArray(option.replacement_choice) ? option.replacement_choice : [])
+        .filter((branch): branch is string[] => Array.isArray(branch) && branch.every((id) => typeof id === "string"));
+      return branches.some((branch) => sameItems(branch, items)) && branches.some((branch) => !sameItems(branch, items) && covered(branch));
+    });
+  const noted = (what: string): void => { if (!notes.includes(`${unitId}: ${what}`)) notes.push(`${unitId}: ${what}`); };
+  const families = collectPeerFamilies(unit, sourceNodes);
+  const peerIds = new Set(families.flatMap((family) => family.peers.map((peer) => str(peer.id)).filter((id): id is string => !!id)));
+  const grouped = new Map<string, Bucket>();
   const incompleteRows = new Set<string>();
-  for (const group of collectPeerGroups(unit)) {
-    const peers = arr(group.selectionEntries).filter((entry) => entry.type === "model");
+  for (const [familyIndex, family] of families.entries()) {
+    const { group, peers } = family;
+    const ownNames: string[] = [];
     const base = normModelName(str(peers[0]?.name) ?? "");
     const projected = { rowName: str(peers[0]?.name) ?? "", variants: [] as LoadoutVariant[], budgets: [] as LoadoutVariantBudget[] };
+    const links = new Map<string, JsonNode[]>();
+    const peerNames = new Map<string, string[]>();
+    const pools: Bucket["pools"] = [];
     let complete = true;
     for (const peer of peers) {
       const name = str(peer.name) ?? "unnamed";
-      const fixed = fixedEquipment(peer);
+      const fixed = fixedEquipment(peer, sourceNodes, (entry) => wargearIds.has(resolve(entry) ?? ""));
       if (fixed.reason) {
         issues.push({ unit: unitId, model_row: base, variant: name, item: fixed.item ?? "(no fixed equipment)", reason: fixed.reason });
         complete = false;
         continue;
       }
-      const ids = fixed.links.map(resolve);
-      const unresolved = ids.findIndex((id) => !id);
-      if (unresolved >= 0 || ids.length === 0) {
-        issues.push({ unit: unitId, model_row: base, variant: name, item: str(fixed.links[unresolved]?.name) ?? "(no fixed equipment)", reason: "unresolved equipment" });
-        complete = false;
-        continue;
+      for (const alternative of fixed.alternatives) for (const link of alternative.links) addRules(sourceNodes.get(str(link.targetId) ?? ""));
+      let peerCap = projectCap(peer, sizes, rules);
+      if (peerCap?.fallback && arr(peer.modifiers).length) {
+        const kept = previousMax(projected.rowName, [name]);
+        if (kept) peerCap = { ...peerCap, forms: [{ count: kept, per_models: 0 }] };
+        noted(`${name}: size-dependent cap kept at its ${kept ? "committed" : "static"} ${flatOf(peerCap.forms)}`);
       }
-      const max = staticMaxCount(peer);
-      const variant = { name, weapon_ids: ids as string[], ...(max ? { max_count: max } : {}) };
-      const existing = projected.variants.find((item) => item.name === name);
-      if (!existing) projected.variants.push(variant);
-      else if (JSON.stringify(existing.weapon_ids) === JSON.stringify(variant.weapon_ids)) {
-        const mergedMax = Math.max(existing.max_count ?? 0, variant.max_count ?? 0);
-        if (mergedMax > 0) existing.max_count = mergedMax;
-      } else {
-        issues.push({ unit: unitId, model_row: base, variant: name, item: name, reason: "conflicting duplicate variant" });
-        complete = false;
+      const splitNames: string[] = [];
+      // What one alternative fields beyond what every alternative of the peer fields.
+      const resolvedIds = fixed.alternatives.map((alternative) => new Set(alternative.links.map(resolve).filter((id): id is string => !!id)));
+      const sharedIds = resolvedIds.length ? [...resolvedIds[0]].filter((id) => resolvedIds.every((ids) => ids.has(id))) : [];
+      for (const alternative of fixed.alternatives) {
+        const variantName = alternative.labels.length ? `${name} (${alternative.labels.join(", ")})` : name;
+        const ids = alternative.links.map(resolve);
+        const unresolved = ids.findIndex((id) => !id);
+        if (unresolved >= 0 || ids.length === 0) {
+          issues.push({ unit: unitId, model_row: base, variant: variantName, item: str(alternative.links[unresolved]?.name) ?? "(no fixed equipment)", reason: "unresolved equipment" });
+          complete = false;
+          continue;
+        }
+        // A unit-scoped cap on one choice limits duplicates of that choice. The
+        // MFM wargear budgets own duplicate limits (`duplicate_limit`) for the
+        // items they cover, so such a cap stands only where no budget covers what
+        // the choice adds.
+        const added = (ids as string[]).filter((id) => !sharedIds.includes(id));
+        const budgeted = added.length > 0 && (covered(added) || menuGoverned(base, added));
+        const choiceCaps = budgeted ? [] : alternative.choices.map((choice) => projectCap(choice, sizes, rules, isWideScope)).filter((cap): cap is ProjectedCap => !!cap);
+        const flats = [...choiceCaps, ...(peerCap ? [peerCap] : [])].map((cap) => flatOf(cap.forms)).filter((n): n is number => n !== undefined);
+        const max = flats.length ? Math.min(...flats) : undefined;
+        const variant = { name: variantName, weapon_ids: ids as string[], ...(max ? { max_count: max } : {}) };
+        for (const cap of choiceCaps) projected.budgets.push(...budgetsFor([variantName], ratiosOf(cap.forms)));
+        splitNames.push(variantName);
+        links.set(variantName, alternative.links);
+        if (family.own.includes(peer) && !ownNames.includes(variantName)) ownNames.push(variantName);
+        const existing = projected.variants.find((item) => item.name === variantName);
+        if (!existing) projected.variants.push(variant);
+        else if (sameItems(existing.weapon_ids, variant.weapon_ids)) {
+          const mergedMax = Math.max(existing.max_count ?? 0, variant.max_count ?? 0);
+          if (mergedMax > 0) existing.max_count = mergedMax;
+        } else {
+          issues.push({ unit: unitId, model_row: base, variant: variantName, item: variantName, reason: "conflicting duplicate variant" });
+          complete = false;
+        }
       }
+      if (str(peer.id)) peerNames.set(str(peer.id)!, splitNames);
+      if (!peerCap) continue;
+      // A peer split by its equipment choice is still one peer: its cap pools
+      // across every split rather than applying to each. A ratio cap binds the
+      // peer even when it is not split.
+      projected.budgets.push(...budgetsFor(splitNames, splitNames.length > 1 ? peerCap.forms : ratiosOf(peerCap.forms)));
+      if (peerCap.pooledWith.length) pools.push({ names: splitNames, with: peerCap.pooledWith, forms: peerCap.forms });
     }
     if (!complete) {
       incompleteRows.add(base);
       continue;
     }
-    const budget = projectBudget(group, projected.variants.map((variant) => variant.name));
-    if (budget) projected.budgets.push(budget);
-    const bucket = grouped.get(base) ?? { rowName: projected.rowName, variants: [], budgets: [] };
+    const bucket: Bucket = grouped.get(base)
+      ?? { rowName: projected.rowName, variants: [], budgets: [], sources: new Map(), groupBudgets: [], links: new Map(), peerNames: new Map(), pools: [], blockCaps: new Map() };
+    const blockSize = constraint(group, "min") === constraint(group, "max") ? constraint(group, "min") : undefined;
+    if (ownNames.length >= 2) {
+      const groupCap = projectCap(group, sizes, rules);
+      let groupBudgets = groupCap && !groupCap.fallback ? budgetsFor(ownNames, groupCap.forms) : [projectBudget(group, ownNames)].filter((b): b is LoadoutVariantBudget => !!b);
+      const sized = !!groupCap?.fallback && arr(group.modifiers).some((m) => m.field !== "error");
+      if (sized) {
+        const kept = previousBudgets(projected.rowName, ownNames);
+        if (kept.length) groupBudgets = kept;
+        noted(`${str(group.name) ?? "peer group"}: size-dependent cap kept at its ${kept.length ? "committed" : "static"} value`);
+      }
+      // One pick of a group whose peers are each required (a missile-launcher
+      // weapons team: the gunner and the loader) fields every one of them.
+      const fielded = family.own.reduce((sum, peer) => sum + (constraint(peer, "min") ?? 0), 0);
+      if (family.own.every((peer) => (constraint(peer, "min") ?? 0) > 0)) groupBudgets = groupBudgets.map((budget) => ({ ...budget, count: budget.count * fielded }));
+      // A flat count standing in for a size-dependent cap no ratio reproduces.
+      const flatStandIn = sized && groupBudgets.every((budget) => budget.per_models === 0);
+      for (const budget of groupBudgets) bucket.groupBudgets.push({ budget, family: familyIndex, ...(flatStandIn ? { sizedOver: ownNames } : {}) });
+    }
+    for (const [name, value] of links) bucket.links.set(name, value);
+    for (const [id, names] of peerNames) bucket.peerNames.set(id, names);
+    bucket.pools.push(...pools);
     for (const variant of projected.variants) {
+      bucket.sources.set(variant.name, new Set([...(bucket.sources.get(variant.name) ?? []), familyIndex]));
+      const blocks = bucket.blockCaps.has(variant.name) ? bucket.blockCaps.get(variant.name) : new Map<number, number>();
+      const sized = blocks && blockSize !== undefined && variant.max_count !== undefined && !(blocks.has(blockSize) && blocks.get(blockSize) !== variant.max_count);
+      bucket.blockCaps.set(variant.name, sized ? blocks.set(blockSize, variant.max_count!) : undefined);
       const existing = bucket.variants.find((item) => item.name === variant.name);
       if (!existing) bucket.variants.push(variant);
-      else if (JSON.stringify(existing.weapon_ids) === JSON.stringify(variant.weapon_ids)) {
-        const mergedMax = Math.max(existing.max_count ?? 0, variant.max_count ?? 0);
-        if (mergedMax > 0) existing.max_count = mergedMax;
+      else if (sameItems(existing.weapon_ids, variant.weapon_ids)) {
+        // A same-named peer may recur across families (tier blocks, a default
+        // pick inside a nested slot); the merged variant keeps the larger
+        // ceiling, and an uncapped copy leaves it uncapped.
+        if (existing.max_count === undefined || variant.max_count === undefined) delete existing.max_count;
+        else existing.max_count = Math.max(existing.max_count, variant.max_count);
       } else {
         issues.push({ unit: unitId, model_row: base, variant: variant.name, item: variant.name, reason: "conflicting duplicate variant" });
         incompleteRows.add(base);
@@ -207,13 +373,64 @@ export function projectUnit(unit: JsonNode, rows: JsonNode[], equipment: JsonNod
     bucket.budgets.push(...projected.budgets);
     grouped.set(base, bucket);
   }
+  const targets = [...new Set(rules.map((rule) => rule.target))].filter((target) => !peerIds.has(target));
   for (const [base, projected] of grouped) {
     if (incompleteRows.has(base) || !projected.variants.length) continue;
     const row = rows.find((candidate) => str(candidate.name)?.toLocaleLowerCase("en") === projected.rowName.toLocaleLowerCase("en"))
       ?? rows.find((candidate) => normModelName(str(candidate.name) ?? "") === normModelName(projected.rowName));
     if (!row) continue;
+    // Same-named rows each record their own default loadout (a miniature the MFM pass split
+    // by default group); whole-loadout variants for the name cannot belong to one of them.
+    if (rows.filter((candidate) => str(candidate.name) === str(row.name)).length > 1) continue;
+    const refusal = dumpConflict(row, rows, projected.variants, wargearOptions);
+    if (refusal) {
+      noted(`${str(row.name)}: not projected: ${refusal}`);
+      continue;
+    }
+    // A group's cap counts only the selections made through that group. A
+    // variant another family also declares is indistinguishable once merged,
+    // so the group cap cannot charge it. A flat stand-in for a size-dependent
+    // group cap over every variant of the row is the row's model count, which
+    // its own min/max and tiers bound (two Dishonoured in twenty Jakhals,
+    // whatever they carry).
+    for (const { budget, family, sizedOver } of projected.groupBudgets) {
+      if (sizedOver && projected.variants.every((variant) => sizedOver.includes(variant.name))) continue;
+      const names = budget.variant_names.filter((name) => [...(projected.sources.get(name) ?? [])].every((source) => source === family));
+      if (names.length) projected.budgets.push({ ...budget, variant_names: names });
+    }
+    // A variant whose tier blocks cap it differently (Krieg vox-casters: 1 of
+    // 9 troopers, 2 of 18) keeps the larger ceiling as its max_count; the
+    // row's own model count scales it back down in the smaller block.
+    for (const [name, blocks] of projected.blockCaps) {
+      if (!blocks || blocks.size < 2 || new Set(blocks.values()).size < 2) continue;
+      if ([...blocks].every(([size, max]) => max >= size)) continue;
+      const forms = fitCap(blocks);
+      if (!forms) { noted(`${name}: tier-block caps not projected: no flat or ratio form reproduces them`); continue; }
+      projected.budgets.push(...forms.map((form) => ({ variant_names: [name], count: form.count, per_models: form.per_models, scope: "model-row" as const, ...(form.stepped ? { stepped: true } : {}) })));
+    }
+    // A peer whose cap the source lowers per selection of other peers shares
+    // that cap with them.
+    for (const pool of projected.pools) {
+      const names = [...pool.names, ...pool.with.flatMap((id) => projected.peerNames.get(id) ?? [])];
+      if (names.length > pool.names.length) projected.budgets.push(...budgetsFor([...new Set(names)], pool.forms));
+    }
+    // A structured count limit on an equipment entry caps the variants that carry it.
+    for (const target of targets) {
+      const carrying = [...projected.links].filter(([, value]) => copiesOf(value, target) > 0);
+      if (!carrying.length) continue;
+      const label = `${str(sourceNodes.get(target)?.name) ?? target} count limit`;
+      if (carrying.some(([, value]) => copiesOf(value, target) > 1)) { noted(`${label} not projected: a variant carries several copies`); continue; }
+      const forms = fitCap(ruleCap(rules, target, sizes) ?? new Map());
+      if (!forms) { noted(`${label} not projected: no flat or ratio form reproduces it`); continue; }
+      projected.budgets.push(...budgetsFor(carrying.map(([name]) => name), forms));
+    }
+    const unique = new Map<string, LoadoutVariantBudget>();
+    for (const budget of projected.budgets) {
+      const key = JSON.stringify({ ...budget, variant_names: [...budget.variant_names].sort() });
+      if (!unique.has(key)) unique.set(key, budget);
+    }
     row.loadout_variants = projected.variants;
-    if (projected.budgets.length) row.loadout_variant_budgets = projected.budgets;
+    if (unique.size) row.loadout_variant_budgets = [...unique.values()];
     else delete row.loadout_variant_budgets;
   }
   return issues;
@@ -237,7 +454,8 @@ export function prepareFactionProjection(
   compositions: JsonNode[],
   equipment: JsonNode[],
   sourceNodes: ReadonlyMap<string, JsonNode>,
-): { compositions: JsonNode[]; issues: VariantIssue[]; discoveredUnits: number; discoveredVariants: number; projectedUnits: number; projectedVariants: number } {
+  wargearOptions: readonly JsonNode[] = [],
+): { compositions: JsonNode[]; units?: JsonNode[]; issues: VariantIssue[]; notes: string[]; discoveredUnits: number; discoveredVariants: number; projectedUnits: number; projectedVariants: number } {
   const projected = structuredClone(compositions);
   for (const composition of projected) {
     for (const row of arr(composition.models)) {
@@ -247,6 +465,7 @@ export function prepareFactionProjection(
   }
 
   const issues: VariantIssue[] = [];
+  const notes: string[] = [];
   let discoveredUnits = 0;
   let discoveredVariants = 0;
   let projectedUnits = 0;
@@ -258,22 +477,20 @@ export function prepareFactionProjection(
     const composition = projected.find((item) => item.unit_id === repoUnit.id);
     if (!source || !composition) continue;
     const rows = arr(composition.models);
-    const peerGroups = collectPeerGroups(source).filter((group) => {
-      const firstPeer = arr(group.selectionEntries).find((entry) => entry.type === "model");
-      return rows.some((row) => normModelName(str(row.name) ?? "") === normModelName(str(firstPeer?.name) ?? ""));
-    });
-    const sourceVariantCount = peerGroups.reduce(
-      (sum, group) => sum + arr(group.selectionEntries).filter((entry) => entry.type === "model").length,
-      0,
-    );
+    const peerFamilies = collectPeerFamilies(source, sourceNodes).filter((family) =>
+      rows.some((row) => normModelName(str(row.name) ?? "") === normModelName(str(family.own[0]?.name) ?? "")));
+    const sourceVariantCount = peerFamilies.reduce((sum, family) => sum + family.own.length, 0);
     if (sourceVariantCount > 0) discoveredUnits += 1;
     discoveredVariants += sourceVariantCount;
-    issues.push(...projectUnit(source, rows, equipment, str(repoUnit.id)!, factionUnitIds));
+    const committed = arr(compositions.find((item) => item.unit_id === repoUnit.id)?.models);
+    issues.push(...projectUnit(source, rows, equipment, str(repoUnit.id)!, factionUnitIds, sourceNodes, compositionSizes(composition), notes, committed, arr(repoUnit.wargear_budgets), wargearOptions.filter((option) => option.unit_id === repoUnit.id)));
     const variantCount = rows.reduce((sum, row) => sum + arr(row.loadout_variants).length, 0);
     if (variantCount > 0) projectedUnits += 1;
     projectedVariants += variantCount;
   }
-  return { compositions: projected, issues, discoveredUnits, discoveredVariants, projectedUnits, projectedVariants };
+  const projectedUnitsList = structuredClone(units);
+  const unitsChanged = restoreCommittedRows(projected, compositions, projectedUnitsList, wargearOptions, notes);
+  return { compositions: projected, ...(unitsChanged ? { units: projectedUnitsList } : {}), issues, notes, discoveredUnits, discoveredVariants, projectedUnits, projectedVariants };
 }
 
 export async function run(argv: readonly string[]): Promise<void> {
@@ -306,12 +523,15 @@ export async function run(argv: readonly string[]): Promise<void> {
     if (!fs.existsSync(compositionsPath)) continue;
     const compositions = readJson(compositionsPath) as JsonNode[];
     const equipment = ["weapons.json", "wargear.json"].flatMap((file) => fs.existsSync(path.join(dir, file)) ? readJson(path.join(dir, file)) as JsonNode[] : []);
-    const projection = prepareFactionProjection(units, compositions, equipment, allNodes);
+    const optionsPath = path.join(dir, "wargear-options.json");
+    const wargearOptions = fs.existsSync(optionsPath) ? readJson(optionsPath) as JsonNode[] : [];
+    const projection = prepareFactionProjection(units, compositions, equipment, allNodes, wargearOptions);
     discoveredUnits += projection.discoveredUnits;
     discoveredVariants += projection.discoveredVariants;
     projectedUnits += projection.projectedUnits;
     projectedVariants += projection.projectedVariants;
     unresolvedVariants += projection.issues.length;
+    for (const note of projection.notes) console.log(`[bsdata-loadout-variants] ${faction}: ${note}`);
     if (projection.issues.length) {
       const detail = projection.issues
         .map((issue) => `${issue.unit}/${issue.model_row}/${issue.variant}: ${issue.item} (${issue.reason})`)
@@ -321,6 +541,8 @@ export async function run(argv: readonly string[]): Promise<void> {
     const original = fs.readFileSync(compositionsPath, "utf8");
     const text = `${JSON.stringify(projection.compositions, null, 2)}\n`;
     if (text !== original) staged.push({ path: compositionsPath, value: projection.compositions, text });
+    // Variants dropped against the dump take the items only they fielded off the unit's weapon list.
+    if (projection.units) staged.push({ path: path.join(dir, "units.json"), value: projection.units, text: `${JSON.stringify(projection.units, null, 2)}\n` });
     console.log(`[bsdata-loadout-variants] ${faction}: 0 unresolved`);
   }
   console.log(`[bsdata-loadout-variants] discovered ${discoveredVariants} source variants across ${discoveredUnits} units; projected ${projectedVariants} variants across ${projectedUnits} units; ${unresolvedVariants} unresolved`);

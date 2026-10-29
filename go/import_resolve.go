@@ -83,117 +83,6 @@ func candFromWeapons(records []*WeaponView) []any {
 	return out
 }
 
-// findWeaponCandidates resolves a weapon raw name to candidate weapons,
-// tolerating a leading "The " mismatch in either direction (NewRecruit "The
-// Bloody Twins" ↔ data "Bloody Twins"; GW "Fire Axe" ↔ data "The Fire Axe").
-// Tries the name as given, then the "The"-stripped form, then the
-// "The"-prefixed form, returning the first non-empty match set. Mirror of the
-// TS findWeaponCandidates.
-func findWeaponCandidates(ds *Dataset, rawName string) []*WeaponView {
-	direct := ds.Weapons.FindAll(rawName)
-	if len(direct) > 0 {
-		return direct
-	}
-	if stripped, ok := StripLeadingThe(rawName); ok {
-		if hits := ds.Weapons.FindAll(stripped); len(hits) > 0 {
-			return hits
-		}
-	}
-	return ds.Weapons.FindAll("The " + rawName)
-}
-
-// scopedWeaponID resolves a weapon raw name to one of the RESOLVED unit's own
-// weapon ids — its weapon_ids plus ids reachable through its wargear options —
-// so a name match picks the per-unit stat variant the unit actually fields.
-// Matches by NormalizeName with the same leading-"The" tolerance as
-// findWeaponCandidates; returns ("", false) when the unit fields no weapon of
-// that name (the caller falls back to the global lookup). Mirror of the TS
-// scopedWeaponID.
-func scopedWeaponID(ds *Dataset, hit *UnitView, rawName string) (string, bool) {
-	ids := append([]string{}, getStrList(hit.Raw, "weapon_ids")...)
-	for _, optAny := range ds.wargearOptionsOf(hit.Raw) {
-		opt, _ := optAny.(map[string]any)
-		ids = append(ids, getStrList(opt, "replaces")...)
-		ids = append(ids, getStrList(opt, "replacement")...)
-		for _, gAny := range getList(opt, "replacement_choice") {
-			g, _ := gAny.([]any)
-			for _, idAny := range g {
-				if s, ok := idAny.(string); ok {
-					ids = append(ids, s)
-				}
-			}
-		}
-	}
-	targets := map[string]bool{NormalizeName(rawName): true, NormalizeName("The " + rawName): true}
-	if stripped, ok := StripLeadingThe(rawName); ok {
-		targets[NormalizeName(stripped)] = true
-	}
-	factionID := getStr(hit.Raw, "faction_id")
-	for _, id := range ids {
-		w, ok := ds.Weapons.GetInFaction(id, factionID)
-		if !ok {
-			w, ok = ds.Weapons.GetAny(id)
-		}
-		if ok && targets[NormalizeName(w.Name())] {
-			return w.ID(), true
-		}
-	}
-	return "", false
-}
-
-// resolveWargearItemID is the fallback for wargear ITEMS (Simulacrum
-// Imperialis, Daemonic Icon, …) — raw names that are not weapons but do exist
-// in the wargear collection. Runs only after BOTH weapon lookups miss, so a
-// wargear item whose name collides with a weapon ("multi-melta", "power
-// weapon") keeps resolving to the weapon exactly as before. Scoped-first: ids
-// reachable through the resolved unit's wargear options, then the global
-// collection (wargear is replicated-identical across factions, so a global
-// first-match is safe). Same NormalizeName + leading-"The" tolerance as the
-// weapon lookups. Mirror of the TS resolveWargearItemId.
-func resolveWargearItemID(ds *Dataset, hit *UnitView, rawName string) (string, bool) {
-	stripped, hasStripped := StripLeadingThe(rawName)
-	if hit != nil {
-		var ids []string
-		for _, optAny := range ds.wargearOptionsOf(hit.Raw) {
-			opt, _ := optAny.(map[string]any)
-			ids = append(ids, getStrList(opt, "replaces")...)
-			ids = append(ids, getStrList(opt, "replacement")...)
-			for _, gAny := range getList(opt, "replacement_choice") {
-				g, _ := gAny.([]any)
-				for _, idAny := range g {
-					if s, ok := idAny.(string); ok {
-						ids = append(ids, s)
-					}
-				}
-			}
-		}
-		targets := map[string]bool{NormalizeName(rawName): true, NormalizeName("The " + rawName): true}
-		if hasStripped {
-			targets[NormalizeName(stripped)] = true
-		}
-		for _, id := range ids {
-			if itemAny, ok := ds.Wargear.GetAny(id); ok {
-				item, _ := itemAny.(map[string]any)
-				if targets[NormalizeName(getStr(item, "name"))] {
-					return getStr(item, "id"), true
-				}
-			}
-		}
-	}
-	if itemAny, ok := ds.Wargear.Find(rawName); ok {
-		return getStr(itemAny.(map[string]any), "id"), true
-	}
-	if hasStripped {
-		if itemAny, ok := ds.Wargear.Find(stripped); ok {
-			return getStr(itemAny.(map[string]any), "id"), true
-		}
-	}
-	if itemAny, ok := ds.Wargear.Find("The " + rawName); ok {
-		return getStr(itemAny.(map[string]any), "id"), true
-	}
-	return "", false
-}
-
 func mapBattleSize(raw any) any {
 	s, ok := raw.(string)
 	if !ok || s == "" {
@@ -1185,13 +1074,18 @@ func applyLeaderAttachments(parsedUnits []any, units []any, ds *Dataset, faction
 	}
 
 	// --- Pass 2: inference for characters without an explicit attachment. -----
+	// Bodyguard candidates exclude other parsed characters, but conditional
+	// groups inspect every resolved unit in the roster (including characters).
 	bodyguardIDs := map[string]bool{}
+	presentUnitIDs := map[string]struct{}{}
 	for i, uAny := range units {
 		u := uAny.(map[string]any)
 		ref := u["ref"].(map[string]any)
-		pu := parsedUnits[i].(map[string]any)
-		if id, ok := ref["id"].(string); ok && id != "" && pu["is_character"] != true {
-			bodyguardIDs[id] = true
+		if id, ok := ref["id"].(string); ok && id != "" {
+			presentUnitIDs[id] = struct{}{}
+			if parsedUnits[i].(map[string]any)["is_character"] != true {
+				bodyguardIDs[id] = true
+			}
 		}
 	}
 	for i, uAny := range units {
@@ -1221,24 +1115,18 @@ func applyLeaderAttachments(parsedUnits []any, units []any, ds *Dataset, faction
 				resolvedUnit = uv
 			}
 		}
-		if resolvedUnit == nil || getStr(resolvedUnit.Raw, "attachment_role") != "support" {
-			continue
-		}
-		var attachment map[string]any
-		for _, laAny := range ds.LeaderAttachments {
-			la := laAny.(map[string]any)
-			if getStr(la, "leader_id") == leaderID {
-				attachment = la
-				break
-			}
-		}
-		if attachment == nil {
+		if resolvedUnit == nil ||
+			ds.attachmentRole(leaderID, getStr(resolvedUnit.Raw, "attachment_role"), presentUnitIDs) != "support" {
 			continue
 		}
 		var bodyguardID string
-		for _, idAny := range getStrList(attachment, "eligible_bodyguard_ids") {
-			if bodyguardIDs[idAny] {
-				bodyguardID = idAny
+		for _, attachmentAny := range ds.LeaderAttachments {
+			attachment, _ := asMap(attachmentAny)
+			if getStr(attachment, "leader_id") != leaderID {
+				continue
+			}
+			bodyguardID = firstPresentEligibleBodyguardID(attachment, presentUnitIDs, bodyguardIDs)
+			if bodyguardID != "" {
 				break
 			}
 		}

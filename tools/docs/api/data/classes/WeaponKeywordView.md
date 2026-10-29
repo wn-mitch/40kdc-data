@@ -6,7 +6,7 @@
 
 # Class: WeaponKeywordView
 
-Defined in: [data/entities.ts:226](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/entities.ts#L226)
+Defined in: [data/entities.ts:474](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/entities.ts#L474)
 
 A weapon-keyword catalog entry, linked to the weapons whose profiles
 reference it. Exposes the keyword's mechanical effect as a buff stack
@@ -18,7 +18,7 @@ via [getBuffs](#getbuffs).
 
 > **new WeaponKeywordView**(`raw`, `ds`): `WeaponKeywordView`
 
-Defined in: [data/entities.ts:227](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/entities.ts#L227)
+Defined in: [data/entities.ts:475](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/entities.ts#L475)
 
 #### Parameters
 
@@ -42,7 +42,7 @@ The full generated `WeaponKeyword` record.
 
 > `readonly` **raw**: [`WeaponKeyword`](../../generated/interfaces/WeaponKeyword.md)
 
-Defined in: [data/entities.ts:229](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/entities.ts#L229)
+Defined in: [data/entities.ts:477](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/entities.ts#L477)
 
 The full generated `WeaponKeyword` record.
 
@@ -54,7 +54,7 @@ The full generated `WeaponKeyword` record.
 
 > **get** **id**(): `string`
 
-Defined in: [data/entities.ts:233](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/entities.ts#L233)
+Defined in: [data/entities.ts:481](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/entities.ts#L481)
 
 ##### Returns
 
@@ -68,7 +68,7 @@ Defined in: [data/entities.ts:233](https://github.com/wn-mitch/40kdc-data/blob/0
 
 > **get** **name**(): `string`
 
-Defined in: [data/entities.ts:237](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/entities.ts#L237)
+Defined in: [data/entities.ts:485](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/entities.ts#L485)
 
 ##### Returns
 
@@ -82,7 +82,7 @@ Defined in: [data/entities.ts:237](https://github.com/wn-mitch/40kdc-data/blob/0
 
 > **get** **weapons**(): [`WeaponView`](WeaponView.md)[]
 
-Defined in: [data/entities.ts:242](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/entities.ts#L242)
+Defined in: [data/entities.ts:490](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/entities.ts#L490)
 
 Weapons whose profiles reference this keyword id.
 
@@ -96,7 +96,7 @@ Weapons whose profiles reference this keyword id.
 
 > **getBuffs**(`parameters`, `weaponId`, `context`): [`Buff`](../type-aliases/Buff.md)[]
 
-Defined in: [data/entities.ts:252](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/entities.ts#L252)
+Defined in: [data/entities.ts:500](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/entities.ts#L500)
 
 Buff contributions from this catalog entry, for one reference site:
 pass the keyword's `parameters` (e.g. `{ value: 1 }` for Sustained Hits 1)

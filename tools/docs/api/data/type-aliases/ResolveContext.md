@@ -8,6 +8,4 @@
 
 > **ResolveContext** = [`EngineContext`](EngineContext.md)
 
-Defined in: [cruncher/buffs.ts:157](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/buffs.ts#L157)
-
-Back-compat alias — `resolveBuffs` accepts the shared engine context.
+Defined in: [cruncher/buffs.ts:482](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/buffs.ts#L482)

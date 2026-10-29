@@ -1,0 +1,223 @@
+{
+  "name": "Preamble Sweep",
+  "source": {
+    "format": "gw",
+    "generated_by": null
+  },
+  "faction_id": "adeptus-astartes",
+  "detachments": [
+    {
+      "ref": {
+        "id": "gladius-task-force",
+        "raw_name": "Gladius Task Force",
+        "resolved": true,
+        "candidates": []
+      },
+      "dp_cost": 3
+    }
+  ],
+  "battle_size": "strike-force",
+  "force_disposition": "take-and-hold",
+  "points": {
+    "declared_limit": 2000,
+    "detachment_cap": 3,
+    "total_reported": 1995,
+    "total_computed": 425
+  },
+  "units": [
+    {
+      "ref": {
+        "id": "captain",
+        "raw_name": "Captain",
+        "resolved": true,
+        "candidates": []
+      },
+      "model_count": 1,
+      "points": 110,
+      "is_warlord": false,
+      "enhancement": {
+        "id": "artificer-armour-gladius-task-force-adeptus-astartes",
+        "raw_name": "Artificer Armour",
+        "resolved": true,
+        "candidates": []
+      },
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "ref": {
+            "id": "master-crafted-power-weapon-captain",
+            "raw_name": "Master-crafted power weapon",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        },
+        {
+          "ref": {
+            "id": "heavy-bolt-pistol-captain",
+            "raw_name": "Heavy bolt pistol",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        },
+        {
+          "ref": {
+            "id": "master-crafted-bolter",
+            "raw_name": "Master-crafted bolter",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        }
+      ],
+      "leader_attachment": null
+    },
+    {
+      "ref": {
+        "id": "lieutenant",
+        "raw_name": "Lieutenant",
+        "resolved": true,
+        "candidates": []
+      },
+      "model_count": 1,
+      "points": 50,
+      "is_warlord": true,
+      "keyword_overrides": [
+        "Adeptus Astartes"
+      ],
+      "enhancement": {
+        "id": "adept-of-the-codex-gladius-task-force-adeptus-astartes",
+        "raw_name": "Adept of the Codex",
+        "resolved": true,
+        "candidates": []
+      },
+      "enhancement_points": 20,
+      "wargear": [
+        {
+          "ref": {
+            "id": "master-crafted-power-weapon-lieutenant",
+            "raw_name": "Master-crafted power weapon",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        },
+        {
+          "ref": {
+            "id": "bolt-pistol-lieutenant",
+            "raw_name": "Bolt pistol",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        },
+        {
+          "ref": {
+            "id": "ceramite-fists-lieutenant",
+            "raw_name": "Ceramite Fists",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        }
+      ],
+      "leader_attachment": null
+    },
+    {
+      "ref": {
+        "id": "land-raider",
+        "raw_name": "Land Raider",
+        "resolved": true,
+        "candidates": []
+      },
+      "model_count": 1,
+      "points": 245,
+      "is_warlord": false,
+      "enhancement": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "ref": {
+            "id": "armoured-tracks",
+            "raw_name": "Armoured tracks",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        },
+        {
+          "ref": {
+            "id": "godhammer-lascannon",
+            "raw_name": "Godhammer lascannon",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 2
+        },
+        {
+          "ref": {
+            "id": "twin-heavy-bolter-land-raider",
+            "raw_name": "Twin Heavy Bolter",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        }
+      ],
+      "loadout_groups": [
+        {
+          "model_name": "Land Raider",
+          "count": 1,
+          "wargear": [
+            {
+              "ref": {
+                "id": "armoured-tracks",
+                "raw_name": "Armoured tracks",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            },
+            {
+              "ref": {
+                "id": "godhammer-lascannon",
+                "raw_name": "Godhammer lascannon",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 2
+            },
+            {
+              "ref": {
+                "id": "twin-heavy-bolter-land-raider",
+                "raw_name": "Twin Heavy Bolter",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "leader_attachment": null
+    }
+  ],
+  "game_version": {
+    "edition": "11th",
+    "dataslate": "pre-launch-provisional"
+  },
+  "diagnostics": {
+    "resolved_units": 3,
+    "unresolved_units": 0,
+    "resolved_weapons": 9,
+    "unresolved_weapons": 0,
+    "warnings": [
+      {
+        "code": "points-mismatch",
+        "message": "Source-reported total (1995) differs from the sum of cost lines (425).",
+        "raw_name": null
+      }
+    ]
+  }
+}

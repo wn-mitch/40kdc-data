@@ -1,5 +1,77 @@
 [
   {
+    "id": "adeptus-astartes-allies",
+    "name": "Deathwatch",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "label": "Deathwatch",
+    "army_keywords_any": [
+      "Adeptus Astartes",
+      "Black Templars",
+      "Blood Angels",
+      "Dark Angels",
+      "Imperial Fists",
+      "Iron Hands",
+      "Raven Guard",
+      "Salamanders",
+      "Space Wolves",
+      "Ultramarines",
+      "White Scars"
+    ],
+    "source_faction_id": "adeptus-astartes",
+    "source_datasheet_ids": [
+      "corvus-blackstar",
+      "deathwatch-terminator-squad",
+      "deathwatch-veterans",
+      "decimus-kill-team",
+      "fortis-kill-team",
+      "indomitor-kill-team",
+      "spectrus-kill-team",
+      "talonstrike-kill-team",
+      "watch-captain-artemis",
+      "watch-master"
+    ],
+    "points_limits": [
+      {
+        "battle_size": "incursion",
+        "max_points": 500
+      },
+      {
+        "battle_size": "strike-force",
+        "max_points": 500
+      },
+      {
+        "battle_size": "onslaught",
+        "max_points": 500
+      }
+    ],
+    "cannot_be_warlord": true
+  },
+  {
+    "id": "adeptus-custodes-allies",
+    "name": "Anathema Psykana",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "label": "Anathema Psykana",
+    "army_keywords_any": [
+      "Adeptus Custodes"
+    ],
+    "source_faction_id": "adeptus-custodes",
+    "source_datasheet_ids": [
+      "anathema-psykana-rhino",
+      "knight-centura",
+      "prosecutor-squad",
+      "vigilator-squad",
+      "witchseeker-squad"
+    ],
+    "cannot_be_warlord": true,
+    "cannot_take_enhancements": true
+  },
+  {
     "id": "aeldari-harlequins",
     "name": "Harlequins",
     "game_version": {
@@ -52,8 +124,8 @@
       "ynnari-wyches",
       "yvraine"
     ],
-    "cannot_be_warlord": true,
-    "cannot_take_enhancements": true
+    "exclusive": true,
+    "cannot_be_warlord": true
   },
   {
     "id": "agents-of-the-imperium-allies",
@@ -318,6 +390,7 @@
       "stormlord",
       "stormsword",
       "taurox",
+      "valkyrie",
       "wyvern"
     ],
     "points_limits": [
@@ -338,7 +411,7 @@
     "cannot_take_enhancements": true,
     "warlord_required_keyword": "Genestealer Cults",
     "removes_ability_ids": [
-      "voice-of-command"
+      "voice-of-command-astra-militarum"
     ],
     "notes": "A Genestealer Cults army may include ASTRA MILITARUM units. A GENESTEALER CULTS model must be the Warlord; included Astra Militarum models lose Voice of Command."
   },
@@ -629,7 +702,7 @@
     "detachment_ids": [
       "tallyband-summoners"
     ],
-    "source_faction_id": "chaos-daemons",
+    "source_faction_id": "death-guard",
     "source_datasheet_ids": [
       "beasts-of-nurgle",
       "great-unclean-one",
@@ -652,8 +725,8 @@
         "max_points": 1500
       }
     ],
-    "cannot_be_warlord": true,
-    "cannot_take_enhancements": true
+    "exclusive": true,
+    "cannot_be_warlord": true
   },
   {
     "id": "drukhari-aeldari",
@@ -765,7 +838,7 @@
     "detachment_ids": [
       "carnival-of-excess"
     ],
-    "source_faction_id": "chaos-daemons",
+    "source_faction_id": "emperors-children",
     "source_datasheet_ids": [
       "daemonettes",
       "fiends",
@@ -787,8 +860,8 @@
         "max_points": 1500
       }
     ],
-    "cannot_be_warlord": true,
-    "cannot_take_enhancements": true
+    "exclusive": true,
+    "cannot_be_warlord": true
   },
   {
     "id": "iconoclast-fiefdom-damned",
@@ -1018,7 +1091,7 @@
     "detachment_ids": [
       "changehost-of-deceit"
     ],
-    "source_faction_id": "chaos-daemons",
+    "source_faction_id": "thousand-sons",
     "source_datasheet_ids": [
       "blue-horrors",
       "flamers",
@@ -1041,8 +1114,8 @@
         "max_points": 1500
       }
     ],
-    "cannot_be_warlord": true,
-    "cannot_take_enhancements": true
+    "exclusive": true,
+    "cannot_be_warlord": true
   },
   {
     "id": "world-eaters-khorne-daemons",
@@ -1058,7 +1131,7 @@
     "detachment_ids": [
       "khorne-daemonkin"
     ],
-    "source_faction_id": "chaos-daemons",
+    "source_faction_id": "world-eaters",
     "source_datasheet_ids": [
       "bloodcrushers",
       "bloodletters",
@@ -1080,7 +1153,7 @@
         "max_points": 1500
       }
     ],
-    "cannot_be_warlord": true,
-    "cannot_take_enhancements": true
+    "exclusive": true,
+    "cannot_be_warlord": true
   }
 ]

@@ -12,7 +12,7 @@
  *
  * units.find("Kharn")!.abilities
  *   .filter(a => a.phases.includes("shooting"))
- *   .map(a => a.id); // ["berzerker-frenzy"]
+ *   .map(a => a.id); // ["berzerker-frenzy-world-eaters"]
  *
  * @example
  * import { factions } from "@alpaca-software/40kdc-data";
@@ -21,12 +21,20 @@
  */
 export { Dataset } from "./dataset.js";
 export type {
+  BuffInput,
   StackableBuff,
   StackableBuffGroup,
   ReactiveTrigger,
 } from "./dataset.js";
-export { Collection } from "./collection.js";
-export type { CollectionConfig } from "./collection.js";
+export { isLegalLeverSelection } from "./lever-selection.js";
+export type { SelectableLever } from "./lever-selection.js";
+export {
+  Collection,
+  DEFAULT_GAME_MODE,
+  GAME_MODE_VIEWS,
+  inGameMode,
+} from "./collection.js";
+export type { CollectionConfig, GameModeView } from "./collection.js";
 export {
   UnitView,
   AbilityView,
@@ -79,7 +87,7 @@ export {
 export * from "../cruncher/index.js";
 
 // The DSL→Buff translator that powers AbilityView.getBuffs / describeBuffs.
-export { effectToBuffs, parseKeywordGrant } from "../cruncher/from-dsl.js";
+export { effectToBuffs } from "../cruncher/from-dsl.js";
 export type {
   ActivatableBuff,
   ActivatableGroupRef,
@@ -87,6 +95,10 @@ export type {
   TranslationPerspective,
   UnsupportedFragment,
 } from "../cruncher/from-dsl.js";
+export type { UnsupportedScope } from "../cruncher/unsupported-scope.js";
+
+export type { AbilityNeed } from "./lever-providers.js";
+export type { AbilityMortalWounds } from "./dataset-mortals.js";
 
 // The eligible-abilities resolver (also reachable as Dataset.eligibleAbilities).
 export * from "../abilities-resolver/index.js";
@@ -117,6 +129,7 @@ export {
   resolveRosterWargear,
   resolveAttachedLeader,
   resolveAttachmentPartners,
+  resolveAttachmentRoles,
   primaryDetachment,
   primaryDetachmentId,
   checkRosterLegality,

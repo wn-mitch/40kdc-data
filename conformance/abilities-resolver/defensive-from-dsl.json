@@ -2,78 +2,1897 @@
   "name": "DSL→Buff translations under target perspective (defender-side)",
   "cases": [
     {
-      "abilityId": "feel-no-pain-5",
-      "source": { "kind": "ability", "abilityId": "feel-no-pain-5", "abilityKind": "unit" },
-      "context": { "phase": "shooting" },
+      "abilityId": "feel-no-pain",
+      "rating": 5,
+      "source": {
+        "kind": "ability",
+        "abilityId": "feel-no-pain",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting"
+      },
       "perspective": "target",
       "expected": {
-        "applied": [{ "type": "feel-no-pain", "threshold": 5 }],
-        "unsupportedReasons": []
-      }
+        "applied": [
+          {
+            "type": "feel-no-pain",
+            "threshold": 5
+          }
+        ],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": []
+      },
+      "_comment": "Feel No Pain is one core record whose threshold reads the unit's printed rating ({rating: true}); rating is that value (a unit printing Feel No Pain 5+)."
     },
     {
-      "abilityId": "feel-no-pain-5",
-      "source": { "kind": "ability", "abilityId": "feel-no-pain-5", "abilityKind": "unit" },
-      "context": { "phase": "shooting" },
+      "abilityId": "feel-no-pain",
+      "rating": 5,
+      "source": {
+        "kind": "ability",
+        "abilityId": "feel-no-pain",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting"
+      },
       "perspective": "attacker",
       "expected": {
         "applied": [],
-        "unsupportedReasons": []
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": []
       }
     },
     {
-      "abilityId": "oath-of-moment",
-      "source": { "kind": "ability", "abilityId": "oath-of-moment", "abilityKind": "army" },
-      "context": { "phase": "shooting" },
+      "abilityId": "combat-doctrines-assault-force-adeptus-astartes",
+      "source": {
+        "kind": "ability",
+        "abilityId": "combat-doctrines-assault-force-adeptus-astartes",
+        "abilityKind": "army"
+      },
+      "context": {
+        "phase": "shooting"
+      },
       "perspective": "target",
       "expected": {
         "applied": [],
-        "unsupportedReasons": []
+        "unsupportedReasons": [
+          "effect type \"permission\" is not modelled by the buff layer",
+          "effect type \"permission\" is not modelled by the buff layer",
+          "effect type \"permission\" is not modelled by the buff layer"
+        ],
+        "unsupportedScopes": [
+          "out-of-scope",
+          "out-of-scope",
+          "out-of-scope"
+        ],
+        "needKeys": [],
+        "activatable": []
       }
     },
     {
       "_comment": "Core rule 19.04: a model-scoped effect (target self/bearer) read as the chosen unit's own ability still buffs it — the Archon's personal 4+ invulnerable save applies when the Archon is the unit being crunched.",
-      "abilityId": "shadowfield",
-      "source": { "kind": "ability", "abilityId": "shadowfield", "abilityKind": "unit" },
-      "context": { "phase": "shooting" },
+      "abilityId": "shadowfield-drukhari",
+      "source": {
+        "kind": "ability",
+        "abilityId": "shadowfield-drukhari",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting"
+      },
       "perspective": "target",
       "expected": {
-        "applied": [{ "type": "invulnerable-save", "threshold": 4 }],
-        "unsupportedReasons": []
+        "applied": [
+          {
+            "type": "invulnerable-save",
+            "threshold": 4
+          }
+        ],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": []
       }
     },
     {
       "_comment": "…but the same effect pooled in from an attached member stays on that model: no buff on the combined unit, one diagnostic instead.",
-      "abilityId": "shadowfield",
+      "abilityId": "shadowfield-drukhari",
       "source": {
         "kind": "ability",
-        "abilityId": "shadowfield",
+        "abilityId": "shadowfield-drukhari",
         "abilityKind": "attached",
         "sourceUnitId": "archon"
       },
-      "context": { "phase": "shooting" },
+      "context": {
+        "phase": "shooting"
+      },
       "perspective": "target",
       "expected": {
         "applied": [],
         "unsupportedReasons": [
           "model-scoped effect from an attached model: applies to that model only (core rule 19.04)"
+        ],
+        "unsupportedScopes": [
+          "out-of-scope"
+        ],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "A leaf aimed at one model in the unit (target model-in-this-unit) does not buff the whole unit: the buff layer cannot tell which model it reaches, so it is reported unsupported.",
+      "abilityId": "fabricated-model-in-this-unit",
+      "effect": {
+        "type": "invulnerable-save",
+        "target": "model-in-this-unit",
+        "modifier": {
+          "threshold": 4
+        }
+      },
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-model-in-this-unit",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "model-in-this-unit: individual model identity is unresolved"
+        ],
+        "unsupportedScopes": [
+          "unresolved"
+        ],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "The same leaf pooled in from an attached member is gated by core rule 19.04 first: model-in-this-unit is model-scoped like this-model.",
+      "abilityId": "fabricated-model-in-this-unit",
+      "effect": {
+        "type": "invulnerable-save",
+        "target": "model-in-this-unit",
+        "modifier": {
+          "threshold": 4
+        }
+      },
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-model-in-this-unit",
+        "abilityKind": "attached",
+        "sourceUnitId": "fabricated-character"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "model-scoped effect from an attached model: applies to that model only (core rule 19.04)"
+        ],
+        "unsupportedScopes": [
+          "out-of-scope"
+        ],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "The counterpart: a genuinely unit-scoped leader rule (target unit — a unit-wide invulnerable save) still reaches the whole combined unit from an attached source. The fabricated witness supplies the source model's explicit leader role; attachment alone is not evidence of leading. Guards against the 19.04 gate over-reaching.",
+      "abilityId": "mental-fortress-adeptus-astartes",
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "attachment",
+          "parameters": {
+            "subject": "this-model",
+            "role": "leading"
+          }
+        },
+        "effect": {
+          "type": "invulnerable-save",
+          "target": "this-unit",
+          "modifier": {
+            "invuln_sv": 4
+          }
+        }
+      },
+      "source": {
+        "kind": "ability",
+        "abilityId": "mental-fortress-adeptus-astartes",
+        "abilityKind": "attached",
+        "sourceUnitId": "librarian"
+      },
+      "context": {
+        "phase": "shooting",
+        "attachmentRoles": {
+          "librarian": "leader"
+        }
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [
+          {
+            "type": "invulnerable-save",
+            "threshold": 4
+          }
+        ],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "Fabricated defender-side rules on the attacked unit: Stealth and the benefit of cover each give cover, a granted Feel No Pain, a set Save, and a worsened incoming AP.",
+      "abilityId": "fabricated-defences",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-defences",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "target",
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "ability-grant",
+            "target": "this-unit",
+            "modifier": {
+              "ability": "stealth"
+            }
+          },
+          {
+            "type": "ability-grant",
+            "target": "this-unit",
+            "modifier": {
+              "ability": "benefit-of-cover"
+            }
+          },
+          {
+            "type": "ability-grant",
+            "target": "this-unit",
+            "modifier": {
+              "ability": "feel-no-pain",
+              "value": 5
+            }
+          },
+          {
+            "type": "stat-modifier",
+            "target": "this-model",
+            "modifier": {
+              "stat": "Sv",
+              "operation": "set",
+              "value": 3
+            }
+          },
+          {
+            "type": "stat-modifier",
+            "target": "attacker",
+            "modifier": {
+              "stat": "AP",
+              "operation": "worsen",
+              "value": 1
+            }
+          }
+        ]
+      },
+      "expected": {
+        "applied": [
+          {
+            "type": "cover"
+          },
+          {
+            "type": "cover"
+          },
+          {
+            "type": "feel-no-pain",
+            "threshold": 5
+          },
+          {
+            "type": "save-characteristic",
+            "value": 3
+          },
+          {
+            "type": "ap-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "Fabricated penalties to attackers' WS and BS: hit modifiers gated to the matching phase. The unit's own critical threshold does not apply to attacks against it.",
+      "abilityId": "fabricated-skill-penalty",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-skill-penalty",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "fight"
+      },
+      "perspective": "target",
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "stat-modifier",
+            "target": "attacker",
+            "modifier": {
+              "stat": "WS",
+              "operation": "worsen",
+              "value": 1
+            }
+          },
+          {
+            "type": "stat-modifier",
+            "target": "attacker",
+            "modifier": {
+              "stat": "BS",
+              "operation": "worsen",
+              "value": 1
+            }
+          },
+          {
+            "type": "roll-result",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "critical_on": 5
+            }
+          }
+        ]
+      },
+      "expected": {
+        "applied": [
+          {
+            "type": "hit-mod",
+            "value": -1
+          },
+          {
+            "type": "hit-mod",
+            "value": -1
+          }
+        ],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/save-characteristic/improve",
+      "abilityId": "fabricated-save",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-save",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "stat": "Sv",
+          "operation": "improve",
+          "value": 1
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [
+          {
+            "type": "save-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/save-characteristic/worsen",
+      "abilityId": "fabricated-save",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-save",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "stat": "Sv",
+          "operation": "worsen",
+          "value": 1
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [
+          {
+            "type": "save-mod",
+            "value": -1
+          }
+        ],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/save-characteristic/add",
+      "abilityId": "fabricated-save",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-save",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "stat": "Sv",
+          "operation": "add",
+          "value": 1
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [
+          {
+            "type": "save-mod",
+            "value": -1
+          }
+        ],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/save-characteristic/subtract",
+      "abilityId": "fabricated-save",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-save",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "stat": "Sv",
+          "operation": "subtract",
+          "value": 1
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [
+          {
+            "type": "save-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/save-characteristic/improve-capped",
+      "_comment": "A Save improvement that cannot take the Save better than 3+ changes the Save characteristic itself (save-improve), not the save roll.",
+      "abilityId": "fabricated-save",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-save",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "stat": "Sv",
+          "operation": "improve",
+          "value": 1,
+          "minimum": 3
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [
+          {
+            "type": "save-improve",
+            "value": 1,
+            "best": 3
+          }
+        ],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "scenario/player-turn/defender-during-attacker-turn",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "player-turn-is",
+          "parameters": {
+            "turn": "your-turn"
+          }
+        },
+        "effect": {
+          "type": "stat-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "stat": "T",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerTurn": true
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "scenario/player-turn/defender-opponent-turn",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "player-turn-is",
+          "parameters": {
+            "turn": "opponent-turn"
+          }
+        },
+        "effect": {
+          "type": "stat-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "stat": "T",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerTurn": true
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [
+          {
+            "type": "toughness-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "scenario/strength/own-unit-below-starting",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "strength",
+          "parameters": {
+            "subject": "this-unit",
+            "below": "starting"
+          }
+        },
+        "effect": {
+          "type": "stat-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "stat": "T",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "targetStrength": "below-starting"
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [
+          {
+            "type": "toughness-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "scenario/objective/defender-friendly-controlled",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "matches",
+          "parameters": {
+            "subject": "this-unit",
+            "filter": {
+              "within": {
+                "of": {
+                  "objective": {
+                    "controlled_by": "friendly"
+                  }
+                },
+                "range": "objective-control"
+              }
+            }
+          }
+        },
+        "effect": {
+          "type": "stat-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "stat": "T",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "targetObjectives": [
+          {
+            "controller": "target"
+          }
+        ]
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [
+          {
+            "type": "toughness-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "scenario/owner/enemy-attacker-from-target",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "matches",
+          "parameters": {
+            "subject": "attacker",
+            "filter": {
+              "owner": "enemy",
+              "all_of": [
+                "INFANTRY"
+              ]
+            }
+          }
+        },
+        "effect": {
+          "type": "stat-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "stat": "T",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerKeywords": [
+          "infantry"
+        ]
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [
+          {
+            "type": "toughness-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "model-keywords/target-every-model",
+      "abilityId": "fabricated-model-keywords",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-model-keywords",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "feel-no-pain",
+        "target": {
+          "owner": "friendly",
+          "level": "model",
+          "all_of": [
+            "INFANTRY"
+          ]
+        },
+        "modifier": {
+          "threshold": 5
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "targetKeywords": [
+          "infantry",
+          "death guard"
+        ],
+        "targetModelKeywords": [
+          "infantry",
+          "death guard"
+        ]
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [
+          {
+            "type": "feel-no-pain",
+            "threshold": 5
+          }
+        ],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "unit-wargear/defensive-carried",
+      "abilityId": "fabricated-unit-wargear",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-unit-wargear",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "unit-wargear",
+          "parameters": {
+            "subject": "this-unit",
+            "wargear": "fab-guard-pod"
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "attacker",
+          "modifier": {
+            "roll": "wound",
+            "operation": "subtract",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "targetWargear": {
+          "fab-guard-pod": 1
+        }
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [
+          {
+            "type": "wound-mod",
+            "value": -1
+          }
+        ],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "unit-wargear/defensive-not-carried",
+      "abilityId": "fabricated-unit-wargear",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-unit-wargear",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "unit-wargear",
+          "parameters": {
+            "subject": "this-unit",
+            "wargear": "fab-guard-pod"
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "attacker",
+          "modifier": {
+            "roll": "wound",
+            "operation": "subtract",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "targetWargear": {}
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "unit-wargear/defensive-unknown",
+      "abilityId": "fabricated-unit-wargear",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-unit-wargear",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "unit-wargear",
+          "parameters": {
+            "subject": "this-unit",
+            "wargear": "fab-guard-pod"
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "attacker",
+          "modifier": {
+            "roll": "wound",
+            "operation": "subtract",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerWargear": {
+          "fab-guard-pod": 1
+        }
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"unit-wargear\" against current context"
+        ],
+        "unsupportedScopes": [
+          "unresolved"
+        ],
+        "needKeys": [
+          "target:{\"parameters\":{\"subject\":\"this-unit\",\"wargear\":\"fab-guard-pod\"},\"type\":\"unit-wargear\"}"
+        ],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/recipient-snapshot/attested-toughness-after-detachment",
+      "abilityId": "snapshot-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "snapshot-example",
+        "abilityKind": "attached",
+        "sourceUnitId": "source"
+      },
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "battle-started",
+          "condition": {
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
+          }
+        },
+        "duration": "battle",
+        "effect": {
+          "type": "for-each-unit",
+          "selector": {
+            "filter": {
+              "level": "model",
+              "member_of": "this-unit",
+              "attachment_role": "bodyguard"
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "stat-modifier",
+                "target": "recipient",
+                "modifier": {
+                  "stat": "S",
+                  "operation": "add",
+                  "value": 1,
+                  "weapons": {
+                    "type": "melee"
+                  }
+                }
+              },
+              {
+                "type": "stat-modifier",
+                "target": "recipient",
+                "modifier": {
+                  "stat": "T",
+                  "operation": "add",
+                  "value": 1
+                }
+              }
+            ]
+          }
+        }
+      },
+      "context": {
+        "phase": "fight",
+        "targetUnitId": "recipient",
+        "targetKeywords": [
+          "INFANTRY",
+          "CHARACTER"
+        ],
+        "targetAttached": false,
+        "recipientSnapshots": [
+          {
+            "source": {
+              "kind": "ability",
+              "abilityId": "snapshot-example",
+              "abilityKind": "attached",
+              "sourceUnitId": "source"
+            },
+            "sourceUnitId": "source",
+            "trigger": {
+              "event": "battle-started",
+              "condition": {
+                "type": "attachment",
+                "parameters": {
+                  "subject": "this-model",
+                  "role": "leading"
+                }
+              }
+            },
+            "selector": {
+              "filter": {
+                "level": "model",
+                "member_of": "this-unit",
+                "attachment_role": "bodyguard"
+              }
+            },
+            "selectionPath": "/effect",
+            "perspective": "target",
+            "recipientUnitId": "recipient",
+            "selected": true
+          }
+        ]
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [
+          {
+            "type": "toughness-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/in-region-defender-territory",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "in-region",
+          "parameters": {
+            "region": {
+              "territory": "your-territory"
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "attacker",
+          "modifier": {
+            "roll": "hit",
+            "operation": "subtract",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "targetRegions": [
+          {
+            "territory": "target"
+          }
+        ]
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [
+          {
+            "type": "hit-mod",
+            "value": -1
+          }
+        ],
+        "unsupportedReasons": [],
+        "needKeys": [],
+        "activatable": [],
+        "applicableWhen": [
+          null
         ]
       }
     },
     {
-      "_comment": "The counterpart: a genuinely unit-scoped leader rule (target unit — 'models in that unit have a 4+ invulnerable save') still reaches the whole combined unit from an attached source. Guards against the 19.04 gate over-reaching.",
-      "abilityId": "mental-fortress-psychic",
+      "caseId": "canonical/scenario/controls-defender-side",
+      "abilityId": "fabricated-scenario",
       "source": {
         "kind": "ability",
-        "abilityId": "mental-fortress-psychic",
-        "abilityKind": "attached",
-        "sourceUnitId": "librarian"
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
       },
-      "context": { "phase": "shooting", "attackerAttached": true },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "controls",
+          "parameters": {
+            "by": "friendly",
+            "proportion": {
+              "comparison": "gte",
+              "fraction": 0.5
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "attacker",
+          "modifier": {
+            "roll": "hit",
+            "operation": "subtract",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "objectivesControlled": {
+          "attacker": 3,
+          "target": 1,
+          "total": 6
+        }
+      },
       "perspective": "target",
       "expected": {
-        "applied": [{ "type": "invulnerable-save", "threshold": 4 }],
-        "unsupportedReasons": []
+        "applied": [],
+        "unsupportedReasons": [],
+        "needKeys": [],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/own-toughness-defender-unbound",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "attack-compare",
+          "parameters": {
+            "left": {
+              "of": "attacker",
+              "stat": "T"
+            },
+            "comparison": "lt",
+            "right": {
+              "of": "defender",
+              "stat": "T"
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "attacker",
+          "modifier": {
+            "roll": "hit",
+            "operation": "subtract",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerToughness": 7
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [
+          {
+            "type": "hit-mod",
+            "value": -1
+          }
+        ],
+        "unsupportedReasons": [],
+        "needKeys": [],
+        "activatable": [],
+        "applicableWhen": [
+          {
+            "attackComparisons": [
+              {
+                "left": {
+                  "of": "attacker",
+                  "stat": "T"
+                },
+                "comparison": "lt",
+                "right": {
+                  "of": "defender",
+                  "stat": "T"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/scenario/designated-applied-defender",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "designated",
+          "parameters": {
+            "tag": "example-mark",
+            "by": "this-unit",
+            "count": {
+              "min": 2
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "attacker",
+          "modifier": {
+            "roll": "hit",
+            "operation": "subtract",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerDesignationsApplied": {
+          "example-mark": 2
+        },
+        "targetDesignationsApplied": {}
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "needKeys": [],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/controls-objective-filter-defender",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "controls",
+          "parameters": {
+            "objective": {
+              "role": "non-home"
+            },
+            "count": {
+              "min": 2
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "attacker",
+          "modifier": {
+            "roll": "hit",
+            "operation": "subtract",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "objectives": [
+          {
+            "role": "non-home",
+            "controller": "target"
+          },
+          {
+            "role": "non-home",
+            "controller": "target"
+          },
+          {
+            "role": "non-home",
+            "controller": "attacker"
+          }
+        ]
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [
+          {
+            "type": "hit-mod",
+            "value": -1
+          }
+        ],
+        "unsupportedReasons": [],
+        "needKeys": [],
+        "activatable": [],
+        "applicableWhen": [
+          null
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/scenario/happened-selected-defender",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "happened",
+          "parameters": {
+            "window": "phase",
+            "event": "selected",
+            "filter": {
+              "to": "fight"
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "attacker",
+          "modifier": {
+            "roll": "hit",
+            "operation": "subtract",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "fight",
+        "attackerSelected": [],
+        "targetSelected": [
+          "fight"
+        ]
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [
+          {
+            "type": "hit-mod",
+            "value": -1
+          }
+        ],
+        "unsupportedReasons": [],
+        "needKeys": [],
+        "activatable": [],
+        "applicableWhen": [
+          null
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/scenario/roll-result-critical-wound-defender-unknown",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "roll-result",
+          "parameters": {
+            "roll": "wound",
+            "result": "critical"
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "attacker",
+          "modifier": {
+            "roll": "hit",
+            "operation": "subtract",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"roll-result\" against current context"
+        ],
+        "needKeys": [
+          "target:{\"parameters\":{\"result\":\"critical\",\"roll\":\"wound\"},\"type\":\"roll-result\"}"
+        ],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/condition-fact-defender",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "matches",
+          "parameters": {
+            "subject": "event-subject",
+            "filter": {
+              "engaged_with": "this-unit"
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "attacker",
+          "modifier": {
+            "roll": "hit",
+            "operation": "subtract",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "conditionFacts": {
+          "target:{\"parameters\":{\"filter\":{\"engaged_with\":\"this-unit\"},\"subject\":\"event-subject\"},\"type\":\"matches\"}": true
+        }
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [
+          {
+            "type": "hit-mod",
+            "value": -1
+          }
+        ],
+        "unsupportedReasons": [],
+        "needKeys": [],
+        "activatable": [],
+        "applicableWhen": [
+          null
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/scenario/mortal-wounds-roll-defender-perspective",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "after-roll",
+          "filter": {
+            "roll": "wound",
+            "result": "success"
+          }
+        },
+        "effect": {
+          "type": "mortal-wounds",
+          "target": "defender",
+          "modifier": {
+            "count": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "fight"
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "needKeys": [],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/granted-record/defender-side",
+      "abilityId": "fabricated-grantor",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-grantor",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "this-unit",
+        "modifier": {
+          "ability": "fabricated-ward"
+        }
+      },
+      "grantedRecords": {
+        "fabricated-ward": {
+          "effect": {
+            "type": "roll-modifier",
+            "target": "attacker",
+            "modifier": {
+              "roll": "hit",
+              "operation": "subtract",
+              "value": 1
+            }
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [
+          {
+            "type": "hit-mod",
+            "value": -1
+          }
+        ],
+        "unsupportedReasons": [],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/damage-zeroing/unlimited",
+      "abilityId": "fabricated-plating",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-plating",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "damage-reduction",
+        "target": "this-unit",
+        "modifier": {
+          "reduction": "to-zero"
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [
+          {
+            "type": "damage-zeroing",
+            "uses": 1,
+            "per": "unit"
+          }
+        ],
+        "unsupportedReasons": [],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/damage-zeroing/n-per-battle",
+      "abilityId": "fabricated-plating",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-plating",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "ability-part",
+        "usage": {
+          "frequency": "n-per-battle",
+          "count": 2,
+          "per": "unit"
+        },
+        "effect": {
+          "type": "damage-reduction",
+          "target": "this-unit",
+          "modifier": {
+            "reduction": "to-zero"
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "needKeys": [],
+        "activatable": [
+          {
+            "id": "fabricated-plating#zero the damage of 2 attacks",
+            "label": "zero the damage of 2 attacks",
+            "group": null,
+            "requires": [
+              {
+                "type": "ability-part",
+                "usage": {
+                  "frequency": "n-per-battle",
+                  "count": 2,
+                  "per": "unit"
+                }
+              }
+            ],
+            "capRaise": null,
+            "buffs": [
+              {
+                "type": "damage-zeroing",
+                "uses": 2,
+                "per": "unit"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/damage-zeroing/per-model",
+      "abilityId": "fabricated-plating",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-plating",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "ability-part",
+        "usage": {
+          "frequency": "once-per-battle-round",
+          "per": "model"
+        },
+        "effect": {
+          "type": "damage-reduction",
+          "target": "this-unit",
+          "modifier": {
+            "reduction": "to-zero"
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "needKeys": [],
+        "activatable": [
+          {
+            "id": "fabricated-plating#zero the damage of 1 attack per model",
+            "label": "zero the damage of 1 attack per model",
+            "group": null,
+            "requires": [
+              {
+                "type": "ability-part",
+                "usage": {
+                  "frequency": "once-per-battle-round",
+                  "per": "model"
+                }
+              }
+            ],
+            "capRaise": null,
+            "buffs": [
+              {
+                "type": "damage-zeroing",
+                "uses": 1,
+                "per": "model"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/damage-zeroing/tightest-limit",
+      "abilityId": "fabricated-plating",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-plating",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "ability-part",
+        "usage": [
+          {
+            "frequency": "n-per-battle",
+            "count": 3,
+            "per": "model"
+          },
+          {
+            "frequency": "once-per-turn",
+            "per": "unit"
+          }
+        ],
+        "effect": {
+          "type": "damage-reduction",
+          "target": "this-unit",
+          "modifier": {
+            "reduction": "to-zero"
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "needKeys": [],
+        "activatable": [
+          {
+            "id": "fabricated-plating#zero the damage of 1 attack",
+            "label": "zero the damage of 1 attack",
+            "group": null,
+            "requires": [
+              {
+                "type": "ability-part",
+                "usage": [
+                  {
+                    "frequency": "n-per-battle",
+                    "count": 3,
+                    "per": "model"
+                  },
+                  {
+                    "frequency": "once-per-turn",
+                    "per": "unit"
+                  }
+                ]
+              }
+            ],
+            "capRaise": null,
+            "buffs": [
+              {
+                "type": "damage-zeroing",
+                "uses": 1,
+                "per": "unit"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/damage-zeroing/half",
+      "abilityId": "fabricated-plating",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-plating",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "damage-reduction",
+        "target": "this-unit",
+        "modifier": {
+          "reduction": "half"
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "damage-reduction: halving Damage is not modelled by the buff layer"
+        ],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/ignore-modifiers/all-except-save-target-walk",
+      "abilityId": "fabricated-resolve",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-resolve",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "ignore-modifiers",
+        "target": "this-unit",
+        "modifier": {
+          "what": "rolls",
+          "rolls": [
+            "all"
+          ],
+          "except_rolls": [
+            "save"
+          ]
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/stratagem-model/multi-model-defender",
+      "abilityId": "stratagem-model-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "stratagem-model-example",
+        "abilityKind": "detachment-stratagem",
+        "selectsModel": true
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "T",
+          "operation": "add",
+          "value": 1
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "targetModelCount": 6
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "model-only target"
+        ],
+        "needKeys": [],
+        "activatable": []
       }
     }
   ]

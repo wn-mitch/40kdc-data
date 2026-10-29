@@ -6,14 +6,10 @@
 
 # Interface: DicePoolAllocationEffect
 
-Defined in: [generated.ts:841](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L841)
+Defined in: [generated.ts:4031](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4031)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "dice-pool-allocation-effect".
-
-## Indexable
-
-> \[`k`: `string`\]: `unknown`
 
 ## Properties
 
@@ -21,7 +17,7 @@ via the `definition` "dice-pool-allocation-effect".
 
 > **type**: `"dice-pool-allocation"`
 
-Defined in: [generated.ts:842](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L842)
+Defined in: [generated.ts:4032](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4032)
 
 ***
 
@@ -29,11 +25,7 @@ Defined in: [generated.ts:842](https://github.com/wn-mitch/40kdc-data/blob/0b695
 
 > **pool**: `object`
 
-Defined in: [generated.ts:843](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L843)
-
-#### Index Signature
-
-\[`k`: `string`\]: `unknown`
+Defined in: [generated.ts:4033](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4033)
 
 #### count
 
@@ -49,15 +41,15 @@ Defined in: [generated.ts:843](https://github.com/wn-mitch/40kdc-data/blob/0b695
 
 > **max\_activations**: `number`
 
-Defined in: [generated.ts:848](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L848)
+Defined in: [generated.ts:4037](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4037)
 
 ***
 
 ### options
 
-> **options**: \[\{\[`k`: `string`\]: `unknown`; `name`: `string`; `requirement`: \{\[`k`: `string`\]: `unknown`; `type`: `"pair"` \| `"triple"` \| `"single"` \| `"run"`; `min_value`: `number`; \}; `effect`: [`EffectNode`](../type-aliases/EffectNode.md); \}, ...\{ name: string; requirement: \{ type: "pair" \| "triple" \| "single" \| "run"; min\_value: number; \[k: string\]: unknown \}; effect: EffectNode; \[k: string\]: unknown \}\[\]\]
+> **options**: \[\{ `id`: `string`; `name`: `string`; `requirement`: [`DiceRequirementSpec`](../type-aliases/DiceRequirementSpec.md); `effect`: [`EffectNode`](../type-aliases/EffectNode.md); \}, `...{ id: string; name: string; requirement: DiceRequirementSpec; effect: EffectNode }[]`\]
 
-Defined in: [generated.ts:852](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L852)
+Defined in: [generated.ts:4041](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4041)
 
 #### Min Items
 

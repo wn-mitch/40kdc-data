@@ -1,0 +1,240 @@
+"""Buff-layer handling of the phase-4 DSL shapes: values the engine cannot size, the
+``roll`` binding container re-encoding a dice-pool allocation, and the diagnostic label of
+an ability's own roll.
+
+Python mirror of the phase-4 helpers in ``tools/src/cruncher/from-dsl.ts``.
+"""
+
+from __future__ import annotations
+
+from collections.abc import Callable
+from typing import Any
+
+from wh40kdc.cruncher.buffs import Buff, BuffSource
+
+#: Numeric modifier fields whose size a buff reads.
+_SIZED_FIELDS = ("value", "count", "amount")
+
+#: Leaves and containers the buff engine reports rather than resolves.
+UNSUPPORTED_SHAPE_REASONS: dict[str, str] = {
+    "select-objective": (
+        "select-objective: the bound objective marker is not resolved by the buff engine"
+    ),
+    "characteristic-resolution": (
+        "characteristic-resolution: which models' characteristic applies depends on the "
+        "unit's model mix; not resolved by the buff engine"
+    ),
+    "borrow-weapons": (
+        "borrow-weapons: the passengers' weapons are not added to the Transport's profile "
+        "by the buff engine"
+    ),
+    "select-weapon": "select-weapon: a bound weapon is not resolved by the buff engine",
+}
+
+
+def _js(v: Any) -> str:
+    """JS ``String(v)`` for the values a diagnostic interpolates."""
+    if v is None:
+        return "undefined"
+    if v is True:
+        return "true"
+    if v is False:
+        return "false"
+    if isinstance(v, float) and v.is_integer():
+        return str(int(v))
+    if isinstance(v, dict):
+        return "[object Object]"
+    return str(v)
+
+
+def roll_label(roll: Any) -> str:
+    """A roll kind for a diagnostic: "hit", or the ability whose dice it is."""
+    if isinstance(roll, dict) and isinstance(roll.get("of_ability"), str):
+        return f"{roll['of_ability']} roll"
+    return _js(roll)
+
+
+def unsized_value_reason(node: dict[str, Any]) -> str | None:
+    """Why a leaf's size cannot be read, or None: a ``scaling`` block (the size depends on
+    models or wounds on the board) or a value bound to the battle size, a roll or a count."""
+    modifier = node.get("modifier")
+    node_type = node.get("type")
+    if not isinstance(modifier, dict) or not isinstance(node_type, str):
+        return None
+    scaling = node.get("scaling")
+    if isinstance(scaling, dict):
+        return (
+            f"{node_type}: the value scales with {_js(scaling.get('of'))}; "
+            "not resolved by the buff engine"
+        )
+    for field in _SIZED_FIELDS:
+        v = modifier.get(field)
+        if not isinstance(v, dict):
+            continue
+        if isinstance(v.get("roll_var"), str):
+            what = "a bound roll"
+        elif isinstance(v.get("count_of"), str):
+            what = f"the number of {v['count_of']}"
+        else:
+            what = "the battle size"
+        return f"{node_type}: its {field} is set by {what}; not resolved by the buff engine"
+    return None
+
+
+def scaled_to_cap(node: dict[str, Any]) -> dict[str, Any] | None:
+    """A scaled leaf with a cap, as the leaf at that cap: the scaled field set to ``max_value``
+    and the scaling removed. None when the scaling has no positive integer cap, the scaled field
+    is not a plain number, or another size is bound."""
+    scaling = node.get("scaling")
+    modifier = node.get("modifier")
+    if not isinstance(scaling, dict) or not isinstance(modifier, dict):
+        return None
+    cap = scaling.get("max_value")
+    if not isinstance(cap, (int, float)) or isinstance(cap, bool):
+        return None
+    if not float(cap).is_integer() or cap <= 0:
+        return None
+    field = scaling["field"] if "field" in scaling else "value"
+    if not isinstance(field, str) or field not in _SIZED_FIELDS:
+        return None
+    if not _is_number(modifier.get(field)):
+        return None
+    if any(isinstance(modifier.get(other), dict) for other in _SIZED_FIELDS):
+        return None
+    rest = {k: v for k, v in node.items() if k != "scaling"}
+    return {**rest, "modifier": {**modifier, field: cap}}
+
+
+def _is_number(value: Any) -> bool:
+    """JS ``typeof value === "number"`` for JSON values."""
+    return isinstance(value, (int, float)) and not isinstance(value, bool)
+
+
+#: A gate on a stance option: ``{"option": {"ability_id", "option_id"}, "negated": bool}``. It
+#: holds while the option is picked, or, ``negated``, while it is not.
+StanceGate = dict[str, Any]
+
+#: Collects one option's buffs into a diagnostics sink: the buffs and the stance gate on them
+#: (None when they have none).
+Collect = Callable[
+    [Any, BuffSource, dict[str, Any], list[dict[str, Any]]],
+    tuple[list[Buff], StanceGate | None],
+]
+
+
+def stance_gate_fields(gate: StanceGate | None) -> dict[str, Any]:
+    """The lever fields that carry ``gate``: ``excludesOption`` for a negated gate, else
+    ``requiresOption``."""
+    if gate is None:
+        return {}
+    return {"excludesOption" if gate["negated"] else "requiresOption": gate["option"]}
+
+
+def enumerate_roll_allocation(
+    node: dict[str, Any],
+    source: BuffSource,
+    opts: dict[str, Any],
+    out: dict[str, Any],
+    collect: Collect,
+    label: Callable[[list[Buff]], str],
+) -> bool:
+    """A ``roll`` whose nested effect is a choice of dice gates on that roll (``from`` +
+    ``requirement``): the general encoding of a dice-pool allocation. Emits the levers the
+    dice-pool enumeration does (ids ``<ability>#<option name>``, one group capped by the
+    choice's ``max_choices``). Returns False when the roll is not such an allocation."""
+    choice = node.get("effect")
+    if not isinstance(choice, dict) or choice.get("type") != "choice":
+        return False
+    options = choice.get("options")
+    if not isinstance(options, list):
+        return False
+    gates: list[tuple[str | None, Any]] = []
+    for opt in options:
+        part = opt if isinstance(opt, dict) and opt.get("type") == "ability-part" else None
+        gate = part.get("effect") if part is not None else opt
+        frm = gate.get("from") if isinstance(gate, dict) else None
+        if not (
+            isinstance(gate, dict)
+            and gate.get("type") == "dice-gated"
+            and gate.get("requirement") is not None
+            and isinstance(frm, dict)
+            and frm.get("roll_var") == node.get("roll_var")
+        ):
+            return False
+        name = part.get("name") if part is not None and isinstance(part.get("name"), str) else None
+        gates.append((name, gate.get("on_success")))
+    max_choices = choice.get("max_choices")
+    is_number = isinstance(max_choices, (int, float)) and not isinstance(max_choices, bool)
+    max_activations = max_choices if is_number else 1
+    for name, effect in gates:
+        buffs, gate = collect(effect, source, opts, out["unsupported"])
+        if not buffs:
+            continue
+        lever = name if name is not None else label(buffs)
+        out["activatable"].append(
+            {
+                "id": f"{opts['abilityId']}#{lever}",
+                "label": lever,
+                "buffs": buffs,
+                "group": {"id": opts["abilityId"], "maxActivations": max_activations},
+                **stance_gate_fields(gate),
+            }
+        )
+    return True
+
+
+def self_designations(effect: Any, ability_id: str) -> frozenset[str]:
+    """The tags ``effect`` designates on the units holding the ability (``this-unit``,
+    ``ability-unit``, or a friendly filter naming the ability in ``has_ability``)."""
+    tags: set[str] = set()
+
+    def visit(node: Any) -> None:
+        if isinstance(node, list):
+            for item in node:
+                visit(item)
+            return
+        if not isinstance(node, dict):
+            return
+        modifier = node.get("modifier")
+        if (
+            node.get("type") == "designate"
+            and isinstance(modifier, dict)
+            and isinstance(modifier.get("tag"), str)
+            and modifier.get("clear") is not True
+        ):
+            target = node.get("target")
+            has_ability = target.get("has_ability") if isinstance(target, dict) else None
+            holders = target in ("this-unit", "ability-unit") or (
+                isinstance(target, dict)
+                and target.get("owner") == "friendly"
+                and isinstance(has_ability, list)
+                and ability_id in has_ability
+            )
+            if holders:
+                tags.add(modifier["tag"])
+        for value in node.values():
+            visit(value)
+
+    visit(effect)
+    return frozenset(tags)
+
+
+def self_designation_gate(condition: dict[str, Any], opts: dict[str, Any]) -> str | None:
+    """The tag of a ``this-unit`` designation gate the ability itself grants its holders, when the
+    context does not declare the unit's designations: the player readies the unit, so the gate is
+    the player's to open."""
+    tags = opts.get("selfDesignations")
+    if opts["context"].get("attackerDesignations") is not None or tags is None:
+        return None
+    parameters = condition.get("parameters")
+    if (
+        condition.get("type") != "matches"
+        or not isinstance(parameters, dict)
+        or parameters.get("subject") != "this-unit"
+    ):
+        return None
+    filter_ = parameters.get("filter")
+    if not isinstance(filter_, dict) or len(filter_) != 1:
+        return None
+    tag = filter_.get("designated")
+    return tag if isinstance(tag, str) and tag in tags else None

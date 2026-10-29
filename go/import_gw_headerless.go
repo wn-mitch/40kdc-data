@@ -1,7 +1,6 @@
 package wh40kdc
 
 import (
-	"errors"
 	"regexp"
 	"strconv"
 	"strings"
@@ -16,9 +15,10 @@ import (
 // crates/wh40kdc/src/import/gw_headerless.rs; unlike the Rust mirror this port
 // also strips the BCP summary block (see gwhStripBcpSummary).
 
-// Title / unit header: `Name (N pts|Points)` with an optional trailing comment
-// (the GW export sometimes appends TO notes). Points may carry thousands commas.
-var gwhPtsLine = regexp.MustCompile(`(?i)^(.+?)\s*\(\s*([\d,]+)\s*(?:pts?|points?)\s*\).*$`)
+// Title / unit header: `Name (N pts|Points)` with an optional trailing comment.
+// Event exports use commas, periods, apostrophes, ordinary spaces, NBSP, and
+// narrow NBSP as thousands separators.
+var gwhPtsLine = regexp.MustCompile(`(?i)^(.+?)\s*\(\s*([\d,.'’\x{00a0}\x{202f} ]+)\s*(?:pts?|points?)\s*\).*$`)
 
 // `## Section [ (N pts) ]` markdown header.
 var gwhMdSection = regexp.MustCompile(`^#{1,6}\s*(.+?)\s*$`)
@@ -30,15 +30,21 @@ var gwhCapsSection = regexp.MustCompile(`^[A-Z][A-Z0-9 \-/&]+$`)
 var gwhColonSection = regexp.MustCompile(`^([A-Za-z][\w /&-]*):\s*$`)
 
 // Bullet line: leading indent, a `•` or `◦` marker, then the body.
-var gwhBulletLine = regexp.MustCompile(`^([\t ]*)[•◦]\s*(.+?)\s*$`)
+var gwhBulletLine = regexp.MustCompile(`^([\t \x{00a0}]*)([•◦*])\s*(.+?)\s*$`)
 
-var gwhNxPrefix = regexp.MustCompile(`(?i)^(\d+)x\s+(.+)$`)
+var gwhNxPrefix = regexp.MustCompile(`(?i)^(\d+)[x×]\s+(.+)$`)
 
-// Inline enhancement annotation: `Name (+N pts)`.
-var gwhEnhAnnot = regexp.MustCompile(`(?i)^(.+?)\s*\(\+\s*(\d+)\s*pts?\s*\)\s*$`)
+// `N Model with w1, w2` (NewRecruit grouping inside a GW-shaped list).
+var gwhModelWithWargear = regexp.MustCompile(`(?i)^(\d+)(?:[x×]\s+|\s+)(.+?)\s+with\s+(.+)$`)
 
-// `Enhancements: X` / `E: X` enhancement bullet.
-var gwhEnhLabel = regexp.MustCompile(`(?i)^(?:e|enh|enhancement|enhancements)\s*:\s*(.+)$`)
+// A title-less total line used by some event submissions: `(2000 points)`.
+var gwhBarePointsLine = regexp.MustCompile(`(?i)^\(?\s*([\d,.'’\x{00a0}\x{202f} ]+)\s*(?:pts?|points?)\s*\)?$`)
+
+// Inline enhancement annotation: `Name (+N pts)` or `Name [+N points]`.
+var gwhEnhAnnot = regexp.MustCompile(`(?i)^(.+?)\s*(?:\(\+\s*(\d+)\s*pts?\s*\)|\[\+\s*(\d+)\s*(?:pts?|points?)\s*\])\s*$`)
+
+// `Enhancements: X` / `E: X` and localized equivalents.
+var gwhEnhLabel = regexp.MustCompile(`(?i)^(?:e|enh|enhancement|enhancements|verbesserung|verbesserungen)\s*:\s*(.+)$`)
 
 // Attachment relationship annotations emitted by GW-family exports.
 var gwhAttachment = regexp.MustCompile(`(?i)^(attached\s+as|leader|leading)\s*:\s*(.+)$`)
@@ -46,73 +52,19 @@ var gwhAttachment = regexp.MustCompile(`(?i)^(attached\s+as|leader|leading)\s*:\
 // `(Character)` inside an attachment role.
 var gwhCharacterRole = regexp.MustCompile(`(?i)\(\s*Character\s*\)`)
 var gwhCharacterAnnotation = regexp.MustCompile(`(?i)^(?:.+\s+keywords?\s*:\s*character|subterranean\s+assault\s+character)$`)
-var gwhKeywordAnnotation = regexp.MustCompile(`(?i)^(?:40kdc\s+)?(?:detachment\s+)?keywords?\s*:\s*(.+)$`)
 
-var gwhBulletAnywhere = regexp.MustCompile(`(?m)^[\t ]*[•◦]`)
+// `… Keywords: X` / `Mark of Chaos: X` / `Daemonic Allegiance: X` selections.
+var gwhColonAnnotation = regexp.MustCompile(`(?i)^(?:.+\s+keywords?|mark of chaos|daemonic allegiance)\s*:`)
+var gwhKeywordAnnotation = regexp.MustCompile(`(?i)^This Datasheet also has the (.+?) keyword$`)
+var gwhPlainCount = regexp.MustCompile(`^(\d+)\s+(.+)$`)
+var gwhAndBeforeLast = regexp.MustCompile(`(?i)\s+and\s+`)
+
+// ListForge-text first line, used only to decline (that framed header belongs
+// to listforgeTextAdapter).
+var gwhListforgeFirstLine = regexp.MustCompile(`(?i)^(.+)\s\(\s*[\d,.'’\x{00a0}\x{202f} ]+\s*Points?\s*\)\s*$`)
+
+var gwhBulletAnywhere = regexp.MustCompile(`(?m)^[\t \x{00a0}]*[•◦*]`)
 var gwhDetachmentPtsSuffix = regexp.MustCompile(`(?i)\s*\(\s*\d*\s*(?:Detachment Points?|Detachementpoints?|DP|PD)\s*\)\s*$`)
-
-// A line of only `+` characters — the BCP summary block's fence.
-var gwhPlusFence = regexp.MustCompile(`^\++$`)
-
-// A line inside that block identifying it as BCP's (not GW's own `+ …` fence).
-var gwhBcpSummaryMarker = regexp.MustCompile(`(?im)^\s*(?:Player Name|Team Name|Factions Used|Army Points)\s*:`)
-
-// Battle-size labels that look like unit headers (`Strike Force (2,000 Points)`)
-// but are army metadata, not datasheets.
-var gwhBattleSizeNames = map[string]bool{
-	"combat patrol": true,
-	"incursion":     true,
-	"strike force":  true,
-	"onslaught":     true,
-}
-
-func gwhParsePts(raw string) any {
-	n, err := strconv.Atoi(strings.ReplaceAll(raw, ",", ""))
-	if err != nil {
-		return nil
-	}
-	return float64(n)
-}
-
-func gwhIsBattleSize(name string) bool {
-	return gwhBattleSizeNames[strings.ToLower(strings.TrimSpace(name))]
-}
-
-func gwhIndent(raw string) int {
-	return len(raw) - len(strings.TrimLeft(raw, " \t"))
-}
-
-// gwhStripBcpSummary drops a leading `++…++`-fenced BCP summary block
-// (`Player Name:` / `Factions Used:` / `Army Points: N` / …). It is BCP
-// metadata, not part of the pasted roster, and would otherwise be consumed as
-// the roster title, turning the real title line into a phantom unit. Only a
-// block whose fence pair wraps a BCP marker is removed, so a framed GW export's
-// own `+ FACTION KEYWORD:` fence is left intact.
-func gwhStripBcpSummary(text string) string {
-	lines := splitLines(text)
-	open := 0
-	for open < len(lines) && strings.TrimSpace(lines[open]) == "" {
-		open++
-	}
-	if open >= len(lines) || !gwhPlusFence.MatchString(strings.TrimSpace(lines[open])) {
-		return text
-	}
-	closeIdx := -1
-	for j := open + 1; j < len(lines); j++ {
-		if gwhPlusFence.MatchString(strings.TrimSpace(lines[j])) {
-			closeIdx = j
-			break
-		}
-	}
-	if closeIdx == -1 {
-		return text
-	}
-	block := strings.Join(lines[open+1:closeIdx], "\n")
-	if !gwhBcpSummaryMarker.MatchString(block) {
-		return text
-	}
-	return strings.Join(lines[closeIdx+1:], "\n")
-}
 
 // gwhHeaderlessText accepts bullet-bearing plain text that no framed adapter
 // claims, returning the BCP-stripped body.
@@ -120,6 +72,10 @@ func gwhHeaderlessText(decoded any) (string, bool) {
 	s, ok := decoded.(string)
 	if !ok {
 		return "", false
+	}
+	if strings.Contains(s, gwFactionKeywordPrefix) && strings.Contains(s, "+ NUMBER OF UNITS:") &&
+		!gwEmbeddedAppBattleSize.MatchString(s) {
+		return "", false // framed GW → gwAdapter
 	}
 	text := gwhStripBcpSummary(s)
 	if !gwhBulletAnywhere.MatchString(text) {
@@ -136,7 +92,7 @@ func gwhHeaderlessText(decoded any) (string, bool) {
 	// listforgeTextAdapter (registered ahead of us). Mirrors its own matcher so
 	// the two stay disjoint.
 	if fnb, ok := firstNonBlank(lines); ok {
-		if m := lftFirstLine.FindStringSubmatch(strings.TrimSpace(fnb)); m != nil {
+		if m := gwhListforgeFirstLine.FindStringSubmatch(strings.TrimSpace(fnb)); m != nil {
 			if len(strings.Split(m[1], " - ")) >= 3 {
 				return "", false
 			}
@@ -183,6 +139,9 @@ type gwhBullet struct {
 	isAttachment bool
 	// setsCharacter: an `Attached as: … (Character)` annotation flags the unit.
 	setsCharacter bool
+	// attachmentRole is the role named by an `Attached as: …` annotation
+	// ("leader", "support", "bodyguard"), or "".
+	attachmentRole string
 	// keywordOverride is an explicitly selected/granted keyword annotation.
 	keywordOverride any
 }
@@ -192,6 +151,11 @@ type gwhUnit struct {
 	displayedPts       any // float64 or nil
 	isCharacterSection bool
 	bullets            []gwhBullet
+	// attachmentGroup is the `Attached Unit N` group number, or 0 outside one.
+	attachmentGroup int
+	// attachmentRole is the unit's role in that group (first `Attached as:`
+	// bullet, or a preceding `Attached as Support:` line).
+	attachmentRole string
 }
 
 func gwhParseBullet(indent int, body string, bulleted bool) gwhBullet {
@@ -199,6 +163,11 @@ func gwhParseBullet(indent int, body string, bulleted bool) gwhBullet {
 	// before the generic colon split: otherwise `Leader: Character Name`
 	// becomes an inline model and inflates the bodyguard's model count by one.
 	if m := gwhAttachment.FindStringSubmatch(body); m != nil {
+		isAttachedAs := strings.EqualFold(strings.Join(strings.Fields(m[1]), " "), "attached as")
+		attachedRole := ""
+		if isAttachedAs {
+			attachedRole = attachedAsRole(m[2])
+		}
 		return gwhBullet{
 			indent:       indent,
 			count:        nil,
@@ -206,8 +175,9 @@ func gwhParseBullet(indent int, body string, bulleted bool) gwhBullet {
 			isAnnotation: true,
 			bulleted:     bulleted,
 			isAttachment: true,
-			setsCharacter: strings.EqualFold(strings.Join(strings.Fields(m[1]), " "), "attached as") &&
+			setsCharacter: isAttachedAs &&
 				gwhCharacterRole.MatchString(m[2]),
+			attachmentRole: attachedRole,
 		}
 	}
 
@@ -240,10 +210,10 @@ func gwhParseBullet(indent int, body string, bulleted bool) gwhBullet {
 		rest = strings.TrimSpace(nx[2])
 	}
 
-	// `Name (+N pts)` enhancement annotation.
+	// `Name (+N pts)` / `Name [+N points]` enhancement annotation.
 	if m := gwhEnhAnnot.FindStringSubmatch(rest); m != nil {
 		var pts any
-		if n, err := strconv.Atoi(m[2]); err == nil {
+		if n, err := strconv.Atoi(m[2] + m[3]); err == nil {
 			pts = n
 		}
 		return gwhBullet{
@@ -259,12 +229,42 @@ func gwhParseBullet(indent int, body string, bulleted bool) gwhBullet {
 		}
 	}
 
-	if m := gwhKeywordAnnotation.FindStringSubmatch(rest); m != nil {
-		keyword := strings.TrimSpace(m[1])
+	// WTC submissions sometimes use NewRecruit's `N Model with w1, w2` grouping
+	// inside an otherwise GW-shaped list. Lower it to the same model plus
+	// inline-wargear representation as the colon dialect.
+	if m := gwhModelWithWargear.FindStringSubmatch(rest); m != nil {
+		n, _ := strconv.Atoi(m[1])
+		return gwhBullet{
+			indent: indent, count: n, name: strings.TrimSpace(m[2]),
+			colonWargear: gwhJoinFinalAnd(m[3]), bulleted: bulleted,
+		}
+	}
+	if count == nil {
+		if m := gwhPlainCount.FindStringSubmatch(rest); m != nil {
+			n, _ := strconv.Atoi(m[1])
+			count = n
+			rest = strings.TrimSpace(m[2])
+		}
+	}
+	keyword := gwhKeywordAnnotation.FindStringSubmatch(rest)
+	if character := gwhCharacterAnnotation.MatchString(rest); character || keyword != nil {
+		override := "Character"
+		if keyword != nil {
+			override = strings.TrimSpace(keyword[1])
+		}
 		return gwhBullet{
 			indent: indent, count: nil, colonWargear: nil, isAnnotation: true,
-			bulleted: bulleted, setsCharacter: strings.EqualFold(keyword, "Character"),
-			keywordOverride: keyword,
+			bulleted: bulleted, setsCharacter: character, keywordOverride: override,
+		}
+	}
+	if gwhColonAnnotation.MatchString(rest) {
+		var override any
+		if value := strings.TrimSpace(rest[strings.Index(rest, ":")+1:]); value != "" {
+			override = value
+		}
+		return gwhBullet{
+			indent: indent, count: nil, colonWargear: nil, isAnnotation: true,
+			bulleted: bulleted, keywordOverride: override,
 		}
 	}
 	// `ModelType: w1, w2` — a model bullet with inline wargear.
@@ -341,19 +341,22 @@ func finishGwhUnit(acc *gwhUnit) map[string]any {
 	isCharacter := acc.isCharacterSection
 	var enhancementRawName, enhancementPoints any
 	keywordOverrides := []string{}
+	// Per-model groups as the source lists them; kept only if exact.
+	var candidateGroups []gwhLoadoutGroup
 
 	for i := range acc.bullets {
 		b := acc.bullets[i]
-		if keyword, ok := b.keywordOverride.(string); ok && keyword != "" {
+		if keyword, ok := b.keywordOverride.(string); ok && keyword != "" && !containsStr(keywordOverrides, keyword) {
 			keywordOverrides = append(keywordOverrides, keyword)
 		}
 
-		// `Attached as: …` carries no model or gear; a `(Character)` role flags
-		// the unit. Skip before model detection.
+		// Character-promoting annotations carry no model or gear. Attachment
+		// metadata is likewise skipped before model detection.
+		if b.setsCharacter {
+			isCharacter = true
+			continue
+		}
 		if b.isAttachment {
-			if b.setsCharacter {
-				isCharacter = true
-			}
 			continue
 		}
 
@@ -372,11 +375,14 @@ func finishGwhUnit(acc *gwhUnit) map[string]any {
 		if b.colonWargear != nil {
 			n := gwhBulletCount(b)
 			modelCount += n
-			for _, item := range strings.Split(b.colonWargear.(string), ",") {
-				if s := strings.TrimSpace(item); s != "" {
-					wargear.add(s, n)
-				}
+			// Items carry their own per-model `Nx` count; markers such as
+			// `Warlord` are not wargear.
+			classified := classifyWargearList(splitWargearList(b.colonWargear.(string)))
+			for _, itemAny := range classified.wargear {
+				item, _ := itemAny.(map[string]any)
+				wargear.add(getStr(item, "raw_name"), asInt(item["count"])*n)
 			}
+			candidateGroups = append(candidateGroups, gwhLoadoutGroup{modelName: b.name, count: n, wargear: classified.wargear})
 			continue
 		}
 
@@ -386,15 +392,15 @@ func finishGwhUnit(acc *gwhUnit) map[string]any {
 			next = &acc.bullets[i+1]
 		}
 		if isModelGroup(b, next) {
-			modelCount += gwhBulletCount(b)
+			n := gwhBulletCount(b)
+			modelCount += n
+			if group, ok := gwhModelGroupLoadout(acc.bullets, i, n); ok {
+				candidateGroups = append(candidateGroups, group)
+			}
 			continue
 		}
 
 		if b.isAnnotation {
-			if b.setsCharacter {
-				isCharacter = true
-				continue
-			}
 			var leftover []string
 			for _, tok := range strings.Split(b.name, ",") {
 				token := strings.TrimSpace(tok)
@@ -452,183 +458,8 @@ func finishGwhUnit(acc *gwhUnit) map[string]any {
 	if len(keywordOverrides) > 0 {
 		result["keyword_overrides"] = strSliceToAny(keywordOverrides)
 	}
+	if groups, ok := gwhExactLoadoutGroups(candidateGroups, modelCount, wargear); ok {
+		result["loadout_groups"] = groups
+	}
 	return result
-}
-
-var gwHeaderlessAdapter = formatAdapter{
-	// Provenance: a GW-family plain-text export. Reuses the `gw` id so no schema
-	// churn is needed for a new label (mirrors the TS/Rust adapters).
-	id: "gw",
-	matches: func(decoded any) bool {
-		_, ok := gwhHeaderlessText(decoded)
-		return ok
-	},
-	parse: func(decoded any) (map[string]any, error) {
-		text, ok := gwhHeaderlessText(decoded)
-		if !ok {
-			return nil, errors.New("gw-headerless: not a headerless plain-text list")
-		}
-
-		name := "Imported roster"
-		var declaredLimit any
-		var battleSizeRaw any
-		var units []map[string]any
-		var current *gwhUnit
-		section := ""
-		haveSection := false
-		allied := 0
-		consumedTitle := false
-		// The GW app export lists faction then detachment as bare lines between
-		// the title and the first section. Capture the first two so resolve can
-		// scope to them; later bare lines are ignored.
-		var factionRawName any
-		detachmentRawNames := []any{}
-
-		flush := func() {
-			if current != nil {
-				units = append(units, finishGwhUnit(current))
-				current = nil
-			}
-		}
-
-		for _, rawLine := range strings.Split(text, "\n") {
-			raw := strings.TrimRight(rawLine, "\r")
-			line := strings.TrimSpace(raw)
-			if line == "" {
-				continue
-			}
-
-			// Bullets attach to the open unit.
-			if bm := gwhBulletLine.FindStringSubmatch(raw); bm != nil {
-				if current != nil {
-					current.bullets = append(current.bullets, gwhParseBullet(len(bm[1]), bm[2], true))
-				}
-				continue
-			}
-
-			// GW export footer.
-			if strings.HasPrefix(line, "Exported with") {
-				continue
-			}
-
-			// The GW app bullets only the first wargear line under a model and
-			// emits the rest unbulleted, one indent deeper. Capture those `Nx …`
-			// continuation lines as the open unit's wargear at their real indent.
-			// A unit header also lacks a bullet but carries a `(N pts)`
-			// parenthetical, so it is excluded here and handled just below.
-			if current != nil && gwhNxPrefix.MatchString(line) && !gwhPtsLine.MatchString(line) {
-				current.bullets = append(current.bullets, gwhParseBullet(gwhIndent(raw), line, false))
-				continue
-			}
-
-			// `## Section` markdown header (strip an optional `(N pts)` tail).
-			if md := gwhMdSection.FindStringSubmatch(line); md != nil {
-				flush()
-				if pts := gwhPtsLine.FindStringSubmatch(md[1]); pts != nil {
-					section = strings.TrimSpace(pts[1])
-				} else {
-					section = strings.TrimSpace(md[1])
-				}
-				haveSection = true
-				continue
-			}
-
-			// First `Name (N pts|Points)` line is the roster title, not a unit.
-			if pts := gwhPtsLine.FindStringSubmatch(line); pts != nil {
-				headerName := strings.TrimSpace(pts[1])
-				points := gwhParsePts(pts[2])
-				if !consumedTitle && current == nil && len(units) == 0 {
-					consumedTitle = true
-					name = headerName
-					declaredLimit = points
-					continue
-				}
-				// Some event exports prepend participant/team/faction lines
-				// without a fence. Recover their actual high-point roster title
-				// instead of emitting it as a phantom unit.
-				pointValue, hasPoints := points.(float64)
-				if declaredLimit == nil && current == nil && len(units) == 0 &&
-					len(detachmentRawNames) == 1 && hasPoints && pointValue >= 1000 {
-					name = headerName
-					declaredLimit = points
-					factionRawName = detachmentRawNames[0]
-					detachmentRawNames = detachmentRawNames[:0]
-					continue
-				}
-				// Battle-size metadata (`Strike Force (2,000 Points)`).
-				if gwhIsBattleSize(headerName) {
-					battleSizeRaw = line
-					if declaredLimit == nil {
-						declaredLimit = points
-					}
-					continue
-				}
-				// A real unit header.
-				flush()
-				inChars := haveSection && strings.EqualFold(section, gwCharactersSection)
-				if haveSection && section == gwAlliedSection {
-					allied++
-				}
-				current = &gwhUnit{
-					rawName:            headerName,
-					displayedPts:       points,
-					isCharacterSection: inChars,
-				}
-				continue
-			}
-
-			// Section headers without points (ALL-CAPS role, `Title:` colon).
-			if gwhCapsSection.MatchString(line) || gwhColonSection.MatchString(line) {
-				flush()
-				section = strings.TrimSpace(strings.TrimRight(line, ":"))
-				haveSection = true
-				continue
-			}
-
-			// Anything else (faction/detachment preamble, stray notes).
-			if !consumedTitle && current == nil && len(units) == 0 {
-				// Very first content line with no `(N pts)` title → use as name.
-				consumedTitle = true
-				name = line
-			} else if current == nil && len(units) == 0 {
-				// Preamble after the title, before the first unit: faction then
-				// detachment. The GW app (v2.0.4+) suffixes the detachment line
-				// with its cost — "Awakened Dynasty (3 Detachment Points)" —
-				// which is presentation, not part of the name; strip it.
-				if factionRawName == nil {
-					factionRawName = line
-				} else if len(detachmentRawNames) == 0 {
-					detachmentRawNames = append(detachmentRawNames, gwhDetachmentPtsSuffix.ReplaceAllString(line, ""))
-				}
-			}
-		}
-		flush()
-
-		totalComputed := 0.0
-		for _, u := range units {
-			if p, ok := u["points"].(float64); ok {
-				totalComputed += p
-			}
-			if p, ok := u["enhancement_points"].(float64); ok {
-				totalComputed += p
-			}
-		}
-
-		if battleSizeRaw == nil {
-			battleSizeRaw = inferBattleSizeRaw(declaredLimit)
-		}
-
-		return map[string]any{
-			"name":                 name,
-			"generated_by":         nil,
-			"faction_raw_name":     factionRawName,
-			"detachment_raw_names": detachmentRawNames,
-			"battle_size_raw":      battleSizeRaw,
-			"declared_limit":       declaredLimit,
-			"total_reported":       nil,
-			"total_computed":       totalComputed,
-			"units":                mapsToAny(units),
-			"multi_force":          allied > 0,
-		}, nil
-	},
 }

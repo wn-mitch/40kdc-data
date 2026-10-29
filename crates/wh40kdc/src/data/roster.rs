@@ -9,9 +9,12 @@
 
 use std::collections::{BTreeMap, HashMap, HashSet};
 
-use crate::data::battle_sizes::{detachment_cap_for_battle_size, points_limit_for_battle_size};
+use crate::data::battle_sizes::{
+    detachment_cap_for_battle_size, enhancement_limit_for_battle_size,
+    points_limit_for_battle_size, unit_limit_for_battle_size,
+};
 use crate::data::loadout::{check_unit_legality, loadout_models, loadout_tiers, Violation};
-use crate::data::pricing::{host_unit_points, wargear_points};
+use crate::data::pricing::{army_unit_points, wargear_points};
 use crate::generated::{Unit, UnitRole};
 use crate::import::{BattleSize, Roster};
 use crate::Dataset;
@@ -21,6 +24,8 @@ use crate::Dataset;
 pub enum RosterViolationCode {
     EnhancementWrongDetachment,
     EnhancementOnNonCharacter,
+    EnhancementOnEpicHero,
+    EnhancementOnExcludedModel,
     EnhancementKeywordMismatch,
     EnhancementExcludedKeyword,
     EnhancementOverMaxTargets,
@@ -36,6 +41,15 @@ pub enum RosterViolationCode {
     UnitExcludedFromFaction,
     NoWarlord,
     MultipleWarlords,
+    WarlordNotMandated,
+    DetachmentExcludedDatasheet,
+    KeywordLimitExceeded,
+    UnitLimitExceeded,
+    EnhancementLimitExceeded,
+    AllyPoolNotOffered,
+    AllyPointsOverLimit,
+    AllyCannotBeWarlord,
+    AllyCannotTakeEnhancements,
     UnitMinimumUnmet,
 }
 
@@ -44,6 +58,8 @@ impl RosterViolationCode {
         match self {
             RosterViolationCode::EnhancementWrongDetachment => "enhancement-wrong-detachment",
             RosterViolationCode::EnhancementOnNonCharacter => "enhancement-on-non-character",
+            RosterViolationCode::EnhancementOnEpicHero => "enhancement-on-epic-hero",
+            RosterViolationCode::EnhancementOnExcludedModel => "enhancement-on-excluded-model",
             RosterViolationCode::EnhancementKeywordMismatch => "enhancement-keyword-mismatch",
             RosterViolationCode::EnhancementExcludedKeyword => "enhancement-excluded-keyword",
             RosterViolationCode::EnhancementOverMaxTargets => "enhancement-over-max-targets",
@@ -59,6 +75,15 @@ impl RosterViolationCode {
             RosterViolationCode::UnitExcludedFromFaction => "unit-excluded-from-faction",
             RosterViolationCode::NoWarlord => "no-warlord",
             RosterViolationCode::MultipleWarlords => "multiple-warlords",
+            RosterViolationCode::WarlordNotMandated => "warlord-not-mandated",
+            RosterViolationCode::DetachmentExcludedDatasheet => "detachment-excluded-datasheet",
+            RosterViolationCode::KeywordLimitExceeded => "keyword-limit-exceeded",
+            RosterViolationCode::UnitLimitExceeded => "unit-limit-exceeded",
+            RosterViolationCode::EnhancementLimitExceeded => "enhancement-limit-exceeded",
+            RosterViolationCode::AllyPoolNotOffered => "ally-pool-not-offered",
+            RosterViolationCode::AllyPointsOverLimit => "ally-points-over-limit",
+            RosterViolationCode::AllyCannotBeWarlord => "ally-cannot-be-warlord",
+            RosterViolationCode::AllyCannotTakeEnhancements => "ally-cannot-take-enhancements",
             RosterViolationCode::UnitMinimumUnmet => "unit-minimum-unmet",
         }
     }
@@ -226,13 +251,7 @@ pub fn validate_roster_core_with_keyword_overrides(
             return None;
         }
         faction
-            .and_then(|f| {
-                dataset
-                    .units
-                    .by_faction(f)
-                    .into_iter()
-                    .find(|u| u.id.as_str() == unit_id)
-            })
+            .and_then(|f| dataset.units.get_in_faction(unit_id, f))
             .or_else(|| dataset.units.get_any(unit_id))
     };
 
@@ -247,10 +266,7 @@ pub fn validate_roster_core_with_keyword_overrides(
     for (idx, su) in spec.units.iter().enumerate() {
         let Some(view) = views[idx] else { continue };
         let options = dataset.wargear_options_of(view);
-        let comp = dataset.unit_compositions.iter().find(|c| {
-            c.unit_id.as_str() == view.id.as_str()
-                && c.faction_id.as_str() == view.faction_id.as_str()
-        });
+        let comp = dataset.unit_composition_of(view);
         let models = comp.map(|c| loadout_models(&c.models));
         let tiers = comp.map(|c| loadout_tiers(&c.tiers));
         let violations = check_unit_legality(
@@ -318,14 +334,62 @@ pub fn validate_roster_core_with_keyword_overrides(
             });
         }
         let kws = roster_keyword_set(view, &army_keywords, &spec.detachment_ids, overrides);
-        let eligible = if let Some(groups) = &enh.keyword_restriction_groups {
-            groups
-                .iter()
-                .any(|group| group.iter().all(|k| kws.contains(k.as_str())))
-        } else if let Some(req) = &enh.keyword_restrictions {
-            req.0.iter().all(|k| kws.contains(k.as_str()))
+        // 11e Select Enhancements: EPIC HERO models cannot be given Enhancements
+        // (Upgrades included). Mirror of TS `enhancement-on-epic-hero`.
+        if matches!(view.role, Some(UnitRole::EpicHero)) || kws.contains("Epic Hero") {
+            army.push(RosterViolation {
+                code: RosterViolationCode::EnhancementOnEpicHero,
+                id: enh.id.as_str().to_string(),
+                message: format!(
+                    "{} cannot be given to Epic Hero {}",
+                    enh.id.as_str(),
+                    view.id.as_str()
+                ),
+                unit_index: Some(idx),
+                severity: Severity::Error,
+            });
+        }
+        // A unit whose every model is `excluded_from_enhancements` has no model that
+        // can carry the Enhancement. Mirror of TS `enhancement-on-excluded-model`.
+        let rows = dataset
+            .unit_composition_of(view)
+            .map(|c| c.models.as_slice())
+            .unwrap_or(&[]);
+        if !rows.is_empty() && rows.iter().all(|m| m.excluded_from_enhancements) {
+            army.push(RosterViolation {
+                code: RosterViolationCode::EnhancementOnExcludedModel,
+                id: enh.id.as_str().to_string(),
+                message: format!(
+                    "{} cannot be given to {}: no model in it can take Enhancements",
+                    enh.id.as_str(),
+                    view.id.as_str()
+                ),
+                unit_index: Some(idx),
+                severity: Severity::Error,
+            });
+        }
+        // Keyword groups or datasheet groups (mirror of TS `meetsEnhancementGroups`).
+        let keyword_eligible = if let Some(groups) = &enh.keyword_restriction_groups {
+            Some(
+                groups
+                    .iter()
+                    .any(|group| group.iter().all(|k| kws.contains(k.as_str()))),
+            )
         } else {
-            true
+            enh.keyword_restrictions
+                .as_ref()
+                .map(|req| req.0.iter().all(|k| kws.contains(k.as_str())))
+        };
+        let datasheet_eligible = enh.datasheet_restriction_groups.iter().any(|group| {
+            group.unit_id.as_str() == view.id.as_str()
+                && group
+                    .keywords
+                    .as_ref()
+                    .is_none_or(|ks| ks.iter().all(|k| kws.contains(k.as_str())))
+        });
+        let eligible = match keyword_eligible {
+            Some(ok) => ok || datasheet_eligible,
+            None => enh.datasheet_restriction_groups.is_empty() || datasheet_eligible,
         };
         if !eligible {
             army.push(RosterViolation {
@@ -373,13 +437,23 @@ pub fn validate_roster_core_with_keyword_overrides(
         }
     }
 
+    let roster_unit_ids: HashSet<String> = views
+        .iter()
+        .flatten()
+        .map(|view| view.id.as_str().to_string())
+        .collect();
+
     // --- Leader attachment. ----------------------------------------------------
     for (idx, su) in spec.units.iter().enumerate() {
         let Some(view) = views[idx] else { continue };
         let overrides = keyword_overrides.get(idx).map(Vec::as_slice).unwrap_or(&[]);
         if let Some(bodyguard_id) = &su.leader_bodyguard_id {
+            // Eligibility is a reference check on a saved roster, not a listing: a
+            // combat-patrol bodyguard stays eligible whatever mode the dataset lists.
             let mut eligible: HashSet<String> = dataset
-                .bodyguards_attachable_from(view.id.as_str())
+                .for_game_mode("all")
+                .expect("\"all\" is a known game mode")
+                .bodyguards_attachable_from_in_roster(view.id.as_str(), Some(&roster_unit_ids))
                 .into_iter()
                 .map(|candidate| candidate.id.as_str().to_string())
                 .collect();
@@ -406,7 +480,11 @@ pub fn validate_roster_core_with_keyword_overrides(
                     severity: Severity::Error,
                 });
             }
-        } else if view.attachment_role == Some(crate::generated::UnitAttachmentRole::Support)
+        } else if dataset.effective_attachment_role(
+            view.id.as_str(),
+            view.attachment_role,
+            &roster_unit_ids,
+        ) == Some(crate::generated::UnitAttachmentRole::Support)
             && is_character(view, overrides)
         {
             army.push(RosterViolation {
@@ -428,20 +506,29 @@ pub fn validate_roster_core_with_keyword_overrides(
     // prices from that entry, not its native table.
     let roster_faction = faction.and_then(|f| dataset.factions.get(f));
     let mut ordinals: HashMap<String, u64> = HashMap::new();
+    let mut unit_costs: Vec<u64> = vec![0; spec.units.len()];
     let mut total: u64 = 0;
     for (idx, su) in spec.units.iter().enumerate() {
         let Some(view) = views[idx] else { continue };
         let ord = ordinals.entry(su.unit_id.clone()).or_insert(0);
         *ord += 1;
-        total += host_unit_points(view, su.model_count, *ord, roster_faction);
-        total += wargear_points(view, &su.counts);
+        let mut cost = army_unit_points(
+            view,
+            su.model_count,
+            *ord,
+            roster_faction,
+            &spec.detachment_ids,
+        );
+        cost += wargear_points(view, &su.counts);
         if let Some(enh_id) = &su.enhancement_id {
-            total += dataset
+            cost += dataset
                 .enhancements
                 .get(enh_id)
                 .map(|e| e.cost)
                 .unwrap_or(0);
         }
+        unit_costs[idx] = cost;
+        total += cost;
     }
     if let Some(limit) = points_limit_for_battle_size(spec.battle_size) {
         if total > limit {
@@ -619,6 +706,328 @@ pub fn validate_roster_core_with_keyword_overrides(
             unit_index: None,
             severity: Severity::Error,
         });
+    }
+
+    // --- Detachment Warlord requirement (e.g. Devoted of Ynnead). -------------
+    // Checked only when a Warlord is chosen; a missing one is `no-warlord` above.
+    // Mirror of TS `warlord-not-mandated`.
+    for d in &detachments {
+        let Some(mandated) = &d.mandatory_warlord_datasheet_ids else {
+            continue;
+        };
+        if mandated.is_empty() || warlords == 0 {
+            continue;
+        }
+        let satisfied = spec
+            .units
+            .iter()
+            .any(|su| su.is_warlord && mandated.iter().any(|m| m.as_str() == su.unit_id));
+        if !satisfied {
+            let names: Vec<&str> = mandated.iter().map(|m| m.as_str()).collect();
+            army.push(RosterViolation {
+                code: RosterViolationCode::WarlordNotMandated,
+                id: d.id.as_str().to_string(),
+                message: format!(
+                    "{} requires the Warlord to be one of: {}",
+                    d.id.as_str(),
+                    names.join(", ")
+                ),
+                unit_index: None,
+                severity: Severity::Error,
+            });
+        }
+    }
+
+    // --- Detachment datasheet exclusions (e.g. Shadow Legion). ----------------
+    // Mirror of TS `detachment-excluded-datasheet`.
+    for d in &detachments {
+        let Some(excluded) = &d.excluded_datasheet_ids else {
+            continue;
+        };
+        for (idx, su) in spec.units.iter().enumerate() {
+            if excluded.iter().any(|x| x.as_str() == su.unit_id) {
+                army.push(RosterViolation {
+                    code: RosterViolationCode::DetachmentExcludedDatasheet,
+                    id: su.unit_id.clone(),
+                    message: format!("{} cannot be included with {}", su.unit_id, d.id.as_str()),
+                    unit_index: Some(idx),
+                    severity: Severity::Error,
+                });
+            }
+        }
+    }
+
+    // --- Unit limit per datasheet (11e Select Battle Size). -------------------
+    // Mirror of TS `unit-limit-exceeded`: incursion 2 / strike-force 3, doubled
+    // for BATTLELINE (incl. detachment-granted) and DEDICATED TRANSPORT units;
+    // every EPIC HERO is limited to 1.
+    let unit_limit = unit_limit_for_battle_size(spec.battle_size);
+    let mut copies: BTreeMap<String, (u64, u64)> = BTreeMap::new();
+    for (idx, view) in views.iter().enumerate() {
+        let Some(view) = *view else { continue };
+        let overrides = keyword_overrides.get(idx).map(Vec::as_slice).unwrap_or(&[]);
+        let kws = roster_keyword_set(view, &army_keywords, &spec.detachment_ids, overrides);
+        let limit = if matches!(view.role, Some(UnitRole::EpicHero)) || kws.contains("Epic Hero") {
+            Some(1)
+        } else if matches!(
+            view.role,
+            Some(UnitRole::Battleline) | Some(UnitRole::DedicatedTransport)
+        ) || kws.contains("Battleline")
+            || kws.contains("Dedicated Transport")
+        {
+            unit_limit.map(|l| l * 2)
+        } else {
+            unit_limit
+        };
+        let Some(limit) = limit else { continue };
+        let entry = copies
+            .entry(view.id.as_str().to_string())
+            .or_insert((0, limit));
+        entry.0 += 1;
+        entry.1 = entry.1.max(limit);
+    }
+    for (id, (count, limit)) in &copies {
+        if count > limit {
+            army.push(RosterViolation {
+                code: RosterViolationCode::UnitLimitExceeded,
+                id: id.clone(),
+                message: format!("army includes {count} {id} units, over the limit of {limit}"),
+                unit_index: None,
+                severity: Severity::Error,
+            });
+        }
+    }
+
+    // --- Enhancement limit (incursion 2, strike-force 4), distinct choices. ---
+    if let Some(limit) = enhancement_limit_for_battle_size(spec.battle_size) {
+        let chosen: HashSet<&str> = spec
+            .units
+            .iter()
+            .filter_map(|su| su.enhancement_id.as_deref())
+            .collect();
+        if chosen.len() as u64 > limit {
+            army.push(RosterViolation {
+                code: RosterViolationCode::EnhancementLimitExceeded,
+                id: "roster".to_string(),
+                message: format!(
+                    "army takes {} Enhancements, over the limit of {limit}",
+                    chosen.len()
+                ),
+                unit_index: None,
+                severity: Severity::Error,
+            });
+        }
+    }
+
+    // --- Army-wide keyword caps (faction `keyword_limits`). -------------------
+    // Mirror of TS `keyword-limit-exceeded`: units with an exempt faction keyword
+    // never count; `mode` picks units-with-every-keyword or distinct alternatives;
+    // a selected detachment's override for the same keyword set replaces `max`
+    // (largest wins).
+    let sorted_keywords = |list: &crate::generated::KeywordList| -> Vec<String> {
+        let mut v: Vec<String> = list.0.iter().map(|k| k.as_str().to_string()).collect();
+        v.sort();
+        v
+    };
+    if let Some(fac) = roster_faction {
+        for kl in &fac.keyword_limits {
+            let keys = sorted_keywords(&kl.keywords);
+            let mut max = kl.max;
+            let mut overridden = false;
+            for d in &detachments {
+                for o in &d.keyword_limit_overrides {
+                    if sorted_keywords(&o.keywords) == keys {
+                        max = if overridden { max.max(o.max) } else { o.max };
+                        overridden = true;
+                    }
+                }
+            }
+            let exempt: Vec<String> = kl
+                .exempt_faction_keywords
+                .as_ref()
+                .map(sorted_keywords)
+                .unwrap_or_default();
+            let counted: Vec<HashSet<String>> = spec
+                .units
+                .iter()
+                .enumerate()
+                .filter_map(|(idx, _)| {
+                    let view = views[idx]?;
+                    let is_exempt = view.faction_keywords.as_ref().is_some_and(|fks| {
+                        fks.0.iter().any(|k| exempt.iter().any(|e| e == k.as_str()))
+                    });
+                    if is_exempt {
+                        return None;
+                    }
+                    let overrides = keyword_overrides.get(idx).map(Vec::as_slice).unwrap_or(&[]);
+                    Some(roster_keyword_set(
+                        view,
+                        &army_keywords,
+                        &spec.detachment_ids,
+                        overrides,
+                    ))
+                })
+                .collect();
+            // `units`: units carrying every keyword. `alternatives`: distinct
+            // keywords present on any unit (Farsight / Ethereal).
+            let count = match kl.mode {
+                crate::generated::FactionKeywordLimitsItemMode::Alternatives => {
+                    keys.iter()
+                        .filter(|k| counted.iter().any(|kws| kws.contains(*k)))
+                        .count() as u64
+                }
+                crate::generated::FactionKeywordLimitsItemMode::Units => counted
+                    .iter()
+                    .filter(|kws| keys.iter().all(|k| kws.contains(k)))
+                    .count()
+                    as u64,
+            };
+            if count > max {
+                let id = keys.join("+");
+                army.push(RosterViolation {
+                    code: RosterViolationCode::KeywordLimitExceeded,
+                    message: format!("army includes {count} of {id}, over the limit of {max}"),
+                    id,
+                    unit_index: None,
+                    severity: Severity::Error,
+                });
+            }
+        }
+    }
+
+    // --- Exclusive allied pools (the army faction's own pool-only units). -----
+    // Mirror of TS: the rule must be offered, and its points cap and
+    // Warlord/Enhancement locks apply; a selected detachment's mandatory or
+    // granted Warlord datasheets lift the Warlord lock.
+    let detachment_warlords: HashSet<&str> = detachments
+        .iter()
+        .flat_map(|d| {
+            d.mandatory_warlord_datasheet_ids
+                .iter()
+                .flatten()
+                .chain(d.granted_warlord_datasheet_ids.iter().flatten())
+                .map(|id| id.as_str())
+        })
+        .collect();
+    if let Some(army_faction) = faction {
+        for rule in dataset.allied_rules.all() {
+            if !rule.exclusive
+                || rule.source_faction_id.as_ref().map(|f| f.as_str()) != Some(army_faction)
+            {
+                continue;
+            }
+            let pool: HashSet<&str> = rule
+                .source_datasheet_ids
+                .iter()
+                .flatten()
+                .map(|id| id.as_str())
+                .collect();
+            let members: Vec<usize> = spec
+                .units
+                .iter()
+                .enumerate()
+                .filter(|(idx, su)| {
+                    views[*idx].is_some_and(|v| v.faction_id.as_str() == army_faction)
+                        && pool.contains(su.unit_id.as_str())
+                })
+                .map(|(idx, _)| idx)
+                .collect();
+            if members.is_empty() {
+                continue;
+            }
+            let army_gate = rule
+                .army_keywords_any
+                .as_ref()
+                .map(|ks| {
+                    ks.0.is_empty() || ks.0.iter().any(|k| army_keywords.contains(k.as_str()))
+                })
+                .unwrap_or(true);
+            let detachment_gate = rule
+                .detachment_ids
+                .as_ref()
+                .map(|ids| {
+                    ids.is_empty()
+                        || ids
+                            .iter()
+                            .any(|id| spec.detachment_ids.iter().any(|s| s == id.as_str()))
+                })
+                .unwrap_or(true);
+            if !army_gate || !detachment_gate {
+                for &idx in &members {
+                    let unit_id = &spec.units[idx].unit_id;
+                    army.push(RosterViolation {
+                        code: RosterViolationCode::AllyPoolNotOffered,
+                        id: unit_id.clone(),
+                        message: format!(
+                            "{unit_id} is only available through {}, which this army does not offer",
+                            rule.id.as_str()
+                        ),
+                        unit_index: Some(idx),
+                        severity: Severity::Error,
+                    });
+                }
+            }
+            let cap = rule.points_limits.iter().flatten().find(|p| {
+                matches!(
+                    (p.battle_size, spec.battle_size),
+                    (
+                        crate::generated::AlliedPointsLimitBattleSize::Incursion,
+                        Some(BattleSize::Incursion)
+                    ) | (
+                        crate::generated::AlliedPointsLimitBattleSize::StrikeForce,
+                        Some(BattleSize::StrikeForce)
+                    )
+                )
+            });
+            if let Some(cap) = cap {
+                let spent: u64 = members.iter().map(|&idx| unit_costs[idx]).sum();
+                if spent > cap.max_points {
+                    army.push(RosterViolation {
+                        code: RosterViolationCode::AllyPointsOverLimit,
+                        id: rule.id.as_str().to_string(),
+                        message: format!(
+                            "{} units total {spent}, over the {} limit",
+                            rule.id.as_str(),
+                            cap.max_points
+                        ),
+                        unit_index: None,
+                        severity: Severity::Error,
+                    });
+                }
+            }
+            for &idx in &members {
+                let su = &spec.units[idx];
+                if rule.cannot_be_warlord
+                    && su.is_warlord
+                    && !detachment_warlords.contains(su.unit_id.as_str())
+                {
+                    army.push(RosterViolation {
+                        code: RosterViolationCode::AllyCannotBeWarlord,
+                        id: su.unit_id.clone(),
+                        message: format!(
+                            "{} cannot be Warlord under {}",
+                            su.unit_id,
+                            rule.id.as_str()
+                        ),
+                        unit_index: Some(idx),
+                        severity: Severity::Error,
+                    });
+                }
+                if rule.cannot_take_enhancements && su.enhancement_id.is_some() {
+                    army.push(RosterViolation {
+                        code: RosterViolationCode::AllyCannotTakeEnhancements,
+                        id: su.unit_id.clone(),
+                        message: format!(
+                            "{} cannot take an Enhancement under {}",
+                            su.unit_id,
+                            rule.id.as_str()
+                        ),
+                        unit_index: Some(idx),
+                        severity: Severity::Error,
+                    });
+                }
+            }
+        }
     }
 
     // --- Unit minimums (e.g. Houndpack: 3+ WAR DOG units). --------------------

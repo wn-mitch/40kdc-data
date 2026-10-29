@@ -22,12 +22,19 @@
             </profile>
             <profile name="Crusade of Wrath" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">While this model is leading a unit, add 1 to the unit's Strength characteristic.</characteristic>
+                <characteristic name="Description">Add 1 to the Attacks characteristic of melee weapons equipped by models in this unit.
+Add 1 to the Strength characteristic of melee weapons equipped by models in this unit.</characteristic>
               </characteristics>
             </profile>
             <profile name="High Marshal" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">During the Fight phase, the target suffers d3 mortal wounds.</characteristic>
+                <characteristic name="Description">At the start of the Fight phase:
+  -&gt; Select one enemy unit if the selected unit is a unit within Engagement Range of the unit:
+    -&gt; Roll one D6:
+      - On 1: Nothing happens.
+      - On 2-3: That unit suffers D3 mortal wounds.
+      - On 4-5: That unit suffers 3 mortal wounds.
+      - On 6: That unit suffers D3+3 mortal wounds.</characteristic>
               </characteristics>
             </profile>
             <profile name="Leader" typeName="Abilities">
@@ -42,17 +49,28 @@
             <category name="Infantry"/>
             <category name="Character"/>
             <category name="Epic Hero"/>
-            <category name="Grenades"/>
             <category name="Imperium"/>
             <category name="Tacticus"/>
             <category name="Chapter Master"/>
             <category name="High Marshal Helbrecht"/>
+            <category name="Explosives"/>
           </categories>
           <selections>
             <selection id="unit0-m0" name="High Marshal Helbrecht" type="model" number="1">
               <selections>
                 <selection id="unit0-m0-w0" name="Sword of the High Marshals" type="upgrade" number="1">
                   <profiles>
+                    <profile name="Strike" typeName="Melee Weapons">
+                      <characteristics>
+                        <characteristic name="Range">Melee</characteristic>
+                        <characteristic name="A">6</characteristic>
+                        <characteristic name="WS">2+</characteristic>
+                        <characteristic name="S">9</characteristic>
+                        <characteristic name="AP">-3</characteristic>
+                        <characteristic name="D">3</characteristic>
+                        <characteristic name="Keywords"></characteristic>
+                      </characteristics>
+                    </profile>
                     <profile name="Sweep" typeName="Melee Weapons">
                       <characteristics>
                         <characteristic name="Range">Melee</characteristic>
@@ -61,17 +79,6 @@
                         <characteristic name="S">6</characteristic>
                         <characteristic name="AP">-3</characteristic>
                         <characteristic name="D">1</characteristic>
-                        <characteristic name="Keywords"></characteristic>
-                      </characteristics>
-                    </profile>
-                    <profile name="Strike" typeName="Melee Weapons">
-                      <characteristics>
-                        <characteristic name="Range">Melee</characteristic>
-                        <characteristic name="A">6</characteristic>
-                        <characteristic name="WS">2+</characteristic>
-                        <characteristic name="S">8</characteristic>
-                        <characteristic name="AP">-3</characteristic>
-                        <characteristic name="D">3</characteristic>
                         <characteristic name="Keywords"></characteristic>
                       </characteristics>
                     </profile>
@@ -110,7 +117,9 @@
             </profile>
             <profile name="Targeted Intercession" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">During the Fight phase, you can re-roll a Wound roll of 1.</characteristic>
+                <characteristic name="Description">If the unit charged this turn:
+  -&gt; Improve the Strength characteristic of melee weapons equipped by models in this unit by 1.
+  -&gt; Improve the Armour Penetration characteristic of melee weapons equipped by models in this unit by 1.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -121,11 +130,12 @@
             <category name="Explosives"/>
             <category name="Imperium"/>
             <category name="Tacticus"/>
+            <category name="Assault Intercessor Squad"/>
           </categories>
           <selections>
             <selection id="unit1-m0" name="Assault Intercessor Sergeant" type="model" number="1">
               <selections>
-                <selection id="unit1-m0-w0" name="Astartes chainsword" type="upgrade" number="1">
+                <selection id="unit1-m0-w0" name="Chainsword" type="upgrade" number="1">
                   <profiles>
                     <profile name="Chainsword" typeName="Melee Weapons">
                       <characteristics>
@@ -159,7 +169,7 @@
             </selection>
             <selection id="unit1-m1" name="Assault Intercessor" type="model" number="4">
               <selections>
-                <selection id="unit1-m1-w0" name="Astartes chainsword" type="upgrade" number="4">
+                <selection id="unit1-m1-w0" name="Chainsword" type="upgrade" number="4">
                   <profiles>
                     <profile name="Chainsword" typeName="Melee Weapons">
                       <characteristics>

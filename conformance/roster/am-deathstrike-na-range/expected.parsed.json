@@ -1,0 +1,62 @@
+{
+  "name": "Deathstrike Battery",
+  "generated_by": "List Forge",
+  "faction_raw_name": "astra-militarum",
+  "detachment_raw_names": [
+    "Combined Arms"
+  ],
+  "battle_size_raw": "Strike Force",
+  "force_disposition": "take-and-hold",
+  "declared_limit": 2000,
+  "total_reported": 185,
+  "total_computed": 185,
+  "units": [
+    {
+      "raw_name": "Primaris Psyker",
+      "is_character": false,
+      "model_count": 1,
+      "points": 60,
+      "is_warlord": true,
+      "enhancement_raw_name": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "raw_name": "Force weapon",
+          "count": 1
+        },
+        {
+          "raw_name": "Laspistol",
+          "count": 1
+        },
+        {
+          "raw_name": "Psychic Maelstrom",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "raw_name": "Deathstrike",
+      "is_character": false,
+      "model_count": 1,
+      "points": 125,
+      "is_warlord": false,
+      "enhancement_raw_name": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "raw_name": "Armoured tracks",
+          "count": 1
+        },
+        {
+          "raw_name": "Deathstrike missile",
+          "count": 1
+        },
+        {
+          "raw_name": "Heavy bolter",
+          "count": 1
+        }
+      ]
+    }
+  ],
+  "multi_force": false
+}

@@ -1,6 +1,6 @@
 [
   {
-    "id": "aggression-protocols-amonhotekhs-guard",
+    "id": "aggression-protocols-amonhotekhs-guard-necrons",
     "name": "Aggression Protocols",
     "category": "detachment",
     "detachment_id": "amonhotekhs-guard",
@@ -10,11 +10,18 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "aggression-protocols-amonhotekhs-guard",
+    "target_restrictions": {
+      "required_keywords": [
+        "Amonhotekh's Guard"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "aggression-protocols-amonhotekhs-guard-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -24,7 +31,7 @@
     ]
   },
   {
-    "id": "animus-curse-cryptek-conclave",
+    "id": "animus-curse-cryptek-conclave-necrons",
     "name": "ANIMUS CURSE",
     "category": "detachment",
     "type": "wargear",
@@ -36,11 +43,45 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Cryptek"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "model",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "model-destroyed",
+              "object": {
+                "level": "model",
+                "member_of": "this-model"
+              },
+              "filter": {
+                "by": "event-subject"
+              },
+              "window": "event"
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "animus-curse-cryptek-conclave-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -54,7 +95,7 @@
     ]
   },
   {
-    "id": "blood-fuelled-cruelty-annihilation-legion",
+    "id": "blood-fuelled-cruelty-annihilation-legion-necrons",
     "name": "BLOOD-FUELLED CRUELTY",
     "category": "detachment",
     "type": "battle-tactic",
@@ -66,7 +107,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "blood-fuelled-cruelty-annihilation-legion-necrons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -83,7 +124,7 @@
     ]
   },
   {
-    "id": "chronodistortion-pantheon-of-woe",
+    "id": "chronodistortion-pantheon-of-woe-necrons",
     "name": "CHRONODISTORTION",
     "category": "detachment",
     "type": "battle-tactic",
@@ -94,11 +135,27 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Necrons"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "chronodistortion-pantheon-of-woe-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -112,7 +169,7 @@
     ]
   },
   {
-    "id": "chronoshift-starshatter-arsenal",
+    "id": "chronoshift-starshatter-arsenal-necrons",
     "name": "CHRONOSHIFT",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -123,11 +180,60 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Necrons"
+      ],
+      "excluded_keywords": [
+        "Titanic"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "MOUNTED",
+                  "VEHICLE"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "move"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "chronoshift-starshatter-arsenal-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -141,7 +247,7 @@
     ]
   },
   {
-    "id": "cosmic-precision-hypercrypt-legion",
+    "id": "cosmic-precision-hypercrypt-legion-necrons",
     "name": "COSMIC PRECISION",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -153,7 +259,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "cosmic-precision-hypercrypt-legion-necrons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -170,7 +276,7 @@
     ]
   },
   {
-    "id": "cosmic-storm-the-phaerons-armoury",
+    "id": "cosmic-storm-the-phaerons-armoury-necrons",
     "name": "Cosmic Storm",
     "category": "detachment",
     "detachment_id": "the-phaerons-armoury",
@@ -180,11 +286,19 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "cosmic-storm-the-phaerons-armoury",
+    "target_restrictions": {
+      "required_keywords_any": [
+        "Obelisk",
+        "Tesseract Vault"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "cosmic-storm-the-phaerons-armoury-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -198,7 +312,7 @@
     ]
   },
   {
-    "id": "countertemporal-shift-canoptek-court",
+    "id": "countertemporal-shift-canoptek-court-necrons",
     "name": "COUNTERTEMPORAL SHIFT",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -209,11 +323,27 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Canoptek"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "countertemporal-shift-canoptek-court-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -227,7 +357,7 @@
     ]
   },
   {
-    "id": "curse-of-the-cryptek-canoptek-court",
+    "id": "curse-of-the-cryptek-canoptek-court-necrons",
     "name": "CURSE OF THE CRYPTEK",
     "category": "detachment",
     "type": "battle-tactic",
@@ -239,11 +369,32 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Cryptek"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "model",
+      "eligibility": {
+        "type": "happened",
+        "parameters": {
+          "event": "model-destroyed",
+          "object": {
+            "level": "model",
+            "member_of": "this-model"
+          },
+          "filter": {
+            "by": "event-subject"
+          },
+          "window": "event"
+        }
+      }
+    },
+    "ability_id": "curse-of-the-cryptek-canoptek-court-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -257,7 +408,7 @@
     ]
   },
   {
-    "id": "cynosure-of-eradication-canoptek-court",
+    "id": "cynosure-of-eradication-canoptek-court-necrons",
     "name": "CYNOSURE OF ERADICATION",
     "category": "detachment",
     "type": "battle-tactic",
@@ -269,11 +420,52 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "CANOPTEK",
+                  "CRYPTEK"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "in-region",
+            "parameters": {
+              "subject": "this-unit",
+              "region": {
+                "rule_region": {
+                  "region_id": "power-matrix",
+                  "owner_faction": "necrons"
+                }
+              },
+              "wholly": true
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "cynosure-of-eradication-canoptek-court-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -287,7 +479,7 @@
     ]
   },
   {
-    "id": "dimensional-corridor-hypercrypt-legion",
+    "id": "dimensional-corridor-hypercrypt-legion-necrons",
     "name": "DIMENSIONAL CORRIDOR",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -299,7 +491,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "dimensional-corridor-hypercrypt-legion-necrons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -316,7 +508,7 @@
     ]
   },
   {
-    "id": "dimensional-tunnel-starshatter-arsenal",
+    "id": "dimensional-tunnel-starshatter-arsenal-necrons",
     "name": "DIMENSIONAL TUNNEL",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -327,11 +519,45 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Necrons"
+      ],
+      "excluded_keywords": [
+        "Titanic"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "MOUNTED",
+                  "VEHICLE"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "dimensional-tunnel-starshatter-arsenal-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -345,7 +571,7 @@
     ]
   },
   {
-    "id": "disharmonisation-cascade-pantheon-of-woe",
+    "id": "disharmonisation-cascade-pantheon-of-woe-necrons",
     "name": "DISHARMONISATION CASCADE",
     "category": "detachment",
     "type": "epic-deed",
@@ -361,7 +587,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "disharmonisation-cascade-pantheon-of-woe-necrons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -378,7 +604,7 @@
     ]
   },
   {
-    "id": "dominance-protocols-hand-of-the-dynasty",
+    "id": "dominance-protocols-hand-of-the-dynasty-necrons",
     "name": "Dominance Protocols",
     "category": "detachment",
     "detachment_id": "hand-of-the-dynasty",
@@ -388,11 +614,18 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "dominance-protocols-hand-of-the-dynasty",
+    "target_restrictions": {
+      "required_keywords": [
+        "Immortals"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit"
+    },
+    "ability_id": "dominance-protocols-hand-of-the-dynasty-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -406,7 +639,7 @@
     ]
   },
   {
-    "id": "driven-to-butchery-cursed-legion",
+    "id": "driven-to-butchery-cursed-legion-necrons",
     "name": "DRIVEN TO BUTCHERY",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -418,11 +651,26 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Destroyer Cult"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "driven-to-butchery-cursed-legion-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -436,7 +684,7 @@
     ]
   },
   {
-    "id": "endless-servitude-starshatter-arsenal",
+    "id": "endless-servitude-starshatter-arsenal-necrons",
     "name": "ENDLESS SERVITUDE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -447,11 +695,50 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Necrons"
+      ],
+      "excluded_keywords": [
+        "Monster",
+        "Titanic"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": {
+                    "objective": {
+                      "controlled_by": "friendly"
+                    }
+                  },
+                  "range": "objective-control"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "endless-servitude-starshatter-arsenal-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -465,7 +752,7 @@
     ]
   },
   {
-    "id": "enslaved-artifice-obeisance-phalanx",
+    "id": "enslaved-artifice-obeisance-phalanx-necrons",
     "name": "ENSLAVED ARTIFICE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -477,11 +764,64 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Necrons"
+      ],
+      "excluded_keywords": [
+        "Titanic"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "operator": "or",
+                "operands": [
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "fight"
+                      },
+                      "window": "phase"
+                    }
+                  },
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "shoot"
+                      },
+                      "window": "phase"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "enslaved-artifice-obeisance-phalanx-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -495,7 +835,7 @@
     ]
   },
   {
-    "id": "entrophasic-aura-targeting-pantheon-of-woe",
+    "id": "entrophasic-aura-targeting-pantheon-of-woe-necrons",
     "name": "ENTROPHASIC AURA TARGETING",
     "category": "detachment",
     "type": "battle-tactic",
@@ -507,11 +847,64 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Necrons"
+      ],
+      "excluded_keywords": [
+        "Monster"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "operator": "or",
+                "operands": [
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "fight"
+                      },
+                      "window": "phase"
+                    }
+                  },
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "shoot"
+                      },
+                      "window": "phase"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "entrophasic-aura-targeting-pantheon-of-woe-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -525,7 +918,7 @@
     ]
   },
   {
-    "id": "entropic-damping-hypercrypt-legion",
+    "id": "entropic-damping-hypercrypt-legion-necrons",
     "name": "ENTROPIC DAMPING",
     "category": "detachment",
     "type": "wargear",
@@ -536,11 +929,45 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Titanic"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "model",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": "event-subject",
+                  "range": {
+                    "inches": 18
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "entropic-damping-hypercrypt-legion-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -554,7 +981,7 @@
     ]
   },
   {
-    "id": "evasive-protocols-skyshroud-spearhead",
+    "id": "evasive-protocols-skyshroud-spearhead-necrons",
     "name": "Evasive Protocols",
     "category": "detachment",
     "detachment_id": "skyshroud-spearhead",
@@ -564,8 +991,16 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "evasive-protocols-skyshroud-spearhead",
+    "target_restrictions": {
+      "required_keywords": [
+        "Mounted",
+        "Necrons"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit"
+    },
+    "ability_id": "evasive-protocols-skyshroud-spearhead-necrons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -582,7 +1017,7 @@
     ]
   },
   {
-    "id": "gauss-storm-amonhotekhs-guard",
+    "id": "gauss-storm-amonhotekhs-guard-necrons",
     "name": "Gauss Storm",
     "category": "detachment",
     "detachment_id": "amonhotekhs-guard",
@@ -592,11 +1027,19 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "gauss-storm-amonhotekhs-guard",
+    "target_restrictions": {
+      "required_keywords": [
+        "Amonhotekh's Guard",
+        "Necron Warriors"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "gauss-storm-amonhotekhs-guard-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -606,7 +1049,7 @@
     ]
   },
   {
-    "id": "hyperphasic-recall-hypercrypt-legion",
+    "id": "hyperphasic-recall-hypercrypt-legion-necrons",
     "name": "HYPERPHASIC RECALL",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -618,11 +1061,68 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": [
+      {
+        "required_keywords": [
+          "Infantry",
+          "Necrons"
+        ],
+        "name": "first",
+        "count": "one",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "owner": "friendly"
+                }
+              }
+            },
+            {
+              "type": "happened",
+              "parameters": {
+                "event": "model-destroyed",
+                "object": "model-in-this-unit",
+                "filter": {
+                  "by": "event-subject"
+                },
+                "window": "event"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "required_keywords": [
+          "Monolith"
+        ],
+        "name": "second",
+        "count": "one",
+        "side": "your-army",
+        "selects": "model",
+        "eligibility": {
+          "operator": "not",
+          "operands": [
+            {
+              "type": "same-unit",
+              "parameters": {
+                "as": {
+                  "stratagem_target": "first"
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "ability_id": "hyperphasic-recall-hypercrypt-legion-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -636,7 +1136,7 @@
     ]
   },
   {
-    "id": "image-of-death-cursed-legion",
+    "id": "image-of-death-cursed-legion-necrons",
     "name": "IMAGE OF DEATH",
     "category": "detachment",
     "type": "battle-tactic",
@@ -648,11 +1148,27 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Destroyer Cult"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "image-of-death-cursed-legion-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -666,7 +1182,7 @@
     ]
   },
   {
-    "id": "insanitys-ire-annihilation-legion",
+    "id": "insanitys-ire-annihilation-legion-necrons",
     "name": "INSANITY’S IRE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -677,11 +1193,29 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords_any": [
+        "Destroyer Cult",
+        "Flayed Ones"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "not_states": [
+              "engaged"
+            ]
+          }
+        }
+      }
+    },
+    "ability_id": "insanitys-ire-annihilation-legion-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -695,7 +1229,7 @@
     ]
   },
   {
-    "id": "masks-of-death-annihilation-legion",
+    "id": "masks-of-death-annihilation-legion-necrons",
     "name": "MASKS OF DEATH",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -707,11 +1241,40 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "DESTROYER CULT",
+                  "FLAYED ONES"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "masks-of-death-annihilation-legion-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -725,7 +1288,7 @@
     ]
   },
   {
-    "id": "mass-transmogrification-pantheon-of-woe",
+    "id": "mass-transmogrification-pantheon-of-woe-necrons",
     "name": "MASS TRANSMOGRIFICATION",
     "category": "detachment",
     "type": "epic-deed",
@@ -738,7 +1301,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "mass-transmogrification-pantheon-of-woe-necrons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -755,7 +1318,7 @@
     ]
   },
   {
-    "id": "merciless-reclamation-starshatter-arsenal",
+    "id": "merciless-reclamation-starshatter-arsenal-necrons",
     "name": "MERCILESS RECLAMATION",
     "category": "detachment",
     "type": "battle-tactic",
@@ -767,11 +1330,65 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Necrons"
+      ],
+      "excluded_keywords": [
+        "Monster",
+        "Titanic"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "operator": "or",
+                "operands": [
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "fight"
+                      },
+                      "window": "phase"
+                    }
+                  },
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "shoot"
+                      },
+                      "window": "phase"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "merciless-reclamation-starshatter-arsenal-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -785,7 +1402,7 @@
     ]
   },
   {
-    "id": "methodical-murder-cursed-legion",
+    "id": "methodical-murder-cursed-legion-necrons",
     "name": "METHODICAL MURDER",
     "category": "detachment",
     "type": "battle-tactic",
@@ -797,11 +1414,65 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Necrons"
+      ],
+      "excluded_keywords": [
+        "Monster",
+        "Vehicle"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "operator": "or",
+                "operands": [
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "fight"
+                      },
+                      "window": "phase"
+                    }
+                  },
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "shoot"
+                      },
+                      "window": "phase"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "methodical-murder-cursed-legion-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -815,7 +1486,7 @@
     ]
   },
   {
-    "id": "microscarab-swarm-cryptek-conclave",
+    "id": "microscarab-swarm-cryptek-conclave-necrons",
     "name": "MICROSCARAB SWARM",
     "category": "detachment",
     "type": "wargear",
@@ -827,11 +1498,28 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Cryptek",
+        "Infantry"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "microscarab-swarm-cryptek-conclave-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -845,7 +1533,7 @@
     ]
   },
   {
-    "id": "molecular-erosion-pantheon-of-woe",
+    "id": "molecular-erosion-pantheon-of-woe-necrons",
     "name": "MOLECULAR EROSION",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -856,11 +1544,27 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Monster",
+        "Necrons"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "molecular-erosion-pantheon-of-woe-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -874,7 +1578,7 @@
     ]
   },
   {
-    "id": "molecular-targeting-cryptek-conclave",
+    "id": "molecular-targeting-cryptek-conclave-necrons",
     "name": "MOLECULAR TARGETING",
     "category": "detachment",
     "type": "battle-tactic",
@@ -886,11 +1590,61 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Necrons"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "operator": "or",
+                "operands": [
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "fight"
+                      },
+                      "window": "phase"
+                    }
+                  },
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "shoot"
+                      },
+                      "window": "phase"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "molecular-targeting-cryptek-conclave-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -904,7 +1658,7 @@
     ]
   },
   {
-    "id": "mortis-protocols-cursed-legion",
+    "id": "mortis-protocols-cursed-legion-necrons",
     "name": "MORTIS PROTOCOLS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -917,7 +1671,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "mortis-protocols-cursed-legion-necrons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -934,7 +1688,7 @@
     ]
   },
   {
-    "id": "murderous-reanimation-annihilation-legion",
+    "id": "murderous-reanimation-annihilation-legion-necrons",
     "name": "MURDEROUS REANIMATION",
     "category": "detachment",
     "type": "battle-tactic",
@@ -946,7 +1700,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "murderous-reanimation-annihilation-legion-necrons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -963,7 +1717,7 @@
     ]
   },
   {
-    "id": "nanoassembly-protocols-obeisance-phalanx",
+    "id": "nanoassembly-protocols-obeisance-phalanx-necrons",
     "name": "NANOASSEMBLY PROTOCOLS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -975,11 +1729,28 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Necrons",
+        "Vehicle"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "nanoassembly-protocols-obeisance-phalanx-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -993,7 +1764,7 @@
     ]
   },
   {
-    "id": "nanosaturation-hand-of-the-dynasty",
+    "id": "nanosaturation-hand-of-the-dynasty-necrons",
     "name": "Nanosaturation",
     "category": "detachment",
     "detachment_id": "hand-of-the-dynasty",
@@ -1003,11 +1774,19 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "nanosaturation-hand-of-the-dynasty",
+    "target_restrictions": {
+      "required_keywords_any": [
+        "Immortals",
+        "Necron Warriors"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit"
+    },
+    "ability_id": "nanosaturation-hand-of-the-dynasty-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1021,7 +1800,7 @@
     ]
   },
   {
-    "id": "omnilocked-strafing-skyshroud-spearhead",
+    "id": "omnilocked-strafing-skyshroud-spearhead-necrons",
     "name": "Omnilocked Strafing",
     "category": "detachment",
     "detachment_id": "skyshroud-spearhead",
@@ -1031,11 +1810,19 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "omnilocked-strafing-skyshroud-spearhead",
+    "target_restrictions": {
+      "required_keywords": [
+        "Mounted",
+        "Necrons"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "omnilocked-strafing-skyshroud-spearhead-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1049,7 +1836,7 @@
     ]
   },
   {
-    "id": "particle-pulse-the-phaerons-armoury",
+    "id": "particle-pulse-the-phaerons-armoury-necrons",
     "name": "Particle Pulse",
     "category": "detachment",
     "detachment_id": "the-phaerons-armoury",
@@ -1059,11 +1846,20 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "particle-pulse-the-phaerons-armoury",
+    "target_restrictions": {
+      "required_keywords": [
+        "Fly",
+        "Necrons",
+        "Titanic"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit"
+    },
+    "ability_id": "particle-pulse-the-phaerons-armoury-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1077,7 +1873,7 @@
     ]
   },
   {
-    "id": "phase-melding-pantheon-of-woe",
+    "id": "phase-melding-pantheon-of-woe-necrons",
     "name": "PHASE MELDING",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1089,7 +1885,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "phase-melding-pantheon-of-woe-necrons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1106,7 +1902,7 @@
     ]
   },
   {
-    "id": "pitiless-hunters-annihilation-legion",
+    "id": "pitiless-hunters-annihilation-legion-necrons",
     "name": "PITILESS HUNTERS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1117,11 +1913,54 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "DESTROYER CULT",
+                  "FLAYED ONES"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "fight"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "pitiless-hunters-annihilation-legion-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1135,7 +1974,7 @@
     ]
   },
   {
-    "id": "potentiality-syphon-cryptek-conclave",
+    "id": "potentiality-syphon-cryptek-conclave-necrons",
     "name": "POTENTIALITY SYPHON",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1146,11 +1985,44 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Necrons"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": {
+                    "objective": {}
+                  },
+                  "range": "objective-control"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "potentiality-syphon-cryptek-conclave-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1164,7 +2036,7 @@
     ]
   },
   {
-    "id": "protocol-of-the-conquering-tyrant-awakened-dynasty",
+    "id": "protocol-of-the-conquering-tyrant-awakened-dynasty-necrons",
     "name": "PROTOCOL OF THE CONQUERING TYRANT",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1175,11 +2047,46 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Necrons"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "shoot"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "protocol-of-the-conquering-tyrant-awakened-dynasty-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1193,7 +2100,7 @@
     ]
   },
   {
-    "id": "protocol-of-the-eternal-revenant-awakened-dynasty",
+    "id": "protocol-of-the-eternal-revenant-awakened-dynasty-necrons",
     "name": "PROTOCOL OF THE ETERNAL REVENANT",
     "category": "detachment",
     "type": "epic-deed",
@@ -1209,7 +2116,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "protocol-of-the-eternal-revenant-awakened-dynasty-necrons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1226,7 +2133,7 @@
     ]
   },
   {
-    "id": "protocol-of-the-hungry-void-awakened-dynasty",
+    "id": "protocol-of-the-hungry-void-awakened-dynasty-necrons",
     "name": "PROTOCOL OF THE HUNGRY VOID",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1237,11 +2144,46 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Necrons"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "fight"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "protocol-of-the-hungry-void-awakened-dynasty-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1255,7 +2197,7 @@
     ]
   },
   {
-    "id": "protocol-of-the-sudden-storm-awakened-dynasty",
+    "id": "protocol-of-the-sudden-storm-awakened-dynasty-necrons",
     "name": "PROTOCOL OF THE SUDDEN STORM",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1266,11 +2208,26 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Necrons"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "protocol-of-the-sudden-storm-awakened-dynasty-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1284,7 +2241,7 @@
     ]
   },
   {
-    "id": "protocol-of-the-undying-legions-awakened-dynasty",
+    "id": "protocol-of-the-undying-legions-awakened-dynasty-necrons",
     "name": "PROTOCOL OF THE UNDYING LEGIONS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1296,11 +2253,42 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Necrons"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "model-destroyed",
+              "object": "model-in-this-unit",
+              "filter": {
+                "by": "event-subject"
+              },
+              "window": "event"
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "protocol-of-the-undying-legions-awakened-dynasty-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1314,7 +2302,7 @@
     ]
   },
   {
-    "id": "protocol-of-the-vengeful-stars-awakened-dynasty",
+    "id": "protocol-of-the-vengeful-stars-awakened-dynasty-necrons",
     "name": "PROTOCOL OF THE VENGEFUL STARS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1325,11 +2313,32 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Character",
+        "Necrons"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "within": {
+              "of": "event-object",
+              "range": {
+                "inches": 6
+              }
+            }
+          }
+        }
+      }
+    },
+    "ability_id": "protocol-of-the-vengeful-stars-awakened-dynasty-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1343,7 +2352,7 @@
     ]
   },
   {
-    "id": "quantum-deflection-hypercrypt-legion",
+    "id": "quantum-deflection-hypercrypt-legion-necrons",
     "name": "QUANTUM DEFLECTION",
     "category": "detachment",
     "type": "wargear",
@@ -1355,11 +2364,28 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Necrons",
+        "Vehicle"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "quantum-deflection-hypercrypt-legion-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1373,7 +2399,7 @@
     ]
   },
   {
-    "id": "reactive-reposition-starshatter-arsenal",
+    "id": "reactive-reposition-starshatter-arsenal-necrons",
     "name": "REACTIVE REPOSITION",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1384,11 +2410,31 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Necrons"
+      ],
+      "excluded_keywords": [
+        "Monster",
+        "Titanic"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "reactive-reposition-starshatter-arsenal-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1402,7 +2448,7 @@
     ]
   },
   {
-    "id": "reactive-subroutines-canoptek-court",
+    "id": "reactive-subroutines-canoptek-court-necrons",
     "name": "REACTIVE SUBROUTINES",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1413,11 +2459,31 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Canoptek"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "within": {
+              "of": "event-subject",
+              "range": {
+                "inches": 8
+              }
+            }
+          }
+        }
+      }
+    },
+    "ability_id": "reactive-subroutines-canoptek-court-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1431,7 +2497,7 @@
     ]
   },
   {
-    "id": "reanimation-crypts-hypercrypt-legion",
+    "id": "reanimation-crypts-hypercrypt-legion-necrons",
     "name": "REANIMATION CRYPTS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1442,11 +2508,19 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Necrons"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "model",
+      "warlord": true
+    },
+    "ability_id": "reanimation-crypts-hypercrypt-legion-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1460,7 +2534,7 @@
     ]
   },
   {
-    "id": "reinforced-resilience-amonhotekhs-guard",
+    "id": "reinforced-resilience-amonhotekhs-guard-necrons",
     "name": "Reinforced Resilience",
     "category": "detachment",
     "detachment_id": "amonhotekhs-guard",
@@ -1470,11 +2544,29 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "reinforced-resilience-amonhotekhs-guard",
+    "target_restrictions": {
+      "required_keywords": [
+        "Amonhotekh's Guard"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "none_of": [
+              "MONSTER",
+              "VEHICLE"
+            ]
+          }
+        }
+      }
+    },
+    "ability_id": "reinforced-resilience-amonhotekhs-guard-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1484,7 +2576,7 @@
     ]
   },
   {
-    "id": "sentinels-of-eternity-obeisance-phalanx",
+    "id": "sentinels-of-eternity-obeisance-phalanx-necrons",
     "name": "SENTINELS OF ETERNITY",
     "category": "detachment",
     "type": "epic-deed",
@@ -1495,11 +2587,40 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "LYCHGUARD",
+                  "TRIARCH PRAETORIANS"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "sentinels-of-eternity-obeisance-phalanx-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1513,7 +2634,7 @@
     ]
   },
   {
-    "id": "solar-pulse-canoptek-court",
+    "id": "solar-pulse-canoptek-court-necrons",
     "name": "SOLAR PULSE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1524,11 +2645,26 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Cryptek"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "model",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "solar-pulse-canoptek-court-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1542,7 +2678,7 @@
     ]
   },
   {
-    "id": "spreading-madness-cursed-legion",
+    "id": "spreading-madness-cursed-legion-necrons",
     "name": "SPREADING MADNESS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1553,11 +2689,50 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Necrons"
+      ],
+      "excluded_keywords": [
+        "Monster",
+        "Vehicle"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "targets-selected",
+                  "filter": {
+                    "kind": "charge"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "spreading-madness-cursed-legion-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1571,7 +2746,7 @@
     ]
   },
   {
-    "id": "suboptimal-facade-canoptek-court",
+    "id": "suboptimal-facade-canoptek-court-necrons",
     "name": "SUBOPTIMAL FACADE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1582,11 +2757,53 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Canoptek"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "targets-selected",
+              "subject": "event-subject",
+              "object": "this-unit",
+              "window": "event"
+            }
+          },
+          {
+            "type": "in-region",
+            "parameters": {
+              "subject": "this-unit",
+              "region": {
+                "rule_region": {
+                  "region_id": "power-matrix",
+                  "owner_faction": "necrons"
+                }
+              },
+              "wholly": true
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "suboptimal-facade-canoptek-court-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1600,7 +2817,7 @@
     ]
   },
   {
-    "id": "subsurface-quantumweave-the-phaerons-armoury",
+    "id": "subsurface-quantumweave-the-phaerons-armoury-necrons",
     "name": "Subsurface Quantumweave",
     "category": "detachment",
     "detachment_id": "the-phaerons-armoury",
@@ -1611,8 +2828,17 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "subsurface-quantumweave-the-phaerons-armoury",
+    "target_restrictions": {
+      "required_keywords": [
+        "Fly",
+        "Necrons",
+        "Titanic"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit"
+    },
+    "ability_id": "subsurface-quantumweave-the-phaerons-armoury-necrons",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1629,7 +2855,7 @@
     ]
   },
   {
-    "id": "suffer-no-rival-obeisance-phalanx",
+    "id": "suffer-no-rival-obeisance-phalanx-necrons",
     "name": "SUFFER NO RIVAL",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1640,11 +2866,54 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "LYCHGUARD",
+                  "TRIARCH"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "fight"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "suffer-no-rival-obeisance-phalanx-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1658,7 +2927,7 @@
     ]
   },
   {
-    "id": "swift-as-death-skyshroud-spearhead",
+    "id": "swift-as-death-skyshroud-spearhead-necrons",
     "name": "Swift As Death",
     "category": "detachment",
     "detachment_id": "skyshroud-spearhead",
@@ -1668,11 +2937,47 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "swift-as-death-skyshroud-spearhead",
+    "target_restrictions": {
+      "required_keywords": [
+        "Mounted",
+        "Necrons"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "not_states": [
+                  "engaged"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": "event-subject",
+                  "range": {
+                    "inches": 8
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "swift-as-death-skyshroud-spearhead-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1686,7 +2991,7 @@
     ]
   },
   {
-    "id": "synergistic-empowerment-cryptek-conclave",
+    "id": "synergistic-empowerment-cryptek-conclave-necrons",
     "name": "SYNERGISTIC EMPOWERMENT",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1697,11 +3002,26 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Cryptek"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "synergistic-empowerment-cryptek-conclave-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1715,7 +3035,7 @@
     ]
   },
   {
-    "id": "territorial-obsession-obeisance-phalanx",
+    "id": "territorial-obsession-obeisance-phalanx-necrons",
     "name": "TERRITORIAL OBSESSION",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1726,11 +3046,39 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "LYCHGUARD",
+                  "TRIARCH"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "territorial-obsession-obeisance-phalanx-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1744,7 +3092,7 @@
     ]
   },
   {
-    "id": "the-spoor-of-frailty-annihilation-legion",
+    "id": "the-spoor-of-frailty-annihilation-legion-necrons",
     "name": "THE SPOOR OF FRAILTY",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1756,11 +3104,69 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "DESTROYER CULT",
+                  "FLAYED ONES"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "operator": "or",
+                "operands": [
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "fight"
+                      },
+                      "window": "phase"
+                    }
+                  },
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "shoot"
+                      },
+                      "window": "phase"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "the-spoor-of-frailty-annihilation-legion-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1774,7 +3180,7 @@
     ]
   },
   {
-    "id": "unnatural-aggression-cursed-legion",
+    "id": "unnatural-aggression-cursed-legion-necrons",
     "name": "UNNATURAL AGGRESSION",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1785,11 +3191,57 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Necrons"
+      ],
+      "excluded_keywords": [
+        "Monster",
+        "Vehicle"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": {
+                    "owner": "enemy"
+                  },
+                  "range": {
+                    "inches": 6
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "eligible",
+            "parameters": {
+              "subject": "this-unit",
+              "to": "declare-charge"
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "unnatural-aggression-cursed-legion-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1803,7 +3255,7 @@
     ]
   },
   {
-    "id": "untapped-power-cryptek-conclave",
+    "id": "untapped-power-cryptek-conclave-necrons",
     "name": "UNTAPPED POWER",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1814,11 +3266,46 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Cryptek"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "shoot"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "untapped-power-cryptek-conclave-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1832,7 +3319,7 @@
     ]
   },
   {
-    "id": "unyielding-forms-starshatter-arsenal",
+    "id": "unyielding-forms-starshatter-arsenal-necrons",
     "name": "UNYIELDING FORMS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1844,11 +3331,46 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Necrons"
+      ],
+      "excluded_keywords": [
+        "Titanic"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "MOUNTED",
+                  "VEHICLE"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "unyielding-forms-starshatter-arsenal-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1862,7 +3384,7 @@
     ]
   },
   {
-    "id": "will-of-the-conqueror-hand-of-the-dynasty",
+    "id": "will-of-the-conqueror-hand-of-the-dynasty-necrons",
     "name": "Will of the Conqueror",
     "category": "detachment",
     "detachment_id": "hand-of-the-dynasty",
@@ -1872,11 +3394,26 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "will-of-the-conqueror-hand-of-the-dynasty",
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "any_of": [
+              "IMMORTALS",
+              "NECRON WARRIORS"
+            ]
+          }
+        }
+      }
+    },
+    "ability_id": "will-of-the-conqueror-hand-of-the-dynasty-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {
@@ -1890,7 +3427,7 @@
     ]
   },
   {
-    "id": "your-time-is-nigh-obeisance-phalanx",
+    "id": "your-time-is-nigh-obeisance-phalanx-necrons",
     "name": "YOUR TIME IS NIGH",
     "category": "detachment",
     "type": "epic-deed",
@@ -1905,11 +3442,19 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Necrons"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "model",
+      "warlord": true
+    },
+    "ability_id": "your-time-is-nigh-obeisance-phalanx-necrons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "external_refs": [
       {

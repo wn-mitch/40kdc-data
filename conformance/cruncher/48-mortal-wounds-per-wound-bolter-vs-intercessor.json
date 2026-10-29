@@ -1,0 +1,43 @@
+{
+  "name": "bolt rifle vs intercessors, 1 mortal wound each time a wound roll scores",
+  "attacker": {
+    "weaponId": "bolt-rifle",
+    "profileIndex": 1
+  },
+  "modelsFiring": 5,
+  "target": {
+    "unitId": "intercessor-squad",
+    "profileIndex": 0,
+    "modelCount": 10
+  },
+  "context": {
+    "phase": "shooting",
+    "attackerStationary": false,
+    "withinHalfRange": false
+  },
+  "buffs": [
+    {
+      "source": {
+        "kind": "manual",
+        "label": "1 MW per wound (test)"
+      },
+      "contribution": {
+        "type": "mortal-wounds-on-roll",
+        "roll": "wound",
+        "outcome": "success",
+        "count": 1
+      }
+    }
+  ],
+  "expected": {
+    "stages": {
+      "attacks": 10,
+      "hits": 6.6667,
+      "wounds": 3.3333,
+      "unsaved": 1.6667,
+      "damage": 5,
+      "after-fnp": 5,
+      "models-killed": 2.5
+    }
+  }
+}

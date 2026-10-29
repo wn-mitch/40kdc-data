@@ -1,0 +1,67 @@
+{
+ "id": 7,
+ "source_text": "xxxx xxxx a xxxxx in this xxxx xx xxxxxxxxx xx a xxxxx xxxxxx, xx that xxxxx xxx xxx xxxxxx this xxxxx, xxxx xxx x6. xx a 2+, xx xxx xxxxxx it xxxx xxxx; that xxxxxxxxx xxxxx xxx xxxxx xxxxx the xxxxxxxxx xxxx xxx xxxxxxxx xxxxxx xxx xxxxxxx, and xx xxxx xxxxxxx xxxx xxxx.",
+ "leaves": [
+  {
+   "role": "EVENT",
+   "family_id": "event",
+   "family_version": 18,
+   "parameters": {
+    "kind": "model-destroyed"
+   },
+   "start_byte": 0,
+   "end_byte": 61,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "CONDITION",
+   "family_id": "unit-activity",
+   "family_version": 14,
+   "parameters": {
+    "activities": [
+     "fought-this-phase"
+    ],
+    "subject": "event-subject",
+    "negated": true
+   },
+   "start_byte": 63,
+   "end_byte": 102,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "EVENT",
+   "family_id": "dice-roll",
+   "family_version": 5,
+   "parameters": {
+    "dice": "D6"
+   },
+   "start_byte": 104,
+   "end_byte": 115,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "CONDITION",
+   "family_id": "roll-result",
+   "family_version": 2,
+   "parameters": {
+    "from": 2
+   },
+   "start_byte": 117,
+   "end_byte": 124,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "EFFECT",
+   "family_id": "fight-on-death",
+   "family_version": 2,
+   "parameters": {
+    "act": "fight",
+    "timing": "after-the-attacking-unit-finishes"
+   },
+   "start_byte": 126,
+   "end_byte": 272,
+   "fragment": "RAW_TEXT"
+  }
+ ],
+ "edits": null
+}

@@ -148,7 +148,7 @@ after real runs.
   describeCondition/describe_condition — negated cases route through the predicate.
 - Fold parallel event vocabularies into ONE closed enum via EVENT_PHRASES/TIMING_ALIASES;
   a mapped event must return the exact string event_clause produces.
-- Derive an aura radius in the helper (range_inches, else parse the aura-N slug) so
-  slug-encoded zones render 'within N"' not 'nearby'.
+- Render an aura radius from the target filter's within.range (or the aura container's
+  modifier.range) as 'within N"', never 'nearby'.
 - New leaf types have distinct render rules (scaling renders only on the single-effect
   leaf path) — verify the describer actually READS each field, not just that the schema accepts it.

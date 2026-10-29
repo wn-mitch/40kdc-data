@@ -17,7 +17,7 @@
             </profile>
             <profile name="Jammer Array" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">During the Reserves phase, for the rest of the battle, enemy units within 12": prevent reserve setup (within 12").</characteristic>
+                <characteristic name="Description">Enemy units cannot be set up on the battlefield from Strategic Reserves within 12" of this model.</characteristic>
               </characteristics>
             </profile>
             <profile name="Leader" typeName="Abilities">
@@ -27,17 +27,17 @@
             </profile>
             <profile name="Structural Analyser" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">During the Shooting phase, while this model is leading a unit, the unit gets +1 to Wound rolls.</characteristic>
+                <characteristic name="Description">While this model is leading a unit, while making ranged attacks, the unit gets +1 to Wound rolls.</characteristic>
               </characteristics>
             </profile>
             <profile name="Infiltrators" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Once per battle, the unit has the Infiltrators ability.</characteristic>
+                <characteristic name="Description">The unit gains the Infiltrators ability.</characteristic>
               </characteristics>
             </profile>
-            <profile name="Scouts 7&quot;" typeName="Abilities">
+            <profile name="Scouts" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Before the first battle round, the unit can make a Scout move of up to 7".</characteristic>
+                <characteristic name="Description">The unit gains the Scouts X" ability, X being its rating.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -105,23 +105,41 @@
             </profile>
             <profile name="Pulse Accelerator Drone" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gains the Weapon Range Increase ability.</characteristic>
+                <characteristic name="Description">Add 6 to the Range characteristic of ranged pulse carbine weapons equipped by models in this unit.</characteristic>
               </characteristics>
             </profile>
             <profile name="Recon Drone" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">This model gains the Weapon Grant ability.
+                <characteristic name="Description">This model gains 1 Drone Burst Cannon weapon.
 The unit gains the Infiltrators ability.</characteristic>
               </characteristics>
             </profile>
             <profile name="Target Uploaded" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit's weapons gain [IGNORES COVER].</characteristic>
+                <characteristic name="Description">Against SPOTTED targets:
+  -&gt; Improve the unit's Ballistic Skill characteristic by 1.
+  -&gt; The unit's weapons gain [IGNORES COVER].</characteristic>
               </characteristics>
             </profile>
-            <profile name="Scouts 7&quot;" typeName="Abilities">
+            <profile name="Scouts" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Before the first battle round, the unit can make a Scout move of up to 7".</characteristic>
+                <characteristic name="Description">The unit gains the Scouts X" ability, X being its rating.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Gun Drone" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">This model gains 1 Twin Pulse Carbine weapon.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Marker Drone" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">The unit gains the MARKERLIGHT keyword.
+The unit is eligible to act as an Observer even if it Advanced this turn.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Shield Drone" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Add 1 to this model's Wounds characteristic.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -327,12 +345,28 @@ The unit gains the Infiltrators ability.</characteristic>
             </profile>
             <profile name="Starscythe" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">During the Shooting phase, subtract 1 from the unit's Armour Penetration characteristic.</characteristic>
+                <characteristic name="Description">While making ranged attacks, while the target does not have the MONSTER or VEHICLE keyword, improve the unit's Armour Penetration characteristic by 1.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deep Strike" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit has the Deep Strike ability.</characteristic>
+                <characteristic name="Description">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Gun Drone" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">This model gains 1 Twin Pulse Carbine weapon.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Marker Drone" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">The unit gains the MARKERLIGHT keyword.
+The unit is eligible to act as an Observer even if it Advanced this turn.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Shield Drone" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Add 1 to this model's Wounds characteristic.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -344,6 +378,7 @@ The unit gains the Infiltrators ability.</characteristic>
             <category name="Battlesuit"/>
             <category name="Crisis"/>
             <category name="Starscythe"/>
+            <category name="Crisis Starscythe Battlesuits"/>
           </categories>
           <selections>
             <selection id="unit2-m0" name="Crisis Starscythe Shas’vre" type="model" number="1">

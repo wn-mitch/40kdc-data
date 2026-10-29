@@ -8,7 +8,7 @@
 
 > **EngineOutput** = `object`
 
-Defined in: [cruncher/engine.ts:46](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/engine.ts#L46)
+Defined in: [cruncher/engine.ts:50](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/engine.ts#L50)
 
 ## Properties
 
@@ -16,7 +16,7 @@ Defined in: [cruncher/engine.ts:46](https://github.com/wn-mitch/40kdc-data/blob/
 
 > **stages**: [`Stage`](Stage.md)[]
 
-Defined in: [cruncher/engine.ts:46](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/engine.ts#L46)
+Defined in: [cruncher/engine.ts:50](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/engine.ts#L50)
 
 ***
 
@@ -24,4 +24,4 @@ Defined in: [cruncher/engine.ts:46](https://github.com/wn-mitch/40kdc-data/blob/
 
 > **resolved**: [`ResolvedModifiers`](ResolvedModifiers.md)
 
-Defined in: [cruncher/engine.ts:46](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/engine.ts#L46)
+Defined in: [cruncher/engine.ts:50](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/engine.ts#L50)

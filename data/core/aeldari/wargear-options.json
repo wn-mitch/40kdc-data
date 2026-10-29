@@ -5,7 +5,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -24,7 +24,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -43,7 +43,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -65,7 +65,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -86,7 +86,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -103,7 +103,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -119,7 +119,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -139,7 +139,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -170,7 +170,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -189,7 +189,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -219,7 +219,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -236,15 +236,38 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
       "shuriken-pistol",
       "power-sword"
     ],
-    "replacement": [
-      "shuriken-rifle"
+    "replacement_choice": [
+      [
+        "shredder"
+      ],
+      [
+        "wraithcannon"
+      ],
+      [
+        "shuriken-cannon-corsair-voidscarred"
+      ],
+      [
+        "blaster"
+      ],
+      [
+        "power-sword",
+        "shuriken-pistol",
+        "faolchu"
+      ],
+      [
+        "shuriken-rifle"
+      ],
+      [
+        "fusion-pistol",
+        "shuriken-pistol"
+      ]
     ],
     "model_constraint": {
       "model_name": "Corsair Voidscarred",
@@ -257,61 +280,12 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
-      "shuriken-rifle"
-    ],
-    "replacement_choice": [
-      [
-        "blaster"
-      ],
-      [
-        "shredder"
-      ]
-    ],
-    "model_constraint": {
-      "model_name": "Corsair Voidscarred",
-      "per_n_models": 5
-    }
-  },
-  {
-    "id": "corsair-voidscarred-wgo-mfm-4",
-    "unit_id": "corsair-voidscarred",
-    "faction_id": "aeldari",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replaces": [
-      "shuriken-rifle"
-    ],
-    "replacement_choice": [
-      [
-        "shuriken-cannon-corsair-voidscarred"
-      ],
-      [
-        "wraithcannon"
-      ]
-    ],
-    "model_constraint": {
-      "model_name": "Corsair Voidscarred",
-      "per_n_models": 10
-    }
-  },
-  {
-    "id": "corsair-voidscarred-wgo-mfm-5",
-    "unit_id": "corsair-voidscarred",
-    "faction_id": "aeldari",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replaces": [
-      "shuriken-rifle"
+      "shuriken-pistol",
+      "power-sword"
     ],
     "replacement": [
       "long-rifle"
@@ -322,32 +296,12 @@
     }
   },
   {
-    "id": "corsair-voidscarred-wgo-mfm-6",
+    "id": "corsair-voidscarred-wgo-mfm-4",
     "unit_id": "corsair-voidscarred",
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replaces": [
-      "power-sword"
-    ],
-    "replacement": [
-      "fusion-pistol"
-    ],
-    "model_constraint": {
-      "model_name": "Corsair Voidscarred",
-      "per_n_models": 10
-    }
-  },
-  {
-    "id": "corsair-voidscarred-wgo-mfm-7",
-    "unit_id": "corsair-voidscarred",
-    "faction_id": "aeldari",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -372,7 +326,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -391,7 +345,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -415,7 +369,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -445,7 +399,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -465,7 +419,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -494,7 +448,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -511,18 +465,20 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
-      "close-combat-weapon"
+      "close-combat-weapon",
+      "shuriken-pistol"
     ],
     "replacement": [
+      "shuriken-pistol",
       "power-sword-storm-guardians"
     ],
     "model_constraint": {
       "model_name": "Storm Guardian",
-      "max_count": 2
+      "any_number": true
     }
   },
   {
@@ -531,23 +487,42 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
+      "close-combat-weapon",
       "shuriken-pistol"
     ],
-    "replacement_choice": [
-      [
-        "fusion-gun"
-      ],
-      [
-        "flamer"
-      ]
+    "replacement": [
+      "close-combat-weapon",
+      "fusion-gun"
     ],
     "model_constraint": {
       "model_name": "Storm Guardian",
-      "max_count": 4
+      "max_count": 2
+    }
+  },
+  {
+    "id": "storm-guardians-wgo-mfm-3",
+    "unit_id": "storm-guardians",
+    "faction_id": "aeldari",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "close-combat-weapon",
+      "shuriken-pistol"
+    ],
+    "replacement": [
+      "close-combat-weapon",
+      "flamer"
+    ],
+    "model_constraint": {
+      "model_name": "Storm Guardian",
+      "max_count": 2
     }
   },
   {
@@ -556,7 +531,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -575,7 +550,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -594,7 +569,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -619,7 +594,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -655,7 +630,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -686,102 +661,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replaces": [
-      "d-bombard"
-    ],
-    "replacement_choice": [
-      [
-        "phantom-starcannon",
-        "phantom-starcannon",
-        "wraith-glaive"
-      ],
-      [
-        "pulse-laser",
-        "pulse-laser",
-        "wraith-glaive"
-      ],
-      [
-        "phantom-pulsar"
-      ],
-      [
-        "phantom-starcannon",
-        "pulse-laser",
-        "wraith-glaive"
-      ]
-    ],
-    "model_constraint": {
-      "any_number": true
-    }
-  },
-  {
-    "id": "phantom-titan-wgo-mfm-2",
-    "unit_id": "phantom-titan",
-    "faction_id": "aeldari",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replaces": [
-      "d-bombard",
-      "phantom-pulsar"
-    ],
-    "replacement_choice": [
-      [
-        "wraith-glaive",
-        "wraith-glaive",
-        "phantom-starcannon",
-        "phantom-starcannon",
-        "pulse-laser",
-        "pulse-laser"
-      ],
-      [
-        "wraith-glaive",
-        "wraith-glaive",
-        "pulse-laser",
-        "pulse-laser",
-        "pulse-laser",
-        "pulse-laser"
-      ],
-      [
-        "phantom-starcannon",
-        "phantom-starcannon",
-        "phantom-starcannon",
-        "wraith-glaive",
-        "wraith-glaive",
-        "pulse-laser"
-      ],
-      [
-        "phantom-starcannon",
-        "phantom-starcannon",
-        "phantom-starcannon",
-        "phantom-starcannon",
-        "wraith-glaive",
-        "wraith-glaive"
-      ],
-      [
-        "wraith-glaive",
-        "wraith-glaive",
-        "phantom-starcannon",
-        "pulse-laser",
-        "pulse-laser",
-        "pulse-laser"
-      ]
-    ],
-    "model_constraint": {
-      "any_number": true
-    }
-  },
-  {
-    "id": "phantom-titan-wgo-mfm-3",
-    "unit_id": "phantom-titan",
-    "faction_id": "aeldari",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -789,118 +669,137 @@
       "phantom-pulsar",
       "phantom-starcannon"
     ],
-    "replacement": [
-      "pulse-laser",
-      "pulse-laser",
-      "pulse-laser",
-      "pulse-laser",
-      "pulse-laser",
-      "wraith-glaive",
-      "wraith-glaive"
-    ],
-    "model_constraint": {
-      "any_number": true
-    }
-  },
-  {
-    "id": "phantom-titan-wgo-mfm-4",
-    "unit_id": "phantom-titan",
-    "faction_id": "aeldari",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replaces": [
-      "phantom-pulsar",
-      "phantom-starcannon"
-    ],
-    "replacement": [
-      "wraith-glaive",
-      "pulse-laser",
-      "pulse-laser"
-    ],
-    "model_constraint": {
-      "any_number": true
-    }
-  },
-  {
-    "id": "phantom-titan-wgo-mfm-5",
-    "unit_id": "phantom-titan",
-    "faction_id": "aeldari",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replaces": [
-      "phantom-pulsar"
-    ],
     "replacement_choice": [
       [
+        "phantom-pulsar",
+        "phantom-starcannon",
         "phantom-starcannon",
         "phantom-starcannon",
         "wraith-glaive"
       ],
       [
+        "wraith-glaive",
+        "wraith-glaive",
+        "phantom-starcannon",
+        "phantom-starcannon",
+        "phantom-starcannon",
+        "pulse-laser",
+        "pulse-laser"
+      ],
+      [
+        "pulse-laser",
+        "pulse-laser",
+        "phantom-starcannon",
+        "phantom-pulsar",
+        "wraith-glaive"
+      ],
+      [
+        "pulse-laser",
+        "pulse-laser",
+        "pulse-laser",
+        "pulse-laser",
+        "pulse-laser",
+        "wraith-glaive",
+        "wraith-glaive"
+      ],
+      [
+        "d-bombard",
+        "wraith-glaive",
+        "pulse-laser",
+        "pulse-laser"
+      ],
+      [
+        "phantom-pulsar",
+        "phantom-pulsar",
+        "phantom-starcannon"
+      ],
+      [
+        "d-bombard",
+        "phantom-starcannon",
+        "phantom-starcannon",
+        "phantom-starcannon",
+        "wraith-glaive"
+      ],
+      [
+        "wraith-glaive",
+        "wraith-glaive",
+        "pulse-laser",
+        "pulse-laser",
+        "pulse-laser",
+        "pulse-laser",
+        "phantom-starcannon"
+      ],
+      [
+        "phantom-starcannon",
+        "phantom-starcannon",
+        "phantom-starcannon",
+        "phantom-starcannon",
+        "wraith-glaive",
+        "wraith-glaive",
+        "pulse-laser"
+      ],
+      [
+        "phantom-starcannon",
+        "d-bombard",
+        "d-bombard"
+      ],
+      [
+        "phantom-starcannon",
+        "phantom-starcannon",
+        "phantom-starcannon",
+        "phantom-starcannon",
+        "phantom-starcannon",
+        "wraith-glaive",
+        "wraith-glaive"
+      ],
+      [
+        "pulse-laser",
+        "pulse-laser",
+        "d-bombard",
+        "phantom-starcannon",
+        "wraith-glaive"
+      ],
+      [
+        "wraith-glaive",
+        "wraith-glaive",
+        "phantom-starcannon",
+        "phantom-starcannon",
+        "pulse-laser",
+        "pulse-laser",
+        "pulse-laser"
+      ],
+      [
+        "d-bombard",
+        "wraith-glaive",
+        "pulse-laser",
+        "phantom-starcannon",
+        "phantom-starcannon"
+      ],
+      [
+        "phantom-starcannon",
+        "phantom-starcannon",
+        "pulse-laser",
+        "phantom-pulsar",
+        "wraith-glaive"
+      ],
+      [
+        "pulse-laser",
+        "phantom-pulsar",
         "d-bombard"
       ],
       [
         "pulse-laser",
         "pulse-laser",
+        "pulse-laser",
+        "phantom-pulsar",
         "wraith-glaive"
       ],
       [
-        "wraith-glaive",
-        "pulse-laser",
-        "phantom-starcannon"
-      ],
-      [
+        "phantom-starcannon",
+        "d-bombard",
         "wraith-glaive",
         "pulse-laser"
       ]
-    ],
-    "model_constraint": {
-      "any_number": true
-    }
-  },
-  {
-    "id": "phantom-titan-wgo-mfm-6",
-    "unit_id": "phantom-titan",
-    "faction_id": "aeldari",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replaces": [
-      "phantom-starcannon"
-    ],
-    "replacement": [
-      "pulse-laser"
-    ],
-    "model_constraint": {
-      "any_number": true
-    }
-  },
-  {
-    "id": "phantom-titan-wgo-mfm-7",
-    "unit_id": "phantom-titan",
-    "faction_id": "aeldari",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replaces": [
-      "d-bombard",
-      "phantom-starcannon"
-    ],
-    "replacement": [
-      "pulse-laser",
-      "pulse-laser",
-      "pulse-laser",
-      "wraith-glaive"
     ],
     "model_constraint": {
       "any_number": true
@@ -912,7 +811,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -943,7 +842,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -968,7 +867,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -989,7 +888,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1008,7 +907,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1027,7 +926,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1052,7 +951,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1077,7 +976,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -1099,7 +998,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -1121,7 +1020,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -1138,7 +1037,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1167,7 +1066,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -1184,7 +1083,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1203,7 +1102,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -1224,7 +1123,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1244,7 +1143,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -1261,7 +1160,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1286,7 +1185,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1311,7 +1210,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1336,7 +1235,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1371,7 +1270,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -1388,7 +1287,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1407,7 +1306,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -1424,7 +1323,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1454,7 +1353,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -1471,7 +1370,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1499,7 +1398,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1524,7 +1423,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -1541,7 +1440,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1561,29 +1460,78 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
       "splinter-rifle"
     ],
-    "replacement_choice": [
-      [
-        "dark-lance"
-      ],
-      [
-        "shredder"
-      ],
-      [
-        "blaster"
-      ],
-      [
-        "splinter-cannon"
-      ]
+    "replacement": [
+      "dark-lance"
     ],
     "model_constraint": {
       "model_name": "Kabalite Warrior",
-      "max_count": 4
+      "max_count": 1
+    }
+  },
+  {
+    "id": "ynnari-kabalite-warriors-wgo-mfm-5",
+    "unit_id": "ynnari-kabalite-warriors",
+    "faction_id": "aeldari",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "splinter-rifle"
+    ],
+    "replacement": [
+      "shredder"
+    ],
+    "model_constraint": {
+      "model_name": "Kabalite Warrior",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "ynnari-kabalite-warriors-wgo-mfm-6",
+    "unit_id": "ynnari-kabalite-warriors",
+    "faction_id": "aeldari",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "splinter-rifle"
+    ],
+    "replacement": [
+      "blaster"
+    ],
+    "model_constraint": {
+      "model_name": "Kabalite Warrior",
+      "max_count": 1
+    }
+  },
+  {
+    "id": "ynnari-kabalite-warriors-wgo-mfm-7",
+    "unit_id": "ynnari-kabalite-warriors",
+    "faction_id": "aeldari",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "is_free": true,
+    "replaces": [
+      "splinter-rifle"
+    ],
+    "replacement": [
+      "splinter-cannon"
+    ],
+    "model_constraint": {
+      "model_name": "Kabalite Warrior",
+      "max_count": 1
     }
   },
   {
@@ -1592,7 +1540,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1611,7 +1559,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1630,7 +1578,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1649,7 +1597,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement_choice": [
@@ -1674,7 +1622,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1694,7 +1642,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1713,7 +1661,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1732,7 +1680,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1751,7 +1699,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1775,7 +1723,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1805,7 +1753,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1825,6 +1773,10 @@
       [
         "power-glaive",
         "shuriken-pistol"
+      ],
+      [
+        "avenger-shuriken-catapult",
+        "avenger-shuriken-catapult"
       ],
       [
         "shuriken-pistol",
@@ -1864,24 +1816,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replacement": [
-      "avenger-shuriken-catapult"
-    ],
-    "model_constraint": {
-      "model_name": "Dire Avenger Exarch",
-      "any_number": true
-    }
-  },
-  {
-    "id": "dire-avengers-wgo-mfm-3",
-    "unit_id": "dire-avengers",
-    "faction_id": "aeldari",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -1898,7 +1833,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1923,7 +1858,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1944,7 +1879,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [
@@ -1961,7 +1896,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -1980,7 +1915,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2010,7 +1945,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2045,7 +1980,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2069,7 +2004,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2093,7 +2028,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2112,7 +2047,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2133,7 +2068,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2152,7 +2087,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2171,7 +2106,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2190,7 +2125,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2209,7 +2144,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2229,7 +2164,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2249,7 +2184,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2274,7 +2209,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2299,7 +2234,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2324,7 +2259,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2343,7 +2278,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2367,7 +2302,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replaces": [
@@ -2386,7 +2321,7 @@
     "faction_id": "aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_free": true,
     "replacement": [

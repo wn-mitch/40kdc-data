@@ -98,6 +98,7 @@ The `query` enum covers the read paths on `Dataset`:
 | `weapons_of`             | `{"unitId":"<id>"}`                  | ordered list of weapon ids |
 | `wargear_options_of`     | `{"unitId":"<id>"}`                  | ordered list of wargear-option ids |
 | `base_loadout`           | `{"unitId":"<id>","modelCount":"<n>"}` | sorted list of `"id:count"` strings |
+| `weapon_bounds`          | `{"unitId":"<id>","modelCount":"<n>"}` | sorted list of `"id:min-max"` strings |
 | `maximal_loadout`        | `{"unitId":"<id>","modelCount":"<n>"}` | sorted list of `"id:count"` strings |
 | `loadout_candidates`     | `{"unitId":"<id>","factionId"?:"<id>","modelCount":"<n>","limit"?:"<n>"}` | ordered list of encoded candidates |
 | `phases_of`              | `{"abilityId":"<id>"}`               | ordered list of phase enum values |
@@ -105,6 +106,14 @@ The `query` enum covers the read paths on `Dataset`:
 | `abilities_of_faction`   | `{"factionId":"<id>"}`               | ordered list of ability ids |
 | `weapons_of_faction`     | `{"factionId":"<id>"}`               | ordered list of weapon ids |
 | `eligible_abilities`     | `{"input":…,"phase":"<phase>"}`      | ordered list of `{kind, abilityId}` |
+| `units_of_faction`       | `{"factionId":"<id>"}`               | list of unit ids (`units.by_faction`) |
+| `detachments_of_faction` | `{"factionId":"<id>"}`               | list of detachment ids (`detachments.by_faction`) |
+| `get_unit`               | `{"unitId":"<id>"}`                  | unit id (`units.get_any`) or null |
+| `get_detachment`         | `{"detachmentId":"<id>"}`            | detachment id (`detachments.get_any`) or null |
+| `find_enhancement`       | `{"query":"<string>"}`               | enhancement id or null |
+| `find_detachment`        | `{"query":"<string>"}`               | detachment id or null |
+
+Every query's `input` may also carry `"gameMode"`: one of `matched-play`, `combat-patrol`, `boarding-actions`, `crusade`, `all`. The query then runs against the dataset's view of that mode; without it, against the `matched-play` view. An unknown mode answers `INVALID_INPUT`. See the game-mode view contract in `CONFORMANCE.md`.
 
 Ordering semantics for each query are documented per-area in `CONFORMANCE.md`. The runner protocol itself is opaque to whether the order is load-bearing — it simply emits whatever the implementation's public API returns.
 
@@ -124,7 +133,7 @@ Tier-aware whole-unit loadout legality (the `roster_legality` corpus). `unitId` 
 {"op":"check_roster_legality","args":{"factionId":"world-eaters","battleSize":"strike-force","forceDisposition":"purge-the-foe","detachments":[{"id":"berzerker-warband"}],"units":[{"unitId":"daemon-prince-of-khorne","modelCount":1,"isWarlord":true,"enhancementId":null,"leaderBodyguardId":null,"counts":{}}]}}
 ```
 
-Whole-army legality over a compact roster spec (the `roster_validation` corpus). Points and detachment-point costs are looked up from the dataset (not caller-supplied). Each unit carries `unitId`, `modelCount`, `isWarlord`, `enhancementId` (or null), `leaderBodyguardId` (or null), and `counts` (weapon/wargear id → count, fed to the per-unit loadout check). The response `value` is **sorted `"<scope>|<severity>|<code>:<id>"` strings**: `scope` is `army` for army-wide violations or `u<index>` (0-based into `units`) for unit-scoped ones; `severity` is `error` or `warn`. A roster is **legal iff it has no `error` entries** (a warn-only result is legal). Codes — per-unit loadout (as above, all `error`); army-construction `error`: `enhancement-wrong-detachment`, `enhancement-on-non-character`, `enhancement-keyword-mismatch`, `enhancement-excluded-keyword`, `enhancement-over-max-targets`, `leader-attachment-illegal`, `leader-must-attach`, `points-over-limit`, `detachment-points-over`, `detachment-tag-conflict`, `detachment-restriction-required`, `detachment-restriction-excluded`, `no-warlord`, `multiple-warlords`, `unit-minimum-unmet`; and `warn` (advisory — provisional 11e Force-Disposition data): `disposition-not-picked`, `disposition-invalid`.
+Whole-army legality over a compact roster spec (the `roster_validation` corpus). Points and detachment-point costs are looked up from the dataset (not caller-supplied). Each unit carries `unitId`, `modelCount`, `isWarlord`, `enhancementId` (or null), `leaderBodyguardId` (or null), and `counts` (weapon/wargear id → count, fed to the per-unit loadout check). The response `value` is **sorted `"<scope>|<severity>|<code>:<id>"` strings**: `scope` is `army` for army-wide violations or `u<index>` (0-based into `units`) for unit-scoped ones; `severity` is `error` or `warn`. A roster is **legal iff it has no `error` entries** (a warn-only result is legal). Codes — per-unit loadout (as above, all `error`); army-construction `error`: `enhancement-wrong-detachment`, `enhancement-on-non-character`, `enhancement-on-epic-hero` (an EPIC HERO given any Enhancement, Upgrades included), `enhancement-on-excluded-model` (every model row of the unit's composition is `excluded_from_enhancements`), `enhancement-keyword-mismatch`, `enhancement-excluded-keyword`, `enhancement-over-max-targets`, `leader-attachment-illegal`, `leader-must-attach`, `points-over-limit`, `detachment-points-over`, `detachment-tag-conflict`, `detachment-restriction-required`, `detachment-restriction-excluded`, `no-warlord`, `multiple-warlords`, `warlord-not-mandated` (a selected detachment's `mandatory_warlord_datasheet_ids` names none of the chosen Warlords; skipped when there is no Warlord), `detachment-excluded-datasheet` (unit-scoped: the unit is in a selected detachment's `excluded_datasheet_ids`), `unit-limit-exceeded` (id = the unit id: more units share a datasheet than the battle size's unit limit — incursion 2, strike-force 3, doubled for BATTLELINE (including conditional Battleline) and DEDICATED TRANSPORT units, 1 for every EPIC HERO), `enhancement-limit-exceeded` (id `roster`: more distinct Enhancements than the battle size allows — incursion 2, strike-force 4), `keyword-limit-exceeded` (id = the cap's keywords sorted and joined with `+`: a faction `keyword_limits` entry's count exceeds its `max` — in `units` mode (default) the number of units carrying all its keywords, in `alternatives` mode the number of its keywords carried by any unit; units with an exempt faction keyword never count — or a selected detachment's `keyword_limit_overrides` max for the same keyword set, the largest when several apply), `ally-pool-not-offered` / `ally-cannot-be-warlord` / `ally-cannot-take-enhancements` (unit-scoped) and `ally-points-over-limit` (id = the rule id) for the army faction's own units listed by an `exclusive` allied rule drawn from it (the rule's army and detachment gates, points cap, and Warlord/Enhancement locks; a selected detachment's mandatory or granted Warlord datasheets lift the Warlord lock), `unit-minimum-unmet`; points use a unit's `detachment_pricing` tiers when one names a selected detachment; and `warn` (advisory — provisional 11e Force-Disposition data): `disposition-not-picked`, `disposition-invalid`.
 
 ### `candidate_affordability`
 
@@ -152,7 +161,7 @@ Response value is a list of error objects: `[{"path":"/profiles/0/Sv","code":"RA
 - `ADDITIONAL_PROPERTY` — object has a property not allowed by `additionalProperties: false`.
 - `UNIQUE_VIOLATION` — array with `uniqueItems: true` has a duplicate.
 
-Adding a new code is a semantic change to the spec and bumps `SPEC_VERSION`. `target` is one of `unit`, `weapon`, `faction`, `ability`, `wargear`, `wargear-option`; more schemas can be added as needed.
+Adding a new code is a semantic change to the spec and bumps `SPEC_VERSION`. `target` is one of `unit`, `weapon`, `faction`, `ability`, `wargear`, `wargear-option`, `stratagem`; more schemas can be added as needed.
 
 ### `crunch`
 
@@ -191,6 +200,31 @@ below which lifts and residuals collapse to zero. Response value is the array of
 kind-tagged discriminated union (`"manual"` / `"ability"` / `"weapon-keyword"`
 with camelCase fields).
 
+### `allocate`
+
+```json
+{"op":"allocate","args":{
+  "attacker":{"weaponId":"bolt-rifle","profileIndex":0},
+  "modelsFiring":5,
+  "target":{"unitId":"intercessor-squad","profileIndex":0},
+  "context":{"phase":"shooting","attackerStationary":false,"withinHalfRange":false},
+  "buffs":[]
+}}
+```
+
+Same input envelope as `crunch`, plus an optional
+`"zeroing":{"uses":1,"per":"unit"}` (`per` is `"unit"` or `"model"`) for a
+defence that changes an attack's Damage to 0; a non-object `zeroing` answers
+`INVALID_INPUT`. Without it, the `damage-zeroing` buffs in `buffs` supply the
+defence. Response value is
+`{damageDealt, modelsDestroyed, modelsDestroyedDistribution}`: the expected
+wounds removed, the expected models destroyed, and the probability of each
+number of models destroyed from `0` to the target's model count. A quantity
+the allocation needs as a whole number (Attacks, Damage, Wounds, model counts,
+zeroing uses) that resolves to a fraction, an unknown `per`, or an event table
+past the exact bound answers `CRUNCH_ERROR`. Floats compare with
+`±5e-4` per value; the distribution's length is exact.
+
 ### `translate_scoring`
 
 ```json
@@ -217,7 +251,9 @@ Humanizes an Ability-DSL `effect` tree (plus an optional `scope` and optional
 `applies_to`) into the generated plain-English approximation — the dataset's
 "ability.print()". The `effect` is embedded in the request verbatim (no dataset
 lookup, so parity is independent of duplicate-ability-id resolution); `scope`
-and `applies_to` may each be omitted or `null`. Response value is
+and `applies_to` may each be omitted or `null`. An optional `optional: true`
+(the ability record's `optional`) marks the ability as the player's choice: its
+text gains a leading `You can: `. Response value is
 `{"text": "<multi-line ASCII string>"}` — container nodes render block-style
 with two-space indentation and an ASCII `-> ` arrow, the scope renders as a
 `Scope: …. Duration: ….` line, and a present `applies_to` filter renders as a

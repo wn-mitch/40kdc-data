@@ -9,17 +9,19 @@
 //! self-referential. The join graph is identical.
 
 use std::collections::{BTreeMap, HashMap, HashSet};
-use std::sync::OnceLock;
+use std::sync::{Arc, OnceLock};
 
 use crate::generated::{
     Ability, AbilityTrigger, AlliedRule, DeploymentPattern, Detachment, Enhancement, Faction,
     ForceDisposition, GameVersion, HullShape, InteractionFlag, KeywordList, LeaderAttachment,
-    Mission, MissionMatchup, Phase, PhaseMapping, ResourcePool, SecondaryCard, Stratagem,
-    TargetProfile, TerrainLayout, TerrainTemplate, Trigger, Unit, UnitComposition, UnitKeyword,
-    Wargear, WargearOption, Weapon, WeaponKeyword,
+    LeaderAttachmentConditionalGroupsItemRole, Mission, MissionMatchup, Phase, PhaseMapping,
+    ResourcePool, SecondaryCard, Stratagem, TargetProfile, TerrainLayout, TerrainTemplate, Trigger,
+    Unit, UnitAttachmentRole, UnitComposition, UnitKeyword, Wargear, WargearOption, Weapon,
+    WeaponKeyword,
 };
 
 use super::collection::Collection;
+use super::game_mode::{self as gm, GameModeView, ViewCache};
 
 /// The shape of the embedded data bundle: one array per entity collection.
 ///
@@ -120,7 +122,9 @@ pub struct ReactiveTrigger<'a> {
 /// The whole dataset, with linked accessors over every entity collection.
 ///
 /// Build it from the embedded bundle with [`Dataset::embedded`], or from custom
-/// data with [`Dataset::from_raw`].
+/// data with [`Dataset::from_raw`]. Both are the matched-play view; see
+/// [`for_game_mode`](Dataset::for_game_mode) and the
+/// [`game_mode`](super::game_mode) module for other game modes.
 ///
 /// # Examples
 ///
@@ -141,10 +145,14 @@ pub struct ReactiveTrigger<'a> {
 ///     .map(|a| a.ability_id.as_str())
 ///     .collect();
 ///
-/// assert_eq!(shooting_abilities, ["berzerker-frenzy"]);
+/// assert_eq!(shooting_abilities, ["berzerker-frenzy-world-eaters"]);
 /// assert_eq!(ds.faction_of(kharn).unwrap().id.as_str(), "world-eaters");
 /// ```
+#[derive(Clone)]
 pub struct Dataset {
+    /// The game mode this view's listings show.
+    pub(super) game_mode: GameModeView,
+
     // Richly-linked collections.
     pub units: Collection<Unit>,
     pub weapons: Collection<Weapon>,
@@ -173,21 +181,30 @@ pub struct Dataset {
 
     // Id-less collections, exposed as plain slices.
     pub leader_attachments: Vec<LeaderAttachment>,
+    /// Unit compositions this view's game mode lists. Look one up per unit
+    /// with [`unit_composition_of`](Dataset::unit_composition_of), which
+    /// resolves in every mode.
     pub unit_compositions: Vec<UnitComposition>,
     pub game_versions: Vec<GameVersion>,
     pub interaction_flags: Vec<InteractionFlag>,
     pub phase_mappings: Vec<PhaseMapping>,
 
+    /// Every unit composition, whatever its game modes (backs
+    /// `unit_composition_of`).
+    pub(super) every_unit_composition: Arc<Vec<UnitComposition>>,
+    /// Views of this dataset in other game modes, built on first use.
+    pub(super) views: ViewCache,
+
     /// `source_type:source_id` → unioned phases.
-    phase_index: HashMap<String, Vec<Phase>>,
-    /// ability id → indices of units that list it (into `units`).
-    units_by_ability: HashMap<String, Vec<usize>>,
-    /// weapon id → indices of units that list it (into `units`).
-    units_by_weapon: HashMap<String, Vec<usize>>,
-    /// lowercased keyword → indices of units carrying it (into `units`).
-    units_by_keyword: HashMap<String, Vec<usize>>,
-    /// unit id → indices of wargear options for it (into `wargear_options`).
-    wargear_options_by_unit: HashMap<String, Vec<usize>>,
+    pub(super) phase_index: Arc<HashMap<String, Vec<Phase>>>,
+    /// ability id → indices of units that list it (into `units.every()`).
+    pub(super) units_by_ability: Arc<HashMap<String, Vec<usize>>>,
+    /// weapon id → indices of units that list it (into `units.every()`).
+    pub(super) units_by_weapon: Arc<HashMap<String, Vec<usize>>>,
+    /// lowercased keyword → indices of units carrying it (into `units.every()`).
+    pub(super) units_by_keyword: Arc<HashMap<String, Vec<usize>>>,
+    /// unit id → indices of wargear options for it (into `wargear_options.every()`).
+    pub(super) wargear_options_by_unit: Arc<HashMap<String, Vec<usize>>>,
 }
 
 /// The embedded dataset bundle, inlined at build time and parsed once.
@@ -231,7 +248,8 @@ impl Dataset {
         })
         // Per-faction copies genuinely diverge (points, keywords, profiles), so
         // a faction-less get() of a shared id is a bug — mirror of the TS guard.
-        .with_unscoped_guard("unit");
+        .with_unscoped_guard("unit")
+        .with_game_modes(gm::unit_modes);
         let weapons = Collection::build(
             raw.weapons,
             |w| w.id.to_string(),
@@ -258,7 +276,8 @@ impl Dataset {
         // Per-faction copies diverge (stats), so a faction-less get() of a
         // shared id is a bug — catalog/import callsites that genuinely lack
         // faction context opt out via get_any.
-        .with_unscoped_guard("weapon");
+        .with_unscoped_guard("weapon")
+        .with_game_modes(gm::weapon_modes);
         let weapon_keywords = id_name_collection(
             raw.weapon_keywords,
             |k| k.id.to_string(),
@@ -269,10 +288,13 @@ impl Dataset {
             |k| k.id.to_string(),
             |k| Some(k.name.as_str()),
         );
-        let factions = Collection::build(
+        let factions = Collection::build_with_aliases(
             raw.factions,
             |f| f.id.to_string(),
             |f| Some(f.name.as_str()),
+            // Factions answer to alternate names ("Space Marines" for Adeptus
+            // Astartes) as exact matches, ahead of the substring fallback.
+            |f| f.aliases.iter().map(|a| a.as_str()).collect(),
             |_| None,
             |f| f.id.to_string(),
         )
@@ -282,29 +304,16 @@ impl Dataset {
                 .map(|refs| refs.as_slice())
                 .unwrap_or(&[])
         })
-        .with_id_aliases(crate::share::embedded_registry().aliases.clone());
-        // An ability_id is shared across factions (each faction's enrichment
-        // authors its own copy of e.g. "deadly-demise-d3", and the copies
-        // legitimately diverge); dedupe on (faction_id, id) so every faction's
-        // copy is retained and a unit resolves its own faction's ability — the
-        // same scheme as weapons (issue #59). `faction_id` is stamped at
-        // bundle time from the enrichment directory; only the shared `_core`
-        // pool stays faction-less, reachable through the first-wins fallback.
+        .with_id_aliases(registry_id_aliases().clone());
+        // Ability ids are unique across the dataset (`<name>-<faction>`; core rules bare), so a
+        // plain get() is exact and an old bare faction id resolves to nothing.
         let abilities = Collection::build(
             raw.abilities,
             |a| a.ability_id.to_string(),
             |a| Some(a.name.as_str()),
             |a| a.faction_id.as_ref().map(|e| e.as_str()),
-            |a| {
-                format!(
-                    "{}::{}",
-                    a.faction_id.as_ref().map(|e| e.as_str()).unwrap_or(""),
-                    a.ability_id.as_str()
-                )
-            },
-        )
-        // Per-faction copies diverge (DSL fidelity, unit_ids) — same guard as weapons.
-        .with_unscoped_guard("ability");
+            |a| a.ability_id.to_string(),
+        );
 
         let target_profiles = Collection::build(
             raw.target_profiles,
@@ -329,10 +338,11 @@ impl Dataset {
                 .map(|refs| refs.as_slice())
                 .unwrap_or(&[])
         })
-        .with_id_aliases(crate::share::embedded_registry().aliases.clone())
+        .with_id_aliases(registry_id_aliases().clone())
         // Shared detachments diverge per chapter (detachment_rule_id,
         // stratagem_ids, enhancement_ids, detachment_points) — same guard as units.
-        .with_unscoped_guard("detachment");
+        .with_unscoped_guard("detachment")
+        .with_game_modes(gm::detachment_modes);
         let allied_rules = id_name_collection(
             raw.allied_rules,
             |r| r.id.to_string(),
@@ -348,7 +358,8 @@ impl Dataset {
                 .as_ref()
                 .map(|refs| refs.as_slice())
                 .unwrap_or(&[])
-        });
+        })
+        .with_game_modes(gm::enhancement_modes);
         let stratagems = id_name_collection(
             raw.stratagems,
             |s| s.id.to_string(),
@@ -359,7 +370,8 @@ impl Dataset {
                 .as_ref()
                 .map(|refs| refs.as_slice())
                 .unwrap_or(&[])
-        });
+        })
+        .with_game_modes(gm::stratagem_modes);
         // Option ids are unique only within a faction — a chassis shared across
         // factions (e.g. `chaos-terminators`) reuses ids like
         // `chaos-terminators-wgo-mfm-4` for different swaps. Dedupe on the full
@@ -378,7 +390,8 @@ impl Dataset {
                     w.id.as_str()
                 )
             },
-        );
+        )
+        .with_game_modes(gm::wargear_option_modes);
         let wargear =
             id_name_collection(raw.wargear, |w| w.id.to_string(), |w| Some(w.name.as_str()))
                 .with_external_refs(|w| {
@@ -440,7 +453,7 @@ impl Dataset {
         // different swaps, so the key is `(faction_id, unit_id)` — never the union
         // across factions. Mirror of the TS `wargearOptionsByUnit`.
         let mut wargear_options_by_unit: HashMap<String, Vec<usize>> = HashMap::new();
-        for (idx, option) in wargear_options.all().iter().enumerate() {
+        for (idx, option) in wargear_options.every().iter().enumerate() {
             wargear_options_by_unit
                 .entry(format!(
                     "{}::{}",
@@ -451,19 +464,22 @@ impl Dataset {
                 .push(idx);
         }
 
+        let mode = GameModeView::MATCHED_PLAY;
+        let every_unit_composition = Arc::new(raw.unit_compositions);
         Dataset {
-            units,
-            weapons,
+            game_mode: mode,
+            units: units.with_game_mode(mode),
+            weapons: weapons.with_game_mode(mode),
             weapon_keywords,
             unit_keywords,
             factions,
             abilities,
             target_profiles,
-            detachments,
+            detachments: detachments.with_game_mode(mode),
             allied_rules,
-            enhancements,
-            stratagems,
-            wargear_options,
+            enhancements: enhancements.with_game_mode(mode),
+            stratagems: stratagems.with_game_mode(mode),
+            wargear_options: wargear_options.with_game_mode(mode),
             wargear,
             missions,
             mission_matchups,
@@ -475,15 +491,21 @@ impl Dataset {
             hull_shapes,
             resource_pools,
             leader_attachments: raw.leader_attachments,
-            unit_compositions: raw.unit_compositions,
+            unit_compositions: every_unit_composition
+                .iter()
+                .filter(|c| gm::in_game_mode(c.game_modes.as_ref(), mode))
+                .cloned()
+                .collect(),
             game_versions: raw.game_versions,
             interaction_flags: raw.interaction_flags,
             phase_mappings: raw.phase_mappings,
-            phase_index,
-            units_by_ability,
-            units_by_weapon,
-            units_by_keyword,
-            wargear_options_by_unit,
+            every_unit_composition,
+            views: ViewCache::default(),
+            phase_index: Arc::new(phase_index),
+            units_by_ability: Arc::new(units_by_ability),
+            units_by_weapon: Arc::new(units_by_weapon),
+            units_by_keyword: Arc::new(units_by_keyword),
+            wargear_options_by_unit: Arc::new(wargear_options_by_unit),
         }
     }
 
@@ -581,20 +603,13 @@ impl Dataset {
             .unwrap_or_default()
     }
 
-    /// Abilities referenced by `ability_ids`; unresolved ids are skipped.
-    ///
-    /// Resolves within the unit's own faction first — an ability_id shared
-    /// across factions has per-faction copies that diverge. The fallback
-    /// catches the faction-less `_core` pool (and any id absent from this
-    /// faction's enrichment). Mirror of TS `UnitView.abilities`.
+    /// Abilities referenced by `ability_ids`, in order; unresolved ids are skipped. Ability
+    /// ids are unique, so a chapter unit's supplement ability resolves like any other.
+    /// Mirror of TS `UnitView.abilities`.
     pub fn abilities_of(&self, unit: &Unit) -> Vec<&Ability> {
         unit.ability_ids
             .iter()
-            .filter_map(|id| {
-                self.abilities
-                    .get_in_faction(id.as_str(), unit.faction_id.as_str())
-                    .or_else(|| self.abilities.get_any(id.as_str()))
-            })
+            .filter_map(|r| self.abilities.get(r.id()))
             .collect()
     }
 
@@ -607,18 +622,23 @@ impl Dataset {
     }
 
     /// Phases a source acts in, unioned across its phase-mappings, keyed by the
-    /// `source_type` / `source_id` pair (e.g. `("ability", "berzerker-frenzy")`).
+    /// `source_type` / `source_id` pair (e.g. `("ability", "berzerker-frenzy-world-eaters")`).
     pub fn phases_for(&self, source_type: &str, source_id: &str) -> &[Phase] {
         self.phase_index
             .get(&format!("{source_type}:{source_id}"))
             .map_or(&[], Vec::as_slice)
     }
 
-    /// Units that list the given ability id in their `ability_ids`.
+    /// Units this view's game mode lists that list the given ability id in
+    /// their `ability_ids`.
     pub fn units_with_ability(&self, ability_id: &str) -> Vec<&Unit> {
         self.units_by_ability
             .get(ability_id)
-            .map(|idxs| idxs.iter().map(|&i| self.units.at(i)).collect())
+            .map(|idxs| {
+                idxs.iter()
+                    .filter_map(|&i| self.units.listed_at(i))
+                    .collect()
+            })
             .unwrap_or_default()
     }
 
@@ -629,10 +649,7 @@ impl Dataset {
     /// `Dataset.reactiveTriggers`.
     pub fn reactive_triggers(&self) -> Vec<ReactiveTrigger<'_>> {
         let mut out: Vec<ReactiveTrigger<'_>> = Vec::new();
-        // The abilities collection retains one copy per faction of a shared
-        // ability_id; this aggregation is faction-less (ReactiveTrigger carries
-        // no faction), so emit each ability id once — first registered copy
-        // wins, matching the collection's own by-id index and the TS mirror.
+        // Ability ids are unique; the guard keeps each id once should a duplicate slip in.
         let mut seen_ids: HashSet<&str> = HashSet::new();
         for ability in self.abilities.all() {
             if !seen_ids.insert(ability.ability_id.as_str()) {
@@ -679,15 +696,21 @@ impl Dataset {
         index
     }
 
-    /// Units that list the given weapon id in their `weapon_ids`.
+    /// Units this view's game mode lists that list the given weapon id in
+    /// their `weapon_ids`.
     pub fn units_with_weapon(&self, weapon_id: &str) -> Vec<&Unit> {
         self.units_by_weapon
             .get(weapon_id)
-            .map(|idxs| idxs.iter().map(|&i| self.units.at(i)).collect())
+            .map(|idxs| {
+                idxs.iter()
+                    .filter_map(|&i| self.units.listed_at(i))
+                    .collect()
+            })
             .unwrap_or_default()
     }
 
-    /// Units carrying the given keyword, matched case-insensitively against the
+    /// Units this view's game mode lists carrying the given keyword, matched
+    /// case-insensitively against the
     /// union of each unit's `keywords` and `faction_keywords`. Powers a list
     /// builder's keyword search bar across the whole dataset (so it also
     /// surfaces cross-faction ally pools). Mirror of TS `unitsWithKeyword`;
@@ -695,7 +718,11 @@ impl Dataset {
     pub fn units_with_keyword(&self, keyword: &str) -> Vec<&Unit> {
         self.units_by_keyword
             .get(&keyword.to_lowercase())
-            .map(|idxs| idxs.iter().map(|&i| self.units.at(i)).collect())
+            .map(|idxs| {
+                idxs.iter()
+                    .filter_map(|&i| self.units.listed_at(i))
+                    .collect()
+            })
             .unwrap_or_default()
     }
 
@@ -808,49 +835,72 @@ impl Dataset {
         out
     }
 
-    /// Leaders whose leader-attachment data lists `bodyguard_unit_id` among its
-    /// eligible body units, sorted by name. The attachment is stored on the
-    /// leader pointing down to its bodyguards, so answering "which leaders can
-    /// attach to this unit?" means scanning the attachment list. Returns an
-    /// empty vec for a unit nothing attaches to (including leader units).
+    /// Leaders whose attachment data can include `bodyguard_unit_id`, sorted by
+    /// name. A shared leader chassis carries one attachment record per faction,
+    /// so leaders are deduped by id. Conditional groups are included as possible
+    /// attachments because this browse API has no roster context.
     pub fn leaders_attachable_to(&self, bodyguard_unit_id: &str) -> Vec<&Unit> {
+        self.leaders_attachable_to_in_roster(bodyguard_unit_id, None)
+    }
+
+    /// Leaders eligible for `bodyguard_unit_id` in an optional roster context.
+    /// Without context conditional groups contribute every possible leader.
+    pub fn leaders_attachable_to_in_roster(
+        &self,
+        bodyguard_unit_id: &str,
+        roster_unit_ids: Option<&HashSet<String>>,
+    ) -> Vec<&Unit> {
         let bodyguard = self.units.get_any(bodyguard_unit_id);
+        let mut seen = std::collections::HashSet::new();
         let mut out: Vec<&Unit> = self
             .leader_attachments
             .iter()
             .filter(|la| {
-                la.eligible_bodyguard_ids
-                    .iter()
-                    .any(|id| id.as_str() == bodyguard_unit_id)
+                attachment_bodyguard_ids(la, roster_unit_ids).any(|id| id == bodyguard_unit_id)
                     // Keyword eligibility (e.g. an Inquisitor leading any
                     // Imperium Battleline Infantry unit): match the bodyguard's
                     // keyword set.
                     || bodyguard.is_some_and(|b| matches_bodyguard_keywords(la, b))
             })
             // Attachment data is faction-agnostic (no faction context here);
-            // accept first-wins for a shared leader chassis via get_any.
+            // accept first-wins for a shared leader chassis via get_any. A
+            // listing, so leaders outside this view's game mode drop out.
             .filter_map(|la| self.units.get_any(la.leader_id.as_str()))
+            .filter(|unit| self.units.lists(unit))
+            .filter(|unit| seen.insert(unit.id.as_str()))
             .collect();
         out.sort_by(|a, b| a.name.cmp(&b.name));
         out
     }
 
     /// The inverse of [`leaders_attachable_to`](Self::leaders_attachable_to):
-    /// the body units the given leader can attach to, sorted by name. Scans the
-    /// same data from the leader's side (`leader_id` matches; resolve each
-    /// `eligible_bodyguard_ids` entry), deduped by id. Empty for a non-leader
-    /// unit. The two together give the bidirectional attachment graph.
+    /// every body unit the given leader could attach to, sorted by name.
+    /// Conditional groups are included as possible attachments because this
+    /// browse API has no roster context.
     pub fn bodyguards_attachable_from(&self, leader_unit_id: &str) -> Vec<&Unit> {
-        let mut seen = std::collections::HashSet::new();
-        let mut out: Vec<&Unit> = Vec::new();
+        self.bodyguards_attachable_from_in_roster(leader_unit_id, None)
+    }
+
+    /// The body units the given leader can attach to in an optional roster
+    /// context. Without a context this returns the union of every possible
+    /// attachment; with one, conditional groups must satisfy their roster
+    /// requirements.
+    pub fn bodyguards_attachable_from_in_roster(
+        &self,
+        leader_unit_id: &str,
+        roster_unit_ids: Option<&HashSet<String>>,
+    ) -> Vec<&Unit> {
+        let mut seen = HashSet::new();
+        let mut out = Vec::new();
         for la in &self.leader_attachments {
             if la.leader_id.as_str() != leader_unit_id {
                 continue;
             }
-            for bodyguard_id in &la.eligible_bodyguard_ids {
-                // Faction-agnostic attachment data — get_any, as above.
-                if let Some(unit) = self.units.get_any(bodyguard_id.as_str()) {
-                    if seen.insert(unit.id.as_str()) {
+            for bodyguard_id in attachment_bodyguard_ids(la, roster_unit_ids) {
+                // Faction-agnostic attachment data — get_any, as above; a
+                // listing, so bodyguards outside this view's mode drop out.
+                if let Some(unit) = self.units.get_any(bodyguard_id) {
+                    if self.units.lists(unit) && seen.insert(unit.id.as_str()) {
                         out.push(unit);
                     }
                 }
@@ -868,6 +918,49 @@ impl Dataset {
         }
         out.sort_by(|a, b| a.name.cmp(&b.name));
         out
+    }
+
+    /// Explicit bodyguard IDs in authored order, filtered by roster conditions.
+    /// Importers use this order when choosing a provisional support attachment.
+    pub fn bodyguard_ids_attachable_from_in_roster<'a>(
+        &'a self,
+        leader_unit_id: &'a str,
+        roster_unit_ids: &'a HashSet<String>,
+    ) -> impl Iterator<Item = &'a str> {
+        self.leader_attachments
+            .iter()
+            .filter(move |la| la.leader_id.as_str() == leader_unit_id)
+            .flat_map(move |la| attachment_bodyguard_ids(la, Some(roster_unit_ids)))
+    }
+
+    /// Resolve a leader's attachment role in a roster. Applicable conditional
+    /// groups override the flat role; leader wins if multiple groups apply.
+    pub fn effective_attachment_role(
+        &self,
+        leader_unit_id: &str,
+        default_role: Option<UnitAttachmentRole>,
+        roster_unit_ids: &HashSet<String>,
+    ) -> Option<UnitAttachmentRole> {
+        let mut support_applies = false;
+        for group in self
+            .leader_attachments
+            .iter()
+            .filter(|la| la.leader_id.as_str() == leader_unit_id)
+            .flat_map(|la| la.conditional_groups.iter())
+            .filter(|group| conditional_group_applies(group, roster_unit_ids))
+        {
+            match group.role {
+                LeaderAttachmentConditionalGroupsItemRole::Leader => {
+                    return Some(UnitAttachmentRole::Leader);
+                }
+                LeaderAttachmentConditionalGroupsItemRole::Support => support_applies = true,
+            }
+        }
+        if support_applies {
+            Some(UnitAttachmentRole::Support)
+        } else {
+            default_role
+        }
     }
 
     /// Faction-scoped abilities (abilities whose `faction_id` is this faction).
@@ -890,6 +983,32 @@ impl Dataset {
     }
 }
 
+/// The share registry's renamed-id map (old id → current id), which id
+/// lookups consult on a miss. Read from the share module's parsed registry
+/// when the `share` feature is on; otherwise the same committed registry file
+/// is parsed here for its `aliases` alone, so id lookups behave the same
+/// without the share codec.
+fn registry_id_aliases() -> &'static HashMap<String, String> {
+    #[cfg(feature = "share")]
+    {
+        &crate::share::embedded_registry().aliases
+    }
+    #[cfg(not(feature = "share"))]
+    {
+        #[derive(serde::Deserialize)]
+        struct Aliases {
+            #[serde(default)]
+            aliases: HashMap<String, String>,
+        }
+        static ALIASES: OnceLock<HashMap<String, String>> = OnceLock::new();
+        ALIASES.get_or_init(|| {
+            serde_json::from_str::<Aliases>(include_str!("../share/registry.generated.json"))
+                .expect("embedded share registry parses")
+                .aliases
+        })
+    }
+}
+
 /// Build a passthrough collection keyed on id (no faction scoping). The id also
 /// serves as the dedupe key.
 fn id_name_collection<T>(
@@ -900,7 +1019,7 @@ fn id_name_collection<T>(
     // Resolve a persisted reference to a renamed id (harmless for record types
     // absent from the registry — their ids are never alias keys).
     Collection::build(items, &id_of, name_of, |_| None, |i| id_of(i))
-        .with_id_aliases(crate::share::embedded_registry().aliases.clone())
+        .with_id_aliases(registry_id_aliases().clone())
 }
 
 /// Union the phases of every phase-mapping, keyed `source_type:source_id`.
@@ -920,7 +1039,7 @@ fn build_phase_index(phase_mappings: &[PhaseMapping]) -> HashMap<String, Vec<Pha
 
 /// The lowercased union of a unit's `keywords` and `faction_keywords`, for
 /// membership tests in `ally_units_for`.
-fn unit_keyword_set(unit: &Unit) -> std::collections::HashSet<String> {
+pub(super) fn unit_keyword_set(unit: &Unit) -> std::collections::HashSet<String> {
     unit.keywords
         .iter()
         .flat_map(|k| k.0.iter())
@@ -958,10 +1077,10 @@ fn build_reverse_indexes(
     let mut by_ability: HashMap<String, Vec<usize>> = HashMap::new();
     let mut by_weapon: HashMap<String, Vec<usize>> = HashMap::new();
     let mut by_keyword: HashMap<String, Vec<usize>> = HashMap::new();
-    for (idx, unit) in units.all().iter().enumerate() {
-        for ability_id in &unit.ability_ids {
+    for (idx, unit) in units.every().iter().enumerate() {
+        for ability_ref in &unit.ability_ids {
             by_ability
-                .entry(ability_id.to_string())
+                .entry(ability_ref.id().to_string())
                 .or_default()
                 .push(idx);
         }
@@ -982,4 +1101,38 @@ fn build_reverse_indexes(
         }
     }
     (by_ability, by_weapon, by_keyword)
+}
+/// The explicit ids a leader can use in a roster context. An absent context is
+/// intentionally permissive for browsing: it returns the union of all groups.
+fn attachment_bodyguard_ids<'a>(
+    attachment: &'a LeaderAttachment,
+    roster_unit_ids: Option<&'a HashSet<String>>,
+) -> impl Iterator<Item = &'a str> {
+    attachment
+        .eligible_bodyguard_ids
+        .iter()
+        .map(|id| id.as_str())
+        .chain(
+            attachment
+                .conditional_groups
+                .iter()
+                .filter(move |group| {
+                    roster_unit_ids.map_or(true, |ids| conditional_group_applies(group, ids))
+                })
+                .flat_map(|group| group.eligible_bodyguard_ids.iter().map(|id| id.as_str())),
+        )
+}
+
+fn conditional_group_applies(
+    group: &crate::generated::LeaderAttachmentConditionalGroupsItem,
+    roster_unit_ids: &HashSet<String>,
+) -> bool {
+    group
+        .required_roster_unit_ids
+        .iter()
+        .all(|id| roster_unit_ids.contains(id.as_str()))
+        && group
+            .excluded_roster_unit_ids
+            .iter()
+            .all(|id| !roster_unit_ids.contains(id.as_str()))
 }

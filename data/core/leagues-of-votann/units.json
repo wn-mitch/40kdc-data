@@ -43,13 +43,13 @@
       "close-combat-weapon"
     ],
     "ability_ids": [
-      "computational-mastermind",
+      "computational-mastermind-leagues-of-votann",
       "leader",
-      "predictive-guidance"
+      "predictive-guidance-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -138,13 +138,19 @@
       "volkanite-disintegrator"
     ],
     "ability_ids": [
-      "decisive-destruction",
-      "teleport-crest",
-      "weavefield-crest"
+      "decisive-destruction-leagues-of-votann",
+      {
+        "id": "teleport-crest-einhyr-hearthguard-leagues-of-votann",
+        "wargear": "teleport-crest"
+      },
+      {
+        "id": "weavefield-crest-leagues-of-votann",
+        "wargear": "weavefield-crest"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -224,13 +230,13 @@
       "close-combat-weapon"
     ],
     "ability_ids": [
-      "fortify-psychic",
-      "grimnyr-s-regard",
+      "fortify-leagues-of-votann",
+      "grimnyrs-regard-leagues-of-votann",
       "leader"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -273,27 +279,27 @@
     "points": [
       {
         "models": 3,
-        "cost": 80,
+        "cost": 85,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 4,
         "models_max": 6,
-        "cost": 160,
+        "cost": 170,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 3,
-        "cost": 90,
+        "cost": 95,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
         "models": 4,
         "models_max": 6,
-        "cost": 170,
+        "cost": 180,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -303,7 +309,8 @@
       "Grenades",
       "Fly",
       "Hernkyn",
-      "Pioneers"
+      "Pioneers",
+      "Hernkyn Pioneers"
     ],
     "faction_keywords": [
       "Leagues of Votann"
@@ -326,15 +333,27 @@
       "plasma-knife"
     ],
     "ability_ids": [
-      "multiwave-comms-array",
-      "outflanking-mag-riders",
-      "panspectral-scanner",
-      "rollbar-searchlight",
-      "scouts-9"
+      {
+        "id": "multiwave-comms-array-leagues-of-votann",
+        "wargear": "multiwave-comms-array"
+      },
+      "outflanking-mag-riders-leagues-of-votann",
+      {
+        "id": "panspectral-scanner-leagues-of-votann",
+        "wargear": "panspectral-scanner"
+      },
+      {
+        "id": "rollbar-searchlight-leagues-of-votann",
+        "wargear": "rollbar-searchlight"
+      },
+      {
+        "id": "scouts",
+        "value": 9
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -410,7 +429,8 @@
       "Infantry",
       "Artillery",
       "Cthonian",
-      "Earthshakers"
+      "Earthshakers",
+      "Cthonian Earthshakers"
     ],
     "faction_keywords": [
       "Leagues of Votann"
@@ -430,12 +450,12 @@
       "tremor-shells"
     ],
     "ability_ids": [
-      "destabilising-quakes",
-      "geomantic-hunters"
+      "destabilising-quakes-leagues-of-votann",
+      "geomantic-hunters-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -492,7 +512,8 @@
       "Dedicated Transport",
       "Hernkyn",
       "Kapricus",
-      "Carrier"
+      "Carrier",
+      "Kapricus Carrier"
     ],
     "faction_keywords": [
       "Leagues of Votann"
@@ -512,18 +533,30 @@
       "twin-magna-coil-autocannon"
     ],
     "ability_ids": [
-      "deadly-demise-1",
-      "firing-deck-5",
-      "scanner-uplinks",
-      "smoke-launcher",
-      "scouts-9"
+      {
+        "id": "deadly-demise",
+        "value": 1
+      },
+      {
+        "id": "firing-deck",
+        "value": 5
+      },
+      "scanner-uplinks-leagues-of-votann",
+      {
+        "id": "smoke-launcher-leagues-of-votann",
+        "wargear": "smoke-launcher"
+      },
+      {
+        "id": "scouts",
+        "value": 9
+      }
     ],
     "transport_capacity": {
       "capacity": 5
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -609,12 +642,15 @@
       "plasma-sword"
     ],
     "ability_ids": [
-      "preymark-crest",
-      "purge-response"
+      {
+        "id": "preymark-crest-leagues-of-votann",
+        "wargear": "preymark-crest"
+      },
+      "purge-response-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -658,7 +694,7 @@
       },
       {
         "models": 1,
-        "cost": 265,
+        "cost": 270,
         "unit_count_min": 2,
         "unit_count_max": null
       }
@@ -666,7 +702,8 @@
     "keywords": [
       "Vehicle",
       "Transport",
-      "Hekaton Land Fortress"
+      "Hekaton Land Fortress",
+      "Frame"
     ],
     "faction_keywords": [
       "Leagues of Votann"
@@ -690,15 +727,26 @@
       "twin-ion-beamer"
     ],
     "ability_ids": [
-      "deadly-demise-d6",
-      "multicog-targeting"
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "multicog-targeting-leagues-of-votann",
+      {
+        "id": "damaged",
+        "value": 5
+      },
+      {
+        "id": "panspectral-scanner-leagues-of-votann",
+        "wargear": "panspectral-scanner"
+      }
     ],
     "transport_capacity": {
       "capacity": 14
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -762,14 +810,14 @@
       "bane"
     ],
     "ability_ids": [
-      "grudge-fuelled-fortitude",
+      "grudge-fuelled-fortitude-leagues-of-votann",
       "lone-operative",
       "stealth",
-      "unhinged-vengeance"
+      "unhinged-vengeance-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -835,7 +883,8 @@
       "Character",
       "Infantry",
       "Brôkhyr",
-      "Iron-master"
+      "Iron-master",
+      "Brôkhyr Iron-master"
     ],
     "faction_keywords": [
       "Leagues of Votann"
@@ -858,14 +907,14 @@
       "plasma-torch"
     ],
     "ability_ids": [
-      "brokhyr-guild-support",
-      "forgewrought-expertise",
+      "brokhyr-guild-support-leagues-of-votann",
+      "forgewrought-expertise-leagues-of-votann",
       "leader",
-      "multispectral-visor"
+      "multispectral-visor-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -935,14 +984,17 @@
       "warforge-gauntlets"
     ],
     "ability_ids": [
-      "break-the-foe",
-      "feel-no-pain-4",
+      "break-the-foe-leagues-of-votann",
+      {
+        "id": "feel-no-pain",
+        "value": 4
+      },
       "leader",
-      "relentless-avalanche"
+      "relentless-avalanche-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1028,11 +1080,15 @@
       "plasma-sword"
     ],
     "ability_ids": [
-      "merciless-eradication"
+      "merciless-eradication-leagues-of-votann",
+      {
+        "id": "preymark-crest-leagues-of-votann",
+        "wargear": "preymark-crest"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1071,7 +1127,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 90
+        "cost": 100
       }
     ],
     "keywords": [
@@ -1097,14 +1153,17 @@
       "volkanite-disintegrator-uthar-the-destined"
     ],
     "ability_ids": [
-      "ancestral-fortune",
-      "grim-efficiency",
+      "ancestral-fortune-leagues-of-votann",
+      "grim-efficiency-leagues-of-votann",
       "leader",
-      "rampart-crest"
+      {
+        "id": "rampart-crest-uthar-the-destined-leagues-of-votann",
+        "wargear": "rampart-crest"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1150,7 +1209,8 @@
       "Infantry",
       "Grenades",
       "Hernkyn",
-      "Yaegirs"
+      "Yaegirs",
+      "Hernkyn Yaegirs"
     ],
     "faction_keywords": [
       "Leagues of Votann"
@@ -1173,11 +1233,11 @@
     ],
     "ability_ids": [
       "infiltrators",
-      "pragmatic-hunters"
+      "pragmatic-hunters-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1242,13 +1302,21 @@
       "mass-hammer"
     ],
     "ability_ids": [
-      "exemplar-of-the-einhyr",
+      "exemplar-of-the-einhyr-leagues-of-votann",
       "leader",
-      "mass-driver-accelerators"
+      "mass-driver-accelerators-leagues-of-votann",
+      {
+        "id": "teleport-crest-leagues-of-votann",
+        "wargear": "teleport-crest"
+      },
+      {
+        "id": "weavefield-crest-einhyr-champion-leagues-of-votann",
+        "wargear": "weavefield-crest"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1316,7 +1384,8 @@
       "Infantry",
       "Exoframe",
       "Brôkhyr",
-      "Thunderkyn"
+      "Thunderkyn",
+      "Brôkhyr Thunderkyn"
     ],
     "faction_keywords": [
       "Leagues of Votann"
@@ -1336,11 +1405,11 @@
       "sp-conversion-beamer"
     ],
     "ability_ids": [
-      "breaching-fire"
+      "breaching-fire-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1407,13 +1476,16 @@
       "transmatter-inverter"
     ],
     "ability_ids": [
-      "resource-transmutation",
-      "science-guild-support",
-      "deadly-demise-1"
+      "resource-transmutation-leagues-of-votann",
+      "science-guild-support-leagues-of-votann",
+      {
+        "id": "deadly-demise",
+        "value": 1
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1451,25 +1523,25 @@
     "points": [
       {
         "models": 1,
-        "cost": 70,
+        "cost": 75,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 2,
-        "cost": 140,
+        "cost": 150,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 80,
+        "cost": 95,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
         "models": 2,
-        "cost": 150,
+        "cost": 170,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -1479,7 +1551,8 @@
       "Fly",
       "Hernkyn",
       "Kapricus",
-      "Defenders"
+      "Defenders",
+      "Kapricus Defenders"
     ],
     "faction_keywords": [
       "Leagues of Votann"
@@ -1500,13 +1573,23 @@
       "twin-magna-coil-autocannon"
     ],
     "ability_ids": [
-      "opportunistic-manoeuvre",
-      "deadly-demise-1",
-      "scouts-9"
+      "opportunistic-manoeuvre-leagues-of-votann",
+      {
+        "id": "deadly-demise",
+        "value": 1
+      },
+      {
+        "id": "scouts",
+        "value": 9
+      },
+      {
+        "id": "smoke-launcher-leagues-of-votann",
+        "wargear": "smoke-launcher"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1544,18 +1627,19 @@
     "points": [
       {
         "models": 5,
-        "cost": 95
+        "cost": 90
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 190
+        "cost": 180
       }
     ],
     "keywords": [
       "Infantry",
       "Cthonian",
-      "Beserks"
+      "Beserks",
+      "Cthonian Beserks"
     ],
     "faction_keywords": [
       "Leagues of Votann"
@@ -1575,13 +1659,16 @@
       "twin-concussion-gauntlet"
     ],
     "ability_ids": [
-      "cyberstimms",
-      "subterranean-explosives",
-      "feel-no-pain-4"
+      "cyberstimms-leagues-of-votann",
+      "subterranean-explosives-leagues-of-votann",
+      {
+        "id": "feel-no-pain",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1589,15 +1676,6 @@
       {
         "keyword": "Battleline",
         "required_detachment_id": "delve-assault-shift"
-      }
-    ],
-    "wargear_budgets": [
-      {
-        "items": [
-          "mole-grenade-launcher"
-        ],
-        "count": 1,
-        "per_models": 5
       }
     ],
     "external_refs": [
@@ -1650,7 +1728,8 @@
       "Vehicle",
       "Transport",
       "Dedicated Transport",
-      "Sagitaur"
+      "Sagitaur",
+      "Frame"
     ],
     "faction_keywords": [
       "Leagues of Votann"
@@ -1672,15 +1751,18 @@
       "twin-bolt-cannon"
     ],
     "ability_ids": [
-      "blistering-advance",
-      "deadly-demise-1"
+      "blistering-advance-leagues-of-votann",
+      {
+        "id": "deadly-demise",
+        "value": 1
+      }
     ],
     "transport_capacity": {
       "capacity": 6
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1745,13 +1827,21 @@
       "volkanite-disintegrator-kahl"
     ],
     "ability_ids": [
-      "kindred-hero",
+      "kindred-hero-leagues-of-votann",
       "leader",
-      "seized-opportunity"
+      "seized-opportunity-leagues-of-votann",
+      {
+        "id": "rampart-crest-leagues-of-votann",
+        "wargear": "rampart-crest"
+      },
+      {
+        "id": "teleport-crest-kahl-leagues-of-votann",
+        "wargear": "teleport-crest"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1826,13 +1916,20 @@
       "theyns-pistol"
     ],
     "ability_ids": [
-      "feel-no-pain-6",
-      "luck-has-need-keeps-toil-earns",
-      "panspectral-scanning"
+      {
+        "id": "feel-no-pain",
+        "value": 6
+      },
+      "luck-has-need-keeps-toil-earns-leagues-of-votann",
+      "panspectral-scanning-leagues-of-votann",
+      {
+        "id": "weavefield-crest-leagues-of-votann",
+        "wargear": "weavefield-crest"
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1898,7 +1995,8 @@
       "Bane-Slayer's Bulwark",
       "Brokhyr",
       "Exoframe",
-      "Infantry"
+      "Infantry",
+      "Bane Slayer's Bulwark Brokhyr Thunderkyn"
     ],
     "faction_keywords": [
       "Leagues of Votann"
@@ -1912,11 +2010,11 @@
       "sp-conversion-beamer"
     ],
     "ability_ids": [
-      "breaching-fire-bane-slayers-bulwark"
+      "breaching-fire-bane-slayers-bulwark-brokhyr-thunderkyn-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"
@@ -1960,7 +2058,8 @@
       "Bane-Slayer's Bulwark",
       "Einhyr",
       "Exoarmour",
-      "Infantry"
+      "Infantry",
+      "Bane-Slayer's Bulwark Einhyr Hearthguard"
     ],
     "faction_keywords": [
       "Leagues of Votann"
@@ -1970,18 +2069,18 @@
       "max": 5
     },
     "weapon_ids": [
-      "exoarmour-grenade-launcher",
+      "exoarmour-grenade-launcher-bane-slayers-bulwark-einhyr-hearthguard",
       "graviton-hammer",
       "plasma-blade-gauntlet",
       "volkanite-disintegrator"
     ],
     "ability_ids": [
-      "decisive-destruction-bane-slayers-bulwark",
-      "weavefield-crest-bane-slayers-bulwark-einhyr-hearthguard"
+      "decisive-destruction-bane-slayers-bulwark-einhyr-hearthguard-leagues-of-votann",
+      "weavefield-crest-bane-slayers-bulwark-einhyr-hearthguard-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"
@@ -2025,7 +2124,8 @@
       "Bane-Slayer's Bulwark",
       "Explosives",
       "Hearthkyn",
-      "Infantry"
+      "Infantry",
+      "Bane-Slayer's Bulwark Hearthkyn Warriors"
     ],
     "faction_keywords": [
       "Leagues of Votann"
@@ -2036,21 +2136,21 @@
     },
     "weapon_ids": [
       "armoured-fists",
-      "autoch-pattern-bolt-pistol",
+      "autoch-pattern-bolt-pistol-bane-slayers-bulwark-hearthkyn-warriors",
       "hylas-auto-rifle",
       "ion-blaster",
       "magna-rail-rifle",
       "plasma-knife",
       "theyns-armaments",
-      "theyns-pistol"
+      "theyns-pistol-bane-slayers-bulwark-hearthkyn-warriors"
     ],
     "ability_ids": [
-      "panspectral-scanning-bane-slayers-bulwark",
-      "weavefield-crest-bane-slayers-bulwark-hearthkyn-warriors"
+      "panspectral-scanning-bane-slayers-bulwark-hearthkyn-warriors-leagues-of-votann",
+      "weavefield-crest-bane-slayers-bulwark-einhyr-hearthguard-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"
@@ -2097,7 +2197,8 @@
       "Einhyr",
       "Einhyr Champion",
       "Exoarmour",
-      "Infantry"
+      "Infantry",
+      "Vynn Bane-Slayer"
     ],
     "faction_keywords": [
       "Leagues of Votann"
@@ -2111,13 +2212,12 @@
       "mass-hammer"
     ],
     "ability_ids": [
-      "fast-firing-targeters-vynn-bane-slayer",
-      "leader",
-      "weavefield-crest-vynn-bane-slayer"
+      "fast-firing-targeters-leagues-of-votann",
+      "weavefield-crest-vynn-bane-slayer-leagues-of-votann"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "game_modes": [
       "combat-patrol"

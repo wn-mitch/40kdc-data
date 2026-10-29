@@ -8,6 +8,6 @@
 
 > `const` **stratagems**: [`Collection`](../classes/Collection.md)\<[`Stratagem`](../../generated/interfaces/Stratagem.md), [`Stratagem`](../../generated/interfaces/Stratagem.md)\> = `dataset.stratagems`
 
-Defined in: [data/index.ts:93](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/index.ts#L93)
+Defined in: [data/index.ts:179](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/index.ts#L179)
 
 All stratagems.

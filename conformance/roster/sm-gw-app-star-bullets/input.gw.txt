@@ -1,0 +1,16 @@
+Star Bullets Test (85 points)
+
+Space Marines
+Gladius Task Force
+
+BATTLELINE
+
+Intercessor Squad (85 points)
+  * 1x Intercessor Sergeant
+   * 1x Bolt Pistol
+     1x Bolt Rifle
+     1x Knives and Fists
+  * 4x Intercessor
+   * 4x Bolt Pistol
+     4x Bolt Rifle
+     4x Knives and Fists

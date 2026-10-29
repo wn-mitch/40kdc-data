@@ -1,0 +1,40 @@
+{
+  "name": "bolt-rifle (saturation) x5 vs intercessor whose 3+ Save is already better than the improvement's 4+ cap",
+  "attacker": {
+    "weaponId": "bolt-rifle",
+    "profileIndex": 1
+  },
+  "modelsFiring": 5,
+  "target": {
+    "unitId": "intercessor-squad",
+    "profileIndex": 0
+  },
+  "context": {
+    "phase": "shooting"
+  },
+  "buffs": [
+    {
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-capped-armour-rule",
+        "abilityKind": "unit"
+      },
+      "contribution": {
+        "type": "save-improve",
+        "value": 1,
+        "best": 4
+      }
+    }
+  ],
+  "expected": {
+    "stages": {
+      "attacks": 10,
+      "hits": 6.6667,
+      "wounds": 3.3333,
+      "unsaved": 1.6667,
+      "damage": 1.6667,
+      "after-fnp": 1.6667,
+      "models-killed": 0.8333
+    }
+  }
+}

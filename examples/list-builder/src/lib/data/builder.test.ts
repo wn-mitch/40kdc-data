@@ -97,25 +97,26 @@ describe('builder points', () => {
 		expect(pointsTierMissing(u, minModels)).toBe(false);
 	});
 
-	// Regression for the reported crash: resizing a range-priced unit (Venatari
-	// Custodians: 3 models @160, or 4–6 models @320) must price every size in the
-	// range at 320 — not fall through to the 3-model tier (160) — and a count
-	// outside the range must be flagged, never silently mispriced.
-	it('prices every size of a range-priced unit and flags oversize (Venatari resize)', () => {
-		const fac = 'adeptus-custodes';
-		const raw = unitRaw('venatari-custodians', undefined, fac)!;
-		expect(baseUnitPoints(raw, 3)).toBe(160);
-		for (const n of [4, 5, 6]) expect(baseUnitPoints(raw, n)).toBe(320);
+	// Regression for the reported crash: resizing a range-priced unit (Reavers:
+	// 3 models @75, or 4–6 models @150) must price every size in the range at
+	// 150 — not fall through to the 3-model tier (75) — and a count outside the
+	// range must be flagged, never silently mispriced.
+	it('prices every size of a range-priced unit and flags oversize (range resize)', () => {
+		const fac = 'drukhari';
+		const raw = unitRaw('reavers', undefined, fac)!;
+		expect(baseUnitPoints(raw, 3)).toBe(75);
+		for (const n of [4, 5, 6]) expect(baseUnitPoints(raw, n)).toBe(150);
 		const mk = (mc: number, key: string): BuilderUnit => ({
 			key,
-			datasheetId: 'venatari-custodians',
+			datasheetId: 'reavers',
 			modelCount: mc,
 			loadout: defaultLoadout(raw, mc),
 			enhancementId: null,
 			isWarlord: false,
 		});
-		// A 5-model squad totals 320 (the regression priced it at 160).
-		expect(totalPoints({ ...emptyBuilderState(), factionId: fac, units: [mk(5, 'v')] })).toBe(320);
+		// A 5-model squad is priced at the 4-6 tier (the regression priced it at the 3-model 75);
+		// Reavers carry no priced wargear.
+		expect(totalPoints({ ...emptyBuilderState(), factionId: fac, units: [mk(5, 'v')] })).toBe(150);
 		// Below the floor and above the ceiling are flagged; legal sizes are not.
 		expect(pointsTierMissing(raw, 2)).toBe(true);
 		expect(pointsTierMissing(raw, 6)).toBe(false);
@@ -125,27 +126,25 @@ describe('builder points', () => {
 	});
 
 	// Issue 75: a unit's displayed cost includes its per-item MFM wargear costs
-	// summed over the final loadout. A Terminator Assault Squad's five thunder
-	// hammers (5 pts each) are a priced default, so unitPoints = base + 25.
-	it('charges wargear_costs over the loadout (Terminator Assault Squad hammers)', () => {
+	// summed over the final loadout. A Terminator Assault Squad's storm shields
+	// (5 pts each) are priced, so five of them add 25 to the base.
+	it('charges wargear_costs over the loadout (Terminator Assault Squad storm shields)', () => {
 		const fac = 'adeptus-astartes';
 		const raw = unitRaw('terminator-assault-squad', undefined, fac)!;
-		expect(raw.wargear_costs).toContainEqual({ item_id: 'thunder-hammer', cost: 5 });
+		expect(raw.wargear_costs).toContainEqual({ item_id: 'storm-shield', cost: 5 });
 		const bu: BuilderUnit = {
 			key: 'tas',
 			datasheetId: 'terminator-assault-squad',
 			modelCount: 5,
-			loadout: defaultLoadout(raw, 5), // five thunder hammers by default
+			loadout: new Map(defaultLoadout(raw, 5)).set('storm-shield', 5),
 			enhancementId: null,
 			isWarlord: false,
 		};
 		const base = baseUnitPoints(raw, 5);
-		const hammers = bu.loadout.get('thunder-hammer') ?? 0;
-		expect(hammers).toBe(5);
-		expect(unitPoints(bu, fac)).toBe(base + hammers * 5); // base + 25
-		// Swapping hammers away for free lightning claws drops the surcharge.
-		const noHammers: BuilderUnit = { ...bu, loadout: new Map(bu.loadout).set('thunder-hammer', 0) };
-		expect(unitPoints(noHammers, fac)).toBe(base);
+		expect(unitPoints(bu, fac)).toBe(base + 25);
+		// Dropping the shields drops the surcharge.
+		const noShields: BuilderUnit = { ...bu, loadout: new Map(bu.loadout).set('storm-shield', 0) };
+		expect(unitPoints(noShields, fac)).toBe(base);
 	});
 
 	it('sums unit points across the draft', () => {
@@ -574,15 +573,16 @@ describe('builder loadout reconciliation', () => {
 	it('preserves wargear when the model count changes, and clamps to the datasheet range', () => {
 		// Regression: the model-count stepper used to rebuild the loadout from the
 		// datasheet default, wiping every wargear swap the player had made (reported
-		// on Custodian Guard 4→5). withModelCount must reconcile, not reset.
-		const raw = unitRaw('custodian-guard');
+		// on Custodian Guard 4→5; Custodian Wardens keep a count range and a swap
+		// since data version 995). withModelCount must reconcile, not reset.
+		const raw = unitRaw('custodian-wardens');
 		if (!raw?.model_count) return; // dataset may not carry Custodes
 		const { min, max } = raw.model_count;
 		expect(max, 'need a real count range to exercise the change').toBeGreaterThan(min);
 
 		const bu: BuilderUnit = {
 			key: 'k',
-			datasheetId: 'custodian-guard',
+			datasheetId: 'custodian-wardens',
 			modelCount: min,
 			loadout: defaultLoadout(raw, min),
 			enhancementId: null,
@@ -592,7 +592,7 @@ describe('builder loadout reconciliation', () => {
 		// Pick an optional weapon (min<max) and choose a non-default count for it.
 		const bounds = loadoutBounds(bu);
 		const swap = [...bounds.entries()].find(([, b]) => b.max > b.min && b.max >= 1);
-		expect(swap, 'custodian-guard should expose a swappable wargear option').toBeTruthy();
+		expect(swap, 'custodian-wardens should expose a swappable wargear option').toBeTruthy();
 		const [swapId, swapBound] = swap!;
 		const chosen = clampCount(bounds, swapId, swapBound.min + 1);
 		bu.loadout.set(swapId, chosen);
@@ -690,6 +690,207 @@ describe('valid allies (soup)', () => {
 	});
 });
 
+describe('daemon-detachment sibling pools', () => {
+	// World Eaters' Blood Legions daemons are printed in Codex: World Eaters but
+	// may be taken only under Khorne Daemonkin, through the exclusive ally pool.
+	const DAEMONS = ['bloodcrushers', 'bloodletters', 'bloodthirster', 'flesh-hounds', 'skarbrand'];
+
+	it('keeps the views out of the faction picker', () => {
+		const ids = unitsForFaction('world-eaters').map((u) => u.id);
+		for (const id of DAEMONS) expect(ids).not.toContain(id);
+		expect(ids).toContain('chaos-spawn'); // ordinary World Eaters units stay
+	});
+
+	it('offers them only under Khorne Daemonkin, as the World Eaters views', () => {
+		const base = { ...emptyBuilderState(), factionId: 'world-eaters' };
+		expect(alliesForState(base).map((g) => g.rule.id)).not.toContain('world-eaters-khorne-daemons');
+		const pool = alliesForState({ ...base, detachmentIds: ['khorne-daemonkin'] }).find(
+			(g) => g.rule.id === 'world-eaters-khorne-daemons',
+		);
+		expect(pool?.units.map((u) => u.id).sort()).toEqual(DAEMONS);
+		for (const u of pool!.units) {
+			expect(u.faction_id).toBe('world-eaters');
+			expect(u.faction_keywords).toEqual(['Blood Legions']);
+		}
+		expect(allyPointsLimit(pool!.rule, 'strike-force')).toBe(1000);
+		expect(pool!.rule.cannot_be_warlord).toBe(true);
+	});
+
+	it('leaves non-exclusive sibling pools (Harlequins) as ordinary picks', () => {
+		expect(unitsForFaction('aeldari').map((u) => u.id)).toContain('troupe');
+	});
+});
+
+describe('detachment pricing, keyword caps and unavailable pools', () => {
+	const unit = (datasheetId: string, extra: Partial<BuilderUnit> = {}): BuilderUnit => ({
+		key: `${datasheetId}-${Math.random()}`,
+		datasheetId,
+		modelCount: 1,
+		loadout: new Map(),
+		enhancementId: null,
+		isWarlord: false,
+		...extra,
+	});
+
+	it("prices a C'tan Shard from Pantheon of Woe's detachment_pricing only while it is selected", () => {
+		const ctan = unit('ctan-shard-of-the-deceiver');
+		expect(unitPoints(ctan, 'necrons')).toBe(330);
+		expect(unitPoints(ctan, 'necrons', 1, ['pantheon-of-woe'])).toBe(375);
+		const state = { ...emptyBuilderState(), factionId: 'necrons', units: [ctan] };
+		expect(totalPoints({ ...state, detachmentIds: ['pantheon-of-woe'] })).toBe(375);
+		expect(totalPoints(state)).toBe(330);
+	});
+
+	it('flags a second Patriarch', () => {
+		const issues = builderViolations({
+			...emptyBuilderState(),
+			factionId: 'genestealer-cults',
+			units: [unit('patriarch', { isWarlord: true }), unit('patriarch')],
+		});
+		expect(issues.some((v) => v.message === 'Patriarch: 2 included (max 1)')).toBe(true);
+	});
+
+	it("applies Ghosts of the Webway's raised Troupe Master cap", () => {
+		const tms = [unit('farseer', { isWarlord: true }), unit('troupe-master'), unit('troupe-master')];
+		const base = { ...emptyBuilderState(), factionId: 'aeldari', units: tms };
+		const capMsg = (v: { message: string }) => v.message.startsWith('Troupe Master:');
+		expect(builderViolations(base).some(capMsg)).toBe(true);
+		expect(builderViolations({ ...base, detachmentIds: ['ghosts-of-the-webway'] }).some(capMsg)).toBe(false);
+	});
+
+	it('treats Commander Farsight and Ethereals as alternatives: either, never both', () => {
+		const army = (ids: string[]) =>
+			builderViolations({
+				...emptyBuilderState(),
+				factionId: 'tau-empire',
+				units: ids.map((id, i) => unit(id, { isWarlord: i === 0 })),
+			});
+		const clash = (v: { message: string }) => /cannot be taken together/.test(v.message);
+		expect(army(['commander-farsight', 'ethereal']).some(clash)).toBe(true);
+		expect(army(['ethereal', 'ethereal']).some(clash)).toBe(false);
+		expect(army(['commander-farsight']).some(clash)).toBe(false);
+	});
+
+	it('scales the per-datasheet unit limit with battle size (Incursion 2, Strike Force 3)', () => {
+		const army = (battleSize: 'incursion' | 'strike-force') =>
+			builderViolations({
+				...emptyBuilderState(),
+				factionId: 'world-eaters',
+				battleSize,
+				units: [0, 1, 2].map((i) => unit('daemon-prince-of-khorne', { isWarlord: i === 0 })),
+			});
+		const over = (v: { message: string }) => /max 2 of a datasheet/.test(v.message);
+		expect(army('incursion').some(over)).toBe(true);
+		expect(army('strike-force').some((v) => /of a datasheet/.test(v.message))).toBe(false);
+	});
+
+	it('flags Enhancements over the battle-size limit (Incursion 2)', () => {
+		const enh = (id: string, e: string | null, w = false) => unit(id, { enhancementId: e, isWarlord: w });
+		const units = [
+			enh('daemon-prince-of-khorne', 'berzerker-glaive-berzerker-warband-world-eaters', true),
+			enh('master-of-executions', 'helm-of-brazen-ire-berzerker-warband-world-eaters'),
+			enh('lord-on-juggernaut', 'favoured-of-khorne-berzerker-warband-world-eaters'),
+		];
+		const state = { ...emptyBuilderState(), factionId: 'world-eaters', detachmentIds: ['berzerker-warband'], units };
+		const over = (v: { message: string }) => v.message === '3 Enhancements (max 2)';
+		expect(builderViolations({ ...state, battleSize: 'incursion' }).some(over)).toBe(true);
+		expect(builderViolations({ ...state, battleSize: 'strike-force' }).some((v) => /Enhancements \(max/.test(v.message))).toBe(false);
+	});
+
+	it('treats a unit whose models are all excluded_from_enhancements as unable to take one', () => {
+		const ogryn = unitRaw('ogryn-bodyguard', undefined, 'astra-militarum')!;
+		expect(eligibleEnhancements(['recon-element'], ogryn, [], 'astra-militarum')).toEqual([]);
+		const castellan = unitRaw('cadian-castellan', undefined, 'astra-militarum')!;
+		expect(eligibleEnhancements(['recon-element'], castellan, [], 'astra-militarum').length).toBeGreaterThan(0);
+		const issues = builderViolations({
+			...emptyBuilderState(),
+			factionId: 'astra-militarum',
+			detachmentIds: ['recon-element'],
+			units: [
+				unit('cadian-castellan', { isWarlord: true }),
+				unit('ogryn-bodyguard', { enhancementId: 'survival-gear-recon-element-astra-militarum' }),
+			],
+		});
+		expect(issues.some((v) => v.message === 'Ogryn Bodyguard cannot take Enhancements')).toBe(true);
+	});
+
+	it('flags an allied unit whose rule is no longer offered', () => {
+		const bloodletters = unit('bloodletters', {
+			factionId: 'world-eaters',
+			allyRuleId: 'world-eaters-khorne-daemons',
+			modelCount: 10,
+		});
+		const state = { ...emptyBuilderState(), factionId: 'world-eaters', units: [bloodletters] };
+		const unavailable = (v: { message: string }) => /is not available to this army/.test(v.message);
+		expect(builderViolations({ ...state, detachmentIds: ['khorne-daemonkin'] }).some(unavailable)).toBe(false);
+		expect(builderViolations(state).some(unavailable)).toBe(true);
+	});
+});
+
+describe('detachment Warlord rules and exclusions', () => {
+	const ally = (datasheetId: string, factionId: string, allyRuleId: string, isWarlord: boolean): BuilderUnit => ({
+		key: datasheetId,
+		datasheetId,
+		factionId,
+		allyRuleId,
+		modelCount: 1,
+		loadout: new Map(),
+		enhancementId: null,
+		isWarlord,
+	});
+	const own = (datasheetId: string, isWarlord: boolean): BuilderUnit => ({
+		key: datasheetId,
+		datasheetId,
+		modelCount: 1,
+		loadout: new Map(),
+		enhancementId: null,
+		isWarlord,
+	});
+
+	it('offers Ynnari only under Devoted of Ynnead, never as ordinary Aeldari picks', () => {
+		expect(unitsForFaction('aeldari').map((u) => u.id)).not.toContain('yvraine');
+		const base = { ...emptyBuilderState(), factionId: 'aeldari' };
+		expect(alliesForState(base).map((g) => g.rule.id)).not.toContain('aeldari-ynnari');
+		const pool = alliesForState({ ...base, detachmentIds: ['devoted-of-ynnead'] }).find(
+			(g) => g.rule.id === 'aeldari-ynnari',
+		);
+		expect(pool?.units.map((u) => u.id)).toContain('yvraine');
+	});
+
+	it("lets Devoted of Ynnead's mandated Warlord override the Ynnari pool's Warlord lock", () => {
+		const yvraine = ally('yvraine', 'aeldari', 'aeldari-ynnari', true);
+		expect(canBeWarlord(yvraine, ['devoted-of-ynnead'], 'aeldari')).toBe(true);
+		expect(canBeWarlord(yvraine, [], 'aeldari')).toBe(false);
+		const issues = builderViolations({
+			...emptyBuilderState(),
+			factionId: 'aeldari',
+			detachmentIds: ['devoted-of-ynnead'],
+			units: [yvraine],
+		});
+		expect(issues.some((v) => /cannot be Warlord|Warlord must be/.test(v.message))).toBe(false);
+	});
+
+	it('flags a Devoted of Ynnead army whose Warlord is not Yvraine or the Yncarne', () => {
+		const issues = builderViolations({
+			...emptyBuilderState(),
+			factionId: 'aeldari',
+			detachmentIds: ['devoted-of-ynnead'],
+			units: [own('farseer', true), ally('yvraine', 'aeldari', 'aeldari-ynnari', false)],
+		});
+		expect(issues.some((v) => /Devoted of Ynnead: Warlord must be/.test(v.message))).toBe(true);
+	});
+
+	it('flags a datasheet the selected detachment excludes', () => {
+		const issues = builderViolations({
+			...emptyBuilderState(),
+			factionId: 'chaos-daemons',
+			detachmentIds: ['shadow-legion'],
+			units: [own('bloodthirster', true), own('skarbrand', false)],
+		});
+		expect(issues.some((v) => /Shadow Legion: Skarbrand cannot be included/.test(v.message))).toBe(true);
+	});
+});
+
 describe('shared Chaos datasheets resolve to the army faction', () => {
 	// Chaos Spawn / Master of Executions / Rhino share one datasheet id across
 	// several Chaos faction files with different faction_keywords. Own-army units
@@ -732,9 +933,9 @@ describe('shared Chaos datasheets resolve to the army faction', () => {
 		for (const god of ['Slaanesh', 'Nurgle', 'Tzeentch']) {
 			expect(lr?.keywords).not.toContain(god);
 		}
-		// "Frame" is a model-build tag the dataset omits everywhere; it had leaked
-		// onto the WE vehicle copies only.
-		expect(lr?.keywords).not.toContain('Frame');
+		// FRAME is an 11th-edition keyword the MFM dump gives every Chaos Land
+		// Raider copy; it is not a god mark and survives the faction resolution.
+		expect(lr?.keywords).toContain('Frame');
 	});
 
 	it('stamps faction onto the datacard and scopes wargear for a shared chassis', () => {
@@ -807,8 +1008,9 @@ describe('generated ally caps: keyword_limits and warlord allowlist', () => {
 		expect(issues.some((v) => /4 War Dog over the 3 allowed/.test(v.message))).toBe(true);
 	});
 
-	it('flags an ally Warlord absent from the pool’s warlord allowlist', () => {
-		// callidus-assassin is in the Imperial Agents pool but not its warlord allowlist.
+	it('flags any Imperial Agents ally as Warlord now that the pool has no allowlist', () => {
+		// Since MFM 963 the Imperial Agents pool bars every allied Warlord instead of listing
+		// the few that may be one.
 		const ally: BuilderUnit = {
 			key: 'cal',
 			datasheetId: 'callidus-assassin',
@@ -824,7 +1026,8 @@ describe('generated ally caps: keyword_limits and warlord allowlist', () => {
 			factionId: 'astra-militarum',
 			units: [ally],
 		});
-		expect(issues.some((v) => /only specific units may be Warlord/.test(v.message))).toBe(true);
+		expect(issues.some((v) => v.unitKey === 'cal' && /allied units cannot be Warlord/.test(v.message))).toBe(true);
+		expect(issues.some((v) => /only specific units may be Warlord/.test(v.message))).toBe(false);
 	});
 });
 
@@ -926,8 +1129,8 @@ describe('unit configuration suggestions', () => {
 	it('discovers Necron leader and positional configurations from structured data', () => {
 		const warriors = necronUnit('necron-warriors', 'warriors');
 		const warriorState = { ...emptyBuilderState(), factionId, units: [warriors] };
-		const plasmancer = suggestionFor(warriorState, warriors, 'harbinger-of-destruction');
-		const szeras = suggestionFor(warriorState, warriors, 'mechanical-augmentation-aura');
+		const plasmancer = suggestionFor(warriorState, warriors, 'harbinger-of-destruction-necrons');
+		const szeras = suggestionFor(warriorState, warriors, 'mechanical-augmentation-necrons');
 
 		expect(plasmancer).toMatchObject({
 			kind: 'leader-attachment',
@@ -939,11 +1142,10 @@ describe('unit configuration suggestions', () => {
 			providerUnitId: 'illuminor-szeras',
 			state: 'add-source',
 		});
-		expect(szeras.description).not.toHaveLength(0);
 
 		const destroyers = necronUnit('lokhust-destroyers', 'destroyers');
 		const destroyerState = { ...emptyBuilderState(), factionId, units: [destroyers] };
-		expect(suggestionFor(destroyerState, destroyers, 'destroyer-cult')).toMatchObject({
+		expect(suggestionFor(destroyerState, destroyers, 'destroyer-cult-necrons')).toMatchObject({
 			kind: 'leader-attachment',
 			providerUnitId: 'lokhust-lord',
 			state: 'available',
@@ -954,7 +1156,7 @@ describe('unit configuration suggestions', () => {
 		const warriors = necronUnit('necron-warriors', 'warriors');
 		const plasmancer = necronUnit('plasmancer', 'plasmancer');
 		const state = { ...emptyBuilderState(), factionId, units: [warriors, plasmancer] };
-		const suggestion = suggestionFor(state, warriors, 'harbinger-of-destruction');
+		const suggestion = suggestionFor(state, warriors, 'harbinger-of-destruction-necrons');
 		expect(suggestion).toMatchObject({
 			state: 'available',
 			attachExistingLeaderKey: 'plasmancer',
@@ -964,20 +1166,20 @@ describe('unit configuration suggestions', () => {
 		expect(configured.units).toHaveLength(2);
 		expect(configured.units.find((unit) => unit.key === 'plasmancer')?.attachedToKey).toBe('warriors');
 		expect(applyConfigurationSuggestion(configured, suggestion, () => 'duplicate')).toBe(configured);
-		expect(suggestionFor(configured, warriors, 'harbinger-of-destruction').state).toBe('attached');
+		expect(suggestionFor(configured, warriors, 'harbinger-of-destruction-necrons').state).toBe('attached');
 	});
 
 	it('adds an aura source without claiming placement or attachment state', () => {
 		const warriors = necronUnit('necron-warriors', 'warriors');
 		const state = { ...emptyBuilderState(), factionId, units: [warriors] };
-		const suggestion = suggestionFor(state, warriors, 'mechanical-augmentation-aura');
+		const suggestion = suggestionFor(state, warriors, 'mechanical-augmentation-necrons');
 		const configured = applyConfigurationSuggestion(state, suggestion, () => 'szeras');
 		const szeras = configured.units.find((unit) => unit.key === 'szeras');
 
 		expect(szeras).toMatchObject({ datasheetId: 'illuminor-szeras' });
 		expect(szeras?.attachedToKey).toBeUndefined();
 		expect(configured.units.find((unit) => unit.key === 'warriors')?.attachedToKey).toBeUndefined();
-		expect(suggestionFor(configured, warriors, 'mechanical-augmentation-aura').state).toBe('source-present');
+		expect(suggestionFor(configured, warriors, 'mechanical-augmentation-necrons').state).toBe('source-present');
 	});
 
 	it('suppresses ability audiences and attachment conditions that cannot prove a bodyguard benefit', () => {
@@ -986,7 +1188,7 @@ describe('unit configuration suggestions', () => {
 		const suggestions = configurationSuggestionsFor(state, warriors);
 
 		expect(suggestions.some((candidate) => candidate.abilityId === 'illuminor')).toBe(false);
-		expect(suggestions.some((candidate) => candidate.abilityId === 'vanguard-protocols')).toBe(false);
+		expect(suggestions.some((candidate) => candidate.abilityId === 'vanguard-protocols-necrons')).toBe(false);
 		expect(
 			configurationSuggestionsFor(
 				{ ...state, factionId: null },

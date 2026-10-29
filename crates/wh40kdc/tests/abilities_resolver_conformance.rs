@@ -1,0 +1,407 @@
+//! The abilities resolver and the DSL→buff translator against the shared goldens in
+//! `conformance/abilities-resolver/`: `[0-9]*.json` (numbered cases) pins the eligible ability ids per source kind
+//! (as sorted sets, per CONFORMANCE.md), and `from-dsl.json` / `defensive-from-dsl.json` pin
+//! each ability effect's applied buffs, unsupported reasons and opt-in levers, in order (a
+//! case's `rating` stands in for the unit's printed rating of a rated rule).
+
+use std::collections::BTreeMap;
+use std::path::PathBuf;
+
+use serde_json::{json, Value};
+use wh40kdc::cruncher::from_dsl::strip_nulls;
+use wh40kdc::cruncher::{
+    effect_to_buffs, mortal_wound_sources, resolve_granted_records, BuffSource, EngineContext,
+    TranslationPerspective,
+};
+use wh40kdc::data::{with_rating, EligibilityInput};
+use wh40kdc::{Dataset, Phase};
+
+fn corpus_dir() -> PathBuf {
+    PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../conformance/abilities-resolver")
+}
+
+fn read(path: &PathBuf) -> Value {
+    let raw =
+        std::fs::read_to_string(path).unwrap_or_else(|e| panic!("read {}: {e}", path.display()));
+    serde_json::from_str(&raw).unwrap_or_else(|e| panic!("parse {}: {e}", path.display()))
+}
+
+/// Numbers compared as floats: the typed buffs serialize `1` as `1.0`.
+fn norm(v: &Value) -> Value {
+    match v {
+        Value::Number(n) => json!(n.as_f64()),
+        Value::Array(a) => Value::Array(a.iter().map(norm).collect()),
+        Value::Object(o) => Value::Object(o.iter().map(|(k, x)| (k.clone(), norm(x))).collect()),
+        other => other.clone(),
+    }
+}
+
+#[test]
+fn eligible_abilities_match_the_resolver_goldens() {
+    let ds = Dataset::embedded();
+    let mut files: Vec<PathBuf> = std::fs::read_dir(corpus_dir())
+        .expect("corpus dir")
+        .filter_map(|e| e.ok().map(|e| e.path()))
+        .filter(|p| {
+            let name = p.file_name().and_then(|n| n.to_str()).unwrap_or("");
+            name.starts_with(|c: char| c.is_ascii_digit()) && name.ends_with(".json")
+        })
+        .collect();
+    files.sort();
+    assert!(!files.is_empty(), "the resolver corpus is empty");
+    let mut failures = Vec::new();
+    for file in &files {
+        let case = read(file);
+        let input: EligibilityInput =
+            serde_json::from_value(case["input"].clone()).expect("eligibility input");
+        let phase: Phase = serde_json::from_value(case["phase"].clone()).expect("phase");
+        let mut grouped: BTreeMap<String, Vec<String>> = BTreeMap::new();
+        for entry in ds.eligible_abilities(&input, phase) {
+            grouped
+                .entry(entry.source.kind().to_string())
+                .or_default()
+                .push(entry.ability.ability_id.to_string());
+        }
+        grouped.values_mut().for_each(|ids| ids.sort());
+        let got = serde_json::to_value(&grouped).unwrap();
+        if got != case["expected"] {
+            failures.push(format!(
+                "{}\n  want: {}\n  got:  {got}",
+                file.display(),
+                case["expected"]
+            ));
+        }
+    }
+    assert!(failures.is_empty(), "{}", failures.join("\n"));
+}
+
+fn run_dsl_corpus(filename: &str) {
+    let ds = Dataset::embedded();
+    let corpus = read(&corpus_dir().join(filename));
+    let cases = corpus["cases"].as_array().expect("cases");
+    assert!(!cases.is_empty());
+    let mut failures = Vec::new();
+    for case in cases {
+        let id = case["abilityId"].as_str().expect("abilityId");
+        let inline_effect = case.get("effect").cloned();
+        let inline = inline_effect.is_some();
+        // Real records must use the public ability adapter, just like TS
+        // `AbilityView.describeBuffs`: it resolves bundles, trigger timing,
+        // usage metadata, recipient snapshots and aura gates. Inline effects
+        // are intentionally standalone specimens and remain direct translator
+        // probes.
+        let raw_effect = match inline_effect {
+            Some(frozen) => frozen,
+            None => {
+                let ability = ds
+                    .abilities
+                    .get_any(id)
+                    .unwrap_or_else(|| panic!("unknown ability {id}"));
+                serde_json::to_value(&ability.effect).unwrap()
+            }
+        };
+        let source: BuffSource = serde_json::from_value(case["source"].clone()).expect("source");
+        let context: EngineContext =
+            serde_json::from_value(case["context"].clone()).expect("context");
+        let perspective = match case["perspective"].as_str() {
+            Some("target") => TranslationPerspective::Target,
+            _ => TranslationPerspective::Attacker,
+        };
+        // A rated rule reads the unit's printed rating; the case supplies it.
+        let rating = case.get("rating").filter(|r| !r.is_null());
+        let result = if inline {
+            // Ability records the effect grants resolve as printed definitions, the granting
+            // ability itself excluded.
+            let raw_effect = match case.get("grantedRecords").and_then(Value::as_object) {
+                Some(records) => {
+                    let lookup = |ability: &str| records.get(ability).cloned();
+                    let own = case["source"]["abilityId"].as_str().unwrap_or_default();
+                    resolve_granted_records(&raw_effect, &lookup, &[own.to_string()].into())
+                        .unwrap_or(raw_effect)
+                }
+                None => raw_effect,
+            };
+            let effect = with_rating(&raw_effect, rating);
+            effect_to_buffs(&effect, &source, &context, perspective)
+        } else {
+            let ability = ds
+                .abilities
+                .get_any(id)
+                .unwrap_or_else(|| panic!("unknown ability {id}"));
+            ds.describe_buffs(ability, &source, Some(&context), perspective, rating)
+        };
+        let expected = &case["expected"];
+        let applied: Vec<Value> = result
+            .applied
+            .iter()
+            .map(|b| serde_json::to_value(&b.contribution).unwrap())
+            .collect();
+        let reasons: Vec<&str> = result
+            .unsupported
+            .iter()
+            .map(|u| u.reason.as_str())
+            .collect();
+        let label = format!("{id} ({perspective:?})");
+        if norm(&json!(applied)) != norm(&expected["applied"]) {
+            failures.push(format!(
+                "{label} applied\n  want: {}\n  got:  {}",
+                expected["applied"],
+                json!(applied)
+            ));
+        }
+        if json!(reasons) != expected["unsupportedReasons"] {
+            failures.push(format!(
+                "{label} unsupportedReasons\n  want: {}\n  got:  {}",
+                expected["unsupportedReasons"],
+                json!(reasons)
+            ));
+        }
+        // Each fragment's scope, parallel to the reasons, pinned on the rows that carry it.
+        if let Some(want) = expected.get("unsupportedScopes") {
+            let got: Vec<Value> = result
+                .unsupported
+                .iter()
+                .map(|u| serde_json::to_value(u.scope).unwrap())
+                .collect();
+            if json!(got) != *want {
+                failures.push(format!(
+                    "{label} unsupportedScopes\n  want: {want}\n  got:  {}",
+                    json!(got)
+                ));
+            }
+        }
+        // Each undecided condition's need keys, in order across every unsupported entry.
+        let need_keys: Vec<&str> = result
+            .unsupported
+            .iter()
+            .flat_map(|u| u.needs.iter().flatten())
+            .map(|need| need.key.as_str())
+            .collect();
+        let want_keys = expected.get("needKeys").cloned().unwrap_or(json!([]));
+        if json!(need_keys) != want_keys {
+            failures.push(format!(
+                "{label} needKeys\n  want: {want_keys}\n  got:  {}",
+                json!(need_keys)
+            ));
+        }
+        // Each applied buff's gate (null when ungated), pinned on the rows that carry it.
+        if let Some(want) = expected.get("applicableWhen") {
+            let got: Vec<Value> = result
+                .applied
+                .iter()
+                .map(|b| serde_json::to_value(&b.applicable_when).unwrap())
+                .collect();
+            if norm(&json!(got)) != norm(want) {
+                failures.push(format!(
+                    "{label} applicableWhen\n  want: {want}\n  got:  {}",
+                    json!(got)
+                ));
+            }
+        }
+        if let Some(want) = expected.get("activatable") {
+            let got: Vec<Value> = result
+                .activatable
+                .iter()
+                .map(|a| {
+                    json!({
+                        "id": a.id,
+                        "label": a.label,
+                        "group": a.group,
+                        "groups": a.groups,
+                        "requires": a.requires,
+                        "capRaise": a.cap_raise,
+                        "requiresOption": a.requires_option,
+                        "excludesOption": a.excludes_option,
+                        "buffs": a.buffs.iter().map(|b| serde_json::to_value(&b.contribution).unwrap()).collect::<Vec<_>>(),
+                    })
+                })
+                .collect();
+            let want: Vec<Value> = want
+                .as_array()
+                .unwrap()
+                .iter()
+                .map(|e| {
+                    let mut e = e.clone();
+                    // Optional independent caps and requirements are absent when unused.
+                    let o = e.as_object_mut().unwrap();
+                    for key in [
+                        "group",
+                        "groups",
+                        "requires",
+                        "capRaise",
+                        "requiresOption",
+                        "excludesOption",
+                    ] {
+                        o.entry(key).or_insert(Value::Null);
+                    }
+                    e
+                })
+                .collect();
+            if norm(&json!(got)) != norm(&json!(want)) {
+                failures.push(format!(
+                    "{label} activatable\n  want: {}\n  got:  {}",
+                    json!(want),
+                    json!(got)
+                ));
+            }
+        }
+    }
+    assert!(
+        failures.is_empty(),
+        "{} of {} cases differ:\n{}",
+        failures.len(),
+        cases.len(),
+        failures.join("\n")
+    );
+}
+
+#[test]
+fn from_dsl_matches_the_attacker_goldens() {
+    run_dsl_corpus("from-dsl.json");
+}
+
+#[test]
+fn defensive_from_dsl_matches_the_target_goldens() {
+    run_dsl_corpus("defensive-from-dsl.json");
+}
+
+#[test]
+fn stratagem_targets_match_the_resolver_goldens() {
+    let corpus = read(&corpus_dir().join("stratagem-targets.json"));
+    let cases = corpus["cases"].as_array().expect("cases");
+    assert!(!cases.is_empty(), "the stratagem-target corpus is empty");
+    let mut failures = Vec::new();
+    for case in cases {
+        let stratagem: wh40kdc::Stratagem = serde_json::from_value(json!({
+            "id": "fabricated-ploy",
+            "name": "Fabricated Ploy",
+            "category": "core",
+            "cp_cost": 1,
+            "phases": ["command"],
+            "player_turn": "your-turn",
+            "timing": "once-per-phase",
+            "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" },
+            "target_restrictions": case["target_restrictions"],
+        }))
+        .expect("stratagem");
+        let set = |list: &Value| -> std::collections::HashSet<String> {
+            list.as_array()
+                .expect("keyword list")
+                .iter()
+                .filter_map(Value::as_str)
+                .map(str::to_string)
+                .collect()
+        };
+        let got = match case.get("members").and_then(Value::as_array) {
+            None => wh40kdc::data::stratagem_can_target(&stratagem, &set(&case["keywords"])),
+            Some(members) => {
+                let members: Vec<_> = members.iter().map(set).collect();
+                let printed = case.get("printed").map(|list| {
+                    set(list)
+                        .iter()
+                        .map(|k| wh40kdc::data::normalize_name(k))
+                        .collect::<std::collections::HashSet<_>>()
+                });
+                let is_printed = |keyword: &str| {
+                    printed
+                        .as_ref()
+                        .is_none_or(|known| known.contains(&wh40kdc::data::normalize_name(keyword)))
+                };
+                wh40kdc::data::stratagem_can_target_unit(
+                    &stratagem,
+                    &members,
+                    case.get("trigger_subject"),
+                    &is_printed,
+                )
+            }
+        };
+        if Value::Bool(got) != case["expected"] {
+            failures.push(format!("{}: got {got}", case["name"]));
+        }
+    }
+    assert!(failures.is_empty(), "{failures:#?}");
+}
+
+/// The mortal-wound sources an ability inflicts outside an attack, against
+/// `mortal-sources.json`. A row with a `factionId` reads its record's effect and trigger from the
+/// embedded dataset; the others carry them inline. The context's phase never gates a source, so
+/// rows that leave it out get a placeholder.
+#[test]
+fn mortal_sources_match_the_goldens() {
+    let ds = Dataset::embedded();
+    let corpus = read(&corpus_dir().join("mortal-sources.json"));
+    let cases = corpus["cases"].as_array().expect("cases");
+    assert!(!cases.is_empty(), "the mortal-sources corpus is empty");
+    let mut failures = Vec::new();
+    for case in cases {
+        let id = case["caseId"].as_str().expect("caseId");
+        let ability_id = case["abilityId"].as_str().expect("abilityId");
+        let mut context_json = case["context"].clone();
+        context_json
+            .as_object_mut()
+            .expect("context")
+            .entry("phase")
+            .or_insert(json!("shooting"));
+        let context: EngineContext = serde_json::from_value(context_json).expect("context");
+        let (effect, trigger) = match case["factionId"].as_str() {
+            Some(faction) => {
+                let ability = ds
+                    .abilities
+                    .get_in_faction(ability_id, faction)
+                    .unwrap_or_else(|| panic!("{id}: unknown ability {ability_id}"));
+                let raw = strip_nulls(&serde_json::to_value(ability).unwrap());
+                (raw["effect"].clone(), raw["trigger"].clone())
+            }
+            None => (
+                strip_nulls(case.get("effect").unwrap_or(&Value::Null)),
+                strip_nulls(case.get("trigger").unwrap_or(&Value::Null)),
+            ),
+        };
+        let rating = case.get("rating").filter(|r| !r.is_null());
+        let got = mortal_wound_sources(ability_id, &effect, &trigger, &context, rating);
+        let want = &case["expected"];
+        let want_sources = want["sources"].as_array().expect("expected sources");
+        let mut problems = Vec::new();
+        if got.sources.len() != want_sources.len() {
+            problems.push(format!(
+                "source count: want {}, got {}",
+                want_sources.len(),
+                got.sources.len()
+            ));
+        } else {
+            for (got, want) in got.sources.iter().zip(want_sources) {
+                let keys: Vec<&str> = got.needs.iter().map(|need| need.key.as_str()).collect();
+                let want_moment = want["moment"].as_str();
+                let want_expected = want["expected"].as_f64().expect("expected number");
+                if got.id != want["id"].as_str().unwrap()
+                    || got.moment.as_deref() != want_moment
+                    || json!(keys) != want["needKeys"]
+                    || (got.expected - want_expected).abs() > 1e-9
+                {
+                    problems.push(format!(
+                        "source\n  want: {want}\n  got:  {} {:?} {} {keys:?}",
+                        got.id, got.moment, got.expected
+                    ));
+                }
+            }
+        }
+        let reasons: Vec<&str> = got.unsupported.iter().map(|u| u.reason.as_str()).collect();
+        if json!(reasons) != want["unsupportedReasons"] {
+            problems.push(format!(
+                "unsupportedReasons\n  want: {}\n  got:  {}",
+                want["unsupportedReasons"],
+                json!(reasons)
+            ));
+        }
+        if !problems.is_empty() {
+            failures.push(format!("{id}: {}", problems.join("\n")));
+        }
+    }
+    assert!(
+        failures.is_empty(),
+        "{} of {} cases differ:\n{}",
+        failures.len(),
+        cases.len(),
+        failures.join("\n")
+    );
+}

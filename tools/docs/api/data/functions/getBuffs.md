@@ -8,7 +8,7 @@
 
 > **getBuffs**(`items`, ...`args`): [`Buff`](../type-aliases/Buff.md)[]
 
-Defined in: [cruncher/get-buffs.ts:16](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/get-buffs.ts#L16)
+Defined in: [cruncher/get-buffs.ts:16](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/get-buffs.ts#L16)
 
 ## Parameters
 

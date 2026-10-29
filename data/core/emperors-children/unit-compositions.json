@@ -22,7 +22,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -72,7 +72,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -102,18 +102,18 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32
+          "diameter": 40
         },
         "default_weapon_ids": [
           "agonising-energies",
-          "bolt-pistol",
+          "bolt-pistol-sorcerer",
           "force-weapon"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -150,7 +150,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -185,7 +185,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -219,7 +219,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -254,7 +254,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -333,7 +333,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -398,19 +398,33 @@
             "weapon_ids": [
               "close-combat-weapon-tormentors",
               "plasma-gun"
-            ],
-            "max_count": 2
+            ]
           },
           {
             "name": "Tormentor w/ meltagun",
             "weapon_ids": [
               "close-combat-weapon-tormentors",
               "meltagun"
-            ],
-            "max_count": 2
+            ]
           }
         ],
         "loadout_variant_budgets": [
+          {
+            "variant_names": [
+              "Tormentor w/ plasma gun"
+            ],
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
+          },
+          {
+            "variant_names": [
+              "Tormentor w/ meltagun"
+            ],
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
+          },
           {
             "variant_names": [
               "Tormentor",
@@ -426,7 +440,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -480,7 +494,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -515,7 +529,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -551,7 +565,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -586,7 +600,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -622,7 +636,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -646,7 +660,7 @@
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
-          "bolt-pistol",
+          "bolt-pistol-infractors",
           "power-sword-infractors"
         ],
         "is_leader_model": true,
@@ -660,8 +674,8 @@
         "min": 4,
         "max": 9,
         "default_weapon_ids": [
-          "bolt-pistol",
-          "duelling-sabre"
+          "bolt-pistol-infractors",
+          "duelling-sabre-infractors"
         ],
         "is_leader_model": false,
         "base_size_mm": {
@@ -672,7 +686,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -727,7 +741,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -751,7 +765,7 @@
         "min": 3,
         "max": 6,
         "default_weapon_ids": [
-          "bolt-pistol",
+          "bolt-pistol-flawless-blades",
           "blissblade"
         ],
         "is_leader_model": false,
@@ -763,7 +777,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -796,7 +810,7 @@
         "max": 3,
         "default_weapon_ids": [
           "blissblade",
-          "bolt-pistol-callous-blades"
+          "bolt-pistol"
         ],
         "is_leader_model": false,
         "base_size_mm": {
@@ -807,7 +821,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -819,6 +833,9 @@
           }
         ]
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -830,8 +847,8 @@
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
-          "bolt-pistol-callous-blades",
-          "power-sword-infractors"
+          "bolt-pistol-callous-blades-infractors",
+          "power-sword-callous-blades-infractors"
         ],
         "is_leader_model": true,
         "base_size_mm": {
@@ -844,7 +861,7 @@
         "min": 9,
         "max": 9,
         "default_weapon_ids": [
-          "bolt-pistol-callous-blades",
+          "bolt-pistol-callous-blades-infractors",
           "duelling-sabre"
         ],
         "is_leader_model": false,
@@ -856,7 +873,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
@@ -873,6 +890,9 @@
           }
         ]
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -885,7 +905,7 @@
         "max": 1,
         "default_weapon_ids": [
           "phoenix-power-spear",
-          "power-fist-lord-exultant"
+          "power-fist-lord-kaphrael-of-the-callous-blades"
         ],
         "is_leader_model": false,
         "base_size_mm": {
@@ -896,13 +916,310 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "mfm-995"
     },
     "tiers": [
       {
         "models": [
           {
             "name": "Lord Kaphrael",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ],
+    "game_modes": [
+      "combat-patrol"
+    ]
+  },
+  {
+    "unit_id": "daemonettes",
+    "faction_id": "emperors-children",
+    "models": [
+      {
+        "name": "Alluress",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "slashing-claws"
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        }
+      },
+      {
+        "name": "Daemonette",
+        "min": 9,
+        "max": 9,
+        "default_weapon_ids": [
+          "slashing-claws"
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        }
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Alluress",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Daemonette",
+            "min": 9,
+            "max": 9
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "fiends",
+    "faction_id": "emperors-children",
+    "models": [
+      {
+        "name": "Blissbringer",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "barbed-tail-and-dissecting-claws"
+        ],
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 75,
+          "length": 42
+        }
+      },
+      {
+        "name": "Fiend",
+        "min": 2,
+        "max": 5,
+        "default_weapon_ids": [
+          "barbed-tail-and-dissecting-claws"
+        ],
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 75,
+          "length": 42
+        }
+      }
+    ],
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Blissbringer",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Fiend",
+            "min": 2,
+            "max": 2
+          }
+        ]
+      },
+      {
+        "models": [
+          {
+            "name": "Blissbringer",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Fiend",
+            "min": 3,
+            "max": 5
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    }
+  },
+  {
+    "unit_id": "seekers",
+    "faction_id": "emperors-children",
+    "models": [
+      {
+        "name": "Heartseeker",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "lashing-tongue",
+          "slashing-claws"
+        ],
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 60,
+          "length": 35.5
+        }
+      },
+      {
+        "name": "Seeker",
+        "min": 4,
+        "max": 9,
+        "default_weapon_ids": [
+          "lashing-tongue",
+          "slashing-claws"
+        ],
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 60,
+          "length": 35.5
+        }
+      }
+    ],
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Heartseeker",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Seeker",
+            "min": 4,
+            "max": 4
+          }
+        ]
+      },
+      {
+        "models": [
+          {
+            "name": "Heartseeker",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Seeker",
+            "min": 5,
+            "max": 9
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    }
+  },
+  {
+    "unit_id": "shalaxi-helbane",
+    "faction_id": "emperors-children",
+    "models": [
+      {
+        "name": "Shalaxi Helbane",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "lash-of-slaanesh",
+          "pavane-of-slaanesh",
+          "snapping-claws",
+          "soulpiercer"
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 100
+        }
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Shalaxi Helbane",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "keeper-of-secrets",
+    "faction_id": "emperors-children",
+    "models": [
+      {
+        "name": "Keeper of Secrets",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "phantasmagoria",
+          "snapping-claws",
+          "witstealer-sword"
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 100
+        }
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Keeper of Secrets",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "defiler",
+    "faction_id": "emperors-children",
+    "models": [
+      {
+        "name": "Defiler",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 160
+        },
+        "default_weapon_ids": [
+          "shearing-claws",
+          "hades-battle-cannon",
+          "excruciator-cannon",
+          "excruciator-cannon",
+          "heavy-missile-launcher",
+          "heavy-baleflamer"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "mfm-995"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Defiler",
             "min": 1,
             "max": 1
           }
