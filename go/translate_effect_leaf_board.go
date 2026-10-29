@@ -565,7 +565,7 @@ func setUpLeaf(m map[string]any, subj string, ctx effCtx) string {
 	return s + limits
 }
 
-func markerLeaf(m map[string]any) string {
+func markerLeaf(m map[string]any, ctx effCtx) string {
 	// A label that already ends in "marker" ("cult-ambush-marker") must not read "marker marker".
 	label := replaceFirst(trailingMarkerRe, dekebab(ejstr(m["label"])), "")
 	consume := ""
@@ -590,15 +590,29 @@ func markerLeaf(m map[string]any) string {
 	if m["placement"] != nil {
 		where = " " + dekebab(ejstr(m["placement"]))
 	}
-	away := ""
+	// "within 1\" of that unit and more than 3\" horizontally away from all enemy units": every limit applies.
+	var limits []string
+	near, _ := asList(m["near"])
+	for _, nAny := range near {
+		n := mapOr(nAny)
+		wholly := ""
+		if n["wholly"] == true {
+			wholly = "wholly "
+		}
+		limits = append(limits, wholly+"within "+rangePhrase(n["range"])+" of "+placePhrase(n["of"], ctx))
+	}
 	if m["min_enemy_distance"] != nil {
-		away = " more than " + rangePhrase(m["min_enemy_distance"]) + " horizontally away from all enemy units"
+		limits = append(limits, "more than "+rangePhrase(m["min_enemy_distance"])+" horizontally away from all enemy units")
+	}
+	tail := ""
+	if len(limits) > 0 {
+		tail = " " + strings.Join(limits, " and ")
 	}
 	article := "a"
 	if leadingVowelRe.MatchString(label) {
 		article = "an"
 	}
-	return "place " + article + " " + label + " marker" + where + away + consume
+	return "place " + article + " " + label + " marker" + where + tail + consume
 }
 
 // describeBoardLeaf renders the board-axis leaves; anything unknown degrades to [type].
@@ -674,7 +688,7 @@ func describeBoardLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 	case "set-up":
 		return setUpLeaf(m, subj, ctx)
 	case "marker":
-		return markerLeaf(m)
+		return markerLeaf(m, ctx)
 	case "transport-capacity":
 		return transportCapacityLeaf(m)
 	case "test":

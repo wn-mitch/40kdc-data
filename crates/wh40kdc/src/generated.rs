@@ -22639,6 +22639,14 @@ for LoadoutConditionParametersUniform {
 ///      "description": "Place: more than this distance horizontally away from all enemy units.",
 ///      "$ref": "#/$defs/range-ref"
 ///    },
+///    "near": {
+///      "description": "Place: (wholly) within range of each named place (\"within 1\\\" of that unit\"). distance on a place has no stated reference point; near names one.",
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/placement-near"
+///      },
+///      "minItems": 1
+///    },
 ///    "not_moved_this_turn": {
 ///      "description": "Relocate: only a marker that has not been moved this turn.",
 ///      "const": true
@@ -22671,6 +22679,9 @@ pub struct MarkerEffectModifier {
     ///Place: more than this distance horizontally away from all enemy units.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub min_enemy_distance: ::std::option::Option<RangeRef>,
+    ///Place: (wholly) within range of each named place ("within 1\" of that unit"). distance on a place has no stated reference point; near names one.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub near: ::std::vec::Vec<PlacementNear>,
     ///Relocate: only a marker that has not been moved this turn.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub not_moved_this_turn: ::std::option::Option<::serde_json::Value>,

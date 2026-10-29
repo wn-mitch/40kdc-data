@@ -680,7 +680,7 @@ def _set_up(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
     return s + limits
 
 
-def _marker(m: dict[str, Any]) -> str:
+def _marker(m: dict[str, Any], ctx: Ctx) -> str:
     # A label that already ends in "marker" ("cult-ambush-marker") must not read "marker marker".
     label = re.sub(r" marker$", "", dekebab(jstr(m.get("label"))), flags=re.IGNORECASE)
     consume = "; using the marker consumes it" if m.get("consume") == "on-use" else ""
@@ -693,13 +693,20 @@ def _marker(m: dict[str, Any]) -> str:
     if m.get("operation") == "remove":
         return f"remove that {label} marker from the battlefield"
     where = f" {dekebab(jstr(m['placement']))}" if m.get("placement") is not None else ""
-    away = (
-        f" more than {range_phrase(m['min_enemy_distance'])} horizontally away from all enemy units"
-        if m.get("min_enemy_distance") is not None
-        else ""
-    )
+    # "within 1\" of that unit and more than 3\" horizontally away from all enemy units": every
+    # limit applies.
+    limits = [
+        f"{'wholly ' if n.get('wholly') is True else ''}within {range_phrase(n.get('range'))} "
+        f"of {place_phrase(n.get('of'), ctx)}"
+        for n in (m.get("near") or [])
+        if isinstance(n, dict)
+    ]
+    if m.get("min_enemy_distance") is not None:
+        away = range_phrase(m["min_enemy_distance"])
+        limits.append(f"more than {away} horizontally away from all enemy units")
+    tail = f" {' and '.join(limits)}" if limits else ""
     article = "an" if re.match(r"[aeiou]", label, re.IGNORECASE) else "a"
-    return f"place {article} {label} marker{where}{away}{consume}"
+    return f"place {article} {label} marker{where}{tail}{consume}"
 
 
 def _test(m: dict[str, Any], subj: str) -> str:
@@ -830,7 +837,7 @@ def describe_board_leaf(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx, inline:
     if t == "set-up":
         return _set_up(m, subj, ctx)
     if t == "marker":
-        return _marker(m)
+        return _marker(m, ctx)
     if t == "transport-capacity":
         return transport_capacity(m)
     if t == "test":

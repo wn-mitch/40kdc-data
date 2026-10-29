@@ -11703,6 +11703,14 @@
                   "$ref": "#/$defs/range-ref",
                   "description": "Place: more than this distance horizontally away from all enemy units."
                 },
+                "near": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "$ref": "#/$defs/placement-near"
+                  },
+                  "description": "Place: (wholly) within range of each named place (\"within 1\\\" of that unit\"). distance on a place has no stated reference point; near names one."
+                },
                 "placement": {
                   "type": "string",
                   "minLength": 1

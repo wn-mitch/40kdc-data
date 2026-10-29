@@ -2264,7 +2264,7 @@
   },
   {
     "caseId": "canonical/marker-placed-away-from-enemies",
-    "effect": { "type": "marker", "target": "this-unit", "modifier": { "label": "alpha-marker", "operation": "place", "distance": { "inches": 1 }, "min_enemy_distance": { "inches": 3 } } },
+    "effect": { "type": "marker", "target": "this-unit", "modifier": { "label": "alpha-marker", "operation": "place", "near": [{ "of": "event-subject", "range": { "inches": 1 } }], "min_enemy_distance": { "inches": 3 } } },
     "scope": { "duration": "permanent" }
   },
   {

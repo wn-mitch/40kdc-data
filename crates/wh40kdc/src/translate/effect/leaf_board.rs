@@ -499,7 +499,7 @@ pub(crate) fn describe_board_leaf(e: &P, m: &P, subj: &str, ctx: &Ctx) -> String
         Some("move") => movement(m, subj, ctx),
         Some("move-modifier") => move_modifier(m, subj, ctx),
         Some("set-up") => set_up(m, subj, ctx),
-        Some("marker") => marker(m),
+        Some("marker") => marker(m, ctx),
         Some("transport-capacity") => transport_capacity(m),
         Some("test") => test(m, subj),
         Some("state-change") => {

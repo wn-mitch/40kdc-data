@@ -5,6 +5,9 @@ import type { SemanticFamilyDefinition } from "../contracts.js";
 import { ENTITY_ID_PATTERN } from "../core-families.js";
 import { type FamilyExtension, optional, standIn, widenedEnum, withProperties } from "../family-extension-helpers.js";
 
+/** What a placed marker's near_inches is measured to (battlefield-marker@4). */
+const MARKER_NEAR_OF = ["this-unit", "this-model", "event-subject"] as const;
+
 const COMMON_SCHEMA = "https://40kdc.dev/schemas/defs/common.schema.json";
 const EFFECT_SCHEMA = "https://40kdc.dev/schemas/enrichment/ability-dsl/effect.schema.json";
 type CanonicalValidator = ValidateFunction<unknown>;
@@ -241,6 +244,27 @@ export const REGION_EXTENSIONS: readonly FamilyExtension[] = [
       const { operation: _remove, ...kept } = rest;
       if (kept.distance !== undefined || kept.not_moved_this_turn !== undefined) throw new TypeError("battlefield-marker remove takes no distance or not_moved_this_turn.");
       return { ...previous(kept), operation: "remove" };
+    },
+  },
+  {
+    // "place a Tunnel Marker … within 1\" of that unit": the place a placed marker is measured to.
+    family: "battlefield-marker",
+    version: 4,
+    description: "As the previous version, plus near_inches with near_of (this-unit, this-model, or event-subject: the moment's unit, \"that unit\") and optional near_wholly: a placed marker goes (wholly) within that many inches of it. A place's distance names no reference point; near_inches does.",
+    schema: (previous) => withProperties(previous, {
+      near_inches: optional({ type: "integer", minimum: 1 }),
+      near_of: optional({ enum: MARKER_NEAR_OF }),
+      near_wholly: optional({ const: true }),
+    }),
+    normalize: (input, previous) => {
+      const { near_inches: inches, near_of: of, near_wholly: wholly, ...rest } = input;
+      if (inches === undefined && of === undefined && wholly === undefined) return previous(input);
+      if ((rest.operation ?? "place") !== "place") throw new TypeError("battlefield-marker.near_inches limits a place.");
+      if (!Number.isInteger(inches) || (inches as number) < 1) throw new TypeError("battlefield-marker.near_inches is a whole number of inches, at least 1, with near_of.");
+      if (!(MARKER_NEAR_OF as readonly unknown[]).includes(of)) throw new TypeError(`battlefield-marker.near_of is one of ${MARKER_NEAR_OF.join(", ")}.`);
+      if (wholly !== undefined && wholly !== true) throw new TypeError("battlefield-marker.near_wholly is true or absent.");
+      if (rest.distance !== undefined) throw new TypeError("battlefield-marker: a place with near_inches takes no distance.");
+      return { ...previous(rest), near_inches: inches, near_of: of, ...(wholly === true ? { near_wholly: true } : {}) };
     },
   },
   {

@@ -5561,12 +5561,17 @@
             "modifier": {
               "label": "tunnel-marker",
               "operation": "place",
-              "distance": {
-                "inches": 1
-              },
               "min_enemy_distance": {
                 "inches": 3
-              }
+              },
+              "near": [
+                {
+                  "of": "event-subject",
+                  "range": {
+                    "inches": 1
+                  }
+                }
+              ]
             }
           }
         },

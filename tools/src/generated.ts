@@ -5614,6 +5614,12 @@ export interface MarkerEffect {
            */
           per_battle_round: [NonTieredRangeRef, ...NonTieredRangeRef[]];
         };
+    /**
+     * Place: (wholly) within range of each named place ("within 1\" of that unit"). distance on a place has no stated reference point; near names one.
+     *
+     * @minItems 1
+     */
+    near?: [PlacementNear, ...PlacementNear[]];
     placement?: string;
     distance?: RangeRef;
     consume?: "on-use" | "never";

@@ -1322,16 +1322,6 @@ class MarkerRange(TypedDict):
 Turn: TypeAlias = int
 
 
-class Modifier37(TypedDict):
-    label: str
-    operation: NotRequired[Literal["place", "relocate", "remove"]]
-    min_enemy_distance: NotRequired[RangeRef]
-    placement: NotRequired[str]
-    distance: NotRequired[RangeRef]
-    consume: NotRequired[Literal["on-use", "never"]]
-    not_moved_this_turn: NotRequired[Literal[True]]
-
-
 class SpacePerModelItem(TypedDict):
     all_of: NotRequired[KeywordList]
     any_of: NotRequired[KeywordList]
@@ -3526,6 +3516,17 @@ class SingleEffect30(TypedDict):
     target: UnitRef
     modifier: Modifier36
     scaling: NotRequired[Scaling]
+
+
+class Modifier37(TypedDict):
+    label: str
+    operation: NotRequired[Literal["place", "relocate", "remove"]]
+    min_enemy_distance: NotRequired[RangeRef]
+    near: NotRequired[list[PlacementNear]]
+    placement: NotRequired[str]
+    distance: NotRequired[RangeRef]
+    consume: NotRequired[Literal["on-use", "never"]]
+    not_moved_this_turn: NotRequired[Literal[True]]
 
 
 class SingleEffect31(TypedDict):

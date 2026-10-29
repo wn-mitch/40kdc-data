@@ -3,12 +3,13 @@
 
 use serde_json::{Map, Value};
 
+use super::placement::place_phrase;
 use super::words::*;
 use crate::translate::condition::{article, nn, obj, objective_phrase, or_list, range_phrase, P};
 use crate::translate::dekebab;
 use crate::translate::expiry::expiry_trail;
 
-pub(super) fn marker(m: &P) -> String {
+pub(super) fn marker(m: &P, ctx: &Ctx) -> String {
     // A label that already ends in "marker" ("cult-ambush-marker") must not read "marker marker".
     let raw = dekebab(&jstr(m.get("label")));
     let label = match raw.len().checked_sub(" marker".len()) {
@@ -39,14 +40,32 @@ pub(super) fn marker(m: &P) -> String {
     let place = nn(m, "placement")
         .map(|p| format!(" {}", dekebab(&jv(p))))
         .unwrap_or_default();
-    let away = nn(m, "min_enemy_distance")
-        .map(|d| {
+    // "within 1\" of that unit and more than 3\" horizontally away from all enemy units": every limit applies.
+    let mut limits: Vec<String> = arr(m, "near")
+        .map(Vec::as_slice)
+        .unwrap_or_default()
+        .iter()
+        .map(|n| {
+            let n = obj(Some(n));
             format!(
-                " more than {} horizontally away from all enemy units",
-                range_phrase(Some(d))
+                "{}within {} of {}",
+                if is_true(n, "wholly") { "wholly " } else { "" },
+                range_phrase(n.get("range")),
+                place_phrase(n.get("of"), ctx)
             )
         })
-        .unwrap_or_default();
+        .collect();
+    if let Some(d) = nn(m, "min_enemy_distance") {
+        limits.push(format!(
+            "more than {} horizontally away from all enemy units",
+            range_phrase(Some(d))
+        ));
+    }
+    let away = if limits.is_empty() {
+        String::new()
+    } else {
+        format!(" {}", limits.join(" and "))
+    };
     let article = if label
         .chars()
         .next()

@@ -42843,9 +42843,14 @@
       "modifier": {
         "label": "alpha-marker",
         "operation": "place",
-        "distance": {
-          "inches": 1
-        },
+        "near": [
+          {
+            "of": "event-subject",
+            "range": {
+              "inches": 1
+            }
+          }
+        ],
         "min_enemy_distance": {
           "inches": 3
         }
@@ -42855,7 +42860,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "Place an alpha marker more than 3\" horizontally away from all enemy units."
+      "text": "Place an alpha marker within 1\" of the triggering unit and more than 3\" horizontally away from all enemy units."
     }
   },
   {

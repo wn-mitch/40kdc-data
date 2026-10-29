@@ -74,6 +74,10 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
       if (leaf.parameters.not_moved_this_turn === true) modifier.not_moved_this_turn = true;
       // Version 3: a placed marker's distance from enemy units.
       if (leaf.parameters.min_enemy_distance !== undefined) modifier.min_enemy_distance = { inches: closed(leaf, "min_enemy_distance") };
+      // Version 4: the place a placed marker is measured to.
+      if (leaf.parameters.near_inches !== undefined) {
+        modifier.near = [{ of: closed(leaf, "near_of"), range: { inches: closed(leaf, "near_inches") }, ...(leaf.parameters.near_wholly === true ? { wholly: true } : {}) }];
+      }
       return { type: "marker", target: closed(leaf, "subject"), modifier };
     }
     case "transport-capacity": {

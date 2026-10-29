@@ -281,7 +281,7 @@ function setUp(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
   return s + limits;
 }
 
-function marker(m: Record<string, unknown>): string {
+function marker(m: Record<string, unknown>, ctx: Ctx): string {
   // A label that already ends in "marker" ("cult-ambush-marker") must not read "marker marker".
   const label = dekebab(jstr(m.label)).replace(/ marker$/i, "");
   const consume = m.consume === "on-use" ? "; using the marker consumes it" : "";
@@ -289,8 +289,10 @@ function marker(m: Record<string, unknown>): string {
   if (m.operation === "relocate") return `move the ${label} marker${unmoved}${m.distance != null ? ` up to ${rangePhrase(m.distance)}` : ""}${consume}`;
   if (m.operation === "remove") return `remove that ${label} marker from the battlefield`;
   const where = m.placement != null ? ` ${dekebab(jstr(m.placement))}` : "";
-  const away = m.min_enemy_distance != null ? ` more than ${rangePhrase(m.min_enemy_distance)} horizontally away from all enemy units` : "";
-  return `place ${/^[aeiou]/i.test(label) ? "an" : "a"} ${label} marker${where}${away}${consume}`;
+  // "within 1\" of that unit and more than 3\" horizontally away from all enemy units": every limit applies.
+  const limits = ((m.near as P[] | undefined) ?? []).map((n) => `${n.wholly === true ? "wholly " : ""}within ${rangePhrase(n.range)} of ${placePhrase(n.of, ctx)}`);
+  if (m.min_enemy_distance != null) limits.push(`more than ${rangePhrase(m.min_enemy_distance)} horizontally away from all enemy units`);
+  return `place ${/^[aeiou]/i.test(label) ? "an" : "a"} ${label} marker${where}${limits.length ? ` ${limits.join(" and ")}` : ""}${consume}`;
 }
 
 function test(m: Record<string, unknown>, subj: string): string {
@@ -514,7 +516,7 @@ export function describeBoardLeaf(e: Leaf, m: Record<string, unknown>, subj: str
     case "move": return move(m, subj, ctx);
     case "move-modifier": return moveModifier(m, subj, ctx);
     case "set-up": return setUp(m, subj, ctx);
-    case "marker": return marker(m);
+    case "marker": return marker(m, ctx);
     case "transport-capacity": return transportCapacity(m);
     case "test": return test(m, subj);
     case "state-change": return m.set === false ? `${subj} ${v(subj, "is")} no longer Battle-shocked` : `${subj} ${v(subj, "is")} Battle-shocked`;
