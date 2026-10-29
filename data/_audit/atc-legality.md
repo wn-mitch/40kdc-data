@@ -18,13 +18,13 @@ rejects.
 - `examples/atc-viewer/src/data/atc-5s.json`: 230 lists (2 without text skipped)
 - **Lists**: 478, parse failures: 16
 - **Legality**: 291 violating units across 94 lists
-- **Composition drift**: 52 dataset units
+- **Composition drift**: 57 dataset units
 
 ### Warnings by code
 
 | code | count |
 |---|--:|
-| `weapon-unresolved` | 269 |
+| `weapon-unresolved` | 267 |
 | `detachment-unresolved` | 128 |
 | `enhancement-unresolved` | 114 |
 | `loadout-illegal` | 93 |
@@ -42,8 +42,8 @@ rejects.
 |---|--:|
 | `grouped` | 3220 |
 | `unit-unresolved` | 35 |
-| `wargear-unresolved` | 155 |
-| `single-model` | 3513 |
+| `wargear-unresolved` | 153 |
+| `single-model` | 3515 |
 | `no-recorded-defaults` | 0 |
 | `solver-null` | 188 |
 
@@ -120,12 +120,6 @@ partition solver could not decompose — bad `replaces` data or genuinely illega
 | `sword-brethren-squad` | 1 |
 | `the-twin-lance` | 1 |
 
-## Unresolved names: `battle-size-unmapped`
-
-| raw name | count |
-|---|--:|
-| `Combat Patrol (500 Point limit)` | 19 |
-
 ## Unresolved names: `detachment-unresolved`
 
 | raw name | count |
@@ -190,15 +184,7 @@ partition solver could not decompose — bad `replaces` data or genuinely illega
 | `Forgefather’s Seekers and Subversion Assets` | 1 |
 | `Freebooter Krew and More Dakka!` | 1 |
 | `Freebooter Krew and Rollin' Deff` | 1 |
-| … 41 more | |
-
-## Unresolved names: `disposition-unresolved`
-
-| raw name | count |
-|---|--:|
-| `Disruption(using this one` | 1 |
-| `TAKE AN HOLD` | 1 |
-| `Using Reconnaissance` | 1 |
+| … 35 more | |
 
 ## Unresolved names: `enhancement-unresolved`
 
@@ -257,12 +243,6 @@ partition solver could not decompose — bad `replaces` data or genuinely illega
 | `Supa-Cybork Body` | 1 |
 | `The Blade Driven Deep` | 1 |
 | `Weaver of Sagas` | 1 |
-
-## Unresolved names: `faction-unresolved`
-
-| raw name | count |
-|---|--:|
-| `Behind them thundered the infamous biker gang known as the Hogs of War. Their leader, Bryce, wore enough leather, chains, and bad decisions to sink a small boat. The bikers swerved around the convoy, revving engines and shouting threats that sounded suspiciously rehearsed. Chris merely adjusted his sunglasses and informed the team that things had become "interesting."` | 1 |
 
 ## Unresolved names: `leader-attachment-inferred`
 
@@ -371,7 +351,6 @@ partition solver could not decompose — bad `replaces` data or genuinely illega
 | `Hot-shot laspistol (ORANGE)` | 2 |
 | `Hot-shot marksman rifle (RED)` | 2 |
 | `Melta Mine (ORANGE/same guy as pistol)` | 2 |
-| `Screamer-Killer talons` | 2 |
 | `Somnus` | 2 |
 | `Spanner` | 2 |
 | `Steed's savage claws` | 2 |
@@ -402,14 +381,19 @@ Units whose composition `default_weapon_ids` reference ids unreachable from
 `weapon_ids` ∪ wargear-option grants (stale defaults under a newer loadout).
 
 - `adepta-sororitas/sanctifiers` — unreachable: salvationist-medikit
+- `adepta-sororitas/sanctuary-guardians-battle-sisters-squad` — unreachable: simulacrum-imperialis
 - `adeptus-astartes/azrael` — unreachable: the-lion-helm
 - `adeptus-astartes/captain-on-bike` — unreachable: heavy-bolt-pistol-captain-on-bike, master-crafted-power-weapon-captain-on-bike
 - `adeptus-astartes/corvus-blackstar` — unreachable: auspex-array
 - `adeptus-astartes/drop-pod` — unreachable: drop-pod
 - `adeptus-astartes/victrix-honour-guard` — unreachable: banner-of-macragge
 - `adeptus-astartes/wulfen` — unreachable: death-totem
+- `adeptus-custodes/aquilan-wing-sentinel-guard-sodality` — unreachable: vexilla
+- `adeptus-custodes/aquilan-wing-venatari-with-kinetic-destroyers` — unreachable: tarsis-buckler
 - `adeptus-custodes/gilded-blades-custodian-guard` — unreachable: praesidium-shield
+- `adeptus-custodes/sentinel-guard-sodality` — unreachable: praesidium-shield
 - `adeptus-custodes/shield-captain` — unreachable: praesidium-shield
+- `adeptus-custodes/venatari-with-kinetic-destroyers` — unreachable: tarsis-buckler
 - `adeptus-mechanicus/archaeopter-fusilave` — unreachable: command-uplink
 - `adeptus-mechanicus/archaeopter-stratoraptor` — unreachable: command-uplink
 - `adeptus-mechanicus/archaeopter-transvector` — unreachable: command-uplink
@@ -456,20 +440,20 @@ Units whose composition `default_weapon_ids` reference ids unreachable from
 
 ## Parse failures
 
-- [T'au Empire] “My Railgun Has 2 Shots (But Now It's 11th Edition)” (`examples/atc-viewer/src/data/atc-2026.json`) — no-adapter-matched: tried 10 formats, none recognised the input
-- [Adepta Sororitas] “You Only Die Twice” (`examples/atc-viewer/src/data/atc-2026.json`) — no-adapter-matched: tried 10 formats, none recognised the input
-- [Necrons] “I need Matt Estrada to notice me.” (`examples/atc-viewer/src/data/atc-2026.json`) — no-adapter-matched: tried 10 formats, none recognised the input
-- [Thousand Sons] “Player Name: Daniel Sansone” (`examples/atc-viewer/src/data/atc-2026.json`) — no-adapter-matched: tried 10 formats, none recognised the input
-- [Leagues of Votann] “Player Name: David Clark” (`examples/atc-viewer/src/data/atc-2026.json`) — no-adapter-matched: tried 10 formats, none recognised the input
-- [Space Marines (Astartes)] “Player Name: Stephen Boone” (`examples/atc-viewer/src/data/atc-2026.json`) — no-adapter-matched: tried 10 formats, none recognised the input
-- [Adeptus Custodes] “Player Name: Casey Espich” (`examples/atc-viewer/src/data/atc-2026.json`) — no-adapter-matched: tried 10 formats, none recognised the input
-- [Leagues of Votann] “Player Name: Alex Mann” (`examples/atc-viewer/src/data/atc-2026.json`) — no-adapter-matched: tried 10 formats, none recognised the input
-- [T'au Empire] “Player Name: Alexander Standeven” (`examples/atc-viewer/src/data/atc-2026.json`) — no-adapter-matched: tried 10 formats, none recognised the input
-- [World Eaters] “+ PLAYER NAME: Will Mitchell” (`examples/atc-viewer/src/data/atc-2026.json`) — no-adapter-matched: tried 10 formats, none recognised the input
-- [Astra Militarum] “Player Name:  Mike "Big Daddy" V” (`examples/atc-viewer/src/data/atc-2026.json`) — no-adapter-matched: tried 10 formats, none recognised the input
-- [Thousand Sons] ““Be that word our sign of parting, bird or fiend!” I shri…” (`examples/atc-viewer/src/data/atc-5s.json`) — no-adapter-matched: tried 10 formats, none recognised the input
-- [Space Marines (Astartes)] “Player Name: Luke Henderson” (`examples/atc-viewer/src/data/atc-5s.json`) — no-adapter-matched: tried 10 formats, none recognised the input
-- [Dark Angels] “[  ] Player name: John trotter” (`examples/atc-viewer/src/data/atc-5s.json`) — decode-failed: input looks like JSON but failed to parse: Unexpected non-whitespace character after JSON at position 5 (line 1 column 6)
-- [Drukhari] “Player name: Matt Wells” (`examples/atc-viewer/src/data/atc-5s.json`) — no-adapter-matched: tried 10 formats, none recognised the input
-- [Leagues of Votann] “Team Name: Turn Zero” (`examples/atc-viewer/src/data/atc-5s.json`) — no-adapter-matched: tried 10 formats, none recognised the input
+- [T'au Empire] `examples/atc-viewer/src/data/atc-2026.json` teams[0].players[0] — no-adapter-matched: tried 10 formats, none recognised the input
+- [Adepta Sororitas] `examples/atc-viewer/src/data/atc-2026.json` teams[0].players[2] — no-adapter-matched: tried 10 formats, none recognised the input
+- [Necrons] `examples/atc-viewer/src/data/atc-2026.json` teams[1].players[0] — no-adapter-matched: tried 10 formats, none recognised the input
+- [Thousand Sons] `examples/atc-viewer/src/data/atc-2026.json` teams[1].players[3] — no-adapter-matched: tried 10 formats, none recognised the input
+- [Leagues of Votann] `examples/atc-viewer/src/data/atc-2026.json` teams[6].players[3] — no-adapter-matched: tried 10 formats, none recognised the input
+- [Space Marines (Astartes)] `examples/atc-viewer/src/data/atc-2026.json` teams[17].players[7] — no-adapter-matched: tried 10 formats, none recognised the input
+- [Adeptus Custodes] `examples/atc-viewer/src/data/atc-2026.json` teams[18].players[0] — no-adapter-matched: tried 10 formats, none recognised the input
+- [Leagues of Votann] `examples/atc-viewer/src/data/atc-2026.json` teams[20].players[0] — no-adapter-matched: tried 10 formats, none recognised the input
+- [T'au Empire] `examples/atc-viewer/src/data/atc-2026.json` teams[20].players[1] — no-adapter-matched: tried 10 formats, none recognised the input
+- [World Eaters] `examples/atc-viewer/src/data/atc-2026.json` teams[20].players[7] — no-adapter-matched: tried 10 formats, none recognised the input
+- [Astra Militarum] `examples/atc-viewer/src/data/atc-2026.json` teams[26].players[5] — no-adapter-matched: tried 10 formats, none recognised the input
+- [Thousand Sons] `examples/atc-viewer/src/data/atc-5s.json` teams[0].players[2] — no-adapter-matched: tried 10 formats, none recognised the input
+- [Space Marines (Astartes)] `examples/atc-viewer/src/data/atc-5s.json` teams[3].players[2] — no-adapter-matched: tried 10 formats, none recognised the input
+- [Dark Angels] `examples/atc-viewer/src/data/atc-5s.json` teams[16].players[2] — decode-failed: input looks like JSON but failed to parse: Unexpected non-whitespace character after JSON at position 5 (line 1 column 6)
+- [Drukhari] `examples/atc-viewer/src/data/atc-5s.json` teams[30].players[3] — no-adapter-matched: tried 10 formats, none recognised the input
+- [Leagues of Votann] `examples/atc-viewer/src/data/atc-5s.json` teams[31].players[3] — no-adapter-matched: tried 10 formats, none recognised the input
 

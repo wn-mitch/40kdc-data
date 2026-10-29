@@ -18,7 +18,7 @@
     "lists_with_violations": 94,
     "violating_units": 291,
     "warnings_by_code": {
-      "weapon-unresolved": 269,
+      "weapon-unresolved": 267,
       "detachment-unresolved": 128,
       "enhancement-unresolved": 114,
       "loadout-illegal": 93,
@@ -39,107 +39,107 @@
     "grouping_by_outcome": {
       "grouped": 3220,
       "unit-unresolved": 35,
-      "wargear-unresolved": 155,
-      "single-model": 3513,
+      "wargear-unresolved": 153,
+      "single-model": 3515,
       "no-recorded-defaults": 0,
       "solver-null": 188
     },
-    "composition_drift_units": 52
+    "composition_drift_units": 57
   },
   "parse_failures": [
     {
       "file": "examples/atc-viewer/src/data/atc-2026.json",
-      "list": "My Railgun Has 2 Shots (But Now It's 11th Edition)",
+      "list": "teams[0].players[0]",
       "faction": "T'au Empire",
       "reason": "no-adapter-matched: tried 10 formats, none recognised the input"
     },
     {
       "file": "examples/atc-viewer/src/data/atc-2026.json",
-      "list": "You Only Die Twice",
+      "list": "teams[0].players[2]",
       "faction": "Adepta Sororitas",
       "reason": "no-adapter-matched: tried 10 formats, none recognised the input"
     },
     {
       "file": "examples/atc-viewer/src/data/atc-2026.json",
-      "list": "I need Matt Estrada to notice me.",
+      "list": "teams[1].players[0]",
       "faction": "Necrons",
       "reason": "no-adapter-matched: tried 10 formats, none recognised the input"
     },
     {
       "file": "examples/atc-viewer/src/data/atc-2026.json",
-      "list": "Player Name: Daniel Sansone",
+      "list": "teams[1].players[3]",
       "faction": "Thousand Sons",
       "reason": "no-adapter-matched: tried 10 formats, none recognised the input"
     },
     {
       "file": "examples/atc-viewer/src/data/atc-2026.json",
-      "list": "Player Name: David Clark",
+      "list": "teams[6].players[3]",
       "faction": "Leagues of Votann",
       "reason": "no-adapter-matched: tried 10 formats, none recognised the input"
     },
     {
       "file": "examples/atc-viewer/src/data/atc-2026.json",
-      "list": "Player Name: Stephen Boone",
+      "list": "teams[17].players[7]",
       "faction": "Space Marines (Astartes)",
       "reason": "no-adapter-matched: tried 10 formats, none recognised the input"
     },
     {
       "file": "examples/atc-viewer/src/data/atc-2026.json",
-      "list": "Player Name: Casey Espich",
+      "list": "teams[18].players[0]",
       "faction": "Adeptus Custodes",
       "reason": "no-adapter-matched: tried 10 formats, none recognised the input"
     },
     {
       "file": "examples/atc-viewer/src/data/atc-2026.json",
-      "list": "Player Name: Alex Mann",
+      "list": "teams[20].players[0]",
       "faction": "Leagues of Votann",
       "reason": "no-adapter-matched: tried 10 formats, none recognised the input"
     },
     {
       "file": "examples/atc-viewer/src/data/atc-2026.json",
-      "list": "Player Name: Alexander Standeven",
+      "list": "teams[20].players[1]",
       "faction": "T'au Empire",
       "reason": "no-adapter-matched: tried 10 formats, none recognised the input"
     },
     {
       "file": "examples/atc-viewer/src/data/atc-2026.json",
-      "list": "+ PLAYER NAME: Will Mitchell",
+      "list": "teams[20].players[7]",
       "faction": "World Eaters",
       "reason": "no-adapter-matched: tried 10 formats, none recognised the input"
     },
     {
       "file": "examples/atc-viewer/src/data/atc-2026.json",
-      "list": "Player Name:  Mike \"Big Daddy\" V",
+      "list": "teams[26].players[5]",
       "faction": "Astra Militarum",
       "reason": "no-adapter-matched: tried 10 formats, none recognised the input"
     },
     {
       "file": "examples/atc-viewer/src/data/atc-5s.json",
-      "list": "“Be that word our sign of parting, bird or fiend!” I shri…",
+      "list": "teams[0].players[2]",
       "faction": "Thousand Sons",
       "reason": "no-adapter-matched: tried 10 formats, none recognised the input"
     },
     {
       "file": "examples/atc-viewer/src/data/atc-5s.json",
-      "list": "Player Name: Luke Henderson",
+      "list": "teams[3].players[2]",
       "faction": "Space Marines (Astartes)",
       "reason": "no-adapter-matched: tried 10 formats, none recognised the input"
     },
     {
       "file": "examples/atc-viewer/src/data/atc-5s.json",
-      "list": "[  ] Player name: John trotter",
+      "list": "teams[16].players[2]",
       "faction": "Dark Angels",
       "reason": "decode-failed: input looks like JSON but failed to parse: Unexpected non-whitespace character after JSON at position 5 (line 1 column 6)"
     },
     {
       "file": "examples/atc-viewer/src/data/atc-5s.json",
-      "list": "Player name: Matt Wells",
+      "list": "teams[30].players[3]",
       "faction": "Drukhari",
       "reason": "no-adapter-matched: tried 10 formats, none recognised the input"
     },
     {
       "file": "examples/atc-viewer/src/data/atc-5s.json",
-      "list": "Team Name: Turn Zero",
+      "list": "teams[31].players[3]",
       "faction": "Leagues of Votann",
       "reason": "no-adapter-matched: tried 10 formats, none recognised the input"
     }
@@ -275,12 +275,6 @@
     }
   ],
   "unresolved_names": {
-    "battle-size-unmapped": [
-      {
-        "key": "Combat Patrol (500 Point limit)",
-        "count": 19
-      }
-    ],
     "detachment-unresolved": [
       {
         "key": "Lions of the Emperor and Silent Hunters",
@@ -595,14 +589,6 @@
         "count": 1
       },
       {
-        "key": "Player Name: Henry Slater",
-        "count": 1
-      },
-      {
-        "key": "Player Name: Ritesh Gautam",
-        "count": 1
-      },
-      {
         "key": "Saga of Great Wolf and Legends of Saga and Song",
         "count": 1
       },
@@ -643,22 +629,6 @@
         "count": 1
       },
       {
-        "key": "Team Name: 3in (Errata to 6in) Deep Striking Your Mom",
-        "count": 1
-      },
-      {
-        "key": "Team Name: Bourbon City Brawlers",
-        "count": 1
-      },
-      {
-        "key": "Team name: Grimdark Gentlemen",
-        "count": 1
-      },
-      {
-        "key": "Team Name: Power-Armored Negligence",
-        "count": 1
-      },
-      {
         "key": "Technomancer w/Canoptek Wraiths",
         "count": 1
       },
@@ -684,20 +654,6 @@
       },
       {
         "key": "Winds of change(1995)",
-        "count": 1
-      }
-    ],
-    "disposition-unresolved": [
-      {
-        "key": "Disruption(using this one",
-        "count": 1
-      },
-      {
-        "key": "TAKE AN HOLD",
-        "count": 1
-      },
-      {
-        "key": "Using Reconnaissance",
         "count": 1
       }
     ],
@@ -912,12 +868,6 @@
       },
       {
         "key": "Weaver of Sagas",
-        "count": 1
-      }
-    ],
-    "faction-unresolved": [
-      {
-        "key": "Behind them thundered the infamous biker gang known as the Hogs of War. Their leader, Bryce, wore enough leather, chains, and bad decisions to sink a small boat. The bikers swerved around the convoy, revving engines and shouting threats that sounded suspiciously rehearsed. Chris merely adjusted his sunglasses and informed the team that things had become \"interesting.\"",
         "count": 1
       }
     ],
@@ -1281,10 +1231,6 @@
         "count": 2
       },
       {
-        "key": "Screamer-Killer talons",
-        "count": 2
-      },
-      {
         "key": "Somnus",
         "count": 2
       },
@@ -1501,6 +1447,13 @@
       ]
     },
     {
+      "faction": "adepta-sororitas",
+      "unit_id": "sanctuary-guardians-battle-sisters-squad",
+      "unreachable": [
+        "simulacrum-imperialis"
+      ]
+    },
+    {
       "faction": "adeptus-astartes",
       "unit_id": "azrael",
       "unreachable": [
@@ -1545,7 +1498,28 @@
     },
     {
       "faction": "adeptus-custodes",
+      "unit_id": "aquilan-wing-sentinel-guard-sodality",
+      "unreachable": [
+        "vexilla"
+      ]
+    },
+    {
+      "faction": "adeptus-custodes",
+      "unit_id": "aquilan-wing-venatari-with-kinetic-destroyers",
+      "unreachable": [
+        "tarsis-buckler"
+      ]
+    },
+    {
+      "faction": "adeptus-custodes",
       "unit_id": "gilded-blades-custodian-guard",
+      "unreachable": [
+        "praesidium-shield"
+      ]
+    },
+    {
+      "faction": "adeptus-custodes",
+      "unit_id": "sentinel-guard-sodality",
       "unreachable": [
         "praesidium-shield"
       ]
@@ -1555,6 +1529,13 @@
       "unit_id": "shield-captain",
       "unreachable": [
         "praesidium-shield"
+      ]
+    },
+    {
+      "faction": "adeptus-custodes",
+      "unit_id": "venatari-with-kinetic-destroyers",
+      "unreachable": [
+        "tarsis-buckler"
       ]
     },
     {

@@ -137,15 +137,15 @@ function toRecord(map: Map<string, number>): Record<string, number> {
   return Object.fromEntries(ranked(map).map((r) => [r.key, r.count]));
 }
 
-/** First non-empty line of the list text — the army name — to locate a list
- * in the corpus without carrying player names into the report. */
-function listLabel(text: string): string {
-  for (const line of text.split(/\r?\n/)) {
-    const t = line.trim();
-    if (t && !/^\++$/.test(t)) return t.length > 60 ? `${t.slice(0, 57)}…` : t;
-  }
-  return "(unnamed)";
-}
+/**
+ * Warning codes whose raw name is free text the player wrote (an army title, a battle size, a
+ * disposition note), not a parsed unit, weapon, enhancement or detachment name. Those texts carry
+ * player and team names, so the report counts them without quoting them.
+ */
+const FREE_TEXT_CODES: ReadonlySet<string> = new Set(["faction-unresolved", "disposition-unresolved", "battle-size-unmapped"]);
+
+/** A list line that labels a person or team ("Player Name: …"), which a misparse can read as an entity name. */
+const NAME_LABEL = /^[\s[\]+*-]*(player|team|captain|coach)\s*name\b/i;
 
 /** Classify why a roster unit did (not) get `loadout_groups`, mirroring the
  * gates of `buildLoadoutGroups` → `groupLoadout` in order. */
@@ -201,7 +201,7 @@ function auditCompositionDrift(ds: Dataset): CompositionDrift[] {
  */
 function forEachCorpusList(
   root: string,
-  cb: (rel: string, faction: string, text: string) => void,
+  cb: (rel: string, at: string, faction: string, text: string) => void,
 ): AtcAuditReport["corpus"] {
   const corpus: AtcAuditReport["corpus"] = [];
   for (const rel of CORPUS_FILES) {
@@ -212,15 +212,15 @@ function forEachCorpusList(
     const data = JSON.parse(readFileSync(path, "utf-8")) as CorpusFile;
     let fileLists = 0;
     let skipped = 0;
-    for (const team of data.teams ?? []) {
-      for (const player of team.players ?? []) {
+    for (const [teamIndex, team] of (data.teams ?? []).entries()) {
+      for (const [playerIndex, player] of (team.players ?? []).entries()) {
         const text = player.armyListText;
         if (!text || !text.trim()) {
           skipped += 1;
           continue;
         }
         fileLists += 1;
-        cb(rel, player.faction ?? "(unknown)", text);
+        cb(rel, `teams[${teamIndex}].players[${playerIndex}]`, player.faction ?? "(unknown)", text);
       }
     }
     corpus.push({ file: rel, lists: fileLists, skipped_no_text: skipped });
@@ -246,14 +246,15 @@ export function auditAtcCorpus(opts: { rootDir?: string } = {}): AtcAuditReport 
   let listsWithViolations = 0;
   let violatingUnits = 0;
 
-  const corpus = forEachCorpusList(root, (rel, faction, text) => {
+  // A list is located by its position in the corpus: its text names players and teams.
+  const corpus = forEachCorpusList(root, (rel, at, faction, text) => {
     lists += 1;
 
     const res = tryImportRoster(text);
     if (!res.ok) {
       parseFailures.push({
         file: rel,
-        list: listLabel(text),
+        list: at,
         faction,
         reason: `${res.reason}: ${res.message}`,
       });
@@ -263,7 +264,7 @@ export function auditAtcCorpus(opts: { rootDir?: string } = {}): AtcAuditReport 
 
     for (const w of roster.diagnostics.warnings) {
       bump(warningsByCode, w.code);
-      if (w.raw_name) {
+      if (w.raw_name && !FREE_TEXT_CODES.has(w.code) && !NAME_LABEL.test(w.raw_name)) {
         const names = unresolvedByCode.get(w.code) ?? new Map<string, number>();
         bump(names, w.raw_name);
         unresolvedByCode.set(w.code, names);
@@ -556,7 +557,7 @@ function countTable(rows: RankedCount[], keyHeader: string, limit?: number): str
   return lines;
 }
 
-function renderMarkdown(report: AtcAuditReport): string {
+export function renderMarkdown(report: AtcAuditReport): string {
   const h = report.headline;
   const lines: string[] = [];
   lines.push("# ATC-corpus legality audit");
@@ -638,7 +639,7 @@ function renderMarkdown(report: AtcAuditReport): string {
     lines.push("## Parse failures");
     lines.push("");
     for (const p of report.parse_failures) {
-      lines.push(`- [${p.faction}] “${p.list}” (\`${p.file}\`) — ${p.reason}`);
+      lines.push(`- [${p.faction}] \`${p.file}\` ${p.list} — ${p.reason}`);
     }
     lines.push("");
   }
