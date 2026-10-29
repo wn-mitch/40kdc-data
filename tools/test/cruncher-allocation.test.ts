@@ -12,7 +12,7 @@ function model(overrides: Partial<AttackModel>): AttackModel {
     modelsFiring: 1, attacksStat: 1, attacksBonus: 0, rapidFireStat: null, torrent: false,
     hit: { pass: 1, crit: 0 }, sustainedStat: null, lethal: false, wound: { pass: 1, crit: 0 },
     devastating: false, unsaved: 1, damage: [{ value: 1, probability: 1 }], woundLost: 1, mortalWoundLost: 1,
-    wounds: 1, modelCount: 1, ...overrides,
+    wounds: 1, modelCount: 1, unmodelled: [], ...overrides,
   };
 }
 
@@ -231,5 +231,31 @@ describe("allocate", () => {
     expect(allocate(input([zeroing(1, "unit"), zeroing(1, "unit")]), ds)).toEqual(allocate(plain, ds, { zeroing: { uses: 2, per: "unit" } }));
     expect(allocate(plated, ds, { zeroing: { uses: 0, per: "unit" } })).toEqual(allocate(plain, ds));
     expect(() => allocate(input([zeroing(1, "unit"), zeroing(1, "model")]), ds)).toThrow(/together are not modelled/);
+  });
+});
+
+describe("exact allocation of what it does not model", () => {
+  const ds = Dataset.embedded();
+  const input = (buffs: Buff[]): EngineInput => ({
+    attacker: { weapon: ds.weapons.getAny("bolt-rifle")!.raw, profileIndex: 0 },
+    target: { unit: ds.units.getAny("intercessor-squad")!.raw, profileIndex: 0 },
+    modelsFiring: 1, buffs, context: { phase: "shooting" },
+  });
+  const manual = { kind: "manual" as const, label: "test" };
+
+  it("refuses a single re-rolled die the expected stages price, rather than returning the unbuffed result", () => {
+    const one = (roll: "hit" | "wound" | "save" | "damage"): Buff => ({ source: manual, contribution: { type: "reroll-one", roll } });
+    expect(() => allocate(input([]), ds)).not.toThrow();
+    for (const [roll, label] of [["hit", "Hit roll"], ["wound", "Wound roll"], ["save", "saving throw"]] as const) {
+      expect(crunch(input([one(roll)]), ds).stages.at(-2)!.expected).not.toBeCloseTo(crunch(input([]), ds).stages.at(-2)!.expected, 6);
+      expect(() => allocate(input([one(roll)]), ds)).toThrow(new RegExp(`re-roll one ${label} not modelled`, "u"));
+    }
+    // A fixed Damage leaves one Damage re-roll nothing to change, so the exact result stands.
+    expect(allocate(input([one("damage")]), ds)).toEqual(allocate(input([]), ds));
+  });
+
+  it("refuses mortal wounds an ability inflicts on a roll", () => {
+    const mortal: Buff = { source: manual, contribution: { type: "mortal-wounds-on-roll", roll: "wound", outcome: "success", count: 1 } };
+    expect(() => allocate(input([mortal]), ds)).toThrow(/mortal wounds inflicted on a roll not modelled/u);
   });
 });

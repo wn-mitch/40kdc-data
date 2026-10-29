@@ -394,3 +394,43 @@ func TestAllocateCriticalWoundsWithTheirOwnSaveAndDamage(t *testing.T) {
 		t.Errorf("critical-wound AP and Damage: damageDealt %v, plain %v", harder.DamageDealt, plain.DamageDealt)
 	}
 }
+
+// A single re-rolled die and ability mortal wounds change the expected stages;
+// exact allocation refuses them rather than returning the result without them.
+func TestAllocateRefusesWhatItDoesNotModel(t *testing.T) {
+	ds := EmbeddedDataset()
+	weapon, _ := ds.Weapons.GetAny("bolt-rifle")
+	unit, _ := ds.Units.GetAny("intercessor-squad")
+	input := func(buffs ...any) map[string]any {
+		return map[string]any{
+			"attacker":     map[string]any{"weapon": weapon.Raw, "profileIndex": 0.0},
+			"target":       map[string]any{"unit": unit.Raw, "profileIndex": 0.0},
+			"modelsFiring": 1.0,
+			"buffs":        buffs,
+			"context":      shootingCtx(),
+		}
+	}
+	manual := map[string]any{"kind": "manual", "label": "test"}
+	one := func(roll string) any {
+		return map[string]any{"source": manual, "contribution": map[string]any{"type": "reroll-one", "roll": roll}}
+	}
+	plain, err := Allocate(input(), ds)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for roll, label := range map[string]string{"hit": "Hit roll", "wound": "Wound roll", "save": "saving throw"} {
+		_, err := Allocate(input(one(roll)), ds)
+		if want := "allocate: re-roll one " + label + " not modelled by exact allocation"; err == nil || err.Error() != want {
+			t.Errorf("re-roll one %s: got %v, want %q", roll, err, want)
+		}
+	}
+	// A fixed Damage leaves one Damage re-roll nothing to change.
+	fixed, err := Allocate(input(one("damage")), ds)
+	if err != nil || fixed.DamageDealt != plain.DamageDealt {
+		t.Errorf("re-roll one Damage roll on a fixed Damage: got %v, %v", fixed, err)
+	}
+	mortal := map[string]any{"source": manual, "contribution": map[string]any{"type": "mortal-wounds-on-roll", "roll": "wound", "outcome": "success", "count": 1.0}}
+	if _, err := Allocate(input(mortal), ds); err == nil || err.Error() != "allocate: mortal wounds inflicted on a roll not modelled by exact allocation" {
+		t.Errorf("mortal wounds on a roll: got %v", err)
+	}
+}

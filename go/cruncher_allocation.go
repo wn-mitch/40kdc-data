@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math"
 	"strconv"
+	"strings"
 )
 
 // The discrete allocation stage: what one shooting or fighting unit's attacks
@@ -61,6 +62,12 @@ type AttackModel struct {
 	// when a buff applies only on a critical wound. With Devastating Wounds it
 	// skips the save and its mortal wounds deal this Damage.
 	CriticalWound *CriticalWound
+	// Unmodelled lists what the expected stages price that exact allocation does
+	// not model: a single re-rolled die over the whole unit (its attacks are no
+	// longer independent) and mortal wounds an ability inflicts on a roll.
+	// Allocation refuses a model listing any rather than return a result
+	// without them.
+	Unmodelled []string
 }
 
 // AllocationOutput is the allocation of one crunch's attacks into the target.
@@ -374,6 +381,9 @@ func AllocateModel(model *AttackModel) (AllocationOutput, error) {
 
 // AllocateModelWith is AllocateModel against the target's per-attack defences.
 func AllocateModelWith(model *AttackModel, defences AllocationDefences) (AllocationOutput, error) {
+	if len(model.Unmodelled) > 0 {
+		return AllocationOutput{}, fmt.Errorf("allocate: %s not modelled by exact allocation", strings.Join(model.Unmodelled, ", "))
+	}
 	models, err := integral(model.ModelCount, "target models")
 	if err != nil {
 		return AllocationOutput{}, err

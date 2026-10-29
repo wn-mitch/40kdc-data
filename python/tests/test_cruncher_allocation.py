@@ -199,3 +199,41 @@ def test_critical_wounds_allocate_with_their_own_save_and_damage() -> None:
         "criticalWound": {"unsaved": 0.0, "damage": [{"value": 2, "probability": 1}]},
     }
     assert allocate_model(mortal)["damageDealt"] > allocate_model(devastating)["damageDealt"]
+
+
+def test_allocate_refuses_what_it_does_not_model(dataset: Any) -> None:
+    """A single re-rolled die and ability mortal wounds change the expected stages; exact
+    allocation refuses them rather than returning the result without them."""
+    from wh40kdc.cruncher import allocate
+
+    def engine_input(buffs: list[dict[str, Any]]) -> Any:
+        return {
+            "attacker": {"weapon": dataset.weapons.get_any("bolt-rifle").raw, "profileIndex": 0},
+            "target": {"unit": dataset.units.get_any("intercessor-squad").raw, "profileIndex": 0},
+            "modelsFiring": 1,
+            "buffs": buffs,
+            "context": {"phase": "shooting"},
+        }
+
+    manual = {"kind": "manual", "label": "test"}
+
+    def one(roll: str) -> dict[str, Any]:
+        return {"source": manual, "contribution": {"type": "reroll-one", "roll": roll}}
+
+    allocate(engine_input([]), dataset)
+    for roll, label in (("hit", "Hit roll"), ("wound", "Wound roll"), ("save", "saving throw")):
+        with pytest.raises(ValueError, match=f"re-roll one {label} not modelled"):
+            allocate(engine_input([one(roll)]), dataset)
+    # A fixed Damage leaves one Damage re-roll nothing to change.
+    assert allocate(engine_input([one("damage")]), dataset) == allocate(engine_input([]), dataset)
+    mortal = {
+        "source": manual,
+        "contribution": {
+            "type": "mortal-wounds-on-roll",
+            "roll": "wound",
+            "outcome": "success",
+            "count": 1,
+        },
+    }
+    with pytest.raises(ValueError, match="mortal wounds inflicted on a roll not modelled"):
+        allocate(engine_input([mortal]), dataset)

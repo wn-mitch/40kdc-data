@@ -85,6 +85,12 @@ export type AttackModel = {
   mortalWoundLost: number;
   wounds: number;
   modelCount: number;
+  /**
+   * What the expected stages price that the exact allocation does not model: a single re-rolled
+   * die over the whole unit (its attacks are no longer independent) and mortal wounds an ability
+   * inflicts on a roll. Allocation refuses a model listing any rather than return a result without them.
+   */
+  unmodelled: string[];
 };
 
 
@@ -199,6 +205,7 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
   let hits: number;
   let critHits: number;
   let hitsDetail: string;
+  let hitRerollOneDice = 0;
   let hitProbs = { pass: 1, crit: 0 };
   if (torrent) {
     hits = attacks;
@@ -225,6 +232,7 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
     if (resolved.rerollOne.hit) {
       const fresh = checkProbabilities({ ...hitCheck, reroll: "none" });
       const dice = oneRerollDice(attacks, probs.open);
+      hitRerollOneDice = dice;
       hits += dice * fresh.pass;
       critHits += dice * fresh.crit;
       hitsDetail += `; re-roll one Hit roll: ${dice.toFixed(4)} dice`;
@@ -469,6 +477,13 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
     wounds: W,
     modelCount: targetModelCount,
     ...(critical ? { criticalWound: { unsaved: 1 - pSavedCritical, damage: perCritical.distribution } } : {}),
+    unmodelled: [
+      ...(hitRerollOneDice > 0 ? ["re-roll one Hit roll"] : []),
+      ...(woundRerollOneDice > 0 ? ["re-roll one Wound roll"] : []),
+      ...(saveRerollOneDice > 0 ? ["re-roll one saving throw"] : []),
+      ...(damageRerollOne > 0 ? ["re-roll one Damage roll"] : []),
+      ...(rollMortals > 0 ? ["mortal wounds inflicted on a roll"] : []),
+    ],
   };
   return { output: { stages, resolved }, model };
 }

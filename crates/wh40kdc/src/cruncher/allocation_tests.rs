@@ -31,6 +31,7 @@ fn model() -> AttackModel {
         wounds: 1,
         model_count: 1,
         critical_wound: None,
+        unmodelled: Vec::new(),
     }
 }
 

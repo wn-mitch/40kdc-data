@@ -108,9 +108,17 @@ pub const MAX_EVENT_WORK: u64 = 1_000_000;
 #[derive(Clone, Debug)]
 pub enum AllocationError {
     Crunch(CruncherError),
-    NotWhole { what: &'static str, value: f64 },
-    TooManyAttacks { attacks: i64, work: u64 },
+    NotWhole {
+        what: &'static str,
+        value: f64,
+    },
+    TooManyAttacks {
+        attacks: i64,
+        work: u64,
+    },
     InvalidZeroing(String),
+    /// What the model prices that exact allocation does not model (`AttackModel::unmodelled`).
+    Unmodelled(Vec<String>),
 }
 
 impl fmt::Display for AllocationError {
@@ -121,6 +129,11 @@ impl fmt::Display for AllocationError {
                 write!(f, "allocate: {what} must be a whole number, got {value}")
             }
             Self::InvalidZeroing(detail) => write!(f, "allocate: {detail}"),
+            Self::Unmodelled(what) => write!(
+                f,
+                "allocate: {} not modelled by exact allocation",
+                what.join(", ")
+            ),
             Self::TooManyAttacks { attacks, work } => write!(
                 f,
                 "allocate: {attacks} attacks exceed the exact allocation bound (work {work} > {MAX_EVENT_WORK})"
@@ -396,6 +409,9 @@ pub fn allocate_model_with(
     model: &AttackModel,
     defences: &AllocationDefences,
 ) -> Result<AllocationOutput, AllocationError> {
+    if !model.unmodelled.is_empty() {
+        return Err(AllocationError::Unmodelled(model.unmodelled.clone()));
+    }
     let models = model.model_count as usize;
     let wounds = model.wounds as usize;
     if models == 0 || wounds == 0 {

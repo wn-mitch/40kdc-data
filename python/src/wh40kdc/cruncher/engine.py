@@ -93,6 +93,11 @@ class AttackModel(TypedDict):
     #: critical wound. With Devastating Wounds it skips the save and its mortal wounds deal this
     #: Damage.
     criticalWound: NotRequired[CriticalWound]
+    #: What the expected stages price that the exact allocation does not model: a single
+    #: re-rolled die over the whole unit (its attacks are no longer independent) and mortal wounds
+    #: an ability inflicts on a roll. Allocation refuses a model listing any rather than return a
+    #: result without them.
+    unmodelled: list[str]
 
 
 
@@ -297,6 +302,7 @@ def crunch_model(
     crit_hit_threshold = min(6, (resolved["critThresholds"].get("hit") or {}).get("value", 6))
     torrent = _find_keyword(resolved, "torrent") is not None
     hit_probs: RollProbabilities = {"pass": 1.0, "crit": 0.0}
+    hit_reroll_one_dice = 0.0
     if torrent:
         hits = attacks
         crit_hits = 0.0
@@ -333,6 +339,7 @@ def crunch_model(
         if resolved["rerollOne"].get("hit"):
             fresh = _check_probabilities(**hit_check, reroll="none")
             dice = one_reroll_dice(attacks, probs[2])
+            hit_reroll_one_dice = dice
             hits += dice * fresh[0]
             crit_hits += dice * fresh[1]
             hits_detail += f"; re-roll one Hit roll: {dice:.4f} dice"
@@ -730,6 +737,17 @@ def crunch_model(
         "mortalWoundLost": p_survive_all * p_survive_mortal,
         "wounds": wounds_stat,
         "modelCount": target_model_count,
+        "unmodelled": [
+            what
+            for priced, what in (
+                (hit_reroll_one_dice > 0, "re-roll one Hit roll"),
+                (wound_reroll_one_dice > 0, "re-roll one Wound roll"),
+                (save_reroll_one_dice > 0, "re-roll one saving throw"),
+                (damage_reroll_one > 0, "re-roll one Damage roll"),
+                (roll_mortals > 0, "mortal wounds inflicted on a roll"),
+            )
+            if priced
+        ],
     }
     if attacks_reroll and "A" not in resolved["statSet"]:
         model["attacksReroll"] = attacks_reroll

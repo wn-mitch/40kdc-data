@@ -281,6 +281,7 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 	}
 	torrent := res.findKeyword("torrent") != nil
 	var hits, critHits float64
+	hitRerollOneDice := 0.0
 	hitPass, hitCrit := 1.0, 0.0
 	if torrent {
 		hits = attacks
@@ -314,6 +315,7 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 		if _, ok := res.rerollOne["hit"]; ok {
 			freshPass, freshCrit, _ := checkProbabilities(hitStatN, hitModifier, "none", true, true, critHitThreshold)
 			dice := oneRerollDice(attacks, openP)
+			hitRerollOneDice = dice
 			hits += dice * freshPass
 			critHits += dice * freshCrit
 		}
@@ -353,11 +355,12 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 	woundPass, woundCrit, woundOpen := checkProbabilities(float64(stdWoundNeeded), res.woundMod, rerollSubset(res, "wound"), true, true, critWoundThreshold)
 	regularWoundsFromRoll := hitsForWoundRoll * (woundPass - woundCrit)
 	critWoundsFromRoll := hitsForWoundRoll * woundCrit
+	woundRerollOneDice := 0.0
 	if _, ok := res.rerollOne["wound"]; ok {
 		freshPass, freshCrit, _ := checkProbabilities(float64(stdWoundNeeded), res.woundMod, "none", true, true, critWoundThreshold)
-		dice := oneRerollDice(hitsForWoundRoll, woundOpen)
-		regularWoundsFromRoll += dice * (freshPass - freshCrit)
-		critWoundsFromRoll += dice * freshCrit
+		woundRerollOneDice = oneRerollDice(hitsForWoundRoll, woundOpen)
+		regularWoundsFromRoll += woundRerollOneDice * (freshPass - freshCrit)
+		critWoundsFromRoll += woundRerollOneDice * freshCrit
 	}
 	totalRegularWounds := regularWoundsFromRoll + lethalAutoWounds
 	hasDevastating := res.findKeyword("devastating-wounds") != nil
@@ -420,10 +423,12 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 	}
 	unsaved := regularWoundsForSaves * (1 - pSaved)
 	// "Re-roll one saving throw": one failed save no other permission re-rolled is rolled again.
+	saveRerollOneDice := 0.0
 	if _, ok := res.rerollOne["save"]; ok && effectiveSaveTarget < 7 {
-		if dice := oneRerollDice(regularWoundsForSaves, saveOpen); dice > 0 {
+		saveRerollOneDice = oneRerollDice(regularWoundsForSaves, saveOpen)
+		if saveRerollOneDice > 0 {
 			freshPass, _, _ := checkProbabilities(effectiveSaveTarget, 0, "none", true, false, 7)
-			unsaved -= dice * freshPass
+			unsaved -= saveRerollOneDice * freshPass
 		}
 	}
 	// Buffs that apply only on a critical wound: those wounds take the save at their own AP.
@@ -447,7 +452,7 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 		crits := criticalSaveStream(criticalSaveTarget, criticalToSaves, reroll)
 		pSavedCritical = crits.saved
 		_, rerollOne := res.rerollOne["save"]
-		unsaved, _ = splitUnsaved([]saveStream{regular, crits}, rerollOne)
+		unsaved, saveRerollOneDice = splitUnsaved([]saveStream{regular, crits}, rerollOne)
 		shareRegular := regular.wounds * (1 - regular.saved)
 		shareCritical := crits.wounds * (1 - crits.saved)
 		unsavedRegular = 0
@@ -522,6 +527,7 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 	// With critical-wound Damage a roll gains against its own kind's mean: the
 	// two kinds are separate rolls, not one die with both distributions.
 	damageRolls := unsaved + mortalWoundsStream
+	damageRerollOne := 0.0
 	if _, ok := res.rerollOne["damage"]; ok && damageReroll == "" && criticalDamageReroll == "" && damageRolls > 0 {
 		gain := 0.0
 		if critical != nil {
@@ -533,12 +539,14 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 		} else {
 			gain = oneDamageRerollGain(perAttack.distribution, damageRolls)
 		}
+		damageRerollOne = gain
 		if gain > 0 {
 			damageMain += gain * (unsaved / damageRolls)
 			damageMortal += gain * (mortalWoundsStream / damageRolls)
 		}
 	}
 	// Mortal wounds the attack's own rolls inflict: one damage each, outside the save and Damage roll.
+	rollMortals := 0.0
 	for _, entry := range res.rollMortals {
 		var triggers float64
 		switch entry.roll + "/" + entry.outcome {
@@ -551,8 +559,9 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 		case "wound/critical":
 			triggers = critWoundsFromRoll
 		}
-		damageMortal += entry.count * triggers
+		rollMortals += entry.count * triggers
 	}
+	damageMortal += rollMortals
 	damage := damageMain + damageMortal
 	stages = append(stages, stage("damage", damage))
 
@@ -599,6 +608,20 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 		MortalWoundLost: pSurviveAll * pSurviveMortal,
 		Wounds:          woundsStat,
 		ModelCount:      tmc,
+	}
+	for _, priced := range []struct {
+		on   bool
+		what string
+	}{
+		{hitRerollOneDice > 0, "re-roll one Hit roll"},
+		{woundRerollOneDice > 0, "re-roll one Wound roll"},
+		{saveRerollOneDice > 0, "re-roll one saving throw"},
+		{damageRerollOne > 0, "re-roll one Damage roll"},
+		{rollMortals > 0, "mortal wounds inflicted on a roll"},
+	} {
+		if priced.on {
+			model.Unmodelled = append(model.Unmodelled, priced.what)
+		}
 	}
 	if critical != nil {
 		model.CriticalWound = &CriticalWound{Unsaved: 1 - pSavedCritical, Damage: perCritical.distribution}

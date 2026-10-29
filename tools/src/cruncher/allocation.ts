@@ -176,6 +176,7 @@ function zeroingOf(defences: AllocationDefences): DamageZeroing {
 }
 
 export function allocateModel(model: AttackModel, defences: AllocationDefences = {}): AllocationOutput {
+  if (model.unmodelled.length > 0) throw new Error(`allocate: ${model.unmodelled.join(", ")} not modelled by exact allocation`);
   const models = integral(model.modelCount, "target models");
   const wounds = integral(model.wounds, "target Wounds");
   const zeroing = zeroingOf(defences);

@@ -273,6 +273,10 @@ def allocate_model(
     model: AttackModel, defences: AllocationDefences | None = None
 ) -> AllocationOutput:
     """Exact allocation of the damage an :class:`AttackModel` describes."""
+    if model.get("unmodelled"):
+        raise ValueError(
+            f"allocate: {', '.join(model['unmodelled'])} not modelled by exact allocation"
+        )
     models = _integral(model["modelCount"], "target models")
     wounds = _integral(model["wounds"], "target Wounds")
     zeroing = _zeroing_of(defences)

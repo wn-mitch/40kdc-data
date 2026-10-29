@@ -172,6 +172,11 @@ pub struct AttackModel {
     /// a critical wound. A critical wound is one the wound roll scores, not a Lethal Hits wound;
     /// with Devastating Wounds it skips the save and its mortal wounds deal this Damage.
     pub critical_wound: Option<CriticalWound>,
+    /// What the expected stages price that the exact allocation does not model: a single
+    /// re-rolled die over the whole unit (its attacks are no longer independent) and mortal
+    /// wounds an ability inflicts on a roll. Allocation refuses a model listing any rather than
+    /// return a result without them.
+    pub unmodelled: Vec<String>,
 }
 
 /// A critical wound's chance to go unsaved and its per-attack Damage, ascending by value.
@@ -477,6 +482,7 @@ pub fn crunch_model(
         pass: 1.0,
         crit: 0.0,
     };
+    let mut hit_reroll_one_dice = 0.0;
     let (hits_raw, crit_hits, mut hits_detail) = if torrent {
         (attacks, 0.0, format!("Torrent: auto-hits ({attacks:.4})"))
     } else {
@@ -534,6 +540,7 @@ pub fn crunch_model(
                 ..hit_check
             });
             let dice = one_reroll_dice(attacks, probs.open);
+            hit_reroll_one_dice = dice;
             hits += dice * fresh.pass;
             crits += dice * fresh.crit;
             detail.push_str(&format!("; re-roll one Hit roll: {dice:.4} dice"));
@@ -1095,6 +1102,16 @@ pub fn crunch_model(
             unsaved: 1.0 - p_saved_critical,
             damage: per_critical.distribution,
         }),
+        unmodelled: [
+            (hit_reroll_one_dice > 0.0, "re-roll one Hit roll"),
+            (wound_reroll_one_dice > 0.0, "re-roll one Wound roll"),
+            (save_reroll_one_dice > 0.0, "re-roll one saving throw"),
+            (damage_reroll_one > 0.0, "re-roll one Damage roll"),
+            (roll_mortals > 0.0, "mortal wounds inflicted on a roll"),
+        ]
+        .into_iter()
+        .filter_map(|(priced, what)| priced.then(|| what.to_string()))
+        .collect(),
     };
     Ok((EngineOutput { stages, resolved }, model))
 }
