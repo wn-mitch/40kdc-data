@@ -61,10 +61,6 @@ pub(super) fn eligibility_clause(sel: &P, require_object: bool) -> String {
     }
 }
 
-fn target_noun(sel: &P) -> &'static str {
-    selector_level(sel)
-}
-
 pub(super) fn selection_limit_phrase(limit: &P, noun: &str) -> String {
     let times = if is_num(limit, "count", 1.0) {
         "once".to_string()
@@ -152,61 +148,6 @@ pub(crate) fn select_units_plural(sel: &P) -> bool {
     selector_count(sel).1
 }
 
-/// Global `\b[Tt]<pat>\b` replacement, with `repl(capital)` choosing the text.
-fn replace_the(text: &str, pat: &str, repl: impl Fn(bool) -> String) -> String {
-    let mut out = String::new();
-    let mut i = 0;
-    while i < text.len() {
-        let rest = &text[i..];
-        let capital = rest.starts_with('T');
-        let hit = (rest.starts_with('T') || rest.starts_with('t'))
-            && rest[1..].starts_with(pat)
-            && !text[..i]
-                .chars()
-                .next_back()
-                .is_some_and(|c| c.is_ascii_alphanumeric() || c == '_')
-            && !text[i + 1 + pat.len()..]
-                .chars()
-                .next()
-                .is_some_and(|c| c.is_ascii_alphanumeric() || c == '_');
-        if hit {
-            out.push_str(&repl(capital));
-            i += 1 + pat.len();
-        } else {
-            let ch = rest.chars().next().unwrap();
-            out.push(ch);
-            i += ch.len_utf8();
-        }
-    }
-    out
-}
-
-pub(crate) fn selected_recipient(text: &str, sel: &P) -> String {
-    let noun = target_noun(sel);
-    let recipient = if select_units_plural(sel) {
-        format!("each selected {noun}")
-    } else {
-        format!("the selected {noun}")
-    };
-    // Membership remains relative to the bearer/current unit, not the selected recipient.
-    let text = text.replace("in the unit", "\u{e000}");
-    let text = replace_the(&text, "he unit's", |cap| {
-        if cap {
-            format!("Each selected {noun}'s")
-        } else {
-            format!("{recipient}'s")
-        }
-    });
-    replace_the(&text, "he unit", |cap| {
-        if cap {
-            format!("Each selected {noun}")
-        } else {
-            recipient.clone()
-        }
-    })
-    .replace('\u{e000}', "in the unit")
-}
-
 pub(crate) fn selected_context(ctx: &Ctx, sel: &P) -> Ctx {
     let model = selector_level(sel) == "model";
     Ctx {
@@ -220,7 +161,7 @@ pub(crate) fn selected_context(ctx: &Ctx, sel: &P) -> Ctx {
 pub(crate) fn select_units_inline(sel: &P, effect: &Value, ctx: &Ctx) -> String {
     let subject = select_units_subject(sel);
     let binding = selection_binding(sel);
-    let nested = selected_recipient(&inline(effect, &selected_context(ctx, sel)), sel);
+    let nested = inline(effect, &selected_context(ctx, sel));
     format!("select {subject}{binding}: {nested}")
 }
 

@@ -134,33 +134,6 @@ func selectUnitsPlural(sel map[string]any) bool {
 	return jsNumber(max) != 1
 }
 
-var theUnitPossRe = regexp.MustCompile(`\b[Tt]he unit's\b`)
-var theUnitRe = regexp.MustCompile(`\b[Tt]he unit\b`)
-
-func selectedRecipient(text string, sel map[string]any) string {
-	noun := selectorNoun(sel)
-	recipient := "the selected " + noun
-	if selectUnitsPlural(sel) {
-		recipient = "each selected " + noun
-	}
-	// Membership remains relative to the bearer/current unit, not the selected recipient.
-	const membership = "\ue000"
-	text = strings.ReplaceAll(text, "in the unit", membership)
-	text = theUnitPossRe.ReplaceAllStringFunc(text, func(match string) string {
-		if match[0] == 'T' {
-			return "Each selected " + noun + "'s"
-		}
-		return recipient + "'s"
-	})
-	text = theUnitRe.ReplaceAllStringFunc(text, func(match string) string {
-		if match[0] == 'T' {
-			return "Each selected " + noun
-		}
-		return recipient
-	})
-	return strings.ReplaceAll(text, membership, "in the unit")
-}
-
 func selectedContext(ctx effCtx, sel map[string]any) effCtx {
 	model := selectorNoun(sel) == "model"
 	ctx.selectedUnit = !model
@@ -172,7 +145,7 @@ func selectedContext(ctx effCtx, sel map[string]any) effCtx {
 func selectUnitsInline(sel, effect map[string]any, ctx effCtx) string {
 	subject := selectUnitsSubject(sel)
 	binding := selectionBinding(sel)
-	nested := selectedRecipient(describeEffectInline(effect, selectedContext(ctx, sel)), sel)
+	nested := describeEffectInline(effect, selectedContext(ctx, sel))
 	return "select " + subject + binding + ": " + nested
 }
 

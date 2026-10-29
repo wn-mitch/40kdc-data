@@ -755,7 +755,7 @@ func selectUnitsBlock(e map[string]any, indent, arrow string, depth int, ctx eff
 		}
 		return strings.TrimSuffix(header, ".") + ":\n" + describeEffect(inner, depth+1, selectedCtx)
 	}
-	nested := selectedRecipient(describeEffectInline(inner, selectedCtx), sel)
+	nested := describeEffectInline(inner, selectedCtx)
 	return header + ": " + nested + "."
 }
 

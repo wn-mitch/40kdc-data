@@ -146,7 +146,7 @@ pub(super) fn block(e: &Value, depth: usize, ctx: &Ctx) -> String {
                 }
                 return format!("{header}:\n{}", block(inner, depth + 1, &selected));
             }
-            let nested = selected_recipient(&inline(inner, &selected), sel);
+            let nested = inline(inner, &selected);
             format!("{header}: {nested}.")
         }
         "persistent-designation" => {

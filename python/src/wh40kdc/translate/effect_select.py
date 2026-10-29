@@ -195,25 +195,6 @@ def select_units_plural(sel: Any) -> bool:
     return selector_count(_obj(sel))[1]
 
 
-def selected_recipient(text: str, sel: Any) -> str:
-    sel = _obj(sel)
-    noun = _selector_level(sel)
-    recipient = f"each selected {noun}" if select_units_plural(sel) else f"the selected {noun}"
-    # Membership remains relative to the bearer/current unit, not the selected recipient.
-    membership = "\ue000"
-    text = text.replace("in the unit", membership)
-    text = re.sub(
-        r"\b[Tt]he unit's\b",
-        lambda mt: f"Each selected {noun}'s" if mt.group(0)[0] == "T" else f"{recipient}'s",
-        text,
-    )
-    return re.sub(
-        r"\b[Tt]he unit\b",
-        lambda mt: f"Each selected {noun}" if mt.group(0)[0] == "T" else recipient,
-        text,
-    ).replace(membership, "in the unit")
-
-
 def selected_context(ctx: Ctx, sel: Any) -> Ctx:
     selected_model = _selector_level(_obj(sel)) == "model"
     return {

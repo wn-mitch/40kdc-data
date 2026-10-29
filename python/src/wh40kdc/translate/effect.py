@@ -61,7 +61,6 @@ from wh40kdc.translate.effect_select import (
     select_units_plural,
     select_units_subject,
     selected_context,
-    selected_recipient,
     selection_binding,
 )
 from wh40kdc.translate.effect_words import (
@@ -320,7 +319,7 @@ def _select_units_block(e: Effect, depth: int, ctx: Ctx, indent: str, arrow: str
             nested = describe_effect(inner, depth + 2, inner_ctx)
             return f"{bare}:\n{indent}  -> For each selected {noun}:\n{nested}"
         return f"{bare}:\n" + describe_effect(inner, depth + 1, inner_ctx)
-    nested = selected_recipient(describe_effect_inline(inner, inner_ctx), selector)
+    nested = describe_effect_inline(inner, inner_ctx)
     return f"{header} {capitalize(nested)}." if engagement else f"{header}: {nested}."
 
 

@@ -245,18 +245,6 @@ function selectUnitsPlural(sel: Record<string, unknown> = {}): boolean {
   return selectorCount(sel).plural;
 }
 
-function selectedRecipient(text: string, sel: Record<string, unknown> = {}): string {
-  const noun = selectorNoun(sel);
-  const recipient = selectUnitsPlural(sel) ? `each selected ${noun}` : `the selected ${noun}`;
-  // Membership remains relative to the bearer/current unit, not the selected recipient.
-  const membership = "\uE000";
-  return text
-    .replaceAll("in the unit", membership)
-    .replace(/\b[Tt]he unit's\b/g, (match) => match[0] === "T" ? `Each selected ${noun}'s` : `${recipient}'s`)
-    .replace(/\b[Tt]he unit\b/g, (match) => match[0] === "T" ? `Each selected ${noun}` : recipient)
-    .replaceAll(membership, "in the unit");
-}
-
 function selectedContext(ctx: Ctx, sel: Record<string, unknown>): Ctx {
   const selectedModel = selectorNoun(sel) === "model";
   return { ...ctx, selectedUnit: !selectedModel, selectedModel, unitSubject: undefined };
@@ -265,7 +253,7 @@ function selectedContext(ctx: Ctx, sel: Record<string, unknown>): Ctx {
 function selectUnitsInline(sel: Record<string, unknown>, effect: Effect, ctx: Ctx): string {
   const subject = selectUnitsSubject(sel);
   const binding = selectionBinding(sel);
-  const nested = selectedRecipient(describeEffectInline(effect, selectedContext(ctx, sel)), sel);
+  const nested = describeEffectInline(effect, selectedContext(ctx, sel));
   return `select ${subject}${binding}: ${nested}`;
 }
 
@@ -922,7 +910,7 @@ export function describeEffect(e: Effect, depth: number = 0, ctx: Ctx = {}): str
         }
         return `${header.replace(/\.$/, "")}:\n` + describeEffect(inner, depth + 1, selectedCtx);
       }
-      const nested = selectedRecipient(describeEffectInline(inner, selectedCtx), selector);
+      const nested = describeEffectInline(inner, selectedCtx);
       return `${header}: ${nested}.`;
     }
     case "persistent-designation": {

@@ -40,7 +40,6 @@ from wh40kdc.translate.effect_select import (
     select_units_engagement,
     select_units_subject,
     selected_context,
-    selected_recipient,
     selection_binding,
 )
 from wh40kdc.translate.effect_words import (
@@ -78,7 +77,7 @@ def _select_units_inline(sel: Any, effect: Effect, ctx: Ctx) -> str:
     subject = select_units_subject(sel)
     engagement = select_units_engagement(sel)
     binding = selection_binding(sel)
-    nested = selected_recipient(describe_effect_inline(effect, selected_context(ctx, sel)), sel)
+    nested = describe_effect_inline(effect, selected_context(ctx, sel))
     if engagement:
         return f"select {subject}{binding}. {engagement} {capitalize(nested)}"
     return f"select {subject}{binding}: {nested}"

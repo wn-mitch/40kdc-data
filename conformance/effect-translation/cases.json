@@ -8734,7 +8734,7 @@
       "optional": true
     },
     "expected": {
-      "text": "When an enemy unit targets this unit, you may use this ability, until the end of the phase:\n  -> The attacking unit gets -1 to Hit rolls.\n  -> Select one friendly CELESTIAN SACRESANTS unit other than the unit if the selected unit is not Battle-shocked and the selected unit is within 6\" of the unit: while the selected unit is tagged righteous, while the selected unit is friendly, if the target unit is the same unit as the selected unit, the attacking unit gets -1 to Hit rolls.\nApplies to: units with CELESTIAN SACRESANTS."
+      "text": "When an enemy unit targets this unit, you may use this ability, until the end of the phase:\n  -> The attacking unit gets -1 to Hit rolls.\n  -> Select one friendly CELESTIAN SACRESANTS unit other than the unit if the selected unit is not Battle-shocked and the selected unit is within 6\" of the unit: while the unit is tagged righteous, while the unit is friendly, if the target unit is the same unit as the selected unit, the attacking unit gets -1 to Hit rolls.\nApplies to: units with CELESTIAN SACRESANTS."
     }
   },
   {
@@ -43230,6 +43230,90 @@
     },
     "expected": {
       "text": "If the enemy Warlord was destroyed this turn, the unit gets +1 to Hit rolls."
+    }
+  },
+  {
+    "caseId": "canonical/select-units-bearer-condition",
+    "effect": {
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "friendly"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "matches",
+          "parameters": {
+            "subject": "this-unit",
+            "filter": {
+              "designated": "righteous"
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "selected-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "expected": {
+      "text": "Until the end of the phase:\n  -> Select one friendly unit: while the unit is tagged righteous, that unit gets +1 to Hit rolls."
+    }
+  },
+  {
+    "caseId": "canonical/select-units-selected-condition",
+    "effect": {
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "friendly"
+        },
+        "count": {
+          "min": 0,
+          "max": 2
+        }
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "matches",
+          "parameters": {
+            "subject": "selected-unit",
+            "filter": {
+              "designated": "righteous"
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "selected-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "expected": {
+      "text": "Until the end of the phase:\n  -> Select up to 2 friendly units: while the selected unit is tagged righteous, that unit gets +1 to Hit rolls."
     }
   }
 ]
