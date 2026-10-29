@@ -292,6 +292,12 @@ func describeHappenedCore(p map[string]any, negated bool) string {
 			}
 			return neg + victim + " lost " + amount + " models to the just-resolved " + atk + "attacks"
 		}
+		// "the enemy WARLORD": one designated model, named as itself rather than counted.
+		warlord := !extended && kws == "" && obj["designated"] == "warlord"
+		victims := amount + " " + objects
+		if warlord {
+			victims = "the " + owner + "Warlord"
+		}
 		// Who destroyed them: the filter's attacker, else the event's subject.
 		killer := f["by"]
 		if killer == nil {
@@ -309,7 +315,14 @@ func describeHappenedCore(p map[string]any, negated bool) string {
 			} else if atk != "" {
 				when = "with " + atk + "attacks " + windowPhrase(p["window"])
 			}
-			return trimEnd(neg + unitRefPhrase(killer, "the unit") + " has destroyed " + amount + " " + objects + " " + when)
+			return trimEnd(neg + unitRefPhrase(killer, "the unit") + " has destroyed " + victims + " " + when)
+		}
+		if warlord {
+			was := "was"
+			if negated {
+				was = "was not"
+			}
+			return withWindow(victims+" "+was+" destroyed", p["window"])
 		}
 		tagged := ""
 		if !extended && obj["designated"] != nil {

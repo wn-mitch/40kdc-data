@@ -119,14 +119,18 @@ function happenedPhrase(p: P, negated: boolean): string {
         const victim = obj.member_of === "selected-unit" ? "the unit" : unitRefPhrase(obj.member_of);
         return `${neg}${victim} lost ${amount} models to the just-resolved ${f.attack_type ? `${str(f.attack_type)} ` : ""}attacks`;
       }
+      // "the enemy WARLORD": one designated model, named as itself rather than counted.
+      const warlord = !extended && kws === "" && obj.designated === "warlord";
+      const victims = warlord ? `the ${owner}Warlord` : `${amount} ${objects}`;
       // Who destroyed them: the filter's attacker, else the event's subject.
       const killer = f.by ?? p.subject;
       if (killer != null) {
         // A destruction by one attack type says it: "with its just-resolved melee attacks", "with melee attacks this phase".
         const atk = f.attack_type ? `${str(f.attack_type)} ` : "";
         const when = p.window === "event" ? `with its just-resolved ${atk}attacks` : `${atk ? `with ${atk}attacks ` : ""}${windowPhrase(p.window)}`;
-        return `${neg}${unitRefPhrase(killer)} has destroyed ${amount} ${objects} ${when}`.trimEnd();
+        return `${neg}${unitRefPhrase(killer)} has destroyed ${victims} ${when}`.trimEnd();
       }
+      if (warlord) return withWindow(`${victims} ${negated ? "was not" : "was"} destroyed`, p.window);
       const tagged = !extended && obj.designated != null ? ` ${designationPhrase(str(obj.designated))}` : "";
       return `${neg}${withWindow(`${amount} ${objects}${tagged} destroyed`, p.window)}`;
     }

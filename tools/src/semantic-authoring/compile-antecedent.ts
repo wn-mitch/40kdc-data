@@ -38,6 +38,9 @@ export function momentNamesUnit(leaves: readonly CompileLeaf[], index: number): 
   // "While a friendly X unit is within …, each time that unit makes a battle-shock roll": a unit-filter
   // before the moment (past its conditions) names the moment's unit (compile-unit-filters.ts folds it on).
   if (leaves.some((other, at) => at < index && other.family_id === "unit-filter" && momentOfFilter(leaves, at) === index)) return true;
+  // "When a unit's Reanimation Protocols activate": a named ability is used by a unit, so the moment names that unit
+  // with or without an owner; a Stratagem named by owner is the player's, and names no unit.
+  if (kind === "used" && leaf.parameters.activity === "ability" && (leaf.parameters.owner !== undefined || leaf.parameters.id !== undefined)) return true;
   if (kind !== "used" || leaf.parameters.owner !== undefined) return false;
   if (leaf.parameters.subject !== undefined || leaf.parameters.subject_filter !== undefined) return true;
   let at = index - 1;
@@ -476,6 +479,22 @@ function recipientOfFilteredEffect(leaves: readonly CompileLeaf[], index: number
   return antecedentKeys(leaf.family_id, leaf.parameters).every((key) => boundValue(leaf, key, AURA_RECIPIENT) !== null) ? AURA_RECIPIENT : null;
 }
 
+/**
+ * Whether a moment of a unit sits between the last for-each loop and the leaf at `index`, after an effect of that loop:
+ * the moment opens a later part, so the loop's pass no longer names "that unit" (momentNamesUnit says which moments
+ * name a unit).
+ */
+function laterPartMoment(leaves: readonly CompileLeaf[], index: number): boolean {
+  const loop = leaves.slice(0, index).map((leaf) => leaf.family_id === "for-each-unit-select").lastIndexOf(true);
+  if (loop < 0) return false;
+  for (let at = index - 1; at > loop; at -= 1) {
+    const leaf = leaves[at]!;
+    if (leaf.family_id !== "event") continue;
+    return momentNamesUnit(leaves, at) && leaves.slice(loop + 1, at).some((other) => other.role === "EFFECT");
+  }
+  return false;
+}
+
 /** The role an earlier leaf of the record gives an anaphor, in order of precedence. */
 function antecedentRole(leaves: readonly CompileLeaf[], index: number, focus?: (index: number) => string | null, sourceText?: string): string | null {
   // "makes a ranged attack that targets an enemy unit visible to the bearer": the unit the attack names after it is the defender.
@@ -530,6 +549,9 @@ function antecedentRole(leaves: readonly CompileLeaf[], index: number, focus?: (
   }
   // "Redeploy up to three friendly units": a set-up whose selection comes after it, in the same part.
   if (selectionFollowsVerb(leaves, index) !== null) return verbFirstSelection(leaves, index);
+  // "For each friendly unit …, activates X. When a unit's X activates, that unit …": a moment of a unit after the
+  // loop's effects opens a later part, and "that unit" there is the moment's unit, not a pass of the loop.
+  if (laterPartMoment(leaves, index)) return "event-subject";
   // "For each enemy unit …, that unit …": each pass's unit, which the DSL's for-each-unit calls its recipient.
   if (earlier.some((other) => other.family_id === "for-each-unit-select")) return AURA_RECIPIENT;
   // "when an enemy unit targets a friendly X unit that is within range of an objective": the filter is the moment's

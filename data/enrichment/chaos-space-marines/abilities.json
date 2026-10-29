@@ -8715,45 +8715,51 @@
             }
           },
           "effect": {
-            "type": "conditional",
-            "condition": {
-              "operator": "and",
-              "operands": [
-                {
-                  "type": "strength",
-                  "parameters": {
-                    "subject": "recipient",
-                    "below": "starting"
-                  }
-                },
-                {
-                  "type": "matches",
-                  "parameters": {
-                    "subject": "recipient",
-                    "filter": {
-                      "within": {
-                        "of": {
-                          "owner": "friendly",
-                          "all_of": [
-                            "HERETIC ASTARTES"
-                          ]
-                        },
-                        "range": {
-                          "inches": 12
+            "type": "for-each-unit",
+            "selector": {
+              "filter": {
+                "owner": "enemy"
+              }
+            },
+            "effect": {
+              "type": "conditional",
+              "condition": {
+                "operator": "and",
+                "operands": [
+                  {
+                    "type": "strength",
+                    "parameters": {
+                      "subject": "recipient",
+                      "below": "starting"
+                    }
+                  },
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "recipient",
+                      "filter": {
+                        "within": {
+                          "of": {
+                            "owner": "friendly",
+                            "all_of": [
+                              "HERETIC ASTARTES"
+                            ]
+                          },
+                          "range": {
+                            "inches": 12
+                          }
                         }
                       }
                     }
                   }
-                }
-              ]
-            },
-            "effect": {
-              "type": "test",
-              "target": {
-                "owner": "enemy"
+                ]
               },
-              "modifier": {
-                "test": "battle-shock"
+              "effect": {
+                "type": "test",
+                "target": "recipient",
+                "modifier": {
+                  "test": "battle-shock"
+                }
               }
             }
           }
@@ -8804,7 +8810,7 @@
                 },
                 {
                   "type": "test-exemption",
-                  "target": "recipient",
+                  "target": "event-subject",
                   "modifier": {
                     "test": "battle-shock",
                     "window": "phase"
@@ -9019,61 +9025,67 @@
             }
           },
           "effect": {
-            "type": "sequence",
-            "steps": [
-              {
-                "type": "conditional",
-                "condition": {
-                  "operator": "and",
-                  "operands": [
-                    {
-                      "type": "strength",
-                      "parameters": {
-                        "subject": "recipient",
-                        "below": "starting"
-                      }
-                    },
-                    {
-                      "type": "matches",
-                      "parameters": {
-                        "subject": "recipient",
-                        "filter": {
-                          "within": {
-                            "of": {
-                              "owner": "friendly",
-                              "all_of": [
-                                "HERETIC ASTARTES"
-                              ]
-                            },
-                            "range": {
-                              "inches": 12
-                            }
+            "type": "for-each-unit",
+            "selector": {
+              "filter": {
+                "owner": "enemy"
+              }
+            },
+            "effect": {
+              "type": "conditional",
+              "condition": {
+                "operator": "and",
+                "operands": [
+                  {
+                    "type": "strength",
+                    "parameters": {
+                      "subject": "recipient",
+                      "below": "starting"
+                    }
+                  },
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "recipient",
+                      "filter": {
+                        "within": {
+                          "of": {
+                            "owner": "friendly",
+                            "all_of": [
+                              "HERETIC ASTARTES"
+                            ]
+                          },
+                          "range": {
+                            "inches": 12
                           }
                         }
                       }
                     }
-                  ]
-                },
-                "effect": {
-                  "type": "test",
-                  "target": {
-                    "owner": "enemy"
-                  },
-                  "modifier": {
-                    "test": "battle-shock",
-                    "modifier": -1
                   }
-                }
+                ]
               },
-              {
-                "type": "test-exemption",
-                "target": "recipient",
-                "modifier": {
-                  "test": "battle-shock",
-                  "window": "phase"
-                }
+              "effect": {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "test",
+                    "target": "recipient",
+                    "modifier": {
+                      "test": "battle-shock",
+                      "modifier": -1
+                    }
+                  },
+                  {
+                    "type": "test-exemption",
+                    "target": "recipient",
+                    "modifier": {
+                      "test": "battle-shock",
+                      "window": "phase"
+                    }
+                  }
+                ]
               }
-            ]
+            }
           }
         },
         {
@@ -15629,40 +15641,19 @@
                         "operator": "not",
                         "operands": [
                           {
-                            "operator": "and",
-                            "operands": [
-                              {
-                                "type": "happened",
-                                "parameters": {
-                                  "event": "model-destroyed",
-                                  "object": {
-                                    "owner": "enemy",
-                                    "designated": "warlord",
-                                    "level": "model"
-                                  },
-                                  "filter": {
-                                    "by": "this-unit"
-                                  },
-                                  "window": "event"
-                                }
+                            "type": "happened",
+                            "parameters": {
+                              "event": "model-destroyed",
+                              "object": {
+                                "owner": "enemy",
+                                "designated": "warlord",
+                                "level": "model"
                               },
-                              {
-                                "type": "matches",
-                                "parameters": {
-                                  "subject": {
-                                    "owner": "enemy"
-                                  },
-                                  "filter": {
-                                    "within": {
-                                      "of": "this-unit",
-                                      "range": {
-                                        "inches": 6
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            ]
+                              "filter": {
+                                "by": "this-unit"
+                              },
+                              "window": "event"
+                            }
                           }
                         ]
                       }
@@ -15699,9 +15690,7 @@
                       {
                         "type": "matches",
                         "parameters": {
-                          "subject": {
-                            "owner": "enemy"
-                          },
+                          "subject": "recipient",
                           "filter": {
                             "within": {
                               "of": "this-unit",
@@ -15716,7 +15705,9 @@
                   },
                   "effect": {
                     "type": "test",
-                    "target": "recipient",
+                    "target": {
+                      "owner": "enemy"
+                    },
                     "modifier": {
                       "test": "battle-shock"
                     }

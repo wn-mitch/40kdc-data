@@ -252,7 +252,7 @@ describe("Result band covers the later clauses of its sentence (compile-clause-b
   const bandLeaves = (text: string) => placed(text,
     ENEMY_SELECT, D6, ON_5,
     ["that unit suffers 3 mortal wounds", "mortal-wounds", { recipient: "that-unit", count: "3" }],
-    ["must take a Battle-shock test", "test", { target: "recipient", test: "battle-shock" }]);
+    ["must take a Battle-shock test", "test", { target: "antecedent", test: "battle-shock" }]);
 
   it("puts the test of an 'and' clause under the same dice-gated success as the mortal wounds", () => {
     const mechanics = mechanicsOf(bandLeaves(BAND_TEXT), BAND_TEXT);
@@ -268,7 +268,7 @@ describe("Result band covers the later clauses of its sentence (compile-clause-b
     const mechanics = mechanicsOf(placed(text,
       ENEMY_SELECT, D6, ON_5,
       ["that unit suffers 3 mortal wounds", "mortal-wounds", { recipient: "that-unit", count: "3" }],
-      ["That unit must take a Battle-shock test", "test", { target: "recipient", test: "battle-shock" }]), text);
+      ["That unit must take a Battle-shock test", "test", { target: "antecedent", test: "battle-shock" }]), text);
     const gated = nodesOf(mechanics, "dice-gated");
     expect(gated).toHaveLength(1);
     expect(JSON.stringify(gated[0]!.on_success)).not.toContain('"type":"test"');
@@ -279,7 +279,7 @@ describe("Result band covers the later clauses of its sentence (compile-clause-b
     const text = "Choose one enemy unit. Roll one D6: that unit must take a Battle-shock test, and on a 5+, that unit suffers 3 mortal wounds.";
     const mechanics = mechanicsOf(placed(text,
       ENEMY_SELECT, D6,
-      ["that unit must take a Battle-shock test", "test", { target: "recipient", test: "battle-shock" }],
+      ["that unit must take a Battle-shock test", "test", { target: "antecedent", test: "battle-shock" }],
       ON_5,
       ["that unit suffers 3 mortal wounds", "mortal-wounds", { recipient: "that-unit", count: "3" }]), text);
     const gated = nodesOf(mechanics, "dice-gated");
@@ -458,7 +458,9 @@ describe("Parenthesised 'or' replaces a test modifier (7100 shape)", () => {
   });
 
   const bearerLeaves = (text: string, wording: string) => placed(text,
-    ["Each enemy unit must take a Battle-shock test", "test", { target: "recipient", test: "battle-shock" }],
+    ["Each", "for-each-unit-select", {}],
+    ["enemy unit", "unit-filter", { side: "enemy" }],
+    ["must take a Battle-shock test", "test", { target: "antecedent", test: "battle-shock" }],
     ["subtracting 1 from that test", "roll-modifier", { roll: "battle-shock", operation: "subtract", value: 1 }],
     ["or", "instead", {}],
     ["subtracting 2", "roll-modifier", { roll: "battle-shock", operation: "subtract", value: 2 }],

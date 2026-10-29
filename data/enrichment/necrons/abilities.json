@@ -11673,7 +11673,7 @@
                 },
                 "effect": {
                   "type": "ability-activate",
-                  "target": "this-unit",
+                  "target": "recipient",
                   "modifier": {
                     "ability": "reanimation-protocols-necrons"
                   }
@@ -11688,11 +11688,14 @@
               "filter": {
                 "kind": "ability",
                 "id": "reanimation-protocols-necrons"
+              },
+              "subject": {
+                "owner": "friendly"
               }
             },
             "effect": {
               "type": "heal",
-              "target": "recipient",
+              "target": "event-subject",
               "modifier": {
                 "amount": "D3"
               }

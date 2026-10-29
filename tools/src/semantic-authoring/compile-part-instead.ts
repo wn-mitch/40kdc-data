@@ -5,7 +5,7 @@ import { CONFLICTING_DURATIONS, NO_ROLL_AFTER_ADVANCE } from "./compile-duration
 import { isRollMarker } from "./compile-dice.js";
 import { replaceProhibitedRoll, selectedMoveRestrictionReplacing } from "./compile-roll-prohibition.js";
 import { crossFamilyCandidates, inheritBand, replaceAcrossFamilies, tradesSuppressedRule } from "./compile-cross-family-instead.js";
-import { inheritAttackFrame, namesBearer } from "./compile-instead-scope.js";
+import { inheritAttackFrame, namesBearer, replacingConditions } from "./compile-instead-scope.js";
 import type { PartFrame } from "./compile-part-classify.js";
 import type { PlannedEffect } from "./compile-part-plan.js";
 
@@ -102,7 +102,7 @@ export function resolveInstead(frame: PartFrame, planned: PlannedEffect[], bound
       const defaultSentence = before.length > 0 ? Math.max(...before.map((item) => places[item.index]!.sentence)) : null;
       const defaults = before.filter((item) => places[item.index]!.sentence === defaultSentence);
       const families = new Set(group.map((item) => item.leaf.family_id));
-      const alternative = allOf(replacement.gate.filter((node) => !isRollMarker(node)));
+      const alternative = allOf(replacingConditions(replacement, defaults, isRollMarker));
       if (defaults.length === 0 || defaults.some((item) => !families.has(item.leaf.family_id))) {
         errors.push(`"Instead" over ${group.length} effects needs the sentence before it to hold the effects it replaces.`);
         continue;
@@ -182,7 +182,7 @@ export function resolveInstead(frame: PartFrame, planned: PlannedEffect[], bound
       }
       continue;
     }
-    const alternative = allOf(replacement.gate.filter((node) => !isRollMarker(node)));
+    const alternative = allOf(replacingConditions(replacement, [replaced], isRollMarker));
     if (!alternative) {
       errors.push(`"Instead" needs a condition in its clause saying when ${replacement.leaf.family_id} is replaced.`);
       continue;

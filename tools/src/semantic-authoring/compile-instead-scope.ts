@@ -140,3 +140,19 @@ export function sentenceIfGates(
   });
   return independent ? openedByIf(list, places, raw, sentence, sourceText) : new Set();
 }
+
+/** Whether a condition is about the unit an effect is applied to (its `recipient`). */
+const namesRecipient = (node: Node): boolean => JSON.stringify(node).includes('"recipient"');
+
+/**
+ * The replacement's conditions that say when it replaces the defaults: its gate without roll bands, and, when the
+ * replacement applies to the units of a filter and no default applies to a recipient, without the conditions on
+ * each of those units ("each enemy unit within 6\" of your unit … instead"): those say which units the replacement
+ * reaches, not when it holds, and a default about another unit has no recipient to test them on.
+ */
+export function replacingConditions(replacement: { node: Node; gate: Node[] }, defaults: readonly { node: Node }[], isRollMarker: (node: Node) => boolean): Node[] {
+  const gate = replacement.gate.filter((node) => !isRollMarker(node));
+  const filtered = replacement.node.target !== null && typeof replacement.node.target === "object";
+  if (!filtered || defaults.some((item) => item.node.target === "recipient")) return gate;
+  return gate.filter((node) => !namesRecipient(node));
+}

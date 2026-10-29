@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 
 import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
+import { effect } from "../src/semantic-authoring/compile-fragments.js";
 import { currentFamilyVersion, normalizeFingerprintParameters, REVIEWED_FAMILY_REGISTRY } from "../src/semantic-authoring/contracts.js";
 import { checkEntry, entryWithMechanics } from "../src/semantic-authoring/entries.js";
 import { prefillFromSource, type PrefillFamily } from "../src/semantic-authoring/leaf-prefill.js";
@@ -425,7 +426,9 @@ describe("Semantic authoring economy-family compiler", () => {
   it("lets sticky-objective@3 name each unit a for-each loop reaches, which v2 refuses", () => {
     expect(normalizeFingerprintParameters("sticky-objective", { subject: "recipient" }, 3)).toEqual({ subject: "recipient" });
     expect(() => normalizeFingerprintParameters("sticky-objective", { subject: "recipient" }, 2)).toThrow(/sticky-objective\.subject/u);
-    expect(compiled([leaf("EFFECT", "sticky-objective", { subject: "recipient" }, 3)]).mechanics.effect).toEqual({ type: "objective-sticky", target: "recipient" });
+    // The leaf lowers to the loop's recipient; on its own, with no loop around it, the record reaches no unit and is refused.
+    expect(effect(leaf("EFFECT", "sticky-objective", { subject: "recipient" }, 3), { attached: false, incoming: false })).toEqual({ type: "objective-sticky", target: "recipient" });
+    expect(compileLeaves([leaf("EFFECT", "sticky-objective", { subject: "recipient" }, 3)]).ok).toBe(false);
   });
 
   it("compiles stratagem-cost, amount required unless the operation waives the cost", () => {

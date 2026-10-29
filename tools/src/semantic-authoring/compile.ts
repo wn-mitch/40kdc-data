@@ -1,4 +1,5 @@
 import { foldStepWindow } from "./compile-step-window.js";
+import { unscopedRecipientEffect } from "./compile-recipient-scope.js";
 import { resolveUnitNames, type UnitNameContext } from "./compile-unit-names.js";
 import { resolveRuleReferences } from "./compile-rule-refs.js";
 import { foldAuraEmitter, lowerConditionalAuras } from "./compile-aura-emitter.js";
@@ -194,6 +195,13 @@ export type CompileOptions = {
 
 /** Compile one ability's reviewed leaves. Failures name what is missing; nothing is guessed. */
 export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: string, options: CompileOptions = {}): Compiled {
+  const result = compileUnchecked(leaves, sourceText, options);
+  // "That unit must take a test" bound to an aura's recipient with no aura or loop around it reaches no unit.
+  const unscoped = result.ok ? unscopedRecipientEffect(result.mechanics.effect) : null;
+  return unscoped === null ? result : { ok: false, signature: result.signature, errors: [`A ${unscoped} effect names the unit it is applied to (recipient), but no aura or for-each-unit applies it to any unit.`] };
+}
+
+function compileUnchecked(leaves: readonly CompileLeaf[], sourceText?: string, options: CompileOptions = {}): Compiled {
   // A span over the record's name compiles as its own part, beside the body (compile-name.ts).
   if (leaves.some((leaf) => leaf.fragment === NAME_FRAGMENT)) {
     return compileWithName(leaves, sourceText, options, compileLeaves, (list) => shapeSignature(ordered(list), sourceText));

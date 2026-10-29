@@ -431,6 +431,15 @@ fn happened_phrase(p: &P, negated: bool) -> String {
                     );
                 }
             }
+            // "the enemy WARLORD": one designated model, named as itself rather than counted.
+            let warlord = !extended
+                && kws.is_empty()
+                && nn(o, "designated").and_then(Value::as_str) == Some("warlord");
+            let victims = if warlord {
+                format!("the {owner}Warlord")
+            } else {
+                format!("{amount} {objects}")
+            };
             // Who destroyed them: the filter's attacker, else the event's subject.
             if let Some(by) = nn(f, "by").or_else(|| nn(p, "subject")) {
                 // A destruction by one attack type says it: "with its just-resolved melee attacks".
@@ -447,11 +456,15 @@ fn happened_phrase(p: &P, negated: bool) -> String {
                     format!("with {atk}attacks {}", window_phrase(window))
                 };
                 return format!(
-                    "{neg}{} has destroyed {amount} {objects} {when}",
+                    "{neg}{} has destroyed {victims} {when}",
                     unit_ref_phrase(Some(by), "the unit")
                 )
                 .trim_end()
                 .to_string();
+            }
+            if warlord {
+                let was = if negated { "was not" } else { "was" };
+                return with_window(&format!("{victims} {was} destroyed"), window);
             }
             let tagged = nn(o, "designated")
                 .filter(|_| !extended)

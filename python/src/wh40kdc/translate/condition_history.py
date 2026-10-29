@@ -236,6 +236,9 @@ def _describe_happened_core(p: P, negated: bool) -> str:
             who = "the unit" if member == "selected-unit" else unit_ref_phrase(member)
             atk = f"{_str(f['attack_type'])} " if _truthy(f.get("attack_type")) else ""
             return f"{neg}{who} lost {_str(n)}+ models to the just-resolved {atk}attacks"
+        # "the enemy WARLORD": one designated model, named as itself rather than counted.
+        warlord = not extended and kws == "" and victim.get("designated") == "warlord"
+        victims = f"the {owner}Warlord" if warlord else f"{_str(n)}+ {objects}"
         # Who destroyed them: the filter's attacker, else the event's subject.
         killer_ref = f["by"] if f.get("by") is not None else p.get("subject")
         if killer_ref is not None:
@@ -246,7 +249,10 @@ def _describe_happened_core(p: P, negated: bool) -> str:
             else:
                 when = (f"with {atk}attacks " if atk else "") + _window_phrase(window)
             killer = unit_ref_phrase(killer_ref)
-            return f"{neg}{killer} has destroyed {_str(n)}+ {objects} {when}".rstrip()
+            return f"{neg}{killer} has destroyed {victims} {when}".rstrip()
+        if warlord:
+            was = "was not" if negated else "was"
+            return _with_window(f"{victims} {was} destroyed", window)
         tagged = (
             f" {_designation_phrase(_str(victim['designated']))}"
             if not extended and victim.get("designated") is not None

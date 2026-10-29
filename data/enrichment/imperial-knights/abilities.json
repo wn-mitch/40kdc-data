@@ -4160,24 +4160,28 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "designated",
-            "parameters": {
-              "tag": "bondsman-affected",
-              "by": "this-unit",
-              "count": {
-                "min": 1
-              }
-            }
-          },
-          {
+        "type": "designated",
+        "parameters": {
+          "tag": "bondsman-affected",
+          "by": "this-unit",
+          "count": {
+            "min": 1
+          }
+        }
+      },
+      "effect": {
+        "type": "for-each-unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          }
+        },
+        "effect": {
+          "type": "conditional",
+          "condition": {
             "type": "matches",
             "parameters": {
-              "subject": {
-                "owner": "enemy"
-              },
+              "subject": "recipient",
               "filter": {
                 "engaged_with": {
                   "owner": "friendly",
@@ -4187,15 +4191,15 @@
                 }
               }
             }
+          },
+          "effect": {
+            "type": "test",
+            "target": "recipient",
+            "modifier": {
+              "test": "battle-shock",
+              "modifier": -1
+            }
           }
-        ]
-      },
-      "effect": {
-        "type": "test",
-        "target": "recipient",
-        "modifier": {
-          "test": "battle-shock",
-          "modifier": -1
         }
       }
     },
