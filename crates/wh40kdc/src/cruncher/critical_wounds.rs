@@ -67,25 +67,3 @@ pub(crate) fn split_unsaved(
         / failing;
     (unsaved, dice)
 }
-
-/// Per-roll damage distributions mixed by weight, ascending by value with each value once, as
-/// `one_damage_reroll_gain` reads them.
-pub(crate) fn mix_distributions(parts: &[(f64, &[(f64, f64)])]) -> Vec<(f64, f64)> {
-    let total: f64 = parts.iter().map(|(weight, _)| weight).sum();
-    let mut mixed: Vec<(f64, f64)> = Vec::new();
-    for (weight, distribution) in parts {
-        for &(value, probability) in *distribution {
-            let share = if total > 0.0 {
-                probability * weight / total
-            } else {
-                0.0
-            };
-            match mixed.iter_mut().find(|(v, _)| *v == value) {
-                Some(entry) => entry.1 += share,
-                None => mixed.push((value, share)),
-            }
-        }
-    }
-    mixed.sort_by(|a, b| a.0.total_cmp(&b.0));
-    mixed
-}

@@ -12,7 +12,6 @@ from collections.abc import Callable, Iterable, Sequence
 from typing import Any
 
 from wh40kdc.cruncher.buffs import resolve_buffs
-from wh40kdc.cruncher.damage_roll import DamageOutcome
 
 
 def has_critical_wound_buffs(buffs: Iterable[Any]) -> bool:
@@ -52,17 +51,3 @@ def split_unsaved(
     # The re-rolled save comes from each stream in proportion to its re-rollable failures.
     unsaved -= dice * sum(s["wounds"] * s["open"] * s["fresh"] for s in streams) / failing
     return unsaved, dice
-
-
-def mix_distributions(
-    parts: Sequence[tuple[float, Sequence[DamageOutcome]]],
-) -> list[DamageOutcome]:
-    """Per-roll damage distributions mixed by weight, ascending by value with each value once, as
-    ``one_damage_reroll_gain`` reads them."""
-    total = sum(weight for weight, _ in parts)
-    by_value: dict[float, float] = {}
-    for weight, distribution in parts:
-        for outcome in distribution:
-            share = outcome["probability"] * weight / total if total > 0 else 0.0
-            by_value[outcome["value"]] = by_value.get(outcome["value"], 0.0) + share
-    return [DamageOutcome(value=v, probability=p) for v, p in sorted(by_value.items())]

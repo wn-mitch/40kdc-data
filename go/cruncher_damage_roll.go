@@ -220,3 +220,62 @@ func oneDamageRerollGain(distribution []DamageOutcome, rolls float64) float64 {
 	}
 	return below + (rolls-low)*(atWhole(low+1)-below)
 }
+
+// oneRerollGainAcross is oneDamageRerollGain over rolls of several kinds, each
+// with its own weight and Damage distribution (normal and critical wounds): a
+// roll gains its kind's mean less its value, so a kind with a fixed Damage
+// never gains, and the player re-rolls the roll that gains most. Over a whole
+// number of rolls the largest gain is g with probability
+// F(g)^rolls - F(below g)^rolls, F being the chance one roll gains at most g; a
+// fractional count is read between the whole counts either side.
+func oneRerollGainAcross(weights []float64, distributions [][]DamageOutcome, rolls float64) float64 {
+	total := 0.0
+	for _, weight := range weights {
+		total += weight
+	}
+	if rolls <= 0 || total <= 0 {
+		return 0
+	}
+	type share struct{ gain, probability float64 }
+	var gains []share
+	for i, distribution := range distributions {
+		mean := 0.0
+		for _, o := range distribution {
+			mean += o.Value * o.Probability
+		}
+		for _, o := range distribution {
+			gain := math.Max(0, mean-o.Value)
+			p := o.Probability * weights[i] / total
+			found := false
+			for k := range gains {
+				if gains[k].gain == gain {
+					gains[k].probability += p
+					found = true
+					break
+				}
+			}
+			if !found {
+				gains = append(gains, share{gain, p})
+			}
+		}
+	}
+	sort.SliceStable(gains, func(i, j int) bool { return gains[i].gain < gains[j].gain })
+	atWhole := func(count float64) float64 {
+		expected := 0.0
+		atMost := 0.0
+		for _, g := range gains {
+			below := atMost
+			atMost += g.probability
+			if g.gain > 0 {
+				expected += g.gain * (math.Pow(atMost, count) - math.Pow(below, count))
+			}
+		}
+		return expected
+	}
+	low := math.Floor(rolls)
+	below := atWhole(low)
+	if rolls == low {
+		return below
+	}
+	return below + (rolls-low)*(atWhole(low+1)-below)
+}

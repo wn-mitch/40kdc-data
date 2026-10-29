@@ -40,20 +40,3 @@ export function splitUnsaved(
   unsaved -= dice * streams.reduce((sum, stream) => sum + stream.wounds * stream.open * stream.fresh, 0) / failing;
   return { unsaved, dice };
 }
-
-/**
- * Two per-roll damage distributions mixed by weight, ascending by value with each value once, as
- * `oneDamageRerollGain` reads them.
- */
-export function mixDistributions(
-  parts: ReadonlyArray<{ weight: number; distribution: ReadonlyArray<{ value: number; probability: number }> }>,
-): Array<{ value: number; probability: number }> {
-  const total = parts.reduce((sum, part) => sum + part.weight, 0);
-  const byValue = new Map<number, number>();
-  for (const { weight, distribution } of parts) {
-    for (const { value, probability } of distribution) {
-      byValue.set(value, (byValue.get(value) ?? 0) + (total > 0 ? probability * weight / total : 0));
-    }
-  }
-  return [...byValue.entries()].sort((a, b) => a[0] - b[0]).map(([value, probability]) => ({ value, probability }));
-}

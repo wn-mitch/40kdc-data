@@ -22,10 +22,11 @@ use super::buffs::{
     WeaponKeywordRef,
 };
 use super::critical_wounds::{
-    attack_ap, has_critical_wound_buffs, mix_distributions, resolve_critical_wound, split_unsaved,
-    SaveStream,
+    attack_ap, has_critical_wound_buffs, resolve_critical_wound, split_unsaved, SaveStream,
 };
-use super::damage_roll::{damage_roll, one_damage_reroll_gain, DamageRollInput};
+use super::damage_roll::{
+    damage_roll, one_damage_reroll_gain, one_reroll_gain_across, DamageRollInput,
+};
 use super::from_keyword::buffs_from_keyword;
 use crate::data::Dataset;
 use crate::{
@@ -933,7 +934,8 @@ pub fn crunch_model(
     let mut damage_mortal = mortal_wounds_stream * per_critical.expected;
     // "Re-roll one Damage roll" over every Damage roll, main and mortal streams alike, shared in
     // proportion to their rolls. A roll another permission already re-rolled cannot be re-rolled,
-    // so beside one the single die is not priced.
+    // so beside one the single die is not priced. With critical-wound Damage a roll gains against
+    // its own kind's mean: the two kinds are separate rolls, not one die with both distributions.
     let damage_rolls = unsaved + mortal_wounds_stream;
     let damage_reroll_one = if resolved.reroll_one.damage.is_some()
         && damage_reroll.is_none()
@@ -941,14 +943,16 @@ pub fn crunch_model(
         && damage_rolls > 0.0
     {
         if critical.is_some() {
-            let mixed = mix_distributions(&[
-                (unsaved_regular, &per_attack.distribution),
-                (
-                    unsaved_critical + mortal_wounds_stream,
-                    &per_critical.distribution,
-                ),
-            ]);
-            one_damage_reroll_gain(&mixed, damage_rolls)
+            one_reroll_gain_across(
+                &[
+                    (unsaved_regular, &per_attack.distribution),
+                    (
+                        unsaved_critical + mortal_wounds_stream,
+                        &per_critical.distribution,
+                    ),
+                ],
+                damage_rolls,
+            )
         } else {
             one_damage_reroll_gain(&per_attack.distribution, damage_rolls)
         }

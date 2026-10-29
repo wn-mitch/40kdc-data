@@ -519,18 +519,21 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 	// "Re-roll one Damage roll" over every Damage roll, main and mortal streams
 	// alike, shared in proportion to their rolls. A roll another permission
 	// already re-rolled cannot be re-rolled, so beside one the die is not priced.
-	// With critical-wound Damage each roll is read from the mixture of the two
-	// rolls' distributions.
+	// With critical-wound Damage a roll gains against its own kind's mean: the
+	// two kinds are separate rolls, not one die with both distributions.
 	damageRolls := unsaved + mortalWoundsStream
-	damageDistribution := perAttack.distribution
-	if critical != nil {
-		damageDistribution = mixDistributions(
-			[]float64{unsavedRegular, unsavedCritical + mortalWoundsStream},
-			[][]DamageOutcome{perAttack.distribution, perCritical.distribution},
-		)
-	}
 	if _, ok := res.rerollOne["damage"]; ok && damageReroll == "" && criticalDamageReroll == "" && damageRolls > 0 {
-		if gain := oneDamageRerollGain(damageDistribution, damageRolls); gain > 0 {
+		gain := 0.0
+		if critical != nil {
+			gain = oneRerollGainAcross(
+				[]float64{unsavedRegular, unsavedCritical + mortalWoundsStream},
+				[][]DamageOutcome{perAttack.distribution, perCritical.distribution},
+				damageRolls,
+			)
+		} else {
+			gain = oneDamageRerollGain(perAttack.distribution, damageRolls)
+		}
+		if gain > 0 {
 			damageMain += gain * (unsaved / damageRolls)
 			damageMortal += gain * (mortalWoundsStream / damageRolls)
 		}

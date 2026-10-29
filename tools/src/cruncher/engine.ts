@@ -21,8 +21,8 @@ import {
 } from "./buffs.js";
 import { Dataset } from "../data/dataset.js";
 import { isMeleeProfile } from "../data/weapon-profile.js";
-import { damageRoll, oneDamageRerollGain } from "./damage-roll.js";
-import { attackAp, hasCriticalWoundBuffs, mixDistributions, resolveCriticalWound, splitUnsaved } from "./critical-wounds.js";
+import { damageRoll, oneDamageRerollGain, oneRerollGainAcross } from "./damage-roll.js";
+import { attackAp, hasCriticalWoundBuffs, resolveCriticalWound, splitUnsaved } from "./critical-wounds.js";
 
 export type AttackProfileRef = { weapon: Weapon; profileIndex: number };
 export type TargetProfileRef = {
@@ -402,16 +402,16 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
   let damageMortal = mortalWoundsStream * perCritical.expected;
   // "Re-roll one Damage roll" over every Damage roll, main and mortal streams alike, shared in
   // proportion to their rolls. A roll another permission already re-rolled cannot be re-rolled, so
-  // beside one the single die is not priced. With critical-wound Damage each roll is read from the
-  // mixture of the two rolls' distributions.
+  // beside one the single die is not priced. With critical-wound Damage a roll gains against its
+  // own kind's mean: the two kinds are separate rolls, not one die with both distributions.
   const damageRolls = unsaved + mortalWoundsStream;
-  const damageDistribution = critical
-    ? mixDistributions([
+  const damageRerollGain = (): number => critical
+    ? oneRerollGainAcross([
       { weight: unsavedRegular, distribution: perAttack.distribution },
       { weight: unsavedCritical + mortalWoundsStream, distribution: perCritical.distribution },
-    ])
-    : perAttack.distribution;
-  const damageRerollOne = resolved.rerollOne.damage && !damageReroll && !criticalDamageReroll && damageRolls > 0 ? oneDamageRerollGain(damageDistribution, damageRolls) : 0;
+    ], damageRolls)
+    : oneDamageRerollGain(perAttack.distribution, damageRolls);
+  const damageRerollOne = resolved.rerollOne.damage && !damageReroll && !criticalDamageReroll && damageRolls > 0 ? damageRerollGain() : 0;
   if (damageRerollOne > 0) {
     damageMain += damageRerollOne * (unsaved / damageRolls);
     damageMortal += damageRerollOne * (mortalWoundsStream / damageRolls);

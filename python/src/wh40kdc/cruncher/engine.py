@@ -29,11 +29,15 @@ from wh40kdc.cruncher.buffs import (
 from wh40kdc.cruncher.critical_wounds import (
     attack_ap,
     has_critical_wound_buffs,
-    mix_distributions,
     resolve_critical_wound,
     split_unsaved,
 )
-from wh40kdc.cruncher.damage_roll import DamageOutcome, damage_roll, one_damage_reroll_gain
+from wh40kdc.cruncher.damage_roll import (
+    DamageOutcome,
+    damage_roll,
+    one_damage_reroll_gain,
+    one_reroll_gain_across,
+)
 from wh40kdc.cruncher.scenario_conditions import (
     has_attack_comparison,
     set_attack_characteristics,
@@ -612,19 +616,20 @@ def crunch_model(
     damage_mortal = mortal_wounds_stream * per_critical["expected"]
     # "Re-roll one Damage roll" over every Damage roll, main and mortal streams alike, shared in
     # proportion to their rolls. A roll another permission already re-rolled cannot be re-rolled,
-    # so beside one the single die is not priced.
+    # so beside one the single die is not priced. With critical-wound Damage a roll gains against
+    # its own kind's mean: the two kinds are separate rolls, not one die with both distributions.
     damage_rolls = unsaved + mortal_wounds_stream
     damage_reroll_one = (
-        one_damage_reroll_gain(
-            mix_distributions(
+        (
+            one_reroll_gain_across(
                 [
                     (unsaved_regular, per_attack["distribution"]),
                     (unsaved_critical + mortal_wounds_stream, per_critical["distribution"]),
-                ]
+                ],
+                damage_rolls,
             )
             if critical is not None
-            else per_attack["distribution"],
-            damage_rolls,
+            else one_damage_reroll_gain(per_attack["distribution"], damage_rolls)
         )
         if resolved["rerollOne"].get("damage")
         and not damage_reroll

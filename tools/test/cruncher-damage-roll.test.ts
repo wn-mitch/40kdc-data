@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { damageRoll, oneDamageRerollGain } from "../src/cruncher/damage-roll.js";
+import { damageRoll, oneDamageRerollGain, oneRerollGainAcross } from "../src/cruncher/damage-roll.js";
 import { Dataset } from "../src/data/dataset.js";
 import { crunch, type Buff, type EngineInput, type Stage } from "../src/cruncher/index.js";
 
@@ -148,6 +148,34 @@ describe("Re-roll one Damage roll", () => {
     }
     // A fixed Damage has nothing to gain.
     expect(oneDamageRerollGain([{ value: 2, probability: 1 }], 4)).toBe(0);
+  });
+
+  it("finds nothing to re-roll when normal and critical wounds each have a fixed Damage", () => {
+    // D1, and D2 on a critical wound: neither roll has a die, though together they look like one.
+    const critical: Buff = { source: { kind: "manual", label: "+1 Damage on a critical wound" }, contribution: { type: "damage-mod", value: 1 }, applicableWhen: { onCritical: "wound" } };
+    expect(stage([critical, one("damage")], "damage")).toBeCloseTo(stage([critical], "damage"), 12);
+  });
+
+  it("re-rolls the roll with most to gain across normal and critical Damage, each against its own mean", () => {
+    // Brute force over which branch each roll came from and what it rolled.
+    const d3 = [1, 2, 3].map((value) => ({ value, probability: 1 / 3 }));
+    const fixed = [{ value: 2, probability: 1 }];
+    const branches = [{ weight: 1, distribution: fixed }, { weight: 2, distribution: d3 }];
+    for (const rolls of [1, 2, 3]) {
+      let brute = 0;
+      const each = branches.flatMap(({ weight, distribution }) => {
+        const mean = distribution.reduce((sum, item) => sum + item.value * item.probability, 0);
+        return distribution.map((item) => ({ gain: Math.max(0, mean - item.value), probability: item.probability * weight / 3 }));
+      });
+      const walk = (left: number, best: number, p: number): void => {
+        if (left === 0) { brute += best * p; return; }
+        for (const item of each) walk(left - 1, Math.max(best, item.gain), p * item.probability);
+      };
+      walk(rolls, 0, 1);
+      expect(oneRerollGainAcross(branches, rolls)).toBeCloseTo(brute, 12);
+    }
+    // One branch alone is the single-distribution gain.
+    expect(oneRerollGainAcross([{ weight: 1, distribution: d3 }], 2.5)).toBeCloseTo(oneDamageRerollGain(d3, 2.5), 12);
   });
 
   it("adds to the damage of a variable-Damage weapon and not of a fixed one", () => {

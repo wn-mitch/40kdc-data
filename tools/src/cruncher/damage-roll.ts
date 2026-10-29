@@ -141,3 +141,41 @@ export function oneDamageRerollGain(distribution: ReadonlyArray<{ value: number;
   const below = atWhole(low);
   return rolls === low ? below : below + (rolls - low) * (atWhole(low + 1) - below);
 }
+
+/**
+ * {@link oneDamageRerollGain} over rolls of several kinds, each with its own Damage distribution
+ * (normal and critical wounds): `weight` is each kind's share of the rolls. A roll gains its kind's
+ * mean less its value, so a kind with a fixed Damage never gains; the player re-rolls the roll that
+ * gains most. Over a whole number of rolls the largest gain is `g` with probability
+ * F(g)^rolls - F(below g)^rolls, F being the chance one roll gains at most `g`; a fractional count
+ * is read between the whole counts either side.
+ */
+export function oneRerollGainAcross(
+  branches: ReadonlyArray<{ weight: number; distribution: ReadonlyArray<{ value: number; probability: number }> }>,
+  rolls: number,
+): number {
+  const total = branches.reduce((sum, branch) => sum + branch.weight, 0);
+  if (rolls <= 0 || total <= 0) return 0;
+  const byGain = new Map<number, number>();
+  for (const { weight, distribution } of branches) {
+    const mean = distribution.reduce((sum, { value, probability }) => sum + value * probability, 0);
+    for (const { value, probability } of distribution) {
+      const gain = Math.max(0, mean - value);
+      byGain.set(gain, (byGain.get(gain) ?? 0) + probability * weight / total);
+    }
+  }
+  const gains = [...byGain.entries()].sort((left, right) => left[0] - right[0]);
+  const atWhole = (count: number): number => {
+    let expected = 0;
+    let atMost = 0;
+    for (const [gain, probability] of gains) {
+      const below = atMost;
+      atMost += probability;
+      if (gain > 0) expected += gain * (Math.pow(atMost, count) - Math.pow(below, count));
+    }
+    return expected;
+  };
+  const low = Math.floor(rolls);
+  const below = atWhole(low);
+  return rolls === low ? below : below + (rolls - low) * (atWhole(low + 1) - below);
+}

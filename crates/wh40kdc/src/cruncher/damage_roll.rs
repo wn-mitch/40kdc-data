@@ -290,6 +290,54 @@ pub(crate) fn one_damage_reroll_gain(distribution: &[(f64, f64)], rolls: f64) ->
     }
 }
 
+/// `one_damage_reroll_gain` over rolls of several kinds, each `(weight, distribution)` with its own
+/// Damage distribution (normal and critical wounds): a roll gains its kind's mean less its value,
+/// so a kind with a fixed Damage never gains, and the player re-rolls the roll that gains most.
+/// Over a whole number of rolls the largest gain is `g` with probability
+/// F(g)^rolls - F(below g)^rolls, F being the chance one roll gains at most `g`; a fractional count
+/// is read between the whole counts either side.
+pub(crate) fn one_reroll_gain_across(branches: &[(f64, &[(f64, f64)])], rolls: f64) -> f64 {
+    let total: f64 = branches.iter().map(|(weight, _)| weight).sum();
+    if rolls <= 0.0 || total <= 0.0 {
+        return 0.0;
+    }
+    let mut gains: Vec<(f64, f64)> = Vec::new();
+    for (weight, distribution) in branches {
+        let mean: f64 = distribution
+            .iter()
+            .map(|(value, probability)| value * probability)
+            .sum();
+        for &(value, probability) in *distribution {
+            let gain = (mean - value).max(0.0);
+            let share = probability * weight / total;
+            match gains.iter_mut().find(|(g, _)| *g == gain) {
+                Some(entry) => entry.1 += share,
+                None => gains.push((gain, share)),
+            }
+        }
+    }
+    gains.sort_by(|a, b| a.0.total_cmp(&b.0));
+    let at_whole = |count: f64| -> f64 {
+        let mut expected = 0.0;
+        let mut at_most = 0.0_f64;
+        for &(gain, probability) in &gains {
+            let below = at_most;
+            at_most += probability;
+            if gain > 0.0 {
+                expected += gain * (at_most.powf(count) - below.powf(count));
+            }
+        }
+        expected
+    };
+    let low = rolls.floor();
+    let below = at_whole(low);
+    if rolls == low {
+        below
+    } else {
+        below + (rolls - low) * (at_whole(low + 1.0) - below)
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

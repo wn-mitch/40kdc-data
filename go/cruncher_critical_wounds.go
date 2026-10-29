@@ -1,9 +1,6 @@
 package wh40kdc
 
-import (
-	"math"
-	"sort"
-)
+import "math"
 
 // Critical wounds with their own AP and Damage. A buff gated
 // `onCritical: "wound"` applies only to the attacks that score a critical
@@ -60,31 +57,6 @@ func splitUnsaved(streams []saveStream, rerollOne bool) (unsaved, dice float64) 
 	dice = oneRerollDice(pool, failing/pool)
 	// The re-rolled save comes from each stream in proportion to its re-rollable failures.
 	return unsaved - dice*refunded/failing, dice
-}
-
-// mixDistributions mixes per-roll damage distributions by weight, ascending by
-// value with each value once, as oneDamageRerollGain reads them.
-func mixDistributions(weights []float64, distributions [][]DamageOutcome) []DamageOutcome {
-	total := 0.0
-	for _, weight := range weights {
-		total += weight
-	}
-	byValue := map[float64]float64{}
-	for i, distribution := range distributions {
-		for _, outcome := range distribution {
-			if total > 0 {
-				byValue[outcome.Value] += outcome.Probability * weights[i] / total
-			} else {
-				byValue[outcome.Value] += 0
-			}
-		}
-	}
-	mixed := make([]DamageOutcome, 0, len(byValue))
-	for value, probability := range byValue {
-		mixed = append(mixed, DamageOutcome{Value: value, Probability: probability})
-	}
-	sort.Slice(mixed, func(i, j int) bool { return mixed[i].Value < mixed[j].Value })
-	return mixed
 }
 
 // criticalSaveStream is the save a stream of wounds takes at target.

@@ -172,3 +172,44 @@ def one_damage_reroll_gain(distribution: list[DamageOutcome], rolls: float) -> f
     low = math.floor(rolls)
     below = at_whole(low)
     return below if rolls == low else below + (rolls - low) * (at_whole(low + 1) - below)
+
+
+def one_reroll_gain_across(
+    branches: list[tuple[float, list[DamageOutcome]]], rolls: float
+) -> float:
+    """``one_damage_reroll_gain`` over rolls of several kinds, each ``(weight,
+    distribution)`` with its own Damage distribution (normal and critical
+    wounds): a roll gains its kind's mean less its value, so a kind with a fixed
+    Damage never gains, and the player re-rolls the roll that gains most. Over a
+    whole number of rolls the largest gain is ``g`` with probability
+    F(g)^rolls - F(below g)^rolls, F being the chance one roll gains at most
+    ``g``; a fractional count is read between the whole counts either side.
+    """
+    total = 0.0
+    for weight, _ in branches:
+        total += weight
+    if rolls <= 0 or total <= 0:
+        return 0.0
+    by_gain: dict[float, float] = {}
+    for weight, distribution in branches:
+        mean = 0.0
+        for outcome in distribution:
+            mean += outcome["value"] * outcome["probability"]
+        for outcome in distribution:
+            gain = max(0.0, mean - outcome["value"])
+            by_gain[gain] = by_gain.get(gain, 0.0) + outcome["probability"] * weight / total
+    gains = sorted(by_gain.items())
+
+    def at_whole(count: int) -> float:
+        expected = 0.0
+        at_most = 0.0
+        for gain, probability in gains:
+            below = at_most
+            at_most += probability
+            if gain > 0:
+                expected += gain * (math.pow(at_most, count) - math.pow(below, count))
+        return expected
+
+    low = math.floor(rolls)
+    below = at_whole(low)
+    return below if rolls == low else below + (rolls - low) * (at_whole(low + 1) - below)
