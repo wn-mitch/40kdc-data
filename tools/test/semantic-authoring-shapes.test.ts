@@ -6,7 +6,7 @@ import type { DatabaseSync as DatabaseType } from "node:sqlite";
 
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { validateFingerprint } from "../src/semantic-authoring/contracts.js";
-import { initializeWorkbench } from "../src/semantic-authoring/db.js";
+import { initializeWorkbench, insertSpan } from "../src/semantic-authoring/db.js";
 import { upgradeFamilyVersions } from "../src/semantic-authoring/family-versions.js";
 
 import { preparePublication, publishPublication } from "../src/semantic-authoring/publish.js";
@@ -16,7 +16,7 @@ import { applyChatReview } from "../src/semantic-authoring/review-apply.js";
 import { factionReviewSheet, writeReviewSheet } from "../src/semantic-authoring/review-sheet.js";
 import { getShape, listShapes, reviewMembers } from "../src/semantic-authoring/shapes.js";
 import { refreshSources } from "../src/semantic-authoring/source.js";
-import { approveShape, confirmSurface, moveSurface, rejectShapeMembers, undoBatch } from "./semantic-authoring-human.js";
+import { applyAnnotationBatch, approveShape, confirmSurface, moveSurface, rejectShapeMembers, undoBatch } from "./semantic-authoring-human.js";
 
 type DatabaseSync = DatabaseType;
 const DatabaseSync = createRequire(import.meta.url)("node:sqlite").DatabaseSync as { new(path: string): DatabaseType };
@@ -40,6 +40,8 @@ const records = [
   { faction_id: "fixture", ability_id: "copy", raw_text: `${LEAD}, ${REROLL}.` },
   { faction_id: "fixture", ability_id: "other", raw_text: `${LEAD}; ${REROLL}.` },
   { faction_id: "fixture", ability_id: "partial", raw_text: `${LEAD}, ${REROLL} and roll a die.` },
+  // Fully described only once a reviewer accepts its connective.
+  { faction_id: "fixture", ability_id: "joined", raw_text: `${LEAD}, ${REROLL} or ${REROLL}.` },
 ];
 
 /** A tracked entry the compiler can graft onto, authored with a different (wrong) meaning. */
@@ -173,6 +175,67 @@ describe("Semantic authoring shapes", () => {
     });
     expect(published.find((entry) => entry.ability_id === "partial")!.effect).toEqual(authoredEntry("partial").effect);
     expect(publishableEntries(db)).toEqual({ factions: [], stale: 0, unchanged: 3, blocked: [] });
+  }, 120_000);
+
+  it("revokes an approval when the shape is later rejected, so its prepared publication cannot publish", async () => {
+    reroll("failed");
+    const alpha = getShape(db, SHAPE).members.find((member) => member.abilities[0]!.ability_id === "alpha")!.ability_version_ids;
+    const state = () => getShape(db, SHAPE).members.find((member) => member.abilities[0]!.ability_id === "alpha")!.state;
+    // Alpha's member folds its identical copy: two source versions decided together.
+    expect(alpha).toHaveLength(2);
+    const approval = await approveShape(db, { reviewer: REVIEWER, signature: SHAPE, ability_version_ids: alpha });
+    const approved = (db.prepare("SELECT id FROM compiled_entries WHERE status = 'approved'").all() as Array<{ id: string }>).map((row) => row.id);
+    const preview = await preparePublication(db, { faction_id: "fixture", entry_ids: approved });
+    const before = readFileSync(abilitiesFile, "utf8");
+
+    const rejection = rejectShapeMembers(db, { reviewer: REVIEWER, signature: SHAPE, ability_version_ids: alpha });
+    expect(state()).toBe("rejected");
+    for (const id of approved) expect(db.prepare("SELECT status FROM compiled_entries WHERE id = ?").get(id)).toEqual({ status: "retracted" });
+    await expect(publishPublication(db, { batch_id: preview.batch_id, preview_hash: preview.preview_hash })).rejects.toThrow(/not an approved entry/u);
+    expect(readFileSync(abilitiesFile, "utf8")).toBe(before);
+    expect(publishableEntries(db).factions).toEqual([]);
+    // The earlier approval cannot be undone out of order to bring it back.
+    expect(() => undoBatch(db, approval.batch_id, { reviewer: REVIEWER })).toThrow(/later changed/u);
+
+    // Approving again replaces the rejection; undoing that approval brings the rejection back.
+    const again = await approveShape(db, { reviewer: REVIEWER, signature: SHAPE, ability_version_ids: alpha });
+    expect(again.recorded).toBe(2);
+    expect(state()).toBe("approved");
+    expect(() => undoBatch(db, rejection.batch_id, { reviewer: REVIEWER })).toThrow(/later changed/u);
+    undoBatch(db, again.batch_id, { reviewer: REVIEWER });
+    expect(state()).toBe("rejected");
+    // Undoing the rejection restores the approval it revoked, not a second approved entry.
+    undoBatch(db, rejection.batch_id, { reviewer: REVIEWER });
+    expect(state()).toBe("approved");
+    expect(db.prepare("SELECT id FROM compiled_entries WHERE status = 'approved' ORDER BY id").all().map((row) => (row as { id: string }).id)).toEqual([...approved].sort());
+  }, 120_000);
+
+  it("refuses to publish a record whose completeness-authorizing connective was undone after preparation", async () => {
+    reroll("failed");
+    const joined = db.prepare("SELECT id, source_hash, source_text FROM abilities WHERE current = 1 AND ability_id = 'joined'").get() as { id: number; source_hash: string; source_text: string };
+    const tiled = () => reviewMembers(db).some((member) => member.ability_version_id === joined.id);
+    expect(tiled()).toBe(false);
+    const start = Buffer.byteLength(joined.source_text.slice(0, joined.source_text.indexOf(" or ") + 1));
+    const span = insertSpan(db, joined.id, "RAW_TEXT", start, start + 2, "or");
+    const proposal = Number(db.prepare("INSERT INTO proposals (span_id, fingerprint_id, role, origin, status, reason_json, created_at) VALUES (?, NULL, 'CONNECTIVE', 'connective-span', 'pending', '{}', ?)")
+      .run(span, new Date().toISOString()).lastInsertRowid);
+    const connective = applyAnnotationBatch(db, { reviewer: REVIEWER, decisions: [{
+      action: "confirm-connective", proposal_id: proposal, ability_version_id: joined.id, source_hash: joined.source_hash,
+      fragment: "RAW_TEXT", start_byte: start, end_byte: start + 2, exact_text: "or", role: "CONNECTIVE",
+    }] });
+    expect(tiled()).toBe(true);
+    const member = reviewMembers(db).find((row) => row.ability_version_id === joined.id)!;
+    await approveShape(db, { reviewer: REVIEWER, signature: member.signature, ability_version_ids: [joined.id] });
+    const entry = (db.prepare("SELECT id FROM compiled_entries WHERE status = 'approved' AND ability_version_id = ?").get(joined.id) as { id: string }).id;
+    const preview = await preparePublication(db, { faction_id: "fixture", entry_ids: [entry] });
+    const before = readFileSync(abilitiesFile, "utf8");
+
+    undoBatch(db, connective.batch_id, { reviewer: REVIEWER });
+    expect(tiled()).toBe(false);
+    await expect(publishPublication(db, { batch_id: preview.batch_id, preview_hash: preview.preview_hash })).rejects.toThrow(/no longer fully described/u);
+    await expect(preparePublication(db, { faction_id: "fixture", entry_ids: [entry] })).rejects.toThrow(/no longer fully described/u);
+    expect(readFileSync(abilitiesFile, "utf8")).toBe(before);
+    expect(publishableEntries(db).factions).toEqual([]);
   }, 120_000);
 
   it("applies approve-shape and reject-shape from a signed decisions file, and refuses an unsigned draft", async () => {

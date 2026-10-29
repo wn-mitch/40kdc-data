@@ -4,6 +4,7 @@ import { compilationInputsHash, getCompiledEntry } from "./compiled.js";
 import { existsSync, readFileSync } from "node:fs";
 
 import { keywordIndex } from "./core-keywords.js";
+import { fullyDescribed } from "./leaf-view.js";
 import { entryWithMechanics, resolveAbilityEntity, semanticAuthoringDataRoot } from "./entries.js";
 import { canonicalTarget, coreStratagemFile } from "./publish-core.js";
 
@@ -55,9 +56,12 @@ export function publishableEntries(db: DatabaseSync): { factions: PublishableFac
   let unchanged = 0;
   // Approved stratagems whose target core cannot take as compiled; listed so they are not lost.
   const blocked: string[] = [];
-  for (const row of rows) {
-    const entry = getCompiledEntry(db, row.id)!;
-    if (compilationInputsHash(db, entry.ability_version_id) !== entry.inputs_hash) { stale += 1; continue; }
+  const entries = rows.map((row) => getCompiledEntry(db, row.id)!);
+  // An approval whose source is no longer fully described (an undone connective) is stale too.
+  const described = fullyDescribed(db, entries.map((entry) => entry.ability_version_id));
+  for (const [index, row] of rows.entries()) {
+    const entry = entries[index]!;
+    if (!described.has(entry.ability_version_id) || compilationInputsHash(db, entry.ability_version_id) !== entry.inputs_hash) { stale += 1; continue; }
     let original: Record<string, unknown>;
     try {
       original = resolveAbilityEntity(semanticAuthoringDataRoot(), row.faction_id, row.ability_id).entry;

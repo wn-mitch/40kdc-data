@@ -227,11 +227,11 @@ function decide(db: DatabaseSync, value: unknown, status: "approved" | "rejected
       const inputsHash = compilationInputsHash(db, id);
       const entryId = `compiled_${hashJson({ ability_version_id: id, inputs_hash: inputsHash, mechanics: compiledIdentity(compiled.mechanics, compiled.core ?? null), status })}`;
       if (db.prepare("SELECT 1 FROM compiled_entries WHERE id = ? AND status = ?").get(entryId, status)) continue;
-      if (status === "approved") {
-        for (const previous of db.prepare("SELECT id FROM compiled_entries WHERE ability_version_id = ? AND status = 'approved'").all(id) as Array<{ id: string }>) {
-          db.prepare("UPDATE compiled_entries SET status = 'retracted' WHERE id = ?").run(previous.id);
-          member.run(batchId, "compiled-entry-replaced", previous.id);
-        }
+      // The latest decision is the only one standing: a rejection revokes the approval it follows,
+      // so a publication prepared from that approval no longer finds an approved entry.
+      for (const previous of db.prepare("SELECT id, status FROM compiled_entries WHERE ability_version_id = ? AND status IN ('approved', 'rejected') AND id != ?").all(id, entryId) as Array<{ id: string; status: string }>) {
+        db.prepare("UPDATE compiled_entries SET status = 'retracted' WHERE id = ?").run(previous.id);
+        member.run(batchId, REPLACED_KIND[previous.status]!, previous.id);
       }
       db.prepare(`
         INSERT INTO compiled_entries (id, ability_version_id, shape_signature, mechanics_json, core_json, inputs_hash, status, batch_id, created_at)
@@ -366,14 +366,23 @@ export function carryApprovals(db: DatabaseSync, actor: Actor, options: { factio
   });
 }
 
+/** The batch member recording a decision replaced by a later one, by the replaced entry's status. */
+const REPLACED_KIND: Record<string, string> = { approved: "compiled-entry-replaced", rejected: "compiled-entry-replaced-rejected" };
+const RESTORED_STATUS: Record<string, string> = { "compiled-entry-replaced": "approved", "compiled-entry-replaced-rejected": "rejected" };
+
 /** Text-keyed batch members this module owns. */
-export const COMPILED_MEMBER_KINDS = new Set(["compiled-entry-approved", "compiled-entry-rejected", "compiled-entry-replaced"]);
+export const COMPILED_MEMBER_KINDS = new Set(["compiled-entry-approved", "compiled-entry-rejected", ...Object.keys(RESTORED_STATUS)]);
 
 export function assertShapeUndo(db: DatabaseSync, members: ReadonlyArray<{ entity_kind: string; entity_id: string }>): void {
   for (const item of members) {
     if (item.entity_kind !== "compiled-entry-approved" && item.entity_kind !== "compiled-entry-rejected") continue;
     const row = db.prepare("SELECT status FROM compiled_entries WHERE id = ?").get(item.entity_id) as { status: string } | undefined;
     if (!row || row.status !== item.entity_kind.slice("compiled-entry-".length)) throw new ShapeError(409, "This batch cannot be undone because one of its compiled entries was later changed.");
+  }
+  for (const item of members) {
+    if (RESTORED_STATUS[item.entity_kind] === undefined) continue;
+    const row = db.prepare("SELECT status FROM compiled_entries WHERE id = ?").get(item.entity_id) as { status: string } | undefined;
+    if (!row || row.status !== "retracted") throw new ShapeError(409, "This batch cannot restore a compiled entry it replaced because that entry was later changed.");
   }
 }
 
@@ -386,8 +395,9 @@ export function applyShapeUndo(db: DatabaseSync, reversalId: string, members: Re
     }
   }
   for (const item of members) {
-    if (item.entity_kind !== "compiled-entry-replaced") continue;
-    db.prepare("UPDATE compiled_entries SET status = 'approved' WHERE id = ? AND status = 'retracted'").run(item.entity_id);
+    const restored = RESTORED_STATUS[item.entity_kind];
+    if (restored === undefined) continue;
+    db.prepare("UPDATE compiled_entries SET status = ? WHERE id = ? AND status = 'retracted'").run(restored, item.entity_id);
     add.run(reversalId, "compiled-entry-restored", item.entity_id);
   }
 }

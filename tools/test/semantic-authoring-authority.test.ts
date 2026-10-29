@@ -259,4 +259,36 @@ describe("Semantic authoring authority boundary", () => {
       db.close();
     }
   });
+
+  it("retracts a copy when its source leaf is retired or corrected, not only when it is undone", () => {
+    const db = fixture([{ ability_id: "first", raw_text: `Then ${CP}.` }, { ability_id: "second", raw_text: `Then ${CP}.` }]);
+    try {
+      const source = () => (db.prepare(`
+        SELECT annotations.id FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id
+        WHERE annotations.status = 'active' AND source_spans.ability_version_id = ?
+      `).get(ability(db, "first").id) as { id: number }).id;
+      const copied = () => getAbilityCoverage(db, ability(db, "second").id).human_leaf_fraction;
+      applyAnnotationBatch(db, { reviewer: "will", decisions: [confirmDecision(db, "first", CP)] }, WILL);
+      propagateDuplicateTexts(db, { dryRun: false });
+      expect(rows(db, "second")).toEqual([{ authority_kind: "derived", status: "active", derived_from_surface_id: null }]);
+
+      applyAnnotationBatch(db, { reviewer: "will", decisions: [{ ...confirmDecision(db, "first", CP), action: "retire", supersedes_annotation_id: source() }] }, WILL);
+      expect(rows(db, "second")).toEqual([{ authority_kind: "derived", status: "retracted", derived_from_surface_id: null }]);
+      expect(copied()).toBe(0);
+
+      applyAnnotationBatch(db, { reviewer: "will", decisions: [confirmDecision(db, "first", CP)] }, WILL);
+      propagateDuplicateTexts(db, { dryRun: false });
+      expect(rows(db, "second").map((row) => row.status)).toEqual(["retracted", "active"]);
+      const correction = { ...confirmDecision(db, "first", CP), action: "correct", supersedes_annotation_id: source(), parameters: { ...cp.parameters, amount: 2 } };
+      const corrected = applyAnnotationBatch(db, { reviewer: "will", decisions: [correction] }, WILL);
+      // The copy of the meaning the reviewer corrected away is no longer trusted on the twin.
+      expect(rows(db, "second").map((row) => row.status)).toEqual(["retracted", "retracted"]);
+      // Undoing the correction restores the source leaf; the next propagation copies it again.
+      undoBatch(db, corrected.batch_id, { reviewer: "will" }, WILL);
+      expect(rows(db, "first").map((row) => row.status)).toEqual(["superseded", "active", "retracted"]);
+      expect(propagateDuplicateTexts(db, { dryRun: true }).leaves).toMatchObject({ planned: 1 });
+    } finally {
+      db.close();
+    }
+  });
 });

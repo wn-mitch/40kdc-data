@@ -110,6 +110,11 @@ export function tiledSources(
   return result;
 }
 
+/** Of these source versions, those still fully tiled in the trusted view. */
+export function fullyDescribed(db: DatabaseSync, abilityVersionIds: Iterable<number>): Set<number> {
+  return new Set(tiledSources(db, { abilityVersionIds: new Set(abilityVersionIds) }).map((source) => source.id));
+}
+
 /**
  * Drop untrusted leaves a trusted leaf overlaps. Among untrusted leaves, the latest model run
  * wins an overlap (a corrective re-run replaces the cut it corrects); machine annotations rank

@@ -8,8 +8,9 @@ import { fileURLToPath } from "node:url";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { compilationInputsHash } from "../src/semantic-authoring/compiled.js";
-import { currentFamilyVersion } from "../src/semantic-authoring/contracts.js";
-import { initializeWorkbench } from "../src/semantic-authoring/db.js";
+import { currentFamilyVersion, validateFingerprint } from "../src/semantic-authoring/contracts.js";
+import { initializeWorkbench, insertSpan } from "../src/semantic-authoring/db.js";
+import { fullyDescribed } from "../src/semantic-authoring/leaf-view.js";
 import {
   getPublicationReport,
   listPublications,
@@ -22,7 +23,7 @@ import { projectRecords } from "../src/semantic-authoring/publication-projection
 import { refreshSources } from "../src/semantic-authoring/source.js";
 import { hashJson } from "../src/round4/hash.js";
 import { sourceDigest } from "../src/source-digest.js";
-import { applyAnnotationBatch } from "./semantic-authoring-human.js";
+import { applyAnnotationBatch, undoBatch } from "./semantic-authoring-human.js";
 
 const DatabaseSync = createRequire(import.meta.url)("node:sqlite").DatabaseSync as { new(path: string): DatabaseType };
 type DatabaseSync = DatabaseType;
@@ -55,6 +56,8 @@ type Fixture = {
   authoredEntryId: string;
   selectedAbilityVersionId: number;
   selectedSourceHash: string;
+  /** The trusted leaf that describes the selected source. */
+  selectedLeafId: number;
 };
 
 function entriesAt(file: string): Array<Record<string, unknown>> {
@@ -74,8 +77,21 @@ const STAT_MECHANICS = {
   applies_to: null,
 };
 
+/** Describe a source version with one trusted leaf over its whole text, as a reviewed record is; returns the leaf. */
+function describeSource(db: DatabaseSync, abilityVersionId: number, suffix: string): number {
+  const { source_text: text } = db.prepare("SELECT source_text FROM abilities WHERE id = ?").get(abilityVersionId) as { source_text: string };
+  const fingerprint = validateFingerprint(db, "leading-unit", { subject: "this-model", attachment: "leading" } as never, currentFamilyVersion("leading-unit"), text);
+  const batchId = `fixture-leaves-${suffix}`;
+  db.prepare("INSERT INTO annotation_batches (id, operation, reviewer, created_at) VALUES (?, 'review', 'fixture-reviewer-secret', ?)").run(batchId, "2026-01-01T00:00:00.000Z");
+  const leaf = Number(db.prepare("INSERT INTO annotations (span_id, fingerprint_id, status, origin, authority_kind, confirmed_by, batch_id, created_at) VALUES (?, ?, 'active', 'manual', 'human', 'fixture-reviewer-secret', ?, ?)")
+    .run(insertSpan(db, abilityVersionId, "RAW_TEXT", 0, Buffer.byteLength(text), text), fingerprint, batchId, "2026-01-01T00:00:00.000Z").lastInsertRowid);
+  if (!fullyDescribed(db, [abilityVersionId]).has(abilityVersionId)) throw new Error(`Fixture source ${suffix} is not fully described.`);
+  return leaf;
+}
+
 /** Record an approved compiled entry pinned to the source version's current leaves. */
 function seedApprovedEntry(db: DatabaseSync, abilityVersionId: number, suffix: string, mechanics: Record<string, unknown> = STAT_MECHANICS): string {
+  describeSource(db, abilityVersionId, suffix);
   const batchId = `fixture-approval-${suffix}`;
   db.prepare("INSERT INTO annotation_batches (id, operation, reviewer, created_at) VALUES (?, 'shape-approval', 'fixture-reviewer-secret', ?)")
     .run(batchId, "2026-01-01T00:00:00.000Z");
@@ -85,6 +101,15 @@ function seedApprovedEntry(db: DatabaseSync, abilityVersionId: number, suffix: s
     VALUES (?, ?, 'EFFECT(characteristic-set)', ?, ?, 'approved', ?, ?)
   `).run(id, abilityVersionId, JSON.stringify(mechanics), compilationInputsHash(db, abilityVersionId), batchId, "2026-01-01T00:00:00.000Z");
   return id;
+}
+
+/** A reviewer's correction of the selected source's leaf: the source stays described, with another meaning. */
+function correctSelectedLeaf(fixture: Fixture): { batch_id: string } {
+  return applyAnnotationBatch(fixture.db, { reviewer: "fixture-reviewer", decisions: [{
+    action: "correct", supersedes_annotation_id: fixture.selectedLeafId, ability_version_id: fixture.selectedAbilityVersionId, source_hash: fixture.selectedSourceHash,
+    fragment: "RAW_TEXT", start_byte: 0, end_byte: Buffer.byteLength(privateSourceText, "utf8"), exact_text: privateSourceText,
+    role: "EFFECT", family_id: "characteristic-set", family_version: currentFamilyVersion("characteristic-set"), parameters: { subject: "this-model", characteristic: "M", value: 1 },
+  }] });
 }
 
 function buildFixture(): Fixture {
@@ -141,6 +166,7 @@ function buildFixture(): Fixture {
     authoredEntryId: seedApprovedEntry(db, authoredAbility.id, "authored"),
     selectedAbilityVersionId: selectedAbility.id,
     selectedSourceHash: selectedAbility.source_hash,
+    selectedLeafId: (db.prepare("SELECT annotations.id FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id WHERE source_spans.ability_version_id = ? AND annotations.status = 'active'").get(selectedAbility.id) as { id: number }).id,
   };
 }
 
@@ -323,15 +349,9 @@ describe("Semantic authoring explicit publication", () => {
       fixture.db.prepare("UPDATE compiled_entries SET status = 'approved' WHERE id = ?").run(fixture.selectedEntryId);
 
       // A leaf decision after approval changes what the entry was compiled from.
-      const phrase = "add one to this model's Move characteristic";
-      const start = Buffer.byteLength(privateSourceText.slice(0, privateSourceText.indexOf(phrase)), "utf8");
-      const leaf = applyAnnotationBatch(fixture.db, { reviewer: "fixture-reviewer", decisions: [{
-        action: "confirm", ability_version_id: fixture.selectedAbilityVersionId, source_hash: fixture.selectedSourceHash,
-        fragment: "RAW_TEXT", start_byte: start, end_byte: start + Buffer.byteLength(phrase, "utf8"), exact_text: phrase,
-        role: "EFFECT", family_id: "characteristic-set", family_version: currentFamilyVersion("characteristic-set"), parameters: { subject: "this-model", characteristic: "M", value: 1 },
-      }] });
+      const leaf = correctSelectedLeaf(fixture);
       await expect(prepare()).rejects.toThrow(/leaves changed after approval/i);
-      fixture.db.prepare("UPDATE annotations SET status = 'retracted' WHERE batch_id = ?").run(leaf.batch_id);
+      undoBatch(fixture.db, leaf.batch_id, { reviewer: "fixture-reviewer" });
 
       const valid = fixture.db.prepare("SELECT mechanics_json FROM compiled_entries WHERE id = ?").get(fixture.selectedEntryId) as { mechanics_json: string };
       fixture.db.prepare("UPDATE compiled_entries SET mechanics_json = ? WHERE id = ?")
@@ -367,13 +387,7 @@ describe("Semantic authoring explicit publication", () => {
       const preview = await preparePublication(fixture.db, { faction_id: factionId, entry_ids: [fixture.selectedEntryId] });
       await publishPublication(fixture.db, { batch_id: preview.batch_id, preview_hash: preview.preview_hash });
       expect(listPublications(fixture.db).items[0]).toMatchObject({ evidence_status: "current" });
-      const phrase = "add one to this model's Move characteristic";
-      const start = Buffer.byteLength(privateSourceText.slice(0, privateSourceText.indexOf(phrase)), "utf8");
-      applyAnnotationBatch(fixture.db, { reviewer: "fixture-reviewer", decisions: [{
-        action: "confirm", ability_version_id: fixture.selectedAbilityVersionId, source_hash: fixture.selectedSourceHash,
-        fragment: "RAW_TEXT", start_byte: start, end_byte: start + Buffer.byteLength(phrase, "utf8"), exact_text: phrase,
-        role: "EFFECT", family_id: "characteristic-set", family_version: currentFamilyVersion("characteristic-set"), parameters: { subject: "this-model", characteristic: "M", value: 1 },
-      }] });
+      correctSelectedLeaf(fixture);
       expect(listPublications(fixture.db).items[0]).toMatchObject({ evidence_status: "stale" });
       expect(getPublicationReport(fixture.db)).toMatchObject({ stale_published_abilities: [`${factionId}/${selectedAbilityId}`] });
     } finally {

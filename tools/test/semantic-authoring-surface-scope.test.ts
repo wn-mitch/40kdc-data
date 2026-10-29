@@ -7,11 +7,11 @@ import type { DatabaseSync as DatabaseType } from "node:sqlite";
 import { afterEach, describe, expect, it } from "vitest";
 import { humanActor } from "../src/semantic-authoring/authority.js";
 import { initializeWorkbench } from "../src/semantic-authoring/db.js";
-import { confirmSurface, reapplyLeafSurfaces } from "../src/semantic-authoring/leaves.js";
+import { confirmSurface, moveSurface, reapplyLeafSurfaces } from "../src/semantic-authoring/leaves.js";
 import { refreshSources } from "../src/semantic-authoring/source.js";
 import { getAbilityCoverage } from "../src/semantic-authoring/coverage.js";
 import { applyChatReview } from "../src/semantic-authoring/review-apply.js";
-import { undoBatch } from "../src/semantic-authoring/review.js";
+import { applyAnnotationBatch, undoBatch } from "../src/semantic-authoring/review.js";
 import { currentFamilyVersion } from "../src/semantic-authoring/contracts.js";
 import { inScope, parseScope } from "../src/semantic-authoring/surface-scope.js";
 
@@ -81,6 +81,51 @@ describe("Semantic authoring surface scope", () => {
         .toEqual({ version: 1, not_followed_by: ["each time", "for"] });
       // The same wording under another scope is another decision, refused while this one stands.
       expect(() => confirmSurface(db, { reviewer: "will", exact_text: "Roll one D6", ...D6 }, WILL)).toThrow(/already decided within/u);
+    } finally {
+      db.close();
+    }
+  });
+
+  it("moves only the in-scope rows of a scoped surface, never a human leaf on an out-of-scope occurrence", () => {
+    const db = fixture(["Roll one D6: on a 4+, gain 1CP.", "Roll one D6 for each model in this unit."]);
+    try {
+      const report = confirmSurface(db, { reviewer: "will", exact_text: "Roll one D6", ...D6, scope: { not_followed_by: ["for"] } }, WILL);
+      const outside = db.prepare("SELECT id, source_hash FROM abilities WHERE current = 1 AND ability_id = 'a1'").get() as { id: number; source_hash: string };
+      // The reviewer decides the out-of-scope occurrence directly, with the same meaning.
+      applyAnnotationBatch(db, { reviewer: "will", decisions: [{
+        action: "confirm", ability_version_id: outside.id, source_hash: outside.source_hash, fragment: "RAW_TEXT",
+        start_byte: 0, end_byte: Buffer.byteLength("Roll one D6"), exact_text: "Roll one D6", role: "EVENT", ...D6,
+      }] }, WILL);
+      const dice = (abilityId: string) => (db.prepare(`
+        SELECT fingerprints.parameters_json FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id
+        JOIN abilities ON abilities.id = source_spans.ability_version_id JOIN fingerprints ON fingerprints.id = annotations.fingerprint_id
+        WHERE annotations.status = 'active' AND abilities.ability_id = ?
+      `).all(abilityId) as Array<{ parameters_json: string }>).map((row) => JSON.parse(row.parameters_json).dice);
+      expect([dice("a0"), dice("a1")]).toEqual([["D6"], ["D6"]]);
+
+      moveSurface(db, { reviewer: "will", surface_id: report.surface_id, ...D6, parameters: { dice: "D3" } }, WILL);
+      expect(dice("a0")).toEqual(["D3"]);
+      expect(dice("a1")).toEqual(["D6"]);
+    } finally {
+      db.close();
+    }
+  });
+
+  it("never brings back a leaf whose own decision was undone when a later, longer surface is undone", () => {
+    const db = fixture(["Roll one D6 for each model in this unit."]);
+    try {
+      const short = confirmSurface(db, { reviewer: "will", exact_text: "Roll one D6", ...D6 }, WILL);
+      const long = confirmSurface(db, { reviewer: "will", exact_text: "Roll one D6 for each model", ...D6 }, WILL);
+      const active = () => (db.prepare(`
+        SELECT source_spans.exact_text FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id WHERE annotations.status = 'active'
+      `).all() as Array<{ exact_text: string }>).map((row) => row.exact_text);
+      expect(active()).toEqual(["Roll one D6 for each model"]);
+      // Out of order: the short decision first, then the long one that had replaced its leaf.
+      undoBatch(db, short.batch_id, { reviewer: "will" }, WILL);
+      undoBatch(db, long.batch_id, { reviewer: "will" }, WILL);
+      expect(db.prepare("SELECT count(*) AS n FROM leaf_surfaces WHERE status = 'active'").get()).toEqual({ n: 0 });
+      expect(active()).toEqual([]);
+      expect(d6Rows(db)).toEqual([]);
     } finally {
       db.close();
     }

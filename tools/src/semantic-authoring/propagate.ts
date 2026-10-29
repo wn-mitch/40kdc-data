@@ -3,6 +3,7 @@ import type { DatabaseSync } from "node:sqlite";
 
 import { NAME_FRAGMENT } from "./compile-name.js";
 import { bumpWorkbenchRevision, insertSpan, withTransaction } from "./db.js";
+import { stillAuthorized } from "./leaves.js";
 
 /**
  * Copy trusted decisions between records whose source is byte-identical (the same source hash
@@ -81,7 +82,7 @@ export function retractOrphanedCopies(db: DatabaseSync, batchId: string): number
   for (const copy of staleCopies(db)) {
     db.prepare("UPDATE annotations SET status = 'retracted' WHERE id = ? AND status = 'active'").run(copy.id);
     addMember(db, batchId, "annotation-retracted-with-source", copy.id);
-    if (copy.supersedes_id !== null) {
+    if (copy.supersedes_id !== null && stillAuthorized(db, copy.supersedes_id)) {
       const restored = db.prepare("UPDATE annotations SET status = 'active' WHERE id = ? AND status = 'superseded'").run(copy.supersedes_id);
       if (restored.changes === 1) addMember(db, batchId, "annotation-restored", copy.supersedes_id);
     }

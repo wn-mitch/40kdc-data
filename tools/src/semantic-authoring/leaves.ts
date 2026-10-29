@@ -444,17 +444,23 @@ export function reapplyLeafSurfaces(db: DatabaseSync, abilityVersionIds?: Readon
  * Supersede active annotations of one fingerprint on the given spans with another fingerprint.
  * A human re-meaning of trusted rows keeps each row's authority; machine rows stay machine and
  * are left for their own review. `surfaceId` links rows to the surface now carrying the meaning.
+ * A surface moves only the occurrences of its wording inside its stored scope (`scopeJson`); a
+ * row outside it was decided on its own and keeps its meaning.
  */
-function repoint(db: DatabaseSync, batchId: string, reviewer: string, from: string, to: string, surface?: string, surfaceId?: number): Set<number> {
+function repoint(db: DatabaseSync, batchId: string, reviewer: string, from: string, to: string, surface?: string, surfaceId?: number, scopeJson: string | null = null): Set<number> {
   const rows = db.prepare(`
-    SELECT annotations.id, annotations.span_id, annotations.authority_kind, annotations.derived_from_surface_id, source_spans.exact_text, source_spans.ability_version_id
+    SELECT annotations.id, annotations.span_id, annotations.authority_kind, annotations.derived_from_surface_id, source_spans.exact_text, source_spans.ability_version_id,
+      source_spans.fragment, source_spans.start_byte, source_spans.end_byte
     FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id
     WHERE annotations.fingerprint_id = ? AND annotations.status = 'active' AND annotations.authority_kind != 'machine'
-  `).all(from) as Array<{ id: number; span_id: number; authority_kind: Authority; derived_from_surface_id: number | null; exact_text: string; ability_version_id: number }>;
+  `).all(from) as Array<{ id: number; span_id: number; authority_kind: Authority; derived_from_surface_id: number | null; exact_text: string; ability_version_id: number; fragment: string; start_byte: number; end_byte: number }>;
+  const scope = parseScope(scopeJson === null ? null : JSON.parse(scopeJson));
+  const sourceText = db.prepare("SELECT source_text, source_type, fragments_json FROM abilities WHERE id = ?");
   const touched = new Set<number>();
   const now = new Date().toISOString();
   for (const row of rows) {
     if (surface !== undefined && leafSurface(row.exact_text) !== surface) continue;
+    if (!inScope(scope, occurrenceContext(sourceText.get(row.ability_version_id) as AbilityContext, row))) continue;
     db.prepare("UPDATE annotations SET status = 'superseded' WHERE id = ?").run(row.id);
     const inserted = db.prepare(`
       INSERT INTO annotations (span_id, fingerprint_id, status, origin, authority_kind, confirmed_by, batch_id, supersedes_id, derived_from_surface_id, created_at)
@@ -494,7 +500,7 @@ export function moveSurface(db: DatabaseSync, value: unknown, actor: Actor): App
     const batchId = newBatch(db, reviewer, { action: "move-surface", surface: row.normalized_surface });
     retire(db, batchId, row);
     const created = insertSurface(db, row.normalized_surface, target.id, batchId, "human", null, row.scope_json);
-    const touched = repoint(db, batchId, reviewer, row.fingerprint_id, target.id, row.normalized_surface, created.id);
+    const touched = repoint(db, batchId, reviewer, row.fingerprint_id, target.id, row.normalized_surface, created.id, row.scope_json);
     const report = applySurface(db, created, reviewer, batchId);
     for (const id of report.touched) touched.add(id);
     finish(db, touched);
@@ -583,6 +589,21 @@ function mergeMetadata(db: DatabaseSync, batchId: string): { from: string; to: s
 }
 
 /**
+ * Whether a superseded row may come back on undo: the decision that wrote it still stands (its
+ * batch is not reversed), and the surface or source row it derives from is still active. A row
+ * whose authority was revoked stays superseded, whatever order its batches are undone in.
+ */
+export function stillAuthorized(db: DatabaseSync, annotationId: number): boolean {
+  return db.prepare(`
+    SELECT 1 FROM annotations
+    WHERE id = ?
+      AND NOT EXISTS (SELECT 1 FROM annotation_batches WHERE annotation_batches.reversed_batch_id = annotations.batch_id)
+      AND (derived_from_surface_id IS NULL OR EXISTS (SELECT 1 FROM leaf_surfaces WHERE leaf_surfaces.id = annotations.derived_from_surface_id AND leaf_surfaces.status = 'active'))
+      AND (derived_from_annotation_id IS NULL OR EXISTS (SELECT 1 FROM annotations AS source WHERE source.id = annotations.derived_from_annotation_id AND source.status = 'active'))
+  `).get(annotationId) !== undefined;
+}
+
+/**
  * Undoing a surface's founding also undoes every row that surface wrote in later batches (a
  * reapply after a source refresh, a scoped pilot propagation): each is retracted and the row it
  * promoted or replaced comes back. Rows in the undone batch itself are handled by the caller.
@@ -596,7 +617,7 @@ function retractDerivedRows(db: DatabaseSync, reversalId: string, surfaceId: num
   for (const row of rows) {
     db.prepare("UPDATE annotations SET status = 'retracted' WHERE id = ? AND status = 'active'").run(row.id);
     addMember(db, reversalId, "annotation-retracted-with-surface", row.id);
-    if (row.supersedes_id !== null) {
+    if (row.supersedes_id !== null && stillAuthorized(db, row.supersedes_id)) {
       const restored = db.prepare("UPDATE annotations SET status = 'active' WHERE id = ? AND status = 'superseded'").run(row.supersedes_id);
       if (restored.changes === 1) addMember(db, reversalId, "annotation-restored", row.supersedes_id);
     }
@@ -605,9 +626,10 @@ function retractDerivedRows(db: DatabaseSync, reversalId: string, surfaceId: num
 
 /** Reverse surface rows: created ones retire, retired ones return (created ones first, so a move swaps back). */
 export function applyLeafUndo(db: DatabaseSync, batchId: string, reversalId: string, members: ReadonlyArray<{ entity_kind: string; entity_id: string }>): void {
-  for (const member of members.filter((item) => item.entity_kind === "annotation-superseded-by-surface")) {
-    db.prepare("UPDATE annotations SET status = 'active' WHERE id = ? AND status = 'superseded'").run(Number(member.entity_id));
-    addMember(db, reversalId, "annotation-restored", member.entity_id);
+  for (const member of members.filter((item) => item.entity_kind === "leaf-surface-created")) {
+    db.prepare("UPDATE leaf_surfaces SET status = 'retired' WHERE id = ? AND status = 'active'").run(Number(member.entity_id));
+    addMember(db, reversalId, "leaf-surface-retired", member.entity_id);
+    retractDerivedRows(db, reversalId, Number(member.entity_id));
   }
   const merge = mergeMetadata(db, batchId);
   if (merge) {
@@ -615,11 +637,6 @@ export function applyLeafUndo(db: DatabaseSync, batchId: string, reversalId: str
       db.prepare("UPDATE proposals SET fingerprint_id = ? WHERE id = ? AND fingerprint_id = ?").run(merge.from, Number(member.entity_id), merge.to);
     }
     db.prepare("UPDATE fingerprints SET status = 'active' WHERE id = ? AND status = 'superseded'").run(merge.from);
-  }
-  for (const member of members.filter((item) => item.entity_kind === "leaf-surface-created")) {
-    db.prepare("UPDATE leaf_surfaces SET status = 'retired' WHERE id = ? AND status = 'active'").run(Number(member.entity_id));
-    addMember(db, reversalId, "leaf-surface-retired", member.entity_id);
-    retractDerivedRows(db, reversalId, Number(member.entity_id));
   }
   for (const member of members.filter((item) => item.entity_kind === "leaf-operator-created")) {
     db.prepare("UPDATE leaf_operators SET status = 'retired' WHERE id = ? AND status = 'active'").run(Number(member.entity_id));
@@ -630,6 +647,13 @@ export function applyLeafUndo(db: DatabaseSync, batchId: string, reversalId: str
     if (activeSurface(db, row.normalized_surface)) throw new LeafError(409, `"${row.normalized_surface}" has a newer meaning; undo that decision first.`);
     db.prepare("UPDATE leaf_surfaces SET status = 'active' WHERE id = ?").run(Number(member.entity_id));
     addMember(db, reversalId, "leaf-surface-restored", member.entity_id);
+  }
+  // Last, once this batch's surfaces are back as they were: a shorter leaf a longer surface
+  // replaced returns only while its own decision still stands.
+  for (const member of members.filter((item) => item.entity_kind === "annotation-superseded-by-surface")) {
+    if (!stillAuthorized(db, Number(member.entity_id))) continue;
+    db.prepare("UPDATE annotations SET status = 'active' WHERE id = ? AND status = 'superseded'").run(Number(member.entity_id));
+    addMember(db, reversalId, "annotation-restored", member.entity_id);
   }
 }
 

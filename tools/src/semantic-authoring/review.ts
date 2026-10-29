@@ -9,7 +9,7 @@ import { BODY_SPAN_SQL, bumpWorkbenchRevision, getWorkbenchRevision, insertSpan,
 import { resolveAbilityContext, type AbilityContext } from "./context.js";
 import { abilityReadiness, currentReadiness, type Readiness } from "./readiness.js";
 import { applySourceAtomUndo, assertSourceAtomUndo, sourceAtomsForAbility } from "./atoms.js";
-import { applyLeafUndo, assertLeafUndo } from "./leaves.js";
+import { applyLeafUndo, assertLeafUndo, stillAuthorized } from "./leaves.js";
 import { retractOrphanedCopies } from "./propagate.js";
 import { assertResolved } from "./placeholders.js";
 import { applyShapeUndo, assertShapeUndo, COMPILED_MEMBER_KINDS } from "./shapes.js";
@@ -1106,6 +1106,8 @@ export function applyAnnotationBatch(
         addMember(db, batchId, "annotation-merged", id);
       }
     }
+    // A retired or corrected leaf takes its copies on byte-identical records with it.
+    retractOrphanedCopies(db, batchId);
     invalidateWholeReview(db, touchedAbilities);
     bumpWorkbenchRevision(db);
     return { batch_id: batchId, applied: batch.decisions.length };
@@ -1276,18 +1278,15 @@ export function undoBatch(
       db.prepare("UPDATE annotations SET status = 'retracted' WHERE id = ? AND status = 'active'").run(annotation.id);
       addMember(db, reversalId, "annotation-retracted", annotation.id);
       touchedAbilities.add(annotation.ability_version_id);
-      if (annotation.supersedes_id !== null) {
-        const restored = db.prepare("UPDATE annotations SET status = 'active' WHERE id = ? AND status = 'superseded'")
-          .run(annotation.supersedes_id);
-        if (restored.changes !== 1) conflict("The superseded annotation changed during undo.");
-        addMember(db, reversalId, "annotation-restored", annotation.supersedes_id);
-      }
     }
-    for (const id of mergedMembers) {
+    // Rows this batch superseded come back after its surfaces do (applyLeafUndo, below), and only
+    // while their own decision still stands.
+    const restore = (id: number, message: string) => {
+      if (!stillAuthorized(db, id)) return;
       const restored = db.prepare("UPDATE annotations SET status = 'active' WHERE id = ? AND status = 'superseded'").run(id);
-      if (restored.changes !== 1) conflict("A merged annotation changed during undo.");
+      if (restored.changes !== 1) conflict(message);
       addMember(db, reversalId, "annotation-restored", id);
-    }
+    };
     for (const member of members) {
       if (NON_NUMERIC_MEMBERS.has(member.entity_kind)) continue;
       const id = numericMemberId(member);
@@ -1328,6 +1327,8 @@ export function undoBatch(
     for (const id of applySourceAtomUndo(db, reversalId, members)) touchedAbilities.add(id);
     for (const id of applyOntologyUndo(db, batchId, reversalId, members)) touchedAbilities.add(id);
     applyLeafUndo(db, batchId, reversalId, members);
+    for (const annotation of annotations) if (annotation.supersedes_id !== null) restore(annotation.supersedes_id, "The superseded annotation changed during undo.");
+    for (const id of mergedMembers) restore(id, "A merged annotation changed during undo.");
     applyShapeUndo(db, reversalId, members);
     // Copies of what this undo retracted, on byte-identical records, go with it.
     retractOrphanedCopies(db, reversalId);

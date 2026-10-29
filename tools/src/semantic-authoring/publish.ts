@@ -9,6 +9,7 @@ import { compilationInputsHash, compiledIdentity, getCompiledEntry } from "./com
 import { abilityFilePath, canonicalDataRoot, semanticAuthoringDataRoot, schemaTreeHash, type Mechanics } from "./entries.js";
 import { bumpWorkbenchRevision, withTransaction } from "./db.js";
 import { gameVersionForDataVersion } from "../mfm/dataslate.js";
+import { fullyDescribed } from "./leaf-view.js";
 import { PublicationError, projectRecords, record, relativeAbilityPath, stagedWrites, type PublicationDiff, type PublicationStamp } from "./publication-projection.js";
 import { coreManifest, coreReplicaManifests, coreStratagemFile, observedCoreHash, type CoreManifest, type CoreProjection } from "./publish-core.js";
 import { loadSourceRecords, type SourceRecord } from "./source.js";
@@ -256,6 +257,11 @@ function buildProjection(
 ): PublicationProjection {
   const dataRoot = canonicalDataRoot(semanticAuthoringDataRoot());
   const rows = loadEntryRows(db, options.faction_id, options.entry_ids);
+  // The inputs hash pins leaves and reviewed relations; an undone connective can leave both intact
+  // while the source is no longer fully described, which revokes what the approval judged.
+  const described = fullyDescribed(db, rows.map((row) => row.ability_version_id));
+  const incomplete = rows.find((row) => !described.has(row.ability_version_id));
+  if (incomplete) throw new PublicationError(409, `Compiled entry ${incomplete.id} source is no longer fully described; review it again.`);
   const sources = freshSourceMap(rows);
   const snapshots = rows.map((row) => {
     const source = sources.records.get(`${row.faction_id}\u0000${row.ability_id}`);
