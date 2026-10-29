@@ -365,29 +365,33 @@
       "duration": "permanent"
     },
     "community_notes": "Used just before making a Battle-shock roll for the unit: that roll is automatically successful. Once per battle",
-    "trigger": [
-      {
-        "event": "step-started",
-        "filter": {
-          "step": "battle-shock"
-        },
-        "condition": {
-          "type": "player-turn-is",
-          "parameters": {
-            "turn": "your-turn"
-          }
-        }
+    "trigger": {
+      "event": "before-roll",
+      "filter": {
+        "roll": "battle-shock"
       },
-      {
-        "event": "before-roll",
-        "filter": {
-          "roll": "battle-shock"
-        },
-        "subject": {
-          "owner": "friendly"
-        }
+      "subject": {
+        "owner": "friendly"
+      },
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command",
+              "step": "battle-shock"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
       }
-    ]
+    }
   },
   {
     "ability_id": "rapid-ingress",

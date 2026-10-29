@@ -3122,6 +3122,9 @@ def _condition_to_applicability(
         return {"onCritical": "wound"} if critical_wound else "context"
     if ctype == "phase-is":
         phase = params.get("phase") if params else None
+        # A step of a phase is a narrower window than the phase the engine knows.
+        if params and "step" in params:
+            return "context"
         return {"phases": [phase]} if isinstance(phase, str) else "context"
     if ctype == "matches":
         filt = params.get("filter") if params else None
@@ -3677,6 +3680,10 @@ def _evaluate_condition_from_context(
         wanted = params.get("phase") if params else None
         if not isinstance(wanted, str):
             return "unknown"
+        # The engine knows the phase, not the step: outside the phase it is false, inside it
+        # unknown.
+        if params and "step" in params:
+            return "unknown" if ctx.get("phase") == wanted else False
         return ctx.get("phase") == wanted
     if ctype == "attack-is":
         if any(k != "attack_type" for k in (params or {})):

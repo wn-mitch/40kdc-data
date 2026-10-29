@@ -243,6 +243,17 @@ def negate_phrase(phrase: str) -> str:
     return f"not {phrase}"
 
 
+
+_STEP_NAMES = {"battle-shock": "Battle-shock", "reinforcements": "Reinforcements"}
+
+
+def step_window(p: dict[str, Any], owner: str = "the") -> str:
+    """ "during the Reinforcements step of the Movement phase": a phase-is narrowed to one of its
+    steps; owner names whose phase."""
+    step = _str(p.get("step"))
+    name = _STEP_NAMES.get(step) or title_case(step)
+    return f"during the {name} step of {owner} {title_case(_str(p.get('phase')))} phase"
+
 def _describe_predicate(c: Condition, negated: bool) -> str:
     """The predicate phrase, optionally negated ("the unit is not below starting strength")."""
     neg = "not " if negated else ""
@@ -268,6 +279,8 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
         return f"{neg}during deployment"
     if ctype == "phase-is":
         phase = _str(p.get("phase"))
+        if p.get("step") is not None:
+            return f"{neg}{step_window(p)}"
         if phase == "command":
             return f"{neg}during the Command phase"
         return f"{neg}during the {title_case(phase)} phase"

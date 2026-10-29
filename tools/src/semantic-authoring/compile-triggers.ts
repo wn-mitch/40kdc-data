@@ -10,6 +10,7 @@ import { closed, CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { OWNED_EVENT_KINDS } from "./event-family.js";
 import { TRIGGER_ROLL_KINDS } from "./dice-families.js";
 import { ANTECEDENT } from "./antecedent-families.js";
+import { STEP_PHASES } from "./compile-step-window.js";
 
 type Node = Record<string, unknown>;
 
@@ -276,6 +277,15 @@ export function trigger(leaf: CompileLeaf): Node {
   if (leaf.parameters.proximity !== undefined) {
     const { of, inches } = leaf.parameters.proximity as { of: string; inches: number };
     node.proximity = { of, range: { inches } };
+  }
+  // "The Reinforcements step of your opponent's Movement phase, just after …" (compile-step-window.ts): the step it happens in.
+  if (leaf.parameters.step_window !== undefined) {
+    const { step, turn } = leaf.parameters.step_window as { step: string; turn?: string };
+    const window: Node[] = [{ type: "phase-is", parameters: { phase: STEP_PHASES[step], step } }];
+    if (turn !== undefined) window.push({ type: "player-turn-is", parameters: { turn: `${turn}-turn` } });
+    const existing = node.condition === undefined ? [] : (node.condition as Node).operator === "and" ? [...((node.condition as Node).operands as Node[])] : [node.condition as Node];
+    const operands = [...window, ...existing];
+    node.condition = operands.length === 1 ? operands[0] : { operator: "and", operands };
   }
   // "Using its Foo ability" (compile-named-ability.ts): the moment's unit used that ability in it.
   if (leaf.parameters.by_ability !== undefined) {

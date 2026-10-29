@@ -18,6 +18,7 @@ mod history;
 mod js;
 mod leadin;
 mod predicate;
+pub(crate) use predicate::step_window;
 mod refs;
 
 use serde_json::Value;

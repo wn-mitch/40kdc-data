@@ -101,33 +101,37 @@
     "scope": {
       "duration": "permanent"
     },
-    "trigger": [
-      {
-        "event": "step-started",
-        "filter": {
-          "step": "reinforcements"
-        },
-        "condition": {
-          "type": "player-turn-is",
-          "parameters": {
-            "turn": "opponent-turn"
-          }
-        }
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "ingress"
+        ]
       },
-      {
-        "event": "move-ended",
-        "filter": {
-          "move_types": [
-            "ingress"
-          ]
-        },
-        "subject": {
-          "owner": "enemy"
-        }
+      "subject": {
+        "owner": "enemy"
+      },
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement",
+              "step": "reinforcements"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
       }
-    ],
+    },
     "expected": {
-      "text": "At the start of the Reinforcements step in your opponent's turn or each time an enemy unit ends an ingress move, the unit can make a Normal move of up to 6\"."
+      "text": "Each time an enemy unit ends an ingress move during the Reinforcements step of your opponent's Movement phase, the unit can make a Normal move of up to 6\"."
     }
   },
   {
@@ -42414,6 +42418,83 @@
     },
     "expected": {
       "text": "When damage is allocated, if for ranged attacks made with [BLAST] weapons, when resolving this use, the unit has the Feel No Pain 5+ ability."
+    }
+  },
+  {
+    "caseId": "canonical/moment-in-reinforcements-step",
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "ingress"
+        ]
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement",
+              "step": "reinforcements"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
+    },
+    "effect": {
+      "type": "move",
+      "target": "this-unit",
+      "modifier": {
+        "move_type": "normal",
+        "distance": 6
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "Each time an enemy unit ends an ingress move during the Reinforcements step of your opponent's Movement phase, when resolving this use, the unit can make a Normal move of up to 6\"."
+    }
+  },
+  {
+    "caseId": "canonical/condition-not-in-battle-shock-step",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command",
+              "step": "battle-shock"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "cp-gain",
+        "target": "this-model",
+        "modifier": {
+          "amount": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "Unless during the Battle-shock step of the Command phase, when resolving this use, you gain 1CP."
     }
   }
 ]

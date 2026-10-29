@@ -2267,6 +2267,10 @@ func conditionToApplicability(condition map[string]any, perspective string, ownT
 		}
 		return "context"
 	case "phase-is":
+		// A step of a phase is a narrower window than the phase the engine knows.
+		if _, stepped := params["step"]; stepped {
+			return "context"
+		}
 		if phase, ok := params["phase"].(string); ok {
 			return map[string]any{"phases": []any{phase}}
 		}
@@ -2954,6 +2958,14 @@ func evaluateConditionFromContext(condition, ctx map[string]any, rest ...any) an
 		wanted, ok := params["phase"].(string)
 		if !ok {
 			return nil
+		}
+		// The engine knows the phase, not the step: outside the phase it is false,
+		// inside it unknown.
+		if _, stepped := params["step"]; stepped {
+			if ctx["phase"] == wanted {
+				return nil
+			}
+			return false
 		}
 		return ctx["phase"] == wanted
 	case "attack-is":

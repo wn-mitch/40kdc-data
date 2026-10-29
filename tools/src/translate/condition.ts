@@ -57,6 +57,14 @@ export function negatePhrase(phrase: string): string {
 const transportPhrase = (ref: unknown): string => ref === "this-unit" ? "that Transport" : unitRefPhrase(ref, "that Transport");
 
 /** The predicate phrase, optionally negated ("the unit is not below starting strength"). */
+/** A step's printed name ("Battle-shock", "Reinforcements"). */
+const STEP_NAMES: Record<string, string> = { "battle-shock": "Battle-shock", reinforcements: "Reinforcements" };
+
+/** "during the Reinforcements step of the Movement phase": a phase-is narrowed to one of its steps; owner names whose phase. */
+export function stepWindow(p: P, owner = "the"): string {
+  return `during the ${STEP_NAMES[str(p.step)] ?? titleCase(str(p.step))} step of ${owner} ${titleCase(str(p.phase))} phase`;
+}
+
 export function describePredicate(c: Condition, negated: boolean): string {
   if (negated && c.type === "controls" && ["count", "compare", "proportion"].filter((key) => c.parameters?.[key] != null).length > 1) return `not (${describePredicate(c, false)})`;
   if (negated && VERB_NEGATED.has(String(c.type))) return negatePhrase(describePredicate(c, false));
@@ -66,6 +74,7 @@ export function describePredicate(c: Condition, negated: boolean): string {
   const p = c.parameters ?? {};
   switch (c.type) {
     case "phase-is":
+      if (p.step != null) return `${neg}${stepWindow(p)}`;
       return str(p.phase) === "command" ? `${neg}during the Command phase` : `${neg}during the ${titleCase(str(p.phase))} phase`;
     case "deployment-window":
       return `${neg}during deployment`;

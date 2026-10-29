@@ -98,6 +98,8 @@ pub(super) fn condition_to_applicability(
             }
             _ => App::Context,
         },
+        // A step of a phase is a narrower window than the phase the engine knows.
+        Some("phase-is") if params.is_some_and(|p| p.contains_key("step")) => App::Context,
         Some("phase-is") => match params.and_then(|p| p.get("phase")).and_then(Value::as_str) {
             Some(phase) => when(json!({ "phases": [phase] })),
             None => App::Context,

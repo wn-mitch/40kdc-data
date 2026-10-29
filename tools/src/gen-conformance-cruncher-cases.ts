@@ -348,6 +348,9 @@ export function canonicalScenarioCases() {
     { id: "neighbour-undeclared", effect: gated(near), context: {} },
     { id: "split-unit-and-weapon", effect: gated({ operator: "and", operands: [{ type: "phase-is", parameters: { phase: "shooting" } }, ranged] }), context: {} },
     { id: "split-unit-false", effect: gated({ operator: "and", operands: [{ type: "phase-is", parameters: { phase: "fight" } }, ranged] }), context: {} },
+    // A step of a phase: false outside the phase, unknown inside it (the engine knows no step).
+    { id: "phase-step-other-phase", effect: gated({ type: "phase-is", parameters: { phase: "command", step: "battle-shock" } }), context: { phase: "shooting" } },
+    { id: "phase-step-same-phase", effect: gated({ type: "phase-is", parameters: { phase: "command", step: "battle-shock" } }), context: { phase: "command" } },
     { id: "split-nested-compare", effect: gated({ operator: "and", operands: [{ operator: "and", operands: [ruleId, sAboveT] }] }), context: { activeRules: ["example-rule"] } },
     { id: "split-unknown-rest", effect: gated({ operator: "and", operands: [ruleId, sAboveT] }), context: {} },
     { id: "attack-compare-unsupported-stat", effect: gated(attacksAbove), context: {} },

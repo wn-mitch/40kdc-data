@@ -30836,6 +30836,12 @@ impl ::std::convert::TryFrom<::std::string::String> for Phase {
 ///  "properties": {
 ///    "phase": {
 ///      "$ref": "#/$defs/phase"
+///    },
+///    "step": {
+///      "enum": [
+///        "battle-shock",
+///        "reinforcements"
+///      ]
 ///    }
 ///  },
 ///  "additionalProperties": false
@@ -30846,6 +30852,83 @@ impl ::std::convert::TryFrom<::std::string::String> for Phase {
 #[serde(deny_unknown_fields)]
 pub struct PhaseIsConditionParameters {
     pub phase: Phase,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub step: ::std::option::Option<PhaseIsConditionParametersStep>,
+}
+///`PhaseIsConditionParametersStep`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "enum": [
+///    "battle-shock",
+///    "reinforcements"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum PhaseIsConditionParametersStep {
+    #[serde(rename = "battle-shock")]
+    BattleShock,
+    #[serde(rename = "reinforcements")]
+    Reinforcements,
+}
+impl ::std::fmt::Display for PhaseIsConditionParametersStep {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::BattleShock => f.write_str("battle-shock"),
+            Self::Reinforcements => f.write_str("reinforcements"),
+        }
+    }
+}
+impl ::std::str::FromStr for PhaseIsConditionParametersStep {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "battle-shock" => Ok(Self::BattleShock),
+            "reinforcements" => Ok(Self::Reinforcements),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for PhaseIsConditionParametersStep {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for PhaseIsConditionParametersStep {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for PhaseIsConditionParametersStep {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
 }
 ///`PhaseList`
 ///
@@ -43187,7 +43270,7 @@ impl ::std::convert::TryFrom<::std::string::String> for Side {
 ///  "oneOf": [
 ///    {
 ///      "title": "phase-is condition",
-///      "description": "[clock] It is this phase.",
+///      "description": "[clock] It is this phase, and with step, this step of it (battle-shock: the Command phase's Battle-shock step; reinforcements: the Movement phase's Reinforcements step).",
 ///      "type": "object",
 ///      "required": [
 ///        "parameters",
@@ -43946,7 +44029,7 @@ impl ::std::convert::TryFrom<::std::string::String> for Side {
 pub enum SimpleCondition {
     /**phase-is condition
 
-[clock] It is this phase.*/
+[clock] It is this phase, and with step, this step of it (battle-shock: the Command phase's Battle-shock step; reinforcements: the Movement phase's Reinforcements step).*/
     #[serde(rename = "phase-is")]
     PhaseIs { parameters: PhaseIsConditionParameters },
     /**player-turn-is condition

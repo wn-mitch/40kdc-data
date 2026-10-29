@@ -4783,31 +4783,35 @@
       "duration": "permanent"
     },
     "behavior": "reactive",
-    "trigger": [
-      {
-        "event": "step-started",
-        "filter": {
-          "step": "reinforcements"
-        },
-        "condition": {
-          "type": "player-turn-is",
-          "parameters": {
-            "turn": "opponent-turn"
-          }
-        }
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "ingress"
+        ]
       },
-      {
-        "event": "move-ended",
-        "filter": {
-          "move_types": [
-            "ingress"
-          ]
-        },
-        "subject": {
-          "owner": "enemy"
-        }
+      "subject": {
+        "owner": "enemy"
+      },
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement",
+              "step": "reinforcements"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
       }
-    ],
+    },
     "source_digest": "a9eebbf7d46b883a15e204c215d51a4378613fe4b42fe27439e41bc7a626a7b7"
   },
   {

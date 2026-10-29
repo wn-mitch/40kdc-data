@@ -2412,6 +2412,8 @@ function conditionToApplicability(
       return "gate";
     case "phase-is": {
       const phase = params?.phase;
+      // A step of a phase is a narrower window than the phase the engine knows.
+      if (params?.step !== undefined) return "context";
       return typeof phase === "string" ? { phases: [phase as Phase] } : "context";
     }
     case "matches": {
@@ -2667,8 +2669,11 @@ function evaluateConditionFromContext(
   }
   switch (condition.type) {
     case "phase-is": {
-      const wanted = (condition.parameters as Record<string, unknown> | undefined)?.phase;
+      const params = condition.parameters as Record<string, unknown> | undefined;
+      const wanted = params?.phase;
       if (typeof wanted !== "string") return "unknown";
+      // The engine knows the phase, not the step: outside the phase it is false, inside it unknown.
+      if (params?.step !== undefined) return ctx.phase === wanted ? "unknown" : false;
       return ctx.phase === wanted;
     }
     case "attack-is": {

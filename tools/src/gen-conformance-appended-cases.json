@@ -2240,5 +2240,16 @@
     "trigger": { "event": "damage-allocated", "condition": { "type": "attack-is", "parameters": { "attack_type": "ranged", "weapons": { "keyword": { "keyword_id": "blast" } } } } },
     "effect": { "type": "feel-no-pain", "target": "this-unit", "modifier": { "threshold": 5 } },
     "scope": { "duration": "resolution" }
+  },
+  {
+    "caseId": "canonical/moment-in-reinforcements-step",
+    "trigger": { "event": "move-ended", "filter": { "move_types": ["ingress"] }, "subject": { "owner": "enemy" }, "condition": { "operator": "and", "operands": [{ "type": "phase-is", "parameters": { "phase": "movement", "step": "reinforcements" } }, { "type": "player-turn-is", "parameters": { "turn": "opponent-turn" } }] } },
+    "effect": { "type": "move", "target": "this-unit", "modifier": { "move_type": "normal", "distance": 6 } },
+    "scope": { "duration": "resolution" }
+  },
+  {
+    "caseId": "canonical/condition-not-in-battle-shock-step",
+    "effect": { "type": "conditional", "condition": { "operator": "not", "operands": [{ "type": "phase-is", "parameters": { "phase": "command", "step": "battle-shock" } }] }, "effect": { "type": "cp-gain", "target": "this-model", "modifier": { "amount": 1 } } },
+    "scope": { "duration": "resolution" }
   }
 ]

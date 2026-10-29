@@ -2,7 +2,7 @@
  * Conditions as sentence lead-ins ("while the unit is Battle-shocked", "against MONSTER
  * targets") and as relative clauses on a selection's candidate ("that was hit…").
  */
-import { describeCondition, describePredicate, type Condition } from "./condition.js";
+import { describeCondition, describePredicate, stepWindow, type Condition } from "./condition.js";
 import { describeHappened } from "./condition-history.js";
 import { andList, orList, type P, ruleRefPhrase, str, titleCase, windowPhrase } from "./condition-refs.js";
 
@@ -93,6 +93,7 @@ export function conditionLeadIn(c: Condition, defending = false): string {
   const p = c.parameters ?? {};
   switch (c.type) {
     case "phase-is":
+      if (p.step != null) return stepWindow(p);
       return str(p.phase) === "command" ? "during the Command phase" : `during the ${titleCase(str(p.phase))} phase`;
     case "player-turn-is":
     case "battle-round":

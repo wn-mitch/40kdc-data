@@ -23,6 +23,7 @@ from wh40kdc.translate.condition import (
     describe_condition,
     move_kinds,
     range_phrase,
+    step_window,
     title_case,
     unit_filter_phrase,
 )
@@ -520,6 +521,8 @@ def _phase_boundary(t: AbilityTrigger) -> str | None:
     for c in operands:
         if _truthy(c.get("operator")) or c.get("type") not in ("phase-is", "player-turn-is"):
             return None
+        if _obj(c.get("parameters")).get("step") is not None:
+            return None
     phase = _param(operands, "phase-is", "phase")
     turn = _param(operands, "player-turn-is", "turn")
     if not isinstance(phase, str) or len(operands) != (1 if turn is _MISSING else 2):
@@ -568,11 +571,15 @@ def phase_window(condition: Condition) -> dict[str, Any]:
         or len(phases) + len(turns) == 0
     ):
         return {"window": "", "rest": condition}
-    window = (
-        f"during {owner or 'the'} {_cap_word(phase)} phase"
-        if phases and isinstance(phase, str)
-        else f"in {owner} turn"
-    )
+    # A step narrows the phase ("during the Reinforcements step of your opponent's Movement
+    # phase"); it is no phase boundary.
+    step = bool(phases) and _obj(phases[0].get("parameters")).get("step") is not None
+    if step:
+        window = step_window(_obj(phases[0].get("parameters")), owner or "the")
+    elif phases and isinstance(phase, str):
+        window = f"during {owner or 'the'} {_cap_word(phase)} phase"
+    else:
+        window = f"in {owner} turn"
     others = [
         c for c in operands if not any(c is x for x in phases) and not any(c is x for x in turns)
     ]
@@ -584,7 +591,7 @@ def phase_window(condition: Condition) -> dict[str, Any]:
     else:
         rest = {"operator": "and", "operands": others}
     out: dict[str, Any] = {"window": window, "rest": rest}
-    if phases:
+    if phases and not step:
         out["phase"] = phase
     if owner:
         out["owner"] = owner

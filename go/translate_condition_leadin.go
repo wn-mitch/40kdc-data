@@ -164,6 +164,9 @@ func conditionLeadInFor(c map[string]any, defending bool) string {
 	p := paramsOf(c)
 	switch c["type"] {
 	case "phase-is":
+		if p["step"] != nil {
+			return stepWindow(p, "the")
+		}
 		if cstr(p["phase"]) == "command" {
 			return "during the Command phase"
 		}

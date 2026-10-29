@@ -1,3 +1,4 @@
+import { foldStepWindow } from "./compile-step-window.js";
 import { resolveUnitNames, type UnitNameContext } from "./compile-unit-names.js";
 import { resolveRuleReferences } from "./compile-rule-refs.js";
 import { foldAuraEmitter, lowerConditionalAuras } from "./compile-aura-emitter.js";
@@ -318,7 +319,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     // An antecedent frame takes its recipient and weapon type from the frame before it (bindFrameAntecedents).
     const weaponBound = bindFrameAntecedents(ordered(bindWeaponAntecedents(bindEarlierNamed(resolveAuthoredNames(leaves, sourceText, options.weapons, options.abilityId), options.weapons, options.abilityId))));
     // A Stratagem with several targets: references to them first (compile-target-refs.ts).
-    const refs = bindTargetRefs(mergeStackedFilters(foldHolderAbilities(foldSetUpPlacement(foldManoeuvreOwnRoll(foldHistoryWindow(foldByAbility(foldAuraMoments(foldUsedObjects(foldStratagemTail(foldObjectRange(splitIgnoreModifiers(resolveAttackBackrefs(groupMembership(hoistWeaponRecipients(foldWarlordTests(foldDestructionAfterAttacks(ordered(weaponBound), sourceText)), sourceText)))), sourceText), sourceText), sourceText), sourceText), sourceText), sourceText), options.menuActions ?? manoeuvreLookupFor(options.abilityId)), sourceText), sourceText, options.abilityId), sourceText), sourceText);
+    const refs = bindTargetRefs(mergeStackedFilters(foldHolderAbilities(foldSetUpPlacement(foldManoeuvreOwnRoll(foldHistoryWindow(foldByAbility(foldAuraMoments(foldUsedObjects(foldStratagemTail(foldObjectRange(splitIgnoreModifiers(resolveAttackBackrefs(groupMembership(hoistWeaponRecipients(foldWarlordTests(foldDestructionAfterAttacks(foldStepWindow(ordered(weaponBound), sourceText), sourceText)), sourceText)))), sourceText), sourceText), sourceText), sourceText), sourceText), sourceText), options.menuActions ?? manoeuvreLookupFor(options.abilityId)), sourceText), sourceText, options.abilityId), sourceText), sourceText);
     const bound = foldCountScales(bindDesignationSubjects(foldAlternativePools(bindPrecedingRolls(foldBoundAttacks(refuseBareTarget(bindAntecedents(markCountedSubjects(bindArmyAntecedents(foldArmyAttachments(foldForwardComposition(refs.leaves), sourceText))), refs.focus, sourceText), isPlacedLimit)), sourceText))), sourceText);
     refuseTransportAsSubject(bound);
     refuseDestinationMismatch(bound, sourceText);

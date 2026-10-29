@@ -311,6 +311,9 @@ func describePredicate(c map[string]any, negated bool) string {
 	case "deployment-window":
 		return neg + "during deployment"
 	case "phase-is":
+		if p["step"] != nil {
+			return neg + stepWindow(p, "the")
+		}
 		if cstr(p["phase"]) == "command" {
 			return neg + "during the Command phase"
 		}
@@ -948,4 +951,18 @@ func armyIncludesPhrase(p map[string]any, negated bool) string {
 		return "your army does not include " + what
 	}
 	return "your army includes " + what
+}
+
+// stepNames are the steps' printed names.
+var stepNames = map[string]string{"battle-shock": "Battle-shock", "reinforcements": "Reinforcements"}
+
+// stepWindow is "during the Reinforcements step of the Movement phase": a
+// phase-is narrowed to one of its steps; owner names whose phase.
+func stepWindow(p map[string]any, owner string) string {
+	step := cstr(p["step"])
+	name, ok := stepNames[step]
+	if !ok {
+		name = titleCase(step)
+	}
+	return "during the " + name + " step of " + owner + " " + titleCase(cstr(p["phase"])) + " phase"
 }

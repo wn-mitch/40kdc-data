@@ -1032,6 +1032,7 @@ class Interaction(TypedDict):
 
 class Parameters1(TypedDict):
     phase: Phase
+    step: NotRequired[Literal["battle-shock", "reinforcements"]]
 
 
 class SimpleCondition1(TypedDict):

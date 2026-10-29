@@ -111,7 +111,9 @@ pub fn condition_lead_in_for(c: &Value, defending: bool) -> String {
     let pred = || describe_predicate(c, false);
     match ctype(c).unwrap_or("") {
         "phase-is" => {
-            if st(p.get("phase")) == "command" {
+            if nn(p, "step").is_some() {
+                super::predicate::step_window(p, "the")
+            } else if st(p.get("phase")) == "command" {
                 "during the Command phase".to_string()
             } else {
                 format!("during the {} phase", title_case(&st(p.get("phase"))))

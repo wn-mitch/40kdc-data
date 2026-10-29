@@ -10525,6 +10525,88 @@
       }
     },
     {
+      "caseId": "canonical/scenario/phase-step-other-phase",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "phase-is",
+          "parameters": {
+            "phase": "command",
+            "step": "battle-shock"
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "needKeys": [],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/phase-step-same-phase",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "phase-is",
+          "parameters": {
+            "phase": "command",
+            "step": "battle-shock"
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "command"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"phase-is\" against current context"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"phase\":\"command\",\"step\":\"battle-shock\"},\"type\":\"phase-is\"}"
+        ],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
       "caseId": "canonical/scenario/split-nested-compare",
       "abilityId": "fabricated-scenario",
       "source": {

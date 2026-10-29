@@ -120,6 +120,15 @@ fn evaluate_condition_from_context(
     match condition.get("type").and_then(Value::as_str) {
         Some("phase-is") => {
             let wanted = p.get("phase").and_then(Value::as_str)?;
+            // The engine knows the phase, not the step: outside the phase it is false, inside it
+            // unknown.
+            if p.contains_key("step") {
+                return if phase_name(ctx) == wanted {
+                    None
+                } else {
+                    Some(false)
+                };
+            }
             Some(phase_name(ctx) == wanted)
         }
         Some("attack-is") => {

@@ -3,7 +3,7 @@
  * (`object`), which one (`filter`), a spatial gate and a condition. ASCII-only, pinned across
  * the ports by the conformance corpus like the condition describer.
  */
-import { dekebab, describeCondition, moveKinds, rangePhrase, titleCase, unitFilterPhrase, type Condition } from "./condition.js";
+import { dekebab, describeCondition, moveKinds, rangePhrase, stepWindow, titleCase, unitFilterPhrase, type Condition } from "./condition.js";
 import { alternativeFilters, eventRelationPhrase, namedUsePhrase, placeRefPhrase, rollWord, statePhrase, unitRefPhrase, usedAbilityPhrase } from "./condition-refs.js";
 import { bracketKeyword, weaponNoun } from "./effect-words.js";
 
@@ -337,7 +337,7 @@ function turnBoundary(t: AbilityTrigger): string | null {
 function phaseBoundary(t: AbilityTrigger): string | null {
   if (t.event !== "phase-started" && t.event !== "phase-ended") return null;
   const operands = !t.condition ? [] : t.condition.operator === "and" ? t.condition.operands ?? [] : [t.condition];
-  if (operands.some((c) => c.operator || (c.type !== "phase-is" && c.type !== "player-turn-is"))) return null;
+  if (operands.some((c) => c.operator || (c.type !== "phase-is" && c.type !== "player-turn-is") || c.parameters?.step != null)) return null;
   const phase = operands.find((c) => c.type === "phase-is")?.parameters?.phase;
   const turn = operands.find((c) => c.type === "player-turn-is")?.parameters?.turn;
   if (typeof phase !== "string" || operands.length !== (turn === undefined ? 1 : 2)) return null;
@@ -360,11 +360,14 @@ export function phaseWindow(condition: Condition): { window: string; rest: Condi
   if (phases.length > 1 || turns.length > 1 || (turns.length === 1 && !owner) || (phases.length === 1 && typeof phase !== "string") || phases.length + turns.length === 0) {
     return { window: "", rest: condition };
   }
-  const window = phases.length ? `during ${owner ?? "the"} ${capWord(phase as string)} phase` : `in ${owner} turn`;
+  // A step narrows the phase ("during the Reinforcements step of your opponent's Movement phase"); it is no phase boundary.
+  const step = phases[0]?.parameters?.step != null;
+  const window = step ? stepWindow(phases[0]!.parameters as P, owner ?? "the")
+    : phases.length ? `during ${owner ?? "the"} ${capWord(phase as string)} phase` : `in ${owner} turn`;
   const others = operands.filter((c) => !phases.includes(c) && !turns.includes(c));
   return {
     window, rest: others.length === 0 ? null : others.length === 1 ? others[0]! : { operator: "and", operands: others },
-    ...(phases.length ? { phase: phase as string } : {}), ...(owner ? { owner } : {}),
+    ...(phases.length && !step ? { phase: phase as string } : {}), ...(owner ? { owner } : {}),
   };
 }
 

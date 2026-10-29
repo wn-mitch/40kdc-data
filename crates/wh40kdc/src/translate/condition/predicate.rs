@@ -128,7 +128,9 @@ pub(crate) fn describe_predicate(c: &Value, negated: bool) -> String {
     match ctype(c).unwrap_or("") {
         "phase-is" => {
             let phase = st(p.get("phase"));
-            if phase == "command" {
+            if nn(p, "step").is_some() {
+                format!("{neg}{}", step_window(p, "the"))
+            } else if phase == "command" {
                 format!("{neg}during the Command phase")
             } else {
                 format!("{neg}during the {} phase", title_case(&phase))
@@ -506,4 +508,19 @@ fn describe_matches(p: &P, negated: bool) -> String {
         }
     }
     format!("{who} is {not}{}", unit_filter_phrase(f))
+}
+
+/// "during the Reinforcements step of the Movement phase": a phase-is narrowed to one of its
+/// steps; owner names whose phase.
+pub(crate) fn step_window(p: &P, owner: &str) -> String {
+    let step = st(p.get("step"));
+    let name = match step.as_str() {
+        "battle-shock" => "Battle-shock".to_string(),
+        "reinforcements" => "Reinforcements".to_string(),
+        _ => title_case(&step),
+    };
+    format!(
+        "during the {name} step of {owner} {} phase",
+        title_case(&st(p.get("phase")))
+    )
 }

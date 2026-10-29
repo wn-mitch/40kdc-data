@@ -625,7 +625,7 @@ func phaseBoundary(t map[string]any) (string, bool) {
 	operands := triggerConditionOperands(t)
 	var phaseOp, turnOp map[string]any
 	for _, c := range operands {
-		if jsTruthy(c["operator"]) || (c["type"] != "phase-is" && c["type"] != "player-turn-is") {
+		if jsTruthy(c["operator"]) || (c["type"] != "phase-is" && c["type"] != "player-turn-is") || paramsOf(c)["step"] != nil {
 			return "", false
 		}
 		if c["type"] == "phase-is" && phaseOp == nil {
@@ -730,6 +730,12 @@ func phaseWindow(condition map[string]any) (window string, rest map[string]any, 
 			windowOwner = "the"
 		}
 		window = "during " + windowOwner + " " + capWord(phase) + " phase"
+		// A step narrows the phase ("during the Reinforcements step of your
+		// opponent's Movement phase"); it is no phase boundary.
+		if p := paramsOf(phases[0]); p["step"] != nil {
+			window = stepWindow(p, windowOwner)
+			phase = ""
+		}
 	} else {
 		window = "in " + owner + " turn"
 	}

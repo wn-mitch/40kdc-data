@@ -5450,7 +5450,7 @@
           "type": "object",
           "additionalProperties": false,
           "title": "phase-is condition",
-          "description": "[clock] It is this phase.",
+          "description": "[clock] It is this phase, and with step, this step of it (battle-shock: the Command phase's Battle-shock step; reinforcements: the Movement phase's Reinforcements step).",
           "required": [
             "type",
             "parameters"
@@ -5465,6 +5465,12 @@
               "properties": {
                 "phase": {
                   "$ref": "#/$defs/phase"
+                },
+                "step": {
+                  "enum": [
+                    "battle-shock",
+                    "reinforcements"
+                  ]
                 }
               },
               "required": [

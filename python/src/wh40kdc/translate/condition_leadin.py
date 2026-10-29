@@ -8,7 +8,12 @@ from __future__ import annotations
 import re
 from collections.abc import Callable
 
-from wh40kdc.translate.condition import Condition, _describe_predicate, describe_condition
+from wh40kdc.translate.condition import (
+    Condition,
+    _describe_predicate,
+    describe_condition,
+    step_window,
+)
 from wh40kdc.translate.condition_history import _describe_happened
 from wh40kdc.translate.condition_refs import (
     P,
@@ -184,6 +189,8 @@ def condition_lead_in(c: Condition, defending: bool = False) -> str:
     ctype = c.get("type")
     if ctype == "phase-is":
         phase = _str(p.get("phase"))
+        if p.get("step") is not None:
+            return step_window(p)
         return (
             "during the Command phase"
             if phase == "command"

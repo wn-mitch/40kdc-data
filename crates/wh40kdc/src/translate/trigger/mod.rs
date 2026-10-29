@@ -65,7 +65,9 @@ fn phase_boundary(t: &P) -> Option<String> {
         Some(c) => vec![c],
     };
     if operands.iter().any(|c| {
-        truthy(c.get("operator")) || !matches!(ctype(c), Some("phase-is" | "player-turn-is"))
+        truthy(c.get("operator"))
+            || !matches!(ctype(c), Some("phase-is" | "player-turn-is"))
+            || param(c, "step").is_some_and(|v| !v.is_null())
     }) {
         return None;
     }
@@ -140,11 +142,20 @@ pub(super) fn phase_window(condition: &Value) -> PhaseWindow {
             owner: None,
         };
     }
+    // A step narrows the phase ("during the Reinforcements step of your opponent's Movement
+    // phase"); it is no phase boundary.
+    let step = phases
+        .first()
+        .and_then(|&i| operands[i].get("parameters"))
+        .and_then(Value::as_object)
+        .filter(|p| p.get("step").is_some_and(|v| !v.is_null()));
     let phase = phase.and_then(Value::as_str).map(str::to_string);
-    let window = match &phase {
-        Some(ph) => format!("during {} {} phase", owner.unwrap_or("the"), cap_word(ph)),
-        None => format!("in {} turn", owner.unwrap_or("undefined")),
+    let window = match (&phase, step) {
+        (_, Some(p)) => crate::translate::condition::step_window(p, owner.unwrap_or("the")),
+        (Some(ph), None) => format!("during {} {} phase", owner.unwrap_or("the"), cap_word(ph)),
+        (None, None) => format!("in {} turn", owner.unwrap_or("undefined")),
     };
+    let phase = if step.is_some() { None } else { phase };
     let others: Vec<Value> = (0..operands.len())
         .filter(|i| !phases.contains(i) && !turns.contains(i))
         .map(|i| operands[i].clone())

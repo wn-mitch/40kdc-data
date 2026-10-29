@@ -1841,12 +1841,13 @@ export interface UnitSelector {
   eligibility?: AbilityDSLCondition;
 }
 /**
- * [clock] It is this phase.
+ * [clock] It is this phase, and with step, this step of it (battle-shock: the Command phase's Battle-shock step; reinforcements: the Movement phase's Reinforcements step).
  */
 export interface PhaseIsCondition {
   type: "phase-is";
   parameters: {
     phase: Phase;
+    step?: "battle-shock" | "reinforcements";
   };
 }
 /**
