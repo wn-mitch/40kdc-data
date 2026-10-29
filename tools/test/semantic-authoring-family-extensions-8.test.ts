@@ -367,6 +367,20 @@ describe("Reserves states", () => {
     expect(() => normalize("battlefield-marker", { subject: "this-unit", label: "beta-marker", near_inches: 1, near_of: "this-unit", distance: 1 })).toThrow(/takes no distance/u);
   });
 
+  it("sizes a placed marker and refuses a size on any other operation", () => {
+    const text = 'place a 40mm circular Beta Marker within 1" of that unit';
+    const mechanics = compiled(placed(text, [
+      [text, "battlefield-marker", { subject: "this-unit", label: "beta-marker", operation: "place", near_inches: 1, near_of: "this-unit", size_mm: 40 }],
+    ]));
+    expect(schemaErrors(mechanics)).toEqual([]);
+    const [effect] = nodes(mechanics, (node) => node.type === "marker");
+    expect(effect!.modifier).toEqual({ label: "beta-marker", operation: "place", near: [{ of: "this-unit", range: { inches: 1 } }], size_mm: 40 });
+    expect(describeAbility(mechanics as never)).toBe('Place a beta marker (40mm) within 1" of the unit.');
+    expect(() => normalize("battlefield-marker", { subject: "this-unit", label: "beta-marker", operation: "remove", size_mm: 40 })).toThrow(/sizes a placed marker/u);
+    expect(() => normalize("battlefield-marker", { subject: "this-unit", label: "beta-marker", operation: "relocate", distance: 6, size_mm: 40 })).toThrow(/sizes a placed marker/u);
+    expect(() => normalize("battlefield-marker", { subject: "this-unit", label: "beta-marker", size_mm: 0 })).toThrow(/at least 1/u);
+  });
+
   it("refuses a Reserves state paired with engaged-with", () => {
     expect(() => normalize("unit-state", { states: ["in-cult-ambush"], subject: "this-unit", negated: false, with: "this-unit" })).toThrow();
   });

@@ -5605,6 +5605,10 @@ export interface MarkerEffect {
   modifier: {
     label: string;
     /**
+     * Place: the diameter of the circular marker in millimetres ("a 40mm circular Tunnel Marker"). Distances measured to the marker are measured to its edge.
+     */
+    size_mm?: number;
+    /**
      * remove: the marker the record's condition names ("that Tunnel Marker is removed from the battlefield").
      */
     operation?: "place" | "relocate" | "remove";

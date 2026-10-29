@@ -637,6 +637,11 @@ func markerLeaf(m map[string]any, ctx effCtx) string {
 	if m["placement"] != nil {
 		where = " " + dekebab(ejstr(m["placement"]))
 	}
+	// "a 40mm circular Tunnel Marker": the diameter follows the noun, so the article stays the label's.
+	size := ""
+	if m["size_mm"] != nil {
+		size = " (" + ejstr(m["size_mm"]) + "mm)"
+	}
 	// "within 1\" of that unit and more than 3\" horizontally away from all enemy units": every limit applies.
 	var limits []string
 	near, _ := asList(m["near"])
@@ -659,7 +664,7 @@ func markerLeaf(m map[string]any, ctx effCtx) string {
 	if leadingVowelRe.MatchString(label) {
 		article = "an"
 	}
-	return "place " + article + " " + label + " marker" + where + tail + consume
+	return "place " + article + " " + label + " marker" + size + where + tail + consume
 }
 
 // describeBoardLeaf renders the board-axis leaves; anything unknown degrades to [type].

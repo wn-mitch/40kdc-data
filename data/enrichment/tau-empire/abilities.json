@@ -10197,7 +10197,12 @@
       "edition": "11th",
       "dataslate": "2026-10-14"
     },
-    "unit_ids": ["commander-cloudspear","sudden-dawn-cadre-breacher-team","sudden-dawn-cadre-devilfish","sudden-dawn-cadre-pathfinder-team"],
+    "unit_ids": [
+      "commander-cloudspear",
+      "sudden-dawn-cadre-breacher-team",
+      "sudden-dawn-cadre-devilfish",
+      "sudden-dawn-cadre-pathfinder-team"
+    ],
     "faction_id": "tau-empire",
     "detachment_id": "sudden-dawn-cadre",
     "ability_type": "faction",
@@ -10358,7 +10363,12 @@
       "dataslate": "pre-launch-provisional"
     },
     "stub": true,
-    "unit_ids": ["commander-cloudspear","sudden-dawn-cadre-breacher-team","sudden-dawn-cadre-devilfish","sudden-dawn-cadre-pathfinder-team"],
+    "unit_ids": [
+      "commander-cloudspear",
+      "sudden-dawn-cadre-breacher-team",
+      "sudden-dawn-cadre-devilfish",
+      "sudden-dawn-cadre-pathfinder-team"
+    ],
     "faction_id": "tau-empire",
     "detachment_id": "sudden-dawn-cadre",
     "ability_type": "faction",

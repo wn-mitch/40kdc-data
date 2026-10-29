@@ -289,6 +289,20 @@ export const REGION_EXTENSIONS: readonly FamilyExtension[] = [
     },
   },
   {
+    // "place a 40mm circular Tunnel Marker": measurements to the marker run to its edge.
+    family: "battlefield-marker",
+    version: 5,
+    description: "As the previous version, plus size_mm: a placed marker is circular with that diameter in millimetres. A size the rule states in another sentence (\"Use a circular 32mm diameter marker for Cult Ambush markers\") still belongs on the place leaf.",
+    schema: (previous) => withProperties(previous, { size_mm: optional({ type: "integer", minimum: 1 }) }),
+    normalize: (input, previous) => {
+      const { size_mm: size, ...rest } = input;
+      if (size === undefined) return previous(input);
+      if ((rest.operation ?? "place") !== "place") throw new TypeError("battlefield-marker.size_mm sizes a placed marker.");
+      if (!Number.isInteger(size) || (size as number) < 1) throw new TypeError("battlefield-marker.size_mm is a whole number of millimetres, at least 1.");
+      return { ...previous(rest), size_mm: size };
+    },
+  },
+  {
     family: "named-region-state",
     version: 2,
     description: "As the previous version, with optional canonical baseline_region and phase_extensions recipe values for reviewed named-region variants.",

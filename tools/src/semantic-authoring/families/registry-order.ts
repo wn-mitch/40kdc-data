@@ -81,4 +81,5 @@ export const REGISTRY_ORDER: readonly string[] = [
   "ability-record-grant@4", "ability-activate@5",
   "bearer-eligibility@7", "unit-position@27", "battlefield-marker@3", "battlefield-marker@4", "resource-spend@4", "reserves-arrival@2",
   "weapon-ability-grant@11",
+  "battlefield-marker@5",
 ];

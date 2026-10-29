@@ -22711,6 +22711,11 @@ for LoadoutConditionParametersUniform {
 ///    "placement": {
 ///      "type": "string",
 ///      "minLength": 1
+///    },
+///    "size_mm": {
+///      "description": "Place: the diameter of the circular marker in millimetres (\"a 40mm circular Tunnel Marker\"). Distances measured to the marker are measured to its edge.",
+///      "type": "integer",
+///      "minimum": 1.0
 ///    }
 ///  },
 ///  "additionalProperties": false
@@ -22739,6 +22744,9 @@ pub struct MarkerEffectModifier {
     pub operation: ::std::option::Option<MarkerEffectModifierOperation>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub placement: ::std::option::Option<MarkerEffectModifierPlacement>,
+    ///Place: the diameter of the circular marker in millimetres ("a 40mm circular Tunnel Marker"). Distances measured to the marker are measured to its edge.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub size_mm: ::std::option::Option<::std::num::NonZeroU64>,
 }
 ///`MarkerEffectModifierConsume`
 ///

@@ -707,6 +707,9 @@ def _marker(m: dict[str, Any], ctx: Ctx) -> str:
     if m.get("operation") == "remove":
         return f"remove that {label} marker from the battlefield"
     where = f" {dekebab(jstr(m['placement']))}" if m.get("placement") is not None else ""
+    # "a 40mm circular Tunnel Marker": the diameter follows the noun, so the article stays the
+    # label's.
+    size = f" ({jstr(m['size_mm'])}mm)" if m.get("size_mm") is not None else ""
     # "within 1\" of that unit and more than 3\" horizontally away from all enemy units": every
     # limit applies.
     limits = [
@@ -720,7 +723,7 @@ def _marker(m: dict[str, Any], ctx: Ctx) -> str:
         limits.append(f"more than {away} horizontally away from all enemy units")
     tail = f" {' and '.join(limits)}" if limits else ""
     article = "an" if re.match(r"[aeiou]", label, re.IGNORECASE) else "a"
-    return f"place {article} {label} marker{where}{tail}{consume}"
+    return f"place {article} {label} marker{size}{where}{tail}{consume}"
 
 
 def _test(m: dict[str, Any], subj: str) -> str:

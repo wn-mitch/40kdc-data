@@ -78,6 +78,8 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
       if (leaf.parameters.near_inches !== undefined) {
         modifier.near = [{ of: closed(leaf, "near_of"), range: { inches: closed(leaf, "near_inches") }, ...(leaf.parameters.near_wholly === true ? { wholly: true } : {}) }];
       }
+      // Version 5: a placed marker's diameter.
+      if (leaf.parameters.size_mm !== undefined) modifier.size_mm = closed(leaf, "size_mm");
       return { type: "marker", target: closed(leaf, "subject"), modifier };
     }
     case "transport-capacity": {

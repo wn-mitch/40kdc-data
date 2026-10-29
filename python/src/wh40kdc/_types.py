@@ -3520,6 +3520,7 @@ class SingleEffect30(TypedDict):
 
 class Modifier37(TypedDict):
     label: str
+    size_mm: NotRequired[int]
     operation: NotRequired[Literal["place", "relocate", "remove"]]
     min_enemy_distance: NotRequired[RangeRef]
     near: NotRequired[list[PlacementNear]]

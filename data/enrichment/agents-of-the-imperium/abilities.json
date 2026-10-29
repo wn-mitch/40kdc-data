@@ -5246,7 +5246,11 @@
       "dataslate": "pre-launch-provisional"
     },
     "stub": true,
-    "unit_ids": ["inquisitors-hand-eversor-assassin","inquisitors-hand-inquisitorial-agents","preacher-teguen"],
+    "unit_ids": [
+      "inquisitors-hand-eversor-assassin",
+      "inquisitors-hand-inquisitorial-agents",
+      "preacher-teguen"
+    ],
     "faction_id": "agents-of-the-imperium",
     "detachment_id": "inquisitors-hand",
     "ability_type": "faction",

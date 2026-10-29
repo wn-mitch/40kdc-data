@@ -310,10 +310,12 @@ function marker(m: Record<string, unknown>, ctx: Ctx): string {
   if (m.operation === "relocate") return `move the ${label} marker${unmoved}${m.distance != null ? ` up to ${rangePhrase(m.distance)}` : ""}${consume}`;
   if (m.operation === "remove") return `remove that ${label} marker from the battlefield`;
   const where = m.placement != null ? ` ${dekebab(jstr(m.placement))}` : "";
+  // "a 40mm circular Tunnel Marker": the diameter follows the noun, so the article stays the label's.
+  const size = m.size_mm != null ? ` (${jstr(m.size_mm)}mm)` : "";
   // "within 1\" of that unit and more than 3\" horizontally away from all enemy units": every limit applies.
   const limits = ((m.near as P[] | undefined) ?? []).map((n) => `${n.wholly === true ? "wholly " : ""}within ${rangePhrase(n.range)} of ${placePhrase(n.of, ctx)}`);
   if (m.min_enemy_distance != null) limits.push(`more than ${rangePhrase(m.min_enemy_distance)} horizontally away from all enemy units`);
-  return `place ${/^[aeiou]/i.test(label) ? "an" : "a"} ${label} marker${where}${limits.length ? ` ${limits.join(" and ")}` : ""}${consume}`;
+  return `place ${/^[aeiou]/i.test(label) ? "an" : "a"} ${label} marker${size}${where}${limits.length ? ` ${limits.join(" and ")}` : ""}${consume}`;
 }
 
 function test(m: Record<string, unknown>, subj: string): string {

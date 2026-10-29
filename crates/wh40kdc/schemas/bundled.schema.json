@@ -10372,6 +10372,11 @@
                   "type": "string",
                   "minLength": 1
                 },
+                "size_mm": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "description": "Place: the diameter of the circular marker in millimetres (\"a 40mm circular Tunnel Marker\"). Distances measured to the marker are measured to its edge."
+                },
                 "operation": {
                   "enum": [
                     "place",

@@ -40,6 +40,10 @@ pub(super) fn marker(m: &P, ctx: &Ctx) -> String {
     let place = nn(m, "placement")
         .map(|p| format!(" {}", dekebab(&jv(p))))
         .unwrap_or_default();
+    // "a 40mm circular Tunnel Marker": the diameter follows the noun, so the article stays the label's.
+    let size = nn(m, "size_mm")
+        .map(|v| format!(" ({}mm)", jv(v)))
+        .unwrap_or_default();
     // "within 1\" of that unit and more than 3\" horizontally away from all enemy units": every limit applies.
     let mut limits: Vec<String> = arr(m, "near")
         .map(Vec::as_slice)
@@ -75,7 +79,7 @@ pub(super) fn marker(m: &P, ctx: &Ctx) -> String {
     } else {
         "a"
     };
-    format!("place {article} {label} marker{place}{away}{consume}")
+    format!("place {article} {label} marker{size}{place}{away}{consume}")
 }
 
 pub(super) fn test(m: &P, subj: &str) -> String {
