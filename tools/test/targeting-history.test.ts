@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import { compileLeaves } from "../src/semantic-authoring/compile.js";
 import { currentFamilyVersion, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { createValidator } from "../src/schema-loader.js";
+import { describeEffectInline } from "../src/translate/effect.js";
 import { placed } from "./semantic-authoring-connective-fixture.js";
 
 // "This unit cannot target a unit it was near at the start of the turn": a restriction on the
@@ -18,7 +19,7 @@ const attackedBy = (kind: string) => ({ type: "happened", parameters: { event: "
 
 describe("targeting-restriction version 6: target history, kinds and after_moves", () => {
   it("accepts the history, several kinds and moves on the by form, in canonical order", () => {
-    expect(currentFamilyVersion(FAMILY)).toBe(6);
+    expect(currentFamilyVersion(FAMILY)).toBeGreaterThanOrEqual(6);
     expect(normalize(NEAR)).toEqual(NEAR);
     const { kind: _kind, ...noKind } = NEAR;
     expect(normalize({ ...noKind, kinds: ["charge", "shoot"], after_moves: ["fall-back", "advance"], target_history: ["charged-by-another-unit-this-phase", "attacked-by-another-unit-this-phase"] })).toEqual({
@@ -69,4 +70,28 @@ describe("a history restriction through compileLeaves", () => {
     if (!result.ok) expect(result.errors.join("; ")).toMatch(/relative to this unit or model/);
   });
 
+});
+
+// "Enemy units count as outside this unit's Engagement Range while ranged targets are selected": the
+// targets of a may target restriction, not a permission for one unit. Wording is fabricated.
+const CLEAR = { subject: "enemy-units", may: "target", kind: "shoot", weapon_type: "ranged", not_engaged_with: "this-unit" };
+
+describe("targeting-restriction version 7: not_engaged_with", () => {
+  it("takes this-unit on a may target restriction and refuses it on any other", () => {
+    expect(currentFamilyVersion(FAMILY)).toBe(7);
+    expect(normalize(CLEAR)).toEqual(CLEAR);
+    expect(() => normalize({ ...CLEAR, may: "cannot-target" })).toThrow(/only applies when may is target/);
+    expect(() => normalize({ ...CLEAR, not_engaged_with: "enemy-units" })).toThrow();
+  });
+
+  it("lowers to a targeting effect on the units it names, which the schema accepts only with may target", () => {
+    const text = "Fixture rule. Enemy units count as clear of this unit when ranged targets are picked.";
+    const result = compileLeaves(placed(text, ["Enemy units count as clear of this unit when ranged targets are picked", FAMILY, CLEAR]), text);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    const effect = { type: "targeting", target: { owner: "enemy" }, modifier: { may: "target", kind: "shoot", weapons: { type: "ranged" }, not_engaged_with: "this-unit" } };
+    expect(result.mechanics.effect).toEqual(effect);
+    expect(validate()(effect)).toBe(true);
+    expect(validate()({ ...effect, modifier: { ...effect.modifier, may: "cannot-target" } })).toBe(false);
+    expect(describeEffectInline(effect as never)).toBe("enemy units are not considered to be within Engagement Range of the unit when targets are selected with ranged weapons");
+  });
 });

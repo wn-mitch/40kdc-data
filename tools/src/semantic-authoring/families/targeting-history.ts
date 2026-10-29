@@ -1,6 +1,6 @@
 import type { FamilyExtension } from "../family-extension-helpers.js";
 import { optional, withProperties } from "../family-extension-helpers.js";
-import { enumSet } from "../family-validation.js";
+import { enumSet, enumValue } from "../family-validation.js";
 import { TARGETING_KINDS } from "../targeting-families.js";
 
 /**
@@ -12,6 +12,9 @@ const TARGET_HISTORY = ["engaged-with-by-at-turn-start", "attacked-by-another-un
 
 /** The moves after which a restriction holds ("in a turn in which it Advanced or Fell Back, but when doing so"). */
 const AFTER_MOVES = ["advance", "fall-back"] as const;
+
+/** Whose Engagement Range a may target restriction sets aside when targets are selected. */
+const NOT_ENGAGED_WITH = ["this-unit"] as const;
 
 /** Every kind a targeting restriction can name, as the version before this one knows them. */
 const KINDS = [...TARGETING_KINDS, "ability"] as const;
@@ -55,6 +58,19 @@ export const TARGETING_HISTORY_EXTENSIONS: readonly FamilyExtension[] = [
         normalized = checked;
       }
       return { ...normalized, kinds: list, ...added };
+    },
+  },
+  {
+    family: "targeting-restriction",
+    version: 7,
+    description: "As the previous version, plus not_engaged_with: this-unit, on a may target restriction: when targets are selected, the units it names are not considered to be within Engagement Range of this unit (ranged attacks can target enemy units engaged with it).",
+    schema: (previous) => withProperties(previous, { not_engaged_with: optional({ enum: [...NOT_ENGAGED_WITH] }) }),
+    normalize: (input, previous) => {
+      const { not_engaged_with: engaged, ...rest } = input;
+      if (engaged === undefined) return previous(input);
+      const normalized = previous(rest);
+      if (normalized.may !== "target") throw new TypeError("targeting-restriction.not_engaged_with only applies when may is target.");
+      return { ...normalized, not_engaged_with: enumValue(engaged, NOT_ENGAGED_WITH, "targeting-restriction.not_engaged_with") };
     },
   },
 ];

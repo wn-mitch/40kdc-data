@@ -3077,6 +3077,7 @@ Modifier17 = TypedDict(
         "except": NotRequired[Literal["core-stratagems"]],
         "weapons": NotRequired[WeaponScope],
         "target_condition": NotRequired[Condition],
+        "not_engaged_with": NotRequired[UnitRef],
     },
 )
 

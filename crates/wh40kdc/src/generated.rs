@@ -50216,6 +50216,10 @@ impl<'de> ::serde::Deserialize<'de> for TargetProfileName {
 ///        "redirect"
 ///      ]
 ///    },
+///    "not_engaged_with": {
+///      "description": "may target: when targets are selected (of kind, with weapons), the effect's target is not considered to be within Engagement Range of this unit: ranged attacks can target enemy units engaged with it, as if they were not.",
+///      "$ref": "#/$defs/unit-ref"
+///    },
 ///    "only_if_none": {
 ///      "$ref": "#/$defs/unit-filter"
 ///    },
@@ -50268,6 +50272,9 @@ pub struct TargetingEffectModifier {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub kind: ::std::option::Option<TargetingEffectModifierKind>,
     pub may: TargetingEffectModifierMay,
+    ///may target: when targets are selected (of kind, with weapons), the effect's target is not considered to be within Engagement Range of this unit: ranged attacks can target enemy units engaged with it, as if they were not.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub not_engaged_with: ::std::option::Option<UnitRef>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub only_if_none: ::std::option::Option<::std::boxed::Box<UnitFilter>>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]

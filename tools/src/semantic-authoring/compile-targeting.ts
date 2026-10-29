@@ -43,6 +43,8 @@ export function targetingEffect(leaf: CompileLeaf, target: (value: unknown) => N
       may: closed(leaf, "may"), kind,
       ...weaponScope(leaf),
       ...(range != null ? { range: { inches: range } } : {}),
+      // Version 7: the targets count as outside this unit's Engagement Range while targets are selected.
+      ...(leaf.parameters.not_engaged_with !== undefined ? { not_engaged_with: unit(closed(leaf, "not_engaged_with")) } : {}),
     };
     if (leaf.parameters.target === undefined) return { type: "targeting", target: unit(closed(leaf, "subject")), modifier };
     const targeted = unit(closed(leaf, "target"));

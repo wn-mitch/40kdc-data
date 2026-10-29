@@ -255,6 +255,15 @@ func targetingLeaf(m map[string]any, subj string, ctx effCtx) string {
 	} else if hasWeapon(m) {
 		kind = " with " + weaponNoun(m)
 	}
+	// not_engaged_with: the targets count as outside that unit's Engagement Range while targets are selected.
+	if m["not_engaged_with"] != nil {
+		units := strings.TrimPrefix(whom, "all ")
+		be := "is"
+		if isPlural(units) {
+			be = "are"
+		}
+		return units + " " + be + " not considered to be within Engagement Range of " + effectSubject(m["not_engaged_with"], ctx) + " when targets are selected" + kind
+	}
 	rng := ""
 	if m["range"] != nil {
 		if m["may"] == "cannot-target" {

@@ -232,6 +232,16 @@ def targeting(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
         kind = f" with {weapon_noun(m)}"
     else:
         kind = _TARGET_KINDS.get(jstr(m.get("kind")), "")
+    # not_engaged_with: the targets count as outside that unit's Engagement Range
+    # while targets are selected.
+    if m.get("not_engaged_with") is not None:
+        units = whom.removeprefix("all ")
+        be = "are" if is_plural(units) else "is"
+        of = effect_subject(m["not_engaged_with"], ctx)
+        return (
+            f"{units} {be} not considered to be within Engagement Range of {of}"
+            f" when targets are selected{kind}"
+        )
     if m.get("range") is None:
         rng = ""
     elif may == "cannot-target":

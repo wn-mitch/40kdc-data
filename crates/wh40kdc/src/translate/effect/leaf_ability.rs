@@ -578,6 +578,15 @@ pub(super) fn targeting(m: &P, subj: &str, ctx: &Ctx) -> String {
         }
         .to_string(),
     };
+    // not_engaged_with: the targets count as outside that unit's Engagement Range while targets are selected.
+    if let Some(engaged) = nn(m, "not_engaged_with") {
+        let units = strip_all(&whom);
+        let be = if is_plural(&units) { "are" } else { "is" };
+        return format!(
+            "{units} {be} not considered to be within Engagement Range of {} when targets are selected{kind}",
+            effect_subject(Some(engaged), ctx)
+        );
+    }
     let range = match nn(m, "range") {
         None => String::new(),
         Some(r) if may == Some("cannot-target") => {

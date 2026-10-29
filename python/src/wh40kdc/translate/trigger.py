@@ -87,6 +87,9 @@ def _actor(ref: Any) -> str:
         return "this model"
     if ref == "model-in-this-unit":
         return "a model in this unit"
+    # A moment nested in an attack's: the unit making that attack.
+    if ref == "attacker":
+        return "the attacking unit"
     if isinstance(ref, (dict, list)):
         f = _obj(ref)
         if isinstance(f.get("event_var"), str):

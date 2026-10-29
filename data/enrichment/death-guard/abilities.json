@@ -2851,9 +2851,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "source_digest": "38c3548141790a9e95e4053ecb3572ddf8fe50d9519eb3ef14c22976bfa04e5c",
+    "source_digest": "1fb0a0bdc2008d55f99fbc5324981962b16faac0e01d0dc8f3372bc4bf71ce91",
     "version": "2025-q3",
     "effect": {
       "type": "sequence",
@@ -6060,19 +6060,79 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "tallyband-summoners",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "targeting",
+          "target": {
+            "owner": "enemy"
+          },
+          "modifier": {
+            "may": "target",
+            "kind": "shoot",
+            "weapons": {
+              "type": "ranged"
+            },
+            "not_engaged_with": "this-unit"
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "damage-allocated",
+            "subject": {
+              "owner": "enemy",
+              "level": "model"
+            }
+          },
+          "effect": {
+            "type": "dice-gated",
+            "dice": "D6",
+            "threshold": 5,
+            "comparison": "gte",
+            "on_success": {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "event-object",
+                  "filter": {
+                    "engaged_with": "this-unit"
+                  }
+                }
+              },
+              "effect": {
+                "type": "ability-part",
+                "trigger": {
+                  "event": "attacks-resolved",
+                  "subject": "attacker"
+                },
+                "effect": {
+                  "type": "mortal-wounds",
+                  "target": "this-unit",
+                  "modifier": {
+                    "count": 1
+                  }
+                }
+              }
+            },
+            "on_fail": null
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "source_digest": "9313f212aba64752f8dee060e7b7c40ce345e0e0f3780327022fdf9574d03275"
   },
   {
     "ability_id": "arch-contaminator-virulent-vectorium-death-guard",

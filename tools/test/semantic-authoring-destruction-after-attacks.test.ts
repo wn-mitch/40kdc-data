@@ -104,3 +104,41 @@ describe("if X, A, and if Y, B", () => {
     expect(mechanics.effect.effect.on_success.steps).toHaveLength(2);
   });
 });
+
+describe("an effect resolved after the attacking unit's attacks", () => {
+  const LOSES = "Each time an enemy model loses a wound";
+  const HARM = "this unit suffers 1 mortal wound";
+  const deferred = (opening: string, between: string) => {
+    const text = `${opening}, roll one D6: on a 4+, ${HARM}${between}${AFTER}.`;
+    const leaves = placed(text,
+      ...(opening === LOSES ? [["loses a wound", "event", { kind: "damage-allocated" }] as [string, string, Record<string, unknown>]] : []),
+      ["roll one D6", "dice-roll", { dice: "D6" }],
+      ["on a 4+", "roll-result", { from: 4 }],
+      [HARM, "mortal-wounds", { recipient: "this-unit", count: "1" }],
+      [AFTER, "event", { kind: "attacks-resolved", owner: "friendly" }],
+    );
+    return { text, leaves };
+  };
+
+  it("waits for the attacker of the wound's attack: a part on its attacks-resolved moment inside the roll", () => {
+    const { text, leaves } = deferred(LOSES, " ");
+    const mechanics = mechanicsOf(leaves, text);
+    expect(mechanics.trigger).toMatchObject({ event: "damage-allocated" });
+    expect(mechanics.effect).toMatchObject({
+      type: "dice-gated", threshold: 4,
+      on_success: { type: "ability-part", trigger: { event: "attacks-resolved", subject: "attacker" }, effect: { type: "mortal-wounds", target: "this-unit" } },
+    });
+  });
+
+  it("leaves the moment alone when no earlier moment names the attack", () => {
+    const { text, leaves } = deferred("Once per battle", " ");
+    const result = compileLeaves(leaves, text);
+    expect(JSON.stringify(result.ok ? result.mechanics : result.errors)).not.toContain('"subject":"attacker"');
+  });
+
+  it("leaves the moment alone when wording stands between it and the effect", () => {
+    const { text, leaves } = deferred(LOSES, " but only ");
+    const result = compileLeaves(leaves, text);
+    expect(JSON.stringify(result.ok ? result.mechanics : result.errors)).not.toContain('"subject":"attacker"');
+  });
+});

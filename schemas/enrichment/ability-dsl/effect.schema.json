@@ -1967,6 +1967,10 @@
                 "target_condition": {
                   "$ref": "condition.schema.json",
                   "description": "The restriction covers only targets that meet this condition (\"a unit it was within Engagement Range of at the start of the turn\"). this-unit is the unit being checked as a target; ability-unit is the unit with the ability."
+                },
+                "not_engaged_with": {
+                  "$ref": "../../defs/common.schema.json#/$defs/unit-ref",
+                  "description": "may target: when targets are selected (of kind, with weapons), the effect's target is not considered to be within Engagement Range of this unit: ranged attacks can target enemy units engaged with it, as if they were not."
                 }
               },
               "required": [
@@ -2039,6 +2043,20 @@
                     "required": [
                       "kind"
                     ]
+                  }
+                },
+                {
+                  "if": {
+                    "required": [
+                      "not_engaged_with"
+                    ]
+                  },
+                  "then": {
+                    "properties": {
+                      "may": {
+                        "const": "target"
+                      }
+                    }
                   }
                 }
               ]

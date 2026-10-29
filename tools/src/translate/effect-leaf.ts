@@ -401,6 +401,11 @@ function targeting(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
       : m.kind === "ability" && m.ability != null
         ? ` with the ${abilityLabel(m.ability)} ability`
         : hasWeapon(m) ? ` with ${weaponNoun(m)}` : TARGET_KINDS[jstr(m.kind)] ?? "";
+  // not_engaged_with: the targets count as outside that unit's Engagement Range while targets are selected.
+  if (m.not_engaged_with != null) {
+    const units = whom.replace(/^all /, "");
+    return `${units} ${isPlural(units) ? "are" : "is"} not considered to be within Engagement Range of ${effectSubject(m.not_engaged_with, ctx)} when targets are selected${kind}`;
+  }
   const range = m.range == null ? "" : m.may === "cannot-target" ? ` unless ${attacking} is within ${rangePhrase(m.range)}` : ` within ${rangePhrase(m.range)}`;
   const unless = m.only_if_none != null ? `, unless there is no other eligible ${effectSubject(m.only_if_none, ctx).replace(/^all /, "").replace(/ units\b/, " unit")}` : "";
   if (m.may === "redirect") {

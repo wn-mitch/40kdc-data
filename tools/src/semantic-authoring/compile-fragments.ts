@@ -238,6 +238,11 @@ export function effect(leaf: CompileLeaf, context: { attached: boolean; attacker
     const { with_embarked: _widened, ...parameters } = leaf.parameters;
     return withEmbarked(effect({ ...leaf, parameters }, context));
   }
+  // "… after the attacking unit has finished making its attacks" (compile-destruction-after-attacks.ts): the effect waits for that unit.
+  if (leaf.parameters.after_attacks === true) {
+    const { after_attacks: _deferred, ...parameters } = leaf.parameters;
+    return { type: "ability-part", trigger: { event: "attacks-resolved", subject: "attacker" }, effect: effect({ ...leaf, parameters }, context) };
+  }
   const specialized = namedAbilityStateEffect(leaf) ?? oathEffect(leaf) ?? abilityUseEffect(leaf);
   if (specialized) return specialized;
   // A count folded onto the leaf (compile-count-scale.ts) applies to the whole node it lowers to.
