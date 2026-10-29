@@ -6,8 +6,9 @@ import { CompileError, type CompileLeaf } from "./compile-fragments.js";
  * step-started leaf followed in its clause by the moment that happens in that step. The step is
  * the moment's window, not a second moment, so the fold removes the step leaf and stores the step
  * and whose turn on the moment (`step_window`), which `trigger()` lowers to its phase-is and
- * player-turn-is condition. A step followed by anything but ", just after" or ", just before" (an
- * "or", or another "when") stays its own moment.
+ * player-turn-is condition. "In the Reinforcements step of your Movement phase, when you set up a
+ * unit …" opens its moment with ", when" the same way. A step followed by anything else (an "or",
+ * or a moment in another clause) stays its own moment.
  */
 
 /** The phase each step belongs to. */
@@ -17,10 +18,10 @@ export const STEP_PHASES: Readonly<Record<string, string>> = { "battle-shock": "
 const BETWEEN = new Set(["unit-filter", "unit-owner"]);
 /** Moments that are themselves clock boundaries, which a step cannot narrow. */
 const CLOCK = new Set(["phase-start", "phase-end", "step-started", "turn-ended", "round-ended", "battle-started", "deployment-ended"]);
-/** The words after a step that open its moment: a comma, then "just after" or "just before" (inside the moment leaf or before it). */
-const JOIN = /^\s*,\s*just\s+(?:after|before)\b/iu;
+/** The words after a step that open its moment: a comma, then "just after", "just before" or "when" (inside the moment leaf or before it). */
+const JOIN = /^\s*,\s*(?:just\s+(?:after|before)|when)\b/iu;
 /** The words between the step and the moment's first leaf: none but the comma and that opening. */
-const BETWEEN_WORDS = /^\s*,\s*(?:just\s+(?:after|before)\b[^.;:]*)?$/iu;
+const BETWEEN_WORDS = /^\s*,\s*(?:(?:just\s+(?:after|before)|when)\b[^.;:]*)?$/iu;
 
 export function foldStepWindow(list: readonly CompileLeaf[], sourceText?: string): CompileLeaf[] {
   if (sourceText === undefined || !list.some(isStep)) return [...list];

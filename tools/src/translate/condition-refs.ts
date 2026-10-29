@@ -233,7 +233,8 @@ export function placeRefPhrase(ref: unknown): string {
       const phrase = objectivePhrase(objective, false, "objective marker");
       return `${/^[aeiou]/i.test(phrase) ? "an" : "a"} ${phrase}`;
     }
-    if (p.marker != null) return `${/^[aeiou]/i.test(str(p.marker)) ? "an" : "a"} ${dekebab(str(p.marker))} marker`;
+    // A marker id that already ends in "marker" ("cult-ambush-marker") must not read "marker marker".
+    if (p.marker != null) return `${/^[aeiou]/i.test(str(p.marker)) ? "an" : "a"} ${dekebab(str(p.marker).replace(/-marker$/u, ""))} marker`;
   }
   return unitRefPhrase(ref);
 }

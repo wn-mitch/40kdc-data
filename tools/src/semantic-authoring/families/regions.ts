@@ -221,6 +221,29 @@ export const REGION_EXTENSIONS: readonly FamilyExtension[] = [
     },
   },
   {
+    // "place a Tunnel Marker … more than 3\" horizontally away from all enemy units"; "that Tunnel
+    // Marker is removed from the battlefield".
+    family: "battlefield-marker",
+    version: 3,
+    description: "As the previous version, plus operation remove (the marker the record's condition names is removed from the battlefield) and min_enemy_distance: a placed marker goes more than that many inches horizontally away from all enemy units.",
+    schema: (previous) => withProperties(previous, {
+      operation: widenedEnum(previous, "operation", ["remove"]),
+      min_enemy_distance: optional({ type: "integer", minimum: 1 }),
+    }),
+    normalize: (input, previous) => {
+      const { min_enemy_distance: away, ...rest } = input;
+      const operation = rest.operation ?? "place";
+      if (away !== undefined) {
+        if (operation !== "place") throw new TypeError("battlefield-marker.min_enemy_distance limits a place.");
+        if (!Number.isInteger(away) || (away as number) < 1) throw new TypeError("battlefield-marker.min_enemy_distance is a whole number of inches, at least 1.");
+      }
+      if (operation !== "remove") return { ...previous(rest), ...(away !== undefined ? { min_enemy_distance: away } : {}) };
+      const { operation: _remove, ...kept } = rest;
+      if (kept.distance !== undefined || kept.not_moved_this_turn !== undefined) throw new TypeError("battlefield-marker remove takes no distance or not_moved_this_turn.");
+      return { ...previous(kept), operation: "remove" };
+    },
+  },
+  {
     family: "named-region-state",
     version: 2,
     description: "As the previous version, with optional canonical baseline_region and phase_extensions recipe values for reviewed named-region variants.",

@@ -22635,14 +22635,20 @@ for LoadoutConditionParametersUniform {
 ///      "type": "string",
 ///      "minLength": 1
 ///    },
+///    "min_enemy_distance": {
+///      "description": "Place: more than this distance horizontally away from all enemy units.",
+///      "$ref": "#/$defs/range-ref"
+///    },
 ///    "not_moved_this_turn": {
 ///      "description": "Relocate: only a marker that has not been moved this turn.",
 ///      "const": true
 ///    },
 ///    "operation": {
+///      "description": "remove: the marker the record's condition names (\"that Tunnel Marker is removed from the battlefield\").",
 ///      "enum": [
 ///        "place",
-///        "relocate"
+///        "relocate",
+///        "remove"
 ///      ]
 ///    },
 ///    "placement": {
@@ -22662,9 +22668,13 @@ pub struct MarkerEffectModifier {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub distance: ::std::option::Option<RangeRef>,
     pub label: MarkerEffectModifierLabel,
+    ///Place: more than this distance horizontally away from all enemy units.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub min_enemy_distance: ::std::option::Option<RangeRef>,
     ///Relocate: only a marker that has not been moved this turn.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub not_moved_this_turn: ::std::option::Option<::serde_json::Value>,
+    ///remove: the marker the record's condition names ("that Tunnel Marker is removed from the battlefield").
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub operation: ::std::option::Option<MarkerEffectModifierOperation>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -22817,15 +22827,17 @@ impl<'de> ::serde::Deserialize<'de> for MarkerEffectModifierLabel {
             })
     }
 }
-///`MarkerEffectModifierOperation`
+///remove: the marker the record's condition names ("that Tunnel Marker is removed from the battlefield").
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
+///  "description": "remove: the marker the record's condition names (\"that Tunnel Marker is removed from the battlefield\").",
 ///  "enum": [
 ///    "place",
-///    "relocate"
+///    "relocate",
+///    "remove"
 ///  ]
 ///}
 /// ```
@@ -22847,12 +22859,15 @@ pub enum MarkerEffectModifierOperation {
     Place,
     #[serde(rename = "relocate")]
     Relocate,
+    #[serde(rename = "remove")]
+    Remove,
 }
 impl ::std::fmt::Display for MarkerEffectModifierOperation {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match *self {
             Self::Place => f.write_str("place"),
             Self::Relocate => f.write_str("relocate"),
+            Self::Remove => f.write_str("remove"),
         }
     }
 }
@@ -22864,6 +22879,7 @@ impl ::std::str::FromStr for MarkerEffectModifierOperation {
         match value {
             "place" => Ok(Self::Place),
             "relocate" => Ok(Self::Relocate),
+            "remove" => Ok(Self::Remove),
             _ => Err("invalid value".into()),
         }
     }
@@ -45021,7 +45037,7 @@ pub enum SimpleCondition {
 ///    },
 ///    {
 ///      "title": "marker effect",
-///      "description": "[placement] Place or relocate a marker.",
+///      "description": "[placement] Place, relocate or remove a marker.",
 ///      "type": "object",
 ///      "required": [
 ///        "modifier",
@@ -45775,7 +45791,7 @@ pub enum SingleEffect {
     },
     /**marker effect
 
-[placement] Place or relocate a marker.*/
+[placement] Place, relocate or remove a marker.*/
     #[serde(rename = "marker")]
     Marker {
         modifier: MarkerEffectModifier,

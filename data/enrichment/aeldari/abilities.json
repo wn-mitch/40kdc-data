@@ -11053,8 +11053,7 @@
     "behavior": "reactive",
     "trigger": [
       {
-        "event": "battle-started",
-        "optional": true
+        "event": "battle-started"
       },
       {
         "event": "targets-selected",

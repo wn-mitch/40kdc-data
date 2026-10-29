@@ -117,6 +117,8 @@ export function classifyLeaves(given: CompileLeaf[], places: Placement[], contai
   let optional = false;
   // The last source sentence holding an optional-use: moments opened after it ("If you do, … when this unit …") depend on the use and stay mandatory.
   let optionalSentence = -1;
+  // Every sentence that offers the use ("you can …"); optionalSentence is the last of them.
+  const offerSentences: number[] = [];
   // "You can spend YP …" read later as "if you spent YP during this use", or by a trigger later in the ability: the spend is the optional part, not the use.
   const usabilityAt = usabilityGates(list);
   const usabilityNodes: Node[] = [];
@@ -325,7 +327,10 @@ export function classifyLeaves(given: CompileLeaf[], places: Placement[], contai
           const group = optionalTargetGroup(list, index);
           if (group === null) {
             optional = optional || !optionalSpend;
-            if (!optionalSpend) optionalSentence = Math.max(optionalSentence, rawOf[index]!);
+            if (!optionalSpend) {
+              optionalSentence = Math.max(optionalSentence, rawOf[index]!);
+              offerSentences.push(rawOf[index]!);
+            }
           }
           else optionalTargets.add(group);
         }
@@ -399,7 +404,7 @@ export function classifyLeaves(given: CompileLeaf[], places: Placement[], contai
     list, places, errors, attempt, containerNodes, consumedByContainer, designationOptional, attached, global, sentenceGates, clauseGates,
     attachedGates, selectedClauses, selectedSentences, selectedGlobally: selectedGlobally as boolean, triggers, triggerIndexes, nestedMoments,
     nestedTriggers, inBand, bandTriggers, durations, durationAt, selections, rolls, combinators, usages, usageIndexes, usageScopes, modelUsages,
-    selectedUnitUsages, optional: optional as boolean, optionalSentence, usabilityNodes, optionalSpend, optionalSpends, checks, targetParts,
+    selectedUnitUsages, optional: optional as boolean, optionalSentence, offerSentences, usabilityNodes, optionalSpend, optionalSpends, checks, targetParts,
     targetPartIndexes, targetConditions, optionalTargets, auraLeaf: auraLeaf as CompileLeaf | null, leaderLeaf: leaderLeaf as CompileLeaf | null,
     forEachLeaf: forEachLeaf as CompileLeaf | null, rulesBundle: rulesBundle as boolean, moveEnds, rawOf, pairCandidates, eligibilityIndexes,
     pairGatesBound, battleSizeCount, roundCount, endClauses,

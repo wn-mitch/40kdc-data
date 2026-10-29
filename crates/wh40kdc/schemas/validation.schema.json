@@ -11670,7 +11670,7 @@
           "type": "object",
           "additionalProperties": false,
           "title": "marker effect",
-          "description": "[placement] Place or relocate a marker.",
+          "description": "[placement] Place, relocate or remove a marker.",
           "required": [
             "type",
             "target",
@@ -11694,8 +11694,14 @@
                 "operation": {
                   "enum": [
                     "place",
-                    "relocate"
-                  ]
+                    "relocate",
+                    "remove"
+                  ],
+                  "description": "remove: the marker the record's condition names (\"that Tunnel Marker is removed from the battlefield\")."
+                },
+                "min_enemy_distance": {
+                  "$ref": "#/$defs/range-ref",
+                  "description": "Place: more than this distance horizontally away from all enemy units."
                 },
                 "placement": {
                   "type": "string",

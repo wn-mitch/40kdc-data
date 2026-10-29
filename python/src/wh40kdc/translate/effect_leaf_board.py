@@ -690,9 +690,16 @@ def _marker(m: dict[str, Any]) -> str:
         if m.get("not_moved_this_turn") is True:
             unmoved = " that has not been moved this turn"
         return f"move the {label} marker{unmoved}{dist}{consume}"
+    if m.get("operation") == "remove":
+        return f"remove that {label} marker from the battlefield"
     where = f" {dekebab(jstr(m['placement']))}" if m.get("placement") is not None else ""
+    away = (
+        f" more than {range_phrase(m['min_enemy_distance'])} horizontally away from all enemy units"
+        if m.get("min_enemy_distance") is not None
+        else ""
+    )
     article = "an" if re.match(r"[aeiou]", label, re.IGNORECASE) else "a"
-    return f"place {article} {label} marker{where}{consume}"
+    return f"place {article} {label} marker{where}{away}{consume}"
 
 
 def _test(m: dict[str, Any], subj: str) -> str:

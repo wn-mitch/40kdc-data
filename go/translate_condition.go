@@ -374,7 +374,8 @@ func placeRefPhrase(ref any) string {
 		}
 		if marker := r["marker"]; marker != nil {
 			phrase := ejstr(marker)
-			return article(phrase) + " " + dekebab(phrase) + " marker"
+			// A marker id that already ends in "marker" ("cult-ambush-marker") must not read "marker marker".
+			return article(phrase) + " " + dekebab(strings.TrimSuffix(phrase, "-marker")) + " marker"
 		}
 	}
 	return unitRefPhrase(ref, "the unit")

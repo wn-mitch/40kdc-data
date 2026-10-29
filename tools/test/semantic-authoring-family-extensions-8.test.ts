@@ -316,6 +316,54 @@ describe("Reserves states", () => {
       .toContain('marker that has not been moved this turn up to 6"');
   });
 
+  it("places a marker away from enemy units, sets up near it, and removes it when an enemy ends a move near it", () => {
+    const text = 'Each time an ALPHA unit from your army is set up on the battlefield from Reserves, place a Beta Marker within 1" of that unit and more than 3" horizontally away from all enemy units. In the Reinforcements step of your Movement phase, when you set up a unit on the battlefield from Reserves, you can set that unit up wholly within 9" of one of your Beta Markers. If an enemy model ends a move within 3" of one of your Beta Markers, that Beta Marker is removed from the battlefield.';
+    const mechanics = compiled(placed(text, [
+      ["ALPHA unit from your army", "unit-filter", { side: "friendly", keywords: ["ALPHA"] }],
+      ["is set up on the battlefield from Reserves", "event", { kind: "move-ended", move_types: ["ingress"] }],
+      ['place a Beta Marker within 1" of that unit and more than 3" horizontally away from all enemy units', "battlefield-marker", { subject: "this-unit", label: "beta-marker", operation: "place", distance: 1, min_enemy_distance: 3 }],
+      ["the Reinforcements step of your Movement phase", "event", { kind: "step-started", step: "reinforcements", turn: "your" }],
+      ["when you set up a unit on the battlefield from Reserves", "event", { kind: "set-up", owner: "friendly", from: "strategic-reserves" }],
+      ["you can", "optional-use", { who: "you" }],
+      ["set that unit up", "set-up", { subject: "antecedent", to: "battlefield" }],
+      ['wholly within 9" of one of your Beta Markers', "unit-position", { kind: "within", inches: 9, of: "marker", of_marker: "beta-marker", subject: "antecedent", negated: false, wholly: true }],
+      ["enemy model", "unit-filter", { side: "enemy", level: "model" }],
+      ["ends a move", "event", { kind: "move-ended" }],
+      ['within 3" of one of your Beta Markers', "unit-position", { kind: "within", inches: 3, of: "marker", of_marker: "beta-marker", subject: "event-subject", negated: false }],
+      ["that Beta Marker is removed from the battlefield", "battlefield-marker", { subject: "this-unit", label: "beta-marker", operation: "remove" }],
+    ]));
+    expect(schemaErrors(mechanics)).toEqual([]);
+    const parts = nodes(mechanics, (node) => node.type === "ability-part");
+    expect(parts).toHaveLength(3);
+    // The placement is mandatory: "you can" belongs to the later Reinforcements-step part only.
+    expect((parts[0]!.trigger as Record<string, unknown>).optional).toBeUndefined();
+    expect(parts[0]!.effect).toEqual({ type: "marker", target: "this-unit", modifier: { label: "beta-marker", operation: "place", distance: { inches: 1 }, min_enemy_distance: { inches: 3 } } });
+    // ", when" after the step opens the moment the step holds: one trigger, narrowed to that step.
+    expect(parts[1]!.trigger).toEqual({
+      event: "set-up", subject: { owner: "friendly" }, filter: { from: "strategic-reserves" }, optional: true,
+      condition: { operator: "and", operands: [
+        { type: "phase-is", parameters: { phase: "movement", step: "reinforcements" } },
+        { type: "player-turn-is", parameters: { turn: "your-turn" } },
+      ] },
+    });
+    expect((parts[1]!.effect as Record<string, unknown>).modifier).toEqual({ to: "battlefield", near: [{ of: { marker: "beta-marker" }, range: { inches: 9 }, wholly: true }] });
+    expect(parts[2]!.effect).toEqual({
+      type: "conditional",
+      condition: { type: "matches", parameters: { subject: "event-subject", filter: { within: { of: { marker: "beta-marker" }, range: { inches: 3 } } } } },
+      effect: { type: "marker", target: "this-unit", modifier: { label: "beta-marker", operation: "remove" } },
+    });
+    const say = describeAbility(mechanics as never);
+    expect(say).toContain('place a beta marker more than 3" horizontally away from all enemy units');
+    expect(say).toContain('within 3" of a beta marker, remove that beta marker from the battlefield');
+    expect(say).not.toContain("marker marker");
+  });
+
+  it("limits a marker's enemy distance to a place and takes no distance on a remove", () => {
+    expect(() => normalize("battlefield-marker", { subject: "this-unit", label: "beta-marker", operation: "relocate", distance: 6, min_enemy_distance: 3 })).toThrow(/limits a place/u);
+    expect(() => normalize("battlefield-marker", { subject: "this-unit", label: "beta-marker", operation: "remove", distance: 3 })).toThrow(/remove takes no distance/u);
+    expect(normalize("battlefield-marker", { subject: "this-unit", label: "beta-marker", min_enemy_distance: 9 })).toEqual({ subject: "this-unit", label: "beta-marker", min_enemy_distance: 9 });
+  });
+
   it("refuses a Reserves state paired with engaged-with", () => {
     expect(() => normalize("unit-state", { states: ["in-cult-ambush"], subject: "this-unit", negated: false, with: "this-unit" })).toThrow();
   });

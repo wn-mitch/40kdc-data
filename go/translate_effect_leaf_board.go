@@ -583,15 +583,22 @@ func markerLeaf(m map[string]any) string {
 		}
 		return "move the " + label + " marker" + unmoved + dist + consume
 	}
+	if m["operation"] == "remove" {
+		return "remove that " + label + " marker from the battlefield"
+	}
 	where := ""
 	if m["placement"] != nil {
 		where = " " + dekebab(ejstr(m["placement"]))
+	}
+	away := ""
+	if m["min_enemy_distance"] != nil {
+		away = " more than " + rangePhrase(m["min_enemy_distance"]) + " horizontally away from all enemy units"
 	}
 	article := "a"
 	if leadingVowelRe.MatchString(label) {
 		article = "an"
 	}
-	return "place " + article + " " + label + " marker" + where + consume
+	return "place " + article + " " + label + " marker" + where + away + consume
 }
 
 // describeBoardLeaf renders the board-axis leaves; anything unknown degrades to [type].

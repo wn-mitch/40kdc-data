@@ -5592,14 +5592,28 @@ export interface SetUpEffect {
   scaling?: Scaling;
 }
 /**
- * [placement] Place or relocate a marker.
+ * [placement] Place, relocate or remove a marker.
  */
 export interface MarkerEffect {
   type: "marker";
   target: UnitRef;
   modifier: {
     label: string;
-    operation?: "place" | "relocate";
+    /**
+     * remove: the marker the record's condition names ("that Tunnel Marker is removed from the battlefield").
+     */
+    operation?: "place" | "relocate" | "remove";
+    /**
+     * One reference for every distance. A per_battle_round table is indexed from battle round 1; each later round uses the next entry and the final entry continues for all subsequent rounds. Tier entries are non-tiered range refs, so nested tables are forbidden.
+     */
+    min_enemy_distance?:
+      | NonTieredRangeRef
+      | {
+          /**
+           * @minItems 1
+           */
+          per_battle_round: [NonTieredRangeRef, ...NonTieredRangeRef[]];
+        };
     placement?: string;
     distance?: RangeRef;
     consume?: "on-use" | "never";

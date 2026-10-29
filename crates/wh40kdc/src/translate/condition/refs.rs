@@ -449,7 +449,9 @@ pub(crate) fn place_ref_phrase(r: Option<&Value>) -> String {
     }
     if let Some(marker) = nn(p, "marker") {
         let marker = st(Some(marker));
-        return format!("{} {} marker", article(&marker), dekebab(&marker));
+        // A marker id that already ends in "marker" ("cult-ambush-marker") must not read "marker marker".
+        let name = dekebab(marker.strip_suffix("-marker").unwrap_or(&marker));
+        return format!("{} {name} marker", article(&marker));
     }
     unit_ref_phrase(r, "the unit")
 }

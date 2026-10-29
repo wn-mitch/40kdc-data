@@ -5512,7 +5512,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "5859049e5bb26cda02752602d22009891a2bf23aa4613c1cb0e352b69fbeb2a5",
     "version": "2025-q3",
@@ -5521,28 +5521,38 @@
     "faction_id": "tyranids",
     "detachment_id": "subterranean-assault",
     "ability_type": "detachment",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "sequence",
       "steps": [
         {
           "type": "re-roll",
-          "target": "this-unit",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "TYRANIDS"
+            ],
+            "level": "model"
+          },
           "modifier": {
             "roll": "hit",
             "subset": "ones"
           }
         },
         {
-          "type": "conditional",
-          "condition": {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "all_of": [
-                  "BURROWER"
-                ]
-              }
+          "type": "ability-part",
+          "trigger": {
+            "event": "move-ended",
+            "filter": {
+              "move_types": [
+                "ingress"
+              ]
+            },
+            "subject": {
+              "owner": "friendly",
+              "all_of": [
+                "BURROWER"
+              ]
             }
           },
           "effect": {
@@ -5551,7 +5561,104 @@
             "modifier": {
               "label": "tunnel-marker",
               "operation": "place",
-              "placement": "within-1-of-unit-more-than-3-from-enemy"
+              "distance": {
+                "inches": 1
+              },
+              "min_enemy_distance": {
+                "inches": 3
+              }
+            }
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "set-up",
+            "subject": {
+              "owner": "friendly"
+            },
+            "filter": {
+              "from": "strategic-reserves"
+            },
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "phase-is",
+                  "parameters": {
+                    "phase": "movement",
+                    "step": "reinforcements"
+                  }
+                },
+                {
+                  "type": "player-turn-is",
+                  "parameters": {
+                    "turn": "your-turn"
+                  }
+                }
+              ]
+            },
+            "optional": true
+          },
+          "effect": {
+            "type": "set-up",
+            "target": "event-subject",
+            "modifier": {
+              "to": "battlefield",
+              "min_enemy_distance": {
+                "inches": 6
+              },
+              "near": [
+                {
+                  "of": {
+                    "marker": "tunnel-marker"
+                  },
+                  "range": {
+                    "inches": 9
+                  },
+                  "wholly": true
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "move-ended",
+            "subject": {
+              "owner": "enemy",
+              "none_of": [
+                "AIRCRAFT"
+              ],
+              "level": "model"
+            }
+          },
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "event-subject",
+                "filter": {
+                  "within": {
+                    "of": {
+                      "marker": "tunnel-marker"
+                    },
+                    "range": {
+                      "inches": 3
+                    }
+                  }
+                }
+              }
+            },
+            "effect": {
+              "type": "marker",
+              "target": "this-unit",
+              "modifier": {
+                "label": "tunnel-marker",
+                "operation": "remove"
+              }
             }
           }
         }

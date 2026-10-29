@@ -247,7 +247,8 @@ describe("bound durations on fabricated sentences", () => {
   });
 
   it("R3: a set-up moment beside another moment, scoping a set-up effect, refuses", () => {
-    const text = "When the step starts, when your unit is set up, it can be set up anywhere.";
+    // ", or" keeps two moments; ", when" after a step would make the step the set-up moment's window (compile-step-window.ts).
+    const text = "When the step starts, or when your unit is set up, it can be set up anywhere.";
     const leaves = placed(text,
       ["When the step starts", "event", { kind: "step-started", step: "reinforcements", turn: "either" }],
       ["when your unit is set up", "event", { kind: "set-up", owner: "friendly" }],

@@ -401,7 +401,10 @@ def place_ref_phrase(ref: Any) -> str:
         if ref.get("marker") is not None:
             marker = ref["marker"]
             marker_text = _str(marker)
-            return f"{_article(marker_text)} {dekebab(marker_text)} marker"
+            # A marker id that already ends in "marker" ("cult-ambush-marker") must not read
+            # "marker marker".
+            name = dekebab(re.sub(r"-marker$", "", marker_text))
+            return f"{_article(marker_text)} {name} marker"
     return unit_ref_phrase(ref)
 
 

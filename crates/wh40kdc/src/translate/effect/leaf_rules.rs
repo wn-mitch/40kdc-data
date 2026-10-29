@@ -33,8 +33,19 @@ pub(super) fn marker(m: &P) -> String {
         };
         return format!("move the {label} marker{unmoved}{dist}{consume}");
     }
+    if sv(m, "operation") == Some("remove") {
+        return format!("remove that {label} marker from the battlefield");
+    }
     let place = nn(m, "placement")
         .map(|p| format!(" {}", dekebab(&jv(p))))
+        .unwrap_or_default();
+    let away = nn(m, "min_enemy_distance")
+        .map(|d| {
+            format!(
+                " more than {} horizontally away from all enemy units",
+                range_phrase(Some(d))
+            )
+        })
         .unwrap_or_default();
     let article = if label
         .chars()
@@ -45,7 +56,7 @@ pub(super) fn marker(m: &P) -> String {
     } else {
         "a"
     };
-    format!("place {article} {label} marker{place}{consume}")
+    format!("place {article} {label} marker{place}{away}{consume}")
 }
 
 pub(super) fn test(m: &P, subj: &str) -> String {

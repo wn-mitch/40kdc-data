@@ -145,7 +145,12 @@ export function assemblePart(
     consumed: consumedByContainer, optionalTarget: (index) => optionalTargetGroup(list, index) !== null, held: new Set([...designatedSpends, ...afterLoop]),
   }));
   if (connective === null) return { ok: false, signature, errors };
-  if (connective.optionalSentence !== null) { optional = true; optionalSentence = Math.max(optionalSentence, connective.optionalSentence); }
+  const offerSentences = [...frame.offerSentences];
+  if (connective.optionalSentence !== null) {
+    optional = true;
+    optionalSentence = Math.max(optionalSentence, connective.optionalSentence);
+    offerSentences.push(connective.optionalSentence);
+  }
   const pieceItems = planned.filter((item) => !designatedSpends.includes(item) && !afterLoop.includes(item));
   const pieces = [0, ...partStarts.map((_, position) => position + 1)].map((part) => attempt(() => resolveRolls(
     pieceItems.filter((item) => partOf(item.index) === part),
@@ -319,12 +324,17 @@ export function assemblePart(
     ? windowPeriod(windowLeaves(position + 1)) : null);
   // "That X unit": the WHEN moment's unit must have the keywords the target names.
   const bound = targetParts.find((leaf) => leaf.family_id === "triggering-target");
-  const offerMoments = triggerIndexes.some((index) => rawOf[index]! <= optionalSentence);
+  // Only the moments of the sentence that offers the use (or the WHEN clauses before it) are the player's choice.
+  // A moment with a later moment between it and every offer after it ("… is set up, place a marker ….
+  // In the Reinforcements step …, when you set up a unit …, you can …") is that earlier part's own, not
+  // the offer's. A Stratagem's WHEN moment is always the use's.
+  const offers = (index: number) => rawOf[index]! <= optionalSentence && (list[index]!.fragment === "WHEN"
+    || offerSentences.some((offer) => offer >= rawOf[index]! && !triggerIndexes.some((other) => rawOf[other]! > rawOf[index]! && rawOf[other]! <= offer)));
+  const offerMoments = triggerIndexes.some(offers);
   const moments = triggers.map((node, position) => {
-    // Only the moments of the sentence that offers the use (or the WHEN clauses before it) are the player's choice.
-    // When every moment comes after the offer ("you can use this ability. If you do, when …"), no moment
+    // When no moment is the offer's ("you can use this ability. If you do, when …"), no moment
     // decides the use, so the choice stays on them: a mandatory trigger would lose it.
-    const decidesUse = optional && (!offerMoments || rawOf[triggerIndexes[position]!]! <= optionalSentence);
+    const decidesUse = optional && (!offerMoments || offers(triggerIndexes[position]!));
     const moment: Node = decidesUse ? { ...node, optional: true } : { ...node };
     // The keywords narrow whoever acted: a filter subject gains all_of; this unit gets a keyword condition.
     const unitIds = bound?.parameters.unit_ids as string[] | undefined;

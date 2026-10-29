@@ -287,8 +287,10 @@ function marker(m: Record<string, unknown>): string {
   const consume = m.consume === "on-use" ? "; using the marker consumes it" : "";
   const unmoved = m.not_moved_this_turn === true ? " that has not been moved this turn" : "";
   if (m.operation === "relocate") return `move the ${label} marker${unmoved}${m.distance != null ? ` up to ${rangePhrase(m.distance)}` : ""}${consume}`;
+  if (m.operation === "remove") return `remove that ${label} marker from the battlefield`;
   const where = m.placement != null ? ` ${dekebab(jstr(m.placement))}` : "";
-  return `place ${/^[aeiou]/i.test(label) ? "an" : "a"} ${label} marker${where}${consume}`;
+  const away = m.min_enemy_distance != null ? ` more than ${rangePhrase(m.min_enemy_distance)} horizontally away from all enemy units` : "";
+  return `place ${/^[aeiou]/i.test(label) ? "an" : "a"} ${label} marker${where}${away}${consume}`;
 }
 
 function test(m: Record<string, unknown>, subj: string): string {

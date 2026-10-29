@@ -1324,7 +1324,8 @@ Turn: TypeAlias = int
 
 class Modifier37(TypedDict):
     label: str
-    operation: NotRequired[Literal["place", "relocate"]]
+    operation: NotRequired[Literal["place", "relocate", "remove"]]
+    min_enemy_distance: NotRequired[RangeRef]
     placement: NotRequired[str]
     distance: NotRequired[RangeRef]
     consume: NotRequired[Literal["on-use", "never"]]
