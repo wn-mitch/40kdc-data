@@ -4705,7 +4705,12 @@
     },
     "community_notes": "When a GENESTEALER CULTS unit is set up as Reinforcements, its weapons gain [SUSTAINED HITS 1] and [IGNORES COVER] until the end of your next Fight phase (modeled as a grant triggered on arrival).",
     "trigger": {
-      "event": "set-up",
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "ingress"
+        ]
+      },
       "subject": {
         "owner": "friendly",
         "all_of": [
@@ -4745,7 +4750,12 @@
     },
     "behavior": "reactive",
     "trigger": {
-      "event": "set-up"
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "ingress"
+        ]
+      }
     },
     "source_digest": "38e34f3e596a7c98c415ae560f4ac294bffafdbf052959ebdaeef99aec85a4ad"
   },
@@ -4787,7 +4797,12 @@
         }
       },
       {
-        "event": "set-up",
+        "event": "move-ended",
+        "filter": {
+          "move_types": [
+            "ingress"
+          ]
+        },
         "subject": {
           "owner": "enemy"
         }

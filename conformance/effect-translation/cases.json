@@ -77,10 +77,15 @@
       "duration": "until-end-of-your-next-fight-phase"
     },
     "trigger": {
-      "event": "set-up"
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "ingress"
+        ]
+      }
     },
     "expected": {
-      "text": "When the unit is set up, until the end of your next Fight phase, ranged weapons equipped by models in this unit gain [LETHAL HITS]."
+      "text": "When the unit ends an ingress move, until the end of your next Fight phase, ranged weapons equipped by models in this unit gain [LETHAL HITS]."
     }
   },
   {
@@ -110,14 +115,19 @@
         }
       },
       {
-        "event": "set-up",
+        "event": "move-ended",
+        "filter": {
+          "move_types": [
+            "ingress"
+          ]
+        },
         "subject": {
           "owner": "enemy"
         }
       }
     ],
     "expected": {
-      "text": "At the start of the Reinforcements step in your opponent's turn or when an enemy unit is set up, the unit can make a Normal move of up to 6\"."
+      "text": "At the start of the Reinforcements step in your opponent's turn or each time an enemy unit ends an ingress move, the unit can make a Normal move of up to 6\"."
     }
   },
   {
@@ -317,7 +327,12 @@
       "duration": "until-end-of-your-next-fight-phase"
     },
     "trigger": {
-      "event": "set-up",
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "ingress"
+        ]
+      },
       "subject": {
         "owner": "friendly",
         "all_of": [
@@ -326,7 +341,7 @@
       }
     },
     "expected": {
-      "text": "When a friendly unit is set up (the triggering unit must have GENESTEALER CULTS), until the end of your next Fight phase, the triggering unit's weapons gain [SUSTAINED HITS 1] and [IGNORES COVER]."
+      "text": "Each time a friendly unit ends an ingress move (the triggering unit must have GENESTEALER CULTS), until the end of your next Fight phase, the triggering unit's weapons gain [SUSTAINED HITS 1] and [IGNORES COVER]."
     }
   },
   {
@@ -19088,13 +19103,18 @@
       "per": "unit"
     },
     "trigger": {
-      "event": "set-up",
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "ingress"
+        ]
+      },
       "subject": {
         "owner": "enemy"
       }
     },
     "expected": {
-      "text": "When an enemy unit is set up, once per turn per unit, during the Movement phase, in the opponent's turn, while the triggering unit is within 18\" of the unit, while the triggering unit is visible to the unit, until the end of the phase:\n  -> If the unit is eligible to shoot, the unit is eligible to shoot as if it were your Shooting phase.\n  -> If the unit is eligible to shoot, the unit must target the triggering unit with ranged attacks."
+      "text": "Each time an enemy unit ends an ingress move, once per turn per unit, during the Movement phase, in the opponent's turn, while the triggering unit is within 18\" of the unit, while the triggering unit is visible to the unit, until the end of the phase:\n  -> If the unit is eligible to shoot, the unit is eligible to shoot as if it were your Shooting phase.\n  -> If the unit is eligible to shoot, the unit must target the triggering unit with ranged attacks."
     }
   },
   {
@@ -27660,10 +27680,22 @@
       "event": "set-up",
       "subject": {
         "owner": "friendly"
+      },
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "used",
+          "subject": "event-subject",
+          "filter": {
+            "kind": "ability",
+            "id": "deep-strike"
+          },
+          "window": "event"
+        }
       }
     },
     "expected": {
-      "text": "When a friendly unit is set up, until the end of the turn:\n  -> You can re-roll a Hit roll of 1 for attacks made by the triggering unit.\n  -> You can re-roll a Wound roll of 1 for attacks made by the triggering unit."
+      "text": "When a friendly unit is set up, if the triggering unit is using Deep Strike, until the end of the turn:\n  -> You can re-roll a Hit roll of 1 for attacks made by the triggering unit.\n  -> You can re-roll a Wound roll of 1 for attacks made by the triggering unit."
     }
   },
   {

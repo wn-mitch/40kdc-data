@@ -2988,6 +2988,18 @@
       "event": "set-up",
       "subject": {
         "owner": "friendly"
+      },
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "used",
+          "subject": "event-subject",
+          "filter": {
+            "kind": "ability",
+            "id": "deep-strike"
+          },
+          "window": "event"
+        }
       }
     }
   },
@@ -4137,7 +4149,12 @@
     },
     "behavior": "reactive",
     "trigger": {
-      "event": "set-up",
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "ingress"
+        ]
+      },
       "optional": true
     },
     "source_digest": "9d4ae448ca6b426cc31b7ab47cc2ae39c8f8ce429f55174e17dfceb76461b34f"
@@ -5825,6 +5842,17 @@
     "behavior": "reactive",
     "trigger": {
       "event": "set-up",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "used",
+          "filter": {
+            "kind": "ability",
+            "id": "deep-strike"
+          },
+          "window": "event"
+        }
+      },
       "optional": true
     },
     "source_digest": "89aef1473b5462a3bdf671b005d4c248fda10abc0b4b40f1df5c5cb37358848b"

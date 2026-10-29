@@ -2262,7 +2262,12 @@
     },
     "faction_id": "necrons",
     "trigger": {
-      "event": "set-up",
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "ingress"
+        ]
+      },
       "subject": {
         "owner": "enemy"
       }

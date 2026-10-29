@@ -8003,9 +8003,14 @@
     },
     "behavior": "reactive",
     "trigger": {
-      "event": "set-up",
+      "event": "move-ended",
       "subject": {
         "owner": "enemy"
+      },
+      "filter": {
+        "move_types": [
+          "ingress"
+        ]
       }
     },
     "source_digest": "9e9370f1456b66779e8b87fc005149f2a92b6153680e383e00f2f19eaa71b646"
