@@ -312,7 +312,7 @@ export class AbilityView {
       source,
       ctx,
       perspective,
-      { usage: this.raw.usage, duration: this.raw.scope?.duration },
+      { usage: this.raw.usage, duration: this.raw.scope?.duration, trigger: this.raw.trigger },
     );
     // An aura (an effect whose target filter reaches units `within` N", e.g. a "within 18\""
     // reroll) gates on distance to the target. Stamp it here rather than in the effect

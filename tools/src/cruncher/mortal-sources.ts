@@ -11,7 +11,8 @@
 import type { EngineContext } from "./buffs.js";
 import type { ConditionNeed } from "./condition-facts.js";
 import { quantityDistribution } from "./damage-roll.js";
-import { evaluateCondition, undecidedNeeds, type UnsupportedFragment } from "./from-dsl.js";
+import { evaluateCondition, isOwnAttackRollTrigger, undecidedNeeds, type UnsupportedFragment } from "./from-dsl.js";
+import { matchesUnitFilter } from "./unit-filter.js";
 
 /** Mortal wounds one ability inflicts on the target at one moment. */
 export type MortalWoundSource = {
@@ -29,7 +30,12 @@ export type MortalWoundSource = {
   expected: number;
   /** Leaf conditions the context leaves undecided; answering one false removes the source. */
   needs: ConditionNeed[];
+  /** Each enclosing `choice`, outermost first, when there is one: picking this source picks its option. */
+  choices?: MortalChoice[];
 };
+
+/** An enclosing `choice` of a source: its pool, the option the source is under, and how many options it allows. */
+export type MortalChoice = { group: string; option: string; max: number };
 
 export type MortalWoundTranslation = { sources: MortalWoundSource[]; unsupported: UnsupportedFragment[] };
 
@@ -44,6 +50,7 @@ type WalkState = {
   subjectEnemy?: boolean;
   /** Whether the nearest `for-each-unit` reaches enemy units. */
   recipientEnemy?: boolean;
+  choices: MortalChoice[];
 };
 
 const SELF_TARGETS = new Set(["this-unit", "this-model", "bearer", "self", "attacker"]);
@@ -77,7 +84,11 @@ export function mortalWoundSources(
   };
 
   const enterTrigger = (value: unknown, state: WalkState): WalkState | null => {
-    const triggers = (Array.isArray(value) ? value : [value]).filter(isObject);
+    const all = (Array.isArray(value) ? value : [value]).filter(isObject);
+    // The unit's own hit and wound rolls inflict theirs within its attacks, which the buff layer
+    // counts: those moments are not sources.
+    const triggers = all.filter((item) => !isOwnAttackRollTrigger(item));
+    if (all.length > 0 && triggers.length === 0) return null;
     if (triggers.length === 0) return state;
     let next: WalkState = { ...state, moment: triggers.map(momentOf).join("|") };
     const subjects = triggers.map((item) => (isObject(item.subject) ? item.subject.owner : undefined));
@@ -113,8 +124,12 @@ export function mortalWoundSources(
       }
       case "select-units": {
         const selector = isObject(node.selector) ? node.selector : {};
-        const owner = isObject(selector.filter) ? selector.filter.owner : undefined;
-        const next = decide(selector.eligibility, { ...state, selectedEnemy: owner === "enemy" ? true : owner === "friendly" ? false : undefined });
+        const filter = isObject(selector.filter) ? selector.filter : {};
+        const owner = filter.owner;
+        let next: WalkState | null = { ...state, selectedEnemy: owner === "enemy" ? true : owner === "friendly" ? false : undefined };
+        // A selected enemy unit suffering the mortal wounds is the target: the rest of the filter is a fact about it.
+        if (owner === "enemy") next = reaches(filter, next);
+        if (next) next = decide(selector.eligibility, next);
         if (next) walk(node.effect, next);
         return;
       }
@@ -132,9 +147,14 @@ export function mortalWoundSources(
       case "roll":
         walk(node.effect, state);
         return;
-      case "choice":
-        (Array.isArray(node.options) ? node.options : []).forEach((option, index) => walk(option, { ...state, id: `${state.id}?${index}` }));
+      case "choice": {
+        const max = typeof node.max_choices === "number" ? node.max_choices : 1;
+        (Array.isArray(node.options) ? node.options : []).forEach((option, index) => {
+          const id = `${state.id}?${index}`;
+          walk(option, { ...state, id, choices: [...state.choices, { group: `${state.id}?choice`, option: id, max }] });
+        });
         return;
+      }
       case "dice-gated": {
         const success = gateProbability(node);
         if (success === null) return report(node, "dice-gated: only a fixed threshold on rolled dice is modelled");
@@ -171,6 +191,9 @@ export function mortalWoundSources(
   const reaches = (filter: Record<string, unknown>, state: WalkState): WalkState | null => {
     const { owner: _owner, ...rest } = filter;
     if (Object.keys(rest).length === 0) return state;
+    const verdict = matchesUnitFilter(filter, ctx as EngineContext, "target", "enemy");
+    if (verdict === false) return null;
+    if (verdict === true) return state;
     return decide({ type: "matches", parameters: { subject: "target", filter: rest } }, state);
   };
 
@@ -200,7 +223,10 @@ export function mortalWoundSources(
       existing.expected += state.probability * expected;
       existing.needs = mergeNeeds(existing.needs, state.needs);
     } else {
-      sources.push({ id: state.id, moment: state.moment, expected: state.probability * expected, needs: [...state.needs] });
+      sources.push({
+        id: state.id, moment: state.moment, expected: state.probability * expected, needs: [...state.needs],
+        ...(state.choices.length > 0 ? { choices: state.choices } : {}),
+      });
     }
   };
 
@@ -224,9 +250,31 @@ export function mortalWoundSources(
     return { models: own, state: decide(each.eligibility, state) };
   };
 
-  const start = enterTrigger(trigger, { probability: 1, moment: null, needs: [], id: abilityId });
+  const start = enterTrigger(trigger, { probability: 1, moment: null, needs: [], id: abilityId, choices: [] });
   if (start) walk(effect, start);
   return { sources: sources.filter((source) => source.expected > 0), unsupported };
+}
+
+/**
+ * The sources a selection keeps, in its order: a source whose option would take an enclosing
+ * choice past its limit of options is left out. Sources under one option share its pick.
+ */
+export function withinChoiceLimits<T extends Pick<MortalWoundSource, "choices">>(selected: readonly T[]): T[] {
+  const picked = new Map<string, Set<string>>();
+  return selected.filter((source) => {
+    const choices = source.choices ?? [];
+    const fits = choices.every((choice) => {
+      const options = picked.get(choice.group);
+      return options === undefined || options.has(choice.option) || options.size < choice.max;
+    });
+    if (!fits) return false;
+    for (const choice of choices) {
+      const options = picked.get(choice.group) ?? new Set<string>();
+      options.add(choice.option);
+      picked.set(choice.group, options);
+    }
+    return true;
+  });
 }
 
 /**

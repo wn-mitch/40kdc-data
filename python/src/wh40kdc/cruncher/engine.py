@@ -656,9 +656,31 @@ def crunch_model(
             "critical": crit_wounds_from_roll,
         },
     }
+    # One gated on a critical wound is only in that resolution and fires on the attacks scoring
+    # one: every such attack hit, and a critical hit wounds as any hit does unless Lethal Hits
+    # skipped its roll.
+    crit_hit_share = (
+        0.0 if has_lethal or hits_for_wound_roll <= 0 else crit_hits / hits_for_wound_roll
+    )
+    critical_triggers = {
+        "hit": {
+            "success": crit_wounds_from_roll,
+            "critical": crit_wounds_from_roll * crit_hit_share,
+        },
+        "wound": {"success": crit_wounds_from_roll, "critical": crit_wounds_from_roll},
+    }
+    critical_mortals = (
+        _critical_only_entries(resolved["rollMortals"], critical["rollMortals"])
+        if critical is not None
+        else []
+    )
     roll_mortals = 0.0
     for entry in resolved["rollMortals"]:
         roll_mortals += entry["count"] * roll_triggers[entry["roll"]][entry["outcome"]]
+    critical_sum = 0.0
+    for entry in critical_mortals:
+        critical_sum += entry["count"] * critical_triggers[entry["roll"]][entry["outcome"]]
+    roll_mortals += critical_sum
     damage_mortal += roll_mortals
     damage = damage_main + damage_mortal
     damage_detail = f"D {base_d}"
@@ -984,3 +1006,30 @@ def _set_or_stat(resolved: dict[str, Any], stat: str, printed: Any) -> float:
     """A ``stat-set`` value when one applies, else the profile's characteristic."""
     set_stat = resolved["statSet"].get(stat)
     return set_stat["value"] if set_stat is not None else eval_stat_value(printed)
+
+
+def _critical_only_entries(
+    ordinary: list[dict[str, Any]], critical: list[dict[str, Any]]
+) -> list[dict[str, Any]]:
+    """The entries of the critical-wound resolution that the ordinary one lacks: those gated on a
+    critical wound. Both resolve the same buffs, so an entry is matched by its source, roll,
+    outcome and count, each match consuming one ordinary entry."""
+    unmatched = list(ordinary)
+    out: list[dict[str, Any]] = []
+    for entry in critical:
+        index = next(
+            (
+                i
+                for i, other in enumerate(unmatched)
+                if other["source"] == entry["source"]
+                and other["roll"] == entry["roll"]
+                and other["outcome"] == entry["outcome"]
+                and other["count"] == entry["count"]
+            ),
+            None,
+        )
+        if index is None:
+            out.append(entry)
+        else:
+            unmatched.pop(index)
+    return out

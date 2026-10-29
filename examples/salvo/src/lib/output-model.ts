@@ -25,6 +25,7 @@ import {
   type UnitView,
   type Weapon,
   type WeaponGrant,
+  withinChoiceLimits,
 } from "@alpaca-software/40kdc-data";
 
 import { activeSupport, defenderBuffs, type DefenderBuild } from "./defender.js";
@@ -360,8 +361,25 @@ function isProvisional(ds: Dataset, abilityId: string, factionId: string | null)
 }
 
 /**
+ * The enabled sources a selection counts, in the order they were ticked: a source past an
+ * enclosing choice's limit of options is left out.
+ */
+export function countedMortalSources(sources: readonly MortalSourceChoice[], enabled: ReadonlySet<string>): MortalSourceChoice[] {
+  const ticked = [...enabled].map((key) => sources.find((source) => source.key === key)).filter((source): source is MortalSourceChoice => source !== undefined);
+  return withinChoiceLimits(ticked);
+}
+
+/** Whether ticking `source` beside the enabled ones would take one of its choices past its limit. */
+export function mortalSourceBlocked(source: MortalSourceChoice, sources: readonly MortalSourceChoice[], enabled: ReadonlySet<string>): boolean {
+  if (enabled.has(source.key)) return false;
+  const counted = countedMortalSources(sources, enabled);
+  return !withinChoiceLimits([...counted, source]).includes(source);
+}
+
+/**
  * The enabled sources' mortal wounds on the target: their expected total, and what is left after
  * the target's Feel No Pain (one on every wound and one on mortal wounds roll independently).
+ * Only the sources {@link countedMortalSources} counts contribute.
  */
 export function mortalSourceLine(
   sources: readonly MortalSourceChoice[],
@@ -369,7 +387,7 @@ export function mortalSourceLine(
   targetBuffs: readonly Buff[],
   context: EngineContext,
 ): { damage: number; afterFnp: number } {
-  const damage = sources.filter((source) => enabled.has(source.key)).reduce((sum, source) => sum + source.expected, 0);
+  const damage = countedMortalSources(sources, enabled).reduce((sum, source) => sum + source.expected, 0);
   if (damage === 0) return { damage, afterFnp: 0 };
   const resolved = resolveBuffs([...targetBuffs], context);
   const survive = (fnp: { threshold: number } | null) => (fnp ? Math.min(1, Math.max(0, (fnp.threshold - 1) / 6)) : 1);

@@ -396,6 +396,7 @@ class AbilityView:
             {
                 "usage": self.raw.get("usage"),
                 "duration": (self.raw.get("scope") or {}).get("duration"),
+                "trigger": trigger,
             },
         )
         # An aura (an effect whose target filter reaches units `within` N", e.g. a

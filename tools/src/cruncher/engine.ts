@@ -427,7 +427,13 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
   // Mortal wounds the attack's own rolls inflict ("each time an attack scores a wound, the target
   // suffers 1 mortal wound"): one damage each, outside the save and Damage roll.
   const rollTriggers = { hit: { success: scoringAttacks, critical: critHits }, wound: { success: totalRegularWounds + critWoundsFromRoll, critical: critWoundsFromRoll } };
-  const rollMortals = resolved.rollMortals.reduce((sum, entry) => sum + entry.count * rollTriggers[entry.roll][entry.outcome], 0);
+  // One gated on a critical wound is only in that resolution and fires on the attacks scoring one:
+  // every such attack hit, and a critical hit wounds as any hit does unless Lethal Hits skipped its roll.
+  const critHitShare = hasLethal || hitsForWoundRoll <= 0 ? 0 : critHits / hitsForWoundRoll;
+  const criticalTriggers = { hit: { success: critWoundsFromRoll, critical: critWoundsFromRoll * critHitShare }, wound: { success: critWoundsFromRoll, critical: critWoundsFromRoll } };
+  const criticalMortals = critical ? criticalOnlyEntries(resolved.rollMortals, critical.rollMortals) : [];
+  const rollMortals = resolved.rollMortals.reduce((sum, entry) => sum + entry.count * rollTriggers[entry.roll][entry.outcome], 0) +
+    criticalMortals.reduce((sum, entry) => sum + entry.count * criticalTriggers[entry.roll][entry.outcome], 0);
   damageMortal += rollMortals;
   const damage = damageMain + damageMortal;
   stages.push({
@@ -692,4 +698,20 @@ export type { Phase };
 
 function hasAttackComparison(gate: BuffApplicability | undefined): boolean {
   return gate !== undefined && (gate.attackComparisons !== undefined || (gate.weaponRequirements ?? []).some(hasAttackComparison));
+}
+
+/**
+ * The entries of the critical-wound resolution that the ordinary one lacks: those gated on a
+ * critical wound. Both resolve the same buffs, so an entry is matched by its source, roll, outcome
+ * and count, each match consuming one ordinary entry.
+ */
+function criticalOnlyEntries<T extends { roll: string; outcome: string; count: number; source: unknown }>(ordinary: readonly T[], critical: readonly T[]): T[] {
+  const unmatched = [...ordinary];
+  return critical.filter((entry) => {
+    const index = unmatched.findIndex((other) =>
+      other.source === entry.source && other.roll === entry.roll && other.outcome === entry.outcome && other.count === entry.count);
+    if (index < 0) return true;
+    unmatched.splice(index, 1);
+    return false;
+  });
 }

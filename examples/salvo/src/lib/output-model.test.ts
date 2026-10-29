@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { Dataset, type EngineContext } from "@alpaca-software/40kdc-data";
 
-import { crunchLine, enabledLeverBuffs, memberMortalSources, memberUnits, mortalSourceKey, mortalSourceLine, synthTarget, targetDefences } from "./output-model.js";
+import { crunchLine, enabledLeverBuffs, memberMortalSources, memberUnits, mortalSourceBlocked, mortalSourceKey, mortalSourceLine, synthTarget, targetDefences } from "./output-model.js";
 import { DEFAULT_TARGET } from "./store.svelte.js";
 import { weaponLines } from "./weapon-lines.js";
 
@@ -61,6 +61,15 @@ describe("mortal wounds outside the attack", () => {
     // Survives a 5+ (4/6) and then a 4+ against mortal wounds (3/6).
     expect(line.afterFnp).toBeCloseTo(3 * (4 / 6) * (3 / 6), 12);
     expect(mortalSourceLine(sources, new Set(), fnp, shooting)).toEqual({ damage: 0, afterFnp: 0 });
+  });
+
+  it("counts one option of a choose-one and blocks its sibling", () => {
+    const pick = (key: string, expected: number) => ({ ...source(key, expected), choices: [{ group: "c?choice", option: key, max: 1 }] });
+    const sources = [pick("c?0", 1), pick("c?1", 2)];
+    expect(mortalSourceLine(sources, new Set(["c?0", "c?1"]), [], shooting).damage).toBe(1);
+    expect(mortalSourceLine(sources, new Set(["c?1", "c?0"]), [], shooting).damage).toBe(2);
+    expect(mortalSourceBlocked(sources[1]!, sources, new Set(["c?0"]))).toBe(true);
+    expect(mortalSourceBlocked(sources[1]!, sources, new Set())).toBe(false);
   });
 
   it("reads a unit's charge mortal wounds with the unit's model count and keys them by moment", () => {

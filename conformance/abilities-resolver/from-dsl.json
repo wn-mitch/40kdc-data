@@ -14455,6 +14455,227 @@
       }
     },
     {
+      "caseId": "canonical/scenario/mortal-wounds-melee-trigger-shooting",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "after-roll",
+          "filter": {
+            "roll": "wound",
+            "result": "success",
+            "attack_type": "melee"
+          }
+        },
+        "effect": {
+          "type": "mortal-wounds",
+          "target": "defender",
+          "modifier": {
+            "count": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "needKeys": [],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/mortal-wounds-melee-trigger-fight",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "after-roll",
+          "filter": {
+            "roll": "wound",
+            "result": "success",
+            "attack_type": "melee"
+          }
+        },
+        "effect": {
+          "type": "mortal-wounds",
+          "target": "defender",
+          "modifier": {
+            "count": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "fight"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "mortal-wounds-on-roll",
+            "roll": "wound",
+            "outcome": "success",
+            "count": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "needKeys": [],
+        "activatable": [],
+        "applicableWhen": [
+          null
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/scenario/mortal-wounds-trigger-unmodelled-filter",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "after-roll",
+          "filter": {
+            "roll": "wound",
+            "result": "success",
+            "phase": "fight"
+          }
+        },
+        "effect": {
+          "type": "mortal-wounds",
+          "target": "defender",
+          "modifier": {
+            "count": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "fight"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "mortal-wounds: the wound roll's trigger filter.phase is not modelled"
+        ],
+        "needKeys": [],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/mortal-wounds-in-choice",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "choice",
+        "options": [
+          {
+            "type": "ability-part",
+            "trigger": {
+              "event": "after-roll",
+              "filter": {
+                "roll": "hit",
+                "result": "critical"
+              }
+            },
+            "effect": {
+              "type": "mortal-wounds",
+              "target": "defender",
+              "modifier": {
+                "count": 1
+              }
+            }
+          },
+          {
+            "type": "ability-part",
+            "trigger": {
+              "event": "after-roll",
+              "filter": {
+                "roll": "wound",
+                "result": "success"
+              }
+            },
+            "effect": {
+              "type": "mortal-wounds",
+              "target": "defender",
+              "modifier": {
+                "count": 1
+              }
+            }
+          }
+        ]
+      },
+      "context": {
+        "phase": "fight"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "needKeys": [],
+        "activatable": [
+          {
+            "id": "fabricated-scenario?0",
+            "label": "1 mortal wound per critical hit",
+            "group": {
+              "id": "fabricated-scenario?choice",
+              "maxActivations": 1
+            },
+            "requires": null,
+            "capRaise": null,
+            "buffs": [
+              {
+                "type": "mortal-wounds-on-roll",
+                "roll": "hit",
+                "outcome": "critical",
+                "count": 1
+              }
+            ]
+          },
+          {
+            "id": "fabricated-scenario?1",
+            "label": "1 mortal wound per wound",
+            "group": {
+              "id": "fabricated-scenario?choice",
+              "maxActivations": 1
+            },
+            "requires": null,
+            "capRaise": null,
+            "buffs": [
+              {
+                "type": "mortal-wounds-on-roll",
+                "roll": "wound",
+                "outcome": "success",
+                "count": 1
+              }
+            ]
+          }
+        ],
+        "applicableWhen": []
+      }
+    },
+    {
       "caseId": "canonical/scenario/mortal-wounds-outside-attack",
       "abilityId": "fabricated-scenario",
       "source": {

@@ -429,6 +429,11 @@ export function canonicalScenarioCases() {
     { id: "mortal-wounds-roll-on-self", effect: rollMortals({ roll: "hit", result: "success" }, "this-unit", { count: 1 }), context: { phase: "fight" } },
     { id: "mortal-wounds-roll-per-success", effect: rollMortals({ roll: "wound", result: "success" }, "defender", { count: 1, per: "success", roll: { dice: 1, threshold: 4 } }), context: { phase: "fight" } },
     { id: "mortal-wounds-roll-defender-perspective", effect: rollMortals({ roll: "wound", result: "success" }, "defender", { count: 1 }), context: { phase: "fight" }, perspective: "target" },
+    // The trigger's attack type gates the roll's mortal wounds; a narrowing the attack cannot carry is reported.
+    { id: "mortal-wounds-melee-trigger-shooting", effect: rollMortals({ roll: "wound", result: "success", attack_type: "melee" }, "defender", { count: 1 }), context: { phase: "shooting" } },
+    { id: "mortal-wounds-melee-trigger-fight", effect: rollMortals({ roll: "wound", result: "success", attack_type: "melee" }, "defender", { count: 1 }), context: { phase: "fight" } },
+    { id: "mortal-wounds-trigger-unmodelled-filter", effect: rollMortals({ roll: "wound", result: "success", phase: "fight" }, "defender", { count: 1 }), context: { phase: "fight" } },
+    { id: "mortal-wounds-in-choice", effect: { type: "choice", options: [rollMortals({ roll: "hit", result: "critical" }, "defender", { count: 1 }), rollMortals({ roll: "wound", result: "success" }, "defender", { count: 1 })] }, context: { phase: "fight" } },
     { id: "mortal-wounds-outside-attack", effect: { type: "ability-part", trigger: { event: "move-ended", filter: { move_types: ["charge"] } }, effect: { type: "mortal-wounds", target: "defender", modifier: { count: "D3" } } }, context: { phase: "fight" } },
   ];
   return inputs.map((input) => withGates(dslExpectation({
@@ -504,6 +509,7 @@ export function canonicalCriticalWoundCases(ds: Dataset) {
   const sustained = { type: "weapon-ability-grant", target: "this-unit", modifier: { keywords: [{ keyword_id: "sustained-hits", parameters: { value: 1 } }] } };
   const defender: Buff = { source: { kind: "ability", abilityId: "fabricated-defender", abilityKind: "unit" }, contribution: { type: "reroll-one", roll: "save" } };
   const damageRerollOne: Buff = { source: { kind: "ability", abilityId: "fabricated-damage-reroll", abilityKind: "unit" }, contribution: { type: "reroll-one", roll: "damage" } };
+  const woundMortals = (count: number) => ({ type: "ability-part", trigger: { event: "after-roll", filter: { roll: "wound", result: "success" } }, effect: { type: "mortal-wounds", target: "defender", modifier: { count } } });
   const inputs: { id: string; effects: unknown[]; extra?: Buff[]; weaponId?: string; unitId?: string }[] = [
     { id: "ap", effects: [apImprove] },
     { id: "damage", effects: [damageAdd] },
@@ -517,6 +523,8 @@ export function canonicalCriticalWoundCases(ds: Dataset) {
     { id: "damage-with-damage-reroll-one", effects: [damageAdd], extra: [damageRerollOne] },
     // D6 and D6+1: each roll gains against its own kind's mean.
     { id: "variable-damage-with-damage-reroll-one", effects: [damageAdd], extra: [damageRerollOne], weaponId: "multi-melta" },
+    // Mortal wounds on a critical wound only, beside ones on every wound.
+    { id: "mortal-wounds", effects: [onCritical(woundMortals(2)), woundMortals(1)] },
   ];
   return inputs.map((row) => {
     const weapon = ds.weapons.getAny(row.weaponId ?? "bolt-rifle");

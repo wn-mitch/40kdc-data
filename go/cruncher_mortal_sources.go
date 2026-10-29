@@ -23,6 +23,15 @@ type MortalWoundSource struct {
 	Expected float64
 	// Needs are the leaf conditions the context leaves undecided (condition-need records).
 	Needs []any
+	// Choices are each enclosing choice, outermost first: picking this source picks its option.
+	Choices []MortalChoice
+}
+
+// MortalChoice is an enclosing choice of a source: its pool, the option the source is under, and
+// how many options it allows.
+type MortalChoice struct {
+	Group, Option string
+	Max           float64
 }
 
 // MortalWoundTranslation is the sources found in one effect and the fragments not modelled.
@@ -60,6 +69,7 @@ type mortalState struct {
 	subjectEnemy tri
 	// recipientEnemy: whether the nearest for-each-unit reaches enemy units.
 	recipientEnemy tri
+	choices        []MortalChoice
 }
 
 var mortalSelfTargets = map[string]bool{"this-unit": true, "this-model": true, "bearer": true, "self": true, "attacker": true}
@@ -94,15 +104,26 @@ func mortalWoundSources(abilityID string, effect, trigger any, context map[strin
 	}
 
 	enterTrigger := func(value any, state mortalState) (mortalState, bool) {
-		var triggers []map[string]any
+		var all []map[string]any
 		if list, ok := asList(value); ok {
 			for _, item := range list {
 				if m, ok := asMap(item); ok && m != nil {
-					triggers = append(triggers, m)
+					all = append(all, m)
 				}
 			}
 		} else if m, ok := asMap(value); ok && m != nil {
-			triggers = append(triggers, m)
+			all = append(all, m)
+		}
+		// The unit's own hit and wound rolls inflict theirs within its attacks, which the buff
+		// layer counts: those moments are not sources.
+		var triggers []map[string]any
+		for _, t := range all {
+			if !isOwnAttackRollTrigger(t) {
+				triggers = append(triggers, t)
+			}
+		}
+		if len(all) > 0 && len(triggers) == 0 {
+			return state, false
 		}
 		if len(triggers) == 0 {
 			return state, true
@@ -155,6 +176,12 @@ func mortalWoundSources(abilityID string, effect, trigger any, context map[strin
 			}
 		}
 		if len(rest) == 0 {
+			return state, true
+		}
+		switch matchesUnitFilter(filter, ctx, "target", "enemy") {
+		case false:
+			return state, false
+		case true:
 			return state, true
 		}
 		return decide(map[string]any{"type": "matches", "parameters": map[string]any{"subject": "target", "filter": rest}}, state)
@@ -253,7 +280,7 @@ func mortalWoundSources(abilityID string, effect, trigger any, context map[strin
 				return
 			}
 		}
-		sources = append(sources, &MortalWoundSource{ID: state.id, Moment: state.moment, Expected: state.probability * expected, Needs: append([]any{}, state.needs...)})
+		sources = append(sources, &MortalWoundSource{ID: state.id, Moment: state.moment, Expected: state.probability * expected, Needs: append([]any{}, state.needs...), Choices: append([]MortalChoice(nil), state.choices...)})
 	}
 
 	walk = func(nodeAny any, state mortalState) {
@@ -282,6 +309,15 @@ func mortalWoundSources(abilityID string, effect, trigger any, context map[strin
 			selector, _ := asMap(node["selector"])
 			filter, _ := asMap(selector["filter"])
 			state.selectedEnemy = triOf(filter["owner"])
+			// A selected enemy unit suffering the mortal wounds is the target: the rest of the
+			// filter is a fact about it.
+			if filter["owner"] == "enemy" {
+				next, ok := reaches(filter, state)
+				if !ok {
+					return
+				}
+				state = next
+			}
 			if next, ok := decide(selector["eligibility"], state); ok {
 				walk(node["effect"], next)
 			}
@@ -301,9 +337,14 @@ func mortalWoundSources(abilityID string, effect, trigger any, context map[strin
 		case "roll":
 			walk(node["effect"], state)
 		case "choice":
+			most := 1.0
+			if n, ok := node["max_choices"].(float64); ok {
+				most = n
+			}
 			for index, option := range getList(node, "options") {
 				next := state
 				next.id = state.id + "?" + strconv.Itoa(index)
+				next.choices = append(append([]MortalChoice(nil), state.choices...), MortalChoice{Group: state.id + "?choice", Option: next.id, Max: most})
 				walk(option, next)
 			}
 		case "dice-gated":
@@ -679,4 +720,33 @@ func containsMortalWounds(node any) bool {
 		}
 	}
 	return false
+}
+
+// withinChoiceLimits is the sources a selection keeps, in its order: a source whose option would
+// take an enclosing choice past its limit of options is left out. Sources under one option share
+// its pick.
+func withinChoiceLimits(selected []*MortalWoundSource) []*MortalWoundSource {
+	picked := map[string]map[string]bool{}
+	var out []*MortalWoundSource
+	for _, source := range selected {
+		fits := true
+		for _, choice := range source.Choices {
+			options, seen := picked[choice.Group]
+			if seen && !options[choice.Option] && float64(len(options)) >= choice.Max {
+				fits = false
+				break
+			}
+		}
+		if !fits {
+			continue
+		}
+		for _, choice := range source.Choices {
+			if picked[choice.Group] == nil {
+				picked[choice.Group] = map[string]bool{}
+			}
+			picked[choice.Group][choice.Option] = true
+		}
+		out = append(out, source)
+	}
+	return out
 }

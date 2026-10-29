@@ -463,6 +463,7 @@ impl Dataset {
             perspective,
             raw.pointer("/scope/duration"),
             raw.get("usage"),
+            raw.get("trigger"),
         );
         if let Some(usage) = raw.get("usage") {
             crate::cruncher::from_dsl::apply_activation(

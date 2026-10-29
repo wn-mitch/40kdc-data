@@ -3,6 +3,7 @@ package wh40kdc
 import (
 	"encoding/json"
 	"math"
+	"reflect"
 	"regexp"
 	"strconv"
 	"strings"
@@ -561,6 +562,24 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 		}
 		rollMortals += entry.count * triggers
 	}
+	// One gated on a critical wound is only in that resolution and fires on the attacks scoring
+	// one: every such attack hit, and a critical hit wounds as any hit does unless Lethal Hits
+	// skipped its roll.
+	if critical != nil {
+		critHitShare := 0.0
+		if !hasLethal && hitsForWoundRoll > 0 {
+			critHitShare = critHits / hitsForWoundRoll
+		}
+		criticalMortals := 0.0
+		for _, entry := range criticalOnlyEntries(res.rollMortals, critical.rollMortals) {
+			triggers := critWoundsFromRoll
+			if entry.roll == "hit" && entry.outcome == "critical" {
+				triggers = critWoundsFromRoll * critHitShare
+			}
+			criticalMortals += entry.count * triggers
+		}
+		rollMortals += criticalMortals
+	}
 	damageMortal += rollMortals
 	damage := damageMain + damageMortal
 	stages = append(stages, stage("damage", damage))
@@ -903,4 +922,27 @@ func rerollIfUnset(subset string, attacksSet bool) string {
 		return ""
 	}
 	return subset
+}
+
+// criticalOnlyEntries is the entries of the critical-wound resolution that the ordinary one lacks:
+// those gated on a critical wound. Both resolve the same buffs, so an entry is matched by its
+// source, roll, outcome and count, each match consuming one ordinary entry.
+func criticalOnlyEntries(ordinary, critical []rollMortal) []rollMortal {
+	unmatched := append([]rollMortal{}, ordinary...)
+	var out []rollMortal
+	for _, entry := range critical {
+		index := -1
+		for i, other := range unmatched {
+			if other.roll == entry.roll && other.outcome == entry.outcome && other.count == entry.count && reflect.DeepEqual(other.source, entry.source) {
+				index = i
+				break
+			}
+		}
+		if index < 0 {
+			out = append(out, entry)
+			continue
+		}
+		unmatched = append(unmatched[:index], unmatched[index+1:]...)
+	}
+	return out
 }

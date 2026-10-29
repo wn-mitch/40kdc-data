@@ -367,7 +367,13 @@ fn collect(
                 || present(n, "cost").is_some()
                 || present(n, "usage").is_some();
             if present(n, "trigger").is_some() || !activation {
-                let effect = n.get("effect").cloned().unwrap_or(Value::Null);
+                let mut effect = n.get("effect").cloned().unwrap_or(Value::Null);
+                if let Some((gated, roll)) =
+                    super::roll_mortals::on_attack_roll(n.get("trigger"), &effect)
+                {
+                    part_opts.attack_roll = Some(roll);
+                    effect = gated;
+                }
                 let gated =
                     moment_gate_with_source(n.get("trigger"), &effect, Some(n)).unwrap_or(effect);
                 collect(&gated, &part_opts, app, sink, diagnostics);

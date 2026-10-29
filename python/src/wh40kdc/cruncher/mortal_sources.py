@@ -17,7 +17,14 @@ from collections.abc import Callable
 from typing import Any, TypeGuard
 
 from wh40kdc.cruncher.damage_roll import quantity_distribution
-from wh40kdc.cruncher.from_dsl import _evaluate_condition, _js_number, _js_str, _undecided_needs
+from wh40kdc.cruncher.from_dsl import (
+    _evaluate_condition,
+    _js_number,
+    _js_str,
+    _matches_unit_filter,
+    _undecided_needs,
+    is_own_attack_roll_trigger,
+)
 
 _SELF_TARGETS = frozenset(["this-unit", "this-model", "bearer", "self", "attacker"])
 
@@ -70,7 +77,12 @@ def mortal_wound_sources(
 
     def enter_trigger(value: Any, state: dict[str, Any]) -> dict[str, Any] | None:
         items = value if isinstance(value, list) else [value]
-        triggers = [item for item in items if _is_object(item)]
+        every = [item for item in items if _is_object(item)]
+        # The unit's own hit and wound rolls inflict theirs within its attacks, which the buff
+        # layer counts: those moments are not sources.
+        triggers = [item for item in every if not is_own_attack_roll_trigger(item)]
+        if every and not triggers:
+            return None
         if not triggers:
             return state
         nxt = {**state, "moment": "|".join(_moment_of(item) for item in triggers)}
@@ -102,6 +114,11 @@ def mortal_wound_sources(
         context rules it out. Its range and other unit facts are needs on the target."""
         rest = {key: value for key, value in filt.items() if key != "owner"}
         if not rest:
+            return state
+        verdict = _matches_unit_filter(filt, ctx, "target", "enemy")
+        if verdict is False:
+            return None
+        if verdict is True:
             return state
         return decide(
             {"type": "matches", "parameters": {"subject": "target", "filter": rest}}, state
@@ -187,14 +204,15 @@ def mortal_wound_sources(
             existing["expected"] += state["probability"] * expected
             existing["needs"] = _merge_needs(existing["needs"], state["needs"])
         else:
-            sources.append(
-                {
-                    "id": state["id"],
-                    "moment": state["moment"],
-                    "expected": state["probability"] * expected,
-                    "needs": list(state["needs"]),
-                }
-            )
+            found = {
+                "id": state["id"],
+                "moment": state["moment"],
+                "expected": state["probability"] * expected,
+                "needs": list(state["needs"]),
+            }
+            if state["choices"]:
+                found["choices"] = state["choices"]
+            sources.append(found)
 
     def walk(node: Any, state: dict[str, Any]) -> None:
         if not _is_object(node) or state["probability"] == 0:
@@ -214,21 +232,24 @@ def mortal_wound_sources(
                 walk(node.get("effect"), nxt)
         elif node_type == "select-units":
             selector = node["selector"] if _is_object(node.get("selector")) else {}
-            filt = selector.get("filter")
-            owner = filt.get("owner") if _is_object(filt) else None
-            nxt = decide(
-                selector.get("eligibility"),
-                {
-                    **state,
-                    "selectedEnemy": True
-                    if owner == "enemy"
-                    else False
-                    if owner == "friendly"
-                    else None,
-                },
-            )
-            if nxt is not None:
-                walk(node.get("effect"), nxt)
+            filt = selector["filter"] if _is_object(selector.get("filter")) else {}
+            owner = filt.get("owner")
+            selected: dict[str, Any] | None = {
+                **state,
+                "selectedEnemy": True
+                if owner == "enemy"
+                else False
+                if owner == "friendly"
+                else None,
+            }
+            # A selected enemy unit suffering the mortal wounds is the target: the rest of the
+            # filter is a fact about it.
+            if owner == "enemy" and selected is not None:
+                selected = reaches(filt, selected)
+            if selected is not None:
+                selected = decide(selector.get("eligibility"), selected)
+            if selected is not None:
+                walk(node.get("effect"), selected)
         elif node_type == "for-each-unit":
             selector = node["selector"] if _is_object(node.get("selector")) else {}
             filt = selector["filter"] if _is_object(selector.get("filter")) else {}
@@ -244,8 +265,12 @@ def mortal_wound_sources(
             walk(node.get("effect"), state)
         elif node_type == "choice":
             options = node.get("options")
+            limit = node.get("max_choices")
+            most = limit if _is_number(limit) else 1
             for index, option in enumerate(options if isinstance(options, list) else []):
-                walk(option, {**state, "id": f"{state['id']}?{index}"})
+                option_id = f"{state['id']}?{index}"
+                choice = {"group": f"{state['id']}?choice", "option": option_id, "max": most}
+                walk(option, {**state, "id": option_id, "choices": [*state["choices"], choice]})
         elif node_type == "dice-gated":
             success = _gate_probability(node)
             if success is None:
@@ -284,7 +309,8 @@ def mortal_wound_sources(
             report(node, f'mortal-wounds inside "{_js_str(node_type)}" are not modelled')
 
     start = enter_trigger(
-        trigger, {"probability": 1, "moment": None, "needs": [], "id": ability_id}
+        trigger,
+        {"probability": 1, "moment": None, "needs": [], "id": ability_id, "choices": []},
     )
     if start is not None:
         walk(effect, start)
@@ -498,3 +524,24 @@ def _contains_mortal_wounds(node: Any) -> bool:
     if node.get("type") == "mortal-wounds":
         return True
     return any(_contains_mortal_wounds(value) for value in node.values())
+
+
+def within_choice_limits(selected: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """The sources a selection keeps, in its order: a source whose option would take an enclosing
+    choice past its limit of options is left out. Sources under one option share its pick."""
+    picked: dict[str, set[str]] = {}
+    out: list[dict[str, Any]] = []
+    for source in selected:
+        choices = source.get("choices") or []
+        fits = all(
+            choice["group"] not in picked
+            or choice["option"] in picked[choice["group"]]
+            or len(picked[choice["group"]]) < choice["max"]
+            for choice in choices
+        )
+        if not fits:
+            continue
+        for choice in choices:
+            picked.setdefault(choice["group"], set()).add(choice["option"])
+        out.append(source)
+    return out

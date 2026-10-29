@@ -33,7 +33,7 @@ from wh40kdc.cruncher.engine import (
 from wh40kdc.cruncher.from_dsl import EffectTranslation, effect_to_buffs
 from wh40kdc.cruncher.from_keyword import ENGINE_DISPATCH_KEYWORDS, buffs_from_keyword
 from wh40kdc.cruncher.granted_records import GrantedRecordLookup, resolve_granted_records
-from wh40kdc.cruncher.mortal_sources import mortal_wound_sources
+from wh40kdc.cruncher.mortal_sources import mortal_wound_sources, within_choice_limits
 
 __all__ = [
     "ENGINE_DISPATCH_KEYWORDS",
@@ -65,4 +65,5 @@ __all__ = [
     "mortal_wound_sources",
     "resolve_buffs",
     "resolve_granted_records",
+    "within_choice_limits",
 ]

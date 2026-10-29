@@ -67,6 +67,11 @@ export function canonicalMortalSourceCases(ds: Dataset): (MortalSourceRow & { ex
     { caseId: "rating-count", abilityId: "a", effect: selectEnemy(mw({ count: { rating: true } })), rating: "D3+1", context: {} },
     { caseId: "unclear-target", abilityId: "a", effect: mw({ count: 1 }, "stratagem-target"), context: {} },
     { caseId: "unmodelled-container", abilityId: "a", effect: { type: "aura", effect: mw({ count: 1 }, "enemy-within-aura") }, context: {} },
+    { caseId: "choice-max-two", abilityId: "a", effect: { type: "choice", max_choices: 2, options: [selectEnemy(mw({ count: 1 })), { type: "choice", options: [selectEnemy(mw({ count: 2 })), selectEnemy(mw({ count: 3 }))] }] }, context: {} },
+    { caseId: "own-attack-roll-nested", abilityId: "a", effect: { type: "ability-part", trigger: { event: "after-roll", filter: { roll: "wound", result: "success" } }, effect: mw({ count: 1 }, "defender") }, context: {} },
+    { caseId: "own-attack-roll-record", abilityId: "a", trigger: { event: "after-roll", filter: { roll: "hit", result: "critical" } }, effect: mw({ count: 1 }, "defender"), context: {} },
+    { caseId: "selected-enemy-filter-excludes", abilityId: "a", trigger: charge, effect: { ...selectEnemy(mw({ count: 1 })), selector: { filter: { owner: "enemy", none_of: ["MONSTER", "VEHICLE"] }, count: { min: 1, max: 1 } } }, context: { targetKeywords: ["VEHICLE"] } },
+    { caseId: "selected-enemy-filter-holds", abilityId: "a", trigger: charge, effect: { ...selectEnemy(mw({ count: 1 })), selector: { filter: { owner: "enemy", none_of: ["MONSTER", "VEHICLE"] }, count: { min: 1, max: 1 } } }, context: { targetKeywords: ["INFANTRY"] } },
     { caseId: "count-from-roll", abilityId: "a", effect: selectEnemy({ type: "roll", dice: "D6", roll_var: "r", effect: mw({ count: { roll_var: "r" } }) }), context: {} },
   ];
   const dataset: MortalSourceRow[] = [
@@ -87,7 +92,7 @@ export function canonicalMortalSourceCases(ds: Dataset): (MortalSourceRow & { ex
     return {
       ...row,
       expected: {
-        sources: result.sources.map((source) => ({ id: source.id, moment: source.moment, expected: stable(source.expected), needKeys: source.needs.map((need) => need.key) })),
+        sources: result.sources.map((source) => ({ id: source.id, moment: source.moment, expected: stable(source.expected), needKeys: source.needs.map((need) => need.key), ...(source.choices ? { choices: source.choices } : {}) })),
         unsupportedReasons: result.unsupported.map((fragment) => fragment.reason),
       },
     };

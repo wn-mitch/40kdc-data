@@ -1,7 +1,7 @@
 <script lang="ts">
   import { salvo } from "./store.svelte.js";
   import { momentLabel } from "./scenario.js";
-  import type { MortalSourceChoice } from "./output-model.js";
+  import { mortalSourceBlocked, type MortalSourceChoice } from "./output-model.js";
 
   let { sources, unverified = [], error }: { sources: MortalSourceChoice[]; unverified?: string[]; error?: string } = $props();
 
@@ -22,8 +22,9 @@
   <p class="hint dim">Abilities that inflict mortal wounds outside the attack. Tick the ones that happen to count them in the total.</p>
   <div class="ability-list">
     {#each sources as source (source.key)}
-      <label class="ability-row" class:active={active.has(source.key)}>
-        <input type="checkbox" checked={active.has(source.key)} onchange={() => toggle(source.key)} />
+      {@const blocked = mortalSourceBlocked(source, sources, active)}
+      <label class="ability-row" class:active={active.has(source.key)} title={blocked ? "Another option of this choice is already ticked" : undefined}>
+        <input type="checkbox" checked={active.has(source.key)} disabled={blocked} onchange={() => toggle(source.key)} />
         <span class="name">
           {source.label}
           <small>· {momentLabel(source.moment)} · {source.expected.toFixed(2)} expected{source.cp !== undefined ? ` · ${source.cp} CP` : ""}</small>

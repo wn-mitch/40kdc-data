@@ -28,6 +28,7 @@ mod js;
 mod leaves;
 mod levers;
 mod roll_mortals;
+pub use roll_mortals::is_own_attack_roll_trigger;
 mod selection;
 
 use serde::{Deserialize, Serialize};
@@ -200,7 +201,7 @@ pub(crate) struct WalkOpts<'a> {
     /// ([`gated::self_designations`]).
     self_designations: &'a std::collections::BTreeSet<String>,
     /// Inside a part triggered by each hit or wound roll of the attack: that roll and its outcome.
-    attack_roll: Option<roll_mortals::AttackRollRef>,
+    attack_roll: Option<roll_mortals::AttackRoll>,
 }
 
 const STOCHASTIC_DICE_GATED: &str = "dice-gated effect: stochastic; not expressible as a buff";
@@ -239,7 +240,7 @@ pub fn effect_to_buffs(
     context: &EngineContext,
     perspective: TranslationPerspective,
 ) -> EffectTranslation {
-    effect_to_buffs_with_duration(effect, source, context, perspective, None, None)
+    effect_to_buffs_with_duration(effect, source, context, perspective, None, None, None)
 }
 
 /// Translate an effect while retaining the owning ability's lifetime for activation gates. Every
@@ -251,8 +252,17 @@ pub(crate) fn effect_to_buffs_with_duration(
     perspective: TranslationPerspective,
     duration: Option<&Value>,
     usage: Option<&Value>,
+    trigger: Option<&Value>,
 ) -> EffectTranslation {
-    let mut out = translate_effect(effect, source, context, perspective, duration, usage);
+    let mut out = translate_effect(
+        effect,
+        source,
+        context,
+        perspective,
+        duration,
+        usage,
+        trigger,
+    );
     for fragment in &mut out.unsupported {
         fragment.scope = Some(scope_of(fragment, source, context, perspective, 0));
     }
@@ -287,7 +297,15 @@ fn scope_of(
                 && is_str(node, "type", "conditional")
                 && node.get("effect").is_some() =>
         {
-            translate_effect(&node["effect"], source, context, perspective, None, None)
+            translate_effect(
+                &node["effect"],
+                source,
+                context,
+                perspective,
+                None,
+                None,
+                None,
+            )
         }
         _ => return UnsupportedScope::Unresolved,
     };
@@ -311,6 +329,7 @@ fn translate_effect(
     perspective: TranslationPerspective,
     duration: Option<&Value>,
     usage: Option<&Value>,
+    trigger: Option<&Value>,
 ) -> EffectTranslation {
     let effect = strip_nulls(effect);
     let effect = if recipient_snapshot_reason(None, &effect).is_some() {
@@ -348,7 +367,7 @@ fn translate_effect(
     };
     let source_value = serde_json::to_value(source).expect("a buff source serializes");
     let self_designations = gated::self_designations(&effect, ability_id);
-    let opts = WalkOpts {
+    let mut opts = WalkOpts {
         context,
         perspective,
         ability_id,
@@ -360,6 +379,14 @@ fn translate_effect(
         granted_holder: false,
         self_designations: &self_designations,
         attack_roll: None,
+    };
+    // The record's own hit or wound trigger is the roll its effect acts on, as an ability part's is.
+    let effect = match roll_mortals::on_attack_roll(trigger, &effect) {
+        Some((gated, roll)) => {
+            opts.attack_roll = Some(roll);
+            gated
+        }
+        None => effect,
     };
     let mut out = Out::default();
     walk(&effect, &opts, &mut out);
@@ -714,8 +741,13 @@ fn dispatch(node: &Obj, opts: &WalkOpts, out: &mut Out) {
             if let Some(usage) = present(node, "usage") {
                 part_opts.usage = Some(usage.clone());
             }
-            if let Some(roll) = roll_mortals::attack_roll_of(node.get("trigger")) {
+            let mut part = std::borrow::Cow::Borrowed(node);
+            if let Some((effect, roll)) = roll_mortals::on_attack_roll(
+                node.get("trigger"),
+                node.get("effect").unwrap_or(&Value::Null),
+            ) {
                 part_opts.attack_roll = Some(roll);
+                part.to_mut().insert("effect".into(), effect);
             }
             // A part firing on its own moment is gated like a timing-is step; one with only a
             // cost, a choice or a usage limit is an activation, as a named effect is.
@@ -723,9 +755,9 @@ fn dispatch(node: &Obj, opts: &WalkOpts, out: &mut Out) {
                 || present(node, "cost").is_some()
                 || present(node, "usage").is_some();
             if activation {
-                levers::named_effect(node, &part_opts, out);
+                levers::named_effect(&part, &part_opts, out);
             } else {
-                let effect = node.get("effect").cloned().unwrap_or(Value::Null);
+                let effect = part.get("effect").cloned().unwrap_or(Value::Null);
                 let gated = levers::moment_gate_with_source(
                     node.get("trigger"),
                     &effect,

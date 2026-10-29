@@ -669,6 +669,7 @@ fn activation_clock_elision_requires_a_crossed_lifetime() {
         TranslationPerspective::Attacker,
         Some(&json!("turn")),
         None,
+        None,
     );
     assert!(lasting.applied.is_empty());
     assert_eq!(lasting.activatable.len(), 1);
@@ -716,6 +717,7 @@ fn lasting_activation_keeps_known_false_nonclock_guards() {
         &context,
         TranslationPerspective::Attacker,
         Some(&json!("turn")),
+        None,
         None,
     );
     assert!(result.applied.is_empty());

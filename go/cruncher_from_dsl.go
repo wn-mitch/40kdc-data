@@ -56,8 +56,12 @@ type dslOpts struct {
 }
 
 // attackRollInfo is the hit or wound roll a single after-roll trigger fires on; outcome is ""
-// when the trigger does not state one.
-type attackRollInfo struct{ roll, outcome string }
+// when the trigger does not state one, and unmodelled names the trigger's narrowing the attack
+// cannot carry.
+type attackRollInfo struct {
+	roll, outcome string
+	unmodelled    []string
+}
 
 // effectToBuffs walks an ability DSL effect tree, producing the buff stack plus
 // unsupported and activatable lists, each unsupported fragment carrying its "scope". An optional
@@ -130,6 +134,11 @@ func translateEffect(effect any, source map[string]any, context map[string]any, 
 	if act != nil {
 		opts.duration = act["duration"]
 		opts.usage = act["usage"]
+		// The record's own hit or wound trigger is the roll its effect acts on, as an ability part's is.
+		if gated, roll := onAttackRoll(act["trigger"], effect); roll != nil {
+			opts.attackRoll = roll
+			effect = gated
+		}
 	}
 	dslWalk(effect, source, opts, out)
 	if act == nil || (act["usage"] == nil && act["cost"] == nil && act["optional"] != true) {
@@ -137,6 +146,7 @@ func translateEffect(effect any, source map[string]any, context map[string]any, 
 	}
 	requirement := cloneMap(act)
 	delete(requirement, "duration")
+	delete(requirement, "trigger")
 	requires := []any{requirement}
 	var counts []float64
 	for _, raw := range getListValue(act["usage"]) {
@@ -415,15 +425,18 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 				return
 			}
 		}
-		if roll := attackRollOf(n["trigger"]); roll != nil {
+		part := n
+		if effect, roll := onAttackRoll(n["trigger"], n["effect"]); roll != nil {
 			partOpts.attackRoll = roll
+			part = cloneMap(n)
+			part["effect"] = effect
 		}
 		// A part with its own optionality, cost or usage is an activation.
 		// Otherwise its trigger is only the moment at which its effect fires.
 		if n["optional"] == true || n["cost"] != nil || n["usage"] != nil {
-			translateNamedEffect(n, source, partOpts, out)
+			translateNamedEffect(part, source, partOpts, out)
 		} else {
-			dslWalk(momentGate(n["trigger"], n["effect"], n), source, partOpts, out)
+			dslWalk(momentGate(part["trigger"], part["effect"], n), source, partOpts, out)
 		}
 	case "choice":
 		enumerateChoice(n, source, opts, out)
@@ -1324,7 +1337,12 @@ func collectGatedBuffs(node any, source map[string]any, opts dslOpts, applicabil
 			partOpts.duration = n["duration"]
 		}
 		if n["trigger"] != nil || (n["optional"] != true && n["cost"] == nil && n["usage"] == nil) {
-			collectGatedBuffs(momentGate(n["trigger"], n["effect"], n), source, partOpts, applicability, outBuffs, diagnostics, stance)
+			effect := n["effect"]
+			if gated, roll := onAttackRoll(n["trigger"], effect); roll != nil {
+				partOpts.attackRoll = roll
+				effect = gated
+			}
+			collectGatedBuffs(momentGate(n["trigger"], effect, n), source, partOpts, applicability, outBuffs, diagnostics, stance)
 		}
 		return
 	case "choice", "dice-pool-allocation", "dice-gated":

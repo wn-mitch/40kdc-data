@@ -174,6 +174,8 @@ def _translate_effect(
         # Tags the owning ability designates on the units holding it.
         "selfDesignations": self_designations(effect, ability_id),
     }
+    # The record's own hit or wound trigger is the roll its effect acts on, as an ability part's is.
+    effect, opts = _on_attack_roll(activation.get("trigger") if activation else None, effect, opts)
     _walk(effect, source, opts, out)
     if activation and (
         activation.get("usage") is not None
@@ -208,7 +210,11 @@ def _translate_effect(
                     lever["groups"] = [*(lever.get("groups") or []), group]
                 else:
                     lever["group"] = group
-            requirement = {key: value for key, value in activation.items() if key != "duration"}
+            requirement = {
+                key: value
+                for key, value in activation.items()
+                if key not in ("duration", "trigger")
+            }
             lever["requires"] = [requirement, *(lever.get("requires") or [])]
     return out
 
@@ -513,16 +519,16 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
             "duration": node.get("duration", opts.get("duration")),
             "usage": opts.get("usage") if node.get("usage") is None else node["usage"],
         }
-        attack_roll = _attack_roll_of(node.get("trigger"))
-        step_opts = {**part_opts, "attackRoll": attack_roll} if attack_roll else part_opts
+        step_effect, step_opts = _on_attack_roll(node.get("trigger"), node.get("effect"), part_opts)
+        part = node if step_effect is node.get("effect") else {**node, "effect": step_effect}
         if (
             node.get("optional") is True
             or node.get("cost") is not None
             or node.get("usage") is not None
         ):
-            _translate_named_effect(node, source, step_opts, out)
+            _translate_named_effect(part, source, step_opts, out)
         else:
-            gated = moment_gate(node.get("trigger"), node.get("effect"), node)
+            gated = moment_gate(part.get("trigger"), part.get("effect"), node)
             _walk(gated, source, step_opts, out)
     elif node_type == "choice":
         # Player decision — each branch becomes an opt-in lever (pick one).
@@ -2180,6 +2186,65 @@ def _attack_roll_of(trigger: Any) -> dict[str, Any] | None:
     return {"roll": roll, "outcome": result}
 
 
+#: Who makes a hit or wound roll the attack's own: the unit or model holding the ability.
+_ROLLING_SUBJECTS: frozenset[str] = frozenset({"this-unit", "this-model", "bearer"})
+
+
+def is_own_attack_roll_trigger(trigger: Any) -> bool:
+    """Whether a trigger fires on a hit or wound roll of the unit's own attacks, whatever its
+    outcome: mortal wounds there belong to the attack, never to a moment outside it."""
+    if (
+        not _is_object(trigger)
+        or trigger.get("event") != "after-roll"
+        or not _is_object(trigger.get("filter"))
+    ):
+        return False
+    if trigger["filter"].get("roll") not in ("hit", "wound"):
+        return False
+    subject = trigger.get("subject")
+    return subject is None or (isinstance(subject, str) and subject in _ROLLING_SUBJECTS)
+
+
+def _on_attack_roll(trigger: Any, effect: Any, opts: dict[str, Any]) -> tuple[Any, dict[str, Any]]:
+    """An effect under a hit or wound trigger and the walk options carrying that roll. The
+    trigger's attack type and weapon scope narrow which attacks fire it, so they gate the effect
+    as an ``attack-is`` condition; any other narrowing (another filter key, another unit rolling,
+    an object) is named in the roll's ``unmodelled``. Under any other trigger both are returned
+    unchanged."""
+    roll = _attack_roll_of(trigger)
+    if roll is None:
+        return effect, opts
+    parameters: dict[str, Any] = {}
+    unmodelled: list[str] = []
+    # Keys in sorted order, so every port names them alike.
+    for key, value in sorted(trigger["filter"].items()):
+        if key in ("roll", "result"):
+            continue
+        if key == "attack_type" and value in ("ranged", "melee"):
+            parameters["attack_type"] = value
+        elif key == "weapons":
+            parameters["weapons"] = value
+        else:
+            unmodelled.append(f"filter.{key}")
+    subject = trigger.get("subject")
+    if subject is not None and not (isinstance(subject, str) and subject in _ROLLING_SUBJECTS):
+        unmodelled.append("subject")
+    if trigger.get("object") is not None:
+        unmodelled.append("object")
+    gated = (
+        {
+            "type": "conditional",
+            "condition": {"type": "attack-is", "parameters": parameters},
+            "effect": effect,
+        }
+        if parameters
+        else effect
+    )
+    if unmodelled:
+        roll = {**roll, "unmodelled": unmodelled}
+    return gated, {**opts, "attackRoll": roll}
+
+
 def _translate_mortal_wounds(
     node: dict[str, Any], source: BuffSource, opts: dict[str, Any], out: EffectTranslation
 ) -> None:
@@ -2207,6 +2272,17 @@ def _translate_mortal_wounds(
             {
                 "reason": (
                     "mortal-wounds: the attack's rolls inflict them on a unit other than the target"
+                ),
+                "effectFragment": node,
+            }
+        )
+        return
+    if roll.get("unmodelled"):
+        out["unsupported"].append(
+            {
+                "reason": (
+                    f"mortal-wounds: the {roll['roll']} roll's trigger "
+                    f"{', '.join(roll['unmodelled'])} is not modelled"
                 ),
                 "effectFragment": node,
             }
@@ -2905,10 +2981,13 @@ def _collect_gated_buffs(
             and node.get("cost") is None
             and node.get("usage") is None
         ):
+            step_effect, step_opts = _on_attack_roll(
+                node.get("trigger"), node.get("effect"), part_opts
+            )
             _collect_gated_buffs(
-                moment_gate(node.get("trigger"), node.get("effect"), node),
+                moment_gate(node.get("trigger"), step_effect, node),
                 source,
-                part_opts,
+                step_opts,
                 applicability,
                 out_buffs,
                 diagnostics,
@@ -3604,9 +3683,7 @@ def _evaluate_condition_from_context(
         moved = evaluate_own_move(p, ctx, _condition_side(p.get("subject"), perspective))
         if moved is not None:
             return moved
-        phase_event = evaluate_phase_event(
-            p, ctx, lambda ref: _condition_side(ref, perspective)
-        )
+        phase_event = evaluate_phase_event(p, ctx, lambda ref: _condition_side(ref, perspective))
         if phase_event is not None:
             return phase_event
         filt = p.get("filter")
@@ -3911,9 +3988,7 @@ def _attachment_from_flags(
         source_id = source.get("sourceUnitId")
         roles = ctx.get("attachmentRoles")
         role = roles.get(source_id) if _is_object(roles) and source_id is not None else None
-        attached = (
-            True if source.get("abilityKind") == "attached" or role is not None else None
-        )
+        attached = True if source.get("abilityKind") == "attached" or role is not None else None
     if attached is False:
         return False
     wanted_role = p.get("role")

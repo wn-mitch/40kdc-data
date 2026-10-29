@@ -373,10 +373,32 @@ fn mortal_sources_match_the_goldens() {
                 let keys: Vec<&str> = got.needs.iter().map(|need| need.key.as_str()).collect();
                 let want_moment = want["moment"].as_str();
                 let want_expected = want["expected"].as_f64().expect("expected number");
+                let want_choices: Vec<(&str, &str, f64)> = want
+                    .get("choices")
+                    .and_then(Value::as_array)
+                    .map(|choices| {
+                        choices
+                            .iter()
+                            .map(|c| {
+                                (
+                                    c["group"].as_str().unwrap(),
+                                    c["option"].as_str().unwrap(),
+                                    c["max"].as_f64().unwrap(),
+                                )
+                            })
+                            .collect()
+                    })
+                    .unwrap_or_default();
+                let got_choices: Vec<(&str, &str, f64)> = got
+                    .choices
+                    .iter()
+                    .map(|c| (c.group.as_str(), c.option.as_str(), c.max))
+                    .collect();
                 if got.id != want["id"].as_str().unwrap()
                     || got.moment.as_deref() != want_moment
                     || json!(keys) != want["needKeys"]
                     || (got.expected - want_expected).abs() > 1e-9
+                    || got_choices != want_choices
                 {
                     problems.push(format!(
                         "source\n  want: {want}\n  got:  {} {:?} {} {keys:?}",

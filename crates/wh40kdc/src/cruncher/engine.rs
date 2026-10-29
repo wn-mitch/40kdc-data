@@ -990,6 +990,30 @@ pub fn crunch_model(
             entry.count * triggers
         })
         .sum();
+    // One gated on a critical wound is only in that resolution and fires on the attacks scoring
+    // one: every such attack hit, and a critical hit wounds as any hit does unless Lethal Hits
+    // skipped its roll.
+    let crit_hit_share = if has_lethal || hits_for_wound_roll <= 0.0 {
+        0.0
+    } else {
+        crit_hits / hits_for_wound_roll
+    };
+    let critical_mortals: f64 = critical
+        .as_ref()
+        .map(|critical| critical_only_entries(&resolved.roll_mortals, &critical.roll_mortals))
+        .unwrap_or_default()
+        .into_iter()
+        .map(|entry| {
+            let triggers = match (entry.roll, entry.outcome) {
+                (super::buffs::AttackRoll::Hit, super::buffs::RollOutcome::Critical) => {
+                    crit_wounds_from_roll * crit_hit_share
+                }
+                _ => crit_wounds_from_roll,
+            };
+            entry.count * triggers
+        })
+        .sum();
+    let roll_mortals = roll_mortals + critical_mortals;
     damage_mortal += roll_mortals;
     let damage = damage_main + damage_mortal;
     stages.push(Stage {
@@ -1541,4 +1565,32 @@ mod tests {
         assert_eq!(wound_threshold(3.0, 4.0), 5); // S*2 > T
         assert_eq!(wound_threshold(2.0, 5.0), 6); // bottom of table
     }
+}
+
+/// The entries of the critical-wound resolution that the ordinary one lacks: those gated on a
+/// critical wound. Both resolve the same buffs, so an entry is matched by its source, roll,
+/// outcome and count, each match consuming one ordinary entry. Mirrors `criticalOnlyEntries`.
+fn critical_only_entries<'a>(
+    ordinary: &[super::resolved::RollMortals],
+    critical: &'a [super::resolved::RollMortals],
+) -> Vec<&'a super::resolved::RollMortals> {
+    let mut unmatched: Vec<&super::resolved::RollMortals> = ordinary.iter().collect();
+    critical
+        .iter()
+        .filter(|entry| {
+            let found = unmatched.iter().position(|other| {
+                other.source == entry.source
+                    && other.roll == entry.roll
+                    && other.outcome == entry.outcome
+                    && other.count == entry.count
+            });
+            match found {
+                Some(index) => {
+                    unmatched.remove(index);
+                    false
+                }
+                None => true,
+            }
+        })
+        .collect()
 }

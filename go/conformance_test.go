@@ -450,6 +450,13 @@ func TestMortalSourcesCorpus(t *testing.T) {
 			if gotKeys, wantKeys := canon(t, keys), canon(t, orEmpty(getList(w, "needKeys"))); gotKeys != wantKeys {
 				t.Errorf("%s[%d] needKeys = %s, want %s", name, i, gotKeys, wantKeys)
 			}
+			choices := []any{}
+			for _, choice := range g.Choices {
+				choices = append(choices, map[string]any{"group": choice.Group, "option": choice.Option, "max": choice.Max})
+			}
+			if gotChoices, wantChoices := canon(t, choices), canon(t, orEmpty(getList(w, "choices"))); gotChoices != wantChoices {
+				t.Errorf("%s[%d] choices = %s, want %s", name, i, gotChoices, wantChoices)
+			}
 		}
 		reasons := []any{}
 		for _, u := range got.Unsupported {

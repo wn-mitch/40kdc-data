@@ -237,7 +237,7 @@ export function effectToBuffs(
   source: BuffSource,
   context: EngineContext,
   perspective: TranslationPerspective = "attacker",
-  activation?: { usage?: unknown; cost?: unknown; optional?: boolean; duration?: unknown },
+  activation?: { usage?: unknown; cost?: unknown; optional?: boolean; duration?: unknown; trigger?: unknown },
 ): EffectTranslation {
   const out = translateEffect(effect, source, context, perspective, activation);
   for (const fragment of out.unsupported) fragment.scope = scopeOf(fragment, source, context, perspective, 0);
@@ -267,7 +267,7 @@ function translateEffect(
   source: BuffSource,
   context: EngineContext,
   perspective: TranslationPerspective,
-  activation?: { usage?: unknown; cost?: unknown; optional?: boolean; duration?: unknown },
+  activation?: { usage?: unknown; cost?: unknown; optional?: boolean; duration?: unknown; trigger?: unknown },
 ): EffectTranslation {
   const out: EffectTranslation = { applied: [], unsupported: [], activatable: [] };
   if (recipientSnapshotReason(undefined, effect)) {
@@ -284,9 +284,11 @@ function translateEffect(
     if (activation) activationSources.set(to, activation);
   });
   const abilityId = source.kind === "ability" ? source.abilityId : "effect";
-  walk(effect, source, { context, perspective, abilityId, duration: activation?.duration, usage: activation?.usage, selfDesignations: selfDesignations(effect, abilityId) }, out);
+  // The record's own hit or wound trigger is the roll its effect acts on, as an ability part's is.
+  const step = onAttackRoll(activation?.trigger, effect, { context, perspective, abilityId, duration: activation?.duration, usage: activation?.usage, selfDesignations: selfDesignations(effect, abilityId) });
+  walk(step.effect, source, step.opts, out);
   if (activation?.usage != null || activation?.cost != null || activation?.optional === true) {
-    const { duration: _duration, ...requirement } = activation;
+    const { duration: _duration, trigger: _trigger, ...requirement } = activation;
     const requires = [requirement];
     const limits = (Array.isArray(activation.usage) ? activation.usage : [activation.usage]).filter(isObject);
     const counts = limits.filter((limit) => limit.per !== "model").map((limit) =>
@@ -318,7 +320,8 @@ type WalkOpts = {
   /** Tags the owning ability designates on the units holding it ({@link selfDesignations}). */
   selfDesignations?: ReadonlySet<string>;
   /** Inside a part triggered by each hit or wound roll of the attack, that roll and its outcome. */
-  attackRoll?: { roll: "hit" | "wound"; outcome: "success" | "critical" | undefined };
+  /** The hit or wound roll an enclosing trigger fires on; `unmodelled` names its narrowing the attack cannot carry. */
+  attackRoll?: { roll: "hit" | "wound"; outcome: "success" | "critical" | undefined; unmodelled?: string[] };
 };
 
 function walk(
@@ -474,12 +477,12 @@ function walk(
           return;
         }
       }
-      const attackRoll = attackRollOf(currentNode.trigger);
-      const stepOpts = attackRoll ? { ...partOpts, attackRoll } : partOpts;
+      const step = onAttackRoll(currentNode.trigger, currentNode.effect, partOpts);
+      const part = step.effect === currentNode.effect ? currentNode : { ...currentNode, effect: step.effect };
       if (currentNode.optional === true || currentNode.cost != null || currentNode.usage != null) {
-        translateNamedEffect(currentNode, source, stepOpts, out);
+        translateNamedEffect(part, source, step.opts, out);
       } else {
-        walk(momentGate(currentNode.trigger, currentNode.effect, currentNode), source, stepOpts, out);
+        walk(momentGate(part.trigger, part.effect, currentNode), source, step.opts, out);
       }
       return;
     }
@@ -1849,6 +1852,43 @@ function attackRollOf(trigger: unknown): WalkOpts["attackRoll"] {
   return { roll, outcome: result };
 }
 
+/** Who makes a hit or wound roll the attack's own: the unit or model holding the ability. */
+const ROLLING_SUBJECTS: ReadonlySet<string> = new Set(["this-unit", "this-model", "bearer"]);
+
+/**
+ * Whether a trigger fires on a hit or wound roll of the unit's own attacks, whatever its outcome:
+ * mortal wounds there belong to the attack, never to a moment outside it.
+ */
+export function isOwnAttackRollTrigger(trigger: unknown): boolean {
+  if (!isObject(trigger) || trigger.event !== "after-roll" || !isObject(trigger.filter)) return false;
+  if (trigger.filter.roll !== "hit" && trigger.filter.roll !== "wound") return false;
+  return trigger.subject == null || (typeof trigger.subject === "string" && ROLLING_SUBJECTS.has(trigger.subject));
+}
+
+/**
+ * An effect under a hit or wound trigger and the walk options carrying that roll. The trigger's
+ * attack type and weapon scope narrow which attacks fire it, so they gate the effect as an
+ * `attack-is` condition; any other narrowing (another filter key, another unit rolling, an object)
+ * is named in the roll's `unmodelled`. Under any other trigger both are returned unchanged.
+ */
+function onAttackRoll(trigger: unknown, effect: unknown, opts: WalkOpts): { effect: unknown; opts: WalkOpts } {
+  const roll = attackRollOf(trigger);
+  if (!roll || !isObject(trigger) || !isObject(trigger.filter)) return { effect, opts };
+  const parameters: Record<string, unknown> = {};
+  const unmodelled: string[] = [];
+  // Keys in sorted order, so every port names them alike.
+  for (const [key, value] of Object.entries(trigger.filter).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))) {
+    if (key === "roll" || key === "result") continue;
+    if (key === "attack_type" && (value === "ranged" || value === "melee")) parameters.attack_type = value;
+    else if (key === "weapons") parameters.weapons = value;
+    else unmodelled.push(`filter.${key}`);
+  }
+  if (trigger.subject != null && !(typeof trigger.subject === "string" && ROLLING_SUBJECTS.has(trigger.subject))) unmodelled.push("subject");
+  if (trigger.object != null) unmodelled.push("object");
+  const gated = Object.keys(parameters).length > 0 ? { type: "conditional", condition: { type: "attack-is", parameters }, effect } : effect;
+  return { effect: gated, opts: { ...opts, attackRoll: unmodelled.length > 0 ? { ...roll, unmodelled } : roll } };
+}
+
 /**
  * Mortal wounds an attack's own hit or wound roll inflicts on the target. Mortal wounds outside an
  * attack are not a buff: {@link Dataset.mortalWoundSourcesFor} reports them.
@@ -1865,6 +1905,10 @@ function translateMortalWounds(node: Record<string, unknown>, source: BuffSource
   }
   if (classifyTarget(node) !== "defender") {
     out.unsupported.push({ reason: "mortal-wounds: the attack's rolls inflict them on a unit other than the target", effectFragment: node });
+    return;
+  }
+  if (roll.unmodelled) {
+    out.unsupported.push({ reason: `mortal-wounds: the ${roll.roll} roll's trigger ${roll.unmodelled.join(", ")} is not modelled`, effectFragment: node });
     return;
   }
   if (opts.perspective !== "attacker") return;
@@ -2274,7 +2318,8 @@ function collectGatedBuffs(
     case "ability-part": {
       const partOpts = node.duration === undefined ? opts : { ...opts, duration: node.duration };
       if (node.trigger != null || (node.optional !== true && node.cost == null && node.usage == null)) {
-        collectGatedBuffs(momentGate(node.trigger, node.effect, node), source, partOpts, applicability, outBuffs, diagnostics, stance);
+        const step = onAttackRoll(node.trigger, node.effect, partOpts);
+        collectGatedBuffs(momentGate(node.trigger, step.effect, node), source, step.opts, applicability, outBuffs, diagnostics, stance);
       }
       return;
     }

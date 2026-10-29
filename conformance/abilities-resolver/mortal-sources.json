@@ -626,13 +626,27 @@
             "id": "a?0",
             "moment": null,
             "expected": 1.333333333333,
-            "needKeys": []
+            "needKeys": [],
+            "choices": [
+              {
+                "group": "a?choice",
+                "option": "a?0",
+                "max": 1
+              }
+            ]
           },
           {
             "id": "a?1",
             "moment": null,
             "expected": 2,
-            "needKeys": []
+            "needKeys": [],
+            "choices": [
+              {
+                "group": "a?choice",
+                "option": "a?1",
+                "max": 1
+              }
+            ]
           }
         ],
         "unsupportedReasons": []
@@ -1216,6 +1230,277 @@
       }
     },
     {
+      "caseId": "choice-max-two",
+      "abilityId": "a",
+      "effect": {
+        "type": "choice",
+        "max_choices": 2,
+        "options": [
+          {
+            "type": "select-units",
+            "selector": {
+              "filter": {
+                "owner": "enemy"
+              },
+              "count": {
+                "min": 1,
+                "max": 1
+              }
+            },
+            "effect": {
+              "type": "mortal-wounds",
+              "target": "selected-unit",
+              "modifier": {
+                "count": 1
+              }
+            }
+          },
+          {
+            "type": "choice",
+            "options": [
+              {
+                "type": "select-units",
+                "selector": {
+                  "filter": {
+                    "owner": "enemy"
+                  },
+                  "count": {
+                    "min": 1,
+                    "max": 1
+                  }
+                },
+                "effect": {
+                  "type": "mortal-wounds",
+                  "target": "selected-unit",
+                  "modifier": {
+                    "count": 2
+                  }
+                }
+              },
+              {
+                "type": "select-units",
+                "selector": {
+                  "filter": {
+                    "owner": "enemy"
+                  },
+                  "count": {
+                    "min": 1,
+                    "max": 1
+                  }
+                },
+                "effect": {
+                  "type": "mortal-wounds",
+                  "target": "selected-unit",
+                  "modifier": {
+                    "count": 3
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "context": {},
+      "expected": {
+        "sources": [
+          {
+            "id": "a?0",
+            "moment": null,
+            "expected": 1,
+            "needKeys": [],
+            "choices": [
+              {
+                "group": "a?choice",
+                "option": "a?0",
+                "max": 2
+              }
+            ]
+          },
+          {
+            "id": "a?1?0",
+            "moment": null,
+            "expected": 2,
+            "needKeys": [],
+            "choices": [
+              {
+                "group": "a?choice",
+                "option": "a?1",
+                "max": 2
+              },
+              {
+                "group": "a?1?choice",
+                "option": "a?1?0",
+                "max": 1
+              }
+            ]
+          },
+          {
+            "id": "a?1?1",
+            "moment": null,
+            "expected": 3,
+            "needKeys": [],
+            "choices": [
+              {
+                "group": "a?choice",
+                "option": "a?1",
+                "max": 2
+              },
+              {
+                "group": "a?1?choice",
+                "option": "a?1?1",
+                "max": 1
+              }
+            ]
+          }
+        ],
+        "unsupportedReasons": []
+      }
+    },
+    {
+      "caseId": "own-attack-roll-nested",
+      "abilityId": "a",
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "after-roll",
+          "filter": {
+            "roll": "wound",
+            "result": "success"
+          }
+        },
+        "effect": {
+          "type": "mortal-wounds",
+          "target": "defender",
+          "modifier": {
+            "count": 1
+          }
+        }
+      },
+      "context": {},
+      "expected": {
+        "sources": [],
+        "unsupportedReasons": []
+      }
+    },
+    {
+      "caseId": "own-attack-roll-record",
+      "abilityId": "a",
+      "trigger": {
+        "event": "after-roll",
+        "filter": {
+          "roll": "hit",
+          "result": "critical"
+        }
+      },
+      "effect": {
+        "type": "mortal-wounds",
+        "target": "defender",
+        "modifier": {
+          "count": 1
+        }
+      },
+      "context": {},
+      "expected": {
+        "sources": [],
+        "unsupportedReasons": []
+      }
+    },
+    {
+      "caseId": "selected-enemy-filter-excludes",
+      "abilityId": "a",
+      "trigger": {
+        "event": "move-ended",
+        "filter": {
+          "move_types": [
+            "charge"
+          ]
+        }
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy",
+            "none_of": [
+              "MONSTER",
+              "VEHICLE"
+            ]
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        },
+        "effect": {
+          "type": "mortal-wounds",
+          "target": "selected-unit",
+          "modifier": {
+            "count": 1
+          }
+        }
+      },
+      "context": {
+        "targetKeywords": [
+          "VEHICLE"
+        ]
+      },
+      "expected": {
+        "sources": [],
+        "unsupportedReasons": []
+      }
+    },
+    {
+      "caseId": "selected-enemy-filter-holds",
+      "abilityId": "a",
+      "trigger": {
+        "event": "move-ended",
+        "filter": {
+          "move_types": [
+            "charge"
+          ]
+        }
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy",
+            "none_of": [
+              "MONSTER",
+              "VEHICLE"
+            ]
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        },
+        "effect": {
+          "type": "mortal-wounds",
+          "target": "selected-unit",
+          "modifier": {
+            "count": 1
+          }
+        }
+      },
+      "context": {
+        "targetKeywords": [
+          "INFANTRY"
+        ]
+      },
+      "expected": {
+        "sources": [
+          {
+            "id": "a",
+            "moment": "move-ended:charge",
+            "expected": 1,
+            "needKeys": []
+          }
+        ],
+        "unsupportedReasons": []
+      }
+    },
+    {
       "caseId": "count-from-roll",
       "abilityId": "a",
       "effect": {
@@ -1349,6 +1634,7 @@
             "moment": "phase-started",
             "expected": 5,
             "needKeys": [
+              "attacker:{\"parameters\":{\"filter\":{\"within\":{\"of\":\"this-unit\",\"range\":{\"inches\":3}}},\"subject\":\"target\"},\"type\":\"matches\"}",
               "attacker:{\"parameters\":{\"filter\":{\"any_of\":[\"MONSTER\",\"VEHICLE\"]},\"subject\":\"selected-unit\"},\"type\":\"matches\"}"
             ]
           }

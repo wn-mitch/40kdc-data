@@ -166,11 +166,18 @@ def test_mortal_wound_sources(dataset: Any, case: dict[str, Any]) -> None:
             "id": s["id"],
             "moment": s["moment"],
             "needKeys": [n["key"] for n in s["needs"]],
+            "choices": s.get("choices"),
         }
         for s in result["sources"]
     ]
     assert got == [
-        {"id": s["id"], "moment": s["moment"], "needKeys": s["needKeys"]} for s in want["sources"]
+        {
+            "id": s["id"],
+            "moment": s["moment"],
+            "needKeys": s["needKeys"],
+            "choices": s.get("choices"),
+        }
+        for s in want["sources"]
     ]
     for found, expected in zip(result["sources"], want["sources"], strict=True):
         assert found["expected"] == pytest.approx(expected["expected"], abs=1e-9), found["id"]

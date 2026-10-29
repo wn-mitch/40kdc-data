@@ -14,8 +14,8 @@ use serde_json::{json, Map, Value};
 use super::buffs::EngineContext;
 use super::condition_facts::{condition_needs, ConditionNeed};
 use super::damage_roll::quantity_distribution;
-use super::from_dsl::conditions::evaluate_condition;
-use super::from_dsl::{TranslationPerspective, UnsupportedFragment};
+use super::from_dsl::conditions::{evaluate_condition, matches_unit_filter};
+use super::from_dsl::{is_own_attack_roll_trigger, TranslationPerspective, UnsupportedFragment};
 
 type Obj = Map<String, Value>;
 type Dist = Vec<(f64, f64)>;
@@ -33,6 +33,17 @@ pub struct MortalWoundSource {
     pub expected: f64,
     /// Leaf conditions the context leaves undecided; answering one false removes the source.
     pub needs: Vec<ConditionNeed>,
+    /// Each enclosing `choice`, outermost first: picking this source picks its option.
+    pub choices: Vec<MortalChoice>,
+}
+
+/// An enclosing `choice` of a source: its pool, the option the source is under, and how many
+/// options it allows.
+#[derive(Clone, Debug, PartialEq, serde::Serialize, serde::Deserialize)]
+pub struct MortalChoice {
+    pub group: String,
+    pub option: String,
+    pub max: f64,
 }
 
 /// The sources an effect yields and the fragments that could not be modelled.
@@ -54,6 +65,7 @@ struct WalkState {
     subject_enemy: Option<bool>,
     /// Whether the nearest `for-each-unit` reaches enemy units.
     recipient_enemy: Option<bool>,
+    choices: Vec<MortalChoice>,
 }
 
 const SELF_TARGETS: &[&str] = &["this-unit", "this-model", "bearer", "self", "attacker"];
@@ -106,6 +118,7 @@ pub fn mortal_wound_sources(
         selected_enemy: None,
         subject_enemy: None,
         recipient_enemy: None,
+        choices: Vec::new(),
     };
     if let Some(start) = walker.enter_trigger(trigger, start) {
         walker.walk(effect, start);
@@ -163,11 +176,21 @@ impl Walker<'_> {
     }
 
     fn enter_trigger(&self, value: &Value, state: WalkState) -> Option<WalkState> {
-        let triggers: Vec<&Obj> = match value {
-            Value::Array(items) => items.iter().filter_map(Value::as_object).collect(),
-            Value::Object(object) => vec![object],
+        let all: Vec<&Value> = match value {
+            Value::Array(items) => items.iter().filter(|item| item.is_object()).collect(),
+            Value::Object(_) => vec![value],
             _ => Vec::new(),
         };
+        // The unit's own hit and wound rolls inflict theirs within its attacks, which the buff
+        // layer counts: those moments are not sources.
+        let triggers: Vec<&Obj> = all
+            .iter()
+            .filter(|item| !is_own_attack_roll_trigger(item))
+            .filter_map(|item| item.as_object())
+            .collect();
+        if !all.is_empty() && triggers.is_empty() {
+            return None;
+        }
         if triggers.is_empty() {
             return Some(state);
         }
@@ -238,16 +261,24 @@ impl Walker<'_> {
             }
             Some("select-units") => {
                 let selector = obj_of(object.get("selector"));
-                let owner = obj_of(selector.get("filter"))
-                    .get("owner")
-                    .and_then(Value::as_str);
+                let filter = obj_of(selector.get("filter"));
+                let owner = filter.get("owner").and_then(Value::as_str);
                 let mut state = state;
                 state.selected_enemy = match owner {
                     Some("enemy") => Some(true),
                     Some("friendly") => Some(false),
                     _ => None,
                 };
-                if let Some(next) = self.decide(selector.get("eligibility"), state) {
+                // A selected enemy unit suffering the mortal wounds is the target: the rest of
+                // the filter is a fact about it.
+                let selected = if owner == Some("enemy") {
+                    self.reaches(filter, state)
+                } else {
+                    Some(state)
+                };
+                if let Some(next) =
+                    selected.and_then(|state| self.decide(selector.get("eligibility"), state))
+                {
                     self.walk(object.get("effect").unwrap_or(&Value::Null), next);
                 }
             }
@@ -272,9 +303,18 @@ impl Walker<'_> {
             }
             Some("roll") => self.walk(object.get("effect").unwrap_or(&Value::Null), state),
             Some("choice") => {
+                let max = object
+                    .get("max_choices")
+                    .and_then(Value::as_f64)
+                    .unwrap_or(1.0);
                 for (index, option) in array(object.get("options")).iter().enumerate() {
                     let mut option_state = state.clone();
                     option_state.id = format!("{}?{index}", state.id);
+                    option_state.choices.push(MortalChoice {
+                        group: format!("{}?choice", state.id),
+                        option: option_state.id.clone(),
+                        max,
+                    });
                     self.walk(option, option_state);
                 }
             }
@@ -344,6 +384,16 @@ impl Walker<'_> {
             .collect();
         if rest.is_empty() {
             return Some(state);
+        }
+        match matches_unit_filter(
+            &Value::Object(filter.clone()),
+            self.ctx,
+            TranslationPerspective::Target,
+            "enemy",
+        ) {
+            Some(false) => return None,
+            Some(true) => return Some(state),
+            None => {}
         }
         let condition = json!({
             "type": "matches",
@@ -426,6 +476,7 @@ impl Walker<'_> {
                 moment: state.moment,
                 expected: contributed,
                 needs: state.needs,
+                choices: state.choices,
             }),
         }
     }
@@ -766,4 +817,34 @@ fn contains_mortal_wounds(node: &Value) -> bool {
         }
         _ => false,
     }
+}
+
+/// The sources a selection keeps, in its order: a source whose option would take an enclosing
+/// choice past its limit of options is left out. Sources under one option share its pick.
+/// Mirrors `withinChoiceLimits`.
+pub fn within_choice_limits<'a>(selected: &[&'a MortalWoundSource]) -> Vec<&'a MortalWoundSource> {
+    let mut picked: BTreeMap<&str, Vec<&str>> = BTreeMap::new();
+    let mut out = Vec::new();
+    for &source in selected {
+        let fits = source
+            .choices
+            .iter()
+            .all(|choice| match picked.get(choice.group.as_str()) {
+                None => true,
+                Some(options) => {
+                    options.contains(&choice.option.as_str()) || (options.len() as f64) < choice.max
+                }
+            });
+        if !fits {
+            continue;
+        }
+        for choice in &source.choices {
+            let options = picked.entry(choice.group.as_str()).or_default();
+            if !options.contains(&choice.option.as_str()) {
+                options.push(choice.option.as_str());
+            }
+        }
+        out.push(source);
+    }
+    out
 }

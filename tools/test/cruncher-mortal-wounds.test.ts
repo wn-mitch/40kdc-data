@@ -1,8 +1,9 @@
 import { describe, expect, it } from "vitest";
 
-import { conditionFactKey, crunch, mortalWoundSources, type EngineContext, type EngineInput } from "../src/cruncher/index.js";
+import { conditionFactKey, crunch, mortalWoundSources, withinChoiceLimits, type EngineContext, type EngineInput } from "../src/cruncher/index.js";
 import { effectToBuffs } from "../src/cruncher/from-dsl.js";
 import { Dataset } from "../src/data/dataset.js";
+import { emptyRawData } from "../src/data/types.js";
 
 const ds = Dataset.embedded();
 
@@ -77,6 +78,68 @@ describe("translating mortal wounds on an attack roll", () => {
   });
 });
 
+describe("mortal wounds on a critical wound alone", () => {
+  const baseline = crunch(boltRifle([]), ds);
+  // 10 attacks hit on 3+ and wound on 4+: a sixth of the hits wound critically.
+  const criticalWounds = 10 * (4 / 6) * (1 / 6);
+
+  it("fires once per critical wound, beside an ungated source counted once", () => {
+    const gated = { source: manual, applicableWhen: { onCritical: "wound" as const }, contribution: { type: "mortal-wounds-on-roll" as const, roll: "wound" as const, outcome: "success" as const, count: 1 } };
+    const ungated = { source: { ...manual, label: "other" }, contribution: { type: "mortal-wounds-on-roll" as const, roll: "wound" as const, outcome: "success" as const, count: 1 } };
+    expect(stage(crunch(boltRifle([gated]), ds), "damage") - stage(baseline, "damage")).toBeCloseTo(criticalWounds, 10);
+    expect(stage(crunch(boltRifle([gated, ungated]), ds), "damage") - stage(baseline, "damage")).toBeCloseTo(criticalWounds + stage(baseline, "wounds"), 10);
+  });
+});
+
+describe("the trigger an attack roll's mortal wounds fire on", () => {
+  const mortal = { type: "mortal-wounds", target: "defender", modifier: { count: 1 } };
+  const onRoll = { type: "mortal-wounds-on-roll", roll: "wound", outcome: "success", count: 1 };
+  const contributions = (out: ReturnType<typeof effectToBuffs>) =>
+    [...out.applied, ...out.activatable.flatMap((lever) => lever.buffs)].map((buff) => buff.contribution);
+
+  it("keeps a melee-only trigger off ranged attacks", () => {
+    const part = { type: "ability-part", trigger: { event: "after-roll", filter: { roll: "wound", result: "success", attack_type: "melee" } }, effect: mortal };
+    expect(contributions(effectToBuffs(part, manual, { phase: "shooting" }))).toEqual([]);
+    expect(contributions(effectToBuffs(part, manual, { phase: "fight" }))).toEqual([onRoll]);
+  });
+
+  it("reports a narrowing it cannot carry instead of applying the mortal wounds", () => {
+    for (const trigger of [
+      { event: "after-roll", filter: { roll: "wound", result: "success", phase: "fight" } },
+      { event: "after-roll", filter: { roll: "wound", result: "success" }, object: { owner: "enemy", all_of: ["VEHICLE"] } },
+    ]) {
+      const out = effectToBuffs({ type: "ability-part", trigger, effect: mortal }, manual, { phase: "fight" });
+      expect(contributions(out)).toEqual([]);
+      expect(out.unsupported.map((item) => item.reason)).toEqual([expect.stringMatching(/wound roll's trigger (filter\.phase|object) is not modelled/)]);
+    }
+  });
+
+  it("gives the same mortal wounds as an ability part, a reactive record and inside a choice", () => {
+    const trigger = { event: "after-roll", filter: { roll: "wound", result: "success" } };
+    const raw = emptyRawData();
+    raw.abilities = [
+      { trigger, effect: mortal },
+      { trigger, usage: { frequency: "once-per-phase" }, effect: mortal },
+    ].map((record, index) => ({
+      ability_id: `reactive-${index}`, name: `Reactive ${index}`, faction_id: "example", ability_type: "unit", behavior: "reactive",
+      game_version: { edition: "11th", dataslate: "test" }, authored_by: "40kdc-community", ...record,
+    })) as never;
+    const records = new Dataset(raw);
+    const describe = (id: string) => records.abilities.get(id)!.describeBuffs({ kind: "ability", abilityId: id, abilityName: id } as never, { phase: "fight" });
+    const forms = [
+      effectToBuffs({ type: "ability-part", trigger, effect: mortal }, manual, { phase: "fight" }),
+      describe("reactive-0"),
+      describe("reactive-1"),
+      effectToBuffs({ type: "choice", options: [{ type: "ability-part", trigger, effect: mortal }, { type: "no-effect" }] }, manual, { phase: "fight" }),
+      effectToBuffs({ type: "ability-part", trigger, optional: true, effect: mortal }, manual, { phase: "fight" }),
+    ];
+    for (const out of forms) {
+      expect(out.unsupported.filter((item) => /mortal/.test(item.reason))).toEqual([]);
+      expect(contributions(out)).toEqual([onRoll]);
+    }
+  });
+});
+
 describe("mortal wound sources outside an attack", () => {
   // The phase never gates a source; every context names one only because the type requires it.
   const sourcesOf = (id: string, effect: unknown, trigger: unknown, context: Partial<EngineContext>) =>
@@ -113,6 +176,34 @@ describe("mortal wound sources outside an attack", () => {
     const table = { type: "dice-table", dice: "D6", outcomes: [{ results: [1, 2], effect: { type: "no-effect" } }, { results: [3, 4, 5], effect: mw({ count: 1 }) }, { results: [6], effect: mw({ count: 3 }) }] };
     const out = sourcesOf("x", { type: "choice", options: [selectEnemy(table), selectEnemy(mw({ count: 2 }))] }, null, {});
     expect(out.sources.map((source) => [source.id, source.moment, source.expected])).toEqual([["x?0", null, 1], ["x?1", null, 2]]);
+  });
+
+  it("leaves an attack's own roll to the attack, at the record or a nested trigger", () => {
+    const trigger = { event: "after-roll", filter: { roll: "wound", result: "success" } };
+    const mortal = mw({ count: 1 }, "defender");
+    const part = { type: "ability-part", trigger, effect: mortal };
+    expect(effectToBuffs(part, manual, { phase: "shooting" }).applied).toHaveLength(1);
+    expect(sourcesOf("x", part, null, {}).sources).toEqual([]);
+    expect(sourcesOf("x", mortal, trigger, {}).sources).toEqual([]);
+    // An enemy's hit roll is not the unit's attack: it stays a moment of its own.
+    expect(sourcesOf("x", mw({ count: 1 }, "event-subject"), { ...trigger, subject: { owner: "enemy" } }, {}).sources).toHaveLength(1);
+  });
+
+  it("applies the selection's filter to the target before counting its mortal wounds", () => {
+    const effect = { type: "select-units", selector: { filter: { owner: "enemy", none_of: ["MONSTER", "VEHICLE"] }, count: { min: 1, max: 1 } }, effect: mw({ count: 1 }) };
+    expect(sourcesOf("x", effect, charge, { targetKeywords: ["VEHICLE"] }).sources).toEqual([]);
+    expect(sourcesOf("x", effect, charge, { targetKeywords: ["INFANTRY"] }).sources.map((source) => source.needs)).toEqual([[]]);
+    expect(sourcesOf("x", effect, charge, {}).sources[0]!.needs).toHaveLength(1);
+  });
+
+  it("keeps a choice's options to its limit when a selection is counted", () => {
+    const options = [selectEnemy(mw({ count: 1 })), selectEnemy(mw({ count: 2 }))];
+    const one = sourcesOf("x", { type: "choice", options }, charge, {}).sources;
+    expect(one.map((source) => source.choices)).toEqual([[{ group: "x?choice", option: "x?0", max: 1 }], [{ group: "x?choice", option: "x?1", max: 1 }]]);
+    expect(withinChoiceLimits(one).map((source) => source.id)).toEqual(["x?0"]);
+    expect(withinChoiceLimits([...one].reverse()).map((source) => source.id)).toEqual(["x?1"]);
+    const two = sourcesOf("x", { type: "choice", max_choices: 2, options }, charge, {}).sources;
+    expect(withinChoiceLimits(two).map((source) => source.id)).toEqual(["x?0", "x?1"]);
   });
 
   it("skips mortal wounds the ability's own unit suffers", () => {
