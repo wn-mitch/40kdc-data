@@ -338,6 +338,14 @@ def dice_gate(e: Effect, ctx: Ctx) -> str:
     return f"roll {one}{dice}{kind}: on {comp}, {success}{fail}"
 
 
+def designation_entries(e: dict[str, Any]) -> list[dict[str, Any]]:
+    """A designate-target's ``applies`` as a list: one entry, or each entry of a list."""
+    applies = e.get("applies")
+    if isinstance(applies, list):
+        return [_obj(entry) for entry in applies]
+    return [_obj(applies)]
+
+
 def designate_when(applies: dict[str, Any], block: bool) -> str:
     to = applies.get("to")
     if to == "target":
@@ -422,14 +430,16 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx) -> str:
         desig = designation_label(e["designation"]) if e.get("designation") else ""
         select_lead = f"{describe_timing(sel['timing'])}, select" if sel.get("timing") else "select"
         _, dur_trail = duration_clauses(e.get("duration"))
-        applies = _obj(e.get("applies"))
-        when = designate_when(applies, False)
-        when_clause = f"{dur_trail}, {when}" if dur_trail else when
-        recipient_ctx = designated_recipient_context(applies, ctx)
-        return (
-            f"{select_lead} {designation_target_subject(sel)}{desig}; {when_clause}, "
-            f"{inline(applies.get('effect'), recipient_ctx)}"
-        )
+        # "while it is your target, …; and each time a friendly unit attacks it, …": one clause
+        # per entry.
+        clauses = [
+            f"{designate_when(applies, False)}, "
+            f"{inline(applies.get('effect'), designated_recipient_context(applies, ctx))}"
+            for applies in designation_entries(e)
+        ]
+        body = f"{'; '.join(clauses[:-1])}; and {clauses[-1]}" if len(clauses) > 1 else clauses[0]
+        lead = f"{dur_trail}, " if dur_trail else ""
+        return f"{select_lead} {designation_target_subject(sel)}{desig}; {lead}{body}"
     if t == "stance-select":
         opts = " / ".join(
             f"{jstr(_obj(o).get('name'))} ({inline(_obj(o).get('effect'), ctx)})"

@@ -1,7 +1,7 @@
 import { slug } from "../pack-blocks.js";
 import { DESIGNATION_IDS } from "../translate/designations.js";
 import { closed, CompileError, type CompileLeaf } from "./compile-fragments.js";
-import { condition } from "./compile-conditions.js";
+import { allOf, condition } from "./compile-conditions.js";
 import { currentFamilyVersion } from "./contracts.js";
 import type { FilterAlternative } from "./unit-filter-alternatives.js";
 import { dslUnitFilter } from "./compile-unit-filter-dsl.js";
@@ -269,7 +269,7 @@ export function designationIdFor(name: string | undefined): string {
  * `friendlyRecipient` is set only by boundAttackDesignation (below): the selection is then the enemy
  * unit of an independent pair, the frame is the friendly unit's grant, and the select carries its name.
  */
-export function designation(recordName: string | undefined, selection: CompileLeaf, leaves: readonly CompileLeaf[], body: Node, lasting: string | undefined, eligibility: Node | null = null, selectionLimit: Node | null = null, friendlyRecipient = false): Node {
+export function designation(recordName: string | undefined, selection: CompileLeaf, leaves: readonly CompileLeaf[], body: Node, lasting: string | undefined, eligibility: Node | null = null, selectionLimit: Node | null = null, friendlyRecipient = false, direct: DirectEntry | null = null): Node {
   if (selection.parameters.target_kind === "model") throw new CompileError("A designated target is a unit; designate-target selects units, not models.");
   const attack = leaves.find((leaf) => leaf.family_id === "attack" && leaf.start_byte > selection.start_byte) ?? leaves.find((leaf) => leaf.family_id === "attack");
   // "Friendly X units' attacks that target that unit have …": an attack-property scope's frame
@@ -279,13 +279,35 @@ export function designation(recordName: string | undefined, selection: CompileLe
       && (leaf.family_id === "weapon-ability-grant" || leaf.family_id === "characteristic-modifier") && leaf.parameters.subject !== "attack");
   if (!attack && !frame) throw new CompileError("A selected unit needs an attack leaf saying whose attacks against it are affected.");
   const own = attack ? attack.parameters.unit === "this-model" : frame!.parameters.subject === "this-model";
+  const attacks: Node = { to: own ? "bearer-attacks-target" : "attackers-of-target", effect: body };
+  // A direct effect on the designated unit is its own entry, in the order the record prints the two.
+  const attackStart = attack?.start_byte ?? frame!.start_byte;
+  const applies = direct === null ? attacks
+    : direct.start < attackStart ? [{ to: "target", effect: direct.effect }, attacks] : [attacks, { to: "target", effect: direct.effect }];
   return {
     type: "designate-target",
     designation: designationIdFor(recordName),
     select: { kind: "unit", selector: selectUnit(selection, body, { eligibility, selectionLimit }).selector as Node },
-    applies: { to: own ? "bearer-attacks-target" : "attackers-of-target", effect: body },
+    applies,
     ...(lasting ? { duration: lasting } : {}),
   };
+}
+
+/** A designation's effect on the designated unit itself, and where the record prints it. */
+export type DirectEntry = { effect: Node; start: number };
+
+/**
+ * The effects on a designated unit itself ("that enemy unit cannot have the Benefit of Cover"), each
+ * under its own gates, as one `applies` entry with `to: target`. A roll in the record would have to
+ * decide between the two entries, which no entry can say, so the record is refused.
+ */
+export function directEntry(items: ReadonlyArray<{ leaf: CompileLeaf; node: Node; gate: Node[] }>, rolls: readonly CompileLeaf[]): DirectEntry {
+  if (rolls.length) throw new CompileError("A designation with an effect on the designated unit and a roll is not lowered yet.");
+  const steps = items.map((item) => {
+    const gate = allOf(item.gate);
+    return gate ? { type: "conditional", condition: gate, effect: item.node } : item.node;
+  });
+  return { effect: steps.length === 1 ? steps[0]! : { type: "sequence", steps }, start: Math.min(...items.map((item) => item.leaf.start_byte)) };
 }
 
 /** Every `target: "selected-unit"` in a node, rewritten to the named selection; the rest of the node is copied. */

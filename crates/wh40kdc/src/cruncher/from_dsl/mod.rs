@@ -528,6 +528,91 @@ pub(crate) fn buff(opts: &WalkOpts, contribution: Value) -> Value {
     json!({ "source": opts.source, "contribution": contribution })
 }
 
+/// One `applies` entry of a designate-target: a lever for attacks against the designated unit, or
+/// an unsupported debuff on it.
+fn designate_entry(node: &Obj, applies: Option<&Obj>, opts: &WalkOpts, out: &mut Out) {
+    if applies.is_some_and(|a| {
+        is_str(a, "to", "attackers-of-target") || is_str(a, "to", "bearer-attacks-target")
+    }) {
+        for key in ["attacker_filter", "attacker_unit_filter"] {
+            if let Some(filter) = applies.and_then(|applies| applies.get(key)) {
+                match conditions::matches_unit_filter(
+                    filter,
+                    opts.context,
+                    TranslationPerspective::Attacker,
+                    "friendly",
+                ) {
+                    Some(false) => return,
+                    None => {
+                        out.unsupported("designate-target attacker filter is unresolved", node);
+                        return;
+                    }
+                    Some(true) => {}
+                }
+            }
+        }
+        // A designation restricted to units the target is not (e.g. an enemy VEHICLE)
+        // never marks it.
+        let selector_filter = object(node.get("select"))
+            .filter(|select| is_str(select, "kind", "unit"))
+            .and_then(|select| object(select.get("selector")))
+            .and_then(|selector| selector.get("filter"));
+        if let Some(filter) = selector_filter {
+            if conditions::matches_unit_filter(
+                filter,
+                opts.context,
+                TranslationPerspective::Target,
+                "enemy",
+            ) == Some(false)
+            {
+                return;
+            }
+        }
+        // Which enemy unit is designated is the player's pick, so its buffs are one opt-in
+        // lever ("this defender is the designated unit"); the player vouches for the
+        // selection's eligibility (range, visibility, "hit by those attacks").
+        let effect = applies.and_then(|a| a.get("effect"));
+        let mut sub = Out::default();
+        walk(effect.unwrap_or(&Value::Null), opts, &mut sub);
+        out.unsupported.extend(sub.unsupported);
+        let requirement = Value::Object(
+            ["select", "duration"]
+                .into_iter()
+                .filter_map(|key| node.get(key).map(|value| (key.into(), value.clone())))
+                .collect(),
+        );
+        for mut lever in sub.activatable {
+            let mut requirements = vec![requirement.clone()];
+            requirements.extend(lever.requires.take().unwrap_or_default());
+            lever.requires = Some(requirements);
+            out.activatable.push(lever);
+        }
+        if !sub.applied.is_empty() {
+            let designation = node
+                .get("designation")
+                .and_then(Value::as_str)
+                .unwrap_or("designated");
+            out.activatable.push(Lever {
+                id: format!("{}#{designation}", opts.ability_id),
+                label: format!(
+                    "Designated target: {}",
+                    applicability::label_for_buffs(&sub.applied)
+                ),
+                buffs: sub.applied,
+                group: None,
+                requires: Some(vec![requirement]),
+                cap_raise: None,
+                gate: None,
+            });
+        }
+    } else {
+        out.unsupported(
+            "designate-target debuff on the marked unit: not a buff on the bearer",
+            node,
+        );
+    }
+}
+
 /// Walk one node into `out`.
 pub(crate) fn walk(node: &Value, opts: &WalkOpts, out: &mut Out) {
     let Some(current) = node.as_object() else {
@@ -802,78 +887,15 @@ fn dispatch(node: &Obj, opts: &WalkOpts, out: &mut Out) {
             node,
         ),
         Some("designate-target") => {
-            let applies = object(node.get("applies"));
-            if applies.is_some_and(|a| {
-                is_str(a, "to", "attackers-of-target") || is_str(a, "to", "bearer-attacks-target")
-            }) {
-                for key in ["attacker_filter", "attacker_unit_filter"] {
-                    if let Some(filter) = applies.and_then(|applies| applies.get(key)) {
-                        match conditions::matches_unit_filter(filter, opts.context, TranslationPerspective::Attacker, "friendly") {
-                            Some(false) => return,
-                            None => {
-                                out.unsupported("designate-target attacker filter is unresolved", node);
-                                return;
-                            }
-                            Some(true) => {}
-                        }
+            // "applies" is one entry, or a list with one entry per `to` (a direct effect and
+            // attacks against the unit).
+            match node.get("applies") {
+                Some(Value::Array(entries)) => {
+                    for entry in entries.iter().filter_map(Value::as_object) {
+                        designate_entry(node, Some(entry), opts, out);
                     }
                 }
-                // A designation restricted to units the target is not (e.g. an enemy VEHICLE)
-                // never marks it.
-                let selector_filter = object(node.get("select"))
-                    .filter(|select| is_str(select, "kind", "unit"))
-                    .and_then(|select| object(select.get("selector")))
-                    .and_then(|selector| selector.get("filter"));
-                if let Some(filter) = selector_filter {
-                    if conditions::matches_unit_filter(filter, opts.context, TranslationPerspective::Target, "enemy") == Some(false) {
-                        return;
-                    }
-                }
-                // Which enemy unit is designated is the player's pick, so its buffs are one opt-in
-                // lever ("this defender is the designated unit"); the player vouches for the
-                // selection's eligibility (range, visibility, "hit by those attacks").
-                let effect = applies.and_then(|a| a.get("effect"));
-                let mut sub = Out::default();
-                walk(effect.unwrap_or(&Value::Null), opts, &mut sub);
-                out.unsupported.extend(sub.unsupported);
-                let requirement = Value::Object(
-                    ["select", "duration"]
-                        .into_iter()
-                        .filter_map(|key| {
-                            node.get(key)
-                                .map(|value| (key.into(), value.clone()))
-                        })
-                        .collect(),
-                );
-                for mut lever in sub.activatable {
-                    let mut requirements = vec![requirement.clone()];
-                    requirements.extend(lever.requires.take().unwrap_or_default());
-                    lever.requires = Some(requirements);
-                    out.activatable.push(lever);
-                }
-                if !sub.applied.is_empty() {
-                    let designation = node
-                        .get("designation")
-                        .and_then(Value::as_str)
-                        .unwrap_or("designated");
-                    out.activatable.push(Lever {
-                        id: format!("{}#{designation}", opts.ability_id),
-                        label: format!(
-                            "Designated target: {}",
-                            applicability::label_for_buffs(&sub.applied)
-                        ),
-                        buffs: sub.applied,
-                        group: None,
-                        requires: Some(vec![requirement]),
-                        cap_raise: None,
-                        gate: None,
-                    });
-                }
-            } else {
-                out.unsupported(
-                    "designate-target debuff on the marked unit: not a buff on the bearer",
-                    node,
-                );
+                other => designate_entry(node, object(other), opts, out),
             }
         }
         Some("risk-reward") => walk(node.get("reward").unwrap_or(&Value::Null), opts, out),

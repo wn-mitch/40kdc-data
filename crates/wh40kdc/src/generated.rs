@@ -10686,37 +10686,35 @@ impl ::std::convert::From<UnitRef> for DesignateEffectModifierSubject {
 ///  ],
 ///  "properties": {
 ///    "applies": {
-///      "type": "object",
-///      "required": [
-///        "effect",
-///        "to"
-///      ],
-///      "properties": {
-///        "attacker_filter": {
-///          "$ref": "#/$defs/unit-filter"
+///      "description": "What the designation does: one entry, or one entry per `to` when it does more than one thing to the designated unit (\"that enemy unit cannot have the Benefit of Cover, and each time a friendly unit makes an attack that targets that unit, …\"). Each entry of a list names a different `to`; a list never holds bound-unit-attacks-reference.",
+///      "oneOf": [
+///        {
+///          "$ref": "#/$defs/designation-applies"
 ///        },
-///        "attacker_unit_filter": {
-///          "$ref": "#/$defs/unit-filter"
-///        },
-///        "beneficiary": {
-///          "$ref": "#/$defs/event-or-selection-reference"
-///        },
-///        "effect": {
-///          "$ref": "#/$defs/effect-node"
-///        },
-///        "reference": {
-///          "$ref": "#/$defs/selection-reference"
-///        },
-///        "to": {
-///          "enum": [
-///            "target",
-///            "attackers-of-target",
-///            "bearer-attacks-target",
-///            "bound-unit-attacks-reference"
-///          ]
+///        {
+///          "type": "array",
+///          "items": {
+///            "allOf": [
+///              {
+///                "$ref": "#/$defs/designation-applies"
+///              },
+///              {
+///                "properties": {
+///                  "to": {
+///                    "enum": [
+///                      "target",
+///                      "attackers-of-target",
+///                      "bearer-attacks-target"
+///                    ]
+///                  }
+///                }
+///              }
+///            ]
+///          },
+///          "maxItems": 3,
+///          "minItems": 2
 ///        }
-///      },
-///      "additionalProperties": false
+///      ]
 ///    },
 ///    "designation": {
 ///      "type": "string",
@@ -10765,6 +10763,7 @@ impl ::std::convert::From<UnitRef> for DesignateEffectModifierSubject {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct DesignateTargetEffect {
+    ///What the designation does: one entry, or one entry per `to` when it does more than one thing to the designated unit ("that enemy unit cannot have the Benefit of Cover, and each time a friendly unit makes an attack that targets that unit, …"). Each entry of a list names a different `to`; a list never holds bound-unit-attacks-reference.
     pub applies: DesignateTargetEffectApplies,
     pub designation: DesignateTargetEffectDesignation,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -10773,49 +10772,89 @@ pub struct DesignateTargetEffect {
     #[serde(rename = "type")]
     pub type_: DesignateTargetEffectType,
 }
-///`DesignateTargetEffectApplies`
+///What the designation does: one entry, or one entry per `to` when it does more than one thing to the designated unit ("that enemy unit cannot have the Benefit of Cover, and each time a friendly unit makes an attack that targets that unit, …"). Each entry of a list names a different `to`; a list never holds bound-unit-attacks-reference.
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "type": "object",
-///  "required": [
-///    "effect",
-///    "to"
-///  ],
-///  "properties": {
-///    "attacker_filter": {
-///      "$ref": "#/$defs/unit-filter"
+///  "description": "What the designation does: one entry, or one entry per `to` when it does more than one thing to the designated unit (\"that enemy unit cannot have the Benefit of Cover, and each time a friendly unit makes an attack that targets that unit, …\"). Each entry of a list names a different `to`; a list never holds bound-unit-attacks-reference.",
+///  "oneOf": [
+///    {
+///      "$ref": "#/$defs/designation-applies"
 ///    },
-///    "attacker_unit_filter": {
-///      "$ref": "#/$defs/unit-filter"
-///    },
-///    "beneficiary": {
-///      "$ref": "#/$defs/event-or-selection-reference"
-///    },
-///    "effect": {
-///      "$ref": "#/$defs/effect-node"
-///    },
-///    "reference": {
-///      "$ref": "#/$defs/selection-reference"
-///    },
-///    "to": {
-///      "enum": [
-///        "target",
-///        "attackers-of-target",
-///        "bearer-attacks-target",
-///        "bound-unit-attacks-reference"
-///      ]
+///    {
+///      "type": "array",
+///      "items": {
+///        "allOf": [
+///          {
+///            "$ref": "#/$defs/designation-applies"
+///          },
+///          {
+///            "properties": {
+///              "to": {
+///                "enum": [
+///                  "target",
+///                  "attackers-of-target",
+///                  "bearer-attacks-target"
+///                ]
+///              }
+///            }
+///          }
+///        ]
+///      },
+///      "maxItems": 3,
+///      "minItems": 2
 ///    }
-///  },
-///  "additionalProperties": false
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(untagged)]
+pub enum DesignateTargetEffectApplies {
+    DesignationApplies(DesignationApplies),
+    Array(::std::vec::Vec<DesignateTargetEffectAppliesArrayItem>),
+}
+impl ::std::convert::From<DesignationApplies> for DesignateTargetEffectApplies {
+    fn from(value: DesignationApplies) -> Self {
+        Self::DesignationApplies(value)
+    }
+}
+impl ::std::convert::From<::std::vec::Vec<DesignateTargetEffectAppliesArrayItem>>
+for DesignateTargetEffectApplies {
+    fn from(value: ::std::vec::Vec<DesignateTargetEffectAppliesArrayItem>) -> Self {
+        Self::Array(value)
+    }
+}
+///`DesignateTargetEffectAppliesArrayItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "allOf": [
+///    {
+///      "$ref": "#/$defs/designation-applies"
+///    },
+///    {
+///      "properties": {
+///        "to": {
+///          "enum": [
+///            "target",
+///            "attackers-of-target",
+///            "bearer-attacks-target"
+///          ]
+///        }
+///      }
+///    }
+///  ]
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
-pub struct DesignateTargetEffectApplies {
+pub struct DesignateTargetEffectAppliesArrayItem {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub attacker_filter: ::std::option::Option<::std::boxed::Box<UnitFilter>>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -10825,9 +10864,9 @@ pub struct DesignateTargetEffectApplies {
     pub effect: EffectNode,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub reference: ::std::option::Option<SelectionReference>,
-    pub to: DesignateTargetEffectAppliesTo,
+    pub to: DesignateTargetEffectAppliesArrayItemTo,
 }
-///`DesignateTargetEffectAppliesTo`
+///`DesignateTargetEffectAppliesArrayItemTo`
 ///
 /// <details><summary>JSON schema</summary>
 ///
@@ -10836,8 +10875,7 @@ pub struct DesignateTargetEffectApplies {
 ///  "enum": [
 ///    "target",
 ///    "attackers-of-target",
-///    "bearer-attacks-target",
-///    "bound-unit-attacks-reference"
+///    "bearer-attacks-target"
 ///  ]
 ///}
 /// ```
@@ -10854,29 +10892,24 @@ pub struct DesignateTargetEffectApplies {
     PartialEq,
     PartialOrd
 )]
-pub enum DesignateTargetEffectAppliesTo {
+pub enum DesignateTargetEffectAppliesArrayItemTo {
     #[serde(rename = "target")]
     Target,
     #[serde(rename = "attackers-of-target")]
     AttackersOfTarget,
     #[serde(rename = "bearer-attacks-target")]
     BearerAttacksTarget,
-    #[serde(rename = "bound-unit-attacks-reference")]
-    BoundUnitAttacksReference,
 }
-impl ::std::fmt::Display for DesignateTargetEffectAppliesTo {
+impl ::std::fmt::Display for DesignateTargetEffectAppliesArrayItemTo {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match *self {
             Self::Target => f.write_str("target"),
             Self::AttackersOfTarget => f.write_str("attackers-of-target"),
             Self::BearerAttacksTarget => f.write_str("bearer-attacks-target"),
-            Self::BoundUnitAttacksReference => {
-                f.write_str("bound-unit-attacks-reference")
-            }
         }
     }
 }
-impl ::std::str::FromStr for DesignateTargetEffectAppliesTo {
+impl ::std::str::FromStr for DesignateTargetEffectAppliesArrayItemTo {
     type Err = self::error::ConversionError;
     fn from_str(
         value: &str,
@@ -10885,12 +10918,11 @@ impl ::std::str::FromStr for DesignateTargetEffectAppliesTo {
             "target" => Ok(Self::Target),
             "attackers-of-target" => Ok(Self::AttackersOfTarget),
             "bearer-attacks-target" => Ok(Self::BearerAttacksTarget),
-            "bound-unit-attacks-reference" => Ok(Self::BoundUnitAttacksReference),
             _ => Err("invalid value".into()),
         }
     }
 }
-impl ::std::convert::TryFrom<&str> for DesignateTargetEffectAppliesTo {
+impl ::std::convert::TryFrom<&str> for DesignateTargetEffectAppliesArrayItemTo {
     type Error = self::error::ConversionError;
     fn try_from(
         value: &str,
@@ -10898,7 +10930,8 @@ impl ::std::convert::TryFrom<&str> for DesignateTargetEffectAppliesTo {
         value.parse()
     }
 }
-impl ::std::convert::TryFrom<&::std::string::String> for DesignateTargetEffectAppliesTo {
+impl ::std::convert::TryFrom<&::std::string::String>
+for DesignateTargetEffectAppliesArrayItemTo {
     type Error = self::error::ConversionError;
     fn try_from(
         value: &::std::string::String,
@@ -10906,7 +10939,8 @@ impl ::std::convert::TryFrom<&::std::string::String> for DesignateTargetEffectAp
         value.parse()
     }
 }
-impl ::std::convert::TryFrom<::std::string::String> for DesignateTargetEffectAppliesTo {
+impl ::std::convert::TryFrom<::std::string::String>
+for DesignateTargetEffectAppliesArrayItemTo {
     type Error = self::error::ConversionError;
     fn try_from(
         value: ::std::string::String,
@@ -12870,6 +12904,147 @@ pub enum DesignatedConditionParametersVariant1Subject {
 impl ::std::convert::From<UnitRef> for DesignatedConditionParametersVariant1Subject {
     fn from(value: UnitRef) -> Self {
         Self::UnitRef(value)
+    }
+}
+///`DesignationApplies`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "effect",
+///    "to"
+///  ],
+///  "properties": {
+///    "attacker_filter": {
+///      "$ref": "#/$defs/unit-filter"
+///    },
+///    "attacker_unit_filter": {
+///      "$ref": "#/$defs/unit-filter"
+///    },
+///    "beneficiary": {
+///      "$ref": "#/$defs/event-or-selection-reference"
+///    },
+///    "effect": {
+///      "$ref": "#/$defs/effect-node"
+///    },
+///    "reference": {
+///      "$ref": "#/$defs/selection-reference"
+///    },
+///    "to": {
+///      "enum": [
+///        "target",
+///        "attackers-of-target",
+///        "bearer-attacks-target",
+///        "bound-unit-attacks-reference"
+///      ]
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct DesignationApplies {
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub attacker_filter: ::std::option::Option<::std::boxed::Box<UnitFilter>>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub attacker_unit_filter: ::std::option::Option<::std::boxed::Box<UnitFilter>>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub beneficiary: ::std::option::Option<EventOrSelectionReference>,
+    pub effect: EffectNode,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub reference: ::std::option::Option<SelectionReference>,
+    pub to: DesignationAppliesTo,
+}
+///`DesignationAppliesTo`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "enum": [
+///    "target",
+///    "attackers-of-target",
+///    "bearer-attacks-target",
+///    "bound-unit-attacks-reference"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum DesignationAppliesTo {
+    #[serde(rename = "target")]
+    Target,
+    #[serde(rename = "attackers-of-target")]
+    AttackersOfTarget,
+    #[serde(rename = "bearer-attacks-target")]
+    BearerAttacksTarget,
+    #[serde(rename = "bound-unit-attacks-reference")]
+    BoundUnitAttacksReference,
+}
+impl ::std::fmt::Display for DesignationAppliesTo {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Target => f.write_str("target"),
+            Self::AttackersOfTarget => f.write_str("attackers-of-target"),
+            Self::BearerAttacksTarget => f.write_str("bearer-attacks-target"),
+            Self::BoundUnitAttacksReference => {
+                f.write_str("bound-unit-attacks-reference")
+            }
+        }
+    }
+}
+impl ::std::str::FromStr for DesignationAppliesTo {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "target" => Ok(Self::Target),
+            "attackers-of-target" => Ok(Self::AttackersOfTarget),
+            "bearer-attacks-target" => Ok(Self::BearerAttacksTarget),
+            "bound-unit-attacks-reference" => Ok(Self::BoundUnitAttacksReference),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for DesignationAppliesTo {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for DesignationAppliesTo {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for DesignationAppliesTo {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
     }
 }
 ///A designation (a tag an effect applies: spotted, observer, afflicted, riled-up). Kebab-case id; the describer prints the rules' term from its label table and integrity rejects ids outside the registry. Upper-case legacy spellings are accepted until the record repair normalises them. warlord is the list-building designation: the model chosen as Warlord when mustering. A unit carries it when it contains the Warlord model; a rule may test it but never apply it.

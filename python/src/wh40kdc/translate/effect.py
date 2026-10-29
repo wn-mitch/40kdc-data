@@ -25,6 +25,7 @@ from wh40kdc.translate.effect_inline import (
     describe_effect_inline,
     describe_requirement,
     designate_when,
+    designation_entries,
     dice_gate,
     dice_table_head,
     dice_table_result_label,
@@ -333,6 +334,20 @@ def _designate_target_block(e: Effect, depth: int, ctx: Ctx, indent: str, arrow:
         f"{capitalize(describe_timing(sel['timing']))}, select" if sel.get("timing") else "Select"
     )
     _, dur_trail = duration_clauses(e.get("duration"))
+    if isinstance(e.get("applies"), list):
+        # One line per entry under the selection, each with its own moment.
+        lines = []
+        for entry in designation_entries(e):
+            recipient = designated_recipient_context(entry, ctx)
+            effect = _obj(entry.get("effect"))
+            lead = f"{indent}  -> {capitalize(designate_when(entry, True))}"
+            if _is_container(effect):
+                lines.append(f"{lead}:\n" + describe_effect(effect, depth + 2, recipient))
+            else:
+                lines.append(f"{lead}, {describe_effect_inline(effect, recipient)}.")
+        during = f". {capitalize(dur_trail)}" if dur_trail else ""
+        subject = designation_target_subject(sel)
+        return f"{indent}{arrow}{select_lead} {subject}{desig}{during}:\n" + "\n".join(lines)
     when = designate_when(applies, True)
     when_clause = f"{capitalize(dur_trail)}, {when}" if dur_trail else capitalize(when)
     head = f"{indent}{arrow}{select_lead} {designation_target_subject(sel)}{desig}. {when_clause}"

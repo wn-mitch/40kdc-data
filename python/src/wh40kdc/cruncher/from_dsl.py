@@ -326,6 +326,81 @@ def _is_model_scoped_from_stratagem(
     return opts["context"].get(key) != 1
 
 
+def _designate_entry(
+    node: dict[str, Any],
+    applies: dict[str, Any],
+    source: BuffSource,
+    opts: dict[str, Any],
+    out: EffectTranslation,
+) -> None:
+    """One ``applies`` entry of a designate-target: a lever for attacks on the unit, or a debuff."""
+    if applies.get("to") in ("attackers-of-target", "bearer-attacks-target"):
+        for filt in (
+            applies.get("attacker_filter"),
+            applies.get("attacker_unit_filter"),
+        ):
+            if filt is None:
+                continue
+            verdict = _matches_unit_filter(filt, opts["context"], "attacker", "friendly")
+            if verdict is False:
+                return
+            if verdict == "unknown":
+                out["unsupported"].append(
+                    {
+                        "reason": "designate-target attacker filter is unresolved",
+                        "effectFragment": node,
+                    }
+                )
+                return
+        # A designation restricted to units the target is not (e.g. an enemy VEHICLE) never
+        # marks it.
+        select = node.get("select")
+        selector = (
+            select.get("selector")
+            if _is_object(select) and select.get("kind") == "unit"
+            else None
+        )
+        if (
+            _is_object(selector)
+            and "filter" in selector
+            and _matches_unit_filter(selector["filter"], opts["context"], "target", "enemy")
+            is False
+        ):
+            return
+        sub: EffectTranslation = {"applied": [], "unsupported": [], "activatable": []}
+        _walk(applies.get("effect"), source, opts, sub)
+        out["unsupported"].extend(sub["unsupported"])
+        requirement = {
+            "select": node.get("select"),
+            "duration": node.get("duration"),
+        }
+        for lever in sub["activatable"]:
+            lever["requires"] = [requirement, *(lever.get("requires") or [])]
+        out["activatable"].extend(sub["activatable"])
+        if sub["applied"]:
+            designation_value = node.get("designation")
+            designation = (
+                designation_value if isinstance(designation_value, str) else "designated"
+            )
+            out["activatable"].append(
+                {
+                    "id": f"{opts['abilityId']}#{designation}",
+                    "label": f"Designated target: {_label_for_buffs(sub['applied'])}",
+                    "buffs": sub["applied"],
+                    "requires": [requirement],
+                }
+            )
+    else:
+        out["unsupported"].append(
+            {
+                "reason": (
+                    "designate-target debuff on the marked unit: not a buff on the bearer"
+                ),
+                "effectFragment": node,
+            }
+        )
+
+
 def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTranslation) -> None:
     if not _is_object(node):
         return
@@ -605,72 +680,16 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
         # selection's eligibility (range, visibility, "hit by those attacks").
         # A `to: target` debuff lands on the enemy, not the bearer, so it is not
         # a buff in this perspective.
+        # "applies" is one entry, or a list with one entry per `to` (a direct effect and attacks
+        # against the unit).
         applies_raw = node.get("applies")
-        applies = applies_raw if isinstance(applies_raw, dict) else {}
-        if applies.get("to") in ("attackers-of-target", "bearer-attacks-target"):
-            for filt in (
-                applies.get("attacker_filter"),
-                applies.get("attacker_unit_filter"),
-            ):
-                if filt is None:
-                    continue
-                verdict = _matches_unit_filter(filt, opts["context"], "attacker", "friendly")
-                if verdict is False:
-                    return
-                if verdict == "unknown":
-                    out["unsupported"].append(
-                        {
-                            "reason": "designate-target attacker filter is unresolved",
-                            "effectFragment": node,
-                        }
-                    )
-                    return
-            # A designation restricted to units the target is not (e.g. an enemy VEHICLE) never
-            # marks it.
-            select = node.get("select")
-            selector = (
-                select.get("selector")
-                if _is_object(select) and select.get("kind") == "unit"
-                else None
-            )
-            if (
-                _is_object(selector)
-                and "filter" in selector
-                and _matches_unit_filter(selector["filter"], opts["context"], "target", "enemy")
-                is False
-            ):
-                return
-            sub: EffectTranslation = {"applied": [], "unsupported": [], "activatable": []}
-            _walk(applies.get("effect"), source, opts, sub)
-            out["unsupported"].extend(sub["unsupported"])
-            requirement = {
-                "select": node.get("select"),
-                "duration": node.get("duration"),
-            }
-            for lever in sub["activatable"]:
-                lever["requires"] = [requirement, *(lever.get("requires") or [])]
-            out["activatable"].extend(sub["activatable"])
-            if sub["applied"]:
-                designation_value = node.get("designation")
-                designation = (
-                    designation_value if isinstance(designation_value, str) else "designated"
-                )
-                out["activatable"].append(
-                    {
-                        "id": f"{opts['abilityId']}#{designation}",
-                        "label": f"Designated target: {_label_for_buffs(sub['applied'])}",
-                        "buffs": sub["applied"],
-                        "requires": [requirement],
-                    }
-                )
+        if isinstance(applies_raw, list):
+            for entry in applies_raw:
+                if isinstance(entry, dict):
+                    _designate_entry(node, entry, source, opts, out)
         else:
-            out["unsupported"].append(
-                {
-                    "reason": (
-                        "designate-target debuff on the marked unit: not a buff on the bearer"
-                    ),
-                    "effectFragment": node,
-                }
+            _designate_entry(
+                node, applies_raw if isinstance(applies_raw, dict) else {}, source, opts, out
             )
     elif node_type == "risk-reward":
         # The reward is the buff; the risk (self-damage on a failed test) is not.
@@ -4234,7 +4253,9 @@ def _trigger_has_unresolved_source(trigger: Any) -> bool:
 
 def _has_unresolved_fidelity_binding(node: dict[str, Any]) -> bool:
     selector = node.get("selector") or {}
-    applies = node.get("applies") or {}
+    # A list of entries never binds a beneficiary or reference (bound-unit-attacks-reference).
+    applies_raw = node.get("applies")
+    applies: dict[str, Any] = applies_raw if isinstance(applies_raw, dict) else {}
     modifier = node.get("modifier") or {}
     consumer = modifier.get("consumer") or {}
     node_type = node.get("type")

@@ -199,6 +199,18 @@ function grantedRecordEffect(dataRoot: string, factionId: string): GrantedRecord
   return (abilityId) => lookup(abilityId)?.effect;
 }
 
+/** The cruncher's reason for a designate-target entry that acts on the designated unit itself. */
+const DESIGNATED_DEBUFF = "designate-target debuff on the marked unit: not a buff on the bearer";
+
+/** The effects of a designate-target's `to: target` entries (its `applies`, or each entry of its list). */
+function designatedUnitEffects(fragment: unknown): unknown[] {
+  if (fragment === null || typeof fragment !== "object") return [];
+  const applies = (fragment as { applies?: unknown }).applies;
+  const entries = Array.isArray(applies) ? applies : [applies];
+  return entries.filter((entry): entry is { to: string; effect: unknown } => entry !== null && typeof entry === "object" && (entry as { to?: unknown }).to === "target")
+    .map((entry) => entry.effect);
+}
+
 export function classifyUnsupported(
   unsupported: EffectTranslation["unsupported"], recordEffect?: GrantedRecordEffect, depth = 0,
 ): GateCounts {
@@ -212,6 +224,18 @@ export function classifyUnsupported(
       honestUnknown += asTarget.honestUnknown;
       outsideDamagePath += asTarget.outsideDamagePath;
       unrecognizedShape += asTarget.unrecognizedShape;
+    } else if (item.reason === DESIGNATED_DEBUFF) {
+      // A designation's own entry (applies to: target) falls on the designated unit: it counts as
+      // whatever the target perspective still cannot model in that entry's effect.
+      const effects = designatedUnitEffects(item.effectFragment);
+      // An entry that names no `to` the cruncher knows is still an unparsed shape.
+      if (effects.length === 0) unrecognizedShape += 1;
+      for (const effect of effects) {
+        const asTarget = classifyUnsupported(effectToBuffs(effect, DEFENDER_CHECK_SOURCE, CRUNCHER_CONTEXT, "target").unsupported, recordEffect, depth);
+        honestUnknown += asTarget.honestUnknown;
+        outsideDamagePath += asTarget.outsideDamagePath;
+        unrecognizedShape += asTarget.unrecognizedShape;
+      }
     } else if (HONEST_UNKNOWN_CONDITION.test(item.reason)
       || (RUNTIME_CONTEXT_UNKNOWN[item.reason] === true && validEffect(item.effectFragment))) honestUnknown += 1;
     else if (isOutsideDamagePath(item)) outsideDamagePath += 1;

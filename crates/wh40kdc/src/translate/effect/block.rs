@@ -184,9 +184,39 @@ pub(super) fn block(e: &Value, depth: usize, ctx: &Ctx) -> String {
             } else {
                 String::new()
             };
+            let (_, trail) = duration_clauses(e.get("duration"));
+            if e.get("applies").is_some_and(Value::is_array) {
+                // One line per entry under the selection, each with its own moment.
+                let lines: Vec<String> = designation_entries(e)
+                    .into_iter()
+                    .map(|applies| {
+                        let recipient = designated_recipient_context(applies, ctx);
+                        let entry = child(applies, "effect");
+                        let lead = format!(
+                            "{indent}  -> {}",
+                            capitalize(&designate_when(applies, true))
+                        );
+                        if is_container(obj(Some(entry))) {
+                            format!("{lead}:\n{}", block(entry, depth + 2, &recipient))
+                        } else {
+                            format!("{lead}, {}.", inline(entry, &recipient))
+                        }
+                    })
+                    .collect();
+                let during = if trail.is_empty() {
+                    String::new()
+                } else {
+                    format!(". {}", capitalize(trail))
+                };
+                return format!(
+                    "{indent}{arrow}{} {}{desig}{during}:\n{}",
+                    designation_select_lead(sel, true),
+                    designation_target_subject(sel),
+                    lines.join("\n")
+                );
+            }
             let applies = obj(nn(e, "applies"));
             let inner = child(applies, "effect");
-            let (_, trail) = duration_clauses(e.get("duration"));
             let when = designate_when(applies, true);
             let when_clause = if trail.is_empty() {
                 capitalize(&when)

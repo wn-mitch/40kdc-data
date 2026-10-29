@@ -6134,62 +6134,32 @@
           ]
         },
         "applies": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "to": {
-              "enum": [
-                "target",
-                "attackers-of-target",
-                "bearer-attacks-target",
-                "bound-unit-attacks-reference"
-              ]
-            },
-            "effect": {
-              "$ref": "#/$defs/effect-node"
-            },
-            "attacker_filter": {
-              "$ref": "../../defs/common.schema.json#/$defs/unit-filter"
-            },
-            "attacker_unit_filter": {
-              "$ref": "../../defs/common.schema.json#/$defs/unit-filter"
-            },
-            "beneficiary": {
-              "$ref": "#/$defs/event-or-selection-reference"
-            },
-            "reference": {
-              "$ref": "#/$defs/selection-reference"
-            }
-          },
-          "required": [
-            "to",
-            "effect"
-          ],
-          "allOf": [
+          "description": "What the designation does: one entry, or one entry per `to` when it does more than one thing to the designated unit (\"that enemy unit cannot have the Benefit of Cover, and each time a friendly unit makes an attack that targets that unit, …\"). Each entry of a list names a different `to`; a list never holds bound-unit-attacks-reference.",
+          "oneOf": [
             {
-              "if": {
-                "anyOf": [
+              "$ref": "#/$defs/designation-applies"
+            },
+            {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 3,
+              "items": {
+                "allOf": [
                   {
-                    "required": [
-                      "attacker_filter"
-                    ]
+                    "$ref": "#/$defs/designation-applies"
                   },
                   {
-                    "required": [
-                      "attacker_unit_filter"
-                    ]
+                    "properties": {
+                      "to": {
+                        "enum": [
+                          "target",
+                          "attackers-of-target",
+                          "bearer-attacks-target"
+                        ]
+                      }
+                    }
                   }
                 ]
-              },
-              "then": {
-                "properties": {
-                  "to": {
-                    "enum": [
-                      "attackers-of-target",
-                      "bearer-attacks-target"
-                    ]
-                  }
-                }
               }
             }
           ]
@@ -6216,7 +6186,8 @@
                 },
                 "required": [
                   "to"
-                ]
+                ],
+                "type": "object"
               }
             },
             "required": [
@@ -6247,7 +6218,8 @@
                 },
                 "required": [
                   "to"
-                ]
+                ],
+                "type": "object"
               }
             },
             "required": [
@@ -7760,6 +7732,67 @@
         "comparison",
         "threshold",
         "modifiers"
+      ]
+    },
+    "designation-applies": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "to": {
+          "enum": [
+            "target",
+            "attackers-of-target",
+            "bearer-attacks-target",
+            "bound-unit-attacks-reference"
+          ]
+        },
+        "effect": {
+          "$ref": "#/$defs/effect-node"
+        },
+        "attacker_filter": {
+          "$ref": "../../defs/common.schema.json#/$defs/unit-filter"
+        },
+        "attacker_unit_filter": {
+          "$ref": "../../defs/common.schema.json#/$defs/unit-filter"
+        },
+        "beneficiary": {
+          "$ref": "#/$defs/event-or-selection-reference"
+        },
+        "reference": {
+          "$ref": "#/$defs/selection-reference"
+        }
+      },
+      "required": [
+        "to",
+        "effect"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "anyOf": [
+              {
+                "required": [
+                  "attacker_filter"
+                ]
+              },
+              {
+                "required": [
+                  "attacker_unit_filter"
+                ]
+              }
+            ]
+          },
+          "then": {
+            "properties": {
+              "to": {
+                "enum": [
+                  "attackers-of-target",
+                  "bearer-attacks-target"
+                ]
+              }
+            }
+          }
+        }
       ]
     }
   },

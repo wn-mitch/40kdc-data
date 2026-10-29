@@ -14,6 +14,7 @@ export const HALF_WEAPON_RANGE_CASE_PREFIX = "canonical/half-weapon-range/";
 export const SCENARIO_CASE_PREFIX = "canonical/scenario/";
 export const TRIGGER_SUBJECT_CASE_PREFIX = "canonical/trigger-subject/";
 export const STRATAGEM_MODEL_CASE_PREFIX = "canonical/stratagem-model/";
+export const DESIGNATION_CASE_PREFIX = "canonical/designation/";
 
 export interface DslInput {
   caseId: string;
@@ -132,6 +133,35 @@ export function canonicalStratagemModelCases() {
       applied: result.applied.map((buff) => buff.contribution),
       unsupportedReasons: result.unsupported.map((item) => item.reason),
     needKeys: needKeys(result),
+      activatable: result.activatable.map((lever) => ({
+        id: lever.id, label: lever.label, group: lever.group ?? null,
+        requires: lever.requires ?? null, capRaise: lever.capRaise ?? null,
+        ...stanceOptionFields(lever),
+        buffs: lever.buffs.map((buff) => buff.contribution),
+      })),
+    } };
+  });
+}
+
+/**
+ * A fabricated designation with one entry on the designated unit and one on attacks against it: the
+ * attacks' entry is the lever, the unit's own entry is reported unsupported, whatever the entry order.
+ */
+export function canonicalDesignationCases() {
+  const source = { kind: "ability", abilityId: "designation-example", abilityKind: "unit" } as const;
+  const cover = { to: "target", effect: { type: "rule-state", target: "selected-unit", modifier: { direction: "suppressed", rule_kind: "core-rule", rule: "benefit-of-cover" } } };
+  const strength = { to: "attackers-of-target", effect: { type: "stat-modifier", target: { owner: "friendly" }, modifier: { stat: "S", operation: "improve", value: 2 } } };
+  const designation = (applies: unknown[]) => ({ type: "designate-target", designation: "combined-fire-target", select: { kind: "unit", selector: { filter: { owner: "enemy" }, count: { min: 1, max: 1 } } }, applies, duration: "phase" });
+  const rows: Array<Omit<DslInput, "abilityId" | "caseId"> & { id: string }> = [
+    { id: "applies-list-unit-first", source, effect: designation([cover, strength]), context: { phase: "shooting" }, perspective: "attacker" },
+    { id: "applies-list-attacks-first", source, effect: designation([strength, cover]), context: { phase: "shooting" }, perspective: "attacker" },
+  ];
+  return rows.map(({ id, ...row }) => {
+    const result = effectToBuffs(row.effect, row.source, row.context, row.perspective);
+    return { caseId: `${DESIGNATION_CASE_PREFIX}${id}`, abilityId: row.source.abilityId, ...row, expected: {
+      applied: result.applied.map((buff) => buff.contribution),
+      unsupportedReasons: result.unsupported.map((item) => item.reason),
+      needKeys: needKeys(result),
       activatable: result.activatable.map((lever) => ({
         id: lever.id, label: lever.label, group: lever.group ?? null,
         requires: lever.requires ?? null, capRaise: lever.capRaise ?? null,

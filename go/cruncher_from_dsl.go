@@ -244,6 +244,61 @@ func isModelScopedFromStratagem(node map[string]any, source map[string]any, opts
 // identify with the buffed unit.
 var unresolvedTargets = map[string]bool{"event-subject": true, "event-object": true, "stratagem-target": true, "bearer-transport": true}
 
+// designateEntry translates one applies entry of a designate-target: a lever for attacks against the
+// designated unit, or an unsupported debuff on it.
+func designateEntry(n, applies map[string]any, source map[string]any, opts dslOpts, out *effectTranslation) {
+	if applies["to"] == "attackers-of-target" || applies["to"] == "bearer-attacks-target" {
+		for _, rawFilter := range []any{applies["attacker_filter"], applies["attacker_unit_filter"]} {
+			if rawFilter == nil {
+				continue
+			}
+			filter, ok := asMap(rawFilter)
+			if !ok || filter == nil {
+				out.unsupported = append(out.unsupported, unsup("designate-target attacker filter is unresolved", n))
+				return
+			}
+			verdict := matchesUnitFilter(filter, opts.context, "attacker", "friendly")
+			if verdict == false {
+				return
+			}
+			if verdict == nil {
+				out.unsupported = append(out.unsupported, unsup("designate-target attacker filter is unresolved", n))
+				return
+			}
+		}
+		// A designation restricted to units the target is not (e.g. an enemy VEHICLE) never marks it.
+		if sel, ok := getMap(n, "select"); ok && sel["kind"] == "unit" {
+			if selector, ok := getMap(sel, "selector"); ok {
+				if filter, ok := asMap(selector["filter"]); ok && filter != nil && matchesUnitFilter(filter, opts.context, "target", "enemy") == false {
+					return
+				}
+			}
+		}
+		sub := &effectTranslation{applied: []any{}, unsupported: []any{}, activatable: []any{}}
+		dslWalk(applies["effect"], source, opts, sub)
+		out.unsupported = append(out.unsupported, sub.unsupported...)
+		requirement := map[string]any{"select": n["select"], "duration": n["duration"]}
+		for _, raw := range sub.activatable {
+			if lever, ok := asMap(raw); ok && lever != nil {
+				lever["requires"] = append([]any{requirement}, getList(lever, "requires")...)
+				out.activatable = append(out.activatable, lever)
+			}
+		}
+		if len(sub.applied) > 0 {
+			designation, ok := n["designation"].(string)
+			if !ok {
+				designation = "designated"
+			}
+			out.activatable = append(out.activatable, map[string]any{
+				"id": opts.abilityID + "#" + designation, "label": "Designated target: " + labelForBuffs(sub.applied),
+				"buffs": sub.applied, "requires": []any{requirement},
+			})
+		}
+	} else {
+		out.unsupported = append(out.unsupported, unsup("designate-target debuff on the marked unit: not a buff on the bearer", n))
+	}
+}
+
 func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslation) {
 	n, ok := asMap(node)
 	if !ok || n == nil {
@@ -503,56 +558,16 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 	case "persistent-designation":
 		out.unsupported = append(out.unsupported, unsup("persistent-designation: retained selection state is not resolved by the buff engine", n))
 	case "designate-target":
-		applies, _ := getMap(n, "applies")
-		if applies["to"] == "attackers-of-target" || applies["to"] == "bearer-attacks-target" {
-			for _, rawFilter := range []any{applies["attacker_filter"], applies["attacker_unit_filter"]} {
-				if rawFilter == nil {
-					continue
+		// "applies" is one entry, or a list with one entry per `to` (a direct effect and attacks against the unit).
+		if list, ok := n["applies"].([]any); ok {
+			for _, raw := range list {
+				if entry, ok := asMap(raw); ok && entry != nil {
+					designateEntry(n, entry, source, opts, out)
 				}
-				filter, ok := asMap(rawFilter)
-				if !ok || filter == nil {
-					out.unsupported = append(out.unsupported, unsup("designate-target attacker filter is unresolved", n))
-					return
-				}
-				verdict := matchesUnitFilter(filter, opts.context, "attacker", "friendly")
-				if verdict == false {
-					return
-				}
-				if verdict == nil {
-					out.unsupported = append(out.unsupported, unsup("designate-target attacker filter is unresolved", n))
-					return
-				}
-			}
-			// A designation restricted to units the target is not (e.g. an enemy VEHICLE) never marks it.
-			if sel, ok := getMap(n, "select"); ok && sel["kind"] == "unit" {
-				if selector, ok := getMap(sel, "selector"); ok {
-					if filter, ok := asMap(selector["filter"]); ok && filter != nil && matchesUnitFilter(filter, opts.context, "target", "enemy") == false {
-						return
-					}
-				}
-			}
-			sub := &effectTranslation{applied: []any{}, unsupported: []any{}, activatable: []any{}}
-			dslWalk(applies["effect"], source, opts, sub)
-			out.unsupported = append(out.unsupported, sub.unsupported...)
-			requirement := map[string]any{"select": n["select"], "duration": n["duration"]}
-			for _, raw := range sub.activatable {
-				if lever, ok := asMap(raw); ok && lever != nil {
-					lever["requires"] = append([]any{requirement}, getList(lever, "requires")...)
-					out.activatable = append(out.activatable, lever)
-				}
-			}
-			if len(sub.applied) > 0 {
-				designation, ok := n["designation"].(string)
-				if !ok {
-					designation = "designated"
-				}
-				out.activatable = append(out.activatable, map[string]any{
-					"id": opts.abilityID + "#" + designation, "label": "Designated target: " + labelForBuffs(sub.applied),
-					"buffs": sub.applied, "requires": []any{requirement},
-				})
 			}
 		} else {
-			out.unsupported = append(out.unsupported, unsup("designate-target debuff on the marked unit: not a buff on the bearer", n))
+			applies, _ := getMap(n, "applies")
+			designateEntry(n, applies, source, opts, out)
 		}
 	case "risk-reward":
 		// The reward is the buff; the risk (self-damage on a failed test) is not.

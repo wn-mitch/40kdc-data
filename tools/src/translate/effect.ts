@@ -120,14 +120,7 @@ export interface Effect {
   attachment?: { leader_id?: string; bodyguard_id?: string };
   formation_event?: string;
   grant?: { recipient?: string; effect?: Effect };
-  applies?: {
-    to?: string;
-    effect?: Effect;
-    attacker_filter?: Record<string, unknown>;
-    attacker_unit_filter?: Record<string, unknown>;
-    beneficiary?: { selection_var: string } | { event_var: string };
-    reference?: { selection_var: string };
-  };
+  applies?: DesignationApplies | DesignationApplies[];
   duration?: string;
   // stance-select
   mode?: string;
@@ -278,7 +271,33 @@ function designationTargetSubject(select: NonNullable<Effect["select"]>): string
   return select.kind === "objective" ? objectiveSelectorPhrase(selector) : `${selectUnitsSubject(selector)}${selectionBinding(selector)}`;
 }
 
-function designationAttackerPhrase(applies: Effect["applies"], block = false): string {
+/** One thing a designate-target does to its designated unit (`applies`, or one entry of its list). */
+interface DesignationApplies {
+  to?: string;
+  effect?: Effect;
+  attacker_filter?: Record<string, unknown>;
+  attacker_unit_filter?: Record<string, unknown>;
+  beneficiary?: { selection_var: string } | { event_var: string };
+  reference?: { selection_var: string };
+}
+
+/** A designate-target's `applies` as a list: one entry, or each entry of a list. */
+function designationEntries(applies: Effect["applies"]): DesignationApplies[] {
+  return Array.isArray(applies) ? applies : [applies ?? {}];
+}
+
+/** When an `applies` entry acts: while the unit is designated, or each time it is attacked. */
+function designationWhen(applies: DesignationApplies, block: boolean): string {
+  return applies.to === "target"
+    ? "while it is your target"
+    : applies.to === "bearer-attacks-target"
+      ? block ? "each time this unit makes an attack against it" : "each time this unit attacks it"
+      : applies.to === "bound-unit-attacks-reference"
+        ? designatedAttackWhen(applies as Record<string, unknown>)
+        : designationAttackerPhrase(applies, block);
+}
+
+function designationAttackerPhrase(applies: DesignationApplies | undefined, block = false): string {
   const model = applies?.attacker_filter;
   const unit = applies?.attacker_unit_filter;
   const attacker = unit
@@ -597,17 +616,11 @@ function describeEffectInlineBase(e: Effect, ctx: Ctx = {}): string {
       const sel = e.select ?? {};
       const desig = e.designation ? designationLabel(e.designation) : "";
       const { trail: durTrail } = durationClauses(e.duration);
-      const when =
-        e.applies?.to === "target"
-          ? "while it is your target"
-          : e.applies?.to === "bearer-attacks-target"
-            ? "each time this unit attacks it"
-            : e.applies?.to === "bound-unit-attacks-reference"
-              ? designatedAttackWhen(e.applies as Record<string, unknown>)
-              : designationAttackerPhrase(e.applies);
-      const whenClause = durTrail ? `${durTrail}, ${when}` : when;
-      const recipientCtx = designatedRecipientContext(e.applies, ctx);
-      return `select ${designationTargetSubject(sel)}${desig}; ${whenClause}, ${describeEffectInline(e.applies?.effect ?? {}, recipientCtx)}`;
+      // "while it is your target, …; and each time a friendly unit attacks it, …": one clause per entry.
+      const clauses = designationEntries(e.applies).map((applies) =>
+        `${designationWhen(applies, false)}, ${describeEffectInline(applies.effect ?? {}, designatedRecipientContext(applies, ctx))}`);
+      const body = clauses.length > 1 ? `${clauses.slice(0, -1).join("; ")}; and ${clauses.at(-1)}` : clauses[0];
+      return `select ${designationTargetSubject(sel)}${desig}; ${durTrail ? `${durTrail}, ` : ""}${body}`;
     }
     case "stance-select":
       return `${stanceInitial(e) ? `${stanceInitial(e)}; ` : ""}${stancePick(e)}${e.mode === "consumable" ? " (each may be chosen once per battle)" : ""}${stanceAdditive(e)}: ${(e.options ?? []).map((o) => `${jstr(o.name)} (${describeEffectInline(o.effect ?? {}, ctx)})`).join(" / ")}`;
@@ -935,17 +948,20 @@ export function describeEffect(e: Effect, depth: number = 0, ctx: Ctx = {}): str
     case "designate-target": {
       const sel = e.select ?? {};
       const desig = e.designation ? designationLabel(e.designation) : "";
+      const { trail: durTrail } = durationClauses(e.duration);
+      if (Array.isArray(e.applies)) {
+        // One line per entry under the selection, each with its own moment.
+        const lines = e.applies.map((applies) => {
+          const recipient = designatedRecipientContext(applies, ctx);
+          const entry = applies.effect ?? {};
+          const lead = `${indent}  -> ${capitalize(designationWhen(applies, true))}`;
+          return CONTAINER_TYPES.has(entry.type ?? "") ? `${lead}:\n${describeEffect(entry, depth + 2, recipient)}` : `${lead}, ${describeEffectInline(entry, recipient)}.`;
+        });
+        return `${indent}${arrow}Select ${designationTargetSubject(sel)}${desig}${durTrail ? `. ${capitalize(durTrail)}` : ""}:\n${lines.join("\n")}`;
+      }
       const applies = e.applies ?? {};
       const inner = applies.effect ?? {};
-      const { trail: durTrail } = durationClauses(e.duration);
-      const when =
-        applies.to === "target"
-          ? "while it is your target"
-          : applies.to === "bearer-attacks-target"
-            ? "each time this unit makes an attack against it"
-            : applies.to === "bound-unit-attacks-reference"
-              ? designatedAttackWhen(applies as Record<string, unknown>)
-              : designationAttackerPhrase(applies, true);
+      const when = designationWhen(applies, true);
       const whenClause = durTrail ? `${capitalize(durTrail)}, ${when}` : capitalize(when);
       const head = `${indent}${arrow}Select ${designationTargetSubject(sel)}${desig}. ${whenClause}`;
       const recipientCtx = designatedRecipientContext(applies, ctx);
@@ -1158,7 +1174,7 @@ function designatedAttackWhen(applies: Record<string, unknown>): string {
   return `each time ${source} makes an attack against ${target}`;
 }
 
-function designatedRecipientContext(applies: Effect["applies"], ctx: Ctx): Ctx {
+function designatedRecipientContext(applies: DesignationApplies | undefined, ctx: Ctx): Ctx {
   if (applies?.to !== "bound-unit-attacks-reference") return ctx;
   return { ...ctx, unitSubject: selectionRefName(applies.beneficiary, "the selected beneficiary unit") };
 }

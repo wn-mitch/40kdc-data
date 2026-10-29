@@ -556,39 +556,45 @@ function walk(
       });
       return;
     case "designate-target": {
-      const applies = isObject(currentNode.applies) ? currentNode.applies : {};
-      if (applies.to === "attackers-of-target" || applies.to === "bearer-attacks-target") {
-        for (const filter of [applies.attacker_filter, applies.attacker_unit_filter]) {
-          if (filter === undefined) continue;
-          const verdict = matchesUnitFilter(filter, opts.context, "attacker");
-          if (verdict === false) return;
-          if (verdict === "unknown") {
-            out.unsupported.push({ reason: "designate-target attacker filter is unresolved", effectFragment: currentNode });
-            return;
+      // "applies" is one entry, or a list with one entry per `to` (a direct effect and attacks against the unit).
+      const entries = Array.isArray(currentNode.applies) ? currentNode.applies.filter(isObject) : [isObject(currentNode.applies) ? currentNode.applies : {}];
+      for (const applies of entries) {
+        if (applies.to === "attackers-of-target" || applies.to === "bearer-attacks-target") {
+          let skip = false;
+          for (const filter of [applies.attacker_filter, applies.attacker_unit_filter]) {
+            if (filter === undefined) continue;
+            const verdict = matchesUnitFilter(filter, opts.context, "attacker");
+            if (verdict === false) { skip = true; break; }
+            if (verdict === "unknown") {
+              out.unsupported.push({ reason: "designate-target attacker filter is unresolved", effectFragment: currentNode });
+              skip = true;
+              break;
+            }
           }
+          if (skip) continue;
+          // A designation restricted to units the target is not (e.g. an enemy VEHICLE) never marks it.
+          const selector = isObject(currentNode.select) && currentNode.select.kind === "unit" && isObject(currentNode.select.selector)
+            ? currentNode.select.selector
+            : undefined;
+          if (selector?.filter !== undefined && matchesUnitFilter(selector.filter, opts.context, "target", "enemy") === false) continue;
+          // Which enemy unit is designated is the player's pick, so its buffs are one opt-in lever
+          // ("this defender is the designated unit"); the player vouches for the selection's
+          // eligibility (range, visibility, "hit by those attacks").
+          const sub: EffectTranslation = { applied: [], unsupported: [], activatable: [] };
+          walk(applies.effect, source, opts, sub);
+          out.unsupported.push(...sub.unsupported);
+          const requirement = { select: currentNode.select, duration: currentNode.duration };
+          out.activatable.push(...sub.activatable.map((lever) => ({ ...lever, requires: [requirement, ...(lever.requires ?? [])] })));
+          if (sub.applied.length > 0) {
+            const designation = typeof currentNode.designation === "string" ? currentNode.designation : "designated";
+            out.activatable.push({ id: `${opts.abilityId}#${designation}`, label: `Designated target: ${labelForBuffs(sub.applied)}`, buffs: sub.applied, requires: [requirement] });
+          }
+        } else {
+          out.unsupported.push({
+            reason: "designate-target debuff on the marked unit: not a buff on the bearer",
+            effectFragment: currentNode,
+          });
         }
-        // A designation restricted to units the target is not (e.g. an enemy VEHICLE) never marks it.
-        const selector = isObject(currentNode.select) && currentNode.select.kind === "unit" && isObject(currentNode.select.selector)
-          ? currentNode.select.selector
-          : undefined;
-        if (selector?.filter !== undefined && matchesUnitFilter(selector.filter, opts.context, "target", "enemy") === false) return;
-        // Which enemy unit is designated is the player's pick, so its buffs are one opt-in lever
-        // ("this defender is the designated unit"); the player vouches for the selection's
-        // eligibility (range, visibility, "hit by those attacks").
-        const sub: EffectTranslation = { applied: [], unsupported: [], activatable: [] };
-        walk(applies.effect, source, opts, sub);
-        out.unsupported.push(...sub.unsupported);
-        const requirement = { select: currentNode.select, duration: currentNode.duration };
-        out.activatable.push(...sub.activatable.map((lever) => ({ ...lever, requires: [requirement, ...(lever.requires ?? [])] })));
-        if (sub.applied.length > 0) {
-          const designation = typeof currentNode.designation === "string" ? currentNode.designation : "designated";
-          out.activatable.push({ id: `${opts.abilityId}#${designation}`, label: `Designated target: ${labelForBuffs(sub.applied)}`, buffs: sub.applied, requires: [requirement] });
-        }
-      } else {
-        out.unsupported.push({
-          reason: "designate-target debuff on the marked unit: not a buff on the bearer",
-          effectFragment: currentNode,
-        });
       }
       return;
     }

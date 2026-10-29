@@ -41,6 +41,7 @@ DESIGNATION_IDS: frozenset[str] = frozenset(
         "claw-of-ascension-survey-augur-target",
         "cleansed",
         "co-ordinated-eradication-target",
+        "combined-fire-target",
         "condemned",
         "conqueror-imperative-active",
         "consecrated",

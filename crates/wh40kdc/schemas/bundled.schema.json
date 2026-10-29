@@ -12288,36 +12288,34 @@
           ]
         },
         "applies": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "to": {
-              "enum": [
-                "target",
-                "attackers-of-target",
-                "bearer-attacks-target",
-                "bound-unit-attacks-reference"
-              ]
+          "description": "What the designation does: one entry, or one entry per `to` when it does more than one thing to the designated unit (\"that enemy unit cannot have the Benefit of Cover, and each time a friendly unit makes an attack that targets that unit, …\"). Each entry of a list names a different `to`; a list never holds bound-unit-attacks-reference.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/designation-applies"
             },
-            "effect": {
-              "$ref": "#/$defs/effect-node"
-            },
-            "attacker_filter": {
-              "$ref": "#/$defs/unit-filter"
-            },
-            "attacker_unit_filter": {
-              "$ref": "#/$defs/unit-filter"
-            },
-            "beneficiary": {
-              "$ref": "#/$defs/event-or-selection-reference"
-            },
-            "reference": {
-              "$ref": "#/$defs/selection-reference"
+            {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 3,
+              "items": {
+                "allOf": [
+                  {
+                    "$ref": "#/$defs/designation-applies"
+                  },
+                  {
+                    "properties": {
+                      "to": {
+                        "enum": [
+                          "target",
+                          "attackers-of-target",
+                          "bearer-attacks-target"
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
             }
-          },
-          "required": [
-            "to",
-            "effect"
           ]
         },
         "duration": {
@@ -13400,6 +13398,39 @@
         "comparison",
         "threshold",
         "modifiers"
+      ]
+    },
+    "designation-applies": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "to": {
+          "enum": [
+            "target",
+            "attackers-of-target",
+            "bearer-attacks-target",
+            "bound-unit-attacks-reference"
+          ]
+        },
+        "effect": {
+          "$ref": "#/$defs/effect-node"
+        },
+        "attacker_filter": {
+          "$ref": "#/$defs/unit-filter"
+        },
+        "attacker_unit_filter": {
+          "$ref": "#/$defs/unit-filter"
+        },
+        "beneficiary": {
+          "$ref": "#/$defs/event-or-selection-reference"
+        },
+        "reference": {
+          "$ref": "#/$defs/selection-reference"
+        }
+      },
+      "required": [
+        "to",
+        "effect"
       ]
     },
     "effect": {

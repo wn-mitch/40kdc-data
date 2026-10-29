@@ -137,24 +137,43 @@ pub(crate) fn designate_target_inline(e: &P, ctx: &Ctx) -> String {
     } else {
         String::new()
     };
-    let applies = obj(nn(e, "applies"));
     let (_, trail) = duration_clauses(e.get("duration"));
-    let when = designate_when(applies, false);
-    let when_clause = if trail.is_empty() {
-        when
-    } else {
-        format!("{trail}, {when}")
+    // "while it is your target, …; and each time a friendly unit attacks it, …": one clause per entry.
+    let clauses: Vec<String> = designation_entries(e)
+        .into_iter()
+        .map(|applies| {
+            format!(
+                "{}, {}",
+                designate_when(applies, false),
+                inline(
+                    nn(applies, "effect").unwrap_or(empty_value()),
+                    &designated_recipient_context(applies, ctx)
+                )
+            )
+        })
+        .collect();
+    let body = match clauses.split_last() {
+        Some((last, rest)) if !rest.is_empty() => format!("{}; and {last}", rest.join("; ")),
+        _ => clauses.concat(),
     };
-    let recipient_ctx = designated_recipient_context(applies, ctx);
+    let lead = if trail.is_empty() {
+        String::new()
+    } else {
+        format!("{trail}, ")
+    };
     format!(
-        "{} {}{desig}; {when_clause}, {}",
+        "{} {}{desig}; {lead}{body}",
         designation_select_lead(sel, false),
-        designation_target_subject(sel),
-        inline(
-            nn(applies, "effect").unwrap_or(empty_value()),
-            &recipient_ctx
-        )
+        designation_target_subject(sel)
     )
+}
+
+/// A designate-target's `applies` as a list: one entry, or each entry of a list.
+pub(crate) fn designation_entries(e: &P) -> Vec<&P> {
+    match e.get("applies") {
+        Some(Value::Array(items)) => items.iter().map(|item| obj(Some(item))).collect(),
+        _ => vec![obj(nn(e, "applies"))],
+    }
 }
 
 pub(super) fn persistent_name(designation: Option<&Value>, scope: Option<&str>) -> String {

@@ -4158,15 +4158,48 @@ export interface DesignateTargetEffect {
     kind: "unit" | "objective";
     selector: UnitSelector | ObjectiveSelector;
   };
-  applies: {
-    to: "target" | "attackers-of-target" | "bearer-attacks-target" | "bound-unit-attacks-reference";
-    effect: EffectNode;
-    attacker_filter?: UnitFilter;
-    attacker_unit_filter?: UnitFilter;
-    beneficiary?: EventOrSelectionReference;
-    reference?: SelectionReference;
-  };
+  /**
+   * What the designation does: one entry, or one entry per `to` when it does more than one thing to the designated unit ("that enemy unit cannot have the Benefit of Cover, and each time a friendly unit makes an attack that targets that unit, …"). Each entry of a list names a different `to`; a list never holds bound-unit-attacks-reference.
+   */
+  applies:
+    | DesignationApplies
+    | [
+        DesignationApplies & {
+          to?: "target" | "attackers-of-target" | "bearer-attacks-target";
+          [k: string]: unknown;
+        },
+        DesignationApplies & {
+          to?: "target" | "attackers-of-target" | "bearer-attacks-target";
+          [k: string]: unknown;
+        }
+      ]
+    | [
+        DesignationApplies & {
+          to?: "target" | "attackers-of-target" | "bearer-attacks-target";
+          [k: string]: unknown;
+        },
+        DesignationApplies & {
+          to?: "target" | "attackers-of-target" | "bearer-attacks-target";
+          [k: string]: unknown;
+        },
+        DesignationApplies & {
+          to?: "target" | "attackers-of-target" | "bearer-attacks-target";
+          [k: string]: unknown;
+        }
+      ];
   duration?: ScopeDuration;
+}
+/**
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "designation-applies".
+ */
+export interface DesignationApplies {
+  to: "target" | "attackers-of-target" | "bearer-attacks-target" | "bound-unit-attacks-reference";
+  effect: EffectNode;
+  attacker_filter?: UnitFilter;
+  attacker_unit_filter?: UnitFilter;
+  beneficiary?: EventOrSelectionReference;
+  reference?: SelectionReference;
 }
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema

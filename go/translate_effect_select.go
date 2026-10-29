@@ -374,14 +374,32 @@ func designateTargetInline(e map[string]any, ctx effCtx) string {
 		desig = designationLabel(e["designation"])
 	}
 	_, durTrail := durationClauses(e["duration"])
-	applies := mapOr(e["applies"])
-	when := designateTargetWhen(applies, false)
-	whenClause := when
-	if durTrail != "" {
-		whenClause = durTrail + ", " + when
+	// "while it is your target, …; and each time a friendly unit attacks it, …": one clause per entry.
+	var clauses []string
+	for _, applies := range designationEntries(e) {
+		clauses = append(clauses, designateTargetWhen(applies, false)+", "+describeEffectInline(mapOr(applies["effect"]), designatedRecipientContext(applies, ctx)))
 	}
-	recipientCtx := designatedRecipientContext(applies, ctx)
-	return "select " + designationTargetSubject(sel) + desig + "; " + whenClause + ", " + describeEffectInline(mapOr(applies["effect"]), recipientCtx)
+	body := clauses[0]
+	if len(clauses) > 1 {
+		body = strings.Join(clauses[:len(clauses)-1], "; ") + "; and " + clauses[len(clauses)-1]
+	}
+	lead := ""
+	if durTrail != "" {
+		lead = durTrail + ", "
+	}
+	return "select " + designationTargetSubject(sel) + desig + "; " + lead + body
+}
+
+// designationEntries is a designate-target's applies as a list: one entry, or each entry of a list.
+func designationEntries(e map[string]any) []map[string]any {
+	if list, ok := e["applies"].([]any); ok {
+		entries := make([]map[string]any, 0, len(list))
+		for _, entry := range list {
+			entries = append(entries, mapOr(entry))
+		}
+		return entries
+	}
+	return []map[string]any{mapOr(e["applies"])}
 }
 
 func designateTargetBlock(e map[string]any, indent, arrow string, depth int, ctx effCtx) string {
@@ -390,9 +408,28 @@ func designateTargetBlock(e map[string]any, indent, arrow string, depth int, ctx
 	if jsTruthy(e["designation"]) {
 		desig = designationLabel(e["designation"])
 	}
+	_, durTrail := durationClauses(e["duration"])
+	if _, ok := e["applies"].([]any); ok {
+		// One line per entry under the selection, each with its own moment.
+		var lines []string
+		for _, applies := range designationEntries(e) {
+			recipient := designatedRecipientContext(applies, ctx)
+			entry := mapOr(applies["effect"])
+			lead := indent + "  -> " + capitalize(designateTargetWhen(applies, true))
+			if containerTypes[ejstrType(entry)] {
+				lines = append(lines, lead+":\n"+describeEffect(entry, depth+2, recipient))
+			} else {
+				lines = append(lines, lead+", "+describeEffectInline(entry, recipient)+".")
+			}
+		}
+		during := ""
+		if durTrail != "" {
+			during = ". " + capitalize(durTrail)
+		}
+		return indent + arrow + "Select " + designationTargetSubject(sel) + desig + during + ":\n" + strings.Join(lines, "\n")
+	}
 	applies := mapOr(e["applies"])
 	inner := mapOr(applies["effect"])
-	_, durTrail := durationClauses(e["duration"])
 	when := designateTargetWhen(applies, true)
 	whenClause := capitalize(when)
 	if durTrail != "" {

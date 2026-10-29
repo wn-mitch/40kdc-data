@@ -15886,6 +15886,198 @@
         "needKeys": [],
         "activatable": []
       }
+    },
+    {
+      "caseId": "canonical/designation/applies-list-unit-first",
+      "abilityId": "designation-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "designation-example",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "designate-target",
+        "designation": "combined-fire-target",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            }
+          }
+        },
+        "applies": [
+          {
+            "to": "target",
+            "effect": {
+              "type": "rule-state",
+              "target": "selected-unit",
+              "modifier": {
+                "direction": "suppressed",
+                "rule_kind": "core-rule",
+                "rule": "benefit-of-cover"
+              }
+            }
+          },
+          {
+            "to": "attackers-of-target",
+            "effect": {
+              "type": "stat-modifier",
+              "target": {
+                "owner": "friendly"
+              },
+              "modifier": {
+                "stat": "S",
+                "operation": "improve",
+                "value": 2
+              }
+            }
+          }
+        ],
+        "duration": "phase"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "designate-target debuff on the marked unit: not a buff on the bearer"
+        ],
+        "needKeys": [],
+        "activatable": [
+          {
+            "id": "designation-example#combined-fire-target",
+            "label": "Designated target: +2 strength",
+            "group": null,
+            "requires": [
+              {
+                "select": {
+                  "kind": "unit",
+                  "selector": {
+                    "filter": {
+                      "owner": "enemy"
+                    },
+                    "count": {
+                      "min": 1,
+                      "max": 1
+                    }
+                  }
+                },
+                "duration": "phase"
+              }
+            ],
+            "capRaise": null,
+            "buffs": [
+              {
+                "type": "strength-mod",
+                "value": 2
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/designation/applies-list-attacks-first",
+      "abilityId": "designation-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "designation-example",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "designate-target",
+        "designation": "combined-fire-target",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            }
+          }
+        },
+        "applies": [
+          {
+            "to": "attackers-of-target",
+            "effect": {
+              "type": "stat-modifier",
+              "target": {
+                "owner": "friendly"
+              },
+              "modifier": {
+                "stat": "S",
+                "operation": "improve",
+                "value": 2
+              }
+            }
+          },
+          {
+            "to": "target",
+            "effect": {
+              "type": "rule-state",
+              "target": "selected-unit",
+              "modifier": {
+                "direction": "suppressed",
+                "rule_kind": "core-rule",
+                "rule": "benefit-of-cover"
+              }
+            }
+          }
+        ],
+        "duration": "phase"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "designate-target debuff on the marked unit: not a buff on the bearer"
+        ],
+        "needKeys": [],
+        "activatable": [
+          {
+            "id": "designation-example#combined-fire-target",
+            "label": "Designated target: +2 strength",
+            "group": null,
+            "requires": [
+              {
+                "select": {
+                  "kind": "unit",
+                  "selector": {
+                    "filter": {
+                      "owner": "enemy"
+                    },
+                    "count": {
+                      "min": 1,
+                      "max": 1
+                    }
+                  }
+                },
+                "duration": "phase"
+              }
+            ],
+            "capRaise": null,
+            "buffs": [
+              {
+                "type": "strength-mod",
+                "value": 2
+              }
+            ]
+          }
+        ]
+      }
     }
   ]
 }

@@ -152,7 +152,11 @@ export function bindParts(frame: PartFrame, plan: ReturnType<typeof planEffects>
   // An optional spend before a designated selection is lifted out of its body (see designatedSpends below); one after it is not.
   const unlimitedItem = (item: PlannedEffect) => !optionalSpends.has(item.leaf);
   const designatedSpends = selections.length === 1 && selected.length > 0 ? planned.filter((item) => optionalSpends.has(item.leaf) && item.leaf.start_byte < selections[0]!.start_byte) : [];
-  if (selections.length === 1 && selected.length > 0 && (selected.filter(unlimitedItem).length !== planned.filter(unlimitedItem).length
+  // "that enemy unit cannot have the Benefit of Cover, and each time … makes an attack that targets that unit, …": an
+  // effect on the selected unit itself is the designation's own entry (applies to: target) beside the attacks' entry.
+  const unselected = selections.length === 1 && selected.length > 0 ? planned.filter((item) => unlimitedItem(item) && !item.selected) : [];
+  const direct = partStarts.length === 0 && unselected.every((item) => item.node.target === "selected-unit") ? unselected : [];
+  if (selections.length === 1 && selected.length > 0 && (selected.filter(unlimitedItem).length + direct.length !== planned.filter(unlimitedItem).length
     || planned.some((item) => optionalSpends.has(item.leaf) && !designatedSpends.includes(item)))) errors.push("A unit is selected, but not every effect is limited to attacks against it.");
   if (selections.length === 0 && selected.length > 0) errors.push("An attack targets \"that unit\", but no select-unit leaf says which unit.");
   if (selections.length === 0 && planned.some((item) => namesSelected(item.node))) errors.push("An effect names \"that unit\", but no select-unit leaf says which unit.");
@@ -194,7 +198,7 @@ export function bindParts(frame: PartFrame, plan: ReturnType<typeof planEffects>
   // When the window is itself an attack moment ("just after an enemy unit has shot"), the reactive trigger already is "those attacks".
   const attackMoment = list.some((leaf) => leaf.family_id === "event" && ["enemy-has-shot", "attacks-resolved", "after-shooting"].includes(String(leaf.parameters.kind)));
   if (!attackMoment && list.some((leaf) => leaf.family_id === "stratagem-target") && list.some((leaf) => leaf.family_id === "hit-by-attacks" && leaf.fragment === "TARGET")) errors.push("A hit-by-attacks qualifier on a Stratagem target has no DSL shape yet; it would be dropped.");
-  return { firstEffectIndex, partStarts, afterDestruction, delayed, fold, selectionLimit, target, nearTarget, selected, pair, independent, designatedSpends };
+  return { firstEffectIndex, partStarts, afterDestruction, delayed, fold, selectionLimit, target, nearTarget, selected, pair, independent, designatedSpends, direct };
 }
 
 /** Whether an effect (or one nested in it) applies to the selected unit. */

@@ -3918,22 +3918,11 @@ class Select1(TypedDict):
     selector: UnitSelector | ObjectiveSelector
 
 
-class Applies(TypedDict):
-    to: Literal[
-        "target", "attackers-of-target", "bearer-attacks-target", "bound-unit-attacks-reference"
-    ]
-    effect: EffectNode
-    attacker_filter: NotRequired[UnitFilter]
-    attacker_unit_filter: NotRequired[UnitFilter]
-    beneficiary: NotRequired[EventOrSelectionReference]
-    reference: NotRequired[SelectionReference]
-
-
 class DesignateTargetEffect(TypedDict):
     type: Literal["designate-target"]
     designation: str
     select: Select1
-    applies: Applies
+    applies: DesignationApplies | list[Apply]
     duration: NotRequired[ScopeDuration]
 
 
@@ -4132,6 +4121,17 @@ class DeathGate(TypedDict):
     modifiers: list[Modifier62]
 
 
+class DesignationApplies(TypedDict):
+    to: Literal[
+        "target", "attackers-of-target", "bearer-attacks-target", "bound-unit-attacks-reference"
+    ]
+    effect: EffectNode
+    attacker_filter: NotRequired[UnitFilter]
+    attacker_unit_filter: NotRequired[UnitFilter]
+    beneficiary: NotRequired[EventOrSelectionReference]
+    reference: NotRequired[SelectionReference]
+
+
 Effect: TypeAlias = EffectNode
 
 
@@ -4148,3 +4148,7 @@ class ResourcePool(TypedDict):
     generation: NotRequired[list[GenerationItem]]
     max_size: NotRequired[int | None]
     game_version: GameVersionRef
+
+
+class Apply(DesignationApplies):
+    to: NotRequired[Literal["target", "attackers-of-target", "bearer-attacks-target"]]

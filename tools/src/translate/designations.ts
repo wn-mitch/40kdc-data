@@ -35,6 +35,7 @@ export const DESIGNATION_IDS: ReadonlySet<string> = new Set([
   "claw-of-ascension-survey-augur-target",
   "cleansed",
   "co-ordinated-eradication-target",
+  "combined-fire-target",
   "condemned",
   "conqueror-imperative-active",
   "consecrated",

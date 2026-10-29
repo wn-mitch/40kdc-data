@@ -8,7 +8,7 @@ import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { allOf, condition } from "./compile-conditions.js";
 import { durationPart, placeInWindow } from "./compile-durations.js";
 import { isRollMarker, resolveRolls } from "./compile-dice.js";
-import { boundAttackDesignation, designation, selectUnit, wrapAura, wrapForEachUnit, wrapLeaderTarget, wrapRulesBundle } from "./compile-wrappers.js";
+import { boundAttackDesignation, designation, directEntry, selectUnit, wrapAura, wrapForEachUnit, wrapLeaderTarget, wrapRulesBundle } from "./compile-wrappers.js";
 import { destroyedFilterObject, wrapModelAura } from "./compile-model-level.js";
 import { auraPart, namesUnboundRecipient } from "./compile-aura-parts.js";
 import { isForbiddenSetUp } from "./compile-set-up-placement.js";
@@ -103,7 +103,7 @@ export function assemblePart(
   } = frame;
   let { optional, optionalSentence } = frame;
   const { planned, split, boundDuration, window } = plan;
-  const { firstEffectIndex, partStarts, afterDestruction, delayed, fold, selectionLimit, target, nearTarget, selected, pair, independent, designatedSpends } = bindings;
+  const { firstEffectIndex, partStarts, afterDestruction, delayed, fold, selectionLimit, target, nearTarget, selected, pair, independent, designatedSpends, direct } = bindings;
   // A Stratagem's RESTRICTIONS apply to its use as a whole, so they belong to the first part, not to the moment printed before them.
   const partOf = (index: number) => list[index]!.fragment === "RESTRICTIONS" ? 0 : partStarts.filter((part) => part.index < index).length;
   // Each effect's own duration wraps its node before the parts are built. Under a window, an effect that
@@ -151,7 +151,7 @@ export function assemblePart(
     optionalSentence = Math.max(optionalSentence, connective.optionalSentence);
     offerSentences.push(connective.optionalSentence);
   }
-  const pieceItems = planned.filter((item) => !designatedSpends.includes(item) && !afterLoop.includes(item));
+  const pieceItems = planned.filter((item) => !designatedSpends.includes(item) && !afterLoop.includes(item) && !direct.includes(item));
   const pieces = [0, ...partStarts.map((_, position) => position + 1)].map((part) => attempt(() => resolveRolls(
     pieceItems.filter((item) => partOf(item.index) === part),
     part === 0 ? global : [],
@@ -237,7 +237,10 @@ export function assemblePart(
     // attacker gate ("that disembarked from this TRANSPORT") narrows it the same way.
     const attackGates = global.filter((node) => node.type === "attack-is" || isAttackerGate(node));
     if (attackGates.length) global.splice(0, global.length, ...global.filter((node) => !attackGates.includes(node)));
-    body = attempt(() => designation(options.name, selections[0]!, list, gated(attackGates, body!), durations[0], eligibility, selectionLimit));
+    // An effect on the designated unit itself (bindings' `direct`) is the designation's own entry.
+    const directOwn = direct.length ? attempt(() => directEntry(direct, rolls)) : null;
+    if (direct.length && directOwn === null) return { ok: false, signature, errors };
+    body = attempt(() => designation(options.name, selections[0]!, list, gated(attackGates, body!), durations[0], eligibility, selectionLimit, false, directOwn));
     // The lifted spends come before the designation, so the designation's read of them is set when it is tested.
     if (body && designatedSpends.length) body = { type: "sequence", steps: [...designatedSpends.map((item) => gated(item.gate, item.node)), body] };
   }

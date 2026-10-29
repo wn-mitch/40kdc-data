@@ -8851,7 +8851,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "3537536d757d4e98260ebde3f409e9a5913b3de24bca9d10a2b8ba95e9783204",
     "version": "2025-q3",
@@ -8860,30 +8860,50 @@
     "faction_id": "astra-militarum",
     "detachment_id": "armoured-infantry",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "rule-state",
-          "target": {
+      "type": "designate-target",
+      "designation": "combined-fire-target",
+      "select": {
+        "kind": "unit",
+        "selector": {
+          "filter": {
             "owner": "enemy"
           },
-          "modifier": {
-            "direction": "suppressed",
-            "rule_kind": "core-rule",
-            "rule": "benefit-of-cover"
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "happened",
+            "parameters": {
+              "event": "after-roll",
+              "subject": "event-subject",
+              "object": "this-unit",
+              "filter": {
+                "roll": "hit",
+                "result": "success"
+              },
+              "window": "event"
+            }
+          }
+        }
+      },
+      "applies": [
+        {
+          "to": "target",
+          "effect": {
+            "type": "rule-state",
+            "target": "selected-unit",
+            "modifier": {
+              "direction": "suppressed",
+              "rule_kind": "core-rule",
+              "rule": "benefit-of-cover"
+            }
           }
         },
         {
-          "type": "conditional",
-          "condition": {
-            "type": "same-unit",
-            "parameters": {
-              "subject": "defender",
-              "as": "selected-unit"
-            }
-          },
+          "to": "attackers-of-target",
           "effect": {
             "type": "stat-modifier",
             "target": {
@@ -8894,12 +8914,13 @@
             },
             "modifier": {
               "stat": "S",
-              "operation": "add",
+              "operation": "improve",
               "value": 2
             }
           }
         }
-      ]
+      ],
+      "duration": "phase"
     },
     "scope": {
       "duration": "phase"
@@ -8908,6 +8929,18 @@
       "all_of": [
         "Armoured Skirmisher"
       ]
+    },
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ARMOURED SKIRMISHER"
+        ]
+      }
     }
   },
   {
