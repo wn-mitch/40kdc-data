@@ -28,7 +28,7 @@ import { normalizeTestParameters, TEST_FAMILIES } from "./test-family.js";
 import { normalizeTargetedParameters, TARGETED_FAMILIES } from "./targeted-family.js";
 import { normalizeGapContainerParameters, GAP_CONTAINER_FAMILIES } from "./gap-container-families.js";
 import { MISSION_PREDICATE_FAMILIES, normalizeMissionPredicateParameters } from "./mission-predicate-families.js";
-import { ENGAGEMENT_RELATION_FAMILIES } from "./families/regions.js";
+import { ENGAGEMENT_RELATION_FAMILIES, MARKER_COUNT_FAMILIES, normalizeMarkerCountParameters } from "./families/regions.js";
 import { CONDITION_EXCLUSION_FAMILIES } from "./families/leaf-structure.js";
 import { OTHERWISE_FAMILIES, normalizeOtherwiseParameters } from "./families/leaf-structure.js";
 import { normalizeRollProhibitionParameters, ROLL_PROHIBITION_FAMILIES } from "./families/rolls.js";
@@ -143,6 +143,7 @@ export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = wit
   ...EMBARKED_PERMISSION_FAMILIES,
   ...MOVE_PASSTHROUGH_USED_FAMILIES,
   ...NAMED_RANGE_FAMILIES,
+  ...MARKER_COUNT_FAMILIES,
 ]));
 
 /** The version new fingerprints and model requests use for a family. */
@@ -234,7 +235,8 @@ function familyParameters(family: string, input: Record<string, unknown>, versio
     ?? normalizeRollProhibitionParameters(family, input)
     ?? normalizeWeaponHasAbilityParameters(family, input)
     ?? normalizeMovePassthroughUsedParameters(family, input)
-    ?? normalizeNamedRangeParameters(family, input);
+    ?? normalizeNamedRangeParameters(family, input)
+    ?? normalizeMarkerCountParameters(family, input);
   if (normalized) return normalized;
   throw new RangeError(`Unknown reviewed semantic family ${family}@${version}.`);
 }

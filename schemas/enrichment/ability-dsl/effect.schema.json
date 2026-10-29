@@ -441,7 +441,7 @@
       ]
     },
     "rule-state-core-rule-slug": {
-      "$comment": "Closed vocabulary of core-rule slugs a `rule-state` effect may toggle (rule_kind: core-rule). These are 10e CORE RULES/mechanics (not core abilities — those are entities, reached via rule_kind: ability). Finite, slow-moving; AJV-enforced, stripped from codegen. The slug — not direction/target — disambiguates active vs passive of the same rule: `fire-overwatch` (the bearer firing Overwatch) vs `overwatch-against-bearer` (the bearer being targeted by Overwatch). For rule_kind `ability`/`faction-rule` the slug is a free string resolved by integrity.ts against the matching entity; `keyword` is a free string (open keyword set). A suppressed `attacking-ends-hidden` discounts, for good, the ranged attacks made while it holds: they never count toward the Hidden rule's ranged-attack clause, even after the effect ends; with `attacks` it discounts exactly the attacks of the bound event.",
+      "$comment": "Closed vocabulary of core-rule slugs a `rule-state` effect may toggle (rule_kind: core-rule). These are 10e CORE RULES/mechanics (not core abilities — those are entities, reached via rule_kind: ability). Finite, slow-moving; AJV-enforced, stripped from codegen. The slug — not direction/target — disambiguates active vs passive of the same rule: `fire-overwatch` (the bearer firing Overwatch) vs `overwatch-against-bearer` (the bearer being targeted by Overwatch). For rule_kind `ability`/`faction-rule` the slug is a free string resolved by integrity.ts against the matching entity; `keyword` is a free string (open keyword set). A suppressed `attacking-ends-hidden` discounts, for good, the ranged attacks made while it holds: they never count toward the Hidden rule's ranged-attack clause, even after the effect ends; with `attacks` it discounts exactly the attacks of the bound event. `reserves-destruction` is the rule that destroys a unit still in Strategic Reserves at the end of the third battle round.",
       "type": "string",
       "enum": [
         "benefit-of-cover",
@@ -457,7 +457,8 @@
         "engaged-shooting-hit-penalty",
         "charge-bonus",
         "hidden",
-        "orders-end-on-battle-shock"
+        "orders-end-on-battle-shock",
+        "reserves-destruction"
       ]
     },
     "dice-requirement": {
@@ -3557,7 +3558,7 @@
           "type": "object",
           "additionalProperties": false,
           "title": "set-up effect",
-          "description": "[placement] Set the target up: onto the battlefield or into Strategic Reserves, with the placement limits the rule prints. allow: false forbids that set-up instead. mandatory: it must be set up this way. arrives: it arrives in your next Movement phase (allow_first_round: even in the first battle round). wounds_remaining: the wounds a model set (back) up has; detach: it is set up as its own unit, no longer part of its attached unit; starting_strength: the Starting Strength of the unit it is set up as.",
+          "description": "[placement] Set the target up: onto the battlefield or into Strategic Reserves, with the placement limits the rule prints. allow: false forbids that set-up instead. mandatory: it must be set up this way. arrives: it arrives in your next Movement phase. allow_first_round: it can be set up this way even in the first battle round (with arrives, that arrival). wounds_remaining: the wounds a model set (back) up has; detach: it is set up as its own unit, no longer part of its attached unit; starting_strength: the Starting Strength of the unit it is set up as.",
           "required": [
             "type",
             "target",
@@ -3762,20 +3763,6 @@
               },
               "required": [
                 "to"
-              ],
-              "allOf": [
-                {
-                  "if": {
-                    "required": [
-                      "allow_first_round"
-                    ]
-                  },
-                  "then": {
-                    "required": [
-                      "arrives"
-                    ]
-                  }
-                }
               ]
             },
             "scaling": {
@@ -4362,7 +4349,8 @@
                     {
                       "enum": [
                         "all",
-                        "one-or-more"
+                        "one-or-more",
+                        "by-table"
                       ]
                     }
                   ]
@@ -4378,6 +4366,42 @@
                 },
                 "requirement": {
                   "$ref": "#/$defs/dice-requirement-spec"
+                },
+                "amount_table": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "unit_ids",
+                      "starting_strength",
+                      "amount"
+                    ],
+                    "properties": {
+                      "unit_ids": {
+                        "type": "array",
+                        "minItems": 1,
+                        "uniqueItems": true,
+                        "items": {
+                          "$ref": "../../defs/common.schema.json#/$defs/entity-id"
+                        }
+                      },
+                      "starting_strength": {
+                        "type": "integer",
+                        "minimum": 1
+                      },
+                      "amount": {
+                        "type": "integer",
+                        "minimum": 0
+                      }
+                    }
+                  },
+                  "description": "With amount by-table: the amount for a unit of one of unit_ids at that Starting Strength (attached CHARACTER models not counted). table_of names the unit; a unit no row matches cannot pay."
+                },
+                "table_of": {
+                  "$ref": "../../defs/common.schema.json#/$defs/unit-ref",
+                  "description": "With amount by-table: the unit whose datasheet and Starting Strength choose the row."
                 }
               },
               "required": [
@@ -4389,6 +4413,38 @@
                   "face",
                   "requirement"
                 ]
+              },
+              "if": {
+                "properties": {
+                  "amount": {
+                    "const": "by-table"
+                  }
+                },
+                "required": [
+                  "amount"
+                ]
+              },
+              "then": {
+                "required": [
+                  "amount_table",
+                  "table_of"
+                ]
+              },
+              "else": {
+                "not": {
+                  "anyOf": [
+                    {
+                      "required": [
+                        "amount_table"
+                      ]
+                    },
+                    {
+                      "required": [
+                        "table_of"
+                      ]
+                    }
+                  ]
+                }
               }
             },
             "scaling": {

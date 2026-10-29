@@ -11596,7 +11596,8 @@
           "owner": "friendly",
           "all_of": [
             "NECRONS"
-          ]
+          ],
+          "state": "in-strategic-reserves"
         }
       },
       "effect": {

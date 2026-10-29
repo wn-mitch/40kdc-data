@@ -338,8 +338,28 @@ def resource_gain(m: dict[str, Any]) -> str:
     return f"you gain {amount} {resource_noun(m.get('pool'), m.get('label'), a)}"
 
 
-def resource_spend(m: dict[str, Any]) -> str:
+def _cost_table(table: Any) -> str:
+    """A by-table spend's rows, one group per datasheet heading: "Aberrants: 4 for 5 models"."""
+    groups: list[tuple[str, list[str]]] = []
+    for row in table if isinstance(table, list) else []:
+        ids = or_list([title_case(jstr(i)) for i in row.get("unit_ids") or []])
+        entry = f"{jstr(row.get('amount'))} for {jstr(row.get('starting_strength'))} models"
+        if groups and groups[-1][0] == ids:
+            groups[-1][1].append(entry)
+        else:
+            groups.append((ids, [entry]))
+    return "; ".join(f"{ids}: {', '.join(rows)}" for ids, rows in groups)
+
+
+def resource_spend(m: dict[str, Any], ctx: Any = None) -> str:
     a = m.get("amount")
+    if a == "by-table":
+        noun = resource_noun(m.get("pool"), m.get("label"), 2)
+        whose = effect_subject(m.get("table_of"), ctx)
+        return (
+            f"spend the {noun} the cost table gives for the datasheet and Starting Strength "
+            f"of {whose} ({_cost_table(m.get('amount_table'))})"
+        )
     amount = "all your" if a == "all" else "one or more" if a == "one-or-more" else dice_case(a)
     if m.get("face") is not None:
         showing = f" showing a {jstr(m['face'])}"

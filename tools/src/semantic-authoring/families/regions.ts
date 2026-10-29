@@ -81,6 +81,27 @@ export const ENGAGEMENT_RELATION_FAMILIES: readonly SemanticFamilyDefinition[] =
   },
 ];
 
+/** A base family: the most units a selection can take is how many of your markers of a label are on the battlefield. */
+export const MARKER_COUNT_FAMILIES: readonly SemanticFamilyDefinition[] = [
+  {
+    id: "count-by-markers",
+    version: 1,
+    role: "RESTRICTION",
+    label: "How many, one per marker",
+    description: "\"For each of your Cult Ambush markers still on the battlefield, you can select one unit\": the most units the selection can take is the number of your markers of this label on the battlefield.",
+    starter: { marker: "" },
+    parameterSchema: { type: "object", required: ["marker"], properties: { marker: { type: "string", pattern: ENTITY_ID_PATTERN.source } }, additionalProperties: false },
+  },
+];
+
+/** count-by-markers parameters: exactly a kebab-case marker label. */
+export function normalizeMarkerCountParameters(family: string, input: Record<string, unknown>): Record<string, unknown> | null {
+  if (family !== "count-by-markers") return null;
+  if (Object.keys(input).join() !== "marker") throw new TypeError("count-by-markers parameters must be exactly: marker.");
+  if (typeof input.marker !== "string" || !ENTITY_ID_PATTERN.test(input.marker)) throw new TypeError("count-by-markers.marker is a kebab-case marker label.");
+  return { marker: input.marker };
+}
+
 export const REGION_EXTENSIONS: readonly FamilyExtension[] = [
   {
     // "if a friendly X unit is within a terrain area, that unit …": the units an earlier filter matches.

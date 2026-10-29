@@ -99,7 +99,7 @@ export function assemblePart(
   const {
     list, places, errors, attempt, consumedByContainer, designationOptional, global, triggers, triggerIndexes, nestedMoments, nestedTriggers,
     bandTriggers, durations, durationAt, selections, rolls, usages, usageIndexes, usabilityNodes, optionalSpend, checks, targetParts, auraLeaf, leaderLeaf,
-    forEachLeaf, rulesBundle, rawOf, eligibilityIndexes, pairCandidates, battleSizeCount, roundCount,
+    forEachLeaf, rulesBundle, rawOf, eligibilityIndexes, pairCandidates, battleSizeCount, countOf,
   } = frame;
   let { optional, optionalSentence } = frame;
   const { planned, split, boundDuration, window } = plan;
@@ -171,11 +171,19 @@ export function assemblePart(
   const eligibility = eligibilityIndexes.length ? attempt(() => allOf(eligibilityIndexes.map((at) => condition(eligibilityLeaf(list[at]!))))) : null;
   // A condition the selection cannot say is a refusal, not an eligibility left off the selection.
   if (eligibilityIndexes.length && eligibility === null) return { ok: false, signature, errors };
+  // A count by battle size, battle round or markers caps the one selection's max_count.
+  const maxCount: Node | undefined = battleSizeCount
+    ? { incursion: battleSizeCount.parameters.incursion, "strike-force": battleSizeCount.parameters["strike-force"], onslaught: battleSizeCount.parameters.onslaught }
+    : countOf ? (countOf.family_id === "count-by-markers" ? { count_of: "markers", marker: countOf.parameters.marker } : { count_of: "battle-round" }) : undefined;
+  const countLeaf = battleSizeCount ?? countOf;
+  if (selectionPart !== null && countLeaf && partOf(list.indexOf(countLeaf)) !== selectionPart) {
+    return { ok: false, signature, errors: [...errors, "A selection count sits in a different part from the selection it limits."] };
+  }
   if (selectionPart !== null && selectionPart > 0) {
     const own = pieces[selectionPart]!;
     // A designated selection takes its eligibility in designation() below, so the part's select takes it only otherwise.
     const designated = selected.length > 0;
-    pieces[selectionPart] = [selectUnit(selections[0]!, own.length === 1 ? own[0]! : { type: "sequence", steps: own }, { selectionLimit, eligibility: designated ? null : eligibility })];
+    pieces[selectionPart] = [selectUnit(selections[0]!, own.length === 1 ? own[0]! : { type: "sequence", steps: own }, { selectionLimit, eligibility: designated ? null : eligibility, ...(maxCount ? { maxCount } : {}) })];
   }
   let steps = pieces[0]!;
   // Under a window, the effects that last within it sit in one window part, which takes the moment as its trigger below.
@@ -262,8 +270,7 @@ export function assemblePart(
   }
   else if (selections.length === 1 && (selectionPart === null || selectionPart === 0)) {
     body = selectUnit(selections[0]!, body, {
-      ...(battleSizeCount ? { maxCount: { incursion: battleSizeCount.parameters.incursion, "strike-force": battleSizeCount.parameters["strike-force"], onslaught: battleSizeCount.parameters.onslaught } } : {}),
-      ...(roundCount && !battleSizeCount ? { maxCount: { count_of: "battle-round" } } : {}),
+      ...(maxCount ? { maxCount } : {}),
       eligibility,
       selectionLimit,
     });

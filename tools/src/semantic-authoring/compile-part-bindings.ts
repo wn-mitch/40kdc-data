@@ -28,7 +28,7 @@ export type PartBindings = ReturnType<typeof bindParts>;
 export function bindParts(frame: PartFrame, plan: ReturnType<typeof planEffects>, sourceText: string | undefined, options: CompileOptions) {
   const {
     list, errors, attempt, triggers, triggerIndexes, durations, selections, modelUsages, usageIndexes, usages, usageScopes, selectedUnitUsages,
-    targetParts, targetPartIndexes, targetConditions, optionalTargets, optionalSpends, forEachLeaf, battleSizeCount, roundCount, pairCandidates,
+    targetParts, targetPartIndexes, targetConditions, optionalTargets, optionalSpends, forEachLeaf, battleSizeCount, countOf, pairCandidates,
     pairGatesBound, rolls, auraLeaf, leaderLeaf, rulesBundle, optionalSpend,
   } = frame;
   const { planned, split } = plan;
@@ -127,25 +127,25 @@ export function bindParts(frame: PartFrame, plan: ReturnType<typeof planEffects>
   const independent = pair === null && errors.length === 0 ? attempt(() => independentSelectionPair(selections)) : null;
   if (selections.length > 1 && pair === null && independent === null && errors.length === 0) errors.push("More than one unit is selected; the compiler binds only one.");
   if (independent) {
-    const refusal = independentPairRefusal(list, { parts: partStarts.length > 0, forEach: forEachLeaf !== null, count: Boolean(battleSizeCount || roundCount) });
+    const refusal = independentPairRefusal(list, { parts: partStarts.length > 0, forEach: forEachLeaf !== null, count: Boolean(battleSizeCount || countOf) });
     if (refusal) errors.push(refusal);
   }
   // A select measured from the other selection with no distance of its own takes that measure from a candidate leaf; with none it would be unbounded.
   if (pair && typeof pair.inner.parameters.within_of === "string" && pair.inner.parameters.distance !== "within" && pairCandidates.length === 0) {
     errors.push("A selection measured from another selection with no distance needs a unit-position or eligible leaf naming that selection.");
   }
-  if (pair && (selected.length > 0 || list.some((leaf) => leaf.family_id === "attack") || partStarts.length > 0 || forEachLeaf || !pairGatesBound || battleSizeCount || roundCount)) {
+  if (pair && (selected.length > 0 || list.some((leaf) => leaf.family_id === "attack") || partStarts.length > 0 || forEachLeaf || !pairGatesBound || battleSizeCount || countOf)) {
     errors.push("A bound selection's effects are only the inner unit's; attacks, parts, eligibility, battle-size counts and for-each loops are not bound with it yet.");
   }
   // A count (by battle size or by battle round) caps the one plain selection's max_count. A designation, a compound part,
   // a persistent designation and a for-each loop never read it, so the cap would be lost and the selection would take one unit.
-  if (battleSizeCount && roundCount) errors.push("A selection takes one count, by battle size or by battle round, not both.");
-  const lostCount = battleSizeCount ?? roundCount;
-  const countName = roundCount && !battleSizeCount ? "round" : "size";
-  if (roundCount && selections.length === 0) errors.push("A count by battle round needs the unit selection it limits.");
+  if (battleSizeCount && countOf) errors.push("A selection takes one count, by battle size or by a count_of (battle round, markers), not both.");
+  const lostCount = battleSizeCount ?? countOf;
+  const countName = countOf && !battleSizeCount ? (countOf.family_id === "count-by-markers" ? "markers" : "battle round") : "battle size";
+  if (countOf && selections.length === 0) errors.push(`A count by ${countOf.family_id === "count-by-markers" ? "markers" : "battle round"} needs the unit selection it limits.`);
   if (lostCount && selections.length > 0 && !pair
-    && (selected.length > 0 || partStarts.length > 0 || forEachLeaf || list.some((leaf) => leaf.family_id === "persistent-designation-open"))) {
-    errors.push(`A count by battle ${countName} is carried only by a plain single selection.`);
+    && (selected.length > 0 || (partStarts.length > 0 && selections.length !== 1) || forEachLeaf || list.some((leaf) => leaf.family_id === "persistent-designation-open"))) {
+    errors.push(`A count by ${countName} is carried only by a plain single selection.`);
   }
   // A selection without "attacks against that unit" is only who "that unit" names (it suffers
   // mortal wounds, say); with it, every effect must be limited to those attacks.

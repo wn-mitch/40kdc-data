@@ -542,6 +542,14 @@ pub(crate) fn describe_board_leaf(e: &P, m: &P, subj: &str, ctx: &Ctx) -> String
             )
         }
         Some("resource-spend") => {
+            if sv(m, "amount") == Some("by-table") {
+                return format!(
+                    "spend the {} the cost table gives for the datasheet and Starting Strength of {} ({})",
+                    resource_noun(m.get("pool"), m.get("label"), Some(&Value::from(2))),
+                    effect_subject(m.get("table_of"), ctx),
+                    cost_table(m.get("amount_table"))
+                );
+            }
             let all = sv(m, "amount") == Some("all");
             let amount = match sv(m, "amount") {
                 Some("all") => "all your".to_string(),
@@ -586,4 +594,33 @@ pub(crate) fn describe_board_leaf(e: &P, m: &P, subj: &str, ctx: &Ctx) -> String
         Some(t) => format!("[{t}]"),
         None => "[unknown]".to_string(),
     }
+}
+
+/// A by-table spend's rows, one group per datasheet heading: "Aberrants: 4 for 5 models, 8 for 10 models; …".
+fn cost_table(table: Option<&Value>) -> String {
+    let mut groups: Vec<(String, Vec<String>)> = Vec::new();
+    for row in table.and_then(Value::as_array).into_iter().flatten() {
+        let ids: Vec<String> = row
+            .get("unit_ids")
+            .and_then(Value::as_array)
+            .into_iter()
+            .flatten()
+            .map(|id| title_case(&jstr(Some(id))))
+            .collect();
+        let ids = or_list(&ids);
+        let entry = format!(
+            "{} for {} models",
+            jstr(row.get("amount")),
+            jstr(row.get("starting_strength"))
+        );
+        match groups.last_mut() {
+            Some((last, rows)) if *last == ids => rows.push(entry),
+            _ => groups.push((ids, vec![entry])),
+        }
+    }
+    groups
+        .iter()
+        .map(|(ids, rows)| format!("{ids}: {}", rows.join(", ")))
+        .collect::<Vec<_>>()
+        .join("; ")
 }

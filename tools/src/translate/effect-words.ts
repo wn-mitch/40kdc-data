@@ -69,6 +69,8 @@ export function scaleSource(q: P): string {
   if (of === "models-equipped-with") s += ` ${titleCase(jstr(q.wargear))}`;
   if (q.keyword != null) s = s.replace(/^models\b/, `${jstr(q.keyword)} models`);
   if (q.within != null) s += ` within ${rangePhrase(q.within)}`;
+  // A label that already ends in "marker" ("cult-ambush-marker") must not read "marker markers".
+  if (of === "markers") s = `your ${dekebab(jstr(q.marker)).replace(/ marker$/i, "")} markers on the battlefield`;
   return s;
 }
 

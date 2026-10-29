@@ -9291,23 +9291,35 @@ impl ::std::default::Default for CountBounds {
         }
     }
 }
-///A number equal to how many of `count_of` there are (models in this unit with `keyword`, models equipped with `wargear`, the battle round number).
+///A number equal to how many of `count_of` there are (models in this unit with `keyword`, models equipped with `wargear`, the battle round number, your markers labelled `marker` on the battlefield).
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "A number equal to how many of `count_of` there are (models in this unit with `keyword`, models equipped with `wargear`, the battle round number).",
+///  "description": "A number equal to how many of `count_of` there are (models in this unit with `keyword`, models equipped with `wargear`, the battle round number, your markers labelled `marker` on the battlefield).",
 ///  "type": "object",
 ///  "required": [
 ///    "count_of"
 ///  ],
 ///  "properties": {
 ///    "count_of": {
-///      "$ref": "#/$defs/scaling-source"
+///      "anyOf": [
+///        {
+///          "$ref": "#/$defs/scaling-source"
+///        },
+///        {
+///          "description": "Your markers labelled `marker` that are on the battlefield.",
+///          "const": "markers"
+///        }
+///      ]
 ///    },
 ///    "keyword": {
 ///      "$ref": "#/$defs/keyword"
+///    },
+///    "marker": {
+///      "description": "With count_of markers: the label of the markers counted.",
+///      "$ref": "#/$defs/entity-id"
 ///    },
 ///    "wargear": {
 ///      "$ref": "#/$defs/entity-id"
@@ -9324,14 +9336,51 @@ impl ::std::default::Default for CountBounds {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct CountOf {
-    pub count_of: ScalingSource,
+    pub count_of: CountOfCountOf,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub keyword: ::std::option::Option<Keyword>,
+    ///With count_of markers: the label of the markers counted.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub marker: ::std::option::Option<EntityId>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub wargear: ::std::option::Option<EntityId>,
     ///Reach used by count sources that count models or units within a named range.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub within: ::std::option::Option<RangeRef>,
+}
+///`CountOfCountOf`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "anyOf": [
+///    {
+///      "$ref": "#/$defs/scaling-source"
+///    },
+///    {
+///      "description": "Your markers labelled `marker` that are on the battlefield.",
+///      "const": "markers"
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(untagged)]
+pub enum CountOfCountOf {
+    Variant0(ScalingSource),
+    Variant1(::serde_json::Value),
+}
+impl ::std::convert::From<ScalingSource> for CountOfCountOf {
+    fn from(value: ScalingSource) -> Self {
+        Self::Variant0(value)
+    }
+}
+impl ::std::convert::From<::serde_json::Value> for CountOfCountOf {
+    fn from(value: ::serde_json::Value) -> Self {
+        Self::Variant1(value)
+    }
 }
 ///`CountsAsEffectModifier`
 ///
@@ -36118,10 +36167,43 @@ impl ::std::convert::TryFrom<::std::string::String> for ResourcePoolPoolType {
 ///        {
 ///          "enum": [
 ///            "all",
-///            "one-or-more"
+///            "one-or-more",
+///            "by-table"
 ///          ]
 ///        }
 ///      ]
+///    },
+///    "amount_table": {
+///      "description": "With amount by-table: the amount for a unit of one of unit_ids at that Starting Strength (attached CHARACTER models not counted). table_of names the unit; a unit no row matches cannot pay.",
+///      "type": "array",
+///      "items": {
+///        "type": "object",
+///        "required": [
+///          "amount",
+///          "starting_strength",
+///          "unit_ids"
+///        ],
+///        "properties": {
+///          "amount": {
+///            "type": "integer",
+///            "minimum": 0.0
+///          },
+///          "starting_strength": {
+///            "type": "integer",
+///            "minimum": 1.0
+///          },
+///          "unit_ids": {
+///            "type": "array",
+///            "items": {
+///              "$ref": "#/$defs/entity-id"
+///            },
+///            "minItems": 1,
+///            "uniqueItems": true
+///          }
+///        },
+///        "additionalProperties": false
+///      },
+///      "minItems": 1
 ///    },
 ///    "face": {
 ///      "type": "integer",
@@ -36138,6 +36220,10 @@ impl ::std::convert::TryFrom<::std::string::String> for ResourcePoolPoolType {
 ///    },
 ///    "requirement": {
 ///      "$ref": "#/$defs/dice-requirement-spec"
+///    },
+///    "table_of": {
+///      "description": "With amount by-table: the unit whose datasheet and Starting Strength choose the row.",
+///      "$ref": "#/$defs/unit-ref"
 ///    }
 ///  },
 ///  "additionalProperties": false
@@ -36148,6 +36234,9 @@ impl ::std::convert::TryFrom<::std::string::String> for ResourcePoolPoolType {
 #[serde(deny_unknown_fields)]
 pub struct ResourceSpendEffectModifier {
     pub amount: ResourceSpendEffectModifierAmount,
+    ///With amount by-table: the amount for a unit of one of unit_ids at that Starting Strength (attached CHARACTER models not counted). table_of names the unit; a unit no row matches cannot pay.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub amount_table: ::std::vec::Vec<ResourceSpendEffectModifierAmountTableItem>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub face: ::std::option::Option<::std::num::NonZeroU64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -36155,6 +36244,9 @@ pub struct ResourceSpendEffectModifier {
     pub pool: ResourceSpendEffectModifierPool,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub requirement: ::std::option::Option<DiceRequirementSpec>,
+    ///With amount by-table: the unit whose datasheet and Starting Strength choose the row.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub table_of: ::std::option::Option<UnitRef>,
 }
 ///`ResourceSpendEffectModifierAmount`
 ///
@@ -36169,7 +36261,8 @@ pub struct ResourceSpendEffectModifier {
 ///    {
 ///      "enum": [
 ///        "all",
-///        "one-or-more"
+///        "one-or-more",
+///        "by-table"
 ///      ]
 ///    }
 ///  ]
@@ -36193,6 +36286,47 @@ for ResourceSpendEffectModifierAmount {
         Self::Variant1(value)
     }
 }
+///`ResourceSpendEffectModifierAmountTableItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "amount",
+///    "starting_strength",
+///    "unit_ids"
+///  ],
+///  "properties": {
+///    "amount": {
+///      "type": "integer",
+///      "minimum": 0.0
+///    },
+///    "starting_strength": {
+///      "type": "integer",
+///      "minimum": 1.0
+///    },
+///    "unit_ids": {
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/entity-id"
+///      },
+///      "minItems": 1,
+///      "uniqueItems": true
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct ResourceSpendEffectModifierAmountTableItem {
+    pub amount: u64,
+    pub starting_strength: ::std::num::NonZeroU64,
+    pub unit_ids: Vec<EntityId>,
+}
 ///`ResourceSpendEffectModifierAmountVariant1`
 ///
 /// <details><summary>JSON schema</summary>
@@ -36201,7 +36335,8 @@ for ResourceSpendEffectModifierAmount {
 ///{
 ///  "enum": [
 ///    "all",
-///    "one-or-more"
+///    "one-or-more",
+///    "by-table"
 ///  ]
 ///}
 /// ```
@@ -36223,12 +36358,15 @@ pub enum ResourceSpendEffectModifierAmountVariant1 {
     All,
     #[serde(rename = "one-or-more")]
     OneOrMore,
+    #[serde(rename = "by-table")]
+    ByTable,
 }
 impl ::std::fmt::Display for ResourceSpendEffectModifierAmountVariant1 {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match *self {
             Self::All => f.write_str("all"),
             Self::OneOrMore => f.write_str("one-or-more"),
+            Self::ByTable => f.write_str("by-table"),
         }
     }
 }
@@ -36240,6 +36378,7 @@ impl ::std::str::FromStr for ResourceSpendEffectModifierAmountVariant1 {
         match value {
             "all" => Ok(Self::All),
             "one-or-more" => Ok(Self::OneOrMore),
+            "by-table" => Ok(Self::ByTable),
             _ => Err("invalid value".into()),
         }
     }
@@ -38505,9 +38644,10 @@ impl ::std::convert::From<NamedAbilityRef> for RuleActiveConditionParametersRule
 ///    "engaged-shooting-hit-penalty",
 ///    "charge-bonus",
 ///    "hidden",
-///    "orders-end-on-battle-shock"
+///    "orders-end-on-battle-shock",
+///    "reserves-destruction"
 ///  ],
-///  "$comment": "Closed vocabulary of core-rule slugs a `rule-state` effect may toggle (rule_kind: core-rule). These are 10e CORE RULES/mechanics (not core abilities — those are entities, reached via rule_kind: ability). Finite, slow-moving; AJV-enforced, stripped from codegen. The slug — not direction/target — disambiguates active vs passive of the same rule: `fire-overwatch` (the bearer firing Overwatch) vs `overwatch-against-bearer` (the bearer being targeted by Overwatch). For rule_kind `ability`/`faction-rule` the slug is a free string resolved by integrity.ts against the matching entity; `keyword` is a free string (open keyword set). A suppressed `attacking-ends-hidden` discounts, for good, the ranged attacks made while it holds: they never count toward the Hidden rule's ranged-attack clause, even after the effect ends; with `attacks` it discounts exactly the attacks of the bound event."
+///  "$comment": "Closed vocabulary of core-rule slugs a `rule-state` effect may toggle (rule_kind: core-rule). These are 10e CORE RULES/mechanics (not core abilities — those are entities, reached via rule_kind: ability). Finite, slow-moving; AJV-enforced, stripped from codegen. The slug — not direction/target — disambiguates active vs passive of the same rule: `fire-overwatch` (the bearer firing Overwatch) vs `overwatch-against-bearer` (the bearer being targeted by Overwatch). For rule_kind `ability`/`faction-rule` the slug is a free string resolved by integrity.ts against the matching entity; `keyword` is a free string (open keyword set). A suppressed `attacking-ends-hidden` discounts, for good, the ranged attacks made while it holds: they never count toward the Hidden rule's ranged-attack clause, even after the effect ends; with `attacks` it discounts exactly the attacks of the bound event. `reserves-destruction` is the rule that destroys a unit still in Strategic Reserves at the end of the third battle round."
 ///}
 /// ```
 /// </details>
@@ -38552,6 +38692,8 @@ pub enum RuleStateCoreRuleSlug {
     Hidden,
     #[serde(rename = "orders-end-on-battle-shock")]
     OrdersEndOnBattleShock,
+    #[serde(rename = "reserves-destruction")]
+    ReservesDestruction,
 }
 impl ::std::fmt::Display for RuleStateCoreRuleSlug {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
@@ -38572,6 +38714,7 @@ impl ::std::fmt::Display for RuleStateCoreRuleSlug {
             Self::ChargeBonus => f.write_str("charge-bonus"),
             Self::Hidden => f.write_str("hidden"),
             Self::OrdersEndOnBattleShock => f.write_str("orders-end-on-battle-shock"),
+            Self::ReservesDestruction => f.write_str("reserves-destruction"),
         }
     }
 }
@@ -38595,6 +38738,7 @@ impl ::std::str::FromStr for RuleStateCoreRuleSlug {
             "charge-bonus" => Ok(Self::ChargeBonus),
             "hidden" => Ok(Self::Hidden),
             "orders-end-on-battle-shock" => Ok(Self::OrdersEndOnBattleShock),
+            "reserves-destruction" => Ok(Self::ReservesDestruction),
             _ => Err("invalid value".into()),
         }
     }
@@ -45023,7 +45167,7 @@ pub enum SimpleCondition {
 ///    },
 ///    {
 ///      "title": "set-up effect",
-///      "description": "[placement] Set the target up: onto the battlefield or into Strategic Reserves, with the placement limits the rule prints. allow: false forbids that set-up instead. mandatory: it must be set up this way. arrives: it arrives in your next Movement phase (allow_first_round: even in the first battle round). wounds_remaining: the wounds a model set (back) up has; detach: it is set up as its own unit, no longer part of its attached unit; starting_strength: the Starting Strength of the unit it is set up as.",
+///      "description": "[placement] Set the target up: onto the battlefield or into Strategic Reserves, with the placement limits the rule prints. allow: false forbids that set-up instead. mandatory: it must be set up this way. arrives: it arrives in your next Movement phase. allow_first_round: it can be set up this way even in the first battle round (with arrives, that arrival). wounds_remaining: the wounds a model set (back) up has; detach: it is set up as its own unit, no longer part of its attached unit; starting_strength: the Starting Strength of the unit it is set up as.",
 ///      "type": "object",
 ///      "required": [
 ///        "modifier",
@@ -45792,7 +45936,7 @@ pub enum SingleEffect {
     },
     /**set-up effect
 
-[placement] Set the target up: onto the battlefield or into Strategic Reserves, with the placement limits the rule prints. allow: false forbids that set-up instead. mandatory: it must be set up this way. arrives: it arrives in your next Movement phase (allow_first_round: even in the first battle round). wounds_remaining: the wounds a model set (back) up has; detach: it is set up as its own unit, no longer part of its attached unit; starting_strength: the Starting Strength of the unit it is set up as.*/
+[placement] Set the target up: onto the battlefield or into Strategic Reserves, with the placement limits the rule prints. allow: false forbids that set-up instead. mandatory: it must be set up this way. arrives: it arrives in your next Movement phase. allow_first_round: it can be set up this way even in the first battle round (with arrives, that arrival). wounds_remaining: the wounds a model set (back) up has; detach: it is set up as its own unit, no longer part of its attached unit; starting_strength: the Starting Strength of the unit it is set up as.*/
     #[serde(rename = "set-up")]
     SetUp {
         modifier: SetUpEffectModifier,

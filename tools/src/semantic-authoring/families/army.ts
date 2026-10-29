@@ -109,6 +109,9 @@ function normalizeOptionalCostV2(input: Record<string, unknown>): Record<string,
 
 /** A spend of as many as the player chooses, at least one ("spend one or more BTP"). */
 const ONE_OR_MORE = "one-or-more";
+/** A spend read from the table after it (resource-spend@4). */
+const BY_TABLE = "by-table";
+const TABLE_OF = ["antecedent", "event-subject", "event-object"] as const;
 
 export const ARMY_EXTENSIONS: readonly FamilyExtension[] = [
   /**
@@ -286,6 +289,39 @@ export const ARMY_EXTENSIONS: readonly FamilyExtension[] = [
       return withProperties(previous, { amount: { ...amount, anyOf: [...(amount.anyOf as Schema[]), { const: ONE_OR_MORE }] } });
     },
     normalize: (input, previous) => input.amount === ONE_OR_MORE ? standIn(input, "amount", "all", previous) : previous(input),
+  },
+  /**
+   * A cost read from a table: "spend the relevant number of Resurgence points shown below based on that unit's
+   * Starting Strength" (amount by-table, table_of the unit whose datasheet and Starting Strength pick the row),
+   * then "Aberrants." + "For 5 models, you must spend 4 Resurgence points." (a row: starting_strength 5, amount 4).
+   * Each heading is a unit-filter naming datasheets; compile-cost-table.ts folds the headings and rows into the table spend.
+   */
+  {
+    family: "resource-spend",
+    version: 4,
+    description: "As the previous version, plus amount by-table with table_of (antecedent: the unit an earlier leaf named, event-subject or event-object): the cost is the row of the table after it that matches that unit; and starting_strength on a row (a fixed amount): the cost for a unit of that Starting Strength; and pool may be any kebab-case pool id.",
+    schema: (previous) => {
+      const { amount, pool } = properties(previous) as Record<string, Schema>;
+      return withProperties(previous, {
+        amount: { ...amount, anyOf: [...(amount.anyOf as Schema[]), { const: BY_TABLE }] },
+        pool: pool.anyOf ? { ...pool, anyOf: [...(pool.anyOf as Schema[]), { type: "string", pattern: POOL_ID_PATTERN.source }] } : pool,
+        table_of: optional({ enum: TABLE_OF, "x-only-when": { amount: [BY_TABLE] } }),
+        starting_strength: optional({ type: "integer", minimum: 1 }),
+      });
+    },
+    normalize: (input, previous) => {
+      const { table_of: of, starting_strength: strength, ...rest } = input;
+      if (rest.amount === BY_TABLE) {
+        if (strength !== undefined) throw new TypeError("resource-spend.starting_strength names one row; a by-table spend has none.");
+        if (!(TABLE_OF as readonly unknown[]).includes(of)) throw new TypeError(`resource-spend amount by-table needs table_of: ${TABLE_OF.join(" or ")}.`);
+        return { ...standIn(rest, "amount", 1, previous), amount: BY_TABLE, table_of: of };
+      }
+      if (of !== undefined) throw new TypeError("resource-spend.table_of goes with amount by-table.");
+      if (strength === undefined) return previous(rest);
+      if (!Number.isInteger(strength) || (strength as number) < 1) throw new TypeError("resource-spend.starting_strength is a whole number of models, at least 1.");
+      if (!Number.isInteger(rest.amount)) throw new TypeError("resource-spend.starting_strength is a table row, which costs a fixed amount.");
+      return { ...previous(rest), starting_strength: strength };
+    },
   },
   /**
    * Version 1 reads a use-time spend only from the same use (window use, subject that spent).

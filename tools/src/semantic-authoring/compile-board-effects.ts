@@ -116,6 +116,13 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
     }
     case "resource-spend": {
       const modifier: Node = { pool: closed(leaf, "pool"), amount: closed(leaf, "amount") };
+      // A by-table spend carries the rows compile-cost-table.ts folded onto it.
+      if (modifier.amount === "by-table") {
+        if (leaf.parameters.amount_table === undefined) throw new CompileError(`The by-table spend at byte ${leaf.start_byte} has no cost table.`);
+        modifier.amount_table = leaf.parameters.amount_table;
+        modifier.table_of = closed(leaf, "table_of");
+      }
+      if (leaf.parameters.starting_strength !== undefined) throw new CompileError(`The resource-spend row at byte ${leaf.start_byte} is a cost-table row with no table.`);
       if (leaf.parameters.label !== undefined) modifier.label = closed(leaf, "label");
       if (leaf.parameters.face !== undefined) modifier.face = closed(leaf, "face");
       if (leaf.parameters.requirement_type !== undefined) modifier.requirement = { type: closed(leaf, "requirement_type"), min_value: closed(leaf, "requirement_min") };

@@ -551,7 +551,9 @@ function antecedentRole(leaves: readonly CompileLeaf[], index: number, focus?: (
   // "Each time an attack is allocated to a model, … that model": the unit the moment happens to,
   // which the DSL's damage-allocated trigger holds as its object; its subject is the attacker.
   if (moment && namesObjectKeyword(leaves, leaves.indexOf(moment), index, sourceText)) return "event-object";
-  if (moment) return OBJECT_MOMENTS.has(String(moment.parameters.kind)) || filterNamesObject(leaves, leaves.indexOf(moment)) ? "event-object" : "event-subject";
+  // A destruction with no destroyer names the destroyed unit, which the DSL's destroyed trigger holds as its object (as momentUnitRole does).
+  const destroyedObject = moment !== undefined && (moment.parameters.kind === "unit-destroyed" || moment.parameters.kind === "model-destroyed") && moment.parameters.by === undefined;
+  if (moment) return OBJECT_MOMENTS.has(String(moment.parameters.kind)) || destroyedObject || filterNamesObject(leaves, leaves.indexOf(moment)) ? "event-object" : "event-subject";
   return null;
 }
 

@@ -7756,7 +7756,8 @@
             "all_of": [
               "EMPEROR'S CHILDREN",
               "TRANSPORT"
-            ]
+            ],
+            "state": "in-strategic-reserves"
           },
           "count": {
             "min": 1,

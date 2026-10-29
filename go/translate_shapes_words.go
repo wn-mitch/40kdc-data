@@ -249,6 +249,10 @@ func scaleSource(q map[string]any) string {
 	if q["within"] != nil {
 		s += " within " + rangePhrase(q["within"])
 	}
+	if of == "markers" {
+		// A label that already ends in "marker" ("cult-ambush-marker") must not read "marker markers".
+		s = "your " + replaceFirst(trailingMarkerRe, dekebab(ejstr(q["marker"])), "") + " markers on the battlefield"
+	}
 	return s
 }
 

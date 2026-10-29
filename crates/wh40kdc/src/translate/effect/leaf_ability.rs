@@ -683,6 +683,10 @@ pub(super) fn core_rule(rule: &str) -> Option<(&'static str, &'static str)> {
             "loses its Orders when it becomes Battle-shocked",
             "keeps its Orders when it becomes Battle-shocked",
         ),
+        "reserves-destruction" => (
+            "is destroyed if still in Strategic Reserves at the end of the third battle round",
+            "is not destroyed for still being in Strategic Reserves at the end of the third battle round",
+        ),
         _ => return None,
     })
 }

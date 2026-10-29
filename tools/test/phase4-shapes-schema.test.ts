@@ -82,10 +82,12 @@ describe("movement", () => {
     expect(effectOk(leaf("move-modifier", { passthrough: [{ kind: "models", height: "over-4" }] }))).toBe(false);
   });
 
-  it("accepts mandatory and next-Movement-phase set-ups; allow_first_round needs arrives", () => {
+  it("accepts mandatory and next-Movement-phase set-ups, and a set-up allowed in the first battle round", () => {
     expect(effectOk(leaf("set-up", { to: "strategic-reserves", mandatory: true }))).toBe(true);
     expect(effectOk(leaf("set-up", { to: "battlefield", arrives: "next-movement-phase", allow_first_round: true }))).toBe(true);
-    expect(effectOk(leaf("set-up", { to: "battlefield", allow_first_round: true }))).toBe(false);
+    // "can make an ingress move in the first battle round using this rule": the rule's own timing, no arrival.
+    expect(effectOk(leaf("set-up", { to: "battlefield", allow_first_round: true }))).toBe(true);
+    expect(effectOk(leaf("set-up", { to: "battlefield", allow_first_round: false }))).toBe(false);
   });
 
   it("adds a moved-over predicate that names the mover", () => {

@@ -46,6 +46,19 @@ pub(crate) fn scale_source(q: &P) -> String {
     if let Some(w) = nn(q, "within") {
         s.push_str(&format!(" within {}", range_phrase(Some(w))));
     }
+    if of == "markers" {
+        // A label that already ends in "marker" ("cult-ambush-marker") must not read "marker markers".
+        let raw = dekebab(&jstr(q.get("marker")));
+        let label = match raw.len().checked_sub(" marker".len()) {
+            Some(cut)
+                if raw.is_char_boundary(cut) && raw[cut..].eq_ignore_ascii_case(" marker") =>
+            {
+                raw[..cut].to_string()
+            }
+            _ => raw,
+        };
+        s = format!("your {label} markers on the battlefield");
+    }
     s
 }
 

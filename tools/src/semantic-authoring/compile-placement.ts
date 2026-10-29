@@ -27,7 +27,9 @@ function gapBetween(previous: CompileLeaf, next: CompileLeaf, sourceText: string
   if (next.start_byte === previous.end_byte) return { sentence: closes, and: false };
   const gap = exactSpan(sourceText, previous.end_byte, next.start_byte);
   // A span ending in its own full stop ("have **Fights First.**") closes its sentence at a line break, as a stop in the gap would.
-  return { sentence: closes || (ends && /[\r\n]/u.test(gap)) || /[.;:]/u.test(gap), and: /\b(?:and|or)\b|\(/iu.test(gap) };
+  // A moment that opens a new line without a bullet ("■ Onslaught: 14 points\nEach time …") starts a sentence too: the list before it has ended.
+  const lineMoment = next.family_id === "event" && /[\r\n]/u.test(gap) && !BULLET.test(gap);
+  return { sentence: closes || lineMoment || (ends && /[\r\n]/u.test(gap)) || /[.;:]/u.test(gap), and: /\b(?:and|or)\b|\(/iu.test(gap) };
 }
 
 /**

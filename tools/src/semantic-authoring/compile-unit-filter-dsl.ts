@@ -43,7 +43,12 @@ export function dslUnitFilter(filter: CompileLeaf, options: { warlordTest?: bool
   if (filter.parameters.among === MATCHED_UNITS) return matchedPoolOf(filter);
   const p = filter.parameters as { side: string; keywords?: string[]; any_keywords?: string[]; excluded_keywords?: string[]; states?: string[]; other?: boolean; other_than?: string; visible?: boolean; held_in?: string; alternatives?: FilterAlternative[]; designated?: string; not_designated?: string; designated_by?: string; member_of?: string; nested_engaged_with?: Record<string, unknown> };
   if (p.designated === "warlord" && options.warlordTest !== true && options.warlordTarget !== true) throw new CompileError("A unit-filter naming the Warlord needs an army test or explicit event participant.");
-  const held = p.held_in === undefined ? undefined : HELD_STATES[p.held_in];
+  // A held unit comes as held_in, or as its Reserves state once filterOf has folded it into a selection's states.
+  const heldStates = (p.states ?? []).filter((state) => Object.values(HELD_STATES).includes(state));
+  if (heldStates.length > 1 || (heldStates.length === 1 && p.held_in !== undefined && HELD_STATES[p.held_in] !== heldStates[0])) {
+    throw new CompileError("A unit-filter holds one place a unit is held.");
+  }
+  const held = p.held_in === undefined ? heldStates[0] : HELD_STATES[p.held_in];
   if (p.held_in !== undefined && held === undefined) throw new CompileError(`A unit held in ${p.held_in} has no DSL unit-state.`);
   assertOneFilterState(p.states, held);
   if (p.any_keywords?.length && p.alternatives?.length) throw new CompileError("A unit-filter holds one any-of; it cannot also hold alternatives.");

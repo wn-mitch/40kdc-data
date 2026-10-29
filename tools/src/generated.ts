@@ -1073,7 +1073,8 @@ export type RuleStateCoreRuleSlug =
   | "engaged-shooting-hit-penalty"
   | "charge-bonus"
   | "hidden"
-  | "orders-end-on-battle-shock";
+  | "orders-end-on-battle-shock"
+  | "reserves-destruction";
 /**
  * When present, only units carrying every listed keyword may use the marker to set up; absent means any friendly unit.
  *
@@ -1180,13 +1181,13 @@ export interface RollReference {
   successes_on?: number;
 }
 /**
- * A number equal to how many of `count_of` there are (models in this unit with `keyword`, models equipped with `wargear`, the battle round number).
+ * A number equal to how many of `count_of` there are (models in this unit with `keyword`, models equipped with `wargear`, the battle round number, your markers labelled `marker` on the battlefield).
  *
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "count-of".
  */
 export interface CountOf {
-  count_of: ScalingSource;
+  count_of: ScalingSource | "markers";
   keyword?: Keyword;
   wargear?: EntityId;
   /**
@@ -1200,6 +1201,10 @@ export interface CountOf {
          */
         per_battle_round: [NonTieredRangeRef, ...NonTieredRangeRef[]];
       };
+  /**
+   * Kebab-case identifier
+   */
+  marker?: string;
 }
 /**
  * The rating the unit's datasheet prints for this rule (the D3 of Deadly Demise D3, the 5 of Feel No Pain 5+): the value of the unit's ability_ids entry for the ability that carries this effect.
@@ -5475,7 +5480,7 @@ export interface EndsNearest2 {
   waives?: "closest-enemy-model";
 }
 /**
- * [placement] Set the target up: onto the battlefield or into Strategic Reserves, with the placement limits the rule prints. allow: false forbids that set-up instead. mandatory: it must be set up this way. arrives: it arrives in your next Movement phase (allow_first_round: even in the first battle round). wounds_remaining: the wounds a model set (back) up has; detach: it is set up as its own unit, no longer part of its attached unit; starting_strength: the Starting Strength of the unit it is set up as.
+ * [placement] Set the target up: onto the battlefield or into Strategic Reserves, with the placement limits the rule prints. allow: false forbids that set-up instead. mandatory: it must be set up this way. arrives: it arrives in your next Movement phase. allow_first_round: it can be set up this way even in the first battle round (with arrives, that arrival). wounds_remaining: the wounds a model set (back) up has; detach: it is set up as its own unit, no longer part of its attached unit; starting_strength: the Starting Strength of the unit it is set up as.
  */
 export interface SetUpEffect {
   type: "set-up";
@@ -5750,10 +5755,61 @@ export interface ResourceSpendEffect {
   target: UnitRef;
   modifier: {
     pool: string;
-    amount: Quantity | ("all" | "one-or-more");
+    amount: Quantity | ("all" | "one-or-more" | "by-table");
     label?: string;
     face?: number;
     requirement?: DiceRequirementSpec;
+    /**
+     * With amount by-table: the amount for a unit of one of unit_ids at that Starting Strength (attached CHARACTER models not counted). table_of names the unit; a unit no row matches cannot pay.
+     *
+     * @minItems 1
+     */
+    amount_table?: [
+      {
+        /**
+         * @minItems 1
+         */
+        unit_ids: [EntityId, ...EntityId[]];
+        starting_strength: number;
+        amount: number;
+      },
+      ...{
+        /**
+         * @minItems 1
+         */
+        unit_ids: [EntityId, ...EntityId[]];
+        starting_strength: number;
+        amount: number;
+      }[]
+    ];
+    /**
+     * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
+     */
+    table_of?:
+      | (
+          | "this-unit"
+          | "this-model"
+          | "model-in-this-unit"
+          | "attacker"
+          | "defender"
+          | "event-subject"
+          | "event-object"
+          | "stratagem-target"
+          | "selected-unit"
+          | "recipient"
+          | "bearer-transport"
+          | "ability-unit"
+        )
+      | UnitFilter
+      | {
+          event_var: string;
+        }
+      | {
+          selection_var: string;
+        }
+      | {
+          stratagem_target: EntityId;
+        };
   };
   scaling?: Scaling;
 }

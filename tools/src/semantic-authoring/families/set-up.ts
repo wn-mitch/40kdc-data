@@ -183,4 +183,19 @@ export const SET_UP_EXTENSIONS: readonly FamilyExtension[] = [
  ADD_UNIT_MODELS,
   UNIT_SIZE_DICE,
   printedKeywordsExtension("split-unit", 2),
+  {
+    // "Units in Cult Ambush can make an ingress move in the first battle round using this rule".
+    family: "reserves-arrival",
+    version: 2,
+    description: "As the previous version, plus this_rule: the set-up this rule describes keeps the timing the rule gives it (no next-Movement-phase arrival), and allow_first_round (true) lets it be made even in the first battle round (\"can make an ingress move in the first battle round using this rule\").",
+    schema: (previous) => withProperties(previous, { this_rule: optional({ const: true }) }),
+    normalize: (input, previous) => {
+      const { this_rule: own, ...rest } = input;
+      if (own === undefined) return previous(rest);
+      if (own !== true) throw new TypeError("reserves-arrival.this_rule is true or absent.");
+      const result = previous(rest);
+      if (result.allow_first_round !== true) throw new TypeError("reserves-arrival.this_rule says only that the rule's own set-up can be made in the first battle round, so allow_first_round is true.");
+      return { ...result, this_rule: true };
+    },
+  },
 ];

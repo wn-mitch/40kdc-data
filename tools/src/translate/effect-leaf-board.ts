@@ -266,6 +266,7 @@ function setUp(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
   s += modeClause(m);
   if (Array.isArray(m.turns)) s += ` in the Reinforcements step of your ${(m.turns as number[]).map((t) => ORD[t] ?? `${t}th`).join(", ").replace(/, ([^,]*)$/, " or $1")} Movement phase`;
   if (m.arrives === "next-movement-phase") s += ` in the Reinforcements step of your next Movement phase${m.allow_first_round === true ? " (even in the first battle round)" : ""}`;
+  else if (m.allow_first_round === true) s += ", even in the first battle round";
   if (m.sections != null) s += ` as ${jstr(m.sections)} separate sections`;
   s += placementPhrase(m) + placementLimits(m, ctx);
   if (m.within_edge != null) s += ` wholly within ${rangePhrase(m.within_edge)} of a battlefield edge`;
@@ -279,6 +280,18 @@ function setUp(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
   if (m.allow_engagement === true) s += "; it can be set up within Engagement Range of enemy units";
   if (m.counts_as_move != null) s += `; it counts as having made ${movedPhrase(m.counts_as_move)} this turn`;
   return s + limits;
+}
+
+/** A by-table spend's rows, one group per datasheet heading: "Aberrants: 4 for 5 models, 8 for 10 models; …". */
+function costTable(table: unknown): string {
+  const groups: { ids: string; rows: string[] }[] = [];
+  for (const row of (Array.isArray(table) ? table : []) as P[]) {
+    const ids = orList((row.unit_ids as unknown[]).map((id) => titleCase(jstr(id))));
+    const entry = `${jstr(row.amount)} for ${jstr(row.starting_strength)} models`;
+    if (groups.at(-1)?.ids === ids) groups.at(-1)!.rows.push(entry);
+    else groups.push({ ids, rows: [entry] });
+  }
+  return groups.map((group) => `${group.ids}: ${group.rows.join(", ")}`).join("; ");
 }
 
 function marker(m: Record<string, unknown>, ctx: Ctx): string {
@@ -531,6 +544,7 @@ export function describeBoardLeaf(e: Leaf, m: Record<string, unknown>, subj: str
       return `you gain ${amount} ${resourceNoun(m.pool, m.label, m.amount)}`;
     }
     case "resource-spend": {
+      if (m.amount === "by-table") return `spend the ${resourceNoun(m.pool, m.label, 2)} the cost table gives for the datasheet and Starting Strength of ${effectSubject(m.table_of, ctx)} (${costTable(m.amount_table)})`;
       const amount = m.amount === "all" ? "all your" : m.amount === "one-or-more" ? "one or more" : diceCase(m.amount);
       const showing = m.face != null ? ` showing a ${jstr(m.face)}` : m.requirement != null ? ` forming a ${requirementPhrase(m.requirement)}` : "";
       let noun = resourceNoun(m.pool, m.label, m.amount === "all" ? 2 : m.amount);

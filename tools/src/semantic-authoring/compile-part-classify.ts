@@ -181,7 +181,10 @@ export function classifyLeaves(given: CompileLeaf[], places: Placement[], contai
   const otherwiseMoved = otherwise.moved;
   for (const { sentence, gate } of otherwise.gates) sentenceGates.set(sentence, [...(sentenceGates.get(sentence) ?? []), gate]);
   const battleSizeCount = list.find((leaf) => leaf.family_id === "count-by-battle-size");
-  const roundCount = list.find((leaf) => leaf.family_id === "count-by-battle-round");
+  // A count by battle round or by markers caps the selection with a count_of quantity.
+  const countOfLeaves = list.filter((leaf) => leaf.family_id === "count-by-battle-round" || leaf.family_id === "count-by-markers");
+  if (countOfLeaves.length > 1) errors.push("A selection takes one count, by battle round or by markers, not both.");
+  const countOf = countOfLeaves[0];
   // Battle-size leaves for two or more sizes are table rows: alternatives, one per size. Each row
   // decides only its own sentence, so a row never joins the ability-wide gates (where rows would
   // AND together and the ability could never apply).
@@ -339,7 +342,7 @@ export function classifyLeaves(given: CompileLeaf[], places: Placement[], contai
         else if (leaf.family_id === "use-window" || leaf.family_id === "bearer-eligibility") checks.push({ kind: leaf.family_id, parameters: leaf.parameters });
         // A non-Stratagem ability has no core record to hold its phases, so they gate the whole ability.
         else if (leaf.family_id === "activation-window") global.push(activationWindowCondition(leaf.parameters));
-        else if (leaf.family_id === "move-must-end" || leaf.family_id === "reserves-arrival" || leaf.family_id === "count-by-battle-size" || leaf.family_id === "count-by-battle-round") { /* folded below */ }
+        else if (leaf.family_id === "move-must-end" || leaf.family_id === "reserves-arrival" || leaf.family_id === "count-by-battle-size" || leaf.family_id === "count-by-battle-round" || leaf.family_id === "count-by-markers") { /* folded below */ }
         else if (leaf.family_id === "move-end-nearest" || leaf.family_id === "move-end-waiver") { /* attached below */ }
         // "this model has that ability": the menu before it already applies the chosen options;
         // "that unit has that ability": they are about the holder, not this unit.
@@ -407,6 +410,6 @@ export function classifyLeaves(given: CompileLeaf[], places: Placement[], contai
     selectedUnitUsages, optional: optional as boolean, optionalSentence, offerSentences, usabilityNodes, optionalSpend, optionalSpends, checks, targetParts,
     targetPartIndexes, targetConditions, optionalTargets, auraLeaf: auraLeaf as CompileLeaf | null, leaderLeaf: leaderLeaf as CompileLeaf | null,
     forEachLeaf: forEachLeaf as CompileLeaf | null, rulesBundle: rulesBundle as boolean, moveEnds, rawOf, pairCandidates, eligibilityIndexes,
-    pairGatesBound, battleSizeCount, roundCount, endClauses,
+    pairGatesBound, battleSizeCount, countOf, endClauses,
   };
 }

@@ -646,6 +646,8 @@ def _set_up(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
     if m.get("arrives") == "next-movement-phase":
         first = " (even in the first battle round)" if m.get("allow_first_round") is True else ""
         s += f" in the Reinforcements step of your next Movement phase{first}"
+    elif m.get("allow_first_round") is True:
+        s += ", even in the first battle round"
     if m.get("sections") is not None:
         s += f" as {jstr(m['sections'])} separate sections"
     s += placement_phrase(m) + placement_limits(m, ctx)
@@ -853,7 +855,7 @@ def describe_board_leaf(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx, inline:
     if t == "resource-gain":
         return resource_gain(m)
     if t == "resource-spend":
-        return resource_spend(m)
+        return resource_spend(m, ctx)
     if t == "resource-die":
         return resource_die(m)
     if t == "objective-sticky":

@@ -519,6 +519,8 @@ func setUpLeaf(m map[string]any, subj string, ctx effCtx) string {
 		if m["allow_first_round"] == true {
 			s += " (even in the first battle round)"
 		}
+	} else if m["allow_first_round"] == true {
+		s += ", even in the first battle round"
 	}
 	if m["sections"] != nil {
 		s += " as " + ejstr(m["sections"]) + " separate sections"
@@ -563,6 +565,36 @@ func setUpLeaf(m map[string]any, subj string, ctx effCtx) string {
 		s += "; it counts as having made " + movedPhrase(m["counts_as_move"]) + " this turn"
 	}
 	return s + limits
+}
+
+// costTable renders a by-table spend's rows, one group per datasheet heading: "Aberrants: 4 for 5 models, 8 for 10 models; …".
+func costTable(table any) string {
+	type group struct {
+		ids  string
+		rows []string
+	}
+	var groups []group
+	rows, _ := table.([]any)
+	for _, raw := range rows {
+		row, _ := raw.(map[string]any)
+		unitIDs, _ := row["unit_ids"].([]any)
+		names := make([]string, 0, len(unitIDs))
+		for _, id := range unitIDs {
+			names = append(names, titleCase(ejstr(id)))
+		}
+		ids := orList(names)
+		entry := ejstr(row["amount"]) + " for " + ejstr(row["starting_strength"]) + " models"
+		if n := len(groups); n > 0 && groups[n-1].ids == ids {
+			groups[n-1].rows = append(groups[n-1].rows, entry)
+		} else {
+			groups = append(groups, group{ids, []string{entry}})
+		}
+	}
+	parts := make([]string, len(groups))
+	for i, g := range groups {
+		parts[i] = g.ids + ": " + strings.Join(g.rows, ", ")
+	}
+	return strings.Join(parts, "; ")
 }
 
 func markerLeaf(m map[string]any, ctx effCtx) string {
@@ -719,6 +751,10 @@ func describeBoardLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 		}
 		return "you gain " + amount + " " + resourceNoun(m["pool"], m["label"], m["amount"])
 	case "resource-spend":
+		if m["amount"] == "by-table" {
+			return "spend the " + resourceNoun(m["pool"], m["label"], 2.0) + " the cost table gives for the datasheet and Starting Strength of " +
+				effectSubject(m["table_of"], ctx) + " (" + costTable(m["amount_table"]) + ")"
+		}
 		amount := diceCase(m["amount"])
 		count := m["amount"]
 		switch m["amount"] {

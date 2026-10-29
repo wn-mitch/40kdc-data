@@ -657,6 +657,12 @@
       "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": [], "consumers": [],
       "reason": "Context-dependent keyword ratings are reviewed enrichment; the MFM weapon projection emits only flat or dice ratings."
     },
+    "/profiles/*/keywords/*/parameters/value/marker": {
+      "provenance": "repo-authored",
+      "coverage": "unimplemented",
+      "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": [], "consumers": [],
+      "reason": "Context-dependent keyword ratings are reviewed enrichment; the MFM weapon projection emits only flat or dice ratings."
+    },
     "/profiles/*/keywords/*/parameters/value/onslaught": {
       "provenance": "repo-authored",
       "coverage": "unimplemented",

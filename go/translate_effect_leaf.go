@@ -712,6 +712,7 @@ var coreRules = map[string][2]string{
 	"charge-bonus":               {"receives the Charge bonus", "does not receive the Charge bonus"},
 	"hidden":                     {"can become hidden", "cannot become hidden"},
 	"orders-end-on-battle-shock": {"loses its Orders when it becomes Battle-shocked", "keeps its Orders when it becomes Battle-shocked"},
+	"reserves-destruction":       {"is destroyed if still in Strategic Reserves at the end of the third battle round", "is not destroyed for still being in Strategic Reserves at the end of the third battle round"},
 }
 
 var coreRuleVerbRe = regexp.MustCompile(`^(has|is|stops|does|suffers|receives|loses|keeps) `)

@@ -353,10 +353,11 @@ class RollReference(TypedDict):
 
 
 class CountOf(TypedDict):
-    count_of: ScalingSource
+    count_of: ScalingSource | Literal["markers"]
     keyword: NotRequired[Keyword]
     wargear: NotRequired[EntityId]
     within: NotRequired[RangeRef]
+    marker: NotRequired[EntityId]
 
 
 MoveMode: TypeAlias = Literal[
@@ -1205,6 +1206,7 @@ RuleStateCoreRuleSlug: TypeAlias = Literal[
     "charge-bonus",
     "hidden",
     "orders-end-on-battle-shock",
+    "reserves-destruction",
 ]
 
 
@@ -1352,6 +1354,12 @@ class Modifier46(TypedDict):
     applies_to: NotRequired[
         Literal["targeting-this-unit", "used-by-this-unit", "the-triggering-use", "any"]
     ]
+
+
+class AmountTableItem(TypedDict):
+    unit_ids: list[EntityId]
+    starting_strength: int
+    amount: int
 
 
 class Subject3(TypedDict):
@@ -1658,14 +1666,6 @@ class Modifier47(TypedDict):
     pool: str
     amount: Quantity | Literal["variable", "any"]
     label: NotRequired[str]
-
-
-class Modifier48(TypedDict):
-    pool: str
-    amount: Quantity | Literal["all", "one-or-more"]
-    label: NotRequired[str]
-    face: NotRequired[int]
-    requirement: NotRequired[DiceRequirementSpec]
 
 
 class Modifier49(TypedDict):
@@ -3582,6 +3582,16 @@ class SingleEffect37(TypedDict):
     target: UnitRef
     modifier: Modifier47
     scaling: NotRequired[Scaling]
+
+
+class Modifier48(TypedDict):
+    pool: str
+    amount: Quantity | Literal["all", "one-or-more", "by-table"]
+    label: NotRequired[str]
+    face: NotRequired[int]
+    requirement: NotRequired[DiceRequirementSpec]
+    amount_table: NotRequired[list[AmountTableItem]]
+    table_of: NotRequired[UnitRef]
 
 
 class SingleEffect38(TypedDict):

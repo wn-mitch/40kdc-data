@@ -47,6 +47,10 @@ def scale_source(q: dict[str, Any]) -> str:
         s = re.sub(r"^models\b", f"{jstr(q['keyword'])} models", s, count=1)
     if q.get("within") is not None:
         s += f" within {range_phrase(q['within'])}"
+    if of == "markers":
+        # A label ending in "marker" ("cult-ambush-marker") must not read "marker markers".
+        label = re.sub(r" marker$", "", dekebab(jstr(q.get("marker"))), flags=re.IGNORECASE)
+        s = f"your {label} markers on the battlefield"
     return s
 
 

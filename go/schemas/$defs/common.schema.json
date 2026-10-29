@@ -1554,10 +1554,18 @@
       "required": [
         "count_of"
       ],
-      "description": "A number equal to how many of `count_of` there are (models in this unit with `keyword`, models equipped with `wargear`, the battle round number).",
+      "description": "A number equal to how many of `count_of` there are (models in this unit with `keyword`, models equipped with `wargear`, the battle round number, your markers labelled `marker` on the battlefield).",
       "properties": {
         "count_of": {
-          "$ref": "#/$defs/scaling-source"
+          "anyOf": [
+            {
+              "$ref": "#/$defs/scaling-source"
+            },
+            {
+              "const": "markers",
+              "description": "Your markers labelled `marker` that are on the battlefield."
+            }
+          ]
         },
         "keyword": {
           "$ref": "#/$defs/keyword"
@@ -1568,6 +1576,10 @@
         "within": {
           "$ref": "#/$defs/range-ref",
           "description": "Reach used by count sources that count models or units within a named range."
+        },
+        "marker": {
+          "$ref": "#/$defs/entity-id",
+          "description": "With count_of markers: the label of the markers counted."
         }
       },
       "allOf": [
@@ -1608,6 +1620,30 @@
             "required": [
               "within"
             ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "count_of": {
+                "const": "markers"
+              }
+            },
+            "required": [
+              "count_of"
+            ]
+          },
+          "then": {
+            "required": [
+              "marker"
+            ]
+          },
+          "else": {
+            "not": {
+              "required": [
+                "marker"
+              ]
+            }
           }
         }
       ]

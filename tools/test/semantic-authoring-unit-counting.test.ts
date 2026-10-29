@@ -238,11 +238,36 @@ describe("Semantic authoring count by battle round: shapes that would drop the c
     ["select a number of", "select-unit", { scope: "friendly", distance: "any", visible: false }],
     FILTER,
   ];
-  it.each([["round", ROUND], ["size", ["equal to or less than the current battle round number", "count-by-battle-size", { incursion: 1, "strike-force": 2, onslaught: 3 }] as Item]])(
-    "refuses a %s count on a selection inside a compound part", (_name, count) => {
-      const items: Item[] = [...PART, count, ["those units must take a Battle-shock test", "test", { target: "antecedent", test: "battle-shock" }]];
-      expect(errorsOf(PART_TEXT, ...items)).toContain(MESSAGE);
-    });
+  /** The later part's select-units node, which must carry the count. */
+  const laterSelect = (items: Item[]) => {
+    const result = run(PART_TEXT, ...items);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    const found: Record<string, unknown>[] = [];
+    const walk = (node: unknown): void => {
+      if (Array.isArray(node)) node.forEach(walk);
+      else if (node && typeof node === "object") {
+        if ((node as Record<string, unknown>).type === "select-units") found.push(node as Record<string, unknown>);
+        Object.values(node).forEach(walk);
+      }
+    };
+    walk(result.mechanics.effect);
+    expect(found).toHaveLength(1);
+    return (found[0]!.selector as Record<string, unknown>).count;
+  };
+  const LATER_EFFECT: Item = ["those units must take a Battle-shock test", "test", { target: "antecedent", test: "battle-shock" }];
+  it.each([
+    ["round", ROUND, { count_of: "battle-round" }],
+    ["size", ["equal to or less than the current battle round number", "count-by-battle-size", { incursion: 1, "strike-force": 2, onslaught: 3 }] as Item, { incursion: 1, "strike-force": 2, onslaught: 3 }],
+    ["marker", ["equal to or less than the current battle round number", "count-by-markers", { marker: "fabricated-marker" }] as Item, { count_of: "markers", marker: "fabricated-marker" }],
+  ])("carries a %s count on the one selection inside a later part", (_name, count, max) => {
+    expect(laterSelect([...PART, count, LATER_EFFECT])).toEqual({ min: 0, max });
+  });
+
+  it("refuses a count in a different part from the selection it limits", () => {
+    const text = `Up to the battle round number. ${PART_TEXT}`;
+    const items: Item[] = [["Up to the battle round number", "count-by-battle-round", {}], ...PART, LATER_EFFECT];
+    expect(errorsOf(text, ...items)).toContain("A selection count sits in a different part from the selection it limits.");
+  });
 
   it.each([["round", ROUND], ["size", ["equal to or less than the current battle round number", "count-by-battle-size", { incursion: 1, "strike-force": 2, onslaught: 3 }] as Item]])(
     "refuses a %s count beside a for-each loop", (_name, count) => {

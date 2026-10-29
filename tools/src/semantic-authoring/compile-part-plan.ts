@@ -165,7 +165,8 @@ export function planEffects(frame: PartFrame, sourceText: string | undefined, op
       ?? (nestedSentence ? nestedSetUp : undefined);
     if (!setUp) { errors.push("A reserves arrival has no set-up before it."); continue; }
     const modifier = setUp.node.modifier as Node;
-    modifier.arrives = "next-movement-phase";
+    // An arrival "using this rule" keeps the set-up's own timing; only the first-round permission carries over.
+    if (leaf.parameters.this_rule !== true) modifier.arrives = "next-movement-phase";
     if (leaf.parameters.allow_first_round === true) modifier.allow_first_round = true;
   }
   const endNearestEntry = (at: number, node: Node): PlannedEffect => ({

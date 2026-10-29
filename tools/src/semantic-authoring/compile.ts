@@ -3,6 +3,7 @@ import { resolveUnitNames, type UnitNameContext } from "./compile-unit-names.js"
 import { resolveRuleReferences } from "./compile-rule-refs.js";
 import { foldAuraEmitter, lowerConditionalAuras } from "./compile-aura-emitter.js";
 import { foldNamedRanges, requireNamedRangeAuras } from "./compile-named-range.js";
+import { foldCostTables } from "./compile-cost-table.js";
 import { foldAbilityUseRefresh } from "./compile-ability-use-refresh.js";
 import { foldActivationPicks } from "./compile-activation.js";
 import { bindAntecedents } from "./compile-antecedent.js";
@@ -203,13 +204,13 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
   // Two for-each-unit-select passes in separate sentences: the second is a later part (compile-for-each-passes.ts).
   const passes = compileForEachPasses(leaves, sourceText, options, compileLeaves, (list) => shapeSignature(ordered(list), sourceText));
   if (passes) return passes;
-  // Printed rule and ability names resolve to their records first (compile-rule-refs.ts). Qualifiers printed apart from their host are bound first: a characteristic amount after its recipient and a floor after its change (compile-characteristic-amount.ts), an additive option after its duration (compile-additive-option.ts), an ignore-modifier list after its lead-in (compile-ignore-list.ts), and a named range's defined values onto its aura (compile-named-range.ts).
+  // Printed rule and ability names resolve to their records first (compile-rule-refs.ts). Qualifiers printed apart from their host are bound first: a characteristic amount after its recipient and a floor after its change (compile-characteristic-amount.ts), an additive option after its duration (compile-additive-option.ts), an ignore-modifier list after its lead-in (compile-ignore-list.ts), a named range's defined values onto its aura (compile-named-range.ts), and a cost table's headings and rows onto its by-table spend (compile-cost-table.ts).
   let bound: CompileLeaf[];
   try {
-    bound = foldNamedRanges(foldAuraEmitter(bindIgnoreLists(
+    bound = foldCostTables(foldNamedRanges(foldAuraEmitter(bindIgnoreLists(
       bindAdditiveOptions(bindCharacteristicFloors(bindCharacteristicAmounts(resolveRuleReferences(resolveUnitNames(leaves, options.units), options.units))), sourceText),
       sourceText,
-    )), options.abilityId);
+    )), options.abilityId));
   } catch (error) {
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature: shapeSignature(ordered(leaves), sourceText), errors: [error.message] };

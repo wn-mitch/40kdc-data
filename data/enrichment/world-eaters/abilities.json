@@ -95,7 +95,7 @@
                       {
                         "type": "happened",
                         "parameters": {
-                          "subject": "event-subject",
+                          "subject": "event-object",
                           "event": "selected",
                           "filter": {
                             "to": "fight"
@@ -9375,7 +9375,7 @@
                       {
                         "type": "happened",
                         "parameters": {
-                          "subject": "event-subject",
+                          "subject": "event-object",
                           "event": "selected",
                           "filter": {
                             "to": "fight"

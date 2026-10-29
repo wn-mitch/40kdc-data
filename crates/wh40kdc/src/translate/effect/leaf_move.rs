@@ -484,6 +484,8 @@ pub(super) fn set_up(m: &P, subj: &str, ctx: &Ctx) -> String {
                 ""
             }
         ));
+    } else if is_true(m, "allow_first_round") {
+        s.push_str(", even in the first battle round");
     }
     if let Some(sections) = nn(m, "sections") {
         s.push_str(&format!(" as {} separate sections", jv(sections)));
