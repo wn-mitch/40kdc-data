@@ -159,6 +159,18 @@ describe("foldCountsAsMoved", () => {
     expect(folded[0]!.parameters.counts_as_move).toBe("normal");
   });
 
+  it("ends the counts-as sentence at a semicolon, as every other pass does", () => {
+    const next = "Fabricated transport. It can disembark from it. After that, it has moved. Carried units that do so count as having made a Test move; they cannot declare a Test charge.";
+    const leaves = build(next,
+      ["It can disembark from it.", "eligibility-permission", DISEMBARK],
+      ["After that, it has moved.", "event", MOVE_ENDED],
+      ["Carried units that do so count as having made a Test move", "counts-as-moved", COUNTS],
+      ["they cannot declare a Test charge.", "eligibility-permission", { subject: "selected-unit", activity: "declare-charge", allow: false }]);
+    const folded = foldCountsAsMoved(leaves, next);
+    expect(folded.map((leaf) => leaf.family_id)).toEqual(["eligibility-permission", "event", "eligibility-permission"]);
+    expect(folded[0]!.parameters.counts_as_move).toBe("normal");
+  });
+
   it("returns the leaves unchanged when none is a counts-as-moved leaf, and refuses without source text", () => {
     const plain = build(text, ["It can disembark from it.", "eligibility-permission", DISEMBARK]);
     expect(foldCountsAsMoved(plain, undefined)).toEqual(plain);

@@ -17,7 +17,8 @@ import { CompileError, type CompileLeaf } from "./compile-fragments.js";
  * `move-ended` event must lie between.
  */
 
-const ENDS_SENTENCE = /[.!?](?=\s|$)/gu;
+/** A full stop, semicolon or colon ends a sentence, as in compile-placement.ts. */
+const ENDS_SENTENCE = /[.;:](?=\s|$)/gu;
 const PERMISSION_SELF_SUBJECTS = new Set(["this-unit", "this-model"]);
 
 const wordingOf = (leaf: CompileLeaf, bytes: Buffer) => bytes.subarray(leaf.start_byte, leaf.end_byte).toString("utf8");
