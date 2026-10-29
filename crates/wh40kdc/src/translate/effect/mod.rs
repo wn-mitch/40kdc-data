@@ -495,8 +495,9 @@ fn inline_base(e: &P, ctx: &Ctx) -> String {
         "for-each-unit" => {
             let sel = obj(nn(e, "selector"));
             format!(
-                "for each {}: {}",
+                "for each {}{}: {}",
                 for_each_unit_subject(sel),
+                for_each_cap(nn(e, "max_affected")),
                 inline(child(e, "effect"), &selected_context(ctx, sel))
             )
         }

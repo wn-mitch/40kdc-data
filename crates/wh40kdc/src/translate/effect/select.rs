@@ -166,6 +166,18 @@ pub(crate) fn select_units_inline(sel: &P, effect: &Value, ctx: &Ctx) -> String 
 }
 
 /// "enemy unit within 6\"" — the canonical all-matches selector phrase.
+/// ", up to 2/3/4 units (Incursion/Strike Force/Onslaught) of your choice": a for-each's cap on
+/// the units it affects.
+pub(crate) fn for_each_cap(max: Option<&Value>) -> String {
+    match max {
+        None | Some(Value::Null) => String::new(),
+        q => format!(
+            ", up to {} of your choice",
+            super::quantity::amount_of(q, "unit", "units")
+        ),
+    }
+}
+
 pub(crate) fn for_each_unit_subject(sel: &P) -> String {
     format!(
         "{}{}{}{}",

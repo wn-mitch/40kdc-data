@@ -171,7 +171,11 @@ pub(super) fn block(e: &Value, depth: usize, ctx: &Ctx) -> String {
             let sel = obj(nn(e, "selector"));
             let inner = child(e, "effect");
             let selected = selected_context(ctx, sel);
-            let lead = format!("For each {}", for_each_unit_subject(sel));
+            let lead = format!(
+                "For each {}{}",
+                for_each_unit_subject(sel),
+                for_each_cap(nn(e, "max_affected"))
+            );
             if is_container(obj(Some(inner))) {
                 return format!("{indent}{lead}:\n{}", block(inner, depth + 1, &selected));
             }

@@ -150,6 +150,15 @@ func selectUnitsInline(sel, effect map[string]any, ctx effCtx) string {
 }
 
 // forEachUnitSubject renders the canonical for-each-unit selector phrase.
+// forEachCap is ", up to 2/3/4 units (Incursion/Strike Force/Onslaught) of your choice": a
+// for-each's cap on the units it affects.
+func forEachCap(max any) string {
+	if max == nil {
+		return ""
+	}
+	return ", up to " + amountOf(max, "unit", "units") + " of your choice"
+}
+
 func forEachUnitSubject(sel map[string]any) string {
 	eligibility := ""
 	if el, ok := asMap(sel["eligibility"]); ok && el != nil {

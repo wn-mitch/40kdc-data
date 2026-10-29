@@ -12,7 +12,7 @@ from typing import Any
 
 from wh40kdc.translate.condition_leadin import describe_selection_eligibility
 from wh40kdc.translate.condition_refs import unit_ref_phrase
-from wh40kdc.translate.effect_quantity import quantity_phrase
+from wh40kdc.translate.effect_quantity import amount_of, quantity_phrase
 from wh40kdc.translate.effect_words import (
     Ctx,
     capitalize,
@@ -211,6 +211,13 @@ _MEMBER_OF = {
     "embarked-in-bearer": " embarked within this model",
     "target": " in the target unit",
 }
+
+
+def for_each_cap(max_affected: Any) -> str:
+    """", up to 2/3/4 units (Incursion/Strike Force/Onslaught) of your choice": a for-each's cap."""
+    if max_affected is None:
+        return ""
+    return f", up to {amount_of(max_affected, 'unit', 'units')} of your choice"
 
 
 def for_each_unit_subject(sel: Any) -> str:

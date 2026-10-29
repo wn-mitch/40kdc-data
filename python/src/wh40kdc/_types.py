@@ -3894,6 +3894,7 @@ class ForEachUnitEffect(TypedDict):
     type: Literal["for-each-unit"]
     selector: UnitSelector
     effect: EffectNode
+    max_affected: NotRequired[Quantity]
 
 
 class Modifier60(TypedDict):

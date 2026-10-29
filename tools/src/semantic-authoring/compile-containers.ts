@@ -1,3 +1,4 @@
+import { withoutSharedBattleSizeTable } from "./compile-battle-size-table.js";
 import { closed, CompileError, effect, type CompileLeaf } from "./compile-fragments.js";
 import { initialOption } from "./compile-stance-initial.js";
 import { trigger, triggerLeaves } from "./compile-triggers.js";
@@ -478,6 +479,8 @@ function planContainerNodes(list: readonly CompileLeaf[], sentenceOf: readonly n
       consumed.add(cursor);
     }
     if (current.length) groups.push(current);
+    // A battle-size table after the last named option is every option's cap, not the last option's (compile-battle-size-table.ts).
+    if (byMarker && leaf.family_id === "choice-open") groups.splice(0, groups.length, ...withoutSharedBattleSizeTable(groups));
     // A choice whose option ends in a move-must-end ("…, provided every model … ends that move …") compiles each
     // option as a whole ability, so its move-end and its conditions stay with the move they end. A sentence after
     // the last move option with no move of its own ("Until the end of the turn, …") is no option: it goes back to

@@ -378,7 +378,7 @@ func describeEffectInlineBase(e map[string]any, ctx effCtx) string {
 		return persistentDesignationLead(e) + " " + persistentDesignationWhen(e) + ", " + describeEffectInline(mapOr(mapOr(e["consumer"])["effect"]), ctx)
 	case "for-each-unit":
 		sel := mapOr(e["selector"])
-		return "for each " + forEachUnitSubject(sel) + ": " + describeEffectInline(mapOr(e["effect"]), selectedContext(ctx, sel))
+		return "for each " + forEachUnitSubject(sel) + forEachCap(e["max_affected"]) + ": " + describeEffectInline(mapOr(e["effect"]), selectedContext(ctx, sel))
 	case "designate-target":
 		return designateTargetInline(e, ctx)
 	case "stance-select":
@@ -665,7 +665,7 @@ func describeEffect(e map[string]any, depth int, ctx effCtx) string {
 		sel := mapOr(e["selector"])
 		inner := mapOr(e["effect"])
 		selectedCtx := selectedContext(ctx, sel)
-		lead := "For each " + forEachUnitSubject(sel)
+		lead := "For each " + forEachUnitSubject(sel) + forEachCap(e["max_affected"])
 		if containerTypes[ejstrType(inner)] {
 			return indent + lead + ":\n" + describeEffect(inner, depth+1, selectedCtx)
 		}

@@ -32,6 +32,7 @@ from wh40kdc.translate.effect_select import (
     designation_label,
     designation_target_subject,
     duration_clauses,
+    for_each_cap,
     for_each_unit_subject,
     persistent_designation_lead,
     persistent_designation_replacement,
@@ -422,7 +423,8 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx) -> str:
     if t == "for-each-unit":
         inner_ctx = selected_context(ctx, e.get("selector"))
         return (
-            f"for each {for_each_unit_subject(e.get('selector'))}: "
+            f"for each {for_each_unit_subject(e.get('selector'))}"
+            f"{for_each_cap(e.get('max_affected'))}: "
             f"{inline(e.get('effect'), inner_ctx)}"
         )
     if t == "designate-target":

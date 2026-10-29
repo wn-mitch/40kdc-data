@@ -9958,72 +9958,234 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "source_digest": "d4ae773bb20d143d7716fea74f1d82457fb756e5dc7292326999dea2aa02a9d7",
+    "source_digest": "de6196133f79c096a569e8a81ff91f623e2b4ac63ffd99cae256fd3d274793ab",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "astra-militarum",
     "detachment_id": "siege-regiment",
     "ability_type": "detachment",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "not",
-        "operands": [
-          {
-            "type": "matches",
-            "parameters": {
+      "type": "choice",
+      "options": [
+        {
+          "type": "ability-part",
+          "effect": {
+            "type": "for-each-unit",
+            "selector": {
               "filter": {
-                "within": {
-                  "range": {
-                    "inches": 12
-                  },
-                  "of": {
-                    "owner": "friendly"
-                  }
-                }
-              }
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 5,
-        "comparison": "gte",
-        "on_success": {
-          "type": "sequence",
-          "steps": [
-            {
-              "type": "stat-modifier",
-              "target": "this-unit",
-              "modifier": {
-                "stat": "M",
-                "operation": "subtract",
-                "value": 2
+                "owner": "enemy"
               }
             },
-            {
-              "type": "roll-modifier",
-              "target": "this-unit",
+            "effect": {
+              "type": "conditional",
+              "condition": {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "recipient",
+                      "filter": {
+                        "within": {
+                          "of": {
+                            "owner": "friendly"
+                          },
+                          "range": {
+                            "inches": 12
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              "effect": {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "dice-gated",
+                    "dice": "D6",
+                    "threshold": 5,
+                    "comparison": "gte",
+                    "on_success": {
+                      "type": "designate",
+                      "target": "recipient",
+                      "modifier": {
+                        "tag": "shaken"
+                      }
+                    },
+                    "on_fail": null
+                  },
+                  {
+                    "type": "conditional",
+                    "condition": {
+                      "type": "matches",
+                      "parameters": {
+                        "subject": "recipient",
+                        "filter": {
+                          "designated": "shaken"
+                        }
+                      }
+                    },
+                    "effect": {
+                      "type": "stat-modifier",
+                      "target": "recipient",
+                      "modifier": {
+                        "stat": "M",
+                        "operation": "subtract",
+                        "value": 2
+                      }
+                    }
+                  },
+                  {
+                    "type": "conditional",
+                    "condition": {
+                      "type": "matches",
+                      "parameters": {
+                        "subject": "recipient",
+                        "filter": {
+                          "designated": "shaken"
+                        }
+                      }
+                    },
+                    "effect": {
+                      "type": "roll-modifier",
+                      "target": "recipient",
+                      "modifier": {
+                        "roll": "charge",
+                        "operation": "subtract",
+                        "value": 2
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "max_affected": {
+              "incursion": 2,
+              "strike-force": 3,
+              "onslaught": 4
+            }
+          },
+          "duration": "battle-round"
+        },
+        {
+          "type": "ability-part",
+          "effect": {
+            "type": "select-units",
+            "selector": {
+              "filter": {
+                "owner": "enemy"
+              },
+              "count": {
+                "min": 0,
+                "max": {
+                  "incursion": 2,
+                  "strike-force": 3,
+                  "onslaught": 4
+                }
+              },
+              "eligibility": {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "selected-unit",
+                      "filter": {
+                        "within": {
+                          "of": {
+                            "owner": "friendly"
+                          },
+                          "range": {
+                            "inches": 12
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "designate",
+                  "target": "selected-unit",
+                  "modifier": {
+                    "tag": "scattered"
+                  }
+                },
+                {
+                  "type": "conditional",
+                  "condition": {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "selected-unit",
+                      "filter": {
+                        "designated": "scattered"
+                      }
+                    }
+                  },
+                  "effect": {
+                    "type": "rule-state",
+                    "target": "selected-unit",
+                    "modifier": {
+                      "direction": "suppressed",
+                      "rule_kind": "core-rule",
+                      "rule": "benefit-of-cover"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "duration": "battle-round"
+        },
+        {
+          "type": "ability-part",
+          "effect": {
+            "type": "select-units",
+            "selector": {
+              "filter": {
+                "owner": "friendly"
+              },
+              "count": {
+                "min": 0,
+                "max": {
+                  "incursion": 2,
+                  "strike-force": 3,
+                  "onslaught": 4
+                }
+              }
+            },
+            "effect": {
+              "type": "ability-grant",
+              "target": "selected-unit",
               "modifier": {
-                "roll": "charge",
-                "operation": "subtract",
-                "value": 2
+                "ability": "stealth"
               }
             }
-          ]
+          },
+          "duration": "battle-round"
         }
-      }
+      ],
+      "choice_label": "artillery support",
+      "min_choices": 1,
+      "max_choices": 1
     },
     "scope": {
-      "duration": "battle-round"
+      "duration": "permanent"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "round-started"
+    }
   },
   {
     "ability_id": "independent-operatives-astra-militarum",

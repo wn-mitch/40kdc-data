@@ -23,7 +23,7 @@ import { expiryTrail } from "./expiry.js";
 import { objectiveSelectorPhrase, rollHead, selectObjectiveBlock, selectObjectiveInline, selectionBinding, selectionLimit, selectorCount, selectorNoun, selectorSubject, selectUnitsSubject } from "./effect-bind.js";
 import {
   diceTableResultLabel,
-  abilityLabel, capitalize, diceCase, filterSubject, formatComparison, jstr, orList, quantityPhrase, rangePhrase, regionPhrase, requirementPhrase, resourceNoun, rollKindNoun, scaleSource,
+  abilityLabel, amountOf, capitalize, diceCase, filterSubject, formatComparison, jstr, orList, quantityPhrase, rangePhrase, regionPhrase, requirementPhrase, resourceNoun, rollKindNoun, scaleSource,
   signed, testName, type Ctx,
 } from "./effect-words.js";
 export type { Ctx };
@@ -57,6 +57,8 @@ export interface Effect {
   modifier?: Record<string, unknown> | AuraModifier;
   condition?: Condition;
   effect?: Effect;
+  /** for-each-unit: at most this many of the units take the effect. */
+  max_affected?: unknown;
   after_move?: Effect;
   steps?: Effect[];
   options?: (Effect & {
@@ -250,6 +252,11 @@ function selectUnitsInline(sel: Record<string, unknown>, effect: Effect, ctx: Ct
   return `select ${subject}${binding}: ${nested}`;
 }
 
+
+/** ", up to 2/3/4 units (Incursion/Strike Force/Onslaught) of your choice": a for-each's cap on the units it affects. */
+function forEachCap(max: unknown): string {
+  return max == null ? "" : `, up to ${amountOf(max, "unit", "units")} of your choice`;
+}
 
 export function forEachUnitSubject(sel: Record<string, unknown> = {}): string {
   const eligibility = sel.eligibility ? ` ${describeSelectionEligibility(sel.eligibility as Condition)}` : "";
@@ -610,7 +617,7 @@ function describeEffectInlineBase(e: Effect, ctx: Ctx = {}): string {
       return `${persistentDesignationLead(e)} ${persistentDesignationWhen(e)}, ${describeEffectInline(e.consumer?.effect ?? {}, ctx)}`;
     case "for-each-unit": {
       const selectedCtx = selectedContext(ctx, e.selector ?? {});
-      return `for each ${forEachUnitSubject(e.selector)}: ${describeEffectInline(e.effect ?? {}, selectedCtx)}`;
+      return `for each ${forEachUnitSubject(e.selector)}${forEachCap(e.max_affected)}: ${describeEffectInline(e.effect ?? {}, selectedCtx)}`;
     }
     case "designate-target": {
       const sel = e.select ?? {};
@@ -940,7 +947,7 @@ export function describeEffect(e: Effect, depth: number = 0, ctx: Ctx = {}): str
     case "for-each-unit": {
       const inner = e.effect ?? {};
       const selectedCtx = selectedContext(ctx, e.selector ?? {});
-      const lead = `For each ${forEachUnitSubject(e.selector)}`;
+      const lead = `For each ${forEachUnitSubject(e.selector)}${forEachCap(e.max_affected)}`;
       if (CONTAINER_TYPES.has(inner.type ?? ""))
         return `${indent}${lead}:\n` + describeEffect(inner, depth + 1, selectedCtx);
       return `${indent}${lead}: ${capitalize(describeEffectInline(inner, selectedCtx))}.`;

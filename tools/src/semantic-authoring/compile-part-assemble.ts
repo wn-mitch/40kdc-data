@@ -291,6 +291,8 @@ export function assemblePart(
   else if (forEachLeaf) {
     const each = forEachLeaf;
     body = attempt(() => wrapForEachUnit(each, body!));
+    // "The maximum number of units that can be … depends on the battle size": the loop's cap on the units it affects.
+    if (body && battleSizeCount && selections.length === 0) body = { ...body, max_affected: maxCount };
     if (body && afterLoop.length) body = { type: "sequence", steps: [body, ...afterLoop.map((item) => gated(item.gate, item.node))] };
   }
   if (!body) return { ok: false, signature, errors };

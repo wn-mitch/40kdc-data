@@ -19240,6 +19240,10 @@ pub enum Footprint {
 ///    "effect": {
 ///      "$ref": "#/$defs/effect-node"
 ///    },
+///    "max_affected": {
+///      "description": "At most this many of the units take the effect, the player picking which among those it applies to (a cap per battle size is a battle-size-value).",
+///      "$ref": "#/$defs/quantity"
+///    },
 ///    "selector": {
 ///      "$ref": "#/$defs/unit-selector"
 ///    },
@@ -19259,6 +19263,9 @@ pub enum Footprint {
 #[serde(deny_unknown_fields)]
 pub struct ForEachUnitEffect {
     pub effect: EffectNode,
+    ///At most this many of the units take the effect, the player picking which among those it applies to (a cap per battle size is a battle-size-value).
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub max_affected: ::std::option::Option<Quantity>,
     pub selector: UnitSelector,
     #[serde(rename = "type")]
     pub type_: ForEachUnitEffectType,

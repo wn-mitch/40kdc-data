@@ -4104,6 +4104,10 @@ export interface ForEachUnitEffect {
   type: "for-each-unit";
   selector: UnitSelector;
   effect: EffectNode;
+  /**
+   * A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield, or the rating the unit prints for this rule.
+   */
+  max_affected?: number | DiceExpression | BattleSizeValue | RollReference | CountOf | UnitRating;
 }
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
