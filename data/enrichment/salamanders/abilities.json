@@ -5,7 +5,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "212ae484eba841f92ccce67493791f0f203f494c01eb34c85df18147c0cf00fc",
     "version": "2025-q3",
@@ -158,7 +158,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "2c6e9b70c4bab356a3218498436ab01104bfd96b330dac784dadc2ce33de7d27",
     "version": "2025-q3",
@@ -210,7 +210,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "6bd4abc9278bdbb98e8953237810285f37e90745b76d80acc3505ded44303553",
     "version": "2025-q3",
@@ -267,7 +267,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [],
     "faction_id": "salamanders",
@@ -320,7 +320,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "efa9ad350dfd023d6d8238fccb710360ac0e7ed2ef71c56c3490cabe1d689304",
     "version": "2025-q3",
@@ -395,7 +395,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [],
     "faction_id": "salamanders",

@@ -9,7 +9,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "keyword_restrictions": [
       "Big Mek"
@@ -40,7 +40,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "upgrade_tag": true,
     "max_targets": 3,
@@ -66,7 +66,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -92,7 +92,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "keyword_restrictions": [
       "Warboss"
@@ -118,7 +118,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -146,7 +146,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "keyword_restrictions": [
       "Orks"
@@ -172,7 +172,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -198,7 +198,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "keyword_restrictions": [
       "Orks",
@@ -225,7 +225,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "keyword_restrictions": [
       "Orks",
@@ -252,7 +252,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "upgrade_tag": true,
     "max_targets": 3,
@@ -282,7 +282,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "upgrade_tag": true,
     "max_targets": 3,
@@ -312,7 +312,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "keyword_restrictions": [
       "Aircraft",
@@ -341,7 +341,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "keyword_restrictions": [
       "Aircraft",
@@ -370,7 +370,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -398,7 +398,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "keyword_restriction_groups": [
       [
@@ -439,7 +439,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "keyword_restrictions": [
       "Big Mek"
@@ -470,7 +470,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "upgrade_tag": true,
     "max_targets": 3,
@@ -500,7 +500,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -526,7 +526,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -552,7 +552,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "upgrade_tag": true,
     "max_targets": 3,
@@ -583,7 +583,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "keyword_restrictions": [
       "Infantry",
@@ -613,7 +613,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "upgrade_tag": true,
     "max_targets": 3,
@@ -643,7 +643,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "keyword_restrictions": [
       "Infantry",
@@ -670,7 +670,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "keyword_restriction_groups": [
       [
@@ -709,7 +709,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "keyword_restrictions": [
       "Mega Armour"
@@ -735,7 +735,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "upgrade_tag": true,
     "max_targets": 3,
@@ -765,7 +765,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "upgrade_tag": true,
     "max_targets": 3,
@@ -798,7 +798,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "keyword_restrictions": [
       "Orks",
@@ -825,7 +825,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "upgrade_tag": true,
     "max_targets": 3,
@@ -860,7 +860,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -884,7 +884,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -908,7 +908,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -947,7 +947,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -972,7 +972,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "points_provisional": false,
     "upgrade_tag": true,
@@ -996,7 +996,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -1020,7 +1020,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "points_provisional": false,
     "upgrade_tag": true,
@@ -1044,7 +1044,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -1076,7 +1076,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -1099,7 +1099,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "game_modes": [
       "combat-patrol"
@@ -1129,7 +1129,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "game_modes": [
       "combat-patrol"

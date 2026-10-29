@@ -5,7 +5,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "edc6f2a6f8e04a8c3ab4df484cb629a75775f0967e7cba1f798efc40c3e3490c",
     "version": "2025-q3",
@@ -62,7 +62,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "43302321f2c7e5558149f8bcb9b452dd7ddc137176c178200a734090be0c7696",
     "version": "2025-q3",
@@ -111,7 +111,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "bd8fc752f6dc4a5e817d4a8dd99a6c083e33f57a7df3dd09cdcf6aca6d7bc848",
     "version": "2025-q3",
@@ -197,7 +197,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "3ce947d1c863f46392b04857d54747806493cea994080782434505f8cf12d215",
     "version": "2025-q3",
@@ -250,7 +250,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "560b59ff8ca1edbd62b1e008d4d559382b8f1c944c07ff3888c0da44f31a0019",
     "version": "2025-q3",
@@ -352,7 +352,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "0e35a2df92dd644d7b1fb2825ab4ac5eaddd939e22e1039f4bd32072cfb250ab",
     "version": "2025-q3",
@@ -384,7 +384,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "7100ce3705aab0feadc7f4324e61a48346d5229541aebcd16819470025a6dc90",
     "version": "2025-q3",
@@ -415,7 +415,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "cc66ff2a282d57055834181f837163efebe609e710dff63d42a75d6e2de3a0dd",
     "version": "2025-q3",
@@ -463,7 +463,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "af4922ac58c56f4f6647c022b9e789aa11e1bcfb58521cd921a046a535f2de4a",
     "version": "2025-q3",
@@ -511,7 +511,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "e3c73862fc010405e55bf4cb39539b6007d4044a3ab4563f6f264cedf4398034",
     "version": "2025-q3",
@@ -660,7 +660,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "5832b8fef26e923505aff85b4d799f6a1cf412a2127e34c2f3f9fea1450e4985",
     "version": "2025-q3",
@@ -979,7 +979,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "89add6a4fd5ccee94e1042786d74698105ea40252e487d749725dad2681e26bd",
     "version": "2025-q3",
@@ -1083,7 +1083,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "9825e7caf7f5315b3e8f410e702843b05c89701bb3f951742a93ab806c214132",
     "version": "2025-q3",
@@ -1200,7 +1200,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "7840880e1ca72c501f2389498e31e74ebcdbc6a08c8c86f8ac4d3410ce2202c8",
     "version": "2025-q3",
@@ -1288,7 +1288,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [
       "emperors-champion"
@@ -1319,7 +1319,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [],
     "faction_id": "black-templars",
@@ -1396,7 +1396,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [],
     "faction_id": "black-templars",
@@ -1477,7 +1477,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [
       "vow-sworn-bladeguard-veteran-squad"
@@ -1553,7 +1553,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [],
     "faction_id": "black-templars",
@@ -1602,7 +1602,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [
       "emperors-champion"
@@ -1656,7 +1656,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [],
     "faction_id": "black-templars",
@@ -1730,7 +1730,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [],
     "faction_id": "black-templars",
@@ -1755,7 +1755,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [
       "emperors-champion-vedrenn"
@@ -1810,7 +1810,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [],
     "faction_id": "black-templars",
@@ -1929,7 +1929,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [],
     "faction_id": "black-templars",
@@ -1970,7 +1970,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [],
     "faction_id": "black-templars",
@@ -2005,7 +2005,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [
       "vow-sworn-sword-brethren-squad"
@@ -2073,7 +2073,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [],
     "faction_id": "black-templars",
@@ -2163,7 +2163,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [],
     "faction_id": "black-templars",
@@ -2190,7 +2190,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [],
     "faction_id": "black-templars",
@@ -2255,7 +2255,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [],
     "faction_id": "black-templars",
@@ -2310,7 +2310,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [],
     "faction_id": "black-templars",
@@ -2340,7 +2340,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [],
     "faction_id": "black-templars",
@@ -2365,7 +2365,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [],
     "faction_id": "black-templars",
@@ -2405,7 +2405,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [
       "impulsor"
@@ -2433,7 +2433,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [],
     "faction_id": "black-templars",
@@ -2557,7 +2557,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [
       "gladiator-valiant"
@@ -2634,7 +2634,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [
       "gladiator-reaper"
@@ -2726,7 +2726,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [
       "vow-sworn-crusader-squad"
@@ -2827,7 +2827,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [
       "impulsor"
@@ -2854,7 +2854,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [
       "emperors-champion"
@@ -2883,7 +2883,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [],
     "faction_id": "black-templars",
@@ -2940,7 +2940,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [],
     "faction_id": "black-templars",
@@ -3016,7 +3016,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [],
     "faction_id": "black-templars",
@@ -3140,7 +3140,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [],
     "faction_id": "black-templars",
@@ -3166,7 +3166,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "71a16375384c1a9b686f3f9ea777fc48debeb04dd560e2af64456ee54af01875",
     "version": "2025-q3",
@@ -3228,7 +3228,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [],
     "faction_id": "black-templars",
@@ -3336,7 +3336,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [],
     "faction_id": "black-templars",
@@ -3365,7 +3365,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [
       "repulsor-executioner"
@@ -3442,7 +3442,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [],
     "faction_id": "black-templars",
@@ -3501,7 +3501,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [
       "impulsor"
@@ -3560,7 +3560,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [],
     "faction_id": "black-templars",

@@ -4,7 +4,7 @@ import { meetsEnhancementGroups } from "../src/data/enhancement-eligibility.js";
 import { canTakeEnhancement } from "../src/data/lever-providers.js";
 import type { Enhancement } from "../src/generated.js";
 
-const base = { id: "fabricated-relic", name: "Fabricated Relic", detachment_id: "fabricated", cost: 10, game_version: { edition: "11th", dataslate: "mfm-995" } } as Enhancement;
+const base = { id: "fabricated-relic", name: "Fabricated Relic", detachment_id: "fabricated", cost: 10, game_version: { edition: "11th", dataslate: "2026-10-14" } } as Enhancement;
 const holds = (keywords: string[]) => (keyword: string) => keywords.includes(keyword);
 
 describe("meetsEnhancementGroups", () => {

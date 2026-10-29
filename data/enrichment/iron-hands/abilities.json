@@ -5,7 +5,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "8bd667d22eeeff5b7940fe554cf66c9fd828530818eb7ee294814ad87054e577",
     "version": "2025-q3",
@@ -65,7 +65,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "12d5b6cb9c67e103e43b04208b9beaf8c62ae3d566a9576957fbcbcc4a01481f",
     "version": "2025-q3",
@@ -190,7 +190,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "2c96ff0862cc6ceb68aa93a17fe50a6727a5f2b1b6244181429ca6034d13a662",
     "version": "2025-q3",
@@ -288,7 +288,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "13009d42eb80a80b9e9a5cb57ab27e67562ff3dc88aaa6c7bf13923eca1cf909",
     "version": "2025-q3",
@@ -334,7 +334,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "25edfcfbb7a310196b34654bde9529c717ccbae9bcd482a6836d6dbe79739c02",
     "version": "2025-q3",
@@ -382,7 +382,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "a60e1d167a6fb1ead0ceb5859b184ba7db84623ac13a6ba01bd77a5ba47ab98d",
     "version": "2025-q3",
@@ -440,7 +440,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [],
     "faction_id": "iron-hands",
@@ -531,7 +531,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [],
     "faction_id": "iron-hands",
@@ -566,7 +566,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [],
     "faction_id": "iron-hands",

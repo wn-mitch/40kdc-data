@@ -17,8 +17,8 @@ export interface GameVersion {
 
 /** Dump `metadata.data_version` → the game-versions.json dataslate its records are stamped with. */
 export const DATASLATE_BY_DATA_VERSION: Readonly<Record<number, string>> = Object.freeze({
-  963: "mfm-963",
-  995: "mfm-995",
+  963: "2026-09-30",
+  995: "2026-10-14",
 });
 
 /** The slate a record falls back to when its dump verification fails. */

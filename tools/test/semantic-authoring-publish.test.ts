@@ -219,12 +219,12 @@ describe("Semantic authoring explicit publication", () => {
       writeFileSync(join(fixture.rawStore, "index.json"), JSON.stringify({ data_version: 963 }));
       const otherBefore = structuredClone(entriesAt(fixture.abilitiesFile).find((entry) => entry.ability_id === authoredAbilityId));
       const preview = await preparePublication(fixture.db, { faction_id: factionId, entry_ids: [fixture.selectedEntryId] });
-      expect(preview.diff[0]!.fields.find((field) => field.field === "game_version")?.after).toEqual({ edition: "11th", dataslate: "mfm-963" });
+      expect(preview.diff[0]!.fields.find((field) => field.field === "game_version")?.after).toEqual({ edition: "11th", dataslate: "2026-09-30" });
       await publishPublication(fixture.db, { batch_id: preview.batch_id, preview_hash: preview.preview_hash });
       const after = entriesAt(fixture.abilitiesFile);
       expect(after.find((entry) => entry.ability_id === selectedAbilityId)).toMatchObject({
         source_digest: sourceDigest(privateSourceText),
-        game_version: { edition: "11th", dataslate: "mfm-963" },
+        game_version: { edition: "11th", dataslate: "2026-09-30" },
       });
       expect(after.find((entry) => entry.ability_id === authoredAbilityId)).toEqual(otherBefore);
 
@@ -240,7 +240,7 @@ describe("Semantic authoring explicit publication", () => {
     const fixture = buildFixture();
     try {
       const before = entriesAt(fixture.abilitiesFile).find((entry) => entry.ability_id === selectedAbilityId)!;
-      const stamp = { gameVersion: { edition: "11th", dataslate: "mfm-963" }, digests: new Map([[selectedAbilityId, sourceDigest("other prose")]]) };
+      const stamp = { gameVersion: { edition: "11th", dataslate: "2026-09-30" }, digests: new Map([[selectedAbilityId, sourceDigest("other prose")]]) };
       const projection = projectRecords(realpathSync(fixture.dataRoot), factionId, [
         { id: "row", ability_id: selectedAbilityId, mechanics: STAT_MECHANICS as never, core: null, source_digest: sourceDigest(privateSourceText) },
       ], stamp);

@@ -11,7 +11,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -39,7 +39,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -67,7 +67,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -95,7 +95,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -123,7 +123,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -148,7 +148,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "points_provisional": false,
     "upgrade_tag": true,
@@ -183,7 +183,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "points_provisional": false,
     "upgrade_tag": true,
@@ -216,7 +216,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -244,7 +244,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "points_provisional": false,
     "upgrade_tag": false,
@@ -273,7 +273,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "game_modes": [
       "combat-patrol"
@@ -301,7 +301,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "game_modes": [
       "combat-patrol"
@@ -329,7 +329,7 @@
     "is_unique": true,
     "game_version": {
       "edition": "11th",
-      "dataslate": "mfm-995"
+      "dataslate": "2026-10-14"
     },
     "points_provisional": false,
     "upgrade_tag": false,

@@ -23,13 +23,13 @@ import { REPO_ROOT } from "../src/mfm/repo-files.js";
 import { openWorkbenchReadOnly } from "../src/semantic-authoring/db.js";
 import { entryWithMechanics } from "../src/semantic-authoring/entries.js";
 
-const NOW = { edition: "11th", dataslate: "mfm-963" };
-const ENTRIES = [{ edition: "11th", dataslate: "mfm-963" }];
+const NOW = { edition: "11th", dataslate: "2026-09-30" };
+const ENTRIES = [{ edition: "11th", dataslate: "2026-09-30" }];
 
 describe("dump dataslate mapping", () => {
   it("names the game-versions entry of a mapped dump", () => {
     expect(gameVersionForDataVersion(963, ENTRIES)).toEqual(NOW);
-    expect(DATASLATE_BY_DATA_VERSION[963]).toBe("mfm-963");
+    expect(DATASLATE_BY_DATA_VERSION[963]).toBe("2026-09-30");
   });
 
   it("throws for an unknown, absent, or unregistered data_version instead of defaulting", () => {
@@ -40,12 +40,12 @@ describe("dump dataslate mapping", () => {
 
   it("is registered in the real game-versions.json", () => {
     expect(gameVersionForDataVersion(963)).toEqual(NOW);
-    expect(gameVersionForDataVersion(995)).toEqual({ edition: "11th", dataslate: "mfm-995" });
+    expect(gameVersionForDataVersion(995)).toEqual({ edition: "11th", dataslate: "2026-10-14" });
   });
 
   it("re-verifies a record stamped by an older dump against a newer one", () => {
-    const newer = { edition: "11th", dataslate: "mfm-995" };
-    expect(DUMP_CONFIRMED_DATASLATES.has("mfm-995")).toBe(true);
+    const newer = { edition: "11th", dataslate: "2026-10-14" };
+    expect(DUMP_CONFIRMED_DATASLATES.has("2026-10-14")).toBe(true);
     expect(stampAction(NOW, true, newer)).toEqual({ action: "promote", next: newer });
     expect(stampAction(NOW, false, newer)).toEqual({
       action: "demote",
@@ -59,7 +59,7 @@ describe("stamp actions", () => {
     expect(stampAction({ edition: "11th", dataslate: "launch" }, true, NOW)).toEqual({ action: "promote", next: NOW });
     expect(stampAction({ edition: "11th", dataslate: "pre-launch-provisional" }, true, NOW)).toEqual({ action: "promote", next: NOW });
     expect(stampAction(NOW, true, NOW)).toEqual({ action: "kept" });
-    for (const claimed of ["launch", "codex-orks", "mfm-963"]) {
+    for (const claimed of ["launch", "codex-orks", "2026-09-30"]) {
       expect(stampAction({ edition: "11th", dataslate: claimed }, false, NOW)).toEqual({
         action: "demote",
         next: { edition: "11th", dataslate: "pre-launch-provisional" },
