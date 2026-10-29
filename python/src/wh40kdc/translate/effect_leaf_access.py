@@ -201,6 +201,22 @@ def targeting(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
     ):
         modal = "cannot" if may == "cannot-target" else "must" if may == "must-target" else "can"
         return f"{whom} {modal} be selected by the {ability_label(m['ability'])} ability"
+    # "Your unit cannot be targeted with the Rapid Ingress Stratagem": a Stratagem ban that names
+    # no user.
+    if (
+        m.get("kind") == "stratagem"
+        and m.get("by") is None
+        and m.get("target") is not None
+        and m.get("target") != "every-eligible"
+        and may != "redirect"
+    ):
+        modal = "cannot" if may == "cannot-target" else "must" if may == "must-target" else "can"
+        what = (
+            f"the {ability_label(m['stratagem'])} Stratagem"
+            if m.get("stratagem") is not None
+            else "Stratagems"
+        )
+        return f"{whom} {modal} be targeted with {what}"
     verb = (
         "cannot target"
         if may == "cannot-target"

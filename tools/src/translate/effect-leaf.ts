@@ -389,6 +389,11 @@ function targeting(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
   if (m.kind === "ability" && m.ability != null && m.by == null && m.may !== "redirect") {
     return `${whom} ${m.may === "cannot-target" ? "cannot" : m.may === "must-target" ? "must" : "can"} be selected by the ${abilityLabel(m.ability)} ability`;
   }
+  // "Your unit cannot be targeted with the Rapid Ingress Stratagem": a Stratagem ban that names no user.
+  if (m.kind === "stratagem" && m.by == null && m.target != null && m.may !== "redirect" && m.target !== "every-eligible") {
+    const what = m.stratagem != null ? `the ${abilityLabel(m.stratagem)} Stratagem` : "Stratagems";
+    return `${whom} ${m.may === "cannot-target" ? "cannot" : m.may === "must-target" ? "must" : "can"} be targeted with ${what}`;
+  }
   const verb = m.may === "cannot-target" ? "cannot target" : m.may === "must-target" ? "must target" : "can target";
   const kind =
     m.kind === "stratagem" && m.stratagem != null

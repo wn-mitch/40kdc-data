@@ -535,6 +535,24 @@ pub(super) fn targeting(m: &P, subj: &str, ctx: &Ctx) -> String {
             );
         }
     }
+    // "Your unit cannot be targeted with the Rapid Ingress Stratagem": a Stratagem ban that names
+    // no user.
+    if jstr(m.get("kind")) == "stratagem"
+        && nn(m, "by").is_none()
+        && nn(m, "target").is_some_and(|t| t.as_str() != Some("every-eligible"))
+        && may != Some("redirect")
+    {
+        let modal = match may {
+            Some("cannot-target") => "cannot",
+            Some("must-target") => "must",
+            _ => "can",
+        };
+        let what = match nn(m, "stratagem") {
+            Some(strat) => format!("the {} Stratagem", ability_label(Some(strat))),
+            None => "Stratagems".to_string(),
+        };
+        return format!("{whom} {modal} be targeted with {what}");
+    }
     let verb = match may {
         Some("cannot-target") => "cannot target",
         Some("must-target") => "must target",

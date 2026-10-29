@@ -224,6 +224,22 @@ func targetingLeaf(m map[string]any, subj string, ctx effCtx) string {
 		}
 		return whom + " " + modal + " be selected by the " + abilityLabel(m["ability"]) + " ability"
 	}
+	// "Your unit cannot be targeted with the Rapid Ingress Stratagem": a Stratagem ban that names
+	// no user.
+	if m["kind"] == "stratagem" && m["by"] == nil && m["target"] != nil && m["target"] != "every-eligible" && m["may"] != "redirect" {
+		modal := "can"
+		switch m["may"] {
+		case "cannot-target":
+			modal = "cannot"
+		case "must-target":
+			modal = "must"
+		}
+		what := "Stratagems"
+		if m["stratagem"] != nil {
+			what = "the " + abilityLabel(m["stratagem"]) + " Stratagem"
+		}
+		return whom + " " + modal + " be targeted with " + what
+	}
 	verb := "can target"
 	switch m["may"] {
 	case "cannot-target":
