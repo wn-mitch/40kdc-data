@@ -11254,7 +11254,12 @@
       "edition": "11th",
       "dataslate": "2026-10-14"
     },
-    "unit_ids": ["kygharils-protectors-dire-avengers","kygharils-protectors-warp-spiders","kygharils-protectors-wraithblades","spiritseer-kygharil"],
+    "unit_ids": [
+      "kygharils-protectors-dire-avengers",
+      "kygharils-protectors-warp-spiders",
+      "kygharils-protectors-wraithblades",
+      "spiritseer-kygharil"
+    ],
     "faction_id": "aeldari",
     "detachment_id": "kygharils-protectors",
     "ability_type": "faction",
@@ -12478,7 +12483,27 @@
       "dataslate": "pre-launch-provisional"
     },
     "stub": true,
-    "unit_ids": ["death-jester","shadowseer","skyweavers","solitaire","starweaver","the-visarch","the-yncarne","troupe","troupe-master","voidweaver","ynnari-archon","ynnari-incubi","ynnari-kabalite-warriors","ynnari-raider","ynnari-reavers","ynnari-succubus","ynnari-venom","ynnari-wyches","yvraine"],
+    "unit_ids": [
+      "death-jester",
+      "shadowseer",
+      "skyweavers",
+      "solitaire",
+      "starweaver",
+      "the-visarch",
+      "the-yncarne",
+      "troupe",
+      "troupe-master",
+      "voidweaver",
+      "ynnari-archon",
+      "ynnari-incubi",
+      "ynnari-kabalite-warriors",
+      "ynnari-raider",
+      "ynnari-reavers",
+      "ynnari-succubus",
+      "ynnari-venom",
+      "ynnari-wyches",
+      "yvraine"
+    ],
     "faction_id": "aeldari",
     "detachment_id": null,
     "ability_type": "faction",

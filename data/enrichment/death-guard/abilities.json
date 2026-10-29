@@ -4234,7 +4234,38 @@
     "ability_type": "faction",
     "behavior": "reactive",
     "community_notes": "-1T always active (Contagion). Plague choice: hill-climbing selects -1 Save (most offensive), equivalent to +1 AP. Other plague options are -1 to enemy Hit (defensive) and -1 M/Ld/OC (utility).",
-    "unit_ids": ["biologus-putrifier","blightlord-terminators","chaos-land-raider","chaos-predator-annihilator","chaos-predator-destructor","chaos-rhino","chaos-spawn","daemon-prince-of-nurgle","daemon-prince-of-nurgle-with-wings","deathshroud-terminators","defiler","foetid-bloat-drone","foetid-bloat-drone-with-heavy-blight-launcher","foul-blightspawn","helbrute","icon-bearer","lord-of-contagion","lord-of-poxes","lord-of-virulence","malignant-plaguecaster","miasmic-malignifier","mortarion","myphitic-blight-haulers","noxious-blightbringer","plague-marines","plague-surgeon","plagueburst-crawler","poxwalkers","tallyman","typhus"]
+    "unit_ids": [
+      "biologus-putrifier",
+      "blightlord-terminators",
+      "chaos-land-raider",
+      "chaos-predator-annihilator",
+      "chaos-predator-destructor",
+      "chaos-rhino",
+      "chaos-spawn",
+      "daemon-prince-of-nurgle",
+      "daemon-prince-of-nurgle-with-wings",
+      "deathshroud-terminators",
+      "defiler",
+      "foetid-bloat-drone",
+      "foetid-bloat-drone-with-heavy-blight-launcher",
+      "foul-blightspawn",
+      "helbrute",
+      "icon-bearer",
+      "lord-of-contagion",
+      "lord-of-poxes",
+      "lord-of-virulence",
+      "malignant-plaguecaster",
+      "miasmic-malignifier",
+      "mortarion",
+      "myphitic-blight-haulers",
+      "noxious-blightbringer",
+      "plague-marines",
+      "plague-surgeon",
+      "plagueburst-crawler",
+      "poxwalkers",
+      "tallyman",
+      "typhus"
+    ]
   },
   {
     "ability_id": "pact-of-decay-death-guard",
@@ -4260,7 +4291,19 @@
     "faction_id": "death-guard",
     "ability_type": "faction",
     "behavior": "passive",
-    "unit_ids": ["beasts-of-nurgle","great-unclean-one","maggot-lords-chaos-rhino","maggot-lords-deathshroud-terminators","maggot-lords-plague-marines","nurglings","plague-drones","plaguebearers","rotigus","septimol-fulg-maggot-lords-tallyman","sholgor-the-putrid"]
+    "unit_ids": [
+      "beasts-of-nurgle",
+      "great-unclean-one",
+      "maggot-lords-chaos-rhino",
+      "maggot-lords-deathshroud-terminators",
+      "maggot-lords-plague-marines",
+      "nurglings",
+      "plague-drones",
+      "plaguebearers",
+      "rotigus",
+      "septimol-fulg-maggot-lords-tallyman",
+      "sholgor-the-putrid"
+    ]
   },
   {
     "ability_id": "warped-and-rusted-animus-death-guard",
@@ -7568,7 +7611,13 @@
       "edition": "11th",
       "dataslate": "2026-10-14"
     },
-    "unit_ids": ["maggot-lords-chaos-rhino","maggot-lords-deathshroud-terminators","maggot-lords-plague-marines","septimol-fulg-maggot-lords-tallyman","sholgor-the-putrid"],
+    "unit_ids": [
+      "maggot-lords-chaos-rhino",
+      "maggot-lords-deathshroud-terminators",
+      "maggot-lords-plague-marines",
+      "septimol-fulg-maggot-lords-tallyman",
+      "sholgor-the-putrid"
+    ],
     "faction_id": "death-guard",
     "detachment_id": "maggot-lords",
     "ability_type": "faction",

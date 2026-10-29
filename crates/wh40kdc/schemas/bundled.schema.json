@@ -687,6 +687,20 @@
           "uniqueItems": true,
           "description": "Units with every listed ability."
         },
+        "has_ability_models": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "none_of"
+          ],
+          "properties": {
+            "none_of": {
+              "$ref": "#/$defs/keyword-list",
+              "description": "Models with any of these keywords are left out of the check."
+            }
+          },
+          "description": "has_ability holds when every model in the unit, except models with any keyword in none_of, has each listed ability (\"every model (excluding CHARACTER models) in that unit has this ability\"). Without it, has_ability reads the unit."
+        },
         "lacks_ability": {
           "type": "array",
           "items": {

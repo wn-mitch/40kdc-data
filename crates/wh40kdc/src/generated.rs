@@ -54841,6 +54841,20 @@ pub struct UnitDetachmentPricingItem {
 ///      "minItems": 1,
 ///      "uniqueItems": true
 ///    },
+///    "has_ability_models": {
+///      "description": "has_ability holds when every model in the unit, except models with any keyword in none_of, has each listed ability (\"every model (excluding CHARACTER models) in that unit has this ability\"). Without it, has_ability reads the unit.",
+///      "type": "object",
+///      "required": [
+///        "none_of"
+///      ],
+///      "properties": {
+///        "none_of": {
+///          "description": "Models with any of these keywords are left out of the check.",
+///          "$ref": "#/$defs/keyword-list"
+///        }
+///      },
+///      "additionalProperties": false
+///    },
 ///    "lacks_ability": {
 ///      "description": "Units with none of the listed abilities.",
 ///      "type": "array",
@@ -54982,6 +54996,8 @@ pub struct UnitFilter {
     ///Units with every listed ability.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub has_ability: ::std::option::Option<Vec<EntityId>>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub has_ability_models: ::std::option::Option<UnitFilterHasAbilityModels>,
     ///Units with none of the listed abilities.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub lacks_ability: ::std::option::Option<Vec<EntityId>>,
@@ -55036,6 +55052,7 @@ impl ::std::default::Default for UnitFilter {
             engaged_with: Default::default(),
             excluding: Default::default(),
             has_ability: Default::default(),
+            has_ability_models: Default::default(),
             lacks_ability: Default::default(),
             level: Default::default(),
             member_of: Default::default(),
@@ -55129,6 +55146,33 @@ impl ::std::convert::TryFrom<::std::string::String> for UnitFilterAttachmentRole
     ) -> ::std::result::Result<Self, self::error::ConversionError> {
         value.parse()
     }
+}
+///has_ability holds when every model in the unit, except models with any keyword in none_of, has each listed ability ("every model (excluding CHARACTER models) in that unit has this ability"). Without it, has_ability reads the unit.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "has_ability holds when every model in the unit, except models with any keyword in none_of, has each listed ability (\"every model (excluding CHARACTER models) in that unit has this ability\"). Without it, has_ability reads the unit.",
+///  "type": "object",
+///  "required": [
+///    "none_of"
+///  ],
+///  "properties": {
+///    "none_of": {
+///      "description": "Models with any of these keywords are left out of the check.",
+///      "$ref": "#/$defs/keyword-list"
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct UnitFilterHasAbilityModels {
+    ///Models with any of these keywords are left out of the check.
+    pub none_of: KeywordList,
 }
 ///model: the filter matches individual models. Default unit.
 ///

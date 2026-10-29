@@ -232,6 +232,10 @@ UnitState: TypeAlias = Literal[
 ModelName: TypeAlias = str
 
 
+class HasAbilityModels(TypedDict):
+    none_of: KeywordList
+
+
 class UnitRef1(TypedDict):
     event_var: str
 
@@ -1963,6 +1967,7 @@ class UnitFilter(TypedDict):
     engaged_with: NotRequired[UnitRef]
     not_engaged_with: NotRequired[UnitRef]
     has_ability: NotRequired[list[EntityId]]
+    has_ability_models: NotRequired[HasAbilityModels]
     lacks_ability: NotRequired[list[EntityId]]
 
 

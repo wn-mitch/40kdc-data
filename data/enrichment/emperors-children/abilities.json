@@ -2369,7 +2369,29 @@
     "faction_id": "emperors-children",
     "ability_type": "faction",
     "behavior": "passive",
-    "unit_ids": ["callous-blades-flawless-blades","callous-blades-infractors","chaos-land-raider","chaos-rhino","chaos-spawn","chaos-terminators","daemon-prince-of-slaanesh","daemon-prince-of-slaanesh-with-wings","defiler","flawless-blades","fulgrim","heldrake","infractors","lord-exultant","lord-kakophonist","lord-kaphrael-of-the-callous-blades","lucius-the-eternal","maulerfiend","noise-marines","sorcerer","tormentors"]
+    "unit_ids": [
+      "callous-blades-flawless-blades",
+      "callous-blades-infractors",
+      "chaos-land-raider",
+      "chaos-rhino",
+      "chaos-spawn",
+      "chaos-terminators",
+      "daemon-prince-of-slaanesh",
+      "daemon-prince-of-slaanesh-with-wings",
+      "defiler",
+      "flawless-blades",
+      "fulgrim",
+      "heldrake",
+      "infractors",
+      "lord-exultant",
+      "lord-kakophonist",
+      "lord-kaphrael-of-the-callous-blades",
+      "lucius-the-eternal",
+      "maulerfiend",
+      "noise-marines",
+      "sorcerer",
+      "tormentors"
+    ]
   },
   {
     "ability_id": "pact-of-excess-emperors-children",
@@ -2395,7 +2417,16 @@
     "faction_id": "emperors-children",
     "ability_type": "faction",
     "behavior": "passive",
-    "unit_ids": ["callous-blades-flawless-blades","callous-blades-infractors","daemonettes","fiends","keeper-of-secrets","lord-kaphrael-of-the-callous-blades","seekers","shalaxi-helbane"]
+    "unit_ids": [
+      "callous-blades-flawless-blades",
+      "callous-blades-infractors",
+      "daemonettes",
+      "fiends",
+      "keeper-of-secrets",
+      "lord-kaphrael-of-the-callous-blades",
+      "seekers",
+      "shalaxi-helbane"
+    ]
   },
   {
     "ability_id": "eager-to-kill-emperors-children",

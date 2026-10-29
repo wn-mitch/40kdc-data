@@ -55,7 +55,8 @@ export function foldHolderAbilities(input: readonly CompileLeaf[], sourceText: s
   const list = input.map((leaf) => resolved(leaf, abilityId));
   const out: CompileLeaf[] = [];
   for (const leaf of list) {
-    if (leaf.family_id !== "unit-has-ability" || leaf.parameters.subject !== ANTECEDENT) { out.push(leaf); continue; }
+    // A per-model check ("every model (excluding CHARACTER models) … has") lowers as a condition.
+    if (leaf.family_id !== "unit-has-ability" || leaf.parameters.subject !== ANTECEDENT || leaf.parameters.excluding_keywords !== undefined) { out.push(leaf); continue; }
     let at = out.length - 1;
     while (at >= 0 && out[at]!.family_id === "unit-owner" && out[at]!.fragment === leaf.fragment) at -= 1;
     const filter = out[at];

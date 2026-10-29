@@ -10,6 +10,9 @@ import { compileLeaves, leafFragment, type CompileLeaf } from "../src/semantic-a
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { previewLeaf } from "../src/semantic-authoring/leaf-preview.js";
 import { canonicalAbilityId, ownAbilityIds, type AbilityIdentity } from "../src/semantic-authoring/own-abilities.js";
+import { describeCondition } from "../src/translate/condition.js";
+import { unitFilterPhrase } from "../src/translate/condition-refs.js";
+import { describeAbility } from "../src/translate/effect.js";
 
 // Fabricated wording, keywords and ability ids only; no GW rule prose.
 
@@ -287,7 +290,37 @@ describe("Semantic authoring unit-has-ability own", () => {
     expect(() => normalize({ subject: "antecedent", own: true, ability: "gloom-veil" })).toThrow(/not both/u);
     expect(() => normalize({ subject: "antecedent" })).toThrow(/names an ability/u);
     expect(() => normalize({ subject: "antecedent", own: false })).toThrow(/own is true/u);
-    expect(() => normalize({ subject: "antecedent", own: true }, currentFamilyVersion("unit-has-ability") - 1)).toThrow();
+    // own arrived at version 3.
+    expect(() => normalize({ subject: "antecedent", own: true }, 2)).toThrow();
+  });
+});
+
+describe("Semantic authoring unit-has-ability per model", () => {
+  const normalize = (parameters: Record<string, unknown>) => normalizeFingerprintParameters("unit-has-ability", parameters, currentFamilyVersion("unit-has-ability"));
+  const everyModel: Item = ["every model (excluding WARDEN models) in that unit has this ability", "unit-has-ability", { subject: "antecedent", own: true, excluding_keywords: ["WARDEN"] }];
+
+  it("checks every model but the excluded ones, as a condition rather than a holder filter", () => {
+    const text = "Each time a unit from your army is destroyed, if every model (excluding WARDEN models) in that unit has this ability, you gain 1CP.";
+    const mechanics = mechanicsOf(placed(text,
+      ["Each time a unit from your army is destroyed", "event", { kind: "unit-destroyed", object_owner: "friendly" }],
+      everyModel,
+      ["you gain 1CP", "resource-gain", { pool: "cp", amount: 1 }]), text);
+    const [node] = hasAbilityNodes(mechanics);
+    expect(node!.parameters.filter).toEqual({ has_ability: [OWN], has_ability_models: { none_of: ["WARDEN"] } });
+    expect(describeAbility(mechanics as never)).toBe("Each time a friendly unit is destroyed, while every model in that unit (excluding WARDEN models) has the Dread Howl ability, you gain 1 CP.");
+  });
+
+  it("refuses an empty or repeated exclusion, and keeps a leaf without one unchanged", () => {
+    expect(() => normalize({ subject: "antecedent", own: true, excluding_keywords: [] })).toThrow(/nonempty/u);
+    expect(() => normalize({ subject: "antecedent", own: true, excluding_keywords: ["WARDEN", "WARDEN"] })).toThrow(/once/u);
+    expect(normalize({ subject: "antecedent", ability: "gloom-veil" })).toEqual({ subject: "antecedent", ability: "gloom-veil" });
+  });
+
+  it("names the exclusion in a filter phrase and in a negated condition", () => {
+    const filter = { has_ability: ["gloom-veil"], has_ability_models: { none_of: ["WARDEN"] } };
+    expect(unitFilterPhrase(filter)).toContain("in which every model (excluding WARDEN models) has the Gloom Veil ability");
+    expect(describeCondition({ operator: "not", operands: [{ type: "matches", parameters: { subject: "this-unit", filter } }] } as never))
+      .toContain("not every model in the unit (excluding WARDEN models) has the Gloom Veil ability");
   });
 });
 

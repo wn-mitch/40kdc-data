@@ -172,7 +172,11 @@ function pred(type: string, parameters: Node, subject?: unknown): Node {
   const who = subject === undefined ? {} : { subject };
   let filter: Node | undefined;
   if (type === "has-keyword" && parameters.chosen_by === undefined) filter = parameters;
-  else if (type === "has-ability") filter = { has_ability: [parameters.ability] };
+  else if (type === "has-ability") {
+    filter = { has_ability: [parameters.ability] };
+    // unit-has-ability@4: every model but the excluded ones has the ability.
+    if (Array.isArray(parameters.excluding_keywords)) filter.has_ability_models = { none_of: parameters.excluding_keywords };
+  }
   else if (type === "owned-by") filter = { owner: parameters.owner };
   else if (type === "unit-state" && (parameters.at === undefined || parameters.at === "now")) {
     if (parameters.with === undefined) filter = { state: parameters.state };
@@ -622,7 +626,10 @@ export function condition(leaf: CompileLeaf): Node {
     case "unit-has-ability":
       // compile.ts binds "this ability" to the record's id before lowering (compile-holder-abilities.ts).
       if (leaf.parameters.own === true) throw new CompileError("unit-has-ability names this ability, which binds to an id only when its record compiles.");
-      return polarity(leaf, pred("has-ability", { ability: closed(leaf, "ability") }, subjectOf(leaf)));
+      return polarity(leaf, pred("has-ability", {
+        ability: closed(leaf, "ability"),
+        ...(leaf.parameters.excluding_keywords !== undefined ? { excluding_keywords: closed(leaf, "excluding_keywords") } : {}),
+      }, subjectOf(leaf)));
     case "same-unit":
       return polarity(leaf, pred("same-unit", { as: closed(leaf, "as") }, subjectOf(leaf)));
     case "model-count": {

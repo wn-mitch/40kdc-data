@@ -5335,7 +5335,12 @@
     "faction_id": "drukhari",
     "ability_type": "faction",
     "behavior": "passive",
-    "unit_ids": ["coven-of-agonies-cronos","coven-of-agonies-talos","coven-of-agonies-wracks","xatrophos-nuul"]
+    "unit_ids": [
+      "coven-of-agonies-cronos",
+      "coven-of-agonies-talos",
+      "coven-of-agonies-wracks",
+      "xatrophos-nuul"
+    ]
   },
   {
     "ability_id": "exacting-cruelty-drukhari",
@@ -9801,7 +9806,34 @@
       "dataslate": "pre-launch-provisional"
     },
     "stub": true,
-    "unit_ids": ["archon","coven-of-agonies-cronos","coven-of-agonies-talos","coven-of-agonies-wracks","cronos","drazhar","haemonculus","hand-of-the-archon","hellions","incubi","kabalite-warriors","lelith-hesperax","mandrakes","raider","ravager","razorwing-jetfighter","reavers","scourges-with-heavy-weapons","scourges-with-shardcarbines","succubus","talos","venom","voidraven-bomber","wracks","wyches","xatrophos-nuul"],
+    "unit_ids": [
+      "archon",
+      "coven-of-agonies-cronos",
+      "coven-of-agonies-talos",
+      "coven-of-agonies-wracks",
+      "cronos",
+      "drazhar",
+      "haemonculus",
+      "hand-of-the-archon",
+      "hellions",
+      "incubi",
+      "kabalite-warriors",
+      "lelith-hesperax",
+      "mandrakes",
+      "raider",
+      "ravager",
+      "razorwing-jetfighter",
+      "reavers",
+      "scourges-with-heavy-weapons",
+      "scourges-with-shardcarbines",
+      "succubus",
+      "talos",
+      "venom",
+      "voidraven-bomber",
+      "wracks",
+      "wyches",
+      "xatrophos-nuul"
+    ],
     "faction_id": "drukhari",
     "detachment_id": null,
     "ability_type": "faction",

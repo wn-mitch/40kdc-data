@@ -390,6 +390,10 @@ export type PlaceRef =
  */
 export type DesignationId = string;
 /**
+ * Models with any of these keywords are left out of the check.
+ */
+export type KeywordList3 = Keyword[];
+/**
  * A region of the battlefield.
  *
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
@@ -478,7 +482,7 @@ export type WeaponKeywordSelection = WeaponKeywordSelector | [WeaponKeywordSelec
 /**
  * @minItems 1
  */
-export type KeywordList3 = [Keyword, ...Keyword[]];
+export type KeywordList4 = [Keyword, ...Keyword[]];
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "weapon-ref".
@@ -610,23 +614,23 @@ export type DefiniteOwner = "friendly" | "enemy" | "any";
 /**
  * Army gate: every model in the army must carry at least one of these keywords for the rule to apply (e.g. ['Chaos Knights', 'Heretic Astartes'] for Daemonic Pact). Empty = no army-level gate (the rule is then gated only by `detachment_ids`, whose detachments are themselves faction-locked).
  */
-export type KeywordList4 = Keyword[];
+export type KeywordList5 = Keyword[];
 /**
  * A unit qualifies for this pool when it carries any of these keywords (e.g. ['Legiones Daemonica'], ['Damned'], ['Vanguard Invader']). Empty = the whole `source_faction_id` is the pool.
  */
-export type KeywordList5 = Keyword[];
+export type KeywordList6 = Keyword[];
 /**
  * Additional filter: a unit must carry ALL of these to be included via this rule (e.g. the matching god ['Khorne'] for a per-god Daemon pool).
  */
-export type KeywordList6 = Keyword[];
+export type KeywordList7 = Keyword[];
 /**
  * A unit carrying ANY of these cannot be included via this rule (e.g. Brood Brothers bans 'Aircraft', 'Epic Hero', 'Ogryn', ...).
  */
-export type KeywordList7 = Keyword[];
+export type KeywordList8 = Keyword[];
 /**
  * Per-keyword Battleline ratio constraint: for each keyword listed, the number of non-BATTLELINE units with that keyword included via this rule cannot exceed the number of BATTLELINE units with that keyword included via this rule (e.g. Daemonic Pact's per-god ['Khorne','Tzeentch','Nurgle','Slaanesh']).
  */
-export type KeywordList8 = Keyword[];
+export type KeywordList9 = Keyword[];
 /**
  * A zone footprint, expressed as an axis-aligned rectangle or an explicit polygon. Vertices/extent are relative to the owning element's position.
  *
@@ -668,7 +672,7 @@ export type GameModes2 = [GameModeId, ...GameModeId[]];
 /**
  * Units carrying any of these faction keywords do not count toward the cap (e.g. YNNARI for the Asuryani Yvraine cap).
  */
-export type KeywordList9 = Keyword[];
+export type KeywordList10 = Keyword[];
 /**
  * A predicate, or and/or/not over predicates. Every predicate sits on one axis (clock, army, identity, composition, state, history, position, board, attack, visibility, designation, resource) and names the unit it tests with `subject` (a unit-ref, default this-unit). Negation is only the `not` operator.
  */
@@ -964,11 +968,11 @@ export type AbilityDSLCondition8 = SimpleCondition | CompoundCondition;
 /**
  * AND set: the target must carry every keyword listed here.
  */
-export type KeywordList10 = Keyword[];
+export type KeywordList11 = Keyword[];
 /**
  * OR set: the target must carry at least one keyword listed here. Use for rules that target a unit with one of several keywords (e.g. Crushing Impact's MONSTER/VEHICLE, Explosives' EXPLOSIVES/GRENADES). Mirrors the `army_keywords_any` OR-gate on allied-rule.schema.json.
  */
-export type KeywordList11 = Keyword[];
+export type KeywordList12 = Keyword[];
 /**
  * A predicate, or and/or/not over predicates. Every predicate sits on one axis (clock, army, identity, composition, state, history, position, board, attack, visibility, designation, resource) and names the unit it tests with `subject` (a unit-ref, default this-unit). Negation is only the `not` operator.
  */
@@ -1030,11 +1034,11 @@ export type GameModes6 = [GameModeId, ...GameModeId[]];
  *
  * @minItems 1
  */
-export type KeywordList12 = [Keyword, ...Keyword[]];
+export type KeywordList13 = [Keyword, ...Keyword[]];
 /**
  * The profile cannot target a unit carrying any listed keyword.
  */
-export type KeywordList13 = Keyword[];
+export type KeywordList14 = Keyword[];
 /**
  * Game modes this weapon is legal or authored for; absent implies matched-play.
  *
@@ -1080,7 +1084,7 @@ export type RuleStateCoreRuleSlug =
  *
  * @minItems 1
  */
-export type KeywordList14 = [Keyword, ...Keyword[]];
+export type KeywordList15 = [Keyword, ...Keyword[]];
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "effect".
@@ -1520,6 +1524,12 @@ export interface UnitFilter {
    */
   has_ability?: [EntityId, ...EntityId[]];
   /**
+   * has_ability holds when every model in the unit, except models with any keyword in none_of, has each listed ability ("every model (excluding CHARACTER models) in that unit has this ability"). Without it, has_ability reads the unit.
+   */
+  has_ability_models?: {
+    none_of: KeywordList3;
+  };
+  /**
    * Units with none of the listed abilities.
    *
    * @minItems 1
@@ -1826,6 +1836,12 @@ export interface UnitFilter1 {
    */
   has_ability?: [EntityId, ...EntityId[]];
   /**
+   * has_ability holds when every model in the unit, except models with any keyword in none_of, has each listed ability ("every model (excluding CHARACTER models) in that unit has this ability"). Without it, has_ability reads the unit.
+   */
+  has_ability_models?: {
+    none_of: KeywordList3;
+  };
+  /**
    * Units with none of the listed abilities.
    *
    * @minItems 1
@@ -2011,7 +2027,7 @@ export interface WeaponKeywordSelector {
     value?: Quantity;
     target_keyword?: Keyword;
     threshold?: number;
-    required_target_keywords_any?: KeywordList3;
+    required_target_keywords_any?: KeywordList4;
     excluded_target_keywords?: KeywordList;
   };
 }
@@ -2662,7 +2678,7 @@ export interface WeaponKeywordRef {
     value?: Quantity;
     target_keyword?: Keyword;
     threshold?: number;
-    required_target_keywords_any?: KeywordList3;
+    required_target_keywords_any?: KeywordList4;
     excluded_target_keywords?: KeywordList;
   };
 }
@@ -2678,7 +2694,7 @@ export interface WeaponKeywordRef1 {
     value?: Quantity;
     target_keyword?: Keyword;
     threshold?: number;
-    required_target_keywords_any?: KeywordList3;
+    required_target_keywords_any?: KeywordList4;
     excluded_target_keywords?: KeywordList;
   };
 }
@@ -2788,7 +2804,7 @@ export interface AlliedRule {
    * Short panel/category heading a list builder groups this pool under (e.g. 'Daemons', 'Imperial Agents', 'Titanic Allies'). Defaults to `name` when omitted.
    */
   label?: string;
-  army_keywords_any?: KeywordList4;
+  army_keywords_any?: KeywordList5;
   /**
    * Detachment gate: the rule applies only when at least one listed detachment is selected. Empty/absent = no detachment gate. Replaces the former single detachment_id (GW pools may gate on several detachments).
    */
@@ -2797,13 +2813,13 @@ export interface AlliedRule {
    * Faction the ally pool is drawn from, when scoping by faction is needed to disambiguate units whose id is shared across factions. Optional hint; `source_keywords` is the primary filter.
    */
   source_faction_id?: EntityId | null;
-  source_keywords?: KeywordList5;
+  source_keywords?: KeywordList6;
   /**
    * Explicit datasheet allowlist: when non-empty, a unit qualifies only if its id is listed (AND-combined with source_keywords/required_keywords/excluded_keywords/roles). GW soup pools enumerate by datasheet; this is the primary unit selector for generated rules. Empty/absent = no datasheet-level restriction.
    */
   source_datasheet_ids?: EntityId[];
-  required_keywords?: KeywordList6;
-  excluded_keywords?: KeywordList7;
+  required_keywords?: KeywordList7;
+  excluded_keywords?: KeywordList8;
   /**
    * Optional battlefield-role filter (matched against a unit's `role`). Empty = no role restriction.
    */
@@ -2844,7 +2860,7 @@ export interface AlliedRule {
    * Abilities that included units lose under this rule (e.g. Astra Militarum units lose 'voice-of-command' under Brood Brothers). A display/effect hint, not a construction constraint.
    */
   removes_ability_ids?: EntityId[];
-  battleline_ratio_keywords?: KeywordList8;
+  battleline_ratio_keywords?: KeywordList9;
   game_version: GameVersionReference;
   notes?: string;
 }
@@ -3099,7 +3115,7 @@ export interface Faction {
      * How the cap counts. `units` (default): the number of units carrying every keyword in `keywords` (one datasheet's identity, e.g. PATRIARCH, or EPIC HERO + YVRAINE). `alternatives`: each keyword is an alternative carried by a different datasheet, and the cap is the number of distinct alternatives present in the army (e.g. COMMANDER FARSIGHT / ETHEREAL with max 1: an army has Farsight or Ethereals, not both).
      */
     mode?: "units" | "alternatives";
-    exempt_faction_keywords?: KeywordList9;
+    exempt_faction_keywords?: KeywordList10;
   }[];
   /**
    * Army-construction constraints evaluated against faction keywords. `faction-keyword-cohesion` limits how many distinct additional faction keywords an army built from this faction may include — the Space Marine Chapters rule, where a second Faction keyword names the unit's Chapter and only one Chapter may be fielded.
@@ -6250,6 +6266,12 @@ export interface UnitFilter2 {
    */
   has_ability?: [EntityId, ...EntityId[]];
   /**
+   * has_ability holds when every model in the unit, except models with any keyword in none_of, has each listed ability ("every model (excluding CHARACTER models) in that unit has this ability"). Without it, has_ability reads the unit.
+   */
+  has_ability_models?: {
+    none_of: KeywordList3;
+  };
+  /**
    * Units with none of the listed abilities.
    *
    * @minItems 1
@@ -6495,6 +6517,12 @@ export interface UnitFilter3 {
    * @minItems 1
    */
   has_ability?: [EntityId, ...EntityId[]];
+  /**
+   * has_ability holds when every model in the unit, except models with any keyword in none_of, has each listed ability ("every model (excluding CHARACTER models) in that unit has this ability"). Without it, has_ability reads the unit.
+   */
+  has_ability_models?: {
+    none_of: KeywordList3;
+  };
   /**
    * Units with none of the listed abilities.
    *
@@ -6742,6 +6770,12 @@ export interface UnitFilter4 {
    */
   has_ability?: [EntityId, ...EntityId[]];
   /**
+   * has_ability holds when every model in the unit, except models with any keyword in none_of, has each listed ability ("every model (excluding CHARACTER models) in that unit has this ability"). Without it, has_ability reads the unit.
+   */
+  has_ability_models?: {
+    none_of: KeywordList3;
+  };
+  /**
    * Units with none of the listed abilities.
    *
    * @minItems 1
@@ -6833,8 +6867,8 @@ export interface StratagemTargetRestriction {
    * Kebab-case identifier
    */
   name?: string;
-  required_keywords?: KeywordList10;
-  required_keywords_any?: KeywordList11;
+  required_keywords?: KeywordList11;
+  required_keywords_any?: KeywordList12;
   excluded_keywords?: KeywordList;
   /**
    * The target is your Warlord: the Warlord model when `selects` is model, the unit that contains it when `selects` is unit. Warlord is the model chosen at mustering, not a keyword, so it never appears in the keyword lists; those still apply to the Warlord ("your DEATH GUARD WARLORD" is warlord plus required_keywords DEATH GUARD). Absent when the target need not be the Warlord. An enemy target is never your Warlord (integrity rejects warlord with side enemy).
@@ -7867,8 +7901,8 @@ export interface Weapon {
        * Target legality for this profile. Distinct from Anti and other effects that modify attacks after a legal target is selected.
        */
       target_restrictions?: {
-        required_keywords_any?: KeywordList12;
-        excluded_keywords?: KeywordList13;
+        required_keywords_any?: KeywordList13;
+        excluded_keywords?: KeywordList14;
       } | null;
     },
     ...{
@@ -7891,8 +7925,8 @@ export interface Weapon {
        * Target legality for this profile. Distinct from Anti and other effects that modify attacks after a legal target is selected.
        */
       target_restrictions?: {
-        required_keywords_any?: KeywordList12;
-        excluded_keywords?: KeywordList13;
+        required_keywords_any?: KeywordList13;
+        excluded_keywords?: KeywordList14;
       } | null;
     }[]
   ];
@@ -8072,7 +8106,7 @@ export interface PersistentBattlefieldMarkerState {
    * Where the marker is placed at the moment the ability resolves.
    */
   placement: "bearer" | "bearer-unit" | "battlefield";
-  setup_keywords?: KeywordList14;
+  setup_keywords?: KeywordList15;
   /**
    * Whether a single set-up use spends the marker.
    */

@@ -9715,7 +9715,12 @@
       "dataslate": "pre-launch-provisional"
     },
     "stub": true,
-    "unit_ids": ["sanctuary-canoness-adalya","sanctuary-guardians-arco-flagellants","sanctuary-guardians-battle-sisters-squad","sanctuary-guardians-celestian-sacresants"],
+    "unit_ids": [
+      "sanctuary-canoness-adalya",
+      "sanctuary-guardians-arco-flagellants",
+      "sanctuary-guardians-battle-sisters-squad",
+      "sanctuary-guardians-celestian-sacresants"
+    ],
     "faction_id": "adepta-sororitas",
     "detachment_id": "sanctuary-guardians",
     "ability_type": "faction",

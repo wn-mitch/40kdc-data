@@ -376,7 +376,12 @@ func filterRelations(f map[string]any, ctx effCtx) string {
 		s += " that share the " + orList(jstrList(f["shares_any_of"])) + " keyword with it"
 	}
 	if isList(f["has_ability"]) {
-		s += " with the " + andList(labels(f["has_ability"])) + " ability"
+		ability := "the " + andList(labels(f["has_ability"])) + " ability"
+		if models, ok := f["has_ability_models"].(map[string]any); ok {
+			s += " in which every model (excluding " + orList(jstrList(models["none_of"])) + " models) has " + ability
+		} else {
+			s += " with " + ability
+		}
 	}
 	if isList(f["lacks_ability"]) {
 		s += " without the " + orList(labels(f["lacks_ability"])) + " ability"

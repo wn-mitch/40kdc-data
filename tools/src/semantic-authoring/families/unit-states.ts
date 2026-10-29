@@ -77,6 +77,23 @@ const UNIT_HAS_OWN_ABILITY: FamilyExtension = {
   },
 };
 
+const UNIT_HAS_ABILITY_MODELS: FamilyExtension = {
+  // "every model (excluding CHARACTER models) in that unit has this ability".
+  family: "unit-has-ability",
+  version: 4,
+  description: "As the previous version, plus excluding_keywords: every model in the unit except models with any of these keywords has the ability (\"every model (excluding CHARACTER models) in that unit has this ability\"). Without it, the leaf reads the unit.",
+  schema: (previous) => withProperties(previous, { excluding_keywords: optional({ type: "array", items: { type: "string", minLength: 1 }, minItems: 1, uniqueItems: true }) }),
+  normalize: (input, previous) => {
+    if (input.excluding_keywords === undefined) return previous(input);
+    const { excluding_keywords: excluded, ...rest } = input;
+    if (!Array.isArray(excluded) || excluded.length === 0 || excluded.some((keyword) => typeof keyword !== "string" || keyword.trim().length === 0)) {
+      throw new TypeError("unit-has-ability.excluding_keywords is a nonempty list of keywords.");
+    }
+    if (new Set(excluded).size !== excluded.length) throw new TypeError("unit-has-ability.excluding_keywords lists each keyword once.");
+    return { ...previous(rest), excluding_keywords: [...excluded] };
+  },
+};
+
 const UNIT_STATE_EMBARKED: FamilyExtension = {
   // The subject is embarked within some Transport.
   family: "unit-state",
@@ -315,6 +332,7 @@ export const UNIT_STATE_EXTENSIONS: readonly FamilyExtension[] = [
    * Units filtered by an ability ("units with this ability").
    */
   UNIT_HAS_OWN_ABILITY,
+  UNIT_HAS_ABILITY_MODELS,
   {
     // "while this model is part of an attached unit", attached as Leader or in support.
     family: "leading-unit",

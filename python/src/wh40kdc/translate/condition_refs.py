@@ -306,7 +306,13 @@ def unit_filter_phrase(f: Any) -> str:
     if isinstance(f.get("shares_any_of"), list):
         s += f" that shares the {_or_list([_str(k) for k in f['shares_any_of']])} keyword with it"
     if isinstance(f.get("has_ability"), list):
-        s += f" with the {_and_list([id_label(a) for a in f['has_ability']])} ability"
+        ability = f"the {_and_list([id_label(a) for a in f['has_ability']])} ability"
+        models = f.get("has_ability_models")
+        if isinstance(models, dict):
+            excluded = _or_list([_str(k) for k in models.get("none_of") or []])
+            s += f" in which every model (excluding {excluded} models) has {ability}"
+        else:
+            s += f" with {ability}"
     if isinstance(f.get("lacks_ability"), list):
         s += f" without the {_or_list([id_label(a) for a in f['lacks_ability']])} ability"
     if isinstance(f.get("model_names"), list):

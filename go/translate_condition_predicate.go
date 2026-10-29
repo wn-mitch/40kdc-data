@@ -93,9 +93,10 @@ func describeMatches(p map[string]any, negated bool) string {
 	if p["subject"] == "defender" {
 		who = "the target"
 	}
+	// has_ability_models qualifies has_ability, so it is not a predicate of its own.
 	keys := 0
 	for key := range f {
-		if key != "level" {
+		if key != "level" && key != "has_ability_models" {
 			keys++
 		}
 	}
@@ -165,11 +166,19 @@ func describeMatches(p map[string]any, negated bool) string {
 			return prefix + andList(parts) + suffix
 		}
 		if values, ok := asList(f["has_ability"]); ok {
+			ability := "the " + andList(idLabelList(values)) + " ability"
+			if models, ok := f["has_ability_models"].(map[string]any); ok {
+				lead := ""
+				if negated {
+					lead = "not "
+				}
+				return lead + "every model in " + who + " (excluding " + orList(cstrList(models["none_of"])) + " models) has " + ability
+			}
 			verb := "has"
 			if negated {
 				verb = "does not have"
 			}
-			return who + " " + verb + " the " + andList(idLabelList(values)) + " ability"
+			return who + " " + verb + " " + ability
 		}
 		if values, ok := asList(f["lacks_ability"]); ok {
 			verb := "does not have"

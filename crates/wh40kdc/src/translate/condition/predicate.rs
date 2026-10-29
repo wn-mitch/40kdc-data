@@ -390,7 +390,10 @@ fn describe_matches(p: &P, negated: bool) -> String {
     let has = if negated { "does not have" } else { "has" };
     let lacks = if negated { "has" } else { "does not have" };
     if f.iter()
-        .filter(|(key, value)| key.as_str() != "level" && !value.is_null())
+        // has_ability_models qualifies has_ability, so it is not a predicate of its own.
+        .filter(|(key, value)| {
+            key.as_str() != "level" && key.as_str() != "has_ability_models" && !value.is_null()
+        })
         .count()
         == 1
     {
@@ -445,8 +448,8 @@ fn describe_matches(p: &P, negated: bool) -> String {
             };
         }
         if let Some(abilities) = f.get("has_ability").and_then(Value::as_array) {
-            return format!(
-                "{who} {has} the {} ability",
+            let ability = format!(
+                "the {} ability",
                 and_list(
                     &abilities
                         .iter()
@@ -454,6 +457,14 @@ fn describe_matches(p: &P, negated: bool) -> String {
                         .collect::<Vec<_>>()
                 )
             );
+            if let Some(models) = f.get("has_ability_models").and_then(Value::as_object) {
+                let excluded = strs(models.get("none_of")).unwrap_or_default();
+                return format!(
+                    "{not}every model in {who} (excluding {} models) has {ability}",
+                    or_list(&excluded)
+                );
+            }
+            return format!("{who} {has} {ability}");
         }
         if let Some(abilities) = f.get("lacks_ability").and_then(Value::as_array) {
             return format!(

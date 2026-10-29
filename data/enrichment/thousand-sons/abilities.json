@@ -3211,7 +3211,20 @@
     "ability_type": "faction",
     "behavior": "passive",
     "community_notes": "auto-generated from faction rule",
-    "unit_ids": ["ahriman","daemon-prince-of-tzeentch","daemon-prince-of-tzeentch-with-wings","exalted-sorcerer","exalted-sorcerer-on-disc-of-tzeentch","infernal-master","magnus-the-red","rubric-marines","scarab-occult-terminators","sorcerer","sorcerer-in-terminator-armour","tzaangor-shaman"]
+    "unit_ids": [
+      "ahriman",
+      "daemon-prince-of-tzeentch",
+      "daemon-prince-of-tzeentch-with-wings",
+      "exalted-sorcerer",
+      "exalted-sorcerer-on-disc-of-tzeentch",
+      "infernal-master",
+      "magnus-the-red",
+      "rubric-marines",
+      "scarab-occult-terminators",
+      "sorcerer",
+      "sorcerer-in-terminator-armour",
+      "tzaangor-shaman"
+    ]
   },
   {
     "ability_id": "pact-of-sorcery-thousand-sons",
@@ -3237,7 +3250,18 @@
     "faction_id": "thousand-sons",
     "ability_type": "faction",
     "behavior": "passive",
-    "unit_ids": ["blue-horrors","flamers","kaaskrek","kairos-fateweaver","lord-of-change","pink-horrors","prism-of-zadophon-rubric-marines","prism-of-zadophon-tzaangor-enlightened","screamers","zadophon-the-soul-eater"]
+    "unit_ids": [
+      "blue-horrors",
+      "flamers",
+      "kaaskrek",
+      "kairos-fateweaver",
+      "lord-of-change",
+      "pink-horrors",
+      "prism-of-zadophon-rubric-marines",
+      "prism-of-zadophon-tzaangor-enlightened",
+      "screamers",
+      "zadophon-the-soul-eater"
+    ]
   },
   {
     "ability_id": "sorcerous-invigoration-thousand-sons",
@@ -9941,7 +9965,12 @@
       "dataslate": "pre-launch-provisional"
     },
     "stub": true,
-    "unit_ids": ["kaaskrek","prism-of-zadophon-rubric-marines","prism-of-zadophon-tzaangor-enlightened","zadophon-the-soul-eater"],
+    "unit_ids": [
+      "kaaskrek",
+      "prism-of-zadophon-rubric-marines",
+      "prism-of-zadophon-tzaangor-enlightened",
+      "zadophon-the-soul-eater"
+    ],
     "faction_id": "thousand-sons",
     "detachment_id": "prism-of-zadophon",
     "ability_type": "faction",

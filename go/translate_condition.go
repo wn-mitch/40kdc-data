@@ -257,7 +257,12 @@ func unitFilterPhrase(f map[string]any) string {
 		s += " that shares the " + orList(cstrList(f["shares_any_of"])) + " keyword with it"
 	}
 	if isList(f["has_ability"]) {
-		s += " with the " + andList(idLabelList(f["has_ability"])) + " ability"
+		ability := "the " + andList(idLabelList(f["has_ability"])) + " ability"
+		if models, ok := f["has_ability_models"].(map[string]any); ok {
+			s += " in which every model (excluding " + orList(cstrList(models["none_of"])) + " models) has " + ability
+		} else {
+			s += " with " + ability
+		}
 	}
 	if isList(f["lacks_ability"]) {
 		s += " without the " + orList(idLabelList(f["lacks_ability"])) + " ability"

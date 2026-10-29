@@ -257,7 +257,14 @@ pub(crate) fn unit_filter_phrase(f: &P) -> String {
     let titled = |v: &Value| id_label(Some(v));
     if let Some(has) = f.get("has_ability").and_then(Value::as_array) {
         let names: Vec<String> = has.iter().map(titled).collect();
-        s.push_str(&format!(" with the {} ability", and_list(&names)));
+        let ability = format!("the {} ability", and_list(&names));
+        match f.get("has_ability_models").and_then(Value::as_object) {
+            Some(models) => s.push_str(&format!(
+                " in which every model (excluding {} models) has {ability}",
+                or_list(&strs(models.get("none_of")).unwrap_or_default())
+            )),
+            None => s.push_str(&format!(" with {ability}")),
+        }
     }
     if let Some(lacks) = f.get("lacks_ability").and_then(Value::as_array) {
         let names: Vec<String> = lacks.iter().map(titled).collect();

@@ -530,7 +530,13 @@ def _filter_relations(f: dict[str, Any], ctx: Ctx) -> str:
     if isinstance(f.get("shares_any_of"), list):
         s += f" that share the {or_list([jstr(x) for x in f['shares_any_of']])} keyword with it"
     if isinstance(f.get("has_ability"), list):
-        s += f" with the {and_list([ability_label(a) for a in f['has_ability']])} ability"
+        ability = f"the {and_list([ability_label(a) for a in f['has_ability']])} ability"
+        models = f.get("has_ability_models")
+        if isinstance(models, dict):
+            excluded = or_list([jstr(k) for k in models.get("none_of") or []])
+            s += f" in which every model (excluding {excluded} models) has {ability}"
+        else:
+            s += f" with {ability}"
     if isinstance(f.get("lacks_ability"), list):
         s += f" without the {or_list([ability_label(a) for a in f['lacks_ability']])} ability"
     if f.get("embarked_in") is not None:

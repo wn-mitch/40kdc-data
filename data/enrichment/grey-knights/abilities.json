@@ -2506,7 +2506,25 @@
     "ability_type": "faction",
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "unit_ids": ["brother-captain","brotherhood-champion","brotherhood-chaplain","brotherhood-librarian","brotherhood-techmarine","brotherhood-terminator-squad","castellan-crowe","grand-master","grand-master-in-nemesis-dreadknight","grand-master-voldus","interceptor-squad","nemesis-dreadknight","paladin-squad","purgation-squad","purifier-squad","strike-squad","venerable-dreadnought"],
+    "unit_ids": [
+      "brother-captain",
+      "brotherhood-champion",
+      "brotherhood-chaplain",
+      "brotherhood-librarian",
+      "brotherhood-techmarine",
+      "brotherhood-terminator-squad",
+      "castellan-crowe",
+      "grand-master",
+      "grand-master-in-nemesis-dreadknight",
+      "grand-master-voldus",
+      "interceptor-squad",
+      "nemesis-dreadknight",
+      "paladin-squad",
+      "purgation-squad",
+      "purifier-squad",
+      "strike-squad",
+      "venerable-dreadnought"
+    ],
     "trigger": {
       "event": "phase-ended",
       "condition": {
@@ -4842,7 +4860,12 @@
       "edition": "11th",
       "dataslate": "2026-10-14"
     },
-    "unit_ids": ["crowes-sanctifiers-brotherhood-terminator-squad","crowes-sanctifiers-strike-squad","crowes-sanctifiers-venerable-dreadnought","sanctifiers-castellan-crowe"],
+    "unit_ids": [
+      "crowes-sanctifiers-brotherhood-terminator-squad",
+      "crowes-sanctifiers-strike-squad",
+      "crowes-sanctifiers-venerable-dreadnought",
+      "sanctifiers-castellan-crowe"
+    ],
     "faction_id": "grey-knights",
     "detachment_id": "crowes-sanctifiers",
     "ability_type": "faction",

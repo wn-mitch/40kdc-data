@@ -344,7 +344,11 @@ export function filterSubject(f: P, ctx: Ctx = {}): string {
 function filterRelations(f: P, ctx: Ctx): string {
   let s = "";
   if (Array.isArray(f.shares_any_of)) s += ` that share the ${orList((f.shares_any_of as unknown[]).map(jstr))} keyword with it`;
-  if (Array.isArray(f.has_ability)) s += ` with the ${andList((f.has_ability as unknown[]).map(abilityLabel))} ability`;
+  if (Array.isArray(f.has_ability)) {
+    const ability = `the ${andList((f.has_ability as unknown[]).map(abilityLabel))} ability`;
+    const models = f.has_ability_models as Record<string, unknown> | undefined;
+    s += models != null ? ` in which every model (excluding ${orList((models.none_of as unknown[]).map(jstr))} models) has ${ability}` : ` with ${ability}`;
+  }
   if (Array.isArray(f.lacks_ability)) s += ` without the ${orList((f.lacks_ability as unknown[]).map(abilityLabel))} ability`;
   if (f.embarked_in != null) s += ` embarked within ${effectSubject(f.embarked_in, ctx)}`;
   if (f.member_of != null) s += ` in ${f.member_of === "this-unit" ? "the unit" : effectSubject(f.member_of, ctx)}`;

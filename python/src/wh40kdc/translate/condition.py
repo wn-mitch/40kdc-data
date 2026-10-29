@@ -111,7 +111,8 @@ def _keyword_list(p: P) -> str:
 def _describe_matches(p: P, negated: bool) -> str:
     f = _obj(p.get("filter"))
     who = "the target" if p.get("subject") == "defender" else _subject_of(p)
-    keys = [key for key in f if key != "level"]
+    # has_ability_models qualifies has_ability, so it is not a predicate of its own.
+    keys = [key for key in f if key not in ("level", "has_ability_models")]
     no = "not " if negated else ""
     if len(keys) == 1:
         if f.get("all_of") is not None or f.get("any_of") is not None:
@@ -150,6 +151,14 @@ def _describe_matches(p: P, negated: bool) -> str:
             return f"not ({grouped})" if negated else grouped
         if isinstance(f.get("has_ability"), list):
             abilities = _and_list([id_label(a) for a in f["has_ability"]])
+            models = f.get("has_ability_models")
+            if isinstance(models, dict):
+                excluded = _or_list([_str(k) for k in models.get("none_of") or []])
+                lead = "not " if negated else ""
+                return (
+                    f"{lead}every model in {who} (excluding {excluded} models) "
+                    f"has the {abilities} ability"
+                )
             verb = "does not have" if negated else "has"
             return f"{who} {verb} the {abilities} ability"
         if isinstance(f.get("lacks_ability"), list):

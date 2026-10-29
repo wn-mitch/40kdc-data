@@ -11812,7 +11812,12 @@
       "edition": "11th",
       "dataslate": "2026-10-14"
     },
-    "unit_ids": ["amonhotekhs-guard-canoptek-scarab-swarms","amonhotekhs-guard-necron-warriors","amonhotekhs-guard-skorpekh-destroyers","overlord-amonhotekh"],
+    "unit_ids": [
+      "amonhotekhs-guard-canoptek-scarab-swarms",
+      "amonhotekhs-guard-necron-warriors",
+      "amonhotekhs-guard-skorpekh-destroyers",
+      "overlord-amonhotekh"
+    ],
     "faction_id": "necrons",
     "detachment_id": "amonhotekhs-guard",
     "ability_type": "faction",

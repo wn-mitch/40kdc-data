@@ -15335,7 +15335,12 @@
                     "filter": {
                       "has_ability": [
                         "cult-ambush-genestealer-cults"
-                      ]
+                      ],
+                      "has_ability_models": {
+                        "none_of": [
+                          "CHARACTER"
+                        ]
+                      }
                     }
                   }
                 },
@@ -15635,7 +15640,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "If your Army Faction is GENESTEALER CULTS, you gain 6/10/14 Resurgence points (Incursion/Strike Force/Onslaught).\n-> Each time a friendly unit is destroyed, if that unit has the Cult Ambush ability, you may use this ability:\n  -> Spend the Resurgence points the cost table gives for the datasheet and Starting Strength of that unit (Aberrants: 4 for 5 models, 8 for 10 models; Acolyte Hybrids with Autopistols, Acolyte Hybrids with Hand Flamers or Hybrid Metamorphs: 2 for 5 models, 4 for 10 models; Atalan Jackals: 2 for 5 models, 6 for 10 models; Neophyte Hybrids: 3 for 10 models, 6 for 20 models; Purestrain Genestealers: 2 for 5 models, 6 for 10 models).\n  -> Add a new unit identical to that unit (excluding CHARACTER models) to your army in Cult Ambush, at its Starting Strength and with all of its wounds remaining, with its [ONE SHOT] weapons counted as not having been shot.\n  -> Place a cult ambush marker (32mm) more than 9\" horizontally away from all enemy units.\nIf your Army Faction is GENESTEALER CULTS:\n  -> Friendly units that are in Cult Ambush cannot be targeted with the Rapid Ingress Stratagem.\n  -> Friendly units that are in Cult Ambush are not destroyed for still being in Strategic Reserves at the end of the third battle round.\n-> Each time an enemy model ends a move (the triggering model must not have AIRCRAFT): if your Army Faction is GENESTEALER CULTS, while the triggering unit is within 8\" of a cult ambush marker, remove that cult ambush marker from the battlefield.\n-> At the end of your opponent's Movement phase, you may use this ability: if your Army Faction is GENESTEALER CULTS, select any number of friendly units that are in Cult Ambush (at most the number of your cult ambush markers on the battlefield): that unit can make an Ingress move; that unit can be set up on the battlefield using a Cult Ambush marker, wholly within 3\" of that marker, even in the first battle round."
+      "text": "If your Army Faction is GENESTEALER CULTS, you gain 6/10/14 Resurgence points (Incursion/Strike Force/Onslaught).\n-> Each time a friendly unit is destroyed, if every model in that unit (excluding CHARACTER models) has the Cult Ambush ability, you may use this ability:\n  -> Spend the Resurgence points the cost table gives for the datasheet and Starting Strength of that unit (Aberrants: 4 for 5 models, 8 for 10 models; Acolyte Hybrids with Autopistols, Acolyte Hybrids with Hand Flamers or Hybrid Metamorphs: 2 for 5 models, 4 for 10 models; Atalan Jackals: 2 for 5 models, 6 for 10 models; Neophyte Hybrids: 3 for 10 models, 6 for 20 models; Purestrain Genestealers: 2 for 5 models, 6 for 10 models).\n  -> Add a new unit identical to that unit (excluding CHARACTER models) to your army in Cult Ambush, at its Starting Strength and with all of its wounds remaining, with its [ONE SHOT] weapons counted as not having been shot.\n  -> Place a cult ambush marker (32mm) more than 9\" horizontally away from all enemy units.\nIf your Army Faction is GENESTEALER CULTS:\n  -> Friendly units that are in Cult Ambush cannot be targeted with the Rapid Ingress Stratagem.\n  -> Friendly units that are in Cult Ambush are not destroyed for still being in Strategic Reserves at the end of the third battle round.\n-> Each time an enemy model ends a move (the triggering model must not have AIRCRAFT): if your Army Faction is GENESTEALER CULTS, while the triggering unit is within 8\" of a cult ambush marker, remove that cult ambush marker from the battlefield.\n-> At the end of your opponent's Movement phase, you may use this ability: if your Army Faction is GENESTEALER CULTS, select any number of friendly units that are in Cult Ambush (at most the number of your cult ambush markers on the battlefield): that unit can make an Ingress move; that unit can be set up on the battlefield using a Cult Ambush marker, wholly within 3\" of that marker, even in the first battle round."
     }
   },
   {
@@ -43441,6 +43446,69 @@
     },
     "expected": {
       "text": "Place a tunnel marker (40mm) within 1\" of the triggering unit and more than 3\" horizontally away from all enemy units."
+    }
+  },
+  {
+    "caseId": "canonical/has-ability-every-model-excluding",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "event-object",
+          "filter": {
+            "has_ability": [
+              "cult-ambush-genestealer-cults"
+            ],
+            "has_ability_models": {
+              "none_of": [
+                "CHARACTER"
+              ]
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "resource-gain",
+        "target": "this-model",
+        "modifier": {
+          "pool": "cp",
+          "amount": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "While every model in that unit (excluding CHARACTER models) has the Cult Ambush ability, you gain 1 CP."
+    }
+  },
+  {
+    "caseId": "canonical/has-ability-every-model-filter",
+    "effect": {
+      "type": "designate",
+      "target": {
+        "owner": "friendly",
+        "has_ability": [
+          "cult-ambush-genestealer-cults"
+        ],
+        "has_ability_models": {
+          "none_of": [
+            "CHARACTER",
+            "VEHICLE"
+          ]
+        }
+      },
+      "modifier": {
+        "tag": "riled-up"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "All friendly units in which every model (excluding CHARACTER or VEHICLE models) has the Cult Ambush ability are riled up."
     }
   }
 ]

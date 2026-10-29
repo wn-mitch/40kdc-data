@@ -2999,7 +2999,12 @@
       "dataslate": "pre-launch-provisional"
     },
     "stub": true,
-    "unit_ids": ["emperors-champion-vedrenn","vow-sworn-bladeguard-veteran-squad","vow-sworn-crusader-squad","vow-sworn-sword-brethren-squad"],
+    "unit_ids": [
+      "emperors-champion-vedrenn",
+      "vow-sworn-bladeguard-veteran-squad",
+      "vow-sworn-crusader-squad",
+      "vow-sworn-sword-brethren-squad"
+    ],
     "faction_id": "black-templars",
     "detachment_id": "vow-sworn-of-vedrenn",
     "ability_type": "faction",
@@ -3297,7 +3302,17 @@
       "dataslate": "pre-launch-provisional"
     },
     "stub": true,
-    "unit_ids": ["castellan","chaplain-grimaldus","crusade-ancient","crusader-squad","emperors-champion","execrator","high-marshal-helbrecht","marshal","sword-brethren-squad"],
+    "unit_ids": [
+      "castellan",
+      "chaplain-grimaldus",
+      "crusade-ancient",
+      "crusader-squad",
+      "emperors-champion",
+      "execrator",
+      "high-marshal-helbrecht",
+      "marshal",
+      "sword-brethren-squad"
+    ],
     "faction_id": "black-templars",
     "detachment_id": null,
     "ability_type": "faction",
@@ -3444,7 +3459,12 @@
       "edition": "11th",
       "dataslate": "2026-10-14"
     },
-    "unit_ids": ["emperors-champion-vedrenn","vow-sworn-bladeguard-veteran-squad","vow-sworn-crusader-squad","vow-sworn-sword-brethren-squad"],
+    "unit_ids": [
+      "emperors-champion-vedrenn",
+      "vow-sworn-bladeguard-veteran-squad",
+      "vow-sworn-crusader-squad",
+      "vow-sworn-sword-brethren-squad"
+    ],
     "faction_id": "black-templars",
     "detachment_id": "vow-sworn-of-vedrenn",
     "ability_type": "faction",
@@ -3562,7 +3582,10 @@
       "edition": "11th",
       "dataslate": "2026-10-14"
     },
-    "unit_ids": ["high-marshal-helbrecht","marshal"],
+    "unit_ids": [
+      "high-marshal-helbrecht",
+      "marshal"
+    ],
     "faction_id": "black-templars",
     "detachment_id": null,
     "ability_type": "faction",

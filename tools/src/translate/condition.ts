@@ -341,7 +341,8 @@ function comparisonPhrase(comparison: unknown): string {
 function describeMatches(p: P, negated: boolean): string {
   const f = (p.filter ?? {}) as P;
   const who = p.subject === "defender" ? "the target" : subjectOf(p);
-  const keys = Object.keys(f).filter((key) => key !== "level");
+  // has_ability_models qualifies has_ability, so it is not a predicate of its own.
+  const keys = Object.keys(f).filter((key) => key !== "level" && key !== "has_ability_models");
   const no = negated ? "not " : "";
   if (keys.length === 1) {
     if (f.all_of != null || f.any_of != null) return `${who} ${negated ? "does not have" : "has"} ${negated && Array.isArray(f.all_of) && f.all_of.length > 1 ? "all of " : ""}${keywordList(f)}`;
@@ -350,7 +351,12 @@ function describeMatches(p: P, negated: boolean): string {
     if (f.owner != null) return `${subjectOf(p)} is ${no}${f.owner === "enemy" ? "an enemy unit" : f.owner === "friendly" ? "friendly" : "a unit of either player"}`;
     if (f.state != null) return f.state === "fights-first" ? `${who} ${negated ? "does not have" : "has"} Fights First` : `${who} is ${statePhrase(str(f.state), negated)}`;
     if (Array.isArray(f.not_states)) return f.not_states.length === 1 ? `${who} is ${statePhrase(str(f.not_states[0]), !negated)}` : `${negated ? "not (" : ""}${andList(f.not_states.map((state) => `${who} is ${statePhrase(str(state), true)}`))}${negated ? ")" : ""}`;
-    if (Array.isArray(f.has_ability)) return `${who} ${negated ? "does not have" : "has"} the ${andList(f.has_ability.map(idLabel))} ability`;
+    if (Array.isArray(f.has_ability)) {
+      const models = f.has_ability_models as P | undefined;
+      const ability = `the ${andList(f.has_ability.map(idLabel))} ability`;
+      if (models != null) return `${negated ? "not " : ""}every model in ${who} (excluding ${orList((models.none_of as unknown[]).map(str))} models) has ${ability}`;
+      return `${who} ${negated ? "does not have" : "has"} ${ability}`;
+    }
     if (Array.isArray(f.lacks_ability)) return `${who} ${negated ? "has" : "does not have"} the ${orList(f.lacks_ability.map(idLabel))} ability`;
     if (f.designated != null || f.not_designated != null) return `${who} is ${(f.not_designated != null) !== negated ? "not " : ""}${designationPhrase(str(f.designated ?? f.not_designated))}`;
     if (f.visible != null) {

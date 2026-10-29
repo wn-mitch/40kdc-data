@@ -2956,7 +2956,12 @@
                     "filter": {
                       "has_ability": [
                         "cult-ambush-genestealer-cults"
-                      ]
+                      ],
+                      "has_ability_models": {
+                        "none_of": [
+                          "CHARACTER"
+                        ]
+                      }
                     }
                   }
                 },

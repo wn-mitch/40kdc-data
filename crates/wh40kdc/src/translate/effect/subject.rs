@@ -156,7 +156,14 @@ fn filter_relations(f: &P, ctx: &Ctx) -> String {
         ));
     }
     if let Some(has) = map_arr(f, "has_ability", |a| ability_label(Some(a))) {
-        s.push_str(&format!(" with the {} ability", and_list(&has)));
+        let ability = format!("the {} ability", and_list(&has));
+        match f.get("has_ability_models").and_then(Value::as_object) {
+            Some(models) => s.push_str(&format!(
+                " in which every model (excluding {} models) has {ability}",
+                or_list(&map_arr(models, "none_of", jv).unwrap_or_default())
+            )),
+            None => s.push_str(&format!(" with {ability}")),
+        }
     }
     if let Some(lacks) = map_arr(f, "lacks_ability", |a| ability_label(Some(a))) {
         s.push_str(&format!(" without the {} ability", or_list(&lacks)));
