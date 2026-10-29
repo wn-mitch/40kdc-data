@@ -257,6 +257,12 @@ export function resolveRuleReferences(leaves: readonly CompileLeaf[], context?: 
         const rule = resolveRule(faction, name);
         return rule && rule !== name ? withParameter("rule", rule) : leaf;
       }
+      case "event": {
+        // "Each time you select an Order for the bearer to issue": the menu those Orders come from (compile-added-order.ts).
+        if (parameters.kind !== "used" || parameters.activity !== "order") return leaf;
+        const menu = resolveOrderMenu(faction);
+        return menu ? withParameter("__menu", menu) : leaf;
+      }
       case "issue-orders-open": {
         // An officer's datasheet issues Orders from its faction's one menu (Voice of Command).
         const menu = resolveOrderMenu(faction);

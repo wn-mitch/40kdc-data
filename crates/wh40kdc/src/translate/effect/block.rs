@@ -309,13 +309,17 @@ pub(super) fn block(e: &Value, depth: usize, ctx: &Ctx) -> String {
                     "This model can issue".to_string()
                 };
                 return format!(
-                    "{indent}{arrow}{who} up to {n} {orders} from {} to eligible {units}{range}{not_states}{}.",
+                    "{indent}{arrow}{who} up to {n} {orders} from {} to {}{range}{not_states}{}{}.",
                     ability_label(Some(menu)),
-                    only_orders(e)
+                    order_to(e, units),
+                    only_orders(e),
+                    order_limit(e)
                 );
             }
             let mut lines = vec![format!(
-                "{indent}{arrow}{issue} up to {n} Orders to eligible {units}{range}{not_states}, each one of:"
+                "{indent}{arrow}{issue} up to {n} Orders to {}{range}{not_states}{}, each one of:",
+                order_to(e, units),
+                order_limit(e)
             )];
             for o in items(e, "options") {
                 let o = obj(Some(o));
@@ -342,6 +346,37 @@ pub(super) fn block(e: &Value, depth: usize, ctx: &Ctx) -> String {
 }
 
 /// ", only Duty and Honour or Fix Bayonets": the Orders of its menu an officer is limited to.
+/// " to the triggering unit": the one unit an issue-orders gives its Order to, when it names one.
+pub(super) fn order_recipient(e: &P) -> String {
+    match nn(e, "recipient") {
+        Some(r) => format!(
+            " to {}",
+            crate::translate::condition::unit_ref_phrase(Some(r), "the unit")
+        ),
+        None => String::new(),
+    }
+}
+
+/// "the triggering unit (if it is one of the eligible friendly … units)", else "eligible friendly … units".
+fn order_to(e: &P, units: &str) -> String {
+    match nn(e, "recipient") {
+        Some(r) => format!(
+            "{} (if it is one of the eligible {units})",
+            crate::translate::condition::unit_ref_phrase(Some(r), "the unit")
+        ),
+        None => format!("eligible {units}"),
+    }
+}
+
+/// ", not counting toward the Orders it can issue this turn": an Order outside the officer's limit.
+pub(super) fn order_limit(e: &P) -> String {
+    if e.get("counts_toward_limit") == Some(&Value::Bool(false)) {
+        ", not counting toward the Orders it can issue this turn".to_string()
+    } else {
+        String::new()
+    }
+}
+
 pub(super) fn only_orders(e: &P) -> String {
     match e.get("only_options").and_then(Value::as_array) {
         Some(ids) => format!(

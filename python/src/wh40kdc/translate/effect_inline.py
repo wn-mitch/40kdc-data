@@ -473,10 +473,13 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx) -> str:
         reward = inline(e.get("reward"), ctx)
         return f"take a {test_name(risk.get('test'))} test (on a failure, {on_fail}), then {reward}"
     if t == "issue-orders" and e.get("menu_from") is not None:
-        return f"issue Orders from {ability_label(e['menu_from'])}{only_orders(e)}"
+        return (
+            f"issue Orders from {ability_label(e['menu_from'])}{order_recipient(e)}"
+            f"{only_orders(e)}{order_limit(e)}"
+        )
     if t == "issue-orders":
         return (
-            "issue Orders, each one of: "
+            f"issue Orders{order_recipient(e)}{order_limit(e)}, each one of: "
             f"{' / '.join(jstr(_obj(o).get('name')) for o in (e.get('options') or []))}"
         )
     if t == "resource-action-menu":
@@ -608,6 +611,25 @@ def leadership_test(e: Effect, ctx: Ctx) -> str:
         f"{who} takes a {kind} test (2D6, passing on its current Leadership or higher{mods}); "
         f"if passed, {success}{fail}"
     )
+
+
+def order_recipient(e: dict[str, Any]) -> str:
+    """" to the triggering unit": the one unit an issue-orders gives its Order to."""
+    return f" to {unit_ref_phrase(e['recipient'])}" if e.get("recipient") is not None else ""
+
+
+def order_to(e: dict[str, Any], units: str) -> str:
+    """"the triggering unit (if it is one of the eligible … units)", else "eligible … units"."""
+    if e.get("recipient") is None:
+        return f"eligible {units}"
+    return f"{unit_ref_phrase(e['recipient'])} (if it is one of the eligible {units})"
+
+
+def order_limit(e: dict[str, Any]) -> str:
+    """", not counting toward the Orders it can issue this turn": an Order outside the limit."""
+    if e.get("counts_toward_limit") is False:
+        return ", not counting toward the Orders it can issue this turn"
+    return ""
 
 
 def only_orders(e: dict[str, Any]) -> str:

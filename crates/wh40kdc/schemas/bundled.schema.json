@@ -1297,10 +1297,17 @@
           ]
         },
         "transport": {
-          "enum": [
-            "this-unit"
+          "oneOf": [
+            {
+              "enum": [
+                "this-unit"
+              ]
+            },
+            {
+              "$ref": "#/$defs/unit-filter"
+            }
           ],
-          "description": "disembarked: the Transport the unit disembarked from; this-unit is \"from this TRANSPORT\"."
+          "description": "disembarked: the Transport the unit disembarked from; this-unit is \"from this TRANSPORT\", a unit filter the Transports it may be (a TRANSPORT within 6 inches of this model)."
         },
         "through": {
           "enum": [
@@ -1326,9 +1333,10 @@
         "timing": {
           "enum": [
             "before-removal",
-            "after-attacks"
+            "after-attacks",
+            "after-set-up"
           ],
-          "description": "destroyed: resolve before the model is removed (before-removal), or after the attacking unit has finished making its attacks (after-attacks)."
+          "description": "destroyed: resolve before the model is removed (before-removal), or after the attacking unit has finished making its attacks (after-attacks); disembarked: resolve once the unit has been set up (after-set-up)."
         },
         "phase": {
           "$ref": "#/$defs/phase",
@@ -8473,6 +8481,10 @@
                   "type": "object",
                   "additionalProperties": false,
                   "properties": {
+                    "id": {
+                      "$ref": "#/$defs/entity-id",
+                      "description": "The added option's stable id; other rules link it as {ability_id, option_id} with this record's id."
+                    },
                     "name": {
                       "type": "string",
                       "minLength": 1
@@ -12527,6 +12539,14 @@
         "eligible": {
           "$ref": "#/$defs/keyword-predicate",
           "description": "Which friendly units may receive an Order, by keyword."
+        },
+        "recipient": {
+          "$ref": "#/$defs/unit-ref",
+          "description": "The one unit the Order goes to (the unit the trigger names), in place of an eligible unit the officer picks."
+        },
+        "counts_toward_limit": {
+          "const": false,
+          "description": "The Order does not count toward the Orders the officer can issue this turn."
         },
         "issuer": {
           "$ref": "#/$defs/keyword-predicate",

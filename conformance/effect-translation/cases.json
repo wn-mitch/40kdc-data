@@ -6180,7 +6180,66 @@
     }
   },
   {
-    "caseId": "aquiline-prow-astra-militarum#121",
+    "caseId": "aquilan-eye-grizzled-company-astra-militarum#121",
+    "effect": {
+      "type": "ability-modifier",
+      "target": "this-model",
+      "modifier": {
+        "ability": "voice-of-command-astra-militarum",
+        "aspect": "options",
+        "operation": "add",
+        "add_option": {
+          "id": "target-weak-spot",
+          "name": "Target Weak Spot",
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "attack-is",
+                  "parameters": {
+                    "attack_type": "ranged"
+                  }
+                },
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "defender",
+                    "filter": {
+                      "within": {
+                        "of": "attacker",
+                        "range": {
+                          "inches": 12
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "stat-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "stat": "AP",
+                "operation": "improve",
+                "value": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "This model's Voice of Command ability gains the option Target Weak Spot (while making ranged attacks, while the target is within 12\" of the attacking unit, improve the unit's Armour Penetration characteristic by 1)."
+    }
+  },
+  {
+    "caseId": "aquiline-prow-astra-militarum#122",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -6271,7 +6330,7 @@
     }
   },
   {
-    "caseId": "arbites-medi-kit-agents-of-the-imperium#122",
+    "caseId": "arbites-medi-kit-agents-of-the-imperium#123",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -6323,7 +6382,7 @@
     }
   },
   {
-    "caseId": "arcane-might-hexwarp-thrallband-thousand-sons#123",
+    "caseId": "arcane-might-hexwarp-thrallband-thousand-sons#124",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -6402,7 +6461,7 @@
     }
   },
   {
-    "caseId": "arcane-shield-thousand-sons#124",
+    "caseId": "arcane-shield-thousand-sons#125",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -6428,7 +6487,7 @@
     }
   },
   {
-    "caseId": "arcane-thralls-aura-rubricae-phalanx-thousand-sons#125",
+    "caseId": "arcane-thralls-aura-rubricae-phalanx-thousand-sons#126",
     "effect": {
       "type": "aura",
       "target": "friendly-within-aura",
@@ -6465,7 +6524,7 @@
     }
   },
   {
-    "caseId": "arcane-venting-sekhetar-cohort-thousand-sons#126",
+    "caseId": "arcane-venting-sekhetar-cohort-thousand-sons#127",
     "effect": {
       "type": "select-objective",
       "selector": {
@@ -6520,7 +6579,7 @@
     }
   },
   {
-    "caseId": "architect-of-ruin-chaos-space-marines#127",
+    "caseId": "architect-of-ruin-chaos-space-marines#128",
     "effect": {
       "type": "ability-part",
       "trigger": {
@@ -6597,7 +6656,7 @@
     }
   },
   {
-    "caseId": "archon-of-the-poisoned-tongue-drukhari#128",
+    "caseId": "archon-of-the-poisoned-tongue-drukhari#129",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -6707,7 +6766,7 @@
     }
   },
   {
-    "caseId": "archons-will-drukhari#129",
+    "caseId": "archons-will-drukhari#130",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -6799,7 +6858,7 @@
     }
   },
   {
-    "caseId": "ard-as-nails-orks#130",
+    "caseId": "ard-as-nails-orks#131",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -6915,7 +6974,7 @@
     }
   },
   {
-    "caseId": "argath-the-king-of-blades-daemonic-incursion-chaos-daemons#131",
+    "caseId": "argath-the-king-of-blades-daemonic-incursion-chaos-daemons#132",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -7010,7 +7069,7 @@
     }
   },
   {
-    "caseId": "argent-wrath-sanctic-spearhead-grey-knights#132",
+    "caseId": "argent-wrath-sanctic-spearhead-grey-knights#133",
     "effect": {
       "type": "aura",
       "target": "enemy-within-aura",
@@ -7055,7 +7114,7 @@
     }
   },
   {
-    "caseId": "arisen-tyrant-hypercrypt-legion-necrons#133",
+    "caseId": "arisen-tyrant-hypercrypt-legion-necrons#134",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -7110,7 +7169,7 @@
     }
   },
   {
-    "caseId": "armour-obliteration-astra-militarum#134",
+    "caseId": "armour-obliteration-astra-militarum#135",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -7140,7 +7199,7 @@
     }
   },
   {
-    "caseId": "armour-of-corruption-warpstrike-champions-chaos-space-marines#135",
+    "caseId": "armour-of-corruption-warpstrike-champions-chaos-space-marines#136",
     "effect": {
       "type": "damage-reduction",
       "target": "this-unit",
@@ -7178,7 +7237,7 @@
     }
   },
   {
-    "caseId": "armour-of-faith-black-templars#136",
+    "caseId": "armour-of-faith-black-templars#137",
     "effect": {
       "type": "damage-reduction",
       "target": "this-model",
@@ -7198,7 +7257,7 @@
     }
   },
   {
-    "caseId": "armoured-aegis-sanctic-spearhead-grey-knights#137",
+    "caseId": "armoured-aegis-sanctic-spearhead-grey-knights#138",
     "effect": {
       "type": "heal",
       "target": "this-unit",
@@ -7215,7 +7274,7 @@
     }
   },
   {
-    "caseId": "armoured-impact-gravis-linebreaker-force-adeptus-astartes#138",
+    "caseId": "armoured-impact-gravis-linebreaker-force-adeptus-astartes#139",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -7308,7 +7367,7 @@
     }
   },
   {
-    "caseId": "artillery-support-astra-militarum#139",
+    "caseId": "artillery-support-astra-militarum#140",
     "effect": {
       "type": "choice",
       "options": [
@@ -7531,7 +7590,7 @@
     }
   },
   {
-    "caseId": "aspect-of-the-beast-helhunt-lance-chaos-knights#140",
+    "caseId": "aspect-of-the-beast-helhunt-lance-chaos-knights#141",
     "effect": {
       "type": "ability-modifier",
       "target": "this-model",
@@ -7550,7 +7609,7 @@
     }
   },
   {
-    "caseId": "assailed-from-every-angle-leagues-of-votann#141",
+    "caseId": "assailed-from-every-angle-leagues-of-votann#142",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -7666,7 +7725,7 @@
     }
   },
   {
-    "caseId": "assassins-poisons-drukhari#142",
+    "caseId": "assassins-poisons-drukhari#143",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -7711,7 +7770,7 @@
     }
   },
   {
-    "caseId": "assault-hatches-steel-hammer-astra-militarum#143",
+    "caseId": "assault-hatches-steel-hammer-astra-militarum#144",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -7761,29 +7820,6 @@
     },
     "expected": {
       "text": "When a unit disembarks from this Transport, if this model made a Normal move this turn, the triggering unit is eligible to declare a charge even if it disembarked this turn.\nApplies to: units with ASTRA MILITARUM, TITANIC, CHARACTER, TRANSPORT."
-    }
-  },
-  {
-    "caseId": "assault-mastery-adeptus-astartes#144",
-    "effect": {
-      "type": "ability-modifier",
-      "target": "this-unit",
-      "modifier": {
-        "ability": {
-          "ability_id": "combat-doctrines-adeptus-astartes",
-          "option_id": "assault-doctrine"
-        },
-        "aspect": "uses",
-        "operation": "lift-limit",
-        "value": 1
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "optional": true,
-    "expected": {
-      "text": "You can: The unit's Assault Doctrine (Combat Doctrines) ability has no limit on its number of uses."
     }
   },
   {
@@ -20156,7 +20192,69 @@
     }
   },
   {
-    "caseId": "melancholic-miasma-chaos-daemons#289",
+    "caseId": "mechanised-spearhead-astra-militarum#289",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "issue-orders",
+        "menu_from": "voice-of-command-astra-militarum",
+        "count": 1,
+        "eligible": {
+          "all_of": [
+            "REGIMENT"
+          ]
+        },
+        "recipient": "event-subject",
+        "counts_toward_limit": false
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "disembarked",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ASTRA MILITARUM",
+          "REGIMENT"
+        ]
+      },
+      "filter": {
+        "timing": "after-set-up",
+        "transport": {
+          "within": {
+            "of": "this-model",
+            "range": {
+              "inches": 6
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "text": "When a friendly unit disembarks from a Transport within 6\" of this model, after it has been set up (the triggering unit must have ASTRA MILITARUM and REGIMENT), during the Movement phase, in your turn:\n  -> This model can issue up to 1 Order from Voice of Command to the triggering unit (if it is one of the eligible friendly REGIMENT units), not counting toward the Orders it can issue this turn."
+    }
+  },
+  {
+    "caseId": "melancholic-miasma-chaos-daemons#290",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -20247,7 +20345,7 @@
     }
   },
   {
-    "caseId": "methodical-destruction-chaos-knights#290",
+    "caseId": "methodical-destruction-chaos-knights#291",
     "effect": {
       "type": "ability-part",
       "trigger": {
@@ -20324,7 +20422,7 @@
     }
   },
   {
-    "caseId": "naturalised-camouflage-unending-swarm-tyranids#291",
+    "caseId": "naturalised-camouflage-unending-swarm-tyranids#292",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -20401,7 +20499,7 @@
     }
   },
   {
-    "caseId": "neuroloids-tyranids#292",
+    "caseId": "neuroloids-tyranids#293",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -20472,7 +20570,7 @@
     }
   },
   {
-    "caseId": "nova-charge-tau-empire#293",
+    "caseId": "nova-charge-tau-empire#294",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -20545,7 +20643,7 @@
     }
   },
   {
-    "caseId": "one-man-army-astra-militarum#294",
+    "caseId": "one-man-army-astra-militarum#295",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -20658,7 +20756,7 @@
     }
   },
   {
-    "caseId": "orders-astra-militarum#295",
+    "caseId": "orders-astra-militarum#296",
     "effect": {
       "type": "issue-orders",
       "menu_from": "voice-of-command-astra-militarum",
@@ -20677,7 +20775,7 @@
     }
   },
   {
-    "caseId": "orders-cadian-castellan-astra-militarum#296",
+    "caseId": "orders-cadian-castellan-astra-militarum#297",
     "effect": {
       "type": "issue-orders",
       "menu_from": "voice-of-command-astra-militarum",
@@ -20696,7 +20794,7 @@
     }
   },
   {
-    "caseId": "orders-commissar-astra-militarum#297",
+    "caseId": "orders-commissar-astra-militarum#298",
     "effect": {
       "type": "issue-orders",
       "menu_from": "voice-of-command-astra-militarum",
@@ -20719,7 +20817,7 @@
     }
   },
   {
-    "caseId": "orders-commissar-graves-astra-militarum#298",
+    "caseId": "orders-commissar-graves-astra-militarum#299",
     "effect": {
       "type": "issue-orders",
       "menu_from": "voice-of-command-astra-militarum",
@@ -20741,30 +20839,6 @@
     },
     "expected": {
       "text": "This model can issue up to 1 Order from Voice of Command to eligible friendly units with the REGIMENT or SQUADRON keyword, only Move Move Move, Duty and Honour or Fix Bayonets."
-    }
-  },
-  {
-    "caseId": "orders-commissar-graves-on-foot-astra-militarum#299",
-    "effect": {
-      "type": "issue-orders",
-      "menu_from": "voice-of-command-astra-militarum",
-      "count": 1,
-      "eligible": {
-        "all_of": [
-          "REGIMENT"
-        ]
-      },
-      "only_options": [
-        "move-move-move",
-        "duty-and-honour",
-        "fix-bayonets"
-      ]
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "expected": {
-      "text": "This model can issue up to 1 Order from Voice of Command to eligible friendly REGIMENT units, only Move Move Move, Duty and Honour or Fix Bayonets."
     }
   },
   {
@@ -43621,6 +43695,78 @@
     },
     "expected": {
       "text": "Until the end of the battle round:\n  For each enemy unit, up to 2/3/4 units (Incursion/Strike Force/Onslaught) of your choice:\n    -> Roll one D6: on a 5+, the unit is shaken."
+    }
+  },
+  {
+    "caseId": "canonical/issue-orders-recipient-outside-limit",
+    "effect": {
+      "type": "issue-orders",
+      "menu_from": "voice-of-command-astra-militarum",
+      "count": 1,
+      "eligible": {
+        "all_of": [
+          "REGIMENT"
+        ]
+      },
+      "recipient": "event-subject",
+      "counts_toward_limit": false
+    },
+    "trigger": {
+      "event": "disembarked",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "REGIMENT"
+        ]
+      },
+      "filter": {
+        "timing": "after-set-up",
+        "transport": {
+          "within": {
+            "of": "this-model",
+            "range": {
+              "inches": 6
+            }
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "When a friendly unit disembarks from a Transport within 6\" of this model, after it has been set up (the triggering unit must have REGIMENT):\n  -> This model can issue up to 1 Order from Voice of Command to the triggering unit (if it is one of the eligible friendly REGIMENT units), not counting toward the Orders it can issue this turn."
+    }
+  },
+  {
+    "caseId": "canonical/ability-modifier-added-order",
+    "effect": {
+      "type": "ability-modifier",
+      "target": "this-model",
+      "modifier": {
+        "ability": "voice-of-command-astra-militarum",
+        "aspect": "options",
+        "operation": "add",
+        "add_option": {
+          "id": "steady-aim",
+          "name": "Steady Aim",
+          "effect": {
+            "type": "stat-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "stat": "AP",
+              "operation": "improve",
+              "value": 1
+            }
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "This model's Voice of Command ability gains the option Steady Aim (improve the unit's Armour Penetration characteristic by 1)."
     }
   }
 ]

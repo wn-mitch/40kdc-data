@@ -2085,12 +2085,12 @@ EventFilter = TypedDict(
         "from": NotRequired[
             Literal["strategic-reserves", "deep-strike", "cult-ambush", "transport"]
         ],
-        "transport": NotRequired[Literal["this-unit"]],
+        "transport": NotRequired[Literal["this-unit"] | UnitFilter],
         "through": NotRequired[Literal["terrain", "tall-terrain"]],
         "attack_type": NotRequired[Literal["ranged", "melee", "psychic", "mortal"]],
         "weapons": NotRequired[WeaponScope],
         "by": NotRequired[UnitRef],
-        "timing": NotRequired[Literal["before-removal", "after-attacks"]],
+        "timing": NotRequired[Literal["before-removal", "after-attacks", "after-set-up"]],
         "phase": NotRequired[Phase],
         "first": NotRequired[Literal[True]],
         "step": NotRequired[Literal["battle-shock", "reinforcements"]],
@@ -2920,6 +2920,7 @@ class Ability1(TypedDict):
 
 
 class AddOption(TypedDict):
+    id: NotRequired[EntityId]
     name: str
     effect: EffectNode
 
@@ -3966,6 +3967,8 @@ class IssueOrdersEffect(TypedDict):
     count: NotRequired[int]
     range: NotRequired[RangeRef]
     eligible: NotRequired[KeywordPredicate]
+    recipient: NotRequired[UnitRef]
+    counts_toward_limit: NotRequired[Literal[False]]
     issuer: NotRequired[KeywordPredicate]
     ineligible_states: NotRequired[list[Literal["battle-shocked"]]]
     ends_on: NotRequired[list[Literal["battle-shocked"]]]

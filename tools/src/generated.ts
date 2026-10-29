@@ -2248,9 +2248,9 @@ export interface EventFilter {
   result?: RollOutcome;
   from?: "strategic-reserves" | "deep-strike" | "cult-ambush" | "transport";
   /**
-   * disembarked: the Transport the unit disembarked from; this-unit is "from this TRANSPORT".
+   * disembarked: the Transport the unit disembarked from; this-unit is "from this TRANSPORT", a unit filter the Transports it may be (a TRANSPORT within 6 inches of this model).
    */
-  transport?: "this-unit";
+  transport?: "this-unit" | UnitFilter;
   through?: "terrain" | "tall-terrain";
   attack_type?: "ranged" | "melee" | "psychic" | "mortal";
   weapons?: WeaponScope;
@@ -2283,9 +2283,9 @@ export interface EventFilter {
         stratagem_target: EntityId;
       };
   /**
-   * destroyed: resolve before the model is removed (before-removal), or after the attacking unit has finished making its attacks (after-attacks).
+   * destroyed: resolve before the model is removed (before-removal), or after the attacking unit has finished making its attacks (after-attacks); disembarked: resolve once the unit has been set up (after-set-up).
    */
-  timing?: "before-removal" | "after-attacks";
+  timing?: "before-removal" | "after-attacks" | "after-set-up";
   /**
    * The five official game phases. Unchanged between 10th and 11th edition — 11e reorders Pile In timing within the Fight phase but adds no top-level phase.
    */
@@ -3760,6 +3760,10 @@ export interface AbilityModifierEffect {
     selection?: UnitSelector;
     recipient_duration?: ScopeDuration;
     add_option?: {
+      /**
+       * Kebab-case identifier
+       */
+      id?: string;
       name: string;
       effect: EffectNode;
     };
@@ -4243,6 +4247,38 @@ export interface IssueOrdersEffect {
         per_battle_round: [NonTieredRangeRef, ...NonTieredRangeRef[]];
       };
   eligible?: KeywordPredicate1;
+  /**
+   * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
+   */
+  recipient?:
+    | (
+        | "this-unit"
+        | "this-model"
+        | "model-in-this-unit"
+        | "attacker"
+        | "defender"
+        | "event-subject"
+        | "event-object"
+        | "stratagem-target"
+        | "selected-unit"
+        | "recipient"
+        | "bearer-transport"
+        | "ability-unit"
+      )
+    | UnitFilter
+    | {
+        event_var: string;
+      }
+    | {
+        selection_var: string;
+      }
+    | {
+        stratagem_target: EntityId;
+      };
+  /**
+   * The Order does not count toward the Orders the officer can issue this turn.
+   */
+  counts_toward_limit?: false;
   issuer?: KeywordPredicate2;
   /**
    * Units in any of these states cannot be issued an Order.

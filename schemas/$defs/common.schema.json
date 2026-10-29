@@ -1374,10 +1374,17 @@
           ]
         },
         "transport": {
-          "enum": [
-            "this-unit"
+          "oneOf": [
+            {
+              "enum": [
+                "this-unit"
+              ]
+            },
+            {
+              "$ref": "#/$defs/unit-filter"
+            }
           ],
-          "description": "disembarked: the Transport the unit disembarked from; this-unit is \"from this TRANSPORT\"."
+          "description": "disembarked: the Transport the unit disembarked from; this-unit is \"from this TRANSPORT\", a unit filter the Transports it may be (a TRANSPORT within 6 inches of this model)."
         },
         "through": {
           "enum": [
@@ -1403,9 +1410,10 @@
         "timing": {
           "enum": [
             "before-removal",
-            "after-attacks"
+            "after-attacks",
+            "after-set-up"
           ],
-          "description": "destroyed: resolve before the model is removed (before-removal), or after the attacking unit has finished making its attacks (after-attacks)."
+          "description": "destroyed: resolve before the model is removed (before-removal), or after the attacking unit has finished making its attacks (after-attacks); disembarked: resolve once the unit has been set up (after-set-up)."
         },
         "phase": {
           "$ref": "#/$defs/phase",

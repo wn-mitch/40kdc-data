@@ -36,6 +36,17 @@ func normalizeTriggers(t any) []map[string]any {
 var turnOwners = map[string]string{"your-turn": "your", "opponent-turn": "your opponent's"}
 
 // triggerActor renders the actor of a trigger: "the unit", "an enemy unit", "this model".
+// transportPhrase is "a Transport within 6\" of this model": the Transports a disembarked
+// moment's filter allows.
+func transportPhrase(ref any) string {
+	if f, ok := ref.(map[string]any); ok && len(f) == 1 {
+		if w, ok := f["within"].(map[string]any); ok {
+			return "a Transport within " + rangePhrase(w["range"]) + " of " + triggerObjectPhrase(w["of"])
+		}
+	}
+	return triggerObjectPhrase(ref)
+}
+
 func triggerActor(ref any) string {
 	switch r := ref.(type) {
 	case nil:
@@ -429,9 +440,13 @@ func triggerEventPhrase(t map[string]any) string {
 		if f["transport"] == "this-unit" || f["transport"] == "this-model" {
 			from = "this Transport"
 		} else if f["transport"] != nil {
-			from = triggerObjectPhrase(f["transport"])
+			from = transportPhrase(f["transport"])
 		}
-		return "when " + who + " disembarks from " + from
+		timing := ""
+		if f["timing"] == "after-set-up" {
+			timing = ", after it has been set up"
+		}
+		return "when " + who + " disembarks from " + from + timing
 	case "before-roll", "after-roll":
 		return rollClause(t, f)
 	case "damage-allocated":

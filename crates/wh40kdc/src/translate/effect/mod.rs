@@ -573,12 +573,16 @@ fn inline_base(e: &P, ctx: &Ctx) -> String {
             )
         }
         "issue-orders" if nn(e, "menu_from").is_some() => format!(
-            "issue Orders from {}{}",
+            "issue Orders from {}{}{}{}",
             ability_label(nn(e, "menu_from")),
-            block::only_orders(e)
+            block::order_recipient(e),
+            block::only_orders(e),
+            block::order_limit(e)
         ),
         "issue-orders" => format!(
-            "issue Orders, each one of: {}",
+            "issue Orders{}{}, each one of: {}",
+            block::order_recipient(e),
+            block::order_limit(e),
             items(e, "options")
                 .iter()
                 .map(|o| jstr(o.get("name")))

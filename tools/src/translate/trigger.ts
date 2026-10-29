@@ -100,6 +100,13 @@ function actorKeywords(ref: unknown): string {
   return s;
 }
 
+/** "a Transport within 6" of this model": the Transports a disembarked moment's filter allows. */
+function transportPhrase(ref: unknown): string {
+  const f = ref as P;
+  const within = f !== null && typeof f === "object" && Object.keys(f).length === 1 ? f.within as P | undefined : undefined;
+  return within != null ? `a Transport within ${rangePhrase(within.range)} of ${objectPhrase(within.of)}` : objectPhrase(ref);
+}
+
 /** An object phrase: "this unit", "an enemy unit". */
 function objectPhrase(ref: unknown): string {
   if (ref == null || ref === "this-unit") return "this unit";
@@ -228,8 +235,8 @@ function eventPhrase(t: AbilityTrigger): string {
       return `when ${who} ${from[str(f.from)] ?? "is set up"}`;
     }
     case "disembarked": {
-      const from = f.transport == null ? "a Transport" : f.transport === "this-unit" || f.transport === "this-model" ? "this Transport" : objectPhrase(f.transport);
-      return `when ${who} disembarks from ${from}`;
+      const from = f.transport == null ? "a Transport" : f.transport === "this-unit" || f.transport === "this-model" ? "this Transport" : transportPhrase(f.transport);
+      return `when ${who} disembarks from ${from}${f.timing === "after-set-up" ? ", after it has been set up" : ""}`;
     }
     case "before-roll":
     case "after-roll":

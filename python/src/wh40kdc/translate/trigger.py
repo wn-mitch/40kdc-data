@@ -79,6 +79,17 @@ _SIMPLE_ACTOR_KEYS = frozenset(
 )
 
 
+def _transport_phrase(ref: Any) -> str:
+    """ "a Transport within 6\" of this model": the Transports a disembarked filter allows."""
+    if isinstance(ref, dict) and len(ref) == 1 and isinstance(ref.get("within"), dict):
+        within = ref["within"]
+        return (
+            f"a Transport within {range_phrase(within.get('range'))}"
+            f" of {_object_phrase(within.get('of'))}"
+        )
+    return _object_phrase(ref)
+
+
 def _actor(ref: Any) -> str:
     """The actor of a trigger: "the unit", "an enemy unit", "this model"."""
     if ref is None or ref == "this-unit":
@@ -371,8 +382,9 @@ def _event_phrase(t: AbilityTrigger) -> str:
         elif transport in ("this-unit", "this-model"):
             source = "this Transport"
         else:
-            source = _object_phrase(transport)
-        return f"when {who} disembarks from {source}"
+            source = _transport_phrase(transport)
+        timing = ", after it has been set up" if f.get("timing") == "after-set-up" else ""
+        return f"when {who} disembarks from {source}{timing}"
     if event in ("before-roll", "after-roll"):
         return _roll_clause(t, f)
     if event == "damage-allocated":

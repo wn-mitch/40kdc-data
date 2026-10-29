@@ -151,4 +151,25 @@ export const CHOICE_AND_DICE_EXTENSIONS: readonly FamilyExtension[] = [
       return { ...previous(rest), per_model: "selected" };
     },
   },
+  {
+    // "this model can issue 1 Order to that unit, regardless of how many Orders it has already issued this turn".
+    family: "issue-orders-open",
+    version: 2,
+    description: "As the previous version, plus recipient: antecedent (the Order goes to the unit the moment before it names, not to an eligible unit the officer picks) and counts_toward_limit: false (the Order does not count toward the Orders the officer can issue this turn).",
+    schema: (previous) => withProperties(previous, {
+      recipient: optional({ enum: ["antecedent"] }),
+      counts_toward_limit: optional({ enum: [false] }),
+    }),
+    normalize: (input, previous) => {
+      const { recipient, counts_toward_limit: counts, ...rest } = input;
+      if (recipient === undefined && counts === undefined) return previous(input);
+      const result = previous(rest);
+      if (recipient !== undefined) result.recipient = enumValue(recipient, ["antecedent"], "issue-orders-open.recipient");
+      if (counts !== undefined) {
+        if (counts !== false) throw new TypeError("issue-orders-open.counts_toward_limit is false, for an Order outside the officer's limit; leave it out otherwise.");
+        result.counts_toward_limit = false;
+      }
+      return result;
+    },
+  },
 ];

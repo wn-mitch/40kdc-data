@@ -32,6 +32,8 @@ from wh40kdc.translate.effect_inline import (
     inline,
     leadership_test,
     only_orders,
+    order_limit,
+    order_to,
     part_head,
     part_inline,
     pool_text,
@@ -284,11 +286,11 @@ def describe_effect(e: Effect, depth: int = 0, ctx: Ctx | None = None) -> str:
             who = issue if issuer is not None else "This model can issue"
             return (
                 f"{indent}{arrow}{who} up to {n} {orders} from {ability_label(e['menu_from'])} "
-                f"to eligible {units}{rng}{not_states}{only_orders(e)}."
+                f"to {order_to(e, units)}{rng}{not_states}{only_orders(e)}{order_limit(e)}."
             )
         head = (
-            f"{indent}{arrow}{issue} up to {n} Orders to eligible {units}{rng}{not_states}, "
-            "each one of:"
+            f"{indent}{arrow}{issue} up to {n} Orders to {order_to(e, units)}{rng}{not_states}"
+            f"{order_limit(e)}, each one of:"
         )
         rules = [f"{indent}{rule}" for rule in _order_rule_sentences(e, ctx)]
         return "\n".join([head, *_option_lines(e, indent, ctx), *rules])

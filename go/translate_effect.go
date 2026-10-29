@@ -428,13 +428,13 @@ func describeEffectInlineBase(e map[string]any, ctx effCtx) string {
 		return "take a " + testName(risk["test"]) + " test (on a failure, " + onFail + "), then " + describeEffectInline(mapOr(e["reward"]), ctx)
 	case "issue-orders":
 		if e["menu_from"] != nil {
-			return "issue Orders from " + abilityLabel(e["menu_from"]) + onlyOrders(e)
+			return "issue Orders from " + abilityLabel(e["menu_from"]) + orderRecipient(e) + onlyOrders(e) + orderLimit(e)
 		}
 		var names []string
 		for _, o := range getList(e, "options") {
 			names = append(names, ejstr(mapOr(o)["name"]))
 		}
-		return "issue Orders, each one of: " + strings.Join(names, " / ")
+		return "issue Orders" + orderRecipient(e) + orderLimit(e) + ", each one of: " + strings.Join(names, " / ")
 	case "resource-action-menu":
 		var acts []string
 		for _, a := range getList(e, "actions") {
@@ -725,9 +725,9 @@ func describeEffect(e map[string]any, depth int, ctx effCtx) string {
 			if e["issuer"] != nil {
 				who = issue
 			}
-			return indent + arrow + who + " up to " + n + " " + orders + " from " + abilityLabel(e["menu_from"]) + " to eligible " + units + rng + notStates + onlyOrders(e) + "."
+			return indent + arrow + who + " up to " + n + " " + orders + " from " + abilityLabel(e["menu_from"]) + " to " + orderTo(e, units) + rng + notStates + onlyOrders(e) + orderLimit(e) + "."
 		}
-		lines := []string{indent + arrow + issue + " up to " + n + " Orders to eligible " + units + rng + notStates + ", each one of:"}
+		lines := []string{indent + arrow + issue + " up to " + n + " Orders to " + orderTo(e, units) + rng + notStates + orderLimit(e) + ", each one of:"}
 		for _, o := range getList(e, "options") {
 			om := mapOr(o)
 			lines = append(lines, indent+"  - "+ejstr(om["name"])+": "+describeEffectInline(mapOr(om["effect"]), ctx)+".")
@@ -795,6 +795,30 @@ func orderRuleSentences(e map[string]any, ctx effCtx) []string {
 }
 
 // onlyOrders is ", only Duty and Honour or Fix Bayonets": the Orders of its menu an officer is limited to.
+// orderRecipient is " to the triggering unit": the one unit an issue-orders gives its Order to.
+func orderRecipient(e map[string]any) string {
+	if e["recipient"] == nil {
+		return ""
+	}
+	return " to " + unitRefPhrase(e["recipient"], "the unit")
+}
+
+// orderTo is "the triggering unit (if it is one of the eligible … units)", else "eligible … units".
+func orderTo(e map[string]any, units string) string {
+	if e["recipient"] == nil {
+		return "eligible " + units
+	}
+	return unitRefPhrase(e["recipient"], "the unit") + " (if it is one of the eligible " + units + ")"
+}
+
+// orderLimit is ", not counting toward the Orders it can issue this turn": an Order outside the limit.
+func orderLimit(e map[string]any) string {
+	if e["counts_toward_limit"] == false {
+		return ", not counting toward the Orders it can issue this turn"
+	}
+	return ""
+}
+
 func onlyOrders(e map[string]any) string {
 	ids, ok := e["only_options"].([]any)
 	if !ok {

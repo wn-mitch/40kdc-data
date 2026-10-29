@@ -311,6 +311,11 @@ export function trigger(leaf: CompileLeaf): Node {
     const filter = (node.filter ?? {}) as Node;
     node.filter = { ...filter, timing: closed(leaf, "timing") };
   }
+  // "disembarks from a TRANSPORT that is within 6\" of this model" (compile-disembark-moment.ts): which Transports.
+  if (leaf.parameters.transport_filter !== undefined) {
+    const filter = (node.filter ?? {}) as Node;
+    node.filter = { ...filter, transport: structuredClone(leaf.parameters.transport_filter as Node) };
+  }
   if (leaf.parameters.object_designated !== undefined) {
     const object = node.object !== null && typeof node.object === "object" && !Array.isArray(node.object) ? node.object as Node : {};
     node.object = { owner: "any", ...object, designated: closed(leaf, "object_designated") };

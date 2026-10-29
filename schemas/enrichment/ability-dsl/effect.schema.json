@@ -1307,6 +1307,10 @@
                   "type": "object",
                   "additionalProperties": false,
                   "properties": {
+                    "id": {
+                      "$ref": "../../defs/common.schema.json#/$defs/entity-id",
+                      "description": "The added option's stable id; other rules link it as {ability_id, option_id} with this record's id."
+                    },
                     "name": {
                       "type": "string",
                       "minLength": 1
@@ -6575,6 +6579,14 @@
         "eligible": {
           "$ref": "../../defs/common.schema.json#/$defs/keyword-predicate",
           "description": "Which friendly units may receive an Order, by keyword."
+        },
+        "recipient": {
+          "$ref": "../../defs/common.schema.json#/$defs/unit-ref",
+          "description": "The one unit the Order goes to (the unit the trigger names), in place of an eligible unit the officer picks."
+        },
+        "counts_toward_limit": {
+          "const": false,
+          "description": "The Order does not count toward the Orders the officer can issue this turn."
         },
         "issuer": {
           "$ref": "../../defs/common.schema.json#/$defs/keyword-predicate",

@@ -69,6 +69,23 @@ fn has_complex_actor_filter(filter: &P) -> bool {
     })
 }
 
+/// "a Transport within 6\" of this model": the Transports a disembarked moment's filter allows.
+fn transport_phrase(r: Option<&Value>) -> String {
+    if let Some(Value::Object(f)) = r {
+        // The typed trigger round-trip writes every unset filter key as null.
+        if f.values().filter(|v| !v.is_null()).count() == 1 {
+            if let Some(Value::Object(w)) = f.get("within") {
+                return format!(
+                    "a Transport within {} of {}",
+                    crate::translate::condition::range_phrase(w.get("range")),
+                    object_phrase(w.get("of"))
+                );
+            }
+        }
+    }
+    object_phrase(r)
+}
+
 /// The actor of a trigger: "the unit", "an enemy unit", "this model".
 pub(crate) fn actor(r: Option<&Value>) -> String {
     match r {
@@ -517,9 +534,14 @@ pub(crate) fn event_phrase(t: &P) -> String {
                 Some(Value::String(s)) if s == "this-unit" || s == "this-model" => {
                     "this Transport".to_string()
                 }
-                other => object_phrase(other),
+                other => transport_phrase(other),
             };
-            format!("when {who} disembarks from {from}")
+            let timing = if f.get("timing").and_then(Value::as_str) == Some("after-set-up") {
+                ", after it has been set up"
+            } else {
+                ""
+            };
+            format!("when {who} disembarks from {from}{timing}")
         }
         "before-roll" | "after-roll" => roll_clause(t, f),
         "damage-allocated" => {

@@ -141,6 +141,9 @@ export interface Effect {
   one_at_a_time?: boolean;
   menu_from?: string;
   only_options?: string[];
+  /** issue-orders: the one unit the Order goes to, and whether it counts toward the officer's limit. */
+  recipient?: unknown;
+  counts_toward_limit?: boolean;
   // resource-action-menu
   menu_id?: string;
   pool_id?: string;
@@ -654,8 +657,8 @@ function describeEffectInlineBase(e: Effect, ctx: Ctx = {}): string {
     case "risk-reward":
       return `take a ${testName(e.risk?.test)} test (on a failure, ${e.risk?.on_fail ? describeEffectInline(e.risk.on_fail, ctx) : "suffer a consequence"}), then ${describeEffectInline(e.reward ?? {}, ctx)}`;
     case "issue-orders":
-      if (e.menu_from != null) return `issue Orders from ${abilityLabel(e.menu_from)}${onlyOrders(e)}`;
-      return `issue Orders, each one of: ${(e.options ?? []).map((o) => jstr(o.name)).join(" / ")}`;
+      if (e.menu_from != null) return `issue Orders from ${abilityLabel(e.menu_from)}${orderRecipient(e)}${onlyOrders(e)}${orderLimit(e)}`;
+      return `issue Orders${orderRecipient(e)}${orderLimit(e)}, each one of: ${(e.options ?? []).map((o) => jstr(o.name)).join(" / ")}`;
     case "resource-action-menu":
       return `actions may be performed when their conditions are met: ${(e.actions ?? []).map((a) => describeMenuAction(a, ctx)).join(" / ")}`;
 
@@ -1003,9 +1006,9 @@ export function describeEffect(e: Effect, depth: number = 0, ctx: Ctx = {}): str
         // An officer's datasheet: how many of its army rule's Orders it issues, and to which units.
         const orders = e.count === 1 ? "Order" : "Orders";
         const who = e.issuer != null ? issue : "This model can issue";
-        return `${indent}${arrow}${who} up to ${n} ${orders} from ${abilityLabel(e.menu_from)} to eligible ${units}${rng}${states}${onlyOrders(e)}.`;
+        return `${indent}${arrow}${who} up to ${n} ${orders} from ${abilityLabel(e.menu_from)} to ${orderTo(e, units)}${rng}${states}${onlyOrders(e)}${orderLimit(e)}.`;
       }
-      const lines = [`${indent}${arrow}${issue} up to ${n} Orders to eligible ${units}${rng}${states}, each one of:`];
+      const lines = [`${indent}${arrow}${issue} up to ${n} Orders to ${orderTo(e, units)}${rng}${states}${orderLimit(e)}, each one of:`];
       for (const opt of e.options ?? []) {
         lines.push(`${indent}  - ${jstr(opt.name)}: ${describeEffectInline(opt.effect ?? {}, ctx)}.`);
       }
@@ -1029,6 +1032,21 @@ export function describeEffect(e: Effect, depth: number = 0, ctx: Ctx = {}): str
 }
 
 /** ", only Duty and Honour or Fix Bayonets": the Orders of its menu an officer is limited to. */
+/** " to the triggering unit": the one unit an issue-orders gives its Order to, when it names one. */
+function orderRecipient(e: Effect): string {
+  return e.recipient != null ? ` to ${unitRefPhrase(e.recipient)}` : "";
+}
+
+/** "the triggering unit (if it is one of the eligible friendly REGIMENT units)", else "eligible friendly … units". */
+function orderTo(e: Effect, units: string): string {
+  return e.recipient != null ? `${unitRefPhrase(e.recipient)} (if it is one of the eligible ${units})` : `eligible ${units}`;
+}
+
+/** ", not counting toward the Orders it can issue this turn": an Order outside the officer's limit. */
+function orderLimit(e: Effect): string {
+  return e.counts_toward_limit === false ? ", not counting toward the Orders it can issue this turn" : "";
+}
+
 function onlyOrders(e: Effect): string {
   return Array.isArray(e.only_options) ? `, only ${orList(e.only_options.map((id) => abilityLabel(id)))}` : "";
 }

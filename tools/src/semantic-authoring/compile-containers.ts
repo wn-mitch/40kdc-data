@@ -1,3 +1,4 @@
+import { addedOrder, addedOrderMoment } from "./compile-added-order.js";
 import { withoutSharedBattleSizeTable } from "./compile-battle-size-table.js";
 import { closed, CompileError, effect, type CompileLeaf } from "./compile-fragments.js";
 import { initialOption } from "./compile-stance-initial.js";
@@ -198,6 +199,9 @@ function buildIssueOrders(head: CompileLeaf, groups: CompileLeaf[][], rules: rea
   if (head.parameters.range !== undefined) node.range = { inches: closed(head, "range") };
   if (head.parameters.eligible_keyword !== undefined) node.eligible = { all_of: [closed(head, "eligible_keyword")] };
   if (head.parameters.__eligible !== undefined) node.eligible = head.parameters.__eligible;
+  // "issue 1 Order to that unit, regardless of how many Orders it has already issued": the moment's unit, outside the limit.
+  if (head.parameters.recipient === "antecedent") node.recipient = "event-subject";
+  if (head.parameters.counts_toward_limit === false) node.counts_toward_limit = false;
   const ruled = orderRules(rules);
   if (ruled.only_options !== undefined && node.menu_from === undefined) throw new CompileError("Only some Orders of a menu: the issue-orders must take its Orders from its army rule.");
   return { ...node, ...ruled };
@@ -481,6 +485,14 @@ function planContainerNodes(list: readonly CompileLeaf[], sentenceOf: readonly n
     if (current.length) groups.push(current);
     // A battle-size table after the last named option is every option's cap, not the last option's (compile-battle-size-table.ts).
     if (byMarker && leaf.family_id === "choice-open") groups.splice(0, groups.length, ...withoutSharedBattleSizeTable(groups));
+    // "Each time you select an Order for the bearer to issue, you can select the Order below": one more Order on its menu.
+    const added = byMarker && leaf.family_id === "choice-open" && groups.length === 1 ? addedOrderMoment(list, index) : null;
+    if (added !== null) {
+      const { id, name, effect: optionEffect } = namedOption(groups[0]!, false, 0);
+      for (const at of added.consumed) consumed.add(at);
+      nodes.set(index, addedOrder(added.menu, { id, name, effect: optionEffect }));
+      return;
+    }
     // A choice whose option ends in a move-must-end ("…, provided every model … ends that move …") compiles each
     // option as a whole ability, so its move-end and its conditions stay with the move they end. A sentence after
     // the last move option with no move of its own ("Until the end of the turn, …") is no option: it goes back to

@@ -1365,6 +1365,10 @@ impl ::std::convert::TryFrom<::std::string::String> for AbilityInteractionsItemT
 ///        "effect": {
 ///          "$ref": "#/$defs/effect-node"
 ///        },
+///        "id": {
+///          "description": "The added option's stable id; other rules link it as {ability_id, option_id} with this record's id.",
+///          "$ref": "#/$defs/entity-id"
+///        },
 ///        "name": {
 ///          "type": "string",
 ///          "minLength": 1
@@ -1748,6 +1752,10 @@ for AbilityModifierEffectModifierAbilityVariant5Keyword {
 ///    "effect": {
 ///      "$ref": "#/$defs/effect-node"
 ///    },
+///    "id": {
+///      "description": "The added option's stable id; other rules link it as {ability_id, option_id} with this record's id.",
+///      "$ref": "#/$defs/entity-id"
+///    },
 ///    "name": {
 ///      "type": "string",
 ///      "minLength": 1
@@ -1761,6 +1769,9 @@ for AbilityModifierEffectModifierAbilityVariant5Keyword {
 #[serde(deny_unknown_fields)]
 pub struct AbilityModifierEffectModifierAddOption {
     pub effect: EffectNode,
+    ///The added option's stable id; other rules link it as {ability_id, option_id} with this record's id.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<EntityId>,
     pub name: AbilityModifierEffectModifierAddOptionName,
 }
 ///`AbilityModifierEffectModifierAddOptionName`
@@ -16644,10 +16655,11 @@ impl<'de> ::serde::Deserialize<'de> for EventBoundReferenceEventVar {
 ///      ]
 ///    },
 ///    "timing": {
-///      "description": "destroyed: resolve before the model is removed (before-removal), or after the attacking unit has finished making its attacks (after-attacks).",
+///      "description": "destroyed: resolve before the model is removed (before-removal), or after the attacking unit has finished making its attacks (after-attacks); disembarked: resolve once the unit has been set up (after-set-up).",
 ///      "enum": [
 ///        "before-removal",
-///        "after-attacks"
+///        "after-attacks",
+///        "after-set-up"
 ///      ]
 ///    },
 ///    "to": {
@@ -16663,9 +16675,16 @@ impl<'de> ::serde::Deserialize<'de> for EventBoundReferenceEventVar {
 ///      ]
 ///    },
 ///    "transport": {
-///      "description": "disembarked: the Transport the unit disembarked from; this-unit is \"from this TRANSPORT\".",
-///      "enum": [
-///        "this-unit"
+///      "description": "disembarked: the Transport the unit disembarked from; this-unit is \"from this TRANSPORT\", a unit filter the Transports it may be (a TRANSPORT within 6 inches of this model).",
+///      "oneOf": [
+///        {
+///          "enum": [
+///            "this-unit"
+///          ]
+///        },
+///        {
+///          "$ref": "#/$defs/unit-filter"
+///        }
 ///      ]
 ///    },
 ///    "usage": {
@@ -16750,13 +16769,13 @@ pub struct EventFilter {
     pub tag: ::std::option::Option<DesignationId>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub through: ::std::option::Option<EventFilterThrough>,
-    ///destroyed: resolve before the model is removed (before-removal), or after the attacking unit has finished making its attacks (after-attacks).
+    ///destroyed: resolve before the model is removed (before-removal), or after the attacking unit has finished making its attacks (after-attacks); disembarked: resolve once the unit has been set up (after-set-up).
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub timing: ::std::option::Option<EventFilterTiming>,
     ///selected: what the unit was selected to do. attack means shoot or fight.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub to: ::std::option::Option<EventFilterTo>,
-    ///disembarked: the Transport the unit disembarked from; this-unit is "from this TRANSPORT".
+    ///disembarked: the Transport the unit disembarked from; this-unit is "from this TRANSPORT", a unit filter the Transports it may be (a TRANSPORT within 6 inches of this model).
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub transport: ::std::option::Option<EventFilterTransport>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -17763,16 +17782,17 @@ impl ::std::convert::TryFrom<::std::string::String> for EventFilterThrough {
         value.parse()
     }
 }
-///destroyed: resolve before the model is removed (before-removal), or after the attacking unit has finished making its attacks (after-attacks).
+///destroyed: resolve before the model is removed (before-removal), or after the attacking unit has finished making its attacks (after-attacks); disembarked: resolve once the unit has been set up (after-set-up).
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "destroyed: resolve before the model is removed (before-removal), or after the attacking unit has finished making its attacks (after-attacks).",
+///  "description": "destroyed: resolve before the model is removed (before-removal), or after the attacking unit has finished making its attacks (after-attacks); disembarked: resolve once the unit has been set up (after-set-up).",
 ///  "enum": [
 ///    "before-removal",
-///    "after-attacks"
+///    "after-attacks",
+///    "after-set-up"
 ///  ]
 ///}
 /// ```
@@ -17794,12 +17814,15 @@ pub enum EventFilterTiming {
     BeforeRemoval,
     #[serde(rename = "after-attacks")]
     AfterAttacks,
+    #[serde(rename = "after-set-up")]
+    AfterSetUp,
 }
 impl ::std::fmt::Display for EventFilterTiming {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match *self {
             Self::BeforeRemoval => f.write_str("before-removal"),
             Self::AfterAttacks => f.write_str("after-attacks"),
+            Self::AfterSetUp => f.write_str("after-set-up"),
         }
     }
 }
@@ -17811,6 +17834,7 @@ impl ::std::str::FromStr for EventFilterTiming {
         match value {
             "before-removal" => Ok(Self::BeforeRemoval),
             "after-attacks" => Ok(Self::AfterAttacks),
+            "after-set-up" => Ok(Self::AfterSetUp),
             _ => Err("invalid value".into()),
         }
     }
@@ -17940,13 +17964,48 @@ impl ::std::convert::TryFrom<::std::string::String> for EventFilterTo {
         value.parse()
     }
 }
-///disembarked: the Transport the unit disembarked from; this-unit is "from this TRANSPORT".
+///disembarked: the Transport the unit disembarked from; this-unit is "from this TRANSPORT", a unit filter the Transports it may be (a TRANSPORT within 6 inches of this model).
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "disembarked: the Transport the unit disembarked from; this-unit is \"from this TRANSPORT\".",
+///  "description": "disembarked: the Transport the unit disembarked from; this-unit is \"from this TRANSPORT\", a unit filter the Transports it may be (a TRANSPORT within 6 inches of this model).",
+///  "oneOf": [
+///    {
+///      "enum": [
+///        "this-unit"
+///      ]
+///    },
+///    {
+///      "$ref": "#/$defs/unit-filter"
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(untagged)]
+pub enum EventFilterTransport {
+    Variant0(EventFilterTransportVariant0),
+    Variant1(UnitFilter),
+}
+impl ::std::convert::From<EventFilterTransportVariant0> for EventFilterTransport {
+    fn from(value: EventFilterTransportVariant0) -> Self {
+        Self::Variant0(value)
+    }
+}
+impl ::std::convert::From<UnitFilter> for EventFilterTransport {
+    fn from(value: UnitFilter) -> Self {
+        Self::Variant1(value)
+    }
+}
+///`EventFilterTransportVariant0`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
 ///  "enum": [
 ///    "this-unit"
 ///  ]
@@ -17965,18 +18024,18 @@ impl ::std::convert::TryFrom<::std::string::String> for EventFilterTo {
     PartialEq,
     PartialOrd
 )]
-pub enum EventFilterTransport {
+pub enum EventFilterTransportVariant0 {
     #[serde(rename = "this-unit")]
     ThisUnit,
 }
-impl ::std::fmt::Display for EventFilterTransport {
+impl ::std::fmt::Display for EventFilterTransportVariant0 {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match *self {
             Self::ThisUnit => f.write_str("this-unit"),
         }
     }
 }
-impl ::std::str::FromStr for EventFilterTransport {
+impl ::std::str::FromStr for EventFilterTransportVariant0 {
     type Err = self::error::ConversionError;
     fn from_str(
         value: &str,
@@ -17987,7 +18046,7 @@ impl ::std::str::FromStr for EventFilterTransport {
         }
     }
 }
-impl ::std::convert::TryFrom<&str> for EventFilterTransport {
+impl ::std::convert::TryFrom<&str> for EventFilterTransportVariant0 {
     type Error = self::error::ConversionError;
     fn try_from(
         value: &str,
@@ -17995,7 +18054,7 @@ impl ::std::convert::TryFrom<&str> for EventFilterTransport {
         value.parse()
     }
 }
-impl ::std::convert::TryFrom<&::std::string::String> for EventFilterTransport {
+impl ::std::convert::TryFrom<&::std::string::String> for EventFilterTransportVariant0 {
     type Error = self::error::ConversionError;
     fn try_from(
         value: &::std::string::String,
@@ -18003,7 +18062,7 @@ impl ::std::convert::TryFrom<&::std::string::String> for EventFilterTransport {
         value.parse()
     }
 }
-impl ::std::convert::TryFrom<::std::string::String> for EventFilterTransport {
+impl ::std::convert::TryFrom<::std::string::String> for EventFilterTransportVariant0 {
     type Error = self::error::ConversionError;
     fn try_from(
         value: ::std::string::String,
@@ -21707,6 +21766,10 @@ pub struct InvulnerableSaveEffectModifier {
 ///      "type": "integer",
 ///      "minimum": 1.0
 ///    },
+///    "counts_toward_limit": {
+///      "description": "The Order does not count toward the Orders the officer can issue this turn.",
+///      "const": false
+///    },
 ///    "eligible": {
 ///      "description": "Which friendly units may receive an Order, by keyword.",
 ///      "$ref": "#/$defs/keyword-predicate"
@@ -21784,6 +21847,10 @@ pub struct InvulnerableSaveEffectModifier {
 ///      "description": "Orders go to eligible units within this distance of the officer.",
 ///      "$ref": "#/$defs/range-ref"
 ///    },
+///    "recipient": {
+///      "description": "The one unit the Order goes to (the unit the trigger names), in place of an eligible unit the officer picks.",
+///      "$ref": "#/$defs/unit-ref"
+///    },
 ///    "type": {
 ///      "type": "string",
 ///      "enum": [
@@ -21804,6 +21871,9 @@ pub struct IssueOrdersEffect {
     pub benefit: ::std::option::Option<KeywordPredicate>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub count: ::std::option::Option<::std::num::NonZeroU64>,
+    ///The Order does not count toward the Orders the officer can issue this turn.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub counts_toward_limit: ::std::option::Option<::serde_json::Value>,
     ///Which friendly units may receive an Order, by keyword.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub eligible: ::std::option::Option<KeywordPredicate>,
@@ -21832,6 +21902,9 @@ pub struct IssueOrdersEffect {
     ///Orders go to eligible units within this distance of the officer.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub range: ::std::option::Option<RangeRef>,
+    ///The one unit the Order goes to (the unit the trigger names), in place of an eligible unit the officer picks.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub recipient: ::std::option::Option<UnitRef>,
     #[serde(rename = "type")]
     pub type_: IssueOrdersEffectType,
 }

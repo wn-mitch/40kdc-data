@@ -5,6 +5,9 @@ import { NAMED_RANGES } from "../named-ranges.js";
 import { ALTERNATIVE_SCHEMA, normalizeAlternatives } from "../unit-filter-alternatives.js";
 import { BEARER_TRANSPORT, EACH_TARGET, FILTERED_UNITS, FOLLOWING_FILTER, designationId, printedKeywordsExtension, refuseWith, standInEachTarget } from "./shared.js";
 
+/** The Transport a disembarked moment's unit came out of (compile-disembark-moment.ts). */
+export const DISEMBARKED_FROM = "disembarked-from";
+
 /**
  * Versions of unit-position: distances, ranges and placements a unit's position is measured by.
  * Each version checks only its own additions and hands the rest of a leaf to the previous version,
@@ -470,6 +473,20 @@ export const POSITION_EXTENSIONS: readonly FamilyExtension[] = [
       const { of_shares_keywords: shared, ...rest } = input;
       if (rest.of !== "matching-unit") throw new TypeError("unit-position.of_shares_keywords goes with of: matching-unit.");
       return { ...previous(rest), of_shares_keywords: keywordList(shared, "unit-position.of_shares_keywords", 2) };
+    },
+  },
+  {
+    // "each time a unit disembarks from a TRANSPORT that is within 6\" of this model".
+    family: "unit-position",
+    version: 28,
+    description: "As the previous version, plus subject disembarked-from: the Transport the moment's unit disembarked from, within or beyond a distance of this unit or model.",
+    schema: (previous) => withProperties(previous, { subject: widenedEnum(previous, "subject", [DISEMBARKED_FROM]) }),
+    normalize: (input, previous) => {
+      if (input.subject !== DISEMBARKED_FROM) return previous(input);
+      if (input.kind !== "within" && input.kind !== "beyond") throw new TypeError("unit-position subject disembarked-from measures a within or beyond distance.");
+      if (input.of !== "this-unit" && input.of !== "this-model") throw new TypeError("unit-position subject disembarked-from is measured to this unit or model.");
+      if (input.negated === true) throw new TypeError("unit-position subject disembarked-from names the Transport's position; negate it with beyond.");
+      return standIn(input, "subject", "this-unit", previous);
     },
   },
 ];
