@@ -52,7 +52,7 @@
             <profile name="Gate of Infinity" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">At the end of your opponent's Fight phase, you may use this ability, if your Army Faction is GREY KNIGHTS:
-  -&gt; Select up to 2/3/4 friendly units (Incursion/Strike Force/Onslaught) if the selected unit is on the battlefield and the selected unit is unengaged and the selected unit has the Gate of Infinity Crowes Sanctifiers ability: that unit can be placed into Strategic Reserves.</characteristic>
+  -&gt; Select up to 2/3/4 friendly units (Incursion/Strike Force/Onslaught) if the selected unit is on the battlefield and the selected unit is unengaged and the selected unit has the Gate of Infinity Crowes Sanctifiers ability: that unit can be placed into Strategic Reserves; it arrives in the Reinforcements step of your next Movement phase, even in the first battle round.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -107,7 +107,7 @@
             <profile name="Acrobatic Escape" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">-&gt; At the end of the Fight phase: while the unit is engaged, the unit can Fall Back up to D6".
--&gt; At the end of your opponent's turn, you may use this ability: while the unit is not within 3" of an enemy unit, the unit can be placed into Strategic Reserves.</characteristic>
+-&gt; At the end of your opponent's turn, you may use this ability: while the unit is not within 3" of an enemy unit, the unit can be placed into Strategic Reserves; it arrives in the Reinforcements step of your next Movement phase, even in the first battle round.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deep Strike" typeName="Abilities">

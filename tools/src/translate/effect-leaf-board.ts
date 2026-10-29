@@ -11,6 +11,7 @@ import {
   amountOf, andList, orList, dekebab, designationFor, movedPhrase, noneOf, diceCase, effectSubject, formatComparison, isLiteral, jstr, ofOrPossessive, pronoun,
   rangePhrase, regionPhrase, requirementPhrase, resourceNoun, rollName, signed, testName, titleCase, v, weaponNoun, type Ctx,
   isRatingRef,
+  isPlural,
   abilityLabel,
 } from "./effect-words.js";
 import { expiryTrail } from "./expiry.js";
@@ -255,7 +256,14 @@ function setUp(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
   const reserves = m.to === "strategic-reserves" || m.from === "strategic-reserves";
   const limits = m.ignore_limits === true ? (reserves ? ", ignoring any limits on units in Strategic Reserves" : ", ignoring the usual set-up limits") : "";
   const can = m.allow === false ? "cannot" : m.mandatory === true ? "must" : "can";
-  if (m.to === "strategic-reserves") return `${m.allow === false ? noneOf(who) : who} ${can} be placed into Strategic Reserves${limits}`;
+  if (m.to === "strategic-reserves") {
+    // When the unit comes back: "it arrives in the Reinforcements step of your next Movement phase, even in the first battle round".
+    const [it, arrives] = isPlural(who) ? ["they", "arrive"] : ["it", "arrives"];
+    const arrival = m.arrives === "next-movement-phase"
+      ? `; ${it} ${arrives} in the Reinforcements step of your next Movement phase${m.allow_first_round === true ? ", even in the first battle round" : ""}`
+      : m.allow_first_round === true ? `; ${it} can arrive in the first battle round` : "";
+    return `${m.allow === false ? noneOf(who) : who} ${can} be placed into Strategic Reserves${limits}${arrival}`;
+  }
   const from = m.from === "strategic-reserves" ? " from Strategic Reserves" : m.from === "transport" ? " from its Transport" : "";
   const whoCan = m.allow === false ? noneOf(who) : who;
   let s = m.from === "battlefield" ? `${whoCan} ${can} be removed from the battlefield and set up again` : `${whoCan} ${can} be set up on the battlefield${from}`;

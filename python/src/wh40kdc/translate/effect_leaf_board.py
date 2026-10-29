@@ -34,6 +34,7 @@ from wh40kdc.translate.effect_words import (
     dice_case,
     effect_subject,
     format_comparison,
+    is_plural,
     is_rating_ref,
     jstr,
     none_of,
@@ -617,7 +618,18 @@ def _set_up(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
     denied = m.get("allow") is False
     can = "cannot" if denied else "must" if m.get("mandatory") is True else "can"
     if m.get("to") == "strategic-reserves":
-        return f"{none_of(who) if denied else who} {can} be placed into Strategic Reserves{limits}"
+        # When the unit comes back: "it arrives in the Reinforcements step of your next Movement
+        # phase, even in the first battle round".
+        first_round = m.get("allow_first_round") is True
+        it, arrives = ("they", "arrive") if is_plural(who) else ("it", "arrives")
+        if m.get("arrives") == "next-movement-phase":
+            arrival = f"; {it} {arrives} in the Reinforcements step of your next Movement phase" + (
+                ", even in the first battle round" if first_round else ""
+            )
+        else:
+            arrival = f"; {it} can arrive in the first battle round" if first_round else ""
+        placed = f"{none_of(who) if denied else who} {can} be placed into Strategic Reserves"
+        return f"{placed}{limits}{arrival}"
     frm = m.get("from")
     source = (
         " from Strategic Reserves"

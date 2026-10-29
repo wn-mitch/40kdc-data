@@ -43,7 +43,7 @@
             <profile name="Gate of Infinity" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">At the end of your opponent's Fight phase, you may use this ability, if your Army Faction is GREY KNIGHTS:
-  -&gt; Select up to 2/3/4 friendly units (Incursion/Strike Force/Onslaught) if the selected unit is on the battlefield and the selected unit is unengaged and the selected unit has the Gate of Infinity Crowes Sanctifiers ability: that unit can be placed into Strategic Reserves.</characteristic>
+  -&gt; Select up to 2/3/4 friendly units (Incursion/Strike Force/Onslaught) if the selected unit is on the battlefield and the selected unit is unengaged and the selected unit has the Gate of Infinity Crowes Sanctifiers ability: that unit can be placed into Strategic Reserves; it arrives in the Reinforcements step of your next Movement phase, even in the first battle round.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -158,7 +158,7 @@
             <profile name="Gate of Infinity" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">At the end of your opponent's Fight phase, you may use this ability, if your Army Faction is GREY KNIGHTS:
-  -&gt; Select up to 2/3/4 friendly units (Incursion/Strike Force/Onslaught) if the selected unit is on the battlefield and the selected unit is unengaged and the selected unit has the Gate of Infinity Crowes Sanctifiers ability: that unit can be placed into Strategic Reserves.</characteristic>
+  -&gt; Select up to 2/3/4 friendly units (Incursion/Strike Force/Onslaught) if the selected unit is on the battlefield and the selected unit is unengaged and the selected unit has the Gate of Infinity Crowes Sanctifiers ability: that unit can be placed into Strategic Reserves; it arrives in the Reinforcements step of your next Movement phase, even in the first battle round.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -249,7 +249,7 @@ While the target is within range of an objective marker, you can re-roll the Wou
             <profile name="Gate of Infinity" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">At the end of your opponent's Fight phase, you may use this ability, if your Army Faction is GREY KNIGHTS:
-  -&gt; Select up to 2/3/4 friendly units (Incursion/Strike Force/Onslaught) if the selected unit is on the battlefield and the selected unit is unengaged and the selected unit has the Gate of Infinity Crowes Sanctifiers ability: that unit can be placed into Strategic Reserves.</characteristic>
+  -&gt; Select up to 2/3/4 friendly units (Incursion/Strike Force/Onslaught) if the selected unit is on the battlefield and the selected unit is unengaged and the selected unit has the Gate of Infinity Crowes Sanctifiers ability: that unit can be placed into Strategic Reserves; it arrives in the Reinforcements step of your next Movement phase, even in the first battle round.</characteristic>
               </characteristics>
             </profile>
           </profiles>

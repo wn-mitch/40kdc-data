@@ -1769,7 +1769,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "-> At the end of the Fight phase: while the unit is engaged, the unit can Fall Back up to D6\".\n-> At the end of your opponent's turn, you may use this ability: while the unit is not within 3\" of an enemy unit, the unit can be placed into Strategic Reserves."
+      "text": "-> At the end of the Fight phase: while the unit is engaged, the unit can Fall Back up to D6\".\n-> At the end of your opponent's turn, you may use this ability: while the unit is not within 3\" of an enemy unit, the unit can be placed into Strategic Reserves; it arrives in the Reinforcements step of your next Movement phase, even in the first battle round."
     }
   },
   {
@@ -43357,6 +43357,60 @@
     },
     "expected": {
       "text": "Enemy units cannot target the unit with the Fire Overwatch Stratagem."
+    }
+  },
+  {
+    "caseId": "canonical/set-up-reserves-arrives-next-movement",
+    "effect": {
+      "type": "set-up",
+      "target": "this-unit",
+      "modifier": {
+        "to": "strategic-reserves",
+        "arrives": "next-movement-phase",
+        "allow_first_round": true
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "The unit can be placed into Strategic Reserves; it arrives in the Reinforcements step of your next Movement phase, even in the first battle round."
+    }
+  },
+  {
+    "caseId": "canonical/set-up-reserves-arrives-plural",
+    "effect": {
+      "type": "set-up",
+      "target": {
+        "owner": "friendly"
+      },
+      "modifier": {
+        "to": "strategic-reserves",
+        "arrives": "next-movement-phase"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "All friendly units can be placed into Strategic Reserves; they arrive in the Reinforcements step of your next Movement phase."
+    }
+  },
+  {
+    "caseId": "canonical/set-up-reserves-first-round",
+    "effect": {
+      "type": "set-up",
+      "target": "this-unit",
+      "modifier": {
+        "to": "strategic-reserves",
+        "allow_first_round": true
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "The unit can be placed into Strategic Reserves; it can arrive in the first battle round."
     }
   }
 ]

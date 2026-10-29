@@ -437,7 +437,29 @@ pub(super) fn set_up(m: &P, subj: &str, ctx: &Ctx) -> String {
     };
     if sv(m, "to") == Some("strategic-reserves") {
         let who = if denied { none_of(&who) } else { who };
-        return format!("{who} {can} be placed into Strategic Reserves{limits}");
+        // When the unit comes back: "it arrives in the Reinforcements step of your next Movement
+        // phase, even in the first battle round".
+        let first_round = is_true(m, "allow_first_round");
+        let (it, arrives) = if is_plural(&who) {
+            ("they", "arrive")
+        } else {
+            ("it", "arrives")
+        };
+        let arrival = if sv(m, "arrives") == Some("next-movement-phase") {
+            format!(
+                "; {it} {arrives} in the Reinforcements step of your next Movement phase{}",
+                if first_round {
+                    ", even in the first battle round"
+                } else {
+                    ""
+                }
+            )
+        } else if first_round {
+            format!("; {it} can arrive in the first battle round")
+        } else {
+            String::new()
+        };
+        return format!("{who} {can} be placed into Strategic Reserves{limits}{arrival}");
     }
     let from = match sv(m, "from") {
         Some("strategic-reserves") => " from Strategic Reserves",

@@ -473,7 +473,22 @@ func setUpLeaf(m map[string]any, subj string, ctx effCtx) string {
 		can = "must"
 	}
 	if m["to"] == "strategic-reserves" {
-		return whoCan + " " + can + " be placed into Strategic Reserves" + limits
+		// When the unit comes back: "it arrives in the Reinforcements step of your next Movement
+		// phase, even in the first battle round".
+		it, arrives := "it", "arrives"
+		if isPlural(who) {
+			it, arrives = "they", "arrive"
+		}
+		arrival := ""
+		if m["arrives"] == "next-movement-phase" {
+			arrival = "; " + it + " " + arrives + " in the Reinforcements step of your next Movement phase"
+			if m["allow_first_round"] == true {
+				arrival += ", even in the first battle round"
+			}
+		} else if m["allow_first_round"] == true {
+			arrival = "; " + it + " can arrive in the first battle round"
+		}
+		return whoCan + " " + can + " be placed into Strategic Reserves" + limits + arrival
 	}
 	from := ""
 	switch m["from"] {
