@@ -1885,11 +1885,27 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Astra Militarum",
+        "Officer"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "order-the-advance-armoured-infantry-astra-militarum",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -2699,10 +2715,6 @@
     "player_turn": "either",
     "timing": "once-per-turn",
     "target_restrictions": {
-      "required_keywords_any": [
-        "Bullgryn Squad",
-        "Ogryn Squad"
-      ],
       "count": "one",
       "selects": "unit",
       "bound_to": "attacked-unit",
@@ -2712,6 +2724,7 @@
           {
             "type": "matches",
             "parameters": {
+              "subject": "this-unit",
               "filter": {
                 "level": "unit",
                 "unit_ids": [

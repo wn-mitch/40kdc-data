@@ -880,6 +880,10 @@
                   }
                 }
               ]
+            },
+            "limit": {
+              "count": 1,
+              "period": "phase"
             }
           }
         },
@@ -926,10 +930,6 @@
       "filter": {
         "kind": "shoot"
       }
-    },
-    "usage": {
-      "frequency": "once-per-phase",
-      "per": "unit"
     }
   },
   {

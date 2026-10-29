@@ -101,7 +101,7 @@
             <profile name="Acrobatic Escape" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">-&gt; At the end of the Fight phase: while the unit is engaged, the unit can Fall Back up to D6".
--&gt; At the end of your opponent's turn, you may use this ability: while the unit is not within 3" of an enemy unit, the unit can be placed into Strategic Reserves; the unit can make an Ingress move.</characteristic>
+-&gt; At the end of your opponent's turn, you may use this ability: while the unit is not within 3" of an enemy unit, the unit can be placed into Strategic Reserves.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deep Strike" typeName="Abilities">

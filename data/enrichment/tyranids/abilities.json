@@ -7236,8 +7236,8 @@
           ]
         },
         "count": {
-          "min": 1,
-          "max": 1
+          "min": 0,
+          "max": 3
         }
       },
       "effect": {
@@ -8553,8 +8553,8 @@
             ]
           },
           "count": {
-            "min": 1,
-            "max": 1
+            "min": 0,
+            "max": 3
           },
           "eligibility": {
             "type": "matches",
@@ -8611,8 +8611,8 @@
           ]
         },
         "count": {
-          "min": 1,
-          "max": 1
+          "min": 0,
+          "max": 3
         }
       },
       "effect": {
@@ -10828,8 +10828,8 @@
             ]
           },
           "count": {
-            "min": 1,
-            "max": 1
+            "min": 0,
+            "max": 3
           }
         },
         "effect": {

@@ -596,10 +596,11 @@
         },
         "effect": {
           "type": "permission",
-          "target": "this-unit",
+          "target": "selected-unit",
           "modifier": {
             "activity": "embark",
-            "allow": true
+            "allow": true,
+            "into": "this-unit"
           }
         }
       }
@@ -4089,23 +4090,13 @@
         ]
       },
       "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "set-up",
-            "target": "this-unit",
-            "modifier": {
-              "to": "strategic-reserves"
-            }
-          },
-          {
-            "type": "move",
-            "target": "this-unit",
-            "modifier": {
-              "move_type": "ingress"
-            }
-          }
-        ]
+        "type": "set-up",
+        "target": "this-unit",
+        "modifier": {
+          "to": "strategic-reserves",
+          "arrives": "next-movement-phase",
+          "allow_first_round": true
+        }
       }
     },
     "scope": {
@@ -12784,7 +12775,9 @@
             "type": "set-up",
             "target": "this-unit",
             "modifier": {
-              "to": "strategic-reserves"
+              "to": "strategic-reserves",
+              "arrives": "next-movement-phase",
+              "allow_first_round": true
             }
           },
           {
@@ -12792,13 +12785,6 @@
             "target": "this-unit",
             "modifier": {
               "ability": "deep-strike"
-            }
-          },
-          {
-            "type": "move",
-            "target": "this-unit",
-            "modifier": {
-              "move_type": "ingress"
             }
           }
         ]

@@ -449,23 +449,13 @@
               ]
             },
             "effect": {
-              "type": "sequence",
-              "steps": [
-                {
-                  "type": "set-up",
-                  "target": "this-unit",
-                  "modifier": {
-                    "to": "strategic-reserves"
-                  }
-                },
-                {
-                  "type": "move",
-                  "target": "this-unit",
-                  "modifier": {
-                    "move_type": "ingress"
-                  }
-                }
-              ]
+              "type": "set-up",
+              "target": "this-unit",
+              "modifier": {
+                "to": "strategic-reserves",
+                "arrives": "next-movement-phase",
+                "allow_first_round": true
+              }
             }
           }
         }
@@ -6422,8 +6412,8 @@
           ]
         },
         "count": {
-          "min": 1,
-          "max": 1
+          "min": 0,
+          "max": 3
         }
       },
       "effect": {

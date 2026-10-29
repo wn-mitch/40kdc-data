@@ -7853,10 +7853,11 @@
           "steps": [
             {
               "type": "permission",
-              "target": "this-unit",
+              "target": "selected-unit",
               "modifier": {
                 "activity": "embark",
-                "allow": true
+                "allow": true,
+                "into": "this-unit"
               }
             },
             {
@@ -15847,8 +15848,8 @@
           ]
         },
         "count": {
-          "min": 1,
-          "max": 1
+          "min": 0,
+          "max": 3
         }
       },
       "effect": {

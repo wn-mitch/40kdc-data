@@ -1115,13 +1115,13 @@
     "usage": {
       "frequency": "n-per-battle",
       "count": 1,
-      "per": "unit"
+      "per": "model"
     },
     "trigger": {
       "event": "damage-allocated"
     },
     "expected": {
-      "text": "When damage is allocated, once per battle per unit, each time an attack is allocated to this model, change the Damage of that attack to 0."
+      "text": "When damage is allocated, once per battle per model, each time an attack is allocated to this model, change the Damage of that attack to 0."
     }
   },
   {
@@ -1749,23 +1749,13 @@
               ]
             },
             "effect": {
-              "type": "sequence",
-              "steps": [
-                {
-                  "type": "set-up",
-                  "target": "this-unit",
-                  "modifier": {
-                    "to": "strategic-reserves"
-                  }
-                },
-                {
-                  "type": "move",
-                  "target": "this-unit",
-                  "modifier": {
-                    "move_type": "ingress"
-                  }
-                }
-              ]
+              "type": "set-up",
+              "target": "this-unit",
+              "modifier": {
+                "to": "strategic-reserves",
+                "arrives": "next-movement-phase",
+                "allow_first_round": true
+              }
             }
           }
         }
@@ -1775,7 +1765,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "-> At the end of the Fight phase: while the unit is engaged, the unit can Fall Back up to D6\".\n-> At the end of your opponent's turn, you may use this ability: while the unit is not within 3\" of an enemy unit, the unit can be placed into Strategic Reserves; the unit can make an Ingress move."
+      "text": "-> At the end of the Fight phase: while the unit is engaged, the unit can Fall Back up to D6\".\n-> At the end of your opponent's turn, you may use this ability: while the unit is not within 3\" of an enemy unit, the unit can be placed into Strategic Reserves."
     }
   },
   {
@@ -3285,7 +3275,8 @@
               "target": "selected-unit",
               "modifier": {
                 "activity": "embark",
-                "allow": true
+                "allow": true,
+                "into": "this-unit"
               }
             },
             {
@@ -3317,7 +3308,7 @@
       "optional": true
     },
     "expected": {
-      "text": "At the end of the Fight phase, you may use this ability, while a unit embarked within the unit is not embarked:\n  -> Select one friendly DRUKHARI INFANTRY unit (excluding FLY units) if the selected unit contains at most 6 models and the selected unit is wholly within 6\" of the unit and the selected unit is unengaged:\n    -> That unit is eligible to embark.\n    -> That unit is eligible to embark even if it disembarked this turn."
+      "text": "At the end of the Fight phase, you may use this ability, while a unit embarked within the unit is not embarked:\n  -> Select one friendly DRUKHARI INFANTRY unit (excluding FLY units) if the selected unit contains at most 6 models and the selected unit is wholly within 6\" of the unit and the selected unit is unengaged:\n    -> That unit is eligible to embark into this unit.\n    -> That unit is eligible to embark even if it disembarked this turn."
     }
   },
   {
@@ -16680,7 +16671,13 @@
             },
             "effect": {
               "type": "return-models",
-              "target": "this-unit",
+              "target": {
+                "level": "model",
+                "member_of": "this-unit",
+                "all_of": [
+                  "DEATH KORPS TROOPERS"
+                ]
+              },
               "modifier": {
                 "count": "D3"
               }
@@ -16703,7 +16700,13 @@
             },
             "effect": {
               "type": "return-models",
-              "target": "this-unit",
+              "target": {
+                "level": "model",
+                "member_of": "this-unit",
+                "all_of": [
+                  "DEATH KORPS TROOPERS"
+                ]
+              },
               "modifier": {
                 "count": "D3+1"
               }
@@ -16737,7 +16740,7 @@
       "optional": true
     },
     "expected": {
-      "text": "At the start of your Command phase, you may use this ability, while the unit is below its starting strength:\n  -> Unless at least 2 models in this unit are equipped with the Death Korps Medi Pack wargear, return D3 destroyed models to the unit, each with its full wounds remaining.\n  -> If at least 2 models in this unit are equipped with the Death Korps Medi Pack wargear, return D3+1 destroyed models to the unit, each with its full wounds remaining."
+      "text": "At the start of your Command phase, you may use this ability, while the unit is below its starting strength:\n  -> Unless at least 2 models in this unit are equipped with the Death Korps Medi Pack wargear, return D3 destroyed DEATH KORPS TROOPERS models to the unit, each with its full wounds remaining.\n  -> If at least 2 models in this unit are equipped with the Death Korps Medi Pack wargear, return D3+1 destroyed DEATH KORPS TROOPERS models to the unit, each with its full wounds remaining."
     }
   },
   {
