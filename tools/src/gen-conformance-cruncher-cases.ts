@@ -501,24 +501,27 @@ export function canonicalCriticalWoundCases(ds: Dataset) {
   const apImprove = onCritical({ type: "stat-modifier", target: "this-unit", modifier: { stat: "AP", operation: "improve", value: 2 } });
   const damageAdd = onCritical({ type: "stat-modifier", target: "this-unit", modifier: { stat: "D", operation: "add", value: 1 } });
   const devastating = { type: "weapon-ability-grant", target: "this-unit", modifier: { keywords: [{ keyword_id: "devastating-wounds" }] } };
+  const sustained = { type: "weapon-ability-grant", target: "this-unit", modifier: { keywords: [{ keyword_id: "sustained-hits", parameters: { value: 1 } }] } };
   const defender: Buff = { source: { kind: "ability", abilityId: "fabricated-defender", abilityKind: "unit" }, contribution: { type: "reroll-one", roll: "save" } };
   const damageRerollOne: Buff = { source: { kind: "ability", abilityId: "fabricated-damage-reroll", abilityKind: "unit" }, contribution: { type: "reroll-one", roll: "damage" } };
-  const inputs: { id: string; effects: unknown[]; extra?: Buff[]; weaponId?: string }[] = [
+  const inputs: { id: string; effects: unknown[]; extra?: Buff[]; weaponId?: string; unitId?: string }[] = [
     { id: "ap", effects: [apImprove] },
     { id: "damage", effects: [damageAdd] },
     { id: "ap-and-damage", effects: [apImprove, damageAdd] },
     { id: "devastating-damage", effects: [devastating, damageAdd] },
+    // A critical hit's extra hit wounds after it: normal and critical Damage land in hit order,
+    // which decides kills against models whose Wounds neither Damage divides.
+    { id: "sustained-damage", effects: [sustained, damageAdd], unitId: "aggressor-squad" },
     { id: "ap-with-save-reroll-one", effects: [apImprove], extra: [defender] },
     // D1 and D2 on a critical wound: two fixed Damage rolls leave one re-roll nothing to gain.
     { id: "damage-with-damage-reroll-one", effects: [damageAdd], extra: [damageRerollOne] },
     // D6 and D6+1: each roll gains against its own kind's mean.
     { id: "variable-damage-with-damage-reroll-one", effects: [damageAdd], extra: [damageRerollOne], weaponId: "multi-melta" },
   ];
-  const unit = ds.units.getAny("intercessor-squad");
-  if (!unit) throw new Error("canonical critical-wound corpus requires intercessor-squad");
   return inputs.map((row) => {
     const weapon = ds.weapons.getAny(row.weaponId ?? "bolt-rifle");
-    if (!weapon) throw new Error(`canonical critical-wound ${row.id}: weapon ${row.weaponId ?? "bolt-rifle"} is missing`);
+    const unit = ds.units.getAny(row.unitId ?? "intercessor-squad");
+    if (!weapon || !unit) throw new Error(`canonical critical-wound ${row.id}: weapon or target is missing`);
     const context: EngineContext = { phase: "shooting", withinHalfRange: true, attackerStationary: false };
     const buffs = [...row.effects.flatMap((effect) => {
       const translated = effectToBuffs(effect, source, context);

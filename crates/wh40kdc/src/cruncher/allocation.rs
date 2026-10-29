@@ -483,10 +483,79 @@ pub fn allocate_model_with(
     state[dead - 1] = 1.0;
     let mut finals = vec![0.0; dead + 1];
     if let Some(critical) = model.critical_wound.as_ref().filter(|_| !model.devastating) {
-        // Critical wounds with their own save and Damage land in attack order, so the
-        // allocation steps one attack at a time: each attack's normal wounds, then its
-        // critical ones.
+        // Critical wounds with their own save and Damage land in the order their hits wound, and
+        // a normal and a critical wound of different Damage do not commute: the allocation steps
+        // one hit at a time, an attack's critical hit before the extra hits Sustained Hits gives it.
         let critical_lost = wounds_lost(&critical.damage, model.wound_lost)?;
+        let to_normal = (model.wound.pass - model.wound.crit) * model.unsaved;
+        let to_critical = model.wound.crit * critical.unsaved;
+        let normal_hit = if model.torrent {
+            1.0
+        } else {
+            model.hit.pass - model.hit.crit
+        };
+        let crit_hit = if model.torrent { 0.0 } else { model.hit.crit };
+        let mut extras = match &model.sustained_stat {
+            None => vec![(0.0, 1.0)],
+            Some(stat) => quantity_distribution(stat)?,
+        };
+        extras.sort_by(|a, b| a.0.total_cmp(&b.0));
+        let mut extra_counts = Vec::with_capacity(extras.len());
+        for &(count, probability) in &extras {
+            extra_counts.push((integral(count, "Sustained Hits")?, probability));
+        }
+        let blend = |parts: &[(f64, &[f64])]| -> Vec<f64> {
+            let mut out = vec![0.0; dead + 1];
+            for &(weight, from) in parts {
+                if weight > 0.0 {
+                    for (id, &q) in from.iter().enumerate() {
+                        out[id] += weight * q;
+                    }
+                }
+            }
+            out
+        };
+        let wound_roll = |from: &[f64]| -> Vec<f64> {
+            let normal_after = step(from, &normal, true);
+            let critical_after = step(from, &critical_lost, true);
+            blend(&[
+                (1.0 - to_normal - to_critical, from),
+                (to_normal, &normal_after),
+                (to_critical, &critical_after),
+            ])
+        };
+        // Lethal Hits: the critical hit wounds automatically, a normal wound that takes the save.
+        let first_wound = |from: &[f64]| -> Vec<f64> {
+            if model.lethal {
+                let normal_after = step(from, &normal, true);
+                blend(&[(1.0 - model.unsaved, from), (model.unsaved, &normal_after)])
+            } else {
+                wound_roll(from)
+            }
+        };
+        let attack = |from: &[f64]| -> Vec<f64> {
+            let hit = wound_roll(from);
+            let mut crits: Vec<(f64, Vec<f64>)> = Vec::new();
+            if crit_hit > 0.0 {
+                let mut after = first_wound(from);
+                let mut done = 0;
+                for &(count, probability) in &extra_counts {
+                    while done < count {
+                        after = wound_roll(&after);
+                        done += 1;
+                    }
+                    crits.push((crit_hit * probability, after.clone()));
+                }
+            }
+            let mut parts: Vec<(f64, &[f64])> =
+                vec![(1.0 - normal_hit - crit_hit, from), (normal_hit, &hit)];
+            parts.extend(
+                crits
+                    .iter()
+                    .map(|(weight, state)| (*weight, state.as_slice())),
+            );
+            blend(&parts)
+        };
         for attacks in 0..=most {
             let weight = counts.get(attacks);
             if weight > 0.0 {
@@ -497,25 +566,7 @@ pub fn allocate_model_with(
             if attacks == most {
                 break;
             }
-            let mut next = vec![0.0; dead + 1];
-            let mut after_normal = state.clone();
-            for (normal_events, row) in per.iter().enumerate() {
-                if normal_events > 0 {
-                    after_normal = step(&after_normal, &normal, true);
-                }
-                let mut after = after_normal.clone();
-                for (critical_events, &p) in row.iter().enumerate() {
-                    if critical_events > 0 {
-                        after = step(&after, &critical_lost, true);
-                    }
-                    if p > 0.0 {
-                        for (id, &q) in after.iter().enumerate() {
-                            next[id] += p * q;
-                        }
-                    }
-                }
-            }
-            state = next;
+            state = attack(&state);
         }
         return Ok(summarise(&finals, models, wounds, uses, cells, dead));
     }

@@ -3,6 +3,7 @@ package wh40kdc
 import (
 	"fmt"
 	"math"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -471,12 +472,80 @@ func AllocateModelWith(model *AttackModel, defences AllocationDefences) (Allocat
 	state[dead-1] = 1
 	final := make([]float64, dead+1)
 	if model.CriticalWound != nil && !model.Devastating {
-		// Critical wounds with their own save and Damage land in attack order, so the
-		// allocation steps one attack at a time: each attack's normal wounds, then its
-		// critical ones.
+		// Critical wounds with their own save and Damage land in the order their hits
+		// wound, and a normal and a critical wound of different Damage do not commute:
+		// the allocation steps one hit at a time, an attack's critical hit before the
+		// extra hits Sustained Hits gives it.
 		criticalLost, err := woundsLost(model.CriticalWound.Damage, model.WoundLost)
 		if err != nil {
 			return AllocationOutput{}, err
+		}
+		toNormal := (model.WoundPass - model.WoundCrit) * model.Unsaved
+		toCritical := model.WoundCrit * model.CriticalWound.Unsaved
+		normalHit, critHit := model.HitPass-model.HitCrit, model.HitCrit
+		if model.Torrent {
+			normalHit, critHit = 1, 0
+		}
+		extras, err := optionalQuantity(model.SustainedStat)
+		if err != nil {
+			return AllocationOutput{}, err
+		}
+		extras = append([]DamageOutcome(nil), extras...)
+		sort.SliceStable(extras, func(i, j int) bool { return extras[i].Value < extras[j].Value })
+		type extraCount struct {
+			count       int
+			probability float64
+		}
+		extraCounts := make([]extraCount, 0, len(extras))
+		for _, extra := range extras {
+			count, err := integral(extra.Value, "Sustained Hits")
+			if err != nil {
+				return AllocationOutput{}, err
+			}
+			extraCounts = append(extraCounts, extraCount{count, extra.Probability})
+		}
+		type part struct {
+			weight float64
+			state  []float64
+		}
+		blend := func(parts []part) []float64 {
+			out := make([]float64, dead+1)
+			for _, p := range parts {
+				if p.weight > 0 {
+					for id, q := range p.state {
+						out[id] += p.weight * q
+					}
+				}
+			}
+			return out
+		}
+		woundRoll := func(from []float64) []float64 {
+			return blend([]part{
+				{1 - toNormal - toCritical, from},
+				{toNormal, step(from, normal, true)},
+				{toCritical, step(from, criticalLost, true)},
+			})
+		}
+		// Lethal Hits: the critical hit wounds automatically, a normal wound that takes the save.
+		firstWound := func(from []float64) []float64 {
+			if model.Lethal {
+				return blend([]part{{1 - model.Unsaved, from}, {model.Unsaved, step(from, normal, true)}})
+			}
+			return woundRoll(from)
+		}
+		attack := func(from []float64) []float64 {
+			parts := []part{{1 - normalHit - critHit, from}, {normalHit, woundRoll(from)}}
+			if critHit > 0 {
+				after := firstWound(from)
+				done := 0
+				for _, extra := range extraCounts {
+					for ; done < extra.count; done++ {
+						after = woundRoll(after)
+					}
+					parts = append(parts, part{critHit * extra.probability, after})
+				}
+			}
+			return blend(parts)
 		}
 		for attacks := 0; attacks <= most; attacks++ {
 			if weight := counts[attacks]; weight > 0 {
@@ -487,25 +556,7 @@ func AllocateModelWith(model *AttackModel, defences AllocationDefences) (Allocat
 			if attacks == most {
 				break
 			}
-			next := make([]float64, dead+1)
-			afterNormal := state
-			for normalEvents, row := range per {
-				if normalEvents > 0 {
-					afterNormal = step(afterNormal, normal, true)
-				}
-				after := afterNormal
-				for criticalEvents, p := range row {
-					if criticalEvents > 0 {
-						after = step(after, criticalLost, true)
-					}
-					if p > 0 {
-						for id, q := range after {
-							next[id] += p * q
-						}
-					}
-				}
-			}
-			state = next
+			state = attack(state)
 		}
 		return summariseAllocation(final, models, wounds, uses, cells, dead), nil
 	}

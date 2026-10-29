@@ -259,3 +259,55 @@ describe("exact allocation of what it does not model", () => {
     expect(() => allocate(input([mortal]), ds)).toThrow(/mortal wounds inflicted on a roll not modelled/u);
   });
 });
+
+describe("allocation order of normal and critical wounds", () => {
+  /**
+   * Exact enumeration, hit by hit: each attack misses, hits, or critically hits (then one extra
+   * Sustained Hits hit follows it); every hit wounds normally, critically, or not, and each wound
+   * goes unsaved and lands on the damaged model before the next hit is rolled. Fixed Damage only.
+   */
+  function enumerate(attack: AttackModel, attacks: number): { damage: number; kills: number } {
+    const normalDamage = attack.damage[0]!.value;
+    const criticalDamage = attack.criticalWound!.damage[0]!.value;
+    const toNormal = (attack.wound.pass - attack.wound.crit) * attack.unsaved;
+    const toCritical = attack.wound.crit * attack.criticalWound!.unsaved;
+    type State = { alive: number; left: number; dealt: number };
+    const land = (state: State, damage: number): State => {
+      if (state.alive === 0) return state;
+      const removed = Math.min(damage, state.left);
+      return state.left - removed === 0
+        ? { alive: state.alive - 1, left: attack.wounds, dealt: state.dealt + removed }
+        : { alive: state.alive, left: state.left - removed, dealt: state.dealt + removed };
+    };
+    const hit = (states: Array<[State, number]>): Array<[State, number]> => states.flatMap(([state, p]) => [
+      [state, p * (1 - toNormal - toCritical)] as [State, number],
+      [land(state, normalDamage), p * toNormal] as [State, number],
+      [land(state, criticalDamage), p * toCritical] as [State, number],
+    ]);
+    let states: Array<[State, number]> = [[{ alive: attack.modelCount, left: attack.wounds, dealt: 0 }, 1]];
+    const normalHit = attack.hit.pass - attack.hit.crit;
+    for (let index = 0; index < attacks; index += 1) {
+      states = [
+        ...states.map(([state, p]) => [state, p * (1 - attack.hit.pass)] as [State, number]),
+        ...hit(states.map(([state, p]) => [state, p * normalHit] as [State, number])),
+        ...hit(hit(states.map(([state, p]) => [state, p * attack.hit.crit] as [State, number]))),
+      ];
+    }
+    return {
+      damage: states.reduce((sum, [state, p]) => sum + p * state.dealt, 0),
+      kills: states.reduce((sum, [state, p]) => sum + p * (attack.modelCount - state.alive), 0),
+    };
+  }
+
+  it("lands each Sustained Hits wound in turn, a critical one not deferred behind the normal ones", () => {
+    const attack = model({
+      attacksStat: 2, hit: { pass: 1 / 2, crit: 1 / 6 }, sustainedStat: 1, wound: { pass: 1 / 2, crit: 1 / 6 },
+      damage: [{ value: 1, probability: 1 }], criticalWound: { unsaved: 1, damage: [{ value: 2, probability: 1 }] },
+      wounds: 3, modelCount: 2,
+    });
+    const exact = enumerate(attack, 2);
+    const out = allocateModel(attack);
+    expect(out.damageDealt).toBeCloseTo(exact.damage, 12);
+    expect(out.modelsDestroyed).toBeCloseTo(exact.kills, 12);
+  });
+});

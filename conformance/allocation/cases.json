@@ -158,15 +158,15 @@
     "name": "Canonical critical wound: ap",
     "cruncher_case": "canonical-critical-wound-ap.json",
     "expected": {
-      "damageDealt": 5.128075358102957,
-      "modelsDestroyed": 2.5640376790514785,
+      "damageDealt": 5.128075358102958,
+      "modelsDestroyed": 2.564037679051479,
       "modelsDestroyedDistribution": [
-        0.04973502207609718,
+        0.0497350220760972,
         0.17407257726634012,
-        0.27416430919448564,
+        0.2741643091944857,
         0.2558866885815199,
         0.1567305967561809,
-        0.08941080612537677
+        0.0894108061253768
       ]
     }
   },
@@ -174,15 +174,15 @@
     "name": "Canonical critical wound: damage",
     "cruncher_case": "canonical-critical-wound-damage.json",
     "expected": {
-      "damageDealt": 4.418834418205261,
-      "modelsDestroyed": 2.20941720910263,
+      "damageDealt": 4.418834418205257,
+      "modelsDestroyed": 2.2094172091026283,
       "modelsDestroyedDistribution": [
-        0.08101311022241219,
-        0.23146602920689185,
-        0.297599180408861,
-        0.22674223269246543,
-        0.11337111634623268,
-        0.0498083311231379
+        0.08101311022241206,
+        0.2314660292068916,
+        0.29759918040886063,
+        0.22674223269246524,
+        0.1133711163462326,
+        0.049808331123137886
       ]
     }
   },
@@ -199,6 +199,20 @@
         0.2636147303023877,
         0.177432991549684,
         0.11481418053446539
+      ]
+    }
+  },
+  {
+    "name": "Canonical critical wound: sustained-damage",
+    "cruncher_case": "canonical-critical-wound-sustained-damage.json",
+    "expected": {
+      "damageDealt": 3.996115162378015,
+      "modelsDestroyed": 1.0799160341490066,
+      "modelsDestroyedDistribution": [
+        0.28194891152615426,
+        0.4279498043798863,
+        0.21833762251275665,
+        0.07176366158120237
       ]
     }
   },

@@ -219,24 +219,42 @@ export function allocateModel(model: AttackModel, defences: AllocationDefences =
   state[dead - 1] = 1;
   const final = new Array<number>(dead + 1).fill(0);
   if (model.criticalWound !== undefined && !model.devastating) {
-    // Critical wounds with their own save and Damage land in attack order, so the allocation steps
-    // one attack at a time: each attack's normal wounds, then its critical ones.
+    // Critical wounds with their own save and Damage land in the order their hits wound, and a
+    // normal and a critical wound of different Damage do not commute: the allocation steps one
+    // hit at a time, an attack's critical hit before the extra hits Sustained Hits gives it.
     const critical = woundsLost(model.criticalWound.damage, model.woundLost);
+    const toNormal = (model.wound.pass - model.wound.crit) * model.unsaved;
+    const toCritical = model.wound.crit * model.criticalWound.unsaved;
+    const normalHit = model.torrent ? 1 : model.hit.pass - model.hit.crit;
+    const critHit = model.torrent ? 0 : model.hit.crit;
+    const extras = model.sustainedStat == null ? [[0, 1] as [number, number]] : quantityDistribution(model.sustainedStat);
+    const blend = (parts: ReadonlyArray<readonly [number, number[]]>): number[] => {
+      const out = new Array<number>(dead + 1).fill(0);
+      for (const [weight, from] of parts) if (weight > 0) from.forEach((q, id) => { out[id]! += weight * q; });
+      return out;
+    };
+    const woundRoll = (from: number[]): number[] =>
+      blend([[1 - toNormal - toCritical, from], [toNormal, step(from, normal, true)], [toCritical, step(from, critical, true)]]);
+    // Lethal Hits: the critical hit wounds automatically, a normal wound that takes the save.
+    const firstWound = (from: number[]): number[] =>
+      model.lethal ? blend([[1 - model.unsaved, from], [model.unsaved, step(from, normal, true)]]) : woundRoll(from);
+    const attack = (from: number[]): number[] => {
+      const parts: Array<readonly [number, number[]]> = [[1 - normalHit - critHit, from], [normalHit, woundRoll(from)]];
+      if (critHit > 0) {
+        let after = firstWound(from);
+        let done = 0;
+        for (const [count, probability] of [...extras].sort((left, right) => left[0] - right[0])) {
+          for (; done < integral(count, "Sustained Hits"); done += 1) after = woundRoll(after);
+          parts.push([critHit * probability, after]);
+        }
+      }
+      return blend(parts);
+    };
     for (let attacks = 0; attacks <= most; attacks += 1) {
       const weight = counts.get(attacks) ?? 0;
       if (weight > 0) state.forEach((q, id) => { final[id]! += weight * q; });
       if (attacks === most) break;
-      const next = new Array<number>(dead + 1).fill(0);
-      let afterNormal = state;
-      per.forEach((row, normalEvents) => {
-        if (normalEvents > 0) afterNormal = step(afterNormal, normal, true);
-        let after = afterNormal;
-        row.forEach((p, criticalEvents) => {
-          if (criticalEvents > 0) after = step(after, critical, true);
-          if (p > 0) after.forEach((q, id) => { next[id]! += p * q; });
-        });
-      });
-      state = next;
+      state = attack(state);
     }
   } else {
     allocateEvents();

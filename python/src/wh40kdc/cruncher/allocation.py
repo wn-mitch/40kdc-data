@@ -324,10 +324,56 @@ def allocate_model(
     final = [0.0] * (dead + 1)
     critical = model.get("criticalWound")
     if critical is not None and not model["devastating"]:
-        # Critical wounds with their own save and Damage land in attack order, so the
-        # allocation steps one attack at a time: each attack's normal wounds, then its
-        # critical ones.
+        # Critical wounds with their own save and Damage land in the order their hits wound, and
+        # a normal and a critical wound of different Damage do not commute: the allocation steps
+        # one hit at a time, an attack's critical hit before the extra hits Sustained Hits gives it.
         critical_lost = _wounds_lost(critical["damage"], model["woundLost"])
+        to_normal = (model["wound"]["pass"] - model["wound"]["crit"]) * model["unsaved"]
+        to_critical = model["wound"]["crit"] * critical["unsaved"]
+        normal_hit = 1 if model["torrent"] else model["hit"]["pass"] - model["hit"]["crit"]
+        crit_hit = 0 if model["torrent"] else model["hit"]["crit"]
+        extras = sorted(
+            _optional_distribution(model["sustainedStat"]), key=lambda extra: extra[0]
+        )
+        extra_counts = [(_integral(count, "Sustained Hits"), p) for count, p in extras]
+
+        def blend(parts: list[tuple[float, list[float]]]) -> list[float]:
+            out = [0.0] * (dead + 1)
+            for weight, from_ in parts:
+                if weight > 0:
+                    for id_, q in enumerate(from_):
+                        out[id_] += weight * q
+            return out
+
+        def wound_roll(from_: list[float]) -> list[float]:
+            return blend(
+                [
+                    (1 - to_normal - to_critical, from_),
+                    (to_normal, step(from_, normal, True)),
+                    (to_critical, step(from_, critical_lost, True)),
+                ]
+            )
+
+        def first_wound(from_: list[float]) -> list[float]:
+            # Lethal Hits: the critical hit wounds automatically, a normal wound taking the save.
+            if model["lethal"]:
+                return blend(
+                    [(1 - model["unsaved"], from_), (model["unsaved"], step(from_, normal, True))]
+                )
+            return wound_roll(from_)
+
+        def attack(from_: list[float]) -> list[float]:
+            parts = [(1 - normal_hit - crit_hit, from_), (normal_hit, wound_roll(from_))]
+            if crit_hit > 0:
+                after = first_wound(from_)
+                done = 0
+                for count, probability in extra_counts:
+                    while done < count:
+                        after = wound_roll(after)
+                        done += 1
+                    parts.append((crit_hit * probability, after))
+            return blend(parts)
+
         for attacks in range(most + 1):
             weight = counts.get(attacks, 0.0)
             if weight > 0:
@@ -335,19 +381,7 @@ def allocate_model(
                     final[id_] += weight * q
             if attacks == most:
                 break
-            nxt = [0.0] * (dead + 1)
-            after_normal = state
-            for normal_events, row in enumerate(per):
-                if normal_events > 0:
-                    after_normal = step(after_normal, normal, True)
-                after = after_normal
-                for critical_events, p in enumerate(row):
-                    if critical_events > 0:
-                        after = step(after, critical_lost, True)
-                    if p > 0:
-                        for id_, q in enumerate(after):
-                            nxt[id_] += p * q
-            state = nxt
+            state = attack(state)
         return _summarise(final, models, wounds, uses, cells, dead)
     events = _events(per, counts, most)
     # Devastating Wounds' mortal wounds deal a critical wound's own Damage when it has one.

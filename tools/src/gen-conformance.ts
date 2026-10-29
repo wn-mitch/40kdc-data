@@ -1184,6 +1184,7 @@ const ALLOCATION_CASE_FILES = [
   "canonical-critical-wound-ap.json",
   "canonical-critical-wound-damage.json",
   "canonical-critical-wound-devastating-damage.json",
+  "canonical-critical-wound-sustained-damage.json",
 ];
 
 /**
@@ -4474,11 +4475,12 @@ genNormalize();
 genRosters();
 genLinkedApi();
 genAttribution();
-genAllocation();
 genScoringTranslation();
 genEffectTranslation();
 genResolverDslCases();
 genCanonicalCruncherCases();
+// After the canonical cruncher cases, some of which it allocates.
+genAllocation();
 genMortalSourceCases();
 genScoring();
 genTerrainResolver();
