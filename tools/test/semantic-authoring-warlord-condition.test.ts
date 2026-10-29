@@ -261,7 +261,7 @@ describe("Army construction names no designation but the Warlord (T4)", () => {
 });
 
 describe("A trigger sentence after a Warlord-gated list (7163 shape)", () => {
-  it("refuses the record instead of gating the trigger's ability-part on the Warlord", () => {
+  it("gates the list on the Warlord and leaves the trigger sentence ungated", () => {
     const text = "If a friendly Alpha Officer model is your Warlord, friendly Beta units have:\rBattleline.\r+1 OC.\rWhen a friendly Alpha unit is selected to shoot, that unit's attacks have +1 to hit rolls.";
     const list = placed(text,
       ["If a", "army-includes", { quantifier: "some", with: "following-filter" }],
@@ -272,7 +272,18 @@ describe("A trigger sentence after a Warlord-gated list (7163 shape)", () => {
       ["+1 OC", "characteristic-modifier", { subject: "antecedent", characteristics: ["OC"], operation: "improve", value: 1 }],
       ["friendly Alpha unit", "unit-filter", { side: "friendly", keywords: ["ALPHA"] }],
       ["is selected to shoot", "event", { kind: "selected", to: "shoot" }],
-      ["+1 to hit rolls", "roll-modifier", { roll: "hit", operation: "add", value: 1 }]);
-    expect(errorsOf(list, text).join()).toMatch(/separate rule/);
+      ["+1 to hit rolls", "roll-modifier", { roll: "hit", operation: "add", value: 1, subject: "antecedent" }]);
+    const [gated, part] = compiledEffect(list, text).effect.steps;
+    expect(gated).toMatchObject({
+      type: "conditional",
+      condition: { type: "army-includes", parameters: { filter: { all_of: ["ALPHA", "OFFICER"], level: "model", designated: "warlord" } } },
+      effect: { type: "sequence", steps: [{ type: "keyword-grant", target: { owner: "friendly", all_of: ["BETA"] } }, { type: "stat-modifier" }] },
+    });
+    // The moment after the list names its own units: no Warlord gate, no Beta filter.
+    expect(part).toEqual({
+      type: "ability-part",
+      trigger: { event: "selected", filter: { to: "shoot" }, subject: { owner: "friendly", all_of: ["ALPHA"] } },
+      effect: { type: "roll-modifier", target: "event-subject", modifier: { roll: "hit", operation: "add", value: 1 } },
+    });
   });
 });

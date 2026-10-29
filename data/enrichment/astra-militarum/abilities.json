@@ -9003,9 +9003,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "source_digest": "ef440eb82f1ab8e1d49305403e935e4ed15980f3f1e68c8197e54696e1879518",
+    "source_digest": "bad110cfb3a3f88420b5cf504ad6951d1926c970a5f1b796d1fa3735e3aceddd",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -9017,57 +9017,89 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "keyword-grant",
-          "target": {
-            "owner": "friendly",
-            "all_of": [
-              "TEMPESTUS SCIONS"
-            ]
-          },
-          "modifier": {
-            "keywords": [
-              "BATTLELINE"
-            ]
-          }
-        },
-        {
-          "type": "stat-modifier",
-          "target": {
-            "owner": "friendly",
-            "all_of": [
-              "TEMPESTUS SCIONS"
-            ]
-          },
-          "modifier": {
-            "stat": "OC",
-            "operation": "add",
-            "value": 1
-          }
-        },
-        {
           "type": "conditional",
           "condition": {
-            "type": "happened",
+            "type": "army-includes",
             "parameters": {
-              "event": "set-up",
-              "subject": "recipient",
-              "window": "turn"
+              "filter": {
+                "owner": "friendly",
+                "all_of": [
+                  "MILITARUM TEMPESTUS",
+                  "OFFICER"
+                ],
+                "level": "model",
+                "designated": "warlord"
+              }
             }
           },
           "effect": {
-            "type": "roll-modifier",
-            "target": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "keyword-grant",
+                "target": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "TEMPESTUS SCIONS"
+                  ]
+                },
+                "modifier": {
+                  "keywords": [
+                    "BATTLELINE"
+                  ]
+                }
+              },
+              {
+                "type": "stat-modifier",
+                "target": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "TEMPESTUS SCIONS"
+                  ]
+                },
+                "modifier": {
+                  "stat": "OC",
+                  "operation": "improve",
+                  "value": 1
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "selected",
+            "filter": {
+              "to": "shoot"
+            },
+            "subject": {
               "owner": "friendly",
               "all_of": [
                 "MILITARUM TEMPESTUS"
               ]
+            }
+          },
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "happened",
+              "parameters": {
+                "subject": "event-subject",
+                "event": "set-up",
+                "window": "turn"
+              }
             },
-            "modifier": {
-              "roll": "hit",
-              "operation": "add",
-              "value": 1,
-              "weapons": {
-                "type": "ranged"
+            "effect": {
+              "type": "roll-modifier",
+              "target": "event-subject",
+              "modifier": {
+                "roll": "hit",
+                "operation": "add",
+                "value": 1,
+                "weapons": {
+                  "type": "ranged"
+                }
               }
             }
           }
@@ -9075,15 +9107,12 @@
       ]
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
         "ASTRA MILITARUM"
       ]
-    },
-    "trigger": {
-      "event": "set-up"
     }
   },
   {

@@ -231,10 +231,10 @@ export function sentenceSegments(leaves: readonly CompileLeaf[], sourceText: str
   }
   if (!hasEffect(parts.at(-1)!) && parts.length > 1) parts.splice(-2, 2, [...parts.at(-2)!, ...parts.at(-1)!]);
   if (parts.length < 2) return null;
-  // A Warlord gate in the header ("If a friendly X model is your Warlord, … have:") would gate every
-  // part, and a moment that follows the list is not gated by the army. The ability stays one part,
-  // which gatesTriggerOnWarlord (compile-warlord-test.ts) refuses.
-  if (header.some((leaf) => leaf.family_id === "designated-filter" && leaf.parameters.tag === "warlord")) return null;
+  // A Warlord gate in the header ("If a friendly X model is your Warlord, friendly Y units have:")
+  // gates the list it introduces (the first part) only: a moment that follows the list names its
+  // own units and is not gated by the army.
+  const warlordHeader = header.some((leaf) => leaf.family_id === "designated-filter" && leaf.parameters.tag === "warlord");
   // An army-construction rule is about the list, not the units a header names. An attack frame in the
   // header gates the list it introduces (the first part) only: a later part with its own moment
   // ("When this unit destroys a …") is not one of that frame's attacks.
@@ -268,7 +268,7 @@ export function sentenceSegments(leaves: readonly CompileLeaf[], sourceText: str
   };
   const factionFor = (part: CompileLeaf[], at: number) => at > 0 && !part.some((leaf) => leaf.family_id === "army-faction") ? factionFrame : [];
   return parts.map((part, at) => armyOnly(part) ? part
-    : (attackFrame || labelled.has(part[0]!)) && at > 0 ? [...factionFor(part, at), ...frameFor(part, at, false), ...part]
+    : (attackFrame || warlordHeader || labelled.has(part[0]!)) && at > 0 ? [...factionFor(part, at), ...frameFor(part, at, false), ...part]
     : [...header, ...factionFor(part, at), ...frameFor(part, at, true), ...part]);
 }
 
