@@ -50,3 +50,21 @@ describe("complete lever selection legality", () => {
     expect(legal(levers, [ids[0], "provider"], [])).toBe(false);
   });
 });
+
+describe("capacity levers keep their option gate", () => {
+  it("still excludes the stance option after its cap raise resolves", async () => {
+    const { resolveCapRaises, resolveOptionRequirements } = await import("../src/data/lever-providers.js");
+    const source = { kind: "manual" as const, label: "test" };
+    const group = { id: "stance?stance", label: "Stance", maxActivations: 1, abilityId: "stance" };
+    const option = (id: string) => ({ id: `stance#${id}`, label: id, buffs: [], enabled: false, source, group: group.id });
+    const capacity = { id: "capacity", label: "Pick both", buffs: [], enabled: false, source };
+    const levers = [option("assault"), option("devastator"), capacity];
+    const capRaises = new Map([[capacity, { ability: "stance", by: 1, allocation: "choose-one-option" as const }]]);
+    const requirements = new Map([[capacity, { excludesOption: { ability_id: "stance", option_id: "assault" } }]]);
+    const resolved = resolveOptionRequirements(resolveCapRaises(levers, capRaises, [group], requirements), requirements, [group], (o) => o.option_id);
+    const raised = resolved.find((lever) => lever.id === "capacity")!;
+    expect(raised).toMatchObject({ raisesCap: { group: group.id, by: 1 }, excludesOption: "stance#assault" });
+    expect(isLegalLeverSelection(resolved, [group], new Set(["capacity", "stance#assault"]))).toBe(false);
+    expect(isLegalLeverSelection(resolved, [group], new Set(["capacity", "stance#devastator"]))).toBe(true);
+  });
+});

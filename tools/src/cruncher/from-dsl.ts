@@ -66,6 +66,11 @@ export type UnsupportedFragment = {
    * fragment {@link effectToBuffs} returns carries it.
    */
   scope?: UnsupportedScope;
+  /**
+   * For a record grant inside a `choice` option: the lever that picks the option and the choice's
+   * pool. The consumer that expands the grant keeps the granted record behind that pick.
+   */
+  choice?: { lever: string; label: string; group: ActivatableGroupRef };
 };
 
 const stochasticDiceGatedReason = "dice-gated effect: stochastic; not expressible as a buff";
@@ -1991,16 +1996,19 @@ function enumerateChoice(
   out: EffectTranslation,
 ): void {
   const options = Array.isArray(node.options) ? node.options : [];
+  const group = { id: `${opts.abilityId}?choice`, maxActivations: typeof node.max_choices === "number" ? node.max_choices : 1 };
   options.forEach((opt, i) => {
-    const { buffs, gate } = collectOptionBuffs(opt, source, opts, out.unsupported);
+    const diagnostics: UnsupportedFragment[] = [];
+    const { buffs, gate } = collectOptionBuffs(opt, source, opts, diagnostics);
+    const lever = `${opts.abilityId}?${i}`;
+    const label = buffs.length > 0 ? labelForBuffs(buffs) : `option ${i + 1}`;
+    // A record grant is expanded by its consumer, which must keep it behind this option's pick.
+    for (const item of diagnostics) {
+      const grant = isObject(item.effectFragment) && item.effectFragment.type === "ability-grant";
+      out.unsupported.push(grant && !item.choice ? { ...item, choice: { lever, label, group } } : item);
+    }
     if (buffs.length === 0) return;
-    out.activatable.push({
-      id: `${opts.abilityId}?${i}`,
-      label: labelForBuffs(buffs),
-      buffs,
-      ...stanceGateFields(gate),
-      group: { id: `${opts.abilityId}?choice`, maxActivations: typeof node.max_choices === "number" ? node.max_choices : 1 },
-    });
+    out.activatable.push({ id: lever, label, buffs, ...stanceGateFields(gate), group });
   });
 }
 

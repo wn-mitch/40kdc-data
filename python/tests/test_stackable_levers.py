@@ -592,3 +592,112 @@ def test_combined_toughness_reads_the_bodyguard_not_the_tougher_leader(dataset: 
     roles = {"ghazghkull-thraka": "bodyguard", "meganobz": "leader"}
     assert combined_toughness([ghazghkull, meganobz], roles) == 10
     assert combined_toughness([]) is None
+
+
+def test_record_grant_recovery_keeps_the_translators_refusals() -> None:
+    """Only a grant the translator admitted whole is expanded: an unsupported target condition or
+    a model-level recipient stays unsupported, as in TypeScript."""
+    from wh40kdc.data.lever_providers import granted_record_ids
+
+    admitted = 'effect type "ability-grant" is not modelled by the buff layer'
+
+    def grant(target: Any) -> dict[str, Any]:
+        return {"type": "ability-grant", "target": target, "modifier": {"ability": "rec"}}
+
+    def ids(reason: str, target: Any) -> list[str]:
+        translation = {"unsupported": [{"reason": reason, "effectFragment": grant(target)}]}
+        return [g["abilityId"] for g in granted_record_ids(translation)]
+
+    assert ids(admitted, "this-unit") == ["rec"]
+    assert ids(admitted, {"owner": "friendly"}) == ["rec"]
+    assert ids("conditional: cannot evaluate condition target-has-keyword", "this-unit") == []
+    assert ids(admitted, {"owner": "friendly", "level": "model"}) == []
+
+
+def test_capacity_lever_keeps_its_option_gate_through_cap_raise_resolution() -> None:
+    """Mirrors the TS lever-selection case: a cap raise gated on not picking a stance option."""
+    from wh40kdc.data.lever_providers import resolve_cap_raises, resolve_option_requirements
+
+    source = {"kind": "manual", "label": "test"}
+    group = {"id": "stance?stance", "label": "Stance", "maxActivations": 1, "abilityId": "stance"}
+
+    def option(name: str) -> dict[str, Any]:
+        return {
+            "id": f"stance#{name}",
+            "label": name,
+            "buffs": [],
+            "enabled": False,
+            "source": source,
+            "group": group["id"],
+        }
+
+    capacity = {
+        "id": "capacity",
+        "label": "Pick both",
+        "buffs": [],
+        "enabled": False,
+        "source": source,
+    }
+    levers = [option("assault"), option("devastator"), capacity]
+    cap_raises = {
+        id(capacity): (capacity, {"ability": "stance", "by": 1, "allocation": "choose-one-option"})
+    }
+    gate = {"excludesOption": {"ability_id": "stance", "option_id": "assault"}}
+    requirements = {id(capacity): (capacity, gate)}
+    resolved = resolve_option_requirements(
+        resolve_cap_raises(levers, cap_raises, [group], requirements),
+        requirements,
+        [group],
+        lambda o: o["option_id"],
+    )
+    raised = next(lever for lever in resolved if lever["id"] == "capacity")
+    assert raised["raisesCap"]["group"] == group["id"]
+    assert raised["excludesOption"] == "stance#assault"
+
+
+def test_choice_between_granted_records_keeps_each_behind_its_own_pick() -> None:
+    """Mirrors the TS case: neither record is enabled; each requires its option's pick, and the
+    picks share one pool of one."""
+    raw = army_raw()
+    raw["abilities"] = [
+        *raw["abilities"],
+        ability(
+            "fix-grant-choice",
+            "detachment",
+            {
+                "type": "choice",
+                "options": [
+                    {
+                        "type": "ability-grant",
+                        "target": "this-unit",
+                        "modifier": {"ability": "fix-a"},
+                    },
+                    {
+                        "type": "ability-grant",
+                        "target": "this-unit",
+                        "modifier": {"ability": "fix-b"},
+                    },
+                ],
+            },
+            detachment_id="fix-det",
+        ),
+        ability("fix-a", "unit", hit_plus("this-unit")),
+        ability(
+            "fix-b",
+            "unit",
+            {
+                "type": "roll-modifier",
+                "target": "this-unit",
+                "modifier": {"roll": "wound", "operation": "add", "value": 1},
+            },
+        ),
+    ]
+    out = Dataset(raw).stackable_buffs_for(MOB, {"phase": "fight"})
+    levers = {lever["id"]: lever for lever in out["buffs"]}
+    assert levers["fix-grant-choice>fix-a"]["enabled"] is False
+    assert levers["fix-grant-choice>fix-a"]["requiresLever"] == "fix-grant-choice?0"
+    assert levers["fix-grant-choice>fix-b"]["requiresLever"] == "fix-grant-choice?1"
+    assert levers["fix-grant-choice?0"]["group"] == "fix-grant-choice?choice"
+    assert levers["fix-grant-choice?0"]["buffs"] == []
+    pool = next(g for g in out["groups"] if g["id"] == "fix-grant-choice?choice")
+    assert pool["maxActivations"] == 1

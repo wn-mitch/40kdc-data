@@ -953,7 +953,10 @@ class Dataset:
             return name if name else option["option_id"]
 
         resolved = resolve_option_requirements(
-            resolve_cap_raises(buffs, cap_raises, groups), option_requirements, groups, option_name
+            resolve_cap_raises(buffs, cap_raises, groups, option_requirements),
+            option_requirements,
+            groups,
+            option_name,
         )
         return {"buffs": resolved, "groups": groups, "needs": needs}
 

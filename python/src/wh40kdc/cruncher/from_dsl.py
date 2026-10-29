@@ -2504,20 +2504,28 @@ def _enumerate_choice(
     max_choices = node.get("max_choices")
     if not isinstance(max_choices, (int, float)) or isinstance(max_choices, bool):
         max_choices = 1
+    group = {"id": f"{opts['abilityId']}?choice", "maxActivations": max_choices}
     for i, opt in enumerate(options):
-        buffs, gate = _collect_option_buffs(opt, source, opts, out["unsupported"])
+        diagnostics: list[dict[str, Any]] = []
+        buffs, gate = _collect_option_buffs(opt, source, opts, diagnostics)
+        lever = f"{opts['abilityId']}?{i}"
+        label = _label_for_buffs(buffs) if buffs else f"option {i + 1}"
+        # A record grant is expanded by its consumer, which must keep it behind this option's pick.
+        for item in diagnostics:
+            fragment = item.get("effectFragment")
+            grant = _is_object(fragment) and fragment.get("type") == "ability-grant"
+            if grant and "choice" not in item:
+                item = {**item, "choice": {"lever": lever, "label": label, "group": group}}
+            out["unsupported"].append(item)
         if not buffs:
             continue
         out["activatable"].append(
             {
-                "id": f"{opts['abilityId']}?{i}",
-                "label": _label_for_buffs(buffs),
+                "id": lever,
+                "label": label,
                 "buffs": buffs,
                 **stance_gate_fields(gate),
-                "group": {
-                    "id": f"{opts['abilityId']}?choice",
-                    "maxActivations": max_choices,
-                },
+                "group": group,
             }
         )
 

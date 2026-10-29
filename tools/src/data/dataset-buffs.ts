@@ -192,7 +192,7 @@ export function stackableBuffsFor(
   const optionName = (option: StanceOptionRef) =>
     stanceOptionName((ds.abilities.getInFaction(option.ability_id, factionId) ?? ds.abilities.getAny(option.ability_id))?.raw.effect, option.option_id)
       ?? option.option_id;
-  const resolved = resolveOptionRequirements(resolveCapRaises(buffs, capRaises, groups), optionRequirements, groups, optionName);
+  const resolved = resolveOptionRequirements(resolveCapRaises(buffs, capRaises, groups, optionRequirements), optionRequirements, groups, optionName);
   return { buffs: resolved, groups, needs };
 }
 

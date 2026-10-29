@@ -262,3 +262,27 @@ describe("Dataset.stackableBuffsFor: costs and providers", () => {
     expect(buffsOf({ unitId: "fix-boss", factionId: "orks" }, "fix-character-models")).not.toEqual([]);
   });
 });
+
+describe("a choice between granted records", () => {
+  it("offers each record behind its own pick, one pick at a time, none enabled", async () => {
+    const { isLegalLeverSelection } = await import("../src/data/index.js");
+    const raw = armyRaw();
+    raw.abilities = [...raw.abilities, ...[
+      ability("fix-grant-choice", "detachment", { type: "choice", options: [
+        { type: "ability-grant", target: "this-unit", modifier: { ability: "fix-a" } },
+        { type: "ability-grant", target: "this-unit", modifier: { ability: "fix-b" } },
+      ] }, { detachment_id: "fix-det" }),
+      ability("fix-a", "unit", hitPlus("this-unit")),
+      ability("fix-b", "unit", { type: "roll-modifier", target: "this-unit", modifier: { roll: "wound", operation: "add", value: 1 } }),
+    ]] as never;
+    const { buffs, groups } = new Dataset(raw).stackableBuffsFor(mob, { phase: "fight" });
+    const lever = (id: string) => buffs.find((candidate) => candidate.id === id);
+    expect(lever("fix-grant-choice>fix-a")).toMatchObject({ enabled: false, requiresLever: "fix-grant-choice?0" });
+    expect(lever("fix-grant-choice>fix-b")).toMatchObject({ enabled: false, requiresLever: "fix-grant-choice?1" });
+    expect(lever("fix-grant-choice?0")).toMatchObject({ buffs: [], group: "fix-grant-choice?choice" });
+    const legal = (ids: string[]) => isLegalLeverSelection(buffs, groups, new Set(ids));
+    expect(legal(["fix-grant-choice?0", "fix-grant-choice>fix-a"])).toBe(true);
+    expect(legal(["fix-grant-choice>fix-a"])).toBe(false);
+    expect(legal(["fix-grant-choice?0", "fix-grant-choice>fix-a", "fix-grant-choice?1", "fix-grant-choice>fix-b"])).toBe(false);
+  });
+});

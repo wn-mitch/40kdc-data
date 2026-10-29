@@ -149,9 +149,13 @@ export function abilityLevers(
     if (gated) out.optionRequirements.set(lever, gated);
     levers.push(lever);
   }
-  for (const { abilityId } of grants) {
+  for (const { abilityId, fragment } of grants) {
     args.held.add(abilityId);
-    const granted = grantedRecordLevers(ds, abilityId, args.factionId, { abilityId: ability.id, source, enabled: gate ? false : args.enabled, requiresLever }, ctx);
+    // A grant one option of a choice makes stands behind picking that option, in the choice's pool.
+    const choice = fragment.choice ? choiceOptionLever(fragment.choice, ability, source, requiresLever, levers, out.groups) : undefined;
+    const granted = grantedRecordLevers(ds, abilityId, args.factionId, {
+      abilityId: ability.id, source, enabled: gate || choice ? false : args.enabled, requiresLever: choice ?? requiresLever,
+    }, ctx);
     if (!granted) continue;
     levers.push(...granted.buffs);
     out.groups.push(...granted.groups);
@@ -238,6 +242,25 @@ export function leverFromActivatable(act: ActivatableBuff, label: string, source
  * providing unit itself, so a grant that reached `unsupported` with a self or friendly-filter target
  * reaches the crunched unit.
  */
+/**
+ * The lever picking a `choice` option, added as a buffless member of the choice's pool when the
+ * option has no buff of its own. Returns its id.
+ */
+function choiceOptionLever(
+  choice: NonNullable<UnsupportedFragment["choice"]>,
+  ability: AbilityView,
+  source: BuffSource,
+  requiresLever: string | undefined,
+  levers: StackableBuff[],
+  groups: StackableBuffGroup[],
+): string {
+  if (!groups.some((existing) => existing.id === choice.group.id)) groups.push({ ...choice.group, label: ability.name, abilityId: ability.id });
+  if (!levers.some((lever) => lever.id === choice.lever)) {
+    levers.push({ id: choice.lever, label: `${ability.name} — ${choice.label}`, buffs: [], enabled: false, source, group: choice.group.id, ...(requiresLever ? { requiresLever } : {}) });
+  }
+  return choice.lever;
+}
+
 export function grantedRecordIds(translation: EffectTranslation): { abilityId: string; fragment: UnsupportedFragment }[] {
   const out: { abilityId: string; fragment: UnsupportedFragment }[] = [];
   for (const item of translation.unsupported) {
@@ -310,19 +333,26 @@ export function grantedRecordLevers(
 /**
  * Resolve a capacity lever by the owning ability's immutable id, never by its
  * display label. Preserve the allocation and exact option references for the
- * selection consumer. Drop it when that stance pool is not available.
+ * selection consumer. Drop it when that stance pool is not available. The
+ * resolved lever is a new object, so its pending option gate in `requirements`
+ * (keyed by lever) is carried onto it for {@link resolveOptionRequirements}.
  */
 export function resolveCapRaises(
   levers: StackableBuff[],
   pending: Map<StackableBuff, CapacityRaise>,
   groups: readonly StackableBuffGroup[],
+  requirements?: Map<StackableBuff, OptionGate>,
 ): StackableBuff[] {
   return levers.flatMap((lever) => {
     const raise = pending.get(lever);
     if (!raise) return [lever];
     const group = groups.find((candidate) => candidate.abilityId === raise.ability && candidate.id.endsWith("?stance"));
     const { ability: _ability, ...allocation } = raise;
-    return group ? [{ ...lever, raisesCap: { ...allocation, group: group.id } }] : [];
+    if (!group) return [];
+    const resolved = { ...lever, raisesCap: { ...allocation, group: group.id } };
+    const gate = requirements?.get(lever);
+    if (gate) requirements!.set(resolved, gate);
+    return [resolved];
   });
 }
 

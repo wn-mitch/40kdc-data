@@ -214,6 +214,13 @@ def ability_levers(
         levers.append(lever)
     for grant in grants:
         held.add(grant["abilityId"])
+        # A grant one option of a choice makes stands behind picking that option, in its pool.
+        choice = grant["fragment"].get("choice")
+        option = (
+            _choice_option_lever(choice, ability, source, requires_lever, levers, out.groups)
+            if choice
+            else None
+        )
         granted = granted_record_levers(
             ds,
             grant["abilityId"],
@@ -221,8 +228,8 @@ def ability_levers(
             {
                 "abilityId": ability.id,
                 "source": source,
-                "enabled": False if gate else enabled,
-                "requiresLever": requires_lever,
+                "enabled": False if gate or option else enabled,
+                "requiresLever": option or requires_lever,
             },
             ctx,
         )
@@ -355,6 +362,37 @@ def lever_from_activatable(act: dict[str, Any], label: str, source: dict[str, An
 #: let the grant through.
 _GRANT_RECIPIENTS = frozenset(["this-unit", "ability-unit", "recipient", "selected-unit"])
 
+#: The reason the translator gives a record grant it admitted whole.
+_ADMITTED_GRANT = 'effect type "ability-grant" is not modelled by the buff layer'
+
+
+def _choice_option_lever(
+    choice: dict[str, Any],
+    ability: Any,
+    source: dict[str, Any],
+    requires_lever: str | None,
+    levers: list[Lever],
+    groups: list[dict[str, Any]],
+) -> str:
+    """The lever picking a ``choice`` option, added as a buffless member of the choice's pool
+    when the option has no buff of its own. Returns its id."""
+    group = choice["group"]
+    if not any(existing["id"] == group["id"] for existing in groups):
+        groups.append({**group, "label": ability.name, "abilityId": ability.id})
+    if not any(lever["id"] == choice["lever"] for lever in levers):
+        lever: Lever = {
+            "id": choice["lever"],
+            "label": f"{ability.name} — {choice['label']}",
+            "buffs": [],
+            "enabled": False,
+            "source": source,
+            "group": group["id"],
+        }
+        if requires_lever:
+            lever["requiresLever"] = requires_lever
+        levers.append(lever)
+    return str(choice["lever"])
+
 
 def granted_record_ids(translation: dict[str, Any]) -> list[dict[str, Any]]:
     """The ability records a translation grants to the crunched unit: each unsupported
@@ -363,6 +401,10 @@ def granted_record_ids(translation: dict[str, Any]) -> list[dict[str, Any]]:
     reached ``unsupported`` with a self or friendly-filter target reaches the crunched unit."""
     out: list[dict[str, Any]] = []
     for item in translation["unsupported"]:
+        # Only a fully admitted record grant may be expanded. Unknown target predicates and model
+        # isolation diagnostics must remain unsupported, not become buffs.
+        if item.get("reason") != _ADMITTED_GRANT:
+            continue
         node = item.get("effectFragment")
         if not isinstance(node, dict) or node.get("type") != "ability-grant":
             continue
@@ -377,7 +419,11 @@ def granted_record_ids(translation: dict[str, Any]) -> list[dict[str, Any]]:
         if isinstance(target, str):
             reaches = target in _GRANT_RECIPIENTS
         else:
-            reaches = isinstance(target, dict) and target.get("owner") == "friendly"
+            reaches = (
+                isinstance(target, dict)
+                and target.get("owner") == "friendly"
+                and target.get("level") != "model"
+            )
         if reaches and not any(g["abilityId"] == modifier["ability"] for g in out):
             out.append({"abilityId": modifier["ability"], "fragment": item})
     return out
@@ -455,8 +501,11 @@ def resolve_cap_raises(
     levers: list[Lever],
     pending: dict[int, tuple[Lever, dict[str, Any]]],
     groups: list[dict[str, Any]],
+    requirements: dict[int, tuple[Lever, OptionGate]] | None = None,
 ) -> list[Lever]:
-    """Resolve each cap-raising lever to the stance pool owned by the named ability."""
+    """Resolve each cap-raising lever to the stance pool owned by the named ability. The resolved
+    lever is a new object, so its pending option gate in ``requirements`` (keyed by lever) is
+    carried onto it for ``resolve_option_requirements``."""
     out: list[Lever] = []
     for lever in levers:
         entry = pending.get(id(lever))
@@ -475,7 +524,11 @@ def resolve_cap_raises(
         )
         if group is not None:
             allocation = {key: value for key, value in raise_.items() if key != "ability"}
-            out.append({**lever, "raisesCap": {**allocation, "group": group["id"]}})
+            resolved = {**lever, "raisesCap": {**allocation, "group": group["id"]}}
+            gate = requirements.get(id(lever)) if requirements is not None else None
+            if requirements is not None and gate is not None and gate[0] is lever:
+                requirements[id(resolved)] = (resolved, gate[1])
+            out.append(resolved)
     return out
 
 
