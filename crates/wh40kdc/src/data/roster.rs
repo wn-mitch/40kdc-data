@@ -9,6 +9,7 @@
 
 use std::collections::{BTreeMap, HashMap, HashSet};
 
+use crate::data::ability_refs::missing_required_abilities;
 use crate::data::battle_sizes::{
     detachment_cap_for_battle_size, enhancement_limit_for_battle_size,
     points_limit_for_battle_size, unit_limit_for_battle_size,
@@ -27,6 +28,7 @@ pub enum RosterViolationCode {
     EnhancementOnEpicHero,
     EnhancementOnExcludedModel,
     EnhancementKeywordMismatch,
+    EnhancementMissingAbility,
     EnhancementExcludedKeyword,
     EnhancementOverMaxTargets,
     LeaderAttachmentIllegal,
@@ -61,6 +63,7 @@ impl RosterViolationCode {
             RosterViolationCode::EnhancementOnEpicHero => "enhancement-on-epic-hero",
             RosterViolationCode::EnhancementOnExcludedModel => "enhancement-on-excluded-model",
             RosterViolationCode::EnhancementKeywordMismatch => "enhancement-keyword-mismatch",
+            RosterViolationCode::EnhancementMissingAbility => "enhancement-missing-ability",
             RosterViolationCode::EnhancementExcludedKeyword => "enhancement-excluded-keyword",
             RosterViolationCode::EnhancementOverMaxTargets => "enhancement-over-max-targets",
             RosterViolationCode::LeaderAttachmentIllegal => "leader-attachment-illegal",
@@ -398,6 +401,21 @@ pub fn validate_roster_core_with_keyword_overrides(
                 message: format!(
                     "{} lacks an eligible keyword group for {}",
                     view.id.as_str(),
+                    enh.id.as_str()
+                ),
+                unit_index: Some(idx),
+                severity: Severity::Error,
+            });
+        }
+        let missing = missing_required_abilities(enh, view);
+        if !missing.is_empty() {
+            army.push(RosterViolation {
+                code: RosterViolationCode::EnhancementMissingAbility,
+                id: enh.id.as_str().to_string(),
+                message: format!(
+                    "{} lacks the {} ability {} requires",
+                    view.id.as_str(),
+                    missing.join(", "),
                     enh.id.as_str()
                 ),
                 unit_index: Some(idx),

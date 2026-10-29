@@ -1,4 +1,5 @@
 import type { Enhancement } from "../generated.js";
+import { unitAbilityIds } from "./ability-refs.js";
 
 /**
  * Whether a bearer meets an enhancement's eligibility groups: every keyword of one keyword group
@@ -14,4 +15,13 @@ export function meetsEnhancementGroups(enhancement: Enhancement, unitId: string,
   if (keywordGroups.length === 0 && datasheetGroups.length === 0) return true;
   return keywordGroups.some((group) => group.every(has))
     || datasheetGroups.some((group) => group.unit_id === unitId && (group.keywords ?? []).every(has));
+}
+
+/**
+ * The core abilities an enhancement requires (`required_ability_ids`, "model with the Deep Strike
+ * ability only") that the bearer's datasheet does not list in its `ability_ids`, in the record's order.
+ */
+export function missingRequiredAbilities(enhancement: Enhancement, bearerAbilityIds: readonly unknown[] | undefined): string[] {
+  const held = new Set(unitAbilityIds(bearerAbilityIds));
+  return (enhancement.required_ability_ids ?? []).filter((id) => !held.has(id));
 }

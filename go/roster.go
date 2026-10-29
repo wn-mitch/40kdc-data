@@ -221,6 +221,9 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 		if !eligible {
 			errV("enhancement-keyword-mismatch", enhID, idx)
 		}
+		if len(missingRequiredAbilities(enh, view.Raw)) > 0 {
+			errV("enhancement-missing-ability", enhID, idx)
+		}
 		for _, k := range getStrList(enh, "exclusion_keywords") {
 			if _, has := kws[k]; has {
 				errV("enhancement-excluded-keyword", enhID, idx)

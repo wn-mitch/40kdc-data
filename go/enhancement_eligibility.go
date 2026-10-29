@@ -47,3 +47,20 @@ func meetsEnhancementGroups(enhancement map[string]any, unitID string, has func(
 	}
 	return false
 }
+
+// missingRequiredAbilities returns the core abilities an enhancement requires
+// (required_ability_ids, "model with the Deep Strike ability only") that the bearer's datasheet
+// does not list in its ability_ids, in the record's order (mirror of TS missingRequiredAbilities).
+func missingRequiredAbilities(enhancement map[string]any, bearer map[string]any) []string {
+	held := map[string]bool{}
+	for _, id := range unitAbilityIDs(bearer) {
+		held[id] = true
+	}
+	var missing []string
+	for _, id := range getStrList(enhancement, "required_ability_ids") {
+		if !held[id] {
+			missing = append(missing, id)
+		}
+	}
+	return missing
+}

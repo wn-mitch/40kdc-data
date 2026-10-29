@@ -113,6 +113,31 @@ describe("Semantic authoring restrictions", () => {
     expect(coreCheckErrors(root, "relic", bearers(["ORACLE"], "all"))[0]).toMatch(/core requires/u);
   });
 
+  it("checks the core abilities an enhancement's bearer needs against core, both ways", () => {
+    const bearers = (abilities?: string[]) => compiled([leaf("RESTRICTION", "bearer-eligibility", { keywords: ["HIEROPHANT"], match: "all", excluded_keywords: [], ...(abilities ? { abilities } : {}) }), grant()]).checks;
+    const root = dataRoot([], [
+      { id: "drop-relic", ability_id: "drop-relic", keyword_restrictions: ["Hierophant"], required_ability_ids: ["deep-strike"] },
+      { id: "relic", ability_id: "relic", keyword_restrictions: ["Hierophant"] },
+    ]);
+    expect(coreCheckErrors(root, "drop-relic", bearers(["deep-strike"]))).toEqual([]);
+    // A leaf that leaves the ability out, or names another, disagrees with core.
+    expect(coreCheckErrors(root, "drop-relic", bearers())).toEqual(["Eligible bearers need no core ability, but core requires deep-strike."]);
+    expect(coreCheckErrors(root, "drop-relic", bearers(["scouts"]))).toEqual(["Eligible bearers need the scouts ability, but core requires deep-strike."]);
+    // An ability core does not require is not one the leaf can add.
+    expect(coreCheckErrors(root, "relic", bearers(["deep-strike"]))).toEqual(["Eligible bearers need the deep-strike ability, but core requires none."]);
+    expect(coreCheckErrors(root, "relic", bearers())).toEqual([]);
+  });
+
+  it("reads \"model with the X ability only\" as a required ability, not a keyword", () => {
+    const family = REVIEWED_FAMILY_REGISTRY.find((item) => item.id === "bearer-eligibility" && !item.deprecated && item.version === currentFamilyVersion("bearer-eligibility"))!;
+    expect(prefillFromSource(family, "**HIEROPHANT** model with the Deep Strike ability only")).toMatchObject({ keywords: ["HIEROPHANT"], match: "all", abilities: ["deep-strike"] });
+    expect(prefillFromSource(family, "Hierophant model with the **Deep Strike** ability only")).toMatchObject({ keywords: ["HIEROPHANT"], abilities: ["deep-strike"] });
+    expect(prefillFromSource(family, "HIEROPHANT model only")).not.toHaveProperty("abilities");
+    expect(normalizeFingerprintParameters("bearer-eligibility", { keywords: ["HIEROPHANT"], match: "all", excluded_keywords: [], abilities: ["scouts", "deep-strike"] }, 7))
+      .toMatchObject({ abilities: ["deep-strike", "scouts"] });
+    expect(() => normalizeFingerprintParameters("bearer-eligibility", { keywords: ["HIEROPHANT"], match: "all", excluded_keywords: [], abilities: ["Deep Strike"] }, 7)).toThrow(/kebab case/u);
+  });
+
   it("accepts a bearer spelled differently from core when both admit the same units, and only then", () => {
     const bearers = (keywords: string[], match: string) => compiled([leaf("RESTRICTION", "bearer-eligibility", { keywords, match }), grant()]).checks;
     const root = dataRoot([], [

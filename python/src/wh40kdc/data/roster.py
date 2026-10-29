@@ -22,7 +22,10 @@ from wh40kdc.data.battle_sizes import (
     unit_limit_for_battle_size,
 )
 from wh40kdc.data.dataset import Dataset
-from wh40kdc.data.enhancement_eligibility import meets_enhancement_groups
+from wh40kdc.data.enhancement_eligibility import (
+    meets_enhancement_groups,
+    missing_required_abilities,
+)
 from wh40kdc.data.loadout import check_unit_legality
 from wh40kdc.data.pricing import host_unit_points, wargear_points
 
@@ -33,6 +36,7 @@ ROSTER_VIOLATION_CODES = (
     "enhancement-on-epic-hero",
     "enhancement-on-excluded-model",
     "enhancement-keyword-mismatch",
+    "enhancement-missing-ability",
     "enhancement-excluded-keyword",
     "enhancement-over-max-targets",
     "leader-attachment-illegal",
@@ -249,6 +253,14 @@ def validate_roster_core(spec: dict[str, Any], dataset: Dataset) -> dict[str, An
                 "enhancement-keyword-mismatch",
                 enh["id"],
                 f"{view.id} lacks an eligible keyword group for {enh['id']}",
+                idx,
+            )
+        missing = missing_required_abilities(enh, view.raw.get("ability_ids"))
+        if missing:
+            err(
+                "enhancement-missing-ability",
+                enh["id"],
+                f"{view.id} lacks the {', '.join(missing)} ability {enh['id']} requires",
                 idx,
             )
         if any(k in kws for k in (enh.get("exclusion_keywords") or [])):

@@ -115,6 +115,9 @@ func historicalEnhancementEligible(ds *Dataset, enhancement map[string]any, owne
 	if !meetsEnhancementGroups(enhancement, owner.ID(), has) {
 		return false
 	}
+	if len(missingRequiredAbilities(enhancement, owner.Raw)) > 0 {
+		return false
+	}
 	return !historicalEnhancementExcluded(enhancement, has)
 }
 

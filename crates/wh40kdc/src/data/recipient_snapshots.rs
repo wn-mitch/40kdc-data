@@ -1,6 +1,9 @@
 //! Rediscover valid source-owned persistent effects after an attachment has ended.
 
-use super::{dataset::unit_keyword_set, Dataset, EligibilityInput, GameModeView};
+use super::{
+    ability_refs::missing_required_abilities, dataset::unit_keyword_set, Dataset, EligibilityInput,
+    GameModeView,
+};
 use crate::cruncher::{AbilityKind, BuffSource, EngineContext, TranslationPerspective};
 use crate::{Ability, Enhancement, Unit, UnitRole};
 
@@ -130,6 +133,7 @@ impl Dataset {
             None => enhancement.datasheet_restriction_groups.is_empty() || datasheet_eligible,
         };
         eligible
+            && missing_required_abilities(enhancement, bearer).is_empty()
             && enhancement
                 .exclusion_keywords
                 .as_ref()

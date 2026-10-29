@@ -10901,18 +10901,26 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "tyranids",
     "detachment_id": "subterranean-assault",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "set-up",
+      "target": "this-unit",
+      "modifier": {
+        "to": "battlefield",
+        "via": "deep-strike",
+        "arrives": "next-movement-phase",
+        "allow_first_round": true
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "381b01cb849eb8297013db835b0258d7093ac642a7497e17a39e7a618daa03c6"
   }
 ]

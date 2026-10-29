@@ -7120,9 +7120,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "source_digest": "84c368efbd94ad1f0369305d1421eb6610fb616c9cc0630af1d5d8b16b3f7b1f",
+    "source_digest": "9d1754488d6c2de2b768c54c2a14adf58003fd81c3828b915180de6d96224291",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -7135,7 +7135,7 @@
       "target": "this-unit",
       "modifier": {
         "roll": "charge",
-        "subset": "all-failures"
+        "result_scope": "any-result"
       }
     },
     "scope": {
@@ -7156,9 +7156,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "source_digest": "e8c98e22a43a37ffcf939de1ba1d62dfac4aa9bc7cee7c2528aaf4980284d041",
+    "source_digest": "e05092b97d8470a4fdf085ca21c164f616473940662921a7b0ba2d9918ca7e4d",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -7171,18 +7171,13 @@
       "target": "this-unit",
       "modifier": {
         "to": "battlefield",
-        "from": "strategic-reserves",
         "via": "deep-strike",
-        "turns": [
-          1,
-          2,
-          3
-        ],
-        "ignore_limits": true
+        "arrives": "next-movement-phase",
+        "allow_first_round": true
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
@@ -7196,60 +7191,68 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "source_digest": "21757344a1802b42dde0dc3b1c3d05e94e333ef812c1ae1c3ede0008e6eee79e",
+    "source_digest": "defa91419cf3efeabc674434a8600dc67a8ccc9fd38e74316a92779c6a9411d5",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "chaos-space-marines",
     "detachment_id": "warpstrike-champions",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "sequence",
       "steps": [
         {
-          "type": "stat-modifier",
-          "target": "this-model",
-          "modifier": {
-            "stat": "A",
-            "operation": "add",
-            "value": 1
-          }
-        },
-        {
-          "type": "stat-modifier",
-          "target": "this-model",
-          "modifier": {
-            "stat": "S",
-            "operation": "add",
-            "value": 1
-          }
-        },
-        {
-          "type": "stat-modifier",
-          "target": "this-model",
-          "modifier": {
-            "stat": "AP",
-            "operation": "improve",
-            "value": 1
-          }
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "stat-modifier",
+              "target": "this-model",
+              "modifier": {
+                "stat": "A",
+                "operation": "improve",
+                "value": 1
+              }
+            },
+            {
+              "type": "stat-modifier",
+              "target": "this-model",
+              "modifier": {
+                "stat": "S",
+                "operation": "improve",
+                "value": 1
+              }
+            },
+            {
+              "type": "stat-modifier",
+              "target": "this-model",
+              "modifier": {
+                "stat": "AP",
+                "operation": "improve",
+                "value": 1
+              }
+            }
+          ]
         },
         {
           "type": "ability-part",
           "trigger": {
-            "event": "set-up",
+            "event": "move-ended",
             "filter": {
-              "from": "strategic-reserves"
+              "move_types": [
+                "ingress"
+              ]
             }
           },
+          "duration": "turn",
           "effect": {
             "type": "stat-modifier",
             "target": "this-model",
             "modifier": {
               "stat": "D",
-              "operation": "add",
+              "operation": "improve",
               "value": 1
             }
           }

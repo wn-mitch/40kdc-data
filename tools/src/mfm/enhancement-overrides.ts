@@ -9,6 +9,8 @@ export interface EnhancementEligibilityOverride {
   keyword_restriction_groups?: string[][];
   /** Replaces the excluded keywords. */
   exclusion_keywords?: string[];
+  /** Replaces the core abilities the bearer's datasheet must have. */
+  required_ability_ids?: string[];
 }
 
 export const RULES_TEXT_ELIGIBILITY: Readonly<Record<string, EnhancementEligibilityOverride>> = {
@@ -17,4 +19,6 @@ export const RULES_TEXT_ELIGIBILITY: Readonly<Record<string, EnhancementEligibil
   "2de8b6d3-68fc-4c7b-a499-0bff89ab1e06": { keyword_restriction_groups: [["Big Mek", "Infantry"], ["Infantry", "Warboss"]] },
   // Smoky Gubbinz (Upgrade): the rows have no excluded keyword; the card prints "excluding Aircraft units".
   "94c08bd8-7e2a-4ffc-8377-1243a0d091fc": { exclusion_keywords: ["Aircraft"] },
+  // Deathwing Assault: the rows have no required ability; the card prints "Deathwing model with the Deep Strike ability only".
+  "89ae162e-a1cb-4b7d-acbb-23f553ae8824": { required_ability_ids: ["deep-strike"] },
 };

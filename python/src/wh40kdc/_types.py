@@ -543,6 +543,7 @@ class Enhancement(TypedDict):
     keyword_restriction_groups: NotRequired[list[KeywordRestrictionGroup]]
     datasheet_restriction_groups: NotRequired[list[DatasheetRestrictionGroup]]
     exclusion_keywords: NotRequired[KeywordList | None]
+    required_ability_ids: NotRequired[list[EntityId]]
     attachment_bodyguard_ids: NotRequired[list[EntityId]]
     ability_id: NotRequired[EntityId | None]
     is_unique: NotRequired[bool]

@@ -129,6 +129,7 @@ const ENHANCEMENT_CODES: Record<string, true> = {
   "enhancement-on-epic-hero": true,
   "enhancement-on-excluded-model": true,
   "enhancement-keyword-mismatch": true,
+  "enhancement-missing-ability": true,
   "enhancement-excluded-keyword": true,
   "enhancement-over-max-targets": true,
   "ally-cannot-take-enhancements": true,

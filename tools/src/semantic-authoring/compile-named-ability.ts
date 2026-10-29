@@ -22,6 +22,12 @@ export function sameSentence(sourceText: string | undefined, from: number | unde
   return !/[.;:]/u.test(Buffer.from(sourceText, "utf8").subarray(from, to).toString("utf8"));
 }
 
+/** Whether only whitespace separates two leaves (no sourceText: assume it does). */
+function adjoins(sourceText: string | undefined, from: number | undefined, to: number): boolean {
+  if (sourceText === undefined || from === undefined) return true;
+  return to >= from && /^\s*$/u.test(Buffer.from(sourceText, "utf8").subarray(from, to).toString("utf8"));
+}
+
 /**
  * "While a friendly X unit is within 3\" of this model, each time that unit uses its Foo ability":
  * a unit-filter, a side-less aura-range and the next leaf's moment of that unit (subject antecedent) become one
@@ -150,6 +156,18 @@ export function foldByAbility(list: readonly CompileLeaf[], sourceText?: string)
       out[out.length - 1] = folded.host;
       out.push(...folded.keep);
       if (folded.following !== undefined) consumed.add(folded.following);
+      continue;
+    }
+    // "The bearer's unit can be set up using the Deep Strike ability": the set-up it permits is a Deep Strike set-up.
+    if (moment?.family_id === "set-up" && moment.role === "EFFECT" && moment.fragment === leaf.fragment && !arrival.length && !between.length
+      && adjoins(sourceText, moment.end_byte, leaf.start_byte)) {
+      if (leaf.parameters.id !== "deep-strike") {
+        throw new CompileError(`by-ability at byte ${leaf.start_byte} names ${String(leaf.parameters.id)} for a set-up it permits; only Deep Strike says how a unit is set up.`);
+      }
+      if (moment.parameters.allow === false || moment.parameters.via !== undefined) {
+        throw new CompileError(`by-ability at byte ${leaf.start_byte} names Deep Strike for a set-up that is forbidden or already names how it is set up.`);
+      }
+      out[out.length - 1] = { ...moment, end_byte: leaf.end_byte, parameters: { ...moment.parameters, via: "deep-strike" } };
       continue;
     }
     if (moment?.family_id !== "event" || moment.fragment !== leaf.fragment || !BY_ABILITY_MOMENTS.has(String(moment.parameters.kind))

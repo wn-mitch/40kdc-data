@@ -15875,6 +15875,15 @@ pub struct EngagementFrontsConditionParameters {
 ///      "default": false,
 ///      "type": "boolean"
 ///    },
+///    "required_ability_ids": {
+///      "description": "Core abilities (data/core/unit-keywords.json ids) the bearer's datasheet must have (\"HERETIC ASTARTES model with the Deep Strike ability only\"). Every listed ability is required, on top of the keyword and datasheet groups.",
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/entity-id"
+///      },
+///      "minItems": 1,
+///      "uniqueItems": true
+///    },
 ///    "upgrade_tag": {
 ///      "description": "11e: when true, this enhancement applies to up to `max_targets` non-character units while counting as a single Enhancement choice.",
 ///      "default": false,
@@ -15923,6 +15932,9 @@ pub struct Enhancement {
     ///True when the cost is carried over provisionally (e.g. seeded from a prior edition during migration) and not yet confirmed against the current dataslate.
     #[serde(default)]
     pub points_provisional: bool,
+    ///Core abilities (data/core/unit-keywords.json ids) the bearer's datasheet must have ("HERETIC ASTARTES model with the Deep Strike ability only"). Every listed ability is required, on top of the keyword and datasheet groups.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub required_ability_ids: ::std::option::Option<Vec<EntityId>>,
     ///11e: when true, this enhancement applies to up to `max_targets` non-character units while counting as a single Enhancement choice.
     #[serde(default)]
     pub upgrade_tag: bool,

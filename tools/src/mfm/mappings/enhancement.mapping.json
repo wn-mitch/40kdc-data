@@ -16,7 +16,7 @@
       "filters": [],
       "precedence": [],
       "consumers": [],
-      "reason": "The edge names a datasheet ability related to an enhancement, but current projection does not establish that it is the core enhancement ability reference."
+      "reason": "The edge names a datasheet ability related to an enhancement; the rows present are the core ability its bearer must have (mapped to /required_ability_ids), not the enhancement's own ability reference."
     },
     "/attachment_bodyguard_ids": {
       "provenance": "derived",
@@ -251,6 +251,50 @@
       "precedence": [],
       "consumers": ["tools/src/mfm/enhancements.ts#runEnhancements"],
       "reason": "Each excluded-keyword edge resolves to one repository keyword label."
+    },
+    "/required_ability_ids": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": [
+        "data.enhancement_datasheet_ability.enhancementId",
+        "data.enhancement_datasheet_ability.datasheetAbilityId",
+        "data.datasheet_ability.abilityType",
+        "data.datasheet_ability.localisations.*.name"
+      ],
+      "joins": [],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/enhancements.ts#buildEnhFieldCanon",
+          "operation": "Resolve each enhancement's core datasheet ability to its core ability id."
+        }
+      ],
+      "filters": [
+        "Only core datasheet abilities whose id is in data/core/unit-keywords.json resolve; an unresolved row leaves the enhancement's eligibility untouched."
+      ],
+      "precedence": [
+        "RULES_TEXT_ELIGIBILITY (tools/src/mfm/enhancement-overrides.ts) replaces the field where the dump's rules text names an ability its rows omit."
+      ],
+      "consumers": ["tools/src/mfm/enhancements.ts#runEnhancements"],
+      "reason": "\"<KEYWORD> model with the Deep Strike ability only\": the bearer's datasheet must have these core abilities."
+    },
+    "/required_ability_ids/*": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": [
+        "data.enhancement_datasheet_ability.datasheetAbilityId",
+        "data.datasheet_ability.localisations.*.name"
+      ],
+      "joins": [],
+      "transforms": [
+        {
+          "symbol": "tools/src/converters/id-generator.ts#nameToId",
+          "operation": "Convert the core ability's English name to its core ability id."
+        }
+      ],
+      "filters": [],
+      "precedence": [],
+      "consumers": ["tools/src/mfm/enhancements.ts#runEnhancements"],
+      "reason": "Each source relation names one core ability the bearer must have."
     },
     "/external_refs": {
       "provenance": "derived",
@@ -742,11 +786,6 @@
       "source": "data.enhancement_bodyguard_group_datasheet.enhancementBodyguardGroupId",
       "candidate_pointer": null,
       "reason": "Bodyguard-to-datasheet eligibility is a distinct condition, not a bearer keyword restriction."
-    },
-    {
-      "source": "data.enhancement_datasheet_ability.enhancementId",
-      "candidate_pointer": "/ability_id",
-      "reason": "Only 6 rows dump-wide; resolving the datasheet ability to an existing enrichment ability id is deferred as low-value/high-complexity."
     },
     {
       "source": "data.enhancement_required_wargear_item.enhancementId",

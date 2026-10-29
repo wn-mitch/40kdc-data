@@ -423,6 +423,34 @@ async function checkAbilityUnitRefs(root: string, result: ValidationResult): Pro
 }
 
 /**
+ * An enhancement's `required_ability_ids` must each name a core ability in
+ * `core/unit-keywords.json`: a dangling id would make every bearer ineligible.
+ * A root without the catalog (a partial fixture tree) is not checked.
+ */
+async function checkEnhancementAbilityRefs(root: string, result: ValidationResult): Promise<void> {
+  const catalogFile = resolve(root, "core/unit-keywords.json");
+  if (!existsSync(catalogFile)) return;
+  const known = new Set(readArray<{ id: string }>(catalogFile).map((ability) => ability.id));
+  for (const file of (await glob("core/*/enhancements.json", { cwd: root, absolute: true })).sort()) {
+    if (basename(dirname(file)).startsWith("_")) continue;
+    let enhancements: Array<{ id?: string; required_ability_ids?: string[] }>;
+    try {
+      enhancements = readArray(file);
+    } catch {
+      continue;
+    }
+    enhancements.forEach((enhancement, index) => {
+      const errors = (enhancement.required_ability_ids ?? [])
+        .filter((id) => !known.has(id))
+        .map((id) => ({ path: `/${index}/required_ability_ids`, message: `enhancement "${enhancement.id}": required ability "${id}" is no core ability` }));
+      if (!errors.length) return;
+      result.failed++;
+      result.errors.push({ file, index, errors });
+    });
+  }
+}
+
+/**
  * A detachment's datasheet lists (`mandatory_warlord_datasheet_ids`,
  * `granted_warlord_datasheet_ids`, `excluded_datasheet_ids`) must each name a core
  * unit in some faction dir: a dangling id would silently make a Warlord requirement
@@ -705,6 +733,7 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
   checkMissionCardLinks(root, result);
   await checkAbilityUnitRefs(root, result);
   await checkDetachmentDatasheetRefs(root, result);
+  await checkEnhancementAbilityRefs(root, result);
   await checkListRequirementRefs(root, result);
   await checkDslShapes(root, result);
   await checkDslContract(root, result);

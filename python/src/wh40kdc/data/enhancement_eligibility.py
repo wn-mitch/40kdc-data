@@ -5,6 +5,8 @@ from __future__ import annotations
 from collections.abc import Callable, Mapping
 from typing import Any
 
+from wh40kdc.data.ability_refs import unit_ability_ids
+
 
 def meets_enhancement_groups(
     enhancement: Mapping[str, Any], unit_id: str, has: Callable[[str], bool]
@@ -28,3 +30,13 @@ def meets_enhancement_groups(
         group.get("unit_id") == unit_id and all(has(k) for k in group.get("keywords") or [])
         for group in datasheets
     )
+
+
+def missing_required_abilities(
+    enhancement: Mapping[str, Any], bearer_ability_ids: Any
+) -> list[str]:
+    """The core abilities ``enhancement`` requires (``required_ability_ids``, "model with the
+    Deep Strike ability only") that the bearer's datasheet does not list in its ``ability_ids``,
+    in the record's order (mirror of TS ``missingRequiredAbilities``)."""
+    held = set(unit_ability_ids(bearer_ability_ids))
+    return [i for i in enhancement.get("required_ability_ids") or [] if i not in held]

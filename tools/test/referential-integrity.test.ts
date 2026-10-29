@@ -308,3 +308,23 @@ describe("ability unit references", () => {
     ]);
   });
 });
+
+describe("enhancement required abilities", () => {
+  it("flags each required ability id that names no core ability, and only those", async () => {
+    const root = mkdtempSync(join(tmpdir(), "integrity-enhancement-abilities-"));
+    try {
+      mkdirSync(join(root, "core", "court"), { recursive: true });
+      writeFileSync(join(root, "core", "unit-keywords.json"), JSON.stringify([{ id: "deep-strike", name: "Deep Strike" }]));
+      writeFileSync(join(root, "core", "court", "enhancements.json"), JSON.stringify([
+        { id: "falling-star", required_ability_ids: ["deep-strike"] },
+        { id: "tunnel-crown", required_ability_ids: ["deep-strike", "burrowing"] },
+        { id: "plain-crown" },
+      ]));
+      const result = await checkReferentialIntegrity(root);
+      const messages = result.errors.flatMap((e) => e.errors.map((x) => x.message)).filter((m) => m.includes("required ability"));
+      expect(messages).toEqual(['enhancement "tunnel-crown": required ability "burrowing" is no core ability']);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  });
+});

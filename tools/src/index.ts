@@ -93,7 +93,7 @@ export {
 // units and Enhancement choices.
 export { reachesOtherUnits } from "./abilities-resolver/resolver.js";
 export { canTakeEnhancement } from "./data/lever-providers.js";
-export { meetsEnhancementGroups } from "./data/enhancement-eligibility.js";
+export { meetsEnhancementGroups, missingRequiredAbilities } from "./data/enhancement-eligibility.js";
 export {
   validateCandidateLoadout,
   type CandidateLoadoutLegality,

@@ -16,7 +16,7 @@ import {
   pointsLimitForBattleSize,
   unitLimitForBattleSize,
 } from "./battle-sizes.js";
-import { meetsEnhancementGroups } from "./enhancement-eligibility.js";
+import { meetsEnhancementGroups, missingRequiredAbilities } from "./enhancement-eligibility.js";
 import { checkUnitLegality, type Violation } from "./loadout.js";
 import { hostUnitPoints, wargearPoints } from "./pricing.js";
 
@@ -149,6 +149,7 @@ export type RosterViolationCode =
   | "enhancement-on-epic-hero"
   | "enhancement-on-excluded-model"
   | "enhancement-keyword-mismatch"
+  | "enhancement-missing-ability"
   | "enhancement-excluded-keyword"
   | "enhancement-over-max-targets"
   | "leader-attachment-illegal"
@@ -352,6 +353,9 @@ export function validateRosterCore(spec: NormRoster, dataset: Dataset): RosterLe
     const eligible = meetsEnhancementGroups(enh, view.id, (keyword) => kws.has(keyword));
     if (!eligible)
       err("enhancement-keyword-mismatch", enh.id, `${view.id} lacks an eligible keyword group for ${enh.id}`, idx);
+    const missing = missingRequiredAbilities(enh, view.raw.ability_ids);
+    if (missing.length)
+      err("enhancement-missing-ability", enh.id, `${view.id} lacks the ${missing.join(", ")} ability ${enh.id} requires`, idx);
     if ((enh.exclusion_keywords ?? []).some((k) => kws.has(k)))
       err("enhancement-excluded-keyword", enh.id, `${view.id} carries a keyword excluded by ${enh.id}`, idx);
   });

@@ -1006,6 +1006,56 @@
     ]
   },
   {
+    "name": "enhancement-missing-ability",
+    "args": {
+      "factionId": "chaos-space-marines",
+      "battleSize": "strike-force",
+      "forceDisposition": "disruption",
+      "detachments": [
+        {
+          "id": "warpstrike-champions"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "chaos-lord",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": "tzagulla-warpstrike-champions-chaos-space-marines",
+          "leaderBodyguardId": null,
+          "counts": {}
+        }
+      ]
+    },
+    "expected": [
+      "u0|error|enhancement-missing-ability:tzagulla-warpstrike-champions-chaos-space-marines"
+    ]
+  },
+  {
+    "name": "legal-enhancement-required-ability",
+    "args": {
+      "factionId": "chaos-space-marines",
+      "battleSize": "strike-force",
+      "forceDisposition": "disruption",
+      "detachments": [
+        {
+          "id": "warpstrike-champions"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "chaos-lord-in-terminator-armour",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": "tzagulla-warpstrike-champions-chaos-space-marines",
+          "leaderBodyguardId": null,
+          "counts": {}
+        }
+      ]
+    },
+    "expected": []
+  },
+  {
     "name": "warlord-not-mandated",
     "args": {
       "factionId": "aeldari",

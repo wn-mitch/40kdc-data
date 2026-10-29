@@ -303,6 +303,12 @@ export function coreCheckErrors(dataRoot: string, abilityId: string, checks: rea
       let problem = eligibilityProblem(record, check.parameters, implied);
       if (problem && !problem.startsWith("core excludes") && sameBearers(dataRoot, record, check.parameters, implied)) problem = null;
       if (problem) errors.push(`Eligible bearers read as ${eligibleReading(check.parameters)}, but ${problem}.`);
+      // The core abilities the leaf requires must be exactly the ones core requires.
+      const abilities = [...(Array.isArray(check.parameters.abilities) ? check.parameters.abilities as string[] : [])].sort();
+      const coreAbilities = [...(Array.isArray(record.required_ability_ids) ? record.required_ability_ids as string[] : [])].sort();
+      if (abilities.join() !== coreAbilities.join()) {
+        errors.push(`Eligible bearers need ${abilities.length ? `the ${abilities.join(", ")} ability` : "no core ability"}, but core requires ${coreAbilities.join(", ") || "none"}.`);
+      }
     }
   }
   return errors;

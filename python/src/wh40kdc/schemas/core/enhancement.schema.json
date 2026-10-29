@@ -68,6 +68,13 @@
         { "type": "null" }
       ]
     },
+    "required_ability_ids": {
+      "type": "array",
+      "items": { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+      "minItems": 1,
+      "uniqueItems": true,
+      "description": "Core abilities (data/core/unit-keywords.json ids) the bearer's datasheet must have (\"HERETIC ASTARTES model with the Deep Strike ability only\"). Every listed ability is required, on top of the keyword and datasheet groups."
+    },
     "attachment_bodyguard_ids": {
       "type": "array",
       "items": { "$ref": "../defs/common.schema.json#/$defs/entity-id" },

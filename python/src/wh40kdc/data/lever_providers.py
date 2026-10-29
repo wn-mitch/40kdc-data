@@ -12,7 +12,10 @@ from __future__ import annotations
 from collections.abc import Callable
 from typing import TYPE_CHECKING, Any
 
-from wh40kdc.data.enhancement_eligibility import meets_enhancement_groups
+from wh40kdc.data.enhancement_eligibility import (
+    meets_enhancement_groups,
+    missing_required_abilities,
+)
 
 if TYPE_CHECKING:
     from wh40kdc.data.dataset import Dataset
@@ -143,7 +146,8 @@ def shared_keywords_lower(units: list[UnitView]) -> list[str]:
 def can_take_enhancement(ds: Dataset, enhancement: dict[str, Any], bearer: UnitView) -> bool:
     """Whether ``bearer`` can take ``enhancement`` under the Select Enhancements rules the roster
     validator enforces: a CHARACTER (or an Upgrade), not an EPIC HERO, with a model that may take
-    Enhancements, carrying every keyword of one restriction group and none of the exclusions."""
+    Enhancements, carrying every keyword of one restriction group, every core ability it requires
+    and none of the exclusions."""
     keywords = set(combined_keywords_lower([bearer]))
 
     def has(keyword: str) -> bool:
@@ -158,7 +162,11 @@ def can_take_enhancement(ds: Dataset, enhancement: dict[str, Any], bearer: UnitV
     if rows and all(model.get("excluded_from_enhancements") is True for model in rows):
         return False
     eligible = meets_enhancement_groups(enhancement, bearer.id, has)
-    return eligible and not any(has(k) for k in enhancement.get("exclusion_keywords") or [])
+    return (
+        eligible
+        and not missing_required_abilities(enhancement, bearer.raw.get("ability_ids"))
+        and not any(has(k) for k in enhancement.get("exclusion_keywords") or [])
+    )
 
 
 def ability_levers(

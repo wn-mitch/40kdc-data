@@ -1657,6 +1657,9 @@
         "namespace": "mfm",
         "id": "6af69b46-850c-47aa-9dc5-183ee6d7ea41"
       }
+    ],
+    "required_ability_ids": [
+      "deep-strike"
     ]
   },
   {
@@ -1685,6 +1688,9 @@
         "namespace": "mfm",
         "id": "e27113b8-e4c1-4f22-8869-b20acd87589b"
       }
+    ],
+    "required_ability_ids": [
+      "deep-strike"
     ]
   },
   {
@@ -1713,6 +1719,9 @@
         "namespace": "mfm",
         "id": "992754f1-6976-4e97-88ac-c42b83f54d8e"
       }
+    ],
+    "required_ability_ids": [
+      "deep-strike"
     ]
   },
   {

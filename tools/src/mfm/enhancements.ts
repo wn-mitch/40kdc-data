@@ -48,6 +48,7 @@ interface EnhRecord {
   keyword_restrictions?: string[] | null;
   keyword_restriction_groups?: string[][] | null;
   datasheet_restriction_groups?: DatasheetRestriction[] | null;
+  required_ability_ids?: string[];
   attachment_bodyguard_ids?: string[];
   [k: string]: unknown;
 }
@@ -69,6 +70,8 @@ export interface DirEnhResult {
   maxTargetsChanged: { id: string; from: number; to: number }[];
   /** Source-owned exclusions that were replaced or cleared. */
   exclusionChanged: { id: string; from: string[] | null; to: string[] | null }[];
+  /** Source-owned required core abilities that were replaced or cleared. */
+  requiredAbilitiesChanged: { id: string; from: string[] | null; to: string[] | null }[];
   /** Source-owned eligibility representation that was replaced or cleared. */
   eligibilityChanged: {
     id: string;
@@ -189,6 +192,7 @@ export interface EnhancementEligibilityRecord {
   keyword_restriction_groups?: string[][] | null;
   datasheet_restriction_groups?: DatasheetRestriction[] | null;
   exclusion_keywords?: string[] | null;
+  required_ability_ids?: string[];
 }
 
 export interface EligibilityReconcileResult {
@@ -197,6 +201,7 @@ export interface EligibilityReconcileResult {
     to: EligibilityShape;
   };
   exclusions?: { from: string[] | null; to: string[] | null };
+  abilities?: { from: string[] | null; to: string[] | null };
 }
 
 /** Reconcile the source-owned eligibility fields without ever retaining both forms. */
@@ -237,6 +242,13 @@ export function reconcileEnhancementEligibility(
     if (fields.exclusion_keywords === null) delete record.exclusion_keywords;
     else record.exclusion_keywords = fields.exclusion_keywords;
   }
+
+  const abilitiesFrom = record.required_ability_ids ?? null;
+  if (!sameLabels(abilitiesFrom, fields.required_ability_ids)) {
+    result.abilities = { from: abilitiesFrom, to: fields.required_ability_ids };
+    if (fields.required_ability_ids === null) delete record.required_ability_ids;
+    else record.required_ability_ids = fields.required_ability_ids;
+  }
   return result;
 }
 export interface EnhFields {
@@ -252,10 +264,17 @@ export interface EnhFields {
   datasheet_restriction_groups: DatasheetRestriction[] | null;
   /** Extra bodyguard datasheets the enhancement permits its bearer to join. */
   attachment_bodyguard_ids: string[] | null;
+  /** Core abilities the bearer's datasheet must have, by core ability id, sorted; null when none. */
+  required_ability_ids: string[] | null;
   /** True when >1 required-keyword group carries a different member set. */
   keywordRestrictionsAmbiguous: boolean;
-  /** Dump keyword/faction-keyword ids that did not resolve to a repo label. */
+  /** Dump keyword, faction-keyword and required-ability ids that did not resolve to a repo label or core ability. */
   unresolvedKeywordIds: string[];
+}
+
+/** The core ability catalog's ids (Deep Strike, Scouts, …), which a required ability must name. */
+function coreAbilityCatalogIds(): Set<string> {
+  return new Set(readJsonArray<{ id: string }>(path.join(CORE_DIR, "unit-keywords.json")).map((ability) => ability.id));
 }
 
 /** The dump's placeholder required keyword: a keyword row named "DNU" that no unit carries. */
@@ -287,6 +306,7 @@ const PLACEHOLDER_BEARER_KEYWORDS: Readonly<Record<string, string>> = {
  *   - max_targets           ← limit (how many copies may be taken; default 1)
  *   - exclusion_keywords    ← enhancement_excluded_keyword.keywordId → labels
  *   - keyword_restrictions  ← required-keyword-group keyword + faction-keyword members
+ *   - required_ability_ids  ← enhancement_datasheet_ability → a core datasheet_ability → its core ability id
  *
  * Required-keyword groups model "bearer must have keyword(s)". Every non-empty
  * keyword-only source group becomes one conjunction in `keyword_restriction_groups`.
@@ -296,8 +316,14 @@ const PLACEHOLDER_BEARER_KEYWORDS: Readonly<Record<string, string>> = {
  * committed record uses the legacy flat field for one keyword conjunction and the
  * grouped field for alternatives; the two forms are mutually exclusive.
  */
-export function buildEnhFieldCanon(dump: MfmDump, unitIdOf: DatasheetUnitResolver = coreUnitIdsByDatasheet()): Map<string, EnhFields> {
+export function buildEnhFieldCanon(
+  dump: MfmDump,
+  unitIdOf: DatasheetUnitResolver = coreUnitIdsByDatasheet(),
+  coreAbilityIds: ReadonlySet<string> = coreAbilityCatalogIds(),
+): Map<string, EnhFields> {
   const detName = dump.byId("detachment");
+  const abilitiesByEnh = safeGroupBy(dump, "enhancement_datasheet_ability", "enhancementId");
+  const datasheetAbilityById = dump.tables.datasheet_ability ? dump.byId("datasheet_ability") : undefined;
   const excludedByEnh = safeGroupBy(dump, "enhancement_excluded_keyword", "enhancementId");
   const groupsByEnh = safeGroupBy(dump, "enhancement_required_keyword_group", "enhancementId");
   const kwByGroup = safeGroupBy(dump, "enhancement_required_keyword_group_keyword", "enhancementRequiredKeywordGroupId");
@@ -363,8 +389,19 @@ export function buildEnhFieldCanon(dump: MfmDump, unitIdOf: DatasheetUnitResolve
       }
     }
 
+    // "<KEYWORD> model with the Deep Strike ability only": a core ability the bearer's datasheet must have.
+    const requiredAbilities = new Set<string>();
+    for (const relation of abilitiesByEnh.get(e.id) ?? []) {
+      const row = datasheetAbilityById?.get(relation.datasheetAbilityId);
+      const name = dump.enName(row);
+      const coreId = row?.abilityType === "core" && name ? nameToId(name) : undefined;
+      if (coreId !== undefined && coreAbilityIds.has(coreId)) requiredAbilities.add(coreId);
+      else unresolved.push(relation.datasheetAbilityId);
+    }
+
     // The dump's own rules text wins over its eligibility rows where the two disagree.
     const override = RULES_TEXT_ELIGIBILITY[e.id];
+    const abilityIds = override?.required_ability_ids ?? [...requiredAbilities];
     const keywordGroups = override?.keyword_restriction_groups ?? distinctGroupSets;
     const keywordUnion = override?.keyword_restriction_groups ? [...new Set(keywordGroups.flat())].sort((a, b) => a.localeCompare(b)) : union;
     out.set(id, {
@@ -377,6 +414,7 @@ export function buildEnhFieldCanon(dump: MfmDump, unitIdOf: DatasheetUnitResolve
       attachment_bodyguard_ids: attachmentBodyguardIds.size
         ? [...attachmentBodyguardIds].sort((a, b) => a.localeCompare(b))
         : null,
+      required_ability_ids: abilityIds.length ? [...abilityIds].sort((a, b) => a.localeCompare(b)) : null,
       keywordRestrictionsAmbiguous: keywordGroups.length > 1,
       unresolvedKeywordIds: [...new Set(unresolved)],
     });
@@ -553,6 +591,7 @@ export function runEnhancements(
       exclusionChanged: [],
       eligibilityChanged: [],
       attachmentBodyguardsChanged: [],
+      requiredAbilitiesChanged: [],
       unresolvedKeywords: [],
     };
     for (const e of enhs) {
@@ -601,6 +640,9 @@ export function runEnhancements(
         }
         if (changes.exclusions) {
           res.exclusionChanged.push({ id: e.id, ...changes.exclusions });
+        }
+        if (changes.abilities) {
+          res.requiredAbilitiesChanged.push({ id: e.id, ...changes.abilities });
         }
         const attachmentAuthored = e.attachment_bodyguard_ids ?? null;
         if (!sameLabels(attachmentAuthored, f.attachment_bodyguard_ids)) {
@@ -722,6 +764,9 @@ export function runEnhancements(
     if (fields.attachment_bodyguard_ids) {
       record.attachment_bodyguard_ids = fields.attachment_bodyguard_ids;
     }
+    if (fields.required_ability_ids && fields.unresolvedKeywordIds.length === 0) {
+      record.required_ability_ids = fields.required_ability_ids;
+    }
 
     const enhancements = enhancementsByDir.get(location.dir);
     if (!enhancements) {
@@ -766,15 +811,15 @@ export function buildEnhReport(report: EnhReport, write: boolean): string {
   L.push("authoritative when all source keywords resolve: they replace stale core");
   L.push("values and absent source relations clear them. Prose is never read or written.");
   L.push("");
-  L.push("| Dir | Matched | Cost | upgrade | max_tgt | eligibility | exclusions | Repo-only |");
-  L.push("|---|--:|--:|--:|--:|--:|--:|--:|");
+  L.push("| Dir | Matched | Cost | upgrade | max_tgt | eligibility | exclusions | abilities | Repo-only |");
+  L.push("|---|--:|--:|--:|--:|--:|--:|--:|--:|");
   for (const d of dirs.filter((d) => d.matched || d.unmatchedRepo.length)) {
     L.push(
-      `| ${d.dir} | ${d.matched} | ${d.costChanged.length} | ${d.upgradeChanged.length} | ${d.maxTargetsChanged.length} | ${d.eligibilityChanged.length} | ${d.exclusionChanged.length} | ${d.unmatchedRepo.length} |`
+      `| ${d.dir} | ${d.matched} | ${d.costChanged.length} | ${d.upgradeChanged.length} | ${d.maxTargetsChanged.length} | ${d.eligibilityChanged.length} | ${d.exclusionChanged.length} | ${d.requiredAbilitiesChanged.length} | ${d.unmatchedRepo.length} |`
     );
   }
   L.push(
-    `| **TOTAL** | **${sum((d) => d.matched)}** | **${sum((d) => d.costChanged.length)}** | **${sum((d) => d.upgradeChanged.length)}** | **${sum((d) => d.maxTargetsChanged.length)}** | **${sum((d) => d.eligibilityChanged.length)}** | **${sum((d) => d.exclusionChanged.length)}** | **${sum((d) => d.unmatchedRepo.length)}** |`
+    `| **TOTAL** | **${sum((d) => d.matched)}** | **${sum((d) => d.costChanged.length)}** | **${sum((d) => d.upgradeChanged.length)}** | **${sum((d) => d.maxTargetsChanged.length)}** | **${sum((d) => d.eligibilityChanged.length)}** | **${sum((d) => d.exclusionChanged.length)}** | **${sum((d) => d.requiredAbilitiesChanged.length)}** | **${sum((d) => d.unmatchedRepo.length)}** |`
   );
   L.push("");
   for (const d of dirs) {
@@ -784,6 +829,7 @@ export function buildEnhReport(report: EnhReport, write: boolean): string {
       d.maxTargetsChanged.length ||
       d.eligibilityChanged.length ||
       d.exclusionChanged.length ||
+      d.requiredAbilitiesChanged.length ||
       d.unresolvedKeywords.length ||
       d.unmatchedRepo.length;
     if (!hasDetail) continue;
@@ -809,6 +855,12 @@ export function buildEnhReport(report: EnhReport, write: boolean): string {
     if (d.exclusionChanged.length) {
       L.push("", "**exclusion_keywords changes:**");
       d.exclusionChanged.forEach((c) =>
+        L.push(`- ${c.id}: ${JSON.stringify(c.from)} → ${JSON.stringify(c.to)}`),
+      );
+    }
+    if (d.requiredAbilitiesChanged.length) {
+      L.push("", "**required_ability_ids changes:**");
+      d.requiredAbilitiesChanged.forEach((c) =>
         L.push(`- ${c.id}: ${JSON.stringify(c.from)} → ${JSON.stringify(c.to)}`),
       );
     }

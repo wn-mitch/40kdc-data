@@ -4,7 +4,7 @@
 
 use serde_json::Value;
 
-use crate::{Unit, UnitAbilityIdsItem};
+use crate::{Enhancement, Unit, UnitAbilityIdsItem};
 
 impl UnitAbilityIdsItem {
     /// The ability id the entry names.
@@ -40,6 +40,20 @@ pub fn unit_ability_ids(unit: &Unit) -> Vec<&str> {
     unit.ability_ids
         .iter()
         .map(UnitAbilityIdsItem::id)
+        .collect()
+}
+
+/// The core abilities `enhancement` requires (`required_ability_ids`, "model with the Deep Strike
+/// ability only") that `bearer`'s datasheet does not list in its `ability_ids`, in the record's
+/// order. Mirrors TS `missingRequiredAbilities`.
+pub fn missing_required_abilities<'a>(enhancement: &'a Enhancement, bearer: &Unit) -> Vec<&'a str> {
+    let held = unit_ability_ids(bearer);
+    enhancement
+        .required_ability_ids
+        .iter()
+        .flatten()
+        .map(|id| id.as_str())
+        .filter(|id| !held.contains(id))
         .collect()
 }
 

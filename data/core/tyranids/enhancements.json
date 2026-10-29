@@ -814,6 +814,9 @@
         "namespace": "mfm",
         "id": "5b10541a-e6c1-4c88-9e2d-80f01ad54a25"
       }
+    ],
+    "required_ability_ids": [
+      "deep-strike"
     ]
   },
   {

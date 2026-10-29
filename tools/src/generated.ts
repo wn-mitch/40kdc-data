@@ -3042,6 +3042,12 @@ export interface Enhancement {
   ];
   exclusion_keywords?: KeywordList | null;
   /**
+   * Core abilities (data/core/unit-keywords.json ids) the bearer's datasheet must have ("HERETIC ASTARTES model with the Deep Strike ability only"). Every listed ability is required, on top of the keyword and datasheet groups.
+   *
+   * @minItems 1
+   */
+  required_ability_ids?: [EntityId, ...EntityId[]];
+  /**
    * Additional bodyguard units the bearer may attach to because it carries this enhancement.
    *
    * @minItems 1

@@ -328,4 +328,23 @@ export const ELIGIBILITY_EXTENSIONS: readonly FamilyExtension[] = [
       return { ...previous(rest), datasheets: [...datasheets].sort() };
     },
   },
+  {
+    // "HERETIC ASTARTES model with the Deep Strike ability only": the bearer's datasheet must have
+    // these core abilities as well as the keywords.
+    family: "bearer-eligibility",
+    version: 7,
+    description: "As the previous version, plus abilities: core abilities the bearer's datasheet must have, by core ability id (\"HERETIC ASTARTES model with the Deep Strike ability only\" is HERETIC ASTARTES plus deep-strike). Checked against the core enhancement's required_ability_ids.",
+    schema: (previous) => withProperties(previous, {
+      abilities: optional({ type: "array", items: { type: "string", pattern: DATASHEET_ID.source }, minItems: 1, uniqueItems: true }),
+    }),
+    normalize: (input, previous) => {
+      if (!("abilities" in input)) return previous(input);
+      const { abilities, ...rest } = input;
+      if (!Array.isArray(abilities) || abilities.length === 0 || abilities.some((id) => typeof id !== "string" || !DATASHEET_ID.test(id))) {
+        throw new TypeError("bearer-eligibility.abilities lists core ability ids in kebab case.");
+      }
+      if (new Set(abilities).size !== abilities.length) throw new TypeError("bearer-eligibility.abilities names an ability twice.");
+      return { ...previous(rest), abilities: [...abilities].sort() };
+    },
+  },
 ];

@@ -346,6 +346,9 @@
         "namespace": "mfm",
         "id": "89ae162e-a1cb-4b7d-acbb-23f553ae8824"
       }
+    ],
+    "required_ability_ids": [
+      "deep-strike"
     ]
   }
 ]

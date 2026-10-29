@@ -473,3 +473,25 @@ describe("Semantic authoring set-up placement: among-filter matches inside a set
       setUp, wholly, among)).toMatch(/names one target but matches 2/u);
   });
 });
+
+describe("Semantic authoring set-up permission through an ability (compile-named-ability.ts foldByAbility)", () => {
+  const permitted = (wording: string): Item => [wording, "set-up", { subject: "this-unit", to: "battlefield" }];
+  const byAbility = (wording: string, id: string): Item => [wording, "by-ability", { id }];
+
+  it("reads \"can be set up using the Deep Strike ability\" as a Deep Strike set-up", () => {
+    const text = "The bearer's unit can be set up using the Deep Strike ability in the first round.";
+    const mechanics = mechanicsOf(text, permitted("The bearer's unit can be set up"), byAbility("using the Deep Strike ability", "deep-strike"));
+    expect(mechanics.effect).toEqual({ type: "set-up", target: "this-unit", modifier: { to: "battlefield", via: "deep-strike" } });
+    expect(describeEffect(mechanics.effect as Effect)).toContain("using the Deep Strike rules");
+  });
+
+  it("refuses another ability, a forbidden set-up, and wording between them", () => {
+    expect(errorsOf("The unit can be set up using the Scouts ability.", permitted("The unit can be set up"), byAbility("using the Scouts ability", "scouts")))
+      .toMatch(/only Deep Strike says how a unit is set up/u);
+    expect(errorsOf("The unit cannot be set up using the Deep Strike ability.", ["The unit cannot be set up", "set-up", { subject: "this-unit", to: "battlefield", allow: false }], byAbility("using the Deep Strike ability", "deep-strike")))
+      .toMatch(/forbidden or already names how it is set up/u);
+    // Words between the two are another clause, so the ability is not the set-up's.
+    expect(errorsOf("The unit can be set up, and then using the Deep Strike ability.", permitted("The unit can be set up"), byAbility("using the Deep Strike ability", "deep-strike")))
+      .toMatch(/no move, selection, set-up or targeting sits before it/u);
+  });
+});
