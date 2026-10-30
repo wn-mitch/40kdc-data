@@ -106,7 +106,7 @@ export function assemblePart(
   } = frame;
   let { optional, optionalSentence } = frame;
   const { planned, split, boundDuration, window } = plan;
-  const { firstEffectIndex, partStarts, afterDestruction, delayed, fold, selectionLimit, target, nearTarget, selected, pair, independent, designatedSpends, direct } = bindings;
+  const { firstEffectIndex, partStarts, afterDestruction, afterThisUse, delayed, fold, selectionLimit, target, nearTarget, selected, pair, independent, designatedSpends, direct } = bindings;
   // A Stratagem's RESTRICTIONS apply to its use as a whole, so they belong to the first part, not to the moment printed before them.
   const partOf = (index: number) => list[index]!.fragment === "RESTRICTIONS" ? 0 : partStarts.filter((part) => part.index < index).length;
   // Each effect's own duration wraps its node before the parts are built. Under a window, an effect that
@@ -459,7 +459,10 @@ export function assemblePart(
     whileMarked.delete(usagePart);
     // "If it does, … At the end of the phase, …": a phase end after a part's own use nests in that part, for the phase.
     const afterOwnUse = momentsAfterOwnUse(list, triggerIndexes, partStarts, sourceText);
+    // "Each time this unit uses this ability, at the end of the phase": the use is the offering part's own moment.
+    for (const position of afterThisUse.keys()) afterOwnUse.add(position);
     afterOwnUse.delete(usagePart);
+    const partMoments = (part: { moments: number[] }, position: number) => part.moments.filter((at) => at !== afterThisUse.get(position)).map((at) => moments[at]!);
     const nestedSteps: Node[] = [];
     // "In addition, … if such an enemy unit is …, it must …": a later part about the aura's recipient holds for each unit in the aura.
     const rawEffects: Node[] = partStarts.map((_, position) => {
@@ -471,11 +474,11 @@ export function assemblePart(
     if (auraLeaf && !auraFirst && !rawEffects.some(namesUnboundRecipient)) {
       return { ok: false, signature, errors: [...errors, "An aura in an ability with several moments reaches no effect's recipient; its range would be dropped."] };
     }
-    const partEffects = partStarts.map((part, position) => attempt(() => auraPart(auraLeaf, rawEffects[position]!, part.moments.map((index) => moments[index]!))));
+    const partEffects = partStarts.map((part, position) => attempt(() => auraPart(auraLeaf, rawEffects[position]!, partMoments(part, position))));
     if (partEffects.some((effect) => effect === null)) return { ok: false, signature, errors };
     partStarts.forEach((part, position) => {
       let node: Node = {
-        type: "ability-part", trigger: asTrigger(part.moments.map((index) => moments[index]!)), effect: partEffects[position]!,
+        type: "ability-part", trigger: asTrigger(partMoments(part, position)), effect: partEffects[position]!,
         ...(position === usagePart ? { usage: usages[0] } : {}),
         ...(connective.optionalParts.has(position + 1) ? { optional: true } : {}),
         ...(partPeriods[position] ? { duration: partPeriods[position] } : {}),

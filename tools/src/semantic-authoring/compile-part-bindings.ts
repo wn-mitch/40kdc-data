@@ -10,7 +10,7 @@ import { applyHolderAllowance } from "./compile-holder-abilities.js";
 import { filterObjectMoment } from "./compile-model-level.js";
 import { alternativeMoments } from "./compile-segments.js";
 import { planDelayedDestruction } from "./compile-delayed-destruction.js";
-import { momentsAfterDestruction } from "./compile-nested-moment.js";
+import { momentsAfterDestruction, momentsAfterThisUse } from "./compile-nested-moment.js";
 import { bindNearFriendlyTarget } from "./compile-near-friendly-target.js";
 import { groupedTargetRestrictions } from "./compile-target-groups.js";
 import type { PartFrame } from "./compile-part-classify.js";
@@ -54,7 +54,9 @@ export function bindParts(frame: PartFrame, plan: ReturnType<typeof planEffects>
   // The attack-window fold applies to a single-part ability; with later parts the durations stay conflicting.
   if (partStarts.length && fold !== null) { if (fold !== "refused") errors.push(CONFLICTING_DURATIONS); fold = null; }
   for (const [position, lowering] of delayed.lowered) triggers[position] = { ...lowering.trigger, condition: lowering.condition };
-  if (partStarts.some((part) => !alternativeMoments(part.moments.map((position) => list[triggerIndexes[position]!]!), sourceText))) {
+  // "Each time this unit uses this ability, at the end of the phase": one moment, nested in the offering part (compile-nested-moment.ts).
+  const afterThisUse = momentsAfterThisUse(list, triggerIndexes, partStarts, sourceText, options.abilityId);
+  if (partStarts.some((part, position) => !afterThisUse.has(position) && !alternativeMoments(part.moments.map((at) => list[triggerIndexes[at]!]!), sourceText))) {
     errors.push("A moment nested in another (\"each time …, at the end of the phase\") has no DSL trigger; a trigger list fires on any one of its moments.");
   }
   if (partStarts.some((part, position) => !planned.some((item) => item.index > part.index && (partStarts[position + 1] === undefined || item.index < partStarts[position + 1]!.index)))) {
@@ -215,7 +217,7 @@ export function bindParts(frame: PartFrame, plan: ReturnType<typeof planEffects>
   // When the window is itself an attack moment ("just after an enemy unit has shot"), the reactive trigger already is "those attacks".
   const attackMoment = list.some((leaf) => leaf.family_id === "event" && ["enemy-has-shot", "attacks-resolved", "after-shooting"].includes(String(leaf.parameters.kind)));
   if (!attackMoment && list.some((leaf) => leaf.family_id === "stratagem-target") && list.some((leaf) => leaf.family_id === "hit-by-attacks" && leaf.fragment === "TARGET")) errors.push("A hit-by-attacks qualifier on a Stratagem target has no DSL shape yet; it would be dropped.");
-  return { firstEffectIndex, partStarts, afterDestruction, delayed, fold, selectionLimit, target, nearTarget, selected, pair, independent, designatedSpends, direct };
+  return { firstEffectIndex, partStarts, afterDestruction, afterThisUse, delayed, fold, selectionLimit, target, nearTarget, selected, pair, independent, designatedSpends, direct };
 }
 
 /** Whether an effect (or one nested in it) applies to the selected unit. */

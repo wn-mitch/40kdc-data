@@ -5213,15 +5213,84 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "9812c82f0ef06958ab3c6f72be403a52f6c77b8d6300142c75a26398465074f5",
     "version": "2025-q3",
     "effect": {
-      "type": "mortal-wounds",
-      "target": "defender",
-      "modifier": {
-        "count": 1
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "selected",
+          "filter": {
+            "move_types": [
+              "normal"
+            ],
+            "to": "move"
+          },
+          "optional": true
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "permission",
+              "target": "this-unit",
+              "modifier": {
+                "activity": "declare-charge",
+                "allow": false
+              }
+            },
+            {
+              "type": "stat-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "stat": "M",
+                "operation": "set",
+                "value": 24
+              }
+            },
+            {
+              "type": "ability-part",
+              "trigger": {
+                "event": "phase-ended"
+              },
+              "effect": {
+                "type": "mortal-wounds",
+                "target": "this-unit",
+                "modifier": {
+                  "count": 1,
+                  "per": "success",
+                  "roll": {
+                    "dice": 1,
+                    "threshold": 1,
+                    "comparison": "lte",
+                    "per_model": "this-unit"
+                  }
+                }
+              },
+              "duration": "phase"
+            }
+          ]
+        }
       }
     },
     "scope": {
@@ -5231,7 +5300,7 @@
       "warp-spiders"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "faction_id": "aeldari"
   },
   {

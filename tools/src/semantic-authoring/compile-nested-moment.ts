@@ -140,3 +140,43 @@ export function momentsAfterOwnUse(
   });
   return nested;
 }
+
+/**
+ * The later parts whose moments are a use of the record's own ability and then the end of the phase: "… it can use
+ * this ability. … Each time this unit uses this ability, at the end of the phase, roll one D6 …". The phase end is
+ * the end of the phase in which that use was made, once for each use, so the part nests in the part that offers the
+ * use, for that phase, and its use moment is dropped: that is the offering part's own moment. Returns, by position
+ * in `partStarts`, the moment position (in `triggerIndexes`) of the use to drop. The use names the record's own id
+ * (event id) and is this unit's, with no other qualifier; it comes first, only a comma stands between it and the
+ * phase end (isAnyPhaseEnd), and an optional use before the part offers it. A record with no id (a printed grant's
+ * body) has none.
+ */
+export function momentsAfterThisUse(
+  list: readonly CompileLeaf[],
+  triggerIndexes: readonly number[],
+  partStarts: ReadonlyArray<{ index: number; moments: number[] }>,
+  sourceText: string | undefined,
+  abilityId: string | undefined,
+): Map<number, number> {
+  const nested = new Map<number, number>();
+  if (sourceText === undefined || abilityId === undefined) return nested;
+  const bytes = Buffer.from(sourceText, "utf8");
+  partStarts.forEach((part, position) => {
+    if (part.moments.length !== 2) return;
+    const [use, end] = part.moments.map((at) => list[triggerIndexes[at]!]!) as [CompileLeaf, CompileLeaf];
+    if (!isOwnUse(use, abilityId) || !isAnyPhaseEnd(end)) return;
+    if (use.end_byte === undefined || use.end_byte > end.start_byte) return;
+    if (!/^[\s,]*$/u.test(bytes.subarray(use.end_byte, end.start_byte).toString("utf8"))) return;
+    if (!list.slice(0, part.index).some((leaf) => leaf.family_id === "optional-use")) return;
+    nested.set(position, part.moments[0]!);
+  });
+  return nested;
+}
+
+/** A use of the record's own ability by this unit ("this unit uses this ability"), with nothing else qualifying it. */
+function isOwnUse(leaf: CompileLeaf, abilityId: string): boolean {
+  const p = leaf.parameters;
+  if (leaf.family_id !== "event" || p.kind !== "used" || p.activity !== "ability" || p.id !== abilityId) return false;
+  if (p.subject !== undefined && p.subject !== "this-unit") return false;
+  return Object.keys(p).every((key) => ["kind", "activity", "id", "subject"].includes(key));
+}
