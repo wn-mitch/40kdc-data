@@ -9,6 +9,8 @@ import { foldUnitFilters } from "./compile-unit-filters.js";
 import { allOf, condition } from "./compile-conditions.js";
 import { durationPart, placeInWindow } from "./compile-durations.js";
 import { laterPartWindow, nestInSelection, withPartWindow } from "./compile-later-part.js";
+import { passOffer, wrapNamedChain } from "./compile-named-selections.js";
+import { refuseUnwrappedThatMany, wrapThatMany } from "./compile-that-many.js";
 import { isRollMarker, resolveRolls } from "./compile-dice.js";
 import { foldBandSelection } from "./compile-band-selection.js";
 import { boundAttackDesignation, designation, directEntry, selectUnit, wrapAura, wrapForEachUnit, wrapLeaderTarget, wrapRulesBundle } from "./compile-wrappers.js";
@@ -106,7 +108,7 @@ export function assemblePart(
   } = frame;
   let { optional, optionalSentence } = frame;
   const { planned, split, boundDuration, window } = plan;
-  const { firstEffectIndex, partStarts, afterDestruction, afterThisUse, delayed, fold, selectionLimit, target, nearTarget, selected, pair, independent, designatedSpends, direct } = bindings;
+  const { firstEffectIndex, partStarts, afterDestruction, afterThisUse, named, namedPass, delayed, fold, selectionLimit, target, nearTarget, selected, pair, independent, designatedSpends, direct } = bindings;
   // A Stratagem's RESTRICTIONS apply to its use as a whole, so they belong to the first part, not to the moment printed before them.
   const partOf = (index: number) => list[index]!.fragment === "RESTRICTIONS" ? 0 : partStarts.filter((part) => part.index < index).length;
   // Each effect's own duration wraps its node before the parts are built. Under a window, an effect that
@@ -286,6 +288,16 @@ export function assemblePart(
       ...(selectUnit(selections[0]!, body!, { eligibility, selectionLimit }).selector as Node),
       ...(existing.bind_as === undefined ? {} : { bind_as: existing.bind_as }),
     };
+  }
+  else if (named && body) {
+    // Selections bound apart and named one by one: each nests in the one before it, with its own conditions.
+    body = attempt(() => wrapNamedChain(list, named, body!, eligibilityIndexes, sourceText, (at) => condition(eligibilityLeaf(list[at]!))));
+    // "For each X unit, you can select …": the choice is made in each pass, not once for the moment.
+    if (body && namedPass && passOffer(list, forEachLeaf!, named)) {
+      body = { type: "ability-part", optional: true, effect: body };
+      optional = false;
+    }
+    if (body && namedPass) body = attempt(() => wrapForEachUnit(forEachLeaf!, body!));
   }
   else if (pair && body) {
     // A bound pair: the outer select takes the selection's eligibility, the inner one its candidate's (compile-pair-eligibility.ts).
@@ -510,7 +522,10 @@ export function assemblePart(
   }
   let resolved: ReturnType<typeof resolveEntry>;
   try {
-    const effect = gated(global, foldConditionalTestModifiers(body));
+    // The mortal wounds and the regain of "that many" share one roll around them (compile-that-many.ts).
+    const shared = wrapThatMany(body) as Node;
+    refuseUnwrappedThatMany(shared);
+    const effect = gated(global, foldConditionalTestModifiers(shared));
     const nestedNow = nestedTriggers.length > 0 && !selectsBeforeMoment;
     resolved = resolveEntry(nestedNow ? { type: "ability-part", trigger: asTrigger(nestedTriggers), effect } : effect, entryTrigger, target, severalTargets(list));
   } catch (error) {

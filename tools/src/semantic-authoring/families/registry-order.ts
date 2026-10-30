@@ -87,4 +87,5 @@ export const REGISTRY_ORDER: readonly string[] = [
   "issue-orders-open@2", "unit-position@28",
   "unit-keyword@8",
   "dice-roll@8", "dice-roll@9", "unit-filter@19", "roll-modifier@11", "unit-position@29", "unit-position@30", "dice-roll@10",
+  "mortal-wounds@6", "regain-wounds@6", "attack@9", "regain-wounds@7",
 ];

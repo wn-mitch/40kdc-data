@@ -17,6 +17,7 @@ import { POSITION_EXTENSIONS } from "./positions.js";
 import { REGION_EXTENSIONS } from "./regions.js";
 import { REGISTRY_ORDER } from "./registry-order.js";
 import { ROLL_EXTENSIONS } from "./rolls.js";
+import { SELECTION_REF_EXTENSIONS } from "./selection-refs.js";
 import { SELECTION_EXTENSIONS } from "./selections.js";
 import { SET_UP_EXTENSIONS } from "./set-up.js";
 import { TARGETING_ABILITY_EXTENSIONS } from "./targeting-ability.js";
@@ -55,6 +56,7 @@ const FAMILY_EXTENSIONS: readonly FamilyExtension[] = [
   ...SET_UP_EXTENSIONS,
   ...ELIGIBILITY_EXTENSIONS,
   ...SELECTION_EXTENSIONS,
+  ...SELECTION_REF_EXTENSIONS,
   ...ARMY_EXTENSIONS,
   ...ABILITY_EXTENSIONS,
   ...DURATION_AND_DESIGNATION_EXTENSIONS,

@@ -31,9 +31,9 @@ const EXACT_COUNT: FamilyExtension = {
 };
 
 /** A selection name: the bind_as of an earlier selection, or the name one selection binds. */
-const SELECTION_NAME = { type: "string", pattern: "^[a-z][a-z0-9_-]*$", minLength: 1, maxLength: 40 };
+export const SELECTION_NAME = { type: "string", pattern: "^[a-z][a-z0-9_-]*$", minLength: 1, maxLength: 40 };
 
-function selectionName(value: unknown, field: string): string {
+export function selectionName(value: unknown, field: string): string {
   if (typeof value !== "string" || !/^[a-z][a-z0-9_-]*$/.test(value) || value.length > 40) throw new TypeError(`${field} is a lowercase selection name.`);
   return value;
 }

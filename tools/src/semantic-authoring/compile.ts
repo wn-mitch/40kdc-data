@@ -40,6 +40,8 @@ import { bindBareFilterHits, bindBeforeFormHits, foldDestroyFilters, foldLeading
 import { refuseUnmovedEventSubject } from "./compile-moved-subject.js";
 import { refuseSuchFilters } from "./compile-such-filter.js";
 import { bindUsedSelections } from "./compile-used-selection.js";
+import { bindSelectionRefs } from "./compile-named-selections.js";
+import { bindThatMany } from "./compile-that-many.js";
 import { bulletBreaks, commaItems, ordered, placements, plainLineBreaks, shapeSignature } from "./compile-placement.js";
 import { foldAlternativePools } from "./compile-dice-variants.js";
 import { planContainers } from "./compile-containers.js";
@@ -352,6 +354,10 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     conditionOf = planConditionOf(leaves, sourceText);
     // "the selected VEHICLE model" after a use of a named ability, in a record that selects nothing itself (compile-used-selection.ts).
     leaves = bindUsedSelections(foldAbilityUseRefresh(foldAbilityUseContext(leaves)));
+    // "That X unit", "the selected Y unit" naming one of several bound selections (compile-named-selections.ts).
+    leaves = bindSelectionRefs(leaves);
+    // "… suffers D3+1 mortal wounds and … regains up to that many lost wounds": one roll for both (compile-that-many.ts).
+    leaves = bindThatMany(leaves, sourceText);
     refuseBlastRating(leaves, sourceText);
     refuseStratagemTargetActivity(leaves);
     refuseUnboundIfItDoes(leaves, sourceText);

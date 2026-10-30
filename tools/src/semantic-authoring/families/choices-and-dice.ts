@@ -140,6 +140,14 @@ export const CHOICE_AND_DICE_EXTENSIONS: readonly FamilyExtension[] = [
     schema: (previous) => withProperties(previous, { amount: widenedEnum(previous, "amount", ["all"]) }),
     normalize: (input, previous) => input.amount === "all" ? standIn(input, "amount", "1", previous) : previous(input),
   },
+  {
+    // "that unit suffers D3+1 mortal wounds and one model in it regains up to that many lost wounds".
+    family: "regain-wounds",
+    version: 7,
+    description: "As the previous version, plus amount that-many: as many wounds as the mortal wounds printed before it in its sentence, from the same roll (\"suffers D3+1 mortal wounds and … regains up to that many lost wounds\").",
+    schema: (previous) => withProperties(previous, { amount: widenedEnum(previous, "amount", ["that-many"]) }),
+    normalize: (input, previous) => input.amount === "that-many" ? standIn(input, "amount", "1", previous) : previous(input),
+  },
   /**
    * "For each X model you select, roll one D6": one roll per model of the model selection the roll
    * sits in, which already applies its effect to each selected model.

@@ -139,8 +139,12 @@ export function foldUnitFilters(input0: readonly CompileLeaf[], sourceText?: str
     } else if (bareForEach(leaf) && isFilter(next) && next!.fragment === leaf.fragment) {
       // "for each" + "enemy unit" (+ "within 6\" of this model" | "engaged with your unit"): the
       // units each pass takes, folded into the quantifier as select-unit's filter is.
-      out.push({ ...leaf, parameters: { ...leaf.parameters, scope: side(next!, "a for-each", { anySide: true }), distance: "any", filter: filterOf(next!) } });
+      const scope = side(next!, "a for-each", { anySide: true });
+      out.push({ ...leaf, parameters: { ...leaf.parameters, scope, distance: "any", filter: filterOf(next!) } });
       index += 1;
+      // "for each X unit" + "from your army": the side the filter already names.
+      const owner = list[index + 1];
+      if (owner?.family_id === "unit-owner" && owner.fragment === leaf.fragment && owner.parameters.negated !== true && owner.parameters.owner === scope) index += 1;
       if (reach(out, list[index + 1])) index += 1;
       else if (nearOther(list[index + 1], leaf)) {
         out[out.length - 1] = { ...out.at(-1)!, parameters: { ...out.at(-1)!.parameters, near: nearOther(list[index + 1], leaf) } };

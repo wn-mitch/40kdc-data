@@ -11,6 +11,7 @@ import { filterObjectMoment } from "./compile-model-level.js";
 import { alternativeMoments } from "./compile-segments.js";
 import { planDelayedDestruction } from "./compile-delayed-destruction.js";
 import { momentsAfterDestruction, momentsAfterThisUse } from "./compile-nested-moment.js";
+import { chainPerPass, namedSelectionChain } from "./compile-named-selections.js";
 import { bindNearFriendlyTarget } from "./compile-near-friendly-target.js";
 import { groupedTargetRestrictions } from "./compile-target-groups.js";
 import type { PartFrame } from "./compile-part-classify.js";
@@ -30,7 +31,7 @@ export function bindParts(frame: PartFrame, plan: ReturnType<typeof planEffects>
   const {
     list, errors, attempt, triggers, triggerIndexes, durations, selections, modelUsages, usageIndexes, usages, usageScopes, selectedUnitUsages,
     targetParts, targetPartIndexes, targetConditions, optionalTargets, optionalSpends, forEachLeaf, battleSizeCount, countOf, pairCandidates,
-    pairGatesBound, rolls, auraLeaf, leaderLeaf, rulesBundle, optionalSpend,
+    pairGatesBound, rolls, auraLeaf, leaderLeaf, rulesBundle, optionalSpend, eligibilityIndexes,
   } = frame;
   const { planned, split } = plan;
   let { fold } = plan;
@@ -137,7 +138,9 @@ export function bindParts(frame: PartFrame, plan: ReturnType<typeof planEffects>
   const pair = attempt(() => boundSelectionPair(selections));
   // A friendly unit and an enemy unit selected apart, neither measured from the other (compile-bound-selection.ts).
   const independent = pair === null && errors.length === 0 ? attempt(() => independentSelectionPair(selections)) : null;
-  if (selections.length > 1 && pair === null && independent === null && errors.length === 0) errors.push("More than one unit is selected; the compiler binds only one.");
+  // Selections bound apart, which the leaves name one by one (compile-named-selections.ts).
+  const named = pair === null && independent === null && errors.length === 0 ? attempt(() => namedSelectionChain(list, selections)) : null;
+  if (selections.length > 1 && pair === null && independent === null && named === null && errors.length === 0) errors.push("More than one unit is selected; the compiler binds only one.");
   if (independent) {
     const refusal = independentPairRefusal(list, { parts: partStarts.length > 0, forEach: forEachLeaf !== null, count: Boolean(battleSizeCount || countOf) });
     if (refusal) errors.push(refusal);
@@ -199,7 +202,9 @@ export function bindParts(frame: PartFrame, plan: ReturnType<typeof planEffects>
   const partOfLeaf = (leaf: CompileLeaf) => partStarts.filter((part) => part.index < list.indexOf(leaf)).length;
   const perPass = forEachLeaf !== null && selectionPerPass(list, forEachLeaf, selections, planned, partOfLeaf);
   const inSelection = forEachLeaf !== null && loopInSelection(list, forEachLeaf, selections, planned, partOfLeaf);
-  if (forEachLeaf && selections.length > 0 && !perPass && !inSelection && (partStarts.length === 0 || selections.some((selection) => partOfLeaf(selection) === partOfLeaf(forEachLeaf!)))) errors.push("A unit is selected and the ability also loops with for-each-unit-select; the compiler binds only one of them.");
+  // A loop that runs a named chain of selections once per pass (compile-named-selections.ts).
+  const namedPass = forEachLeaf !== null && named !== null && chainPerPass(list, forEachLeaf, named, eligibilityIndexes, planned, partOfLeaf);
+  if (forEachLeaf && selections.length > 0 && !perPass && !inSelection && !namedPass && (partStarts.length === 0 || selections.some((selection) => partOfLeaf(selection) === partOfLeaf(forEachLeaf!)))) errors.push("A unit is selected and the ability also loops with for-each-unit-select; the compiler binds only one of them.");
   // Several durations: the parts that take the durations' own wrapping, with the features that read one duration are refused.
   if (split) {
     const selectsAttacks = selections.length === 1 && planned.some((item) => item.selected);
@@ -217,7 +222,7 @@ export function bindParts(frame: PartFrame, plan: ReturnType<typeof planEffects>
   // When the window is itself an attack moment ("just after an enemy unit has shot"), the reactive trigger already is "those attacks".
   const attackMoment = list.some((leaf) => leaf.family_id === "event" && ["enemy-has-shot", "attacks-resolved", "after-shooting"].includes(String(leaf.parameters.kind)));
   if (!attackMoment && list.some((leaf) => leaf.family_id === "stratagem-target") && list.some((leaf) => leaf.family_id === "hit-by-attacks" && leaf.fragment === "TARGET")) errors.push("A hit-by-attacks qualifier on a Stratagem target has no DSL shape yet; it would be dropped.");
-  return { firstEffectIndex, partStarts, afterDestruction, afterThisUse, delayed, fold, selectionLimit, target, nearTarget, selected, pair, independent, designatedSpends, direct };
+  return { firstEffectIndex, partStarts, afterDestruction, afterThisUse, named, namedPass, delayed, fold, selectionLimit, target, nearTarget, selected, pair, independent, designatedSpends, direct };
 }
 
 /** Whether an effect (or one nested in it) applies to the selected unit. */

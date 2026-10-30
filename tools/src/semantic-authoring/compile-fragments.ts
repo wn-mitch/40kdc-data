@@ -4,6 +4,7 @@
  */
 
 import { activationModifier } from "./compile-activation.js";
+import { thatManyCount } from "./compile-that-many.js";
 import { permissionDestination } from "./compile-permission-destination.js";
 import { isSelectionRef } from "./compile-pair-eligibility.js";
 import { condition } from "./compile-conditions.js";
@@ -549,7 +550,9 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
           : MORTAL_TARGETS[String(closed(leaf, "recipient"))];
       // "These mortal wounds are inflicted by a psychic attack" (compile-weapon-qualified.ts foldMortalWoundSources).
       const psychic = leaf.parameters.psychic === true ? { psychic: true } : {};
-      return { type: "mortal-wounds", target, modifier: { count: /^\d+$/u.test(count) ? Number(count) : count, ...cap, ...psychic } };
+      // "… and regains up to that many lost wounds": the count is the pair's shared roll (compile-that-many.ts).
+      const amount = typeof leaf.parameters.count_var === "string" ? thatManyCount(leaf.parameters.count_var, count) : /^\d+$/u.test(count) ? Number(count) : count;
+      return { type: "mortal-wounds", target, modifier: { count: amount, ...cap, ...psychic } };
     }
     case "fight-on-death": {
       const act = leaf.family_version >= 2 ? closed(leaf, "act") : "fight";
@@ -579,7 +582,8 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
       const amount = String(closed(leaf, "amount"));
       const per = leaf.parameters.per;
       // "Regains all of its lost wounds" is the DSL's full heal.
-      const quantity = amount === "all" ? "full" : /^\d+$/u.test(amount) ? Number(amount) : amount;
+      const quantity = typeof leaf.parameters.amount_var === "string" ? { roll_var: leaf.parameters.amount_var }
+        : amount === "all" ? "full" : /^\d+$/u.test(amount) ? Number(amount) : amount;
       return { type: "heal", target: target(leaf.parameters.subject), modifier: { amount: quantity, ...(per ? { per } : {}) } };
     }
     case "characteristic-modifier": {

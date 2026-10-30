@@ -164,7 +164,16 @@ export function sentenceSegments(leaves: readonly CompileLeaf[], sourceText: str
     // under one is a rule of its own, so it neither fires at the header's moment nor splits anywhere else.
     const headed = sentences.map((sentence, position) => position > firstEffectful && hasEffect(sentence.concat(sentences.slice(position + 1).flat()))
       && HEADING_LINE.test(sentenceGap(leaves, starts[position]!, sentence, sourceText)));
-    if (!headed.some(Boolean)) return null;
+    // "X units from your army have the following ability:" on a line of its own after the moment's effects is a
+    // standing grant the units hold whenever the record applies, not something the moment does.
+    const grants = sentences.map((sentence, position) => position > firstEffectful && standingGrant(sentence)
+      && /[\r\n]/u.test(sentenceGap(leaves, starts[position]!, sentence, sourceText)));
+    const grantFrom = grants.indexOf(true);
+    const trailingGrants = grantFrom !== -1 && grants.slice(grantFrom).every(Boolean);
+    if (!headed.some(Boolean)) {
+      if (!trailingGrants) return null;
+      return [[...header, ...sentences.slice(firstEffectful, grantFrom).flat()], ...sentences.slice(grantFrom)];
+    }
     const blocks: CompileLeaf[][] = [[...header]];
     sentences.forEach((sentence, position) => {
       if (headed[position]) blocks.push([]);

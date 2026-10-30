@@ -5533,34 +5533,23 @@
     "ability_type": "detachment",
     "behavior": "passive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "matches",
-        "parameters": {
-          "filter": {
-            "owner": "friendly"
-          }
+      "type": "for-each-unit",
+      "selector": {
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "ADEPTA SORORITAS"
+          ]
         }
       },
       "effect": {
-        "type": "for-each-unit",
-        "selector": {
-          "filter": {
-            "owner": "friendly",
-            "all_of": [
-              "ADEPTA SORORITAS"
-            ]
-          }
-        },
-        "effect": {
-          "type": "ability-modifier",
-          "target": "recipient",
-          "modifier": {
-            "ability": "acts-of-faith-adepta-sororitas",
-            "aspect": "uses",
-            "operation": "set",
-            "value": 2
-          }
+        "type": "ability-modifier",
+        "target": "recipient",
+        "modifier": {
+          "ability": "acts-of-faith-adepta-sororitas",
+          "aspect": "uses",
+          "operation": "set",
+          "value": 2
         }
       }
     },
