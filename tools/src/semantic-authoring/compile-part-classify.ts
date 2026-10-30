@@ -1,6 +1,6 @@
 import { exactSpan } from "./contracts.js";
 import { retargetMenu } from "./compile-activation.js";
-import { FILTERED_UNITS } from "./compile-antecedent.js";
+import { AURA_RECIPIENT, FILTERED_UNITS } from "./compile-antecedent.js";
 import { checkAbilityUsedWindows, namedAbilityChecks } from "./compile-named-ability.js";
 import { selectedUnitMoments } from "./compile-selection-moment.js";
 import { nestedWhenMoments } from "./compile-when-subject.js";
@@ -388,8 +388,13 @@ export function classifyLeaves(given: CompileLeaf[], places: Placement[], contai
           // a back-reference repeats its antecedent's type only where that one's gate does not reach.
           const gate = addsAttackGate(leaf) && leaf.parameters.permission_start === undefined ? attackTypeCondition(leaf) : null;
           if (gate) scope(gate);
-          // "targets that unit": the designation's unit needs nothing more; the selected unit scopes as a selection.
-          if (leaf.parameters.target === "that-unit" && attackTargetBinding(list, index) === "selected") scope("selected");
+          // "targets that unit": the designation's unit needs nothing more; the selected unit scopes as a selection;
+          // an enemy aura's unit is the defender of each attack the aura's effect gates.
+          if (leaf.parameters.target === "that-unit") {
+            const binding = attackTargetBinding(list, index);
+            if (binding === "selected") scope("selected");
+            else if (binding === "aura") scope({ type: "same-unit", parameters: { subject: "defender", as: AURA_RECIPIENT } });
+          }
         } else if (leaf.family_id === "select-unit") selections.push(leaf);
         else if (leaf.family_id === "for-each-unit-select") forEachLeaf = leaf;
         else if (leaf.family_id === "dice-roll") {

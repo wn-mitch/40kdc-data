@@ -44550,5 +44550,52 @@
     "expected": {
       "text": "When the unit ends a Charge move:\n  -> Select one enemy unit, binding it as foe:\n    -> Select one friendly model in the unit that is a unit within Engagement Range of the bound foe, binding it as rammer:\n      -> Roll a number of D6 equal to the T characteristic of the selected unit, then:\n        -> This unit suffers a number of mortal wounds equal to the number of those dice that rolled a 1 (to a maximum of 6 mortal wounds).\n        -> The bound foe suffers a number of mortal wounds equal to the number of those dice that rolled a 2 or less (to a maximum of 6 mortal wounds).\n        -> The bound foe suffers a number of mortal wounds equal to the number of those dice that rolled a 5+ (to a maximum of 6 mortal wounds)."
     }
+  },
+  {
+    "caseId": "canonical/same-unit-defender-aura-recipient",
+    "effect": {
+      "type": "aura",
+      "target": "enemy-within-aura",
+      "modifier": {
+        "range": {
+          "inches": 6
+        },
+        "effect": {
+          "type": "conditional",
+          "condition": {
+            "type": "same-unit",
+            "parameters": {
+              "subject": "defender",
+              "as": "recipient"
+            }
+          },
+          "effect": {
+            "type": "roll-modifier",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "SAMPLE"
+              ]
+            },
+            "modifier": {
+              "roll": "hit",
+              "operation": "add",
+              "value": 1
+            }
+          }
+        },
+        "eligible": {
+          "owner": "enemy"
+        },
+        "of": "this-unit"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "aura",
+    "expected": {
+      "text": "While an enemy unit is within 6\" of this unit, if the attack targets that unit, all friendly SAMPLE units get +1 to Hit rolls."
+    }
   }
 ]

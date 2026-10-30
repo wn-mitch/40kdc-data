@@ -178,6 +178,15 @@ pub(crate) fn describe_predicate(c: &Value, negated: bool) -> String {
                 title_case(&st(p.get("chosen_by")))
             )
         }
+        // The attack's target is the unit an aura reaches ("an attack that targets that enemy unit").
+        "same-unit" if is(p, "subject", "defender") && is(p, "as", "recipient") => format!(
+            "the attack {} that unit",
+            if negated {
+                "does not target"
+            } else {
+                "targets"
+            }
+        ),
         "same-unit" => format!(
             "{} is {not_}the same unit as {}",
             subject_of(p, "the unit"),

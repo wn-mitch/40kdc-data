@@ -327,6 +327,9 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
         who = "the target" if p.get("subject") == "defender" else _subject_of(p)
         return f"{who} {'does not have' if negated else 'has'} {_keyword_list(p)}"
     if ctype == "same-unit":
+        # The attack's target is the unit an aura reaches ("targets that enemy unit").
+        if p.get("subject") == "defender" and p.get("as") == "recipient":
+            return f"the attack {'does not target' if negated else 'targets'} that unit"
         other = "this unit" if p.get("as") == "this-unit" else unit_ref_phrase(p.get("as"))
         return f"{_subject_of(p)} is {nt}the same unit as {other}"
     if ctype == "model-profile":

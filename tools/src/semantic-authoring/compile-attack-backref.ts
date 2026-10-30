@@ -79,13 +79,17 @@ export function addsAttackGate(leaf: CompileLeaf): boolean {
  * before it in its fragment ("While a unit is assailed, when an X unit targets that unit"), whose
  * check bindDesignationSubjects already puts on the defender, so nothing more is emitted; else to
  * the unit a select-unit earlier in the record chose, which scopes the attack's effects to that
- * unit as "the target is the selected unit" does. Anything else is refused.
+ * unit as "the target is the selected unit" does; else to the enemy unit an aura before it in its
+ * fragment reaches ("While an enemy unit is within 6\" of this unit, each time a friendly unit
+ * makes an attack that targets that enemy unit"), so the attack's defender is that aura's
+ * recipient. Anything else is refused.
  */
-export function attackTargetBinding(list: readonly CompileLeaf[], index: number): "designation" | "selected" {
+export function attackTargetBinding(list: readonly CompileLeaf[], index: number): "designation" | "selected" | "aura" {
   const attack = list[index]!;
   const earlier = list.slice(0, index);
   if (earlier.some((leaf) => leaf.family_id === "designated-filter" && leaf.fragment === attack.fragment && leaf.parameters.subject === "defender"
     && leaf.parameters.count_min === undefined && leaf.parameters.count_max === undefined)) return "designation";
   if (earlier.some((leaf) => leaf.family_id === "select-unit")) return "selected";
+  if (earlier.some((leaf) => leaf.family_id === "aura-range" && leaf.fragment === attack.fragment && leaf.parameters.side === "enemy")) return "aura";
   throw new CompileError("An attack targets 'that unit', but no designation or selection before it names the unit.");
 }

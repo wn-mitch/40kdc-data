@@ -381,6 +381,13 @@ func describePredicate(c map[string]any, negated bool) string {
 		}
 		return subjectOf(p, "the unit") + " is " + neg + side
 	case "same-unit":
+		// The attack's target is the unit an aura reaches ("an attack that targets that enemy unit").
+		if p["subject"] == "defender" && p["as"] == "recipient" {
+			if negated {
+				return "the attack does not target that unit"
+			}
+			return "the attack targets that unit"
+		}
 		as := unitRefPhrase(p["as"], "the unit")
 		if p["as"] == "this-unit" {
 			as = "this unit"
