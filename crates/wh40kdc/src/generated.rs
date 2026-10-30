@@ -37757,6 +37757,35 @@ impl ::std::convert::TryFrom<::std::string::String> for RiskRewardEffectType {
 ///    "type"
 ///  ],
 ///  "properties": {
+///    "count_stat": {
+///      "description": "Roll as many of `dice` (one die, such as D6) as this characteristic of `of` (as many D6 as the selected model's Toughness).",
+///      "type": "object",
+///      "required": [
+///        "of",
+///        "stat"
+///      ],
+///      "properties": {
+///        "of": {
+///          "$ref": "#/$defs/unit-ref"
+///        },
+///        "stat": {
+///          "allOf": [
+///            {
+///              "description": "A characteristic a model prints as a whole number.",
+///              "enum": [
+///                "M",
+///                "T",
+///                "W",
+///                "OC",
+///                "A"
+///              ]
+///            }
+///          ],
+///          "$ref": "#/$defs/stat"
+///        }
+///      },
+///      "additionalProperties": false
+///    },
 ///    "dice": {
 ///      "$ref": "#/$defs/dice-expression"
 ///    },
@@ -37782,13 +37811,15 @@ impl ::std::convert::TryFrom<::std::string::String> for RiskRewardEffectType {
 ///    }
 ///  },
 ///  "additionalProperties": false,
-///  "$comment": "Roll dice once and bind the result as roll_var: numeric fields inside accept {roll_var} (the total, or the count of dice at successes_on+), and dice-gated steps with `from` gate its dice. extra_dice_pool adds one die per die held in that pool, so the die count varies."
+///  "$comment": "Roll dice once and bind the result as roll_var: numeric fields inside accept {roll_var} (the total, or the count of dice at successes_on+, or at successes_on or less with comparison lte), and dice-gated steps with `from` gate its dice. extra_dice_pool adds one die per die held in that pool, so the die count varies. count_stat rolls as many of the one die `dice` names as a model's characteristic."
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct RollEffect {
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub count_stat: ::std::option::Option<RollEffectCountStat>,
     pub dice: DiceExpression,
     pub effect: EffectNode,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -37798,6 +37829,135 @@ pub struct RollEffect {
     pub roll_var: RollEffectRollVar,
     #[serde(rename = "type")]
     pub type_: RollEffectType,
+}
+///Roll as many of `dice` (one die, such as D6) as this characteristic of `of` (as many D6 as the selected model's Toughness).
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Roll as many of `dice` (one die, such as D6) as this characteristic of `of` (as many D6 as the selected model's Toughness).",
+///  "type": "object",
+///  "required": [
+///    "of",
+///    "stat"
+///  ],
+///  "properties": {
+///    "of": {
+///      "$ref": "#/$defs/unit-ref"
+///    },
+///    "stat": {
+///      "allOf": [
+///        {
+///          "description": "A characteristic a model prints as a whole number.",
+///          "enum": [
+///            "M",
+///            "T",
+///            "W",
+///            "OC",
+///            "A"
+///          ]
+///        }
+///      ],
+///      "$ref": "#/$defs/stat"
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct RollEffectCountStat {
+    pub of: UnitRef,
+    pub stat: RollEffectCountStatStat,
+}
+///`RollEffectCountStatStat`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "enum": [
+///    "M",
+///    "T",
+///    "W",
+///    "OC",
+///    "A"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum RollEffectCountStatStat {
+    M,
+    T,
+    W,
+    #[serde(rename = "OC")]
+    Oc,
+    A,
+}
+impl ::std::fmt::Display for RollEffectCountStatStat {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::M => f.write_str("M"),
+            Self::T => f.write_str("T"),
+            Self::W => f.write_str("W"),
+            Self::Oc => f.write_str("OC"),
+            Self::A => f.write_str("A"),
+        }
+    }
+}
+impl ::std::str::FromStr for RollEffectCountStatStat {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "M" => Ok(Self::M),
+            "T" => Ok(Self::T),
+            "W" => Ok(Self::W),
+            "OC" => Ok(Self::Oc),
+            "A" => Ok(Self::A),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for RollEffectCountStatStat {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for RollEffectCountStatStat {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for RollEffectCountStatStat {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
 }
 ///`RollEffectExtraDicePool`
 ///
@@ -38454,18 +38614,22 @@ impl ::std::convert::TryFrom<::std::string::String> for RollOutcome {
         value.parse()
     }
 }
-///The result of a roll an enclosing `roll` step bound: its total, or (with successes_on) how many of its dice rolled that value or higher.
+///The result of a roll an enclosing `roll` step bound: its total, or (with successes_on) how many of its dice rolled that value or higher, or (with comparison lte) that value or lower ("for each 1").
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "The result of a roll an enclosing `roll` step bound: its total, or (with successes_on) how many of its dice rolled that value or higher.",
+///  "description": "The result of a roll an enclosing `roll` step bound: its total, or (with successes_on) how many of its dice rolled that value or higher, or (with comparison lte) that value or lower (\"for each 1\").",
 ///  "type": "object",
 ///  "required": [
 ///    "roll_var"
 ///  ],
 ///  "properties": {
+///    "comparison": {
+///      "description": "Count the dice that rolled successes_on or lower, not higher.",
+///      "const": "lte"
+///    },
 ///    "roll_var": {
 ///      "type": "string",
 ///      "minLength": 1
@@ -38473,7 +38637,7 @@ impl ::std::convert::TryFrom<::std::string::String> for RollOutcome {
 ///    "successes_on": {
 ///      "type": "integer",
 ///      "maximum": 6.0,
-///      "minimum": 2.0
+///      "minimum": 1.0
 ///    }
 ///  },
 ///  "additionalProperties": false
@@ -38483,9 +38647,12 @@ impl ::std::convert::TryFrom<::std::string::String> for RollOutcome {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct RollReference {
+    ///Count the dice that rolled successes_on or lower, not higher.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub comparison: ::std::option::Option<::serde_json::Value>,
     pub roll_var: RollReferenceRollVar,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub successes_on: ::std::option::Option<i64>,
+    pub successes_on: ::std::option::Option<::std::num::NonZeroU64>,
 }
 ///`RollReferenceRollVar`
 ///

@@ -83,6 +83,14 @@ pub(crate) fn quantity_phrase(q: &P) -> String {
     }
     if q.get("roll_var").is_some_and(Value::is_string) {
         return match nn(q, "successes_on") {
+            // "for each 1": the dice at or under the face.
+            Some(n) if q.get("comparison").and_then(Value::as_str) == Some("lte") => {
+                if n.as_f64() == Some(1.0) {
+                    "the number of those dice that rolled a 1".to_string()
+                } else {
+                    format!("the number of those dice that rolled a {} or less", jv(n))
+                }
+            }
             Some(n) => format!("the number of those dice that rolled a {}+", jv(n)),
             None => "the result of that roll".to_string(),
         };

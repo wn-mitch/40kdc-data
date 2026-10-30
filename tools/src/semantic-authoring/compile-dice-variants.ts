@@ -1,5 +1,5 @@
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
-import { bandOfMarker, markerOf, perSuccess, type ConditionalBonus, type Planned, resolveRolls, ROLL, stripMarkers } from "./compile-dice.js";
+import { bandOfMarker, isRollMarker, markerOf, perSuccess, type ConditionalBonus, type Planned, resolveRolls, ROLL, stripMarkers } from "./compile-dice.js";
 
 type Node = Record<string, unknown>;
 
@@ -126,4 +126,49 @@ export function twoDiceConditionalRolls(planned: Planned[], banded: Planned[], r
 function gatedNode(item: Planned): Node {
   if (item.gate.length === 0) return item.node;
   return { type: "conditional", condition: item.gate.length === 1 ? item.gate[0]! : { operator: "and", operands: item.gate }, effect: item.node };
+}
+
+/** Whose characteristic a dice count reads (dice-roll@10 count_stat.of), as the DSL's unit-ref. */
+const COUNT_STAT_REFS: Record<string, string> = { selected: "selected-unit", "this-model": "this-model" };
+
+/**
+ * One pool of dice whose faces pay out to different effects ("roll six D6: for each 1, your unit suffers 1 mortal
+ * wound; for each 5+, that enemy unit suffers 1 mortal wound"). The dice are rolled once, as a `roll` step, and each
+ * mortal-wound effect counts its own faces of that roll: a band reaching 6 counts the dice at its face or higher, a
+ * band from 1 the dice at its top or lower. The count is a number of dice, or a model's characteristic (count_stat).
+ * Every banded effect must be mortal wounds of 1 per die; the effects keep their written order.
+ */
+export function sharedPool(planned: Planned[], banded: Planned[], roll: CompileLeaf): Node[] {
+  const die = String(roll.parameters.dice);
+  if (die !== "D6") throw new CompileError(`A shared pool of ${die} has no DSL shape; only D6 count faces.`);
+  if (roll.parameters.roll_var !== undefined || roll.parameters.bonus !== undefined) throw new CompileError("A shared pool reads each die's face; it binds no roll_var and takes no bonus.");
+  const rollVar = "pool";
+  const counted = (item: Planned): Node => {
+    const markers = item.gate.filter(isRollMarker);
+    if (markers.length !== 1) throw new CompileError("One effect is gated by two result bands.");
+    if (item.leaf.family_id !== "mortal-wounds") throw new CompileError(`A shared pool pays out only mortal wounds; ${item.leaf.family_id} has no per-face shape.`);
+    const modifier = item.node.modifier as Node;
+    if (Number(modifier.count) !== 1) throw new CompileError("A shared pool pays 1 mortal wound for each die of a band.");
+    const band = bandOfMarker(markers[0]!, 6);
+    if (band.to > 6) throw new CompileError("A shared pool's band reaches beyond a D6.");
+    // "for each 1": a band from the bottom face is counted at or under its top; any other band must reach 6.
+    const low = band.from === 1 && band.to < 6;
+    if (!low && band.to !== 6) throw new CompileError("A shared pool's band must reach 6 (\"for each 5+\") or start at 1 (\"for each 1\").");
+    const count = low ? { roll_var: rollVar, successes_on: band.to, comparison: "lte" } : { roll_var: rollVar, successes_on: band.from };
+    const gate = item.gate.filter((node) => !isRollMarker(node));
+    const node = { ...item.node, modifier: { ...modifier, count } };
+    return gate.length === 0 ? node : { type: "conditional", condition: gate.length === 1 ? gate[0]! : { operator: "and", operands: gate }, effect: node };
+  };
+  const inside = banded.map(counted);
+  const countStat = roll.parameters.count_stat as { stat: string; of: string } | undefined;
+  const count = roll.parameters.count as number | undefined;
+  const rolled: Node = {
+    type: "roll",
+    dice: countStat !== undefined ? die : `${count ?? 1}${die}`,
+    ...(countStat !== undefined ? { count_stat: { stat: countStat.stat, of: COUNT_STAT_REFS[countStat.of] } } : {}),
+    roll_var: rollVar,
+    effect: inside.length === 1 ? inside[0]! : { type: "sequence", steps: inside },
+  };
+  const first = planned.indexOf(banded[0]!);
+  return planned.flatMap((item, at) => at === first ? [rolled] : banded.includes(item) ? [] : [item.gate.length === 0 ? item.node : { type: "conditional", condition: item.gate.length === 1 ? item.gate[0]! : { operator: "and", operands: item.gate }, effect: item.node }]);
 }

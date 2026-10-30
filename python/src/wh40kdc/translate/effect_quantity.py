@@ -68,6 +68,11 @@ def quantity_phrase(q: dict[str, Any]) -> str:
         return f"{values} (Incursion/Strike Force/Onslaught)"
     if isinstance(q.get("roll_var"), str):
         if q.get("successes_on") is not None:
+            # "for each 1": the dice at or under the face.
+            if q.get("comparison") == "lte":
+                if q["successes_on"] == 1:
+                    return "the number of those dice that rolled a 1"
+                return f"the number of those dice that rolled a {jstr(q['successes_on'])} or less"
             return f"the number of those dice that rolled a {jstr(q['successes_on'])}+"
         return "the result of that roll"
     if q.get("count_of") == "battle-round":

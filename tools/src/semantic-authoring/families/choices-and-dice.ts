@@ -2,6 +2,11 @@ import { type FamilyExtension, optional, standIn, widenedEnum, withProperties } 
 import { boundedInteger, enumValue } from "../family-validation.js";
 import { isObject, namedId } from "./shared.js";
 
+/** Characteristics a number of dice can equal: whole numbers a model prints. */
+const COUNT_STATS = ["M", "T", "W", "OC", "A"];
+/** Whose characteristic: the model the enclosing selection selected, or the model with the ability. */
+const COUNT_STAT_OF = ["selected", "this-model"];
+
 /**
  * Versions of dice-roll, choice-open and named-option: dice a rule rolls and options a player
  * picks. Each version checks only its own additions and hands the rest of a leaf to the previous
@@ -184,6 +189,25 @@ export const CHOICE_AND_DICE_EXTENSIONS: readonly FamilyExtension[] = [
         if (rest[key] !== undefined) throw new TypeError(`dice-roll.plus is printed on one die; it takes no ${key}.`);
       }
       return { ...previous(rest), plus: boundedInteger(plus, 1, 12, "dice-roll.plus") };
+    },
+  },
+  {
+    // As many dice as a model's characteristic (a D6 for each point of the selected model's Toughness).
+    family: "dice-roll",
+    version: 10,
+    description: "As the previous version, plus count_stat: as many dice as a characteristic of a model (as many D6 as the selected model's Toughness): stat (M, T, W, OC or A) and of (selected: the model the enclosing selection selected; this-model: the model with the ability). It takes no count, per_model, alternative, plus or kind.",
+    schema: (previous) => withProperties(previous, {
+      count_stat: optional({ type: "object", additionalProperties: false, required: ["stat", "of"], properties: { stat: { enum: COUNT_STATS }, of: { enum: COUNT_STAT_OF } } }),
+    }),
+    normalize: (input, previous) => {
+      if (input.count_stat === undefined) return previous(input);
+      const { count_stat: countStat, ...rest } = input;
+      for (const key of ["count", "per_model", "alternative", "plus", "kind"]) {
+        if (rest[key] !== undefined) throw new TypeError(`dice-roll.count_stat sets how many dice; it takes no ${key}.`);
+      }
+      if (countStat === null || typeof countStat !== "object" || Array.isArray(countStat) || Object.keys(countStat).some((key) => key !== "stat" && key !== "of")) throw new TypeError("dice-roll.count_stat is {stat, of}.");
+      const stat = countStat as Record<string, unknown>;
+      return { ...previous(rest), count_stat: { stat: enumValue(stat.stat, COUNT_STATS, "dice-roll.count_stat.stat"), of: enumValue(stat.of, COUNT_STAT_OF, "dice-roll.count_stat.of") } };
     },
   },
   {

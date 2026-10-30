@@ -12,7 +12,7 @@ import re
 from collections.abc import Callable
 from typing import Any
 
-from wh40kdc.translate.condition_refs import _objective_phrase
+from wh40kdc.translate.condition_refs import _objective_phrase, unit_ref_phrase
 from wh40kdc.translate.effect_quantity import quantity_phrase, roll_kind_noun
 from wh40kdc.translate.effect_words import (
     capitalize,
@@ -42,6 +42,13 @@ def roll_head(e: dict[str, Any]) -> str:
         f", plus one D6 for each die in your {_pool_title(pool)}" if isinstance(pool, str) else ""
     )
     kind = f" ({roll_kind_noun(e['kind'])})" if e.get("kind") is not None else ""
+    # As many dice as a model's characteristic.
+    stat = e.get("count_stat")
+    if isinstance(stat, dict):
+        return (
+            f"roll a number of {dice_case(e.get('dice'))} equal to the {jstr(stat.get('stat'))} "
+            f"characteristic of {unit_ref_phrase(stat.get('of'))}{extra}{kind}"
+        )
     return f"roll {dice_case(e.get('dice'))}{extra}{kind}"
 
 

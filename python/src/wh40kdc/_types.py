@@ -359,6 +359,7 @@ ScalingSource: TypeAlias = Literal[
 class RollReference(TypedDict):
     roll_var: str
     successes_on: NotRequired[int]
+    comparison: NotRequired[Literal["lte"]]
 
 
 class CountOf(TypedDict):
@@ -4110,9 +4111,15 @@ class PersistentDesignationEffect(TypedDict):
     allow_while_embarked: NotRequired[bool]
 
 
+class CountStat(TypedDict):
+    stat: Stat
+    of: UnitRef
+
+
 class RollEffect(TypedDict):
     type: Literal["roll"]
     dice: DiceExpression
+    count_stat: NotRequired[CountStat]
     extra_dice_pool: NotRequired[str]
     kind: NotRequired[RollKind]
     roll_var: str

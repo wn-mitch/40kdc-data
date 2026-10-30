@@ -1,6 +1,6 @@
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { DICE_FACES } from "./dice-families.js";
-import { perDieConditionalRolls, resolveAlternativePools, twoDiceConditionalRolls } from "./compile-dice-variants.js";
+import { perDieConditionalRolls, resolveAlternativePools, sharedPool, twoDiceConditionalRolls } from "./compile-dice-variants.js";
 
 /**
  * Result bands of a roll. A roll-result leaf compiles to a marker condition that clause binding
@@ -70,6 +70,12 @@ export function perSuccess(planned: Planned[], banded: Planned[], dice: string, 
   return planned.map((item) => gated(item.gate, item.node));
 }
 
+/** Whether banded mortal-wound effects read two or more different bands of one roll. */
+function splitBands(banded: readonly Planned[]): boolean {
+  if (banded.length < 2 || banded.some((item) => item.leaf.family_id !== "mortal-wounds")) return false;
+  return new Set(banded.map((item) => JSON.stringify(item.gate.filter(isRollMarker)))).size > 1;
+}
+
 /** Effects whose amount takes a quantity, so it can be the count of a roll's successes. */
 const COUNTED_TYPES = new Set(["mortal-wounds", "heal", "return-models", "destroy-models", "resource-gain", "resource-spend"]);
 
@@ -126,7 +132,7 @@ function readRoll(node: Node, dice: string, rollVar: string): Node | null {
  */
 function resultReaders(planned: Planned[], roll: CompileLeaf): Node[] | null {
   const parameters = roll.parameters;
-  if (["count", "per_model", "for_each", "roll_var", "conditional_bonus", "pool_condition", "kind"].some((key) => parameters[key] !== undefined)) return null;
+  if (["count", "count_stat", "per_model", "for_each", "roll_var", "conditional_bonus", "pool_condition", "kind"].some((key) => parameters[key] !== undefined)) return null;
   // "Roll D3+3: … that number of mortal wounds": the readers write the roll with its bonus.
   const bonus = Number(parameters.bonus ?? 0);
   const dice = bonus > 0 ? `${String(parameters.dice)}+${bonus}` : String(parameters.dice);
@@ -174,6 +180,10 @@ export function resolveRolls(planned: Planned[], global: Node[], rolls: readonly
   if ((count !== undefined || perModel !== undefined || forEach !== undefined || perAttack !== undefined) && rolls[0]!.parameters.bonus !== undefined) {
     throw new CompileError("Several dice rolled at once each read their own face; a bonus added to the result has no per-die DSL shape.");
   }
+  // A count from a model's characteristic is one shared pool (compile-dice-variants.ts).
+  if (rolls[0]!.parameters.count_stat !== undefined) return sharedPool(planned, banded, rolls[0]!);
+  // Several dice whose bands pay different mortal-wound effects are one pool, not a roll per effect.
+  if (count !== undefined && perModel === undefined && forEach === undefined && perAttack === undefined && splitBands(banded)) return sharedPool(planned, banded, rolls[0]!);
   if (count !== undefined || perModel !== undefined || forEach !== undefined || perAttack !== undefined) {
     return perSuccess(planned, banded, die, count ?? 1, rolls[0]!.parameters.roll_var !== undefined, perModel, forEach, perAttack);
   }

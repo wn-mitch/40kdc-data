@@ -24,6 +24,10 @@ func rollHead(e map[string]any) string {
 	if e["kind"] != nil {
 		kind = " (" + rollKindNoun(e["kind"]) + ")"
 	}
+	// As many dice as a model's characteristic.
+	if stat, ok := asMap(e["count_stat"]); ok && stat != nil {
+		return "roll a number of " + diceCase(e["dice"]) + " equal to the " + cstr(stat["stat"]) + " characteristic of " + unitRefPhrase(stat["of"], "the unit") + extra + kind
+	}
 	return "roll " + diceCase(e["dice"]) + extra + kind
 }
 

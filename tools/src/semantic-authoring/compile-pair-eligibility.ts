@@ -42,11 +42,14 @@ export function pairIndexes(list: readonly CompileLeaf[]): { outer: number; inne
 /**
  * The inner selection's candidate conditions: a CONDITION eligibility or unit-position after the
  * inner select, in its sentence, with no effect between, that names the outer unit (`selected-unit`,
- * before rewriting). Returns their indexes.
+ * before rewriting); or a unit-state of the candidate (this-unit) engaged with the outer unit
+ * ("select one model in your unit engaged with that enemy unit"). Returns their indexes.
  */
 export function candidateIndexes(list: readonly CompileLeaf[], inner: number, sameSentence: (at: number, selected: number) => boolean): number[] {
-  return list.flatMap((leaf, at) => at > inner && leaf.role === "CONDITION" && CANDIDATE_FAMILIES.has(leaf.family_id)
-    && (leaf.parameters.subject === POSITIONAL || leaf.parameters.of === POSITIONAL)
+  const engagedWithOuter = (leaf: CompileLeaf) => leaf.family_id === "unit-state" && leaf.parameters.subject === "this-unit" && leaf.parameters.with === POSITIONAL
+    && leaf.parameters.negated !== true && JSON.stringify(leaf.parameters.states) === JSON.stringify(["engaged"]) && leaf.parameters.at === undefined;
+  return list.flatMap((leaf, at) => at > inner && leaf.role === "CONDITION"
+    && ((CANDIDATE_FAMILIES.has(leaf.family_id) && (leaf.parameters.subject === POSITIONAL || leaf.parameters.of === POSITIONAL)) || engagedWithOuter(leaf))
     && sameSentence(at, inner) && !list.slice(inner + 1, at).some((between) => between.role === "EFFECT") ? [at] : []);
 }
 
@@ -110,5 +113,6 @@ function rewriteRefs(parameters: Record<string, unknown>, outer: SelectionRef): 
   const rewritten = { ...parameters };
   if (rewritten.subject === POSITIONAL) rewritten.subject = outer;
   if (rewritten.of === POSITIONAL) rewritten.of = outer;
+  if (rewritten.with === POSITIONAL) rewritten.with = outer;
   return rewritten;
 }

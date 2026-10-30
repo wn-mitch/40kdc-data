@@ -2536,5 +2536,110 @@
         }
       }
     }
+  },
+  {
+    "caseId": "canonical/roll-count-stat-shared-pool",
+    "effect": {
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "bind_as": "foe"
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "friendly",
+            "level": "model",
+            "member_of": "this-unit"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "engaged_with": {
+                  "selection_var": "foe"
+                }
+              }
+            }
+          },
+          "bind_as": "rammer"
+        },
+        "effect": {
+          "type": "roll",
+          "dice": "D6",
+          "count_stat": {
+            "stat": "T",
+            "of": "selected-unit"
+          },
+          "roll_var": "pool",
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "mortal-wounds",
+                "target": "this-unit",
+                "modifier": {
+                  "count": {
+                    "roll_var": "pool",
+                    "successes_on": 1,
+                    "comparison": "lte"
+                  },
+                  "max": 6
+                }
+              },
+              {
+                "type": "mortal-wounds",
+                "target": {
+                  "selection_var": "foe"
+                },
+                "modifier": {
+                  "count": {
+                    "roll_var": "pool",
+                    "successes_on": 2,
+                    "comparison": "lte"
+                  },
+                  "max": 6
+                }
+              },
+              {
+                "type": "mortal-wounds",
+                "target": {
+                  "selection_var": "foe"
+                },
+                "modifier": {
+                  "count": {
+                    "roll_var": "pool",
+                    "successes_on": 5
+                  },
+                  "max": 6
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "charge"
+        ]
+      }
+    }
   }
 ]

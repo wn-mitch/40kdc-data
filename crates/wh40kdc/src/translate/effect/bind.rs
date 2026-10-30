@@ -5,7 +5,7 @@
 use super::block::block;
 use super::words::*;
 use super::{child, inline, is_container};
-use crate::translate::condition::{nn, obj, objective_phrase, P};
+use crate::translate::condition::{nn, obj, objective_phrase, unit_ref_phrase, P};
 
 /// "roll 8D6, plus one D6 for each die in your Blessings of Khorne pool (a Blessings of
 /// Khorne roll)".
@@ -20,6 +20,16 @@ pub(super) fn roll_head(e: &P) -> String {
     let kind = nn(e, "kind")
         .map(|k| format!(" ({})", roll_kind_noun(Some(k))))
         .unwrap_or_default();
+    // As many dice as a model's characteristic: "roll a number of D6 equal to the T characteristic of the selected unit".
+    if let Some(stat) = nn(e, "count_stat") {
+        let stat = obj(Some(stat));
+        return format!(
+            "roll a number of {} equal to the {} characteristic of {}{extra}{kind}",
+            dice_case(e.get("dice")),
+            sv(stat, "stat").unwrap_or("?"),
+            unit_ref_phrase(stat.get("of"), "the unit")
+        );
+    }
     format!("roll {}{extra}{kind}", dice_case(e.get("dice")))
 }
 

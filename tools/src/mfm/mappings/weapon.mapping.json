@@ -687,6 +687,12 @@
       "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": [], "consumers": [],
       "reason": "Battle-size keyword ratings are reviewed enrichment; the MFM weapon projection emits only flat or dice ratings."
     },
+    "/profiles/*/keywords/*/parameters/value/comparison": {
+      "provenance": "repo-authored",
+      "coverage": "unimplemented",
+      "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": [], "consumers": [],
+      "reason": "Bound-roll keyword ratings are reviewed enrichment; the MFM weapon projection emits only flat or dice ratings."
+    },
     "/profiles/*/keywords/*/parameters/value/successes_on": {
       "provenance": "repo-authored",
       "coverage": "unimplemented",

@@ -83,7 +83,12 @@ export function scaleSource(q: P): string {
 export function quantityPhrase(q: P): string {
   if (isRatingRef(q)) return "its rating";
   if (BATTLE_SIZES.every((k) => q[k] != null)) return `${BATTLE_SIZES.map((k) => jstr(q[k])).join("/")} (Incursion/Strike Force/Onslaught)`;
-  if (typeof q.roll_var === "string") return q.successes_on != null ? `the number of those dice that rolled a ${jstr(q.successes_on)}+` : "the result of that roll";
+  if (typeof q.roll_var === "string") {
+    if (q.successes_on == null) return "the result of that roll";
+    // "for each 1": the dice at or under the face.
+    if (q.comparison === "lte") return Number(q.successes_on) === 1 ? "the number of those dice that rolled a 1" : `the number of those dice that rolled a ${jstr(q.successes_on)} or less`;
+    return `the number of those dice that rolled a ${jstr(q.successes_on)}+`;
+  }
   if (q.count_of === "battle-round") return "the battle round number";
   if (q.count_of === "embarked-models-oc") return `the total ${scaleSource(q)}`;
   if (q.count_of != null) return `the number of ${scaleSource(q)}`;

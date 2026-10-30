@@ -1178,7 +1178,7 @@ export interface BattleSizeValue {
   onslaught: number;
 }
 /**
- * The result of a roll an enclosing `roll` step bound: its total, or (with successes_on) how many of its dice rolled that value or higher.
+ * The result of a roll an enclosing `roll` step bound: its total, or (with successes_on) how many of its dice rolled that value or higher, or (with comparison lte) that value or lower ("for each 1").
  *
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "roll-reference".
@@ -1186,6 +1186,10 @@ export interface BattleSizeValue {
 export interface RollReference {
   roll_var: string;
   successes_on?: number;
+  /**
+   * Count the dice that rolled successes_on or lower, not higher.
+   */
+  comparison?: "lte";
 }
 /**
  * A number equal to how many of `count_of` there are (models in this unit with `keyword`, models equipped with `wargear`, the battle round number, your markers labelled `marker` on the battlefield).
@@ -3997,11 +4001,15 @@ export interface AbilityPart {
   usage?: AbilityUsageLimit | [AbilityUsageLimit, AbilityUsageLimit, ...AbilityUsageLimit[]];
 }
 /**
- * The result of a roll an enclosing `roll` step bound: its total, or (with successes_on) how many of its dice rolled that value or higher.
+ * The result of a roll an enclosing `roll` step bound: its total, or (with successes_on) how many of its dice rolled that value or higher, or (with comparison lte) that value or lower ("for each 1").
  */
 export interface RollReference1 {
   roll_var: string;
   successes_on?: number;
+  /**
+   * Count the dice that rolled successes_on or lower, not higher.
+   */
+  comparison?: "lte";
 }
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
@@ -4749,6 +4757,30 @@ export interface NoEffectEffect {
 export interface RollEffect {
   type: "roll";
   dice: DiceExpression;
+  /**
+   * Roll as many of `dice` (one die, such as D6) as this characteristic of `of` (as many D6 as the selected model's Toughness).
+   */
+  count_stat?: {
+    stat: ("M" | "T" | "W" | "OC" | "A") &
+      (
+        | "M"
+        | "T"
+        | "Sv"
+        | "W"
+        | "Ld"
+        | "OC"
+        | "A"
+        | "WS"
+        | "BS"
+        | "S"
+        | "AP"
+        | "D"
+        | "Range"
+        | "detection-range"
+        | "psyker-level"
+      );
+    of: UnitRef;
+  };
   extra_dice_pool?: string;
   kind?: RollKind;
   roll_var: string;

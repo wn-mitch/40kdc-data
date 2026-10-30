@@ -44442,5 +44442,113 @@
     "expected": {
       "text": "At the end of the Fight phase:\n  -> Select one enemy model without the Lone Operative ability:\n    For each enemy unit within D6\" of the selected unit:\n      -> Roll one D6: on a 4+, the unit suffers D3 mortal wounds."
     }
+  },
+  {
+    "caseId": "canonical/roll-count-stat-shared-pool",
+    "effect": {
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "bind_as": "foe"
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "friendly",
+            "level": "model",
+            "member_of": "this-unit"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "engaged_with": {
+                  "selection_var": "foe"
+                }
+              }
+            }
+          },
+          "bind_as": "rammer"
+        },
+        "effect": {
+          "type": "roll",
+          "dice": "D6",
+          "count_stat": {
+            "stat": "T",
+            "of": "selected-unit"
+          },
+          "roll_var": "pool",
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "mortal-wounds",
+                "target": "this-unit",
+                "modifier": {
+                  "count": {
+                    "roll_var": "pool",
+                    "successes_on": 1,
+                    "comparison": "lte"
+                  },
+                  "max": 6
+                }
+              },
+              {
+                "type": "mortal-wounds",
+                "target": {
+                  "selection_var": "foe"
+                },
+                "modifier": {
+                  "count": {
+                    "roll_var": "pool",
+                    "successes_on": 2,
+                    "comparison": "lte"
+                  },
+                  "max": 6
+                }
+              },
+              {
+                "type": "mortal-wounds",
+                "target": {
+                  "selection_var": "foe"
+                },
+                "modifier": {
+                  "count": {
+                    "roll_var": "pool",
+                    "successes_on": 5
+                  },
+                  "max": 6
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "charge"
+        ]
+      }
+    },
+    "expected": {
+      "text": "When the unit ends a Charge move:\n  -> Select one enemy unit, binding it as foe:\n    -> Select one friendly model in the unit that is a unit within Engagement Range of the bound foe, binding it as rammer:\n      -> Roll a number of D6 equal to the T characteristic of the selected unit, then:\n        -> This unit suffers a number of mortal wounds equal to the number of those dice that rolled a 1 (to a maximum of 6 mortal wounds).\n        -> The bound foe suffers a number of mortal wounds equal to the number of those dice that rolled a 2 or less (to a maximum of 6 mortal wounds).\n        -> The bound foe suffers a number of mortal wounds equal to the number of those dice that rolled a 5+ (to a maximum of 6 mortal wounds)."
+    }
   }
 ]

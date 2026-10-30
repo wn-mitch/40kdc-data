@@ -5,7 +5,7 @@
  * not import `effect.ts`.
  */
 
-import { objectivePhrase, type P } from "./condition-refs.js";
+import { objectivePhrase, unitRefPhrase, type P } from "./condition-refs.js";
 import { describeSelectionEligibility } from "./condition-leadin.js";
 import type { Condition } from "./condition.js";
 import { capitalize, diceCase, filterSubject, jstr, quantityPhrase, rollKindNoun, titleCase, type Ctx } from "./effect-words.js";
@@ -41,6 +41,9 @@ function poolTitle(pool: string): string {
 export function rollHead(e: P): string {
   const extra = typeof e.extra_dice_pool === "string" ? `, plus one D6 for each die in your ${poolTitle(e.extra_dice_pool)}` : "";
   const kind = e.kind != null ? ` (${rollKindNoun(e.kind)})` : "";
+  // As many dice as a model's characteristic: "roll a number of D6 equal to the T characteristic of the selected unit".
+  const stat = e.count_stat as P | undefined;
+  if (stat != null) return `roll a number of ${diceCase(e.dice)} equal to the ${jstr(stat.stat)} characteristic of ${unitRefPhrase(stat.of)}${extra}${kind}`;
   return `roll ${diceCase(e.dice)}${extra}${kind}`;
 }
 

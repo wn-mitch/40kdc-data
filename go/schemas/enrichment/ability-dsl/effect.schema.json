@@ -7748,13 +7748,42 @@
     "roll-effect": {
       "type": "object",
       "additionalProperties": false,
-      "$comment": "Roll dice once and bind the result as roll_var: numeric fields inside accept {roll_var} (the total, or the count of dice at successes_on+), and dice-gated steps with `from` gate its dice. extra_dice_pool adds one die per die held in that pool, so the die count varies.",
+      "$comment": "Roll dice once and bind the result as roll_var: numeric fields inside accept {roll_var} (the total, or the count of dice at successes_on+, or at successes_on or less with comparison lte), and dice-gated steps with `from` gate its dice. extra_dice_pool adds one die per die held in that pool, so the die count varies. count_stat rolls as many of the one die `dice` names as a model's characteristic.",
       "properties": {
         "type": {
           "const": "roll"
         },
         "dice": {
           "$ref": "../../defs/common.schema.json#/$defs/dice-expression"
+        },
+        "count_stat": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "stat",
+            "of"
+          ],
+          "description": "Roll as many of `dice` (one die, such as D6) as this characteristic of `of` (as many D6 as the selected model's Toughness).",
+          "properties": {
+            "stat": {
+              "$ref": "../../defs/common.schema.json#/$defs/stat",
+              "allOf": [
+                {
+                  "enum": [
+                    "M",
+                    "T",
+                    "W",
+                    "OC",
+                    "A"
+                  ],
+                  "description": "A characteristic a model prints as a whole number."
+                }
+              ]
+            },
+            "of": {
+              "$ref": "../../defs/common.schema.json#/$defs/unit-ref"
+            }
+          }
         },
         "extra_dice_pool": {
           "type": "string",

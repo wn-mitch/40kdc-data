@@ -267,6 +267,13 @@ func quantityPhrase(q map[string]any) string {
 	}
 	if _, ok := q["roll_var"].(string); ok {
 		if q["successes_on"] != nil {
+			// "for each 1": the dice at or under the face.
+			if q["comparison"] == "lte" {
+				if ejstr(q["successes_on"]) == "1" {
+					return "the number of those dice that rolled a 1"
+				}
+				return "the number of those dice that rolled a " + ejstr(q["successes_on"]) + " or less"
+			}
 			return "the number of those dice that rolled a " + ejstr(q["successes_on"]) + "+"
 		}
 		return "the result of that roll"
