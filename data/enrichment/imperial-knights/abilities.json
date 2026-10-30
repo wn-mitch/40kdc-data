@@ -1088,24 +1088,117 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "dc515d8a241071d77d0077dd5ab79eb1ad924943332fbce0eb2fcb5ec560c93e",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
       },
       "effect": {
-        "type": "mortal-wounds",
-        "target": "defender",
-        "modifier": {
-          "count": "D3"
-        }
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "ability-part",
+            "trigger": {
+              "event": "targets-selected",
+              "subject": "this-model",
+              "filter": {
+                "kind": "shoot",
+                "weapons": {
+                  "name": "thundercoil harpoon"
+                }
+              }
+            },
+            "effect": {
+              "type": "for-each-unit",
+              "selector": {
+                "filter": {
+                  "owner": "enemy"
+                },
+                "eligibility": {
+                  "operator": "or",
+                  "operands": [
+                    {
+                      "type": "same-unit",
+                      "parameters": {
+                        "as": "defender"
+                      }
+                    },
+                    {
+                      "type": "matches",
+                      "parameters": {
+                        "filter": {
+                          "owner": "enemy",
+                          "within": {
+                            "range": {
+                              "inches": 6
+                            },
+                            "of": "defender"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "effect": {
+                "type": "dice-gated",
+                "dice": "D6",
+                "threshold": 4,
+                "comparison": "gte",
+                "on_success": {
+                  "type": "designate",
+                  "target": "recipient",
+                  "modifier": {
+                    "tag": "struck-by-arcing-energies",
+                    "clears_on": "phase"
+                  }
+                },
+                "on_fail": null
+              }
+            }
+          },
+          {
+            "type": "ability-part",
+            "trigger": {
+              "event": "attacks-resolved",
+              "subject": "this-model"
+            },
+            "effect": {
+              "type": "for-each-unit",
+              "selector": {
+                "filter": {
+                  "owner": "any",
+                  "designated": "struck-by-arcing-energies"
+                }
+              },
+              "effect": {
+                "type": "mortal-wounds",
+                "target": "recipient",
+                "modifier": {
+                  "count": "D3"
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -1115,7 +1208,7 @@
       "knight-valiant"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "faction_id": "imperial-knights"
   },
   {

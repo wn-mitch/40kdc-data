@@ -3146,7 +3146,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "38d9fedc1bc82ed80aadab147260dd288d4d02f6670861e5e04a0b9cbe17179e",
     "version": "2025-q3",
@@ -3156,26 +3156,123 @@
         "operator": "and",
         "operands": [
           {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
             "type": "attachment",
             "parameters": {
               "subject": "this-model",
               "role": "leading"
             }
+          },
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "shooting"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
+            ]
+          },
+          {
+            "type": "attack-is",
+            "parameters": {
+              "all_target_same_unit": true
+            }
           }
         ]
       },
       "effect": {
-        "type": "mortal-wounds",
-        "target": "defender",
-        "modifier": {
-          "count": "D3"
-        }
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "ability-part",
+            "trigger": {
+              "event": "targets-selected",
+              "filter": {
+                "kind": "shoot"
+              }
+            },
+            "effect": {
+              "type": "for-each-unit",
+              "selector": {
+                "filter": {
+                  "owner": "enemy"
+                },
+                "eligibility": {
+                  "operator": "or",
+                  "operands": [
+                    {
+                      "type": "same-unit",
+                      "parameters": {
+                        "as": "defender"
+                      }
+                    },
+                    {
+                      "type": "matches",
+                      "parameters": {
+                        "filter": {
+                          "owner": "enemy",
+                          "within": {
+                            "range": {
+                              "inches": 3
+                            },
+                            "of": "defender"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "effect": {
+                "type": "dice-gated",
+                "dice": "D6",
+                "threshold": 5,
+                "comparison": "gte",
+                "on_success": {
+                  "type": "designate",
+                  "target": "recipient",
+                  "modifier": {
+                    "tag": "struck-by-explosive-debris",
+                    "clears_on": "phase"
+                  }
+                },
+                "on_fail": null
+              }
+            }
+          },
+          {
+            "type": "ability-part",
+            "trigger": {
+              "event": "attacks-resolved",
+              "filter": {
+                "kind": "shoot"
+              }
+            },
+            "effect": {
+              "type": "for-each-unit",
+              "selector": {
+                "filter": {
+                  "owner": "any",
+                  "designated": "struck-by-explosive-debris"
+                }
+              },
+              "effect": {
+                "type": "mortal-wounds",
+                "target": "recipient",
+                "modifier": {
+                  "count": "D3"
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -3185,7 +3282,7 @@
       "maugan-ra"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "faction_id": "aeldari"
   },
   {

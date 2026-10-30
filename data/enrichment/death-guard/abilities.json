@@ -1109,25 +1109,167 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "6d35e52a9b7dd58342c01ac8ffab32f2fc2b83987d782ed0986b759bd4d77124",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "targets-selected",
+            "subject": "this-model",
+            "filter": {
+              "kind": "shoot",
+              "weapons": {
+                "name": "Plagueburst mortar"
+              }
+            }
+          },
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "phase-is",
+                  "parameters": {
+                    "phase": "shooting"
+                  }
+                },
+                {
+                  "type": "player-turn-is",
+                  "parameters": {
+                    "turn": "your-turn"
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "for-each-unit",
+              "selector": {
+                "filter": {
+                  "owner": "enemy"
+                },
+                "eligibility": {
+                  "operator": "or",
+                  "operands": [
+                    {
+                      "type": "same-unit",
+                      "parameters": {
+                        "as": "defender"
+                      }
+                    },
+                    {
+                      "type": "matches",
+                      "parameters": {
+                        "filter": {
+                          "owner": "enemy",
+                          "within": {
+                            "range": {
+                              "inches": 3
+                            },
+                            "of": "defender"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "effect": {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "conditional",
+                    "condition": {
+                      "type": "matches",
+                      "parameters": {
+                        "subject": "recipient",
+                        "filter": {
+                          "designated": "afflicted"
+                        }
+                      }
+                    },
+                    "effect": {
+                      "type": "dice-gated",
+                      "dice": "D6+1",
+                      "threshold": 6,
+                      "comparison": "gte",
+                      "on_success": {
+                        "type": "designate",
+                        "target": "recipient",
+                        "modifier": {
+                          "tag": "struck-by-spores",
+                          "clears_on": "phase"
+                        }
+                      },
+                      "on_fail": null
+                    }
+                  },
+                  {
+                    "type": "conditional",
+                    "condition": {
+                      "operator": "not",
+                      "operands": [
+                        {
+                          "type": "matches",
+                          "parameters": {
+                            "subject": "recipient",
+                            "filter": {
+                              "designated": "afflicted"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "effect": {
+                      "type": "dice-gated",
+                      "dice": "D6",
+                      "threshold": 6,
+                      "comparison": "gte",
+                      "on_success": {
+                        "type": "designate",
+                        "target": "recipient",
+                        "modifier": {
+                          "tag": "struck-by-spores",
+                          "clears_on": "phase"
+                        }
+                      },
+                      "on_fail": null
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "attacks-resolved",
+            "subject": "this-model"
+          },
+          "effect": {
+            "type": "for-each-unit",
+            "selector": {
+              "filter": {
+                "owner": "any",
+                "designated": "struck-by-spores"
+              }
+            },
+            "effect": {
+              "type": "mortal-wounds",
+              "target": "recipient",
+              "modifier": {
+                "count": "D3"
+              }
+            }
+          }
         }
-      },
-      "effect": {
-        "type": "mortal-wounds",
-        "target": "defender",
-        "modifier": {
-          "count": "D3"
-        }
-      }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -1136,7 +1278,7 @@
       "plagueburst-crawler"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "faction_id": "death-guard"
   },
   {

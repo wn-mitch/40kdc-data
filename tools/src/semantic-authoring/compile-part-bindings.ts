@@ -196,8 +196,9 @@ export function bindParts(frame: PartFrame, plan: ReturnType<typeof planEffects>
     const testAfterMark = refuseTestAfterMark(planned.map((item) => ({ index: item.index, node: item.node, gate: item.gate })), (index) => partStarts.filter((part) => part.index < index).length);
     if (testAfterMark) errors.push(testAfterMark);
   }
-  // forEachLeaf keeps only the last quantifier, so a second pass would replace the first one's selector.
-  if (list.filter((leaf) => leaf.family_id === "for-each-unit-select").length > 1) errors.push("A record with two for-each-unit-select passes is not lowered yet; the compiler binds only one pass's units, so it refuses the record.");
+  // forEachLeaf keeps only the last quantifier, so a second pass would replace the first one's selector, unless the
+  // two loops wrap different parts (firstPartLoop).
+  if (list.filter((leaf) => leaf.family_id === "for-each-unit-select").length > 1 && firstPartLoop(list, partOfLeaf) === null) errors.push("A record with two for-each-unit-select passes is not lowered yet; the compiler binds only one pass's units, so it refuses the record.");
   // "One enemy unit hit by those attacks" on a Stratagem target: only a select-unit's eligibility takes the hit, so it would be dropped.
   // When the window is itself an attack moment ("just after an enemy unit has shot"), the reactive trigger already is "those attacks".
   const attackMoment = list.some((leaf) => leaf.family_id === "event" && ["enemy-has-shot", "attacks-resolved", "after-shooting"].includes(String(leaf.parameters.kind)));
@@ -227,4 +228,15 @@ export function selectionPerPass(list: readonly CompileLeaf[], loop: CompileLeaf
   const at = list.indexOf(selection);
   if (list.indexOf(loop) > at || partOfLeaf(selection) !== partOfLeaf(loop)) return false;
   return planned.every((item) => partOfLeaf(list[item.index]!) !== partOfLeaf(loop) || item.index > at);
+}
+
+/**
+ * "roll one D6 for the target unit and one D6 for every other enemy unit …; after resolving all of this model's attacks
+ * against the target unit, each unit struck by arcing energies suffers D3 mortal wounds": two loops, the first in the
+ * record's own part and the second in a later part with its own moment. Each wraps only its part, so the first is
+ * returned for the record's part (the later one stays forEachLeaf); any other pair of loops is null.
+ */
+export function firstPartLoop(list: readonly CompileLeaf[], partOfLeaf: (leaf: CompileLeaf) => number): CompileLeaf | null {
+  const loops = list.filter((leaf) => leaf.family_id === "for-each-unit-select");
+  return loops.length === 2 && partOfLeaf(loops[0]!) === 0 && partOfLeaf(loops[1]!) > 0 ? loops[0]! : null;
 }

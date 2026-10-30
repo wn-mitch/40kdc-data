@@ -6,7 +6,7 @@ import { abilityUseTrigger } from "./compile-ability-use.js";
  */
 
 import { attackTypeCondition } from "./compile-conditions.js";
-import { closed, CompileError, type CompileLeaf } from "./compile-fragments.js";
+import { closed, CompileError, weaponScope, type CompileLeaf } from "./compile-fragments.js";
 import { OWNED_EVENT_KINDS } from "./event-family.js";
 import { TRIGGER_ROLL_KINDS } from "./dice-families.js";
 import { ANTECEDENT } from "./antecedent-families.js";
@@ -206,6 +206,10 @@ function ownedEventTrigger(leaf: CompileLeaf): Node {
   if (leaf.parameters.id !== undefined) {
     if (filter.kind !== "stratagem") throw new CompileError("A targeting names its ability through a by-ability leaf, with the unit whose ability it is.");
     filter.id = closed(leaf, "id");
+  }
+  // "Select a target for this model's twin tesla destructor": which weapon's targeting (compile-weapon-qualified.ts).
+  if (leaf.parameters.targeting_weapons !== undefined) {
+    filter.weapons = weaponScope({ ...leaf, parameters: leaf.parameters.targeting_weapons as Node }).weapons;
   }
   if (Object.keys(filter).length) node.filter = filter;
   // "In your opponent's Shooting phase" on an attacks-resolved moment: the trigger's own condition.

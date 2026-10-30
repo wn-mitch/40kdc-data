@@ -137,3 +137,56 @@ describe("Semantic authoring a selection made in each pass of a loop over models
     if (!result.ok) expect(result.errors.join(" ")).toMatch(/for-each over models needs the unit they are in/u);
   });
 });
+
+describe("Semantic authoring a marking loop at targeting and a reading loop after the attacks", () => {
+  const text = "In your Shooting phase, each time you select a target for this model's glimmer lance, roll one D6 for the target unit and one D6 for every other enemy unit within 3\" of the target unit. On a 5+, the unit being rolled for is spotted. After resolving all of this model's attacks, each unit that is spotted suffers D3 mortal wounds.";
+  const items: Item[] = [
+    ["In your Shooting phase", "phase-window", { phase: "shooting", turn: "your" }],
+    ["each time you select a target for", "event", { kind: "targets-selected", action_kind: "shoot", subject: "this-model" }],
+    ["this model's glimmer lance", "attack-filter", { weapon_name: "glimmer lance", attack_type: "ranged" }],
+    ["roll one D6", "dice-roll", { dice: "D6" }],
+    ["for the target unit and one D6 for every", "for-each-unit-select", { including: "target" }],
+    ["other enemy unit", "unit-filter", { side: "enemy", other: true }],
+    ["within 3\" of the target unit", "unit-position", { kind: "within", inches: 3, of: "target", subject: "antecedent", negated: false }],
+    ["On a 5+", "roll-result", { from: 5 }],
+    ["the unit being rolled for is spotted", "apply-mark", { subject: "antecedent", tag: "spotted" }],
+    ["After resolving all of this model's attacks", "event", { kind: "attacks-resolved", subject: "this-model" }],
+    ["each", "for-each-unit-select", {}],
+    ["unit that is spotted", "unit-filter", { side: "any", designated: "spotted" }],
+    ["suffers D3 mortal wounds", "mortal-wounds", { recipient: "antecedent", count: "D3" }],
+  ];
+
+  // Hunts: two loops in two parts were refused as one record looping twice; the weapon was dropped from the
+  // targeting moment; and the mark, with no printed duration, never cleared.
+  it("loops at the named weapon's targeting, then loops over the marked units once the attacks are resolved", () => {
+    const result = run(text, ...items);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    const [first, later] = (result.mechanics.effect as { effect: { steps: Array<Record<string, any>> } }).effect.steps;
+    expect(first!.trigger).toEqual({ event: "targets-selected", subject: "this-model", filter: { kind: "shoot", weapons: { name: "glimmer lance" } } });
+    expect(first!.effect).toMatchObject({ type: "for-each-unit", effect: { type: "dice-gated", threshold: 5, on_success: { type: "designate", target: "recipient", modifier: { tag: "spotted", clears_on: "phase" } } } });
+    expect(later).toMatchObject({ trigger: { event: "attacks-resolved", subject: "this-model" }, effect: { type: "for-each-unit", selector: { filter: { owner: "any", designated: "spotted" } }, effect: { type: "mortal-wounds", target: "recipient" } } });
+    const validate = createValidator().getSchema("https://40kdc.dev/schemas/enrichment/ability-dsl/effect.schema.json");
+    expect(validate?.(result.mechanics.effect), JSON.stringify(validate?.errors)).toBe(true);
+    const render = describeAbility(result.mechanics as never);
+    expect(render).toContain("selects its targets with glimmer lance");
+    expect(render).toContain("is Spotted until the end of the phase");
+  });
+
+  it("leaves a mark no later attacks-resolved moment reads without an expiry", () => {
+    const unread = items.slice(0, 9);
+    const result = run(text, ...unread, items[9]!, items[10]!, ["unit that is spotted", "unit-filter", { side: "any", designated: "pinned" }], items[12]!);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    expect(JSON.stringify(result.mechanics.effect)).toContain('"modifier":{"tag":"spotted"}');
+  });
+
+  it("refuses a melee weapon on a shooting targeting", () => {
+    const result = run(text, ...items.map((item): Item => item[1] === "attack-filter" ? [item[0], item[1], { weapon_name: "glimmer lance", attack_type: "melee" }] : item));
+    expect(result.ok ? "" : result.errors.join(" ")).toContain("shooting targeting's weapon makes ranged attacks");
+  });
+
+  it("still refuses three loops", () => {
+    const third = "In your Shooting phase, each time you select a target for this model's glimmer lance, roll one D6 for the target unit and one D6 for every other enemy unit within 3\" of the target unit. On a 5+, the unit being rolled for is spotted. After resolving all of this model's attacks, each unit that is spotted suffers D3 mortal wounds, and each unit that is spotted is pinned.";
+    const result = run(third, ...items, ["each", "for-each-unit-select", {}], ["unit that is spotted", "unit-filter", { side: "any", designated: "spotted" }], ["is pinned", "apply-mark", { subject: "antecedent", tag: "pinned" }]);
+    expect(result.ok).toBe(false);
+  });
+});

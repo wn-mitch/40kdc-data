@@ -28,7 +28,7 @@ import { hoistResolvedSelections } from "./compile-resolved-selection.js";
 import { bindArmyAntecedents, foldArmyAttachments, foldArmyPer, foldForwardComposition, resolveArmyGroups } from "./compile-army.js";
 import { bindPrecedingRolls } from "./compile-preceding-roll.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
-import { withDesignationExpiry } from "./compile-designation-expiry.js";
+import { withDesignationExpiry, withResolvedReadExpiry } from "./compile-designation-expiry.js";
 import { bindDesignationSubjects, foldHitFilters } from "./compile-conditions.js";
 import { foldDestructionAfterAttacks, foldEffectAfterAttacks } from "./compile-destruction-after-attacks.js";
 import { foldDisembarkMoment } from "./compile-disembark-moment.js";
@@ -36,7 +36,7 @@ import { foldObjectiveCriteria } from "./compile-objective-criteria.js";
 import { foldDestroyedSelections } from "./compile-destroyed-selection.js";
 import { compileForEachPasses } from "./compile-for-each-passes.js";
 import { foldAllocatedAttackRolls, foldSelectedModelRolls } from "./compile-selected-model-roll.js";
-import { bindBareFilterHits, bindBeforeFormHits, foldDestroyFilters, foldLeadingHitFilters, refuseBeforeFormAnaphors } from "./compile-weapon-qualified.js";
+import { bindBareFilterHits, bindBeforeFormHits, foldDestroyFilters, foldLeadingHitFilters, foldTargetingWeapons, refuseBeforeFormAnaphors } from "./compile-weapon-qualified.js";
 import { refuseUnmovedEventSubject } from "./compile-moved-subject.js";
 import { refuseSuchFilters } from "./compile-such-filter.js";
 import { bindUsedSelections } from "./compile-used-selection.js";
@@ -202,7 +202,9 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
   return unscoped === null ? result : { ok: false, signature: result.signature, errors: [`A ${unscoped} effect names the unit it is applied to (recipient), but no aura or for-each-unit applies it to any unit.`] };
 }
 
-function compileUnchecked(leaves: readonly CompileLeaf[], sourceText?: string, options: CompileOptions = {}): Compiled {
+function compileUnchecked(record: readonly CompileLeaf[], sourceText?: string, options: CompileOptions = {}): Compiled {
+  // A mark read back after the attacks it was made for clears with the phase (compile-designation-expiry.ts); it needs the whole record.
+  const leaves = withResolvedReadExpiry(record);
   // A span over the record's name compiles as its own part, beside the body (compile-name.ts).
   if (leaves.some((leaf) => leaf.fragment === NAME_FRAGMENT)) {
     return compileWithName(leaves, sourceText, options, compileLeaves, (list) => shapeSignature(ordered(list), sourceText));
@@ -333,7 +335,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     const bound = foldCountScales(bindDesignationSubjects(foldAlternativePools(bindPrecedingRolls(foldBoundAttacks(refuseBareTarget(bindAntecedents(markCountedSubjects(bindArmyAntecedents(foldArmyAttachments(foldForwardComposition(refs.leaves), sourceText))), refs.focus, sourceText), isPlacedLimit)), sourceText))), sourceText);
     refuseTransportAsSubject(bound);
     refuseDestinationMismatch(bound, sourceText);
-    const scoped = bindWeaponStatAntecedents(foldWeaponScopes(foldModelState(foldReturnedModelExclusions(foldFightNext(foldCountsAsMoved(foldPassthroughUsed(foldAsIfPhases(foldHitFilters(foldLeadingHitFilters(foldDestroyFilters(bindEquippedCounts(bound), sourceText), sourceText), sourceText), sourceText)), sourceText), sourceText), sourceText)), sourceText));
+    const scoped = bindWeaponStatAntecedents(foldWeaponScopes(foldModelState(foldReturnedModelExclusions(foldFightNext(foldCountsAsMoved(foldPassthroughUsed(foldAsIfPhases(foldHitFilters(foldLeadingHitFilters(foldTargetingWeapons(foldDestroyFilters(bindEquippedCounts(bound), sourceText), sourceText), sourceText), sourceText), sourceText)), sourceText), sourceText), sourceText)), sourceText));
     const filtered = resolveArmyGroups(foldWeaponAlreadyHas(bindScopeAttacks(foldUnitFilters(foldArmyPer(foldWeaponKeywords(foldAttackProperties(bindMatchedPools(scoped), sourceText), sourceText), sourceText), sourceText))));
     // "For each X model you select, roll one D6": a plain roll inside the model selection (compile-selected-model-roll.ts);
     // "select one objective that: …": the criteria fold into the selection (compile-objective-criteria.ts).

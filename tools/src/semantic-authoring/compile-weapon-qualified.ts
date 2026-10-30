@@ -93,6 +93,35 @@ export function foldLeadingHitFilters(leaves: readonly CompileLeaf[], sourceText
   return out;
 }
 
+/**
+ * "Each time you select a target for this model's twin tesla destructor": an attack-filter naming
+ * a weapon right after a shooting targets-selected moment says which weapon's targeting fires it.
+ * The fold writes the moment's `targeting_weapons`, which ownedEventTrigger (compile-triggers.ts)
+ * sets as the trigger filter's weapons. Only a weapon name or keyword folds, and an attack type, if
+ * named, must be ranged.
+ */
+export function foldTargetingWeapons(leaves: readonly CompileLeaf[], sourceText?: string): CompileLeaf[] {
+  if (sourceText === undefined || !leaves.some(isShootingTargeting)) return [...leaves];
+  const bytes = Buffer.from(sourceText, "utf8");
+  const out: CompileLeaf[] = [];
+  for (const leaf of leaves) {
+    const moment = out.at(-1);
+    if (moment === undefined || !isShootingTargeting(moment) || leaf.family_id !== "attack-filter" || !touching(bytes, moment, leaf)) { out.push(leaf); continue; }
+    const { attack_type: attackType, ...weapon } = leaf.parameters;
+    if (weapon.weapon_name === undefined && weapon.weapon_keyword === undefined) { out.push(leaf); continue; }
+    const extra = Object.keys(weapon).find((key) => key !== "weapon_name" && key !== "weapon_keyword");
+    if (extra !== undefined) throw new CompileError(`A targeting's weapon names only weapon_name or weapon_keyword, not ${extra}.`);
+    if (attackType !== undefined && attackType !== "ranged") throw new CompileError("A shooting targeting's weapon makes ranged attacks.");
+    if (moment.parameters.targeting_weapons !== undefined) throw new CompileError("A targeting names one weapon qualifier, and this one already has one.");
+    out[out.length - 1] = { ...moment, end_byte: leaf.end_byte, parameters: { ...moment.parameters, targeting_weapons: weapon } };
+  }
+  return out;
+}
+
+function isShootingTargeting(leaf: CompileLeaf): boolean {
+  return leaf.family_id === "event" && leaf.parameters.kind === "targets-selected" && leaf.parameters.action_kind === "shoot";
+}
+
 /** The attack-filter fields a hit can name, checked the same way for a leading and a before-form hit. */
 function checkHitFilter(filter: CompileLeaf): void {
   const keys = Object.keys(filter.parameters);

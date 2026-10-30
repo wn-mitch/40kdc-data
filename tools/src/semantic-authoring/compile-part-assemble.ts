@@ -24,7 +24,7 @@ import { isAttackMoment } from "./compile-attack-window.js";
 import { AURA_RECIPIENT } from "./compile-antecedent.js";
 import type { PartFrame } from "./compile-part-classify.js";
 import type { planEffects } from "./compile-part-plan.js";
-import { selectionPerPass, type PartBindings } from "./compile-part-bindings.js";
+import { firstPartLoop, selectionPerPass, type PartBindings } from "./compile-part-bindings.js";
 
 type Node = Record<string, unknown>;
 
@@ -194,6 +194,8 @@ export function assemblePart(
   }
   // "At the start of each player's Command phase, roll one D6 for each poisoned enemy unit": a loop in a later part repeats only that part.
   const forEachPart = forEachLeaf !== null && partStarts.length ? partOf(list.indexOf(forEachLeaf)) : 0;
+  // A second loop in a later part leaves the record's own part its first loop.
+  const recordLoop = forEachPart > 0 ? firstPartLoop(list, (leaf) => partOf(list.indexOf(leaf))) : null;
   if (forEachPart > 0) {
     const own = pieces[forEachPart]!;
     const each = forEachLeaf!;
@@ -309,8 +311,8 @@ export function assemblePart(
     body = ahead.length ? { type: "sequence", steps: [...ahead, select] } : select;
     if (perPass) body = attempt(() => wrapForEachUnit(forEachLeaf!, body!));
   }
-  else if (forEachLeaf && forEachPart === 0) {
-    const each = forEachLeaf;
+  else if ((forEachLeaf && forEachPart === 0) || recordLoop) {
+    const each = recordLoop ?? forEachLeaf!;
     body = attempt(() => wrapForEachUnit(each, body!));
     // "The maximum number of units that can be … depends on the battle size": the loop's cap on the units it affects.
     if (body && battleSizeCount && selections.length === 0) body = { ...body, max_affected: maxCount };
