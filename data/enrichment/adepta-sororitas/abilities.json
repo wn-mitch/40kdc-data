@@ -368,7 +368,8 @@
             "modifier": {
               "count": 1
             }
-          }
+          },
+          "duration": "phase"
         }
       ]
     },

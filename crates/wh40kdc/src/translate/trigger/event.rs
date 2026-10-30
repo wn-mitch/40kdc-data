@@ -96,6 +96,7 @@ pub(crate) fn actor(r: Option<&Value>) -> String {
             "model-in-this-unit" => "a model in this unit".to_string(),
             // A moment nested in an attack's: the unit making that attack.
             "attacker" => "the attacking unit".to_string(),
+            "selected-unit" => "the selected unit".to_string(),
             other => dekebab(other),
         },
         Some(Value::Object(f)) => {

@@ -141,7 +141,7 @@ def _hinders_attacker(e: dict) -> bool:
     m = modifier if isinstance(modifier, dict) else {}
     op = m.get("operation")
     if e.get("type") == "roll-modifier":
-        return op == "subtract"
+        return op in ("subtract", "halve")
     if e.get("type") != "stat-modifier":
         return False
     return op in ("worsen", "halve") or (

@@ -173,6 +173,10 @@ func rollModifierLeaf(m map[string]any, subj string) string {
 		cap = " (to a maximum of " + esigned(m["operation"], m["cap"]) + ")"
 	}
 	rolls := rollName(m["roll"]) + " rolls"
+	// "Halve Advance and Charge rolls made for that unit": the result is halved, with no value.
+	if m["operation"] == "halve" {
+		return "halve " + ofOrPossessive(subj, rolls) + weaponRollScope(m)
+	}
 	verb, prep := "add", "to"
 	if m["operation"] == "subtract" {
 		verb, prep = "subtract", "from"

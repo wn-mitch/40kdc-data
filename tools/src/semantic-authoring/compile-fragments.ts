@@ -349,7 +349,8 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
       return {
         type: "roll-modifier", target: rollTarget(roll),
         modifier: {
-          roll, operation: closed(leaf, "operation"), value: closed(leaf, "value"),
+          // "Halve Advance and Charge rolls" (roll-modifier@11) takes no value.
+          roll, operation: closed(leaf, "operation"), ...(leaf.parameters.operation === "halve" ? {} : { value: closed(leaf, "value") }),
           ...(leaf.parameters.cap !== undefined ? { cap: closed(leaf, "cap") } : {}), ...weaponScope(leaf),
         },
       };

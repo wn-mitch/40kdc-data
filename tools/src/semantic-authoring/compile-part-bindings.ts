@@ -44,7 +44,7 @@ export function bindParts(frame: PartFrame, plan: ReturnType<typeof planEffects>
     const last = partStarts.at(-1);
     // A moment right after another, with no effect between, is an alternative for the same part.
     if (last && !planned.some((item) => item.index > last.index && item.index < index)) last.moments.push(position);
-    else partStarts.push({ index, moments: [position] });
+    else partStarts.push({ index: sentenceLeadStart(list, index, last?.index ?? firstEffectIndex, sourceText), moments: [position] });
   });
   // "The first time this model is destroyed, at the end of the phase": one moment (compile-delayed-destruction.ts).
   // "Then, at the end of the phase" after a destruction nests under it instead (momentsAfterDestruction below).
@@ -200,7 +200,9 @@ export function bindParts(frame: PartFrame, plan: ReturnType<typeof planEffects>
   // Several durations: the parts that take the durations' own wrapping, with the features that read one duration are refused.
   if (split) {
     const selectsAttacks = selections.length === 1 && planned.some((item) => item.selected);
-    if (rolls.length || auraLeaf || forEachLeaf || leaderLeaf || rulesBundle || optionalSpend || selectsAttacks) errors.push(CONFLICTING_DURATIONS);
+    // A roll only a later part makes ("In addition, until …, roll one D6 each time that unit ends a move") is that part's own.
+    const firstPartRoll = rolls.some((roll) => partOfLeaf(roll) === 0);
+    if (firstPartRoll || auraLeaf || forEachLeaf || leaderLeaf || rulesBundle || optionalSpend || selectsAttacks) errors.push(CONFLICTING_DURATIONS);
     if (usages.length) errors.push("A usage limit in an ability with several durations has no reading yet.");
     const testAfterMark = refuseTestAfterMark(planned.map((item) => ({ index: item.index, node: item.node, gate: item.gate })), (index) => partStarts.filter((part) => part.index < index).length);
     if (testAfterMark) errors.push(testAfterMark);
@@ -249,3 +251,27 @@ export function firstPartLoop(list: readonly CompileLeaf[], partOfLeaf: (leaf: C
   const loops = list.filter((leaf) => leaf.family_id === "for-each-unit-select");
   return loops.length === 2 && partOfLeaf(loops[0]!) === 0 && partOfLeaf(loops[1]!) > 0 ? loops[0]! : null;
 }
+
+/** Leaves a later part's sentence can print before its moment: a gate, a duration, or the roll the moment makes. */
+const LEAD_ROLES = new Set(["CONDITION", "DURATION"]);
+
+/**
+ * "In addition, if that unit can FLY, until …, roll one D6 each time that unit ends a move": the
+ * gate, duration and roll printed before a later moment in its own sentence belong to that moment's
+ * part. Walks back from the moment over such leaves while no sentence break (. ; or a line break)
+ * separates them, stopping at an effect, at the previous part's start and at `floor`.
+ */
+function sentenceLeadStart(list: readonly CompileLeaf[], moment: number, floor: number, sourceText: string | undefined): number {
+  if (sourceText === undefined) return moment;
+  const bytes = Buffer.from(sourceText, "utf8");
+  let start = moment;
+  while (start - 1 > floor) {
+    const before = list[start - 1]!;
+    const lead = LEAD_ROLES.has(before.role) || before.family_id === "dice-roll";
+    if (!lead || before.fragment !== list[moment]!.fragment || before.end_byte === undefined) break;
+    if (/[.;\r\n]/u.test(bytes.subarray(before.end_byte, list[start]!.start_byte).toString("utf8"))) break;
+    start -= 1;
+  }
+  return start;
+}
+

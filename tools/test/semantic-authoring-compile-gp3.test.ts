@@ -395,9 +395,11 @@ describe("a window beside a later moment, and a parenthetical's duration (compil
 
   it("gives the parenthetical's move-end rule the turn duration of the clause it belongs to", () => {
     const later = (mechanicsOf(text, pieces).effect.steps as Array<Record<string, any>>)[1]!;
-    const parts = later.effect.steps as Array<Record<string, any>>;
-    expect(parts.map((part) => part.duration)).toEqual(["turn", "turn"]);
-    expect(JSON.stringify(parts[1])).toContain("no_end_in_engagement");
+    // The turn is the later part's own lifetime, so both of its effects, the parenthetical's rule included, last it.
+    expect(later.duration).toBe("turn");
+    expect(later.effect.steps).toHaveLength(2);
+    expect(JSON.stringify(later.effect.steps[1])).toContain("no_end_in_engagement");
+    expect(JSON.stringify(later.effect)).not.toContain('"duration"');
   });
 
   it("keeps one ability-wide duration when the later moment prints none", () => {

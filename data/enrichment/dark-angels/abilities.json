@@ -2504,300 +2504,301 @@
     "source_digest": "99920dffe0e8ad1dbb08f88cb3725b018106a4d9db5050db055c3517371d0638",
     "version": "2025-q3",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "ability-part",
-          "trigger": {
-            "event": "phase-ended",
-            "condition": {
-              "operator": "and",
-              "operands": [
-                {
-                  "type": "phase-is",
-                  "parameters": {
-                    "phase": "fight"
-                  }
-                },
-                {
-                  "type": "player-turn-is",
-                  "parameters": {
-                    "turn": "opponent-turn"
-                  }
-                }
-              ]
+      "type": "ability-part",
+      "trigger": {
+        "event": "phase-ended",
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "fight"
+              }
+            },
+            {
+              "type": "player-turn-is",
+              "parameters": {
+                "turn": "opponent-turn"
+              }
+            }
+          ]
+        }
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy",
+            "none_of": [
+              "AIRCRAFT"
+            ],
+            "lacks_ability": [
+              "lone-operative"
+            ],
+            "visible": {
+              "to": "this-model"
             }
           },
-          "effect": {
-            "type": "select-units",
-            "selector": {
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "matches",
+            "parameters": {
+              "subject": "selected-unit",
               "filter": {
-                "owner": "enemy",
-                "none_of": [
-                  "AIRCRAFT"
-                ],
-                "lacks_ability": [
-                  "lone-operative"
-                ],
-                "visible": {
-                  "to": "this-model"
-                }
-              },
-              "count": {
-                "min": 1,
-                "max": 1
-              },
-              "eligibility": {
-                "type": "matches",
-                "parameters": {
-                  "subject": "selected-unit",
-                  "filter": {
-                    "within": {
-                      "of": "this-unit",
-                      "range": {
-                        "inches": 24
-                      }
-                    }
+                "within": {
+                  "of": "this-unit",
+                  "range": {
+                    "inches": 24
                   }
                 }
               }
-            },
-            "effect": {
+            }
+          }
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
               "type": "designate",
               "target": "selected-unit",
               "modifier": {
                 "tag": "slowed"
               }
-            }
-          }
-        },
-        {
-          "type": "ability-part",
-          "trigger": {
-            "event": "selected",
-            "subject": "selected-unit",
-            "filter": {
-              "to": "move"
             },
-            "condition": {
-              "operator": "not",
-              "operands": [
-                {
-                  "type": "happened",
-                  "parameters": {
-                    "subject": "event-subject",
-                    "event": "move-ended",
-                    "filter": {
-                      "move_types": [
-                        "remain-stationary"
-                      ]
-                    },
-                    "window": "turn"
-                  }
-                }
-              ]
-            }
-          },
-          "effect": {
-            "type": "dice-table",
-            "dice": "D6",
-            "outcomes": [
-              {
-                "results": [
-                  1,
-                  2,
-                  3,
-                  4
-                ],
-                "effect": {
-                  "type": "sequence",
-                  "steps": [
+            {
+              "type": "ability-part",
+              "trigger": {
+                "event": "selected",
+                "subject": "selected-unit",
+                "filter": {
+                  "to": "move"
+                },
+                "condition": {
+                  "operator": "not",
+                  "operands": [
                     {
-                      "type": "conditional",
-                      "condition": {
-                        "operator": "and",
-                        "operands": [
-                          {
-                            "type": "matches",
-                            "parameters": {
-                              "subject": "event-subject",
-                              "filter": {
-                                "designated": "slowed"
-                              }
-                            }
-                          },
-                          {
-                            "operator": "and",
-                            "operands": [
-                              {
-                                "type": "phase-is",
-                                "parameters": {
-                                  "phase": "movement"
-                                }
-                              },
-                              {
-                                "type": "player-turn-is",
-                                "parameters": {
-                                  "turn": "opponent-turn"
-                                }
-                              }
-                            ]
-                          }
-                        ]
-                      },
-                      "effect": {
-                        "type": "mortal-wounds",
-                        "target": "event-subject",
-                        "modifier": {
-                          "count": "D3"
-                        }
-                      }
-                    },
-                    {
-                      "type": "conditional",
-                      "condition": {
-                        "operator": "and",
-                        "operands": [
-                          {
-                            "type": "matches",
-                            "parameters": {
-                              "subject": "event-subject",
-                              "filter": {
-                                "designated": "slowed"
-                              }
-                            }
-                          },
-                          {
-                            "operator": "and",
-                            "operands": [
-                              {
-                                "type": "phase-is",
-                                "parameters": {
-                                  "phase": "movement"
-                                }
-                              },
-                              {
-                                "type": "player-turn-is",
-                                "parameters": {
-                                  "turn": "opponent-turn"
-                                }
-                              }
-                            ]
-                          }
-                        ]
-                      },
-                      "effect": {
-                        "type": "stat-modifier",
-                        "target": "event-subject",
-                        "modifier": {
-                          "stat": "M",
-                          "operation": "subtract",
-                          "value": 2
-                        }
+                      "type": "happened",
+                      "parameters": {
+                        "subject": "event-subject",
+                        "event": "move-ended",
+                        "filter": {
+                          "move_types": [
+                            "remain-stationary"
+                          ]
+                        },
+                        "window": "turn"
                       }
                     }
                   ]
                 }
               },
-              {
-                "results": [
-                  5,
-                  6
-                ],
-                "effect": {
-                  "type": "sequence",
-                  "steps": [
-                    {
-                      "type": "conditional",
-                      "condition": {
-                        "operator": "and",
-                        "operands": [
-                          {
-                            "type": "matches",
-                            "parameters": {
-                              "subject": "event-subject",
-                              "filter": {
-                                "designated": "slowed"
-                              }
-                            }
-                          },
-                          {
+              "effect": {
+                "type": "dice-table",
+                "dice": "D6",
+                "outcomes": [
+                  {
+                    "results": [
+                      1,
+                      2,
+                      3,
+                      4
+                    ],
+                    "effect": {
+                      "type": "sequence",
+                      "steps": [
+                        {
+                          "type": "conditional",
+                          "condition": {
                             "operator": "and",
                             "operands": [
                               {
-                                "type": "phase-is",
+                                "type": "matches",
                                 "parameters": {
-                                  "phase": "movement"
+                                  "subject": "event-subject",
+                                  "filter": {
+                                    "designated": "slowed"
+                                  }
                                 }
                               },
                               {
-                                "type": "player-turn-is",
-                                "parameters": {
-                                  "turn": "opponent-turn"
-                                }
+                                "operator": "and",
+                                "operands": [
+                                  {
+                                    "type": "phase-is",
+                                    "parameters": {
+                                      "phase": "movement"
+                                    }
+                                  },
+                                  {
+                                    "type": "player-turn-is",
+                                    "parameters": {
+                                      "turn": "opponent-turn"
+                                    }
+                                  }
+                                ]
                               }
                             ]
-                          }
-                        ]
-                      },
-                      "effect": {
-                        "type": "mortal-wounds",
-                        "target": "event-subject",
-                        "modifier": {
-                          "count": "2D3"
-                        }
-                      }
-                    },
-                    {
-                      "type": "conditional",
-                      "condition": {
-                        "operator": "and",
-                        "operands": [
-                          {
-                            "type": "matches",
-                            "parameters": {
-                              "subject": "event-subject",
-                              "filter": {
-                                "designated": "slowed"
-                              }
-                            }
                           },
-                          {
+                          "effect": {
+                            "type": "mortal-wounds",
+                            "target": "event-subject",
+                            "modifier": {
+                              "count": "D3"
+                            }
+                          }
+                        },
+                        {
+                          "type": "conditional",
+                          "condition": {
                             "operator": "and",
                             "operands": [
                               {
-                                "type": "phase-is",
+                                "type": "matches",
                                 "parameters": {
-                                  "phase": "movement"
+                                  "subject": "event-subject",
+                                  "filter": {
+                                    "designated": "slowed"
+                                  }
                                 }
                               },
                               {
-                                "type": "player-turn-is",
-                                "parameters": {
-                                  "turn": "opponent-turn"
-                                }
+                                "operator": "and",
+                                "operands": [
+                                  {
+                                    "type": "phase-is",
+                                    "parameters": {
+                                      "phase": "movement"
+                                    }
+                                  },
+                                  {
+                                    "type": "player-turn-is",
+                                    "parameters": {
+                                      "turn": "opponent-turn"
+                                    }
+                                  }
+                                ]
                               }
                             ]
+                          },
+                          "effect": {
+                            "type": "stat-modifier",
+                            "target": "event-subject",
+                            "modifier": {
+                              "stat": "M",
+                              "operation": "subtract",
+                              "value": 2
+                            }
                           }
-                        ]
-                      },
-                      "effect": {
-                        "type": "stat-modifier",
-                        "target": "event-subject",
-                        "modifier": {
-                          "stat": "M",
-                          "operation": "subtract",
-                          "value": 3
                         }
-                      }
+                      ]
                     }
-                  ]
-                }
-              }
-            ]
-          }
+                  },
+                  {
+                    "results": [
+                      5,
+                      6
+                    ],
+                    "effect": {
+                      "type": "sequence",
+                      "steps": [
+                        {
+                          "type": "conditional",
+                          "condition": {
+                            "operator": "and",
+                            "operands": [
+                              {
+                                "type": "matches",
+                                "parameters": {
+                                  "subject": "event-subject",
+                                  "filter": {
+                                    "designated": "slowed"
+                                  }
+                                }
+                              },
+                              {
+                                "operator": "and",
+                                "operands": [
+                                  {
+                                    "type": "phase-is",
+                                    "parameters": {
+                                      "phase": "movement"
+                                    }
+                                  },
+                                  {
+                                    "type": "player-turn-is",
+                                    "parameters": {
+                                      "turn": "opponent-turn"
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          "effect": {
+                            "type": "mortal-wounds",
+                            "target": "event-subject",
+                            "modifier": {
+                              "count": "2D3"
+                            }
+                          }
+                        },
+                        {
+                          "type": "conditional",
+                          "condition": {
+                            "operator": "and",
+                            "operands": [
+                              {
+                                "type": "matches",
+                                "parameters": {
+                                  "subject": "event-subject",
+                                  "filter": {
+                                    "designated": "slowed"
+                                  }
+                                }
+                              },
+                              {
+                                "operator": "and",
+                                "operands": [
+                                  {
+                                    "type": "phase-is",
+                                    "parameters": {
+                                      "phase": "movement"
+                                    }
+                                  },
+                                  {
+                                    "type": "player-turn-is",
+                                    "parameters": {
+                                      "turn": "opponent-turn"
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          "effect": {
+                            "type": "stat-modifier",
+                            "target": "event-subject",
+                            "modifier": {
+                              "stat": "M",
+                              "operation": "subtract",
+                              "value": 3
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              "duration": "until-end-of-opponent-next-movement-phase"
+            }
+          ]
         }
-      ]
+      }
     },
     "scope": {
       "duration": "until-end-of-opponent-next-movement-phase"

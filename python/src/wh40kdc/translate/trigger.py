@@ -101,6 +101,8 @@ def _actor(ref: Any) -> str:
     # A moment nested in an attack's: the unit making that attack.
     if ref == "attacker":
         return "the attacking unit"
+    if ref == "selected-unit":
+        return "the selected unit"
     if isinstance(ref, (dict, list)):
         f = _obj(ref)
         if isinstance(f.get("event_var"), str):

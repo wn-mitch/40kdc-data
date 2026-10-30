@@ -1829,7 +1829,7 @@ class Modifier1(TypedDict):
 
 class Modifier2(TypedDict):
     roll: RollSelector
-    operation: Literal["add", "subtract"]
+    operation: Literal["add", "subtract", "halve"]
     value: NotRequired[Quantity]
     cap: NotRequired[int]
     value_from: NotRequired[Literal["previous-roll"]]

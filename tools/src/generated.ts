@@ -3616,14 +3616,14 @@ export interface IgnoreModifiersEffect {
   scaling?: Scaling;
 }
 /**
- * [roll] Add to or subtract from a roll. cap bounds a stacking modifier; value_from takes the value from an earlier step's roll.
+ * [roll] Add to or subtract from a roll, or halve it. cap bounds a stacking modifier; value_from takes the value from an earlier step's roll. halve takes no value, cap or value_from.
  */
 export interface RollModifierEffect {
   type: "roll-modifier";
   target: UnitRef;
   modifier: {
     roll: RollSelector;
-    operation: "add" | "subtract";
+    operation: "add" | "subtract" | "halve";
     value?: Quantity;
     cap?: number;
     value_from?: "previous-roll";

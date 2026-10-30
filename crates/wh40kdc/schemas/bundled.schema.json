@@ -7878,7 +7878,7 @@
           "type": "object",
           "additionalProperties": false,
           "title": "roll-modifier effect",
-          "description": "[roll] Add to or subtract from a roll. cap bounds a stacking modifier; value_from takes the value from an earlier step's roll.",
+          "description": "[roll] Add to or subtract from a roll, or halve it. cap bounds a stacking modifier; value_from takes the value from an earlier step's roll. halve takes no value, cap or value_from.",
           "required": [
             "type",
             "target",
@@ -7901,7 +7901,8 @@
                 "operation": {
                   "enum": [
                     "add",
-                    "subtract"
+                    "subtract",
+                    "halve"
                   ]
                 },
                 "value": {

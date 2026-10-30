@@ -43,7 +43,7 @@ fn hinders_attacker(e: &Value) -> bool {
     let op = m.and_then(|m| m.get("operation")).and_then(Value::as_str);
     let stat = m.and_then(|m| m.get("stat")).and_then(Value::as_str);
     match e.get("type").and_then(Value::as_str) {
-        Some("roll-modifier") => op == Some("subtract"),
+        Some("roll-modifier") => matches!(op, Some("subtract" | "halve")),
         Some("stat-modifier") => match op {
             Some("worsen" | "halve") => true,
             Some("subtract") => !matches!(stat, Some("BS" | "WS" | "AP" | "Sv" | "Ld")),

@@ -60,7 +60,7 @@ const LOWER_IS_BETTER_STATS = new Set(["BS", "WS", "AP", "Sv", "Ld"]);
 /** Whether a modifier aimed at the attacker hinders its attack ("-1 to Hit", "subtract 1 from Damage", "worsen AP"). */
 function hindersAttacker(e: { type?: string; modifier?: Record<string, unknown> }): boolean {
   const op = str(e.modifier?.operation);
-  if (e.type === "roll-modifier") return op === "subtract";
+  if (e.type === "roll-modifier") return op === "subtract" || op === "halve";
   if (e.type !== "stat-modifier") return false;
   return op === "worsen" || op === "halve" || (op === "subtract" && !LOWER_IS_BETTER_STATS.has(str(e.modifier?.stat)));
 }

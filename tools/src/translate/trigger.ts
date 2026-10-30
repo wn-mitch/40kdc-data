@@ -67,6 +67,7 @@ function actor(ref: unknown): string {
   if (ref === "model-in-this-unit") return "a model in this unit";
   // A moment nested in an attack's: the unit making that attack.
   if (ref === "attacker") return "the attacking unit";
+  if (ref === "selected-unit") return "the selected unit";
   if (typeof ref === "object") {
     const f = ref as P;
     if (typeof f.event_var === "string") return "that unit";

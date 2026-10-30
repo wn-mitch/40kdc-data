@@ -278,6 +278,29 @@ export const ROLL_EXTENSIONS: readonly FamilyExtension[] = [
     },
   },
   {
+    // "halve Advance and Charge rolls made for that unit".
+    family: "roll-modifier",
+    version: 11,
+    description: "As the previous version, and operation can be halve: the roll's result is halved. It takes no value or cap.",
+    schema: (previous) => {
+      const props = properties(previous);
+      const { required, ...rest } = previous as { required?: string[] } & Record<string, unknown>;
+      return withProperties({ ...rest, required: (required ?? []).filter((key) => key !== "value") }, {
+        operation: widenedEnum(previous, "operation", ["halve"]),
+        value: optional(props.value!),
+      });
+    },
+    normalize: (input, previous) => {
+      if (input.operation !== "halve") {
+        if (input.value === undefined) throw new TypeError("roll-modifier.value is required unless operation is halve.");
+        return previous(input);
+      }
+      if (input.value !== undefined || input.cap !== undefined) throw new TypeError("roll-modifier operation halve takes no value or cap.");
+      const { value: _value, ...normalized } = previous({ ...input, operation: "add", value: 1 });
+      return { ...normalized, operation: "halve" };
+    },
+  },
+  {
     // "can re-roll hit rolls and wound rolls"; "re-roll one Hit roll, one Wound roll and one Damage roll".
     family: "reroll",
     version: 4,

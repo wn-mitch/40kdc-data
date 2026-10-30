@@ -98,6 +98,8 @@ function rollModifier(m: Record<string, unknown>, subj: string): string {
   const value = m.value_from === "previous-roll" ? "the result of that roll" : null;
   const cap = m.cap != null ? ` (to a maximum of ${signed(m.operation, m.cap)})` : "";
   const rolls = `${rollName(m.roll)} rolls`;
+  // "Halve Advance and Charge rolls made for that unit": the result is halved, with no value.
+  if (m.operation === "halve") return `halve ${ofOrPossessive(subj, rolls)}${weaponRollScope(m)}`;
   if (m.incoming === true) {
     const change = value ? `${m.operation === "subtract" ? "subtract" : "add"} ${value} ${m.operation === "subtract" ? "from" : "to"}` : `apply ${signed(m.operation, m.value)} to`;
     return `${incomingLead(m, subj)}${change} the ${rollName(m.roll)} roll${cap}`;

@@ -12170,7 +12170,8 @@
               }
             },
             "on_fail": null
-          }
+          },
+          "duration": "phase"
         }
       ]
     },

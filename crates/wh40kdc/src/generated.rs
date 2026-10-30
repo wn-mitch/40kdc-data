@@ -38234,7 +38234,8 @@ impl ::std::convert::TryFrom<::std::string::String> for RollKindVariant0 {
 ///    "operation": {
 ///      "enum": [
 ///        "add",
-///        "subtract"
+///        "subtract",
+///        "halve"
 ///      ]
 ///    },
 ///    "roll": {
@@ -38278,7 +38279,8 @@ pub struct RollModifierEffectModifier {
 ///{
 ///  "enum": [
 ///    "add",
-///    "subtract"
+///    "subtract",
+///    "halve"
 ///  ]
 ///}
 /// ```
@@ -38300,12 +38302,15 @@ pub enum RollModifierEffectModifierOperation {
     Add,
     #[serde(rename = "subtract")]
     Subtract,
+    #[serde(rename = "halve")]
+    Halve,
 }
 impl ::std::fmt::Display for RollModifierEffectModifierOperation {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match *self {
             Self::Add => f.write_str("add"),
             Self::Subtract => f.write_str("subtract"),
+            Self::Halve => f.write_str("halve"),
         }
     }
 }
@@ -38317,6 +38322,7 @@ impl ::std::str::FromStr for RollModifierEffectModifierOperation {
         match value {
             "add" => Ok(Self::Add),
             "subtract" => Ok(Self::Subtract),
+            "halve" => Ok(Self::Halve),
             _ => Err("invalid value".into()),
         }
     }
@@ -44915,7 +44921,7 @@ pub enum SimpleCondition {
 ///    },
 ///    {
 ///      "title": "roll-modifier effect",
-///      "description": "[roll] Add to or subtract from a roll. cap bounds a stacking modifier; value_from takes the value from an earlier step's roll.",
+///      "description": "[roll] Add to or subtract from a roll, or halve it. cap bounds a stacking modifier; value_from takes the value from an earlier step's roll. halve takes no value, cap or value_from.",
 ///      "type": "object",
 ///      "required": [
 ///        "modifier",
@@ -46087,7 +46093,7 @@ pub enum SingleEffect {
     },
     /**roll-modifier effect
 
-[roll] Add to or subtract from a roll. cap bounds a stacking modifier; value_from takes the value from an earlier step's roll.*/
+[roll] Add to or subtract from a roll, or halve it. cap bounds a stacking modifier; value_from takes the value from an earlier step's roll. halve takes no value, cap or value_from.*/
     #[serde(rename = "roll-modifier")]
     RollModifier {
         modifier: RollModifierEffectModifier,

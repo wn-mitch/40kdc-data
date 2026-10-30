@@ -2520,25 +2520,162 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "46d29e0e48a3546ebc70e467f27392e0781964e5a29adc9538a058ece080377d",
     "version": "2025-q3",
     "effect": {
-      "type": "mortal-wounds",
-      "target": "defender",
-      "modifier": {
-        "count": "D3"
+      "type": "ability-part",
+      "trigger": {
+        "event": "phase-started",
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "movement"
+              }
+            },
+            {
+              "type": "player-turn-is",
+              "parameters": {
+                "turn": "opponent-turn"
+              }
+            }
+          ]
+        },
+        "optional": true
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "selected-unit",
+                  "filter": {
+                    "within": {
+                      "of": "this-model",
+                      "range": {
+                        "inches": 18
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "selected-unit",
+                  "filter": {
+                    "visible": {
+                      "to": "this-model"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "ability-part",
+              "duration": "turn",
+              "effect": {
+                "type": "stat-modifier",
+                "target": "selected-unit",
+                "modifier": {
+                  "stat": "M",
+                  "operation": "halve"
+                }
+              }
+            },
+            {
+              "type": "ability-part",
+              "duration": "turn",
+              "effect": {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "roll-modifier",
+                    "target": "selected-unit",
+                    "modifier": {
+                      "roll": "advance",
+                      "operation": "halve"
+                    }
+                  },
+                  {
+                    "type": "roll-modifier",
+                    "target": "selected-unit",
+                    "modifier": {
+                      "roll": "charge",
+                      "operation": "halve"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "ability-part",
+              "trigger": {
+                "event": "move-ended",
+                "subject": "selected-unit"
+              },
+              "effect": {
+                "type": "dice-gated",
+                "dice": "D6",
+                "threshold": 4,
+                "comparison": "gte",
+                "on_success": {
+                  "type": "conditional",
+                  "condition": {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "selected-unit",
+                      "filter": {
+                        "all_of": [
+                          "FLY"
+                        ]
+                      }
+                    }
+                  },
+                  "effect": {
+                    "type": "mortal-wounds",
+                    "target": "selected-unit",
+                    "modifier": {
+                      "count": "D3"
+                    }
+                  }
+                },
+                "on_fail": null
+              },
+              "duration": "until-next-movement-phase"
+            }
+          ]
+        }
       }
     },
     "scope": {
-      "duration": "turn"
+      "duration": "permanent"
     },
     "unit_ids": [
       "obelisk"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "faction_id": "necrons"
   },
   {

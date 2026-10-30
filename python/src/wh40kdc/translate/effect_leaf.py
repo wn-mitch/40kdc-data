@@ -222,6 +222,9 @@ def _roll_modifier(m: dict[str, Any], subj: str) -> str:
         else ""
     )
     rolls = f"{roll_name(m.get('roll'))} rolls"
+    # "Halve Advance and Charge rolls made for that unit": the result is halved, with no value.
+    if m.get("operation") == "halve":
+        return f"halve {of_or_possessive(subj, rolls)}{weapon_roll_scope(m)}"
     sub = m.get("operation") == "subtract"
     if m.get("incoming") is True:
         if value:

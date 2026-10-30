@@ -217,6 +217,14 @@ fn roll_modifier(m: &P, subj: &str) -> String {
         .map(|c| format!(" (to a maximum of {})", signed(m.get("operation"), Some(c))))
         .unwrap_or_default();
     let rolls = format!("{} rolls", roll_name(m.get("roll")));
+    // "Halve Advance and Charge rolls made for that unit": the result is halved, with no value.
+    if sv(m, "operation") == Some("halve") {
+        return format!(
+            "halve {}{}",
+            of_or_possessive(subj, &rolls),
+            weapon_roll_scope(m)
+        );
+    }
     let subtract = sv(m, "operation") == Some("subtract");
     let (verb, prep) = if subtract {
         ("subtract", "from")

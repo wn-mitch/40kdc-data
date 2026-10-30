@@ -93,7 +93,7 @@ func hindersAttacker(e map[string]any) bool {
 	op := m["operation"]
 	switch e["type"] {
 	case "roll-modifier":
-		return op == "subtract"
+		return op == "subtract" || op == "halve"
 	case "stat-modifier":
 		switch op {
 		case "worsen", "halve":

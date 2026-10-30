@@ -62,6 +62,8 @@ func triggerActor(ref any) string {
 		case "attacker":
 			// A moment nested in an attack's: the unit making that attack.
 			return "the attacking unit"
+		case "selected-unit":
+			return "the selected unit"
 		}
 		return dekebab(r)
 	case map[string]any:

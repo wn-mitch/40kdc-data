@@ -7,6 +7,7 @@ import { foldConditionalTestModifiers } from "./compile-preceding-roll.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { allOf, condition } from "./compile-conditions.js";
 import { durationPart, placeInWindow } from "./compile-durations.js";
+import { laterPartWindow, nestInSelection, withPartWindow } from "./compile-later-part.js";
 import { isRollMarker, resolveRolls } from "./compile-dice.js";
 import { foldBandSelection } from "./compile-band-selection.js";
 import { boundAttackDesignation, designation, directEntry, selectUnit, wrapAura, wrapForEachUnit, wrapLeaderTarget, wrapRulesBundle } from "./compile-wrappers.js";
@@ -467,14 +468,21 @@ export function assemblePart(
     const partEffects = partStarts.map((part, position) => attempt(() => auraPart(auraLeaf, rawEffects[position]!, part.moments.map((index) => moments[index]!))));
     if (partEffects.some((effect) => effect === null)) return { ok: false, signature, errors };
     partStarts.forEach((part, position) => {
-      const node: Node = {
+      let node: Node = {
         type: "ability-part", trigger: asTrigger(part.moments.map((index) => moments[index]!)), effect: partEffects[position]!,
         ...(position === usagePart ? { usage: usages[0] } : {}),
         ...(connective.optionalParts.has(position + 1) ? { optional: true } : {}),
         ...(partPeriods[position] ? { duration: partPeriods[position] } : {}),
         ...(laterPartDuration === position + 1 ? { duration: durations[0] } : {}),
       };
-      if (whileMarked.has(position)) nestedSteps.push(node);
+      // "…, until the start of your next Movement phase, roll one D6 each time that unit ends a move": the lead-in's duration is the part's lifetime.
+      const window = laterPartWindow(list, part.index, triggerIndexes[part.moments[0]!]!);
+      if (window !== null && node.duration === undefined) node = withPartWindow(node, window);
+      // "Each time that unit ends a move" after a selection in the entry part: the part nests in that selection.
+      const subject = (node.trigger as Node | undefined)?.subject;
+      const inSelection = subject === "selected-unit" && selectionPart === 0 && partSteps.length > 0 ? nestInSelection(partSteps[0]!, node) : null;
+      if (inSelection !== null) partSteps[0] = inSelection;
+      else if (whileMarked.has(position)) nestedSteps.push(node);
       else if (under.has(position)) nestedSteps.push({ ...node, duration: "phase" });
       else if (afterOwnUse.has(position) && partSteps.length > 0) {
         const owner = partSteps.at(-1)!;

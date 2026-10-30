@@ -9986,50 +9986,39 @@
             "type": "sequence",
             "steps": [
               {
-                "type": "ability-part",
-                "duration": "turn",
-                "effect": {
-                  "type": "move-modifier",
-                  "target": "this-unit",
-                  "modifier": {
-                    "passthrough": [
-                      "models"
-                    ]
-                  }
+                "type": "move-modifier",
+                "target": "this-unit",
+                "modifier": {
+                  "passthrough": [
+                    "models"
+                  ]
                 }
               },
               {
-                "type": "ability-part",
-                "duration": "turn",
-                "effect": {
-                  "type": "permission",
-                  "target": "this-unit",
-                  "modifier": {
-                    "activity": "move",
-                    "allow": true,
-                    "despite": [
-                      "engaged"
-                    ]
-                  }
+                "type": "permission",
+                "target": "this-unit",
+                "modifier": {
+                  "activity": "move",
+                  "allow": true,
+                  "despite": [
+                    "engaged"
+                  ]
                 }
               },
               {
-                "type": "ability-part",
-                "duration": "turn",
-                "effect": {
-                  "type": "move-modifier",
-                  "target": "this-unit",
-                  "modifier": {
-                    "no_end_in_engagement": true,
-                    "applies_to_moves": [
-                      "normal",
-                      "advance"
-                    ]
-                  }
+                "type": "move-modifier",
+                "target": "this-unit",
+                "modifier": {
+                  "no_end_in_engagement": true,
+                  "applies_to_moves": [
+                    "normal",
+                    "advance"
+                  ]
                 }
               }
             ]
-          }
+          },
+          "duration": "turn"
         }
       ]
     },

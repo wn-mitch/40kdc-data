@@ -4218,7 +4218,8 @@
               }
             },
             "on_fail": null
-          }
+          },
+          "duration": "phase"
         }
       ]
     },
@@ -4226,7 +4227,7 @@
       "duration": "phase"
     },
     "expected": {
-      "text": "Until the end of the phase:\n  -> Enemy units are not considered to be within Engagement Range of the unit when targets are selected with ranged weapons.\n  -> When damage is allocated to an enemy model:\n    -> Roll one D6: on a 5+, while that unit is a unit within Engagement Range of the unit, after the attacking unit resolves its attacks: the unit suffers 1 mortal wound."
+      "text": "Until the end of the phase:\n  -> Enemy units are not considered to be within Engagement Range of the unit when targets are selected with ranged weapons.\n  -> When damage is allocated to an enemy model, until the end of the phase:\n    -> Roll one D6: on a 5+, while that unit is a unit within Engagement Range of the unit, after the attacking unit resolves its attacks: the unit suffers 1 mortal wound."
     }
   },
   {
@@ -12860,7 +12861,8 @@
               }
             },
             "on_fail": null
-          }
+          },
+          "duration": "phase"
         }
       ]
     },
@@ -12868,7 +12870,7 @@
       "duration": "phase"
     },
     "expected": {
-      "text": "Until the end of the phase:\n  -> Enemy units are not considered to be within Engagement Range of the unit when targets are selected with ranged weapons.\n  -> When damage is allocated to an enemy model:\n    -> Roll one D6: on a 4+, while that unit is a unit within Engagement Range of the unit, after the attacking unit resolves its attacks: destroy 1 model in the unit."
+      "text": "Until the end of the phase:\n  -> Enemy units are not considered to be within Engagement Range of the unit when targets are selected with ranged weapons.\n  -> When damage is allocated to an enemy model, until the end of the phase:\n    -> Roll one D6: on a 4+, while that unit is a unit within Engagement Range of the unit, after the attacking unit resolves its attacks: destroy 1 model in the unit."
     }
   },
   {
@@ -28402,7 +28404,8 @@
             "modifier": {
               "count": 1
             }
-          }
+          },
+          "duration": "phase"
         }
       ]
     },
@@ -28410,7 +28413,7 @@
       "duration": "phase"
     },
     "expected": {
-      "text": "Until the end of the phase:\n  -> When the unit is selected to fight, you may use this ability: spend 1 Miracle die.\n  -> Each time an attack made by a model in this unit scores a wound: the target suffers 1 mortal wound."
+      "text": "Until the end of the phase:\n  -> When the unit is selected to fight, you may use this ability: spend 1 Miracle die.\n  -> Each time an attack made by a model in this unit scores a wound, until the end of the phase: the target suffers 1 mortal wound."
     }
   },
   {
@@ -44050,6 +44053,79 @@
     },
     "expected": {
       "text": "At the start of the Command phase:\n  For each enemy unit that is poisoned that is on the battlefield:\n    -> Roll one D6: on a 4+, the unit suffers D3 mortal wounds."
+    }
+  },
+  {
+    "caseId": "canonical/roll-modifier-halve",
+    "effect": {
+      "type": "roll-modifier",
+      "target": "selected-unit",
+      "modifier": {
+        "roll": "advance",
+        "operation": "halve"
+      }
+    },
+    "scope": {
+      "duration": "turn"
+    },
+    "expected": {
+      "text": "Until the end of the turn, halve the selected unit's Advance rolls."
+    }
+  },
+  {
+    "caseId": "canonical/trigger-selected-unit-move-ended",
+    "effect": {
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "roll-modifier",
+            "target": "selected-unit",
+            "modifier": {
+              "roll": "charge",
+              "operation": "halve"
+            }
+          },
+          {
+            "type": "ability-part",
+            "trigger": {
+              "event": "move-ended",
+              "subject": "selected-unit"
+            },
+            "duration": "until-next-movement-phase",
+            "effect": {
+              "type": "dice-gated",
+              "dice": "D6",
+              "threshold": 4,
+              "comparison": "gte",
+              "on_success": {
+                "type": "mortal-wounds",
+                "target": "selected-unit",
+                "modifier": {
+                  "count": "D3"
+                }
+              },
+              "on_fail": null
+            }
+          }
+        ]
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Select one enemy unit:\n  -> Halve that unit's Charge rolls.\n  -> When the selected unit ends a move, until the start of your next Movement phase:\n    -> Roll one D6: on a 4+, that unit suffers D3 mortal wounds."
     }
   }
 ]
