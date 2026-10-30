@@ -1,6 +1,6 @@
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { DICE_FACES } from "./dice-families.js";
-import { perDieConditionalRolls, resolveAlternativePools } from "./compile-dice-variants.js";
+import { perDieConditionalRolls, resolveAlternativePools, twoDiceConditionalRolls } from "./compile-dice-variants.js";
 
 /**
  * Result bands of a roll. A roll-result leaf compiles to a marker condition that clause binding
@@ -119,14 +119,17 @@ function readRoll(node: Node, dice: string, rollVar: string): Node | null {
 
 /**
  * "Roll one D3: your unit suffers a number of mortal wounds equal to the result": a roll with no
- * result band whose result an effect after it takes as its amount (written as the roll's own dice).
+ * result band whose result an effect after it takes as its amount (written as the roll's own dice,
+ * with its bonus: "D3+3").
  * The effects from the first reader to the last share that one roll, bound as the DSL's `roll`
  * step. Null when the roll is not a single plain die or no effect reads it.
  */
 function resultReaders(planned: Planned[], roll: CompileLeaf): Node[] | null {
   const parameters = roll.parameters;
-  if (["count", "per_model", "for_each", "bonus", "roll_var", "conditional_bonus", "pool_condition", "kind"].some((key) => parameters[key] !== undefined)) return null;
-  const dice = String(parameters.dice);
+  if (["count", "per_model", "for_each", "roll_var", "conditional_bonus", "pool_condition", "kind"].some((key) => parameters[key] !== undefined)) return null;
+  // "Roll D3+3: … that number of mortal wounds": the readers write the roll with its bonus.
+  const bonus = Number(parameters.bonus ?? 0);
+  const dice = bonus > 0 ? `${String(parameters.dice)}+${bonus}` : String(parameters.dice);
   const rollVar = "result";
   const read = planned.map((item) => readRoll(item.node, dice, rollVar));
   const first = read.findIndex((node) => node !== null);
@@ -352,7 +355,8 @@ function resolveConditionalRolls(planned: Planned[], global: Node[], banded: Pla
   }
   if (Number(roll.parameters.bonus ?? 0) !== 0) throw new CompileError("An unconditional and a conditional change to one roll have no DSL shape yet.");
   const die = String(roll.parameters.dice);
-  if (die !== "D3" && die !== "D6") throw new CompileError(`A conditional change folds only into a D3 or D6 roll, not ${die}.`);
+  if (die === "2D6") return twoDiceConditionalRolls(planned, banded, roll, bonus);
+  if (die !== "D3" && die !== "D6") throw new CompileError(`A conditional change folds only into a D3, D6 or 2D6 roll, not ${die}.`);
   const faces = DICE_FACES[die]!;
   const value = bonus.value;
   const notCondition: Node = { operator: "not", operands: [bonus.node] };

@@ -102,9 +102,18 @@ export function bindParts(frame: PartFrame, plan: ReturnType<typeof planEffects>
   }
   // "One or more units from your army with this ability": once for the army (compile-holder-abilities.ts).
   applyHolderAllowance(list, triggers, options.abilityId, usages, usageScopes);
+  // "Once per battle … only one model from your army can use it each battle round": two limits that
+  // both apply, each naming its own scope, are the entry's usage array (schema ability-usage).
+  const ownScoped = usages.length === 2 && usages.every((usage) => usage.per !== undefined)
+    && !list.some((leaf) => leaf.family_id === "usage-scope")
+    && (usages[0]!.frequency !== usages[1]!.frequency || usages[0]!.per !== usages[1]!.per);
+  if (ownScoped) {
+    usages.splice(0, 2, [usages[0]!, usages[1]!] as unknown as Node);
+    usageScopes.clear();
+  }
   if (usages.length > 1) errors.push("More than one usage limit; the entry has one usage.");
   if (usageScopes.size > 1) errors.push("Conflicting usage scopes.");
-  if (usages.length && usageScopes.size === 0) errors.push("Usage frequency needs a reviewed usage scope.");
+  if (usages.length && usageScopes.size === 0 && !ownScoped) errors.push("Usage frequency needs a reviewed usage scope.");
   if (!usages.length && usageScopes.size) errors.push("Usage scope has no frequency.");
   if (usages.length === 1 && usageScopes.size === 1) {
     const per = usageScopes.values().next().value!;

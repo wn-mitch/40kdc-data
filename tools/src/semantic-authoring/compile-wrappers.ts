@@ -239,7 +239,9 @@ export function selectUnit(selection: CompileLeaf, body: Node, extra: { maxCount
       : selection.parameters.at_least === true ? { min: own ?? 1 } : { min: own ?? 1, max: own ?? 1 };
   // "Select one of those destroyed models": only a unit that lost a model to the triggering attacks (compile-destroyed-selection.ts).
   const among = destroyedSelectionEligibility(selection);
-  const eligibility = among && extra.eligibility ? { operator: "and", operands: [extra.eligibility, among] } : among ?? extra.eligibility;
+  const protection = loneOperativeProtection(selection);
+  const checks = [extra.eligibility, among, protection].filter((node): node is Node => node !== null && node !== undefined);
+  const eligibility = checks.length === 0 ? null : checks.length === 1 ? checks[0]! : { operator: "and", operands: checks };
   return {
     type: "select-units",
     selector: {
@@ -250,6 +252,24 @@ export function selectUnit(selection: CompileLeaf, body: Node, extra: { maxCount
       ...(typeof selection.parameters.bind_as === "string" ? { bind_as: selection.parameters.bind_as } : {}),
     },
     effect: body,
+  };
+}
+
+/**
+ * "Excluding units with the Lone Operative ability that are not part of an Attached unit and are not
+ * within 12" of this model" (unit-filter@19): a unit can be selected if it lacks Lone Operative, is
+ * part of an Attached unit, or is within that range.
+ */
+function loneOperativeProtection(selection: CompileLeaf): Node | null {
+  const protection = ((selection.parameters.filter ?? {}) as Node).lone_operative_protection as { inches: number; of: string } | undefined;
+  if (protection === undefined) return null;
+  return {
+    operator: "or",
+    operands: [
+      { operator: "not", operands: [{ type: "matches", parameters: { subject: "selected-unit", filter: { has_ability: ["lone-operative"] } } }] },
+      { type: "attachment", parameters: { subject: "selected-unit", role: "attached" } },
+      { type: "matches", parameters: { subject: "selected-unit", filter: { within: { range: { inches: protection.inches }, of: protection.of } } } },
+    ],
   };
 }
 

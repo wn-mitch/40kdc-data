@@ -382,6 +382,34 @@ export const UNIT_FILTER_EXTENSIONS: readonly FamilyExtension[] = [
       };
     },
   },
+  {
+    // "(excluding units with the Lone Operative ability that are not part of an Attached unit and are
+    // not within 12" of this model)".
+    family: "unit-filter",
+    version: 19,
+    description: "As the previous version, plus lone_operative_protection: the units excluded are those with the Lone Operative ability that are neither part of an Attached unit nor within `inches` of `of` (this model or this unit). Unit level only.",
+    schema: (previous) => withProperties(previous, {
+      lone_operative_protection: optional({
+        type: "object",
+        required: ["inches", "of"],
+        additionalProperties: false,
+        properties: { inches: { type: "integer", minimum: 1, maximum: 36 }, of: { enum: ["this-model", "this-unit"] } },
+      }),
+    }),
+    normalize: (input, previous) => {
+      if (input.lone_operative_protection === undefined) return previous(input);
+      const { lone_operative_protection: protection, ...rest } = input;
+      if (rest.level === "model") throw new TypeError("unit-filter.lone_operative_protection excludes units, not models.");
+      const value = protection as Record<string, unknown>;
+      if (value === null || typeof value !== "object" || Object.keys(value).some((key) => key !== "inches" && key !== "of")) {
+        throw new TypeError("unit-filter.lone_operative_protection is { inches, of }.");
+      }
+      return {
+        ...previous(rest),
+        lone_operative_protection: { inches: boundedInteger(value.inches, 1, 36, "unit-filter.lone_operative_protection.inches"), of: enumValue(value.of, ["this-model", "this-unit"], "unit-filter.lone_operative_protection.of") },
+      };
+    },
+  },
   TARGET_IS_SELECTED_PARTIES,
   VISIBLE_TO_FILTER,
   {

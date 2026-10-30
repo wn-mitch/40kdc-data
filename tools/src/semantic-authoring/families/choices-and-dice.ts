@@ -172,6 +172,21 @@ export const CHOICE_AND_DICE_EXTENSIONS: readonly FamilyExtension[] = [
     },
   },
   {
+    // "Roll D3+3: your unit suffers that number of mortal wounds".
+    family: "dice-roll",
+    version: 9,
+    description: "As the previous version, plus plus: a number printed as part of the roll (\"roll D3+3\" is dice D3, plus 3); the result bands and any effect that reads the result read the roll with it added. It takes one die: no count, per_model, alternative or kind.",
+    schema: (previous) => withProperties(previous, { plus: optional({ type: "integer", minimum: 1, maximum: 12 }) }),
+    normalize: (input, previous) => {
+      if (input.plus === undefined) return previous(input);
+      const { plus, ...rest } = input;
+      for (const key of ["count", "per_model", "alternative", "kind"]) {
+        if (rest[key] !== undefined) throw new TypeError(`dice-roll.plus is printed on one die; it takes no ${key}.`);
+      }
+      return { ...previous(rest), plus: boundedInteger(plus, 1, 12, "dice-roll.plus") };
+    },
+  },
+  {
     // "this model can issue 1 Order to that unit, regardless of how many Orders it has already issued this turn".
     family: "issue-orders-open",
     version: 2,

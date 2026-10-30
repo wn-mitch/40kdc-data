@@ -232,3 +232,25 @@ export function filteredAfter(list: readonly CompileLeaf[], index: number): numb
   const leaf = list[at];
   return leaf && Object.values(leaf.parameters).includes(FILTERED_UNITS) ? at : null;
 }
+
+/** Leaves that qualify the selection before them: its range and visibility, about the unit it selects. */
+const SELECTION_QUALIFIERS = new Set(["unit-position", "visible"]);
+
+/**
+ * "Select one enemy unit within 18" of and visible to this model (excluding units with the Lone
+ * Operative ability that …)": a protection-only unit-filter after a selection's own qualifiers
+ * narrows that selection. Returns the index in `out` of the select-unit it folds into, or null when
+ * the leaf is not a protection-only filter or no selection precedes it in its fragment. A filter
+ * that names a different side from the selection is refused.
+ */
+export function protectedSelection(out: readonly CompileLeaf[], leaf: CompileLeaf): number | null {
+  if (!isFilter(leaf) || leaf.parameters.lone_operative_protection === undefined) return null;
+  const extra = Object.keys(leaf.parameters).find((key) => key !== "side" && key !== "lone_operative_protection");
+  if (extra !== undefined) throw new CompileError(`A Lone Operative exclusion names only the units it protects; ${extra} belongs in its own unit-filter.`);
+  let at = out.length - 1;
+  while (at >= 0 && out[at]!.fragment === leaf.fragment && SELECTION_QUALIFIERS.has(out[at]!.family_id)) at -= 1;
+  const selection = out[at];
+  if (selection === undefined || !selectOf(selection) || selection.fragment !== leaf.fragment) return null;
+  if (leaf.parameters.side !== "any" && selection.parameters.scope !== leaf.parameters.side) throw new CompileError("A Lone Operative exclusion names a different side from the selection it narrows.");
+  return at;
+}

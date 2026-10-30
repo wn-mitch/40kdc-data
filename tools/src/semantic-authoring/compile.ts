@@ -36,7 +36,7 @@ import { foldObjectiveCriteria } from "./compile-objective-criteria.js";
 import { foldDestroyedSelections } from "./compile-destroyed-selection.js";
 import { compileForEachPasses } from "./compile-for-each-passes.js";
 import { foldAllocatedAttackRolls, foldSelectedModelRolls } from "./compile-selected-model-roll.js";
-import { bindBareFilterHits, bindBeforeFormHits, foldDestroyFilters, foldLeadingHitFilters, foldTargetingWeapons, refuseBeforeFormAnaphors } from "./compile-weapon-qualified.js";
+import { bindBareFilterHits, bindBeforeFormHits, foldDestroyFilters, foldLeadingHitFilters, foldMortalWoundSources, foldTargetingWeapons, refuseBeforeFormAnaphors } from "./compile-weapon-qualified.js";
 import { refuseUnmovedEventSubject } from "./compile-moved-subject.js";
 import { refuseSuchFilters } from "./compile-such-filter.js";
 import { bindUsedSelections } from "./compile-used-selection.js";
@@ -335,7 +335,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     const bound = foldCountScales(bindDesignationSubjects(foldAlternativePools(bindPrecedingRolls(foldBoundAttacks(refuseBareTarget(bindAntecedents(markCountedSubjects(bindArmyAntecedents(foldArmyAttachments(foldForwardComposition(refs.leaves), sourceText))), refs.focus, sourceText), isPlacedLimit)), sourceText))), sourceText);
     refuseTransportAsSubject(bound);
     refuseDestinationMismatch(bound, sourceText);
-    const scoped = bindWeaponStatAntecedents(foldWeaponScopes(foldModelState(foldReturnedModelExclusions(foldFightNext(foldCountsAsMoved(foldPassthroughUsed(foldAsIfPhases(foldHitFilters(foldLeadingHitFilters(foldTargetingWeapons(foldDestroyFilters(bindEquippedCounts(bound), sourceText), sourceText), sourceText), sourceText), sourceText)), sourceText), sourceText), sourceText)), sourceText));
+    const scoped = bindWeaponStatAntecedents(foldWeaponScopes(foldModelState(foldReturnedModelExclusions(foldFightNext(foldCountsAsMoved(foldPassthroughUsed(foldAsIfPhases(foldHitFilters(foldLeadingHitFilters(foldTargetingWeapons(foldDestroyFilters(foldMortalWoundSources(bindEquippedCounts(bound)), sourceText), sourceText), sourceText), sourceText), sourceText)), sourceText), sourceText), sourceText)), sourceText));
     const filtered = resolveArmyGroups(foldWeaponAlreadyHas(bindScopeAttacks(foldUnitFilters(foldArmyPer(foldWeaponKeywords(foldAttackProperties(bindMatchedPools(scoped), sourceText), sourceText), sourceText), sourceText))));
     // "For each X model you select, roll one D6": a plain roll inside the model selection (compile-selected-model-roll.ts);
     // "select one objective that: …": the criteria fold into the selection (compile-objective-criteria.ts).

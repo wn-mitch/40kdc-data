@@ -153,6 +153,16 @@ export const DICE_FAMILIES: readonly SemanticFamilyDefinition[] = [
     },
   },
   {
+    // "These mortal wounds are inflicted by a psychic attack".
+    id: "mortal-wound-source",
+    version: 1,
+    role: "CONDITION",
+    label: "Mortal wounds from a psychic attack",
+    description: "The mortal wounds this record's earlier mortal-wounds leaves inflict are inflicted by a psychic attack. It qualifies every mortal-wounds leaf before it in the record and needs at least one.",
+    starter: { psychic: true },
+    parameterSchema: { type: "object", required: ["psychic"], properties: { psychic: { const: true } }, additionalProperties: false },
+  },
+  {
     id: "fight-on-death",
     version: 1,
     role: "EFFECT",
@@ -308,6 +318,10 @@ export function normalizeDiceParameters(family: string, input: Record<string, un
       const from = boundedInteger(input.from, 1, 12, "roll-result.from");
       return hasUpperBound ? { from, to: boundedInteger(input.to, from, 12, "roll-result.to") } : { from };
     }
+    case "mortal-wound-source":
+      exactKeys(input, ["psychic"], family);
+      if (input.psychic !== true) throw new TypeError("mortal-wound-source.psychic is true: the mortal wounds are inflicted by a psychic attack.");
+      return { psychic: true };
     case "mortal-wounds":
       exactKeys(input, ["recipient", "count"], family);
       return { recipient: enumValue(input.recipient, MORTAL_RECIPIENTS, "mortal-wounds.recipient"), count: enumValue(input.count, WOUND_COUNTS, "mortal-wounds.count") };

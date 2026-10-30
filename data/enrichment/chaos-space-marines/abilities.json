@@ -6147,27 +6147,21 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "source_digest": "a4ae6f9462a3c5ce17e3fce3abfbfb9112f089fcac988a0cfee2d8d8e28f4724",
+    "source_digest": "b4c888ee0ee5d1f2f71efd64a28799bc61244627058286729965401468c273e9",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "chaos-space-marines",
     "detachment_id": "cabal-of-chaos",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "select-units",
       "selector": {
         "filter": {
           "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 12
-            },
-            "of": "this-model"
-          },
           "visible": {
             "to": "this-model"
           }
@@ -6175,6 +6169,20 @@
         "count": {
           "min": 1,
           "max": 1
+        },
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "subject": "selected-unit",
+            "filter": {
+              "within": {
+                "of": "this-unit",
+                "range": {
+                  "inches": 12
+                }
+              }
+            }
+          }
         }
       },
       "effect": {
@@ -6227,13 +6235,33 @@
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
         "HERETIC ASTARTES",
         "PSYKER"
       ]
+    },
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
     }
   },
   {

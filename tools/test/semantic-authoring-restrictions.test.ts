@@ -47,6 +47,23 @@ describe("Semantic authoring restrictions", () => {
     expect(two.ok ? [] : two.errors).toContain("More than one usage limit; the entry has one usage.");
   });
 
+  // Hunts: two limits that both apply, each with its own scope, were refused, or one scope overwrote the other.
+  it("writes two limits that each name their own scope as the usage array, in order", () => {
+    const both = compiled([
+      leaf("RESTRICTION", "usage-limit", { frequency: "once-per-battle", per: "unit" }),
+      grant(),
+      leaf("RESTRICTION", "usage-limit", { frequency: "once-per-battle-round", per: "army" }),
+    ]);
+    expect(both.mechanics.usage).toEqual([{ frequency: "n-per-battle", count: 1, per: "unit" }, { frequency: "once-per-battle-round", per: "army" }]);
+    const shared = compileLeaves([
+      leaf("RESTRICTION", "usage-limit", { frequency: "once-per-battle", per: "unit" }),
+      leaf("RESTRICTION", "usage-limit", { frequency: "once-per-battle-round", per: "army" }),
+      leaf("RESTRICTION", "usage-scope", { per: "unit" }),
+      grant(),
+    ]);
+    expect(shared.ok ? [] : shared.errors).toContain("More than one usage limit; the entry has one usage.");
+  });
+
   it.each(["phase", "turn", "battle round", "battle"])("reuses the same once-per-%s qualifier across independently scoped allowances", (period) => {
     const family = REVIEWED_FAMILY_REGISTRY.find((item) => item.id === "usage-limit" && !item.deprecated)!;
     const parameters = normalizeFingerprintParameters("usage-limit", prefillFromSource(family, `Once per ${period}`), family.version);

@@ -546,7 +546,9 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
       const target = typeof leaf.parameters.recipient_var === "string" ? { event_var: leaf.parameters.recipient_var }
         : typeof leaf.parameters.recipient_selection === "string" ? { selection_var: leaf.parameters.recipient_selection }
           : MORTAL_TARGETS[String(closed(leaf, "recipient"))];
-      return { type: "mortal-wounds", target, modifier: { count: /^\d+$/u.test(count) ? Number(count) : count, ...cap } };
+      // "These mortal wounds are inflicted by a psychic attack" (compile-weapon-qualified.ts foldMortalWoundSources).
+      const psychic = leaf.parameters.psychic === true ? { psychic: true } : {};
+      return { type: "mortal-wounds", target, modifier: { count: /^\d+$/u.test(count) ? Number(count) : count, ...cap, ...psychic } };
     }
     case "fight-on-death": {
       const act = leaf.family_version >= 2 ? closed(leaf, "act") : "fight";

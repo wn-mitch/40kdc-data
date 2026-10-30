@@ -3050,9 +3050,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "source_digest": "bbbc72e5112fd3ef875d8b443405624221272ac6d29e9ea9ff2d724b68f2c305",
+    "source_digest": "a73f25f8a1e2cdadd30b328d1149d653f4437f57953bc2d46fa5fbd4708eba22",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -3061,26 +3061,57 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "mortal-wounds",
-          "target": "this-model",
-          "modifier": {
-            "count": "D3+3"
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "CHAOS KNIGHTS"
+          ],
+          "level": "model",
+          "within": {
+            "range": {
+              "inches": 9
+            },
+            "of": "this-unit"
           }
         },
-        {
-          "type": "heal",
-          "target": "this-unit",
-          "modifier": {
-            "amount": "D3+3"
-          }
+        "count": {
+          "min": 1,
+          "max": 1
         }
-      ]
+      },
+      "effect": {
+        "type": "roll",
+        "dice": "D3+3",
+        "roll_var": "result",
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "mortal-wounds",
+              "target": "this-unit",
+              "modifier": {
+                "count": {
+                  "roll_var": "result"
+                }
+              }
+            },
+            {
+              "type": "heal",
+              "target": "selected-unit",
+              "modifier": {
+                "amount": {
+                  "roll_var": "result"
+                }
+              }
+            }
+          ]
+        }
+      }
     },
     "scope": {
-      "duration": "one-use"
+      "duration": "permanent"
     },
     "community_notes": "In your Command phase: a friendly DAMNED unit (excluding ACCURSED CULTISTS) within 9\" of a CHAOS KNIGHTS model suffers D3+3 mortal wounds; a CHAOS KNIGHTS model within 9\" heals that many wounds."
   },

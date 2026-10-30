@@ -1309,11 +1309,39 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Damned"
+      ],
+      "excluded_keywords": [
+        "Accursed Cultists"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "within": {
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "CHAOS KNIGHTS"
+                ]
+              },
+              "range": {
+                "inches": 9
+              }
+            }
+          }
+        }
+      }
+    },
     "ability_id": "dark-sacrifice-iconoclast-fiefdom-chaos-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {

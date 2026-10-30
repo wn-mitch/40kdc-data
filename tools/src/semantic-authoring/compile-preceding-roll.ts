@@ -49,7 +49,7 @@ function foldFilteredChangeConditions(leaves: readonly CompileLeaf[]): CompileLe
  * condition would otherwise gate the whole roll).
  */
 export function bindPrecedingRolls(input: readonly CompileLeaf[], sourceText?: string): CompileLeaf[] {
-  const leaves = bindTestTakers(foldFilteredChangeConditions(foldTestModifiers(input, sourceText)));
+  const leaves = bindTestTakers(foldFilteredChangeConditions(foldTestModifiers(input.map(printedBonus), sourceText)));
   if (!leaves.some((leaf) => leaf.family_id === "roll-modifier" && leaf.parameters.roll === "preceding")) return [...leaves];
   const out = [...leaves];
   const dropped = new Set<number>();
@@ -94,6 +94,13 @@ export function bindPrecedingRolls(input: readonly CompileLeaf[], sourceText?: s
     dropped.add(index);
   });
   return out.filter((_, index) => !dropped.has(index));
+}
+
+/** "Roll D3+3" (dice-roll plus): the printed number is the roll's own bonus, as "adding 3 to the result" would be. */
+function printedBonus(leaf: CompileLeaf): CompileLeaf {
+  if (leaf.family_id !== "dice-roll" || leaf.parameters.plus === undefined) return leaf;
+  const { plus, ...rest } = leaf.parameters;
+  return { ...leaf, parameters: { ...rest, bonus: plus } };
 }
 
 /** A condition leaf of the change's fragment that is not a result band. */

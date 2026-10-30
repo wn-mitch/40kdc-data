@@ -279,3 +279,28 @@ export function bindBareFilterHits(leaves: readonly CompileLeaf[], sourceText?: 
   }
   return out;
 }
+
+/**
+ * "These mortal wounds are inflicted by a psychic attack": the source leaf marks every mortal-wounds
+ * leaf before it in the record as psychic, then drops out. A source with no mortal wounds before it
+ * names none, and is refused.
+ */
+export function foldMortalWoundSources(leaves: readonly CompileLeaf[]): CompileLeaf[] {
+  if (!leaves.some(isMortalWoundSource)) return [...leaves];
+  const out: CompileLeaf[] = [];
+  for (const leaf of leaves) {
+    if (!isMortalWoundSource(leaf)) { out.push(leaf); continue; }
+    let marked = 0;
+    out.forEach((earlier, at) => {
+      if (earlier.family_id !== "mortal-wounds") return;
+      out[at] = { ...earlier, parameters: { ...earlier.parameters, psychic: true } };
+      marked += 1;
+    });
+    if (marked === 0) throw new CompileError("A psychic mortal-wound source names the mortal wounds before it, but none come before it.");
+  }
+  return out;
+}
+
+function isMortalWoundSource(leaf: CompileLeaf): boolean {
+  return leaf.family_id === "mortal-wound-source";
+}

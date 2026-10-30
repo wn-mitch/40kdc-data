@@ -4060,23 +4060,161 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "2d9739cd37d0524391ef86b390b71401c6e59286c7370e201e263d90454f7abe",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
       },
       "effect": {
-        "type": "mortal-wounds",
-        "target": "defender",
-        "modifier": {
-          "count": "D3"
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "operator": "and",
+            "operands": [
+              {
+                "operator": "and",
+                "operands": [
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "selected-unit",
+                      "filter": {
+                        "within": {
+                          "of": "this-model",
+                          "range": {
+                            "inches": 18
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "selected-unit",
+                      "filter": {
+                        "visible": {
+                          "to": "this-model"
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "operator": "or",
+                "operands": [
+                  {
+                    "operator": "not",
+                    "operands": [
+                      {
+                        "type": "matches",
+                        "parameters": {
+                          "subject": "selected-unit",
+                          "filter": {
+                            "has_ability": [
+                              "lone-operative"
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "attachment",
+                    "parameters": {
+                      "subject": "selected-unit",
+                      "role": "attached"
+                    }
+                  },
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "selected-unit",
+                      "filter": {
+                        "within": {
+                          "range": {
+                            "inches": 12
+                          },
+                          "of": "this-model"
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "effect": {
+          "type": "dice-table",
+          "dice": "D6",
+          "outcomes": [
+            {
+              "results": [
+                1
+              ],
+              "effect": {
+                "type": "mortal-wounds",
+                "target": "this-unit",
+                "modifier": {
+                  "count": "D3"
+                }
+              }
+            },
+            {
+              "results": [
+                2,
+                3,
+                4,
+                5
+              ],
+              "effect": {
+                "type": "mortal-wounds",
+                "target": "selected-unit",
+                "modifier": {
+                  "count": "D6"
+                }
+              }
+            },
+            {
+              "results": [
+                6
+              ],
+              "effect": {
+                "type": "mortal-wounds",
+                "target": "selected-unit",
+                "modifier": {
+                  "count": "D3+3"
+                }
+              }
+            }
+          ]
         }
       }
     },
@@ -4087,8 +4225,9 @@
       "typhus"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "death-guard"
+    "behavior": "activated",
+    "faction_id": "death-guard",
+    "optional": true
   },
   {
     "ability_id": "blistering-fusillade-death-guard",
@@ -5873,7 +6012,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "be4ac72d62770cecf56787c950e7bac5dadead81251edf6a275ce261277a99fd",
     "version": "2025-q3",
@@ -5899,75 +6038,79 @@
             "parameters": {
               "turn": "opponent-turn"
             }
-          },
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "designated": "AFFLICTED"
-              },
-              "subject": "defender"
-            }
           }
         ]
       },
       "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "conditional",
-            "condition": {
-              "type": "strength",
-              "parameters": {
-                "below": "half"
-              }
-            },
-            "effect": {
-              "type": "dice-gated",
-              "dice": "2D6",
-              "threshold": 7,
-              "comparison": "lte",
-              "on_success": {
-                "type": "mortal-wounds",
-                "target": "this-unit",
-                "modifier": {
-                  "count": "D3"
-                }
-              }
-            }
-          },
-          {
-            "type": "conditional",
-            "condition": {
-              "operator": "not",
-              "operands": [
-                {
-                  "type": "strength",
-                  "parameters": {
-                    "below": "half"
-                  }
-                }
-              ]
-            },
-            "effect": {
-              "type": "dice-gated",
-              "dice": "2D6",
-              "threshold": 6,
-              "comparison": "lte",
-              "on_success": {
-                "type": "mortal-wounds",
-                "target": "this-unit",
-                "modifier": {
-                  "count": "D3"
-                }
-              }
-            }
+        "type": "for-each-unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy",
+            "designated": "afflicted"
           }
-        ]
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "strength",
+                "parameters": {
+                  "subject": "recipient",
+                  "below": "half"
+                }
+              },
+              "effect": {
+                "type": "dice-gated",
+                "dice": "2D6",
+                "threshold": 7,
+                "comparison": "lte",
+                "on_success": {
+                  "type": "mortal-wounds",
+                  "target": "recipient",
+                  "modifier": {
+                    "count": "D3"
+                  }
+                },
+                "on_fail": null
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "strength",
+                    "parameters": {
+                      "subject": "recipient",
+                      "below": "half"
+                    }
+                  }
+                ]
+              },
+              "effect": {
+                "type": "dice-gated",
+                "dice": "2D6",
+                "threshold": 6,
+                "comparison": "lte",
+                "on_success": {
+                  "type": "mortal-wounds",
+                  "target": "recipient",
+                  "modifier": {
+                    "count": "D3"
+                  }
+                },
+                "on_fail": null
+              }
+            }
+          ]
+        }
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },

@@ -86,3 +86,44 @@ export function foldAlternativePools(input: readonly CompileLeaf[]): CompileLeaf
   }
   return out;
 }
+
+/**
+ * A conditional change to a 2D6 roll read as one total ("roll 2D6 …, subtracting 1 if X: if the
+ * result is 6 or less …"). The band reads the changed total, so each side becomes one dice-gated
+ * 2D6 roll: a band that reaches the top total compares at or above, one that starts at the lowest
+ * total compares at or below. The yes side shifts the threshold by the change; the no side reads
+ * the band as written. A band inside the range, or one the change moves past every total, is refused.
+ */
+export function twoDiceConditionalRolls(planned: Planned[], banded: Planned[], roll: CompileLeaf, bonus: ConditionalBonus): Node[] {
+  if (roll.parameters.roll_var !== undefined || roll.parameters.kind !== undefined) throw new CompileError("A conditional change to a named 2D6 roll has no DSL shape yet.");
+  const bands = banded.map((item) => bandOfMarker(markerOf(item), 12 + bonus.value));
+  const band = bands[0]!;
+  if (bands.some((other) => other.from !== band.from || other.to !== band.to)) throw new CompileError("A conditional change to a 2D6 roll folds only one result band.");
+  const low = 2 + bonus.value;
+  const high = 12 + bonus.value;
+  const comparison = band.to >= high ? "gte" : band.from <= low ? "lte" : undefined;
+  if (comparison === undefined) throw new CompileError("A 2D6 result band must reach the highest or the lowest total.");
+  const written = comparison === "gte" ? band.from : band.to;
+  const gate = (threshold: number): Node => {
+    if (threshold <= 2 || threshold >= 12) throw new CompileError(`A 2D6 threshold of ${threshold} succeeds on every total or none; it has no DSL shape.`);
+    const items = banded.map(stripMarkers);
+    const onSuccess = items.length === 1 ? gatedNode(items[0]!) : { type: "sequence", steps: items.map(gatedNode) };
+    return { type: "dice-gated", dice: "2D6", threshold, comparison, on_success: onSuccess, on_fail: null };
+  };
+  const yes = gate(written - bonus.value);
+  const no = gate(written);
+  const steps: Node[] = [];
+  let placed = false;
+  for (const item of planned) {
+    if (!banded.includes(item)) { steps.push(gatedNode(item)); continue; }
+    if (placed) continue;
+    steps.push({ type: "conditional", condition: bonus.node, effect: yes }, { type: "conditional", condition: { operator: "not", operands: [bonus.node] }, effect: no });
+    placed = true;
+  }
+  return steps;
+}
+
+function gatedNode(item: Planned): Node {
+  if (item.gate.length === 0) return item.node;
+  return { type: "conditional", condition: item.gate.length === 1 ? item.gate[0]! : { operator: "and", operands: item.gate }, effect: item.node };
+}

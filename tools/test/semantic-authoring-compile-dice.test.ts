@@ -313,6 +313,21 @@ describe("a roll whose result an effect takes as its amount", () => {
     expect(rendered(base(), leaves)).toMatch(/result of that roll/u);
   });
 
+  // Hunts: "roll D3+3" had no leaf, and a bonused roll was never offered to its readers, so two effects rolled apart.
+  it("shares a roll with a printed bonus between the effects that read it", () => {
+    const leaves = [
+      versioned("dice-roll", { dice: "D3", plus: 3 }),
+      versioned("mortal-wounds", { recipient: "this-unit", count: "D3+3" }),
+      versioned("regain-wounds", { subject: "this-unit", amount: "D3+3" }),
+    ];
+    const effect = compiled(leaves).mechanics.effect as Record<string, any>;
+    expect(effect).toEqual({ type: "roll", dice: "D3+3", roll_var: "result", effect: { type: "sequence", steps: [
+      { type: "mortal-wounds", target: "this-unit", modifier: { count: { roll_var: "result" } } },
+      { type: "heal", target: "this-unit", modifier: { amount: { roll_var: "result" } } },
+    ] } });
+    expect(() => normalizeFingerprintParameters("dice-roll", { dice: "D6", count: 2, plus: 1 }, currentFamilyVersion("dice-roll"))).toThrow(/takes no count/u);
+  });
+
   it("still refuses a band-less roll no effect reads", () => {
     const result = compileLeaves([
       versioned("dice-roll", { dice: "D3" }),
@@ -347,5 +362,42 @@ describe("Semantic authoring several dice counted per success", () => {
   it("refuses an amount other than 1 per success, which a count of successes cannot scale", () => {
     const result = compileLeaves(leaves({ subject: "this-unit", amount: "D3", per: "unit" }));
     expect(result.ok ? [] : result.errors).toEqual([expect.stringContaining("needs an amount of 1")]);
+  });
+});
+
+describe("Semantic authoring psychic mortal-wound sources", () => {
+  const versioned = (family: string, parameters: Record<string, unknown>) =>
+    leaf(familyRole(family, currentFamilyVersion(family)), family, normalizeFingerprintParameters(family, parameters, currentFamilyVersion(family)), currentFamilyVersion(family));
+
+  // Hunts: "these mortal wounds are inflicted by a psychic attack" had no leaf, so the table's mortal wounds
+  // compiled as ordinary ones; a fold that marked only the nearest row would also pass a one-row test.
+  it("marks every mortal wound of a table before it as psychic", () => {
+    const text = "Roll one D6: on a 1-3, this unit suffers 1 mortal wound; on a 4-6, this unit suffers D3 mortal wounds. These mortal wounds are inflicted by a psychic attack.";
+    const bytes = Buffer.from(text, "utf8");
+    let from = 0;
+    const at = (wording: string, family: string, parameters: Record<string, unknown>): CompileLeaf => {
+      const start = bytes.indexOf(Buffer.from(wording, "utf8"), from);
+      from = start + Buffer.byteLength(wording, "utf8");
+      return { ...versioned(family, parameters), start_byte: start, end_byte: from, fragment: "RAW_TEXT" };
+    };
+    const leaves = [
+      at("Roll one D6", "dice-roll", { dice: "D6" }),
+      at("on a 1-3", "roll-result", { from: 1, to: 3 }),
+      at("this unit suffers 1 mortal wound", "mortal-wounds", { recipient: "this-unit", count: "1" }),
+      at("on a 4-6", "roll-result", { from: 4, to: 6 }),
+      at("this unit suffers D3 mortal wounds", "mortal-wounds", { recipient: "this-unit", count: "D3" }),
+      at("These mortal wounds are inflicted by a psychic attack", "mortal-wound-source", { psychic: true }),
+    ];
+    const result = compileLeaves(leaves, text);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    const outcomes = (result.mechanics.effect as { outcomes: Array<{ effect: { modifier: Record<string, unknown> } }> }).outcomes;
+    expect(outcomes.map((row) => row.effect.modifier.psychic)).toEqual([true, true]);
+    const check = checkEntry(entryWithMechanics(authored("adeptus-mechanicus", "control-edict-adeptus-mechanicus"), result.mechanics));
+    expect(check.rendered_text).toContain("(Psychic Attack)");
+  });
+
+  it("refuses a source with no mortal wounds before it", () => {
+    const result = compileLeaves([versioned("mortal-wound-source", { psychic: true }), versioned("mortal-wounds", { recipient: "this-unit", count: "1" })]);
+    expect(result.ok ? [] : result.errors).toContainEqual(expect.stringMatching(/none come before it/u));
   });
 });

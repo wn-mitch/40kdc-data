@@ -14,7 +14,7 @@ import { dslUnitFilter, filterOf } from "./compile-unit-filter-dsl.js";
 import { joinerBetween, mergedFilter, mergeStackedFilters } from "./compile-unit-filter-merge.js";
 import {
   armyGroup, attackerAfter, bareForEach, engagedWithOwnUnit, filterDesignation, filteredAfter, followedBy, followsTargetingAttack, inheritedPostfixFilter, isFilter, madeBy,
-  nearMatching, nearOther, nestedEngagedChain, openAura, openSelect, openTarget, orAlternative, ownedBy, ownerlessEvent, pastOwners, postfixRecipient, renamedAttackTarget, restatesObjectOwner, selectionBefore, selectOf, side,
+  nearMatching, nearOther, nestedEngagedChain, openAura, openSelect, openTarget, orAlternative, ownedBy, ownerlessEvent, pastOwners, postfixRecipient, protectedSelection, renamedAttackTarget, restatesObjectOwner, selectionBefore, selectOf, side,
 } from "./compile-unit-filter-predicates.js";
 
 /**
@@ -418,6 +418,11 @@ export function foldUnitFilters(input0: readonly CompileLeaf[], sourceText?: str
         out.push({ ...next, parameters: { ...next.parameters, subject_filter: dslUnitFilter(named) } });
         index += 1;
       }
+    } else if (protectedSelection(out, leaf) !== null) {
+      // "(excluding units with the Lone Operative ability that …)" after the selection's range and visibility.
+      const at = protectedSelection(out, leaf)!;
+      const selection = out[at]!;
+      out[at] = { ...selection, parameters: { ...selection.parameters, filter: { ...((selection.parameters.filter ?? {}) as Record<string, unknown>), lone_operative_protection: leaf.parameters.lone_operative_protection } } };
     } else if (isFilter(leaf)) {
       throw new CompileError("A unit-filter needs a select-unit or attack right before it, or an aura-range or event right after it, or a Stratagem target leaf before it.");
     } else if (openSelect(leaf)) {

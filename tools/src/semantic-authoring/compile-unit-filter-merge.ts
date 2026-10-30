@@ -83,6 +83,11 @@ export function mergedFilter(first: CompileLeaf, second: CompileLeaf): CompileLe
   if ((memberA ?? memberB) !== undefined) parameters.member_of = memberA ?? memberB;
   const embarkedIn = a.embarked_in ?? b.embarked_in;
   if (embarkedIn !== undefined) parameters.embarked_in = embarkedIn;
+  // "(excluding units with the Lone Operative ability that are not … within 12" of this model)" (unit-filter@19).
+  const protectionA = (a as Record<string, unknown>).lone_operative_protection;
+  const protectionB = (b as Record<string, unknown>).lone_operative_protection;
+  if (protectionA !== undefined && protectionB !== undefined) return null;
+  if ((protectionA ?? protectionB) !== undefined) parameters.lone_operative_protection = protectionA ?? protectionB;
   // Designation inclusion/exclusion survives stacked filters as a candidate predicate.
   if (a.designated !== undefined && b.designated !== undefined && a.designated !== b.designated) return null;
   if (a.not_designated !== undefined && b.not_designated !== undefined && a.not_designated !== b.not_designated) return null;

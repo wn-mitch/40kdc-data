@@ -261,3 +261,29 @@ describe("Semantic authoring own-roll conditional change, subject of the conditi
     expect(no.condition.operands[0]).toEqual(within);
   });
 });
+
+describe("Semantic authoring own-roll conditional change, a 2D6 total", () => {
+  const ROLL_2D6: Item = ["Roll 2D6", "dice-roll", { dice: "2D6" }];
+  const HURT: Item = ["that unit suffers D3 mortal wounds", "mortal-wounds", { recipient: "that-unit", count: "D3" }];
+  const roll = (change: Item, band: Item, wording: string) => effectOf(`Select one enemy unit. Roll 2D6, ${change[0]} if that unit is a VEHICLE unit. If ${wording}, that unit suffers D3 mortal wounds.`,
+    SELECT, ROLL_2D6, change, ["if that unit is a VEHICLE unit", ...VEHICLE], band, HURT);
+
+  // Hunts: a 2D6 total was refused outright, and a low band ("6 or less") would read as a table from 1.
+  it("compares a low band at or below, the yes side raising the threshold by a subtraction", () => {
+    const [yes, no] = roll(SUBTRACT, ["the result is 6 or less", "roll-result", { from: 1, to: 6 }], "the result is 6 or less").effect.steps;
+    expect(yes).toMatchObject({ condition: { type: "matches" }, effect: { type: "dice-gated", dice: "2D6", threshold: 7, comparison: "lte", on_success: { type: "mortal-wounds" } } });
+    expect(no).toMatchObject({ condition: { operator: "not" }, effect: { type: "dice-gated", dice: "2D6", threshold: 6, comparison: "lte" } });
+  });
+
+  it("compares a high band at or above, the yes side lowering the threshold by an addition", () => {
+    const [yes, no] = roll(ADD, ["the result is 9+", "roll-result", { from: 9 }], "the result is 9+").effect.steps;
+    expect(yes.effect).toMatchObject({ dice: "2D6", threshold: 8, comparison: "gte" });
+    expect(no.effect).toMatchObject({ dice: "2D6", threshold: 9, comparison: "gte" });
+  });
+
+  it("refuses a band inside the totals, which no single comparison expresses", () => {
+    const text = "Select one enemy unit. Roll 2D6, subtracting 1 from the result if that unit is a VEHICLE unit. If the result is 5-8, that unit suffers D3 mortal wounds.";
+    expect(errorOf(text, SELECT, ROLL_2D6, SUBTRACT, ["if that unit is a VEHICLE unit", ...VEHICLE], ["the result is 5-8", "roll-result", { from: 5, to: 8 }], HURT))
+      .toContain("must reach the highest or the lowest total");
+  });
+});
