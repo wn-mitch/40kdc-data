@@ -8,6 +8,7 @@ import {
   rmSync,
   writeFileSync,
 } from "node:fs";
+import { createRequire } from "node:module";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -29,7 +30,8 @@ import {
 import { sourceDigest } from "../src/source-digest.js";
 
 const TOOLS = resolve(fileURLToPath(new URL(".", import.meta.url)), "..");
-const TSX = join(TOOLS, "node_modules", "tsx", "dist", "cli.mjs");
+// Resolved like any import, so it works whether npm hoists tsx to the workspace root or not.
+const TSX = createRequire(import.meta.url).resolve("tsx/cli");
 const SCRIPT = join(TOOLS, "src", "backfill-source-digests.ts");
 
 /**
