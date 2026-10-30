@@ -555,7 +555,13 @@ export function condition(leaf: CompileLeaf): Node {
           if (named || engagement || weaponDistance) throw new CompileError(`unit-position of ${String(leaf.parameters.of)} takes inches, not a named range or a weapon distance.`);
           return { inches: closed(leaf, "inches") };
         };
-        const wholly = leaf.parameters.wholly === true ? { wholly: true } : {};
+        // Version 29: where the subject was when the triggering move began (compile.ts checks the record has that move).
+        const at = leaf.parameters.at === "move-start" ? { at: "move-start" } : {};
+        if (leaf.parameters.at === "move-start" && (leaf.parameters.of === "objective" || leaf.parameters.of === undefined)) {
+          throw new CompileError("unit-position at move-start measures to a unit or place, not an objective or the defender.");
+        }
+        // How the distance is read: wholly inside it, and when.
+        const measured = { ...(leaf.parameters.wholly === true ? { wholly: true } : {}), ...at };
         // Version 22: every model of the subject is within (unit-position@23).
         const every = everyModelFlag(leaf);
         // Wave 10: a distance to an objective marker by its designation and controller, or to the
@@ -563,19 +569,19 @@ export function condition(leaf: CompileLeaf): Node {
         const node = leaf.parameters.of === "objective"
           ? pred("within", { of: { objective: objectiveFilter(leaf) }, range: inchesOnly() }, subject)
           : leaf.parameters.of === "enemy-deployment-zone"
-          ? pred("within", { of: { territory: "enemy-deployment-zone" }, range: inchesOnly(), ...wholly }, subject)
+          ? pred("within", { of: { territory: "enemy-deployment-zone" }, range: inchesOnly(), ...measured }, subject)
           : leaf.parameters.of === "battlefield-centre"
-          ? pred("within", { of: "battlefield-centre", range: inchesOnly(), ...wholly }, subject)
+          ? pred("within", { of: "battlefield-centre", range: inchesOnly(), ...measured }, subject)
           : leaf.parameters.of === "marker"
-          ? pred("within", { of: { marker: closed(leaf, "of_marker") }, range: inchesOnly(), ...wholly }, subject)
+          ? pred("within", { of: { marker: closed(leaf, "of_marker") }, range: inchesOnly(), ...measured }, subject)
           : leaf.parameters.of === "battlefield-edge"
-          ? pred("within", { of: "battlefield-edge", range: inchesOnly(), ...wholly }, subject)
+          ? pred("within", { of: "battlefield-edge", range: inchesOnly(), ...measured }, subject)
           : leaf.parameters.of === "following-filter"
-          ? pred("within", { of: followingFilter(leaf), range: engagement ? range : inchesOnly(), ...wholly, ...every }, subject)
+          ? pred("within", { of: followingFilter(leaf), range: engagement ? range : inchesOnly(), ...measured, ...every }, subject)
           : leaf.parameters.of === "matching-unit"
-          ? pred("within", { of: matchingUnit(leaf, subject), range, ...wholly }, subject)
+          ? pred("within", { of: matchingUnit(leaf, subject), range, ...measured }, subject)
           : leaf.parameters.of !== undefined
-          ? pred("within", { of: widenedWho(closed(leaf, "of")) ?? "this-unit", range, ...wholly, ...every }, subject)
+          ? pred("within", { of: widenedWho(closed(leaf, "of")) ?? "this-unit", range, ...measured, ...every }, subject)
           : pred("within", { of: "defender", range: inchesOnly() });
         return polarity(leaf, kind === "beyond" ? negate(node) : node);
       }

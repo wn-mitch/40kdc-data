@@ -68,7 +68,7 @@ export function bindPrecedingRolls(input: readonly CompileLeaf[], sourceText?: s
     const dice = out[at]!;
     const value = leaf.parameters.value;
     const adjacent = adjacentCondition(out, index, sourceText);
-    const attaches = adjacent === "attach";
+    const attaches = adjacent === "attach" || adjacent === "attach-with-filter";
     // Two changes to one roll, at least one conditional, have no DSL shape. Checked before the
     // condition between them, which is the first change's condition and still in the list here.
     if (dice.parameters.conditional_bonus !== undefined && attaches) throw new CompileError("Two changes to one roll, at least one conditional, have no DSL shape (6891: nested deployment-zone bonuses).");
@@ -84,9 +84,12 @@ export function bindPrecedingRolls(input: readonly CompileLeaf[], sourceText?: s
       // The condition right after the change joins the dice leaf; compile.ts turns it into the
       // bonus's condition node, and compile-dice.ts places the rolls it makes.
       const signed = leaf.parameters.operation === "subtract" ? -value : value;
-      out[at] = { ...dice, parameters: { ...dice.parameters, conditional_bonus: { value: signed, leaf: out[index + 1]! } } };
+      // A distance's unit-filter rides with it, folded where the condition is compiled (compile-part-assemble.ts).
+      const following = adjacent === "attach-with-filter" ? { following: out[index + 2]! } : {};
+      out[at] = { ...dice, parameters: { ...dice.parameters, conditional_bonus: { value: signed, leaf: out[index + 1]!, ...following } } };
       dropped.add(index);
       dropped.add(index + 1);
+      if (adjacent === "attach-with-filter") dropped.add(index + 2);
       return;
     }
     if (leaf.parameters.operation !== "add" || typeof value !== "number" || value < 1) throw new CompileError("Only adding a number to this ability's own roll folds into its dice.");
@@ -120,11 +123,13 @@ function conditionBetween(leaves: readonly CompileLeaf[], dice: number, change: 
  * The condition right after a change, with no sentence break before it. "with +1 to the result if
  * a friendly X model is within 6\"" attaches to the change ("attach"), as one condition leaf. A
  * comma before it ("adding 1 to the result, and if X"), or a second condition leaf with no break
- * after the first (a condition of two leaves cannot be attached as one), is refused ("refuse").
+ * after the first (a condition of two leaves cannot be attached as one), is refused ("refuse"),
+ * except a distance to the unit-filter after it ("within 6\" of" + "friendly X units"), which
+ * attaches with that filter ("attach-with-filter").
  * A sentence, colon, or semicolon break leaves the condition gating the ability as a whole (null),
  * as does a missing source text.
  */
-function adjacentCondition(leaves: readonly CompileLeaf[], change: number, sourceText: string | undefined): "attach" | "refuse" | null {
+function adjacentCondition(leaves: readonly CompileLeaf[], change: number, sourceText: string | undefined): "attach" | "attach-with-filter" | "refuse" | null {
   if (sourceText === undefined || !isClauseCondition(leaves[change + 1], leaves[change]!)) return null;
   const bytes = Buffer.from(sourceText, "utf8");
   const text = (from: number, to: number) => bytes.subarray(from, to).toString("utf8");
@@ -135,7 +140,12 @@ function adjacentCondition(leaves: readonly CompileLeaf[], change: number, sourc
   if (/^\s*and\s*,/iu.test(between)) return null;
   if (/,/u.test(between)) return "refuse";
   const second = leaves[change + 2];
-  if (isClauseCondition(second, leaves[change]!) && !/[.:;]/u.test(text(first.end_byte ?? first.start_byte, second!.start_byte))) return "refuse";
+  if (isClauseCondition(second, leaves[change]!) && !/[.:;]/u.test(text(first.end_byte ?? first.start_byte, second!.start_byte))) {
+    // The distance's own unit-filter, with nothing after it that is a third condition.
+    const measured = first.family_id === "unit-position" && first.parameters.of === "following-filter" && second!.family_id === "unit-filter";
+    if (!measured || isClauseCondition(leaves[change + 3], leaves[change]!)) return "refuse";
+    return "attach-with-filter";
+  }
   return "attach";
 }
 
@@ -161,7 +171,9 @@ export function trailingTestCondition(leaves: readonly CompileLeaf[], change: nu
   if (sourceText === undefined) return null;
   const between = Buffer.from(sourceText, "utf8").subarray(test.end_byte ?? test.start_byte, leaf.start_byte).toString("utf8");
   if (/[.:;]/u.test(between)) return null;
-  return adjacentCondition(leaves, change, sourceText);
+  // A test's change takes a one-leaf condition only.
+  const adjacent = adjacentCondition(leaves, change, sourceText);
+  return adjacent === "attach-with-filter" ? "refuse" : adjacent;
 }
 
 /**

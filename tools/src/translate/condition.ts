@@ -180,8 +180,9 @@ export function describePredicate(c: Condition, negated: boolean): string {
       const who = every ? `every model in ${subjectOf(p)}${p.count != null ? ` (${countPhrase(p.count)} models)` : ""}` : p.count != null ? `${countPhrase(p.count)} models in ${subjectOf(p)}` : subjectOf(p);
       const plural = !every && p.count != null;
       const target = range === "half-weapon" || range === "weapon" ? "" : ` of ${placeRefPhrase(of)}`;
-      const at = p.at === "phase-start" ? " at the start of the phase" : "";
-      return `${who} ${p.at === "phase-start" ? (plural ? "were" : "was") : (plural ? "are" : "is")} ${negated ? "not " : ""}${wholly}within ${rangePhrase(range)}${target}${at}`;
+      // An earlier position: the start of the phase, or of the move that triggered the ability.
+      const at = p.at === "phase-start" ? " at the start of the phase" : p.at === "move-start" ? " at the start of that move" : "";
+      return `${who} ${at !== "" ? (plural ? "were" : "was") : (plural ? "are" : "is")} ${negated ? "not " : ""}${wholly}within ${rangePhrase(range)}${target}${at}`;
     }
     case "in-region": {
       const r = (p.region ?? {}) as P;

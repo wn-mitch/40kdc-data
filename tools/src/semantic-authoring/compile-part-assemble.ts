@@ -5,6 +5,7 @@ import { battleStartSnapshot } from "./compile-recipient-snapshot.js";
 import { armyCoreChecks } from "./compile-army.js";
 import { foldConditionalTestModifiers } from "./compile-preceding-roll.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
+import { foldUnitFilters } from "./compile-unit-filters.js";
 import { allOf, condition } from "./compile-conditions.js";
 import { durationPart, placeInWindow } from "./compile-durations.js";
 import { laterPartWindow, nestInSelection, withPartWindow } from "./compile-later-part.js";
@@ -171,9 +172,9 @@ export function assemblePart(
     rolls.filter((leaf) => partOf(list.indexOf(leaf)) === part).map((leaf) => {
       const poolLeaf = leaf.parameters.pool_condition as CompileLeaf | undefined;
       if (poolLeaf !== undefined) return { ...leaf, parameters: { ...leaf.parameters, pool_condition: condition(poolLeaf) } };
-      const bonus = leaf.parameters.conditional_bonus as { value: number; leaf: CompileLeaf } | undefined;
+      const bonus = leaf.parameters.conditional_bonus as { value: number; leaf: CompileLeaf; following?: CompileLeaf } | undefined;
       if (bonus === undefined) return leaf;
-      return { ...leaf, parameters: { ...leaf.parameters, conditional_bonus: { value: bonus.value, node: condition(bonus.leaf) } } };
+      return { ...leaf, parameters: { ...leaf.parameters, conditional_bonus: { value: bonus.value, node: condition(bonusCondition(bonus, sourceText)) } } };
     }),
   )));
   if (pieces.some((piece) => !piece)) return { ok: false, signature, errors };
@@ -537,4 +538,12 @@ export function assemblePart(
  */
 function eligibilityLeaf(leaf: CompileLeaf): CompileLeaf {
   return leaf.family_id === "hit-by-attacks" ? { ...leaf, parameters: { ...leaf.parameters, subject: "this-unit" } } : leaf;
+}
+
+/** A conditional change's condition leaf, with the unit-filter its distance measures to folded in. */
+function bonusCondition(bonus: { leaf: CompileLeaf; following?: CompileLeaf }, sourceText: string | undefined): CompileLeaf {
+  if (bonus.following === undefined) return bonus.leaf;
+  const folded = foldUnitFilters([bonus.leaf, bonus.following], sourceText);
+  if (folded.length !== 1) throw new CompileError("A conditional change's distance does not take the unit-filter after it.");
+  return folded[0]!;
 }

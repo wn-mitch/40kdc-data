@@ -71,8 +71,9 @@ function perModelRoll(list: readonly CompileLeaf[], anchor: number): number | nu
   while (to < list.length && list[to]!.fragment === quantifier.fragment && !moment(list[to]!)) to += 1;
   const window = list.slice(from, to).map((leaf, offset) => ({ leaf, at: from + offset }));
   const rolls = window.filter(({ leaf }) => leaf.family_id === "dice-roll");
-  // A bonus bound from "adding 1 to the result" (compile-preceding-roll.ts) is refused when the roll resolves.
-  const plain = rolls.filter(({ leaf }) => Object.keys(leaf.parameters).every((key) => key === "dice" || key === "bonus"));
+  // A bonus bound from "adding 1 to the result" (compile-preceding-roll.ts) is refused when the roll resolves;
+  // a conditional one makes the roll in two forms (compile-dice-variants.ts).
+  const plain = rolls.filter(({ leaf }) => Object.keys(leaf.parameters).every((key) => key === "dice" || key === "bonus" || key === "conditional_bonus"));
   if (plain.length !== 1 || !window.some(({ leaf }) => leaf.family_id === "roll-result") || !window.some(({ leaf }) => leaf.family_id === "mortal-wounds")) return null;
   // "for each model …, select one of those enemy units. … roll one D6": each pass selects, so the roll is the pass's own (a for-each loop), not one die per model.
   if (window.some(({ leaf, at }) => leaf.family_id === "select-unit" && at > anchor)) return null;

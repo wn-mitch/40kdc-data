@@ -2364,13 +2364,13 @@ export interface HappenedCompareCondition {
   };
 }
 /**
- * [position] The subject is within `range` of `of`. `models` quantifies the subject's models (`every` requires all); `count` bounds how many subject models are within range. `wholly` requires the subject footprint to be inside the range. `at` reads the position at an earlier point.
+ * [position] The subject is within `range` of `of`. `models` quantifies the subject's models (`every` requires all); `count` bounds how many subject models are within range. `wholly` requires the subject footprint to be inside the range. `at` reads the position at an earlier point: the start of the phase, or of the move that triggered the ability.
  */
 export interface WithinCondition {
   type: "within";
   parameters:
     | {
-        at: "phase-start";
+        at: "phase-start" | "move-start";
         [k: string]: unknown;
       }
     | {

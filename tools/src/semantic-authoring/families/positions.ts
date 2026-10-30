@@ -489,4 +489,18 @@ export const POSITION_EXTENSIONS: readonly FamilyExtension[] = [
       return standIn(input, "subject", "this-unit", previous);
     },
   },
+  {
+    // "if this unit started its move within 6\" of …": the position when the triggering move began.
+    family: "unit-position",
+    version: 29,
+    description: "As the previous version, plus at: move-start reads a within or beyond distance where the subject was when the move that triggered the ability began, not where it is now.",
+    schema: (previous) => withProperties(previous, { at: optional({ enum: ["move-start"], "x-only-when": { kind: ["within", "beyond"] } }) }),
+    normalize: (input, previous) => {
+      if (input.at === undefined) return previous(input);
+      const { at, ...rest } = input;
+      if (at !== "move-start") throw new TypeError("unit-position.at is move-start.");
+      if (rest.kind !== "within" && rest.kind !== "beyond") throw new TypeError("unit-position.at reads a within or beyond distance.");
+      return { ...previous(rest), at };
+    },
+  },
 ];

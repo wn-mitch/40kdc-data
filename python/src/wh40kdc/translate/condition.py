@@ -477,8 +477,11 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
         target = (
             "" if range_v in ("half-weapon", "weapon") else f" of {place_ref_phrase(of)}"
         )
-        at = " at the start of the phase" if p.get("at") == "phase-start" else ""
-        if p.get("at") == "phase-start":
+        at = {
+            "phase-start": " at the start of the phase",
+            "move-start": " at the start of that move",
+        }.get(_str(p.get("at")), "")
+        if at:
             verb = "were" if plural else "was"
         else:
             verb = "are" if plural else "is"

@@ -92,7 +92,15 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
             } else {
                 format!(" of {}", place_ref_phrase(p.get("of")))
             };
-            let verb = if is(p, "at", "phase-start") {
+            // An earlier position: the start of the phase, or of the move that triggered the ability.
+            let at = if is(p, "at", "phase-start") {
+                " at the start of the phase"
+            } else if is(p, "at", "move-start") {
+                " at the start of that move"
+            } else {
+                ""
+            };
+            let verb = if !at.is_empty() {
                 if plural {
                     "were"
                 } else {
@@ -106,11 +114,7 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
             format!(
                 "{who} {verb} {not_}{wholly}within {}{target}{}",
                 range_phrase(p.get("range")),
-                if is(p, "at", "phase-start") {
-                    " at the start of the phase"
-                } else {
-                    ""
-                }
+                at
             )
         }
         "in-region" => {

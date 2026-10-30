@@ -196,6 +196,11 @@ export type CompileOptions = {
 
 /** Compile one ability's reviewed leaves. Failures name what is missing; nothing is guessed. */
 export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: string, options: CompileOptions = {}): Compiled {
+  // "If it started that move within 6\"" reads the start of the move that triggered the ability, so the record needs that move.
+  const moveStart = leaves.some((leaf) => leaf.family_id === "unit-position" && leaf.parameters.at === "move-start");
+  if (moveStart && !leaves.some((leaf) => leaf.family_id === "event" && leaf.parameters.kind === "move-ended")) {
+    return { ok: false, signature: shapeSignature(ordered(leaves), sourceText), errors: ["A position at the start of a move needs the record to be triggered by that move ending."] };
+  }
   const result = compileUnchecked(leaves, sourceText, options);
   // "That unit must take a test" bound to an aura's recipient with no aura or loop around it reaches no unit.
   const unscoped = result.ok ? unscopedRecipientEffect(result.mechanics.effect) : null;

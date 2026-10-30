@@ -338,6 +338,16 @@ function bandedRoll(rows: Row[], dice: string, faces: number, names: RollNames):
   return wrap({ type: "dice-table", dice, outcomes });
 }
 
+/** Units a condition can name that are the same for every die of a roll. */
+const FIXED_SUBJECTS = new Set(["this-unit", "this-model", "selected-unit"]);
+
+/** Whether every subject a condition names is fixed for the whole roll (an absent subject is this unit). */
+function fixedSubjects(node: unknown): boolean {
+  if (Array.isArray(node)) return node.every(fixedSubjects);
+  if (node === null || typeof node !== "object") return true;
+  return Object.entries(node as Node).every(([key, value]) => key === "subject" ? typeof value === "string" && FIXED_SUBJECTS.has(value) : fixedSubjects(value));
+}
+
 /**
  * A conditional change to this ability's own roll ("adding 1 to the result if X"). The roll is made
  * in two forms, one for each side of X, and exactly one of them runs. Each form is wrapped in its
@@ -349,8 +359,12 @@ function bandedRoll(rows: Row[], dice: string, faces: number, names: RollNames):
  */
 function resolveConditionalRolls(planned: Planned[], global: Node[], banded: Planned[], roll: CompileLeaf, bonus: ConditionalBonus): Node[] {
   if (roll.parameters.count !== undefined || roll.parameters.per_model !== undefined || roll.parameters.for_each !== undefined || roll.parameters.per_attack !== undefined) {
-    // Only a plain count of dice folds. A per-model or per-unit roll that adds a bonus stays refused (BRIEF: per-model dice).
-    if (roll.parameters.count !== undefined && roll.parameters.per_model === undefined && roll.parameters.for_each === undefined) return perDieConditionalRolls(planned, banded, roll, bonus);
+    // A count of dice folds. So does one die for each model a selector matches, when the condition is
+    // about a fixed unit, the same for every die: the whole roll is made in one of two forms. A
+    // per-model roll of a unit, or a condition about each counted model, stays refused (BRIEF: per-model dice).
+    const plainCount = roll.parameters.count !== undefined && roll.parameters.per_model === undefined && roll.parameters.for_each === undefined;
+    const fixedForEach = roll.parameters.for_each !== undefined && roll.parameters.per_model === undefined && roll.parameters.count === undefined && fixedSubjects(bonus.node);
+    if (plainCount || fixedForEach) return perDieConditionalRolls(planned, banded, roll, bonus);
     throw new CompileError("A conditional change to a roll of several dice has no DSL shape.");
   }
   if (Number(roll.parameters.bonus ?? 0) !== 0) throw new CompileError("An unconditional and a conditional change to one roll have no DSL shape yet.");

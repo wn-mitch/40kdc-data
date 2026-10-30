@@ -895,8 +895,11 @@ func describeWithin(p map[string]any, neg string) string {
 	if plural {
 		is = "are"
 	}
-	if p["at"] == "phase-start" {
+	if p["at"] == "phase-start" || p["at"] == "move-start" {
 		is, at = "was", " at the start of the phase"
+		if p["at"] == "move-start" {
+			at = " at the start of that move"
+		}
 		if plural {
 			is = "were"
 		}

@@ -2367,5 +2367,115 @@
     "scope": {
       "duration": "permanent"
     }
+  },
+  {
+    "caseId": "canonical/within-at-move-start",
+    "effect": {
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "within",
+              "parameters": {
+                "of": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "SAMPLE"
+                  ]
+                },
+                "range": {
+                  "inches": 6
+                },
+                "at": "move-start"
+              }
+            },
+            "effect": {
+              "type": "mortal-wounds",
+              "target": "selected-unit",
+              "modifier": {
+                "count": 1,
+                "per": "success",
+                "roll": {
+                  "dice": 1,
+                  "threshold": 2,
+                  "for_each": {
+                    "filter": {
+                      "owner": "friendly",
+                      "level": "model",
+                      "member_of": "this-unit"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "within",
+                  "parameters": {
+                    "of": {
+                      "owner": "friendly",
+                      "all_of": [
+                        "SAMPLE"
+                      ]
+                    },
+                    "range": {
+                      "inches": 6
+                    },
+                    "at": "move-start"
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "mortal-wounds",
+              "target": "selected-unit",
+              "modifier": {
+                "count": 1,
+                "per": "success",
+                "roll": {
+                  "dice": 1,
+                  "threshold": 4,
+                  "for_each": {
+                    "filter": {
+                      "owner": "friendly",
+                      "level": "model",
+                      "member_of": "this-unit"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "charge"
+        ]
+      }
+    }
   }
 ]

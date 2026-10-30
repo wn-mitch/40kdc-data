@@ -44241,7 +44241,7 @@ impl ::std::convert::TryFrom<::std::string::String> for Side {
 ///    },
 ///    {
 ///      "title": "within condition",
-///      "description": "[position] The subject is within `range` of `of`. `models` quantifies the subject's models (`every` requires all); `count` bounds how many subject models are within range. `wholly` requires the subject footprint to be inside the range. `at` reads the position at an earlier point.",
+///      "description": "[position] The subject is within `range` of `of`. `models` quantifies the subject's models (`every` requires all); `count` bounds how many subject models are within range. `wholly` requires the subject footprint to be inside the range. `at` reads the position at an earlier point: the start of the phase, or of the move that triggered the ability.",
 ///      "type": "object",
 ///      "required": [
 ///        "parameters",
@@ -44740,7 +44740,7 @@ pub enum SimpleCondition {
     HappenedCompare { parameters: HappenedCompareConditionParameters },
     /**within condition
 
-[position] The subject is within `range` of `of`. `models` quantifies the subject's models (`every` requires all); `count` bounds how many subject models are within range. `wholly` requires the subject footprint to be inside the range. `at` reads the position at an earlier point.*/
+[position] The subject is within `range` of `of`. `models` quantifies the subject's models (`every` requires all); `count` bounds how many subject models are within range. `wholly` requires the subject footprint to be inside the range. `at` reads the position at an earlier point: the start of the phase, or of the move that triggered the ability.*/
     #[serde(rename = "within")]
     Within { parameters: WithinConditionParameters },
     /**in-region condition
@@ -59958,7 +59958,8 @@ impl ::std::convert::TryFrom<::std::string::String> for WeaponType {
 ///      "properties": {
 ///        "at": {
 ///          "enum": [
-///            "phase-start"
+///            "phase-start",
+///            "move-start"
 ///          ]
 ///        }
 ///      }
@@ -59980,7 +59981,15 @@ impl ::std::convert::TryFrom<::std::string::String> for WeaponType {
 ///  ],
 ///  "properties": {
 ///    "at": {
-///      "$ref": "#/$defs/snapshot"
+///      "anyOf": [
+///        {
+///          "$ref": "#/$defs/snapshot"
+///        },
+///        {
+///          "description": "The start of the move whose end triggered the ability: where the subject was when that move began.",
+///          "const": "move-start"
+///        }
+///      ]
 ///    },
 ///    "count": {
 ///      "description": "Inclusive bounds on the number of subject models within range.",
@@ -60023,7 +60032,7 @@ pub enum WithinConditionParameters {
     },
     Variant1 {
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-        at: ::std::option::Option<Snapshot>,
+        at: ::std::option::Option<WithinConditionParametersVariant1At>,
         models: WithinConditionParametersVariant1Models,
         of: PlaceRef,
         range: RangeRef,
@@ -60034,7 +60043,7 @@ pub enum WithinConditionParameters {
     },
     Variant2 {
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-        at: ::std::option::Option<Snapshot>,
+        at: ::std::option::Option<WithinConditionParametersVariant2At>,
         ///Inclusive bounds on the number of subject models within range.
         count: CountBounds,
         of: PlaceRef,
@@ -60051,44 +60060,66 @@ pub enum WithinConditionParameters {
 ///
 /// ```json
 ///{
-///  "type": "string",
-///  "enum": [
-///    "phase-start"
+///  "anyOf": [
+///    {
+///      "allOf": [
+///        {
+///          "enum": [
+///            "phase-start",
+///            "move-start"
+///          ]
+///        },
+///        {
+///          "$ref": "#/$defs/snapshot"
+///        },
+///        {
+///          "not": {
+///            "description": "The start of the move whose end triggered the ability: where the subject was when that move began.",
+///            "const": "move-start"
+///          }
+///        }
+///      ]
+///    },
+///    {
+///      "allOf": [
+///        {
+///          "enum": [
+///            "phase-start",
+///            "move-start"
+///          ]
+///        },
+///        {
+///          "description": "The start of the move whose end triggered the ability: where the subject was when that move began.",
+///          "const": "move-start"
+///        },
+///        {
+///          "not": {
+///            "$ref": "#/$defs/snapshot"
+///          }
+///        }
+///      ]
+///    }
 ///  ]
 ///}
 /// ```
 /// </details>
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(untagged)]
 pub enum WithinConditionParametersVariant0At {
-    #[serde(rename = "phase-start")]
-    PhaseStart,
-}
-impl ::std::fmt::Display for WithinConditionParametersVariant0At {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::PhaseStart => f.write_str("phase-start"),
-        }
-    }
+    Variant0(WithinConditionParametersVariant0AtVariant0),
+    Variant1(WithinConditionParametersVariant0AtVariant1),
 }
 impl ::std::str::FromStr for WithinConditionParametersVariant0At {
     type Err = self::error::ConversionError;
     fn from_str(
         value: &str,
     ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "phase-start" => Ok(Self::PhaseStart),
-            _ => Err("invalid value".into()),
+        if let Ok(v) = value.parse() {
+            Ok(Self::Variant0(v))
+        } else if let Ok(v) = value.parse() {
+            Ok(Self::Variant1(v))
+        } else {
+            Err("string conversion failed for all variants".into())
         }
     }
 }
@@ -60116,6 +60147,232 @@ for WithinConditionParametersVariant0At {
         value: ::std::string::String,
     ) -> ::std::result::Result<Self, self::error::ConversionError> {
         value.parse()
+    }
+}
+impl ::std::fmt::Display for WithinConditionParametersVariant0At {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match self {
+            Self::Variant0(x) => x.fmt(f),
+            Self::Variant1(x) => x.fmt(f),
+        }
+    }
+}
+impl ::std::convert::From<WithinConditionParametersVariant0AtVariant0>
+for WithinConditionParametersVariant0At {
+    fn from(value: WithinConditionParametersVariant0AtVariant0) -> Self {
+        Self::Variant0(value)
+    }
+}
+impl ::std::convert::From<WithinConditionParametersVariant0AtVariant1>
+for WithinConditionParametersVariant0At {
+    fn from(value: WithinConditionParametersVariant0AtVariant1) -> Self {
+        Self::Variant1(value)
+    }
+}
+///`WithinConditionParametersVariant0AtVariant0`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "allOf": [
+///    {
+///      "enum": [
+///        "phase-start",
+///        "move-start"
+///      ]
+///    },
+///    {
+///      "$ref": "#/$defs/snapshot"
+///    },
+///    {
+///      "not": {
+///        "description": "The start of the move whose end triggered the ability: where the subject was when that move began.",
+///        "const": "move-start"
+///      }
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum WithinConditionParametersVariant0AtVariant0 {
+    #[serde(rename = "phase-start")]
+    PhaseStart,
+}
+impl ::std::fmt::Display for WithinConditionParametersVariant0AtVariant0 {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::PhaseStart => f.write_str("phase-start"),
+        }
+    }
+}
+impl ::std::str::FromStr for WithinConditionParametersVariant0AtVariant0 {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "phase-start" => Ok(Self::PhaseStart),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for WithinConditionParametersVariant0AtVariant0 {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for WithinConditionParametersVariant0AtVariant0 {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for WithinConditionParametersVariant0AtVariant0 {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`WithinConditionParametersVariant0AtVariant1`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "allOf": [
+///    {
+///      "enum": [
+///        "phase-start",
+///        "move-start"
+///      ]
+///    },
+///    {
+///      "description": "The start of the move whose end triggered the ability: where the subject was when that move began.",
+///      "const": "move-start"
+///    },
+///    {
+///      "not": {
+///        "$ref": "#/$defs/snapshot"
+///      }
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum WithinConditionParametersVariant0AtVariant1 {
+    #[serde(rename = "move-start")]
+    MoveStart,
+}
+impl ::std::fmt::Display for WithinConditionParametersVariant0AtVariant1 {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::MoveStart => f.write_str("move-start"),
+        }
+    }
+}
+impl ::std::str::FromStr for WithinConditionParametersVariant0AtVariant1 {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "move-start" => Ok(Self::MoveStart),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for WithinConditionParametersVariant0AtVariant1 {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for WithinConditionParametersVariant0AtVariant1 {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for WithinConditionParametersVariant0AtVariant1 {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`WithinConditionParametersVariant1At`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "anyOf": [
+///    {
+///      "$ref": "#/$defs/snapshot"
+///    },
+///    {
+///      "description": "The start of the move whose end triggered the ability: where the subject was when that move began.",
+///      "const": "move-start"
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(untagged)]
+pub enum WithinConditionParametersVariant1At {
+    Variant0(Snapshot),
+    Variant1(::serde_json::Value),
+}
+impl ::std::convert::From<Snapshot> for WithinConditionParametersVariant1At {
+    fn from(value: Snapshot) -> Self {
+        Self::Variant0(value)
+    }
+}
+impl ::std::convert::From<::serde_json::Value> for WithinConditionParametersVariant1At {
+    fn from(value: ::serde_json::Value) -> Self {
+        Self::Variant1(value)
     }
 }
 ///`WithinConditionParametersVariant1Models`
@@ -60193,6 +60450,40 @@ for WithinConditionParametersVariant1Models {
         value: ::std::string::String,
     ) -> ::std::result::Result<Self, self::error::ConversionError> {
         value.parse()
+    }
+}
+///`WithinConditionParametersVariant2At`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "anyOf": [
+///    {
+///      "$ref": "#/$defs/snapshot"
+///    },
+///    {
+///      "description": "The start of the move whose end triggered the ability: where the subject was when that move began.",
+///      "const": "move-start"
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(untagged)]
+pub enum WithinConditionParametersVariant2At {
+    Variant0(Snapshot),
+    Variant1(::serde_json::Value),
+}
+impl ::std::convert::From<Snapshot> for WithinConditionParametersVariant2At {
+    fn from(value: Snapshot) -> Self {
+        Self::Variant0(value)
+    }
+}
+impl ::std::convert::From<::serde_json::Value> for WithinConditionParametersVariant2At {
+    fn from(value: ::serde_json::Value) -> Self {
+        Self::Variant1(value)
     }
 }
 ///`WoundsConditionParameters`

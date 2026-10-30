@@ -2556,7 +2556,7 @@ class Parameters25(TypedDict):
     range: RangeRef
     wholly: NotRequired[Literal[True]]
     models: NotRequired[Literal["any", "every"]]
-    at: Literal["now", "phase-start", "turn-start", "opponent-previous-turn-end", "phase-start"]
+    at: Snapshot | Literal["phase-start", "move-start"]
     count: NotRequired[CountBounds]
 
 
@@ -2566,7 +2566,7 @@ class Parameters26(TypedDict):
     range: RangeRef
     wholly: NotRequired[Literal[True]]
     models: Literal["any", "every"]
-    at: NotRequired[Snapshot]
+    at: NotRequired[Snapshot | Literal["move-start"]]
     count: NotRequired[CountBounds]
 
 
@@ -2576,7 +2576,7 @@ class Parameters27(TypedDict):
     range: RangeRef
     wholly: NotRequired[Literal[True]]
     models: NotRequired[Literal["any", "every"]]
-    at: NotRequired[Snapshot]
+    at: NotRequired[Snapshot | Literal["move-start"]]
     count: CountBounds
 
 

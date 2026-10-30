@@ -19824,7 +19824,147 @@
     }
   },
   {
-    "caseId": "madcap-artillery-orks#287",
+    "caseId": "line-breakers-adeptus-mechanicus#287",
+    "effect": {
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "subject": "selected-unit",
+            "filter": {
+              "engaged_with": "this-unit"
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "within",
+              "parameters": {
+                "of": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "ADEPTUS MECHANICUS",
+                    "BATTLELINE"
+                  ]
+                },
+                "range": {
+                  "inches": 6
+                },
+                "at": "move-start"
+              }
+            },
+            "effect": {
+              "type": "mortal-wounds",
+              "target": "selected-unit",
+              "modifier": {
+                "count": 1,
+                "per": "success",
+                "roll": {
+                  "dice": 1,
+                  "threshold": 2,
+                  "for_each": {
+                    "filter": {
+                      "owner": "friendly",
+                      "level": "model",
+                      "member_of": "this-unit"
+                    },
+                    "eligibility": {
+                      "type": "matches",
+                      "parameters": {
+                        "filter": {
+                          "engaged_with": "selected-unit"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "within",
+                  "parameters": {
+                    "of": {
+                      "owner": "friendly",
+                      "all_of": [
+                        "ADEPTUS MECHANICUS",
+                        "BATTLELINE"
+                      ]
+                    },
+                    "range": {
+                      "inches": 6
+                    },
+                    "at": "move-start"
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "mortal-wounds",
+              "target": "selected-unit",
+              "modifier": {
+                "count": 1,
+                "per": "success",
+                "roll": {
+                  "dice": 1,
+                  "threshold": 4,
+                  "for_each": {
+                    "filter": {
+                      "owner": "friendly",
+                      "level": "model",
+                      "member_of": "this-unit"
+                    },
+                    "eligibility": {
+                      "type": "matches",
+                      "parameters": {
+                        "filter": {
+                          "engaged_with": "selected-unit"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "charge"
+        ]
+      }
+    },
+    "expected": {
+      "text": "When the unit ends a Charge move:\n  -> Select one enemy unit if the selected unit is a unit within Engagement Range of the unit:\n    -> While the unit was within 6\" of a friendly ADEPTUS MECHANICUS BATTLELINE unit at the start of that move, roll one D6 for each friendly model in the unit that is a unit within Engagement Range of the selected unit: for each 2+, that unit suffers 1 mortal wound.\n    -> Unless the unit was within 6\" of a friendly ADEPTUS MECHANICUS BATTLELINE unit at the start of that move, roll one D6 for each friendly model in the unit that is a unit within Engagement Range of the selected unit: for each 4+, that unit suffers 1 mortal wound."
+    }
+  },
+  {
+    "caseId": "madcap-artillery-orks#288",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -20156,7 +20296,7 @@
     }
   },
   {
-    "caseId": "martial-pride-imperial-knights#288",
+    "caseId": "martial-pride-imperial-knights#289",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -20194,7 +20334,7 @@
     }
   },
   {
-    "caseId": "mechanised-spearhead-astra-militarum#289",
+    "caseId": "mechanised-spearhead-astra-militarum#290",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -20256,7 +20396,7 @@
     }
   },
   {
-    "caseId": "melancholic-miasma-chaos-daemons#290",
+    "caseId": "melancholic-miasma-chaos-daemons#291",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -20347,7 +20487,7 @@
     }
   },
   {
-    "caseId": "methodical-destruction-chaos-knights#291",
+    "caseId": "methodical-destruction-chaos-knights#292",
     "effect": {
       "type": "ability-part",
       "trigger": {
@@ -20424,7 +20564,7 @@
     }
   },
   {
-    "caseId": "naturalised-camouflage-unending-swarm-tyranids#292",
+    "caseId": "naturalised-camouflage-unending-swarm-tyranids#293",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -20501,7 +20641,7 @@
     }
   },
   {
-    "caseId": "neuroloids-tyranids#293",
+    "caseId": "neuroloids-tyranids#294",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -20572,7 +20712,7 @@
     }
   },
   {
-    "caseId": "nova-charge-tau-empire#294",
+    "caseId": "nova-charge-tau-empire#295",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -20645,7 +20785,7 @@
     }
   },
   {
-    "caseId": "one-man-army-astra-militarum#295",
+    "caseId": "one-man-army-astra-militarum#296",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -20758,7 +20898,7 @@
     }
   },
   {
-    "caseId": "orders-astra-militarum#296",
+    "caseId": "orders-astra-militarum#297",
     "effect": {
       "type": "issue-orders",
       "menu_from": "voice-of-command-astra-militarum",
@@ -20777,7 +20917,7 @@
     }
   },
   {
-    "caseId": "orders-cadian-castellan-astra-militarum#297",
+    "caseId": "orders-cadian-castellan-astra-militarum#298",
     "effect": {
       "type": "issue-orders",
       "menu_from": "voice-of-command-astra-militarum",
@@ -20796,7 +20936,7 @@
     }
   },
   {
-    "caseId": "orders-commissar-astra-militarum#298",
+    "caseId": "orders-commissar-astra-militarum#299",
     "effect": {
       "type": "issue-orders",
       "menu_from": "voice-of-command-astra-militarum",
@@ -20819,7 +20959,7 @@
     }
   },
   {
-    "caseId": "orders-commissar-graves-astra-militarum#299",
+    "caseId": "orders-commissar-graves-astra-militarum#300",
     "effect": {
       "type": "issue-orders",
       "menu_from": "voice-of-command-astra-militarum",
@@ -20844,7 +20984,7 @@
     }
   },
   {
-    "caseId": "pain-engine-drukhari#300",
+    "caseId": "pain-engine-drukhari#301",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -20943,7 +21083,7 @@
     }
   },
   {
-    "caseId": "paragon-of-sanctity-warpbane-task-force-grey-knights#301",
+    "caseId": "paragon-of-sanctity-warpbane-task-force-grey-knights#302",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -21018,7 +21158,7 @@
     }
   },
   {
-    "caseId": "plasma-accelerator-rifle-experimental-prototype-cadre-tau-empire#302",
+    "caseId": "plasma-accelerator-rifle-experimental-prototype-cadre-tau-empire#303",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -21111,7 +21251,7 @@
     }
   },
   {
-    "caseId": "pledges-to-the-dark-prince-emperors-children#303",
+    "caseId": "pledges-to-the-dark-prince-emperors-children#304",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -21221,7 +21361,7 @@
     }
   },
   {
-    "caseId": "possessed-blade-carnival-of-excess-emperors-children#304",
+    "caseId": "possessed-blade-carnival-of-excess-emperors-children#305",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -21341,7 +21481,7 @@
     }
   },
   {
-    "caseId": "power-matrix-necrons#305",
+    "caseId": "power-matrix-necrons#306",
     "effect": {
       "type": "named-region-state",
       "target": {
@@ -21486,7 +21626,7 @@
     }
   },
   {
-    "caseId": "powers-of-da-waaagh-orks#306",
+    "caseId": "powers-of-da-waaagh-orks#307",
     "effect": {
       "type": "for-each-unit",
       "selector": {
@@ -21731,7 +21871,7 @@
     }
   },
   {
-    "caseId": "praise-the-fallen-hallowed-martyrs-adepta-sororitas#307",
+    "caseId": "praise-the-fallen-hallowed-martyrs-adepta-sororitas#308",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -21796,7 +21936,7 @@
     }
   },
   {
-    "caseId": "prioritised-efficiency-leagues-of-votann#308",
+    "caseId": "prioritised-efficiency-leagues-of-votann#309",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -22223,7 +22363,7 @@
     }
   },
   {
-    "caseId": "righteous-rage-bringers-of-flame-adepta-sororitas#309",
+    "caseId": "righteous-rage-bringers-of-flame-adepta-sororitas#310",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -22279,7 +22419,7 @@
     }
   },
   {
-    "caseId": "rise-to-the-challenge-peerless-bladesmen-emperors-children#310",
+    "caseId": "rise-to-the-challenge-peerless-bladesmen-emperors-children#311",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -22339,7 +22479,7 @@
     }
   },
   {
-    "caseId": "rune-of-mists-spirit-conclave-aeldari#311",
+    "caseId": "rune-of-mists-spirit-conclave-aeldari#312",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -22447,7 +22587,7 @@
     }
   },
   {
-    "caseId": "ruthless-reinvestment-leagues-of-votann#312",
+    "caseId": "ruthless-reinvestment-leagues-of-votann#313",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -22593,7 +22733,7 @@
     }
   },
   {
-    "caseId": "servo-sentry-astra-militarum#313",
+    "caseId": "servo-sentry-astra-militarum#314",
     "effect": {
       "type": "permission",
       "target": {
@@ -22641,7 +22781,7 @@
     }
   },
   {
-    "caseId": "speednob-support-orks#314",
+    "caseId": "speednob-support-orks#315",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -22679,7 +22819,7 @@
     }
   },
   {
-    "caseId": "spirit-leech-tyranids#315",
+    "caseId": "spirit-leech-tyranids#316",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -22739,7 +22879,7 @@
     }
   },
   {
-    "caseId": "stalwart-defenders-adeptus-astartes#316",
+    "caseId": "stalwart-defenders-adeptus-astartes#317",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -22780,7 +22920,7 @@
     }
   },
   {
-    "caseId": "storm-swift-onslaught-white-scars#317",
+    "caseId": "storm-swift-onslaught-white-scars#318",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -22944,7 +23084,7 @@
     }
   },
   {
-    "caseId": "supernova-launcher-experimental-prototype-cadre-tau-empire#318",
+    "caseId": "supernova-launcher-experimental-prototype-cadre-tau-empire#319",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -23023,7 +23163,7 @@
     }
   },
   {
-    "caseId": "swift-demise-aeldari#319",
+    "caseId": "swift-demise-aeldari#320",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -23089,7 +23229,7 @@
     }
   },
   {
-    "caseId": "taktikal-know-wotz-orks#320",
+    "caseId": "taktikal-know-wotz-orks#321",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -23131,7 +23271,7 @@
     }
   },
   {
-    "caseId": "tempestor-prime-astra-militarum#321",
+    "caseId": "tempestor-prime-astra-militarum#322",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -23167,7 +23307,7 @@
     }
   },
   {
-    "caseId": "terror-descends-chaos-space-marines#322",
+    "caseId": "terror-descends-chaos-space-marines#323",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -23301,7 +23441,7 @@
     }
   },
   {
-    "caseId": "terror-made-manifest-chaos-space-marines#323",
+    "caseId": "terror-made-manifest-chaos-space-marines#324",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -23490,7 +23630,7 @@
     }
   },
   {
-    "caseId": "the-shadow-of-chaos-chaos-daemons#324",
+    "caseId": "the-shadow-of-chaos-chaos-daemons#325",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -23835,7 +23975,7 @@
     }
   },
   {
-    "caseId": "thermoneutronic-projector-experimental-prototype-cadre-tau-empire#325",
+    "caseId": "thermoneutronic-projector-experimental-prototype-cadre-tau-empire#326",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -23915,7 +24055,7 @@
     }
   },
   {
-    "caseId": "tidewall-defence-platform-tau-empire#326",
+    "caseId": "tidewall-defence-platform-tau-empire#327",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -23943,7 +24083,7 @@
     }
   },
   {
-    "caseId": "unleash-the-lions-lions-of-the-emperor-adeptus-custodes#327",
+    "caseId": "unleash-the-lions-lions-of-the-emperor-adeptus-custodes#328",
     "effect": {
       "type": "split-unit",
       "target": "this-unit",
@@ -23965,7 +24105,7 @@
     }
   },
   {
-    "caseId": "using-sir-hekhtur-imperial-knights#328",
+    "caseId": "using-sir-hekhtur-imperial-knights#329",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -24023,7 +24163,7 @@
     }
   },
   {
-    "caseId": "violent-fury-space-wolves#329",
+    "caseId": "violent-fury-space-wolves#330",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -24056,7 +24196,7 @@
     }
   },
   {
-    "caseId": "ability-grant-scouts#330",
+    "caseId": "ability-grant-scouts#331",
     "effect": {
       "type": "ability-grant",
       "target": "this-unit",
@@ -24073,7 +24213,7 @@
     }
   },
   {
-    "caseId": "permission-charge-after-disembark#331",
+    "caseId": "permission-charge-after-disembark#332",
     "effect": {
       "type": "permission",
       "target": "this-unit",
@@ -24093,7 +24233,7 @@
     }
   },
   {
-    "caseId": "permission-charge-after-fall-back#332",
+    "caseId": "permission-charge-after-fall-back#333",
     "effect": {
       "type": "permission",
       "target": "this-model",
@@ -24113,7 +24253,7 @@
     }
   },
   {
-    "caseId": "unit-state-engaged#333",
+    "caseId": "unit-state-engaged#334",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -24140,7 +24280,7 @@
     }
   },
   {
-    "caseId": "unit-state-on-battlefield#334",
+    "caseId": "unit-state-on-battlefield#335",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -24167,7 +24307,7 @@
     }
   },
   {
-    "caseId": "unit-state-embarked#335",
+    "caseId": "unit-state-embarked#336",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -24194,7 +24334,7 @@
     }
   },
   {
-    "caseId": "unit-state-unengaged#336",
+    "caseId": "unit-state-unengaged#337",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -24226,7 +24366,7 @@
     }
   },
   {
-    "caseId": "unit-state-negated#337",
+    "caseId": "unit-state-negated#338",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -24258,7 +24398,7 @@
     }
   },
   {
-    "caseId": "unit-state-in-strategic-reserves#338",
+    "caseId": "unit-state-in-strategic-reserves#339",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -24285,7 +24425,7 @@
     }
   },
   {
-    "caseId": "owned-by-enemy#339",
+    "caseId": "owned-by-enemy#340",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -24313,7 +24453,7 @@
     }
   },
   {
-    "caseId": "fights-first-cond#340",
+    "caseId": "fights-first-cond#341",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -24342,7 +24482,7 @@
     }
   },
   {
-    "caseId": "scaling-attacks-per-models#341",
+    "caseId": "scaling-attacks-per-models#342",
     "effect": {
       "type": "stat-modifier",
       "target": "this-unit",
@@ -24367,7 +24507,7 @@
     }
   },
   {
-    "caseId": "scaling-strength-wounds-lost#342",
+    "caseId": "scaling-strength-wounds-lost#343",
     "effect": {
       "type": "stat-modifier",
       "target": "this-model",
@@ -24391,7 +24531,7 @@
     }
   },
   {
-    "caseId": "dice-pool-inline-label#343",
+    "caseId": "dice-pool-inline-label#344",
     "effect": {
       "type": "choice",
       "options": [
@@ -24439,7 +24579,7 @@
     }
   },
   {
-    "caseId": "closest-eligible-within-range#344",
+    "caseId": "closest-eligible-within-range#345",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -24469,7 +24609,7 @@
     }
   },
   {
-    "caseId": "dice-pool-requirement-anyof#345",
+    "caseId": "dice-pool-requirement-anyof#346",
     "effect": {
       "type": "dice-pool-allocation",
       "pool": {
@@ -24523,7 +24663,7 @@
     }
   },
   {
-    "caseId": "rule-state-forgo-faction-rule#346",
+    "caseId": "rule-state-forgo-faction-rule#347",
     "effect": {
       "type": "ability-part",
       "cost": {
@@ -24553,7 +24693,7 @@
     }
   },
   {
-    "caseId": "rule-state-faction-rule-granted#347",
+    "caseId": "rule-state-faction-rule-granted#348",
     "effect": {
       "type": "rule-state",
       "target": "this-model",
@@ -24571,7 +24711,7 @@
     }
   },
   {
-    "caseId": "rule-state-cover-granted#348",
+    "caseId": "rule-state-cover-granted#349",
     "effect": {
       "type": "rule-state",
       "target": "this-model",
@@ -24589,7 +24729,7 @@
     }
   },
   {
-    "caseId": "permission-advance-forbidden#349",
+    "caseId": "permission-advance-forbidden#350",
     "effect": {
       "type": "permission",
       "target": "this-unit",
@@ -24606,7 +24746,7 @@
     }
   },
   {
-    "caseId": "rule-state-overwatch-against-bearer#350",
+    "caseId": "rule-state-overwatch-against-bearer#351",
     "effect": {
       "type": "rule-state",
       "target": "this-unit",
@@ -24624,7 +24764,7 @@
     }
   },
   {
-    "caseId": "rule-state-desperate-escape-granted#351",
+    "caseId": "rule-state-desperate-escape-granted#352",
     "effect": {
       "type": "rule-state",
       "target": {
@@ -24647,7 +24787,7 @@
     }
   },
   {
-    "caseId": "rule-state-desperate-escape-suppressed#352",
+    "caseId": "rule-state-desperate-escape-suppressed#353",
     "effect": {
       "type": "rule-state",
       "target": "this-model",
@@ -24665,7 +24805,7 @@
     }
   },
   {
-    "caseId": "rule-state-ability-granted#353",
+    "caseId": "rule-state-ability-granted#354",
     "effect": {
       "type": "rule-state",
       "target": "this-unit",
@@ -24683,7 +24823,7 @@
     }
   },
   {
-    "caseId": "rule-state-keyword-suppressed#354",
+    "caseId": "rule-state-keyword-suppressed#355",
     "effect": {
       "type": "rule-state",
       "target": "this-unit",
@@ -24701,7 +24841,7 @@
     }
   },
   {
-    "caseId": "rule-state-ordered-retreat-suppressed#355",
+    "caseId": "rule-state-ordered-retreat-suppressed#356",
     "effect": {
       "type": "rule-state",
       "target": {
@@ -24726,7 +24866,7 @@
     }
   },
   {
-    "caseId": "rule-state-ordered-retreat-granted#356",
+    "caseId": "rule-state-ordered-retreat-granted#357",
     "effect": {
       "type": "rule-state",
       "target": "this-unit",
@@ -24744,7 +24884,7 @@
     }
   },
   {
-    "caseId": "weapon-ability-grant-anti-titanic#357",
+    "caseId": "weapon-ability-grant-anti-titanic#358",
     "effect": {
       "type": "weapon-ability-grant",
       "target": "this-unit",
@@ -24768,7 +24908,7 @@
     }
   },
   {
-    "caseId": "weapon-ability-grant-anti-infantry#358",
+    "caseId": "weapon-ability-grant-anti-infantry#359",
     "effect": {
       "type": "weapon-ability-grant",
       "target": "this-unit",
@@ -24792,7 +24932,7 @@
     }
   },
   {
-    "caseId": "weapon-ability-grant-rated-value#359",
+    "caseId": "weapon-ability-grant-rated-value#360",
     "effect": {
       "type": "weapon-ability-grant",
       "target": "this-unit",
@@ -24815,7 +24955,7 @@
     }
   },
   {
-    "caseId": "roll-result-battle-shock-pass#360",
+    "caseId": "roll-result-battle-shock-pass#361",
     "effect": {
       "type": "roll-result",
       "target": "this-unit",
@@ -24832,7 +24972,7 @@
     }
   },
   {
-    "caseId": "roll-result-hit-six#361",
+    "caseId": "roll-result-hit-six#362",
     "effect": {
       "type": "roll-result",
       "target": "this-unit",
@@ -24849,7 +24989,7 @@
     }
   },
   {
-    "caseId": "ability-grant-firing-deck#362",
+    "caseId": "ability-grant-firing-deck#363",
     "effect": {
       "type": "ability-grant",
       "target": "this-model",
@@ -24866,7 +25006,7 @@
     }
   },
   {
-    "caseId": "permission-disembark-after-move#363",
+    "caseId": "permission-disembark-after-move#364",
     "effect": {
       "type": "permission",
       "target": "this-model",
@@ -24886,7 +25026,7 @@
     }
   },
   {
-    "caseId": "usage-once-per-turn#364",
+    "caseId": "usage-once-per-turn#365",
     "effect": {
       "type": "cp-gain",
       "target": "this-model",
@@ -24905,7 +25045,7 @@
     }
   },
   {
-    "caseId": "usage-n-per-battle-per-unit#365",
+    "caseId": "usage-n-per-battle-per-unit#366",
     "effect": {
       "type": "stat-modifier",
       "target": "this-unit",
@@ -24928,7 +25068,7 @@
     }
   },
   {
-    "caseId": "trigger-enemy-ended-move#366",
+    "caseId": "trigger-enemy-ended-move#367",
     "effect": {
       "type": "move",
       "target": "this-model",
@@ -24957,7 +25097,7 @@
     }
   },
   {
-    "caseId": "trigger-on-model-destroyed#367",
+    "caseId": "trigger-on-model-destroyed#368",
     "effect": {
       "type": "mortal-wounds",
       "target": {
@@ -24984,7 +25124,7 @@
     }
   },
   {
-    "caseId": "trigger-before-save-with-condition#368",
+    "caseId": "trigger-before-save-with-condition#369",
     "effect": {
       "type": "re-roll",
       "target": "this-unit",
@@ -25015,7 +25155,7 @@
     }
   },
   {
-    "caseId": "move-passthrough-models-terrain#369",
+    "caseId": "move-passthrough-models-terrain#370",
     "effect": {
       "type": "move-modifier",
       "target": "this-model",
@@ -25034,7 +25174,7 @@
     }
   },
   {
-    "caseId": "move-passthrough-applies#370",
+    "caseId": "move-passthrough-applies#371",
     "effect": {
       "type": "move-modifier",
       "target": "this-unit",
@@ -25057,7 +25197,7 @@
     }
   },
   {
-    "caseId": "move-ignore-vertical#371",
+    "caseId": "move-ignore-vertical#372",
     "effect": {
       "type": "move-modifier",
       "target": "this-unit",
@@ -25073,7 +25213,7 @@
     }
   },
   {
-    "caseId": "move-modifier-distance-bonus#372",
+    "caseId": "move-modifier-distance-bonus#373",
     "effect": {
       "type": "move-modifier",
       "target": "this-unit",
@@ -25094,7 +25234,7 @@
     }
   },
   {
-    "caseId": "stat-modifier-move-negative#373",
+    "caseId": "stat-modifier-move-negative#374",
     "effect": {
       "type": "stat-modifier",
       "target": "defender",
@@ -25112,7 +25252,7 @@
     }
   },
   {
-    "caseId": "roll-modifier-advance-bonus#374",
+    "caseId": "roll-modifier-advance-bonus#375",
     "effect": {
       "type": "roll-modifier",
       "target": "this-unit",
@@ -25130,7 +25270,7 @@
     }
   },
   {
-    "caseId": "move-pile-in#375",
+    "caseId": "move-pile-in#376",
     "effect": {
       "type": "move",
       "target": "this-unit",
@@ -25147,7 +25287,7 @@
     }
   },
   {
-    "caseId": "move-consolidation#376",
+    "caseId": "move-consolidation#377",
     "effect": {
       "type": "move",
       "target": "this-unit",
@@ -25164,7 +25304,7 @@
     }
   },
   {
-    "caseId": "move-surge#377",
+    "caseId": "move-surge#378",
     "effect": {
       "type": "move",
       "target": "this-unit",
@@ -25181,7 +25321,7 @@
     }
   },
   {
-    "caseId": "move-normal-after-shooting#378",
+    "caseId": "move-normal-after-shooting#379",
     "effect": {
       "type": "move",
       "target": "this-unit",
@@ -25198,7 +25338,7 @@
     }
   },
   {
-    "caseId": "set-up-reserves-max-units#379",
+    "caseId": "set-up-reserves-max-units#380",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -25226,7 +25366,7 @@
     }
   },
   {
-    "caseId": "marker-relocate#380",
+    "caseId": "marker-relocate#381",
     "effect": {
       "type": "marker",
       "target": "this-unit",
@@ -25246,7 +25386,7 @@
     }
   },
   {
-    "caseId": "set-up-redeploy-filtered#381",
+    "caseId": "set-up-redeploy-filtered#382",
     "effect": {
       "type": "set-up",
       "target": {
@@ -25269,7 +25409,7 @@
     }
   },
   {
-    "caseId": "ability-grant-infiltrators#382",
+    "caseId": "ability-grant-infiltrators#383",
     "effect": {
       "type": "ability-grant",
       "target": "this-unit",
@@ -25285,7 +25425,7 @@
     }
   },
   {
-    "caseId": "aura-range-bonus#383",
+    "caseId": "aura-range-bonus#384",
     "effect": {
       "type": "aura",
       "target": "enemy-within-aura",
@@ -25304,7 +25444,7 @@
     }
   },
   {
-    "caseId": "issue-orders-eligible-keywords#384",
+    "caseId": "issue-orders-eligible-keywords#385",
     "effect": {
       "type": "issue-orders",
       "count": 1,
@@ -25336,7 +25476,7 @@
     }
   },
   {
-    "caseId": "issue-orders-menu-from#385",
+    "caseId": "issue-orders-menu-from#386",
     "effect": {
       "type": "issue-orders",
       "count": 1,
@@ -25360,7 +25500,7 @@
     }
   },
   {
-    "caseId": "aura-army-emitter-tiered-capped#386",
+    "caseId": "aura-army-emitter-tiered-capped#387",
     "effect": {
       "type": "aura",
       "target": "enemy-within-aura",
@@ -25407,7 +25547,7 @@
     }
   },
   {
-    "caseId": "aura-any-emitter-keyword-clauses#387",
+    "caseId": "aura-any-emitter-keyword-clauses#388",
     "effect": {
       "type": "aura",
       "target": "friendly-within-aura",
@@ -25448,7 +25588,7 @@
     }
   },
   {
-    "caseId": "aura-model-emitter-keywords#388",
+    "caseId": "aura-model-emitter-keywords#389",
     "effect": {
       "type": "aura",
       "target": "friendly-within-aura",
@@ -25480,7 +25620,7 @@
     }
   },
   {
-    "caseId": "aura-unit-origin#389",
+    "caseId": "aura-unit-origin#390",
     "effect": {
       "type": "aura",
       "target": "enemy-within-aura",
@@ -25511,7 +25651,7 @@
     }
   },
   {
-    "caseId": "aura-unit-origin-emitter-keywords#390",
+    "caseId": "aura-unit-origin-emitter-keywords#391",
     "effect": {
       "type": "aura",
       "target": "friendly-within-aura",
@@ -25544,7 +25684,7 @@
     }
   },
   {
-    "caseId": "aura-tiered-effect#391",
+    "caseId": "aura-tiered-effect#392",
     "effect": {
       "type": "aura",
       "target": "enemy-within-aura",
@@ -25581,7 +25721,7 @@
     }
   },
   {
-    "caseId": "set-up-deep-strike-min-distance#392",
+    "caseId": "set-up-deep-strike-min-distance#393",
     "effect": {
       "type": "set-up",
       "target": "this-unit",
@@ -25601,7 +25741,7 @@
     }
   },
   {
-    "caseId": "move-modifier-engagement-no-end#393",
+    "caseId": "move-modifier-engagement-no-end#394",
     "effect": {
       "type": "move-modifier",
       "target": "this-model",
@@ -25620,7 +25760,7 @@
     }
   },
   {
-    "caseId": "permission-shoot-after-fall-back#394",
+    "caseId": "permission-shoot-after-fall-back#395",
     "effect": {
       "type": "permission",
       "target": "this-unit",
@@ -25640,7 +25780,7 @@
     }
   },
   {
-    "caseId": "permission-shoot-and-charge-after-fall-back#395",
+    "caseId": "permission-shoot-and-charge-after-fall-back#396",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -25676,7 +25816,7 @@
     }
   },
   {
-    "caseId": "superlative-strategist-aeldari#396",
+    "caseId": "superlative-strategist-aeldari#397",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -25729,7 +25869,7 @@
     }
   },
   {
-    "caseId": "deceptive-feint#397",
+    "caseId": "deceptive-feint#398",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -25814,7 +25954,7 @@
     }
   },
   {
-    "caseId": "heal-selected-model#398",
+    "caseId": "heal-selected-model#399",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -25867,7 +26007,7 @@
     }
   },
   {
-    "caseId": "marker-next-to-target#399",
+    "caseId": "marker-next-to-target#400",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -25916,7 +26056,7 @@
     }
   },
   {
-    "caseId": "psychic-model-bundle#400",
+    "caseId": "psychic-model-bundle#401",
     "effect": {
       "type": "for-each-unit",
       "selector": {
@@ -25995,7 +26135,7 @@
     }
   },
   {
-    "caseId": "designate-bearer-target-with-eligibility#401",
+    "caseId": "designate-bearer-target-with-eligibility#402",
     "effect": {
       "type": "ability-part",
       "trigger": {
@@ -26076,7 +26216,7 @@
     }
   },
   {
-    "caseId": "conditional-selected-to-shoot-this-phase#402",
+    "caseId": "conditional-selected-to-shoot-this-phase#403",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -26107,7 +26247,7 @@
     }
   },
   {
-    "caseId": "transport-capacity#403",
+    "caseId": "transport-capacity#404",
     "effect": {
       "type": "transport-capacity",
       "target": "this-unit",
@@ -26128,7 +26268,7 @@
     }
   },
   {
-    "caseId": "transport-grouped-single-keyword-model#404",
+    "caseId": "transport-grouped-single-keyword-model#405",
     "effect": {
       "type": "transport-capacity",
       "target": "this-model",
@@ -26149,7 +26289,7 @@
     }
   },
   {
-    "caseId": "transport-fixed-model-spaces-with-capacity-eligibility#405",
+    "caseId": "transport-fixed-model-spaces-with-capacity-eligibility#406",
     "effect": {
       "type": "transport-capacity",
       "target": "this-model",
@@ -26170,7 +26310,7 @@
     }
   },
   {
-    "caseId": "transport-fixed-model-spaces-with-embark-as#406",
+    "caseId": "transport-fixed-model-spaces-with-embark-as#407",
     "effect": {
       "type": "transport-capacity",
       "target": "this-model",
@@ -26191,7 +26331,7 @@
     }
   },
   {
-    "caseId": "transport-equivalent-model-keyword#407",
+    "caseId": "transport-equivalent-model-keyword#408",
     "effect": {
       "type": "transport-capacity",
       "target": "this-unit",
@@ -26210,7 +26350,7 @@
     }
   },
   {
-    "caseId": "transport-equivalent-model-count#408",
+    "caseId": "transport-equivalent-model-count#409",
     "effect": {
       "type": "transport-capacity",
       "target": "this-model",
@@ -26228,7 +26368,7 @@
     }
   },
   {
-    "caseId": "moved-through-tall-terrain-inline#409",
+    "caseId": "moved-through-tall-terrain-inline#410",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -26257,7 +26397,7 @@
     }
   },
   {
-    "caseId": "moved-through-tall-terrain-trigger-condition#410",
+    "caseId": "moved-through-tall-terrain-trigger-condition#411",
     "effect": {
       "type": "ability-grant",
       "target": "this-model",
@@ -26289,7 +26429,7 @@
     }
   },
   {
-    "caseId": "moved-through-tall-terrain-negated-inline#411",
+    "caseId": "moved-through-tall-terrain-negated-inline#412",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -26323,7 +26463,7 @@
     }
   },
   {
-    "caseId": "moved-through-tall-terrain-negated-trigger-condition#412",
+    "caseId": "moved-through-tall-terrain-negated-trigger-condition#413",
     "effect": {
       "type": "ability-grant",
       "target": "this-model",
@@ -26360,7 +26500,7 @@
     }
   },
   {
-    "caseId": "moved-through-tall-terrain-trigger-event#413",
+    "caseId": "moved-through-tall-terrain-trigger-event#414",
     "effect": {
       "type": "ability-grant",
       "target": "this-model",
@@ -26382,7 +26522,7 @@
     }
   },
   {
-    "caseId": "moved-through-terrain-generic#414",
+    "caseId": "moved-through-terrain-generic#415",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -26411,7 +26551,7 @@
     }
   },
   {
-    "caseId": "aura-role-filtered-effect#415",
+    "caseId": "aura-role-filtered-effect#416",
     "effect": {
       "type": "aura",
       "target": "friendly-within-aura",
@@ -44126,6 +44266,119 @@
     },
     "expected": {
       "text": "Select one enemy unit:\n  -> Halve that unit's Charge rolls.\n  -> When the selected unit ends a move, until the start of your next Movement phase:\n    -> Roll one D6: on a 4+, that unit suffers D3 mortal wounds."
+    }
+  },
+  {
+    "caseId": "canonical/within-at-move-start",
+    "effect": {
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "within",
+              "parameters": {
+                "of": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "SAMPLE"
+                  ]
+                },
+                "range": {
+                  "inches": 6
+                },
+                "at": "move-start"
+              }
+            },
+            "effect": {
+              "type": "mortal-wounds",
+              "target": "selected-unit",
+              "modifier": {
+                "count": 1,
+                "per": "success",
+                "roll": {
+                  "dice": 1,
+                  "threshold": 2,
+                  "for_each": {
+                    "filter": {
+                      "owner": "friendly",
+                      "level": "model",
+                      "member_of": "this-unit"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "within",
+                  "parameters": {
+                    "of": {
+                      "owner": "friendly",
+                      "all_of": [
+                        "SAMPLE"
+                      ]
+                    },
+                    "range": {
+                      "inches": 6
+                    },
+                    "at": "move-start"
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "mortal-wounds",
+              "target": "selected-unit",
+              "modifier": {
+                "count": 1,
+                "per": "success",
+                "roll": {
+                  "dice": 1,
+                  "threshold": 4,
+                  "for_each": {
+                    "filter": {
+                      "owner": "friendly",
+                      "level": "model",
+                      "member_of": "this-unit"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "charge"
+        ]
+      }
+    },
+    "expected": {
+      "text": "When the unit ends a Charge move:\n  -> Select one enemy unit:\n    -> While the unit was within 6\" of a friendly SAMPLE unit at the start of that move, roll one D6 for each friendly model in the unit: for each 2+, that unit suffers 1 mortal wound.\n    -> Unless the unit was within 6\" of a friendly SAMPLE unit at the start of that move, roll one D6 for each friendly model in the unit: for each 4+, that unit suffers 1 mortal wound."
     }
   }
 ]
