@@ -253,13 +253,18 @@ class NonTieredRangeRef1(TypedDict):
 
 
 class NonTieredRangeRef2(TypedDict):
+    dice: DiceExpression
+
+
+class NonTieredRangeRef3(TypedDict):
     aura_of: EntityId
 
 
 NonTieredRangeRef: TypeAlias = (
     NonTieredRangeRef1
-    | Literal["engagement", "aura", "weapon", "half-weapon", "detection", "objective-control"]
     | NonTieredRangeRef2
+    | Literal["engagement", "aura", "weapon", "half-weapon", "detection", "objective-control"]
+    | NonTieredRangeRef3
 )
 
 

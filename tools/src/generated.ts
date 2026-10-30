@@ -70,6 +70,9 @@ export type NonTieredRangeRef =
   | {
       inches: number;
     }
+  | {
+      dice: DiceExpression;
+    }
   | ("engagement" | "aura" | "weapon" | "half-weapon" | "detection" | "objective-control")
   | {
       aura_of: EntityId;

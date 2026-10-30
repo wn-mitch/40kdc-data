@@ -204,7 +204,30 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
   const result = compileUnchecked(leaves, sourceText, options);
   // "That unit must take a test" bound to an aura's recipient with no aura or loop around it reaches no unit.
   const unscoped = result.ok ? unscopedRecipientEffect(result.mechanics.effect) : null;
-  return unscoped === null ? result : { ok: false, signature: result.signature, errors: [`A ${unscoped} effect names the unit it is applied to (recipient), but no aura or for-each-unit applies it to any unit.`] };
+  if (unscoped !== null) return { ok: false, signature: result.signature, errors: [`A ${unscoped} effect names the unit it is applied to (recipient), but no aura or for-each-unit applies it to any unit.`] };
+  // A rolled distance or a start-of-move position that a lowering path read as plain inches would be lost, not refused.
+  const lost = result.ok ? lostDistance(leaves, result.mechanics) : null;
+  return lost === null ? result : { ok: false, signature: result.signature, errors: [lost] };
+}
+
+/** Whether any range in the mechanics lost its distance, or a leaf's rolled or start-of-move distance is missing from them. */
+function lostDistance(leaves: readonly CompileLeaf[], mechanics: unknown): string | null {
+  let empty = false;
+  const walk = (node: unknown): void => {
+    if (Array.isArray(node)) return node.forEach(walk);
+    if (node === null || typeof node !== "object") return;
+    for (const [key, value] of Object.entries(node as Record<string, unknown>)) {
+      if (key === "range" && value !== null && typeof value === "object" && !Array.isArray(value) && Object.values(value).every((inner) => inner === undefined)) empty = true;
+      walk(value);
+    }
+  };
+  walk(mechanics);
+  if (empty) return "A distance lowered with no inches; its lowering path does not read this leaf's distance.";
+  const text = JSON.stringify(mechanics);
+  const positions = leaves.filter((leaf) => leaf.family_id === "unit-position");
+  if (positions.some((leaf) => leaf.parameters.rolled_inches !== undefined) && !/"range":\{"dice":/u.test(text)) return "A rolled distance was lowered without its roll.";
+  if (positions.some((leaf) => leaf.parameters.at === "move-start") && !text.includes("\"move-start\"")) return "A position at the start of a move was lowered as the position now.";
+  return null;
 }
 
 function compileUnchecked(record: readonly CompileLeaf[], sourceText?: string, options: CompileOptions = {}): Compiled {

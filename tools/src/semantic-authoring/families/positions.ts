@@ -1,5 +1,5 @@
 import { DESIGNATION_IDS, refuseListBuildingTag } from "../../translate/designations.js";
-import { type FamilyExtension, KEYWORD_ITEMS, keywordList, optional, properties, standIn, widenedEnum, withProperties } from "../family-extension-helpers.js";
+import { DICE, type FamilyExtension, KEYWORD_ITEMS, keywordList, optional, properties, standIn, widenedEnum, withProperties } from "../family-extension-helpers.js";
 import { enumValue } from "../family-validation.js";
 import { NAMED_RANGES } from "../named-ranges.js";
 import { ALTERNATIVE_SCHEMA, normalizeAlternatives } from "../unit-filter-alternatives.js";
@@ -501,6 +501,23 @@ export const POSITION_EXTENSIONS: readonly FamilyExtension[] = [
       if (at !== "move-start") throw new TypeError("unit-position.at is move-start.");
       if (rest.kind !== "within" && rest.kind !== "beyond") throw new TypeError("unit-position.at reads a within or beyond distance.");
       return { ...previous(rest), at };
+    },
+  },
+  {
+    // "for each enemy unit within D6\" of that model": a distance rolled each time the ability resolves.
+    family: "unit-position",
+    version: 30,
+    description: "As the previous version, plus rolled_inches instead of inches: a within or beyond distance of a dice roll (D3, D6, 2D6, D6+1), rolled once each time the ability resolves.",
+    schema: (previous) => withProperties(previous, { rolled_inches: optional({ type: "string", pattern: DICE.source, "x-only-when": { kind: ["within", "beyond"] } }) }),
+    normalize: (input, previous) => {
+      if (input.rolled_inches === undefined) return previous(input);
+      const { rolled_inches: rolled, ...rest } = input;
+      if (typeof rolled !== "string" || !DICE.test(rolled)) throw new TypeError("unit-position.rolled_inches is a dice roll (D3, D6, 2D6, D6+1).");
+      if (rest.kind !== "within" && rest.kind !== "beyond") throw new TypeError("unit-position.rolled_inches measures a within or beyond distance.");
+      refuseWith(rest, ["inches", "range_ref", "distance", "weapon_range"], "unit-position.rolled_inches");
+      // The previous version checks the rest with a stand-in distance; the stand-in is not kept.
+      const { inches: _standIn, ...checked } = previous({ ...rest, inches: 1 });
+      return { ...checked, rolled_inches: rolled };
     },
   },
 ];

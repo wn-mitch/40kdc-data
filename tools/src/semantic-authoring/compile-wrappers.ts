@@ -170,7 +170,7 @@ function leaderEffect(node: Node): Node {
 export function selectionFilter(leaf: CompileLeaf, folded: UnitFilter = (leaf.parameters.filter ?? {}) as UnitFilter): Node {
   const origin = typeof leaf.parameters.within_of === "string" ? { selection_var: leaf.parameters.within_of }
     : leaf.parameters.within_origin ?? "this-model";
-  const near = leaf.parameters.near as { of: string; inches: number } | undefined;
+  const near = leaf.parameters.near as { of: string; range: Node } | undefined;
   if (near && leaf.parameters.distance === "within") throw new CompileError("A selection names two range origins.");
   return {
     ...dslUnitFilter({ ...leaf, parameters: { ...folded, side: leaf.parameters.scope ?? "any",
@@ -178,7 +178,7 @@ export function selectionFilter(leaf: CompileLeaf, folded: UnitFilter = (leaf.pa
       ...(folded.membership !== undefined ? { member_of: folded.membership } : {}),
     } }),
     ...(leaf.parameters.distance === "within" ? { within: { range: { inches: leaf.parameters.inches }, of: origin, ...(leaf.parameters.wholly === true ? { wholly: true } : {}) } } : {}),
-    ...(near ? { within: { range: { inches: near.inches }, of: near.of } } : {}),
+    ...(near ? { within: { range: near.range, of: near.of } } : {}),
     ...(leaf.parameters.visible === true || leaf.parameters.visible_to !== undefined
       ? { visible: { to: typeof leaf.parameters.visible_to === "string" ? { selection_var: leaf.parameters.visible_to } : "this-model" } } : {}),
     ...(leaf.parameters.engaged_with !== undefined ? { engaged_with: leaf.parameters.engaged_with } : {}),

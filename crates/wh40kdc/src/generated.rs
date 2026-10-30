@@ -27858,6 +27858,19 @@ impl ::std::convert::TryFrom<::std::string::String> for NoEffectEffectType {
 ///      "additionalProperties": false
 ///    },
 ///    {
+///      "description": "A distance in inches rolled once each time the ability resolves, the same roll for every unit it measures.",
+///      "type": "object",
+///      "required": [
+///        "dice"
+///      ],
+///      "properties": {
+///        "dice": {
+///          "$ref": "#/$defs/dice-expression"
+///        }
+///      },
+///      "additionalProperties": false
+///    },
+///    {
 ///      "description": "engagement: Engagement Range. aura: the aura range of the unit the distance is measured from. weapon / half-weapon: the attacking weapon's range, or half of it. detection: detection range. objective-control: the range at which a model counts for an objective.",
 ///      "type": "string",
 ///      "enum": [
@@ -27889,6 +27902,9 @@ impl ::std::convert::TryFrom<::std::string::String> for NoEffectEffectType {
 pub enum NonTieredRangeRef {
     #[serde(rename = "inches")]
     Inches(f64),
+    ///A distance in inches rolled once each time the ability resolves, the same roll for every unit it measures.
+    #[serde(rename = "dice")]
+    Dice(DiceExpression),
     ///engagement: Engagement Range. aura: the aura range of the unit the distance is measured from. weapon / half-weapon: the attacking weapon's range, or half of it. detection: detection range. objective-control: the range at which a model counts for an objective.
     #[serde(rename = "engagement")]
     Engagement,
@@ -27913,6 +27929,11 @@ pub enum NonTieredRangeRef {
 impl ::std::convert::From<f64> for NonTieredRangeRef {
     fn from(value: f64) -> Self {
         Self::Inches(value)
+    }
+}
+impl ::std::convert::From<DiceExpression> for NonTieredRangeRef {
+    fn from(value: DiceExpression) -> Self {
+        Self::Dice(value)
     }
 }
 impl ::std::convert::From<EntityId> for NonTieredRangeRef {

@@ -413,6 +413,10 @@ pub(crate) fn range_phrase(r: Option<&Value>) -> String {
             if let Some(inches) = nn(o, "inches") {
                 return format!("{}\"", st(Some(inches)));
             }
+            // A rolled distance ("within D6\"").
+            if let Some(dice) = nn(o, "dice") {
+                return format!("{}\"", st(Some(dice)));
+            }
             if let Some(aura) = nn(o, "aura_of") {
                 let id = st(Some(aura));
                 return match id.as_str() {

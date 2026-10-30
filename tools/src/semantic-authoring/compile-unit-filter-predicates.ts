@@ -25,11 +25,11 @@ export function side(filter: CompileLeaf, what: string, options: { models?: bool
  * "that is within 3\" of one or more enemy units" after a loop's model-level filter: each pass's model is near a
  * unit of that side (and keywords), the DSL's `within` measured to a unit filter.
  */
-export function nearMatching(leaf: CompileLeaf | undefined, quantifier: CompileLeaf): { of: Record<string, unknown>; inches: unknown } | null {
+export function nearMatching(leaf: CompileLeaf | undefined, quantifier: CompileLeaf): { of: Record<string, unknown>; range: Record<string, unknown> } | null {
   if (leaf?.family_id !== "unit-position" || leaf.fragment !== quantifier.fragment) return null;
   const p = leaf.parameters;
   if (p.kind !== "within" || p.of !== "matching-unit" || p.subject !== AURA_RECIPIENT || p.negated === true || p.wholly === true || p.of_other === true) return null;
-  return { of: { owner: p.of_side, ...(Array.isArray(p.of_keywords) ? { all_of: p.of_keywords } : {}) }, inches: p.inches };
+  return { of: { owner: p.of_side, ...(Array.isArray(p.of_keywords) ? { all_of: p.of_keywords } : {}) }, range: nearRange(leaf) };
 }
 
 /** Units a distance after a quantifier's filter can be measured to, as the DSL's unit-refs. */
@@ -46,7 +46,17 @@ export function nearOther(leaf: CompileLeaf | undefined, quantifier: CompileLeaf
   const of = NEAR_REFS[String(p.of)];
   // Folding would drop the named range (its inches are absent); the distance stays a condition instead.
   if (of !== undefined && p.range_ref !== undefined) throw new CompileError("A distance to another unit by a named range has no quantifier shape yet.");
-  return of === undefined ? null : { of, inches: p.inches };
+  return of === undefined ? null : { of, range: nearRange(leaf) };
+}
+
+/**
+ * The distance a quantifier's unit-position folds into its filter: inches, or a roll ("within D6\"", unit-position@30).
+ * A position read at the start of the triggering move (unit-position@29) is not a filter's distance; it refuses here
+ * rather than folding as the position now.
+ */
+function nearRange(leaf: CompileLeaf): Record<string, unknown> {
+  if (leaf.parameters.at !== undefined) throw new CompileError("A distance read at the start of a move has no quantifier shape yet.");
+  return leaf.parameters.rolled_inches !== undefined ? { dice: leaf.parameters.rolled_inches } : { inches: leaf.parameters.inches };
 }
 
 /** Whether a filter is a list-building rule's group: the filter after its rule, or the filter its rule points back to. */

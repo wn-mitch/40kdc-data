@@ -196,7 +196,8 @@ export function bindParts(frame: PartFrame, plan: ReturnType<typeof planEffects>
   // A selection and a loop in different parts ("… select one enemy unit … At the start of each Command phase, roll one D6 for each …") each wrap their own part.
   const partOfLeaf = (leaf: CompileLeaf) => partStarts.filter((part) => part.index < list.indexOf(leaf)).length;
   const perPass = forEachLeaf !== null && selectionPerPass(list, forEachLeaf, selections, planned, partOfLeaf);
-  if (forEachLeaf && selections.length > 0 && !perPass && (partStarts.length === 0 || selections.some((selection) => partOfLeaf(selection) === partOfLeaf(forEachLeaf!)))) errors.push("A unit is selected and the ability also loops with for-each-unit-select; the compiler binds only one of them.");
+  const inSelection = forEachLeaf !== null && loopInSelection(list, forEachLeaf, selections, planned, partOfLeaf);
+  if (forEachLeaf && selections.length > 0 && !perPass && !inSelection && (partStarts.length === 0 || selections.some((selection) => partOfLeaf(selection) === partOfLeaf(forEachLeaf!)))) errors.push("A unit is selected and the ability also loops with for-each-unit-select; the compiler binds only one of them.");
   // Several durations: the parts that take the durations' own wrapping, with the features that read one duration are refused.
   if (split) {
     const selectsAttacks = selections.length === 1 && planned.some((item) => item.selected);
@@ -239,6 +240,26 @@ export function selectionPerPass(list: readonly CompileLeaf[], loop: CompileLeaf
   const at = list.indexOf(selection);
   if (list.indexOf(loop) > at || partOfLeaf(selection) !== partOfLeaf(loop)) return false;
   return planned.every((item) => partOfLeaf(list[item.index]!) !== partOfLeaf(loop) || item.index > at);
+}
+
+/**
+ * "select one enemy model …, and roll one D6 for each enemy unit within 6\" of that model": one selection, then a
+ * loop over units that reads it, so the selection wraps the loop. The loop counts units (no membership), follows the
+ * selection in its part, names the selected unit in its own filter or a condition after it, and every effect of that
+ * part follows those leaves. A selection the loop does not read stays refused.
+ */
+export function loopInSelection(list: readonly CompileLeaf[], loop: CompileLeaf, selections: readonly CompileLeaf[], planned: readonly PlannedEffect[],
+  partOfLeaf: (leaf: CompileLeaf) => number): boolean {
+  if (selections.length !== 1 || (loop.parameters.filter as { membership?: unknown } | undefined)?.membership !== undefined) return false;
+  const selection = selections[0]!;
+  const at = list.indexOf(loop);
+  if (list.indexOf(selection) > at || partOfLeaf(selection) !== partOfLeaf(loop)) return false;
+  const own = planned.filter((item) => partOfLeaf(list[item.index]!) === partOfLeaf(loop));
+  const firstEffect = Math.min(...own.map((item) => item.index));
+  if (own.length === 0 || firstEffect < at) return false;
+  // The loop's own filter (a distance it folded, compile-unit-filters.ts) or a condition after it.
+  const readsSelection = (leaf: CompileLeaf) => JSON.stringify(leaf.parameters).includes("\"selected-unit\"");
+  return readsSelection(loop) || list.slice(at + 1, firstEffect).some((leaf) => leaf.role === "CONDITION" && readsSelection(leaf));
 }
 
 /**

@@ -874,6 +874,19 @@
           }
         },
         {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "dice"
+          ],
+          "description": "A distance in inches rolled once each time the ability resolves, the same roll for every unit it measures.",
+          "properties": {
+            "dice": {
+              "$ref": "#/$defs/dice-expression"
+            }
+          }
+        },
+        {
           "type": "string",
           "enum": [
             "engagement",

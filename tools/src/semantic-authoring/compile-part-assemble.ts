@@ -26,7 +26,7 @@ import { isAttackMoment } from "./compile-attack-window.js";
 import { AURA_RECIPIENT } from "./compile-antecedent.js";
 import type { PartFrame } from "./compile-part-classify.js";
 import type { planEffects } from "./compile-part-plan.js";
-import { firstPartLoop, selectionPerPass, type PartBindings } from "./compile-part-bindings.js";
+import { firstPartLoop, loopInSelection, selectionPerPass, type PartBindings } from "./compile-part-bindings.js";
 
 type Node = Record<string, unknown>;
 
@@ -292,6 +292,11 @@ export function assemblePart(
     body = selectUnit(pair.outer, selectUnit(pair.inner, body, { eligibility: pairCandidateEligibility }), { eligibility });
   }
   else if (selections.length === 1 && (selectionPart === null || selectionPart === 0) && bandSelected === null) {
+    // "Select one enemy model …, and roll one D6 for each enemy unit within 6\" of that model": the loop runs inside the selection.
+    if (forEachLeaf !== null && forEachPart === 0 && loopInSelection(list, forEachLeaf, selections, planned, (leaf) => partOf(list.indexOf(leaf)))) {
+      body = attempt(() => wrapForEachUnit(forEachLeaf!, body!));
+      if (!body) return { ok: false, signature, errors };
+    }
     // "Each time an attack targets your unit, subtract 1 …. In addition, you can select one other unit …": the effects
     // of the sentences before the selection's do not wait on it, so they stay outside the select.
     const selectionSentence = places[list.indexOf(selections[0]!)]?.sentence;

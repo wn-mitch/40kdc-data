@@ -426,6 +426,10 @@ func rangePhrase(r any) string {
 		if x["inches"] != nil {
 			return cstr(x["inches"]) + "\""
 		}
+		// A rolled distance ("within D6\"").
+		if x["dice"] != nil {
+			return cstr(x["dice"]) + "\""
+		}
 		if x["aura_of"] != nil {
 			if p, ok := auraRanges[cstr(x["aura_of"])]; ok {
 				return p

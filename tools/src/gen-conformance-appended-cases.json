@@ -2477,5 +2477,64 @@
         ]
       }
     }
+  },
+  {
+    "caseId": "canonical/for-each-within-rolled-range",
+    "effect": {
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy",
+          "level": "model",
+          "lacks_ability": [
+            "lone-operative"
+          ]
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "effect": {
+        "type": "for-each-unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy",
+            "within": {
+              "range": {
+                "dice": "D6"
+              },
+              "of": "selected-unit"
+            }
+          }
+        },
+        "effect": {
+          "type": "dice-gated",
+          "dice": "D6",
+          "threshold": 4,
+          "comparison": "gte",
+          "on_success": {
+            "type": "mortal-wounds",
+            "target": "recipient",
+            "modifier": {
+              "count": "D3"
+            }
+          },
+          "on_fail": null
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
+    }
   }
 ]

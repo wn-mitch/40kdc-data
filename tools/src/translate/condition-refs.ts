@@ -220,6 +220,8 @@ export function rangePhrase(r: unknown): string {
   }
   const o = r as P;
   if (o.inches != null) return `${str(o.inches)}"`;
+  // A rolled distance ("within D6\"").
+  if (o.dice != null) return `${str(o.dice)}"`;
   if (o.aura_of != null) return AURA_RANGES[str(o.aura_of)] ?? `the ${idLabel(o.aura_of)} range`;
   if (Array.isArray(o.per_battle_round)) return `${o.per_battle_round.map(rangePhrase).join(", ")} in battle rounds ${o.per_battle_round.map((_, i) => i + 1).join(", ")} respectively (using the final range in later battle rounds)`;
   return '?"';

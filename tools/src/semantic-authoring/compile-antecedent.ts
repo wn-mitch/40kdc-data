@@ -508,6 +508,18 @@ function passModelAnaphor(leaves: readonly CompileLeaf[], index: number, sourceT
   return /^that model\b/iu.test(exactSpan(sourceText, leaf.start_byte, leaf.end_byte).replace(/\*/gu, ""));
 }
 
+/**
+ * "select one enemy model …, and roll one D6 for each enemy unit within 6\" of that model": a distance right after the
+ * filter of a loop that follows the last selection qualifies the loop's units, so it is about each pass's unit (the
+ * loop folds it into its filter, compile-unit-filter-predicates.ts nearOther). Other conditions keep the rules below.
+ */
+function loopFilterAnaphor(leaves: readonly CompileLeaf[], index: number): boolean {
+  const earlier = leaves.slice(0, index);
+  const lastSelect = earlier.map((other) => other.family_id === "select-unit").lastIndexOf(true);
+  const lastLoop = earlier.map((other) => other.family_id === "for-each-unit-select").lastIndexOf(true);
+  return lastSelect >= 0 && lastLoop > lastSelect && leaves[index]!.family_id === "unit-position" && bareFilterAt(leaves, index) === lastLoop + 1;
+}
+
 /** The role an earlier leaf of the record gives an anaphor, in order of precedence. */
 function antecedentRole(leaves: readonly CompileLeaf[], index: number, focus?: (index: number) => string | null, sourceText?: string): string | null {
   // "makes a ranged attack that targets an enemy unit visible to the bearer": the unit the attack names after it is the defender.
@@ -550,6 +562,7 @@ function antecedentRole(leaves: readonly CompileLeaf[], index: number, focus?: (
   if (leaves[index]!.family_id === "unit-position" && leaves[index]!.role === "CONDITION" && bareFilter(leaves, index)
     && leaves[index - 1]?.family_id === "unit-filter" && leaves.some(isDestructionActivity)) return FILTERED_UNITS;
   if (passModelAnaphor(leaves, index, sourceText)) return AURA_RECIPIENT;
+  if (loopFilterAnaphor(leaves, index)) return AURA_RECIPIENT;
   if (earlier.some((other) => other.family_id === "select-unit")) {
     // "While an enemy unit is infested …, that unit …": a bare filter after the last selection is the nearer unit,
     // unless it is the other unit a condition measures to (a following filter).

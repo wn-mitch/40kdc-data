@@ -34,12 +34,23 @@ export function foldSelectExclusions(
       list.splice(index + 1, 0, exclusion!);
       continue;
     }
-    const merged = mergeFilters(list[base]!, exclusion!);
+    const merged = mergeFilters(list[base]!, modelLevelExclusion(list[base]!, exclusion!));
     if (merged === null) throw new CompileError("An exclusion cannot narrow the select-unit's filter (its sides or keyword lists conflict).");
     list[base] = merged;
     list.splice(cursor, 1);
   }
   return list;
+}
+
+/**
+ * "select one visible enemy model (excluding Lone Operative units)": a unit's ability is every one of its models'
+ * ability, so an exclusion of units by ability narrows a model selection as the same exclusion of models. Keyword
+ * exclusions keep their level (a model can lack a keyword its unit has).
+ */
+function modelLevelExclusion(base: CompileLeaf, exclusion: CompileLeaf): CompileLeaf {
+  const abilitiesOnly = Object.keys(exclusion.parameters).every((key) => key === "side" || key === "excluded_abilities");
+  if (base.parameters.level !== "model" || exclusion.parameters.level !== undefined || !abilitiesOnly) return exclusion;
+  return { ...exclusion, parameters: { ...exclusion.parameters, level: "model" } };
 }
 
 /**
@@ -88,13 +99,15 @@ function selectionCondition(leaf: CompileLeaf | undefined, select: CompileLeaf):
   return (leaf.family_id === "unit-position" || leaf.family_id === "model-count") && ["selected-unit", "antecedent", "target"].includes(String(leaf.parameters.subject));
 }
 
-/** Parameters an exclusion-only unit-filter may carry: the side it names and the keywords it excludes. */
-const EXCLUSION_KEYS = new Set(["side", "excluded_keywords", "excluded_all_keywords"]);
+/** Parameters an exclusion-only unit-filter may carry: the side it names and the keywords or abilities it excludes. */
+const EXCLUSION_KEYS = new Set(["side", "excluded_keywords", "excluded_all_keywords", "excluded_abilities"]);
 
 /** A unit-filter that only excludes units ("(excluding **MONSTER** units)"), so it can narrow a selection but not name one. */
 export function exclusionOnly(leaf: CompileLeaf | undefined): boolean {
   if (!isFilter(leaf) || !Object.keys(leaf!.parameters).every((key) => EXCLUSION_KEYS.has(key))) return false;
   const excluded = (leaf!.parameters.excluded_keywords as unknown[] | undefined)?.length ?? 0;
   const allExcluded = (leaf!.parameters.excluded_all_keywords as unknown[] | undefined)?.length ?? 0;
-  return excluded + allExcluded > 0;
+  // "(excluding Lone Operative units)": units with the ability.
+  const abilities = (leaf!.parameters.excluded_abilities as unknown[] | undefined)?.length ?? 0;
+  return excluded + allExcluded + abilities > 0;
 }

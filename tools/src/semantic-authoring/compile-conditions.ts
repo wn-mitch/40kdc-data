@@ -550,10 +550,12 @@ export function condition(leaf: CompileLeaf): Node {
         if (named && kind === "beyond") throw new CompileError("A named range is measured within, not beyond.");
         // A weapon distance (distance half-weapon, unit-position@21) is the attacking weapon's half range: a range string, not inches.
         const weaponDistance = leaf.parameters.distance !== undefined;
-        const range = (engagement ? "engagement" : named ? { aura_of: namedRange(leaf.parameters.range_ref).aura_of } : weaponDistance ? "half-weapon" : { inches: closed(leaf, "inches") }) as unknown as Node;
+        // Version 30: a distance rolled each time the ability resolves ("within D6\"").
+        const inches = (): Node => leaf.parameters.rolled_inches !== undefined ? { dice: closed(leaf, "rolled_inches") } : { inches: closed(leaf, "inches") };
+        const range = (engagement ? "engagement" : named ? { aura_of: namedRange(leaf.parameters.range_ref).aura_of } : weaponDistance ? "half-weapon" : inches()) as unknown as Node;
         const inchesOnly = (): Node => {
           if (named || engagement || weaponDistance) throw new CompileError(`unit-position of ${String(leaf.parameters.of)} takes inches, not a named range or a weapon distance.`);
-          return { inches: closed(leaf, "inches") };
+          return inches();
         };
         // Version 29: where the subject was when the triggering move began (compile.ts checks the record has that move).
         const at = leaf.parameters.at === "move-start" ? { at: "move-start" } : {};

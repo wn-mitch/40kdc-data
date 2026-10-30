@@ -442,6 +442,9 @@ def range_phrase(r: Any) -> str:
     o = _obj(r)
     if o.get("inches") is not None:
         return f'{_str(o["inches"])}"'
+    # A rolled distance ("within D6\"").
+    if o.get("dice") is not None:
+        return f'{_str(o["dice"])}"'
     if o.get("aura_of") is not None:
         aura = _str(o["aura_of"])
         return _AURA_RANGES.get(aura, f"the {id_label(aura)} range")
