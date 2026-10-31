@@ -16719,11 +16719,12 @@ impl<'de> ::serde::Deserialize<'de> for EventBoundReferenceEventVar {
 ///      ]
 ///    },
 ///    "timing": {
-///      "description": "destroyed: resolve before the model is removed (before-removal), or after the attacking unit has finished making its attacks (after-attacks); disembarked: resolve once the unit has been set up (after-set-up).",
+///      "description": "destroyed: resolve before the model is removed (before-removal), after the attacking unit has finished making its attacks (after-attacks), or once the units embarked within the destroyed model have made their emergency disembark moves (after-emergency-disembark); disembarked: resolve once the unit has been set up (after-set-up).",
 ///      "enum": [
 ///        "before-removal",
 ///        "after-attacks",
-///        "after-set-up"
+///        "after-set-up",
+///        "after-emergency-disembark"
 ///      ]
 ///    },
 ///    "to": {
@@ -16854,7 +16855,7 @@ pub struct EventFilter {
     pub tag: ::std::option::Option<DesignationId>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub through: ::std::option::Option<EventFilterThrough>,
-    ///destroyed: resolve before the model is removed (before-removal), or after the attacking unit has finished making its attacks (after-attacks); disembarked: resolve once the unit has been set up (after-set-up).
+    ///destroyed: resolve before the model is removed (before-removal), after the attacking unit has finished making its attacks (after-attacks), or once the units embarked within the destroyed model have made their emergency disembark moves (after-emergency-disembark); disembarked: resolve once the unit has been set up (after-set-up).
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub timing: ::std::option::Option<EventFilterTiming>,
     ///selected: what the unit was selected to do. attack means shoot or fight.
@@ -17870,17 +17871,18 @@ impl ::std::convert::TryFrom<::std::string::String> for EventFilterThrough {
         value.parse()
     }
 }
-///destroyed: resolve before the model is removed (before-removal), or after the attacking unit has finished making its attacks (after-attacks); disembarked: resolve once the unit has been set up (after-set-up).
+///destroyed: resolve before the model is removed (before-removal), after the attacking unit has finished making its attacks (after-attacks), or once the units embarked within the destroyed model have made their emergency disembark moves (after-emergency-disembark); disembarked: resolve once the unit has been set up (after-set-up).
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "destroyed: resolve before the model is removed (before-removal), or after the attacking unit has finished making its attacks (after-attacks); disembarked: resolve once the unit has been set up (after-set-up).",
+///  "description": "destroyed: resolve before the model is removed (before-removal), after the attacking unit has finished making its attacks (after-attacks), or once the units embarked within the destroyed model have made their emergency disembark moves (after-emergency-disembark); disembarked: resolve once the unit has been set up (after-set-up).",
 ///  "enum": [
 ///    "before-removal",
 ///    "after-attacks",
-///    "after-set-up"
+///    "after-set-up",
+///    "after-emergency-disembark"
 ///  ]
 ///}
 /// ```
@@ -17904,6 +17906,8 @@ pub enum EventFilterTiming {
     AfterAttacks,
     #[serde(rename = "after-set-up")]
     AfterSetUp,
+    #[serde(rename = "after-emergency-disembark")]
+    AfterEmergencyDisembark,
 }
 impl ::std::fmt::Display for EventFilterTiming {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
@@ -17911,6 +17915,7 @@ impl ::std::fmt::Display for EventFilterTiming {
             Self::BeforeRemoval => f.write_str("before-removal"),
             Self::AfterAttacks => f.write_str("after-attacks"),
             Self::AfterSetUp => f.write_str("after-set-up"),
+            Self::AfterEmergencyDisembark => f.write_str("after-emergency-disembark"),
         }
     }
 }
@@ -17923,6 +17928,7 @@ impl ::std::str::FromStr for EventFilterTiming {
             "before-removal" => Ok(Self::BeforeRemoval),
             "after-attacks" => Ok(Self::AfterAttacks),
             "after-set-up" => Ok(Self::AfterSetUp),
+            "after-emergency-disembark" => Ok(Self::AfterEmergencyDisembark),
             _ => Err("invalid value".into()),
         }
     }

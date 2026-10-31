@@ -2967,5 +2967,60 @@
       "duration": "permanent"
     },
     "behavior": "reactive"
+  },
+  {
+    "caseId": "canonical/model-destroyed-after-emergency-disembark",
+    "trigger": {
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "after-emergency-disembark"
+      }
+    },
+    "effect": {
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_fail": null,
+      "on_success": {
+        "type": "for-each-unit",
+        "selector": {
+          "filter": {
+            "owner": "any"
+          }
+        },
+        "effect": {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": "recipient",
+              "filter": {
+                "within": {
+                  "of": "this-model",
+                  "range": {
+                    "inches": 6
+                  }
+                }
+              }
+            }
+          },
+          "effect": {
+            "type": "mortal-wounds",
+            "target": "recipient",
+            "modifier": {
+              "count": {
+                "rating": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "reactive"
   }
 ]

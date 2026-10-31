@@ -22,8 +22,8 @@
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+                <characteristic name="Description">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
+  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Damaged" typeName="Abilities">
@@ -145,8 +145,8 @@
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+                <characteristic name="Description">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
+  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Damaged" typeName="Abilities">
@@ -269,8 +269,8 @@ If this model has destroyed 1+ enemy units with its just-resolved attacks, enemy
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+                <characteristic name="Description">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
+  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Damaged" typeName="Abilities">
@@ -378,8 +378,8 @@ If this model has destroyed 1+ enemy units with its just-resolved attacks, enemy
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+                <characteristic name="Description">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
+  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Damaged" typeName="Abilities">
@@ -487,8 +487,8 @@ You can re-roll the Advance roll.</characteristic>
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+                <characteristic name="Description">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
+  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Damaged" typeName="Abilities">
@@ -596,8 +596,8 @@ You can re-roll the Advance roll.</characteristic>
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+                <characteristic name="Description">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
+  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Damaged" typeName="Abilities">
@@ -705,8 +705,8 @@ You can re-roll the Advance roll.</characteristic>
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+                <characteristic name="Description">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
+  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Damaged" typeName="Abilities">
@@ -814,8 +814,8 @@ You can re-roll the Advance roll.</characteristic>
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+                <characteristic name="Description">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
+  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Damaged" typeName="Abilities">
@@ -927,8 +927,8 @@ You can re-roll the Advance roll.</characteristic>
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+                <characteristic name="Description">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
+  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Damaged" typeName="Abilities">
@@ -1040,8 +1040,8 @@ You can re-roll the Advance roll.</characteristic>
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+                <characteristic name="Description">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
+  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Damaged" typeName="Abilities">
@@ -1153,8 +1153,8 @@ You can re-roll the Advance roll.</characteristic>
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+                <characteristic name="Description">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
+  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Damaged" typeName="Abilities">
@@ -1266,8 +1266,8 @@ You can re-roll the Advance roll.</characteristic>
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+                <characteristic name="Description">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
+  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Damaged" typeName="Abilities">
@@ -1379,8 +1379,8 @@ You can re-roll the Advance roll.</characteristic>
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+                <characteristic name="Description">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
+  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Damaged" typeName="Abilities">
@@ -1487,8 +1487,8 @@ You can re-roll the Advance roll.</characteristic>
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+                <characteristic name="Description">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
+  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Grotesque Regeneration" typeName="Abilities">

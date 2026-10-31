@@ -44815,5 +44815,63 @@
     "expected": {
       "text": "Before a Psychic test is made, you may use this ability:\n  -> Roll D3, then:\n    -> This model suffers a number of mortal wounds equal to the result of that roll.\n    -> Add the result of that roll to the unit's Psychic rolls."
     }
+  },
+  {
+    "caseId": "canonical/model-destroyed-after-emergency-disembark",
+    "trigger": {
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "after-emergency-disembark"
+      }
+    },
+    "effect": {
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 6,
+      "comparison": "gte",
+      "on_fail": null,
+      "on_success": {
+        "type": "for-each-unit",
+        "selector": {
+          "filter": {
+            "owner": "any"
+          }
+        },
+        "effect": {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": "recipient",
+              "filter": {
+                "within": {
+                  "of": "this-model",
+                  "range": {
+                    "inches": 6
+                  }
+                }
+              }
+            }
+          },
+          "effect": {
+            "type": "mortal-wounds",
+            "target": "recipient",
+            "modifier": {
+              "count": {
+                "rating": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "reactive",
+    "expected": {
+      "text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating."
+    }
   }
 ]

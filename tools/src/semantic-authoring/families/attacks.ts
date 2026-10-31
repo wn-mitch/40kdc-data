@@ -288,6 +288,14 @@ export const ATTACK_EXTENSIONS: readonly FamilyExtension[] = [
       return { ...previous(rest), max };
     },
   },
+  {
+    // "suffers a number of mortal wounds denoted by X": the rating the unit prints for this ability.
+    family: "mortal-wounds",
+    version: 7,
+    description: "As the previous version, and the count can be rating: the value the unit's datasheet prints for this ability (the X of Deadly Demise X).",
+    schema: (previous) => withProperties(previous, { count: { anyOf: [...(properties(previous).count as { anyOf: unknown[] }).anyOf, { const: "rating" }] } }),
+    normalize: (input, previous) => input.count === "rating" ? standIn(input, "count", "1", previous) : previous(input),
+  },
   printedKeywordsExtension("destroy-models", 3),
   printedKeywordsExtension("return-models", 3),
   RETURN_MODELS_WOUNDS,

@@ -9,7 +9,7 @@ Python mirror of ``tools/src/translate/trigger.ts``.
 from __future__ import annotations
 
 import re
-from typing import Any
+from typing import Any, cast
 
 from wh40kdc.translate.condition import (
     Condition,
@@ -430,6 +430,12 @@ def _event_phrase(t: AbilityTrigger) -> str:
     if event == "model-destroyed":
         if f.get("timing") == "before-removal":
             return "before this model is removed from play"
+        # Resolved once the units embarked within the destroyed model have disembarked.
+        if f.get("timing") == "after-emergency-disembark":
+            kept = {k: v for k, v in f.items() if k != "timing"}
+            rest = cast(AbilityTrigger, {**t, "filter": kept})
+            after = "after the units embarked within it have made their emergency disembark moves"
+            return f"{_event_phrase(rest)}, {after}"
         if f.get("first") is True:
             return "the first time a model in the unit is destroyed"
         # A subject names who destroyed the model: "each time the unit destroys an enemy

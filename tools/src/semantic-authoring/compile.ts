@@ -46,6 +46,7 @@ import { foldRollFaces } from "./compile-roll-faces.js";
 import { compileWindowMoment } from "./compile-window-moment.js";
 import { foldDelayedMoments } from "./compile-delayed-moment.js";
 import { foldRitualTest } from "./compile-ritual-test.js";
+import { foldEmergencyDisembark } from "./compile-emergency-disembark.js";
 import { bulletBreaks, commaItems, ordered, placements, plainLineBreaks, shapeSignature } from "./compile-placement.js";
 import { foldAlternativePools } from "./compile-dice-variants.js";
 import { planContainers } from "./compile-containers.js";
@@ -360,6 +361,8 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     leaves = foldSelectedAttacks(leaves, sourceText);
     // "Each time the bearer attempts a Ritual, just before … the Psychic test": one moment (compile-ritual-test.ts).
     leaves = foldRitualTest(leaves, sourceText);
+    // "Each time a model … is destroyed, after the units embarked within it … emergency disembark moves": one moment (compile-emergency-disembark.ts).
+    leaves = foldEmergencyDisembark(leaves, sourceText);
     conditionOf = planConditionOf(leaves, sourceText);
     // "the selected VEHICLE model" after a use of a named ability, in a record that selects nothing itself (compile-used-selection.ts).
     leaves = bindUsedSelections(foldAbilityUseRefresh(foldAbilityUseContext(leaves)));

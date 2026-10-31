@@ -551,7 +551,7 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
       // "These mortal wounds are inflicted by a psychic attack" (compile-weapon-qualified.ts foldMortalWoundSources).
       const psychic = leaf.parameters.psychic === true ? { psychic: true } : {};
       // "… and regains up to that many lost wounds": the count is the pair's shared roll (compile-that-many.ts).
-      const amount = typeof leaf.parameters.count_var === "string" ? thatManyCount(leaf.parameters.count_var, count) : /^\d+$/u.test(count) ? Number(count) : count;
+      const amount = typeof leaf.parameters.count_var === "string" ? thatManyCount(leaf.parameters.count_var, count) : count === "rating" ? { rating: true } : /^\d+$/u.test(count) ? Number(count) : count;
       return { type: "mortal-wounds", target, modifier: { count: amount, ...cap, ...psychic } };
     }
     case "fight-on-death": {

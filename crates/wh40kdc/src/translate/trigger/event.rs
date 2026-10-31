@@ -643,6 +643,14 @@ pub(crate) fn event_phrase(t: &P) -> String {
             if is(f, "timing", "before-removal") {
                 return "before this model is removed from play".to_string();
             }
+            // Resolved once the units embarked within the destroyed model have disembarked.
+            if is(f, "timing", "after-emergency-disembark") {
+                let mut rest = t.clone();
+                if let Some(Value::Object(filter)) = rest.get_mut("filter") {
+                    filter.remove("timing");
+                }
+                return format!("{}, after the units embarked within it have made their emergency disembark moves", event_phrase(&rest));
+            }
             if f.get("first") == Some(&Value::Bool(true)) {
                 return "the first time a model in the unit is destroyed".to_string();
             }

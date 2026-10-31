@@ -2361,9 +2361,9 @@ export interface EventFilter {
         stratagem_target: EntityId;
       };
   /**
-   * destroyed: resolve before the model is removed (before-removal), or after the attacking unit has finished making its attacks (after-attacks); disembarked: resolve once the unit has been set up (after-set-up).
+   * destroyed: resolve before the model is removed (before-removal), after the attacking unit has finished making its attacks (after-attacks), or once the units embarked within the destroyed model have made their emergency disembark moves (after-emergency-disembark); disembarked: resolve once the unit has been set up (after-set-up).
    */
-  timing?: "before-removal" | "after-attacks" | "after-set-up";
+  timing?: "before-removal" | "after-attacks" | "after-set-up" | "after-emergency-disembark";
   /**
    * The five official game phases. Unchanged between 10th and 11th edition — 11e reorders Pile In timing within the Fight phase but adds no top-level phase.
    */

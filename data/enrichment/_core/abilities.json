@@ -572,7 +572,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
@@ -582,21 +582,36 @@
       "threshold": 6,
       "comparison": "gte",
       "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 6
-            }
+        "type": "for-each-unit",
+        "selector": {
+          "filter": {
+            "owner": "any"
           }
         },
-        "modifier": {
-          "count": {
-            "rating": true
+        "effect": {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": "recipient",
+              "filter": {
+                "within": {
+                  "of": "this-model",
+                  "range": {
+                    "inches": 6
+                  }
+                }
+              }
+            }
           },
-          "range": {
-            "inches": 6
+          "effect": {
+            "type": "mortal-wounds",
+            "target": "recipient",
+            "modifier": {
+              "count": {
+                "rating": true
+              }
+            }
           }
         }
       },
@@ -612,7 +627,7 @@
       "event": "model-destroyed",
       "object": "this-model",
       "filter": {
-        "timing": "before-removal"
+        "timing": "after-emergency-disembark"
       }
     }
   },

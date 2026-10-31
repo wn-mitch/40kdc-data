@@ -274,6 +274,11 @@ function eventPhrase(t: AbilityTrigger): string {
     }
     case "model-destroyed": {
       if (f.timing === "before-removal") return "before this model is removed from play";
+      // Resolved once the units embarked within the destroyed model have disembarked.
+      if (f.timing === "after-emergency-disembark") {
+        const { timing: _timing, ...rest } = f;
+        return `${eventPhrase({ ...t, filter: rest } as AbilityTrigger)}, after the units embarked within it have made their emergency disembark moves`;
+      }
       if (f.first === true) return "the first time a model in the unit is destroyed";
       const obj = t.object;
       // A subject names who destroyed the model: "each time the unit destroys an enemy CHARACTER model".

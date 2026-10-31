@@ -526,6 +526,21 @@ func triggerEventPhrase(t map[string]any) string {
 		if f["timing"] == "before-removal" {
 			return "before this model is removed from play"
 		}
+		// Resolved once the units embarked within the destroyed model have disembarked.
+		if f["timing"] == "after-emergency-disembark" {
+			rest := map[string]any{}
+			for k, v := range t {
+				rest[k] = v
+			}
+			filter := map[string]any{}
+			for k, v := range f {
+				if k != "timing" {
+					filter[k] = v
+				}
+			}
+			rest["filter"] = filter
+			return triggerEventPhrase(rest) + ", after the units embarked within it have made their emergency disembark moves"
+		}
 		if f["first"] == true {
 			return "the first time a model in the unit is destroyed"
 		}

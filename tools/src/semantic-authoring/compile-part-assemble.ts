@@ -28,6 +28,7 @@ import { isAttackMoment } from "./compile-attack-window.js";
 import { AURA_RECIPIENT } from "./compile-antecedent.js";
 import type { PartFrame } from "./compile-part-classify.js";
 import type { planEffects } from "./compile-part-plan.js";
+import { loopUnderBand, wrapBandLoop } from "./compile-band-loop.js";
 import { firstPartLoop, loopInSelection, selectionPerPass, type PartBindings } from "./compile-part-bindings.js";
 
 type Node = Record<string, unknown>;
@@ -332,7 +333,8 @@ export function assemblePart(
   }
   else if ((forEachLeaf && forEachPart === 0) || recordLoop) {
     const each = recordLoop ?? forEachLeaf!;
-    body = attempt(() => wrapForEachUnit(each, body!));
+    // "Roll one D6. On a 6, …; each unit within 6\" …": the loop runs in the band's outcome (compile-band-loop.ts).
+    body = attempt(() => loopUnderBand(list, each, sourceText) ? wrapBandLoop(each, body!) : wrapForEachUnit(each, body!));
     // "The maximum number of units that can be … depends on the battle size": the loop's cap on the units it affects.
     if (body && battleSizeCount && selections.length === 0) body = { ...body, max_affected: maxCount };
     if (body && afterLoop.length) body = { type: "sequence", steps: [body, ...afterLoop.map((item) => gated(item.gate, item.node))] };
