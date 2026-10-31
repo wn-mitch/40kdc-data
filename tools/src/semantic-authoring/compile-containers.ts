@@ -183,6 +183,7 @@ function buildStanceSelect(head: CompileLeaf, groups: CompileLeaf[][]): Node {
   const node: Node = { type: "stance-select", mode: closed(head, "mode"), options, ...initialOption(head, options) };
   // "in addition to any other combat doctrine": the pick joins the active options instead of replacing them.
   if (head.parameters.additive === true) node.additive = true;
+  if (head.parameters.or_random !== undefined) node.or_random = stanceRandom(node, head.parameters.or_random as { dice: string; count: number });
   const min = head.parameters.min_choices;
   const max = head.parameters.max_choices;
   if (min !== undefined || max !== undefined) {
@@ -193,6 +194,17 @@ function buildStanceSelect(head: CompileLeaf, groups: CompileLeaf[][]): Node {
   return node;
 }
 
+
+/**
+ * "or randomly select two Dread abilities … by rolling two D6 …, from those numbered 1-6": the faces number the options
+ * other than the one in force from the start, in order, so there must be one option per face.
+ */
+function stanceRandom(node: Node, random: { dice: string; count: number }): Node {
+  const faces = (node.options as Node[]).map((option) => option.id).filter((id) => id !== node.initial);
+  const sides = random.dice === "D3" ? 3 : 6;
+  if (faces.length !== sides) throw new CompileError(`Randomly selecting by rolling a ${random.dice} needs exactly ${sides} numbered options besides the one in force from the start; found ${faces.length}.`);
+  return { dice: random.dice, count: random.count, faces };
+}
 
 /**
  * An issue-orders: its own Orders, one per named option, or none, when an officer's datasheet issues

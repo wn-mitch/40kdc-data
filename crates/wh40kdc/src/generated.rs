@@ -47493,6 +47493,39 @@ pub struct StanceOptionRef {
 ///      },
 ///      "minItems": 2
 ///    },
+///    "or_random": {
+///      "description": "The pick may instead be rolled (\"or randomly select two … by rolling two D6\"): count dice, each result applying the option whose id faces lists at that number (faces[0] is a 1). A rolled option already active has no additional effect.",
+///      "type": "object",
+///      "required": [
+///        "count",
+///        "dice",
+///        "faces"
+///      ],
+///      "properties": {
+///        "count": {
+///          "type": "integer",
+///          "maximum": 3.0,
+///          "minimum": 1.0
+///        },
+///        "dice": {
+///          "enum": [
+///            "D3",
+///            "D6"
+///          ]
+///        },
+///        "faces": {
+///          "type": "array",
+///          "items": {
+///            "type": "string",
+///            "minLength": 1
+///          },
+///          "maxItems": 6,
+///          "minItems": 3,
+///          "uniqueItems": true
+///        }
+///      },
+///      "additionalProperties": false
+///    },
 ///    "type": {
 ///      "type": "string",
 ///      "enum": [
@@ -47518,6 +47551,8 @@ pub struct StanceSelectEffect {
     pub min_choices: ::std::option::Option<u64>,
     pub mode: StanceSelectEffectMode,
     pub options: ::std::vec::Vec<StanceSelectEffectOptionsItem>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub or_random: ::std::option::Option<StanceSelectEffectOrRandom>,
     #[serde(rename = "type")]
     pub type_: StanceSelectEffectType,
 }
@@ -47841,6 +47876,201 @@ for StanceSelectEffectOptionsItemName {
     }
 }
 impl<'de> ::serde::Deserialize<'de> for StanceSelectEffectOptionsItemName {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///The pick may instead be rolled ("or randomly select two … by rolling two D6"): count dice, each result applying the option whose id faces lists at that number (faces[0] is a 1). A rolled option already active has no additional effect.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "The pick may instead be rolled (\"or randomly select two … by rolling two D6\"): count dice, each result applying the option whose id faces lists at that number (faces[0] is a 1). A rolled option already active has no additional effect.",
+///  "type": "object",
+///  "required": [
+///    "count",
+///    "dice",
+///    "faces"
+///  ],
+///  "properties": {
+///    "count": {
+///      "type": "integer",
+///      "maximum": 3.0,
+///      "minimum": 1.0
+///    },
+///    "dice": {
+///      "enum": [
+///        "D3",
+///        "D6"
+///      ]
+///    },
+///    "faces": {
+///      "type": "array",
+///      "items": {
+///        "type": "string",
+///        "minLength": 1
+///      },
+///      "maxItems": 6,
+///      "minItems": 3,
+///      "uniqueItems": true
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct StanceSelectEffectOrRandom {
+    pub count: ::std::num::NonZeroU64,
+    pub dice: StanceSelectEffectOrRandomDice,
+    pub faces: Vec<StanceSelectEffectOrRandomFacesItem>,
+}
+///`StanceSelectEffectOrRandomDice`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "enum": [
+///    "D3",
+///    "D6"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum StanceSelectEffectOrRandomDice {
+    D3,
+    D6,
+}
+impl ::std::fmt::Display for StanceSelectEffectOrRandomDice {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::D3 => f.write_str("D3"),
+            Self::D6 => f.write_str("D6"),
+        }
+    }
+}
+impl ::std::str::FromStr for StanceSelectEffectOrRandomDice {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "D3" => Ok(Self::D3),
+            "D6" => Ok(Self::D6),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for StanceSelectEffectOrRandomDice {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for StanceSelectEffectOrRandomDice {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for StanceSelectEffectOrRandomDice {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`StanceSelectEffectOrRandomFacesItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct StanceSelectEffectOrRandomFacesItem(::std::string::String);
+impl ::std::ops::Deref for StanceSelectEffectOrRandomFacesItem {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<StanceSelectEffectOrRandomFacesItem>
+for ::std::string::String {
+    fn from(value: StanceSelectEffectOrRandomFacesItem) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for StanceSelectEffectOrRandomFacesItem {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for StanceSelectEffectOrRandomFacesItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for StanceSelectEffectOrRandomFacesItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for StanceSelectEffectOrRandomFacesItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for StanceSelectEffectOrRandomFacesItem {
     fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
     where
         D: ::serde::Deserializer<'de>,

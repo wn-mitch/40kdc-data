@@ -3091,5 +3091,143 @@
       "duration": "permanent"
     },
     "behavior": "passive"
+  },
+  {
+    "caseId": "canonical/stance-select-or-random",
+    "effect": {
+      "type": "stance-select",
+      "mode": "consumable",
+      "additive": true,
+      "initial": "watch",
+      "options": [
+        {
+          "id": "watch",
+          "name": "Watch",
+          "effect": {
+            "type": "mortal-wounds",
+            "target": "this-unit",
+            "modifier": {
+              "count": 1
+            }
+          }
+        },
+        {
+          "id": "ward",
+          "name": "Ward",
+          "effect": {
+            "type": "state-change",
+            "target": "this-unit",
+            "modifier": {
+              "state": "battle-shocked",
+              "set": true
+            }
+          }
+        },
+        {
+          "id": "wake",
+          "name": "Wake",
+          "effect": {
+            "type": "mortal-wounds",
+            "target": "this-unit",
+            "modifier": {
+              "count": 2
+            }
+          }
+        },
+        {
+          "id": "wane",
+          "effect": {
+            "type": "mortal-wounds",
+            "target": "this-unit",
+            "modifier": {
+              "count": 3
+            }
+          },
+          "name": "Wane"
+        }
+      ],
+      "or_random": {
+        "dice": "D3",
+        "count": 2,
+        "faces": [
+          "ward",
+          "wake",
+          "wane"
+        ]
+      }
+    },
+    "scope": {
+      "duration": "battle"
+    },
+    "behavior": "passive"
+  },
+  {
+    "caseId": "canonical/stance-select-or-random-inline",
+    "effect": {
+      "type": "choice",
+      "options": [
+        {
+          "type": "stance-select",
+          "mode": "consumable",
+          "additive": true,
+          "options": [
+            {
+              "id": "watch",
+              "name": "Watch",
+              "effect": {
+                "type": "mortal-wounds",
+                "target": "this-unit",
+                "modifier": {
+                  "count": 1
+                }
+              }
+            },
+            {
+              "id": "ward",
+              "name": "Ward",
+              "effect": {
+                "type": "state-change",
+                "target": "this-unit",
+                "modifier": {
+                  "state": "battle-shocked",
+                  "set": true
+                }
+              }
+            },
+            {
+              "id": "wake",
+              "name": "Wake",
+              "effect": {
+                "type": "mortal-wounds",
+                "target": "this-unit",
+                "modifier": {
+                  "count": 2
+                }
+              }
+            }
+          ],
+          "or_random": {
+            "dice": "D3",
+            "count": 1,
+            "faces": [
+              "watch",
+              "ward",
+              "wake"
+            ]
+          }
+        },
+        {
+          "type": "mortal-wounds",
+          "target": "this-unit",
+          "modifier": {
+            "count": 1
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "passive"
   }
 ]

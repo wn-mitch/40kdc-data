@@ -1415,6 +1415,15 @@ class Pool(TypedDict):
     die: DiceExpression
 
 
+Face: TypeAlias = str
+
+
+class OrRandom(TypedDict):
+    dice: Literal["D3", "D6"]
+    count: int
+    faces: list[Face]
+
+
 class Option3(TypedDict):
     ability_id: EntityId
     option_id: EntityId
@@ -3969,6 +3978,7 @@ class StanceSelectEffect(TypedDict):
     min_choices: NotRequired[int]
     max_choices: NotRequired[int]
     initial: NotRequired[str]
+    or_random: NotRequired[OrRandom]
 
 
 class Risk(TypedDict):

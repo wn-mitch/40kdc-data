@@ -10,7 +10,7 @@ use super::select::*;
 use super::words::*;
 use super::{
     child, choice_prompt, inline, is_container, items, part_head, part_inline, stance_additive,
-    stance_initial, stance_pick, ty,
+    stance_initial, stance_pick, stance_random, ty,
 };
 use crate::translate::condition::{
     condition_lead_in_for, is_defensive_effect, nn, obj, or_list, range_phrase, truthy, P,
@@ -260,6 +260,10 @@ pub(super) fn block(e: &Value, depth: usize, ctx: &Ctx) -> String {
                     jstr(o.get("name")),
                     inline(child(o, "effect"), ctx)
                 ));
+            }
+            let random = stance_random(e);
+            if !random.is_empty() {
+                lines.push(format!("{indent}{arrow}{}.", capitalize(&random)));
             }
             lines.join("\n")
         }

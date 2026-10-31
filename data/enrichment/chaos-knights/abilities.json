@@ -3842,7 +3842,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "60f48fa7a937d0b312844e6a579cd4b0a163c746fda648f727418e611612cf21",
     "version": "2025-q3",
@@ -3871,106 +3871,247 @@
     ],
     "faction_id": "chaos-knights",
     "ability_type": "faction",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "stat-modifier",
-          "target": {
-            "owner": "enemy",
-            "within": {
-              "range": {
-                "inches": 9
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "army-faction",
+            "parameters": {
+              "faction": "chaos-knights"
+            }
+          },
+          {
+            "operator": "or",
+            "operands": [
+              {
+                "type": "battle-round",
+                "parameters": {
+                  "min": 1,
+                  "max": 1
+                }
+              },
+              {
+                "type": "battle-round",
+                "parameters": {
+                  "min": 3,
+                  "max": 3
+                }
+              },
+              {
+                "type": "battle-round",
+                "parameters": {
+                  "min": 5,
+                  "max": 5
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "effect": {
+        "type": "stance-select",
+        "mode": "consumable",
+        "options": [
+          {
+            "id": "deathly-terror",
+            "name": "Deathly Terror",
+            "effect": {
+              "type": "aura",
+              "target": "enemy-within-aura",
+              "modifier": {
+                "range": {
+                  "inches": 9
+                },
+                "effect": {
+                  "type": "stat-modifier",
+                  "target": "recipient",
+                  "modifier": {
+                    "stat": "Ld",
+                    "operation": "worsen",
+                    "value": 1
+                  }
+                },
+                "eligible": {
+                  "owner": "enemy"
+                }
               }
             }
           },
-          "modifier": {
-            "stat": "Ld",
-            "operation": "subtract",
-            "value": 1
-          }
-        },
-        {
-          "type": "choice",
-          "choice_label": "dread-ability",
-          "options": [
-            {
-              "type": "stat-modifier",
-              "target": {
-                "owner": "enemy",
-                "within": {
-                  "range": {
-                    "inches": 9
-                  }
-                }
-              },
+          {
+            "id": "despair",
+            "name": "Despair",
+            "effect": {
+              "type": "aura",
+              "target": "enemy-within-aura",
               "modifier": {
-                "stat": "Ld",
-                "operation": "subtract",
-                "value": 1
+                "range": {
+                  "inches": 9
+                },
+                "effect": {
+                  "type": "stat-modifier",
+                  "target": "recipient",
+                  "modifier": {
+                    "stat": "Ld",
+                    "operation": "worsen",
+                    "value": 1
+                  }
+                },
+                "eligible": {
+                  "owner": "enemy"
+                }
               }
-            },
-            {
+            }
+          },
+          {
+            "id": "doom",
+            "name": "Doom",
+            "effect": {
               "type": "conditional",
               "condition": {
                 "type": "matches",
                 "parameters": {
+                  "subject": "defender",
                   "filter": {
                     "state": "battle-shocked"
-                  },
-                  "subject": "defender"
+                  }
                 }
               },
               "effect": {
                 "type": "roll-modifier",
-                "target": "this-unit",
+                "target": "this-model",
                 "modifier": {
                   "roll": "wound",
                   "operation": "add",
                   "value": 1
                 }
               }
-            },
-            {
+            }
+          },
+          {
+            "id": "darkness",
+            "name": "Darkness",
+            "effect": {
               "type": "ability-grant",
               "target": "this-model",
               "modifier": {
                 "ability": "stealth"
               }
-            },
-            {
-              "type": "test",
-              "target": {
-                "owner": "enemy",
-                "within": {
-                  "range": {
-                    "inches": 9
+            }
+          },
+          {
+            "id": "dismay",
+            "name": "Dismay",
+            "effect": {
+              "type": "ability-part",
+              "effect": {
+                "type": "for-each-unit",
+                "selector": {
+                  "filter": {
+                    "owner": "enemy"
+                  }
+                },
+                "effect": {
+                  "type": "conditional",
+                  "condition": {
+                    "operator": "and",
+                    "operands": [
+                      {
+                        "type": "strength",
+                        "parameters": {
+                          "subject": "recipient",
+                          "below": "starting"
+                        }
+                      },
+                      {
+                        "type": "matches",
+                        "parameters": {
+                          "subject": "recipient",
+                          "filter": {
+                            "within": {
+                              "of": "this-model",
+                              "range": {
+                                "inches": 9
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "effect": {
+                    "type": "test",
+                    "target": "recipient",
+                    "modifier": {
+                      "test": "battle-shock"
+                    }
                   }
                 }
               },
-              "modifier": {
-                "test": "battle-shock"
+              "trigger": {
+                "event": "step-started",
+                "filter": {
+                  "step": "battle-shock"
+                },
+                "condition": {
+                  "type": "player-turn-is",
+                  "parameters": {
+                    "turn": "opponent-turn"
+                  }
+                }
               }
-            },
-            {
-              "type": "mortal-wounds",
-              "target": {
-                "owner": "enemy",
-                "within": {
+            }
+          },
+          {
+            "id": "delirium",
+            "name": "Delirium",
+            "effect": {
+              "type": "ability-part",
+              "effect": {
+                "type": "aura",
+                "target": "enemy-within-aura",
+                "modifier": {
                   "range": {
                     "inches": 9
+                  },
+                  "effect": {
+                    "type": "conditional",
+                    "condition": {
+                      "type": "strength",
+                      "parameters": {
+                        "subject": "recipient",
+                        "below": "half"
+                      }
+                    },
+                    "effect": {
+                      "type": "mortal-wounds",
+                      "target": "recipient",
+                      "modifier": {
+                        "count": "D3"
+                      }
+                    }
+                  },
+                  "eligible": {
+                    "owner": "enemy"
                   }
                 }
               },
-              "modifier": {
-                "count": "D3",
-                "range": {
-                  "inches": 9
-                }
+              "trigger": {
+                "event": "after-roll",
+                "filter": {
+                  "roll": "battle-shock",
+                  "result": "failure"
+                },
+                "subject": "recipient"
               }
-            },
-            {
+            }
+          },
+          {
+            "id": "dominion",
+            "name": "Dominion",
+            "effect": {
               "type": "ability-modifier",
               "target": "this-model",
               "modifier": {
@@ -3982,14 +4123,34 @@
                 "value": 3
               }
             }
+          }
+        ],
+        "initial": "deathly-terror",
+        "additive": true,
+        "or_random": {
+          "dice": "D6",
+          "count": 2,
+          "faces": [
+            "despair",
+            "doom",
+            "darkness",
+            "dismay",
+            "delirium",
+            "dominion"
           ]
-        }
-      ]
+        },
+        "min_choices": 1,
+        "max_choices": 1
+      }
     },
     "scope": {
       "duration": "battle"
     },
-    "community_notes": "Harbingers of Dread army rule. Deathly Terror is always active: worsen the Ld of enemy units within 9\" by 1. At the start of battle rounds 1, 3 and 5, select one further Dread ability (or roll 2D6 for two) to stay active for the battle: (1) a further -1 Ld within 9\" (cumulative); (2) +1 to Wound vs Battle-shocked targets; (3) Darkness = this model has Stealth (Faction Pack v1.0 update, was -1 to be hit by Battle-shocked/>18\" attackers); (4) below-Starting-Strength enemies within 9\" take a Battle-shock test in the opponent's Command phase; (5) D3 mortal wounds when a Below Half-strength enemy within 9\" fails a Battle-shock test; (6) +3\" to this model's Aura range."
+    "community_notes": "Harbingers of Dread army rule. Deathly Terror is always active: worsen the Ld of enemy units within 9\" by 1. At the start of battle rounds 1, 3 and 5, select one further Dread ability (or roll 2D6 for two) to stay active for the battle: (1) a further -1 Ld within 9\" (cumulative); (2) +1 to Wound vs Battle-shocked targets; (3) Darkness = this model has Stealth (Faction Pack v1.0 update, was -1 to be hit by Battle-shocked/>18\" attackers); (4) below-Starting-Strength enemies within 9\" take a Battle-shock test in the opponent's Command phase; (5) D3 mortal wounds when a Below Half-strength enemy within 9\" fails a Battle-shock test; (6) +3\" to this model's Aura range.",
+    "trigger": {
+      "event": "round-started",
+      "optional": true
+    }
   },
   {
     "ability_id": "dreadblades-chaos-knights",

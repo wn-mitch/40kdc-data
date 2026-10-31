@@ -44948,5 +44948,149 @@
     "expected": {
       "text": "Your opponent selects from 1 through 2 distinct options:\n  - The unit suffers 1 mortal wound.\n  - The unit is Battle-shocked."
     }
+  },
+  {
+    "caseId": "canonical/stance-select-or-random",
+    "effect": {
+      "type": "stance-select",
+      "mode": "consumable",
+      "additive": true,
+      "initial": "watch",
+      "options": [
+        {
+          "id": "watch",
+          "name": "Watch",
+          "effect": {
+            "type": "mortal-wounds",
+            "target": "this-unit",
+            "modifier": {
+              "count": 1
+            }
+          }
+        },
+        {
+          "id": "ward",
+          "name": "Ward",
+          "effect": {
+            "type": "state-change",
+            "target": "this-unit",
+            "modifier": {
+              "state": "battle-shocked",
+              "set": true
+            }
+          }
+        },
+        {
+          "id": "wake",
+          "name": "Wake",
+          "effect": {
+            "type": "mortal-wounds",
+            "target": "this-unit",
+            "modifier": {
+              "count": 2
+            }
+          }
+        },
+        {
+          "id": "wane",
+          "effect": {
+            "type": "mortal-wounds",
+            "target": "this-unit",
+            "modifier": {
+              "count": 3
+            }
+          },
+          "name": "Wane"
+        }
+      ],
+      "or_random": {
+        "dice": "D3",
+        "count": 2,
+        "faces": [
+          "ward",
+          "wake",
+          "wane"
+        ]
+      }
+    },
+    "scope": {
+      "duration": "battle"
+    },
+    "behavior": "passive",
+    "expected": {
+      "text": "For the rest of the battle:\n  -> At the start of the battle, Watch is active.\n  -> Select one (each may be chosen once per battle) (in addition to any already active):\n    - Watch: the unit suffers 1 mortal wound.\n    - Ward: the unit is Battle-shocked.\n    - Wake: the unit suffers 2 mortal wounds.\n    - Wane: the unit suffers 3 mortal wounds.\n  -> Or, instead of selecting, roll two D3: each result applies the option it numbers (1 Ward, 2 Wake, 3 Wane); a result already active has no additional effect."
+    }
+  },
+  {
+    "caseId": "canonical/stance-select-or-random-inline",
+    "effect": {
+      "type": "choice",
+      "options": [
+        {
+          "type": "stance-select",
+          "mode": "consumable",
+          "additive": true,
+          "options": [
+            {
+              "id": "watch",
+              "name": "Watch",
+              "effect": {
+                "type": "mortal-wounds",
+                "target": "this-unit",
+                "modifier": {
+                  "count": 1
+                }
+              }
+            },
+            {
+              "id": "ward",
+              "name": "Ward",
+              "effect": {
+                "type": "state-change",
+                "target": "this-unit",
+                "modifier": {
+                  "state": "battle-shocked",
+                  "set": true
+                }
+              }
+            },
+            {
+              "id": "wake",
+              "name": "Wake",
+              "effect": {
+                "type": "mortal-wounds",
+                "target": "this-unit",
+                "modifier": {
+                  "count": 2
+                }
+              }
+            }
+          ],
+          "or_random": {
+            "dice": "D3",
+            "count": 1,
+            "faces": [
+              "watch",
+              "ward",
+              "wake"
+            ]
+          }
+        },
+        {
+          "type": "mortal-wounds",
+          "target": "this-unit",
+          "modifier": {
+            "count": 1
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "passive",
+    "expected": {
+      "text": "Select one of the following:\n  - Select one (each may be chosen once per battle) (in addition to any already active): Watch (the unit suffers 1 mortal wound) / Ward (the unit is Battle-shocked) / Wake (the unit suffers 2 mortal wounds); or, instead of selecting, roll one D3: each result applies the option it numbers (1 Watch, 2 Ward, 3 Wake); a result already active has no additional effect.\n  - The unit suffers 1 mortal wound."
+    }
   }
 ]

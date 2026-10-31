@@ -1,4 +1,5 @@
 import { attackOfFilter, AURA_RECIPIENT, FILTERED_UNITS, momentOfFilter, objectEvent, targetedAttackOfFilter, targetedByOtherSide } from "./compile-antecedent.js";
+import { ANTECEDENT } from "./antecedent-families.js";
 import { EXCLUDED_FROM_ATTACKS, FILTER_SUBJECT_TARGET } from "./families/unit-filters.js";
 import { destinationOf } from "./compile-move-end-nearest.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
@@ -233,19 +234,24 @@ export function foldUnitFilters(input0: readonly CompileLeaf[], sourceText?: str
       const event = out.at(-1)!;
       out[out.length - 1] = { ...event, parameters: { ...event.parameters, subject_filter: dslUnitFilter(leaf) } };
       index = at - 1;
-    } else if (isFilter(leaf) && next?.family_id === "aura-range") {
+    } else if (isFilter(leaf) && auraAfterStates(list, index) !== null) {
+      // "While an enemy unit that is Below Half-strength is within 9\" of this model": the states between the filter
+      // and the aura test each unit the aura reaches, so they follow the aura as conditions on its recipient.
+      const at = auraAfterStates(list, index)!;
+      const states = list.slice(index + 1, at).map((state) => ({ ...state, parameters: { ...state.parameters, subject: AURA_RECIPIENT } }));
+      const aura = list[at]!;
       // An aura's side, when it names one, is the filter's own side ("enemy X unit" + "within 3\" of this unit").
-      if (next.parameters.side !== undefined && next.parameters.side !== leaf.parameters.side) throw new CompileError("An aura-range's side differs from the unit-filter before it.");
+      if (aura.parameters.side !== undefined && aura.parameters.side !== leaf.parameters.side) throw new CompileError("An aura-range's side differs from the unit-filter before it.");
       if (leaf.parameters.visible === true) throw new CompileError("An aura reaches units whether or not they are visible; drop visible from its unit-filter.");
       // "While a friendly WAR DOG model is within 9\" of this model": each such model is the
       // recipient (compile-model-level.ts wrapModelAura), not the unit it belongs to.
       const models = leaf.parameters.level === "model" ? { model_recipient: modelRecipientFilter(leaf, dslUnitFilter(leaf)) } : {};
       // A region grant ("the area within 6\" of this model is held in a rule region") reaches units of either side:
       // its filter may say any, and wrapAura lowers it to one counts-as over every unit within the range.
-      const regionGrant = leaf.parameters.side === "any" && leaf.parameters.level !== "model" && list.slice(index + 2).some((later) =>
+      const regionGrant = leaf.parameters.side === "any" && leaf.parameters.level !== "model" && list.slice(at + 1).some((later) =>
         later.family_id === "counts-as" && later.parameters.region !== undefined && later.fragment === leaf.fragment);
-      out.push({ ...next!, parameters: { ...next!.parameters, side: side(leaf, "an aura", { models: true, anySide: regionGrant }), filter: filterOf(leaf), ...models } });
-      index += 1;
+      out.push({ ...aura, parameters: { ...aura.parameters, side: side(leaf, "an aura", { models: true, anySide: regionGrant }), filter: filterOf(leaf), ...models } }, ...states);
+      index = at;
     } else if (openTarget(leaf) && isFilter(next)) {
       // "One" + "friendly ADEPTA SORORITAS unit" (+ "from your army"): a Stratagem's TARGET.
       const side = String(next!.parameters.side);
@@ -505,4 +511,16 @@ function foldOrderRecipients(opener: CompileLeaf, filter: CompileLeaf): CompileL
     eligible = { any_of: [...new Set([...alternatives(previous), ...alternatives(rest)])] };
   }
   return { ...opener, end_byte: Math.max(opener.end_byte ?? opener.start_byte, filter.end_byte ?? filter.start_byte), parameters: { ...opener.parameters, __eligible: eligible } };
+}
+
+/**
+ * The aura-range a unit-filter's units are reached by: right after the filter, or after unit-state conditions on the
+ * filter's own units in between ("an enemy unit" + "that is Below Half-strength" + "within 9\" of this model"). Null
+ * when anything else comes first.
+ */
+function auraAfterStates(list: readonly CompileLeaf[], index: number): number | null {
+  let at = index + 1;
+  while (list[at]?.family_id === "unit-state" && list[at]!.fragment === list[index]!.fragment
+    && [FILTERED_UNITS, ANTECEDENT, AURA_RECIPIENT].includes(String(list[at]!.parameters.subject))) at += 1;
+  return list[at]?.family_id === "aura-range" ? at : null;
 }

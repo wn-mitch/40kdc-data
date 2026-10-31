@@ -41,6 +41,7 @@ from wh40kdc.translate.effect_inline import (
     stance_additive,
     stance_initial,
     stance_pick,
+    stance_random,
     usage_clause,
 )
 from wh40kdc.translate.effect_leaf import defined_grant_head, definition_part, is_defined_grant
@@ -257,6 +258,7 @@ def describe_effect(e: Effect, depth: int = 0, ctx: Ctx | None = None) -> str:
                 *initial,
                 f"{indent}{arrow}{capitalize(stance_pick(e))}{consum}{stance_additive(e)}:",
                 *_option_lines(e, indent, ctx),
+                *([f"{indent}{arrow}{capitalize(stance_random(e))}."] if stance_random(e) else []),
             ]
         )
     if t == "risk-reward":

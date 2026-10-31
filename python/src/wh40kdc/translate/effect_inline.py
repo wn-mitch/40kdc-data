@@ -449,7 +449,9 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx) -> str:
             for o in (e.get("options") or [])
         )
         initial = f"{stance_initial(e)}; " if stance_initial(e) else ""
-        return f"{initial}{stance_pick(e)}{stance_additive(e)}: {opts}"
+        consum = " (each may be chosen once per battle)" if e.get("mode") == "consumable" else ""
+        random = f"; {stance_random(e)}" if stance_random(e) else ""
+        return f"{initial}{stance_pick(e)}{consum}{stance_additive(e)}: {opts}{random}"
     if t == "stance-selection-capacity":
         n = num(m.get("additional_selections"))
         n = 1.0 if n != n or n == 0 else n
@@ -514,6 +516,31 @@ def stance_initial(e: Effect) -> str:
     option = next((_obj(o) for o in (e.get("options") or []) if _obj(o).get("id") == initial), {})
     name = jstr(option["name"]) if option.get("name") is not None else title_case(initial)
     return f"at the start of the battle, {name} is active"
+
+
+def stance_random(e: Effect) -> str:
+    """ "or, instead of selecting, roll two D6: …": the pick rolled instead, each face applying
+    the option it numbers, or ""."""
+    random = e.get("or_random")
+    if not isinstance(random, dict):
+        return ""
+    options = [_obj(o) for o in (e.get("options") or [])]
+    faces = []
+    for at, face in enumerate(random.get("faces") or []):
+        option = next((o for o in options if o.get("id") == face), {})
+        name = jstr(option["name"]) if option.get("name") is not None else title_case(str(face))
+        faces.append(f"{at + 1} {name}")
+    count = random.get("count")
+    word = (
+        _NUMBER_WORDS[count]
+        if isinstance(count, int) and not isinstance(count, bool) and 1 <= count <= 3
+        else jstr(count)
+    )
+    return (
+        f"or, instead of selecting, roll {word} {jstr(random.get('dice'))}: each result applies"
+        f" the option it numbers ({', '.join(faces)}); a result already active has no"
+        " additional effect"
+    )
 
 
 def stance_additive(e: Effect) -> str:

@@ -279,6 +279,39 @@ fn aura_clause(e: &P, m: &P, ctx: &Ctx) -> String {
 }
 
 /// " (in addition to any already active)" when a stance pick joins the active options.
+/// "or, instead of selecting, roll two D6: …": the pick rolled instead, each face applying the
+/// option it numbers, or "".
+fn stance_random(e: &P) -> String {
+    let Some(random) = nn(e, "or_random").map(|value| obj(Some(value))) else {
+        return String::new();
+    };
+    let faces: Vec<String> = items(random, "faces")
+        .iter()
+        .enumerate()
+        .map(|(at, id)| {
+            let id = id.as_str().unwrap_or_default();
+            let name = items(e, "options")
+                .iter()
+                .map(|o| obj(Some(o)))
+                .find(|o| sv(o, "id") == Some(id) && nn(o, "name").is_some())
+                .map(|o| jstr(o.get("name")))
+                .unwrap_or_else(|| title_case(id));
+            format!("{} {name}", at + 1)
+        })
+        .collect();
+    let count = match nn(random, "count").and_then(|value| value.as_f64()) {
+        Some(n) if n == 1.0 => "one".to_string(),
+        Some(n) if n == 2.0 => "two".to_string(),
+        Some(n) if n == 3.0 => "three".to_string(),
+        _ => jstr(random.get("count")),
+    };
+    format!(
+        "or, instead of selecting, roll {count} {}: each result applies the option it numbers ({}); a result already active has no additional effect",
+        jstr(random.get("dice")),
+        faces.join(", ")
+    )
+}
+
 fn stance_additive(e: &P) -> &'static str {
     if is_true(e, "additive") {
         " (in addition to any already active)"
@@ -521,8 +554,9 @@ fn inline_base(e: &P, ctx: &Ctx) -> String {
                 ""
             };
             let initial = stance_initial(e);
+            let random = stance_random(e);
             format!(
-                "{}{}{}{}: {}",
+                "{}{}{}{}: {}{}",
                 if initial.is_empty() {
                     String::new()
                 } else {
@@ -542,7 +576,12 @@ fn inline_base(e: &P, ctx: &Ctx) -> String {
                         )
                     })
                     .collect::<Vec<_>>()
-                    .join(" / ")
+                    .join(" / "),
+                if random.is_empty() {
+                    String::new()
+                } else {
+                    format!("; {random}")
+                }
             )
         }
         "stance-selection-capacity" => {

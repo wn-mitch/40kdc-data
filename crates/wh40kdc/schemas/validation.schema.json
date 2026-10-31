@@ -14474,6 +14474,39 @@
           "type": "string",
           "minLength": 1,
           "description": "The id of the option in force from the start of the battle, before any selection (\"At the start of the battle, that unit enters Aegis Protocol\")."
+        },
+        "or_random": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "The pick may instead be rolled (\"or randomly select two … by rolling two D6\"): count dice, each result applying the option whose id faces lists at that number (faces[0] is a 1). A rolled option already active has no additional effect.",
+          "properties": {
+            "dice": {
+              "enum": [
+                "D3",
+                "D6"
+              ]
+            },
+            "count": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 3
+            },
+            "faces": {
+              "type": "array",
+              "minItems": 3,
+              "maxItems": 6,
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "required": [
+            "dice",
+            "count",
+            "faces"
+          ]
         }
       },
       "required": [

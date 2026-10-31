@@ -72,6 +72,8 @@ export interface Effect {
   choice_prompt?: string;
   /** stance-select: the option id in force from the start of the battle. */
   initial?: string;
+  /** stance-select: the pick may instead be rolled, each face applying the option it numbers. */
+  or_random?: { dice?: string; count?: number; faces?: string[] };
   min_choices?: number;
   max_choices?: number;
   cost?: Effect;
@@ -639,7 +641,7 @@ function describeEffectInlineBase(e: Effect, ctx: Ctx = {}): string {
       return `select ${designationTargetSubject(sel)}${desig}; ${durTrail ? `${durTrail}, ` : ""}${body}`;
     }
     case "stance-select":
-      return `${stanceInitial(e) ? `${stanceInitial(e)}; ` : ""}${stancePick(e)}${e.mode === "consumable" ? " (each may be chosen once per battle)" : ""}${stanceAdditive(e)}: ${(e.options ?? []).map((o) => `${jstr(o.name)} (${describeEffectInline(o.effect ?? {}, ctx)})`).join(" / ")}`;
+      return `${stanceInitial(e) ? `${stanceInitial(e)}; ` : ""}${stancePick(e)}${e.mode === "consumable" ? " (each may be chosen once per battle)" : ""}${stanceAdditive(e)}: ${(e.options ?? []).map((o) => `${jstr(o.name)} (${describeEffectInline(o.effect ?? {}, ctx)})`).join(" / ")}${stanceRandom(e) ? `; ${stanceRandom(e)}` : ""}`;
     case "stance-selection-capacity": {
       const m = (e.modifier ?? {}) as {
         ability_id?: unknown;
@@ -702,6 +704,18 @@ function stanceInitial(e: Effect): string {
   if (typeof e.initial !== "string") return "";
   const option = (e.options ?? []).find((o) => o.id === e.initial);
   return `at the start of the battle, ${option?.name != null ? jstr(option.name) : titleCase(e.initial)} is active`;
+}
+
+/** "or, instead of selecting, roll two D6: …": the pick rolled instead, each face applying the option it numbers, or "". */
+function stanceRandom(e: Effect): string {
+  const random = e.or_random;
+  if (random == null) return "";
+  const faces = (random.faces ?? []).map((id, at) => {
+    const option = (e.options ?? []).find((o) => o.id === id);
+    return `${at + 1} ${option?.name != null ? jstr(option.name) : titleCase(id)}`;
+  });
+  const count = ["one", "two", "three"][Number(random.count) - 1] ?? jstr(random.count);
+  return `or, instead of selecting, roll ${count} ${jstr(random.dice)}: each result applies the option it numbers (${faces.join(", ")}); a result already active has no additional effect`;
 }
 
 function stanceAdditive(e: Effect): string {
@@ -1000,6 +1014,7 @@ export function describeEffect(e: Effect, depth: number = 0, ctx: Ctx = {}): str
       for (const opt of e.options ?? []) {
         lines.push(`${indent}  - ${jstr(opt.name)}: ${describeEffectInline(opt.effect ?? {}, ctx)}.`);
       }
+      if (stanceRandom(e)) lines.push(`${indent}${arrow}${capitalize(stanceRandom(e))}.`);
       return lines.join("\n");
     }
     case "risk-reward": {

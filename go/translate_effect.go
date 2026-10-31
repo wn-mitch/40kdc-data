@@ -2,6 +2,7 @@ package wh40kdc
 
 import (
 	"sort"
+	"strconv"
 	"strings"
 )
 
@@ -395,7 +396,11 @@ func describeEffectInlineBase(e map[string]any, ctx effCtx) string {
 		if s := stanceInitial(e); s != "" {
 			initial = s + "; "
 		}
-		return initial + stancePick(e) + consum + stanceAdditive(e) + ": " + strings.Join(opts, " / ")
+		random := ""
+		if r := stanceRandom(e); r != "" {
+			random = "; " + r
+		}
+		return initial + stancePick(e) + consum + stanceAdditive(e) + ": " + strings.Join(opts, " / ") + random
 	case "stance-selection-capacity":
 		n := jsNumber(m["additional_selections"])
 		if n != n || n == 0 {
@@ -456,6 +461,38 @@ var smallNumberWords = []string{"zero", "one", "two", "three", "four"}
 
 // stancePick renders how many menu options are picked ("select one", "select up to two").
 // stanceAdditive is " (in addition to any already active)" when a stance pick joins the active options.
+// stanceRandom renders the pick rolled instead ("or, instead of selecting, roll two D6: …"), each
+// face applying the option it numbers, or "".
+func stanceRandom(e map[string]any) string {
+	random, ok := e["or_random"].(map[string]any)
+	if !ok {
+		return ""
+	}
+	var faces []string
+	for at, face := range getList(random, "faces") {
+		id, _ := face.(string)
+		name := titleCase(id)
+		for _, o := range getList(e, "options") {
+			if om := mapOr(o); om["id"] == id && om["name"] != nil {
+				name = ejstr(om["name"])
+				break
+			}
+		}
+		faces = append(faces, strconv.Itoa(at+1)+" "+name)
+	}
+	count := ejstr(random["count"])
+	switch random["count"] {
+	case 1.0:
+		count = "one"
+	case 2.0:
+		count = "two"
+	case 3.0:
+		count = "three"
+	}
+	return "or, instead of selecting, roll " + count + " " + ejstr(random["dice"]) + ": each result applies the option it numbers (" +
+		strings.Join(faces, ", ") + "); a result already active has no additional effect"
+}
+
 func stanceAdditive(e map[string]any) string {
 	if e["additive"] == true {
 		return " (in addition to any already active)"
@@ -696,6 +733,9 @@ func describeEffect(e map[string]any, depth int, ctx effCtx) string {
 		for _, o := range getList(e, "options") {
 			om := mapOr(o)
 			lines = append(lines, indent+"  - "+ejstr(om["name"])+": "+describeEffectInline(mapOr(om["effect"]), ctx)+".")
+		}
+		if random := stanceRandom(e); random != "" {
+			lines = append(lines, indent+arrow+capitalize(random)+".")
 		}
 		return strings.Join(lines, "\n")
 	case "risk-reward":

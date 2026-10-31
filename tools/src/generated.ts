@@ -3911,6 +3911,22 @@ export interface StanceSelectEffect {
    * The id of the option in force from the start of the battle, before any selection ("At the start of the battle, that unit enters Aegis Protocol").
    */
   initial?: string;
+  /**
+   * The pick may instead be rolled ("or randomly select two … by rolling two D6"): count dice, each result applying the option whose id faces lists at that number (faces[0] is a 1). A rolled option already active has no additional effect.
+   */
+  or_random?: {
+    dice: "D3" | "D6";
+    count: number;
+    /**
+     * @minItems 3
+     * @maxItems 6
+     */
+    faces:
+      | [string, string, string]
+      | [string, string, string, string]
+      | [string, string, string, string, string]
+      | [string, string, string, string, string, string];
+  };
 }
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema

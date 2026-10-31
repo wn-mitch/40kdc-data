@@ -35,6 +35,21 @@ const ROLL_KINDS = ["psychic", "hazard", "leadership", "battle-shock", "desperat
 
 const RANDOM_DICE = ["D3", "D6"] as const;
 
+/** A pick that may instead be rolled: count dice (D3 or D6), each result picking the option it numbers. */
+const RANDOM_PICK = {
+  type: "object", required: ["dice", "count"],
+  properties: { dice: { enum: RANDOM_DICE }, count: { type: "integer", minimum: 1, maximum: 3 } },
+  additionalProperties: false,
+};
+
+/** An or_random's dice and count, checked for `family`. */
+function randomPick(random: unknown, family: string): { dice: string; count: number } {
+  if (!isObject(random)) throw new TypeError(`${family}.or_random is an object with dice and count.`);
+  const { dice, count, ...extra } = random as Record<string, unknown>;
+  if (Object.keys(extra).length) throw new TypeError(`${family}.or_random has only dice and count.`);
+  return { dice: enumValue(dice, RANDOM_DICE, `${family}.or_random.dice`), count: boundedInteger(count, 1, 3, `${family}.or_random.count`) };
+}
+
 export const CHOICE_AND_DICE_EXTENSIONS: readonly FamilyExtension[] = [
   /**
    * A roll's kind: a Psychic test is 2D6 against its Warp Charge.
@@ -73,19 +88,12 @@ export const CHOICE_AND_DICE_EXTENSIONS: readonly FamilyExtension[] = [
     version: 2,
     description: "As the previous version, and or_random says the options may instead be picked at random: {dice, count} rolls count dice (D3 or D6) and applies the option numbered by each result, the options being numbered in order from 1 to the die's faces.",
     schema: (previous) => withProperties(previous, {
-      or_random: optional({
-        type: "object", required: ["dice", "count"],
-        properties: { dice: { enum: RANDOM_DICE }, count: { type: "integer", minimum: 1, maximum: 3 } },
-        additionalProperties: false,
-      }),
+      or_random: optional(RANDOM_PICK),
     }),
     normalize: (input, previous) => {
       if (!("or_random" in input)) return previous(input);
       const { or_random: random, ...rest } = input;
-      if (!isObject(random)) throw new TypeError("choice-open.or_random is an object with dice and count.");
-      const { dice, count, ...extra } = random as Record<string, unknown>;
-      if (Object.keys(extra).length) throw new TypeError("choice-open.or_random has only dice and count.");
-      return { ...previous(rest), or_random: { dice: enumValue(dice, RANDOM_DICE, "choice-open.or_random.dice"), count: boundedInteger(count, 1, 3, "choice-open.or_random.count") } };
+      return { ...previous(rest), or_random: randomPick(random, "choice-open") };
     },
   },
   {
@@ -101,6 +109,18 @@ export const CHOICE_AND_DICE_EXTENSIONS: readonly FamilyExtension[] = [
       const result = previous(rest);
       if (result.or_random !== undefined) throw new TypeError("choice-open.ignore_consumed is a pick by the player, not a random one.");
       return { ...result, ignore_consumed: true };
+    },
+  },
+  {
+    // "either select one of the other Dread abilities or randomly select two … by rolling two D6".
+    family: "stance-select-open",
+    version: 3,
+    description: "As the previous version, and or_random says the pick may instead be rolled: {dice, count} rolls count dice (D3 or D6) and applies the option numbered by each result, the options other than the one in force from the start being numbered in order from 1 to the die's faces. A rolled option already active has no additional effect.",
+    schema: (previous) => withProperties(previous, { or_random: optional(RANDOM_PICK) }),
+    normalize: (input, previous) => {
+      if (!("or_random" in input)) return previous(input);
+      const { or_random: random, ...rest } = input;
+      return { ...previous(rest), or_random: randomPick(random, "stance-select-open") };
     },
   },
   {
