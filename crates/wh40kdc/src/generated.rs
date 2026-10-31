@@ -15478,6 +15478,9 @@ impl ::std::convert::From<EffectNode> for Effect {
 ///    },
 ///    {
 ///      "$ref": "#/$defs/oath-modifier-effect"
+///    },
+///    {
+///      "$ref": "#/$defs/ritual-menu-effect"
 ///    }
 ///  ]
 ///}
@@ -15510,6 +15513,7 @@ pub enum EffectNode {
     RollEffect(::std::boxed::Box<RollEffect>),
     SelectObjectiveEffect(::std::boxed::Box<SelectObjectiveEffect>),
     OathModifierEffect(::std::boxed::Box<OathModifierEffect>),
+    RitualMenuEffect(::std::boxed::Box<RitualMenuEffect>),
 }
 impl ::std::convert::From<SingleEffect> for EffectNode {
     fn from(value: SingleEffect) -> Self {
@@ -15629,6 +15633,11 @@ impl ::std::convert::From<SelectObjectiveEffect> for EffectNode {
 impl ::std::convert::From<OathModifierEffect> for EffectNode {
     fn from(value: OathModifierEffect) -> Self {
         Self::OathModifierEffect(::std::boxed::Box::new(value))
+    }
+}
+impl ::std::convert::From<RitualMenuEffect> for EffectNode {
+    fn from(value: RitualMenuEffect) -> Self {
+        Self::RitualMenuEffect(::std::boxed::Box::new(value))
     }
 }
 ///`EligibleConditionParameters`
@@ -38062,6 +38071,642 @@ impl ::std::convert::TryFrom<::std::string::String> for RiskRewardEffectType {
         value.parse()
     }
 }
+///Rituals attempted with a Psychic test. Each attempt picks one Ritual (ritual_limit: each Ritual once per turn across the army) and takes the test: roll `dice` (and optionally `extra_die`), bound as `roll_var`; when any two of its dice show the same result (perils on double) the perils effect resolves. If the attempting model (this-model) is not destroyed and the total of all the test's dice equals or exceeds the Ritual's warp_charge, the model manifests that Ritual and its effect resolves. Inside a Ritual's effect, a roll-total condition on roll_var reads the test result.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "title": "ritual-menu effect",
+///  "description": "Rituals attempted with a Psychic test. Each attempt picks one Ritual (ritual_limit: each Ritual once per turn across the army) and takes the test: roll `dice` (and optionally `extra_die`), bound as `roll_var`; when any two of its dice show the same result (perils on double) the perils effect resolves. If the attempting model (this-model) is not destroyed and the total of all the test's dice equals or exceeds the Ritual's warp_charge, the model manifests that Ritual and its effect resolves. Inside a Ritual's effect, a roll-total condition on roll_var reads the test result.",
+///  "type": "object",
+///  "required": [
+///    "ritual_limit",
+///    "rituals",
+///    "test",
+///    "type"
+///  ],
+///  "properties": {
+///    "ritual_limit": {
+///      "description": "How often each Ritual can be attempted (\"select one Ritual no model from your army has attempted to manifest this turn\").",
+///      "type": "object",
+///      "required": [
+///        "frequency",
+///        "per"
+///      ],
+///      "properties": {
+///        "frequency": {
+///          "const": "once-per-turn"
+///        },
+///        "per": {
+///          "const": "army"
+///        }
+///      },
+///      "additionalProperties": false
+///    },
+///    "rituals": {
+///      "type": "array",
+///      "items": {
+///        "type": "object",
+///        "required": [
+///          "effect",
+///          "id",
+///          "name",
+///          "warp_charge"
+///        ],
+///        "properties": {
+///          "effect": {
+///            "$ref": "#/$defs/effect-node"
+///          },
+///          "id": {
+///            "$ref": "#/$defs/entity-id"
+///          },
+///          "name": {
+///            "type": "string",
+///            "minLength": 1
+///          },
+///          "warp_charge": {
+///            "description": "The test result the Ritual needs: the total of the test's dice must equal or exceed it.",
+///            "type": "integer",
+///            "maximum": 18.0,
+///            "minimum": 2.0
+///          }
+///        },
+///        "additionalProperties": false
+///      },
+///      "minItems": 1
+///    },
+///    "test": {
+///      "type": "object",
+///      "required": [
+///        "dice",
+///        "roll_var"
+///      ],
+///      "properties": {
+///        "dice": {
+///          "$ref": "#/$defs/dice-expression"
+///        },
+///        "extra_die": {
+///          "description": "One more die the player can add to the test (\"Optionally, you can roll one additional D6\"); its result counts toward the total.",
+///          "type": "object",
+///          "required": [
+///            "dice"
+///          ],
+///          "properties": {
+///            "dice": {
+///              "$ref": "#/$defs/dice-expression"
+///            },
+///            "optional": {
+///              "const": true
+///            }
+///          },
+///          "additionalProperties": false
+///        },
+///        "kind": {
+///          "$ref": "#/$defs/roll-kind"
+///        },
+///        "perils": {
+///          "description": "What happens when the test's dice match (\"if one or more doubles or triples were rolled\": a triple holds a double).",
+///          "type": "object",
+///          "required": [
+///            "effect",
+///            "on"
+///          ],
+///          "properties": {
+///            "effect": {
+///              "$ref": "#/$defs/effect-node"
+///            },
+///            "on": {
+///              "enum": [
+///                "double"
+///              ]
+///            }
+///          },
+///          "additionalProperties": false
+///        },
+///        "roll_var": {
+///          "type": "string",
+///          "minLength": 1
+///        }
+///      },
+///      "additionalProperties": false
+///    },
+///    "type": {
+///      "type": "string",
+///      "enum": [
+///        "ritual-menu"
+///      ]
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct RitualMenuEffect {
+    pub ritual_limit: RitualMenuEffectRitualLimit,
+    pub rituals: ::std::vec::Vec<RitualMenuEffectRitualsItem>,
+    pub test: RitualMenuEffectTest,
+    #[serde(rename = "type")]
+    pub type_: RitualMenuEffectType,
+}
+///How often each Ritual can be attempted ("select one Ritual no model from your army has attempted to manifest this turn").
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "How often each Ritual can be attempted (\"select one Ritual no model from your army has attempted to manifest this turn\").",
+///  "type": "object",
+///  "required": [
+///    "frequency",
+///    "per"
+///  ],
+///  "properties": {
+///    "frequency": {
+///      "const": "once-per-turn"
+///    },
+///    "per": {
+///      "const": "army"
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct RitualMenuEffectRitualLimit {
+    pub frequency: ::serde_json::Value,
+    pub per: ::serde_json::Value,
+}
+///`RitualMenuEffectRitualsItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "effect",
+///    "id",
+///    "name",
+///    "warp_charge"
+///  ],
+///  "properties": {
+///    "effect": {
+///      "$ref": "#/$defs/effect-node"
+///    },
+///    "id": {
+///      "$ref": "#/$defs/entity-id"
+///    },
+///    "name": {
+///      "type": "string",
+///      "minLength": 1
+///    },
+///    "warp_charge": {
+///      "description": "The test result the Ritual needs: the total of the test's dice must equal or exceed it.",
+///      "type": "integer",
+///      "maximum": 18.0,
+///      "minimum": 2.0
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct RitualMenuEffectRitualsItem {
+    pub effect: EffectNode,
+    pub id: EntityId,
+    pub name: RitualMenuEffectRitualsItemName,
+    ///The test result the Ritual needs: the total of the test's dice must equal or exceed it.
+    pub warp_charge: i64,
+}
+///`RitualMenuEffectRitualsItemName`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct RitualMenuEffectRitualsItemName(::std::string::String);
+impl ::std::ops::Deref for RitualMenuEffectRitualsItemName {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<RitualMenuEffectRitualsItemName> for ::std::string::String {
+    fn from(value: RitualMenuEffectRitualsItemName) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for RitualMenuEffectRitualsItemName {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for RitualMenuEffectRitualsItemName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for RitualMenuEffectRitualsItemName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for RitualMenuEffectRitualsItemName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for RitualMenuEffectRitualsItemName {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`RitualMenuEffectTest`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "dice",
+///    "roll_var"
+///  ],
+///  "properties": {
+///    "dice": {
+///      "$ref": "#/$defs/dice-expression"
+///    },
+///    "extra_die": {
+///      "description": "One more die the player can add to the test (\"Optionally, you can roll one additional D6\"); its result counts toward the total.",
+///      "type": "object",
+///      "required": [
+///        "dice"
+///      ],
+///      "properties": {
+///        "dice": {
+///          "$ref": "#/$defs/dice-expression"
+///        },
+///        "optional": {
+///          "const": true
+///        }
+///      },
+///      "additionalProperties": false
+///    },
+///    "kind": {
+///      "$ref": "#/$defs/roll-kind"
+///    },
+///    "perils": {
+///      "description": "What happens when the test's dice match (\"if one or more doubles or triples were rolled\": a triple holds a double).",
+///      "type": "object",
+///      "required": [
+///        "effect",
+///        "on"
+///      ],
+///      "properties": {
+///        "effect": {
+///          "$ref": "#/$defs/effect-node"
+///        },
+///        "on": {
+///          "enum": [
+///            "double"
+///          ]
+///        }
+///      },
+///      "additionalProperties": false
+///    },
+///    "roll_var": {
+///      "type": "string",
+///      "minLength": 1
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct RitualMenuEffectTest {
+    pub dice: DiceExpression,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub extra_die: ::std::option::Option<RitualMenuEffectTestExtraDie>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub kind: ::std::option::Option<RollKind>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub perils: ::std::option::Option<RitualMenuEffectTestPerils>,
+    pub roll_var: RitualMenuEffectTestRollVar,
+}
+///One more die the player can add to the test ("Optionally, you can roll one additional D6"); its result counts toward the total.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "One more die the player can add to the test (\"Optionally, you can roll one additional D6\"); its result counts toward the total.",
+///  "type": "object",
+///  "required": [
+///    "dice"
+///  ],
+///  "properties": {
+///    "dice": {
+///      "$ref": "#/$defs/dice-expression"
+///    },
+///    "optional": {
+///      "const": true
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct RitualMenuEffectTestExtraDie {
+    pub dice: DiceExpression,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub optional: ::std::option::Option<::serde_json::Value>,
+}
+///What happens when the test's dice match ("if one or more doubles or triples were rolled": a triple holds a double).
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "What happens when the test's dice match (\"if one or more doubles or triples were rolled\": a triple holds a double).",
+///  "type": "object",
+///  "required": [
+///    "effect",
+///    "on"
+///  ],
+///  "properties": {
+///    "effect": {
+///      "$ref": "#/$defs/effect-node"
+///    },
+///    "on": {
+///      "enum": [
+///        "double"
+///      ]
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct RitualMenuEffectTestPerils {
+    pub effect: EffectNode,
+    pub on: RitualMenuEffectTestPerilsOn,
+}
+///`RitualMenuEffectTestPerilsOn`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "enum": [
+///    "double"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum RitualMenuEffectTestPerilsOn {
+    #[serde(rename = "double")]
+    Double,
+}
+impl ::std::fmt::Display for RitualMenuEffectTestPerilsOn {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Double => f.write_str("double"),
+        }
+    }
+}
+impl ::std::str::FromStr for RitualMenuEffectTestPerilsOn {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "double" => Ok(Self::Double),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for RitualMenuEffectTestPerilsOn {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for RitualMenuEffectTestPerilsOn {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for RitualMenuEffectTestPerilsOn {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`RitualMenuEffectTestRollVar`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct RitualMenuEffectTestRollVar(::std::string::String);
+impl ::std::ops::Deref for RitualMenuEffectTestRollVar {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<RitualMenuEffectTestRollVar> for ::std::string::String {
+    fn from(value: RitualMenuEffectTestRollVar) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for RitualMenuEffectTestRollVar {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for RitualMenuEffectTestRollVar {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for RitualMenuEffectTestRollVar {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for RitualMenuEffectTestRollVar {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for RitualMenuEffectTestRollVar {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`RitualMenuEffectType`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "enum": [
+///    "ritual-menu"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum RitualMenuEffectType {
+    #[serde(rename = "ritual-menu")]
+    RitualMenu,
+}
+impl ::std::fmt::Display for RitualMenuEffectType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::RitualMenu => f.write_str("ritual-menu"),
+        }
+    }
+}
+impl ::std::str::FromStr for RitualMenuEffectType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "ritual-menu" => Ok(Self::RitualMenu),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for RitualMenuEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for RitualMenuEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for RitualMenuEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
 ///`RollEffect`
 ///
 /// <details><summary>JSON schema</summary>
@@ -39480,6 +40125,113 @@ impl ::std::convert::TryFrom<::std::string::String> for RollSelectorVariant0 {
         value: ::std::string::String,
     ) -> ::std::result::Result<Self, self::error::ConversionError> {
         value.parse()
+    }
+}
+///`RollTotalConditionParameters`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "min",
+///    "roll_var"
+///  ],
+///  "properties": {
+///    "min": {
+///      "type": "integer",
+///      "maximum": 36.0,
+///      "minimum": 1.0
+///    },
+///    "roll_var": {
+///      "type": "string",
+///      "minLength": 1
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct RollTotalConditionParameters {
+    pub min: ::std::num::NonZeroU64,
+    pub roll_var: RollTotalConditionParametersRollVar,
+}
+///`RollTotalConditionParametersRollVar`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct RollTotalConditionParametersRollVar(::std::string::String);
+impl ::std::ops::Deref for RollTotalConditionParametersRollVar {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<RollTotalConditionParametersRollVar>
+for ::std::string::String {
+    fn from(value: RollTotalConditionParametersRollVar) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for RollTotalConditionParametersRollVar {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for RollTotalConditionParametersRollVar {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for RollTotalConditionParametersRollVar {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for RollTotalConditionParametersRollVar {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for RollTotalConditionParametersRollVar {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
     }
 }
 ///`RuleActiveConditionParameters`
@@ -44872,6 +45624,24 @@ impl ::std::convert::TryFrom<::std::string::String> for Side {
 ///      "additionalProperties": false
 ///    },
 ///    {
+///      "title": "roll-total condition",
+///      "description": "[roll] The total of a roll an enclosing step bound (`roll_var`: a ritual-menu's test, a roll step) is at least min (\"if the Psychic test result for this Ritual was 10+\").",
+///      "type": "object",
+///      "required": [
+///        "parameters",
+///        "type"
+///      ],
+///      "properties": {
+///        "parameters": {
+///          "$ref": "#/$defs/roll-total-condition-parameters"
+///        },
+///        "type": {
+///          "const": "roll-total"
+///        }
+///      },
+///      "additionalProperties": false
+///    },
+///    {
 ///      "title": "visible condition",
 ///      "description": "[visibility] The subject is visible (fully visible, if set) to `to` (default the attacker). With blocked_by, the view is instead blocked by that unit.",
 ///      "type": "object",
@@ -45283,6 +46053,11 @@ pub enum SimpleCondition {
 [attack] A roll came out this way.*/
     #[serde(rename = "roll-result")]
     RollResult { parameters: RollResultConditionParameters },
+    /**roll-total condition
+
+[roll] The total of a roll an enclosing step bound (`roll_var`: a ritual-menu's test, a roll step) is at least min ("if the Psychic test result for this Ritual was 10+").*/
+    #[serde(rename = "roll-total")]
+    RollTotal { parameters: RollTotalConditionParameters },
     /**visible condition
 
 [visibility] The subject is visible (fully visible, if set) to `to` (default the attacker). With blocked_by, the view is instead blocked by that unit.*/
@@ -61572,6 +62347,9 @@ fn effect_node_from_value(
         }
         Some("oath-modifier") => {
             |v| ::serde_json::from_value(v).map(EffectNode::OathModifierEffect)
+        }
+        Some("ritual-menu") => {
+            |v| ::serde_json::from_value(v).map(EffectNode::RitualMenuEffect)
         }
         Some(other) => {
             return Err(

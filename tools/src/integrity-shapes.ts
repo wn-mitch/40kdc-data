@@ -88,6 +88,13 @@ function checkBindings(node: unknown, path: string, scope: Scope, weapons: Reado
   if (node.type === "roll" && typeof node.roll_var === "string") {
     inner = { ...scope, rolls: new Set([...scope.rolls, node.roll_var]) };
   }
+  // A ritual menu's Psychic test is the roll its Rituals read ("If the Psychic test result for this Ritual was 10+").
+  if (node.type === "ritual-menu" && isNode(node.test) && typeof node.test.roll_var === "string") {
+    inner = { ...scope, rolls: new Set([...scope.rolls, node.test.roll_var]) };
+  }
+  if (node.type === "roll-total" && isNode(node.parameters) && typeof node.parameters.roll_var === "string" && !inner.rolls.has(node.parameters.roll_var)) {
+    out.push({ path: `${path}/parameters/roll_var`, message: `roll-total "${node.parameters.roll_var}" is not inside a roll step or ritual menu that binds it` });
+  }
   if (node.type === "select-objective" && isNode(node.selector) && typeof node.selector.bind_as === "string") {
     inner = { ...scope, objectives: new Set([...scope.objectives, node.selector.bind_as]) };
   }

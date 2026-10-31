@@ -441,6 +441,15 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
                 dekebab(&st(p.get("pool")))
             )
         }
+        // "the Psychic test result is 10+": the total of a roll an enclosing step bound.
+        "roll-total" => {
+            let roll = st(p.get("roll_var"));
+            let noun = match roll.strip_suffix("-test") {
+                Some(kind) => format!("{} test", title_case(kind)),
+                None => dekebab(&roll),
+            };
+            format!("the {noun} result is {}+", st(p.get("min")))
+        }
         // ── Mission-card predicates ───────────────────────────────────────────
         "operation-markers" => {
             let side = nn(p, "side")

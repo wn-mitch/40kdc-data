@@ -3162,54 +3162,554 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "source_digest": "1bcbc3cf8cb17b9df486babbf4e6e7e5c15a09946695cbd33f034ee480730d13",
+    "source_digest": "21a5e5e50201fab8d9bf7727fab9ac1ef11a5e4ec5c4bd7fb320477ed7fd1581",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
+        "type": "army-faction",
         "parameters": {
-          "phase": "shooting"
+          "faction": "thousand-sons"
         }
       },
       "effect": {
-        "type": "sequence",
-        "steps": [
+        "type": "ritual-menu",
+        "test": {
+          "dice": "2D6",
+          "kind": "psychic",
+          "roll_var": "psychic-test",
+          "extra_die": {
+            "dice": "D6",
+            "optional": true
+          },
+          "perils": {
+            "on": "double",
+            "effect": {
+              "type": "mortal-wounds",
+              "target": "this-unit",
+              "modifier": {
+                "count": "D3"
+              }
+            }
+          }
+        },
+        "ritual_limit": {
+          "frequency": "once-per-turn",
+          "per": "army"
+        },
+        "rituals": [
           {
-            "type": "re-roll",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "hit",
-              "subset": "ones"
+            "id": "destiny-s-ruin",
+            "name": "Destiny’s Ruin",
+            "warp_charge": 5,
+            "effect": {
+              "type": "ability-part",
+              "effect": {
+                "type": "designate-target",
+                "designation": "destinys-ruin-target",
+                "select": {
+                  "kind": "unit",
+                  "selector": {
+                    "filter": {
+                      "owner": "enemy"
+                    },
+                    "count": {
+                      "min": 1,
+                      "max": 1
+                    },
+                    "eligibility": {
+                      "operator": "and",
+                      "operands": [
+                        {
+                          "type": "matches",
+                          "parameters": {
+                            "subject": "selected-unit",
+                            "filter": {
+                              "within": {
+                                "of": "this-model",
+                                "range": {
+                                  "inches": 24
+                                }
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "type": "matches",
+                          "parameters": {
+                            "subject": "selected-unit",
+                            "filter": {
+                              "visible": {
+                                "to": "this-model"
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                "applies": {
+                  "to": "attackers-of-target",
+                  "effect": {
+                    "type": "sequence",
+                    "steps": [
+                      {
+                        "type": "conditional",
+                        "condition": {
+                          "operator": "not",
+                          "operands": [
+                            {
+                              "type": "roll-total",
+                              "parameters": {
+                                "roll_var": "psychic-test",
+                                "min": 10
+                              }
+                            }
+                          ]
+                        },
+                        "effect": {
+                          "type": "re-roll",
+                          "target": {
+                            "owner": "friendly",
+                            "any_of": [
+                              "SCINTILLATING LEGIONS",
+                              "THOUSAND SONS"
+                            ],
+                            "level": "model"
+                          },
+                          "modifier": {
+                            "roll": "hit",
+                            "subset": "ones"
+                          }
+                        }
+                      },
+                      {
+                        "type": "conditional",
+                        "condition": {
+                          "type": "roll-total",
+                          "parameters": {
+                            "roll_var": "psychic-test",
+                            "min": 10
+                          }
+                        },
+                        "effect": {
+                          "type": "re-roll",
+                          "target": {
+                            "owner": "friendly",
+                            "any_of": [
+                              "SCINTILLATING LEGIONS",
+                              "THOUSAND SONS"
+                            ],
+                            "level": "model"
+                          },
+                          "modifier": {
+                            "roll": "hit",
+                            "result_scope": "any-result"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "duration": "phase"
+              },
+              "duration": "phase"
             }
           },
           {
-            "type": "stat-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "stat": "AP",
-              "operation": "improve",
-              "value": 1
+            "id": "temporal-surge",
+            "name": "Temporal Surge",
+            "warp_charge": 6,
+            "effect": {
+              "type": "ability-part",
+              "effect": {
+                "type": "select-units",
+                "selector": {
+                  "filter": {
+                    "owner": "friendly",
+                    "any_of": [
+                      "SCINTILLATING LEGIONS",
+                      "THOUSAND SONS"
+                    ]
+                  },
+                  "count": {
+                    "min": 1,
+                    "max": 1
+                  },
+                  "eligibility": {
+                    "operator": "and",
+                    "operands": [
+                      {
+                        "operator": "not",
+                        "operands": [
+                          {
+                            "type": "matches",
+                            "parameters": {
+                              "subject": "selected-unit",
+                              "filter": {
+                                "state": "engaged"
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "type": "matches",
+                        "parameters": {
+                          "subject": "selected-unit",
+                          "filter": {
+                            "within": {
+                              "of": "this-model",
+                              "range": {
+                                "inches": 24
+                              }
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "type": "matches",
+                        "parameters": {
+                          "subject": "selected-unit",
+                          "filter": {
+                            "visible": {
+                              "to": "this-model"
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "effect": {
+                  "type": "sequence",
+                  "steps": [
+                    {
+                      "type": "conditional",
+                      "condition": {
+                        "operator": "not",
+                        "operands": [
+                          {
+                            "type": "roll-total",
+                            "parameters": {
+                              "roll_var": "psychic-test",
+                              "min": 10
+                            }
+                          }
+                        ]
+                      },
+                      "effect": {
+                        "type": "move",
+                        "target": "selected-unit",
+                        "modifier": {
+                          "move_type": "normal",
+                          "distance": "D6"
+                        }
+                      }
+                    },
+                    {
+                      "type": "conditional",
+                      "condition": {
+                        "type": "roll-total",
+                        "parameters": {
+                          "roll_var": "psychic-test",
+                          "min": 10
+                        }
+                      },
+                      "effect": {
+                        "type": "move",
+                        "target": "selected-unit",
+                        "modifier": {
+                          "move_type": "normal",
+                          "distance": 6
+                        }
+                      }
+                    },
+                    {
+                      "type": "permission",
+                      "target": "selected-unit",
+                      "modifier": {
+                        "activity": "declare-charge",
+                        "allow": false
+                      }
+                    }
+                  ]
+                }
+              },
+              "duration": "turn"
             }
           },
           {
-            "type": "mortal-wounds",
-            "target": "defender",
-            "modifier": {
-              "count": "D3"
+            "id": "doombolt",
+            "name": "Doombolt",
+            "warp_charge": 7,
+            "effect": {
+              "type": "select-units",
+              "selector": {
+                "filter": {
+                  "owner": "enemy"
+                },
+                "count": {
+                  "min": 1,
+                  "max": 1
+                },
+                "eligibility": {
+                  "operator": "and",
+                  "operands": [
+                    {
+                      "operator": "and",
+                      "operands": [
+                        {
+                          "type": "matches",
+                          "parameters": {
+                            "subject": "selected-unit",
+                            "filter": {
+                              "within": {
+                                "of": "this-model",
+                                "range": {
+                                  "inches": 24
+                                }
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "type": "matches",
+                          "parameters": {
+                            "subject": "selected-unit",
+                            "filter": {
+                              "visible": {
+                                "to": "this-model"
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "operator": "or",
+                      "operands": [
+                        {
+                          "operator": "not",
+                          "operands": [
+                            {
+                              "type": "matches",
+                              "parameters": {
+                                "subject": "selected-unit",
+                                "filter": {
+                                  "has_ability": [
+                                    "lone-operative"
+                                  ]
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "attachment",
+                          "parameters": {
+                            "subject": "selected-unit",
+                            "role": "attached"
+                          }
+                        },
+                        {
+                          "type": "matches",
+                          "parameters": {
+                            "subject": "selected-unit",
+                            "filter": {
+                              "within": {
+                                "range": {
+                                  "inches": 12
+                                },
+                                "of": "this-model"
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              "effect": {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "conditional",
+                    "condition": {
+                      "operator": "not",
+                      "operands": [
+                        {
+                          "type": "roll-total",
+                          "parameters": {
+                            "roll_var": "psychic-test",
+                            "min": 11
+                          }
+                        }
+                      ]
+                    },
+                    "effect": {
+                      "type": "mortal-wounds",
+                      "target": "selected-unit",
+                      "modifier": {
+                        "count": "D3"
+                      }
+                    }
+                  },
+                  {
+                    "type": "conditional",
+                    "condition": {
+                      "type": "roll-total",
+                      "parameters": {
+                        "roll_var": "psychic-test",
+                        "min": 11
+                      }
+                    },
+                    "effect": {
+                      "type": "mortal-wounds",
+                      "target": "selected-unit",
+                      "modifier": {
+                        "count": "D3+3"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "twist-of-fate",
+            "name": "Twist of Fate",
+            "warp_charge": 9,
+            "effect": {
+              "type": "ability-part",
+              "effect": {
+                "type": "designate-target",
+                "designation": "twist-of-fate-target",
+                "select": {
+                  "kind": "unit",
+                  "selector": {
+                    "filter": {
+                      "owner": "enemy"
+                    },
+                    "count": {
+                      "min": 1,
+                      "max": 1
+                    },
+                    "eligibility": {
+                      "operator": "and",
+                      "operands": [
+                        {
+                          "type": "matches",
+                          "parameters": {
+                            "subject": "selected-unit",
+                            "filter": {
+                              "within": {
+                                "of": "this-model",
+                                "range": {
+                                  "inches": 24
+                                }
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "type": "matches",
+                          "parameters": {
+                            "subject": "selected-unit",
+                            "filter": {
+                              "visible": {
+                                "to": "this-model"
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                "applies": {
+                  "to": "attackers-of-target",
+                  "effect": {
+                    "type": "sequence",
+                    "steps": [
+                      {
+                        "type": "conditional",
+                        "condition": {
+                          "operator": "not",
+                          "operands": [
+                            {
+                              "type": "roll-total",
+                              "parameters": {
+                                "roll_var": "psychic-test",
+                                "min": 12
+                              }
+                            }
+                          ]
+                        },
+                        "effect": {
+                          "type": "stat-modifier",
+                          "target": {
+                            "owner": "friendly",
+                            "any_of": [
+                              "SCINTILLATING LEGIONS",
+                              "THOUSAND SONS"
+                            ],
+                            "level": "model"
+                          },
+                          "modifier": {
+                            "stat": "AP",
+                            "operation": "improve",
+                            "value": 1
+                          }
+                        }
+                      },
+                      {
+                        "type": "conditional",
+                        "condition": {
+                          "type": "roll-total",
+                          "parameters": {
+                            "roll_var": "psychic-test",
+                            "min": 12
+                          }
+                        },
+                        "effect": {
+                          "type": "stat-modifier",
+                          "target": {
+                            "owner": "friendly",
+                            "any_of": [
+                              "SCINTILLATING LEGIONS",
+                              "THOUSAND SONS"
+                            ],
+                            "level": "model"
+                          },
+                          "modifier": {
+                            "stat": "AP",
+                            "operation": "improve",
+                            "value": 2
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "duration": "phase"
+              },
+              "duration": "phase"
             }
           }
         ]
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "faction_id": "thousand-sons",
     "ability_type": "faction",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "auto-generated from faction rule",
     "unit_ids": [
       "ahriman",
@@ -3224,7 +3724,31 @@
       "sorcerer",
       "sorcerer-in-terminator-armour",
       "tzaangor-shaman"
-    ]
+    ],
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    },
+    "usage": {
+      "frequency": "once-per-turn",
+      "per": "model"
+    }
   },
   {
     "ability_id": "pact-of-sorcery-thousand-sons",
@@ -10005,9 +10529,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [
       "kaaskrek",
       "prism-of-zadophon-rubric-marines",
@@ -10018,7 +10541,542 @@
     "detachment_id": "prism-of-zadophon",
     "ability_type": "faction",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "army-faction",
+        "parameters": {
+          "faction": "thousand-sons"
+        }
+      },
+      "effect": {
+        "type": "ritual-menu",
+        "test": {
+          "dice": "2D6",
+          "kind": "psychic",
+          "roll_var": "psychic-test",
+          "extra_die": {
+            "dice": "D6",
+            "optional": true
+          },
+          "perils": {
+            "on": "double",
+            "effect": {
+              "type": "mortal-wounds",
+              "target": "this-unit",
+              "modifier": {
+                "count": "D3"
+              }
+            }
+          }
+        },
+        "ritual_limit": {
+          "frequency": "once-per-turn",
+          "per": "army"
+        },
+        "rituals": [
+          {
+            "id": "destiny-s-ruin",
+            "name": "Destiny’s Ruin",
+            "warp_charge": 5,
+            "effect": {
+              "type": "ability-part",
+              "effect": {
+                "type": "designate-target",
+                "designation": "destinys-ruin-target",
+                "select": {
+                  "kind": "unit",
+                  "selector": {
+                    "filter": {
+                      "owner": "enemy"
+                    },
+                    "count": {
+                      "min": 1,
+                      "max": 1
+                    },
+                    "eligibility": {
+                      "operator": "and",
+                      "operands": [
+                        {
+                          "type": "matches",
+                          "parameters": {
+                            "subject": "selected-unit",
+                            "filter": {
+                              "within": {
+                                "of": "this-model",
+                                "range": {
+                                  "inches": 24
+                                }
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "type": "matches",
+                          "parameters": {
+                            "subject": "selected-unit",
+                            "filter": {
+                              "visible": {
+                                "to": "this-model"
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                "applies": {
+                  "to": "attackers-of-target",
+                  "effect": {
+                    "type": "sequence",
+                    "steps": [
+                      {
+                        "type": "conditional",
+                        "condition": {
+                          "operator": "not",
+                          "operands": [
+                            {
+                              "type": "roll-total",
+                              "parameters": {
+                                "roll_var": "psychic-test",
+                                "min": 10
+                              }
+                            }
+                          ]
+                        },
+                        "effect": {
+                          "type": "re-roll",
+                          "target": {
+                            "owner": "friendly",
+                            "any_of": [
+                              "SCINTILLATING LEGIONS",
+                              "THOUSAND SONS"
+                            ],
+                            "level": "model"
+                          },
+                          "modifier": {
+                            "roll": "hit",
+                            "subset": "ones"
+                          }
+                        }
+                      },
+                      {
+                        "type": "conditional",
+                        "condition": {
+                          "type": "roll-total",
+                          "parameters": {
+                            "roll_var": "psychic-test",
+                            "min": 10
+                          }
+                        },
+                        "effect": {
+                          "type": "re-roll",
+                          "target": {
+                            "owner": "friendly",
+                            "any_of": [
+                              "SCINTILLATING LEGIONS",
+                              "THOUSAND SONS"
+                            ],
+                            "level": "model"
+                          },
+                          "modifier": {
+                            "roll": "hit",
+                            "result_scope": "any-result"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "duration": "phase"
+              },
+              "duration": "phase"
+            }
+          },
+          {
+            "id": "temporal-surge",
+            "name": "Temporal Surge",
+            "warp_charge": 6,
+            "effect": {
+              "type": "ability-part",
+              "effect": {
+                "type": "select-units",
+                "selector": {
+                  "filter": {
+                    "owner": "friendly",
+                    "any_of": [
+                      "SCINTILLATING LEGIONS",
+                      "THOUSAND SONS"
+                    ]
+                  },
+                  "count": {
+                    "min": 1,
+                    "max": 1
+                  },
+                  "eligibility": {
+                    "operator": "and",
+                    "operands": [
+                      {
+                        "operator": "not",
+                        "operands": [
+                          {
+                            "type": "matches",
+                            "parameters": {
+                              "subject": "selected-unit",
+                              "filter": {
+                                "state": "engaged"
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "type": "matches",
+                        "parameters": {
+                          "subject": "selected-unit",
+                          "filter": {
+                            "within": {
+                              "of": "this-model",
+                              "range": {
+                                "inches": 24
+                              }
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "type": "matches",
+                        "parameters": {
+                          "subject": "selected-unit",
+                          "filter": {
+                            "visible": {
+                              "to": "this-model"
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "effect": {
+                  "type": "sequence",
+                  "steps": [
+                    {
+                      "type": "conditional",
+                      "condition": {
+                        "operator": "not",
+                        "operands": [
+                          {
+                            "type": "roll-total",
+                            "parameters": {
+                              "roll_var": "psychic-test",
+                              "min": 10
+                            }
+                          }
+                        ]
+                      },
+                      "effect": {
+                        "type": "move",
+                        "target": "selected-unit",
+                        "modifier": {
+                          "move_type": "normal",
+                          "distance": "D6"
+                        }
+                      }
+                    },
+                    {
+                      "type": "conditional",
+                      "condition": {
+                        "type": "roll-total",
+                        "parameters": {
+                          "roll_var": "psychic-test",
+                          "min": 10
+                        }
+                      },
+                      "effect": {
+                        "type": "move",
+                        "target": "selected-unit",
+                        "modifier": {
+                          "move_type": "normal",
+                          "distance": 6
+                        }
+                      }
+                    },
+                    {
+                      "type": "permission",
+                      "target": "selected-unit",
+                      "modifier": {
+                        "activity": "declare-charge",
+                        "allow": false
+                      }
+                    }
+                  ]
+                }
+              },
+              "duration": "turn"
+            }
+          },
+          {
+            "id": "doombolt",
+            "name": "Doombolt",
+            "warp_charge": 7,
+            "effect": {
+              "type": "select-units",
+              "selector": {
+                "filter": {
+                  "owner": "enemy"
+                },
+                "count": {
+                  "min": 1,
+                  "max": 1
+                },
+                "eligibility": {
+                  "operator": "and",
+                  "operands": [
+                    {
+                      "operator": "and",
+                      "operands": [
+                        {
+                          "type": "matches",
+                          "parameters": {
+                            "subject": "selected-unit",
+                            "filter": {
+                              "within": {
+                                "of": "this-model",
+                                "range": {
+                                  "inches": 24
+                                }
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "type": "matches",
+                          "parameters": {
+                            "subject": "selected-unit",
+                            "filter": {
+                              "visible": {
+                                "to": "this-model"
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "operator": "or",
+                      "operands": [
+                        {
+                          "operator": "not",
+                          "operands": [
+                            {
+                              "type": "matches",
+                              "parameters": {
+                                "subject": "selected-unit",
+                                "filter": {
+                                  "has_ability": [
+                                    "lone-operative"
+                                  ]
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "attachment",
+                          "parameters": {
+                            "subject": "selected-unit",
+                            "role": "attached"
+                          }
+                        },
+                        {
+                          "type": "matches",
+                          "parameters": {
+                            "subject": "selected-unit",
+                            "filter": {
+                              "within": {
+                                "range": {
+                                  "inches": 12
+                                },
+                                "of": "this-model"
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              "effect": {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "conditional",
+                    "condition": {
+                      "operator": "not",
+                      "operands": [
+                        {
+                          "type": "roll-total",
+                          "parameters": {
+                            "roll_var": "psychic-test",
+                            "min": 11
+                          }
+                        }
+                      ]
+                    },
+                    "effect": {
+                      "type": "mortal-wounds",
+                      "target": "selected-unit",
+                      "modifier": {
+                        "count": "D3"
+                      }
+                    }
+                  },
+                  {
+                    "type": "conditional",
+                    "condition": {
+                      "type": "roll-total",
+                      "parameters": {
+                        "roll_var": "psychic-test",
+                        "min": 11
+                      }
+                    },
+                    "effect": {
+                      "type": "mortal-wounds",
+                      "target": "selected-unit",
+                      "modifier": {
+                        "count": "D3+3"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "twist-of-fate",
+            "name": "Twist of Fate",
+            "warp_charge": 9,
+            "effect": {
+              "type": "ability-part",
+              "effect": {
+                "type": "designate-target",
+                "designation": "twist-of-fate-target",
+                "select": {
+                  "kind": "unit",
+                  "selector": {
+                    "filter": {
+                      "owner": "enemy"
+                    },
+                    "count": {
+                      "min": 1,
+                      "max": 1
+                    },
+                    "eligibility": {
+                      "operator": "and",
+                      "operands": [
+                        {
+                          "type": "matches",
+                          "parameters": {
+                            "subject": "selected-unit",
+                            "filter": {
+                              "within": {
+                                "of": "this-model",
+                                "range": {
+                                  "inches": 24
+                                }
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "type": "matches",
+                          "parameters": {
+                            "subject": "selected-unit",
+                            "filter": {
+                              "visible": {
+                                "to": "this-model"
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                "applies": {
+                  "to": "attackers-of-target",
+                  "effect": {
+                    "type": "sequence",
+                    "steps": [
+                      {
+                        "type": "conditional",
+                        "condition": {
+                          "operator": "not",
+                          "operands": [
+                            {
+                              "type": "roll-total",
+                              "parameters": {
+                                "roll_var": "psychic-test",
+                                "min": 12
+                              }
+                            }
+                          ]
+                        },
+                        "effect": {
+                          "type": "stat-modifier",
+                          "target": {
+                            "owner": "friendly",
+                            "any_of": [
+                              "SCINTILLATING LEGIONS",
+                              "THOUSAND SONS"
+                            ],
+                            "level": "model"
+                          },
+                          "modifier": {
+                            "stat": "AP",
+                            "operation": "improve",
+                            "value": 1
+                          }
+                        }
+                      },
+                      {
+                        "type": "conditional",
+                        "condition": {
+                          "type": "roll-total",
+                          "parameters": {
+                            "roll_var": "psychic-test",
+                            "min": 12
+                          }
+                        },
+                        "effect": {
+                          "type": "stat-modifier",
+                          "target": {
+                            "owner": "friendly",
+                            "any_of": [
+                              "SCINTILLATING LEGIONS",
+                              "THOUSAND SONS"
+                            ],
+                            "level": "model"
+                          },
+                          "modifier": {
+                            "stat": "AP",
+                            "operation": "improve",
+                            "value": 2
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "duration": "phase"
+              },
+              "duration": "phase"
+            }
+          }
+        ]
+      }
     },
     "scope": {
       "duration": "permanent"
@@ -10028,7 +11086,33 @@
         "ability_ref": "cabal-of-sorcerers-thousand-sons",
         "type": "replaces"
       }
-    ]
+    ],
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    },
+    "usage": {
+      "frequency": "once-per-turn",
+      "per": "model"
+    },
+    "source_digest": "21a5e5e50201fab8d9bf7727fab9ac1ef11a5e4ec5c4bd7fb320477ed7fd1581"
   },
   {
     "ability_id": "committed-to-the-ritual-thousand-sons",

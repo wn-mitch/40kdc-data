@@ -210,6 +210,7 @@ _VERB_NEGATED = frozenset(
         "resource",
         "attack-compare",
         "happened-compare",
+        "roll-total",
         "operation-markers",
         "engagement-fronts",
         "destroyed-while-on-objective",
@@ -671,6 +672,12 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
         )
         # A pool is the player's ("If you have 3 or more Pact points").
         return f"you have {amount} {dekebab(_str(p.get('pool')))}"
+    if ctype == "roll-total":
+        # "the Psychic test result is 10+": the total of a roll an enclosing step bound.
+        roll = _str(p.get("roll_var"))
+        kind = roll[: -len("-test")]
+        noun = f"{title_case(kind)} test" if roll.endswith("-test") else dekebab(roll)
+        return f"the {noun} result is {_str(p.get('min'))}+"
     if ctype == "operation-markers":
         side_s = f"{_str(p['side'])} " if p.get("side") is not None else ""
         lo, hi = _count_bounds(p)

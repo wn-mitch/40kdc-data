@@ -31,7 +31,7 @@ export { dekebab, moveKinds, rangePhrase, titleCase, unitFilterPhrase, unitRefPh
 /** Predicates whose phrase negates by turning its verb (see `negatePhrase`). */
 const VERB_NEGATED = new Set([
   "strength", "model-count", "wounds", "loadout", "equipped-weapon-count", "attachment", "controls", "resource", "attack-compare",
-  "happened-compare", "operation-markers", "engagement-fronts", "destroyed-while-on-objective", "destroyed-in-tagged-terrain", "army-faction", "battle-size",
+  "happened-compare", "roll-total", "operation-markers", "engagement-fronts", "destroyed-while-on-objective", "destroyed-in-tagged-terrain", "army-faction", "battle-size",
 ]);
 
 /** "X is Y" → "X is not Y", "X has Y" → "X does not have Y", "you control" → "you do not control"; else a leading "not". */
@@ -283,6 +283,12 @@ export function describePredicate(c: Condition, negated: boolean): string {
       const amount = countPhrase(p.count);
       // A pool is the player's ("If you have 3 or more Pact points").
       return `you have ${amount} ${dekebab(str(p.pool))}`;
+    }
+    // "the Psychic test result is 10+": the total of a roll an enclosing step bound.
+    case "roll-total": {
+      const roll = str(p.roll_var);
+      const noun = roll.endsWith("-test") ? `${titleCase(roll.slice(0, -"-test".length))} test` : dekebab(roll);
+      return `the ${noun} result is ${str(p.min)}+`;
     }
     // ── Mission-card predicates ───────────────────────────────────────────
     case "operation-markers": {

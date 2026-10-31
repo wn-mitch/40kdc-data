@@ -168,6 +168,18 @@ export const CHOICE_AND_DICE_EXTENSIONS: readonly FamilyExtension[] = [
     },
   },
   {
+    // "**Doombolt (Psychic)**", whose card prints "Warp Charge - 7": the test result the Ritual needs.
+    family: "named-option",
+    version: 4,
+    description: "As the previous version, plus warp_charge on a Ritual of a ritual menu: the Psychic test result it needs (2-18), from the Ritual's card where its text does not print it.",
+    schema: (previous) => withProperties(previous, { warp_charge: optional({ type: "integer", minimum: 2, maximum: 18 }) }),
+    normalize: (input, previous) => {
+      if (input.warp_charge === undefined) return previous(input);
+      const { warp_charge: warpCharge, ...rest } = input;
+      return { ...previous(rest), warp_charge: boundedInteger(warpCharge, 2, 18, "named-option.warp_charge") };
+    },
+  },
+  {
     // "that model regains all of its lost wounds".
     family: "regain-wounds",
     version: 5,

@@ -327,6 +327,14 @@ describe("integrity: phase-4 bindings", () => {
     ]);
   });
 
+  it("reads a roll-total only inside the ritual menu or roll that binds its roll", async () => {
+    const gate = { type: "conditional", condition: { type: "roll-total", parameters: { roll_var: "psychic-test", min: 10 } }, effect: { type: "no-effect" } };
+    expect(await run(gate)).toEqual(['roll-total "psychic-test" is not inside a roll step or ritual menu that binds it']);
+    const menu = (effect: unknown) => ({ type: "ritual-menu", test: { dice: "2D6", roll_var: "psychic-test" }, ritual_limit: { frequency: "once-per-turn", per: "army" }, rituals: [{ id: "gloom-bolt", name: "Gloom Bolt", warp_charge: 6, effect }] });
+    expect(await run(menu(gate))).toEqual([]);
+    expect(await run({ type: "sequence", steps: [menu({ type: "no-effect" }), gate] })).toEqual(['roll-total "psychic-test" is not inside a roll step or ritual menu that binds it']);
+  });
+
   it("requires bound objectives, bound weapons and one binding per split unit", async () => {
     expect(await run(leaf("designate", { subject: { objective: { selection_var: "o" } }, tag: "mutated" }))).toEqual([
       'objective {selection_var: "o"} is not inside a select-objective that binds it',

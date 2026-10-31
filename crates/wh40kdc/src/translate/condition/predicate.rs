@@ -25,6 +25,7 @@ pub(crate) fn verb_negated(t: &str) -> bool {
             | "resource"
             | "attack-compare"
             | "happened-compare"
+            | "roll-total"
             | "operation-markers"
             | "engagement-fronts"
             | "destroyed-while-on-objective"

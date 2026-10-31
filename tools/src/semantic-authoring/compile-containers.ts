@@ -9,6 +9,8 @@ import { selectionFilter } from "./compile-wrappers.js";
 import { buildResourceActionMenu } from "./compile-resource-menu.js";
 import { condition, duration } from "./compile-conditions.js";
 import { gatedMoment } from "./compile-usability-gate.js";
+import { buildRitualMenu, isRitualTestLeaf } from "./compile-ritual-menu.js";
+import { RITUAL_MENU_OPEN } from "./psychic-families.js";
 
 /**
  * Container fragments (batch 5). `compile.ts` delegates here in two ways:
@@ -30,7 +32,7 @@ type Node = Record<string, unknown>;
 
 const LEADING_CONTAINERS = new Set([
   "choice-open", "stance-select-open", "issue-orders-open", "dice-pool-allocation-open",
-  "risk-reward-open", "resource-action-menu-open", "persistent-designation-open", "select-objective-open",
+  "risk-reward-open", "resource-action-menu-open", "persistent-designation-open", "select-objective-open", RITUAL_MENU_OPEN,
 ]);
 /** Openers that wrap a single combined body instead of splitting into two or more options. */
 const SINGLE_BODY_CONTAINERS = new Set(["persistent-designation-open", "select-objective-open"]);
@@ -48,7 +50,7 @@ function opensMoment(list: readonly CompileLeaf[], from: number): boolean {
   return false;
 }
 /** Openers each of whose options leads with a named-option leaf. */
-const NAMED_OPTION_CONTAINERS = new Set(["stance-select-open", "issue-orders-open", "dice-pool-allocation-open"]);
+const NAMED_OPTION_CONTAINERS = new Set(["stance-select-open", "issue-orders-open", "dice-pool-allocation-open", RITUAL_MENU_OPEN]);
 /** Openers whose options may number just one (the DSL's own `actions`/`outcomes` array allows it). */
 const ONE_OR_MORE_CONTAINERS = new Set(["resource-action-menu-open"]);
 
@@ -88,13 +90,13 @@ export function containerEffect(leaf: CompileLeaf): Node | undefined {
  * already names a bearer (persistent-designation's `beneficiary`) passes that name instead, so a
  * reroll inside it targets the same bearer the container itself names, not a second default.
  */
-function effectsOf(leaves: readonly CompileLeaf[], attacker: Record<string, unknown> | string | null = null, objective?: string): Node {
+function effectsOf(leaves: readonly CompileLeaf[], attacker: Record<string, unknown> | string | null = null, objective?: string, name?: string): Node {
   if (leaves.length === 0) throw new CompileError("An option has no effect.");
   const bad = leaves.find((leaf) => leaf.role !== "EFFECT");
   if (bad) {
     // An option with its own moment or conditions ("Each time a model in this unit makes a
     // Pile-in move, …") compiles like a whole ability of its own, as one ability-part.
-    if (nestedCompiler) return nestedCompiler(leaves, objective);
+    if (nestedCompiler) return nestedCompiler(leaves, objective, name);
     throw new CompileError(`An option here can only hold effect leaves; ${bad.family_id} has no place inside it.`);
   }
   const nodes = leaves.map((leaf) => effect(leaf, { attached: false, attacker, incoming: false }));
@@ -106,7 +108,7 @@ function effectsOf(leaves: readonly CompileLeaf[], attacker: Record<string, unkn
  * `planContainers` for the duration of one plan: `compile.ts` owns that pipeline, and passing it in
  * keeps this module free of an import cycle.
  */
-let nestedCompiler: ((leaves: readonly CompileLeaf[], objective?: string) => Node) | null = null;
+let nestedCompiler: ((leaves: readonly CompileLeaf[], objective?: string, name?: string) => Node) | null = null;
 
 /**
  * What choosing any option of the menu being built does, printed once before the first option
@@ -125,7 +127,7 @@ function withSharedSteps(option: Node, shared: Node): Node {
 }
 
 /** A named option's leading `named-option` leaf, and the plain effect leaves after it. */
-function namedOption(group: readonly CompileLeaf[], forRequirement: boolean, sourceIndex = 0): { id: string; name: unknown; effect: Node; marker: CompileLeaf } {
+function namedOption(group: readonly CompileLeaf[], forRequirement: boolean, sourceIndex = 0, ritual = false): { id: string; name: unknown; effect: Node; marker: CompileLeaf } {
   const marker = group[0];
   if (!marker || marker.family_id !== "named-option") throw new CompileError("Each option here needs a leading named-option leaf giving its name.");
   const hasRequirement = marker.parameters.requirement_type !== undefined || marker.parameters.requirement_any_of !== undefined;
@@ -141,7 +143,8 @@ function namedOption(group: readonly CompileLeaf[], forRequirement: boolean, sou
     throw new CompileError(`Option ${sourceIndex + 1}'s named-option leaf needs a reviewed option_id.`);
   }
   const id = reviewedId;
-  const effect = effectsOf(group.slice(1));
+  // A Ritual is a rule of its own: a unit it designates carries the Ritual's tag, not the menu record's.
+  const effect = effectsOf(group.slice(1), null, undefined, ritual ? String(closed(marker, "label")) : undefined);
   return { id, name: closed(marker, "label"), effect: sharedOptionSteps === null ? effect : withSharedSteps(effect, sharedOptionSteps), marker };
 }
 
@@ -426,7 +429,7 @@ export type ContainerPlan = { nodes: Map<number, Node>; consumed: Set<number> };
  * node is `nodes.get(openerIndex)`.
  */
 export function planContainers(
-  list: readonly CompileLeaf[], sentenceOf: readonly number[], nested: ((leaves: readonly CompileLeaf[], objective?: string) => Node) | null = null, bullets: readonly boolean[] = [],
+  list: readonly CompileLeaf[], sentenceOf: readonly number[], nested: ((leaves: readonly CompileLeaf[], objective?: string, name?: string) => Node) | null = null, bullets: readonly boolean[] = [],
   commas: readonly boolean[] = [], lines: readonly boolean[] = [],
 ): ContainerPlan {
   const outer = nestedCompiler;
@@ -515,6 +518,18 @@ function planContainerNodes(list: readonly CompileLeaf[], sentenceOf: readonly n
     if (byMarker && leaf.family_id === "choice-open") groups.splice(0, groups.length, ...withoutSharedBattleSizeTable(groups));
     // A roll printed before the first named option is each option's roll (compile-shared-roll.ts).
     if (byMarker && leaf.family_id === "choice-open") groups.splice(0, groups.length, ...withSharedRoll(groups, optionMarker));
+    // A Warp Charge is a Ritual's: only a ritual menu's options read it.
+    const charged = leaf.family_id === RITUAL_MENU_OPEN ? undefined : groups.flat().find((item) => item.family_id === "named-option" && item.parameters.warp_charge !== undefined);
+    if (charged !== undefined) throw new CompileError(`The named-option at byte ${charged.start_byte} carries a warp_charge, which only a Ritual of a ritual menu has.`);
+    // The Psychic test printed before the first Ritual is the menu's own; the rest of those leaves go back to the record.
+    if (leaf.family_id === RITUAL_MENU_OPEN) {
+      const first = groups.findIndex((group) => group[0]!.family_id === "named-option");
+      if (first < 0) throw new CompileError("A ritual menu needs its Rituals after it, each a named option.");
+      const before = groups.splice(0, first).flat();
+      for (const returned of before.filter((item) => !isRitualTestLeaf(item))) consumed.delete(list.indexOf(returned));
+      nodes.set(index, buildRitualMenu(before.filter(isRitualTestLeaf), groups.map((group, at) => namedOption(group, false, at, true))));
+      return;
+    }
     // "Each time you select an Order for the bearer to issue, you can select the Order below": one more Order on its menu.
     const added = byMarker && leaf.family_id === "choice-open" && groups.length === 1 ? addedOrderMoment(list, index) : null;
     if (added !== null) {

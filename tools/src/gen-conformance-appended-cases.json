@@ -3463,5 +3463,265 @@
       "duration": "permanent"
     },
     "behavior": "reactive"
+  },
+  {
+    "caseId": "canonical/ritual-menu-block",
+    "effect": {
+      "type": "ritual-menu",
+      "test": {
+        "dice": "2D6",
+        "kind": "psychic",
+        "roll_var": "psychic-test",
+        "extra_die": {
+          "dice": "D6",
+          "optional": true
+        },
+        "perils": {
+          "on": "double",
+          "effect": {
+            "type": "mortal-wounds",
+            "target": "this-unit",
+            "modifier": {
+              "count": "D3"
+            }
+          }
+        }
+      },
+      "ritual_limit": {
+        "frequency": "once-per-turn",
+        "per": "army"
+      },
+      "rituals": [
+        {
+          "id": "gloom-bolt",
+          "name": "Gloom Bolt",
+          "warp_charge": 6,
+          "effect": {
+            "type": "select-units",
+            "selector": {
+              "filter": {
+                "owner": "enemy"
+              },
+              "count": {
+                "min": 1,
+                "max": 1
+              },
+              "eligibility": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "selected-unit",
+                  "filter": {
+                    "within": {
+                      "of": "this-model",
+                      "range": {
+                        "inches": 18
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "conditional",
+                  "condition": {
+                    "operator": "not",
+                    "operands": [
+                      {
+                        "type": "roll-total",
+                        "parameters": {
+                          "roll_var": "psychic-test",
+                          "min": 10
+                        }
+                      }
+                    ]
+                  },
+                  "effect": {
+                    "type": "mortal-wounds",
+                    "target": "selected-unit",
+                    "modifier": {
+                      "count": "D3"
+                    }
+                  }
+                },
+                {
+                  "type": "conditional",
+                  "condition": {
+                    "type": "roll-total",
+                    "parameters": {
+                      "roll_var": "psychic-test",
+                      "min": 10
+                    }
+                  },
+                  "effect": {
+                    "type": "mortal-wounds",
+                    "target": "selected-unit",
+                    "modifier": {
+                      "count": "D6"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": "hush",
+          "name": "Hush",
+          "warp_charge": 5,
+          "effect": {
+            "type": "ability-part",
+            "effect": {
+              "type": "select-units",
+              "selector": {
+                "filter": {
+                  "owner": "friendly"
+                },
+                "count": {
+                  "min": 1,
+                  "max": 1
+                },
+                "eligibility": {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "selected-unit",
+                    "filter": {
+                      "within": {
+                        "of": "this-model",
+                        "range": {
+                          "inches": 12
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "effect": {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "move",
+                    "target": "selected-unit",
+                    "modifier": {
+                      "move_type": "normal",
+                      "distance": "D6"
+                    }
+                  },
+                  {
+                    "type": "permission",
+                    "target": "selected-unit",
+                    "modifier": {
+                      "activity": "declare-charge",
+                      "allow": false
+                    }
+                  }
+                ]
+              }
+            },
+            "duration": "turn"
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "reactive"
+  },
+  {
+    "caseId": "canonical/ritual-menu-inline-bare-test",
+    "effect": {
+      "type": "choice",
+      "options": [
+        {
+          "type": "ritual-menu",
+          "test": {
+            "dice": "2D6",
+            "roll_var": "psychic-test",
+            "extra_die": {
+              "dice": "D3"
+            }
+          },
+          "ritual_limit": {
+            "frequency": "once-per-turn",
+            "per": "army"
+          },
+          "rituals": [
+            {
+              "id": "gloom-bolt",
+              "name": "Gloom Bolt",
+              "warp_charge": 6,
+              "effect": {
+                "type": "conditional",
+                "condition": {
+                  "type": "roll-total",
+                  "parameters": {
+                    "roll_var": "psychic-test",
+                    "min": 9
+                  }
+                },
+                "effect": {
+                  "type": "mortal-wounds",
+                  "target": "this-unit",
+                  "modifier": {
+                    "count": 1
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "mortal-wounds",
+          "target": "this-unit",
+          "modifier": {
+            "count": 1
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "passive"
+  },
+  {
+    "caseId": "canonical/roll-total-negated-trigger",
+    "effect": {
+      "type": "roll",
+      "dice": "2D6",
+      "roll_var": "psychic-test",
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "phase-ended",
+          "condition": {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "roll-total",
+                "parameters": {
+                  "roll_var": "psychic-test",
+                  "min": 10
+                }
+              }
+            ]
+          }
+        },
+        "effect": {
+          "type": "mortal-wounds",
+          "target": "this-unit",
+          "modifier": {
+            "count": 1
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "reactive"
   }
 ]

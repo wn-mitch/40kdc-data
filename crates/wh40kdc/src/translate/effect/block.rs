@@ -86,6 +86,7 @@ pub(super) fn block(e: &Value, depth: usize, ctx: &Ctx) -> String {
         }
         "roll" => super::bind::roll_block(e, depth, ctx),
         "select-objective" => super::bind::select_objective_block(e, depth, ctx),
+        "ritual-menu" => super::ritual::ritual_menu_block(e, depth, ctx),
         "dice-table" => {
             let mut lines = vec![format!(
                 "{indent}{arrow}{}:",

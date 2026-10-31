@@ -26,6 +26,7 @@ mod menu;
 mod placement;
 mod quantity;
 mod region;
+mod ritual;
 mod select;
 mod subject;
 mod words;
@@ -57,6 +58,7 @@ pub(crate) use words::{bracket_keyword, dice_case, title_case, weapon_noun};
 const CONTAINER_TYPES: &[&str] = &[
     "roll",
     "select-objective",
+    "ritual-menu",
     "sequence",
     "rules-bundle",
     "ability-part",
@@ -505,6 +507,7 @@ fn inline_base(e: &P, ctx: &Ctx) -> String {
             inline(child(e, "effect"), ctx)
         ),
         "select-objective" => bind::select_objective_inline(e, ctx),
+        "ritual-menu" => ritual::ritual_menu_inline(e, ctx),
         "dice-table" => dice_table_inline(e, ctx),
         "dice-pool-allocation" => {
             let opts = items(e, "options")

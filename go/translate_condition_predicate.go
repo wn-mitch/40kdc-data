@@ -41,7 +41,7 @@ func notWord(negated bool) string {
 // verbNegated lists predicates whose phrase negates by turning its verb (see negatePhrase).
 var verbNegated = map[string]bool{
 	"strength": true, "model-count": true, "wounds": true, "loadout": true, "equipped-weapon-count": true, "attachment": true, "has-ability": true,
-	"controls": true, "resource": true, "attack-compare": true, "happened-compare": true, "operation-markers": true,
+	"controls": true, "resource": true, "attack-compare": true, "happened-compare": true, "roll-total": true, "operation-markers": true,
 	"engagement-fronts": true, "destroyed-while-on-objective": true, "destroyed-in-tagged-terrain": true,
 	"army-faction": true, "battle-size": true,
 }
@@ -782,6 +782,14 @@ func describePredicate(c map[string]any, negated bool) string {
 			by = " by " + by
 		}
 		return subjectOf(p, "the unit") + " is " + neg + designationPhrase(cstr(p["tag"]), false) + by
+	case "roll-total":
+		// "the Psychic test result is 10+": the total of a roll an enclosing step bound.
+		roll := cstr(p["roll_var"])
+		noun := dekebab(roll)
+		if kind, ok := strings.CutSuffix(roll, "-test"); ok {
+			noun = titleCase(kind) + " test"
+		}
+		return "the " + noun + " result is " + cstr(p["min"]) + "+"
 	case "resource":
 		if p["below_max"] == true {
 			source := mapOr(p["source_ability"])["ability_id"]

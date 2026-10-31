@@ -50,6 +50,7 @@ from wh40kdc.translate.effect_region import (
     describe_menu_action,
     shared_usage_clause,
 )
+from wh40kdc.translate.effect_ritual import ritual_menu_block
 from wh40kdc.translate.effect_select import (
     _selector_level,
     designated_recipient_context,
@@ -101,6 +102,7 @@ _CONTAINER_TYPES = frozenset(
     {
         "roll",
         "select-objective",
+        "ritual-menu",
         "sequence",
         "rules-bundle",
         "ability-part",
@@ -197,6 +199,8 @@ def describe_effect(e: Effect, depth: int = 0, ctx: Ctx | None = None) -> str:
         if _is_container(inner):
             return f"{head}, then:\n" + describe_effect(inner, depth + 1, ctx)
         return f"{head}; then {describe_effect_inline(inner, ctx)}."
+    if t == "ritual-menu":
+        return ritual_menu_block(e, indent, arrow, lambda x: inline(x, ctx))
     if t == "select-objective":
         inner = _obj(e.get("effect"))
         nested = describe_effect(inner, depth + 1, ctx) if _is_container(inner) else None

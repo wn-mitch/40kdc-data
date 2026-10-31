@@ -62,6 +62,30 @@ test('closed no-effect leaves remain explicit inside dice-table bands', () => {
   assert.ok(argument(table, 'members').some(band => band.results[0] === 1 && band.effect === noop.semantic_key))
 })
 
+test('ritual menu claims its perils and each Ritual as children and keeps the test as controls', () => {
+  const result = mapEffectNodeToCandidates({
+    origin_id,
+    node: {
+      type: 'ritual-menu',
+      test: { dice: '2D6', kind: 'psychic', roll_var: 'psychic-test', perils: { on: 'double', effect: { type: 'mortal-wounds', target: 'this-unit', modifier: { count: 'D3' } } } },
+      ritual_limit: { frequency: 'once-per-turn', per: 'army' },
+      rituals: [
+        { id: 'fabricated-first', name: 'First', warp_charge: 5, effect: leaf('objective-sticky') },
+        { id: 'fabricated-second', name: 'Second', warp_charge: 7, effect: leaf('mortal-wounds') },
+      ],
+    },
+  })
+  assert.deepEqual(result.unresolved, [])
+  const menu = byPredicate(result.assertions, 'mechanic.composition.ritual-menu')[0]
+  const perils = result.assertions.find(assertion => assertion.extraction_local_id.endsWith('/test/perils/effect'))
+  assert.equal(argument(menu, 'on-failure'), perils.semantic_key)
+  assert.equal(argument(menu, 'members').length, 2)
+  assert.ok(!argument(menu, 'members').includes(perils.semantic_key))
+  const controls = argument(menu, 'parameters')
+  assert.deepEqual(controls.test, { dice: '2D6', kind: 'psychic', roll_var: 'psychic-test', perils: { on: 'double' } })
+  assert.deepEqual(controls.ritual_limit, { frequency: 'once-per-turn', per: 'army' })
+})
+
 test('canonical oath branches and inline ability grants retain nested effect claims', () => {
   const oath = mapEffectNodeToCandidates({
     origin_id,

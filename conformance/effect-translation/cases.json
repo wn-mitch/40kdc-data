@@ -12802,7 +12802,1149 @@
     }
   },
   {
-    "caseId": "callous-sacrifice-siege-regiment-astra-militarum#200",
+    "caseId": "cabal-of-sorcerers-prism-of-zadophon-thousand-sons#200",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "army-faction",
+        "parameters": {
+          "faction": "thousand-sons"
+        }
+      },
+      "effect": {
+        "type": "ritual-menu",
+        "test": {
+          "dice": "2D6",
+          "kind": "psychic",
+          "roll_var": "psychic-test",
+          "extra_die": {
+            "dice": "D6",
+            "optional": true
+          },
+          "perils": {
+            "on": "double",
+            "effect": {
+              "type": "mortal-wounds",
+              "target": "this-unit",
+              "modifier": {
+                "count": "D3"
+              }
+            }
+          }
+        },
+        "ritual_limit": {
+          "frequency": "once-per-turn",
+          "per": "army"
+        },
+        "rituals": [
+          {
+            "id": "destiny-s-ruin",
+            "name": "Destiny’s Ruin",
+            "warp_charge": 5,
+            "effect": {
+              "type": "ability-part",
+              "effect": {
+                "type": "designate-target",
+                "designation": "destinys-ruin-target",
+                "select": {
+                  "kind": "unit",
+                  "selector": {
+                    "filter": {
+                      "owner": "enemy"
+                    },
+                    "count": {
+                      "min": 1,
+                      "max": 1
+                    },
+                    "eligibility": {
+                      "operator": "and",
+                      "operands": [
+                        {
+                          "type": "matches",
+                          "parameters": {
+                            "subject": "selected-unit",
+                            "filter": {
+                              "within": {
+                                "of": "this-model",
+                                "range": {
+                                  "inches": 24
+                                }
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "type": "matches",
+                          "parameters": {
+                            "subject": "selected-unit",
+                            "filter": {
+                              "visible": {
+                                "to": "this-model"
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                "applies": {
+                  "to": "attackers-of-target",
+                  "effect": {
+                    "type": "sequence",
+                    "steps": [
+                      {
+                        "type": "conditional",
+                        "condition": {
+                          "operator": "not",
+                          "operands": [
+                            {
+                              "type": "roll-total",
+                              "parameters": {
+                                "roll_var": "psychic-test",
+                                "min": 10
+                              }
+                            }
+                          ]
+                        },
+                        "effect": {
+                          "type": "re-roll",
+                          "target": {
+                            "owner": "friendly",
+                            "any_of": [
+                              "SCINTILLATING LEGIONS",
+                              "THOUSAND SONS"
+                            ],
+                            "level": "model"
+                          },
+                          "modifier": {
+                            "roll": "hit",
+                            "subset": "ones"
+                          }
+                        }
+                      },
+                      {
+                        "type": "conditional",
+                        "condition": {
+                          "type": "roll-total",
+                          "parameters": {
+                            "roll_var": "psychic-test",
+                            "min": 10
+                          }
+                        },
+                        "effect": {
+                          "type": "re-roll",
+                          "target": {
+                            "owner": "friendly",
+                            "any_of": [
+                              "SCINTILLATING LEGIONS",
+                              "THOUSAND SONS"
+                            ],
+                            "level": "model"
+                          },
+                          "modifier": {
+                            "roll": "hit",
+                            "result_scope": "any-result"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "duration": "phase"
+              },
+              "duration": "phase"
+            }
+          },
+          {
+            "id": "temporal-surge",
+            "name": "Temporal Surge",
+            "warp_charge": 6,
+            "effect": {
+              "type": "ability-part",
+              "effect": {
+                "type": "select-units",
+                "selector": {
+                  "filter": {
+                    "owner": "friendly",
+                    "any_of": [
+                      "SCINTILLATING LEGIONS",
+                      "THOUSAND SONS"
+                    ]
+                  },
+                  "count": {
+                    "min": 1,
+                    "max": 1
+                  },
+                  "eligibility": {
+                    "operator": "and",
+                    "operands": [
+                      {
+                        "operator": "not",
+                        "operands": [
+                          {
+                            "type": "matches",
+                            "parameters": {
+                              "subject": "selected-unit",
+                              "filter": {
+                                "state": "engaged"
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "type": "matches",
+                        "parameters": {
+                          "subject": "selected-unit",
+                          "filter": {
+                            "within": {
+                              "of": "this-model",
+                              "range": {
+                                "inches": 24
+                              }
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "type": "matches",
+                        "parameters": {
+                          "subject": "selected-unit",
+                          "filter": {
+                            "visible": {
+                              "to": "this-model"
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "effect": {
+                  "type": "sequence",
+                  "steps": [
+                    {
+                      "type": "conditional",
+                      "condition": {
+                        "operator": "not",
+                        "operands": [
+                          {
+                            "type": "roll-total",
+                            "parameters": {
+                              "roll_var": "psychic-test",
+                              "min": 10
+                            }
+                          }
+                        ]
+                      },
+                      "effect": {
+                        "type": "move",
+                        "target": "selected-unit",
+                        "modifier": {
+                          "move_type": "normal",
+                          "distance": "D6"
+                        }
+                      }
+                    },
+                    {
+                      "type": "conditional",
+                      "condition": {
+                        "type": "roll-total",
+                        "parameters": {
+                          "roll_var": "psychic-test",
+                          "min": 10
+                        }
+                      },
+                      "effect": {
+                        "type": "move",
+                        "target": "selected-unit",
+                        "modifier": {
+                          "move_type": "normal",
+                          "distance": 6
+                        }
+                      }
+                    },
+                    {
+                      "type": "permission",
+                      "target": "selected-unit",
+                      "modifier": {
+                        "activity": "declare-charge",
+                        "allow": false
+                      }
+                    }
+                  ]
+                }
+              },
+              "duration": "turn"
+            }
+          },
+          {
+            "id": "doombolt",
+            "name": "Doombolt",
+            "warp_charge": 7,
+            "effect": {
+              "type": "select-units",
+              "selector": {
+                "filter": {
+                  "owner": "enemy"
+                },
+                "count": {
+                  "min": 1,
+                  "max": 1
+                },
+                "eligibility": {
+                  "operator": "and",
+                  "operands": [
+                    {
+                      "operator": "and",
+                      "operands": [
+                        {
+                          "type": "matches",
+                          "parameters": {
+                            "subject": "selected-unit",
+                            "filter": {
+                              "within": {
+                                "of": "this-model",
+                                "range": {
+                                  "inches": 24
+                                }
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "type": "matches",
+                          "parameters": {
+                            "subject": "selected-unit",
+                            "filter": {
+                              "visible": {
+                                "to": "this-model"
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "operator": "or",
+                      "operands": [
+                        {
+                          "operator": "not",
+                          "operands": [
+                            {
+                              "type": "matches",
+                              "parameters": {
+                                "subject": "selected-unit",
+                                "filter": {
+                                  "has_ability": [
+                                    "lone-operative"
+                                  ]
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "attachment",
+                          "parameters": {
+                            "subject": "selected-unit",
+                            "role": "attached"
+                          }
+                        },
+                        {
+                          "type": "matches",
+                          "parameters": {
+                            "subject": "selected-unit",
+                            "filter": {
+                              "within": {
+                                "range": {
+                                  "inches": 12
+                                },
+                                "of": "this-model"
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              "effect": {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "conditional",
+                    "condition": {
+                      "operator": "not",
+                      "operands": [
+                        {
+                          "type": "roll-total",
+                          "parameters": {
+                            "roll_var": "psychic-test",
+                            "min": 11
+                          }
+                        }
+                      ]
+                    },
+                    "effect": {
+                      "type": "mortal-wounds",
+                      "target": "selected-unit",
+                      "modifier": {
+                        "count": "D3"
+                      }
+                    }
+                  },
+                  {
+                    "type": "conditional",
+                    "condition": {
+                      "type": "roll-total",
+                      "parameters": {
+                        "roll_var": "psychic-test",
+                        "min": 11
+                      }
+                    },
+                    "effect": {
+                      "type": "mortal-wounds",
+                      "target": "selected-unit",
+                      "modifier": {
+                        "count": "D3+3"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "twist-of-fate",
+            "name": "Twist of Fate",
+            "warp_charge": 9,
+            "effect": {
+              "type": "ability-part",
+              "effect": {
+                "type": "designate-target",
+                "designation": "twist-of-fate-target",
+                "select": {
+                  "kind": "unit",
+                  "selector": {
+                    "filter": {
+                      "owner": "enemy"
+                    },
+                    "count": {
+                      "min": 1,
+                      "max": 1
+                    },
+                    "eligibility": {
+                      "operator": "and",
+                      "operands": [
+                        {
+                          "type": "matches",
+                          "parameters": {
+                            "subject": "selected-unit",
+                            "filter": {
+                              "within": {
+                                "of": "this-model",
+                                "range": {
+                                  "inches": 24
+                                }
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "type": "matches",
+                          "parameters": {
+                            "subject": "selected-unit",
+                            "filter": {
+                              "visible": {
+                                "to": "this-model"
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                "applies": {
+                  "to": "attackers-of-target",
+                  "effect": {
+                    "type": "sequence",
+                    "steps": [
+                      {
+                        "type": "conditional",
+                        "condition": {
+                          "operator": "not",
+                          "operands": [
+                            {
+                              "type": "roll-total",
+                              "parameters": {
+                                "roll_var": "psychic-test",
+                                "min": 12
+                              }
+                            }
+                          ]
+                        },
+                        "effect": {
+                          "type": "stat-modifier",
+                          "target": {
+                            "owner": "friendly",
+                            "any_of": [
+                              "SCINTILLATING LEGIONS",
+                              "THOUSAND SONS"
+                            ],
+                            "level": "model"
+                          },
+                          "modifier": {
+                            "stat": "AP",
+                            "operation": "improve",
+                            "value": 1
+                          }
+                        }
+                      },
+                      {
+                        "type": "conditional",
+                        "condition": {
+                          "type": "roll-total",
+                          "parameters": {
+                            "roll_var": "psychic-test",
+                            "min": 12
+                          }
+                        },
+                        "effect": {
+                          "type": "stat-modifier",
+                          "target": {
+                            "owner": "friendly",
+                            "any_of": [
+                              "SCINTILLATING LEGIONS",
+                              "THOUSAND SONS"
+                            ],
+                            "level": "model"
+                          },
+                          "modifier": {
+                            "stat": "AP",
+                            "operation": "improve",
+                            "value": 2
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "duration": "phase"
+              },
+              "duration": "phase"
+            }
+          }
+        ]
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "usage": {
+      "frequency": "once-per-turn",
+      "per": "model"
+    },
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    },
+    "expected": {
+      "text": "At the start of your Shooting phase, once per turn per model, if your Army Faction is THOUSAND SONS:\n  -> Attempt one of the Rituals below (each Ritual can be attempted once per turn across your army). To do so, take a Psychic test: roll 2D6, and you can roll one additional D6; if any two of its dice show the same result, the unit suffers D3 mortal wounds; if this model is not destroyed and the total of all its dice equals or exceeds the Ritual's Warp Charge, this model manifests that Ritual:\n    - Destiny’s Ruin (Warp Charge 5): Until the end of the phase: select one enemy unit if the selected unit is within 24\" of this model and the selected unit is visible to this model (your Destinys Ruin Target); until the end of the phase, each time a friendly unit attacks it, unless the Psychic test result is 10+, you can re-roll a Hit roll of 1 for attacks made by all friendly models with the SCINTILLATING LEGIONS or THOUSAND SONS keyword; if the Psychic test result is 10+, you can re-roll the Hit roll for attacks made by all friendly models with the SCINTILLATING LEGIONS or THOUSAND SONS keyword.\n    - Temporal Surge (Warp Charge 6): Until the end of the turn: select one friendly unit with the SCINTILLATING LEGIONS or THOUSAND SONS keyword if the selected unit is unengaged and the selected unit is within 24\" of this model and the selected unit is visible to this model: unless the Psychic test result is 10+, that unit can make a Normal move of up to D6\"; if the Psychic test result is 10+, that unit can make a Normal move of up to 6\"; that unit cannot declare a charge.\n    - Doombolt (Warp Charge 7): Select one enemy unit if the selected unit is within 24\" of this model and the selected unit is visible to this model and (the selected unit does not have the Lone Operative ability or the selected unit is an attached unit or the selected unit is within 12\" of this model): unless the Psychic test result is 11+, that unit suffers D3 mortal wounds; if the Psychic test result is 11+, that unit suffers D3+3 mortal wounds.\n    - Twist of Fate (Warp Charge 9): Until the end of the phase: select one enemy unit if the selected unit is within 24\" of this model and the selected unit is visible to this model (your Twist of Fate Target); until the end of the phase, each time a friendly unit attacks it, unless the Psychic test result is 12+, improve the Armour Penetration characteristic of all friendly models with the SCINTILLATING LEGIONS or THOUSAND SONS keyword by 1; if the Psychic test result is 12+, improve the Armour Penetration characteristic of all friendly models with the SCINTILLATING LEGIONS or THOUSAND SONS keyword by 2."
+    }
+  },
+  {
+    "caseId": "cabal-of-sorcerers-thousand-sons#201",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "army-faction",
+        "parameters": {
+          "faction": "thousand-sons"
+        }
+      },
+      "effect": {
+        "type": "ritual-menu",
+        "test": {
+          "dice": "2D6",
+          "kind": "psychic",
+          "roll_var": "psychic-test",
+          "extra_die": {
+            "dice": "D6",
+            "optional": true
+          },
+          "perils": {
+            "on": "double",
+            "effect": {
+              "type": "mortal-wounds",
+              "target": "this-unit",
+              "modifier": {
+                "count": "D3"
+              }
+            }
+          }
+        },
+        "ritual_limit": {
+          "frequency": "once-per-turn",
+          "per": "army"
+        },
+        "rituals": [
+          {
+            "id": "destiny-s-ruin",
+            "name": "Destiny’s Ruin",
+            "warp_charge": 5,
+            "effect": {
+              "type": "ability-part",
+              "effect": {
+                "type": "designate-target",
+                "designation": "destinys-ruin-target",
+                "select": {
+                  "kind": "unit",
+                  "selector": {
+                    "filter": {
+                      "owner": "enemy"
+                    },
+                    "count": {
+                      "min": 1,
+                      "max": 1
+                    },
+                    "eligibility": {
+                      "operator": "and",
+                      "operands": [
+                        {
+                          "type": "matches",
+                          "parameters": {
+                            "subject": "selected-unit",
+                            "filter": {
+                              "within": {
+                                "of": "this-model",
+                                "range": {
+                                  "inches": 24
+                                }
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "type": "matches",
+                          "parameters": {
+                            "subject": "selected-unit",
+                            "filter": {
+                              "visible": {
+                                "to": "this-model"
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                "applies": {
+                  "to": "attackers-of-target",
+                  "effect": {
+                    "type": "sequence",
+                    "steps": [
+                      {
+                        "type": "conditional",
+                        "condition": {
+                          "operator": "not",
+                          "operands": [
+                            {
+                              "type": "roll-total",
+                              "parameters": {
+                                "roll_var": "psychic-test",
+                                "min": 10
+                              }
+                            }
+                          ]
+                        },
+                        "effect": {
+                          "type": "re-roll",
+                          "target": {
+                            "owner": "friendly",
+                            "any_of": [
+                              "SCINTILLATING LEGIONS",
+                              "THOUSAND SONS"
+                            ],
+                            "level": "model"
+                          },
+                          "modifier": {
+                            "roll": "hit",
+                            "subset": "ones"
+                          }
+                        }
+                      },
+                      {
+                        "type": "conditional",
+                        "condition": {
+                          "type": "roll-total",
+                          "parameters": {
+                            "roll_var": "psychic-test",
+                            "min": 10
+                          }
+                        },
+                        "effect": {
+                          "type": "re-roll",
+                          "target": {
+                            "owner": "friendly",
+                            "any_of": [
+                              "SCINTILLATING LEGIONS",
+                              "THOUSAND SONS"
+                            ],
+                            "level": "model"
+                          },
+                          "modifier": {
+                            "roll": "hit",
+                            "result_scope": "any-result"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "duration": "phase"
+              },
+              "duration": "phase"
+            }
+          },
+          {
+            "id": "temporal-surge",
+            "name": "Temporal Surge",
+            "warp_charge": 6,
+            "effect": {
+              "type": "ability-part",
+              "effect": {
+                "type": "select-units",
+                "selector": {
+                  "filter": {
+                    "owner": "friendly",
+                    "any_of": [
+                      "SCINTILLATING LEGIONS",
+                      "THOUSAND SONS"
+                    ]
+                  },
+                  "count": {
+                    "min": 1,
+                    "max": 1
+                  },
+                  "eligibility": {
+                    "operator": "and",
+                    "operands": [
+                      {
+                        "operator": "not",
+                        "operands": [
+                          {
+                            "type": "matches",
+                            "parameters": {
+                              "subject": "selected-unit",
+                              "filter": {
+                                "state": "engaged"
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "type": "matches",
+                        "parameters": {
+                          "subject": "selected-unit",
+                          "filter": {
+                            "within": {
+                              "of": "this-model",
+                              "range": {
+                                "inches": 24
+                              }
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "type": "matches",
+                        "parameters": {
+                          "subject": "selected-unit",
+                          "filter": {
+                            "visible": {
+                              "to": "this-model"
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "effect": {
+                  "type": "sequence",
+                  "steps": [
+                    {
+                      "type": "conditional",
+                      "condition": {
+                        "operator": "not",
+                        "operands": [
+                          {
+                            "type": "roll-total",
+                            "parameters": {
+                              "roll_var": "psychic-test",
+                              "min": 10
+                            }
+                          }
+                        ]
+                      },
+                      "effect": {
+                        "type": "move",
+                        "target": "selected-unit",
+                        "modifier": {
+                          "move_type": "normal",
+                          "distance": "D6"
+                        }
+                      }
+                    },
+                    {
+                      "type": "conditional",
+                      "condition": {
+                        "type": "roll-total",
+                        "parameters": {
+                          "roll_var": "psychic-test",
+                          "min": 10
+                        }
+                      },
+                      "effect": {
+                        "type": "move",
+                        "target": "selected-unit",
+                        "modifier": {
+                          "move_type": "normal",
+                          "distance": 6
+                        }
+                      }
+                    },
+                    {
+                      "type": "permission",
+                      "target": "selected-unit",
+                      "modifier": {
+                        "activity": "declare-charge",
+                        "allow": false
+                      }
+                    }
+                  ]
+                }
+              },
+              "duration": "turn"
+            }
+          },
+          {
+            "id": "doombolt",
+            "name": "Doombolt",
+            "warp_charge": 7,
+            "effect": {
+              "type": "select-units",
+              "selector": {
+                "filter": {
+                  "owner": "enemy"
+                },
+                "count": {
+                  "min": 1,
+                  "max": 1
+                },
+                "eligibility": {
+                  "operator": "and",
+                  "operands": [
+                    {
+                      "operator": "and",
+                      "operands": [
+                        {
+                          "type": "matches",
+                          "parameters": {
+                            "subject": "selected-unit",
+                            "filter": {
+                              "within": {
+                                "of": "this-model",
+                                "range": {
+                                  "inches": 24
+                                }
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "type": "matches",
+                          "parameters": {
+                            "subject": "selected-unit",
+                            "filter": {
+                              "visible": {
+                                "to": "this-model"
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "operator": "or",
+                      "operands": [
+                        {
+                          "operator": "not",
+                          "operands": [
+                            {
+                              "type": "matches",
+                              "parameters": {
+                                "subject": "selected-unit",
+                                "filter": {
+                                  "has_ability": [
+                                    "lone-operative"
+                                  ]
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "attachment",
+                          "parameters": {
+                            "subject": "selected-unit",
+                            "role": "attached"
+                          }
+                        },
+                        {
+                          "type": "matches",
+                          "parameters": {
+                            "subject": "selected-unit",
+                            "filter": {
+                              "within": {
+                                "range": {
+                                  "inches": 12
+                                },
+                                "of": "this-model"
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              "effect": {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "conditional",
+                    "condition": {
+                      "operator": "not",
+                      "operands": [
+                        {
+                          "type": "roll-total",
+                          "parameters": {
+                            "roll_var": "psychic-test",
+                            "min": 11
+                          }
+                        }
+                      ]
+                    },
+                    "effect": {
+                      "type": "mortal-wounds",
+                      "target": "selected-unit",
+                      "modifier": {
+                        "count": "D3"
+                      }
+                    }
+                  },
+                  {
+                    "type": "conditional",
+                    "condition": {
+                      "type": "roll-total",
+                      "parameters": {
+                        "roll_var": "psychic-test",
+                        "min": 11
+                      }
+                    },
+                    "effect": {
+                      "type": "mortal-wounds",
+                      "target": "selected-unit",
+                      "modifier": {
+                        "count": "D3+3"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "twist-of-fate",
+            "name": "Twist of Fate",
+            "warp_charge": 9,
+            "effect": {
+              "type": "ability-part",
+              "effect": {
+                "type": "designate-target",
+                "designation": "twist-of-fate-target",
+                "select": {
+                  "kind": "unit",
+                  "selector": {
+                    "filter": {
+                      "owner": "enemy"
+                    },
+                    "count": {
+                      "min": 1,
+                      "max": 1
+                    },
+                    "eligibility": {
+                      "operator": "and",
+                      "operands": [
+                        {
+                          "type": "matches",
+                          "parameters": {
+                            "subject": "selected-unit",
+                            "filter": {
+                              "within": {
+                                "of": "this-model",
+                                "range": {
+                                  "inches": 24
+                                }
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "type": "matches",
+                          "parameters": {
+                            "subject": "selected-unit",
+                            "filter": {
+                              "visible": {
+                                "to": "this-model"
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                "applies": {
+                  "to": "attackers-of-target",
+                  "effect": {
+                    "type": "sequence",
+                    "steps": [
+                      {
+                        "type": "conditional",
+                        "condition": {
+                          "operator": "not",
+                          "operands": [
+                            {
+                              "type": "roll-total",
+                              "parameters": {
+                                "roll_var": "psychic-test",
+                                "min": 12
+                              }
+                            }
+                          ]
+                        },
+                        "effect": {
+                          "type": "stat-modifier",
+                          "target": {
+                            "owner": "friendly",
+                            "any_of": [
+                              "SCINTILLATING LEGIONS",
+                              "THOUSAND SONS"
+                            ],
+                            "level": "model"
+                          },
+                          "modifier": {
+                            "stat": "AP",
+                            "operation": "improve",
+                            "value": 1
+                          }
+                        }
+                      },
+                      {
+                        "type": "conditional",
+                        "condition": {
+                          "type": "roll-total",
+                          "parameters": {
+                            "roll_var": "psychic-test",
+                            "min": 12
+                          }
+                        },
+                        "effect": {
+                          "type": "stat-modifier",
+                          "target": {
+                            "owner": "friendly",
+                            "any_of": [
+                              "SCINTILLATING LEGIONS",
+                              "THOUSAND SONS"
+                            ],
+                            "level": "model"
+                          },
+                          "modifier": {
+                            "stat": "AP",
+                            "operation": "improve",
+                            "value": 2
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "duration": "phase"
+              },
+              "duration": "phase"
+            }
+          }
+        ]
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "usage": {
+      "frequency": "once-per-turn",
+      "per": "model"
+    },
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    },
+    "expected": {
+      "text": "At the start of your Shooting phase, once per turn per model, if your Army Faction is THOUSAND SONS:\n  -> Attempt one of the Rituals below (each Ritual can be attempted once per turn across your army). To do so, take a Psychic test: roll 2D6, and you can roll one additional D6; if any two of its dice show the same result, the unit suffers D3 mortal wounds; if this model is not destroyed and the total of all its dice equals or exceeds the Ritual's Warp Charge, this model manifests that Ritual:\n    - Destiny’s Ruin (Warp Charge 5): Until the end of the phase: select one enemy unit if the selected unit is within 24\" of this model and the selected unit is visible to this model (your Destinys Ruin Target); until the end of the phase, each time a friendly unit attacks it, unless the Psychic test result is 10+, you can re-roll a Hit roll of 1 for attacks made by all friendly models with the SCINTILLATING LEGIONS or THOUSAND SONS keyword; if the Psychic test result is 10+, you can re-roll the Hit roll for attacks made by all friendly models with the SCINTILLATING LEGIONS or THOUSAND SONS keyword.\n    - Temporal Surge (Warp Charge 6): Until the end of the turn: select one friendly unit with the SCINTILLATING LEGIONS or THOUSAND SONS keyword if the selected unit is unengaged and the selected unit is within 24\" of this model and the selected unit is visible to this model: unless the Psychic test result is 10+, that unit can make a Normal move of up to D6\"; if the Psychic test result is 10+, that unit can make a Normal move of up to 6\"; that unit cannot declare a charge.\n    - Doombolt (Warp Charge 7): Select one enemy unit if the selected unit is within 24\" of this model and the selected unit is visible to this model and (the selected unit does not have the Lone Operative ability or the selected unit is an attached unit or the selected unit is within 12\" of this model): unless the Psychic test result is 11+, that unit suffers D3 mortal wounds; if the Psychic test result is 11+, that unit suffers D3+3 mortal wounds.\n    - Twist of Fate (Warp Charge 9): Until the end of the phase: select one enemy unit if the selected unit is within 24\" of this model and the selected unit is visible to this model (your Twist of Fate Target); until the end of the phase, each time a friendly unit attacks it, unless the Psychic test result is 12+, improve the Armour Penetration characteristic of all friendly models with the SCINTILLATING LEGIONS or THOUSAND SONS keyword by 1; if the Psychic test result is 12+, improve the Armour Penetration characteristic of all friendly models with the SCINTILLATING LEGIONS or THOUSAND SONS keyword by 2."
+    }
+  },
+  {
+    "caseId": "callous-sacrifice-siege-regiment-astra-militarum#202",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -12874,7 +14016,7 @@
     }
   },
   {
-    "caseId": "canoptek-swarm-necrons#201",
+    "caseId": "canoptek-swarm-necrons#203",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -12922,7 +14064,7 @@
     }
   },
   {
-    "caseId": "captivating-performance-twilight-flickers-aeldari#202",
+    "caseId": "captivating-performance-twilight-flickers-aeldari#204",
     "effect": {
       "type": "select-objective",
       "selector": {
@@ -12972,7 +14114,7 @@
     }
   },
   {
-    "caseId": "carry-forth-the-faithful-bringers-of-flame-adepta-sororitas#203",
+    "caseId": "carry-forth-the-faithful-bringers-of-flame-adepta-sororitas#205",
     "effect": {
       "type": "rules-bundle",
       "steps": [
@@ -13037,7 +14179,7 @@
     }
   },
   {
-    "caseId": "castigators-duty-imperial-knights#204",
+    "caseId": "castigators-duty-imperial-knights#206",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -13089,7 +14231,7 @@
     }
   },
   {
-    "caseId": "chainbreaker-imperial-knights#205",
+    "caseId": "chainbreaker-imperial-knights#207",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -13158,7 +14300,7 @@
     }
   },
   {
-    "caseId": "chaplet-of-sacrifice-hallowed-martyrs-adepta-sororitas#206",
+    "caseId": "chaplet-of-sacrifice-hallowed-martyrs-adepta-sororitas#208",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -13259,7 +14401,7 @@
     }
   },
   {
-    "caseId": "cherub-agents-of-the-imperium#207",
+    "caseId": "cherub-agents-of-the-imperium#209",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -13309,7 +14451,7 @@
     }
   },
   {
-    "caseId": "chief-librarian-adeptus-astartes#208",
+    "caseId": "chief-librarian-adeptus-astartes#210",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -13560,7 +14702,7 @@
     }
   },
   {
-    "caseId": "chief-librarian-blood-angels#209",
+    "caseId": "chief-librarian-blood-angels#211",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -13846,7 +14988,7 @@
     }
   },
   {
-    "caseId": "chief-librarian-dark-angels#210",
+    "caseId": "chief-librarian-dark-angels#212",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -14088,7 +15230,7 @@
     }
   },
   {
-    "caseId": "close-range-killers-chaos-knights#211",
+    "caseId": "close-range-killers-chaos-knights#213",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -14129,7 +15271,7 @@
     }
   },
   {
-    "caseId": "close-range-titan-killer-astra-militarum#212",
+    "caseId": "close-range-titan-killer-astra-militarum#214",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -14172,7 +15314,7 @@
     }
   },
   {
-    "caseId": "code-chivalric-imperial-knights#213",
+    "caseId": "code-chivalric-imperial-knights#215",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -14413,7 +15555,7 @@
     }
   },
   {
-    "caseId": "codex-fire-patterns-adeptus-astartes#214",
+    "caseId": "codex-fire-patterns-adeptus-astartes#216",
     "effect": {
       "type": "weapon-ability-range",
       "target": {
@@ -14437,7 +15579,7 @@
     }
   },
   {
-    "caseId": "cold-and-calculating-adeptus-astartes#215",
+    "caseId": "cold-and-calculating-adeptus-astartes#217",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -14667,7 +15809,7 @@
     }
   },
   {
-    "caseId": "combat-doctrines-adeptus-astartes#216",
+    "caseId": "combat-doctrines-adeptus-astartes#218",
     "effect": {
       "type": "stance-select",
       "mode": "consumable",
@@ -14793,7 +15935,7 @@
     }
   },
   {
-    "caseId": "combat-doctrines-assault-force-adeptus-astartes#217",
+    "caseId": "combat-doctrines-assault-force-adeptus-astartes#219",
     "effect": {
       "type": "stance-select",
       "mode": "consumable",
@@ -14919,7 +16061,7 @@
     }
   },
   {
-    "caseId": "combat-embarkation-kauyon-tau-empire#218",
+    "caseId": "combat-embarkation-kauyon-tau-empire#220",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -14987,7 +16129,7 @@
     }
   },
   {
-    "caseId": "combat-squad-chaos-space-marines#219",
+    "caseId": "combat-squad-chaos-space-marines#221",
     "effect": {
       "type": "split-unit",
       "target": "this-unit",
@@ -15010,7 +16152,7 @@
     }
   },
   {
-    "caseId": "combat-squad-grey-knights#220",
+    "caseId": "combat-squad-grey-knights#222",
     "effect": {
       "type": "split-unit",
       "target": "this-unit",
@@ -15033,7 +16175,7 @@
     }
   },
   {
-    "caseId": "compact-astra-militarum#221",
+    "caseId": "compact-astra-militarum#223",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -15075,7 +16217,7 @@
     }
   },
   {
-    "caseId": "contemptuous-disregard-court-of-the-phoenician-emperors-children#222",
+    "caseId": "contemptuous-disregard-court-of-the-phoenician-emperors-children#224",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -15115,7 +16257,7 @@
     }
   },
   {
-    "caseId": "corrupting-taint-infernal-lance-chaos-knights#223",
+    "caseId": "corrupting-taint-infernal-lance-chaos-knights#225",
     "effect": {
       "type": "select-objective",
       "selector": {
@@ -15154,7 +16296,7 @@
     }
   },
   {
-    "caseId": "courageous-diversion-recon-element-astra-militarum#224",
+    "caseId": "courageous-diversion-recon-element-astra-militarum#226",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -15217,7 +16359,7 @@
     }
   },
   {
-    "caseId": "crewed-platform-storm-guardians-aeldari#225",
+    "caseId": "crewed-platform-storm-guardians-aeldari#227",
     "effect": {
       "type": "destroy-models",
       "target": {
@@ -15243,7 +16385,7 @@
     }
   },
   {
-    "caseId": "cult-ambush-genestealer-cults#226",
+    "caseId": "cult-ambush-genestealer-cults#228",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -15594,7 +16736,7 @@
     }
   },
   {
-    "caseId": "cult-infiltration-genestealer-cults#227",
+    "caseId": "cult-infiltration-genestealer-cults#229",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -15637,7 +16779,7 @@
     }
   },
   {
-    "caseId": "curse-of-the-wulfen-askars-wolfpack-space-wolves#228",
+    "caseId": "curse-of-the-wulfen-askars-wolfpack-space-wolves#230",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -15778,7 +16920,7 @@
     }
   },
   {
-    "caseId": "curse-of-the-wulfen-space-wolves#229",
+    "caseId": "curse-of-the-wulfen-space-wolves#231",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -15919,7 +17061,7 @@
     }
   },
   {
-    "caseId": "da-gobshot-thunderbuss-brute-bosses-orks#230",
+    "caseId": "da-gobshot-thunderbuss-brute-bosses-orks#232",
     "effect": {
       "type": "weapon-grant",
       "target": "this-model",
@@ -15935,7 +17077,7 @@
     }
   },
   {
-    "caseId": "da-krunch-wurrband-orks#231",
+    "caseId": "da-krunch-wurrband-orks#233",
     "effect": {
       "type": "weapon-grant",
       "target": "this-model",
@@ -15951,7 +17093,7 @@
     }
   },
   {
-    "caseId": "daemonic-allegiance-soul-grinder-chaos-daemons#232",
+    "caseId": "daemonic-allegiance-soul-grinder-chaos-daemons#234",
     "effect": {
       "type": "ability-part",
       "trigger": {
@@ -16072,7 +17214,7 @@
     }
   },
   {
-    "caseId": "daemonic-patrons-callous-blades-flawless-blades-emperors-children#233",
+    "caseId": "daemonic-patrons-callous-blades-flawless-blades-emperors-children#235",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -16155,7 +17297,7 @@
     }
   },
   {
-    "caseId": "daemonkin-aranis-zarkan-chaos-space-marines#234",
+    "caseId": "daemonkin-aranis-zarkan-chaos-space-marines#236",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -16198,7 +17340,7 @@
     }
   },
   {
-    "caseId": "damaged#235",
+    "caseId": "damaged#237",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -16228,7 +17370,7 @@
     }
   },
   {
-    "caseId": "damaged-1-6-wounds-remaining-adepta-sororitas#236",
+    "caseId": "damaged-1-6-wounds-remaining-adepta-sororitas#238",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -16270,7 +17412,7 @@
     }
   },
   {
-    "caseId": "damaged-1-6-wounds-remaining-necrons#237",
+    "caseId": "damaged-1-6-wounds-remaining-necrons#239",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -16311,7 +17453,7 @@
     }
   },
   {
-    "caseId": "damaged-1-7-wounds-remaining-chaos-daemons#238",
+    "caseId": "damaged-1-7-wounds-remaining-chaos-daemons#240",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -16343,7 +17485,7 @@
     }
   },
   {
-    "caseId": "data-severed-adeptus-mechanicus#239",
+    "caseId": "data-severed-adeptus-mechanicus#241",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -16386,7 +17528,7 @@
     }
   },
   {
-    "caseId": "dauntless-bravery-sanguinary-spearhead-blood-angels#240",
+    "caseId": "dauntless-bravery-sanguinary-spearhead-blood-angels#242",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -16431,7 +17573,7 @@
     }
   },
   {
-    "caseId": "dauntless-defenders-imperial-knights#241",
+    "caseId": "dauntless-defenders-imperial-knights#243",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -16483,7 +17625,7 @@
     }
   },
   {
-    "caseId": "death-korps-medi-pack-astra-militarum#242",
+    "caseId": "death-korps-medi-pack-astra-militarum#244",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -16590,7 +17732,7 @@
     }
   },
   {
-    "caseId": "deathstrike-missile-astra-militarum#243",
+    "caseId": "deathstrike-missile-astra-militarum#245",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -16635,7 +17777,7 @@
     }
   },
   {
-    "caseId": "divinator-class-auspexes-adeptus-astartes#244",
+    "caseId": "divinator-class-auspexes-adeptus-astartes#246",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -16751,7 +17893,7 @@
     }
   },
   {
-    "caseId": "downtrodden-orks#245",
+    "caseId": "downtrodden-orks#247",
     "effect": {
       "type": "transport-capacity",
       "target": "this-unit",
@@ -16777,7 +17919,7 @@
     }
   },
   {
-    "caseId": "drawn-to-the-slaughter-cult-of-blood-world-eaters#246",
+    "caseId": "drawn-to-the-slaughter-cult-of-blood-world-eaters#248",
     "effect": {
       "type": "add-unit",
       "target": "stratagem-target",
@@ -16804,7 +17946,7 @@
     }
   },
   {
-    "caseId": "dreadblades-chaos-knights#247",
+    "caseId": "dreadblades-chaos-knights#249",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -16913,7 +18055,7 @@
     }
   },
   {
-    "caseId": "drive-them-out-gate-warden-lance-imperial-knights#248",
+    "caseId": "drive-them-out-gate-warden-lance-imperial-knights#250",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -16945,7 +18087,7 @@
     }
   },
   {
-    "caseId": "drones-sudden-dawn-cadre-tau-empire#249",
+    "caseId": "drones-sudden-dawn-cadre-tau-empire#251",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -17090,7 +18232,7 @@
     }
   },
   {
-    "caseId": "drones-tau-empire#250",
+    "caseId": "drones-tau-empire#252",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -17235,7 +18377,7 @@
     }
   },
   {
-    "caseId": "embarking-krieg-heavy-weapons-squad-astra-militarum#251",
+    "caseId": "embarking-krieg-heavy-weapons-squad-astra-militarum#253",
     "effect": {
       "type": "transport-capacity",
       "target": "this-unit",
@@ -17254,7 +18396,7 @@
     }
   },
   {
-    "caseId": "empowered-manifestation-hexwarp-thrallband-thousand-sons#252",
+    "caseId": "empowered-manifestation-hexwarp-thrallband-thousand-sons#254",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -17307,7 +18449,7 @@
     }
   },
   {
-    "caseId": "empyric-onslaught-hexwarp-thrallband-thousand-sons#253",
+    "caseId": "empyric-onslaught-hexwarp-thrallband-thousand-sons#255",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -17344,7 +18486,7 @@
     }
   },
   {
-    "caseId": "exemplar-of-the-code-imperial-knights#254",
+    "caseId": "exemplar-of-the-code-imperial-knights#256",
     "effect": {
       "type": "ability-part",
       "trigger": {
@@ -17414,7 +18556,7 @@
     }
   },
   {
-    "caseId": "exemplar-of-the-kauyon-kauyon-tau-empire#255",
+    "caseId": "exemplar-of-the-kauyon-kauyon-tau-empire#257",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -17457,7 +18599,7 @@
     }
   },
   {
-    "caseId": "exemplar-of-the-montka-montka-tau-empire#256",
+    "caseId": "exemplar-of-the-montka-montka-tau-empire#258",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -17500,7 +18642,7 @@
     }
   },
   {
-    "caseId": "fables-of-nightmare-spearhead-at-arms-imperial-knights#257",
+    "caseId": "fables-of-nightmare-spearhead-at-arms-imperial-knights#259",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -17543,7 +18685,7 @@
     }
   },
   {
-    "caseId": "fated-hero-aeldari#258",
+    "caseId": "fated-hero-aeldari#260",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -17583,7 +18725,7 @@
     }
   },
   {
-    "caseId": "fates-in-flux-chaos-daemons#259",
+    "caseId": "fates-in-flux-chaos-daemons#261",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -17623,7 +18765,7 @@
     }
   },
   {
-    "caseId": "ferocious-show-off-green-tide-orks#260",
+    "caseId": "ferocious-show-off-green-tide-orks#262",
     "effect": {
       "type": "choice",
       "options": [
@@ -17671,7 +18813,7 @@
     }
   },
   {
-    "caseId": "fire-and-fury-bringers-of-flame-adepta-sororitas#261",
+    "caseId": "fire-and-fury-bringers-of-flame-adepta-sororitas#263",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -17731,7 +18873,7 @@
     }
   },
   {
-    "caseId": "fire-zone-purge-astra-militarum#262",
+    "caseId": "fire-zone-purge-astra-militarum#264",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -17838,7 +18980,7 @@
     }
   },
   {
-    "caseId": "fires-of-damnation-sanctuary-guardians-adepta-sororitas#263",
+    "caseId": "fires-of-damnation-sanctuary-guardians-adepta-sororitas#265",
     "effect": {
       "type": "rules-bundle",
       "steps": [
@@ -17880,7 +19022,7 @@
     }
   },
   {
-    "caseId": "flow-of-magic-thousand-sons#264",
+    "caseId": "flow-of-magic-thousand-sons#266",
     "effect": {
       "type": "named-region-state",
       "target": {
@@ -18035,7 +19177,7 @@
     }
   },
   {
-    "caseId": "forward-assault-warsuit-adeptus-astartes#265",
+    "caseId": "forward-assault-warsuit-adeptus-astartes#267",
     "effect": {
       "type": "ability-part",
       "trigger": {
@@ -18113,7 +19255,7 @@
     }
   },
   {
-    "caseId": "freeblades-imperial-knights#266",
+    "caseId": "freeblades-imperial-knights#268",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -18222,7 +19364,7 @@
     }
   },
   {
-    "caseId": "gift-of-change-warpmeld-pact-thousand-sons#267",
+    "caseId": "gift-of-change-warpmeld-pact-thousand-sons#269",
     "effect": {
       "type": "add-unit",
       "target": "this-unit",
@@ -18243,7 +19385,7 @@
     }
   },
   {
-    "caseId": "grot-shields-runt-swarm-orks#268",
+    "caseId": "grot-shields-runt-swarm-orks#270",
     "effect": {
       "type": "ability-part",
       "trigger": {
@@ -18338,7 +19480,7 @@
     }
   },
   {
-    "caseId": "guns-blazing-chaos-space-marines#269",
+    "caseId": "guns-blazing-chaos-space-marines#271",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -18451,7 +19593,7 @@
     }
   },
   {
-    "caseId": "hallowed-ground-grey-knights#270",
+    "caseId": "hallowed-ground-grey-knights#272",
     "effect": {
       "type": "named-region-state",
       "target": {
@@ -18657,7 +19799,7 @@
     }
   },
   {
-    "caseId": "headhunters-space-wolves#271",
+    "caseId": "headhunters-space-wolves#273",
     "effect": {
       "type": "ability-part",
       "trigger": {
@@ -18742,7 +19884,7 @@
     }
   },
   {
-    "caseId": "headlong-destruction-chaos-space-marines#272",
+    "caseId": "headlong-destruction-chaos-space-marines#274",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -18771,7 +19913,7 @@
     }
   },
   {
-    "caseId": "heroes-of-legend-imperial-knights#273",
+    "caseId": "heroes-of-legend-imperial-knights#275",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -18863,7 +20005,7 @@
     }
   },
   {
-    "caseId": "honour-or-death-dark-angels#274",
+    "caseId": "honour-or-death-dark-angels#276",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -18943,7 +20085,7 @@
     }
   },
   {
-    "caseId": "horrors-are-pink-horrors-are-blue-where-once-there-was-one-now-there-are-two-chaos-daemons#275",
+    "caseId": "horrors-are-pink-horrors-are-blue-where-once-there-was-one-now-there-are-two-chaos-daemons#277",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -18970,7 +20112,7 @@
     }
   },
   {
-    "caseId": "horrors-are-pink-horrors-are-blue-where-once-there-was-one-now-there-are-two-thousand-sons#276",
+    "caseId": "horrors-are-pink-horrors-are-blue-where-once-there-was-one-now-there-are-two-thousand-sons#278",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -19042,7 +20184,7 @@
     }
   },
   {
-    "caseId": "hyper-adaptations-tyranids#277",
+    "caseId": "hyper-adaptations-tyranids#279",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -19182,7 +20324,7 @@
     }
   },
   {
-    "caseId": "hyperspace-hunters-necrons#278",
+    "caseId": "hyperspace-hunters-necrons#280",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -19298,7 +20440,7 @@
     }
   },
   {
-    "caseId": "icon-of-khorne-world-eaters#279",
+    "caseId": "icon-of-khorne-world-eaters#281",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -19340,7 +20482,7 @@
     }
   },
   {
-    "caseId": "idol-of-blessed-blood-khorne-lord-of-skulls-world-eaters#280",
+    "caseId": "idol-of-blessed-blood-khorne-lord-of-skulls-world-eaters#282",
     "effect": {
       "type": "resource-die",
       "target": "this-model",
@@ -19362,7 +20504,7 @@
     }
   },
   {
-    "caseId": "imposing-arrival-steel-hammer-astra-militarum#281",
+    "caseId": "imposing-arrival-steel-hammer-astra-militarum#283",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -19399,7 +20541,7 @@
     }
   },
   {
-    "caseId": "independent-power-tau-empire#282",
+    "caseId": "independent-power-tau-empire#284",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -19455,7 +20597,7 @@
     }
   },
   {
-    "caseId": "infested-war-zone-runt-swarm-orks#283",
+    "caseId": "infested-war-zone-runt-swarm-orks#285",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -19536,7 +20678,7 @@
     }
   },
   {
-    "caseId": "join-the-hunt-kroot-hunting-pack-tau-empire#284",
+    "caseId": "join-the-hunt-kroot-hunting-pack-tau-empire#286",
     "effect": {
       "type": "add-unit",
       "target": "this-unit",
@@ -19563,7 +20705,7 @@
     }
   },
   {
-    "caseId": "knightly-teachings-imperial-knights#285",
+    "caseId": "knightly-teachings-imperial-knights#287",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -19717,7 +20859,7 @@
     }
   },
   {
-    "caseId": "let-loose-the-wolves-space-wolves#286",
+    "caseId": "let-loose-the-wolves-space-wolves#288",
     "effect": {
       "type": "split-unit",
       "target": "this-unit",
@@ -19742,7 +20884,7 @@
     }
   },
   {
-    "caseId": "line-breakers-adeptus-mechanicus#287",
+    "caseId": "line-breakers-adeptus-mechanicus#289",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -19882,7 +21024,7 @@
     }
   },
   {
-    "caseId": "madcap-artillery-orks#288",
+    "caseId": "madcap-artillery-orks#290",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -20214,7 +21356,7 @@
     }
   },
   {
-    "caseId": "martial-pride-imperial-knights#289",
+    "caseId": "martial-pride-imperial-knights#291",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -20252,7 +21394,7 @@
     }
   },
   {
-    "caseId": "mechanised-spearhead-astra-militarum#290",
+    "caseId": "mechanised-spearhead-astra-militarum#292",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -20314,7 +21456,7 @@
     }
   },
   {
-    "caseId": "melancholic-miasma-chaos-daemons#291",
+    "caseId": "melancholic-miasma-chaos-daemons#293",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -20405,7 +21547,7 @@
     }
   },
   {
-    "caseId": "methodical-destruction-chaos-knights#292",
+    "caseId": "methodical-destruction-chaos-knights#294",
     "effect": {
       "type": "ability-part",
       "trigger": {
@@ -20482,7 +21624,7 @@
     }
   },
   {
-    "caseId": "naturalised-camouflage-unending-swarm-tyranids#293",
+    "caseId": "naturalised-camouflage-unending-swarm-tyranids#295",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -20559,7 +21701,7 @@
     }
   },
   {
-    "caseId": "neuroloids-tyranids#294",
+    "caseId": "neuroloids-tyranids#296",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -20630,7 +21772,7 @@
     }
   },
   {
-    "caseId": "nova-charge-tau-empire#295",
+    "caseId": "nova-charge-tau-empire#297",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -20703,7 +21845,7 @@
     }
   },
   {
-    "caseId": "one-man-army-astra-militarum#296",
+    "caseId": "one-man-army-astra-militarum#298",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -20816,7 +21958,7 @@
     }
   },
   {
-    "caseId": "orders-astra-militarum#297",
+    "caseId": "orders-astra-militarum#299",
     "effect": {
       "type": "issue-orders",
       "menu_from": "voice-of-command-astra-militarum",
@@ -20835,7 +21977,7 @@
     }
   },
   {
-    "caseId": "orders-cadian-castellan-astra-militarum#298",
+    "caseId": "orders-cadian-castellan-astra-militarum#300",
     "effect": {
       "type": "issue-orders",
       "menu_from": "voice-of-command-astra-militarum",
@@ -20854,7 +21996,7 @@
     }
   },
   {
-    "caseId": "orders-commissar-astra-militarum#299",
+    "caseId": "orders-commissar-astra-militarum#301",
     "effect": {
       "type": "issue-orders",
       "menu_from": "voice-of-command-astra-militarum",
@@ -20877,7 +22019,7 @@
     }
   },
   {
-    "caseId": "orders-commissar-graves-astra-militarum#300",
+    "caseId": "orders-commissar-graves-astra-militarum#302",
     "effect": {
       "type": "issue-orders",
       "menu_from": "voice-of-command-astra-militarum",
@@ -20902,7 +22044,7 @@
     }
   },
   {
-    "caseId": "pain-engine-drukhari#301",
+    "caseId": "pain-engine-drukhari#303",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -21001,7 +22143,7 @@
     }
   },
   {
-    "caseId": "paragon-of-sanctity-warpbane-task-force-grey-knights#302",
+    "caseId": "paragon-of-sanctity-warpbane-task-force-grey-knights#304",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -21076,7 +22218,7 @@
     }
   },
   {
-    "caseId": "plasma-accelerator-rifle-experimental-prototype-cadre-tau-empire#303",
+    "caseId": "plasma-accelerator-rifle-experimental-prototype-cadre-tau-empire#305",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -21169,7 +22311,7 @@
     }
   },
   {
-    "caseId": "pledges-to-the-dark-prince-emperors-children#304",
+    "caseId": "pledges-to-the-dark-prince-emperors-children#306",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -21400,7 +22542,7 @@
     }
   },
   {
-    "caseId": "possessed-blade-carnival-of-excess-emperors-children#305",
+    "caseId": "possessed-blade-carnival-of-excess-emperors-children#307",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -21520,7 +22662,7 @@
     }
   },
   {
-    "caseId": "power-matrix-necrons#306",
+    "caseId": "power-matrix-necrons#308",
     "effect": {
       "type": "named-region-state",
       "target": {
@@ -21665,7 +22807,7 @@
     }
   },
   {
-    "caseId": "powers-of-da-waaagh-orks#307",
+    "caseId": "powers-of-da-waaagh-orks#309",
     "effect": {
       "type": "for-each-unit",
       "selector": {
@@ -21910,7 +23052,7 @@
     }
   },
   {
-    "caseId": "praise-the-fallen-hallowed-martyrs-adepta-sororitas#308",
+    "caseId": "praise-the-fallen-hallowed-martyrs-adepta-sororitas#310",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -21975,7 +23117,7 @@
     }
   },
   {
-    "caseId": "prioritised-efficiency-leagues-of-votann#309",
+    "caseId": "prioritised-efficiency-leagues-of-votann#311",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -22402,7 +23544,7 @@
     }
   },
   {
-    "caseId": "righteous-rage-bringers-of-flame-adepta-sororitas#310",
+    "caseId": "righteous-rage-bringers-of-flame-adepta-sororitas#312",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -22458,7 +23600,7 @@
     }
   },
   {
-    "caseId": "rise-to-the-challenge-peerless-bladesmen-emperors-children#311",
+    "caseId": "rise-to-the-challenge-peerless-bladesmen-emperors-children#313",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -22518,7 +23660,7 @@
     }
   },
   {
-    "caseId": "rune-of-mists-spirit-conclave-aeldari#312",
+    "caseId": "rune-of-mists-spirit-conclave-aeldari#314",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -22626,7 +23768,7 @@
     }
   },
   {
-    "caseId": "ruthless-reinvestment-leagues-of-votann#313",
+    "caseId": "ruthless-reinvestment-leagues-of-votann#315",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -22772,7 +23914,7 @@
     }
   },
   {
-    "caseId": "servo-sentry-astra-militarum#314",
+    "caseId": "servo-sentry-astra-militarum#316",
     "effect": {
       "type": "permission",
       "target": {
@@ -22820,7 +23962,7 @@
     }
   },
   {
-    "caseId": "speednob-support-orks#315",
+    "caseId": "speednob-support-orks#317",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -22858,7 +24000,7 @@
     }
   },
   {
-    "caseId": "spirit-leech-tyranids#316",
+    "caseId": "spirit-leech-tyranids#318",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -22918,7 +24060,7 @@
     }
   },
   {
-    "caseId": "stalwart-defenders-adeptus-astartes#317",
+    "caseId": "stalwart-defenders-adeptus-astartes#319",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -22959,7 +24101,7 @@
     }
   },
   {
-    "caseId": "storm-swift-onslaught-white-scars#318",
+    "caseId": "storm-swift-onslaught-white-scars#320",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -23123,7 +24265,7 @@
     }
   },
   {
-    "caseId": "supernova-launcher-experimental-prototype-cadre-tau-empire#319",
+    "caseId": "supernova-launcher-experimental-prototype-cadre-tau-empire#321",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -23202,7 +24344,7 @@
     }
   },
   {
-    "caseId": "swift-demise-aeldari#320",
+    "caseId": "swift-demise-aeldari#322",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -23268,7 +24410,7 @@
     }
   },
   {
-    "caseId": "taktikal-know-wotz-orks#321",
+    "caseId": "taktikal-know-wotz-orks#323",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -23310,7 +24452,7 @@
     }
   },
   {
-    "caseId": "tempestor-prime-astra-militarum#322",
+    "caseId": "tempestor-prime-astra-militarum#324",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -23346,7 +24488,7 @@
     }
   },
   {
-    "caseId": "terror-descends-chaos-space-marines#323",
+    "caseId": "terror-descends-chaos-space-marines#325",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -23480,7 +24622,7 @@
     }
   },
   {
-    "caseId": "terror-made-manifest-chaos-space-marines#324",
+    "caseId": "terror-made-manifest-chaos-space-marines#326",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -23669,7 +24811,7 @@
     }
   },
   {
-    "caseId": "the-shadow-of-chaos-chaos-daemons#325",
+    "caseId": "the-shadow-of-chaos-chaos-daemons#327",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -24014,7 +25156,7 @@
     }
   },
   {
-    "caseId": "thermoneutronic-projector-experimental-prototype-cadre-tau-empire#326",
+    "caseId": "thermoneutronic-projector-experimental-prototype-cadre-tau-empire#328",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -24094,7 +25236,7 @@
     }
   },
   {
-    "caseId": "tidewall-defence-platform-tau-empire#327",
+    "caseId": "tidewall-defence-platform-tau-empire#329",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -24122,7 +25264,7 @@
     }
   },
   {
-    "caseId": "unleash-the-lions-lions-of-the-emperor-adeptus-custodes#328",
+    "caseId": "unleash-the-lions-lions-of-the-emperor-adeptus-custodes#330",
     "effect": {
       "type": "split-unit",
       "target": "this-unit",
@@ -24144,7 +25286,7 @@
     }
   },
   {
-    "caseId": "using-sir-hekhtur-imperial-knights#329",
+    "caseId": "using-sir-hekhtur-imperial-knights#331",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -24202,7 +25344,7 @@
     }
   },
   {
-    "caseId": "violent-fury-space-wolves#330",
+    "caseId": "violent-fury-space-wolves#332",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -24235,7 +25377,7 @@
     }
   },
   {
-    "caseId": "ability-grant-scouts#331",
+    "caseId": "ability-grant-scouts#333",
     "effect": {
       "type": "ability-grant",
       "target": "this-unit",
@@ -24252,7 +25394,7 @@
     }
   },
   {
-    "caseId": "permission-charge-after-disembark#332",
+    "caseId": "permission-charge-after-disembark#334",
     "effect": {
       "type": "permission",
       "target": "this-unit",
@@ -24272,7 +25414,7 @@
     }
   },
   {
-    "caseId": "permission-charge-after-fall-back#333",
+    "caseId": "permission-charge-after-fall-back#335",
     "effect": {
       "type": "permission",
       "target": "this-model",
@@ -24292,7 +25434,7 @@
     }
   },
   {
-    "caseId": "unit-state-engaged#334",
+    "caseId": "unit-state-engaged#336",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -24319,7 +25461,7 @@
     }
   },
   {
-    "caseId": "unit-state-on-battlefield#335",
+    "caseId": "unit-state-on-battlefield#337",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -24346,7 +25488,7 @@
     }
   },
   {
-    "caseId": "unit-state-embarked#336",
+    "caseId": "unit-state-embarked#338",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -24373,7 +25515,7 @@
     }
   },
   {
-    "caseId": "unit-state-unengaged#337",
+    "caseId": "unit-state-unengaged#339",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -24405,7 +25547,7 @@
     }
   },
   {
-    "caseId": "unit-state-negated#338",
+    "caseId": "unit-state-negated#340",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -24437,7 +25579,7 @@
     }
   },
   {
-    "caseId": "unit-state-in-strategic-reserves#339",
+    "caseId": "unit-state-in-strategic-reserves#341",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -24464,7 +25606,7 @@
     }
   },
   {
-    "caseId": "owned-by-enemy#340",
+    "caseId": "owned-by-enemy#342",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -24492,7 +25634,7 @@
     }
   },
   {
-    "caseId": "fights-first-cond#341",
+    "caseId": "fights-first-cond#343",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -24521,7 +25663,7 @@
     }
   },
   {
-    "caseId": "scaling-attacks-per-models#342",
+    "caseId": "scaling-attacks-per-models#344",
     "effect": {
       "type": "stat-modifier",
       "target": "this-unit",
@@ -24546,7 +25688,7 @@
     }
   },
   {
-    "caseId": "scaling-strength-wounds-lost#343",
+    "caseId": "scaling-strength-wounds-lost#345",
     "effect": {
       "type": "stat-modifier",
       "target": "this-model",
@@ -24570,7 +25712,7 @@
     }
   },
   {
-    "caseId": "dice-pool-inline-label#344",
+    "caseId": "dice-pool-inline-label#346",
     "effect": {
       "type": "choice",
       "options": [
@@ -24618,7 +25760,7 @@
     }
   },
   {
-    "caseId": "closest-eligible-within-range#345",
+    "caseId": "closest-eligible-within-range#347",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -24648,7 +25790,7 @@
     }
   },
   {
-    "caseId": "dice-pool-requirement-anyof#346",
+    "caseId": "dice-pool-requirement-anyof#348",
     "effect": {
       "type": "dice-pool-allocation",
       "pool": {
@@ -24702,7 +25844,7 @@
     }
   },
   {
-    "caseId": "rule-state-forgo-faction-rule#347",
+    "caseId": "rule-state-forgo-faction-rule#349",
     "effect": {
       "type": "ability-part",
       "cost": {
@@ -24732,7 +25874,7 @@
     }
   },
   {
-    "caseId": "rule-state-faction-rule-granted#348",
+    "caseId": "rule-state-faction-rule-granted#350",
     "effect": {
       "type": "rule-state",
       "target": "this-model",
@@ -24750,7 +25892,7 @@
     }
   },
   {
-    "caseId": "rule-state-cover-granted#349",
+    "caseId": "rule-state-cover-granted#351",
     "effect": {
       "type": "rule-state",
       "target": "this-model",
@@ -24768,7 +25910,7 @@
     }
   },
   {
-    "caseId": "permission-advance-forbidden#350",
+    "caseId": "permission-advance-forbidden#352",
     "effect": {
       "type": "permission",
       "target": "this-unit",
@@ -24785,7 +25927,7 @@
     }
   },
   {
-    "caseId": "rule-state-overwatch-against-bearer#351",
+    "caseId": "rule-state-overwatch-against-bearer#353",
     "effect": {
       "type": "rule-state",
       "target": "this-unit",
@@ -24803,7 +25945,7 @@
     }
   },
   {
-    "caseId": "rule-state-desperate-escape-granted#352",
+    "caseId": "rule-state-desperate-escape-granted#354",
     "effect": {
       "type": "rule-state",
       "target": {
@@ -24826,7 +25968,7 @@
     }
   },
   {
-    "caseId": "rule-state-desperate-escape-suppressed#353",
+    "caseId": "rule-state-desperate-escape-suppressed#355",
     "effect": {
       "type": "rule-state",
       "target": "this-model",
@@ -24844,7 +25986,7 @@
     }
   },
   {
-    "caseId": "rule-state-ability-granted#354",
+    "caseId": "rule-state-ability-granted#356",
     "effect": {
       "type": "rule-state",
       "target": "this-unit",
@@ -24862,7 +26004,7 @@
     }
   },
   {
-    "caseId": "rule-state-keyword-suppressed#355",
+    "caseId": "rule-state-keyword-suppressed#357",
     "effect": {
       "type": "rule-state",
       "target": "this-unit",
@@ -24880,7 +26022,7 @@
     }
   },
   {
-    "caseId": "rule-state-ordered-retreat-suppressed#356",
+    "caseId": "rule-state-ordered-retreat-suppressed#358",
     "effect": {
       "type": "rule-state",
       "target": {
@@ -24905,7 +26047,7 @@
     }
   },
   {
-    "caseId": "rule-state-ordered-retreat-granted#357",
+    "caseId": "rule-state-ordered-retreat-granted#359",
     "effect": {
       "type": "rule-state",
       "target": "this-unit",
@@ -24923,7 +26065,7 @@
     }
   },
   {
-    "caseId": "weapon-ability-grant-anti-titanic#358",
+    "caseId": "weapon-ability-grant-anti-titanic#360",
     "effect": {
       "type": "weapon-ability-grant",
       "target": "this-unit",
@@ -24947,7 +26089,7 @@
     }
   },
   {
-    "caseId": "weapon-ability-grant-anti-infantry#359",
+    "caseId": "weapon-ability-grant-anti-infantry#361",
     "effect": {
       "type": "weapon-ability-grant",
       "target": "this-unit",
@@ -24971,7 +26113,7 @@
     }
   },
   {
-    "caseId": "weapon-ability-grant-rated-value#360",
+    "caseId": "weapon-ability-grant-rated-value#362",
     "effect": {
       "type": "weapon-ability-grant",
       "target": "this-unit",
@@ -24994,7 +26136,7 @@
     }
   },
   {
-    "caseId": "roll-result-battle-shock-pass#361",
+    "caseId": "roll-result-battle-shock-pass#363",
     "effect": {
       "type": "roll-result",
       "target": "this-unit",
@@ -25011,7 +26153,7 @@
     }
   },
   {
-    "caseId": "roll-result-hit-six#362",
+    "caseId": "roll-result-hit-six#364",
     "effect": {
       "type": "roll-result",
       "target": "this-unit",
@@ -25028,7 +26170,7 @@
     }
   },
   {
-    "caseId": "ability-grant-firing-deck#363",
+    "caseId": "ability-grant-firing-deck#365",
     "effect": {
       "type": "ability-grant",
       "target": "this-model",
@@ -25045,7 +26187,7 @@
     }
   },
   {
-    "caseId": "permission-disembark-after-move#364",
+    "caseId": "permission-disembark-after-move#366",
     "effect": {
       "type": "permission",
       "target": "this-model",
@@ -25065,7 +26207,7 @@
     }
   },
   {
-    "caseId": "usage-once-per-turn#365",
+    "caseId": "usage-once-per-turn#367",
     "effect": {
       "type": "cp-gain",
       "target": "this-model",
@@ -25084,7 +26226,7 @@
     }
   },
   {
-    "caseId": "usage-n-per-battle-per-unit#366",
+    "caseId": "usage-n-per-battle-per-unit#368",
     "effect": {
       "type": "stat-modifier",
       "target": "this-unit",
@@ -25107,7 +26249,7 @@
     }
   },
   {
-    "caseId": "trigger-enemy-ended-move#367",
+    "caseId": "trigger-enemy-ended-move#369",
     "effect": {
       "type": "move",
       "target": "this-model",
@@ -25136,7 +26278,7 @@
     }
   },
   {
-    "caseId": "trigger-on-model-destroyed#368",
+    "caseId": "trigger-on-model-destroyed#370",
     "effect": {
       "type": "mortal-wounds",
       "target": {
@@ -25163,7 +26305,7 @@
     }
   },
   {
-    "caseId": "trigger-before-save-with-condition#369",
+    "caseId": "trigger-before-save-with-condition#371",
     "effect": {
       "type": "re-roll",
       "target": "this-unit",
@@ -25194,7 +26336,7 @@
     }
   },
   {
-    "caseId": "move-passthrough-models-terrain#370",
+    "caseId": "move-passthrough-models-terrain#372",
     "effect": {
       "type": "move-modifier",
       "target": "this-model",
@@ -25213,7 +26355,7 @@
     }
   },
   {
-    "caseId": "move-passthrough-applies#371",
+    "caseId": "move-passthrough-applies#373",
     "effect": {
       "type": "move-modifier",
       "target": "this-unit",
@@ -25236,7 +26378,7 @@
     }
   },
   {
-    "caseId": "move-ignore-vertical#372",
+    "caseId": "move-ignore-vertical#374",
     "effect": {
       "type": "move-modifier",
       "target": "this-unit",
@@ -25252,7 +26394,7 @@
     }
   },
   {
-    "caseId": "move-modifier-distance-bonus#373",
+    "caseId": "move-modifier-distance-bonus#375",
     "effect": {
       "type": "move-modifier",
       "target": "this-unit",
@@ -25273,7 +26415,7 @@
     }
   },
   {
-    "caseId": "stat-modifier-move-negative#374",
+    "caseId": "stat-modifier-move-negative#376",
     "effect": {
       "type": "stat-modifier",
       "target": "defender",
@@ -25291,7 +26433,7 @@
     }
   },
   {
-    "caseId": "roll-modifier-advance-bonus#375",
+    "caseId": "roll-modifier-advance-bonus#377",
     "effect": {
       "type": "roll-modifier",
       "target": "this-unit",
@@ -25309,7 +26451,7 @@
     }
   },
   {
-    "caseId": "move-pile-in#376",
+    "caseId": "move-pile-in#378",
     "effect": {
       "type": "move",
       "target": "this-unit",
@@ -25326,7 +26468,7 @@
     }
   },
   {
-    "caseId": "move-consolidation#377",
+    "caseId": "move-consolidation#379",
     "effect": {
       "type": "move",
       "target": "this-unit",
@@ -25343,7 +26485,7 @@
     }
   },
   {
-    "caseId": "move-surge#378",
+    "caseId": "move-surge#380",
     "effect": {
       "type": "move",
       "target": "this-unit",
@@ -25360,7 +26502,7 @@
     }
   },
   {
-    "caseId": "move-normal-after-shooting#379",
+    "caseId": "move-normal-after-shooting#381",
     "effect": {
       "type": "move",
       "target": "this-unit",
@@ -25377,7 +26519,7 @@
     }
   },
   {
-    "caseId": "set-up-reserves-max-units#380",
+    "caseId": "set-up-reserves-max-units#382",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -25405,7 +26547,7 @@
     }
   },
   {
-    "caseId": "marker-relocate#381",
+    "caseId": "marker-relocate#383",
     "effect": {
       "type": "marker",
       "target": "this-unit",
@@ -25425,7 +26567,7 @@
     }
   },
   {
-    "caseId": "set-up-redeploy-filtered#382",
+    "caseId": "set-up-redeploy-filtered#384",
     "effect": {
       "type": "set-up",
       "target": {
@@ -25448,7 +26590,7 @@
     }
   },
   {
-    "caseId": "ability-grant-infiltrators#383",
+    "caseId": "ability-grant-infiltrators#385",
     "effect": {
       "type": "ability-grant",
       "target": "this-unit",
@@ -25464,7 +26606,7 @@
     }
   },
   {
-    "caseId": "aura-range-bonus#384",
+    "caseId": "aura-range-bonus#386",
     "effect": {
       "type": "aura",
       "target": "enemy-within-aura",
@@ -25483,7 +26625,7 @@
     }
   },
   {
-    "caseId": "issue-orders-eligible-keywords#385",
+    "caseId": "issue-orders-eligible-keywords#387",
     "effect": {
       "type": "issue-orders",
       "count": 1,
@@ -25515,7 +26657,7 @@
     }
   },
   {
-    "caseId": "issue-orders-menu-from#386",
+    "caseId": "issue-orders-menu-from#388",
     "effect": {
       "type": "issue-orders",
       "count": 1,
@@ -25539,7 +26681,7 @@
     }
   },
   {
-    "caseId": "aura-army-emitter-tiered-capped#387",
+    "caseId": "aura-army-emitter-tiered-capped#389",
     "effect": {
       "type": "aura",
       "target": "enemy-within-aura",
@@ -25586,7 +26728,7 @@
     }
   },
   {
-    "caseId": "aura-any-emitter-keyword-clauses#388",
+    "caseId": "aura-any-emitter-keyword-clauses#390",
     "effect": {
       "type": "aura",
       "target": "friendly-within-aura",
@@ -25627,7 +26769,7 @@
     }
   },
   {
-    "caseId": "aura-model-emitter-keywords#389",
+    "caseId": "aura-model-emitter-keywords#391",
     "effect": {
       "type": "aura",
       "target": "friendly-within-aura",
@@ -25659,7 +26801,7 @@
     }
   },
   {
-    "caseId": "aura-unit-origin#390",
+    "caseId": "aura-unit-origin#392",
     "effect": {
       "type": "aura",
       "target": "enemy-within-aura",
@@ -25690,7 +26832,7 @@
     }
   },
   {
-    "caseId": "aura-unit-origin-emitter-keywords#391",
+    "caseId": "aura-unit-origin-emitter-keywords#393",
     "effect": {
       "type": "aura",
       "target": "friendly-within-aura",
@@ -25723,7 +26865,7 @@
     }
   },
   {
-    "caseId": "aura-tiered-effect#392",
+    "caseId": "aura-tiered-effect#394",
     "effect": {
       "type": "aura",
       "target": "enemy-within-aura",
@@ -25760,7 +26902,7 @@
     }
   },
   {
-    "caseId": "set-up-deep-strike-min-distance#393",
+    "caseId": "set-up-deep-strike-min-distance#395",
     "effect": {
       "type": "set-up",
       "target": "this-unit",
@@ -25780,7 +26922,7 @@
     }
   },
   {
-    "caseId": "move-modifier-engagement-no-end#394",
+    "caseId": "move-modifier-engagement-no-end#396",
     "effect": {
       "type": "move-modifier",
       "target": "this-model",
@@ -25799,7 +26941,7 @@
     }
   },
   {
-    "caseId": "permission-shoot-after-fall-back#395",
+    "caseId": "permission-shoot-after-fall-back#397",
     "effect": {
       "type": "permission",
       "target": "this-unit",
@@ -25819,7 +26961,7 @@
     }
   },
   {
-    "caseId": "permission-shoot-and-charge-after-fall-back#396",
+    "caseId": "permission-shoot-and-charge-after-fall-back#398",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -25855,7 +26997,7 @@
     }
   },
   {
-    "caseId": "superlative-strategist-aeldari#397",
+    "caseId": "superlative-strategist-aeldari#399",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -25908,7 +27050,7 @@
     }
   },
   {
-    "caseId": "deceptive-feint#398",
+    "caseId": "deceptive-feint#400",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -25993,7 +27135,7 @@
     }
   },
   {
-    "caseId": "heal-selected-model#399",
+    "caseId": "heal-selected-model#401",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -26046,7 +27188,7 @@
     }
   },
   {
-    "caseId": "marker-next-to-target#400",
+    "caseId": "marker-next-to-target#402",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -26095,7 +27237,7 @@
     }
   },
   {
-    "caseId": "psychic-model-bundle#401",
+    "caseId": "psychic-model-bundle#403",
     "effect": {
       "type": "for-each-unit",
       "selector": {
@@ -26174,7 +27316,7 @@
     }
   },
   {
-    "caseId": "designate-bearer-target-with-eligibility#402",
+    "caseId": "designate-bearer-target-with-eligibility#404",
     "effect": {
       "type": "ability-part",
       "trigger": {
@@ -26255,7 +27397,7 @@
     }
   },
   {
-    "caseId": "conditional-selected-to-shoot-this-phase#403",
+    "caseId": "conditional-selected-to-shoot-this-phase#405",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -26286,7 +27428,7 @@
     }
   },
   {
-    "caseId": "transport-capacity#404",
+    "caseId": "transport-capacity#406",
     "effect": {
       "type": "transport-capacity",
       "target": "this-unit",
@@ -26307,7 +27449,7 @@
     }
   },
   {
-    "caseId": "transport-grouped-single-keyword-model#405",
+    "caseId": "transport-grouped-single-keyword-model#407",
     "effect": {
       "type": "transport-capacity",
       "target": "this-model",
@@ -26328,7 +27470,7 @@
     }
   },
   {
-    "caseId": "transport-fixed-model-spaces-with-capacity-eligibility#406",
+    "caseId": "transport-fixed-model-spaces-with-capacity-eligibility#408",
     "effect": {
       "type": "transport-capacity",
       "target": "this-model",
@@ -26349,7 +27491,7 @@
     }
   },
   {
-    "caseId": "transport-fixed-model-spaces-with-embark-as#407",
+    "caseId": "transport-fixed-model-spaces-with-embark-as#409",
     "effect": {
       "type": "transport-capacity",
       "target": "this-model",
@@ -26370,7 +27512,7 @@
     }
   },
   {
-    "caseId": "transport-equivalent-model-keyword#408",
+    "caseId": "transport-equivalent-model-keyword#410",
     "effect": {
       "type": "transport-capacity",
       "target": "this-unit",
@@ -26389,7 +27531,7 @@
     }
   },
   {
-    "caseId": "transport-equivalent-model-count#409",
+    "caseId": "transport-equivalent-model-count#411",
     "effect": {
       "type": "transport-capacity",
       "target": "this-model",
@@ -26407,7 +27549,7 @@
     }
   },
   {
-    "caseId": "moved-through-tall-terrain-inline#410",
+    "caseId": "moved-through-tall-terrain-inline#412",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -26436,7 +27578,7 @@
     }
   },
   {
-    "caseId": "moved-through-tall-terrain-trigger-condition#411",
+    "caseId": "moved-through-tall-terrain-trigger-condition#413",
     "effect": {
       "type": "ability-grant",
       "target": "this-model",
@@ -26468,7 +27610,7 @@
     }
   },
   {
-    "caseId": "moved-through-tall-terrain-negated-inline#412",
+    "caseId": "moved-through-tall-terrain-negated-inline#414",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -26502,7 +27644,7 @@
     }
   },
   {
-    "caseId": "moved-through-tall-terrain-negated-trigger-condition#413",
+    "caseId": "moved-through-tall-terrain-negated-trigger-condition#415",
     "effect": {
       "type": "ability-grant",
       "target": "this-model",
@@ -26539,7 +27681,7 @@
     }
   },
   {
-    "caseId": "moved-through-tall-terrain-trigger-event#414",
+    "caseId": "moved-through-tall-terrain-trigger-event#416",
     "effect": {
       "type": "ability-grant",
       "target": "this-model",
@@ -26561,7 +27703,7 @@
     }
   },
   {
-    "caseId": "moved-through-terrain-generic#415",
+    "caseId": "moved-through-terrain-generic#417",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -26590,7 +27732,7 @@
     }
   },
   {
-    "caseId": "aura-role-filtered-effect#416",
+    "caseId": "aura-role-filtered-effect#418",
     "effect": {
       "type": "aura",
       "target": "friendly-within-aura",
@@ -45458,6 +46600,275 @@
     "behavior": "reactive",
     "expected": {
       "text": "-> At the start of the battle round, if you do not have 2+ glory points: the unit suffers 1 mortal wound."
+    }
+  },
+  {
+    "caseId": "canonical/ritual-menu-block",
+    "effect": {
+      "type": "ritual-menu",
+      "test": {
+        "dice": "2D6",
+        "kind": "psychic",
+        "roll_var": "psychic-test",
+        "extra_die": {
+          "dice": "D6",
+          "optional": true
+        },
+        "perils": {
+          "on": "double",
+          "effect": {
+            "type": "mortal-wounds",
+            "target": "this-unit",
+            "modifier": {
+              "count": "D3"
+            }
+          }
+        }
+      },
+      "ritual_limit": {
+        "frequency": "once-per-turn",
+        "per": "army"
+      },
+      "rituals": [
+        {
+          "id": "gloom-bolt",
+          "name": "Gloom Bolt",
+          "warp_charge": 6,
+          "effect": {
+            "type": "select-units",
+            "selector": {
+              "filter": {
+                "owner": "enemy"
+              },
+              "count": {
+                "min": 1,
+                "max": 1
+              },
+              "eligibility": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "selected-unit",
+                  "filter": {
+                    "within": {
+                      "of": "this-model",
+                      "range": {
+                        "inches": 18
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "conditional",
+                  "condition": {
+                    "operator": "not",
+                    "operands": [
+                      {
+                        "type": "roll-total",
+                        "parameters": {
+                          "roll_var": "psychic-test",
+                          "min": 10
+                        }
+                      }
+                    ]
+                  },
+                  "effect": {
+                    "type": "mortal-wounds",
+                    "target": "selected-unit",
+                    "modifier": {
+                      "count": "D3"
+                    }
+                  }
+                },
+                {
+                  "type": "conditional",
+                  "condition": {
+                    "type": "roll-total",
+                    "parameters": {
+                      "roll_var": "psychic-test",
+                      "min": 10
+                    }
+                  },
+                  "effect": {
+                    "type": "mortal-wounds",
+                    "target": "selected-unit",
+                    "modifier": {
+                      "count": "D6"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": "hush",
+          "name": "Hush",
+          "warp_charge": 5,
+          "effect": {
+            "type": "ability-part",
+            "effect": {
+              "type": "select-units",
+              "selector": {
+                "filter": {
+                  "owner": "friendly"
+                },
+                "count": {
+                  "min": 1,
+                  "max": 1
+                },
+                "eligibility": {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "selected-unit",
+                    "filter": {
+                      "within": {
+                        "of": "this-model",
+                        "range": {
+                          "inches": 12
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "effect": {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "move",
+                    "target": "selected-unit",
+                    "modifier": {
+                      "move_type": "normal",
+                      "distance": "D6"
+                    }
+                  },
+                  {
+                    "type": "permission",
+                    "target": "selected-unit",
+                    "modifier": {
+                      "activity": "declare-charge",
+                      "allow": false
+                    }
+                  }
+                ]
+              }
+            },
+            "duration": "turn"
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "reactive",
+    "expected": {
+      "text": "Attempt one of the Rituals below (each Ritual can be attempted once per turn across your army). To do so, take a Psychic test: roll 2D6, and you can roll one additional D6; if any two of its dice show the same result, the unit suffers D3 mortal wounds; if this model is not destroyed and the total of all its dice equals or exceeds the Ritual's Warp Charge, this model manifests that Ritual:\n  - Gloom Bolt (Warp Charge 6): Select one enemy unit if the selected unit is within 18\" of this model: unless the Psychic test result is 10+, that unit suffers D3 mortal wounds; if the Psychic test result is 10+, that unit suffers D6 mortal wounds.\n  - Hush (Warp Charge 5): Until the end of the turn: select one friendly unit if the selected unit is within 12\" of this model: that unit can make a Normal move of up to D6\"; that unit cannot declare a charge."
+    }
+  },
+  {
+    "caseId": "canonical/ritual-menu-inline-bare-test",
+    "effect": {
+      "type": "choice",
+      "options": [
+        {
+          "type": "ritual-menu",
+          "test": {
+            "dice": "2D6",
+            "roll_var": "psychic-test",
+            "extra_die": {
+              "dice": "D3"
+            }
+          },
+          "ritual_limit": {
+            "frequency": "once-per-turn",
+            "per": "army"
+          },
+          "rituals": [
+            {
+              "id": "gloom-bolt",
+              "name": "Gloom Bolt",
+              "warp_charge": 6,
+              "effect": {
+                "type": "conditional",
+                "condition": {
+                  "type": "roll-total",
+                  "parameters": {
+                    "roll_var": "psychic-test",
+                    "min": 9
+                  }
+                },
+                "effect": {
+                  "type": "mortal-wounds",
+                  "target": "this-unit",
+                  "modifier": {
+                    "count": 1
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "mortal-wounds",
+          "target": "this-unit",
+          "modifier": {
+            "count": 1
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "passive",
+    "expected": {
+      "text": "Select one of the following:\n  - Attempt one Ritual (each Ritual can be attempted once per turn across your army); to do so, take a test: roll 2D6, and roll one additional D3; if this model is not destroyed and the total of all its dice equals or exceeds the Ritual's Warp Charge, this model manifests that Ritual: Gloom Bolt (Warp Charge 6): if the Psychic test result is 9+, the unit suffers 1 mortal wound.\n  - The unit suffers 1 mortal wound."
+    }
+  },
+  {
+    "caseId": "canonical/roll-total-negated-trigger",
+    "effect": {
+      "type": "roll",
+      "dice": "2D6",
+      "roll_var": "psychic-test",
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "phase-ended",
+          "condition": {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "roll-total",
+                "parameters": {
+                  "roll_var": "psychic-test",
+                  "min": 10
+                }
+              }
+            ]
+          }
+        },
+        "effect": {
+          "type": "mortal-wounds",
+          "target": "this-unit",
+          "modifier": {
+            "count": 1
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "reactive",
+    "expected": {
+      "text": "Roll 2D6, then:\n  -> At the end of each phase, if the Psychic test result is not 10+: the unit suffers 1 mortal wound."
     }
   }
 ]

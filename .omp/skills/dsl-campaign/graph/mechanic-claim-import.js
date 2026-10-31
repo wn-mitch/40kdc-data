@@ -25,6 +25,7 @@ const WRAPPER_CHILDREN = Object.freeze({
   'risk-reward': [{ path: ['reward'], role: 'on-success' }, { path: ['risk', 'on_fail'], role: 'on-failure' }],
   'issue-orders': [{ path: ['options'], child: ['effect'], role: 'members', array: true }],
   'resource-action-menu': [{ path: ['actions'], child: ['effect'], role: 'members', array: true }],
+  'ritual-menu': [{ path: ['test', 'perils', 'effect'], role: 'on-failure' }, { path: ['rituals'], child: ['effect'], role: 'members', array: true }],
   'select-objective': [{ path: ['effect'], role: 'members' }],
   roll: [{ path: ['effect'], role: 'members' }],
   'oath-modifier': [{ path: ['modifier', 'effect'], role: 'members' }],

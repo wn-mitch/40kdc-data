@@ -1417,6 +1417,40 @@
         {
           "type": "object",
           "additionalProperties": false,
+          "title": "roll-total condition",
+          "description": "[roll] The total of a roll an enclosing step bound (`roll_var`: a ritual-menu's test, a roll step) is at least min (\"if the Psychic test result for this Ritual was 10+\").",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "roll-total"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "roll_var",
+                "min"
+              ],
+              "properties": {
+                "roll_var": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "min": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 36
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
           "title": "visible condition",
           "description": "[visibility] The subject is visible (fully visible, if set) to `to` (default the attacker). With blocked_by, the view is instead blocked by that unit.",
           "required": [

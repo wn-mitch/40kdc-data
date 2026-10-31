@@ -76,6 +76,9 @@
         },
         {
           "$ref": "#/$defs/oath-modifier-effect"
+        },
+        {
+          "$ref": "#/$defs/ritual-menu-effect"
         }
       ]
     },
@@ -7903,6 +7906,127 @@
           }
         }
       ]
+    },
+    "ritual-menu-effect": {
+      "type": "object",
+      "additionalProperties": false,
+      "title": "ritual-menu effect",
+      "description": "Rituals attempted with a Psychic test. Each attempt picks one Ritual (ritual_limit: each Ritual once per turn across the army) and takes the test: roll `dice` (and optionally `extra_die`), bound as `roll_var`; when any two of its dice show the same result (perils on double) the perils effect resolves. If the attempting model (this-model) is not destroyed and the total of all the test's dice equals or exceeds the Ritual's warp_charge, the model manifests that Ritual and its effect resolves. Inside a Ritual's effect, a roll-total condition on roll_var reads the test result.",
+      "required": [
+        "type",
+        "test",
+        "ritual_limit",
+        "rituals"
+      ],
+      "properties": {
+        "type": {
+          "const": "ritual-menu"
+        },
+        "test": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "dice",
+            "roll_var"
+          ],
+          "properties": {
+            "dice": {
+              "$ref": "../../defs/common.schema.json#/$defs/dice-expression"
+            },
+            "kind": {
+              "$ref": "../../defs/common.schema.json#/$defs/roll-kind"
+            },
+            "extra_die": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "dice"
+              ],
+              "description": "One more die the player can add to the test (\"Optionally, you can roll one additional D6\"); its result counts toward the total.",
+              "properties": {
+                "dice": {
+                  "$ref": "../../defs/common.schema.json#/$defs/dice-expression"
+                },
+                "optional": {
+                  "const": true
+                }
+              }
+            },
+            "roll_var": {
+              "type": "string",
+              "minLength": 1
+            },
+            "perils": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "on",
+                "effect"
+              ],
+              "description": "What happens when the test's dice match (\"if one or more doubles or triples were rolled\": a triple holds a double).",
+              "properties": {
+                "on": {
+                  "enum": [
+                    "double"
+                  ]
+                },
+                "effect": {
+                  "$ref": "#/$defs/effect-node"
+                }
+              }
+            }
+          }
+        },
+        "ritual_limit": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "frequency",
+            "per"
+          ],
+          "description": "How often each Ritual can be attempted (\"select one Ritual no model from your army has attempted to manifest this turn\").",
+          "properties": {
+            "frequency": {
+              "const": "once-per-turn"
+            },
+            "per": {
+              "const": "army"
+            }
+          }
+        },
+        "rituals": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "name",
+              "warp_charge",
+              "effect"
+            ],
+            "properties": {
+              "id": {
+                "$ref": "../../defs/common.schema.json#/$defs/entity-id"
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "warp_charge": {
+                "type": "integer",
+                "minimum": 2,
+                "maximum": 18,
+                "description": "The test result the Ritual needs: the total of the test's dice must equal or exceed it."
+              },
+              "effect": {
+                "$ref": "#/$defs/effect-node"
+              }
+            }
+          }
+        }
+      }
     },
     "death-gate": {
       "type": "object",

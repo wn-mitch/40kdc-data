@@ -25,6 +25,7 @@ from wh40kdc.translate.effect_region import (
     describe_named_region_conditional,
     describe_named_region_state,
 )
+from wh40kdc.translate.effect_ritual import ritual_menu_inline
 from wh40kdc.translate.effect_select import (
     designated_attack_when,
     designated_recipient_context,
@@ -397,6 +398,8 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx) -> str:
         return dice_gate(e, ctx)
     if t == "roll":
         return f"{roll_head(e)}; then {inline(e.get('effect'), ctx)}"
+    if t == "ritual-menu":
+        return ritual_menu_inline(e, lambda x: inline(x, ctx))
     if t == "select-objective":
         return select_objective_inline(e, lambda x: inline(x, ctx))
     if t == "dice-table":

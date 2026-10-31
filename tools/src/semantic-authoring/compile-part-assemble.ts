@@ -68,6 +68,8 @@ function hasLastingEffect(node: unknown): boolean {
   const record = node as Node;
   // An extra use "but not in the same phase" can only be spent after this phase, so the window cannot bound it.
   if (record.type === "ability-modifier" && (record.modifier as Node | undefined)?.not_same === "phase") return false;
+  // A part that prints its own duration ("Until the end of the turn, …" inside a Ritual) lasts that long, whatever the window.
+  if (typeof record.duration === "string" && record.duration !== "permanent") return false;
   return (typeof record.type === "string" && LASTING_EFFECTS.has(record.type)) || isForbiddenSetUp(record) || Object.values(record).some(hasLastingEffect);
 }
 

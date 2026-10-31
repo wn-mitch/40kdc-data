@@ -356,6 +356,11 @@ export const COMPOSED: readonly ComposedEntry[] = [
     reason: "Needs a select-unit leaf plus a later attack leaf targeting that selection; select-unit alone (no attack) compiles to select-units instead.",
     pinnedTest: "tools/test/semantic-authoring-compose.test.ts:298",
   },
+  {
+    type: "ritual-menu",
+    reason: "Needs ritual-menu-open plus the Psychic test's dice-roll, a ritual-manifest, a per-army once-per-turn usage-limit and named-options carrying warp_charge; the opener alone has no test or Rituals.",
+    pinnedTest: "tools/test/semantic-authoring-ritual-menu.test.ts:83",
+  },
 ];
 
 // ------------------------------------------------------------------------------------------

@@ -161,8 +161,9 @@ export { shapeSignature } from "./compile-placement.js";
  * A container option that carries its own moment or conditions, compiled as a whole ability and
  * returned as one ability-part: its trigger, usage and duration go on the part, its effect inside.
  */
-function nestedPart(group: readonly CompileLeaf[], sourceText: string | undefined, options: CompileOptions, objective?: string): Node {
-  const compiled = compileChecked(group, sourceText, objective === undefined ? options : { ...options, selectedObjective: objective }, true);
+function nestedPart(group: readonly CompileLeaf[], sourceText: string | undefined, options: CompileOptions, objective?: string, name?: string): Node {
+  const own = name === undefined ? options : { ...options, name };
+  const compiled = compileChecked(group, sourceText, objective === undefined ? own : { ...own, selectedObjective: objective }, true);
   if (!compiled.ok) throw new CompileError(compiled.errors[0]!);
   const { effect: body, trigger: moment, usage, scope } = compiled.mechanics;
   if (!moment && !usage && (scope.duration === undefined || scope.duration === "permanent")) return body;
@@ -449,7 +450,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   let containerNodes: Map<number, Node>;
   let consumedByContainer: Set<number>;
   try {
-    ({ nodes: containerNodes, consumed: consumedByContainer } = planContainers(list, places.map((place) => place.sentence), (group, objective) => nestedPart(group, sourceText, options, objective), bulletBreaks(list, sourceText), commaItems(list, sourceText), plainLineBreaks(list, sourceText)));
+    ({ nodes: containerNodes, consumed: consumedByContainer } = planContainers(list, places.map((place) => place.sentence), (group, objective, name) => nestedPart(group, sourceText, options, objective, name), bulletBreaks(list, sourceText), commaItems(list, sourceText), plainLineBreaks(list, sourceText)));
   } catch (error) {
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature, errors: [error.message] };

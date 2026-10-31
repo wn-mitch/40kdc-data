@@ -20,6 +20,7 @@ import { unitRefPhrase, usageClause } from "./condition-refs.js";
 import { describeTrigger, normalizeTriggers, type AbilityTriggerSpec } from "./trigger.js";
 import { definedGrantHead, definitionPart, describeLeaf, isDefinedGrant, LEAF_TYPES, type Leaf } from "./effect-leaf.js";
 import { expiryTrail } from "./expiry.js";
+import { ritualMenuBlock, ritualMenuInline } from "./effect-ritual.js";
 import { objectiveSelectorPhrase, rollHead, selectObjectiveBlock, selectObjectiveInline, selectionBinding, selectionLimit, selectorCount, selectorNoun, selectorSubject, selectUnitsSubject } from "./effect-bind.js";
 import {
   diceTableResultLabel,
@@ -216,6 +217,7 @@ export interface AbilityLike {
 const CONTAINER_TYPES = new Set([
   "roll",
   "select-objective",
+  "ritual-menu",
   "sequence",
   "rules-bundle",
   "ability-part",
@@ -609,6 +611,8 @@ function describeEffectInlineBase(e: Effect, ctx: Ctx = {}): string {
       return diceGate(e, ctx);
     case "roll":
       return `${rollHead(e as Record<string, unknown>)}; then ${describeEffectInline(e.effect ?? {}, ctx)}`;
+    case "ritual-menu":
+      return ritualMenuInline(e as Record<string, unknown>, (x) => describeEffectInline((x ?? {}) as Effect, ctx));
     case "select-objective":
       return selectObjectiveInline(e as Record<string, unknown>, (x) => describeEffectInline((x ?? {}) as Effect, ctx));
     case "dice-table":
@@ -921,6 +925,8 @@ export function describeEffect(e: Effect, depth: number = 0, ctx: Ctx = {}): str
       if (CONTAINER_TYPES.has(inner.type ?? "")) return `${head}, then:\n` + describeEffect(inner, depth + 1, ctx);
       return `${head}; then ${describeEffectInline(inner, ctx)}.`;
     }
+    case "ritual-menu":
+      return ritualMenuBlock(e as Record<string, unknown>, indent, arrow, (x) => describeEffectInline((x ?? {}) as Effect, ctx));
     case "select-objective": {
       const inner = e.effect ?? {};
       const nested = CONTAINER_TYPES.has(inner.type ?? "") ? describeEffect(inner, depth + 1, ctx) : null;
