@@ -17,7 +17,7 @@
   import { scenarioContext } from "./scenario.js";
   import { memberLevers, memberMortalSources, unionLevers } from "./output-model.js";
   import { defenderNeeds } from "./defender.js";
-  import { needToggles } from "./scenario.js";
+  import { needToggles, unansweredContext } from "./scenario.js";
   import NeedsList from "./needs-list.svelte";
   import MortalSourcesList from "./mortal-sources-list.svelte";
 
@@ -49,25 +49,23 @@
     ...scenarioContext(salvo.scenario),
   });
 
+  const member = $derived({
+    unitId: salvo.selectedUnitId,
+    factionId: salvo.selectedFactionId,
+    detachmentId: salvo.selectedDetachmentId,
+    attachedUnitIds: salvo.attachedUnitIds,
+    supportUnitIds: salvo.supportUnitIds,
+  });
+  const weapons = $derived(salvo.selectedWeaponId ? [{ weaponId: salvo.selectedWeaponId, profileIndex: salvo.selectedProfileIndex }] : []);
+
   // Every buff the attacker could stack, as toggleable levers. The package
   // does the DSL walk once and hands back (buff, enabled) pairs plus the
   // activation groups (dice-pool / choice) that cap how many fire at once.
-  const stackable = $derived.by<{ buffs: StackableBuff[]; groups: StackableBuffGroup[]; needs: AbilityNeed[]; error?: string }>(() =>
-    unionLevers(memberLevers(
-      ds,
-      {
-        unitId: salvo.selectedUnitId,
-        factionId: salvo.selectedFactionId,
-        detachmentId: salvo.selectedDetachmentId,
-        attachedUnitIds: salvo.attachedUnitIds,
-        supportUnitIds: salvo.supportUnitIds,
-      },
-      engineContext,
-      salvo.selectedWeaponId ? [{ weaponId: salvo.selectedWeaponId, profileIndex: salvo.selectedProfileIndex }] : [],
-    )));
+  const leversIn = (context: EngineContext) => unionLevers(memberLevers(ds, member, context, weapons));
+  const stackable = $derived.by<{ buffs: StackableBuff[]; groups: StackableBuffGroup[]; needs: AbilityNeed[]; error?: string }>(() => leversIn(engineContext));
 
   // The defending unit's undecided conditions, read with the same build the projection uses.
-  const targetNeeds = $derived.by<AbilityNeed[]>(() => {
+  function targetNeedsIn(context: EngineContext): AbilityNeed[] {
     const unit = salvo.targetUnitId ? ds.units.getAny(salvo.targetUnitId) : undefined;
     if (!unit) return [];
     try {
@@ -76,27 +74,26 @@
         stratagemIds: salvo.defenderStratagemIds,
         enhancementId: salvo.defenderEnhancementId,
         wargear: salvo.targetWargear,
-      }, engineContext);
+      }, context);
     } catch {
       // The projection pane reports a defender build that fails; here it only hides its needs.
       return [];
     }
-  });
+  }
   // Mortal wounds the combined unit's abilities inflict outside its attacks.
-  const mortal = $derived(memberMortalSources(
-    ds,
-    {
-      unitId: salvo.selectedUnitId,
-      factionId: salvo.selectedFactionId,
-      detachmentId: salvo.selectedDetachmentId,
-      attachedUnitIds: salvo.attachedUnitIds,
-      supportUnitIds: salvo.supportUnitIds,
-    },
-    { ...engineContext, targetModelCount: salvo.manualTarget.modelCount },
-  ));
-  // One toggle per undecided condition across the attacker's levers, its mortal-wound sources and
-  // the defender's rules.
-  const needs = $derived(needToggles([...stackable.needs, ...mortal.needs, ...targetNeeds]));
+  const mortalIn = (context: EngineContext) => memberMortalSources(ds, member, { ...context, targetModelCount: salvo.manualTarget.modelCount });
+  const mortal = $derived(mortalIn(engineContext));
+  // One toggle per condition across the attacker's levers, its mortal-wound sources and the
+  // defender's rules, read with no condition answered so an answered toggle stays listed.
+  const needs = $derived.by(() => {
+    const context = unansweredContext(engineContext);
+    const answered = context !== engineContext;
+    return needToggles([
+      ...(answered ? leversIn(context) : stackable).needs,
+      ...(answered ? mortalIn(context) : mortal).needs,
+      ...targetNeedsIn(context),
+    ]);
+  });
 
   // Free-standing levers (always-on abilities, stratagems, weapon keywords).
   const ungrouped = $derived(stackable.buffs.filter((b) => !b.group));

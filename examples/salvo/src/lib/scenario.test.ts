@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { Dataset } from "@alpaca-software/40kdc-data";
 
-import { momentLabel, needToggles, parseDesignations, scenarioContext, withConditionFact } from "./scenario.js";
+import { momentLabel, needToggles, parseDesignations, scenarioContext, unansweredContext, withConditionFact } from "./scenario.js";
 
 describe("scenario", () => {
   it("parses declared designations, blank meaning none", () => {
@@ -47,6 +47,23 @@ describe("scenario", () => {
     // The leaf sits under a "not": exactly one answer gives Executioner a lever.
     const has = (r: typeof yes) => r.buffs.some((lever) => lever.source.kind === "ability" && lever.source.abilityId === ability.id);
     expect(Number(has(yes)) + Number(has(no))).toBe(1);
+  });
+
+  it("keeps an answered condition's toggle listed, with its answer still applied", () => {
+    const ds = Dataset.embedded();
+    const ability = ds.abilities.getInFaction("executioner-adeptus-astartes", "adeptus-astartes")!;
+    const unit = ds.units.all.find((u) => u.abilities.some((a) => a.id === ability.id))!;
+    const input = { unitId: unit.id, factionId: unit.factionId };
+    const toggle = needToggles(ds.stackableBuffsFor(input, { phase: "shooting" }).needs).find((t) => t.abilities.includes(ability.name))!;
+    const context = { phase: "shooting" as const, ...scenarioContext(withConditionFact({ battleRound: 2 }, toggle.key, true)) };
+    expect(ds.stackableBuffsFor(input, context).needs.some((n) => n.key === toggle.key)).toBe(false);
+    const listed = unansweredContext(context);
+    expect(listed).toEqual({ phase: "shooting", battleRound: 2 });
+    expect(needToggles(ds.stackableBuffsFor(input, listed).needs).map((t) => t.key)).toContain(toggle.key);
+    // The answer itself stays in the context the levers read.
+    expect(context.conditionFacts).toEqual({ [toggle.key]: true });
+    const unanswered = { phase: "shooting" as const };
+    expect(unansweredContext(unanswered)).toBe(unanswered);
   });
 
   it("drops the facts map when its last answer is cleared", () => {

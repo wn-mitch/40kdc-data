@@ -68,6 +68,16 @@ export function needToggles(needs: readonly AbilityNeed[]): NeedToggle[] {
   return [...byKey.values()];
 }
 
+/**
+ * `context` with no condition answered, for listing every condition the abilities ask: an answered
+ * condition stops being a need, and its toggle must stay listed so the answer can be revised.
+ */
+export function unansweredContext<T extends Partial<EngineContext>>(context: T): T {
+  if (context.conditionFacts === undefined) return context;
+  const { conditionFacts: _answered, ...rest } = context;
+  return rest as T;
+}
+
 /** The scenario with one condition answered, or returned to unset when `value` is undefined. */
 export function withConditionFact(scenario: Scenario, key: string, value: boolean | undefined): Scenario {
   const facts = { ...scenario.conditionFacts };
