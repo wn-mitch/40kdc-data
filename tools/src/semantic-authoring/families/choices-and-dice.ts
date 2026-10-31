@@ -104,6 +104,21 @@ export const CHOICE_AND_DICE_EXTENSIONS: readonly FamilyExtension[] = [
     },
   },
   {
+    // "your opponent must decide whether that unit will take cover or stand firm".
+    family: "choice-open",
+    version: 4,
+    description: "As the previous version, and chosen_by opponent: the opponent picks the option, not the player using the ability.",
+    schema: (previous) => withProperties(previous, { chosen_by: optional({ enum: ["opponent"] }) }),
+    normalize: (input, previous) => {
+      if (!("chosen_by" in input)) return previous(input);
+      const { chosen_by: by, ...rest } = input;
+      if (by !== "opponent") throw new TypeError("choice-open.chosen_by is opponent or omitted.");
+      const result = previous(rest);
+      if (result.or_random !== undefined || result.ignore_consumed !== undefined) throw new TypeError("choice-open chosen by the opponent is a plain pick: no or_random or ignore_consumed.");
+      return { ...result, chosen_by: by };
+    },
+  },
+  {
     // "a double 4 or higher, or any triple": the option activates if any one requirement is met.
     family: "named-option",
     version: 2,

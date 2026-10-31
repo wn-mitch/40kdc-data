@@ -3961,6 +3961,10 @@ export interface ChoiceEffect {
    * Maximum number of distinct options selected at this activation; defaults to one.
    */
   max_choices?: number;
+  /**
+   * Who picks the option: the opponent ("your opponent must decide whether that unit will take cover or stand firm"). Absent, the player using the ability picks.
+   */
+  chosen_by?: "opponent";
 }
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema

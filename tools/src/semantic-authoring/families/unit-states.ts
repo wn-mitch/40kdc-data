@@ -139,6 +139,14 @@ const BATTLE_SHOCK_EVENT_SUBJECT: FamilyExtension = {
   normalize: (input, previous) => input.recipient === EVENT_SUBJECT ? standIn(input, "recipient", "this-unit", previous) : previous(input),
 };
 
+const BATTLE_SHOCK_ANTECEDENT: FamilyExtension = {
+  family: "battle-shock-state",
+  version: 3,
+  description: "As the previous version, plus recipient antecedent: the unit an earlier leaf of the record introduced (\"That unit is battle-shocked\" for each unit a loop names), bound when the record compiles.",
+  schema: (previous) => withProperties(previous, { recipient: widenedEnum(previous, "recipient", [ANTECEDENT]) }),
+  normalize: (input, previous) => input.recipient === ANTECEDENT ? standIn(input, "recipient", "this-unit", previous) : previous(input),
+};
+
 export const UNIT_STATE_EXTENSIONS: readonly FamilyExtension[] = [
   {
     // "There are no models embarked within this TRANSPORT": a unit is embarked within the subject.
@@ -292,6 +300,7 @@ export const UNIT_STATE_EXTENSIONS: readonly FamilyExtension[] = [
    * own enum named only the bearer, a selection or an earlier leaf's unit.
    */
   BATTLE_SHOCK_EVENT_SUBJECT,
+  BATTLE_SHOCK_ANTECEDENT,
   {
     // "that enemy unit cannot have the Benefit of Cover": a rule suppressed on another unit.
     family: "rule-state",

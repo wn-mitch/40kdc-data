@@ -162,7 +162,7 @@ export { shapeSignature } from "./compile-placement.js";
  * returned as one ability-part: its trigger, usage and duration go on the part, its effect inside.
  */
 function nestedPart(group: readonly CompileLeaf[], sourceText: string | undefined, options: CompileOptions, objective?: string): Node {
-  const compiled = compileLeaves(group, sourceText, objective === undefined ? options : { ...options, selectedObjective: objective });
+  const compiled = compileChecked(group, sourceText, objective === undefined ? options : { ...options, selectedObjective: objective }, true);
   if (!compiled.ok) throw new CompileError(compiled.errors[0]!);
   const { effect: body, trigger: moment, usage, scope } = compiled.mechanics;
   if (!moment && !usage && (scope.duration === undefined || scope.duration === "permanent")) return body;
@@ -203,6 +203,15 @@ export type CompileOptions = {
 
 /** Compile one ability's reviewed leaves. Failures name what is missing; nothing is guessed. */
 export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: string, options: CompileOptions = {}): Compiled {
+  return compileChecked(leaves, sourceText, options, false);
+}
+
+/**
+ * compileLeaves, where `enclosed` says the leaves are one part of an enclosing ability (a container's option): a
+ * recipient there may be the unit of a loop or aura around the container, which the enclosing compile checks on the
+ * whole mechanics, so it is not refused here.
+ */
+function compileChecked(leaves: readonly CompileLeaf[], sourceText: string | undefined, options: CompileOptions, enclosed: boolean): Compiled {
   // "If it started that move within 6\"" reads the start of the move that triggered the ability, so the record needs that move.
   const moveStart = leaves.some((leaf) => leaf.family_id === "unit-position" && leaf.parameters.at === "move-start");
   if (moveStart && !leaves.some((leaf) => leaf.family_id === "event" && leaf.parameters.kind === "move-ended")) {
@@ -210,7 +219,7 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
   }
   const result = compileUnchecked(leaves, sourceText, options);
   // "That unit must take a test" bound to an aura's recipient with no aura or loop around it reaches no unit.
-  const unscoped = result.ok ? unscopedRecipientEffect(result.mechanics.effect) : null;
+  const unscoped = result.ok && !enclosed ? unscopedRecipientEffect(result.mechanics.effect) : null;
   if (unscoped !== null) return { ok: false, signature: result.signature, errors: [`A ${unscoped} effect names the unit it is applied to (recipient), but no aura or for-each-unit applies it to any unit.`] };
   // A rolled distance or a start-of-move position that a lowering path read as plain inches would be lost, not refused.
   const lost = result.ok ? lostDistance(leaves, result.mechanics) : null;

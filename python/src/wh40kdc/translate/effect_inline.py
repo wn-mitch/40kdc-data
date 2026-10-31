@@ -537,6 +537,16 @@ def stance_pick(e: Effect) -> str:
 
 
 def choice_prompt(e: Effect) -> str:
+    """The prompt of a choice, with the player who picks: the opponent when chosen_by says so."""
+    own = _own_choice_prompt(e)
+    if e.get("chosen_by") != "opponent":
+        return own
+    if own.startswith("select "):
+        return f"your opponent selects {own[len('select '):]}"
+    return f"your opponent: {own}"
+
+
+def _own_choice_prompt(e: Effect) -> str:
     prompt = e.get("choice_prompt")
     if isinstance(prompt, str) and prompt.strip():
         return prompt

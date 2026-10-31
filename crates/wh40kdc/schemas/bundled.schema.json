@@ -11652,6 +11652,12 @@
           "type": "integer",
           "minimum": 1,
           "description": "Maximum number of distinct options selected at this activation; defaults to one."
+        },
+        "chosen_by": {
+          "enum": [
+            "opponent"
+          ],
+          "description": "Who picks the option: the opponent (\"your opponent must decide whether that unit will take cover or stand firm\"). Absent, the player using the ability picks."
         }
       },
       "required": [

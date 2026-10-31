@@ -44873,5 +44873,80 @@
     "expected": {
       "text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating."
     }
+  },
+  {
+    "caseId": "canonical/choice-chosen-by-opponent",
+    "trigger": {
+      "event": "round-started"
+    },
+    "effect": {
+      "type": "for-each-unit",
+      "selector": {
+        "filter": {
+          "owner": "enemy"
+        }
+      },
+      "effect": {
+        "type": "choice",
+        "chosen_by": "opponent",
+        "options": [
+          {
+            "type": "mortal-wounds",
+            "target": "recipient",
+            "modifier": {
+              "count": "D3"
+            }
+          },
+          {
+            "type": "state-change",
+            "target": "recipient",
+            "modifier": {
+              "state": "battle-shocked",
+              "set": true
+            }
+          }
+        ]
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "reactive",
+    "expected": {
+      "text": "At the start of the battle round:\n  For each enemy unit:\n    Your opponent selects one of the following:\n      - The unit suffers D3 mortal wounds.\n      - The unit is Battle-shocked."
+    }
+  },
+  {
+    "caseId": "canonical/choice-chosen-by-opponent-counted",
+    "effect": {
+      "type": "choice",
+      "chosen_by": "opponent",
+      "min_choices": 1,
+      "max_choices": 2,
+      "options": [
+        {
+          "type": "mortal-wounds",
+          "target": "this-unit",
+          "modifier": {
+            "count": 1
+          }
+        },
+        {
+          "type": "state-change",
+          "target": "this-unit",
+          "modifier": {
+            "state": "battle-shocked",
+            "set": true
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "passive",
+    "expected": {
+      "text": "Your opponent selects from 1 through 2 distinct options:\n  - The unit suffers 1 mortal wound.\n  - The unit is Battle-shocked."
+    }
   }
 ]

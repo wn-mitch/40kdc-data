@@ -29,6 +29,7 @@ import { AURA_RECIPIENT } from "./compile-antecedent.js";
 import type { PartFrame } from "./compile-part-classify.js";
 import type { planEffects } from "./compile-part-plan.js";
 import { loopUnderBand, stepsBeforeLoop, wrapBandLoop } from "./compile-band-loop.js";
+import { firstPartRounds } from "./compile-round-sections.js";
 import { firstPartLoop, loopInSelection, selectionPerPass, type PartBindings } from "./compile-part-bindings.js";
 
 type Node = Record<string, unknown>;
@@ -489,6 +490,13 @@ export function assemblePart(
       const own = pieces[position + 1]!;
       return own.length === 1 ? own[0]! : { type: "sequence", steps: own };
     });
+    // A record-wide battle-round condition that a later part's own rounds exclude heads the first part only (compile-round-sections.ts).
+    const sectioned = entryTrigger ? firstPartRounds(global, rawEffects) : [];
+    if (sectioned.length) {
+      const own = sectioned.filter((node, at) => sectioned.findIndex((other) => JSON.stringify(other) === JSON.stringify(node)) === at);
+      partSteps[0] = { ...partSteps[0]!, effect: gated(own, partSteps[0]!.effect as Node) };
+      global.splice(0, global.length, ...global.filter((node) => !sectioned.includes(node)));
+    }
     // "each time a friendly X unit within 9\" of the bearer fails a test, …": an aura no part's effect names the recipient of
     // describes a moment's unit, which a part's trigger cannot hold here, so its range would be dropped.
     if (auraLeaf && !auraFirst && !rawEffects.some(namesUnboundRecipient)) {

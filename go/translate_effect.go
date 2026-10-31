@@ -502,7 +502,19 @@ func stancePick(e map[string]any) string {
 	return "select from " + n(min) + " to " + n(max)
 }
 
+// choicePrompt is the prompt of a choice, with the player who picks: the opponent when chosen_by says so.
 func choicePrompt(e map[string]any) string {
+	own := ownChoicePrompt(e)
+	if by, _ := e["chosen_by"].(string); by != "opponent" {
+		return own
+	}
+	if rest, ok := strings.CutPrefix(own, "select "); ok {
+		return "your opponent selects " + rest
+	}
+	return "your opponent: " + own
+}
+
+func ownChoicePrompt(e map[string]any) string {
 	if p, ok := e["choice_prompt"].(string); ok && strings.TrimSpace(p) != "" {
 		return p
 	}

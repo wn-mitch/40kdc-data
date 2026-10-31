@@ -649,6 +649,7 @@ const ANY_UNIT_KEYS: Readonly<Record<string, readonly string[]>> = {
   // "-2\" from that pile-in move" of an enemy unit an earlier unit-filter names.
   "move-distance": ["subject"],
   "move-mode-choice": ["subject"],
+  "battle-shock-state": ["recipient"],
 };
 const ANY_UNIT_CONDITION_KEYS: Readonly<Record<string, readonly string[]>> = {
   "unit-state": ["subject", "with"], "unit-activity": ["subject"], "unit-position": ["subject", "of"], "unit-keyword": ["subject"], "hit-by-attacks": ["subject"],

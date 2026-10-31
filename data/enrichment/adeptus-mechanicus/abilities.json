@@ -6266,42 +6266,223 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "source_digest": "d073c913a0c65c1ed22544a44249eae5609e0157e9714bbea06c6b34d6c33b14",
+    "source_digest": "b4147c44c7f834ae2e0065b4062fc199d2d69de0bcbabbba8922ff3e928cc581",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "adeptus-mechanicus",
     "detachment_id": "rad-zone-corps",
     "ability_type": "detachment",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "battle-round",
-        "parameters": {
-          "min": 1,
-          "max": 1
-        }
-      },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 3,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "recipient",
-          "modifier": {
-            "count": "D3"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "round-started"
+          },
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "battle-round",
+              "parameters": {
+                "min": 1,
+                "max": 1
+              }
+            },
+            "effect": {
+              "type": "for-each-unit",
+              "selector": {
+                "filter": {
+                  "owner": "enemy"
+                }
+              },
+              "effect": {
+                "type": "conditional",
+                "condition": {
+                  "type": "in-region",
+                  "parameters": {
+                    "subject": "recipient",
+                    "region": {
+                      "territory": "enemy-deployment-zone"
+                    }
+                  }
+                },
+                "effect": {
+                  "type": "choice",
+                  "options": [
+                    {
+                      "type": "dice-gated",
+                      "dice": "D6",
+                      "threshold": 3,
+                      "comparison": "gte",
+                      "on_success": {
+                        "type": "mortal-wounds",
+                        "target": "recipient",
+                        "modifier": {
+                          "count": "D3"
+                        }
+                      },
+                      "on_fail": null
+                    },
+                    {
+                      "type": "sequence",
+                      "steps": [
+                        {
+                          "type": "state-change",
+                          "target": "recipient",
+                          "modifier": {
+                            "state": "battle-shocked",
+                            "set": true
+                          }
+                        },
+                        {
+                          "type": "dice-gated",
+                          "dice": "D6",
+                          "threshold": 5,
+                          "comparison": "gte",
+                          "on_success": {
+                            "type": "mortal-wounds",
+                            "target": "recipient",
+                            "modifier": {
+                              "count": "D3"
+                            }
+                          },
+                          "on_fail": null
+                        }
+                      ]
+                    }
+                  ],
+                  "chosen_by": "opponent"
+                }
+              }
+            }
           }
         },
-        "on_fail": null
-      }
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "phase-started",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "phase-is",
+                  "parameters": {
+                    "phase": "command"
+                  }
+                },
+                {
+                  "type": "player-turn-is",
+                  "parameters": {
+                    "turn": "your-turn"
+                  }
+                }
+              ]
+            }
+          },
+          "effect": {
+            "type": "for-each-unit",
+            "selector": {
+              "filter": {
+                "owner": "enemy"
+              }
+            },
+            "effect": {
+              "type": "dice-gated",
+              "dice": "D6",
+              "threshold": 3,
+              "comparison": "gte",
+              "on_success": {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "conditional",
+                    "condition": {
+                      "operator": "and",
+                      "operands": [
+                        {
+                          "type": "battle-round",
+                          "parameters": {
+                            "min": 2
+                          }
+                        },
+                        {
+                          "type": "battle-round",
+                          "parameters": {
+                            "min": 2,
+                            "max": 5
+                          }
+                        },
+                        {
+                          "type": "in-region",
+                          "parameters": {
+                            "subject": "recipient",
+                            "region": {
+                              "territory": "enemy-deployment-zone"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "effect": {
+                      "type": "mortal-wounds",
+                      "target": "recipient",
+                      "modifier": {
+                        "count": 1
+                      }
+                    }
+                  },
+                  {
+                    "type": "conditional",
+                    "condition": {
+                      "operator": "and",
+                      "operands": [
+                        {
+                          "type": "battle-round",
+                          "parameters": {
+                            "min": 2
+                          }
+                        },
+                        {
+                          "type": "battle-round",
+                          "parameters": {
+                            "min": 2,
+                            "max": 5
+                          }
+                        },
+                        {
+                          "type": "in-region",
+                          "parameters": {
+                            "subject": "recipient",
+                            "region": {
+                              "territory": "enemy-deployment-zone"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "effect": {
+                      "type": "test",
+                      "target": "recipient",
+                      "modifier": {
+                        "test": "battle-shock"
+                      }
+                    }
+                  }
+                ]
+              },
+              "on_fail": null
+            }
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "battle-round"
+      "duration": "permanent"
     },
     "community_notes": "[APPROX] Only the BOMBARDMENT 'standing firm' branch is modeled (3+ → D3 mortal wounds to each enemy unit in the opponent's deployment zone at the start of the first battle round). The opponent's cover/stand-firm choice, the 'taking cover' branch (Battle-shock plus 5+ → D3 mortal wounds), and the FALLOUT effect across battle rounds 2–5 are not encoded. Full rule in raw-text store."
   },

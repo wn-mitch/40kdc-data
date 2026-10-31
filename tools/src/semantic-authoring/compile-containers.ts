@@ -1,5 +1,6 @@
 import { addedOrder, addedOrderMoment } from "./compile-added-order.js";
 import { withoutSharedBattleSizeTable } from "./compile-battle-size-table.js";
+import { withSharedRoll } from "./compile-shared-roll.js";
 import { closed, CompileError, effect, type CompileLeaf } from "./compile-fragments.js";
 import { initialOption } from "./compile-stance-initial.js";
 import { trigger, triggerLeaves } from "./compile-triggers.js";
@@ -36,6 +37,16 @@ const SINGLE_BODY_CONTAINERS = new Set(["persistent-designation-open", "select-o
 /** A leaf that starts its own moment, duration or usage: the sentence holding it is independent of the one before. */
 const OWN_MOMENT_FAMILIES = new Set(["usage-limit", "usage-scope", "phase-window"]);
 const opensOwnMoment = (leaf: CompileLeaf) => leaf.role === "EVENT" || leaf.role === "DURATION" || OWN_MOMENT_FAMILIES.has(leaf.family_id) || LEADING_CONTAINERS.has(leaf.family_id);
+/** The record's moments: a trigger event or the start of a turn or round. */
+const MOMENT_FAMILIES = new Set(["event", "turn-start"]);
+/** Whether the leaves from `from` open a moment: only conditions (a heading such as "Battle round two onwards") come before it. */
+function opensMoment(list: readonly CompileLeaf[], from: number): boolean {
+  for (let at = from; at < list.length; at += 1) {
+    if (MOMENT_FAMILIES.has(list[at]!.family_id)) return true;
+    if (list[at]!.role !== "CONDITION") return false;
+  }
+  return false;
+}
 /** Openers each of whose options leads with a named-option leaf. */
 const NAMED_OPTION_CONTAINERS = new Set(["stance-select-open", "issue-orders-open", "dice-pool-allocation-open"]);
 /** Openers whose options may number just one (the DSL's own `actions`/`outcomes` array allows it). */
@@ -140,6 +151,7 @@ function buildChoice(head: CompileLeaf, groups: CompileLeaf[][]): Node {
   const options = groups.map((group) => effectsOf(group[0]?.family_id === "named-option" ? group.slice(1) : group));
   const node: Node = { type: "choice", options };
   if (head.parameters.choice_label !== undefined) node.choice_label = closed(head, "choice_label");
+  if (head.parameters.chosen_by !== undefined) node.chosen_by = closed(head, "chosen_by");
   const min = head.parameters.min_choices;
   const max = head.parameters.max_choices;
   if (min !== undefined || max !== undefined) {
@@ -464,6 +476,10 @@ function planContainerNodes(list: readonly CompileLeaf[], sentenceOf: readonly n
       // A bulleted choice ends at a later choice of its own kind, or at a line after the last bullet;
       // another container is an option's own.
       if (byBullet && (list[cursor]!.family_id === "choice-open" || lines[cursor] === true)) break;
+      // A choice of named options ends at a line that opens a moment of its own after an option's effect
+      // ("■ B: … On a 5+, ….\nBattle round two onwards\nAt the start of your Command phase, …"): a later part, not option B.
+      if (byMarker && !menu && leaf.family_id === "choice-open" && lines[cursor] === true && current[0]?.family_id === optionMarker
+        && current.some((item) => item.role === "EFFECT") && opensMoment(list, cursor)) break;
       // Each item of a colon-introduced comma list is an option of its own (compile-placement.ts commaItems).
       const itemStarts = leaf.family_id === "choice-open" && commas[cursor] === true;
       if (list[cursor]!.family_id === "order-rule") continue;
@@ -485,6 +501,8 @@ function planContainerNodes(list: readonly CompileLeaf[], sentenceOf: readonly n
     if (current.length) groups.push(current);
     // A battle-size table after the last named option is every option's cap, not the last option's (compile-battle-size-table.ts).
     if (byMarker && leaf.family_id === "choice-open") groups.splice(0, groups.length, ...withoutSharedBattleSizeTable(groups));
+    // A roll printed before the first named option is each option's roll (compile-shared-roll.ts).
+    if (byMarker && leaf.family_id === "choice-open") groups.splice(0, groups.length, ...withSharedRoll(groups, optionMarker));
     // "Each time you select an Order for the bearer to issue, you can select the Order below": one more Order on its menu.
     const added = byMarker && leaf.family_id === "choice-open" && groups.length === 1 ? addedOrderMoment(list, index) : null;
     if (added !== null) {

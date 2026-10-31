@@ -3022,5 +3022,74 @@
       "duration": "permanent"
     },
     "behavior": "reactive"
+  },
+  {
+    "caseId": "canonical/choice-chosen-by-opponent",
+    "trigger": {
+      "event": "round-started"
+    },
+    "effect": {
+      "type": "for-each-unit",
+      "selector": {
+        "filter": {
+          "owner": "enemy"
+        }
+      },
+      "effect": {
+        "type": "choice",
+        "chosen_by": "opponent",
+        "options": [
+          {
+            "type": "mortal-wounds",
+            "target": "recipient",
+            "modifier": {
+              "count": "D3"
+            }
+          },
+          {
+            "type": "state-change",
+            "target": "recipient",
+            "modifier": {
+              "state": "battle-shocked",
+              "set": true
+            }
+          }
+        ]
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "reactive"
+  },
+  {
+    "caseId": "canonical/choice-chosen-by-opponent-counted",
+    "effect": {
+      "type": "choice",
+      "chosen_by": "opponent",
+      "min_choices": 1,
+      "max_choices": 2,
+      "options": [
+        {
+          "type": "mortal-wounds",
+          "target": "this-unit",
+          "modifier": {
+            "count": 1
+          }
+        },
+        {
+          "type": "state-change",
+          "target": "this-unit",
+          "modifier": {
+            "state": "battle-shocked",
+            "set": true
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "passive"
   }
 ]

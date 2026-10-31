@@ -326,7 +326,19 @@ fn stance_pick(e: &P) -> String {
     }
 }
 
+/// The prompt of a choice, with the player who picks: the opponent when `chosen_by` says so.
 fn choice_prompt(e: &P) -> String {
+    let own = own_choice_prompt(e);
+    if sv(e, "chosen_by") != Some("opponent") {
+        return own;
+    }
+    match own.strip_prefix("select ") {
+        Some(rest) => format!("your opponent selects {rest}"),
+        None => format!("your opponent: {own}"),
+    }
+}
+
+fn own_choice_prompt(e: &P) -> String {
     if let Some(p) = sv(e, "choice_prompt").filter(|p| !p.trim().is_empty()) {
         return p.to_string();
     }

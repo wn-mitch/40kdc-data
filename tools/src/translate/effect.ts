@@ -68,6 +68,7 @@ export interface Effect {
     requirement?: unknown;
   })[];
   choice_label?: string;
+  chosen_by?: string;
   choice_prompt?: string;
   /** stance-select: the option id in force from the start of the battle. */
   initial?: string;
@@ -715,7 +716,14 @@ function stancePick(e: Effect): string {
   return min <= 1 ? `select up to ${n(max)}` : `select from ${n(min)} to ${n(max)}`;
 }
 
+/** The prompt of a choice, with the player who picks: the opponent when chosen_by says so. */
 function choicePrompt(e: Effect): string {
+  const own = ownChoicePrompt(e);
+  if (e.chosen_by !== "opponent") return own;
+  return own.startsWith("select ") ? `your opponent selects ${own.slice("select ".length)}` : `your opponent: ${own}`;
+}
+
+function ownChoicePrompt(e: Effect): string {
   if (typeof e.choice_prompt === "string" && e.choice_prompt.trim().length > 0) return e.choice_prompt;
   if (e.min_choices != null && e.max_choices != null) {
     const quantity = e.min_choices === e.max_choices ? `exactly ${e.max_choices}` : e.min_choices === 0 ? `up to ${e.max_choices}` : `from ${e.min_choices} through ${e.max_choices}`;

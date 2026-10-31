@@ -7925,6 +7925,12 @@ for CharacteristicResolutionEffectModifierTie {
 ///      "type": "string",
 ///      "minLength": 1
 ///    },
+///    "chosen_by": {
+///      "description": "Who picks the option: the opponent (\"your opponent must decide whether that unit will take cover or stand firm\"). Absent, the player using the ability picks.",
+///      "enum": [
+///        "opponent"
+///      ]
+///    },
 ///    "max_choices": {
 ///      "description": "Maximum number of distinct options selected at this activation; defaults to one.",
 ///      "type": "integer",
@@ -7960,6 +7966,9 @@ pub struct ChoiceEffect {
     pub choice_label: ::std::option::Option<::std::string::String>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub choice_prompt: ::std::option::Option<ChoiceEffectChoicePrompt>,
+    ///Who picks the option: the opponent ("your opponent must decide whether that unit will take cover or stand firm"). Absent, the player using the ability picks.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub chosen_by: ::std::option::Option<ChoiceEffectChosenBy>,
     ///Maximum number of distinct options selected at this activation; defaults to one.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub max_choices: ::std::option::Option<::std::num::NonZeroU64>,
@@ -8040,6 +8049,77 @@ impl<'de> ::serde::Deserialize<'de> for ChoiceEffectChoicePrompt {
             .map_err(|e: self::error::ConversionError| {
                 <D::Error as ::serde::de::Error>::custom(e.to_string())
             })
+    }
+}
+///Who picks the option: the opponent ("your opponent must decide whether that unit will take cover or stand firm"). Absent, the player using the ability picks.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Who picks the option: the opponent (\"your opponent must decide whether that unit will take cover or stand firm\"). Absent, the player using the ability picks.",
+///  "enum": [
+///    "opponent"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum ChoiceEffectChosenBy {
+    #[serde(rename = "opponent")]
+    Opponent,
+}
+impl ::std::fmt::Display for ChoiceEffectChosenBy {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Opponent => f.write_str("opponent"),
+        }
+    }
+}
+impl ::std::str::FromStr for ChoiceEffectChosenBy {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "opponent" => Ok(Self::Opponent),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for ChoiceEffectChosenBy {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for ChoiceEffectChosenBy {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for ChoiceEffectChosenBy {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
     }
 }
 ///`ChoiceEffectType`

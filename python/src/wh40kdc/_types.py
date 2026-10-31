@@ -3823,6 +3823,7 @@ class ChoiceEffect(TypedDict):
     choice_prompt: NotRequired[str]
     min_choices: NotRequired[int]
     max_choices: NotRequired[int]
+    chosen_by: NotRequired[Literal["opponent"]]
 
 
 class SequenceEffect(TypedDict):
