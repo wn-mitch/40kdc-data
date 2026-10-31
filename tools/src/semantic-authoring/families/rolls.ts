@@ -51,6 +51,9 @@ function rollSubject(family: string, version: number, example: string): FamilyEx
 
 const ROLL = "roll";
 
+/** roll-auto-result outcome chosen: the player picks the result from the leaf's values. */
+const CHOSEN = "chosen";
+
 /** A roll a named ability makes: its own dice, named by its entity id. */
 const ABILITY_ROLL: Schema = {
   type: "object",
@@ -406,6 +409,30 @@ export const ROLL_EXTENSIONS: readonly FamilyExtension[] = [
       if (input.roll !== "dark-pact") return previous(input);
       if (input.outcome !== "auto-pass") throw new TypeError("roll-auto-result dark-pact is an automatic pass of that test.");
       return standIn(input, "roll", "leadership", previous);
+    },
+  },
+  {
+    // "do not roll for that ability; instead, you can choose whether the result of that roll is a 1 or a 6".
+    family: "roll-auto-result",
+    version: 6,
+    description: "As the previous version, plus outcome chosen: the player picks the roll's result from values (two or more of 1 to 6) in place of rolling it. Takes roll, values and optionally subject only.",
+    schema: (previous) => withProperties(previous, {
+      outcome: widenedEnum(previous, "outcome", [CHOSEN]),
+      values: optional({ type: "array", items: { type: "integer", minimum: 1, maximum: 6 }, minItems: 2, uniqueItems: true, "x-only-when": { outcome: [CHOSEN] } }),
+    }),
+    normalize: (input, previous) => {
+      if (input.outcome !== CHOSEN) {
+        if (input.values !== undefined) throw new TypeError("roll-auto-result.values names the results of outcome chosen only.");
+        return previous(input);
+      }
+      exactKeys(input, ["roll", "outcome", "values", ...(input.subject === undefined ? [] : ["subject"])], "roll-auto-result");
+      const values = input.values;
+      if (!Array.isArray(values) || values.length < 2 || !values.every((value) => Number.isSafeInteger(value) && value >= 1 && value <= 6)
+        || new Set(values).size !== values.length) {
+        throw new TypeError("roll-auto-result.values for chosen must be two or more different whole numbers from 1 to 6.");
+      }
+      const { values: _values, ...rest } = input;
+      return { ...previous({ ...rest, outcome: "auto-pass" }), outcome: CHOSEN, values: [...values].sort((a, b) => a - b) };
     },
   },
   antecedentSubject("ignore-modifiers", 3, "\"Friendly X units can ignore modifiers to …\": the units a unit-filter right before it matches, or a selected unit"),

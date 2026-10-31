@@ -21,6 +21,19 @@ export function loopUnderBand(list: readonly CompileLeaf[], loop: CompileLeaf, s
   return !/[.!?](?:\s|$)/u.test(exactSpan(sourceText, band.end_byte, loop.start_byte));
 }
 
+/**
+ * "If it has X, choose A. If it does not, roll one D6 for each unit within 6\" of it: …": a loop repeats the effects of
+ * its own sentence, so the steps of the sentences before it run once, outside the loop. `sentences` gives each step's
+ * sentence, one per step. Returns how many leading steps stay outside: the run of steps before the loop's sentence,
+ * when every later step is in or after it and none of the leading steps names the loop's unit (recipient).
+ */
+export function stepsBeforeLoop(steps: readonly Node[], sentences: readonly number[], loopSentence: number): number {
+  if (steps.length < 2 || sentences.length !== steps.length) return 0;
+  const lead = sentences.findIndex((sentence) => sentence >= loopSentence);
+  if (lead <= 0 || sentences.slice(lead).some((sentence) => sentence < loopSentence)) return 0;
+  return steps.slice(0, lead).some(readsPass) ? 0 : lead;
+}
+
 /** Whether a condition reads the loop's unit (the pass's recipient). */
 const readsPass = (node: unknown): boolean => JSON.stringify(node ?? null).includes("\"recipient\"");
 

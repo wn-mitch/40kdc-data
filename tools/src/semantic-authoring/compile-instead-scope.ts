@@ -138,7 +138,37 @@ export function sentenceIfGates(
     const first = list.findIndex((item, at) => item.role === "EFFECT" && places[at]!.sentence === later);
     return list.slice(0, first).some((item, at) => places[at]!.sentence === later && item.role === "EVENT") || openedByIf(list, places, raw, later, sourceText).size > 0;
   });
-  return independent ? openedByIf(list, places, raw, sentence, sourceText) : new Set();
+  return independent ? new Set([...openedByIf(list, places, raw, sentence, sourceText), ...complementedLater(list, places, sentence, sourceText)]) : new Set();
+}
+
+/** A condition's parameters without its negation, so a condition and its negation compare equal. */
+const unnegated = (leaf: CompileLeaf) => JSON.stringify(Object.fromEntries(Object.entries(leaf.parameters).filter(([key]) => key !== "negated")));
+
+/**
+ * "Before …, if it has X, do A. If it does not have X, do B.": an "if" condition inside the first sentence that a later
+ * sentence opens with the negation of is one branch of an if/else, so it gates its own sentence only, as an "If" that
+ * opens the sentence does. Only a later leaf of the same family with the same parameters and the opposite `negated` is
+ * that negation.
+ */
+function complementedLater(list: readonly CompileLeaf[], places: readonly Placement[], sentence: number, sourceText: string): Set<number> {
+  const bytes = Buffer.from(sourceText, "utf8");
+  const own = (leaf: CompileLeaf) => leaf.end_byte === undefined ? "" : bytes.subarray(leaf.start_byte, leaf.end_byte).toString("utf8");
+  const before = (leaf: CompileLeaf) => {
+    const from = Math.max(0, leaf.start_byte - 24);
+    return (from > 0 ? "\u0000" : "") + bytes.subarray(from, leaf.start_byte).toString("utf8");
+  };
+  const firstEffect = (each: number) => list.findIndex((leaf, at) => leaf.role === "EFFECT" && places[at]!.sentence === each);
+  const leading = (leaf: CompileLeaf, at: number) => leaf.role === "CONDITION" && leaf.family_id !== "roll-result" && at < firstEffect(places[at]!.sentence);
+  // The later branch: a condition whose "If" opens its sentence ("If it does not have X, …").
+  const opens = list.flatMap((leaf, at) => places[at]!.sentence > sentence && leading(leaf, at)
+    && ((IF_LED.test(own(leaf)) && SENTENCE_START.test(before(leaf))) || IF_OPENS.test(before(leaf))) ? [leaf] : []);
+  const found = new Set<number>();
+  list.forEach((leaf, at) => {
+    if (places[at]!.sentence !== sentence || !leading(leaf, at) || !(IF_LED.test(own(leaf)) || IF_BEFORE.test(before(leaf)))) return;
+    if (opens.some((other) => other.family_id === leaf.family_id && unnegated(other) === unnegated(leaf)
+      && Boolean(other.parameters.negated) !== Boolean(leaf.parameters.negated))) found.add(at);
+  });
+  return found;
 }
 
 /** Whether a condition is about the unit an effect is applied to (its `recipient`). */

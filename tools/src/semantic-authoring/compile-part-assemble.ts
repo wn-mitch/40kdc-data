@@ -28,7 +28,7 @@ import { isAttackMoment } from "./compile-attack-window.js";
 import { AURA_RECIPIENT } from "./compile-antecedent.js";
 import type { PartFrame } from "./compile-part-classify.js";
 import type { planEffects } from "./compile-part-plan.js";
-import { loopUnderBand, wrapBandLoop } from "./compile-band-loop.js";
+import { loopUnderBand, stepsBeforeLoop, wrapBandLoop } from "./compile-band-loop.js";
 import { firstPartLoop, loopInSelection, selectionPerPass, type PartBindings } from "./compile-part-bindings.js";
 
 type Node = Record<string, unknown>;
@@ -333,8 +333,14 @@ export function assemblePart(
   }
   else if ((forEachLeaf && forEachPart === 0) || recordLoop) {
     const each = recordLoop ?? forEachLeaf!;
+    // The steps of the sentences before the loop's run once, outside it (compile-band-loop.ts).
+    const firstItems = pieceItems.filter((item) => partOf(item.index) === 0);
+    const outside = !recordLoop && partStarts.length === 0 && window === null && body === unwrapped && body.type === "sequence" && steps.length === firstItems.length
+      ? stepsBeforeLoop(steps, firstItems.map((item) => places[item.index]!.sentence), places[list.indexOf(each)]!.sentence) : 0;
+    const looped: Node = outside === 0 ? body! : steps.length - outside === 1 ? steps[outside]! : { type: "sequence", steps: steps.slice(outside) };
     // "Roll one D6. On a 6, …; each unit within 6\" …": the loop runs in the band's outcome (compile-band-loop.ts).
-    body = attempt(() => loopUnderBand(list, each, sourceText) ? wrapBandLoop(each, body!) : wrapForEachUnit(each, body!));
+    body = attempt(() => loopUnderBand(list, each, sourceText) ? wrapBandLoop(each, looped) : wrapForEachUnit(each, looped));
+    if (body && outside > 0) body = { type: "sequence", steps: [...steps.slice(0, outside), body] };
     // "The maximum number of units that can be … depends on the battle size": the loop's cap on the units it affects.
     if (body && battleSizeCount && selections.length === 0) body = { ...body, max_affected: maxCount };
     if (body && afterLoop.length) body = { type: "sequence", steps: [body, ...afterLoop.map((item) => gated(item.gate, item.node))] };

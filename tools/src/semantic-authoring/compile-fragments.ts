@@ -324,6 +324,8 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
       if (Array.isArray(leaf.parameters.rolls)) return pickOne(leaf, context);
       const roll = closed(leaf, "roll");
       const outcome = closed(leaf, "outcome");
+      // "choose whether the result of that roll is a 1 or a 6": a choice of fixed results.
+      if (outcome === "chosen") return { type: "choice", options: (leaf.parameters.values as number[]).map((result) => ({ type: "roll-result", target: rollTarget(roll), modifier: { roll, result } })) };
       const modifier: Node = { roll };
       if (leaf.parameters.count === 1) modifier.count = 1;
       if (outcome === "succeeds-on") modifier.succeeds_on = closed(leaf, "value");

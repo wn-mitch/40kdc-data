@@ -27,7 +27,8 @@ export function prohibitedRollName(roll: unknown): string {
 
 /**
  * "Do not roll <roll> …. Instead, <auto-result>": the instead replaces the roll the prohibition names.
- * Accepted only for a roll-auto-result that passes automatically on that same roll, with the same condition
+ * Accepted only for a roll-auto-result that passes automatically on that same roll, or whose result the player
+ * chooses (outcome chosen: "you can choose whether the result of that roll is a 1 or a 6"), with the same condition
  * (or none, in which case the prohibition's condition is taken). The roll is not made at all, so the
  * replacement is the whole DSL output and the prohibition node is removed.
  */
@@ -43,7 +44,8 @@ export function replaceProhibitedRoll(
   if (prohibited !== null && typeof prohibited === "object") return replaceProhibitedAbilityRoll(planned, previous, replacement, boundDuration, conflictingDurations, String((prohibited as { ability: unknown }).ability));
   const roll = String(prohibited);
   const leaf = replacement.leaf;
-  if (leaf.family_id !== "roll-auto-result" || leaf.parameters.outcome !== "auto-pass" || leaf.parameters.rolls !== undefined || leaf.parameters.roll !== roll) {
+  const outcome = leaf.parameters.outcome;
+  if (leaf.family_id !== "roll-auto-result" || (outcome !== "auto-pass" && outcome !== "chosen") || leaf.parameters.rolls !== undefined || leaf.parameters.roll !== roll) {
     return `"Instead" after a roll prohibition replaces only the roll it names (${roll}).`;
   }
   if (replacement.gate.length > 0 && !sameGate(replacement.gate, previous.gate)) {
