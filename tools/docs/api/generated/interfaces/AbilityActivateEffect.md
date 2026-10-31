@@ -6,7 +6,7 @@
 
 # Interface: AbilityActivateEffect
 
-Defined in: [generated.ts:4708](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4708)
+Defined in: [generated.ts:5023](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L5023)
 
 [ability] Make a named ability resolve now, or make options of it active: option (one), options (two or more together) or all_options (every one). select: which option is picked now (by a fresh roll, by the player, or by event: the option the triggering use of another ability selected, "the selected combat doctrine is active for this unit" after a Strategic Acumen use; excluding: army-active, never the option active for your army; count: how many, from: only among these; option_var: the pick is made once and bound under this name, so every unit a surrounding aura or loop applies it to shares it). exclusive: the activated options replace any already active; without it they join them. ignore_consumed: the option may be picked even if a once-per-battle selection already used it. override: the activation resolves with this amount instead of its own.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:4708](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **type**: `"ability-activate"`
 
-Defined in: [generated.ts:4709](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4709)
+Defined in: [generated.ts:5024](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L5024)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:4709](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **target**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:4710](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4710)
+Defined in: [generated.ts:5025](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L5025)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [generated.ts:4710](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **modifier**: `object`
 
-Defined in: [generated.ts:4711](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4711)
+Defined in: [generated.ts:5026](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L5026)
 
 #### ability
 
@@ -110,4 +110,4 @@ The pick cannot be the option active for your army. It reads a selection made on
 
 > `optional` **scaling?**: [`Scaling`](Scaling.md)
 
-Defined in: [generated.ts:4739](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4739)
+Defined in: [generated.ts:5054](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L5054)

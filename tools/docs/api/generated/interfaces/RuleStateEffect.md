@@ -6,7 +6,7 @@
 
 # Interface: RuleStateEffect
 
-Defined in: [generated.ts:4963](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4963)
+Defined in: [generated.ts:5314](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L5314)
 
 [permission] Switch a named rule on or off for the target.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:4963](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **type**: `"rule-state"`
 
-Defined in: [generated.ts:4964](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4964)
+Defined in: [generated.ts:5315](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L5315)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:4964](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **target**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:4965](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4965)
+Defined in: [generated.ts:5316](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L5316)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [generated.ts:4965](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **modifier**: `object`
 
-Defined in: [generated.ts:4966](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4966)
+Defined in: [generated.ts:5317](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L5317)
 
 #### direction
 
@@ -70,4 +70,4 @@ A granted faction rule the holder can use whatever your Army Faction is ("even t
 
 > `optional` **scaling?**: [`Scaling`](Scaling.md)
 
-Defined in: [generated.ts:4978](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4978)
+Defined in: [generated.ts:5329](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L5329)

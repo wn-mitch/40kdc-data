@@ -25,10 +25,11 @@ schemas/
   core/             Structural entity schemas:
                       faction, unit, weapon, game-version,
                       detachment, enhancement, stratagem,
-                      wargear-option, leader-attachment, unit-composition
+                      wargear-option, leader-attachment, unit-composition,
+                      game-mode, mission, roster, and more
   enrichment/       Community-authored intelligence:
     ability-dsl/      Ability DSL (ability, trigger, condition, effect, scope)
-    *.schema.json     Phase-mapping, interaction-flag
+    *.schema.json     Phase-mapping, interaction-flag, resource-pool
 data/
   core/_example/    Fabricated example data (not real GW data)
   enrichment/       Community enrichment data by edition/dataslate
@@ -49,8 +50,10 @@ tools/              TypeScript package @alpaca-software/40kdc-data:
                         mappings/            one provenance map per schemas/core schema
                         gen-dump-schema.ts    contract generator/checker/report command
                         loader.ts            shared runtime table/relation access
+                      src/semantic-authoring/  Leaf workbench, compiler, gates,
+                                      publication (see SEMANTIC_AUTHORING.md)
 examples/           Demo web apps consuming the package (Svelte 5 + Vite +
-                      Cloudflare). See examples/AGENTS.md for their shared
+                      Cloudflare). See examples/CLAUDE.md for their shared
                       conventions before working in any of them.
 ```
 
@@ -94,28 +97,30 @@ examples/           Demo web apps consuming the package (Svelte 5 + Vite +
 **The one pre-push gate is `just preflight`** (root `Justfile`, or `npm run
 preflight` from `tools/`). It reproduces locally every check
 `.github/workflows/validate.yml` fails on — for the data/library/parity jobs:
-it regenerates all four-language artifacts in order, formats Rust/Go, runs the
-TS/Rust/Python/Go suites + conformance, then gates on `git diff` of the
-generated artifacts and on the four-file version lockstep. A green preflight
-means a green CI. (It does **not** run CI's `examples`/`sync-worker` app jobs —
-run those with their own workspace commands when you touch those apps. It needs
-node, cargo, python3 + the `.[dev]` extras, and go on PATH.)
+it regenerates all four-language artifacts in order, formats Rust/Go, typechecks
+the TS sources and tests, runs the TS/Rust/Python/Go suites + conformance, then
+gates on `git diff` of the generated artifacts and on the four-file version
+lockstep. A green preflight means a green CI. (It does **not** run CI's
+`examples`/`sync-worker` app jobs — run those with their own workspace commands
+when you touch those apps. It needs node, cargo, python3 + the `.[dev]` extras,
+and go on PATH; CI's regenerating jobs run Node 24.)
 
 For quick inner-loop checks:
 
 ```bash
 cd tools
 npm install
-npm test           # unit tests (vitest)
-npm run validate   # validate all data files against schemas
+npm test                # unit tests (vitest)
+npm run typecheck:test  # typecheck the test files (tsconfig.test.json)
+npm run validate        # validate all data files against schemas
 ```
 
 CI runs on every push and PR via `.github/workflows/validate.yml`.
 
 `npm test`/`npm run validate` are **not** sufficient before pushing — CI also
-diff-checks committed generated artifacts and Rust formatting, which those
-commands don't touch. `just preflight` covers all of it; the per-change
-regen commands below are the manual equivalents:
+typechecks the tests and diff-checks committed generated artifacts and Rust
+formatting, which those commands don't touch. `just preflight` covers all of it;
+the per-change regen commands below are the manual equivalents:
 
 - **Changed anything under `data/`** → regenerate the embedded bundles, or the
   `Validate Data` job's "artifacts up to date" steps fail:
@@ -138,11 +143,38 @@ regen commands below are the manual equivalents:
   `--report`; finish at the repository root with `just preflight`. The snapshot
   commands require ignored `_private/dump.json`; CI and contributors without it
   exercise the public contract through fabricated `test/mfm-*.test.ts` fixtures.
+- **Changed a unit's or detachment's `game_modes`, or which units carry a
+  weapon or wargear option** → run `npm run stamp:game-modes -- --write`.
+  Stratagems, weapons and wargear options take their `game_modes` from the
+  records that use them (`tools/src/game-mode-stamps.ts`): a stratagem from its
+  detachment, a wargear option from its unit, a weapon from every unit that
+  carries it, can take it, or equips it by default. An absent `game_modes` means
+  matched play only. `npm run validate` fails on any stamp drift; MFM writes
+  (`mfm/apply.ts`) re-derive the stamps before they validate.
+- **Changed a published entry point's imports** → keep them to `dependencies`
+  and built-ins the `engines` range has. `tools/test/package-runtime-imports.test.ts`
+  fails on `node:sqlite` or any package outside `dependencies` reachable from the
+  package's `exports`/`bin`; authoring-only packages (the model SDK, the
+  embedder) stay in `devDependencies`.
+
+**Condition and trigger vocabulary.** Conditions are predicates on named axes (`has-keyword`,
+`unit-state`, `happened`, `within`, …) whose `subject` is a unit-ref; negation is only the `not`
+operator; triggers are event families (`selected`, `move-ended`, `targets-selected`, …) with
+`subject`/`object`/`filter`. Single effects are closed variants `{type, target, modifier}` whose
+`target` is the same unit-ref (an aura's range is the target filter's `within`, not `scope`), and
+`ability-grant` names only a core ability (`data/core/unit-keywords.json`) or an ability record.
+The schema (`condition.schema.json`, `effect.schema.json`, `common.schema.json`) is the catalog.
+Data authored in the pre-round-6 vocabulary (`unit-has-keyword`, `timing-is`,
+`enemy-unit-targets-bearer`, `negated: true`, `movement-modifier`, `grant_type`, `target: "self"`,
+`scope.range`) fails validation: run `npm run vocab:migrate --
+<paths>` (dry run; `--write` applies, `--review <file>` lists what it can't place) and resolve any
+reviews in `tools/src/round6/vocab-overrides.json`.
 
 Referential integrity beyond JSON Schema (unit `ability_id`s must resolve in the
 same faction's enrichment; `faction_keywords` must match the faction's home
-keyword) is enforced by `tools/src/integrity.ts`, run as part of
-`npm run validate`.
+keyword; an enhancement's `required_ability_ids` must name core abilities in
+`data/core/unit-keywords.json`; `game_modes` stamps must match their users) is
+enforced by `tools/src/integrity.ts`, run as part of `npm run validate`.
 
 ## Semantic authoring (locked architecture)
 
@@ -156,6 +188,13 @@ proof-route search, Gold-conditioned search, model-authored canonical DSL,
 Jev as segmenter, and the rest) stay closed without new evidence; classify a
 hard problem as segmentation, leaf semantics, relation/composition or DSL
 representation and solve it at that layer.
+
+Approving a compiled shape (`semantic-authoring/shapes.ts`) and publishing an
+approved record (`semantic-authoring/publish.ts`) both refuse a record that fails
+the record gates (`gates.ts`, `recordGateErrors`/`cruncherGateErrors`): schema and
+canonical form, a non-empty describer render, and a cruncher that models every
+damage-path effect it carries. The describer round-trip similarity score is a
+review signal, not a gate.
 
 ## Cross-language parity
 
@@ -244,8 +283,17 @@ Tools can consume this repo via:
 Entity IDs are the interoperability contract. If two tools use
 `"space-marines"` as a faction ID, they can exchange data.
 
+A `Dataset` is a view of one game mode. The embedded dataset is the matched-play
+view: listings and searches of mode-scoped records (units, weapons, detachments,
+enhancements, stratagems, wargear options, unit compositions) skip records whose
+`game_modes` lack matched play, while id lookups and per-record links resolve
+every record. `forGameMode("combat-patrol" | "all" | …)` (`for_game_mode` in
+Rust/Python, `ForGameMode` in Go) returns another view. A list imported on the
+matched-play view whose detachment is a Combat Patrol detachment resolves against
+the Combat Patrol view.
+
 For exchanging a *whole list* compactly (e.g. a share URL another tool can
-import), the three packages also expose the `share-v1` codec —
+import), the TS, Rust and Python packages also expose the `share-v1` codec —
 `encodeShareToken` / `decodeShareToken` (TS/Python) and
 `encode_share_token` / `decode_share_token` (Rust) — which packs a list into a
 short, URL-safe token over a versioned id registry. The wire format is
@@ -261,25 +309,25 @@ across implementations by the `conformance/share/` corpus.
 ## Data Sources
 
 - **army-assist** (`~/army-assist/src/assets/json/`): Normalized JSON extracted
-  from community datasources. Used as source for mechanical data (stats, points,
-  keywords, weapons). Contains UUID-based entity IDs. Shared units appear with
-  per-faction "views" — select the view whose faction ability matches the target
-  faction's faction rule. Run `npx tsx tools/src/convert-faction.ts <faction-id>`
-  to regenerate core data from this source (e.g., `convert-faction.ts world-eaters`).
+  from community datasources, with UUID-based entity IDs. Its converter
+  (`convert-faction.ts`) is retired; the MFM dump is the source for mechanical
+  data. The authoring tools still read it as the 10e archive
+  (`tools/src/author-input.ts`, overridable with `ARMY_ASSIST_JSON`).
 - **game-datacards** (`github.com/game-datacards/datasources`, `10th/json/`):
   community-extracted datasheet text. Used only for structure: external-ref ids
   (`sync-external-refs.ts`) and the 10e detachment↔rule association
   (`reconcile-detachment-rules.ts`). Its prose is never stored anywhere.
 - **GW MFM dump**: `_private/dump.json` is the ignored raw Munitorum Field
   Manual export; its intentionally public structural contract is committed in
-  `tools/src/mfm/`. The ~30MB UUID-keyed relational dump (`data_version 867`)
-  has ~130 tables covering datasheets, loadouts, enhancements, detachment rules,
-  stratagems, and missions. It is **authoritative** for the live game and
+  `tools/src/mfm/`. The ~30MB UUID-keyed relational dump (`metadata.data_version`
+  995 at the current sync) has ~130 tables covering datasheets, loadouts,
+  enhancements, detachment rules, stratagems, and missions. It is **authoritative** for the live game and
   supersedes army-assist → convert-faction as the upstream for mechanical data.
   Run `npx tsx tools/src/ingest-mfm.ts <subcommand>` (coverage / dispositions /
   enhancements / points / wargear / wargear-budgets / composition-names /
   composition-tiers / attachment-role / stratagems / missions / cull-legends /
-  seed-units) — dry
+  seed-units / weapon-stats / weapons / unit-keywords / mirror / dataslates and
+  more; run it with no subcommand for the full list) — dry
   run + `_reports/mfm-*.md` report by default, `--write` to apply, unmatched rows
   to `_private/mfm/`. **`seed-units` is the only subcommand that CREATES new units**
   (skeleton id/name/profiles/points/keywords/role/model_count) for dump datasheets
@@ -297,7 +345,14 @@ across implementations by the `conformance/share/` corpus.
   the whole projected dataset (AJV + `integrity.ts`, the same checks as
   `npm run validate`) and **throws on any failure in either mode** — so a clean
   dry run guarantees a clean `--write`, and `--write` persists atomically
-  (all-or-nothing) only after validation passes. The loader/faction-map live in
+  (all-or-nothing) only after validation passes. `tools/test/mfm-dump-drift.test.ts`
+  runs every pass against the dump (skipped without it) and fails on any file a pass
+  would still change: apply the drift with `--write`, or fix the pass, rather than
+  letting it accumulate. Dump-sourced records carry the dataslate of the dump they
+  were verified against: `mfm/dataslate.ts` maps each `data_version` to a dataslate
+  named by its release date (963 → `2026-09-30`, 995 → `2026-10-14`) in
+  `data/core/game-versions.json`, and an unmapped version throws, so a new dump
+  needs both a game-versions entry and a row there. The loader/faction-map live in
   `tools/src/mfm/`. Models 11e
   per-army-ordinal pricing via `unit_count_min`/`unit_count_max` on unit `points`.
   Numeric/structural fields land in the repo; GW prose stays in the dump (see
@@ -354,7 +409,11 @@ For a new dump snapshot:
 3. Review every new/changed field and update `dump.catalog.json` plus every
    affected core-schema mapping; do not infer relation meaning from field names.
 4. Run `npm run mfm:contract -- --write`, then `--check`, then `--report`.
-5. Run the focused MFM tests and root `just preflight`.
+5. Map the new `data_version` to its release-date dataslate in
+   `tools/src/mfm/dataslate.ts` and add that dataslate to
+   `data/core/game-versions.json`; passes that stamp a dataslate throw on an
+   unmapped version.
+6. Run the focused MFM tests and root `just preflight`.
 
 The public contract may contain names, types, nullability, counts, identities,
 relations, and provenance. It MUST NOT contain dump row values, localized GW

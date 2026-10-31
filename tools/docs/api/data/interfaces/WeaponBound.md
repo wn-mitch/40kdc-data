@@ -6,7 +6,7 @@
 
 # Interface: WeaponBound
 
-Defined in: [data/loadout.ts:20](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/loadout.ts#L20)
+Defined in: [data/loadout.ts:20](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/data/loadout.ts#L20)
 
 Inclusive count range a single weapon/wargear id may take in a loadout.
 
@@ -16,7 +16,7 @@ Inclusive count range a single weapon/wargear id may take in a loadout.
 
 > **min**: `number`
 
-Defined in: [data/loadout.ts:21](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/loadout.ts#L21)
+Defined in: [data/loadout.ts:21](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/data/loadout.ts#L21)
 
 ***
 
@@ -24,4 +24,4 @@ Defined in: [data/loadout.ts:21](https://github.com/wn-mitch/40kdc-data/blob/855
 
 > **max**: `number`
 
-Defined in: [data/loadout.ts:22](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/loadout.ts#L22)
+Defined in: [data/loadout.ts:22](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/data/loadout.ts#L22)

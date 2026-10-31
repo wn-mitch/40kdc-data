@@ -707,8 +707,7 @@ def run_corpus(
         "scoring-translation": ["translate_scoring"],
         "effect-translation": ["translate_effect"],
         "applies-to": ["match_applies_to"],
-        # Rust doesn't ship a validator yet — its runner answers UNKNOWN_OP
-        # and the area skips for rust pairings; ts↔py exercises it.
+        # A runner without a validator answers UNKNOWN_OP and the area skips.
         "validator": ["validate"],
         # These areas weren't in needed_ops historically because every shipped
         # runner supported them; listing them lets a *partially* implemented

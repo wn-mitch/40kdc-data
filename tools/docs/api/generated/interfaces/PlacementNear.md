@@ -6,7 +6,7 @@
 
 # Interface: PlacementNear
 
-Defined in: [generated.ts:2679](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2679)
+Defined in: [generated.ts:2800](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2800)
 
 Set up within `range` of `of` (wholly within, if set).
 
@@ -19,7 +19,7 @@ via the `definition` "placement-near".
 
 > **of**: [`PlaceRef`](../type-aliases/PlaceRef.md)
 
-Defined in: [generated.ts:2680](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2680)
+Defined in: [generated.ts:2801](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2801)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [generated.ts:2680](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **range**: [`RangeRef`](../type-aliases/RangeRef.md)
 
-Defined in: [generated.ts:2681](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2681)
+Defined in: [generated.ts:2802](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2802)
 
 ***
 
@@ -35,4 +35,4 @@ Defined in: [generated.ts:2681](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **wholly?**: `true`
 
-Defined in: [generated.ts:2682](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2682)
+Defined in: [generated.ts:2803](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2803)

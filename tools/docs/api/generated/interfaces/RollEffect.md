@@ -6,7 +6,7 @@
 
 # Interface: RollEffect
 
-Defined in: [generated.ts:4639](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4639)
+Defined in: [generated.ts:4872](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4872)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "roll-effect".
@@ -17,7 +17,7 @@ via the `definition` "roll-effect".
 
 > **type**: `"roll"`
 
-Defined in: [generated.ts:4640](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4640)
+Defined in: [generated.ts:4873](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4873)
 
 ***
 
@@ -25,7 +25,25 @@ Defined in: [generated.ts:4640](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **dice**: `string`
 
-Defined in: [generated.ts:4641](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4641)
+Defined in: [generated.ts:4874](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4874)
+
+***
+
+### count\_stat?
+
+> `optional` **count\_stat?**: `object`
+
+Defined in: [generated.ts:4878](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4878)
+
+Roll as many of `dice` (one die, such as D6) as this characteristic of `of` (as many D6 as the selected model's Toughness).
+
+#### stat
+
+> **stat**: `"M"` \| `"T"` \| `"W"` \| `"OC"` \| `"A"`
+
+#### of
+
+> **of**: [`UnitRef`](../type-aliases/UnitRef.md)
 
 ***
 
@@ -33,7 +51,7 @@ Defined in: [generated.ts:4641](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **extra\_dice\_pool?**: `string`
 
-Defined in: [generated.ts:4642](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4642)
+Defined in: [generated.ts:4899](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4899)
 
 ***
 
@@ -41,7 +59,7 @@ Defined in: [generated.ts:4642](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **kind?**: [`RollKind`](../type-aliases/RollKind.md)
 
-Defined in: [generated.ts:4643](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4643)
+Defined in: [generated.ts:4900](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4900)
 
 ***
 
@@ -49,7 +67,7 @@ Defined in: [generated.ts:4643](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **roll\_var**: `string`
 
-Defined in: [generated.ts:4644](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4644)
+Defined in: [generated.ts:4901](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4901)
 
 ***
 
@@ -57,4 +75,4 @@ Defined in: [generated.ts:4644](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **effect**: [`EffectNode`](../type-aliases/EffectNode.md)
 
-Defined in: [generated.ts:4645](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4645)
+Defined in: [generated.ts:4902](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4902)

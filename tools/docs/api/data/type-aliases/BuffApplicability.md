@@ -8,7 +8,7 @@
 
 > **BuffApplicability** = `object`
 
-Defined in: [cruncher/buffs.ts:133](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/buffs.ts#L133)
+Defined in: [cruncher/buffs.ts:140](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/cruncher/buffs.ts#L140)
 
 Optional gating; the resolver drops buffs whose gate fails.
 
@@ -18,7 +18,7 @@ Optional gating; the resolver drops buffs whose gate fails.
 
 > `optional` **phases?**: [`Phase`](../../generated/type-aliases/Phase.md)[]
 
-Defined in: [cruncher/buffs.ts:134](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/buffs.ts#L134)
+Defined in: [cruncher/buffs.ts:141](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/cruncher/buffs.ts#L141)
 
 ***
 
@@ -26,7 +26,7 @@ Defined in: [cruncher/buffs.ts:134](https://github.com/wn-mitch/40kdc-data/blob/
 
 > `optional` **rollType?**: `"hit"` \| `"wound"` \| `"save"` \| `"damage"`
 
-Defined in: [cruncher/buffs.ts:135](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/buffs.ts#L135)
+Defined in: [cruncher/buffs.ts:142](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/cruncher/buffs.ts#L142)
 
 ***
 
@@ -34,7 +34,7 @@ Defined in: [cruncher/buffs.ts:135](https://github.com/wn-mitch/40kdc-data/blob/
 
 > `optional` **onCritical?**: `"wound"`
 
-Defined in: [cruncher/buffs.ts:140](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/buffs.ts#L140)
+Defined in: [cruncher/buffs.ts:147](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/cruncher/buffs.ts#L147)
 
 Only on a critical wound: the engine applies the buff's AP and Damage to the attacks that
 score one, and no other stage reads it.
@@ -45,7 +45,7 @@ score one, and no other stage reads it.
 
 > `optional` **requiresTargetKeyword?**: `string`
 
-Defined in: [cruncher/buffs.ts:142](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/buffs.ts#L142)
+Defined in: [cruncher/buffs.ts:149](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/cruncher/buffs.ts#L149)
 
 Target must carry this keyword (case-insensitive).
 
@@ -55,7 +55,7 @@ Target must carry this keyword (case-insensitive).
 
 > `optional` **requiresAttackerKeyword?**: `string`
 
-Defined in: [cruncher/buffs.ts:144](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/buffs.ts#L144)
+Defined in: [cruncher/buffs.ts:151](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/cruncher/buffs.ts#L151)
 
 Attacker must carry this keyword (case-insensitive).
 
@@ -65,7 +65,7 @@ Attacker must carry this keyword (case-insensitive).
 
 > `optional` **attackerFilter?**: `Record`\<`string`, `unknown`\>
 
-Defined in: [cruncher/buffs.ts:145](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/buffs.ts#L145)
+Defined in: [cruncher/buffs.ts:152](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/cruncher/buffs.ts#L152)
 
 ***
 
@@ -73,7 +73,7 @@ Defined in: [cruncher/buffs.ts:145](https://github.com/wn-mitch/40kdc-data/blob/
 
 > `optional` **targetFilter?**: `Record`\<`string`, `unknown`\>
 
-Defined in: [cruncher/buffs.ts:146](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/buffs.ts#L146)
+Defined in: [cruncher/buffs.ts:153](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/cruncher/buffs.ts#L153)
 
 ***
 
@@ -81,7 +81,7 @@ Defined in: [cruncher/buffs.ts:146](https://github.com/wn-mitch/40kdc-data/blob/
 
 > `optional` **excludedTargetKeywords?**: `string`[]
 
-Defined in: [cruncher/buffs.ts:148](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/buffs.ts#L148)
+Defined in: [cruncher/buffs.ts:155](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/cruncher/buffs.ts#L155)
 
 Target must carry none of these keywords (case-insensitive). Permissive when the target's keywords are unknown.
 
@@ -91,7 +91,7 @@ Target must carry none of these keywords (case-insensitive). Permissive when the
 
 > `optional` **maxRangeInches?**: `number`
 
-Defined in: [cruncher/buffs.ts:154](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/buffs.ts#L154)
+Defined in: [cruncher/buffs.ts:161](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/cruncher/buffs.ts#L161)
 
 Fixed-distance applicability lowered from canonical range predicates.
 Requires a known target distance at or within this inclusive maximum;
@@ -103,7 +103,7 @@ absent distance does not establish eligibility.
 
 > `optional` **weaponName?**: `string`
 
-Defined in: [cruncher/buffs.ts:159](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/buffs.ts#L159)
+Defined in: [cruncher/buffs.ts:166](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/cruncher/buffs.ts#L166)
 
 Only attacks with the weapon of this name (lower case). Missing weapon context does not
 establish a match; the engine always supplies its names.
@@ -114,7 +114,7 @@ establish a match; the engine always supplies its names.
 
 > `optional` **weaponKeywords?**: [`WeaponKeywordRef`](../../generated/interfaces/WeaponKeywordRef.md)[]
 
-Defined in: [cruncher/buffs.ts:161](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/buffs.ts#L161)
+Defined in: [cruncher/buffs.ts:168](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/cruncher/buffs.ts#L168)
 
 Structured keyword selectors: inclusion matches any, exclusions reject any.
 
@@ -124,7 +124,7 @@ Structured keyword selectors: inclusion matches any, exclusions reject any.
 
 > `optional` **excludedWeaponKeywords?**: [`WeaponKeywordRef`](../../generated/interfaces/WeaponKeywordRef.md)[]
 
-Defined in: [cruncher/buffs.ts:162](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/buffs.ts#L162)
+Defined in: [cruncher/buffs.ts:169](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/cruncher/buffs.ts#L169)
 
 ***
 
@@ -132,7 +132,7 @@ Defined in: [cruncher/buffs.ts:162](https://github.com/wn-mitch/40kdc-data/blob/
 
 > `optional` **excludedWeaponName?**: `string`
 
-Defined in: [cruncher/buffs.ts:163](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/buffs.ts#L163)
+Defined in: [cruncher/buffs.ts:170](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/cruncher/buffs.ts#L170)
 
 ***
 
@@ -140,7 +140,7 @@ Defined in: [cruncher/buffs.ts:163](https://github.com/wn-mitch/40kdc-data/blob/
 
 > `optional` **weaponRequirements?**: `BuffApplicability`[]
 
-Defined in: [cruncher/buffs.ts:165](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/buffs.ts#L165)
+Defined in: [cruncher/buffs.ts:172](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/cruncher/buffs.ts#L172)
 
 Additional conjunctive weapon predicates inherited from enclosing effects.
 
@@ -150,7 +150,7 @@ Additional conjunctive weapon predicates inherited from enclosing effects.
 
 > `optional` **attackComparisons?**: `AttackComparison`[]
 
-Defined in: [cruncher/buffs.ts:170](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/buffs.ts#L170)
+Defined in: [cruncher/buffs.ts:177](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/cruncher/buffs.ts#L177)
 
 Conjunctive comparisons of the attack's characteristics (the attack's Strength against the
 target's Toughness). A comparison whose characteristic the context lacks does not hold.

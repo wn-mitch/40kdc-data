@@ -6,7 +6,7 @@
 
 # Interface: BattleSizeCondition
 
-Defined in: [generated.ts:2554](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2554)
+Defined in: [generated.ts:2675](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2675)
 
 [clock] The battle is being played at this battle size.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:2554](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **type**: `"battle-size"`
 
-Defined in: [generated.ts:2555](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2555)
+Defined in: [generated.ts:2676](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2676)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:2555](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **parameters**: `object`
 
-Defined in: [generated.ts:2556](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2556)
+Defined in: [generated.ts:2677](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2677)
 
 #### size
 

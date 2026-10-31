@@ -8,7 +8,7 @@
 
 > **isMeleeProfile**(`profile`): `boolean`
 
-Defined in: [data/weapon-profile.ts:33](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/weapon-profile.ts#L33)
+Defined in: [data/weapon-profile.ts:33](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/data/weapon-profile.ts#L33)
 
 Whether a weapon profile is a melee profile (`range === "Melee"`).
 

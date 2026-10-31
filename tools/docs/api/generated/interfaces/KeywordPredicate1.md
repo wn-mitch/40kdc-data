@@ -6,7 +6,7 @@
 
 # Interface: KeywordPredicate1
 
-Defined in: [generated.ts:4228](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4228)
+Defined in: [generated.ts:4457](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4457)
 
 Which friendly units may receive an Order, by keyword.
 
@@ -16,7 +16,7 @@ Which friendly units may receive an Order, by keyword.
 
 > `optional` **all\_of?**: [`KeywordList`](../type-aliases/KeywordList.md)
 
-Defined in: [generated.ts:4229](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4229)
+Defined in: [generated.ts:4458](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4458)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:4229](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **any\_of?**: [`KeywordList`](../type-aliases/KeywordList.md)
 
-Defined in: [generated.ts:4230](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4230)
+Defined in: [generated.ts:4459](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4459)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [generated.ts:4230](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **none\_of?**: [`KeywordList`](../type-aliases/KeywordList.md)
 
-Defined in: [generated.ts:4231](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4231)
+Defined in: [generated.ts:4460](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4460)
 
 ***
 
@@ -40,4 +40,4 @@ Defined in: [generated.ts:4231](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **not\_all\_of?**: [`KeywordList`](../type-aliases/KeywordList.md)
 
-Defined in: [generated.ts:4232](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4232)
+Defined in: [generated.ts:4461](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4461)

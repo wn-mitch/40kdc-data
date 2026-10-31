@@ -6,7 +6,7 @@
 
 # Interface: ArmyCompositionPredicate1
 
-Defined in: [generated.ts:3491](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3491)
+Defined in: [generated.ts:3618](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3618)
 
 Draw-time army-composition predicate gating the operation (e.g. redraw when the opponent lacks a qualifying unit).
 
@@ -16,7 +16,7 @@ Draw-time army-composition predicate gating the operation (e.g. redraw when the 
 
 > **subject**: `"self"` \| `"opponent"`
 
-Defined in: [generated.ts:3495](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3495)
+Defined in: [generated.ts:3622](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3622)
 
 Whose army list the predicate inspects.
 
@@ -26,7 +26,7 @@ Whose army list the predicate inspects.
 
 > **quantifier**: `"any"` \| `"none"`
 
-Defined in: [generated.ts:3499](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3499)
+Defined in: [generated.ts:3626](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3626)
 
 Whether the army must contain ('any') or lack ('none') a unit matching unit_filter for the predicate to hold.
 
@@ -36,7 +36,7 @@ Whether the army must contain ('any') or lack ('none') a unit matching unit_filt
 
 > **unit\_filter**: `object`
 
-Defined in: [generated.ts:3503](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3503)
+Defined in: [generated.ts:3630](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3630)
 
 Criteria a unit in the army must satisfy to match. All present criteria must hold (logical AND).
 

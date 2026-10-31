@@ -6,7 +6,7 @@
 
 # Interface: RiskRewardEffect
 
-Defined in: [generated.ts:4148](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4148)
+Defined in: [generated.ts:4341](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4341)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "risk-reward-effect".
@@ -17,7 +17,7 @@ via the `definition` "risk-reward-effect".
 
 > **type**: `"risk-reward"`
 
-Defined in: [generated.ts:4149](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4149)
+Defined in: [generated.ts:4342](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4342)
 
 ***
 
@@ -25,7 +25,7 @@ Defined in: [generated.ts:4149](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **reward**: [`EffectNode`](../type-aliases/EffectNode.md)
 
-Defined in: [generated.ts:4150](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4150)
+Defined in: [generated.ts:4343](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4343)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [generated.ts:4150](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **risk**: `object`
 
-Defined in: [generated.ts:4151](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4151)
+Defined in: [generated.ts:4344](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4344)
 
 #### test
 

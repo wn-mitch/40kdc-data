@@ -6,7 +6,7 @@
 
 # Interface: PersistentDesignationEffect
 
-Defined in: [generated.ts:4573](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4573)
+Defined in: [generated.ts:4802](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4802)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "persistent-designation-effect".
@@ -17,7 +17,7 @@ via the `definition` "persistent-designation-effect".
 
 > **type**: `"persistent-designation"`
 
-Defined in: [generated.ts:4574](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4574)
+Defined in: [generated.ts:4803](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4803)
 
 ***
 
@@ -25,7 +25,7 @@ Defined in: [generated.ts:4574](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **operation?**: `"replace"` \| `"establish"`
 
-Defined in: [generated.ts:4575](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4575)
+Defined in: [generated.ts:4804](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4804)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [generated.ts:4575](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **designation**: `string`
 
-Defined in: [generated.ts:4576](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4576)
+Defined in: [generated.ts:4805](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4805)
 
 ***
 
@@ -41,7 +41,7 @@ Defined in: [generated.ts:4576](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **select**: `object`
 
-Defined in: [generated.ts:4577](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4577)
+Defined in: [generated.ts:4806](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4806)
 
 #### kind
 
@@ -57,7 +57,7 @@ Defined in: [generated.ts:4577](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **consumer?**: `object`
 
-Defined in: [generated.ts:4581](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4581)
+Defined in: [generated.ts:4810](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4810)
 
 #### relation
 
@@ -65,9 +65,89 @@ Defined in: [generated.ts:4581](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 #### beneficiary
 
-> **beneficiary**: `"this-unit"` \| `"this-model"` \| `"model-in-this-unit"` \| `"attacker"` \| `"defender"` \| `"event-subject"` \| `"event-object"` \| `"stratagem-target"` \| `"selected-unit"` \| `"recipient"` \| `"bearer-transport"` \| `"ability-unit"` \| [`UnitFilter`](UnitFilter.md) \| \{ `event_var`: `string`; \} \| \{ `selection_var`: `string`; \} \| \{ `stratagem_target`: `string`; \}
+> **beneficiary**: `"this-unit"` \| `"this-model"` \| `"model-in-this-unit"` \| `"attacker"` \| `"defender"` \| `"event-subject"` \| `"event-object"` \| `"stratagem-target"` \| `"selected-unit"` \| `"recipient"` \| `"bearer-transport"` \| `"ability-unit"` \| [`UnitFilter`](UnitFilter.md) \| \{ `event_var`: `string`; `role?`: `"object"`; \} \| \{ `selection_var`: `string`; \} \| \{ `stratagem_target`: `string`; \}
 
 Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
+
+##### Union Members
+
+`"this-unit"`
+
+***
+
+`"this-model"`
+
+***
+
+`"model-in-this-unit"`
+
+***
+
+`"attacker"`
+
+***
+
+`"defender"`
+
+***
+
+`"event-subject"`
+
+***
+
+`"event-object"`
+
+***
+
+`"stratagem-target"`
+
+***
+
+`"selected-unit"`
+
+***
+
+`"recipient"`
+
+***
+
+`"bearer-transport"`
+
+***
+
+`"ability-unit"`
+
+***
+
+[`UnitFilter`](UnitFilter.md)
+
+***
+
+###### Type Literal
+
+\{ `event_var`: `string`; `role?`: `"object"`; \}
+
+###### event\_var
+
+> **event\_var**: `string`
+
+###### role?
+
+> `optional` **role?**: `"object"`
+
+The bound event's object (the unit it was aimed at) instead of its actor.
+
+***
+
+###### Type Literal
+
+\{ `selection_var`: `string`; \}
+
+***
+
+###### Type Literal
+
+\{ `stratagem_target`: `string`; \}
 
 #### reference?
 
@@ -83,7 +163,7 @@ Which unit a predicate or trigger talks about. A fixed role, a filter for 'any u
 
 > **duration**: [`ScopeDuration`](../type-aliases/ScopeDuration.md)
 
-Defined in: [generated.ts:4614](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4614)
+Defined in: [generated.ts:4847](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4847)
 
 ***
 
@@ -91,7 +171,7 @@ Defined in: [generated.ts:4614](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **lifecycle?**: `object`
 
-Defined in: [generated.ts:4615](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4615)
+Defined in: [generated.ts:4848](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4848)
 
 #### replace
 
@@ -119,7 +199,7 @@ Defined in: [generated.ts:4615](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **selection\_policy**: `"one-time"` \| `"replace-on-destroyed"`
 
-Defined in: [generated.ts:4623](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4623)
+Defined in: [generated.ts:4856](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4856)
 
 ***
 
@@ -127,4 +207,4 @@ Defined in: [generated.ts:4623](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **allow\_while\_embarked?**: `boolean`
 
-Defined in: [generated.ts:4624](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4624)
+Defined in: [generated.ts:4857](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4857)

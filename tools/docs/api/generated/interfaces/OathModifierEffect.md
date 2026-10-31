@@ -6,7 +6,7 @@
 
 # Interface: OathModifierEffect
 
-Defined in: [generated.ts:4660](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4660)
+Defined in: [generated.ts:4917](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4917)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "oath-modifier-effect".
@@ -17,7 +17,7 @@ via the `definition` "oath-modifier-effect".
 
 > **type**: `"oath-modifier"`
 
-Defined in: [generated.ts:4661](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4661)
+Defined in: [generated.ts:4918](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4918)
 
 ***
 
@@ -25,7 +25,7 @@ Defined in: [generated.ts:4661](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **target**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:4662](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4662)
+Defined in: [generated.ts:4919](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4919)
 
 ***
 
@@ -33,4 +33,4 @@ Defined in: [generated.ts:4662](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **modifier**: [`OathModifier`](OathModifier.md)
 
-Defined in: [generated.ts:4663](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4663)
+Defined in: [generated.ts:4920](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4920)

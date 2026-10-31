@@ -6,7 +6,7 @@
 
 # Interface: Piece
 
-Defined in: [generated.ts:6861](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6861)
+Defined in: [generated.ts:7401](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L7401)
 
 One terrain piece placed on the board. Geometry comes from a catalog `template` or an inline `footprint` (if both are present, `footprint` is authoritative and `template` is provenance).
 
@@ -19,7 +19,7 @@ via the `definition` "piece".
 
 > `optional` **id?**: `string`
 
-Defined in: [generated.ts:6865](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6865)
+Defined in: [generated.ts:7405](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L7405)
 
 Kebab-case identifier
 
@@ -29,7 +29,7 @@ Kebab-case identifier
 
 > `optional` **name?**: `string`
 
-Defined in: [generated.ts:6866](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6866)
+Defined in: [generated.ts:7406](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L7406)
 
 ***
 
@@ -37,7 +37,7 @@ Defined in: [generated.ts:6866](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **piece\_type?**: `"area"` \| `"feature"`
 
-Defined in: [generated.ts:6870](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6870)
+Defined in: [generated.ts:7410](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L7410)
 
 An `area` is a gameplay zone with extent (an 11e 'terrain area' by default; set `terrain: false` for an EMPTY area such as a bare objective marker); a `feature` is physical scenery (walls, containers, pipes) placed on an area.
 
@@ -47,7 +47,7 @@ An `area` is a gameplay zone with extent (an 11e 'terrain area' by default; set 
 
 > `optional` **terrain?**: `boolean`
 
-Defined in: [generated.ts:6874](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6874)
+Defined in: [generated.ts:7414](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L7414)
 
 Whether this area is gameplay terrain — an 11e terrain area that confers cover / area-terrain rules. `false` marks an EMPTY area: it still has a footprint (extent, for measurement and control-range display) but is not terrain and grants no cover, e.g. a 10th-edition objective marker sitting on open ground. Only meaningful for `area` pieces; absent means true (a terrain area). This is the data signal that distinguishes a 10th-style bare objective marker from an 11th objective embedded in a terrain area.
 
@@ -57,7 +57,7 @@ Whether this area is gameplay terrain — an 11e terrain area that confers cover
 
 > `optional` **template?**: `string`
 
-Defined in: [generated.ts:6878](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6878)
+Defined in: [generated.ts:7418](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L7418)
 
 Kebab-case identifier
 
@@ -67,7 +67,7 @@ Kebab-case identifier
 
 > `optional` **footprint?**: \{ `type`: `"rectangle"`; `width`: `number`; `height`: `number`; \} \| \{ `type`: `"right-triangle"`; `width`: `number`; `height`: `number`; \} \| \{ `type`: `"polygon"`; `points`: \[[`Vec2`](Vec2.md), [`Vec2`](Vec2.md), [`Vec2`](Vec2.md), `...Vec2[]`\]; \}
 
-Defined in: [generated.ts:6882](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6882)
+Defined in: [generated.ts:7422](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L7422)
 
 Inline geometry, standing in for or overriding a template footprint. Authoritative when present.
 
@@ -107,7 +107,7 @@ Inline geometry, standing in for or overriding a template footprint. Authoritati
 
 > **position**: [`Vec21`](Vec21.md)
 
-Defined in: [generated.ts:6900](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6900)
+Defined in: [generated.ts:7440](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L7440)
 
 ***
 
@@ -115,7 +115,7 @@ Defined in: [generated.ts:6900](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **rotation\_degrees?**: `number`
 
-Defined in: [generated.ts:6904](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6904)
+Defined in: [generated.ts:7444](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L7444)
 
 Clockwise rotation about the centroid in the y-down board frame. Absent or 0 means the template's natural orientation.
 
@@ -125,7 +125,7 @@ Clockwise rotation about the centroid in the y-down board frame. Absent or 0 mea
 
 > `optional` **mirror?**: `"none"` \| `"horizontal"` \| `"vertical"`
 
-Defined in: [generated.ts:6908](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6908)
+Defined in: [generated.ts:7448](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L7448)
 
 Reflection applied in the centroid-local frame before rotation: `horizontal` negates local x (left-right flip), `vertical` negates local y.
 
@@ -135,7 +135,7 @@ Reflection applied in the centroid-local frame before rotation: `horizontal` neg
 
 > `optional` **parent\_area\_id?**: `string`
 
-Defined in: [generated.ts:6912](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6912)
+Defined in: [generated.ts:7452](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L7452)
 
 Kebab-case identifier
 
@@ -145,7 +145,7 @@ Kebab-case identifier
 
 > `optional` **floor?**: `number`
 
-Defined in: [generated.ts:6916](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6916)
+Defined in: [generated.ts:7456](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L7456)
 
 Ruin floor this piece occupies (0 = ground level).
 
@@ -155,7 +155,7 @@ Ruin floor this piece occupies (0 = ground level).
 
 > `optional` **height\_inches?**: `number`
 
-Defined in: [generated.ts:6920](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6920)
+Defined in: [generated.ts:7460](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L7460)
 
 Height of the piece in inches; overrides the template default. Gates Plunging Fire (a piece 3" or taller confers +1 BS on ground-level targets).
 
@@ -165,7 +165,7 @@ Height of the piece in inches; overrides the template default. Gates Plunging Fi
 
 > `optional` **terrain\_area\_keywords?**: [`TerrainAreaKeyword`](../type-aliases/TerrainAreaKeyword.md)[]
 
-Defined in: [generated.ts:6924](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6924)
+Defined in: [generated.ts:7464](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L7464)
 
 Terrain-area keywords this piece's area carries; overrides the template default.
 
@@ -175,7 +175,7 @@ Terrain-area keywords this piece's area carries; overrides the template default.
 
 > `optional` **link\_group?**: `string`
 
-Defined in: [generated.ts:6928](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6928)
+Defined in: [generated.ts:7468](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L7468)
 
 Pieces sharing a `link_group` value are linked terrain — treated as a single terrain feature (and, where an objective sits among them, a single objective).
 
@@ -185,7 +185,7 @@ Pieces sharing a `link_group` value are linked terrain — treated as a single t
 
 > `optional` **objective\_role?**: `"expansion"` \| `"home"` \| `"center"`
 
-Defined in: [generated.ts:6932](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6932)
+Defined in: [generated.ts:7472](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L7472)
 
 Designates this terrain area — or, when `link_group`'d, the union of linked areas (one objective for the set) — as carrying an objective of the given 11e role: `home` (inside a deployment zone), `center` (board middle), or `expansion` (no-man's-land). Implies `is_objective`.
 
@@ -195,7 +195,7 @@ Designates this terrain area — or, when `link_group`'d, the union of linked ar
 
 > `optional` **is\_objective?**: `boolean`
 
-Defined in: [generated.ts:6936](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6936)
+Defined in: [generated.ts:7476](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L7476)
 
 Whether this piece carries an objective marker.
 
@@ -205,7 +205,7 @@ Whether this piece carries an objective marker.
 
 > `optional` **objective?**: `object`
 
-Defined in: [generated.ts:6940](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6940)
+Defined in: [generated.ts:7480](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L7480)
 
 Objective-marker metadata. Only meaningful when `is_objective` is true.
 
@@ -225,7 +225,7 @@ Range from the marker within which models contribute to control.
 
 > `optional` **keystones?**: `object`[]
 
-Defined in: [generated.ts:6950](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L6950)
+Defined in: [generated.ts:7490](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L7490)
 
 Measurement keystones: the author-selected dimension lines a reference card prints so a player can place this piece with a tape measure (board edge → a feature of the placed piece). Only the selection is stored — the distance is always DERIVED from the resolved geometry by the shared keystone resolver (pinned by the conformance corpus), so a keystone can never disagree with the layout. Vertex indices follow the resolver's pinned vertex order; re-authoring a template's footprint invalidates them, so review keystones when geometry changes.
 

@@ -6,7 +6,7 @@
 
 # Interface: OperationMarkersCondition
 
-Defined in: [generated.ts:2502](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2502)
+Defined in: [generated.ts:2623](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2623)
 
 [board] Mission: operation markers on the battlefield.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:2502](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **type**: `"operation-markers"`
 
-Defined in: [generated.ts:2503](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2503)
+Defined in: [generated.ts:2624](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2624)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:2503](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **parameters?**: `object`
 
-Defined in: [generated.ts:2504](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2504)
+Defined in: [generated.ts:2625](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2625)
 
 #### side?
 

@@ -4,7 +4,7 @@ The 40kdc Warhammer 40K dataset behind a linked, typed API — find units, follo
 them to their weapons, abilities, phases, and factions. The Python counterpart
 to [`@alpaca-software/40kdc-data`](https://www.npmjs.com/package/@alpaca-software/40kdc-data)
 (npm) and [`wh40kdc`](https://crates.io/crates/wh40kdc) (crates.io), held in
-behavioral lockstep with both by the shared conformance corpus in the
+behavioral lockstep with both, and with the Go module, by the shared conformance corpus in the
 [40kdc-data repository](https://github.com/wn-mitch/40kdc-data).
 
 ```bash
@@ -24,14 +24,23 @@ What ships:
 
 - **Linked dataset API** — `Dataset` with id/name lookups (diacritic- and
   punctuation-insensitive), reverse indexes, and join queries across units,
-  weapons, abilities, phases, and factions.
+  weapons, abilities, phases, and factions. `Dataset.embedded()` is the
+  matched-play view: listings and name searches skip Combat Patrol-only
+  records, and id lookups resolve every record.
+  `ds.for_game_mode("combat-patrol")` or `ds.for_game_mode("all")` opens
+  another view.
 - **Importers** — ListForge, NewRecruit (JSON / WTC-compact / WTC-full /
-  simple), GW app export, and Rosterizer, all resolving to one `Roster` shape.
-- **Exporters** — the same roster formats back out, byte-identical to the
-  TypeScript and Rust implementations.
+  simple), GW app export, Rosterizer, and canonical Roster JSON, all resolving
+  to one `Roster` shape.
+- **Exporters** — NewRecruit (JSON / WTC-compact / WTC-full / simple),
+  canonical Roster JSON, Rosterizer, ATC 2026, and Yellowscribe, byte-identical
+  to the TypeScript, Rust, and Go implementations.
 - **Cruncher** — the damage-projection engine (attacks → hits → wounds →
   unsaved → damage → after-FNP → models-killed) with buff resolution and
-  per-buff attribution.
+  per-buff attribution. Undecided leaf conditions are reported as needs with
+  stable keys and answered through the engine context's `conditionFacts` dict;
+  `Dataset.mortal_wound_sources_for` lists mortal wounds inflicted outside the
+  attack.
 - **Scoring, terrain, translation** — secondary-mission scoring, terrain
   layout resolution and keystone measurements, and the ability-DSL /
   scoring-card describers.

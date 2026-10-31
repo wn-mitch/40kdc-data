@@ -6,7 +6,7 @@
 
 # Interface: StatModifierEffect
 
-Defined in: [generated.ts:3513](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3513)
+Defined in: [generated.ts:3640](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3640)
 
 [characteristic] Change a characteristic of the target's models or their weapons. incoming: the change applies to attacks made against the target.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:3513](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **type**: `"stat-modifier"`
 
-Defined in: [generated.ts:3514](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3514)
+Defined in: [generated.ts:3641](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3641)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:3514](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **target**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:3515](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3515)
+Defined in: [generated.ts:3642](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3642)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [generated.ts:3515](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **modifier**: `object`
 
-Defined in: [generated.ts:3516](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3516)
+Defined in: [generated.ts:3643](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3643)
 
 #### stat
 
@@ -68,4 +68,4 @@ Defined in: [generated.ts:3516](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **scaling?**: [`Scaling`](Scaling.md)
 
-Defined in: [generated.ts:3525](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3525)
+Defined in: [generated.ts:3652](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3652)

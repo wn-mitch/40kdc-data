@@ -8,7 +8,7 @@
 
 > **optionCap**(`option`, `modelCount`, `models?`): `number`
 
-Defined in: [data/loadout.ts:51](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/loadout.ts#L51)
+Defined in: [data/loadout.ts:51](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/data/loadout.ts#L51)
 
 The maximum number of TIMES `option` may be taken in a unit of `modelCount`
 models: `any_number` alone → once per model; `any_number` WITH `max_count: L`

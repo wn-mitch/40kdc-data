@@ -6,7 +6,7 @@
 
 # Interface: NamedRegionPhaseExtension
 
-Defined in: [generated.ts:4484](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4484)
+Defined in: [generated.ts:4713](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4713)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "named-region-phase-extension".
@@ -17,7 +17,7 @@ via the `definition` "named-region-phase-extension".
 
 > **region**: [`RegionRef`](../type-aliases/RegionRef.md)
 
-Defined in: [generated.ts:4485](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4485)
+Defined in: [generated.ts:4714](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4714)
 
 ***
 
@@ -25,7 +25,7 @@ Defined in: [generated.ts:4485](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **condition**: [`AbilityDSLCondition1`](../type-aliases/AbilityDSLCondition1.md)
 
-Defined in: [generated.ts:4486](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4486)
+Defined in: [generated.ts:4715](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4715)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [generated.ts:4486](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **trigger**: [`AbilityTrigger`](../type-aliases/AbilityTrigger.md)
 
-Defined in: [generated.ts:4487](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4487)
+Defined in: [generated.ts:4716](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4716)
 
 ***
 
@@ -41,7 +41,7 @@ Defined in: [generated.ts:4487](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **duration**: [`ScopeDuration`](../type-aliases/ScopeDuration.md)
 
-Defined in: [generated.ts:4488](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4488)
+Defined in: [generated.ts:4717](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4717)
 
 ***
 
@@ -49,4 +49,4 @@ Defined in: [generated.ts:4488](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **evaluation**: `"snapshot-once"`
 
-Defined in: [generated.ts:4489](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4489)
+Defined in: [generated.ts:4718](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4718)

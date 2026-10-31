@@ -6,12 +6,8 @@
 
 # Type Alias: KeywordList11
 
-> **KeywordList11** = \[[`Keyword`](Keyword.md), `...Keyword[]`\]
+> **KeywordList11** = [`Keyword`](Keyword.md)[]
 
-Defined in: [generated.ts:1029](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1029)
+Defined in: [generated.ts:981](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L981)
 
-The profile can target a unit carrying at least one listed keyword.
-
-## Min Items
-
-1
+AND set: the target must carry every keyword listed here.

@@ -6,7 +6,7 @@
 
 # Interface: ArmyStateCondition
 
-Defined in: [generated.ts:2612](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2612)
+Defined in: [generated.ts:2733](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2733)
 
 [army] The named army state currently holds for the referenced side.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:2612](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **type**: `"army-state"`
 
-Defined in: [generated.ts:2613](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2613)
+Defined in: [generated.ts:2734](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2734)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:2613](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **parameters**: `object`
 
-Defined in: [generated.ts:2614](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2614)
+Defined in: [generated.ts:2735](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2735)
 
 #### owner
 

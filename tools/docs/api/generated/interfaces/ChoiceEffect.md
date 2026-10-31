@@ -6,7 +6,7 @@
 
 # Interface: ChoiceEffect
 
-Defined in: [generated.ts:3832](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3832)
+Defined in: [generated.ts:3979](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3979)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "choice-effect".
@@ -17,7 +17,7 @@ via the `definition` "choice-effect".
 
 > **type**: `"choice"`
 
-Defined in: [generated.ts:3833](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3833)
+Defined in: [generated.ts:3980](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3980)
 
 ***
 
@@ -25,7 +25,7 @@ Defined in: [generated.ts:3833](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **options**: \[[`EffectNode`](../type-aliases/EffectNode.md), [`EffectNode`](../type-aliases/EffectNode.md), `...EffectNode[]`\]
 
-Defined in: [generated.ts:3837](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3837)
+Defined in: [generated.ts:3984](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3984)
 
 #### Min Items
 
@@ -37,7 +37,7 @@ Defined in: [generated.ts:3837](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **choice\_label?**: `string`
 
-Defined in: [generated.ts:3838](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3838)
+Defined in: [generated.ts:3985](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3985)
 
 ***
 
@@ -45,7 +45,7 @@ Defined in: [generated.ts:3838](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **choice\_prompt?**: `string`
 
-Defined in: [generated.ts:3839](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3839)
+Defined in: [generated.ts:3986](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3986)
 
 ***
 
@@ -53,7 +53,7 @@ Defined in: [generated.ts:3839](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **min\_choices?**: `number`
 
-Defined in: [generated.ts:3843](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3843)
+Defined in: [generated.ts:3990](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3990)
 
 Minimum number of distinct options selected at this activation; defaults to one.
 
@@ -63,6 +63,16 @@ Minimum number of distinct options selected at this activation; defaults to one.
 
 > `optional` **max\_choices?**: `number`
 
-Defined in: [generated.ts:3847](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3847)
+Defined in: [generated.ts:3994](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3994)
 
 Maximum number of distinct options selected at this activation; defaults to one.
+
+***
+
+### chosen\_by?
+
+> `optional` **chosen\_by?**: `"opponent"`
+
+Defined in: [generated.ts:3998](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3998)
+
+Who picks the option: the opponent ("your opponent must decide whether that unit will take cover or stand firm"). Absent, the player using the ability picks.

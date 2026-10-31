@@ -8,7 +8,7 @@
 
 > **crunchModel**(`input`, `dataset?`): `object`
 
-Defined in: [cruncher/engine.ts:109](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/engine.ts#L109)
+Defined in: [cruncher/engine.ts:117](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/cruncher/engine.ts#L117)
 
 [crunch](crunch.md) with the [AttackModel](../type-aliases/AttackModel.md) its stages were computed from.
 

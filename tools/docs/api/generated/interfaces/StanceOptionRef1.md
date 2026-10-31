@@ -6,7 +6,7 @@
 
 # Interface: StanceOptionRef1
 
-Defined in: [generated.ts:3753](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3753)
+Defined in: [generated.ts:3884](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3884)
 
 Stable reference to one option within its containing ability.
 
@@ -16,7 +16,7 @@ Stable reference to one option within its containing ability.
 
 > **ability\_id**: `string`
 
-Defined in: [generated.ts:3754](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3754)
+Defined in: [generated.ts:3885](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3885)
 
 ***
 
@@ -24,4 +24,4 @@ Defined in: [generated.ts:3754](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **option\_id**: `string`
 
-Defined in: [generated.ts:3755](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3755)
+Defined in: [generated.ts:3886](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3886)

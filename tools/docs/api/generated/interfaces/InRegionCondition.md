@@ -6,7 +6,7 @@
 
 # Interface: InRegionCondition
 
-Defined in: [generated.ts:2355](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2355)
+Defined in: [generated.ts:2466](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2466)
 
 [position] The subject is inside a region (wholly, if set).
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:2355](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **type**: `"in-region"`
 
-Defined in: [generated.ts:2356](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2356)
+Defined in: [generated.ts:2467](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2467)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:2356](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **parameters**: `object`
 
-Defined in: [generated.ts:2357](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2357)
+Defined in: [generated.ts:2468](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2468)
 
 #### subject?
 
@@ -40,4 +40,4 @@ Defined in: [generated.ts:2357](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 #### models?
 
-> `optional` **models?**: `"every"` \| `"any"`
+> `optional` **models?**: `"any"` \| `"every"`

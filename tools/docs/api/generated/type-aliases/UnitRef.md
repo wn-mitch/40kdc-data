@@ -6,11 +6,47 @@
 
 # Type Alias: UnitRef
 
-> **UnitRef** = `"this-unit"` \| `"this-model"` \| `"model-in-this-unit"` \| `"attacker"` \| `"defender"` \| `"event-subject"` \| `"event-object"` \| `"stratagem-target"` \| `"selected-unit"` \| `"recipient"` \| `"bearer-transport"` \| `"ability-unit"` \| [`UnitFilter`](../interfaces/UnitFilter.md) \| \{ `event_var`: `string`; \} \| \{ `selection_var`: `string`; \} \| \{ `stratagem_target`: [`EntityId`](EntityId.md); \}
+> **UnitRef** = `"this-unit"` \| `"this-model"` \| `"model-in-this-unit"` \| `"attacker"` \| `"defender"` \| `"event-subject"` \| `"event-object"` \| `"stratagem-target"` \| `"selected-unit"` \| `"recipient"` \| `"bearer-transport"` \| `"ability-unit"` \| [`UnitFilter`](../interfaces/UnitFilter.md) \| \{ `event_var`: `string`; `role?`: `"object"`; \} \| \{ `selection_var`: `string`; \} \| \{ `stratagem_target`: [`EntityId`](EntityId.md); \}
 
-Defined in: [generated.ts:326](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L326)
+Defined in: [generated.ts:333](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L333)
 
 Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "unit-ref".
+
+## Union Members
+
+`"this-unit"` \| `"this-model"` \| `"model-in-this-unit"` \| `"attacker"` \| `"defender"` \| `"event-subject"` \| `"event-object"` \| `"stratagem-target"` \| `"selected-unit"` \| `"recipient"` \| `"bearer-transport"` \| `"ability-unit"`
+
+***
+
+[`UnitFilter`](../interfaces/UnitFilter.md)
+
+***
+
+### Type Literal
+
+\{ `event_var`: `string`; `role?`: `"object"`; \}
+
+#### event\_var
+
+> **event\_var**: `string`
+
+#### role?
+
+> `optional` **role?**: `"object"`
+
+The bound event's object (the unit it was aimed at) instead of its actor.
+
+***
+
+### Type Literal
+
+\{ `selection_var`: `string`; \}
+
+***
+
+### Type Literal
+
+\{ `stratagem_target`: [`EntityId`](EntityId.md); \}

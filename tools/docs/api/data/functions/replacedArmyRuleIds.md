@@ -8,7 +8,7 @@
 
 > **replacedArmyRuleIds**(`dataset`, `factionId`, `detachmentIds`): `Set`\<`string`\>
 
-Defined in: [abilities-resolver/resolver.ts:220](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/abilities-resolver/resolver.ts#L220)
+Defined in: [abilities-resolver/resolver.ts:224](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/abilities-resolver/resolver.ts#L224)
 
 The army rules of `factionId` that the selected detachments' own army rules replace: a
 faction-typed record with a `detachment_id` among `detachmentIds` (a Combat Patrol box's army

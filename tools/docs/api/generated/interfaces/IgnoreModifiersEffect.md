@@ -6,7 +6,7 @@
 
 # Interface: IgnoreModifiersEffect
 
-Defined in: [generated.ts:3559](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3559)
+Defined in: [generated.ts:3686](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3686)
 
 [characteristic] Ignore modifiers to characteristics or rolls (all of them, or only worsening ones).
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:3559](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **type**: `"ignore-modifiers"`
 
-Defined in: [generated.ts:3560](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3560)
+Defined in: [generated.ts:3687](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3687)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:3560](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **target**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:3561](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3561)
+Defined in: [generated.ts:3688](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3688)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [generated.ts:3561](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **modifier**: `object`
 
-Defined in: [generated.ts:3562](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3562)
+Defined in: [generated.ts:3689](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3689)
 
 #### what
 
@@ -82,4 +82,4 @@ Rolls left out of an "any roll" list (rolls ["all"]): their modifiers still appl
 
 > `optional` **scaling?**: [`Scaling`](Scaling.md)
 
-Defined in: [generated.ts:3582](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3582)
+Defined in: [generated.ts:3709](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3709)

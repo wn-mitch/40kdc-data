@@ -8,6 +8,6 @@
 
 > **SelectableLever** = `Pick`\<[`StackableBuff`](StackableBuff.md), `"id"` \| `"group"` \| `"groups"` \| `"requiresLever"` \| `"requiresOption"` \| `"excludesOption"` \| `"raisesCap"`\>
 
-Defined in: [data/lever-selection.ts:4](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/lever-selection.ts#L4)
+Defined in: [data/lever-selection.ts:4](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/data/lever-selection.ts#L4)
 
 The activation metadata needed to validate a complete proposed selection.

@@ -6,7 +6,7 @@
 
 # Interface: MoveEffect
 
-Defined in: [generated.ts:5204](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5204)
+Defined in: [generated.ts:5555](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L5555)
 
 [move] The target makes a move now. A surge move carries its core limit (21.02).
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:5204](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **type**: `"move"`
 
-Defined in: [generated.ts:5205](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5205)
+Defined in: [generated.ts:5556](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L5556)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:5205](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **target**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:5206](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5206)
+Defined in: [generated.ts:5557](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L5557)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [generated.ts:5206](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **modifier**: `object`
 
-Defined in: [generated.ts:5207](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5207)
+Defined in: [generated.ts:5558](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L5558)
 
 #### move\_type
 
@@ -110,4 +110,4 @@ The move counts as this kind of move for rules that check what the unit did this
 
 > `optional` **scaling?**: [`Scaling`](Scaling.md)
 
-Defined in: [generated.ts:5310](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5310)
+Defined in: [generated.ts:5661](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L5661)

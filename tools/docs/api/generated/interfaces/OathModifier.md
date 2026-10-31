@@ -6,7 +6,7 @@
 
 # Interface: OathModifier
 
-Defined in: [generated.ts:4669](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4669)
+Defined in: [generated.ts:4926](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4926)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "oath-modifier".
@@ -17,7 +17,7 @@ via the `definition` "oath-modifier".
 
 > **ability**: `string`
 
-Defined in: [generated.ts:4670](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4670)
+Defined in: [generated.ts:4927](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4927)
 
 ***
 
@@ -25,7 +25,7 @@ Defined in: [generated.ts:4670](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **aspect**: `"selection"` \| `"quality-persistence"` \| `"deed-reward"`
 
-Defined in: [generated.ts:4671](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4671)
+Defined in: [generated.ts:4928](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4928)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [generated.ts:4671](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **domains?**: \[`"deed"` \| `"quality"`, ...("deed" \| "quality")\[\]\]
 
-Defined in: [generated.ts:4675](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4675)
+Defined in: [generated.ts:4932](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4932)
 
 #### Min Items
 
@@ -45,7 +45,7 @@ Defined in: [generated.ts:4675](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **exclude\_previously\_selected?**: `true`
 
-Defined in: [generated.ts:4676](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4676)
+Defined in: [generated.ts:4933](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4933)
 
 ***
 
@@ -53,7 +53,7 @@ Defined in: [generated.ts:4676](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **duplicate\_roll?**: `"choose-unselected"`
 
-Defined in: [generated.ts:4677](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4677)
+Defined in: [generated.ts:4934](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4934)
 
 ***
 
@@ -61,7 +61,7 @@ Defined in: [generated.ts:4677](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **stop\_when?**: `"all-domains-exhausted"`
 
-Defined in: [generated.ts:4678](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4678)
+Defined in: [generated.ts:4935](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4935)
 
 ***
 
@@ -69,7 +69,7 @@ Defined in: [generated.ts:4678](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **from?**: `"fulfilled"`
 
-Defined in: [generated.ts:4679](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4679)
+Defined in: [generated.ts:4936](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4936)
 
 ***
 
@@ -77,7 +77,7 @@ Defined in: [generated.ts:4679](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **duration?**: [`ScopeDuration`](../type-aliases/ScopeDuration.md)
 
-Defined in: [generated.ts:4680](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4680)
+Defined in: [generated.ts:4937](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4937)
 
 ***
 
@@ -85,7 +85,7 @@ Defined in: [generated.ts:4680](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **applies\_to?**: `"additional"`
 
-Defined in: [generated.ts:4681](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4681)
+Defined in: [generated.ts:4938](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4938)
 
 ***
 
@@ -93,7 +93,7 @@ Defined in: [generated.ts:4681](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **operation?**: `"replace"`
 
-Defined in: [generated.ts:4682](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4682)
+Defined in: [generated.ts:4939](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4939)
 
 ***
 
@@ -101,7 +101,7 @@ Defined in: [generated.ts:4682](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **selection\_method?**: `"any"` \| `"chosen"` \| `"random"`
 
-Defined in: [generated.ts:4683](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4683)
+Defined in: [generated.ts:4940](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4940)
 
 ***
 
@@ -109,4 +109,4 @@ Defined in: [generated.ts:4683](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **effect?**: [`EffectNode`](../type-aliases/EffectNode.md)
 
-Defined in: [generated.ts:4684](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4684)
+Defined in: [generated.ts:4941](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4941)

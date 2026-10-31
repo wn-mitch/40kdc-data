@@ -6,7 +6,7 @@
 
 # Interface: FeelNoPainEffect
 
-Defined in: [generated.ts:5022](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5022)
+Defined in: [generated.ts:5373](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L5373)
 
 [protection] The target has a Feel No Pain save.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:5022](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **type**: `"feel-no-pain"`
 
-Defined in: [generated.ts:5023](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5023)
+Defined in: [generated.ts:5374](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L5374)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:5023](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **target**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:5024](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5024)
+Defined in: [generated.ts:5375](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L5375)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [generated.ts:5024](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **modifier**: `object`
 
-Defined in: [generated.ts:5025](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5025)
+Defined in: [generated.ts:5376](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L5376)
 
 #### threshold
 
@@ -48,4 +48,4 @@ Defined in: [generated.ts:5025](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **scaling?**: [`Scaling`](Scaling.md)
 
-Defined in: [generated.ts:5029](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5029)
+Defined in: [generated.ts:5380](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L5380)

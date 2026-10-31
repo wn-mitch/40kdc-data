@@ -8,7 +8,7 @@
 
 > **hostPointsTiers**(`unit`, `hostFaction?`, `detachmentIds?`): readonly `CostTier`[]
 
-Defined in: [data/pricing.ts:98](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/pricing.ts#L98)
+Defined in: [data/pricing.ts:98](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/data/pricing.ts#L98)
 
 The points tiers in effect for a unit fielded in `hostFaction`'s army.
 

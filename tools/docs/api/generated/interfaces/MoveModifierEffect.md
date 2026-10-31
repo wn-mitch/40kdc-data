@@ -6,7 +6,7 @@
 
 # Interface: MoveModifierEffect
 
-Defined in: [generated.ts:5329](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5329)
+Defined in: [generated.ts:5680](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L5680)
 
 [move] Change how the target's moves work.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:5329](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **type**: `"move-modifier"`
 
-Defined in: [generated.ts:5330](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5330)
+Defined in: [generated.ts:5681](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L5681)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:5330](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **target**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:5331](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5331)
+Defined in: [generated.ts:5682](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L5682)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [generated.ts:5331](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **modifier**: `object`
 
-Defined in: [generated.ts:5332](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5332)
+Defined in: [generated.ts:5683](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L5683)
 
 #### applies\_to\_moves?
 
@@ -114,4 +114,4 @@ The unit can select a mode of its move (applies_to_moves) it otherwise could not
 
 > `optional` **scaling?**: [`Scaling`](Scaling.md)
 
-Defined in: [generated.ts:5448](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5448)
+Defined in: [generated.ts:5799](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L5799)

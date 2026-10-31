@@ -6,7 +6,7 @@
 
 # Interface: DestroyModelsEffect
 
-Defined in: [generated.ts:5130](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5130)
+Defined in: [generated.ts:5481](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L5481)
 
 [models] Destroy models in the target.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:5130](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **type**: `"destroy-models"`
 
-Defined in: [generated.ts:5131](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5131)
+Defined in: [generated.ts:5482](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L5482)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:5131](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **target**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:5132](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5132)
+Defined in: [generated.ts:5483](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L5483)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [generated.ts:5132](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **modifier**: `object`
 
-Defined in: [generated.ts:5133](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5133)
+Defined in: [generated.ts:5484](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L5484)
 
 #### count
 
@@ -52,4 +52,4 @@ Defined in: [generated.ts:5133](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **scaling?**: [`Scaling`](Scaling.md)
 
-Defined in: [generated.ts:5138](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5138)
+Defined in: [generated.ts:5489](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L5489)

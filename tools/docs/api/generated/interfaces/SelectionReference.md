@@ -6,7 +6,7 @@
 
 # Interface: SelectionReference
 
-Defined in: [generated.ts:4141](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4141)
+Defined in: [generated.ts:4334](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4334)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "selection-reference".
@@ -17,4 +17,4 @@ via the `definition` "selection-reference".
 
 > **selection\_var**: `string`
 
-Defined in: [generated.ts:4142](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4142)
+Defined in: [generated.ts:4335](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4335)

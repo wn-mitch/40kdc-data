@@ -6,7 +6,7 @@
 
 # Interface: DesignatedCondition
 
-Defined in: [generated.ts:2467](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2467)
+Defined in: [generated.ts:2588](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2588)
 
 [designation] The subject carries this designation. With the optional inclusive `count` bounds, counts how many units or objectives carry it.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:2467](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **type**: `"designated"`
 
-Defined in: [generated.ts:2468](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2468)
+Defined in: [generated.ts:2589](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2589)
 
 ***
 
@@ -24,4 +24,4 @@ Defined in: [generated.ts:2468](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **parameters**: \{\[`k`: `string`\]: `unknown`; `subject`: \{\[`k`: `string`\]: `unknown`; \}; \} \| \{\[`k`: `string`\]: `unknown`; \}
 
-Defined in: [generated.ts:2469](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2469)
+Defined in: [generated.ts:2590](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2590)

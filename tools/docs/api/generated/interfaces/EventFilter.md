@@ -6,7 +6,7 @@
 
 # Interface: EventFilter
 
-Defined in: [generated.ts:2133](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2133)
+Defined in: [generated.ts:2233](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2233)
 
 Narrows an event family: which selection, move, roll or rule. Only the properties that make sense for the family are used.
 
@@ -19,7 +19,7 @@ via the `definition` "event-filter".
 
 > `optional` **to?**: `"disembark"` \| `"fight"` \| `"shoot"` \| `"declare-charge"` \| `"move"` \| `"attack"` \| `"observe"`
 
-Defined in: [generated.ts:2137](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2137)
+Defined in: [generated.ts:2237](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2237)
 
 selected: what the unit was selected to do. attack means shoot or fight.
 
@@ -29,7 +29,7 @@ selected: what the unit was selected to do. attack means shoot or fight.
 
 > `optional` **kind?**: `"charge"` \| `"fight"` \| `"ability"` \| `"stratagem"` \| `"dark-pact"` \| `"manoeuvre"` \| `"shoot"` \| `"attack"` \| `"action"` \| `"order"` \| `"ritual"` \| `"act-of-faith"` \| `"doctrine"` \| `"contract"`
 
-Defined in: [generated.ts:2141](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2141)
+Defined in: [generated.ts:2241](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2241)
 
 targets-selected / attacks-resolved / used: which kind of targeting, attack or rule.
 
@@ -39,7 +39,7 @@ targets-selected / attacks-resolved / used: which kind of targeting, attack or r
 
 > `optional` **source?**: \[`"enhancement"` \| `"unit"`, ...("enhancement" \| "unit")\[\]\]
 
-Defined in: [generated.ts:2161](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2161)
+Defined in: [generated.ts:2261](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2261)
 
 used ability: which ability definitions the event may be a use of (unit is a datasheet ability; enhancement is an Enhancement ability).
 
@@ -53,7 +53,7 @@ used ability: which ability definitions the event may be a use of (unit is a dat
 
 > `optional` **usage?**: `object`
 
-Defined in: [generated.ts:2165](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2165)
+Defined in: [generated.ts:2265](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2265)
 
 used ability: the exact once-per-battle cadence of the ability definition.
 
@@ -71,7 +71,7 @@ used ability: the exact once-per-battle cadence of the ability definition.
 
 > `optional` **id?**: `string`
 
-Defined in: [generated.ts:2172](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2172)
+Defined in: [generated.ts:2272](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2272)
 
 Kebab-case identifier
 
@@ -81,7 +81,7 @@ Kebab-case identifier
 
 > `optional` **move\_types?**: \[`"normal"` \| `"advance"` \| `"remain-stationary"` \| `"fall-back"` \| `"charge"` \| `"pile-in"` \| `"consolidation"` \| `"ingress"` \| `"surge"` \| `"scout"` \| `"disembark"`, ...("normal" \| "advance" \| "remain-stationary" \| "fall-back" \| "charge" \| "pile-in" \| "consolidation" \| "ingress" \| "surge" \| "scout" \| "disembark")\[\]\]
 
-Defined in: [generated.ts:2176](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2176)
+Defined in: [generated.ts:2276](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2276)
 
 #### Min Items
 
@@ -93,7 +93,7 @@ Defined in: [generated.ts:2176](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **mode?**: `"desperate-escape"` \| `"ordered-retreat"` \| `"ongoing"` \| `"engaging"` \| `"objective"` \| `"rapid"` \| `"tactical"` \| `"combat"` \| `"emergency"` \| `"assault"` \| `"shock"`
 
-Defined in: [generated.ts:2207](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2207)
+Defined in: [generated.ts:2307](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2307)
 
 A move type's named mode (a Fall Back's desperate escape, a combat disembark).
 
@@ -103,7 +103,7 @@ A move type's named mode (a Fall Back's desperate escape, a combat disembark).
 
 > `optional` **roll?**: [`RollKind`](../type-aliases/RollKind.md)
 
-Defined in: [generated.ts:2219](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2219)
+Defined in: [generated.ts:2319](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2319)
 
 ***
 
@@ -111,7 +111,25 @@ Defined in: [generated.ts:2219](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **result?**: [`RollOutcome`](../type-aliases/RollOutcome.md)
 
-Defined in: [generated.ts:2220](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2220)
+Defined in: [generated.ts:2320](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2320)
+
+***
+
+### unmodified?
+
+> `optional` **unmodified?**: `object`
+
+Defined in: [generated.ts:2324](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2324)
+
+after-roll: only a die whose face, before any modifier, is from to to (inclusive).
+
+#### from
+
+> **from**: `number`
+
+#### to
+
+> **to**: `number`
 
 ***
 
@@ -119,17 +137,17 @@ Defined in: [generated.ts:2220](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **from?**: `"strategic-reserves"` \| `"deep-strike"` \| `"cult-ambush"` \| `"transport"`
 
-Defined in: [generated.ts:2221](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2221)
+Defined in: [generated.ts:2328](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2328)
 
 ***
 
 ### transport?
 
-> `optional` **transport?**: `"this-unit"`
+> `optional` **transport?**: `"this-unit"` \| [`UnitFilter`](UnitFilter.md)
 
-Defined in: [generated.ts:2225](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2225)
+Defined in: [generated.ts:2332](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2332)
 
-disembarked: the Transport the unit disembarked from; this-unit is "from this TRANSPORT".
+disembarked: the Transport the unit disembarked from; this-unit is "from this TRANSPORT", a unit filter the Transports it may be (a TRANSPORT within 6 inches of this model).
 
 ***
 
@@ -137,7 +155,7 @@ disembarked: the Transport the unit disembarked from; this-unit is "from this TR
 
 > `optional` **through?**: `"terrain"` \| `"tall-terrain"`
 
-Defined in: [generated.ts:2226](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2226)
+Defined in: [generated.ts:2333](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2333)
 
 ***
 
@@ -145,7 +163,7 @@ Defined in: [generated.ts:2226](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **attack\_type?**: `"psychic"` \| `"ranged"` \| `"melee"` \| `"mortal"`
 
-Defined in: [generated.ts:2227](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2227)
+Defined in: [generated.ts:2334](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2334)
 
 ***
 
@@ -153,27 +171,107 @@ Defined in: [generated.ts:2227](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **weapons?**: [`WeaponScope`](WeaponScope.md)
 
-Defined in: [generated.ts:2228](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2228)
+Defined in: [generated.ts:2335](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2335)
 
 ***
 
 ### by?
 
-> `optional` **by?**: `"this-unit"` \| `"this-model"` \| `"model-in-this-unit"` \| `"attacker"` \| `"defender"` \| `"event-subject"` \| `"event-object"` \| `"stratagem-target"` \| `"selected-unit"` \| `"recipient"` \| `"bearer-transport"` \| `"ability-unit"` \| [`UnitFilter`](UnitFilter.md) \| \{ `event_var`: `string`; \} \| \{ `selection_var`: `string`; \} \| \{ `stratagem_target`: `string`; \}
+> `optional` **by?**: `"this-unit"` \| `"this-model"` \| `"model-in-this-unit"` \| `"attacker"` \| `"defender"` \| `"event-subject"` \| `"event-object"` \| `"stratagem-target"` \| `"selected-unit"` \| `"recipient"` \| `"bearer-transport"` \| `"ability-unit"` \| [`UnitFilter`](UnitFilter.md) \| \{ `event_var`: `string`; `role?`: `"object"`; \} \| \{ `selection_var`: `string`; \} \| \{ `stratagem_target`: `string`; \}
 
-Defined in: [generated.ts:2232](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2232)
+Defined in: [generated.ts:2339](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2339)
 
 Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
+
+#### Union Members
+
+`"this-unit"`
+
+***
+
+`"this-model"`
+
+***
+
+`"model-in-this-unit"`
+
+***
+
+`"attacker"`
+
+***
+
+`"defender"`
+
+***
+
+`"event-subject"`
+
+***
+
+`"event-object"`
+
+***
+
+`"stratagem-target"`
+
+***
+
+`"selected-unit"`
+
+***
+
+`"recipient"`
+
+***
+
+`"bearer-transport"`
+
+***
+
+`"ability-unit"`
+
+***
+
+[`UnitFilter`](UnitFilter.md)
+
+***
+
+##### Type Literal
+
+\{ `event_var`: `string`; `role?`: `"object"`; \}
+
+##### event\_var
+
+> **event\_var**: `string`
+
+##### role?
+
+> `optional` **role?**: `"object"`
+
+The bound event's object (the unit it was aimed at) instead of its actor.
+
+***
+
+##### Type Literal
+
+\{ `selection_var`: `string`; \}
+
+***
+
+##### Type Literal
+
+\{ `stratagem_target`: `string`; \}
 
 ***
 
 ### timing?
 
-> `optional` **timing?**: `"before-removal"` \| `"after-attacks"`
+> `optional` **timing?**: `"before-removal"` \| `"after-attacks"` \| `"after-set-up"` \| `"after-emergency-disembark"`
 
-Defined in: [generated.ts:2260](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2260)
+Defined in: [generated.ts:2371](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2371)
 
-destroyed: resolve before the model is removed (before-removal), or after the attacking unit has finished making its attacks (after-attacks).
+destroyed: resolve before the model is removed (before-removal), after the attacking unit has finished making its attacks (after-attacks), or once the units embarked within the destroyed model have made their emergency disembark moves (after-emergency-disembark); disembarked: resolve once the unit has been set up (after-set-up).
 
 ***
 
@@ -181,7 +279,7 @@ destroyed: resolve before the model is removed (before-removal), or after the at
 
 > `optional` **phase?**: `"charge"` \| `"command"` \| `"movement"` \| `"shooting"` \| `"fight"`
 
-Defined in: [generated.ts:2264](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2264)
+Defined in: [generated.ts:2375](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2375)
 
 The five official game phases. Unchanged between 10th and 11th edition — 11e reorders Pile In timing within the Fight phase but adds no top-level phase.
 
@@ -191,7 +289,7 @@ The five official game phases. Unchanged between 10th and 11th edition — 11e r
 
 > `optional` **first?**: `true`
 
-Defined in: [generated.ts:2268](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2268)
+Defined in: [generated.ts:2379](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2379)
 
 Only the first time this happens in the window.
 
@@ -201,7 +299,7 @@ Only the first time this happens in the window.
 
 > `optional` **step?**: `"battle-shock"` \| `"reinforcements"`
 
-Defined in: [generated.ts:2269](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2269)
+Defined in: [generated.ts:2380](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2380)
 
 ***
 
@@ -209,7 +307,7 @@ Defined in: [generated.ts:2269](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **state?**: [`UnitState`](../type-aliases/UnitState.md)
 
-Defined in: [generated.ts:2270](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2270)
+Defined in: [generated.ts:2381](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2381)
 
 ***
 
@@ -217,7 +315,7 @@ Defined in: [generated.ts:2270](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **tag?**: `string`
 
-Defined in: [generated.ts:2271](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2271)
+Defined in: [generated.ts:2382](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2382)
 
 ***
 
@@ -225,7 +323,7 @@ Defined in: [generated.ts:2271](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **pool?**: `string`
 
-Defined in: [generated.ts:2272](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2272)
+Defined in: [generated.ts:2383](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2383)
 
 ***
 
@@ -233,7 +331,7 @@ Defined in: [generated.ts:2272](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **marker?**: `string`
 
-Defined in: [generated.ts:2273](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2273)
+Defined in: [generated.ts:2384](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2384)
 
 ***
 
@@ -241,7 +339,7 @@ Defined in: [generated.ts:2273](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **ability\_keyword?**: `string`
 
-Defined in: [generated.ts:2277](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2277)
+Defined in: [generated.ts:2388](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2388)
 
 used: any ability whose name carries this keyword in brackets (BONDSMAN for every '(Bondsman)' ability), instead of one `id`.
 
@@ -251,7 +349,7 @@ used: any ability whose name carries this keyword in brackets (BONDSMAN for ever
 
 > `optional` **same\_rule\_as?**: `object`
 
-Defined in: [generated.ts:2281](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2281)
+Defined in: [generated.ts:2392](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2392)
 
 The exact ability or Stratagem definition used by the event a trigger bound with binds_event_variable; it is not a per-model instance or keyword-family match.
 
@@ -265,7 +363,7 @@ The exact ability or Stratagem definition used by the event a trigger bound with
 
 > `optional` **caused\_by?**: [`EventBoundReference`](EventBoundReference.md)
 
-Defined in: [generated.ts:2284](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2284)
+Defined in: [generated.ts:2395](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2395)
 
 ***
 
@@ -273,4 +371,4 @@ Defined in: [generated.ts:2284](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **causes?**: [`EventBoundReference1`](EventBoundReference1.md)
 
-Defined in: [generated.ts:2285](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2285)
+Defined in: [generated.ts:2396](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2396)

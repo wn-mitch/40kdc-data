@@ -6,7 +6,7 @@
 
 # Interface: GuidedCondition
 
-Defined in: [generated.ts:2594](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2594)
+Defined in: [generated.ts:2715](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2715)
 
 [designation] The subject (default this unit) is Guided: it has For the Greater Good, is not an Observer, and is targeting one or more Spotted units.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:2594](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **type**: `"guided"`
 
-Defined in: [generated.ts:2595](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2595)
+Defined in: [generated.ts:2716](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2716)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:2595](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **parameters**: `object`
 
-Defined in: [generated.ts:2596](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2596)
+Defined in: [generated.ts:2717](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2717)
 
 #### subject?
 

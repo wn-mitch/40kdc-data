@@ -6,7 +6,7 @@
 
 # Interface: WeaponKeywordRef
 
-Defined in: [generated.ts:2647](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2647)
+Defined in: [generated.ts:2768](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2768)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "weapon-keyword-ref".
@@ -17,7 +17,7 @@ via the `definition` "weapon-keyword-ref".
 
 > **keyword\_id**: `string`
 
-Defined in: [generated.ts:2648](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2648)
+Defined in: [generated.ts:2769](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2769)
 
 ***
 
@@ -25,7 +25,7 @@ Defined in: [generated.ts:2648](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **parameters?**: `object`
 
-Defined in: [generated.ts:2649](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2649)
+Defined in: [generated.ts:2770](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2770)
 
 #### value?
 
@@ -41,7 +41,7 @@ Defined in: [generated.ts:2649](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 #### required\_target\_keywords\_any?
 
-> `optional` **required\_target\_keywords\_any?**: [`KeywordList2`](../type-aliases/KeywordList2.md)
+> `optional` **required\_target\_keywords\_any?**: [`KeywordList4`](../type-aliases/KeywordList4.md)
 
 #### excluded\_target\_keywords?
 

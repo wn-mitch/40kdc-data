@@ -8,7 +8,7 @@
 
 > **stratagemCanTargetUnit**(`stratagem`, `members`, `triggerSubject?`, `printed?`): `boolean`
 
-Defined in: [abilities-resolver/resolver.ts:284](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/abilities-resolver/resolver.ts#L284)
+Defined in: [abilities-resolver/resolver.ts:288](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/abilities-resolver/resolver.ts#L288)
 
 Whether a unit of `members` (each member's keywords: a unit and the units attached to it) can
 be a stratagem's friendly target, as `stratagemCanTarget`. A target that selects a model needs

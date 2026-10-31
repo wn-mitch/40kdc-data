@@ -55,9 +55,21 @@ unsigned decisions file of `approve-shape` decisions for the members that pass e
 integrity gate projects each record alone into the dataset and runs the schema and
 referential-integrity checks `prepare-publication` runs, so a member that passes every gate is
 one publication accepts on its own. The reviewer signs the draft; `review-apply` records the
-approvals as `compiled_entries`, refusing an `approve-shape` decision whose members include one
-that fails that integrity check; `publishable` lists the approved entries that would change
-tracked data; `prepare-publication` and `publish` write them.
+approvals as `compiled_entries`. `approveShape` (`shapes.ts`) refuses a member whose compiled
+entry fails schema or canonical form, renders no describer text, fails its core-record checks,
+fails that integrity check, or carries a damage-path effect the cruncher cannot model
+(`cruncherGateErrors`, `gates.ts`). The describer round-trip similarity (`gates` reports it
+against a 0.55 floor, and the review sheet drafts approvals only above it) is a review signal,
+not an approval or publication gate. A `reject-shape` decision retracts any approval it follows;
+the latest decision is the only one standing. `publishable` lists the approved entries that would
+change tracked data; `prepare-publication` and `publish` write them. Both recheck that each
+entry's source is still current, byte-identical and fully described, and that its leaves are
+unchanged since approval; `buildProjection` (`publish.ts`) re-runs `recordGateErrors` on every
+entry it writes, so an approval recorded under older gates cannot publish a record that fails
+them. A family-version migration re-issues leaves and stales the approvals they fed; the
+`carry-approvals` review action (`carryApprovals`) re-records an approval under the current leaves
+when its approval-time leaves differ only by later migrations and the recompiled mechanics and
+core are byte-identical. Any reviewed leaf change keeps the record stale for review.
 
 The `_private/round5c/` directory is intentionally retained as the persisted workbench and
 artifact location so existing local databases and run history remain reachable. Stored algorithm

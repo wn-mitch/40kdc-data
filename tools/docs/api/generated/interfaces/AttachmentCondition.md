@@ -6,7 +6,7 @@
 
 # Interface: AttachmentCondition
 
-Defined in: [generated.ts:1913](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1913)
+Defined in: [generated.ts:2009](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2009)
 
 [composition] leading: the subject model is leading a unit (matching `with`, if given). led: the subject unit is led by a Leader matching `with`. attached: the subject is part of an attached unit.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:1913](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **type**: `"attachment"`
 
-Defined in: [generated.ts:1914](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1914)
+Defined in: [generated.ts:2010](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2010)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:1914](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **parameters**: `object`
 
-Defined in: [generated.ts:1915](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1915)
+Defined in: [generated.ts:2011](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2011)
 
 #### subject?
 

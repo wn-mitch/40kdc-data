@@ -163,9 +163,10 @@ If the schema genuinely cannot express it:
 2. Propose a MINIMAL extension aligned with existing patterns — a new `condition` type
    (condition.schema.json enum + its `$comment`), an optional `single-effect` field
    (effect.schema.json, e.g. `scaling`), or a documented modifier-narrowing key — and
-   wire it into the engine: add the key to `CANONICAL_MODIFIER_KEYS` and teach
-   `REPAIR_SYSTEM` in `tools/src/author-batch.ts` so future runs emit it.
-2b. **Teach the human-readable describer in ALL THREE ports — byte-identical.** A new
+   wire it into the leaf compiler: a semantic family in
+   `tools/src/semantic-authoring/families/` and its lowering in the
+   `tools/src/semantic-authoring/compile-*.ts` modules, so reviewed leaves emit it.
+2b. **Teach the human-readable describer in ALL FOUR ports — byte-identical.** A new
    `condition`/`effect` type that the schema accepts but a describer doesn't recognize
    falls through to a generic `dekebab(type)` fallback (e.g. `attack-stat-compare` →
    "attack stat compare") in whichever port forgot it — a silent **cross-impl parity
@@ -173,8 +174,9 @@ If the schema genuinely cannot express it:
    the `effect-translation` / `scoring-translation` areas). For every new type you MUST
    add a matching arm, producing **character-for-character identical** output, in all of:
    - `tools/src/translate/condition.ts` and/or `tools/src/translate/effect.ts` (TS — the corpus reference)
-   - `crates/wh40kdc/src/translate/mod.rs` and/or `effect.rs` (Rust)
-   - `python/src/wh40kdc/translate/condition.py` and/or `effect.py` (Python)
+   - `crates/wh40kdc/src/translate/condition/` and/or `effect/` (Rust)
+   - `python/src/wh40kdc/translate/condition*.py` and/or `effect*.py` (Python)
+   - `go/translate_condition*.go` and/or `go/translate_effect*.go` (Go)
    Match parameter handling exactly too (e.g. Rust's `unwrap_or("")` for a missing field
    renders as `""`, not TS `str()`'s `"?"`). The phrasing is pinned by the corpus, so this
    is a `SPEC_VERSION`-bumping change (Step 7 handles the bump + regen).
@@ -201,7 +203,7 @@ with no mechanical model (represent via `ability-grant {grant_type}`). Those mus
 ## When to Use
 
 When the user asks to author/import abilities from a PDF or JSON, structure raw
-abilities, fill ability stubs, or build the raw-text lookup. One ability, a unit's
+abilities, or fill ability stubs. One ability, a unit's
 worth, or a whole faction pack.
 
 ## Where source files live
@@ -308,18 +310,27 @@ workbench `ability_version_id`s (`query "SELECT id FROM abilities WHERE ability_
    file (`confirm`/`correct`/`add`/`surface`/`gap`/…, see `review-apply.ts`), signed with the
    user's reviewer name. Apply it with `review-apply <file>`, then
    `propagate --duplicate-texts --abilities <ids>`.
-3. Compile and gate: `gates --abilities <ids>` (read-only). The gates are schema, core checks,
+3. Compile and gate: `gates --abilities <ids>` (read-only). It reports schema, core checks,
    integrity (the schema and referential-integrity checks `prepare-publication` runs, on the
-   dataset with that record alone published), describer round-trip and cruncher shape.
+   dataset with that record alone published), describer round-trip similarity (against a 0.55
+   floor) and cruncher shape. The similarity score is a review signal; it does not block
+   approval or publication.
 4. Publication review: `review-sheet <faction> --out ../_private/round5c/review` writes
    `<faction>.md` (published vs compiled renders, lever diffs, failing gates) and an unsigned
-   `<faction>.decisions.json` of `approve-shape` decisions for the members that pass every gate.
-   The user reads the sheet and signs (sets `reviewer`) or edits the decisions; only then run
-   `review-apply` on it. An unsigned draft is refused, and so is an `approve-shape` decision
-   with a member that fails the integrity gate.
+   `<faction>.decisions.json` of `approve-shape` decisions for the members that pass every gate
+   `gates` reports. The user reads the sheet and signs (sets `reviewer`) or edits the decisions;
+   only then run `review-apply` on it. An unsigned draft is refused. An `approve-shape` decision
+   is refused when a member's compiled entry fails schema or canonical form, renders no describer
+   text, fails its core-record checks or the integrity gate, or carries a damage-path effect the
+   cruncher cannot model. A `reject-shape` decision retracts an earlier approval. After a
+   family-version migration stales approvals, a `carry-approvals` decision (optional
+   `faction_id`) re-records each one whose recompiled mechanics are byte-identical.
 5. Publish: `publishable --faction <faction>` lists the approved entries that change the tracked
-   record; `prepare-publication <faction> <entry-ids>` then `publish <batch-id> <preview-hash>`.
-   Publication validates the whole projected dataset before writing.
+   record; `publish-check <faction>` validates that projection without recording a batch;
+   `prepare-publication <faction> <entry-ids>` then `publish <batch-id> <preview-hash>`. Both
+   refuse an entry whose source changed or is no longer fully described, or whose leaves changed
+   since approval, re-run the record gates on every entry they write, and validate the whole
+   projected dataset before writing.
 
 The older `author:propose`/`author:repair`/`author:apply` scripts apply model output without
 leaf review. Do not use them for new authoring.
@@ -343,8 +354,7 @@ the private MFM dump, `_private/dump.json`), and the **DSL→English** readout. 
 `_private/reports/ability-review-<faction>.md` — **git-ignored, because it embeds GW text;
 never commit it.** Skim it to confirm each authored entry is faithful to the source meaning
 and that every omitted clause is explicitly reviewed as `DSL_GAP` or `[APPROX]`; do not
-accept a strongest-case rewrite as faithful.
-surface any genuine mismatch in the final report. Abilities whose own owner prints no dump text
+accept a strongest-case rewrite as faithful. Surface any genuine mismatch in the final report. Abilities whose own owner prints no dump text
 render `_(no dump text)_` — check them with `npm run prose -- grep`; they are usually
 misfiled or renamed, and the final report should list them.
 

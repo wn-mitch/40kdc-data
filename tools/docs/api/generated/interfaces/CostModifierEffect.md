@@ -6,7 +6,7 @@
 
 # Interface: CostModifierEffect
 
-Defined in: [generated.ts:5687](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5687)
+Defined in: [generated.ts:6062](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L6062)
 
 [resource] Change what a Stratagem, manoeuvre or ability costs.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:5687](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **type**: `"cost-modifier"`
 
-Defined in: [generated.ts:5688](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5688)
+Defined in: [generated.ts:6063](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L6063)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:5688](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **target**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:5689](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5689)
+Defined in: [generated.ts:6064](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L6064)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [generated.ts:5689](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **modifier**: `object`
 
-Defined in: [generated.ts:5690](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5690)
+Defined in: [generated.ts:6065](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L6065)
 
 #### of
 
@@ -60,4 +60,4 @@ Defined in: [generated.ts:5690](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **scaling?**: [`Scaling`](Scaling.md)
 
-Defined in: [generated.ts:5697](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5697)
+Defined in: [generated.ts:6072](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L6072)

@@ -2,7 +2,7 @@
 name: author-faction-detachments
 description: >-
   Author 11e faction-pack detachment metadata + new detachments with structured
-  ability DSL for a target faction, then verify across TS/Rust/Python. Use when a
+  ability DSL for a target faction, then verify across TS/Rust/Python/Go. Use when a
   faction pack PDF (in _private/) needs its detachments backfilled with
   detachment_points/force_dispositions, its new pack detachments added as core
   entities + DSL, redefined ports reconciled, and structured Rules Updates applied.
@@ -28,8 +28,12 @@ existing detachments that the pack merely reprints — backfill them only.
 ## 1. Extract the pack
 
 ```bash
-pdftotext -layout _private/<pack>.pdf /tmp/<faction>.txt && wc -l /tmp/<faction>.txt
+cd tools && npm run extract:faction-pack -- ../_private/<pack>.pdf --faction <faction>
 ```
+This reads the pack through `pdftotext -bbox-layout` per-word coordinates (it needs
+poppler's `pdftotext`) and writes names plus numeric/enum metadata, never prose, to
+`data/_audit/faction-pack-input/<faction>.json`. Do not linearize the pack with plain
+`pdftotext`; two-column layouts interleave and misassign cards.
 Read the **Contents / What's New** list and each detachment block. For each
 detachment, record: rule, enhancements, stratagems, CP costs, WHEN→phase/turn,
 and any `UNIQUE: <TAG>` line or "has the <X> tag" sentence (→ detachment `tags`).
@@ -65,8 +69,10 @@ Mirror the entity shapes already in the faction's files. Key fields:
   (UNIQUE groups), `granted_keywords` (construction keywords like Battleline→X —
   *not* combat keywords), `detachment_rule_id`, `enhancement_ids`, `stratagem_ids`.
 - **enhancement**: `detachment_id`, `cost` (provisional; `points_provisional:true`),
-  `keyword_restrictions`, `ability_id` (= the id), `upgrade_tag:true` for
-  non-character "UPGRADE" enhancements, `max_targets`.
+  `keyword_restrictions` (or `keyword_restriction_groups`), `datasheet_restriction_groups`
+  when eligibility names a datasheet rather than a keyword, `required_ability_ids` when the
+  bearer's datasheet must have a core ability (e.g. Deep Strike), `ability_id` (= the id),
+  `upgrade_tag:true` for non-character "UPGRADE" enhancements, `max_targets`.
 - **stratagem**: `category:"detachment"`, `detachment_id`, `cp_cost` (0–4),
   `phases` (from WHEN), `player_turn` (your-turn/opponent-turn/either),
   `timing`, `ability_id`. Omit `type` for newly introduced detachments
@@ -81,6 +87,12 @@ reactive|aura), effect, scope`. Also set `version:"2025-q3", supersedes:null,
 human-curated roster-highlighting predicate (`all_of`, `any_of`, `none_of`,
 and/or `not_all_of`; `null`/absent means no highlight, `{}` matches all).
 `applies_to` is not a runtime target.
+
+The mechanics (`effect`, `scope`, `trigger`, `usage`) come from the leaf path in
+`SEMANTIC_AUTHORING.md`: seed the ability record, then segment, review, compile and
+publish it with the `author-ability` skill's Step 5. Do not hand-write canonical DSL.
+The conventions below describe what the compiled DSL looks like, for reviewing it and
+finding precedents.
 
 Effect/condition/scope vocabulary is closed and documented in
 `schemas/enrichment/ability-dsl/{effect,condition,scope}.schema.json`. Do not
@@ -177,7 +189,7 @@ print(f"[{f}] dets={len(d)} dp_set={sum(1 for x in d if x['detachment_points'])}
 PY
 ```
 
-## 7. Tri-language parity (once, after all target factions authored)
+## 7. Cross-language parity (once, after all target factions authored)
 
 ```bash
 cd tools
@@ -187,7 +199,9 @@ python3 python/codegen/sync_bundle.py    # embedded data bundle
 python3 python/codegen/sync_spec.py      # _spec.py (SPEC_VERSION mirror) — easy to forget
 python3 python/codegen/gen_typeddicts.py # _types.py (only drifts if schemas changed)
 cd python && source .venv/bin/activate && python -m pytest tests -q  # Python reproduces
-cd .. && npm --prefix tools run audit:coverage                       # refresh coverage snapshot
+cd .. && bash go/codegen/sync.sh          # Go bundle/registry/schemas/spec.go
+(cd go && go test ./...)                  # Go reproduces
+npm --prefix tools run audit:coverage                       # refresh coverage snapshot
 ```
 
 If any file under `conformance/` changed (e.g. `effect-translation/cases.json`,
@@ -205,6 +219,6 @@ a bump and commit `_spec.py` with the corpus.
 
 ## 8. Commit
 
-Conventional commit, no scope. Commit data + regenerated Rust/Python bundles +
+Conventional commit, no scope. Commit data + regenerated Rust/Python/Go bundles +
 goldens + `SPEC_VERSION` + coverage snapshot together. The TS bundle
 (`tools/src/data/bundle.generated.ts`) is gitignored — don't try to commit it.

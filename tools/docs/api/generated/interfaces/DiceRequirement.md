@@ -6,7 +6,7 @@
 
 # Interface: DiceRequirement
 
-Defined in: [generated.ts:3969](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3969)
+Defined in: [generated.ts:4125](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4125)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "dice-requirement".
@@ -17,7 +17,7 @@ via the `definition` "dice-requirement".
 
 > **type**: `"pair"` \| `"triple"` \| `"single"` \| `"run"`
 
-Defined in: [generated.ts:3970](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3970)
+Defined in: [generated.ts:4126](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4126)
 
 ***
 
@@ -25,4 +25,4 @@ Defined in: [generated.ts:3970](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **min\_value**: `number`
 
-Defined in: [generated.ts:3971](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3971)
+Defined in: [generated.ts:4127](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4127)

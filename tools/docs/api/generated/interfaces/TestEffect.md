@@ -6,7 +6,7 @@
 
 # Interface: TestEffect
 
-Defined in: [generated.ts:5650](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5650)
+Defined in: [generated.ts:6025](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L6025)
 
 [test] Force the target to take a test (count or per: several rolls).
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:5650](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **type**: `"test"`
 
-Defined in: [generated.ts:5651](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5651)
+Defined in: [generated.ts:6026](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L6026)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:5651](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **target**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:5652](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5652)
+Defined in: [generated.ts:6027](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L6027)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [generated.ts:5652](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **modifier**: `object`
 
-Defined in: [generated.ts:5653](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5653)
+Defined in: [generated.ts:6028](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L6028)
 
 #### test
 
@@ -56,4 +56,4 @@ Defined in: [generated.ts:5653](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **scaling?**: [`Scaling`](Scaling.md)
 
-Defined in: [generated.ts:5659](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5659)
+Defined in: [generated.ts:6034](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L6034)

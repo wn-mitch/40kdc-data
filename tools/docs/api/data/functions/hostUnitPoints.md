@@ -8,7 +8,7 @@
 
 > **hostUnitPoints**(`unit`, `modelCount`, `ordinal?`, `hostFaction?`, `detachmentIds?`): `number`
 
-Defined in: [data/pricing.ts:121](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/pricing.ts#L121)
+Defined in: [data/pricing.ts:121](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/data/pricing.ts#L121)
 
 [baseUnitPoints](baseUnitPoints.md), but priced from the tier table in effect inside
 `hostFaction`'s army (see [hostPointsTiers](hostPointsTiers.md)). With no `hostFaction`

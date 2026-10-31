@@ -6,7 +6,7 @@
 
 # Interface: KeywordPredicate
 
-Defined in: [generated.ts:1141](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1141)
+Defined in: [generated.ts:1162](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L1162)
 
 A closed static keyword predicate. Absent or null is handled by the containing contract; an empty object matches every keyword set.
 
@@ -19,7 +19,7 @@ via the `definition` "keyword-predicate".
 
 > `optional` **all\_of?**: [`KeywordList`](../type-aliases/KeywordList.md)
 
-Defined in: [generated.ts:1142](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1142)
+Defined in: [generated.ts:1163](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L1163)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [generated.ts:1142](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **any\_of?**: [`KeywordList`](../type-aliases/KeywordList.md)
 
-Defined in: [generated.ts:1143](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1143)
+Defined in: [generated.ts:1164](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L1164)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [generated.ts:1143](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **none\_of?**: [`KeywordList`](../type-aliases/KeywordList.md)
 
-Defined in: [generated.ts:1144](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1144)
+Defined in: [generated.ts:1165](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L1165)
 
 ***
 
@@ -43,4 +43,4 @@ Defined in: [generated.ts:1144](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **not\_all\_of?**: [`KeywordList`](../type-aliases/KeywordList.md)
 
-Defined in: [generated.ts:1145](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1145)
+Defined in: [generated.ts:1166](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L1166)

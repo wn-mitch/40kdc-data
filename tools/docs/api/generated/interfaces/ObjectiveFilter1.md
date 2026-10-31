@@ -6,7 +6,7 @@
 
 # Interface: ObjectiveFilter1
 
-Defined in: [generated.ts:5761](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5761)
+Defined in: [generated.ts:6200](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L6200)
 
 Which objectives. Every listed property must hold.
 
@@ -16,7 +16,7 @@ Which objectives. Every listed property must hold.
 
 > `optional` **role?**: `"central"` \| `"expansion"` \| `"home"` \| `"non-home"`
 
-Defined in: [generated.ts:5762](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5762)
+Defined in: [generated.ts:6201](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L6201)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:5762](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **home\_of?**: `"friendly"` \| `"enemy"`
 
-Defined in: [generated.ts:5766](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5766)
+Defined in: [generated.ts:6205](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L6205)
 
 The friendly or the enemy home objective.
 
@@ -34,7 +34,7 @@ The friendly or the enemy home objective.
 
 > `optional` **territory?**: `"your-territory"` \| `"enemy-territory"` \| `"no-mans-land"` \| `"your-deployment-zone"` \| `"enemy-deployment-zone"`
 
-Defined in: [generated.ts:5767](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5767)
+Defined in: [generated.ts:6206](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L6206)
 
 ***
 
@@ -42,7 +42,7 @@ Defined in: [generated.ts:5767](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **controlled\_by?**: [`Owner`](../type-aliases/Owner.md)
 
-Defined in: [generated.ts:5768](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5768)
+Defined in: [generated.ts:6207](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L6207)
 
 ***
 
@@ -50,7 +50,7 @@ Defined in: [generated.ts:5768](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **designated?**: `string`
 
-Defined in: [generated.ts:5769](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5769)
+Defined in: [generated.ts:6208](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L6208)
 
 ***
 
@@ -58,7 +58,7 @@ Defined in: [generated.ts:5769](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **name?**: `string`
 
-Defined in: [generated.ts:5773](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5773)
+Defined in: [generated.ts:6212](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L6212)
 
 Kebab-case identifier
 
@@ -68,7 +68,7 @@ Kebab-case identifier
 
 > `optional` **selection\_var?**: `string`
 
-Defined in: [generated.ts:5777](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5777)
+Defined in: [generated.ts:6216](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L6216)
 
 The objective marker a select-objective step bound.
 
@@ -78,7 +78,7 @@ The objective marker a select-objective step bound.
 
 > `optional` **within?**: `object`
 
-Defined in: [generated.ts:5781](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5781)
+Defined in: [generated.ts:6220](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L6220)
 
 Only objective markers within this range of `of` (default the model with the ability).
 
@@ -94,11 +94,91 @@ Only objective markers within this range of `of` (default the model with the abi
 
 ### controlled\_by\_unit?
 
-> `optional` **controlled\_by\_unit?**: `"this-unit"` \| `"this-model"` \| `"model-in-this-unit"` \| `"attacker"` \| `"defender"` \| `"event-subject"` \| `"event-object"` \| `"stratagem-target"` \| `"selected-unit"` \| `"recipient"` \| `"bearer-transport"` \| `"ability-unit"` \| [`UnitFilter`](UnitFilter.md) \| \{ `event_var`: `string`; \} \| \{ `selection_var`: `string`; \} \| \{ `stratagem_target`: `string`; \}
+> `optional` **controlled\_by\_unit?**: `"this-unit"` \| `"this-model"` \| `"model-in-this-unit"` \| `"attacker"` \| `"defender"` \| `"event-subject"` \| `"event-object"` \| `"stratagem-target"` \| `"selected-unit"` \| `"recipient"` \| `"bearer-transport"` \| `"ability-unit"` \| [`UnitFilter`](UnitFilter.md) \| \{ `event_var`: `string`; `role?`: `"object"`; \} \| \{ `selection_var`: `string`; \} \| \{ `stratagem_target`: `string`; \}
 
-Defined in: [generated.ts:5788](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5788)
+Defined in: [generated.ts:6227](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L6227)
 
 Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
+
+#### Union Members
+
+`"this-unit"`
+
+***
+
+`"this-model"`
+
+***
+
+`"model-in-this-unit"`
+
+***
+
+`"attacker"`
+
+***
+
+`"defender"`
+
+***
+
+`"event-subject"`
+
+***
+
+`"event-object"`
+
+***
+
+`"stratagem-target"`
+
+***
+
+`"selected-unit"`
+
+***
+
+`"recipient"`
+
+***
+
+`"bearer-transport"`
+
+***
+
+`"ability-unit"`
+
+***
+
+[`UnitFilter`](UnitFilter.md)
+
+***
+
+##### Type Literal
+
+\{ `event_var`: `string`; `role?`: `"object"`; \}
+
+##### event\_var
+
+> **event\_var**: `string`
+
+##### role?
+
+> `optional` **role?**: `"object"`
+
+The bound event's object (the unit it was aimed at) instead of its actor.
+
+***
+
+##### Type Literal
+
+\{ `selection_var`: `string`; \}
+
+***
+
+##### Type Literal
+
+\{ `stratagem_target`: `string`; \}
 
 ***
 
@@ -106,4 +186,4 @@ Which unit a predicate or trigger talks about. A fixed role, a filter for 'any u
 
 > `optional` **clear\_of?**: [`UnitFilter1`](UnitFilter1.md)
 
-Defined in: [generated.ts:5813](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5813)
+Defined in: [generated.ts:6256](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L6256)

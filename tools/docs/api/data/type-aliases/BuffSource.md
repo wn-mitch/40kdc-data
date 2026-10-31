@@ -8,7 +8,7 @@
 
 > **BuffSource** = \{ `kind`: `"weapon-keyword"`; `weaponId`: `string`; `keywordId`: `string`; \} \| \{ `kind`: `"ability"`; `abilityId`: `string`; `abilityKind`: `"army"` \| `"detachment"` \| `"detachment-stratagem"` \| `"unit"` \| `"attached"` \| `"support"`; `sourceUnitId?`: `string`; `selectsModel?`: `true`; \} \| \{ `kind`: `"manual"`; `label`: `string`; \}
 
-Defined in: [cruncher/buffs.ts:20](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/buffs.ts#L20)
+Defined in: [cruncher/buffs.ts:20](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/cruncher/buffs.ts#L20)
 
 Where a buff originated. Drives stable tie-breaking inside `resolveBuffs`.
 

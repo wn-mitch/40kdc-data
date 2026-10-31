@@ -6,7 +6,7 @@
 
 # Interface: AuraEffect
 
-Defined in: [generated.ts:4078](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4078)
+Defined in: [generated.ts:4238](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4238)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "aura-effect".
@@ -17,7 +17,7 @@ via the `definition` "aura-effect".
 
 > **type**: `"aura"`
 
-Defined in: [generated.ts:4079](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4079)
+Defined in: [generated.ts:4239](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4239)
 
 ***
 
@@ -25,7 +25,7 @@ Defined in: [generated.ts:4079](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **target**: `"enemy-within-aura"` \| `"friendly-within-aura"`
 
-Defined in: [generated.ts:4080](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4080)
+Defined in: [generated.ts:4240](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4240)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [generated.ts:4080](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **modifier**: `object`
 
-Defined in: [generated.ts:4081](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4081)
+Defined in: [generated.ts:4241](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4241)
 
 #### range?
 

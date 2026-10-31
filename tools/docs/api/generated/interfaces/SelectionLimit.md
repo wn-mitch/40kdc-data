@@ -6,7 +6,7 @@
 
 # Interface: SelectionLimit
 
-Defined in: [generated.ts:1828](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1828)
+Defined in: [generated.ts:1923](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L1923)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "selection-limit".
@@ -17,7 +17,7 @@ via the `definition` "selection-limit".
 
 > **count**: `number`
 
-Defined in: [generated.ts:1829](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1829)
+Defined in: [generated.ts:1924](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L1924)
 
 ***
 
@@ -25,4 +25,4 @@ Defined in: [generated.ts:1829](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **period**: [`Period`](../type-aliases/Period.md)
 
-Defined in: [generated.ts:1830](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1830)
+Defined in: [generated.ts:1925](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L1925)

@@ -8,7 +8,7 @@
 
 > **DiceRequirementSpec** = [`DiceRequirement`](../interfaces/DiceRequirement.md) \| \{ `any_of`: \[[`DiceRequirement`](../interfaces/DiceRequirement.md), [`DiceRequirement`](../interfaces/DiceRequirement.md), `...DiceRequirement[]`\]; \}
 
-Defined in: [generated.ts:904](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L904)
+Defined in: [generated.ts:922](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L922)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "dice-requirement-spec".

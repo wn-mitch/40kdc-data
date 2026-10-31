@@ -8,7 +8,7 @@
 
 > **GameModes1** = \[[`GameModeId`](GameModeId.md), `...GameModeId[]`\]
 
-Defined in: [generated.ts:657](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L657)
+Defined in: [generated.ts:673](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L673)
 
 Game modes this detachment is legal or authored for; absent implies matched-play.
 

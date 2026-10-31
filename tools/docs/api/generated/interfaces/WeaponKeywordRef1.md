@@ -6,7 +6,7 @@
 
 # Interface: WeaponKeywordRef1
 
-Defined in: [generated.ts:2663](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2663)
+Defined in: [generated.ts:2784](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2784)
 
 A catalog-backed weapon keyword selector. Parameters may omit a rating when matching any rating.
 
@@ -19,7 +19,7 @@ via the `definition` "weapon-keyword-selector".
 
 > **keyword\_id**: `string`
 
-Defined in: [generated.ts:2664](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2664)
+Defined in: [generated.ts:2785](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2785)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [generated.ts:2664](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **parameters?**: `object`
 
-Defined in: [generated.ts:2665](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2665)
+Defined in: [generated.ts:2786](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2786)
 
 #### value?
 
@@ -43,7 +43,7 @@ Defined in: [generated.ts:2665](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 #### required\_target\_keywords\_any?
 
-> `optional` **required\_target\_keywords\_any?**: [`KeywordList2`](../type-aliases/KeywordList2.md)
+> `optional` **required\_target\_keywords\_any?**: [`KeywordList4`](../type-aliases/KeywordList4.md)
 
 #### excluded\_target\_keywords?
 

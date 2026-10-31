@@ -6,9 +6,9 @@
 
 # Interface: CountOf
 
-Defined in: [generated.ts:1184](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1184)
+Defined in: [generated.ts:1209](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L1209)
 
-A number equal to how many of `count_of` there are (models in this unit with `keyword`, models equipped with `wargear`, the battle round number).
+A number equal to how many of `count_of` there are (models in this unit with `keyword`, models equipped with `wargear`, the battle round number, your markers labelled `marker` on the battlefield).
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "count-of".
@@ -17,9 +17,9 @@ via the `definition` "count-of".
 
 ### count\_of
 
-> **count\_of**: [`ScalingSource`](../type-aliases/ScalingSource.md)
+> **count\_of**: [`ScalingSource`](../type-aliases/ScalingSource.md) \| `"markers"`
 
-Defined in: [generated.ts:1185](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1185)
+Defined in: [generated.ts:1210](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L1210)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [generated.ts:1185](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **keyword?**: `string`
 
-Defined in: [generated.ts:1186](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1186)
+Defined in: [generated.ts:1211](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L1211)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [generated.ts:1186](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **wargear?**: `string`
 
-Defined in: [generated.ts:1187](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1187)
+Defined in: [generated.ts:1212](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L1212)
 
 ***
 
@@ -43,7 +43,7 @@ Defined in: [generated.ts:1187](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **within?**: [`NonTieredRangeRef`](../type-aliases/NonTieredRangeRef.md) \| \{ `per_battle_round`: \[[`NonTieredRangeRef`](../type-aliases/NonTieredRangeRef.md), `...NonTieredRangeRef[]`\]; \}
 
-Defined in: [generated.ts:1191](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1191)
+Defined in: [generated.ts:1216](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L1216)
 
 Reach used by count sources that count models or units within a named range.
 
@@ -64,3 +64,13 @@ Reach used by count sources that count models or units within a named range.
 ###### Min Items
 
 1
+
+***
+
+### marker?
+
+> `optional` **marker?**: `string`
+
+Defined in: [generated.ts:1227](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L1227)
+
+Kebab-case identifier

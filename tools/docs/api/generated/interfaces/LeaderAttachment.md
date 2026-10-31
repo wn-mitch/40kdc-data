@@ -6,7 +6,7 @@
 
 # Interface: LeaderAttachment
 
-Defined in: [generated.ts:3188](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3188)
+Defined in: [generated.ts:3315](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3315)
 
 Defines which character units can attach to which bodyguard units.
 
@@ -19,7 +19,7 @@ via the `definition` "leader-attachment".
 
 > **leader\_id**: `string`
 
-Defined in: [generated.ts:3189](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3189)
+Defined in: [generated.ts:3316](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3316)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [generated.ts:3189](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **eligible\_bodyguard\_ids**: `string`[]
 
-Defined in: [generated.ts:3190](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3190)
+Defined in: [generated.ts:3317](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3317)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [generated.ts:3190](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **eligible\_bodyguard\_keywords?**: \[`string`, `...string[]`\]
 
-Defined in: [generated.ts:3196](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3196)
+Defined in: [generated.ts:3323](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3323)
 
 Optional keyword-based eligibility: any unit whose keyword set (keywords ∪ faction_keywords, case-insensitive) contains ALL of these is also an eligible bodyguard, in addition to eligible_bodyguard_ids. Models rules like an Inquisitor leading any IMPERIUM BATTLELINE INFANTRY unit.
 
@@ -49,7 +49,7 @@ Optional keyword-based eligibility: any unit whose keyword set (keywords ∪ fac
 
 > `optional` **conditional\_groups?**: \[\{ `role`: `"leader"` \| `"support"`; `eligible_bodyguard_ids`: \[`string`, `...string[]`\]; `required_roster_unit_ids?`: \[`string`, `...string[]`\]; `excluded_roster_unit_ids?`: \[`string`, `...string[]`\]; \}, ...\{ role: "leader" \| "support"; eligible\_bodyguard\_ids: \[string, ...string\[\]\]; required\_roster\_unit\_ids?: \[string, ...string\[\]\]; excluded\_roster\_unit\_ids?: \[string, ...string\[\]\] \}\[\]\]
 
-Defined in: [generated.ts:3202](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3202)
+Defined in: [generated.ts:3329](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3329)
 
 Attachment eligibility and role that apply only when all required roster units and no excluded roster units are present.
 
@@ -63,4 +63,4 @@ Attachment eligibility and role that apply only when all required roster units a
 
 > **game\_version**: [`GameVersionReference`](GameVersionReference.md)
 
-Defined in: [generated.ts:3234](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3234)
+Defined in: [generated.ts:3361](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3361)

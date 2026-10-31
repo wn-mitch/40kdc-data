@@ -5,8 +5,8 @@
  * The dump is authoritative for the live game (it IS the MFM); it supersedes the
  * army-assist → convert-faction path as the upstream source. The Legends/Forge-World
  * tail the dump omits is dropped from the repo (see the cull-legends subcommand), not
- * backfilled. Numeric/structural fields land here; GW prose routes to the out-of-repo
- * store (never committed here).
+ * backfilled. Numeric/structural fields land here; GW prose stays in the private dump,
+ * read through mfm/record-prose.ts (never committed here).
  *
  * Subcommands (more land in later phases):
  *   coverage      Report dump-vs-repo coverage; writes no data. (phase 1)

@@ -8,7 +8,7 @@
 
 > **AllocationDefences** = `object`
 
-Defined in: [cruncher/allocation.ts:38](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/allocation.ts#L38)
+Defined in: [cruncher/allocation.ts:38](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/cruncher/allocation.ts#L38)
 
 Defender options that act on individual attacks, which only the allocation stage sees.
 
@@ -18,4 +18,4 @@ Defender options that act on individual attacks, which only the allocation stage
 
 > `optional` **zeroing?**: [`DamageZeroing`](DamageZeroing.md)
 
-Defined in: [cruncher/allocation.ts:38](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/allocation.ts#L38)
+Defined in: [cruncher/allocation.ts:38](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/cruncher/allocation.ts#L38)

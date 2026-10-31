@@ -6,7 +6,7 @@
 
 # Interface: WeaponAbilityGrantEffect
 
-Defined in: [generated.ts:3658](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3658)
+Defined in: [generated.ts:3785](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3785)
 
 [ability] Give the target's weapons weapon abilities. if_present: increment raises an ability the weapon already has by the granted rating.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:3658](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **type**: `"weapon-ability-grant"`
 
-Defined in: [generated.ts:3659](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3659)
+Defined in: [generated.ts:3786](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3786)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:3659](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **target**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:3660](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3660)
+Defined in: [generated.ts:3787](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3787)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [generated.ts:3660](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **modifier**: `object`
 
-Defined in: [generated.ts:3661](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3661)
+Defined in: [generated.ts:3788](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3788)
 
 #### removes?
 
@@ -68,4 +68,4 @@ Defined in: [generated.ts:3661](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **scaling?**: [`Scaling`](Scaling.md)
 
-Defined in: [generated.ts:3674](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3674)
+Defined in: [generated.ts:3801](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3801)

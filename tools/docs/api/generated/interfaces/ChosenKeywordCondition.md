@@ -6,7 +6,7 @@
 
 # Interface: ChosenKeywordCondition
 
-Defined in: [generated.ts:1893](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1893)
+Defined in: [generated.ts:1989](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L1989)
 
 [identity] The subject carries the keyword this ability had the player pick.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:1893](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **type**: `"has-keyword"`
 
-Defined in: [generated.ts:1894](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1894)
+Defined in: [generated.ts:1990](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L1990)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:1894](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **parameters**: `object`
 
-Defined in: [generated.ts:1895](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1895)
+Defined in: [generated.ts:1991](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L1991)
 
 #### subject?
 

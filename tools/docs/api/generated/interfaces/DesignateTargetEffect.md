@@ -6,7 +6,7 @@
 
 # Interface: DesignateTargetEffect
 
-Defined in: [generated.ts:4120](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4120)
+Defined in: [generated.ts:4280](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4280)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "designate-target-effect".
@@ -17,7 +17,7 @@ via the `definition` "designate-target-effect".
 
 > **type**: `"designate-target"`
 
-Defined in: [generated.ts:4121](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4121)
+Defined in: [generated.ts:4281](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4281)
 
 ***
 
@@ -25,7 +25,7 @@ Defined in: [generated.ts:4121](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **designation**: `string`
 
-Defined in: [generated.ts:4122](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4122)
+Defined in: [generated.ts:4282](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4282)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [generated.ts:4122](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **select**: `object`
 
-Defined in: [generated.ts:4123](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4123)
+Defined in: [generated.ts:4283](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4283)
 
 #### kind
 
@@ -47,33 +47,11 @@ Defined in: [generated.ts:4123](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 ### applies
 
-> **applies**: `object`
+> **applies**: [`DesignationApplies`](DesignationApplies.md) \| \[[`DesignationApplies`](DesignationApplies.md) & `object`, [`DesignationApplies`](DesignationApplies.md) & `object`\] \| \[[`DesignationApplies`](DesignationApplies.md) & `object`, [`DesignationApplies`](DesignationApplies.md) & `object`, [`DesignationApplies`](DesignationApplies.md) & `object`\]
 
-Defined in: [generated.ts:4127](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4127)
+Defined in: [generated.ts:4290](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4290)
 
-#### to
-
-> **to**: `"target"` \| `"attackers-of-target"` \| `"bearer-attacks-target"` \| `"bound-unit-attacks-reference"`
-
-#### effect
-
-> **effect**: [`EffectNode`](../type-aliases/EffectNode.md)
-
-#### attacker\_filter?
-
-> `optional` **attacker\_filter?**: [`UnitFilter`](UnitFilter.md)
-
-#### attacker\_unit\_filter?
-
-> `optional` **attacker\_unit\_filter?**: [`UnitFilter`](UnitFilter.md)
-
-#### beneficiary?
-
-> `optional` **beneficiary?**: [`EventOrSelectionReference`](../type-aliases/EventOrSelectionReference.md)
-
-#### reference?
-
-> `optional` **reference?**: [`SelectionReference`](SelectionReference.md)
+What the designation does: one entry, or one entry per `to` when it does more than one thing to the designated unit ("that enemy unit cannot have the Benefit of Cover, and each time a friendly unit makes an attack that targets that unit, …"). Each entry of a list names a different `to`; a list never holds bound-unit-attacks-reference.
 
 ***
 
@@ -81,4 +59,4 @@ Defined in: [generated.ts:4127](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **duration?**: [`ScopeDuration`](../type-aliases/ScopeDuration.md)
 
-Defined in: [generated.ts:4135](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4135)
+Defined in: [generated.ts:4316](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4316)

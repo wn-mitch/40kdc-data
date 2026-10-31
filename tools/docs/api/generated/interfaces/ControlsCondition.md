@@ -6,7 +6,7 @@
 
 # Interface: ControlsCondition
 
-Defined in: [generated.ts:2379](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2379)
+Defined in: [generated.ts:2490](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2490)
 
 [board] A player controls objectives matching the filter. `count` supplies inclusive bounds; `compare` compares the controlling player's count with the named owner's count over the same objective filter; `proportion` compares controlled matching markers with a fraction of all matching markers.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:2379](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **type**: `"controls"`
 
-Defined in: [generated.ts:2380](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2380)
+Defined in: [generated.ts:2491](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2491)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:2380](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **parameters?**: `object`
 
-Defined in: [generated.ts:2381](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2381)
+Defined in: [generated.ts:2492](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2492)
 
 #### by?
 

@@ -6,7 +6,7 @@
 
 # Interface: AlliedRule
 
-Defined in: [generated.ts:2772](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2772)
+Defined in: [generated.ts:2893](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2893)
 
 A community-authored model of an allied-detachment / 'soup' rule: the named exception by which units lacking the army's chosen Faction keyword may still be included (e.g. Daemonic Pact, Brood Brothers, Iconoclast Fiefdom's Damned access). One rule = one allied source pool; a faction that allies in several pools (the Chaos cult pattern: a Chaos Knights pool plus a matching-god Daemons pool) carries one rule per pool. The rule is gated by two optional, AND-combined conditions: an army-wide keyword condition (`army_keywords_any`) and/or a selected detachment (`detachment_ids`).
 
@@ -19,7 +19,7 @@ via the `definition` "allied-rule".
 
 > **id**: `string`
 
-Defined in: [generated.ts:2773](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2773)
+Defined in: [generated.ts:2894](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2894)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [generated.ts:2773](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **name**: `string`
 
-Defined in: [generated.ts:2774](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2774)
+Defined in: [generated.ts:2895](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2895)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [generated.ts:2774](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **label?**: `string`
 
-Defined in: [generated.ts:2778](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2778)
+Defined in: [generated.ts:2899](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2899)
 
 Short panel/category heading a list builder groups this pool under (e.g. 'Daemons', 'Imperial Agents', 'Titanic Allies'). Defaults to `name` when omitted.
 
@@ -43,9 +43,9 @@ Short panel/category heading a list builder groups this pool under (e.g. 'Daemon
 
 ### army\_keywords\_any?
 
-> `optional` **army\_keywords\_any?**: [`KeywordList3`](../type-aliases/KeywordList3.md)
+> `optional` **army\_keywords\_any?**: [`KeywordList5`](../type-aliases/KeywordList5.md)
 
-Defined in: [generated.ts:2779](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2779)
+Defined in: [generated.ts:2900](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2900)
 
 ***
 
@@ -53,7 +53,7 @@ Defined in: [generated.ts:2779](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **detachment\_ids?**: `string`[]
 
-Defined in: [generated.ts:2783](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2783)
+Defined in: [generated.ts:2904](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2904)
 
 Detachment gate: the rule applies only when at least one listed detachment is selected. Empty/absent = no detachment gate. Replaces the former single detachment_id (GW pools may gate on several detachments).
 
@@ -63,7 +63,7 @@ Detachment gate: the rule applies only when at least one listed detachment is se
 
 > `optional` **source\_faction\_id?**: `string` \| `null`
 
-Defined in: [generated.ts:2787](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2787)
+Defined in: [generated.ts:2908](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2908)
 
 Faction the ally pool is drawn from, when scoping by faction is needed to disambiguate units whose id is shared across factions. Optional hint; `source_keywords` is the primary filter.
 
@@ -71,9 +71,9 @@ Faction the ally pool is drawn from, when scoping by faction is needed to disamb
 
 ### source\_keywords?
 
-> `optional` **source\_keywords?**: [`KeywordList4`](../type-aliases/KeywordList4.md)
+> `optional` **source\_keywords?**: [`KeywordList6`](../type-aliases/KeywordList6.md)
 
-Defined in: [generated.ts:2788](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2788)
+Defined in: [generated.ts:2909](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2909)
 
 ***
 
@@ -81,7 +81,7 @@ Defined in: [generated.ts:2788](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **source\_datasheet\_ids?**: `string`[]
 
-Defined in: [generated.ts:2792](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2792)
+Defined in: [generated.ts:2913](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2913)
 
 Explicit datasheet allowlist: when non-empty, a unit qualifies only if its id is listed (AND-combined with source_keywords/required_keywords/excluded_keywords/roles). GW soup pools enumerate by datasheet; this is the primary unit selector for generated rules. Empty/absent = no datasheet-level restriction.
 
@@ -89,17 +89,17 @@ Explicit datasheet allowlist: when non-empty, a unit qualifies only if its id is
 
 ### required\_keywords?
 
-> `optional` **required\_keywords?**: [`KeywordList5`](../type-aliases/KeywordList5.md)
+> `optional` **required\_keywords?**: [`KeywordList7`](../type-aliases/KeywordList7.md)
 
-Defined in: [generated.ts:2793](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2793)
+Defined in: [generated.ts:2914](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2914)
 
 ***
 
 ### excluded\_keywords?
 
-> `optional` **excluded\_keywords?**: [`KeywordList6`](../type-aliases/KeywordList6.md)
+> `optional` **excluded\_keywords?**: [`KeywordList8`](../type-aliases/KeywordList8.md)
 
-Defined in: [generated.ts:2794](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2794)
+Defined in: [generated.ts:2915](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2915)
 
 ***
 
@@ -107,7 +107,7 @@ Defined in: [generated.ts:2794](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **roles?**: `string`[]
 
-Defined in: [generated.ts:2798](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2798)
+Defined in: [generated.ts:2919](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2919)
 
 Optional battlefield-role filter (matched against a unit's `role`). Empty = no role restriction.
 
@@ -117,7 +117,7 @@ Optional battlefield-role filter (matched against a unit's `role`). Empty = no r
 
 > `optional` **points\_limits?**: [`AlliedPointsLimit`](AlliedPointsLimit.md)[]
 
-Defined in: [generated.ts:2802](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2802)
+Defined in: [generated.ts:2923](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2923)
 
 Absolute points cap on the combined cost of units included via this rule, per battle size. Empty = no points cap. A rule lists at most one entry per battle size.
 
@@ -127,7 +127,7 @@ Absolute points cap on the combined cost of units included via this rule, per ba
 
 > `optional` **keyword\_limits?**: [`AlliedKeywordLimit`](AlliedKeywordLimit.md)[]
 
-Defined in: [generated.ts:2806](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2806)
+Defined in: [generated.ts:2927](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2927)
 
 Per-keyword, per-battle-size cap on how many units carrying `keyword` may be included via this rule (e.g. Imperial Knights' Titanic 1 / Armiger 3; Agents of the Imperium's Character/Retinue/Requisitioned counts). Advisory construction cap.
 
@@ -137,7 +137,7 @@ Per-keyword, per-battle-size cap on how many units carrying `keyword` may be inc
 
 > `optional` **max\_units?**: `number` \| `null`
 
-Defined in: [generated.ts:2810](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2810)
+Defined in: [generated.ts:2931](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2931)
 
 Optional cap on the number of units included via this rule, independent of points. null = no unit-count cap.
 
@@ -147,7 +147,7 @@ Optional cap on the number of units included via this rule, independent of point
 
 > `optional` **exclusive?**: `boolean`
 
-Defined in: [generated.ts:2814](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2814)
+Defined in: [generated.ts:2935](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2935)
 
 True when the pool's units are not part of the source faction's own roster: an army of `source_faction_id` may take them only through this rule (its detachment gate, caps and locks), never as ordinary picks. Models a sibling-faction pool printed in the host's own codex, e.g. World Eaters' Blood Legions daemons, available only under Khorne Daemonkin.
 
@@ -157,7 +157,7 @@ True when the pool's units are not part of the source faction's own roster: an a
 
 > `optional` **cannot\_be\_warlord?**: `boolean`
 
-Defined in: [generated.ts:2818](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2818)
+Defined in: [generated.ts:2939](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2939)
 
 True when units included via this rule cannot be the army's Warlord (e.g. Daemonic Pact, Star Children's Blessings).
 
@@ -167,7 +167,7 @@ True when units included via this rule cannot be the army's Warlord (e.g. Daemon
 
 > `optional` **cannot\_take\_enhancements?**: `boolean`
 
-Defined in: [generated.ts:2822](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2822)
+Defined in: [generated.ts:2943](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2943)
 
 True when units included via this rule cannot be given Enhancements (e.g. Daemonic Pact).
 
@@ -177,7 +177,7 @@ True when units included via this rule cannot be given Enhancements (e.g. Daemon
 
 > `optional` **warlord\_required\_keyword?**: `string` \| `null`
 
-Defined in: [generated.ts:2826](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2826)
+Defined in: [generated.ts:2947](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2947)
 
 Host-Warlord requirement: a model carrying this keyword must be the army's Warlord (e.g. Brood Brothers requires a 'Genestealer Cults' Warlord). null = no such requirement.
 
@@ -187,7 +187,7 @@ Host-Warlord requirement: a model carrying this keyword must be the army's Warlo
 
 > `optional` **warlord\_datasheet\_ids?**: `string`[]
 
-Defined in: [generated.ts:2830](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2830)
+Defined in: [generated.ts:2951](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2951)
 
 Datasheet allowlist for which units included via this rule may be the army Warlord (the specific characters GW permits). Non-empty = only these may be Warlord among the pool's units; pair with cannot_be_warlord:false. Empty/absent = no per-datasheet warlord allowlist.
 
@@ -197,7 +197,7 @@ Datasheet allowlist for which units included via this rule may be the army Warlo
 
 > `optional` **removes\_ability\_ids?**: `string`[]
 
-Defined in: [generated.ts:2834](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2834)
+Defined in: [generated.ts:2955](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2955)
 
 Abilities that included units lose under this rule (e.g. Astra Militarum units lose 'voice-of-command' under Brood Brothers). A display/effect hint, not a construction constraint.
 
@@ -205,9 +205,9 @@ Abilities that included units lose under this rule (e.g. Astra Militarum units l
 
 ### battleline\_ratio\_keywords?
 
-> `optional` **battleline\_ratio\_keywords?**: [`KeywordList7`](../type-aliases/KeywordList7.md)
+> `optional` **battleline\_ratio\_keywords?**: [`KeywordList9`](../type-aliases/KeywordList9.md)
 
-Defined in: [generated.ts:2835](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2835)
+Defined in: [generated.ts:2956](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2956)
 
 ***
 
@@ -215,7 +215,7 @@ Defined in: [generated.ts:2835](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **game\_version**: [`GameVersionReference`](GameVersionReference.md)
 
-Defined in: [generated.ts:2836](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2836)
+Defined in: [generated.ts:2957](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2957)
 
 ***
 
@@ -223,4 +223,4 @@ Defined in: [generated.ts:2836](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **notes?**: `string`
 
-Defined in: [generated.ts:2837](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2837)
+Defined in: [generated.ts:2958](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2958)

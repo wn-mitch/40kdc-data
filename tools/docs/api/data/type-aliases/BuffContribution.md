@@ -6,9 +6,9 @@
 
 # Type Alias: BuffContribution
 
-> **BuffContribution** = \{ `type`: `"hit-mod"`; `value`: `number`; \} \| \{ `type`: `"wound-mod"`; `value`: `number`; \} \| \{ `type`: `"save-mod"`; `value`: `number`; \} \| \{ `type`: `"cover"`; \} \| \{ `type`: `"reroll"`; `roll`: `"hit"` \| `"wound"` \| `"save"` \| `"damage"`; `subset`: `"ones"` \| `"all-failures"`; \} \| \{ `type`: `"reroll-one"`; `roll`: `"hit"` \| `"wound"` \| `"save"` \| `"damage"`; \} \| \{ `type`: `"extra-keyword"`; `keywordRef`: [`WeaponKeywordRef`](../../generated/interfaces/WeaponKeywordRef.md); \} \| \{ `type`: `"feel-no-pain"`; `threshold`: `number`; `scope?`: `"all"` \| `"mortal"`; \} \| \{ `type`: `"damage-mod"`; `value`: `number`; \} \| \{ `type`: `"attacks-mod"`; `value`: `number`; \} \| \{ `type`: `"strength-mod"`; `value`: `number`; \} \| \{ `type`: `"toughness-mod"`; `value`: `number`; \} \| \{ `type`: `"ap-mod"`; `value`: `number`; \} \| \{ `type`: `"stat-set"`; `stat`: `SetStat`; `value`: `number`; \} \| \{ `type`: `"damage-reduction"`; `value`: `number`; \} \| \{ `type`: `"damage-zeroing"`; `uses`: `number`; `per`: `"unit"` \| `"model"`; \} \| \{ `type`: `"invulnerable-save"`; `threshold`: `number`; \} \| \{ `type`: `"crit-threshold"`; `roll`: `"hit"` \| `"wound"`; `value`: `number`; \} \| \{ `type`: `"ignore-modifiers"`; `roll`: `"hit"` \| `"wound"`; \} \| \{ `type`: `"skill-mod"`; `stat`: `"WS"` \| `"BS"`; `value`: `number`; \} \| \{ `type`: `"save-characteristic"`; `value`: `number`; \} \| \{ `type`: `"save-improve"`; `value`: `number`; `best`: `number`; \}
+> **BuffContribution** = \{ `type`: `"hit-mod"`; `value`: `number`; \} \| \{ `type`: `"wound-mod"`; `value`: `number`; \} \| \{ `type`: `"save-mod"`; `value`: `number`; \} \| \{ `type`: `"cover"`; \} \| \{ `type`: `"reroll"`; `roll`: `"hit"` \| `"wound"` \| `"save"` \| `"damage"` \| `"attacks"`; `subset`: `"ones"` \| `"all-failures"`; \} \| \{ `type`: `"reroll-one"`; `roll`: `"hit"` \| `"wound"` \| `"save"` \| `"damage"`; \} \| \{ `type`: `"extra-keyword"`; `keywordRef`: [`WeaponKeywordRef`](../../generated/interfaces/WeaponKeywordRef.md); \} \| \{ `type`: `"feel-no-pain"`; `threshold`: `number`; `scope?`: `"all"` \| `"mortal"`; \} \| \{ `type`: `"damage-mod"`; `value`: `number`; \} \| \{ `type`: `"attacks-mod"`; `value`: `number`; \} \| \{ `type`: `"strength-mod"`; `value`: `number`; \} \| \{ `type`: `"toughness-mod"`; `value`: `number`; \} \| \{ `type`: `"ap-mod"`; `value`: `number`; \} \| \{ `type`: `"stat-set"`; `stat`: `SetStat`; `value`: `number`; \} \| \{ `type`: `"damage-reduction"`; `value`: `number`; \} \| \{ `type`: `"damage-zeroing"`; `uses`: `number`; `per`: `"unit"` \| `"model"`; \} \| \{ `type`: `"invulnerable-save"`; `threshold`: `number`; \} \| \{ `type`: `"crit-threshold"`; `roll`: `"hit"` \| `"wound"`; `value`: `number`; \} \| \{ `type`: `"ignore-modifiers"`; `roll`: `"hit"` \| `"wound"`; \} \| \{ `type`: `"skill-mod"`; `stat`: `"WS"` \| `"BS"`; `value`: `number`; \} \| \{ `type`: `"save-characteristic"`; `value`: `number`; \} \| \{ `type`: `"save-improve"`; `value`: `number`; `best`: `number`; \} \| \{ `type`: `"mortal-wounds-on-roll"`; `roll`: `"hit"` \| `"wound"`; `outcome`: `"success"` \| `"critical"`; `count`: `number`; \}
 
-Defined in: [cruncher/buffs.ts:45](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/buffs.ts#L45)
+Defined in: [cruncher/buffs.ts:45](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/cruncher/buffs.ts#L45)
 
 One typed contribution; the engine reads `ResolvedModifiers` for the rest.
 
@@ -40,7 +40,21 @@ One typed contribution; the engine reads `ResolvedModifiers` for the rest.
 
 ### Type Literal
 
-\{ `type`: `"reroll"`; `roll`: `"hit"` \| `"wound"` \| `"save"` \| `"damage"`; `subset`: `"ones"` \| `"all-failures"`; \}
+\{ `type`: `"reroll"`; `roll`: `"hit"` \| `"wound"` \| `"save"` \| `"damage"` \| `"attacks"`; `subset`: `"ones"` \| `"all-failures"`; \}
+
+#### type
+
+> **type**: `"reroll"`
+
+#### roll
+
+> **roll**: `"hit"` \| `"wound"` \| `"save"` \| `"damage"` \| `"attacks"`
+
+`attacks` re-rolls a random Attacks characteristic's dice.
+
+#### subset
+
+> **subset**: `"ones"` \| `"all-failures"`
 
 ***
 
@@ -194,3 +208,13 @@ Defender-side: the Save characteristic becomes `value`+. Best (lowest) wins.
 
 Defender-side: improve the Save characteristic by `value`, but never to better than `best`+.
 Applies after any `save-characteristic` and before AP.
+
+***
+
+### Type Literal
+
+\{ `type`: `"mortal-wounds-on-roll"`; `roll`: `"hit"` \| `"wound"`; `outcome`: `"success"` \| `"critical"`; `count`: `number`; \}
+
+Attacker-side: each hit or wound roll with this outcome inflicts `count` mortal wounds on the
+target in addition to any normal damage ("each time an attack scores a wound, the target
+suffers 1 mortal wound"). `count` is the expected number per roll. Sources stack.

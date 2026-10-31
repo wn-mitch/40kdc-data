@@ -6,7 +6,7 @@
 
 # Interface: MortalWoundsEffect
 
-Defined in: [generated.ts:4989](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4989)
+Defined in: [generated.ts:5340](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L5340)
 
 [protection] The target suffers mortal wounds: a count, or a count per success on a roll per model.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:4989](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **type**: `"mortal-wounds"`
 
-Defined in: [generated.ts:4990](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4990)
+Defined in: [generated.ts:5341](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L5341)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:4990](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **target**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:4991](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4991)
+Defined in: [generated.ts:5342](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L5342)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [generated.ts:4991](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **modifier**: `object`
 
-Defined in: [generated.ts:4992](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4992)
+Defined in: [generated.ts:5343](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L5343)
 
 #### count
 
@@ -70,4 +70,4 @@ No more than this many mortal wounds in total ("to a maximum of 6 mortal wounds"
 
 > `optional` **scaling?**: [`Scaling`](Scaling.md)
 
-Defined in: [generated.ts:5005](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5005)
+Defined in: [generated.ts:5356](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L5356)

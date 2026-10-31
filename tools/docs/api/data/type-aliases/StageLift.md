@@ -8,7 +8,7 @@
 
 > **StageLift** = `object`
 
-Defined in: [cruncher/attribution.ts:26](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/attribution.ts#L26)
+Defined in: [cruncher/attribution.ts:26](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/cruncher/attribution.ts#L26)
 
 One toggleable buff group's marginal effect on a single stage.
 
@@ -18,7 +18,7 @@ One toggleable buff group's marginal effect on a single stage.
 
 > **source**: [`BuffSource`](BuffSource.md)
 
-Defined in: [cruncher/attribution.ts:28](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/attribution.ts#L28)
+Defined in: [cruncher/attribution.ts:28](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/cruncher/attribution.ts#L28)
 
 Representative source of the group (all its `Buff`s share a group key).
 
@@ -28,6 +28,6 @@ Representative source of the group (all its `Buff`s share a group key).
 
 > **delta**: `number`
 
-Defined in: [cruncher/attribution.ts:30](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/attribution.ts#L30)
+Defined in: [cruncher/attribution.ts:30](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/cruncher/attribution.ts#L30)
 
 `stageValue(all buffs) − stageValue(all buffs minus this group)`.

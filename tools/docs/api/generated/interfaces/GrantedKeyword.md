@@ -6,7 +6,7 @@
 
 # Interface: GrantedKeyword
 
-Defined in: [generated.ts:2904](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2904)
+Defined in: [generated.ts:3025](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3025)
 
 A construction keyword a detachment grants to units matching a keyword filter. Blanket by default (every matching unit gains it); when `max_selected` is set, the keyword is instead granted to up to that many matching units of the player's choice (e.g. Houndpack Lance: 'select three WAR DOG units; they gain CHARACTER').
 
@@ -19,7 +19,7 @@ via the `definition` "granted-keyword".
 
 > **keyword**: `string`
 
-Defined in: [generated.ts:2905](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2905)
+Defined in: [generated.ts:3026](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3026)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [generated.ts:2905](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **to\_keywords**: [`KeywordList`](../type-aliases/KeywordList.md)
 
-Defined in: [generated.ts:2906](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2906)
+Defined in: [generated.ts:3027](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3027)
 
 ***
 
@@ -35,6 +35,6 @@ Defined in: [generated.ts:2906](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **max\_selected?**: `number`
 
-Defined in: [generated.ts:2910](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2910)
+Defined in: [generated.ts:3031](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3031)
 
 When present, the grant is not blanket: the player selects up to this many matching units to receive `keyword` (e.g. 3 WAR DOG units gain CHARACTER under Houndpack Lance). Absent = every matching unit gains it.

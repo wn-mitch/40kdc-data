@@ -6,7 +6,7 @@
 
 # Interface: AbilityModifierEffect
 
-Defined in: [generated.ts:3691](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3691)
+Defined in: [generated.ts:3818](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3818)
 
 [ability] Change one named ability: its uses, range, targets, recipients, selections, how many can apply at once, duration, start round, threshold or options.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:3691](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **type**: `"ability-modifier"`
 
-Defined in: [generated.ts:3692](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3692)
+Defined in: [generated.ts:3819](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3819)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:3692](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **target**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:3693](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3693)
+Defined in: [generated.ts:3820](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3820)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [generated.ts:3693](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **modifier**: `object`
 
-Defined in: [generated.ts:3694](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3694)
+Defined in: [generated.ts:3821](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3821)
 
 #### ability
 
@@ -69,6 +69,12 @@ Defined in: [generated.ts:3694](https://github.com/wn-mitch/40kdc-data/blob/8559
 #### add\_option?
 
 > `optional` **add\_option?**: `object`
+
+##### add\_option.id?
+
+> `optional` **id?**: `string`
+
+Kebab-case identifier
 
 ##### add\_option.name
 
@@ -110,4 +116,4 @@ This unit's use does not count toward the shared (once per phase per army) limit
 
 > `optional` **scaling?**: [`Scaling`](Scaling.md)
 
-Defined in: [generated.ts:3748](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3748)
+Defined in: [generated.ts:3879](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3879)

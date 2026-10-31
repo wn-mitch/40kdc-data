@@ -8,7 +8,7 @@
 
 > **GameModes7** = \[[`GameModeId`](GameModeId.md), `...GameModeId[]`\]
 
-Defined in: [generated.ts:1039](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1039)
+Defined in: [generated.ts:1058](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L1058)
 
 Game modes this weapon is legal or authored for; absent implies matched-play.
 

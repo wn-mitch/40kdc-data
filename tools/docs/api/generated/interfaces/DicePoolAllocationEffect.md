@@ -6,7 +6,7 @@
 
 # Interface: DicePoolAllocationEffect
 
-Defined in: [generated.ts:4031](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4031)
+Defined in: [generated.ts:4187](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4187)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "dice-pool-allocation-effect".
@@ -17,7 +17,7 @@ via the `definition` "dice-pool-allocation-effect".
 
 > **type**: `"dice-pool-allocation"`
 
-Defined in: [generated.ts:4032](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4032)
+Defined in: [generated.ts:4188](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4188)
 
 ***
 
@@ -25,7 +25,7 @@ Defined in: [generated.ts:4032](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **pool**: `object`
 
-Defined in: [generated.ts:4033](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4033)
+Defined in: [generated.ts:4189](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4189)
 
 #### count
 
@@ -41,7 +41,7 @@ Defined in: [generated.ts:4033](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **max\_activations**: `number`
 
-Defined in: [generated.ts:4037](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4037)
+Defined in: [generated.ts:4193](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4193)
 
 ***
 
@@ -49,7 +49,7 @@ Defined in: [generated.ts:4037](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **options**: \[\{ `id`: `string`; `name`: `string`; `requirement`: [`DiceRequirementSpec`](../type-aliases/DiceRequirementSpec.md); `effect`: [`EffectNode`](../type-aliases/EffectNode.md); \}, `...{ id: string; name: string; requirement: DiceRequirementSpec; effect: EffectNode }[]`\]
 
-Defined in: [generated.ts:4041](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4041)
+Defined in: [generated.ts:4197](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4197)
 
 #### Min Items
 

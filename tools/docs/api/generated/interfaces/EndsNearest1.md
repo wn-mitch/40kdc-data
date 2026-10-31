@@ -6,7 +6,7 @@
 
 # Interface: EndsNearest1
 
-Defined in: [generated.ts:5315](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5315)
+Defined in: [generated.ts:5666](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L5666)
 
 Where the move must end: as close as possible to the closest unit matching `of` (the move's own end rule).
 
@@ -16,7 +16,7 @@ Where the move must end: as close as possible to the closest unit matching `of` 
 
 > **of**: [`UnitRef`](../type-aliases/UnitRef.md) \| \{ `objective`: [`ObjectiveFilter`](ObjectiveFilter.md); \}
 
-Defined in: [generated.ts:5316](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5316)
+Defined in: [generated.ts:5667](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L5667)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:5316](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **per?**: `"unit"` \| `"model"`
 
-Defined in: [generated.ts:5321](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5321)
+Defined in: [generated.ts:5672](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L5672)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [generated.ts:5321](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **instead\_of?**: `"closest-enemy-unit"`
 
-Defined in: [generated.ts:5322](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5322)
+Defined in: [generated.ts:5673](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L5673)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [generated.ts:5322](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **optional?**: `true`
 
-Defined in: [generated.ts:5323](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5323)
+Defined in: [generated.ts:5674](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L5674)
 
 ***
 
@@ -48,4 +48,4 @@ Defined in: [generated.ts:5323](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **waives?**: `"closest-enemy-model"`
 
-Defined in: [generated.ts:5324](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5324)
+Defined in: [generated.ts:5675](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L5675)

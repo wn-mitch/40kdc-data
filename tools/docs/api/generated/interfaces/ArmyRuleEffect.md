@@ -6,7 +6,7 @@
 
 # Interface: ArmyRuleEffect
 
-Defined in: [generated.ts:5869](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5869)
+Defined in: [generated.ts:6316](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L6316)
 
 [army] A rule that applies when mustering the army.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:5869](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **type**: `"army-rule"`
 
-Defined in: [generated.ts:5870](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5870)
+Defined in: [generated.ts:6317](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L6317)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:5870](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **target**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:5871](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5871)
+Defined in: [generated.ts:6318](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L6318)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [generated.ts:5871](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **modifier**: `object`
 
-Defined in: [generated.ts:5872](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5872)
+Defined in: [generated.ts:6319](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L6319)
 
 #### rule
 
@@ -114,4 +114,4 @@ Limits the rule's units are left out of: retinue-limit (composition: the Retinue
 
 > `optional` **scaling?**: [`Scaling`](Scaling.md)
 
-Defined in: [generated.ts:5918](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5918)
+Defined in: [generated.ts:6365](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L6365)

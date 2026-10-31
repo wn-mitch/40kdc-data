@@ -8,7 +8,7 @@
 
 > **AttackModel** = `object`
 
-Defined in: [cruncher/engine.ts:56](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/engine.ts#L56)
+Defined in: [cruncher/engine.ts:56](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/cruncher/engine.ts#L56)
 
 The per-roll parameters behind one crunch, for the discrete allocation stage
 (`allocation.ts`): every probability is the one the expected-value stages use.
@@ -19,7 +19,7 @@ The per-roll parameters behind one crunch, for the discrete allocation stage
 
 > **modelsFiring**: `number`
 
-Defined in: [cruncher/engine.ts:57](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/engine.ts#L57)
+Defined in: [cruncher/engine.ts:57](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/cruncher/engine.ts#L57)
 
 ***
 
@@ -27,9 +27,19 @@ Defined in: [cruncher/engine.ts:57](https://github.com/wn-mitch/40kdc-data/blob/
 
 > **attacksStat**: `unknown`
 
-Defined in: [cruncher/engine.ts:59](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/engine.ts#L59)
+Defined in: [cruncher/engine.ts:59](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/cruncher/engine.ts#L59)
 
 One model's Attacks characteristic, before the flat additions below.
+
+***
+
+### attacksReroll?
+
+> `optional` **attacksReroll?**: `"ones"` \| `"all-failures"`
+
+Defined in: [cruncher/engine.ts:61](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/cruncher/engine.ts#L61)
+
+A re-roll of the Attacks dice, kept when at or above a fresh roll's mean.
 
 ***
 
@@ -37,7 +47,7 @@ One model's Attacks characteristic, before the flat additions below.
 
 > **attacksBonus**: `number`
 
-Defined in: [cruncher/engine.ts:61](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/engine.ts#L61)
+Defined in: [cruncher/engine.ts:63](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/cruncher/engine.ts#L63)
 
 Flat attacks every model adds: the modifier and Blast.
 
@@ -47,7 +57,7 @@ Flat attacks every model adds: the modifier and Blast.
 
 > **rapidFireStat**: `unknown`
 
-Defined in: [cruncher/engine.ts:63](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/engine.ts#L63)
+Defined in: [cruncher/engine.ts:65](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/cruncher/engine.ts#L65)
 
 Rapid Fire's extra attacks per model when active, else null.
 
@@ -57,7 +67,7 @@ Rapid Fire's extra attacks per model when active, else null.
 
 > **torrent**: `boolean`
 
-Defined in: [cruncher/engine.ts:64](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/engine.ts#L64)
+Defined in: [cruncher/engine.ts:66](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/cruncher/engine.ts#L66)
 
 ***
 
@@ -65,7 +75,7 @@ Defined in: [cruncher/engine.ts:64](https://github.com/wn-mitch/40kdc-data/blob/
 
 > **hit**: `object`
 
-Defined in: [cruncher/engine.ts:65](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/engine.ts#L65)
+Defined in: [cruncher/engine.ts:67](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/cruncher/engine.ts#L67)
 
 #### pass
 
@@ -81,7 +91,7 @@ Defined in: [cruncher/engine.ts:65](https://github.com/wn-mitch/40kdc-data/blob/
 
 > **sustainedStat**: `unknown`
 
-Defined in: [cruncher/engine.ts:67](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/engine.ts#L67)
+Defined in: [cruncher/engine.ts:69](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/cruncher/engine.ts#L69)
 
 Sustained Hits' extra hits per critical hit, else null.
 
@@ -91,7 +101,7 @@ Sustained Hits' extra hits per critical hit, else null.
 
 > **lethal**: `boolean`
 
-Defined in: [cruncher/engine.ts:68](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/engine.ts#L68)
+Defined in: [cruncher/engine.ts:70](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/cruncher/engine.ts#L70)
 
 ***
 
@@ -99,7 +109,7 @@ Defined in: [cruncher/engine.ts:68](https://github.com/wn-mitch/40kdc-data/blob/
 
 > **wound**: `object`
 
-Defined in: [cruncher/engine.ts:69](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/engine.ts#L69)
+Defined in: [cruncher/engine.ts:71](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/cruncher/engine.ts#L71)
 
 #### pass
 
@@ -115,7 +125,7 @@ Defined in: [cruncher/engine.ts:69](https://github.com/wn-mitch/40kdc-data/blob/
 
 > **devastating**: `boolean`
 
-Defined in: [cruncher/engine.ts:70](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/engine.ts#L70)
+Defined in: [cruncher/engine.ts:72](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/cruncher/engine.ts#L72)
 
 ***
 
@@ -123,7 +133,7 @@ Defined in: [cruncher/engine.ts:70](https://github.com/wn-mitch/40kdc-data/blob/
 
 > **unsaved**: `number`
 
-Defined in: [cruncher/engine.ts:72](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/engine.ts#L72)
+Defined in: [cruncher/engine.ts:74](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/cruncher/engine.ts#L74)
 
 Probability a wound that reaches the save is not saved.
 
@@ -133,7 +143,7 @@ Probability a wound that reaches the save is not saved.
 
 > **damage**: `object`[]
 
-Defined in: [cruncher/engine.ts:74](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/engine.ts#L74)
+Defined in: [cruncher/engine.ts:76](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/cruncher/engine.ts#L76)
 
 Final per-attack damage.
 
@@ -151,7 +161,7 @@ Final per-attack damage.
 
 > `optional` **criticalWound?**: `object`
 
-Defined in: [cruncher/engine.ts:80](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/engine.ts#L80)
+Defined in: [cruncher/engine.ts:82](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/cruncher/engine.ts#L82)
 
 A critical wound's own save failure and Damage, present only when a buff applies only on a
 critical wound. A critical wound is one the wound roll scores, not a Lethal Hits wound; with
@@ -171,7 +181,7 @@ Devastating Wounds it skips the save and its mortal wounds deal this Damage.
 
 > **woundLost**: `number`
 
-Defined in: [cruncher/engine.ts:82](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/engine.ts#L82)
+Defined in: [cruncher/engine.ts:84](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/cruncher/engine.ts#L84)
 
 Probability each wound is lost despite Feel No Pain: on every wound, and on mortal wounds only.
 
@@ -181,7 +191,7 @@ Probability each wound is lost despite Feel No Pain: on every wound, and on mort
 
 > **mortalWoundLost**: `number`
 
-Defined in: [cruncher/engine.ts:83](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/engine.ts#L83)
+Defined in: [cruncher/engine.ts:85](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/cruncher/engine.ts#L85)
 
 ***
 
@@ -189,7 +199,7 @@ Defined in: [cruncher/engine.ts:83](https://github.com/wn-mitch/40kdc-data/blob/
 
 > **wounds**: `number`
 
-Defined in: [cruncher/engine.ts:84](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/engine.ts#L84)
+Defined in: [cruncher/engine.ts:86](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/cruncher/engine.ts#L86)
 
 ***
 
@@ -197,4 +207,16 @@ Defined in: [cruncher/engine.ts:84](https://github.com/wn-mitch/40kdc-data/blob/
 
 > **modelCount**: `number`
 
-Defined in: [cruncher/engine.ts:85](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/engine.ts#L85)
+Defined in: [cruncher/engine.ts:87](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/cruncher/engine.ts#L87)
+
+***
+
+### unmodelled
+
+> **unmodelled**: `string`[]
+
+Defined in: [cruncher/engine.ts:93](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/cruncher/engine.ts#L93)
+
+What the expected stages price that the exact allocation does not model: a single re-rolled
+die over the whole unit (its attacks are no longer independent) and mortal wounds an ability
+inflicts on a roll. Allocation refuses a model listing any rather than return a result without them.

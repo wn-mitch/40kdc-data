@@ -6,7 +6,7 @@
 
 # Interface: NamedRegionStateEffect
 
-Defined in: [generated.ts:4431](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4431)
+Defined in: [generated.ts:4660](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4660)
 
 A named battlefield region: who produces it, what it does to units inside it, and when.
 
@@ -19,7 +19,7 @@ via the `definition` "named-region-state-effect".
 
 > **type**: `"named-region-state"`
 
-Defined in: [generated.ts:4432](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4432)
+Defined in: [generated.ts:4661](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4661)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [generated.ts:4432](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **target?**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:4433](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4433)
+Defined in: [generated.ts:4662](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4662)
 
 ***
 
@@ -35,4 +35,4 @@ Defined in: [generated.ts:4433](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **modifier**: [`NamedRegionState`](NamedRegionState.md)
 
-Defined in: [generated.ts:4434](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4434)
+Defined in: [generated.ts:4663](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4663)

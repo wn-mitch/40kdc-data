@@ -6,7 +6,7 @@
 
 # Interface: SelectObjectiveEffect
 
-Defined in: [generated.ts:4651](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4651)
+Defined in: [generated.ts:4908](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4908)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "select-objective-effect".
@@ -17,7 +17,7 @@ via the `definition` "select-objective-effect".
 
 > **type**: `"select-objective"`
 
-Defined in: [generated.ts:4652](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4652)
+Defined in: [generated.ts:4909](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4909)
 
 ***
 
@@ -25,7 +25,7 @@ Defined in: [generated.ts:4652](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **selector**: [`ObjectiveSelector`](ObjectiveSelector.md)
 
-Defined in: [generated.ts:4653](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4653)
+Defined in: [generated.ts:4910](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4910)
 
 ***
 
@@ -33,4 +33,4 @@ Defined in: [generated.ts:4653](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **effect**: [`EffectNode`](../type-aliases/EffectNode.md)
 
-Defined in: [generated.ts:4654](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4654)
+Defined in: [generated.ts:4911](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4911)

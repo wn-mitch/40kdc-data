@@ -8,7 +8,7 @@
 
 > **GrantedRecordLookup** = (`abilityId`) => [`GrantedRecord`](GrantedRecord.md) \| `undefined`
 
-Defined in: [cruncher/granted-records.ts:11](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/cruncher/granted-records.ts#L11)
+Defined in: [cruncher/granted-records.ts:11](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/cruncher/granted-records.ts#L11)
 
 The ability record with this id, or undefined when none resolves.
 

@@ -6,7 +6,7 @@
 
 # Interface: KeywordPredicate2
 
-Defined in: [generated.ts:4237](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4237)
+Defined in: [generated.ts:4466](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4466)
 
 Which models with this ability issue Orders, by keyword; each one's datasheet sets how many Orders it issues and which units may receive them.
 
@@ -16,7 +16,7 @@ Which models with this ability issue Orders, by keyword; each one's datasheet se
 
 > `optional` **all\_of?**: [`KeywordList`](../type-aliases/KeywordList.md)
 
-Defined in: [generated.ts:4238](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4238)
+Defined in: [generated.ts:4467](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4467)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:4238](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **any\_of?**: [`KeywordList`](../type-aliases/KeywordList.md)
 
-Defined in: [generated.ts:4239](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4239)
+Defined in: [generated.ts:4468](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4468)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [generated.ts:4239](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **none\_of?**: [`KeywordList`](../type-aliases/KeywordList.md)
 
-Defined in: [generated.ts:4240](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4240)
+Defined in: [generated.ts:4469](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4469)
 
 ***
 
@@ -40,4 +40,4 @@ Defined in: [generated.ts:4240](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **not\_all\_of?**: [`KeywordList`](../type-aliases/KeywordList.md)
 
-Defined in: [generated.ts:4241](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4241)
+Defined in: [generated.ts:4470](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4470)

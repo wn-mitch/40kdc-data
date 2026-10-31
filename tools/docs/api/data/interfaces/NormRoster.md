@@ -6,7 +6,7 @@
 
 # Interface: NormRoster
 
-Defined in: [data/roster-resolve.ts:214](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/roster-resolve.ts#L214)
+Defined in: [data/roster-resolve.ts:215](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/data/roster-resolve.ts#L215)
 
 Normalised roster input shared by [checkRoster](../functions/checkRoster.md) (from a full Roster)
 and the `check_roster_legality` runner op (from a compact spec), so the two
@@ -18,7 +18,7 @@ entry points run the exact same checks.
 
 > **factionId**: `string` \| `null`
 
-Defined in: [data/roster-resolve.ts:215](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/roster-resolve.ts#L215)
+Defined in: [data/roster-resolve.ts:216](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/data/roster-resolve.ts#L216)
 
 ***
 
@@ -26,7 +26,7 @@ Defined in: [data/roster-resolve.ts:215](https://github.com/wn-mitch/40kdc-data/
 
 > **battleSize**: `BattleSize` \| `null`
 
-Defined in: [data/roster-resolve.ts:216](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/roster-resolve.ts#L216)
+Defined in: [data/roster-resolve.ts:217](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/data/roster-resolve.ts#L217)
 
 ***
 
@@ -34,7 +34,7 @@ Defined in: [data/roster-resolve.ts:216](https://github.com/wn-mitch/40kdc-data/
 
 > **forceDisposition**: `string` \| `null`
 
-Defined in: [data/roster-resolve.ts:217](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/roster-resolve.ts#L217)
+Defined in: [data/roster-resolve.ts:218](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/data/roster-resolve.ts#L218)
 
 ***
 
@@ -42,7 +42,7 @@ Defined in: [data/roster-resolve.ts:217](https://github.com/wn-mitch/40kdc-data/
 
 > **detachmentIds**: `string`[]
 
-Defined in: [data/roster-resolve.ts:218](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/roster-resolve.ts#L218)
+Defined in: [data/roster-resolve.ts:219](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/data/roster-resolve.ts#L219)
 
 ***
 
@@ -50,4 +50,4 @@ Defined in: [data/roster-resolve.ts:218](https://github.com/wn-mitch/40kdc-data/
 
 > **units**: `NormUnit`[]
 
-Defined in: [data/roster-resolve.ts:219](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/roster-resolve.ts#L219)
+Defined in: [data/roster-resolve.ts:220](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/data/roster-resolve.ts#L220)

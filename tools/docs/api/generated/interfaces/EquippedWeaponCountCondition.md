@@ -6,7 +6,7 @@
 
 # Interface: EquippedWeaponCountCondition
 
-Defined in: [generated.ts:1973](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1973)
+Defined in: [generated.ts:2069](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2069)
 
 [composition] This model carries exactly count weapons matching the shared weapons scope (for example, type melee while excluding a named weapon).
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:1973](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **type**: `"equipped-weapon-count"`
 
-Defined in: [generated.ts:1974](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1974)
+Defined in: [generated.ts:2070](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2070)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:1974](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **parameters**: `object`
 
-Defined in: [generated.ts:1975](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1975)
+Defined in: [generated.ts:2071](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L2071)
 
 #### subject
 

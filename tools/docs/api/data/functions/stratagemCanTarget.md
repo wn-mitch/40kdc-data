@@ -8,7 +8,7 @@
 
 > **stratagemCanTarget**(`stratagem`, `keywords`): `boolean`
 
-Defined in: [abilities-resolver/resolver.ts:270](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/abilities-resolver/resolver.ts#L270)
+Defined in: [abilities-resolver/resolver.ts:274](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/abilities-resolver/resolver.ts#L274)
 
 Whether a unit with `keywords` (lower-cased) can be a stratagem's friendly target. A stratagem
 with no friendly target (none printed, or only enemy targets) does not restrict its user here;

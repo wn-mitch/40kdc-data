@@ -6,7 +6,7 @@
 
 # Interface: Scaling
 
-Defined in: [generated.ts:3533](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3533)
+Defined in: [generated.ts:3660](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3660)
 
 Scales a numeric modifier field (`field`, default `value`): it applies once per `per` of `of` (rounding `round`, default down), optionally capped at `max_value`. E.g. '+2 to the Attacks characteristic for every 5 enemy models within 6"' -> modifier.value 2 with scaling { per: 5, of: 'enemy-models-in-range', within: { inches: 6 } }.
 
@@ -19,7 +19,7 @@ via the `definition` "scaling".
 
 > **per**: `number`
 
-Defined in: [generated.ts:3534](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3534)
+Defined in: [generated.ts:3661](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3661)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [generated.ts:3534](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **of**: [`ScalingSource`](../type-aliases/ScalingSource.md)
 
-Defined in: [generated.ts:3535](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3535)
+Defined in: [generated.ts:3662](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3662)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [generated.ts:3535](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **round?**: `"down"` \| `"up"`
 
-Defined in: [generated.ts:3536](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3536)
+Defined in: [generated.ts:3663](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3663)
 
 ***
 
@@ -43,7 +43,7 @@ Defined in: [generated.ts:3536](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **max\_value?**: `number`
 
-Defined in: [generated.ts:3537](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3537)
+Defined in: [generated.ts:3664](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3664)
 
 ***
 
@@ -51,7 +51,7 @@ Defined in: [generated.ts:3537](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **field?**: `"value"` \| `"count"` \| `"amount"` \| `"distance"` \| `"modifier"` \| `"max_models"`
 
-Defined in: [generated.ts:3541](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3541)
+Defined in: [generated.ts:3668](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3668)
 
 The modifier field the scaling multiplies (default value): count for re-roll/return-models, modifier for a test's penalty.
 
@@ -61,7 +61,7 @@ The modifier field the scaling multiplies (default value): count for re-roll/ret
 
 > `optional` **keyword?**: `string`
 
-Defined in: [generated.ts:3545](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3545)
+Defined in: [generated.ts:3672](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3672)
 
 Only models with this keyword are counted.
 
@@ -71,7 +71,7 @@ Only models with this keyword are counted.
 
 > `optional` **wargear?**: `string`
 
-Defined in: [generated.ts:3549](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3549)
+Defined in: [generated.ts:3676](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3676)
 
 Kebab-case identifier
 
@@ -81,7 +81,7 @@ Kebab-case identifier
 
 > `optional` **evaluated?**: `"live"` \| `"on-apply"`
 
-Defined in: [generated.ts:3553](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3553)
+Defined in: [generated.ts:3680](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3680)
 
 When the count is taken. live (absent): at each use of the effect. on-apply: once, when the rule applies, and fixed for the rule's duration (a count in a rule that starts at a moment and lasts).
 
@@ -91,4 +91,4 @@ When the count is taken. live (absent): at each use of the effect. on-apply: onc
 
 > `optional` **within?**: [`RangeRef`](../type-aliases/RangeRef.md)
 
-Defined in: [generated.ts:3554](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3554)
+Defined in: [generated.ts:3681](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3681)

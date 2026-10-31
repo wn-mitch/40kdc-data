@@ -6,7 +6,7 @@
 
 # Interface: RosterViolation
 
-Defined in: [data/roster-resolve.ts:178](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/roster-resolve.ts#L178)
+Defined in: [data/roster-resolve.ts:179](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/data/roster-resolve.ts#L179)
 
 One army-level legality violation.
 
@@ -16,7 +16,7 @@ One army-level legality violation.
 
 > **code**: [`RosterViolationCode`](../type-aliases/RosterViolationCode.md)
 
-Defined in: [data/roster-resolve.ts:179](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/roster-resolve.ts#L179)
+Defined in: [data/roster-resolve.ts:180](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/data/roster-resolve.ts#L180)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [data/roster-resolve.ts:179](https://github.com/wn-mitch/40kdc-data/
 
 > **id**: `string`
 
-Defined in: [data/roster-resolve.ts:181](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/roster-resolve.ts#L181)
+Defined in: [data/roster-resolve.ts:182](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/data/roster-resolve.ts#L182)
 
 Offending entity id (enhancement/unit/keyword/tag), or "roster" for army-wide.
 
@@ -34,7 +34,7 @@ Offending entity id (enhancement/unit/keyword/tag), or "roster" for army-wide.
 
 > **message**: `string`
 
-Defined in: [data/roster-resolve.ts:182](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/roster-resolve.ts#L182)
+Defined in: [data/roster-resolve.ts:183](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/data/roster-resolve.ts#L183)
 
 ***
 
@@ -42,7 +42,7 @@ Defined in: [data/roster-resolve.ts:182](https://github.com/wn-mitch/40kdc-data/
 
 > **unitIndex**: `number` \| `null`
 
-Defined in: [data/roster-resolve.ts:184](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/roster-resolve.ts#L184)
+Defined in: [data/roster-resolve.ts:185](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/data/roster-resolve.ts#L185)
 
 Index into the roster's units for unit-scoped codes; null for army-wide.
 
@@ -52,7 +52,7 @@ Index into the roster's units for unit-scoped codes; null for army-wide.
 
 > **severity**: `"error"` \| `"warn"`
 
-Defined in: [data/roster-resolve.ts:189](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/roster-resolve.ts#L189)
+Defined in: [data/roster-resolve.ts:190](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/data/roster-resolve.ts#L190)
 
 `warn` for advisory codes (force disposition — provisional 11e data),
 `error` otherwise. A roster is legal iff it has no `error` violations.

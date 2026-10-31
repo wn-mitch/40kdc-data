@@ -6,7 +6,7 @@
 
 # Interface: NamedRegionRef
 
-Defined in: [generated.ts:4452](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4452)
+Defined in: [generated.ts:4681](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4681)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "named-region-ref".
@@ -17,7 +17,7 @@ via the `definition` "named-region-ref".
 
 > **region\_id**: `string`
 
-Defined in: [generated.ts:4453](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4453)
+Defined in: [generated.ts:4682](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4682)
 
 ***
 
@@ -25,4 +25,4 @@ Defined in: [generated.ts:4453](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **owner\_faction**: `string`
 
-Defined in: [generated.ts:4454](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4454)
+Defined in: [generated.ts:4683](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4683)

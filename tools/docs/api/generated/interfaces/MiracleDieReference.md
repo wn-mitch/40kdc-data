@@ -6,7 +6,7 @@
 
 # Interface: MiracleDieReference
 
-Defined in: [generated.ts:7991](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L7991)
+Defined in: [generated.ts:8531](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L8531)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "miracle-die-reference".
@@ -17,4 +17,4 @@ via the `definition` "miracle-die-reference".
 
 > **die\_var**: `string`
 
-Defined in: [generated.ts:7992](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L7992)
+Defined in: [generated.ts:8532](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L8532)

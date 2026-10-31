@@ -6,7 +6,7 @@
 
 # Interface: PersistentBattlefieldMarkerState
 
-Defined in: [generated.ts:7973](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L7973)
+Defined in: [generated.ts:8513](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L8513)
 
 A marker placed on the battlefield that persists after placement: matching units may set up near it, using it may consume it, and enemy proximity removes it. Distinct from `tracking-token`, which is a reminder co-located with a model rather than a placed battlefield object with its own lifecycle.
 
@@ -19,7 +19,7 @@ via the `definition` "persistent-battlefield-marker-state".
 
 > **marker\_label**: `string`
 
-Defined in: [generated.ts:7974](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L7974)
+Defined in: [generated.ts:8514](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L8514)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [generated.ts:7974](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **placement**: `"battlefield"` \| `"bearer"` \| `"bearer-unit"`
 
-Defined in: [generated.ts:7978](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L7978)
+Defined in: [generated.ts:8518](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L8518)
 
 Where the marker is placed at the moment the ability resolves.
 
@@ -35,9 +35,9 @@ Where the marker is placed at the moment the ability resolves.
 
 ### setup\_keywords?
 
-> `optional` **setup\_keywords?**: [`KeywordList13`](../type-aliases/KeywordList13.md)
+> `optional` **setup\_keywords?**: [`KeywordList15`](../type-aliases/KeywordList15.md)
 
-Defined in: [generated.ts:7979](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L7979)
+Defined in: [generated.ts:8519](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L8519)
 
 ***
 
@@ -45,7 +45,7 @@ Defined in: [generated.ts:7979](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **consume?**: `"on-use"` \| `"never"`
 
-Defined in: [generated.ts:7983](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L7983)
+Defined in: [generated.ts:8523](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L8523)
 
 Whether a single set-up use spends the marker.
 
@@ -55,7 +55,7 @@ Whether a single set-up use spends the marker.
 
 > `optional` **setup\_within?**: [`RangeRef`](../type-aliases/RangeRef.md)
 
-Defined in: [generated.ts:7984](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L7984)
+Defined in: [generated.ts:8524](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L8524)
 
 ***
 
@@ -63,4 +63,4 @@ Defined in: [generated.ts:7984](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **removed\_by\_enemy\_within?**: [`RangeRef`](../type-aliases/RangeRef.md)
 
-Defined in: [generated.ts:7985](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L7985)
+Defined in: [generated.ts:8525](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L8525)

@@ -6,7 +6,7 @@
 
 # Interface: KeywordPredicate3
 
-Defined in: [generated.ts:4246](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4246)
+Defined in: [generated.ts:4475](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4475)
 
 Only models with these keywords gain the benefit of an Order issued to their unit.
 
@@ -16,7 +16,7 @@ Only models with these keywords gain the benefit of an Order issued to their uni
 
 > `optional` **all\_of?**: [`KeywordList`](../type-aliases/KeywordList.md)
 
-Defined in: [generated.ts:4247](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4247)
+Defined in: [generated.ts:4476](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4476)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:4247](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **any\_of?**: [`KeywordList`](../type-aliases/KeywordList.md)
 
-Defined in: [generated.ts:4248](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4248)
+Defined in: [generated.ts:4477](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4477)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [generated.ts:4248](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **none\_of?**: [`KeywordList`](../type-aliases/KeywordList.md)
 
-Defined in: [generated.ts:4249](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4249)
+Defined in: [generated.ts:4478](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4478)
 
 ***
 
@@ -40,4 +40,4 @@ Defined in: [generated.ts:4249](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **not\_all\_of?**: [`KeywordList`](../type-aliases/KeywordList.md)
 
-Defined in: [generated.ts:4250](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4250)
+Defined in: [generated.ts:4479](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4479)

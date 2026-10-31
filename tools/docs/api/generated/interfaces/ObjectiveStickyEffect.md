@@ -6,7 +6,7 @@
 
 # Interface: ObjectiveStickyEffect
 
-Defined in: [generated.ts:5750](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5750)
+Defined in: [generated.ts:6189](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L6189)
 
 [designation] An objective the target controls stays under your control until the opponent's control is greater at the end of a phase.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:5750](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **type**: `"objective-sticky"`
 
-Defined in: [generated.ts:5751](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5751)
+Defined in: [generated.ts:6190](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L6190)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:5751](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **target**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:5752](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5752)
+Defined in: [generated.ts:6191](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L6191)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [generated.ts:5752](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **modifier?**: `object`
 
-Defined in: [generated.ts:5753](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5753)
+Defined in: [generated.ts:6192](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L6192)
 
 #### objective?
 
@@ -44,4 +44,4 @@ Defined in: [generated.ts:5753](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **scaling?**: [`Scaling`](Scaling.md)
 
-Defined in: [generated.ts:5756](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L5756)
+Defined in: [generated.ts:6195](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L6195)

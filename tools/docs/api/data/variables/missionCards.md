@@ -8,6 +8,6 @@
 
 > `const` **missionCards**: [`Collection`](../classes/Collection.md)\<[`SecondaryCard`](../../generated/interfaces/SecondaryCard.md), [`SecondaryCard`](../../generated/interfaces/SecondaryCard.md)\> = `dataset.missionCards`
 
-Defined in: [data/index.ts:189](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/index.ts#L189)
+Defined in: [data/index.ts:193](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/data/index.ts#L193)
 
 All primary and secondary mission cards.

@@ -6,7 +6,7 @@
 
 # Interface: StanceSelectionCapacityEffect
 
-Defined in: [generated.ts:3803](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3803)
+Defined in: [generated.ts:3950](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3950)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "stance-selection-capacity-effect".
@@ -17,7 +17,7 @@ via the `definition` "stance-selection-capacity-effect".
 
 > **type**: `"stance-selection-capacity"`
 
-Defined in: [generated.ts:3804](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3804)
+Defined in: [generated.ts:3951](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3951)
 
 ***
 
@@ -25,7 +25,7 @@ Defined in: [generated.ts:3804](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **modifier**: `object`
 
-Defined in: [generated.ts:3805](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3805)
+Defined in: [generated.ts:3952](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3952)
 
 #### option?
 

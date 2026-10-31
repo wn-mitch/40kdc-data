@@ -6,7 +6,7 @@
 
 # Interface: Faction
 
-Defined in: [generated.ts:3060](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3060)
+Defined in: [generated.ts:3187](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3187)
 
 A playable faction or sub-faction.
 
@@ -19,7 +19,7 @@ via the `definition` "faction".
 
 > **id**: `string`
 
-Defined in: [generated.ts:3061](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3061)
+Defined in: [generated.ts:3188](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3188)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [generated.ts:3061](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **external\_refs?**: [`ExternalReferenceList`](../type-aliases/ExternalReferenceList.md)
 
-Defined in: [generated.ts:3062](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3062)
+Defined in: [generated.ts:3189](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3189)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [generated.ts:3062](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **name**: `string`
 
-Defined in: [generated.ts:3063](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3063)
+Defined in: [generated.ts:3190](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3190)
 
 ***
 
@@ -43,7 +43,7 @@ Defined in: [generated.ts:3063](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **parent\_faction\_id?**: `string` \| `null`
 
-Defined in: [generated.ts:3064](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3064)
+Defined in: [generated.ts:3191](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3191)
 
 ***
 
@@ -51,7 +51,7 @@ Defined in: [generated.ts:3064](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **game\_version**: [`GameVersionReference`](GameVersionReference.md)
 
-Defined in: [generated.ts:3065](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3065)
+Defined in: [generated.ts:3192](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3192)
 
 ***
 
@@ -59,7 +59,7 @@ Defined in: [generated.ts:3065](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **keywords?**: [`KeywordList`](../type-aliases/KeywordList.md)
 
-Defined in: [generated.ts:3066](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3066)
+Defined in: [generated.ts:3193](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3193)
 
 ***
 
@@ -67,7 +67,7 @@ Defined in: [generated.ts:3066](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **aliases?**: `string`[]
 
-Defined in: [generated.ts:3067](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3067)
+Defined in: [generated.ts:3194](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3194)
 
 ***
 
@@ -75,7 +75,7 @@ Defined in: [generated.ts:3067](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **faction\_rule\_ids**: \[`string`, `...string[]`\]
 
-Defined in: [generated.ts:3073](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3073)
+Defined in: [generated.ts:3200](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3200)
 
 References to the faction-wide abilities in display order
 
@@ -89,7 +89,7 @@ References to the faction-wide abilities in display order
 
 > `optional` **keyword\_limits?**: `object`[]
 
-Defined in: [generated.ts:3077](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3077)
+Defined in: [generated.ts:3204](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3204)
 
 Army-wide caps on units carrying a keyword set, for an army of this faction (e.g. Genestealer Cults: at most one PATRIARCH; Asuryani: at most one TROUPE MASTER). A unit counts toward an entry when it carries every keyword in `keywords` (its keywords, faction keywords or name; see `mode` for alternatives) and none of `exempt_faction_keywords`. A selected detachment's `keyword_limit_overrides` entry with the same `keywords` replaces `max`.
 
@@ -109,7 +109,7 @@ How the cap counts. `units` (default): the number of units carrying every keywor
 
 #### exempt\_faction\_keywords?
 
-> `optional` **exempt\_faction\_keywords?**: [`KeywordList8`](../type-aliases/KeywordList8.md)
+> `optional` **exempt\_faction\_keywords?**: [`KeywordList10`](../type-aliases/KeywordList10.md)
 
 ***
 
@@ -117,7 +117,7 @@ How the cap counts. `units` (default): the number of units carrying every keywor
 
 > `optional` **army\_construction\_rules?**: `object`[]
 
-Defined in: [generated.ts:3089](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3089)
+Defined in: [generated.ts:3216](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3216)
 
 Army-construction constraints evaluated against faction keywords. `faction-keyword-cohesion` limits how many distinct additional faction keywords an army built from this faction may include — the Space Marine Chapters rule, where a second Faction keyword names the unit's Chapter and only one Chapter may be fielded.
 
@@ -147,6 +147,6 @@ Maximum number of distinct additional faction keywords an army may include.
 
 > `optional` **logo\_url?**: `string`
 
-Defined in: [generated.ts:3104](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3104)
+Defined in: [generated.ts:3231](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3231)
 
 URL to the faction's logo/emblem image.

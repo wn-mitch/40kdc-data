@@ -232,16 +232,16 @@ Workflow({ scriptPath: ".omp/skills/dsl-campaign/workflows/wf-author-batch.js", 
   batch_id: "cNNN-bK", new_shapes: […], abilities: […5–6 worklist entries…] } })
 ```
 
-Statuses back: `accepted` → apply (step 3). `needs-schema` → **step 2a** (family check,
+Statuses back: `accepted` → apply (step 4). `needs-schema` → **step 3a** (family check,
 then shape-scout or inbox). `rejected` → adjudicate: spawn inquisitor (`mode:"review"`,
 the candidate + verdicts as `agent_outputs`); `accept` overrides a bad refutation (record
-why), otherwise terminal `abandoned` with reason — or `needs-schema` (→ step 2a) if the
+why), otherwise terminal `abandoned` with reason — or `needs-schema` (→ step 3a) if the
 divergences show the schema can't express it. `no-prose` / `agent-error` → terminal
 `abandoned` (reason recorded). Each result's `thread` is the FULL per-round revision
 history (every attempt's divergences, not just the last) — record it in the
 ledger/roundtrip notes so cyclical revisions stay auditable.
 
-### 2a — Shape-scout on a needs-schema result
+### 3a — Shape-scout on a needs-schema result
 
 A `needs-schema` is not automatically terminal. Spawn inquisitor to judge whether the
 resisted mechanic is a FAMILY (≥ ~4 abilities, exact+near) or a singleton:
@@ -266,9 +266,9 @@ resisted mechanic is a FAMILY (≥ ~4 abilities, exact+near) or a singleton:
     **auto-apply**: hand `shape_package` to warpsmith (`implement`) to land the schema
     oneOf branch + all four describer ports + conformance cases + SPEC bump + version
     lockstep, then re-author the seed AND every `faithful_family` member onto the new
-    shape as accepted candidates (step 3). The campaign is now shape-led — expect a
-    heavier PR, and the full close gate (step 4) must cover the port/SPEC work.
-  - `existing-fits` → the scout proved an existing shape fits after all; re-enter step 2
+    shape as accepted candidates (step 4). The campaign is now shape-led — expect a
+    heavier PR, and the full close gate (step 5) must cover the port/SPEC work.
+  - `existing-fits` → the scout proved an existing shape fits after all; re-enter step 3
     authoring with that shape named (the resist was a false alarm).
   - `rejected-sprawl` / `rejected-singleton` / `not-converged` → file the inbox block,
     ledger `needs-schema` (terminal); record the scout's reason.
@@ -276,7 +276,7 @@ resisted mechanic is a FAMILY (≥ ~4 abilities, exact+near) or a singleton:
   `task.maxRecursionDepth >= 2` in `.omp/config.yml` and restart; never hand-simulate the
   kroot agents (that is anti-condition 5, weakened verification).
 
-### 3 — Apply + verify (per batch)
+### 4 — Apply + verify (per batch)
 
 1. **warpsmith applies** the accepted candidates (Agent tool, sole writer):
    `implement` decisions referencing each candidate's dsl JSON; it edits
@@ -316,15 +316,15 @@ resisted mechanic is a FAMILY (≥ ~4 abilities, exact+near) or a singleton:
    rule is ephemeral session output; never persist it in the repo, loop-state, PR body, or
    commit message. Do not call the batch accepted until this comparison was surfaced.
 6. Inquisitor batch review (`mode:"review"`, arch-magos outputs + verify results +
-   scores + final audit). `revise` re-enters step 2 for that ability; `reject` → terminal
-   per step 2.
+   scores + final audit). `revise` re-enters step 3 for that ability; `reject` → terminal
+   per step 3.
 7. On accept: seal the review, persist the apply transaction and post-apply repository
    snapshot/checks, then `jj commit -m "feat: dsl-campaign cNNN batch K — <target>"`.
    Advance leases/checkpoints and regenerate the registry projection through the graph;
    never write `registry.json` directly. Worker errors become durable `failed-final`,
    `invalid-output`, or `stale` transitions instead of bypassing the reducer.
 
-### 4 — Close
+### 5 — Close
 
 1. All worklist entries terminal (anti-condition 6) — else keep batching.
 2. Full gate: `PATH="$PWD/python/.venv/bin:$PATH" just regen fmt test-all

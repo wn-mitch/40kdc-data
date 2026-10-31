@@ -6,7 +6,7 @@
 
 # Interface: ResourceActionMenuTrigger
 
-Defined in: [generated.ts:4381](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4381)
+Defined in: [generated.ts:4610](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4610)
 
 A single reactive trigger: an event family (`event`), who acted (`subject`, default this-unit; clock events have none), what the action was aimed at (`object`), which one (`filter`: the move, roll, Stratagem or ability), a spatial gate (`proximity`), an extra gate (`condition`, where phase and turn go), `optional` for 'you can' reactions, a CP `cost`, and the `window` a granted reaction stays open.
 
@@ -16,7 +16,7 @@ A single reactive trigger: an event family (`event`), who acted (`subject`, defa
 
 > **event**: [`GameEvent`](../type-aliases/GameEvent.md)
 
-Defined in: [generated.ts:4382](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4382)
+Defined in: [generated.ts:4611](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4611)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:4382](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **subject?**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:4383](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4383)
+Defined in: [generated.ts:4612](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4612)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [generated.ts:4383](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **object?**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:4384](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4384)
+Defined in: [generated.ts:4613](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4613)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [generated.ts:4384](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **filter?**: [`EventFilter`](EventFilter.md)
 
-Defined in: [generated.ts:4385](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4385)
+Defined in: [generated.ts:4614](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4614)
 
 ***
 
@@ -48,7 +48,7 @@ Defined in: [generated.ts:4385](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **proximity?**: `object`
 
-Defined in: [generated.ts:4389](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4389)
+Defined in: [generated.ts:4618](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4618)
 
 The event happened within range of `of` (default this-unit).
 
@@ -66,7 +66,7 @@ The event happened within range of `of` (default this-unit).
 
 > `optional` **condition?**: [`AbilityDSLCondition1`](../type-aliases/AbilityDSLCondition1.md)
 
-Defined in: [generated.ts:4393](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4393)
+Defined in: [generated.ts:4622](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4622)
 
 ***
 
@@ -74,7 +74,7 @@ Defined in: [generated.ts:4393](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **optional?**: `boolean`
 
-Defined in: [generated.ts:4394](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4394)
+Defined in: [generated.ts:4623](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4623)
 
 ***
 
@@ -82,7 +82,7 @@ Defined in: [generated.ts:4394](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **cost?**: `object`
 
-Defined in: [generated.ts:4395](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4395)
+Defined in: [generated.ts:4624](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4624)
 
 #### cp?
 
@@ -94,7 +94,7 @@ Defined in: [generated.ts:4395](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **window?**: `string`
 
-Defined in: [generated.ts:4398](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4398)
+Defined in: [generated.ts:4627](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4627)
 
 ***
 
@@ -102,7 +102,7 @@ Defined in: [generated.ts:4398](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **binds\_event\_variable?**: `string`
 
-Defined in: [generated.ts:4399](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4399)
+Defined in: [generated.ts:4628](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4628)
 
 ***
 
@@ -110,7 +110,7 @@ Defined in: [generated.ts:4399](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **binds\_die\_variable?**: `string`
 
-Defined in: [generated.ts:4403](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4403)
+Defined in: [generated.ts:4632](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4632)
 
 Binds the generated Miracle die identity from a resource-generation trigger; consumers refer only as {die_var: ID}.
 
@@ -120,7 +120,7 @@ Binds the generated Miracle die identity from a resource-generation trigger; con
 
 > `optional` **binds\_selected\_die\_variable?**: `string`
 
-Defined in: [generated.ts:4407](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4407)
+Defined in: [generated.ts:4636](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4636)
 
 Binds the controller-selected Miracle die among those used in the triggering Act of Faith; consumers refer only as {die_var: ID}.
 
@@ -130,7 +130,7 @@ Binds the controller-selected Miracle die among those used in the triggering Act
 
 > `optional` **source\_ability?**: `object`
 
-Defined in: [generated.ts:4411](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L4411)
+Defined in: [generated.ts:4640](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L4640)
 
 The ability whose selection fired a `targets-selected {kind: ability}` trigger. Required there and allowed nowhere else.
 

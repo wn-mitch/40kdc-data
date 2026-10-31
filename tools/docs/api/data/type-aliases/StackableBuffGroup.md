@@ -8,7 +8,7 @@
 
 > **StackableBuffGroup** = `object`
 
-Defined in: [data/dataset-buffs.ts:82](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/dataset-buffs.ts#L82)
+Defined in: [data/dataset-buffs.ts:85](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/data/dataset-buffs.ts#L85)
 
 A pool of [StackableBuff](StackableBuff.md) levers limited to `maxActivations` at once.
 
@@ -18,7 +18,7 @@ A pool of [StackableBuff](StackableBuff.md) levers limited to `maxActivations` a
 
 > **id**: `string`
 
-Defined in: [data/dataset-buffs.ts:83](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/dataset-buffs.ts#L83)
+Defined in: [data/dataset-buffs.ts:86](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/data/dataset-buffs.ts#L86)
 
 ***
 
@@ -26,7 +26,7 @@ Defined in: [data/dataset-buffs.ts:83](https://github.com/wn-mitch/40kdc-data/bl
 
 > `optional` **abilityId?**: `string`
 
-Defined in: [data/dataset-buffs.ts:85](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/dataset-buffs.ts#L85)
+Defined in: [data/dataset-buffs.ts:88](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/data/dataset-buffs.ts#L88)
 
 Stable owning ability id, independent of its display name.
 
@@ -36,7 +36,7 @@ Stable owning ability id, independent of its display name.
 
 > **label**: `string`
 
-Defined in: [data/dataset-buffs.ts:86](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/dataset-buffs.ts#L86)
+Defined in: [data/dataset-buffs.ts:89](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/data/dataset-buffs.ts#L89)
 
 ***
 
@@ -44,4 +44,4 @@ Defined in: [data/dataset-buffs.ts:86](https://github.com/wn-mitch/40kdc-data/bl
 
 > **maxActivations**: `number`
 
-Defined in: [data/dataset-buffs.ts:87](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/dataset-buffs.ts#L87)
+Defined in: [data/dataset-buffs.ts:90](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/data/dataset-buffs.ts#L90)

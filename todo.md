@@ -137,10 +137,10 @@ leak (273 entries), offensive stubs (~273 + long tail), defensive coverage (177
     and rule-replacement/transformation ("replace this model with…"). Rare.
   - **Housekeeping pending:** decide whether to commit `data/_audit/` (living
     worklist) or `.gitignore` it; nothing committed yet (jj change `lkpokstw`).
-- [ ] **#25 Fixed timing-window vocabulary** — replace free-form `timing-is`
+- [x] ~~**#25 Fixed timing-window vocabulary**~~ — done: `timing-is` is retired; triggers name closed event families and `npm run vocab:migrate` converts legacy data. Original scope: replace free-form `timing-is`
   strings with a controlled enum. **Deferred until 11th edition defines the
   windows** (owner's call) — no point inventing a vocabulary GW will overwrite.
-- [ ] **#22 Engine: defensive effect interpretation** — teach the cruncher
+- [x] ~~**#22 Engine: defensive effect interpretation**~~ — done in both engines, pinned by `cruncher/08-*` (damage reduction), `09-*` (ability invulnerable save) and `10-*` (mortal-only Feel No Pain). Original scope: teach the cruncher
   `damage-reduction`, ability-granted `invulnerable-save`, FNP-vs-mortal
   (`engine.ts:225` TODO). New `BuffContribution` + resolver + math in **both**
   `engine.ts` and `engine.rs`, new `from-dsl.ts` target-perspective emitters, new
@@ -148,7 +148,7 @@ leak (273 entries), offensive stubs (~273 + long tail), defensive coverage (177
 - [ ] **#23 Defensive DSL authoring** — convert the 177 `"defensive ability
   (skipped for damage calc)"` entries to real defensive DSL once #22 lands. Same
   fan-out + gate loop as #21, target perspective.
-- [ ] **#24 (flag) Rust `from_dsl.rs`** — ability-DSL→buff translation is TS-only;
+- [x] ~~**#24 (flag) Rust `from_dsl.rs`**~~ — done: `crates/wh40kdc/src/cruncher/from_dsl/` reproduces `abilities-resolver/from-dsl.json` and `defensive-from-dsl.json`. Original scope: ability-DSL→buff translation is TS-only;
   the Rust cruncher has no `from_dsl.rs` (conformance pins engine *math*, not DSL
   translation). Add for full parity — don't block #22 on it.
 

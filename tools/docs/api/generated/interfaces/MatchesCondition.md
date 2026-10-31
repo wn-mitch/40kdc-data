@@ -6,7 +6,7 @@
 
 # Interface: MatchesCondition
 
-Defined in: [generated.ts:1883](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1883)
+Defined in: [generated.ts:1979](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L1979)
 
 [identity/state/position] The subject matches one closed unit-filter predicate. The filter carries ordinary ownership, keyword, ability, state, range, visibility and attachment predicates.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:1883](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **type**: `"matches"`
 
-Defined in: [generated.ts:1884](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1884)
+Defined in: [generated.ts:1980](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L1980)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:1884](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **parameters**: `object`
 
-Defined in: [generated.ts:1885](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L1885)
+Defined in: [generated.ts:1981](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L1981)
 
 #### subject?
 

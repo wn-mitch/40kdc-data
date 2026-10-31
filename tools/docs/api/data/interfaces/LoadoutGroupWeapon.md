@@ -6,7 +6,7 @@
 
 # Interface: LoadoutGroupWeapon
 
-Defined in: [data/loadout.ts:475](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/loadout.ts#L475)
+Defined in: [data/loadout.ts:475](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/data/loadout.ts#L475)
 
 One weapon line within a [LoadoutGroup](LoadoutGroup.md): entity id and its count *per model* in the group.
 
@@ -16,7 +16,7 @@ One weapon line within a [LoadoutGroup](LoadoutGroup.md): entity id and its coun
 
 > **id**: `string`
 
-Defined in: [data/loadout.ts:476](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/loadout.ts#L476)
+Defined in: [data/loadout.ts:476](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/data/loadout.ts#L476)
 
 ***
 
@@ -24,4 +24,4 @@ Defined in: [data/loadout.ts:476](https://github.com/wn-mitch/40kdc-data/blob/85
 
 > **count**: `number`
 
-Defined in: [data/loadout.ts:477](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/data/loadout.ts#L477)
+Defined in: [data/loadout.ts:477](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/data/loadout.ts#L477)

@@ -6,9 +6,9 @@
 
 # Interface: RollModifierEffect
 
-Defined in: [generated.ts:3587](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3587)
+Defined in: [generated.ts:3714](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3714)
 
-[roll] Add to or subtract from a roll. cap bounds a stacking modifier; value_from takes the value from an earlier step's roll.
+[roll] Add to or subtract from a roll, or halve it. cap bounds a stacking modifier; value_from takes the value from an earlier step's roll. halve takes no value, cap or value_from.
 
 ## Properties
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:3587](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **type**: `"roll-modifier"`
 
-Defined in: [generated.ts:3588](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3588)
+Defined in: [generated.ts:3715](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3715)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:3588](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **target**: [`UnitRef`](../type-aliases/UnitRef.md)
 
-Defined in: [generated.ts:3589](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3589)
+Defined in: [generated.ts:3716](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3716)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [generated.ts:3589](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **modifier**: `object`
 
-Defined in: [generated.ts:3590](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3590)
+Defined in: [generated.ts:3717](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3717)
 
 #### roll
 
@@ -40,7 +40,7 @@ Defined in: [generated.ts:3590](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 #### operation
 
-> **operation**: `"add"` \| `"subtract"`
+> **operation**: `"add"` \| `"subtract"` \| `"halve"`
 
 #### value?
 
@@ -68,4 +68,4 @@ Defined in: [generated.ts:3590](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **scaling?**: [`Scaling`](Scaling.md)
 
-Defined in: [generated.ts:3599](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3599)
+Defined in: [generated.ts:3726](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3726)

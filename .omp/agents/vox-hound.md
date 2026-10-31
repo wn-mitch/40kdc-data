@@ -48,7 +48,8 @@ the prompt. Cross-references go in `lookups_needed`, not fetched yourself.
 - `schemas/enrichment/ability-dsl/effect.schema.json` — the authority. Composition
   kinds: `choice`, `sequence`, `conditional`, `dice-gated`, `dice-table`, `aura`,
   `select-units`, `for-each-unit`, `designate-target`, `stance-select`,
-  `dice-pool-allocation`, `issue-orders`, `risk-reward`, `ability-part`. Leaf
+  `dice-pool-allocation`, `issue-orders`, `risk-reward`, `ritual-menu` (Rituals
+  attempted with a Psychic test), `ability-part`. Leaf
   types are closed `{type, target, modifier}` variants: `stat-modifier`,
   `ignore-modifiers`, `roll-modifier`, `re-roll`, `roll-result`, `ability-grant`,
   `keyword-grant` (unit keywords), `weapon-ability-grant`, `permission`,

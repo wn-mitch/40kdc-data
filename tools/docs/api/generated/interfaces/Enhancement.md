@@ -6,7 +6,7 @@
 
 # Interface: Enhancement
 
-Defined in: [generated.ts:2996](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2996)
+Defined in: [generated.ts:3117](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3117)
 
 A purchasable upgrade for a character unit, provided by a detachment.
 
@@ -19,7 +19,7 @@ via the `definition` "enhancement".
 
 > **id**: `string`
 
-Defined in: [generated.ts:2997](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2997)
+Defined in: [generated.ts:3118](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3118)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [generated.ts:2997](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **external\_refs?**: [`ExternalReferenceList`](../type-aliases/ExternalReferenceList.md)
 
-Defined in: [generated.ts:2998](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2998)
+Defined in: [generated.ts:3119](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3119)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [generated.ts:2998](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **name**: `string`
 
-Defined in: [generated.ts:2999](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2999)
+Defined in: [generated.ts:3120](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3120)
 
 ***
 
@@ -43,7 +43,7 @@ Defined in: [generated.ts:2999](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **detachment\_id**: `string`
 
-Defined in: [generated.ts:3000](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3000)
+Defined in: [generated.ts:3121](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3121)
 
 ***
 
@@ -51,7 +51,7 @@ Defined in: [generated.ts:3000](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **cost**: `number`
 
-Defined in: [generated.ts:3001](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3001)
+Defined in: [generated.ts:3122](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3122)
 
 ***
 
@@ -59,7 +59,7 @@ Defined in: [generated.ts:3001](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **points\_provisional?**: `boolean`
 
-Defined in: [generated.ts:3005](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3005)
+Defined in: [generated.ts:3126](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3126)
 
 True when the cost is carried over provisionally (e.g. seeded from a prior edition during migration) and not yet confirmed against the current dataslate.
 
@@ -69,7 +69,7 @@ True when the cost is carried over provisionally (e.g. seeded from a prior editi
 
 > `optional` **upgrade\_tag?**: `boolean`
 
-Defined in: [generated.ts:3009](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3009)
+Defined in: [generated.ts:3130](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3130)
 
 11e: when true, this enhancement applies to up to `max_targets` non-character units while counting as a single Enhancement choice.
 
@@ -79,7 +79,7 @@ Defined in: [generated.ts:3009](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **max\_targets?**: `number`
 
-Defined in: [generated.ts:3013](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3013)
+Defined in: [generated.ts:3134](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3134)
 
 Number of units this enhancement may be applied to. Only meaningful when `upgrade_tag` is true; defaults to 1.
 
@@ -89,7 +89,7 @@ Number of units this enhancement may be applied to. Only meaningful when `upgrad
 
 > `optional` **keyword\_restrictions?**: [`KeywordList`](../type-aliases/KeywordList.md)
 
-Defined in: [generated.ts:3014](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3014)
+Defined in: [generated.ts:3135](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3135)
 
 ***
 
@@ -97,7 +97,7 @@ Defined in: [generated.ts:3014](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **keyword\_restriction\_groups?**: \[\[`string`, `...string[]`\], `...[string, ...string[]][]`\]
 
-Defined in: [generated.ts:3020](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3020)
+Defined in: [generated.ts:3141](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3141)
 
 Alternative bearer eligibility groups. Every keyword in one group is required (AND), while satisfying any group is sufficient (OR). When present, this supersedes the legacy flat `keyword_restrictions` field.
 
@@ -111,7 +111,7 @@ Alternative bearer eligibility groups. Every keyword in one group is required (A
 
 > `optional` **datasheet\_restriction\_groups?**: \[\{ `unit_id`: `string`; `keywords?`: \[`string`, `...string[]`\]; \}, `...{ unit_id: string; keywords?: [string, ...string[]] }[]`\]
 
-Defined in: [generated.ts:3026](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3026)
+Defined in: [generated.ts:3147](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3147)
 
 Datasheet-scoped bearer eligibility groups: a bearer whose unit is `unit_id` and carries every listed keyword is eligible. Each group is a further alternative (OR) to the keyword groups in `keyword_restrictions` / `keyword_restriction_groups`. A datasheet group admits only that datasheet, never another unit that carries the datasheet's name as a keyword. `exclusion_keywords` still applies.
 
@@ -125,7 +125,21 @@ Datasheet-scoped bearer eligibility groups: a bearer whose unit is `unit_id` and
 
 > `optional` **exclusion\_keywords?**: [`KeywordList`](../type-aliases/KeywordList.md) \| `null`
 
-Defined in: [generated.ts:3042](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3042)
+Defined in: [generated.ts:3163](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3163)
+
+***
+
+### required\_ability\_ids?
+
+> `optional` **required\_ability\_ids?**: \[`string`, `...string[]`\]
+
+Defined in: [generated.ts:3169](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3169)
+
+Core abilities (data/core/unit-keywords.json ids) the bearer's datasheet must have ("HERETIC ASTARTES model with the Deep Strike ability only"). Every listed ability is required, on top of the keyword and datasheet groups.
+
+#### Min Items
+
+1
 
 ***
 
@@ -133,7 +147,7 @@ Defined in: [generated.ts:3042](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **attachment\_bodyguard\_ids?**: \[`string`, `...string[]`\]
 
-Defined in: [generated.ts:3048](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3048)
+Defined in: [generated.ts:3175](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3175)
 
 Additional bodyguard units the bearer may attach to because it carries this enhancement.
 
@@ -147,7 +161,7 @@ Additional bodyguard units the bearer may attach to because it carries this enha
 
 > `optional` **ability\_id?**: `string` \| `null`
 
-Defined in: [generated.ts:3049](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3049)
+Defined in: [generated.ts:3176](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3176)
 
 ***
 
@@ -155,7 +169,7 @@ Defined in: [generated.ts:3049](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **is\_unique?**: `boolean`
 
-Defined in: [generated.ts:3050](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3050)
+Defined in: [generated.ts:3177](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3177)
 
 ***
 
@@ -163,7 +177,7 @@ Defined in: [generated.ts:3050](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **game\_version**: [`GameVersionReference`](GameVersionReference.md)
 
-Defined in: [generated.ts:3051](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3051)
+Defined in: [generated.ts:3178](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3178)
 
 ***
 
@@ -171,4 +185,4 @@ Defined in: [generated.ts:3051](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **game\_modes?**: [`GameModes2`](../type-aliases/GameModes2.md)
 
-Defined in: [generated.ts:3052](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L3052)
+Defined in: [generated.ts:3179](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3179)

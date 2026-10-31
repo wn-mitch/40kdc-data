@@ -6,7 +6,7 @@
 
 # Interface: Detachment
 
-Defined in: [generated.ts:2928](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2928)
+Defined in: [generated.ts:3049](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3049)
 
 A detachment option within a faction, providing a detachment rule, enhancements, and stratagems.
 
@@ -19,7 +19,7 @@ via the `definition` "detachment".
 
 > **id**: `string`
 
-Defined in: [generated.ts:2929](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2929)
+Defined in: [generated.ts:3050](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3050)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [generated.ts:2929](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **external\_refs?**: [`ExternalReferenceList`](../type-aliases/ExternalReferenceList.md)
 
-Defined in: [generated.ts:2930](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2930)
+Defined in: [generated.ts:3051](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3051)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [generated.ts:2930](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **name**: `string`
 
-Defined in: [generated.ts:2931](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2931)
+Defined in: [generated.ts:3052](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3052)
 
 ***
 
@@ -43,7 +43,7 @@ Defined in: [generated.ts:2931](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > **faction\_id**: `string`
 
-Defined in: [generated.ts:2932](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2932)
+Defined in: [generated.ts:3053](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3053)
 
 ***
 
@@ -51,7 +51,7 @@ Defined in: [generated.ts:2932](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **detachment\_rule\_id?**: `string` \| `null`
 
-Defined in: [generated.ts:2936](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2936)
+Defined in: [generated.ts:3057](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3057)
 
 Deprecated single-rule link, kept for back-compat (and referenced by allied-rule). A detachment may have more than one rule ability — prefer `detachment_rule_ids`.
 
@@ -61,7 +61,7 @@ Deprecated single-rule link, kept for back-compat (and referenced by allied-rule
 
 > `optional` **detachment\_rule\_ids?**: `string`[]
 
-Defined in: [generated.ts:2940](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2940)
+Defined in: [generated.ts:3061](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3061)
 
 ability_ids of every detachment-rule ability this detachment provides (a detachment rule may have multiple named parts). These match the enrichment `abilities.json` / raw-text-store ids, so the downstream lookup `store[ability_id]` resolves. Empty/absent until linked by author:reconcile.
 
@@ -71,7 +71,7 @@ ability_ids of every detachment-rule ability this detachment provides (a detachm
 
 > `optional` **detachment\_points?**: `number` \| `null`
 
-Defined in: [generated.ts:2944](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2944)
+Defined in: [generated.ts:3065](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3065)
 
 11e: the detachment-point cost (1–3) charged against the army's detachment-point budget. null when not yet assigned.
 
@@ -81,7 +81,7 @@ Defined in: [generated.ts:2944](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **force\_dispositions?**: `string`[]
 
-Defined in: [generated.ts:2948](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2948)
+Defined in: [generated.ts:3069](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3069)
 
 11e: ids of the Force Disposition entities this detachment grants. Empty until assigned.
 
@@ -91,7 +91,7 @@ Defined in: [generated.ts:2948](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **tags?**: `string`[]
 
-Defined in: [generated.ts:2952](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2952)
+Defined in: [generated.ts:3073](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3073)
 
 11e: detachment-type tags (e.g. 'dynasty', 'kabal'). A roster may include at most one detachment per shared tag — the 'you can only take one of X type of detachment' rule. Empty when the detachment carries no UNIQUE tag.
 
@@ -101,7 +101,7 @@ Defined in: [generated.ts:2952](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **enhancement\_ids?**: `string`[]
 
-Defined in: [generated.ts:2953](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2953)
+Defined in: [generated.ts:3074](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3074)
 
 ***
 
@@ -109,7 +109,7 @@ Defined in: [generated.ts:2953](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **stratagem\_ids?**: `string`[]
 
-Defined in: [generated.ts:2954](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2954)
+Defined in: [generated.ts:3075](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3075)
 
 ***
 
@@ -117,7 +117,7 @@ Defined in: [generated.ts:2954](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **restrictions?**: \{ `required_keywords?`: [`KeywordList`](../type-aliases/KeywordList.md); `excluded_keywords?`: [`KeywordList`](../type-aliases/KeywordList.md); `notes?`: `string`; \} \| `null`
 
-Defined in: [generated.ts:2955](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2955)
+Defined in: [generated.ts:3076](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3076)
 
 ***
 
@@ -125,7 +125,7 @@ Defined in: [generated.ts:2955](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **granted\_keywords?**: [`GrantedKeyword`](GrantedKeyword.md)[]
 
-Defined in: [generated.ts:2963](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2963)
+Defined in: [generated.ts:3084](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3084)
 
 Construction keywords this detachment grants to matching units while it is selected (e.g. Houndpack Lance grants 'Battleline' to 'War Dog' units). A unit carrying any keyword in a grant's `to_keywords` gains that grant's `keyword` for army-construction purposes (datasheet-count caps, battlefield role). Empty/absent when the detachment grants no construction keywords. Distinct from combat keywords, which live in the ability DSL.
 
@@ -135,7 +135,7 @@ Construction keywords this detachment grants to matching units while it is selec
 
 > `optional` **unit\_minimums?**: [`UnitMinimum`](UnitMinimum.md)[]
 
-Defined in: [generated.ts:2967](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2967)
+Defined in: [generated.ts:3088](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3088)
 
 Minimum unit counts the detachment requires while selected (e.g. Houndpack Lance: 'your army must include three or more WAR DOG units'). Each entry requires at least `min` units carrying `keyword`. Empty/absent when the detachment imposes no minimum.
 
@@ -145,7 +145,7 @@ Minimum unit counts the detachment requires while selected (e.g. Houndpack Lance
 
 > `optional` **mandatory\_warlord\_datasheet\_ids?**: `string`[]
 
-Defined in: [generated.ts:2971](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2971)
+Defined in: [generated.ts:3092](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3092)
 
 While this detachment is selected, the army's Warlord must be one of these datasheets (e.g. Devoted of Ynnead: Yvraine or The Yncarne). The requirement also makes them eligible to be Warlord when an allied rule would otherwise bar it. Empty/absent when the detachment imposes no Warlord requirement.
 
@@ -155,7 +155,7 @@ While this detachment is selected, the army's Warlord must be one of these datas
 
 > `optional` **granted\_warlord\_datasheet\_ids?**: `string`[]
 
-Defined in: [generated.ts:2975](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2975)
+Defined in: [generated.ts:3096](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3096)
 
 Datasheets this detachment allows to be the army's Warlord while it is selected, even when the allied rule they were included under bars it (e.g. Ghosts of the Webway: a Troupe Master, Shadowseer or Death Jester). A permission, not a requirement. Empty/absent when the detachment grants none.
 
@@ -165,7 +165,7 @@ Datasheets this detachment allows to be the army's Warlord while it is selected,
 
 > `optional` **keyword\_limit\_overrides?**: `object`[]
 
-Defined in: [generated.ts:2979](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2979)
+Defined in: [generated.ts:3100](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3100)
 
 Replacement caps for the army faction's `keyword_limits` while this detachment is selected (e.g. Ghosts of the Webway: up to three TROUPE MASTER units instead of one). An entry applies to the faction cap with the identical `keywords` set. Empty/absent when the detachment changes no cap.
 
@@ -183,7 +183,7 @@ Replacement caps for the army faction's `keyword_limits` while this detachment i
 
 > `optional` **excluded\_datasheet\_ids?**: `string`[]
 
-Defined in: [generated.ts:2986](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2986)
+Defined in: [generated.ts:3107](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3107)
 
 Datasheets an army cannot include while this detachment is selected (e.g. Shadow Legion bars named Greater Daemons such as Skarbrand). Empty/absent when the detachment bars none.
 
@@ -193,7 +193,7 @@ Datasheets an army cannot include while this detachment is selected (e.g. Shadow
 
 > **game\_version**: [`GameVersionReference`](GameVersionReference.md)
 
-Defined in: [generated.ts:2987](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2987)
+Defined in: [generated.ts:3108](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3108)
 
 ***
 
@@ -201,4 +201,4 @@ Defined in: [generated.ts:2987](https://github.com/wn-mitch/40kdc-data/blob/8559
 
 > `optional` **game\_modes?**: [`GameModes1`](../type-aliases/GameModes1.md)
 
-Defined in: [generated.ts:2988](https://github.com/wn-mitch/40kdc-data/blob/8559c3d1e7f22290453eb0e2572d8cbc3c6c9bb7/tools/src/generated.ts#L2988)
+Defined in: [generated.ts:3109](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L3109)
