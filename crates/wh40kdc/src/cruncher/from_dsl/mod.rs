@@ -1067,6 +1067,10 @@ pub(crate) fn classify_target(node: &Obj) -> Side {
             if is_str(t, "member_of", "defender") {
                 return Side::Defender;
             }
+            // A Stratagem's named target is the unit it was used on: the unit opted into it.
+            if t.get("stratagem_target").is_some_and(Value::is_string) {
+                return Side::Buffed;
+            }
             match t.get("owner").and_then(Value::as_str) {
                 None | Some("any") if t.get("unit_ids").is_some_and(Value::is_array) => {
                     Side::Buffed

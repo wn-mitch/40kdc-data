@@ -4,6 +4,8 @@ package wh40kdc
 // (eligible_abilities / buffs_for / defensive_buffs_for). Go mirror of the
 // buff-translation halves of python .../data/entities.py and dataset.py.
 
+import "strings"
+
 // resolveRulesBundles expands entity-backed grants into reusable bundle effect
 // trees. Unresolved, malformed, and cyclic references remain untouched so the
 // DSL translator emits its normal unsupported diagnostic.
@@ -335,8 +337,46 @@ func (ds *Dataset) collectBuffs(input, context map[string]any, perspective strin
 		ability := entry["ability"].(*AbilityView)
 		bs := buffSourceFromEligible(entry)
 		rating, hasRating := entry["rating"]
-		out = append(out, ability.describeRatedBuffs(bs, ctx, perspective, rating, hasRating).applied...)
+		at := ctx
+		if getStr(source, "kind") == "detachment-stratagem" {
+			at = ds.stratagemContext(input, entry, ctx)
+		}
+		out = append(out, ability.describeRatedBuffs(bs, at, perspective, rating, hasRating).applied...)
 	}
+	return out
+}
+
+// stratagemContext is ctx with stratagemTargets filled in for an opted-in Stratagem: which of its
+// named friendly targets the input unit (with the units attached to it) can be. Mirrors TS
+// stratagemContext.
+func (ds *Dataset) stratagemContext(input map[string]any, entry, ctx map[string]any) map[string]any {
+	if _, set := ctx["stratagemTargets"]; set {
+		return ctx
+	}
+	found, ok := ds.Stratagems.Get(getStr(entry["source"].(map[string]any), "stratagemId"))
+	stratagem, isMap := asMap(found)
+	combined := ds.combinedUnit(input)
+	if !ok || !isMap || stratagem == nil || len(combined) == 0 {
+		return ctx
+	}
+	members := make([]map[string]bool, 0, len(combined))
+	for _, member := range combined {
+		keywords := map[string]bool{}
+		for _, keyword := range append(append([]string{}, getStrList(member.Raw, "keywords")...), getStrList(member.Raw, "faction_keywords")...) {
+			keywords[strings.ToLower(keyword)] = true
+		}
+		members = append(members, keywords)
+	}
+	trigger, _ := asMap(entry["ability"].(*AbilityView).Raw["trigger"])
+	targets := stratagemTargetNames(stratagem, members, mapOr(trigger)["subject"], ds.printedKeyword())
+	if len(targets) == 0 {
+		return ctx
+	}
+	out := make(map[string]any, len(ctx)+1)
+	for key, value := range ctx {
+		out[key] = value
+	}
+	out["stratagemTargets"] = targets
 	return out
 }
 
@@ -429,7 +469,9 @@ func auraInches(effect any) (float64, bool) {
 		case map[string]any:
 			if _, typed := x["type"].(string); typed {
 				if target, ok := asMap(x["target"]); ok && target != nil {
-					if inches, ok := mapOr(mapOr(target["within"])["range"])["inches"].(float64); ok {
+					// A range from a Stratagem's named target is not one from this ability's unit.
+					_, fromNamedTarget := mapOr(mapOr(target["within"])["of"])["stratagem_target"]
+					if inches, ok := mapOr(mapOr(target["within"])["range"])["inches"].(float64); ok && !fromNamedTarget {
 						found[inches] = true
 					}
 				}

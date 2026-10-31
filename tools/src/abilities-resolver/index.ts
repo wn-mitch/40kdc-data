@@ -7,10 +7,12 @@
  */
 export {
   isCombatPatrolDetachment,
+  printedKeyword,
   replacedArmyRuleIds,
   resolveEligibleAbilities,
   stratagemCanTarget,
   stratagemCanTargetUnit,
+  stratagemTargetNames,
   type EligibilityInput,
   type EligibleAbility,
   type EligibleAbilitySource,

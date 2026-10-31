@@ -14,6 +14,7 @@ export const HALF_WEAPON_RANGE_CASE_PREFIX = "canonical/half-weapon-range/";
 export const SCENARIO_CASE_PREFIX = "canonical/scenario/";
 export const TRIGGER_SUBJECT_CASE_PREFIX = "canonical/trigger-subject/";
 export const STRATAGEM_MODEL_CASE_PREFIX = "canonical/stratagem-model/";
+export const STRATAGEM_TARGET_CASE_PREFIX = "canonical/stratagem-target/";
 export const DESIGNATION_CASE_PREFIX = "canonical/designation/";
 
 export interface DslInput {
@@ -133,6 +134,36 @@ export function canonicalStratagemModelCases() {
       applied: result.applied.map((buff) => buff.contribution),
       unsupportedReasons: result.unsupported.map((item) => item.reason),
     needKeys: needKeys(result),
+      activatable: result.activatable.map((lever) => ({
+        id: lever.id, label: lever.label, group: lever.group ?? null,
+        requires: lever.requires ?? null, capRaise: lever.capRaise ?? null,
+        ...stanceOptionFields(lever),
+        buffs: lever.buffs.map((buff) => buff.contribution),
+      })),
+    } };
+  });
+}
+
+/**
+ * A fabricated two-target Stratagem whose effect names each target: the context says which named
+ * friendly targets the crunched unit is, and a name it does not list stays unresolved.
+ */
+export function canonicalStratagemTargetCases() {
+  const source = { kind: "ability", abilityId: "stratagem-target-example", abilityKind: "detachment-stratagem" } as const;
+  const fnp = (name: string, threshold: number) => ({ type: "feel-no-pain", target: { stratagem_target: name }, modifier: { threshold } });
+  const effect = { type: "sequence", steps: [fnp("first", 5), fnp("second", 4)] };
+  const rows: Array<Omit<DslInput, "abilityId" | "caseId"> & { id: string }> = [
+    { id: "unit-is-first-only", source, effect, context: { phase: "shooting", stratagemTargets: { first: true, second: false } }, perspective: "target" },
+    { id: "unit-is-both", source, effect, context: { phase: "shooting", stratagemTargets: { first: true, second: true } }, perspective: "target" },
+    { id: "targets-unknown", source, effect, context: { phase: "shooting" }, perspective: "target" },
+    { id: "unlisted-name", source, effect: fnp("third", 5), context: { phase: "shooting", stratagemTargets: { first: true } }, perspective: "target" },
+  ];
+  return rows.map(({ id, ...row }) => {
+    const result = effectToBuffs(row.effect, row.source, row.context, row.perspective);
+    return { caseId: `${STRATAGEM_TARGET_CASE_PREFIX}${id}`, abilityId: row.source.abilityId, ...row, expected: {
+      applied: result.applied.map((buff) => buff.contribution),
+      unsupportedReasons: result.unsupported.map((item) => item.reason),
+      needKeys: needKeys(result),
       activatable: result.activatable.map((lever) => ({
         id: lever.id, label: lever.label, group: lever.group ?? null,
         requires: lever.requires ?? null, capRaise: lever.capRaise ?? null,

@@ -13,6 +13,7 @@ import type { Phase } from "../generated.js";
 import type { EligibleAbility } from "../abilities-resolver/index.js";
 import type { Dataset } from "./dataset.js";
 import type { EligibilityInput } from "../abilities-resolver/index.js";
+import { printedKeyword, stratagemTargetNames } from "../abilities-resolver/index.js";
 import type { AbilityView, UnitView } from "./entities.js";
 import { historicalSnapshotAbilities } from "./recipient-snapshots.js";
 import {
@@ -223,8 +224,8 @@ export function collectBuffs(
   needs?: AbilityNeed[],
 ): Buff[] {
   const out: Buff[] = [];
-  const translate = (ability: AbilityView, source: BuffSource, rating?: string | number) => {
-    const translation = ability.describeBuffs(source, ctx, perspective, rating);
+  const translate = (ability: AbilityView, source: BuffSource, rating?: string | number, at: EngineContext = ctx) => {
+    const translation = ability.describeBuffs(source, at, perspective, rating);
     if (needs) {
       for (const need of abilityNeeds(translation.unsupported, ability.id, ability.name)) {
         if (!needs.some((n) => n.key === need.key && n.abilityId === need.abilityId)) needs.push(need);
@@ -261,7 +262,8 @@ export function collectBuffs(
     }
     const source = bufferSourceFromEligible(entry);
     visited.push({ abilityId: entry.ability.id, source });
-    out.push(...translate(entry.ability, source, entry.rating));
+    const at = entry.source.kind === "detachment-stratagem" ? stratagemContext(ds, input, entry, ctx) : ctx;
+    out.push(...translate(entry.ability, source, entry.rating, at));
   }
   for (const entry of historicalSnapshotAbilities(ds, input, ctx, perspective)) {
     if (visited.some((current) => current.abilityId === entry.ability.id && sameSnapshotValue(current.source, entry.source))) continue;
@@ -269,6 +271,23 @@ export function collectBuffs(
   }
 
   return out;
+}
+
+/**
+ * `ctx` with {@link EngineContext.stratagemTargets} filled in for an opted-in Stratagem: which of
+ * its named friendly targets the input unit (with the units attached to it) can be.
+ */
+function stratagemContext(ds: Dataset, input: BuffInput, entry: EligibleAbility, ctx: EngineContext): EngineContext {
+  if (entry.source.kind !== "detachment-stratagem" || ctx.stratagemTargets !== undefined) return ctx;
+  const stratagem = ds.stratagems.get(entry.source.stratagemId);
+  const unit = inputUnit(ds, input);
+  if (!stratagem || !unit) return ctx;
+  const factionId = input.factionId ?? unit.raw.faction_id;
+  const members = [unit, ...(input.attachedUnitIds ?? []).map((id) => (factionId ? ds.units.getInFaction(id, factionId) : undefined) ?? ds.units.getAny(id))]
+    .map((member) => new Set([...(member?.keywords ?? []), ...(member?.factionKeywords ?? [])].map((keyword) => keyword.toLowerCase())));
+  const trigger = entry.ability.raw.trigger as { subject?: unknown } | null | undefined;
+  const targets = stratagemTargetNames(stratagem, members, trigger?.subject, printedKeyword(ds));
+  return Object.keys(targets).length === 0 ? ctx : { ...ctx, stratagemTargets: targets };
 }
 
 /**

@@ -705,6 +705,8 @@ function classifyTarget(
   // A unit filter reaches every unit it matches: friendly ones are the buffed side, enemy ones the other.
   if (isObject(target) && !("event_var" in target) && !("selection_var" in target)) {
     if (target.member_of === "attacker" || target.member_of === "defender") return target.member_of;
+    // A Stratagem's named target is the unit it was used on: the unit opted into it.
+    if (typeof target.stratagem_target === "string") return "self";
     if (Array.isArray(target.unit_ids) && (target.owner === undefined || target.owner === "any")) return "self";
     if (target.owner === "friendly" || (target.owner === undefined && target.member_of === "this-unit")) return "self";
     if (target.owner === "enemy") return "defender";

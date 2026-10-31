@@ -1894,6 +1894,190 @@
         "needKeys": [],
         "activatable": []
       }
+    },
+    {
+      "caseId": "canonical/stratagem-target/unit-is-first-only",
+      "abilityId": "stratagem-target-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "stratagem-target-example",
+        "abilityKind": "detachment-stratagem"
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "feel-no-pain",
+            "target": {
+              "stratagem_target": "first"
+            },
+            "modifier": {
+              "threshold": 5
+            }
+          },
+          {
+            "type": "feel-no-pain",
+            "target": {
+              "stratagem_target": "second"
+            },
+            "modifier": {
+              "threshold": 4
+            }
+          }
+        ]
+      },
+      "context": {
+        "phase": "shooting",
+        "stratagemTargets": {
+          "first": true,
+          "second": false
+        }
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [
+          {
+            "type": "feel-no-pain",
+            "threshold": 5
+          }
+        ],
+        "unsupportedReasons": [],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/stratagem-target/unit-is-both",
+      "abilityId": "stratagem-target-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "stratagem-target-example",
+        "abilityKind": "detachment-stratagem"
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "feel-no-pain",
+            "target": {
+              "stratagem_target": "first"
+            },
+            "modifier": {
+              "threshold": 5
+            }
+          },
+          {
+            "type": "feel-no-pain",
+            "target": {
+              "stratagem_target": "second"
+            },
+            "modifier": {
+              "threshold": 4
+            }
+          }
+        ]
+      },
+      "context": {
+        "phase": "shooting",
+        "stratagemTargets": {
+          "first": true,
+          "second": true
+        }
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [
+          {
+            "type": "feel-no-pain",
+            "threshold": 5
+          },
+          {
+            "type": "feel-no-pain",
+            "threshold": 4
+          }
+        ],
+        "unsupportedReasons": [],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/stratagem-target/targets-unknown",
+      "abilityId": "stratagem-target-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "stratagem-target-example",
+        "abilityKind": "detachment-stratagem"
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "feel-no-pain",
+            "target": {
+              "stratagem_target": "first"
+            },
+            "modifier": {
+              "threshold": 5
+            }
+          },
+          {
+            "type": "feel-no-pain",
+            "target": {
+              "stratagem_target": "second"
+            },
+            "modifier": {
+              "threshold": 4
+            }
+          }
+        ]
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "unit-filter target: identity, state or model membership is unresolved",
+          "unit-filter target: identity, state or model membership is unresolved"
+        ],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/stratagem-target/unlisted-name",
+      "abilityId": "stratagem-target-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "stratagem-target-example",
+        "abilityKind": "detachment-stratagem"
+      },
+      "effect": {
+        "type": "feel-no-pain",
+        "target": {
+          "stratagem_target": "third"
+        },
+        "modifier": {
+          "threshold": 5
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "stratagemTargets": {
+          "first": true
+        }
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "unit-filter target: identity, state or model membership is unresolved"
+        ],
+        "needKeys": [],
+        "activatable": []
+      }
     }
   ]
 }

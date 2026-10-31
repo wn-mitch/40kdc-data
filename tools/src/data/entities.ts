@@ -342,7 +342,9 @@ export function auraInches(effect: unknown, battleRound?: number): number | unde
     const target = rec.target;
     if (target !== null && typeof target === "object" && "within" in target) {
       const within = target.within;
-      if (within !== null && typeof within === "object" && "range" in within) {
+      // A range from a Stratagem's named target is not one from this ability's unit.
+      const fromNamedTarget = within !== null && typeof within === "object" && "of" in within && within.of !== null && typeof within.of === "object" && "stratagem_target" in within.of;
+      if (within !== null && typeof within === "object" && "range" in within && !fromNamedTarget) {
         let range = within.range;
         if (range !== null && typeof range === "object" && "per_battle_round" in range) {
           const tiers = range.per_battle_round;

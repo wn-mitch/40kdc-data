@@ -354,6 +354,17 @@ func TestStratagemTargetsCorpus(t *testing.T) {
 				printed = func(keyword string) bool { return known[NormalizeName(keyword)] }
 			}
 			got = stratagemCanTargetUnit(stratagem, members, c["trigger_subject"], printed)
+			if want, listed := asMap(c["expected_names"]); listed && want != nil {
+				names := stratagemTargetNames(stratagem, members, c["trigger_subject"], printed)
+				if len(names) != len(want) {
+					t.Errorf("%s: names %v, want %v", getStr(c, "name"), names, want)
+				}
+				for name, verdict := range want {
+					if got, ok := names[name]; !ok || got != verdict {
+						t.Errorf("%s: names %v, want %v", getStr(c, "name"), names, want)
+					}
+				}
+			}
 		}
 		if want, _ := c["expected"].(bool); got != want {
 			t.Errorf("%s: got %v, want %v", getStr(c, "name"), got, want)

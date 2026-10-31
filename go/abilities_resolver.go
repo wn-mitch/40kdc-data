@@ -315,6 +315,35 @@ func stratagemCanTargetUnit(stratagem map[string]any, members []map[string]bool,
 	if len(friendly) == 0 {
 		return true
 	}
+	holds := targetHolds(members, triggerSubject, printed)
+	for _, target := range friendly {
+		if holds(target) {
+			return true
+		}
+	}
+	return false
+}
+
+// stratagemTargetNames reports, for a Stratagem with several targets (an array target_restrictions),
+// whether a unit of members can be each named friendly target, read as stratagemCanTargetUnit reads
+// each target: what {stratagem_target: name} resolves to when the Stratagem is used on that unit.
+// Enemy targets are not listed. Mirrors TS stratagemTargetNames.
+func stratagemTargetNames(stratagem map[string]any, members []map[string]bool, triggerSubject any, printed func(string) bool) map[string]bool {
+	out := map[string]bool{}
+	if _, listed := stratagem["target_restrictions"].([]any); !listed {
+		return out
+	}
+	holds := targetHolds(members, triggerSubject, printed)
+	for _, target := range stratagemTargets(stratagem) {
+		if name, named := target["name"].(string); named && getStr(target, "side") != "enemy" {
+			out[name] = holds(target)
+		}
+	}
+	return out
+}
+
+// targetHolds reports whether a unit of members meets one friendly Stratagem target.
+func targetHolds(members []map[string]bool, triggerSubject any, printed func(string) bool) func(map[string]any) bool {
 	normalized := make([]map[string]bool, 0, len(members))
 	combined := map[string]bool{}
 	for _, member := range members {
@@ -326,7 +355,7 @@ func stratagemCanTargetUnit(stratagem map[string]any, members []map[string]bool,
 		normalized = append(normalized, own)
 	}
 	subject := friendlySubject(triggerSubject)
-	for _, target := range friendly {
+	return func(target map[string]any) bool {
 		candidates := []map[string]bool{combined}
 		if getStr(target, "selects") == "model" {
 			candidates = normalized
@@ -345,8 +374,8 @@ func stratagemCanTargetUnit(stratagem map[string]any, members []map[string]bool,
 			}
 			return true
 		}
+		return false
 	}
-	return false
 }
 
 // friendlySubject is a trigger subject's keyword lists when it names a friendly unit, else nil.

@@ -984,6 +984,44 @@ class Dataset:
             ctx["attachmentRoles"] = roles
         return ctx
 
+    def _stratagem_context(
+        self, input: dict[str, Any], entry: dict[str, Any], ctx: dict[str, Any]
+    ) -> dict[str, Any]:
+        """``ctx`` with ``stratagemTargets`` filled in for an opted-in Stratagem: which of its
+        named friendly targets the input unit (with the units attached to it) can be. Mirrors
+        TS ``stratagemContext``."""
+        from wh40kdc.abilities_resolver import _printed_keyword, stratagem_target_names
+
+        if ctx.get("stratagemTargets") is not None:
+            return ctx
+        stratagem = self.stratagems.get(entry["source"]["stratagemId"])
+        faction_id = input.get("factionId")
+        unit = (
+            self.units.get_in_faction(input["unitId"], faction_id) if faction_id else None
+        ) or self.units.get_any(input.get("unitId") or "")
+        if stratagem is None or unit is None:
+            return ctx
+        faction_id = faction_id or unit.raw.get("faction_id")
+        members = [unit] + [
+            (self.units.get_in_faction(member_id, faction_id) if faction_id else None)
+            or self.units.get_any(member_id)
+            for member_id in input.get("attachedUnitIds") or []
+        ]
+        keywords = [
+            {
+                keyword.lower()
+                for keyword in (member.raw.get("keywords") or [])
+                + (member.raw.get("faction_keywords") or [])
+            }
+            if member is not None
+            else set()
+            for member in members
+        ]
+        trigger = entry["ability"].raw.get("trigger")
+        subject = trigger.get("subject") if isinstance(trigger, dict) else None
+        targets = stratagem_target_names(stratagem, keywords, subject, _printed_keyword(self))
+        return {**ctx, "stratagemTargets": targets} if targets else ctx
+
     def _buff_context(
         self, input: dict[str, Any], context: dict[str, Any], perspective: str
     ) -> dict[str, Any]:
@@ -1141,7 +1179,12 @@ class Dataset:
                 continue
             source = _buff_source_from_eligible(entry)
             ability = entry["ability"]
-            translation = ability.describe_buffs(source, ctx, perspective, entry.get("rating"))
+            at = (
+                self._stratagem_context(input, entry, ctx)
+                if source_info["kind"] == "detachment-stratagem"
+                else ctx
+            )
+            translation = ability.describe_buffs(source, at, perspective, entry.get("rating"))
             if needs is not None:
                 for need in ability_needs(translation["unsupported"], ability.id, ability.name):
                     if not any(

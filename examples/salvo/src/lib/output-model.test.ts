@@ -4,6 +4,7 @@ import { Dataset, type EngineContext } from "@alpaca-software/40kdc-data";
 import { crunchLine, enabledLeverBuffs, memberMortalSources, memberUnits, mortalSourceBlocked, mortalSourceKey, mortalSourceLine, synthTarget, targetDefences } from "./output-model.js";
 import { DEFAULT_TARGET } from "./store.svelte.js";
 import { weaponLines } from "./weapon-lines.js";
+import { RAW_DATA } from "../../../../tools/dist/data/bundle.generated.js";
 
 const ds = Dataset.embedded();
 const shooting: EngineContext = { phase: "shooting" };
@@ -87,11 +88,17 @@ describe("mortal wounds outside the attack", () => {
   });
 
   it("names a pre-launch record's mortal wounds without offering them as a toggle", () => {
-    const pulse = ds.abilities.getInFaction("gravitic-pulse-necrons", "necrons");
-    expect(pulse?.raw.game_version?.dataslate).toBe("pre-launch-provisional");
-    const { sources, unverified, error } = memberMortalSources(ds, { unitId: "obelisk", factionId: "necrons", detachmentId: null, attachedUnitIds: [], supportUnitIds: [] }, shooting);
+    // Krushin' Impetus marked as still carrying its pre-launch DSL.
+    const fixture = new Dataset({
+      ...RAW_DATA,
+      abilities: RAW_DATA.abilities.map((ability) => ability.ability_id === "krushin-impetus-orks"
+        ? { ...ability, game_version: { edition: "11th", dataslate: "pre-launch-provisional" } }
+        : ability) as never,
+    });
+    const unit = fixture.units.all.find((entry) => entry.raw.ability_ids?.some((ref) => (typeof ref === "string" ? ref : ref.id) === "krushin-impetus-orks"))!;
+    const { sources, unverified, error } = memberMortalSources(fixture, { unitId: unit.id, factionId: unit.raw.faction_id, detachmentId: null, attachedUnitIds: [], supportUnitIds: [] }, shooting);
     expect(error).toBeUndefined();
-    expect(sources.some((entry) => entry.abilityId === "gravitic-pulse-necrons")).toBe(false);
-    expect(unverified).toContain(pulse!.name);
+    expect(sources.some((entry) => entry.abilityId === "krushin-impetus-orks")).toBe(false);
+    expect(unverified).toContain(fixture.abilities.getInFaction("krushin-impetus-orks", "orks")!.name);
   });
 });

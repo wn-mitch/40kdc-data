@@ -39,7 +39,7 @@ import { effectToBuffs } from "../src/cruncher/from-dsl.js";
 import { mortalWoundSources } from "../src/cruncher/mortal-sources.js";
 import { resolveGrantedRecords, type GrantedRecord } from "../src/cruncher/granted-records.js";
 import { encodeBase } from "../src/runner.js";
-import { stratagemCanTarget, stratagemCanTargetUnit, type EligibilityInput } from "../src/abilities-resolver/index.js";
+import { stratagemCanTarget, stratagemCanTargetUnit, stratagemTargetNames, type EligibilityInput } from "../src/abilities-resolver/index.js";
 import {
   resolveLayout,
   type TerrainTemplate as ResolverTemplate,
@@ -439,6 +439,7 @@ describe("abilities-resolver conformance corpus", () => {
   type TargetCase = {
     name: string; target_restrictions: unknown; expected: boolean;
     keywords?: string[]; members?: string[][]; trigger_subject?: unknown; printed?: string[];
+    expected_names?: Record<string, boolean>;
   };
   const targets = readJson(join(dir, "stratagem-targets.json")) as { cases: TargetCase[] };
   for (const c of targets.cases) {
@@ -451,6 +452,7 @@ describe("abilities-resolver conformance corpus", () => {
       const printed = c.printed ? new Set(c.printed.map(normalizeName)) : null;
       const isPrinted = (keyword: string) => printed === null || printed.has(normalizeName(keyword));
       expect(stratagemCanTargetUnit(stratagem, c.members.map((member) => new Set(member)), c.trigger_subject, isPrinted)).toBe(c.expected);
+      if (c.expected_names) expect(stratagemTargetNames(stratagem, c.members.map((member) => new Set(member)), c.trigger_subject, isPrinted)).toEqual(c.expected_names);
     });
   }
 

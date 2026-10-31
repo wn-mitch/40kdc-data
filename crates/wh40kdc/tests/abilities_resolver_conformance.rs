@@ -307,6 +307,17 @@ fn stratagem_targets_match_the_resolver_goldens() {
                         .as_ref()
                         .is_none_or(|known| known.contains(&wh40kdc::data::normalize_name(keyword)))
                 };
+                if let Some(want) = case.get("expected_names") {
+                    let names = wh40kdc::data::stratagem_target_names(
+                        &stratagem,
+                        &members,
+                        case.get("trigger_subject"),
+                        &is_printed,
+                    );
+                    if serde_json::to_value(&names).ok().as_ref() != Some(want) {
+                        failures.push(format!("{}: names {names:?}", case["name"]));
+                    }
+                }
                 wh40kdc::data::stratagem_can_target_unit(
                     &stratagem,
                     &members,

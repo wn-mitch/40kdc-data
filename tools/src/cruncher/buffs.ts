@@ -245,6 +245,13 @@ export type EngineContext = {
   /** The target-side counterpart of {@link attackerMemberKeywords}. */
   targetMemberKeywords?: ReadonlyArray<string>;
   /**
+   * For the Stratagem being translated, whether the crunched unit is each of its named friendly
+   * targets (`{stratagem_target: name}`): true for a target it can be when the Stratagem is used
+   * on it, false for one it cannot. A name it does not list (an enemy target, or any name when
+   * absent) is unresolved.
+   */
+  stratagemTargets?: Readonly<Record<string, boolean>>;
+  /**
    * Sub-phase timing flag (e.g. `"start-of-phase"`, `"end-of-phase"`,
    * `"on-destroyed"`). Consumed by the `timing-is` condition. Left undefined
    * when the caller can't pin a sub-phase down — the condition then evaluates

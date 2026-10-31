@@ -617,7 +617,15 @@ fn aura_inches_for_round(effect: &Value, battle_round: Option<u32>) -> Option<f6
                 if model_grant {
                     return;
                 }
-                let mut range = o.get("target").and_then(|t| t.pointer("/within/range"));
+                // A range from a Stratagem's named target is not one from this ability's unit.
+                let from_named_target = o
+                    .get("target")
+                    .and_then(|t| t.pointer("/within/of/stratagem_target"))
+                    .is_some();
+                let mut range = o
+                    .get("target")
+                    .and_then(|t| t.pointer("/within/range"))
+                    .filter(|_| !from_named_target);
                 if let Some(tiers) = range
                     .and_then(|r| r.get("per_battle_round"))
                     .and_then(Value::as_array)
@@ -690,13 +698,51 @@ pub fn stratagem_can_target_unit(
     if friendly.is_empty() {
         return true;
     }
+    let holds = target_holds(members, trigger_subject, printed);
+    friendly.into_iter().any(holds)
+}
+
+/// For a Stratagem with several targets (an array `target_restrictions`), whether a unit of
+/// `members` can be each named friendly target, read as [`stratagem_can_target_unit`] reads each
+/// target: what `{stratagem_target: name}` resolves to when the Stratagem is used on that unit.
+/// Enemy targets are not listed. Mirrors TS `stratagemTargetNames`.
+pub fn stratagem_target_names(
+    stratagem: &crate::Stratagem,
+    members: &[HashSet<String>],
+    trigger_subject: Option<&Value>,
+    printed: &dyn Fn(&str) -> bool,
+) -> std::collections::BTreeMap<String, bool> {
+    let raw = stratagem
+        .target_restrictions
+        .as_ref()
+        .and_then(|t| serde_json::to_value(t).ok());
+    let Some(Value::Array(targets)) = raw else {
+        return Default::default();
+    };
+    let holds = target_holds(members, trigger_subject, printed);
+    targets
+        .iter()
+        .filter(|target| target.get("side").and_then(Value::as_str) != Some("enemy"))
+        .filter_map(|target| {
+            let name = target.get("name").and_then(Value::as_str)?;
+            Some((name.to_string(), holds(target)))
+        })
+        .collect()
+}
+
+/// Whether a unit of `members` meets one friendly Stratagem target.
+fn target_holds<'a>(
+    members: &[HashSet<String>],
+    trigger_subject: Option<&Value>,
+    printed: &'a dyn Fn(&str) -> bool,
+) -> impl Fn(&Value) -> bool + 'a {
     let normalized: Vec<HashSet<String>> = members
         .iter()
         .map(|member| member.iter().map(|k| normalize_name(k)).collect())
         .collect();
     let combined: HashSet<String> = normalized.iter().flatten().cloned().collect();
     let subject = friendly_subject(trigger_subject);
-    friendly.iter().any(|target| {
+    move |target: &Value| {
         let candidates: Vec<&HashSet<String>> =
             if target.get("selects").and_then(Value::as_str) == Some("model") {
                 normalized.iter().collect()
@@ -715,7 +761,7 @@ pub fn stratagem_can_target_unit(
                         .as_ref()
                         .is_none_or(|subject| keyword_lists_hold(subject, &gained, &has)))
         })
-    })
+    }
 }
 
 /// A trigger subject's keyword lists, as a target restriction, when it names a friendly unit.

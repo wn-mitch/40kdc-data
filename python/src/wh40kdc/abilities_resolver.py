@@ -334,6 +334,36 @@ def stratagem_can_target_unit(
     friendly = [target for target in targets if target.get("side") != "enemy"]
     if not friendly:
         return True
+    holds = _target_holds(members, trigger_subject, printed)
+    return any(holds(target) for target in friendly)
+
+
+def stratagem_target_names(
+    stratagem: dict[str, Any],
+    members: list[set[str]],
+    trigger_subject: Any = None,
+    printed: Callable[[str], bool] = lambda _keyword: True,
+) -> dict[str, bool]:
+    """For a Stratagem with several targets (a list ``target_restrictions``), whether a unit of
+    ``members`` can be each named friendly target, read as ``stratagem_can_target_unit`` reads
+    each target: what ``{stratagem_target: name}`` resolves to when the Stratagem is used on
+    that unit. Enemy targets are not listed. Mirrors TS ``stratagemTargetNames``.
+    """
+    raw = stratagem.get("target_restrictions")
+    if not isinstance(raw, list):
+        return {}
+    holds = _target_holds(members, trigger_subject, printed)
+    return {
+        target["name"]: holds(target)
+        for target in raw
+        if target.get("side") != "enemy" and isinstance(target.get("name"), str)
+    }
+
+
+def _target_holds(
+    members: list[set[str]], trigger_subject: Any, printed: Callable[[str], bool]
+) -> Callable[[dict[str, Any]], bool]:
+    """Whether a unit of ``members`` meets one friendly Stratagem target."""
     normalized = [{normalize_name(keyword) for keyword in member} for member in members]
     combined: set[str] = set().union(*normalized)
     subject = _friendly_subject(trigger_subject)
@@ -355,9 +385,8 @@ def stratagem_can_target_unit(
             )
         )
 
-    return any(
+    return lambda target: any(
         meets(target, keywords)
-        for target in friendly
         for keywords in (normalized if target.get("selects") == "model" else [combined])
     )
 

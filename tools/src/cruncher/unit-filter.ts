@@ -20,6 +20,10 @@ type KeywordPredicate = { all_of?: string[]; any_of?: string[]; none_of?: string
  */
 export function matchesUnitFilter(filter: unknown, context: EngineContext, side: Side, owner: "friendly" | "enemy" = "friendly"): FilterVerdict {
   if (!isObject(filter)) return "unknown";
+  // A Stratagem's named target is the crunched unit when the Stratagem was used on it as that target.
+  if (typeof filter.stratagem_target === "string") {
+    return context.stratagemTargets?.[filter.stratagem_target] ?? "unknown";
+  }
   const abilitySide: Side = owner === "friendly" ? side : side === "attacker" ? "target" : "attacker";
   let unknown = false;
   const predicate: KeywordPredicate = {};

@@ -1,5 +1,5 @@
 {
-  "description": "stratagemCanTarget(stratagem, keywords): whether a unit with these lower-cased keywords (the combined unit's, as the resolver collects them) can be the stratagem's friendly target. A Warlord target needs a unit that could contain the Warlord: one with CHARACTER. A case with members calls stratagemCanTargetUnit(stratagem, members, trigger_subject, printed): each member's keywords; a target that selects a model needs one member that meets it alone, a unit target reads the members combined; a target bound to the triggering unit also meets the friendly trigger_subject's all_of/any_of/none_of; a required trigger keyword outside printed (when given) is gained in play and counts as held. Keywords compare by normalizeName.",
+  "description": "stratagemCanTarget(stratagem, keywords): whether a unit with these lower-cased keywords (the combined unit's, as the resolver collects them) can be the stratagem's friendly target. A Warlord target needs a unit that could contain the Warlord: one with CHARACTER. A case with members calls stratagemCanTargetUnit(stratagem, members, trigger_subject, printed): each member's keywords; a target that selects a model needs one member that meets it alone, a unit target reads the members combined; a target bound to the triggering unit also meets the friendly trigger_subject's all_of/any_of/none_of; a required trigger keyword outside printed (when given) is gained in play and counts as held. Keywords compare by normalizeName. A case with expected_names also calls stratagemTargetNames(stratagem, members, trigger_subject, printed): for an array-form target_restrictions, each named friendly target mapped to whether the unit can be it (enemy targets omitted; {} for a single-object form).",
   "cases": [
     {
       "name": "warlord target: a CHARACTER unit with the required keyword qualifies",
@@ -350,6 +350,168 @@
         "vehicle"
       ],
       "expected": false
+    },
+    {
+      "name": "named targets: a unit without the second target's keyword is only the first",
+      "target_restrictions": [
+        {
+          "name": "first",
+          "count": "one",
+          "mode": "a",
+          "selects": "unit",
+          "bound_to": "triggering-unit",
+          "required_keywords": [
+            "Gloom Wardens"
+          ]
+        },
+        {
+          "name": "second",
+          "count": "one",
+          "mode": "b",
+          "side": "your-army",
+          "selects": "unit",
+          "required_keywords": [
+            "Gloom Wardens",
+            "Jump Pack"
+          ]
+        }
+      ],
+      "members": [
+        [
+          "gloom wardens",
+          "infantry"
+        ]
+      ],
+      "expected": true,
+      "expected_names": {
+        "first": true,
+        "second": false
+      }
+    },
+    {
+      "name": "named targets: a unit meeting both is each of them",
+      "target_restrictions": [
+        {
+          "name": "first",
+          "count": "one",
+          "mode": "a",
+          "selects": "unit",
+          "bound_to": "triggering-unit",
+          "required_keywords": [
+            "Gloom Wardens"
+          ]
+        },
+        {
+          "name": "second",
+          "count": "one",
+          "mode": "b",
+          "side": "your-army",
+          "selects": "unit",
+          "required_keywords": [
+            "Gloom Wardens",
+            "Jump Pack"
+          ]
+        }
+      ],
+      "members": [
+        [
+          "gloom wardens",
+          "jump pack"
+        ]
+      ],
+      "expected": true,
+      "expected_names": {
+        "first": true,
+        "second": true
+      }
+    },
+    {
+      "name": "named targets: an attached member's keyword counts for a unit target",
+      "target_restrictions": [
+        {
+          "name": "first",
+          "count": "one",
+          "mode": "a",
+          "selects": "unit",
+          "bound_to": "triggering-unit",
+          "required_keywords": [
+            "Gloom Wardens"
+          ]
+        },
+        {
+          "name": "second",
+          "count": "one",
+          "mode": "b",
+          "side": "your-army",
+          "selects": "unit",
+          "required_keywords": [
+            "Gloom Wardens",
+            "Jump Pack"
+          ]
+        }
+      ],
+      "members": [
+        [
+          "gloom wardens"
+        ],
+        [
+          "jump pack",
+          "character"
+        ]
+      ],
+      "expected": true,
+      "expected_names": {
+        "first": true,
+        "second": true
+      }
+    },
+    {
+      "name": "named targets: an enemy target is not listed",
+      "target_restrictions": [
+        {
+          "name": "first",
+          "count": "one",
+          "mode": "a",
+          "selects": "unit",
+          "bound_to": "triggering-unit",
+          "required_keywords": [
+            "Gloom Wardens"
+          ]
+        },
+        {
+          "name": "second",
+          "count": "one",
+          "side": "enemy",
+          "selects": "unit"
+        }
+      ],
+      "members": [
+        [
+          "gloom wardens"
+        ]
+      ],
+      "expected": true,
+      "expected_names": {
+        "first": true
+      }
+    },
+    {
+      "name": "named targets: a single-object target restriction names none",
+      "target_restrictions": {
+        "count": "one",
+        "side": "your-army",
+        "selects": "unit",
+        "required_keywords": [
+          "Gloom Wardens"
+        ]
+      },
+      "members": [
+        [
+          "gloom wardens"
+        ]
+      ],
+      "expected": true,
+      "expected_names": {}
     }
   ]
 }

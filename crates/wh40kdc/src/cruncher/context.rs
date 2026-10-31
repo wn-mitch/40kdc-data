@@ -219,6 +219,11 @@ pub struct EngineContext {
     /// The target-side counterpart of `attacker_member_keywords`.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub target_member_keywords: Option<Vec<String>>,
+    /// For the Stratagem being translated, whether the crunched unit is each of its named friendly
+    /// targets (`{stratagem_target: name}`). A name it does not list (an enemy target, or any name
+    /// when absent) is unresolved.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub stratagem_targets: Option<std::collections::BTreeMap<String, bool>>,
     /// Sub-phase timing flag consumed by the `timing-is` condition.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub timing: Option<String>,
@@ -351,6 +356,7 @@ impl EngineContext {
             target_model_keywords: None,
             attacker_member_keywords: None,
             target_member_keywords: None,
+            stratagem_targets: None,
             timing: None,
             attacker_attached: None,
             target_attached: None,

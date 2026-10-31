@@ -13,7 +13,11 @@ from typing import Any
 
 import pytest
 
-from wh40kdc.abilities_resolver import stratagem_can_target, stratagem_can_target_unit
+from wh40kdc.abilities_resolver import (
+    stratagem_can_target,
+    stratagem_can_target_unit,
+    stratagem_target_names,
+)
 from wh40kdc.cruncher import effect_to_buffs, mortal_wound_sources, resolve_granted_records
 from wh40kdc.data.ability_refs import with_rating
 from wh40kdc.data.normalize import normalize_name
@@ -56,13 +60,15 @@ def test_stratagem_can_target(case: dict[str, Any]) -> None:
         return
     listed = case.get("printed")
     printed = {normalize_name(k) for k in listed} if listed is not None else None
-    got = stratagem_can_target_unit(
-        stratagem,
-        [set(member) for member in case["members"]],
-        case.get("trigger_subject"),
-        lambda keyword: printed is None or normalize_name(keyword) in printed,
-    )
+    def is_printed(keyword: str) -> bool:
+        return printed is None or normalize_name(keyword) in printed
+
+    members = [set(member) for member in case["members"]]
+    got = stratagem_can_target_unit(stratagem, members, case.get("trigger_subject"), is_printed)
     assert got is case["expected"]
+    if "expected_names" in case:
+        names = stratagem_target_names(stratagem, members, case.get("trigger_subject"), is_printed)
+        assert names == case["expected_names"]
 
 
 def _run_dsl_corpus(dataset: Any, filename: str) -> None:

@@ -496,6 +496,11 @@ pub(crate) fn matches_unit_filter(
     side: TranslationPerspective,
     owner: &str,
 ) -> Option<bool> {
+    // A Stratagem's named target is the crunched unit when the Stratagem was used on it as that
+    // target.
+    if let Some(name) = filter.get("stratagem_target").and_then(Value::as_str) {
+        return context.stratagem_targets.as_ref()?.get(name).copied();
+    }
     let keywords = if side == TranslationPerspective::Attacker {
         context.attacker_keywords.as_deref()
     } else {

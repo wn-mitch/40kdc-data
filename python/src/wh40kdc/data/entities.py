@@ -602,6 +602,10 @@ def aura_inches(effect: Any) -> float | int | None:
         target = node.get("target")
         if isinstance(node.get("type"), str) and isinstance(target, dict):
             within = target.get("within")
+            # A range from a Stratagem's named target is not one from this ability's unit.
+            of = within.get("of") if isinstance(within, dict) else None
+            if isinstance(of, dict) and "stratagem_target" in of:
+                within = None
             rng = within.get("range") if isinstance(within, dict) else None
             inches = rng.get("inches") if isinstance(rng, dict) else None
             if (

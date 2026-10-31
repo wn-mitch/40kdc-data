@@ -744,6 +744,9 @@ def _classify_target(node: dict[str, Any]) -> str:
     if _is_object(target) and "event_var" not in target and "selection_var" not in target:
         if target.get("member_of") in ("attacker", "defender"):
             return target["member_of"]
+        # A Stratagem's named target is the unit it was used on: the unit opted into it.
+        if isinstance(target.get("stratagem_target"), str):
+            return "self"
         if isinstance(target.get("unit_ids"), list) and target.get("owner") in (None, "any"):
             return "self"
         if target.get("owner") == "friendly" or (
@@ -3377,6 +3380,11 @@ def _matches_unit_filter(
     """
     if not _is_object(filt):
         return "unknown"
+    # A Stratagem's named target is the crunched unit when the Stratagem was used on it as
+    # that target.
+    if isinstance(filt.get("stratagem_target"), str):
+        verdict = (ctx.get("stratagemTargets") or {}).get(filt["stratagem_target"])
+        return "unknown" if verdict is None else verdict
     ability_side = side if owner == "friendly" else ("target" if side == "attacker" else "attacker")
     unknown = False
     predicates: dict[str, list[str]] = {}

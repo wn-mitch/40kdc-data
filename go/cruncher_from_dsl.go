@@ -1395,6 +1395,10 @@ func classifyTarget(node map[string]any) string {
 			if member, _ := f["member_of"].(string); member == "attacker" || member == "defender" {
 				return member
 			}
+			// A Stratagem's named target is the unit it was used on: the unit opted into it.
+			if _, named := f["stratagem_target"].(string); named {
+				return "self"
+			}
 			owner, hasOwner := f["owner"]
 			if _, listed := f["unit_ids"].([]any); listed && (!hasOwner || owner == "any") {
 				return "self"
@@ -2611,6 +2615,20 @@ func modelKeywordVerdict(predicates map[string]any, every []string, everyKnown b
 // belongs to side when the unit is friendly, and to the other side when it is
 // an enemy.
 func matchesUnitFilter(filter, ctx map[string]any, side, owner string) any {
+	// A Stratagem's named target is the crunched unit when the Stratagem was used on it as that target.
+	if name, named := filter["stratagem_target"].(string); named {
+		switch targets := ctx["stratagemTargets"].(type) {
+		case map[string]bool:
+			if verdict, known := targets[name]; known {
+				return verdict
+			}
+		case map[string]any:
+			if verdict, known := targets[name].(bool); known {
+				return verdict
+			}
+		}
+		return nil
+	}
 	abilitySide := side
 	if owner != "friendly" {
 		abilitySide = otherSide(side)

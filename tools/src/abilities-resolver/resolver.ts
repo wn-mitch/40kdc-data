@@ -259,7 +259,7 @@ function stratagemPhaseMatches(stratagem: Stratagem, phase: Phase): boolean {
 }
 
 type TargetRestriction = {
-  side?: string; selects?: string; bound_to?: string; warlord?: true;
+  name?: string; side?: string; selects?: string; bound_to?: string; warlord?: true;
   required_keywords?: string[]; required_keywords_any?: string[]; excluded_keywords?: string[];
 };
 type TriggerSubject = { owner?: string; all_of?: string[]; any_of?: string[]; none_of?: string[] };
@@ -295,16 +295,42 @@ export function stratagemCanTargetUnit(
   if (!raw) return true;
   const friendly = (Array.isArray(raw) ? raw : [raw]).filter((target) => target.side !== "enemy");
   if (friendly.length === 0) return true;
+  const holds = targetHolds(members, triggerSubject, printed);
+  return friendly.some(holds);
+}
+
+/**
+ * For a Stratagem with several targets (an array-form `target_restrictions`), whether a unit of
+ * `members` can be each named friendly target, read as {@link stratagemCanTargetUnit} reads each
+ * target: what `{stratagem_target: name}` resolves to when the Stratagem is used on that unit.
+ * Enemy targets are not listed; a Stratagem with no named targets gives an empty record.
+ */
+export function stratagemTargetNames(
+  stratagem: Stratagem,
+  members: readonly ReadonlySet<string>[],
+  triggerSubject?: unknown,
+  printed: (keyword: string) => boolean = () => true,
+): Record<string, boolean> {
+  const raw = stratagem.target_restrictions as TargetRestriction | TargetRestriction[] | null | undefined;
+  if (!Array.isArray(raw)) return {};
+  const holds = targetHolds(members, triggerSubject, printed);
+  return Object.fromEntries(raw
+    .filter((target): target is TargetRestriction & { name: string } => target.side !== "enemy" && typeof target.name === "string")
+    .map((target) => [target.name, holds(target)]));
+}
+
+/** Whether a unit of `members` meets one friendly Stratagem target (see {@link stratagemCanTargetUnit}). */
+function targetHolds(members: readonly ReadonlySet<string>[], triggerSubject: unknown, printed: (keyword: string) => boolean): (target: TargetRestriction) => boolean {
   const normalized = members.map((member) => new Set([...member].map(normalizeName)));
   const combined = new Set(normalized.flatMap((member) => [...member]));
   const subject = friendlySubject(triggerSubject);
-  return friendly.some((target) => (target.selects === "model" ? normalized : [combined]).some((keywords) => {
+  return (target) => (target.selects === "model" ? normalized : [combined]).some((keywords) => {
     const has = (keyword: string) => keywords.has(normalizeName(keyword));
     const gained = (keyword: string) => has(keyword) || !printed(keyword);
     return (target.warlord !== true || has("character"))
       && keywordListsHold(target, has, has)
       && (target.bound_to !== "triggering-unit" || subject === null || keywordListsHold(subject, gained, has));
-  }));
+  });
 }
 
 /**
@@ -312,7 +338,7 @@ export function stratagemCanTargetUnit(
  * Counts every game mode's datasheets: a keyword printed only on a Combat Patrol unit is
  * still printed, whatever view the caller's dataset lists.
  */
-function printedKeyword(dataset: Dataset): (keyword: string) => boolean {
+export function printedKeyword(dataset: Dataset): (keyword: string) => boolean {
   const seen = new Map<string, boolean>();
   const every = dataset.forGameMode("all");
   return (keyword) => {
