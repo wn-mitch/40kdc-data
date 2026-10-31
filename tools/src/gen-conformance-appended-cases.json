@@ -3229,5 +3229,239 @@
       "duration": "permanent"
     },
     "behavior": "passive"
+  },
+  {
+    "caseId": "canonical/resource-gain-pledge-round",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "round-started"
+          },
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": {
+                  "owner": "friendly",
+                  "level": "model",
+                  "designated": "warlord"
+                },
+                "filter": {
+                  "state": "on-battlefield"
+                }
+              }
+            },
+            "effect": {
+              "type": "resource-gain",
+              "target": "this-model",
+              "modifier": {
+                "pool": "vow",
+                "amount": "any",
+                "set": true
+              }
+            }
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "round-ended"
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "conditional",
+                "condition": {
+                  "type": "happened-compare",
+                  "parameters": {
+                    "left": {
+                      "event": "destroyed",
+                      "object": {
+                        "owner": "enemy"
+                      },
+                      "window": "battle-round"
+                    },
+                    "comparison": "gte",
+                    "right": {
+                      "pool": "vow"
+                    }
+                  }
+                },
+                "effect": {
+                  "type": "resource-gain",
+                  "target": "this-model",
+                  "modifier": {
+                    "pool": "glory-points",
+                    "amount": {
+                      "pool": "vow"
+                    }
+                  }
+                }
+              },
+              {
+                "type": "conditional",
+                "condition": {
+                  "operator": "not",
+                  "operands": [
+                    {
+                      "type": "happened-compare",
+                      "parameters": {
+                        "left": {
+                          "event": "destroyed",
+                          "object": {
+                            "owner": "enemy"
+                          },
+                          "window": "battle-round"
+                        },
+                        "comparison": "gte",
+                        "right": {
+                          "pool": "vow"
+                        }
+                      }
+                    }
+                  ]
+                },
+                "effect": {
+                  "type": "mortal-wounds",
+                  "target": {
+                    "owner": "friendly",
+                    "level": "model",
+                    "designated": "warlord"
+                  },
+                  "modifier": {
+                    "count": "D3"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "reactive"
+  },
+  {
+    "caseId": "canonical/printed-grant-pool-tiers",
+    "effect": {
+      "type": "ability-grant",
+      "target": {
+        "owner": "friendly",
+        "all_of": [
+          "GLOOM WARDENS"
+        ]
+      },
+      "modifier": {
+        "definition": {
+          "type": "ability-part",
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "conditional",
+                "condition": {
+                  "type": "resource",
+                  "parameters": {
+                    "pool": "glory-points",
+                    "count": {
+                      "min": 2
+                    }
+                  }
+                },
+                "effect": {
+                  "type": "re-roll",
+                  "target": "this-unit",
+                  "modifier": {
+                    "roll": "hit",
+                    "subset": "ones"
+                  }
+                }
+              },
+              {
+                "type": "conditional",
+                "condition": {
+                  "type": "resource",
+                  "parameters": {
+                    "pool": "glory-points",
+                    "count": {
+                      "min": 4
+                    }
+                  }
+                },
+                "effect": {
+                  "type": "re-roll",
+                  "target": "this-unit",
+                  "modifier": {
+                    "roll": "wound",
+                    "subset": "ones"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "passive"
+  },
+  {
+    "caseId": "canonical/resource-gain-set-dice",
+    "effect": {
+      "type": "resource-gain",
+      "target": "this-model",
+      "modifier": {
+        "pool": "vow",
+        "amount": "D3",
+        "set": true
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "passive"
+  },
+  {
+    "caseId": "canonical/resource-condition-negated-trigger",
+    "effect": {
+      "type": "ability-part",
+      "trigger": {
+        "event": "round-started",
+        "condition": {
+          "operator": "not",
+          "operands": [
+            {
+              "type": "resource",
+              "parameters": {
+                "pool": "glory-points",
+                "count": {
+                  "min": 2
+                }
+              }
+            }
+          ]
+        }
+      },
+      "effect": {
+        "type": "mortal-wounds",
+        "target": "this-unit",
+        "modifier": {
+          "count": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "reactive"
   }
 ]

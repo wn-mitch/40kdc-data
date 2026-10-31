@@ -775,6 +775,19 @@ func describeBoardLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 	case "cost-modifier":
 		return costModifierLeaf(m, subj)
 	case "resource-gain":
+		// "you must pledge a number": the pool becomes the number picked, not one more.
+		if m["set"] == true {
+			if m["amount"] == "any" {
+				return "declare a number as your " + dekebab(ejstr(m["pool"]))
+			}
+			return "your " + dekebab(ejstr(m["pool"])) + " becomes " + diceCase(m["amount"])
+		}
+		// "a number of Pact points equal to your pledge": as many as another pool holds.
+		if a, ok := m["amount"].(map[string]any); ok {
+			if source, ok := a["pool"].(string); ok {
+				return "you gain a number of " + resourceNoun(m["pool"], m["label"], 2.0) + " equal to your " + dekebab(source)
+			}
+		}
 		if _, ok := m["amount"].(map[string]any); ok {
 			return "you gain " + amountOf(m["amount"], resourceNoun(m["pool"], m["label"], 1.0), resourceNoun(m["pool"], m["label"], 2.0))
 		}

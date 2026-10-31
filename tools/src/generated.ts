@@ -6005,7 +6005,16 @@ export interface ResourceGainEffect {
   target: UnitRef;
   modifier: {
     pool: string;
-    amount: Quantity | ("variable" | "any");
+    amount:
+      | Quantity
+      | ("variable" | "any")
+      | {
+          pool: string;
+        };
+    /**
+     * The pool becomes the amount instead of gaining it ('you must pledge a number'); amount any is a number the player picks.
+     */
+    set?: true;
     label?: string;
   };
   scaling?: Scaling;

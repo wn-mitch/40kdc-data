@@ -12444,8 +12444,26 @@
                         "variable",
                         "any"
                       ]
+                    },
+                    {
+                      "type": "object",
+                      "description": "As many as another pool holds ('a number of Pact points equal to your pledge').",
+                      "additionalProperties": false,
+                      "required": [
+                        "pool"
+                      ],
+                      "properties": {
+                        "pool": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      }
                     }
                   ]
+                },
+                "set": {
+                  "const": true,
+                  "description": "The pool becomes the amount instead of gaining it ('you must pledge a number'); amount any is a number the player picks."
                 },
                 "label": {
                   "type": "string",

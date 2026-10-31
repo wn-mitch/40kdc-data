@@ -1380,6 +1380,10 @@ class Modifier46(TypedDict):
     ]
 
 
+class Amount(TypedDict):
+    pool: str
+
+
 class AmountTableItem(TypedDict):
     unit_ids: list[EntityId]
     starting_strength: int
@@ -1697,7 +1701,8 @@ class Modifier41(TypedDict):
 
 class Modifier47(TypedDict):
     pool: str
-    amount: Quantity | Literal["variable", "any"]
+    amount: Quantity | Literal["variable", "any"] | Amount
+    set: NotRequired[Literal[True]]
     label: NotRequired[str]
 
 

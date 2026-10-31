@@ -55,6 +55,7 @@ pub(crate) fn negate_phrase(phrase: &str) -> String {
     for (from, to) in [
         ("you control ", "you do not control "),
         ("you hold ", "you do not hold "),
+        ("you have ", "you do not have "),
         ("you destroyed ", "you did not destroy "),
         ("you newly control ", "you do not newly control "),
         ("you are ", "you are not "),

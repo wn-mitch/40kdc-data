@@ -289,7 +289,7 @@ export function designationPhrase(tag: string, plural = false): string {
 }
 
 const WINDOW_PHRASES: Record<string, string> = {
-  phase: "this phase", turn: "this turn", round: "this battle round", battle: "this battle",
+  phase: "this phase", turn: "this turn", round: "this battle round", "battle-round": "this battle round", battle: "this battle",
   "previous-turn": "in the previous turn", event: "",
 };
 export const windowPhrase = (w: unknown): string => WINDOW_PHRASES[str(w)] ?? dekebab(str(w));

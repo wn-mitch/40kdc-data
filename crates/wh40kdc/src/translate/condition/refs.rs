@@ -596,7 +596,7 @@ pub(crate) fn window_phrase(w: Option<&Value>) -> String {
     match key.as_str() {
         "phase" => "this phase".to_string(),
         "turn" => "this turn".to_string(),
-        "battle-round" => "battle round".to_string(),
+        "round" | "battle-round" => "this battle round".to_string(),
         "battle" => "this battle".to_string(),
         "previous-turn" => "in the previous turn".to_string(),
         "event" => String::new(),

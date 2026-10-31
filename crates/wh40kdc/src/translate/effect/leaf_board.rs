@@ -537,6 +537,28 @@ pub(crate) fn describe_board_leaf(e: &P, m: &P, subj: &str, ctx: &Ctx) -> String
         }
         Some("cost-modifier") => cost_modifier(m, subj),
         Some("resource-gain") => {
+            // "you must pledge a number": the pool becomes the number picked, not one more.
+            if is_true(m, "set") {
+                let pool = crate::translate::dekebab(&jstr(m.get("pool")));
+                return if sv(m, "amount") == Some("any") {
+                    format!("declare a number as your {pool}")
+                } else {
+                    format!("your {pool} becomes {}", dice_case(m.get("amount")))
+                };
+            }
+            // "a number of Pact points equal to your pledge": as many as another pool holds.
+            if let Some(source) = nn(m, "amount")
+                .and_then(|a| a.as_object())
+                .and_then(|a| a.get("pool"))
+                .and_then(|p| p.as_str())
+            {
+                let two = Value::from(2);
+                return format!(
+                    "you gain a number of {} equal to your {}",
+                    resource_noun(m.get("pool"), m.get("label"), Some(&two)),
+                    crate::translate::dekebab(source)
+                );
+            }
             if let Some(a) = nn(m, "amount").filter(|a| a.is_object() || a.is_array()) {
                 let one = Value::from(1);
                 let two = Value::from(2);

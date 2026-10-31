@@ -555,6 +555,12 @@ export function describeBoardLeaf(e: Leaf, m: Record<string, unknown>, subj: str
     }
     case "cost-modifier": return costModifier(m, subj);
     case "resource-gain": {
+      // "you must pledge a number": the pool becomes the number picked, not one more.
+      if (m.set === true) return m.amount === "any" ? `declare a number as your ${dekebab(jstr(m.pool))}` : `your ${dekebab(jstr(m.pool))} becomes ${diceCase(m.amount)}`;
+      // "a number of Pact points equal to your pledge": as many as another pool holds.
+      if (m.amount != null && typeof m.amount === "object" && !Array.isArray(m.amount) && typeof (m.amount as P).pool === "string") {
+        return `you gain a number of ${resourceNoun(m.pool, m.label, 2)} equal to your ${dekebab(jstr((m.amount as P).pool))}`;
+      }
       if (m.amount != null && typeof m.amount === "object") return `you gain ${amountOf(m.amount, resourceNoun(m.pool, m.label, 1), resourceNoun(m.pool, m.label, 2))}`;
       const amount = m.amount === "variable" ? "a number of" : m.amount === "any" ? "any number of" : diceCase(m.amount);
       return `you gain ${amount} ${resourceNoun(m.pool, m.label, m.amount)}`;

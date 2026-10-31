@@ -37,7 +37,7 @@ const VERB_NEGATED = new Set([
 /** "X is Y" → "X is not Y", "X has Y" → "X does not have Y", "you control" → "you do not control"; else a leading "not". */
 export function negatePhrase(phrase: string): string {
   for (const [from, to] of [
-    [/^you control /, "you do not control "], [/^you hold /, "you do not hold "], [/^you destroyed /, "you did not destroy "],
+    [/^you control /, "you do not control "], [/^you hold /, "you do not hold "], [/^you have /, "you do not have "], [/^you destroyed /, "you did not destroy "],
     [/^you newly control /, "you do not newly control "], [/^you are /, "you are not "], [/^your opponent controls /, "your opponent does not control "],
   ] as const) {
     if (from.test(phrase)) return phrase.replace(from, to);
@@ -281,7 +281,8 @@ export function describePredicate(c: Condition, negated: boolean): string {
         return `${neg}the ${dekebab(str(source))} ability had unused selection capacity at the end of the opponent's previous turn`;
       }
       const amount = countPhrase(p.count);
-      return `${neg}the unit has ${amount} ${dekebab(str(p.pool))}`;
+      // A pool is the player's ("If you have 3 or more Pact points").
+      return `you have ${amount} ${dekebab(str(p.pool))}`;
     }
     // ── Mission-card predicates ───────────────────────────────────────────
     case "operation-markers": {

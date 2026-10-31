@@ -330,6 +330,16 @@ def transport_capacity(m: dict[str, Any]) -> str:
 
 def resource_gain(m: dict[str, Any]) -> str:
     a = m.get("amount")
+    pool = str(m.get("pool") or "").replace("-", " ")
+    # "you must pledge a number": the pool becomes the number picked, not one more.
+    if m.get("set") is True:
+        if a == "any":
+            return f"declare a number as your {pool}"
+        return f"your {pool} becomes {dice_case(a)}"
+    # "a number of Pact points equal to your pledge": as many as another pool holds.
+    if isinstance(a, dict) and isinstance(a.get("pool"), str):
+        many = resource_noun(m.get("pool"), m.get("label"), 2)
+        return f"you gain a number of {many} equal to your {a['pool'].replace('-', ' ')}"
     if isinstance(a, (dict, list)):
         one = resource_noun(m.get("pool"), m.get("label"), 1)
         many = resource_noun(m.get("pool"), m.get("label"), 2)

@@ -47,7 +47,7 @@ var verbNegated = map[string]bool{
 }
 
 var negatePrefixes = [][2]string{
-	{"you control ", "you do not control "}, {"you hold ", "you do not hold "}, {"you destroyed ", "you did not destroy "},
+	{"you control ", "you do not control "}, {"you hold ", "you do not hold "}, {"you have ", "you do not have "}, {"you destroyed ", "you did not destroy "},
 	{"you newly control ", "you do not newly control "}, {"you are ", "you are not "},
 	{"your opponent controls ", "your opponent does not control "},
 }
@@ -787,7 +787,8 @@ func describePredicate(c map[string]any, negated bool) string {
 			source := mapOr(p["source_ability"])["ability_id"]
 			return neg + "the " + dekebab(cstr(source)) + " ability had unused selection capacity at the end of the opponent's previous turn"
 		}
-		return neg + "the unit has " + controlCountPhrase(p["count"]) + " " + dekebab(cstr(p["pool"]))
+		// A pool is the player's ("If you have 3 or more Pact points").
+		return "you have " + controlCountPhrase(p["count"]) + " " + dekebab(cstr(p["pool"]))
 	// -- Mission-card predicates --
 	case "operation-markers":
 		side := ""

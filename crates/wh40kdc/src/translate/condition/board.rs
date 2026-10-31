@@ -434,8 +434,9 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
                     dekebab(&st(source))
                 );
             }
+            // A pool is the player's ("If you have 3 or more Pact points").
             format!(
-                "{neg}the unit has {} {}",
+                "you have {} {}",
                 count_phrase(p.get("count")),
                 dekebab(&st(p.get("pool")))
             )

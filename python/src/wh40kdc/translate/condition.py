@@ -222,6 +222,7 @@ _VERB_NEGATED = frozenset(
 _NEGATED_OPENERS = (
     ("you control ", "you do not control "),
     ("you hold ", "you do not hold "),
+    ("you have ", "you do not have "),
     ("you destroyed ", "you did not destroy "),
     ("you newly control ", "you do not newly control "),
     ("you are ", "you are not "),
@@ -668,7 +669,8 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
             if minimum is not None
             else f"at most {_str(maximum)}"
         )
-        return f"{neg}the unit has {amount} {dekebab(_str(p.get('pool')))}"
+        # A pool is the player's ("If you have 3 or more Pact points").
+        return f"you have {amount} {dekebab(_str(p.get('pool')))}"
     if ctype == "operation-markers":
         side_s = f"{_str(p['side'])} " if p.get("side") is not None else ""
         lo, hi = _count_bounds(p)

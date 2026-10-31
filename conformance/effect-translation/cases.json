@@ -21183,10 +21183,13 @@
             "condition": {
               "type": "matches",
               "parameters": {
+                "subject": {
+                  "owner": "friendly",
+                  "level": "model",
+                  "designated": "warlord"
+                },
                 "filter": {
-                  "all_of": [
-                    "WARLORD"
-                  ]
+                  "state": "on-battlefield"
                 }
               }
             },
@@ -21194,8 +21197,9 @@
               "type": "resource-gain",
               "target": "this-model",
               "modifier": {
-                "pool": "pact-pledge",
-                "amount": "variable"
+                "pool": "pledge",
+                "amount": "any",
+                "set": true
               }
             }
           }
@@ -21222,7 +21226,7 @@
                     },
                     "comparison": "gte",
                     "right": {
-                      "pool": "pact-pledge"
+                      "pool": "pledge"
                     }
                   }
                 },
@@ -21230,8 +21234,10 @@
                   "type": "resource-gain",
                   "target": "this-model",
                   "modifier": {
-                    "pool": "pact-points-pool",
-                    "amount": "variable"
+                    "pool": "pact-points",
+                    "amount": {
+                      "pool": "pledge"
+                    }
                   }
                 }
               },
@@ -21252,7 +21258,7 @@
                         },
                         "comparison": "gte",
                         "right": {
-                          "pool": "pact-pledge"
+                          "pool": "pledge"
                         }
                       }
                     }
@@ -21260,7 +21266,11 @@
                 },
                 "effect": {
                   "type": "mortal-wounds",
-                  "target": "this-model",
+                  "target": {
+                    "owner": "friendly",
+                    "level": "model",
+                    "designated": "warlord"
+                  },
                   "modifier": {
                     "count": "D3"
                   }
@@ -21268,14 +21278,125 @@
               }
             ]
           }
+        },
+        {
+          "type": "ability-grant",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "EMPEROR'S CHILDREN"
+            ]
+          },
+          "modifier": {
+            "definition": {
+              "type": "ability-part",
+              "effect": {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "conditional",
+                    "condition": {
+                      "type": "resource",
+                      "parameters": {
+                        "pool": "pact-points",
+                        "count": {
+                          "min": 1
+                        }
+                      }
+                    },
+                    "effect": {
+                      "type": "re-roll",
+                      "target": "this-unit",
+                      "modifier": {
+                        "roll": "hit",
+                        "subset": "ones"
+                      }
+                    }
+                  },
+                  {
+                    "type": "conditional",
+                    "condition": {
+                      "type": "resource",
+                      "parameters": {
+                        "pool": "pact-points",
+                        "count": {
+                          "min": 3
+                        }
+                      }
+                    },
+                    "effect": {
+                      "type": "re-roll",
+                      "target": "this-unit",
+                      "modifier": {
+                        "roll": "wound",
+                        "subset": "ones"
+                      }
+                    }
+                  },
+                  {
+                    "type": "conditional",
+                    "condition": {
+                      "type": "resource",
+                      "parameters": {
+                        "pool": "pact-points",
+                        "count": {
+                          "min": 5
+                        }
+                      }
+                    },
+                    "effect": {
+                      "type": "weapon-ability-grant",
+                      "target": "this-unit",
+                      "modifier": {
+                        "keywords": [
+                          {
+                            "keyword_id": "lethal-hits"
+                          },
+                          {
+                            "keyword_id": "sustained-hits",
+                            "parameters": {
+                              "value": 1
+                            }
+                          }
+                        ],
+                        "weapons": {
+                          "type": "melee"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "type": "conditional",
+                    "condition": {
+                      "type": "resource",
+                      "parameters": {
+                        "pool": "pact-points",
+                        "count": {
+                          "min": 7
+                        }
+                      }
+                    },
+                    "effect": {
+                      "type": "roll-result",
+                      "target": "this-unit",
+                      "modifier": {
+                        "roll": "hit",
+                        "critical_on": 5
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
         }
       ]
     },
     "scope": {
-      "duration": "battle-round"
+      "duration": "permanent"
     },
     "expected": {
-      "text": "Until the end of the battle round:\n  -> At the start of the battle round: if the unit has the WARLORD keyword, you gain a number of Pact Pledge.\n  -> At the end of the battle round:\n    -> If you destroyed at least as many enemy units battle round as your pact pledge, you gain a number of Pact points.\n    -> Unless you destroyed at least as many enemy units battle round as your pact pledge, this model suffers D3 mortal wounds."
+      "text": "-> At the start of the battle round: while a friendly model that is the Warlord is on the battlefield, declare a number as your pledge.\n-> At the end of the battle round:\n  -> If you destroyed at least as many enemy units this battle round as your pledge, you gain a number of Pact points equal to your pledge.\n  -> Unless you destroyed at least as many enemy units this battle round as your pledge, friendly models that are the Warlord suffer D3 mortal wounds.\nAll friendly EMPEROR'S CHILDREN units gain the following rules:\n  -> While you have 1+ pact points, you can re-roll a Hit roll of 1.\n  -> While you have 3+ pact points, you can re-roll a Wound roll of 1.\n  -> While you have 5+ pact points, melee weapons equipped by models in this unit gain [LETHAL HITS] and [SUSTAINED HITS 1].\n  -> While you have 7+ pact points, the unit scores Critical Hits on Hit rolls of 5+."
     }
   },
   {
@@ -22277,7 +22398,7 @@
       "duration": "battle"
     },
     "expected": {
-      "text": "If your Army Faction is LEAGUES OF VOTANN, for the rest of the battle:\n  -> At the start of the battle:\n    -> Until the start of your next Command phase: all friendly LEAGUES OF VOTANN units gain the Hostile Acquisition ability (while the target is within range of an objective marker, the unit gets +1 to Hit rolls; you can re-roll the Charge roll; you can re-roll the Advance roll).\n  -> At the end of each phase:\n    During the Command phase:\n      -> If you control 1+ home objectives in your territory, you gain 1 YP.\n      From the second battle round onward:\n        -> If you control 1+ objectives (excluding home), you gain 1 YP.\n        -> If you control 2+ objectives (excluding home), you gain 1 YP.\n        -> If you hold more objectives than the opponent, you gain 1 YP.\n    During the Command phase, in your turn:\n      -> While the unit has at most 6 yp pool, until the start of your next Command phase: all friendly LEAGUES OF VOTANN units gain the Hostile Acquisition (Prioritised Efficiency) ability.\n    During the Command phase, in your turn:\n      -> While the unit has 7+ yp pool, until the start of your next Command phase: all friendly LEAGUES OF VOTANN units gain the Fortify Takeover ability (while the unit is within range of an objective marker you control, the unit gets +1 to Hit rolls; when the attack's S is more than the target's T, unless the unit has the VEHICLE keyword, the attacking unit gets -1 to Wound rolls)."
+      "text": "If your Army Faction is LEAGUES OF VOTANN, for the rest of the battle:\n  -> At the start of the battle:\n    -> Until the start of your next Command phase: all friendly LEAGUES OF VOTANN units gain the Hostile Acquisition ability (while the target is within range of an objective marker, the unit gets +1 to Hit rolls; you can re-roll the Charge roll; you can re-roll the Advance roll).\n  -> At the end of each phase:\n    During the Command phase:\n      -> If you control 1+ home objectives in your territory, you gain 1 YP.\n      From the second battle round onward:\n        -> If you control 1+ objectives (excluding home), you gain 1 YP.\n        -> If you control 2+ objectives (excluding home), you gain 1 YP.\n        -> If you hold more objectives than the opponent, you gain 1 YP.\n    During the Command phase, in your turn:\n      -> While you have at most 6 yp pool, until the start of your next Command phase: all friendly LEAGUES OF VOTANN units gain the Hostile Acquisition (Prioritised Efficiency) ability.\n    During the Command phase, in your turn:\n      -> While you have 7+ yp pool, until the start of your next Command phase: all friendly LEAGUES OF VOTANN units gain the Fortify Takeover ability (while the unit is within range of an objective marker you control, the unit gets +1 to Hit rolls; when the attack's S is more than the target's T, unless the unit has the VEHICLE keyword, the attacking unit gets -1 to Wound rolls)."
     }
   },
   {
@@ -22647,7 +22768,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "All friendly LEAGUES OF VOTANN units lose the Hostile Acquisition (Prioritised Efficiency) ability and cannot gain it except from this ability.\nAll friendly LEAGUES OF VOTANN units lose the Fortify Takeover (Prioritised Efficiency) ability and cannot gain it except from this ability.\n-> At the start of the battle: all friendly LEAGUES OF VOTANN units gain the Hostile Acquisition (Prioritised Efficiency) ability.\n-> At the end of your Command phase, you may use this ability: while the unit has 3+ yp pool, spend 3 YP; if all friendly LEAGUES OF VOTANN units have exactly one of the Hostile Acquisition (Prioritised Efficiency) and Fortify Takeover (Prioritised Efficiency) abilities, all friendly LEAGUES OF VOTANN units simultaneously lose that ability and gain the other."
+      "text": "All friendly LEAGUES OF VOTANN units lose the Hostile Acquisition (Prioritised Efficiency) ability and cannot gain it except from this ability.\nAll friendly LEAGUES OF VOTANN units lose the Fortify Takeover (Prioritised Efficiency) ability and cannot gain it except from this ability.\n-> At the start of the battle: all friendly LEAGUES OF VOTANN units gain the Hostile Acquisition (Prioritised Efficiency) ability.\n-> At the end of your Command phase, you may use this ability: while you have 3+ yp pool, spend 3 YP; if all friendly LEAGUES OF VOTANN units have exactly one of the Hostile Acquisition (Prioritised Efficiency) and Fortify Takeover (Prioritised Efficiency) abilities, all friendly LEAGUES OF VOTANN units simultaneously lose that ability and gain the other."
     }
   },
   {
@@ -33470,7 +33591,7 @@
       "duration": "battle"
     },
     "expected": {
-      "text": "If your Army Faction is LEAGUES OF VOTANN, for the rest of the battle:\n  -> At the start of the battle:\n    -> Until the start of your next Command phase: all friendly LEAGUES OF VOTANN units gain the Hostile Acquisition ability (while the target is within range of an objective marker, the unit gets +1 to Hit rolls; you can re-roll the Charge roll; you can re-roll the Advance roll).\n  -> At the end of each phase:\n    During the Command phase:\n      -> If you control 1+ home objectives in your territory, you gain 1 YP.\n      From the second battle round onward:\n        -> If you control 1+ objectives (excluding home), you gain 1 YP.\n        -> If you control 2+ objectives (excluding home), you gain 1 YP.\n        -> If you hold more objectives than the opponent, you gain 1 YP.\n    During the Command phase, in your turn:\n      -> While the unit has at most 6 yp pool, until the start of your next Command phase: all friendly LEAGUES OF VOTANN units gain the Hostile Acquisition (Prioritised Efficiency) ability.\n    During the Command phase, in your turn:\n      -> While the unit has 7+ yp pool, until the start of your next Command phase: all friendly LEAGUES OF VOTANN units gain the Fortify Takeover ability (while the unit is within range of an objective marker you control, the unit gets +1 to Hit rolls; when the attack's S is more than the target's T, unless the unit has the VEHICLE keyword, the attacking unit gets -1 to Wound rolls)."
+      "text": "If your Army Faction is LEAGUES OF VOTANN, for the rest of the battle:\n  -> At the start of the battle:\n    -> Until the start of your next Command phase: all friendly LEAGUES OF VOTANN units gain the Hostile Acquisition ability (while the target is within range of an objective marker, the unit gets +1 to Hit rolls; you can re-roll the Charge roll; you can re-roll the Advance roll).\n  -> At the end of each phase:\n    During the Command phase:\n      -> If you control 1+ home objectives in your territory, you gain 1 YP.\n      From the second battle round onward:\n        -> If you control 1+ objectives (excluding home), you gain 1 YP.\n        -> If you control 2+ objectives (excluding home), you gain 1 YP.\n        -> If you hold more objectives than the opponent, you gain 1 YP.\n    During the Command phase, in your turn:\n      -> While you have at most 6 yp pool, until the start of your next Command phase: all friendly LEAGUES OF VOTANN units gain the Hostile Acquisition (Prioritised Efficiency) ability.\n    During the Command phase, in your turn:\n      -> While you have 7+ yp pool, until the start of your next Command phase: all friendly LEAGUES OF VOTANN units gain the Fortify Takeover ability (while the unit is within range of an objective marker you control, the unit gets +1 to Hit rolls; when the attack's S is more than the target's T, unless the unit has the VEHICLE keyword, the attacking unit gets -1 to Wound rolls)."
     }
   },
   {
@@ -33616,7 +33737,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "All friendly LEAGUES OF VOTANN units lose the Hostile Acquisition (Prioritised Efficiency) ability and cannot gain it except from this ability.\nAll friendly LEAGUES OF VOTANN units lose the Fortify Takeover (Prioritised Efficiency) ability and cannot gain it except from this ability.\n-> At the start of the battle: all friendly LEAGUES OF VOTANN units gain the Hostile Acquisition (Prioritised Efficiency) ability.\n-> At the end of your Command phase, you may use this ability: while the unit has 3+ yp pool, spend 3 YP; if all friendly LEAGUES OF VOTANN units have exactly one of the Hostile Acquisition (Prioritised Efficiency) and Fortify Takeover (Prioritised Efficiency) abilities, all friendly LEAGUES OF VOTANN units simultaneously lose that ability and gain the other."
+      "text": "All friendly LEAGUES OF VOTANN units lose the Hostile Acquisition (Prioritised Efficiency) ability and cannot gain it except from this ability.\nAll friendly LEAGUES OF VOTANN units lose the Fortify Takeover (Prioritised Efficiency) ability and cannot gain it except from this ability.\n-> At the start of the battle: all friendly LEAGUES OF VOTANN units gain the Hostile Acquisition (Prioritised Efficiency) ability.\n-> At the end of your Command phase, you may use this ability: while you have 3+ yp pool, spend 3 YP; if all friendly LEAGUES OF VOTANN units have exactly one of the Hostile Acquisition (Prioritised Efficiency) and Fortify Takeover (Prioritised Efficiency) abilities, all friendly LEAGUES OF VOTANN units simultaneously lose that ability and gain the other."
     }
   },
   {
@@ -45091,6 +45212,252 @@
     "behavior": "passive",
     "expected": {
       "text": "Select one of the following:\n  - Select one (each may be chosen once per battle) (in addition to any already active): Watch (the unit suffers 1 mortal wound) / Ward (the unit is Battle-shocked) / Wake (the unit suffers 2 mortal wounds); or, instead of selecting, roll one D3: each result applies the option it numbers (1 Watch, 2 Ward, 3 Wake); a result already active has no additional effect.\n  - The unit suffers 1 mortal wound."
+    }
+  },
+  {
+    "caseId": "canonical/resource-gain-pledge-round",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "round-started"
+          },
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": {
+                  "owner": "friendly",
+                  "level": "model",
+                  "designated": "warlord"
+                },
+                "filter": {
+                  "state": "on-battlefield"
+                }
+              }
+            },
+            "effect": {
+              "type": "resource-gain",
+              "target": "this-model",
+              "modifier": {
+                "pool": "vow",
+                "amount": "any",
+                "set": true
+              }
+            }
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "round-ended"
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "conditional",
+                "condition": {
+                  "type": "happened-compare",
+                  "parameters": {
+                    "left": {
+                      "event": "destroyed",
+                      "object": {
+                        "owner": "enemy"
+                      },
+                      "window": "battle-round"
+                    },
+                    "comparison": "gte",
+                    "right": {
+                      "pool": "vow"
+                    }
+                  }
+                },
+                "effect": {
+                  "type": "resource-gain",
+                  "target": "this-model",
+                  "modifier": {
+                    "pool": "glory-points",
+                    "amount": {
+                      "pool": "vow"
+                    }
+                  }
+                }
+              },
+              {
+                "type": "conditional",
+                "condition": {
+                  "operator": "not",
+                  "operands": [
+                    {
+                      "type": "happened-compare",
+                      "parameters": {
+                        "left": {
+                          "event": "destroyed",
+                          "object": {
+                            "owner": "enemy"
+                          },
+                          "window": "battle-round"
+                        },
+                        "comparison": "gte",
+                        "right": {
+                          "pool": "vow"
+                        }
+                      }
+                    }
+                  ]
+                },
+                "effect": {
+                  "type": "mortal-wounds",
+                  "target": {
+                    "owner": "friendly",
+                    "level": "model",
+                    "designated": "warlord"
+                  },
+                  "modifier": {
+                    "count": "D3"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "reactive",
+    "expected": {
+      "text": "-> At the start of the battle round: while a friendly model that is the Warlord is on the battlefield, declare a number as your vow.\n-> At the end of the battle round:\n  -> If you destroyed at least as many enemy units this battle round as your vow, you gain a number of Glory points equal to your vow.\n  -> Unless you destroyed at least as many enemy units this battle round as your vow, friendly models that are the Warlord suffer D3 mortal wounds."
+    }
+  },
+  {
+    "caseId": "canonical/printed-grant-pool-tiers",
+    "effect": {
+      "type": "ability-grant",
+      "target": {
+        "owner": "friendly",
+        "all_of": [
+          "GLOOM WARDENS"
+        ]
+      },
+      "modifier": {
+        "definition": {
+          "type": "ability-part",
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "conditional",
+                "condition": {
+                  "type": "resource",
+                  "parameters": {
+                    "pool": "glory-points",
+                    "count": {
+                      "min": 2
+                    }
+                  }
+                },
+                "effect": {
+                  "type": "re-roll",
+                  "target": "this-unit",
+                  "modifier": {
+                    "roll": "hit",
+                    "subset": "ones"
+                  }
+                }
+              },
+              {
+                "type": "conditional",
+                "condition": {
+                  "type": "resource",
+                  "parameters": {
+                    "pool": "glory-points",
+                    "count": {
+                      "min": 4
+                    }
+                  }
+                },
+                "effect": {
+                  "type": "re-roll",
+                  "target": "this-unit",
+                  "modifier": {
+                    "roll": "wound",
+                    "subset": "ones"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "passive",
+    "expected": {
+      "text": "All friendly GLOOM WARDENS units gain the following rules:\n  -> While you have 2+ glory points, you can re-roll a Hit roll of 1.\n  -> While you have 4+ glory points, you can re-roll a Wound roll of 1."
+    }
+  },
+  {
+    "caseId": "canonical/resource-gain-set-dice",
+    "effect": {
+      "type": "resource-gain",
+      "target": "this-model",
+      "modifier": {
+        "pool": "vow",
+        "amount": "D3",
+        "set": true
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "passive",
+    "expected": {
+      "text": "Your vow becomes D3."
+    }
+  },
+  {
+    "caseId": "canonical/resource-condition-negated-trigger",
+    "effect": {
+      "type": "ability-part",
+      "trigger": {
+        "event": "round-started",
+        "condition": {
+          "operator": "not",
+          "operands": [
+            {
+              "type": "resource",
+              "parameters": {
+                "pool": "glory-points",
+                "count": {
+                  "min": 2
+                }
+              }
+            }
+          ]
+        }
+      },
+      "effect": {
+        "type": "mortal-wounds",
+        "target": "this-unit",
+        "modifier": {
+          "count": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "reactive",
+    "expected": {
+      "text": "-> At the start of the battle round, if you do not have 2+ glory points: the unit suffers 1 mortal wound."
     }
   }
 ]

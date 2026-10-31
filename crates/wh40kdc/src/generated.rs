@@ -36245,6 +36245,20 @@ for ResourceDieEffectModifierValueVariant1 {
 ///            "variable",
 ///            "any"
 ///          ]
+///        },
+///        {
+///          "description": "As many as another pool holds ('a number of Pact points equal to your pledge').",
+///          "type": "object",
+///          "required": [
+///            "pool"
+///          ],
+///          "properties": {
+///            "pool": {
+///              "type": "string",
+///              "minLength": 1
+///            }
+///          },
+///          "additionalProperties": false
 ///        }
 ///      ]
 ///    },
@@ -36255,6 +36269,10 @@ for ResourceDieEffectModifierValueVariant1 {
 ///    "pool": {
 ///      "type": "string",
 ///      "minLength": 1
+///    },
+///    "set": {
+///      "description": "The pool becomes the amount instead of gaining it ('you must pledge a number'); amount any is a number the player picks.",
+///      "const": true
 ///    }
 ///  },
 ///  "additionalProperties": false
@@ -36268,6 +36286,9 @@ pub struct ResourceGainEffectModifier {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub label: ::std::option::Option<ResourceGainEffectModifierLabel>,
     pub pool: ResourceGainEffectModifierPool,
+    ///The pool becomes the amount instead of gaining it ('you must pledge a number'); amount any is a number the player picks.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub set: ::std::option::Option<::serde_json::Value>,
 }
 ///`ResourceGainEffectModifierAmount`
 ///
@@ -36284,16 +36305,31 @@ pub struct ResourceGainEffectModifier {
 ///        "variable",
 ///        "any"
 ///      ]
+///    },
+///    {
+///      "description": "As many as another pool holds ('a number of Pact points equal to your pledge').",
+///      "type": "object",
+///      "required": [
+///        "pool"
+///      ],
+///      "properties": {
+///        "pool": {
+///          "type": "string",
+///          "minLength": 1
+///        }
+///      },
+///      "additionalProperties": false
 ///    }
 ///  ]
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
-#[serde(untagged)]
+#[serde(untagged, deny_unknown_fields)]
 pub enum ResourceGainEffectModifierAmount {
     Variant0(Quantity),
     Variant1(ResourceGainEffectModifierAmountVariant1),
+    Variant2 { pool: ResourceGainEffectModifierAmountVariant2Pool },
 }
 impl ::std::convert::From<Quantity> for ResourceGainEffectModifierAmount {
     fn from(value: Quantity) -> Self {
@@ -36381,6 +36417,81 @@ for ResourceGainEffectModifierAmountVariant1 {
         value: ::std::string::String,
     ) -> ::std::result::Result<Self, self::error::ConversionError> {
         value.parse()
+    }
+}
+///`ResourceGainEffectModifierAmountVariant2Pool`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct ResourceGainEffectModifierAmountVariant2Pool(::std::string::String);
+impl ::std::ops::Deref for ResourceGainEffectModifierAmountVariant2Pool {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<ResourceGainEffectModifierAmountVariant2Pool>
+for ::std::string::String {
+    fn from(value: ResourceGainEffectModifierAmountVariant2Pool) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for ResourceGainEffectModifierAmountVariant2Pool {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for ResourceGainEffectModifierAmountVariant2Pool {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for ResourceGainEffectModifierAmountVariant2Pool {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for ResourceGainEffectModifierAmountVariant2Pool {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for ResourceGainEffectModifierAmountVariant2Pool {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
     }
 }
 ///`ResourceGainEffectModifierLabel`

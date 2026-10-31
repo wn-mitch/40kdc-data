@@ -69,7 +69,7 @@ describe("canonical condition predicates", () => {
     expect(countPhrase({ min: "D3" })).toBe("at least D3");
     expect(countPhrase({ min: 1, max: { count_of: "battle-round" } })).toBe("between 1 and the battle round number");
     expect(rangePhrase({ per_battle_round: [{ inches: 3 }, { inches: 6 }] })).toBe('3", 6" in battle rounds 1, 2 respectively (using the final range in later battle rounds)');
-    expect(describeCondition({ type: "resource", parameters: { pool: "tokens", count: { max: 3 } } })).toBe("the unit has at most 3 tokens");
+    expect(describeCondition({ type: "resource", parameters: { pool: "tokens", count: { max: 3 } } })).toBe("you have at most 3 tokens");
     expect(describeCondition({ type: "happened", parameters: { event: "destroyed", object: { owner: "enemy" }, count: { min: 2, max: 4 }, window: "turn" } })).toBe("2-4 enemy units destroyed this turn");
   });
 

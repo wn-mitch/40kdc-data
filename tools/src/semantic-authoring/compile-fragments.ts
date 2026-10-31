@@ -549,7 +549,7 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
       // "that enemy unit" after a selection of this unit's models: the unit selection's name (compile-pair-eligibility.ts).
       const target = typeof leaf.parameters.recipient_var === "string" ? { event_var: leaf.parameters.recipient_var }
         : typeof leaf.parameters.recipient_selection === "string" ? { selection_var: leaf.parameters.recipient_selection }
-          : MORTAL_TARGETS[String(closed(leaf, "recipient"))];
+          : leaf.parameters.recipient === "filtered-units" ? unitOf(leaf, "recipient") : MORTAL_TARGETS[String(closed(leaf, "recipient"))];
       // "These mortal wounds are inflicted by a psychic attack" (compile-weapon-qualified.ts foldMortalWoundSources).
       const psychic = leaf.parameters.psychic === true ? { psychic: true } : {};
       // "… and regains up to that many lost wounds": the count is the pair's shared roll (compile-that-many.ts).

@@ -276,6 +276,39 @@ export const ARMY_EXTENSIONS: readonly FamilyExtension[] = [
     },
   },
   /**
+   * A number the player picks and keeps, and a gain as large as it: "you must pledge a number" sets the pledge
+   * pool to a number you choose (set true, amount any) rather than adding to it, and "you gain a number of Pact
+   * points equal to your pledge" gains as many as the pledge pool holds (amount {pool: "pledge"}). A pledge with
+   * a fixed or rolled number keeps that amount with set true. A gain from another pool is never a set.
+   */
+  {
+    family: "resource-gain",
+    version: 5,
+    description: "As the previous version, plus set: true (the pool becomes the amount instead of gaining it; amount any is a number the player picks) and amount {pool}: gain as many as another pool holds.",
+    schema: (previous) => {
+      const amount = properties(previous).amount!;
+      return withProperties(previous, {
+        set: optional({ const: true }),
+        amount: { anyOf: [...(amount.anyOf as unknown[]), { type: "object", required: ["pool"], properties: { pool: { type: "string", pattern: POOL_ID_PATTERN.source } }, additionalProperties: false }] },
+      });
+    },
+    normalize: (input, previous) => {
+      const { set, ...rest } = input;
+      const amount = rest.amount as Record<string, unknown>;
+      if (isObject(amount) && "pool" in amount) {
+        if (set !== undefined) throw new TypeError("resource-gain.set does not take an amount read from another pool.");
+        const keys = Object.keys(amount);
+        if (keys.length !== 1 || typeof amount.pool !== "string" || !POOL_ID_PATTERN.test(amount.pool)) throw new TypeError("resource-gain.amount {pool} takes only a kebab-case pool id.");
+        if (amount.pool === rest.pool) throw new TypeError("resource-gain.amount {pool} names another pool than the one gained.");
+        return { ...standIn(rest, "amount", 1, previous), amount: { pool: amount.pool } };
+      }
+      if (set === undefined) return previous(rest);
+      if (set !== true) throw new TypeError("resource-gain.set is true or omitted.");
+      if (rest.amount === "variable") throw new TypeError("resource-gain.set needs a number: any, a value or dice.");
+      return { ...previous(rest), set: true };
+    },
+  },
+  /**
    * An open amount: "spend one or more BTP you have". The DSL's resource-spend names it (`amount:
    * one-or-more`). A cap ("up to 2") is not this value: nothing in the DSL says the largest amount,
    * so such a leaf keeps its number or stays unauthored.

@@ -8,6 +8,9 @@ import { TARGETING_KINDS } from "../targeting-families.js";
  * (`by`): within its Engagement Range at the start of the turn, or the target of another unit's
  * attack or charge this phase. A leaf that lists several means any one of them.
  */
+/** The narrower window a destroyed-units tally may count over; omitted, it counts the whole battle. */
+const HISTORY_WINDOWS = ["battle-round"] as const;
+
 const TARGET_HISTORY = ["engaged-with-by-at-turn-start", "attacked-by-another-unit-this-phase", "charged-by-another-unit-this-phase"] as const;
 
 /** The moves after which a restriction holds ("in a turn in which it Advanced or Fell Back, but when doing so"). */
@@ -71,6 +74,18 @@ export const TARGETING_HISTORY_EXTENSIONS: readonly FamilyExtension[] = [
       const normalized = previous(rest);
       if (normalized.may !== "target") throw new TypeError("targeting-restriction.not_engaged_with only applies when may is target.");
       return { ...normalized, not_engaged_with: enumValue(engaged, NOT_ENGAGED_WITH, "targeting-restriction.not_engaged_with") };
+    },
+  },
+  {
+    // "if the number of enemy units destroyed this battle round is greater than or equal to your pledge".
+    family: "history-compare",
+    version: 2,
+    description: "As the previous version, plus window battle-round: both tallies count enemy units destroyed this battle round instead of this battle.",
+    schema: (previous) => withProperties(previous, { window: optional({ enum: [...HISTORY_WINDOWS] }) }),
+    normalize: (input, previous) => {
+      const { window, ...rest } = input;
+      if (window === undefined) return previous(input);
+      return { ...previous(rest), window: enumValue(window, HISTORY_WINDOWS, "history-compare.window") };
     },
   },
 ];

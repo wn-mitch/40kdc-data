@@ -70,6 +70,16 @@ function orEnd(spans: ReadonlyArray<[number, number]>, bytes: Buffer, end: numbe
 }
 
 /**
+ * "… gain a bonus …, as shown below (…)." then the bonus on the next line: an unnamed body whose header paragraph
+ * holds no effect after the header is the paragraph right after it. Returns that paragraph's end, or `end` unchanged.
+ */
+function belowEnd(spans: ReadonlyArray<[number, number]>, bytes: Buffer, after: readonly CompileLeaf[], end: number): number {
+  if (!Number.isFinite(end) || after.some((leaf) => leaf.start_byte < end && leaf.role === "EFFECT")) return end;
+  const next = spans.find(([from]) => from > end);
+  return next ? orEnd(spans, bytes, next[1]) : end;
+}
+
+/**
  * A body whose wording opens with a keyword-only unit-filter followed by "units only" ("SHADOW LEGION
  * units only: …") holds only the header's units that also have those keywords. Returns that filter as
  * DSL and the body's leaves after it. Any other leading filter stays part of the body.
@@ -156,7 +166,8 @@ function splitBodies(list: readonly CompileLeaf[], sourceText: string | undefine
       const ownEnd = paragraphEnd(spans, opener.start_byte);
       // A heading printed on a line of its own ("**Name**" then the body's lines): the body runs to the next heading.
       const headingOnly = markers.length > 0 && Number.isFinite(ownEnd) && /^[\s*:]*$/u.test(bytes.subarray(opener.end_byte ?? opener.start_byte, ownEnd).toString("utf8"));
-      const end = headingOnly ? (limit < list.length ? list[limit]!.start_byte : Number.POSITIVE_INFINITY) : orEnd(spans, bytes, ownEnd);
+      const own = headingOnly ? (limit < list.length ? list[limit]!.start_byte : Number.POSITIVE_INFINITY) : orEnd(spans, bytes, ownEnd);
+      const end = markers.length ? own : belowEnd(spans, bytes, list.slice(start + 1, limit), own);
       const leaves: CompileLeaf[] = [];
       let cursor = start + 1;
       while (cursor < limit && list[cursor]!.start_byte < end && list[cursor]!.fragment === opener.fragment) leaves.push(list[cursor++]!);

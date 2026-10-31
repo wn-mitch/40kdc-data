@@ -114,6 +114,7 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
       if (pool === "command-point") return { type: "cp-gain", target: "this-model", modifier: { amount } };
       const modifier: Node = { pool, amount };
       if (leaf.parameters.label !== undefined) modifier.label = closed(leaf, "label");
+      if (leaf.parameters.set === true) modifier.set = true;
       return { type: "resource-gain", target: "this-model", modifier };
     }
     case "resource-spend": {

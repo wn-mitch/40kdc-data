@@ -416,7 +416,11 @@ export function foldUnitFilters(input0: readonly CompileLeaf[], sourceText?: str
       // "If a friendly X unit" + "is within range of an objective" + "that unit's …": the per-recipient
       // conditions (compile-antecedent.ts) stay ahead of the effect, about its recipient.
       out.push(...between.filter((other) => other.family_id !== "unit-owner" && !filterDesignation(other, leaf)));
-      out.push({ ...list[at]!, parameters: { ...list[at]!.parameters, subject_filter: dslUnitFilter(named) } });
+      // "your **WARLORD**" + "is on the battlefield", "your **WARLORD** model" + "suffers D3 mortal wounds": at model level the
+      // filter names the Warlord model outright. A unit-level one would also match the Warlord's unit, and a list-building
+      // rule would lose its mustering restriction as a unit-ref, so both stay refused.
+      const warlordTarget = leaf.parameters.level === "model" && list[at]!.family_id !== "army-construction";
+      out.push({ ...list[at]!, parameters: { ...list[at]!.parameters, subject_filter: dslUnitFilter(named, { warlordTarget }) } });
       index = at;
       // "Friendly X units' melee attacks have +1 A and +1 S": every property of one scope after the
       // filter names the same units (a weapon ability keyword carries no subject of its own).

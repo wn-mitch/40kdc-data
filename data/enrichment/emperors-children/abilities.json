@@ -3987,16 +3987,16 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "source_digest": "eb23b13bb0a365dc1ba0824825799ff08eefec00cdf679d18818250f8fee3f38",
+    "source_digest": "ea351eb519deffaf7bdd6c2ab2f4f1dfebfc769a6ebcd6014eb6cb8d608b853e",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "emperors-children",
     "detachment_id": "coterie-of-the-conceited",
     "ability_type": "detachment",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -4010,10 +4010,13 @@
             "condition": {
               "type": "matches",
               "parameters": {
+                "subject": {
+                  "owner": "friendly",
+                  "level": "model",
+                  "designated": "warlord"
+                },
                 "filter": {
-                  "all_of": [
-                    "WARLORD"
-                  ]
+                  "state": "on-battlefield"
                 }
               }
             },
@@ -4021,8 +4024,9 @@
               "type": "resource-gain",
               "target": "this-model",
               "modifier": {
-                "pool": "pact-pledge",
-                "amount": "variable"
+                "pool": "pledge",
+                "amount": "any",
+                "set": true
               }
             }
           }
@@ -4049,7 +4053,7 @@
                     },
                     "comparison": "gte",
                     "right": {
-                      "pool": "pact-pledge"
+                      "pool": "pledge"
                     }
                   }
                 },
@@ -4057,8 +4061,10 @@
                   "type": "resource-gain",
                   "target": "this-model",
                   "modifier": {
-                    "pool": "pact-points-pool",
-                    "amount": "variable"
+                    "pool": "pact-points",
+                    "amount": {
+                      "pool": "pledge"
+                    }
                   }
                 }
               },
@@ -4079,7 +4085,7 @@
                         },
                         "comparison": "gte",
                         "right": {
-                          "pool": "pact-pledge"
+                          "pool": "pledge"
                         }
                       }
                     }
@@ -4087,7 +4093,11 @@
                 },
                 "effect": {
                   "type": "mortal-wounds",
-                  "target": "this-model",
+                  "target": {
+                    "owner": "friendly",
+                    "level": "model",
+                    "designated": "warlord"
+                  },
                   "modifier": {
                     "count": "D3"
                   }
@@ -4095,11 +4105,122 @@
               }
             ]
           }
+        },
+        {
+          "type": "ability-grant",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "EMPEROR'S CHILDREN"
+            ]
+          },
+          "modifier": {
+            "definition": {
+              "type": "ability-part",
+              "effect": {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "conditional",
+                    "condition": {
+                      "type": "resource",
+                      "parameters": {
+                        "pool": "pact-points",
+                        "count": {
+                          "min": 1
+                        }
+                      }
+                    },
+                    "effect": {
+                      "type": "re-roll",
+                      "target": "this-unit",
+                      "modifier": {
+                        "roll": "hit",
+                        "subset": "ones"
+                      }
+                    }
+                  },
+                  {
+                    "type": "conditional",
+                    "condition": {
+                      "type": "resource",
+                      "parameters": {
+                        "pool": "pact-points",
+                        "count": {
+                          "min": 3
+                        }
+                      }
+                    },
+                    "effect": {
+                      "type": "re-roll",
+                      "target": "this-unit",
+                      "modifier": {
+                        "roll": "wound",
+                        "subset": "ones"
+                      }
+                    }
+                  },
+                  {
+                    "type": "conditional",
+                    "condition": {
+                      "type": "resource",
+                      "parameters": {
+                        "pool": "pact-points",
+                        "count": {
+                          "min": 5
+                        }
+                      }
+                    },
+                    "effect": {
+                      "type": "weapon-ability-grant",
+                      "target": "this-unit",
+                      "modifier": {
+                        "keywords": [
+                          {
+                            "keyword_id": "lethal-hits"
+                          },
+                          {
+                            "keyword_id": "sustained-hits",
+                            "parameters": {
+                              "value": 1
+                            }
+                          }
+                        ],
+                        "weapons": {
+                          "type": "melee"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "type": "conditional",
+                    "condition": {
+                      "type": "resource",
+                      "parameters": {
+                        "pool": "pact-points",
+                        "count": {
+                          "min": 7
+                        }
+                      }
+                    },
+                    "effect": {
+                      "type": "roll-result",
+                      "target": "this-unit",
+                      "modifier": {
+                        "roll": "hit",
+                        "critical_on": 5
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
         }
       ]
     },
     "scope": {
-      "duration": "battle-round"
+      "duration": "permanent"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },

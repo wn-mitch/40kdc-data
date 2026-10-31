@@ -698,7 +698,8 @@ function boundValue(leaf: CompileLeaf, key: string, role: string): string | null
   if (isTargetRef(role)) return TARGET_REF_KEYS[leaf.family_id]?.includes(key) ? role : null;
   // "that unit has that ability": the unit whose options the menu before it applies (compile.ts retargets them).
   if (leaf.family_id === "chosen-option-grant") return MENU_HOLDERS.has(role) ? role : null;
-  if (role === FILTERED_UNITS) return anyUnitKey(leaf, key) ? role : null;
+  // "your **WARLORD** model" + "suffers D3 mortal wounds": the units the filter names (compile-fragments.ts unitOf).
+  if (role === FILTERED_UNITS) return anyUnitKey(leaf, key) || (leaf.family_id === "mortal-wounds" && key === "recipient") ? role : null;
   if (role === AURA_RECIPIENT) {
     if (ANY_UNIT_KEYS[leaf.family_id]?.includes(key) || ANY_UNIT_CONDITION_KEYS[leaf.family_id]?.includes(key)) return role;
     if (leaf.family_id === "mortal-wounds" && key === "recipient") return role;

@@ -536,6 +536,7 @@ _WINDOW_PHRASES: dict[str, str] = {
     "phase": "this phase",
     "turn": "this turn",
     "round": "this battle round",
+    "battle-round": "this battle round",
     "battle": "this battle",
     "previous-turn": "in the previous turn",
     "event": "",

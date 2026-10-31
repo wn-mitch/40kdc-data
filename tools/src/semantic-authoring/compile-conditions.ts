@@ -654,9 +654,10 @@ export function condition(leaf: CompileLeaf): Node {
       return polarity(leaf, pred("wounds", parameters, subjectOf(leaf)));
     }
     case "history-compare": {
-      // Both sides always tally enemy units destroyed this battle; the only variable is whether
-      // one side narrows to CHARACTER units (mission-card kill-count comparisons).
-      const destroyedSide = (kind: unknown): Node => ({ event: "destroyed", object: { owner: "enemy", ...(kind === "character" ? { all_of: ["CHARACTER"] } : {}) }, window: "battle" });
+      // Both sides tally enemy units destroyed this battle (or this battle round, with window); one side may
+      // narrow to CHARACTER units (mission-card kill-count comparisons).
+      const window = leaf.parameters.window === undefined ? "battle" : closed(leaf, "window");
+      const destroyedSide = (kind: unknown): Node => ({ event: "destroyed", object: { owner: "enemy", ...(kind === "character" ? { all_of: ["CHARACTER"] } : {}) }, window });
       const left = destroyedSide(leaf.parameters.left_kind);
       const rightKind = closed(leaf, "right_kind");
       const right: Node = rightKind === "tally" ? destroyedSide(leaf.parameters.right_tally_kind)
