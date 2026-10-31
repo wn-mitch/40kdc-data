@@ -45,6 +45,7 @@ import { bindThatMany } from "./compile-that-many.js";
 import { foldRollFaces } from "./compile-roll-faces.js";
 import { compileWindowMoment } from "./compile-window-moment.js";
 import { foldDelayedMoments } from "./compile-delayed-moment.js";
+import { foldRitualTest } from "./compile-ritual-test.js";
 import { bulletBreaks, commaItems, ordered, placements, plainLineBreaks, shapeSignature } from "./compile-placement.js";
 import { foldAlternativePools } from "./compile-dice-variants.js";
 import { planContainers } from "./compile-containers.js";
@@ -357,6 +358,8 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     // Reviewed "if it does" connectives are planned on the leaves as reviewed, before any fold (compile-connective-plan.ts).
     // "Selected to fight, after resolving its attacks" is one moment before any connective is planned on it (compile-selected-attacks.ts).
     leaves = foldSelectedAttacks(leaves, sourceText);
+    // "Each time the bearer attempts a Ritual, just before … the Psychic test": one moment (compile-ritual-test.ts).
+    leaves = foldRitualTest(leaves, sourceText);
     conditionOf = planConditionOf(leaves, sourceText);
     // "the selected VEHICLE model" after a use of a named ability, in a record that selects nothing itself (compile-used-selection.ts).
     leaves = bindUsedSelections(foldAbilityUseRefresh(foldAbilityUseContext(leaves)));

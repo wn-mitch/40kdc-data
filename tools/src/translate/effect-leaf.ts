@@ -95,7 +95,9 @@ function ignoreModifiers(m: Record<string, unknown>, subj: string): string {
 }
 
 function rollModifier(m: Record<string, unknown>, subj: string): string {
-  const value = m.value_from === "previous-roll" ? "the result of that roll" : null;
+  // A bound roll's result as the value ("add 1 for each of those mortal wounds", one roll for both).
+  const bound = typeof m.value === "object" && m.value !== null && typeof (m.value as P).roll_var === "string" && (m.value as P).successes_on == null;
+  const value = m.value_from === "previous-roll" || bound ? "the result of that roll" : null;
   const cap = m.cap != null ? ` (to a maximum of ${signed(m.operation, m.cap)})` : "";
   const rolls = `${rollName(m.roll)} rolls`;
   // "Halve Advance and Charge rolls made for that unit": the result is halved, with no value.

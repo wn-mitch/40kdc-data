@@ -9312,7 +9312,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "446b3cff417b089e378f813f272200dc1d2af6a22d807be59f2968890bf28a4f",
     "version": "2025-q3",
@@ -9321,37 +9321,80 @@
     "faction_id": "thousand-sons",
     "detachment_id": "warpmeld-pact",
     "ability_type": "enhancement",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "mortal-wounds",
-          "target": "this-model",
-          "modifier": {
-            "count": "D3"
+      "type": "roll",
+      "dice": "D3",
+      "roll_var": "that-many",
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "mortal-wounds",
+            "target": "this-model",
+            "modifier": {
+              "count": {
+                "roll_var": "that-many"
+              }
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "this-model",
+                "filter": {
+                  "state": "on-battlefield"
+                }
+              }
+            },
+            "effect": {
+              "type": "roll-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "psychic",
+                "operation": "add",
+                "value": {
+                  "roll_var": "that-many"
+                }
+              }
+            }
           }
-        },
-        {
-          "type": "roll-modifier",
-          "target": "this-model",
-          "modifier": {
-            "roll": "psychic",
-            "operation": "add",
-            "value_from": "previous-roll"
-          }
-        }
-      ]
+        ]
+      }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [
         "TZAANGOR SHAMAN"
       ]
     },
-    "community_notes": "[APPROX] When attempting a Ritual, just before determining the Psychic test result, the bearer can suffer D3 mortal wounds; if not destroyed, add 1 to the test result for each mortal wound suffered. Encoded as an opaque grant. Full rule in raw-text store."
+    "community_notes": "[APPROX] When attempting a Ritual, just before determining the Psychic test result, the bearer can suffer D3 mortal wounds; if not destroyed, add 1 to the test result for each mortal wound suffered. Encoded as an opaque grant. Full rule in raw-text store.",
+    "trigger": {
+      "event": "before-roll",
+      "filter": {
+        "roll": "psychic"
+      },
+      "binds_event_variable": "ritual-test",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "used",
+          "subject": "event-subject",
+          "filter": {
+            "kind": "ritual",
+            "same_rule_as": {
+              "event_var": "ritual-test"
+            }
+          },
+          "window": "event"
+        }
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "diamond-of-distortion-warpmeld-pact-thousand-sons",

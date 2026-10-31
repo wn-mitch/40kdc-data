@@ -165,7 +165,10 @@ func ignoreModifiersLeaf(m map[string]any, subj string) string {
 
 func rollModifierLeaf(m map[string]any, subj string) string {
 	value := ""
-	if m["value_from"] == "previous-roll" {
+	// A bound roll's result as the value ("add 1 for each of those mortal wounds", one roll for both).
+	raw, _ := m["value"].(map[string]any)
+	_, bound := raw["roll_var"].(string)
+	if m["value_from"] == "previous-roll" || (bound && raw["successes_on"] == nil) {
 		value = "the result of that roll"
 	}
 	cap := ""

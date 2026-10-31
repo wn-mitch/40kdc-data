@@ -44768,5 +44768,52 @@
     "expected": {
       "text": "After a saving throw is made, on an unmodified 2-3, the unit suffers 1 mortal wound."
     }
+  },
+  {
+    "caseId": "canonical/roll-modifier-bound-roll-value",
+    "trigger": {
+      "event": "before-roll",
+      "filter": {
+        "roll": "psychic"
+      },
+      "optional": true
+    },
+    "effect": {
+      "type": "roll",
+      "dice": "D3",
+      "roll_var": "that-many",
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "mortal-wounds",
+            "target": "this-model",
+            "modifier": {
+              "count": {
+                "roll_var": "that-many"
+              }
+            }
+          },
+          {
+            "type": "roll-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "psychic",
+              "operation": "add",
+              "value": {
+                "roll_var": "that-many"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "reactive",
+    "expected": {
+      "text": "Before a Psychic test is made, you may use this ability:\n  -> Roll D3, then:\n    -> This model suffers a number of mortal wounds equal to the result of that roll.\n    -> Add the result of that roll to the unit's Psychic rolls."
+    }
   }
 ]

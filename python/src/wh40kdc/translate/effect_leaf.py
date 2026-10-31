@@ -215,7 +215,15 @@ def _ignore_modifiers(m: dict[str, Any], subj: str) -> str:
 
 
 def _roll_modifier(m: dict[str, Any], subj: str) -> str:
-    value = "the result of that roll" if m.get("value_from") == "previous-roll" else None
+    # A bound roll's result as the value ("add 1 for each of those mortal wounds").
+    raw = m.get("value")
+    bound = (
+        isinstance(raw, dict)
+        and isinstance(raw.get("roll_var"), str)
+        and raw.get("successes_on") is None
+    )
+    from_roll = m.get("value_from") == "previous-roll" or bound
+    value = "the result of that roll" if from_roll else None
     cap = (
         f" (to a maximum of {signed(m.get('operation'), m['cap'])})"
         if m.get("cap") is not None

@@ -1,4 +1,4 @@
-import { type FamilyExtension, optional, standIn, widenedEnum, withProperties } from "../family-extension-helpers.js";
+import { type FamilyExtension, optional, properties, standIn, widenedEnum, withProperties } from "../family-extension-helpers.js";
 import { boundedInteger, enumValue } from "../family-validation.js";
 import { isObject, namedId } from "./shared.js";
 
@@ -147,6 +147,22 @@ export const CHOICE_AND_DICE_EXTENSIONS: readonly FamilyExtension[] = [
     description: "As the previous version, plus amount that-many: as many wounds as the mortal wounds printed before it in its sentence, from the same roll (\"suffers D3+1 mortal wounds and … regains up to that many lost wounds\").",
     schema: (previous) => withProperties(previous, { amount: widenedEnum(previous, "amount", ["that-many"]) }),
     normalize: (input, previous) => input.amount === "that-many" ? standIn(input, "amount", "1", previous) : previous(input),
+  },
+  {
+    // "suffers D3 mortal wounds; … add 1 to that Psychic test result for each of those mortal wounds suffered".
+    family: "roll-modifier",
+    version: 12,
+    description: "As the previous version, plus value that-many: add as many as the mortal wounds printed before it in its sentence, from the same roll (\"suffers D3 mortal wounds; … add 1 to that roll for each of those mortal wounds\"). It needs operation add, and takes no cap or rolls.",
+    schema: (previous) => {
+      const value = properties(previous).value as Record<string, unknown> & { anyOf: unknown[] };
+      return withProperties(previous, { value: { ...value, anyOf: [...value.anyOf, { const: "that-many" }] } });
+    },
+    normalize: (input, previous) => {
+      if (input.value !== "that-many") return previous(input);
+      if (input.operation !== "add") throw new TypeError("roll-modifier value that-many adds the mortal wounds suffered; it needs operation add.");
+      if (input.cap !== undefined || input.rolls !== undefined) throw new TypeError("roll-modifier value that-many takes no cap or rolls.");
+      return standIn(input, "value", 1, previous);
+    },
   },
   /**
    * "For each X model you select, roll one D6": one roll per model of the model selection the roll

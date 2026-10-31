@@ -212,7 +212,13 @@ fn ignore_modifiers(m: &P, subj: &str) -> String {
 }
 
 fn roll_modifier(m: &P, subj: &str) -> String {
-    let value = (sv(m, "value_from") == Some("previous-roll")).then_some("the result of that roll");
+    // A bound roll's result as the value ("add 1 for each of those mortal wounds", one roll for both).
+    let bound = m.get("value").and_then(Value::as_object).is_some_and(|q| {
+        q.get("roll_var").is_some_and(Value::is_string)
+            && q.get("successes_on").is_none_or(Value::is_null)
+    });
+    let value = (sv(m, "value_from") == Some("previous-roll") || bound)
+        .then_some("the result of that roll");
     let cap = nn(m, "cap")
         .map(|c| format!(" (to a maximum of {})", signed(m.get("operation"), Some(c))))
         .unwrap_or_default();

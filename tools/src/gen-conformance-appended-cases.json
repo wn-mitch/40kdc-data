@@ -2923,5 +2923,49 @@
       "duration": "permanent"
     },
     "behavior": "reactive"
+  },
+  {
+    "caseId": "canonical/roll-modifier-bound-roll-value",
+    "trigger": {
+      "event": "before-roll",
+      "filter": {
+        "roll": "psychic"
+      },
+      "optional": true
+    },
+    "effect": {
+      "type": "roll",
+      "dice": "D3",
+      "roll_var": "that-many",
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "mortal-wounds",
+            "target": "this-model",
+            "modifier": {
+              "count": {
+                "roll_var": "that-many"
+              }
+            }
+          },
+          {
+            "type": "roll-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "psychic",
+              "operation": "add",
+              "value": {
+                "roll_var": "that-many"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "reactive"
   }
 ]
