@@ -371,11 +371,12 @@ export function validateRosterCore(spec: NormRoster, dataset: Dataset): RosterLe
     if (!view) return;
     if (su.leaderBodyguardId) {
       // Every game mode: legality of a saved roster's attachment is a lookup, and a
-      // Combat Patrol bodyguard named by id must still count as eligible.
+      // Combat Patrol bodyguard named by id must still count as eligible. Not scoped to the
+      // army's faction: an allied leader attaches to its own faction's bodyguards.
       const eligible = new Set(
         dataset
           .forGameMode("all")
-          .bodyguardsAttachableFrom(view.id, spec.factionId ?? undefined, rosterUnitIds)
+          .bodyguardsAttachableFrom(view.id, undefined, rosterUnitIds)
           .map((v) => v.id),
       );
       const enhancement = su.enhancementId ? dataset.enhancements.get(su.enhancementId) : undefined;

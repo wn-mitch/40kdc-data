@@ -124,7 +124,8 @@ export const rosterJsonAdapter: FormatAdapter = {
       detachment_raw_names: roster.detachments.map((d) => d.ref.raw_name),
       battle_size_raw:
         roster.battle_size != null ? (BATTLE_SIZE_LABELS[roster.battle_size] ?? null) : null,
-      force_disposition: roster.force_disposition ?? null,
+      // Absent, the key is omitted, as every other adapter leaves it.
+      ...(roster.force_disposition != null ? { force_disposition: roster.force_disposition } : {}),
       declared_limit: roster.points.declared_limit,
       total_reported: roster.points.total_reported,
       total_computed: roster.points.total_computed,

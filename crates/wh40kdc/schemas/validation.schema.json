@@ -16229,6 +16229,7 @@
     },
     "scope": {
       "title": "Ability Scope",
+      "type": "object",
       "additionalProperties": false,
       "properties": {
         "duration": {

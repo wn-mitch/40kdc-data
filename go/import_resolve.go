@@ -131,7 +131,39 @@ func lookupDetachment(ds *Dataset, detachmentID, factionID string) map[string]an
 	return nil
 }
 
+// rosterGameModeView is the game-mode view a roster resolves against. A list on the matched-play
+// view (the default) whose detachment is a Combat Patrol detachment, by id or exact name, is a
+// Combat Patrol list: its units and enhancements are listed only there. Any other view is the
+// caller's choice. Mirrors TS rosterGameModeView.
+func rosterGameModeView(parsed map[string]any, ds *Dataset) *Dataset {
+	if ds.GameMode() != "matched-play" {
+		return ds
+	}
+	patrol, err := ds.ForGameMode("combat-patrol")
+	if err != nil {
+		return ds
+	}
+	rawNames := getStrList(parsed, "detachment_raw_names")
+	names := map[string]bool{}
+	for _, name := range rawNames {
+		names[NormalizeName(name)] = true
+	}
+	for _, item := range patrol.Detachments.All() {
+		detachment, _ := asMap(item)
+		if detachment == nil || !contains(getStrList(detachment, "game_modes"), "combat-patrol") {
+			continue
+		}
+		if contains(rawNames, getStr(detachment, "id")) || names[NormalizeName(getStr(detachment, "name"))] {
+			return patrol
+		}
+	}
+	return ds
+}
+
 func resolveRoster(parsed map[string]any, ds *Dataset, format string) map[string]any {
+	if view := rosterGameModeView(parsed, ds); view != ds {
+		return resolveRoster(parsed, view, format)
+	}
 	diag := &diagBuilder{}
 	_ = parsed["multi_force"]
 

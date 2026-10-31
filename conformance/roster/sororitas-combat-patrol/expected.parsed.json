@@ -1,0 +1,177 @@
+{
+  "name": "Combat Patrol import",
+  "generated_by": "40kdc",
+  "faction_raw_name": "adepta-sororitas",
+  "detachment_raw_names": [
+    "Sanctuary Guardians"
+  ],
+  "battle_size_raw": null,
+  "declared_limit": null,
+  "total_reported": 0,
+  "total_computed": 0,
+  "units": [
+    {
+      "raw_name": "Sanctuary Canoness Adalya",
+      "is_character": false,
+      "model_count": 1,
+      "points": 0,
+      "is_warlord": true,
+      "enhancement_raw_name": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "raw_name": "Condemnor boltgun",
+          "count": 1
+        },
+        {
+          "raw_name": "Hallowed chainsword",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "raw_name": "Sanctuary Guardians Battle Sisters Squad",
+      "is_character": false,
+      "model_count": 10,
+      "points": 0,
+      "is_warlord": false,
+      "enhancement_raw_name": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "raw_name": "Bolt pistol",
+          "count": 40
+        },
+        {
+          "raw_name": "Boltgun",
+          "count": 7
+        },
+        {
+          "raw_name": "simulacrum imperialis",
+          "count": 1
+        },
+        {
+          "raw_name": "Stocks and Fists",
+          "count": 40
+        },
+        {
+          "raw_name": "Ministorum flamer",
+          "count": 1
+        },
+        {
+          "raw_name": "Ministorum heavy flamer",
+          "count": 1
+        },
+        {
+          "raw_name": "Combi-weapon",
+          "count": 1
+        },
+        {
+          "raw_name": "Power weapon",
+          "count": 1
+        }
+      ],
+      "loadout_groups": [
+        {
+          "model_name": "Battle Sister with Simulacrum Imperialis",
+          "count": 1,
+          "wargear": [
+            {
+              "raw_name": "Bolt pistol",
+              "count": 1
+            },
+            {
+              "raw_name": "Boltgun",
+              "count": 1
+            },
+            {
+              "raw_name": "simulacrum imperialis",
+              "count": 1
+            },
+            {
+              "raw_name": "Stocks and Fists",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model_name": "Battle Sister with Ministorum Flamer",
+          "count": 1,
+          "wargear": [
+            {
+              "raw_name": "Bolt pistol",
+              "count": 1
+            },
+            {
+              "raw_name": "Ministorum flamer",
+              "count": 1
+            },
+            {
+              "raw_name": "Stocks and Fists",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model_name": "Battle Sister",
+          "count": 6,
+          "wargear": [
+            {
+              "raw_name": "Bolt pistol",
+              "count": 6
+            },
+            {
+              "raw_name": "Boltgun",
+              "count": 1
+            },
+            {
+              "raw_name": "Stocks and Fists",
+              "count": 6
+            }
+          ]
+        },
+        {
+          "model_name": "Battle Sister with Ministorum Heavy Flamer",
+          "count": 1,
+          "wargear": [
+            {
+              "raw_name": "Bolt pistol",
+              "count": 1
+            },
+            {
+              "raw_name": "Ministorum heavy flamer",
+              "count": 1
+            },
+            {
+              "raw_name": "Stocks and Fists",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model_name": "Sister Superior",
+          "count": 1,
+          "wargear": [
+            {
+              "raw_name": "Bolt pistol",
+              "count": 1
+            },
+            {
+              "raw_name": "Combi-weapon",
+              "count": 1
+            },
+            {
+              "raw_name": "Power weapon",
+              "count": 1
+            },
+            {
+              "raw_name": "Stocks and Fists",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "multi_force": false
+}

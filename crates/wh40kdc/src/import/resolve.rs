@@ -17,8 +17,9 @@ use std::collections::{BTreeMap, HashMap, HashSet};
 
 use crate::data::{
     check_unit_legality, complete_loadout, group_loadout, loadout_models, loadout_tiers,
-    normalize_name, Dataset, ViolationCode,
+    normalize_name, Dataset, GameModeView, ViolationCode,
 };
+use crate::GameModeId;
 
 use super::source_names::{
     find_weapon_candidates, lookup_name_keys, name_matches, resolve_wargear_item_id,
@@ -29,6 +30,38 @@ use super::types::{
     Roster, RosterDetachment, RosterFormat, RosterLeaderAttachment, RosterLoadoutGroup,
     RosterPoints, RosterSource, RosterUnit, RosterWargear, Warning, WarningCode,
 };
+
+/// The game-mode view a roster resolves against. A list on the matched-play view (the default)
+/// whose detachment is a Combat Patrol detachment, by id or exact name, is a Combat Patrol list:
+/// its units and enhancements are listed only there. Any other view is the caller's choice.
+/// Mirrors TS `rosterGameModeView`.
+fn roster_game_mode_view<'a>(parsed: &ParsedRoster, ds: &'a Dataset) -> &'a Dataset {
+    if ds.game_mode() != GameModeView::MATCHED_PLAY {
+        return ds;
+    }
+    let patrol = ds.with_game_mode(GameModeView::Mode(GameModeId::CombatPatrol));
+    let names: HashSet<String> = parsed
+        .detachment_raw_names
+        .iter()
+        .map(|name| normalize_name(name))
+        .collect();
+    let is_patrol_list = patrol.detachments.all().iter().any(|detachment| {
+        detachment
+            .game_modes
+            .as_ref()
+            .is_some_and(|modes| modes.contains(&GameModeId::CombatPatrol))
+            && (parsed
+                .detachment_raw_names
+                .iter()
+                .any(|name| name.as_str() == detachment.id.as_str())
+                || names.contains(&normalize_name(detachment.name.as_str())))
+    });
+    if is_patrol_list {
+        patrol
+    } else {
+        ds
+    }
+}
 
 /// The dataset edition/dataslate stamped onto an imported roster.
 const ROSTER_EDITION: &str = "11th";
@@ -166,6 +199,10 @@ fn battle_size_label(battle_size: Option<BattleSize>) -> &'static str {
 /// assert_eq!(roster.source.format, RosterFormat::Listforge);
 /// ```
 pub fn resolve(parsed: &ParsedRoster, ds: &Dataset, format: RosterFormat) -> Roster {
+    let view = roster_game_mode_view(parsed, ds);
+    if !std::ptr::eq(view, ds) {
+        return resolve(parsed, view, format);
+    }
     let mut diag = DiagnosticsBuilder::default();
 
     let _ = parsed.multi_force;

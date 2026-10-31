@@ -41437,6 +41437,7 @@ impl ::std::convert::TryFrom<::std::string::String> for ScalingSource {
 /// ```json
 ///{
 ///  "title": "Ability Scope",
+///  "type": "object",
 ///  "required": [
 ///    "duration"
 ///  ],

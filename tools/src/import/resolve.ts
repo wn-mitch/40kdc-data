@@ -14,6 +14,7 @@
  *
  * @packageDocumentation
  */
+import { isCombatPatrolDetachment } from "../abilities-resolver/index.js";
 import { unitAbilityIds } from "../data/ability-refs.js";
 import type { Dataset } from "../data/dataset.js";
 import type { UnitView } from "../data/entities.js";
@@ -166,11 +167,28 @@ function mapBattleSize(raw: string | null): BattleSize | null {
 /** 11e detachment-point budget for a battle size; null when the size is unknown. */
 const detachmentCap = detachmentCapForBattleSize;
 
+/**
+ * The game-mode view a roster resolves against. A list on the matched-play view (the default)
+ * whose detachment is a Combat Patrol detachment, by id or exact name, is a Combat Patrol list:
+ * its units and enhancements are listed only there. Any other view is the caller's choice.
+ */
+function rosterGameModeView(parsed: ParsedRoster, ds: Dataset): Dataset {
+  if (ds.gameMode !== "matched-play") return ds;
+  const patrol = ds.forGameMode("combat-patrol");
+  const names = new Set(parsed.detachment_raw_names.map(normalizeName));
+  const isPatrolList = patrol.detachments.all.some((detachment) =>
+    isCombatPatrolDetachment(detachment) &&
+    (parsed.detachment_raw_names.includes(detachment.id) || names.has(normalizeName(detachment.name ?? ""))));
+  return isPatrolList ? patrol : ds;
+}
+
 export function resolve(
   parsed: ParsedRoster,
   ds: Dataset,
   format: RosterFormat = "listforge",
 ): Roster {
+  const view = rosterGameModeView(parsed, ds);
+  if (view !== ds) return resolve(parsed, view, format);
   const diag = new DiagnosticsBuilder();
 
 

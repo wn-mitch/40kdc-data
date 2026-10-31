@@ -254,7 +254,29 @@ def _detachment_cap(battle_size: str | None) -> int | None:
     return None
 
 
+def _roster_game_mode_view(parsed: dict[str, Any], ds: Dataset) -> Dataset:
+    """The game-mode view a roster resolves against. A list on the matched-play view (the
+    default) whose detachment is a Combat Patrol detachment, by id or exact name, is a Combat
+    Patrol list: its units and enhancements are listed only there. Any other view is the
+    caller's choice. Mirrors TS ``rosterGameModeView``."""
+    if ds.game_mode != "matched-play":
+        return ds
+    patrol = ds.for_game_mode("combat-patrol")
+    raw_names = parsed.get("detachment_raw_names") or []
+    names = {normalize_name(name) for name in raw_names}
+    for detachment in patrol.detachments.all:
+        if "combat-patrol" not in (detachment.get("game_modes") or []):
+            continue
+        name = normalize_name(detachment.get("name") or "")
+        if detachment.get("id") in raw_names or name in names:
+            return patrol
+    return ds
+
+
 def resolve(parsed: dict[str, Any], ds: Dataset, format: str = "listforge") -> dict[str, Any]:
+    view = _roster_game_mode_view(parsed, ds)
+    if view is not ds:
+        return resolve(parsed, view, format)
     diag = _DiagnosticsBuilder()
 
     # --- Faction (resolved first so other lookups can scope to it). ----------
