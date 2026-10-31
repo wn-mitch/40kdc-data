@@ -257,7 +257,7 @@ describe("Semantic authoring reusable minimum roll results", () => {
 
   it("preserves explicit bands and exact results when upgrading existing leaves", () => {
     for (const parameters of [{ from: 2, to: 5 }, { from: 6, to: 6 }]) {
-      expect(mapToLatest("roll-result", 1, parameters)).toEqual({ family: "roll-result", version: 2, parameters });
+      expect(mapToLatest("roll-result", 1, parameters)).toEqual({ family: "roll-result", version: currentFamilyVersion("roll-result"), parameters });
     }
     expect(normalizeFingerprintParameters("roll-result", { from: 2 }, 2)).toEqual({ from: 2 });
     expect(() => normalizeFingerprintParameters("roll-result", { from: 4, to: 3 }, 2)).toThrow();

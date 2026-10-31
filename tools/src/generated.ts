@@ -2313,6 +2313,13 @@ export interface EventFilter {
     | "shock";
   roll?: RollKind;
   result?: RollOutcome;
+  /**
+   * after-roll: only a die whose face, before any modifier, is from to to (inclusive).
+   */
+  unmodified?: {
+    from: number;
+    to: number;
+  };
   from?: "strategic-reserves" | "deep-strike" | "cult-ambush" | "transport";
   /**
    * disembarked: the Transport the unit disembarked from; this-unit is "from this TRANSPORT", a unit filter the Transports it may be (a TRANSPORT within 6 inches of this model).

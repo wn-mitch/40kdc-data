@@ -133,6 +133,15 @@ const TEST_ROLLS = new Set(["battle-shock", "leadership", "desperate-escape"]);
 
 const ATTACK_MODELS: Record<string, string> = { "this-model": "this model", "this-unit": "a model in this unit", "model-in-this-unit": "a model in this unit" };
 
+/** An after-roll moment narrowed to unmodified faces: ", on an unmodified 6" (or 5+, or 2-3). */
+function withUnmodified(t: AbilityTrigger, f: P, clause: string): string {
+  const faces = f.unmodified as P | undefined;
+  if (t.event !== "after-roll" || faces == null) return clause;
+  const from = Number(faces.from);
+  const to = Number(faces.to);
+  return `${clause}, on an unmodified ${from === to ? `${from}` : to === 6 ? `${from}+` : `${from}-${to}`}`;
+}
+
 function rollClause(t: AbilityTrigger, f: P): string {
   // An ability's own dice ({of_ability}) read "Reanimation Protocols roll".
   const roll = typeof f.roll === "object" && f.roll != null ? "" : str(f.roll);
@@ -245,7 +254,7 @@ function eventPhrase(t: AbilityTrigger): string {
     }
     case "before-roll":
     case "after-roll":
-      return rollClause(t, f);
+      return withUnmodified(t, f, rollClause(t, f));
     case "damage-allocated": {
       const type = allocatedAttackType(t);
       const allocated = type ? `when a ${type} attack is allocated` : "when damage is allocated";

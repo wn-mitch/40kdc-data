@@ -203,6 +203,16 @@ _ATTACK_MODELS: dict[str, str] = {
 }
 
 
+def _with_unmodified(t: AbilityTrigger, f: dict[str, Any], clause: str) -> str:
+    """An after-roll moment narrowed to unmodified faces: ", on an unmodified 6"."""
+    faces = f.get("unmodified")
+    if t.get("event") != "after-roll" or not isinstance(faces, dict):
+        return clause
+    low, high = int(faces.get("from", 0)), int(faces.get("to", 0))
+    span = f"{low}" if low == high else f"{low}+" if high == 6 else f"{low}-{high}"
+    return f"{clause}, on an unmodified {span}"
+
+
 def _roll_clause(t: AbilityTrigger, f: dict[str, Any]) -> str:
     # An ability's own dice ({of_ability}) read "Reanimation Protocols roll".
     roll = "" if isinstance(f.get("roll"), dict) else _str(f.get("roll"))
@@ -391,7 +401,7 @@ def _event_phrase(t: AbilityTrigger) -> str:
         timing = ", after it has been set up" if f.get("timing") == "after-set-up" else ""
         return f"when {who} disembarks from {source}{timing}"
     if event in ("before-roll", "after-roll"):
-        return _roll_clause(t, f)
+        return _with_unmodified(t, f, _roll_clause(t, f))
     if event == "damage-allocated":
         kind = _allocated_attack_type(t)
         allocated = f"when a {kind} attack is allocated" if kind else "when damage is allocated"

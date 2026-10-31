@@ -173,7 +173,9 @@ const V7_FILTERED_KINDS: Record<string, (leaf: CompileLeaf) => Node> = {
   "before-roll": (leaf) => ({ event: "before-roll", filter: { roll: triggerRoll(leaf) } }),
   // Version 8 (batch 7a).
   "after-roll": (leaf) => ({
-    event: "after-roll", filter: { roll: triggerRoll(leaf), ...(leaf.parameters.result !== undefined ? { result: closed(leaf, "result") } : {}) },
+    event: "after-roll", filter: { roll: triggerRoll(leaf), ...(leaf.parameters.result !== undefined ? { result: closed(leaf, "result") } : {}),
+      // "on an unmodified 6" after the moment (compile-roll-faces.ts).
+      ...(leaf.parameters.unmodified !== undefined ? { unmodified: leaf.parameters.unmodified } : {}) },
     // The WHEN moment's unit, which a Stratagem's nested roll moment names (compile-when-subject.ts).
     ...(typeof leaf.parameters.subject_var === "string" ? { subject: { event_var: leaf.parameters.subject_var } }
       : leaf.parameters.subject !== undefined && leaf.parameters.subject !== "this-unit" ? { subject: closed(leaf, "subject") } : {}),

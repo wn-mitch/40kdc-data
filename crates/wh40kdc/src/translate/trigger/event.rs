@@ -265,6 +265,26 @@ pub(crate) fn is_object(v: Option<&Value>) -> bool {
     matches!(v, Some(Value::Object(_) | Value::Array(_) | Value::Null))
 }
 
+/// An after-roll moment narrowed to unmodified faces: ", on an unmodified 6" (or 5+, or 2-3).
+fn with_unmodified(t: &P, f: &P, clause: String) -> String {
+    let Some(Value::Object(faces)) = f.get("unmodified") else {
+        return clause;
+    };
+    if t.get("event").and_then(Value::as_str) != Some("after-roll") {
+        return clause;
+    }
+    let from = faces.get("from").and_then(Value::as_i64).unwrap_or(0);
+    let to = faces.get("to").and_then(Value::as_i64).unwrap_or(0);
+    let range = if from == to {
+        from.to_string()
+    } else if to == 6 {
+        format!("{from}+")
+    } else {
+        format!("{from}-{to}")
+    };
+    format!("{clause}, on an unmodified {range}")
+}
+
 pub(crate) fn roll_clause(t: &P, f: &P) -> String {
     // An ability's own dice ({of_ability}) read "Reanimation Protocols roll".
     let (roll, noun) = match f.get("roll") {
@@ -551,7 +571,7 @@ pub(crate) fn event_phrase(t: &P) -> String {
             };
             format!("when {who} disembarks from {from}{timing}")
         }
-        "before-roll" | "after-roll" => roll_clause(t, f),
+        "before-roll" | "after-roll" => with_unmodified(t, f, roll_clause(t, f)),
         "damage-allocated" => {
             let allocated = match allocated_attack_type(t) {
                 Some(kind) => format!("when a {kind} attack is allocated"),

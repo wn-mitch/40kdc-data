@@ -42,6 +42,9 @@ import { refuseSuchFilters } from "./compile-such-filter.js";
 import { bindUsedSelections } from "./compile-used-selection.js";
 import { bindSelectionRefs } from "./compile-named-selections.js";
 import { bindThatMany } from "./compile-that-many.js";
+import { foldRollFaces } from "./compile-roll-faces.js";
+import { compileWindowMoment } from "./compile-window-moment.js";
+import { foldDelayedMoments } from "./compile-delayed-moment.js";
 import { bulletBreaks, commaItems, ordered, placements, plainLineBreaks, shapeSignature } from "./compile-placement.js";
 import { foldAlternativePools } from "./compile-dice-variants.js";
 import { planContainers } from "./compile-containers.js";
@@ -326,6 +329,9 @@ function compileRecord(given: readonly CompileLeaf[], sourceText?: string, optio
   if (reactions !== null) return reactions;
   const oath = compileOathRecord(leaves, sourceText, (group) => compilePart(group, sourceText, options));
   if (oath !== null) return oath;
+  // A moment printed within an earlier moment's duration is a part on that window (compile-window-moment.ts).
+  const window = compileWindowMoment(ordered(leaves), sourceText, (group) => compilePart(group, sourceText, options));
+  if (window !== null) return window;
   const segments = oneRule ? null : sentenceSegments(ordered(leaves), sourceText);
   if (!segments) return compilePart(leaves, sourceText, options);
   // Independent sentences (compile-segments.ts) compile alone and join as parts of one ability.
@@ -358,6 +364,10 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     leaves = bindSelectionRefs(leaves);
     // "… suffers D3+1 mortal wounds and … regains up to that many lost wounds": one roll for both (compile-that-many.ts).
     leaves = bindThatMany(leaves, sourceText);
+    // "When this unit makes a save roll: on an unmodified 6, …": the band narrows the moment's roll (compile-roll-faces.ts).
+    leaves = foldRollFaces(leaves);
+    // "… suffers 1 mortal wound after that enemy unit has shot": the effect waits for that moment (compile-delayed-moment.ts).
+    leaves = foldDelayedMoments(leaves, sourceText);
     refuseBlastRating(leaves, sourceText);
     refuseStratagemTargetActivity(leaves);
     refuseUnboundIfItDoes(leaves, sourceText);

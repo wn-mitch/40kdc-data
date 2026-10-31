@@ -2824,5 +2824,104 @@
       "duration": "permanent"
     },
     "behavior": "reactive"
+  },
+  {
+    "caseId": "canonical/after-roll-unmodified-delayed-part",
+    "trigger": {
+      "event": "targets-selected",
+      "subject": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "kind": "shoot"
+      },
+      "object": "this-unit",
+      "binds_event_variable": "moment-subject"
+    },
+    "effect": {
+      "type": "ability-part",
+      "trigger": {
+        "event": "after-roll",
+        "filter": {
+          "roll": "save",
+          "unmodified": {
+            "from": 6,
+            "to": 6
+          }
+        }
+      },
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "attacks-resolved",
+          "filter": {
+            "kind": "shoot"
+          },
+          "subject": {
+            "event_var": "moment-subject"
+          }
+        },
+        "duration": "phase",
+        "effect": {
+          "type": "mortal-wounds",
+          "target": "event-subject",
+          "modifier": {
+            "count": 1
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "attack-sequence"
+    },
+    "behavior": "reactive"
+  },
+  {
+    "caseId": "canonical/after-roll-unmodified-min",
+    "trigger": {
+      "event": "after-roll",
+      "filter": {
+        "roll": "save",
+        "unmodified": {
+          "from": 5,
+          "to": 6
+        }
+      }
+    },
+    "effect": {
+      "type": "mortal-wounds",
+      "target": "this-unit",
+      "modifier": {
+        "count": 1
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "reactive"
+  },
+  {
+    "caseId": "canonical/after-roll-unmodified-band",
+    "trigger": {
+      "event": "after-roll",
+      "filter": {
+        "roll": "save",
+        "unmodified": {
+          "from": 2,
+          "to": 3
+        }
+      }
+    },
+    "effect": {
+      "type": "mortal-wounds",
+      "target": "this-unit",
+      "modifier": {
+        "count": 1
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "reactive"
   }
 ]

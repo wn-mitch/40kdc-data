@@ -1382,6 +1382,27 @@
         "result": {
           "$ref": "#/$defs/roll-outcome"
         },
+        "unmodified": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "from",
+            "to"
+          ],
+          "properties": {
+            "from": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 6
+            },
+            "to": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 6
+            }
+          },
+          "description": "after-roll: only a die whose face, before any modifier, is from to to (inclusive)."
+        },
         "from": {
           "enum": [
             "strategic-reserves",

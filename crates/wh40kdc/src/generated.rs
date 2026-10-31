@@ -16751,6 +16751,27 @@ impl<'de> ::serde::Deserialize<'de> for EventBoundReferenceEventVar {
 ///        }
 ///      ]
 ///    },
+///    "unmodified": {
+///      "description": "after-roll: only a die whose face, before any modifier, is from to to (inclusive).",
+///      "type": "object",
+///      "required": [
+///        "from",
+///        "to"
+///      ],
+///      "properties": {
+///        "from": {
+///          "type": "integer",
+///          "maximum": 6.0,
+///          "minimum": 1.0
+///        },
+///        "to": {
+///          "type": "integer",
+///          "maximum": 6.0,
+///          "minimum": 1.0
+///        }
+///      },
+///      "additionalProperties": false
+///    },
 ///    "usage": {
 ///      "description": "used ability: the exact once-per-battle cadence of the ability definition.",
 ///      "type": "object",
@@ -16843,6 +16864,8 @@ pub struct EventFilter {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub transport: ::std::option::Option<EventFilterTransport>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub unmodified: ::std::option::Option<EventFilterUnmodified>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub usage: ::std::option::Option<EventFilterUsage>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub weapons: ::std::option::Option<WeaponScope>,
@@ -16875,6 +16898,7 @@ impl ::std::default::Default for EventFilter {
             timing: Default::default(),
             to: Default::default(),
             transport: Default::default(),
+            unmodified: Default::default(),
             usage: Default::default(),
             weapons: Default::default(),
         }
@@ -18133,6 +18157,40 @@ impl ::std::convert::TryFrom<::std::string::String> for EventFilterTransportVari
     ) -> ::std::result::Result<Self, self::error::ConversionError> {
         value.parse()
     }
+}
+///after-roll: only a die whose face, before any modifier, is from to to (inclusive).
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "after-roll: only a die whose face, before any modifier, is from to to (inclusive).",
+///  "type": "object",
+///  "required": [
+///    "from",
+///    "to"
+///  ],
+///  "properties": {
+///    "from": {
+///      "type": "integer",
+///      "maximum": 6.0,
+///      "minimum": 1.0
+///    },
+///    "to": {
+///      "type": "integer",
+///      "maximum": 6.0,
+///      "minimum": 1.0
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct EventFilterUnmodified {
+    pub from: ::std::num::NonZeroU64,
+    pub to: ::std::num::NonZeroU64,
 }
 ///used ability: the exact once-per-battle cadence of the ability definition.
 ///

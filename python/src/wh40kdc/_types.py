@@ -326,6 +326,15 @@ class Usage(TypedDict):
     count: Literal[1]
 
 
+Unmodified = TypedDict(
+    "Unmodified",
+    {
+        "from": int,
+        "to": int,
+    },
+)
+
+
 class SameRuleAs(TypedDict):
     event_var: str
 
@@ -2093,6 +2102,7 @@ EventFilter = TypedDict(
         "mode": NotRequired[MoveMode],
         "roll": NotRequired[RollKind],
         "result": NotRequired[RollOutcome],
+        "unmodified": NotRequired[Unmodified],
         "from": NotRequired[
             Literal["strategic-reserves", "deep-strike", "cult-ambush", "transport"]
         ],

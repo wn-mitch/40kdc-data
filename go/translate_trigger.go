@@ -2,6 +2,7 @@ package wh40kdc
 
 import (
 	"regexp"
+	"strconv"
 	"strings"
 )
 
@@ -204,6 +205,24 @@ func isObject(v any) bool {
 		return true
 	}
 	return false
+}
+
+// withUnmodified narrows an after-roll moment to unmodified faces: ", on an unmodified 6" (or 5+, or 2-3).
+func withUnmodified(t, f map[string]any, clause string) string {
+	faces, ok := f["unmodified"].(map[string]any)
+	if !ok || t["event"] != "after-roll" {
+		return clause
+	}
+	low, _ := num(faces["from"])
+	high, _ := num(faces["to"])
+	from, to := strconv.Itoa(int(low)), strconv.Itoa(int(high))
+	span := from + "-" + to
+	if low == high {
+		span = from
+	} else if high == 6 {
+		span = from + "+"
+	}
+	return clause + ", on an unmodified " + span
 }
 
 func rollClause(t, f map[string]any) string {
@@ -454,7 +473,7 @@ func triggerEventPhrase(t map[string]any) string {
 		}
 		return "when " + who + " disembarks from " + from + timing
 	case "before-roll", "after-roll":
-		return rollClause(t, f)
+		return withUnmodified(t, f, rollClause(t, f))
 	case "damage-allocated":
 		allocated := "when damage is allocated"
 		if kind := allocatedAttackType(t); kind != "" {

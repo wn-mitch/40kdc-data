@@ -3462,36 +3462,64 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "source_digest": "31236efd9d270ea0be6d40b30c508a2e06a06fa610b2a0bace4cd590df600ce7",
+    "source_digest": "9d8ef8274c67b2f4c037aa39884465cad58f81bbe2b6028d1da70e19420740d8",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
+      "type": "ability-part",
+      "trigger": {
+        "event": "after-roll",
+        "filter": {
+          "roll": "save",
+          "unmodified": {
+            "from": 6,
+            "to": 6
+          }
         }
       },
       "effect": {
-        "type": "mortal-wounds",
-        "target": "defender",
-        "modifier": {
-          "count": 1
+        "type": "ability-part",
+        "trigger": {
+          "event": "attacks-resolved",
+          "filter": {
+            "kind": "shoot"
+          },
+          "subject": {
+            "event_var": "moment-subject"
+          }
+        },
+        "duration": "phase",
+        "effect": {
+          "type": "mortal-wounds",
+          "target": "event-subject",
+          "modifier": {
+            "count": 1
+          }
         }
       }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "attack-sequence"
     },
     "unit_ids": [
       "kastelan-robots"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "defensive ability (skipped for damage calc)",
-    "faction_id": "adeptus-mechanicus"
+    "faction_id": "adeptus-mechanicus",
+    "trigger": {
+      "event": "targets-selected",
+      "subject": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "kind": "shoot"
+      },
+      "object": "this-unit",
+      "binds_event_variable": "moment-subject"
+    }
   },
   {
     "ability_id": "searing-conflagration-adeptus-mechanicus",

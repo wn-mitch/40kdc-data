@@ -14,6 +14,7 @@ import { attackFold, isAttackMoment, triggerWindow } from "./compile-attack-wind
 import { prohibitedRollName } from "./compile-roll-prohibition.js";
 import type { PartFrame } from "./compile-part-classify.js";
 import { isAdvanceInPlace, PROHIBITIONS, resolveInstead } from "./compile-part-instead.js";
+import { wrapDelayed } from "./compile-delayed-moment.js";
 
 type Node = Record<string, unknown>;
 
@@ -91,8 +92,10 @@ export function planEffects(frame: PartFrame, sourceText: string | undefined, op
       // selected unit. An attack on "your unit" printed before the selection is on the bearer's or the target's unit.
       const onSelected = !onObject && attack?.parameters.direction === "targeted" && attack.parameters.unit === "that-unit"
         && list.slice(0, attackAt).some((other) => other.family_id === "select-unit");
-      if (onObject || onSelected) return { type: "conditional", condition: { type: "same-unit", parameters: { subject: "defender", as: onObject ? "event-object" : "selected-unit" } }, effect: compiled };
-      return compiled;
+      // "… after that enemy unit has shot": the effect waits for that moment (compile-delayed-moment.ts).
+      const held = wrapDelayed(leaf, compiled);
+      if (onObject || onSelected) return { type: "conditional", condition: { type: "same-unit", parameters: { subject: "defender", as: onObject ? "event-object" : "selected-unit" } }, effect: held };
+      return held;
     });
     if (!node) return;
     planned.push({

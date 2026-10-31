@@ -239,4 +239,20 @@ export const CHOICE_AND_DICE_EXTENSIONS: readonly FamilyExtension[] = [
       return result;
     },
   },
+  /**
+   * "On an unmodified 6" after a moment that is a roll ("when this unit makes a save roll"): the faces
+   * of that roll before any modifier, which compile-roll-faces.ts folds into the moment's trigger.
+   */
+  {
+    family: "roll-result",
+    version: 3,
+    description: "As the previous version, plus unmodified true: the band reads the die before any modifier (\"on an unmodified 6\"). After a moment that is a roll, with no dice of the ability's own between, it narrows that moment to those faces.",
+    schema: (previous) => withProperties(previous, { unmodified: optional({ const: true }) }),
+    normalize: (input, previous) => {
+      if (!("unmodified" in input)) return previous(input);
+      const { unmodified, ...rest } = input;
+      if (unmodified !== true) throw new TypeError("roll-result.unmodified is true or absent.");
+      return { ...previous(rest), unmodified: true };
+    },
+  },
 ];
