@@ -2685,5 +2685,144 @@
       "duration": "permanent"
     },
     "behavior": "aura"
+  },
+  {
+    "caseId": "canonical/after-roll-bound-subject-event-object",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "SAMPLE"
+        ]
+      },
+      "binds_event_variable": "when-subject"
+    },
+    "effect": {
+      "type": "ability-part",
+      "trigger": {
+        "event": "after-roll",
+        "filter": {
+          "roll": "hit",
+          "result": "success"
+        },
+        "subject": {
+          "event_var": "when-subject"
+        }
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "attack-is",
+              "parameters": {
+                "attack_type": "ranged"
+              }
+            },
+            {
+              "type": "same-unit",
+              "parameters": {
+                "subject": "defender",
+                "as": {
+                  "event_var": "when-subject",
+                  "role": "object"
+                }
+              }
+            }
+          ]
+        },
+        "effect": {
+          "type": "mortal-wounds",
+          "target": "this-unit",
+          "modifier": {
+            "count": 1
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "reactive"
+  },
+  {
+    "caseId": "canonical/same-unit-defender-event-object-negated",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "SAMPLE"
+        ]
+      },
+      "binds_event_variable": "when-subject"
+    },
+    "effect": {
+      "type": "ability-part",
+      "trigger": {
+        "event": "after-roll",
+        "filter": {
+          "roll": "hit",
+          "result": "success"
+        },
+        "subject": {
+          "event_var": "when-subject"
+        }
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "attack-is",
+              "parameters": {
+                "attack_type": "ranged"
+              }
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "same-unit",
+                  "parameters": {
+                    "subject": "defender",
+                    "as": {
+                      "event_var": "when-subject",
+                      "role": "object"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "effect": {
+          "type": "mortal-wounds",
+          "target": "this-unit",
+          "modifier": {
+            "count": 1
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "reactive"
   }
 ]

@@ -101,6 +101,8 @@ export function describePredicate(c: Condition, negated: boolean): string {
     case "same-unit":
       // The attack's target is the unit an aura reaches ("an attack that targets that enemy unit").
       if (p.subject === "defender" && p.as === "recipient") return `the attack ${negated ? "does not target" : "targets"} that unit`;
+      // The attack's target is the unit a bound event aimed at ("attacks that target that X unit").
+      if (p.subject === "defender" && typeof p.as === "object" && p.as !== null && (p.as as P).role === "object") return `the attack ${negated ? "does not target" : "targets"} the unit that unit targeted`;
       return `${subjectOf(p)} is ${negated ? "not " : ""}the same unit as ${p.as === "this-unit" ? "this unit" : unitRefPhrase(p.as)}`;
     case "model-profile":
       return `${subjectOf(p, "the model")} is ${negated ? "not " : ""}the ${titleCase(str(p.profile))} model`;

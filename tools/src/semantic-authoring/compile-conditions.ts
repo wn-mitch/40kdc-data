@@ -687,7 +687,11 @@ export function condition(leaf: CompileLeaf): Node {
     }
     case "attack-filter": {
       const parameters = attackFilter(leaf, leaf.parameters);
-      return polarity(leaf, { type: "attack-is", parameters });
+      if (leaf.parameters.target !== "that-unit") return polarity(leaf, { type: "attack-is", parameters });
+      // Version 4: aimed at the unit a Stratagem's WHEN moment named, its bound event's object (compile-when-subject.ts).
+      if (typeof leaf.parameters.defender_var !== "string") throw new CompileError("Attacks that target \"that unit\" name the unit a Stratagem's WHEN moment targeted, past a moment nested under it; this record has none.");
+      const aimed: Node = { type: "same-unit", parameters: { subject: "defender", as: { event_var: leaf.parameters.defender_var, role: "object" } } };
+      return polarity(leaf, Object.keys(parameters).length ? { operator: "and", operands: [{ type: "attack-is", parameters }, aimed] } : aimed);
     }
     case "attack-compare": {
       const left: Node = { of: closed(leaf, "left_of"), stat: stat(leaf, "left_stat") };

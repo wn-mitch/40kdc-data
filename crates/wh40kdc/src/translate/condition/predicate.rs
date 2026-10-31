@@ -187,6 +187,22 @@ pub(crate) fn describe_predicate(c: &Value, negated: bool) -> String {
                 "targets"
             }
         ),
+        // The attack's target is the unit a bound event aimed at ("attacks that target that X unit").
+        "same-unit"
+            if is(p, "subject", "defender")
+                && p.get("as")
+                    .and_then(Value::as_object)
+                    .is_some_and(|r| is(r, "role", "object")) =>
+        {
+            format!(
+                "the attack {} the unit that unit targeted",
+                if negated {
+                    "does not target"
+                } else {
+                    "targets"
+                }
+            )
+        }
         "same-unit" => format!(
             "{} is {not_}the same unit as {}",
             subject_of(p, "the unit"),

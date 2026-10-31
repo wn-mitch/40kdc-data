@@ -225,6 +225,9 @@ def _roll_clause(t: AbilityTrigger, f: dict[str, Any]) -> str:
         suffix = f" for an attack made by {by}" if by else ""
         return f"before {_article(noun)} {noun} is made{suffix}"
     if f.get("result") == "success" and roll == "hit":
+        # A bound unit's hits: "each time an attack made by that unit scores a hit".
+        if isinstance(subject, dict) and isinstance(subject.get("event_var"), str):
+            return "each time an attack made by that unit scores a hit"
         return "after scoring a hit"
     if f.get("result") == "success" and roll == "wound":
         if anyone:

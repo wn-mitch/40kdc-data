@@ -174,7 +174,9 @@ const V7_FILTERED_KINDS: Record<string, (leaf: CompileLeaf) => Node> = {
   // Version 8 (batch 7a).
   "after-roll": (leaf) => ({
     event: "after-roll", filter: { roll: triggerRoll(leaf), ...(leaf.parameters.result !== undefined ? { result: closed(leaf, "result") } : {}) },
-    ...(leaf.parameters.subject !== undefined && leaf.parameters.subject !== "this-unit" ? { subject: closed(leaf, "subject") } : {}),
+    // The WHEN moment's unit, which a Stratagem's nested roll moment names (compile-when-subject.ts).
+    ...(typeof leaf.parameters.subject_var === "string" ? { subject: { event_var: leaf.parameters.subject_var } }
+      : leaf.parameters.subject !== undefined && leaf.parameters.subject !== "this-unit" ? { subject: closed(leaf, "subject") } : {}),
   }),
   "marker-removed": (leaf) => ({ event: "marker-removed", filter: { marker: closed(leaf, "marker") } }),
   "resource-gained": (leaf) => ({ event: "resource-gained", filter: { pool: closed(leaf, "pool") } }),

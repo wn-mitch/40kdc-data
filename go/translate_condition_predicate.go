@@ -388,6 +388,13 @@ func describePredicate(c map[string]any, negated bool) string {
 			}
 			return "the attack targets that unit"
 		}
+		// The attack's target is the unit a bound event aimed at ("attacks that target that X unit").
+		if as, ok := asMap(p["as"]); ok && p["subject"] == "defender" && as["role"] == "object" {
+			if negated {
+				return "the attack does not target the unit that unit targeted"
+			}
+			return "the attack targets the unit that unit targeted"
+		}
 		as := unitRefPhrase(p["as"], "the unit")
 		if p["as"] == "this-unit" {
 			as = "this unit"

@@ -242,6 +242,10 @@ func rollClause(t, f map[string]any) string {
 		return s
 	}
 	if f["result"] == "success" && roll == "hit" {
+		// A bound unit's hits: "each time an attack made by that unit scores a hit".
+		if _, bound := sm["event_var"].(string); isMap && bound {
+			return "each time an attack made by that unit scores a hit"
+		}
 		return "after scoring a hit"
 	}
 	if f["result"] == "success" && roll == "wound" {

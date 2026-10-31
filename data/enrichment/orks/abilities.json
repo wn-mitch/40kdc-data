@@ -8144,104 +8144,21 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "source_digest": "d4c5d47059305966ae1990be55a0b888060ccaa0579dde79a81ece564626ef9a",
+    "source_digest": "c82a1f67142e1ee66af383898ea1ac7ba5c1c4f7c53a5e52075e71650e4d65a5",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "owner": "enemy"
-              },
-              "subject": "recipient"
-            }
-          },
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "owner": "friendly"
-              },
-              "subject": "recipient"
-            }
-          },
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "all_of": [
-                  "GRETCHIN"
-                ]
-              }
-            }
-          },
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "owner": "friendly"
-              },
-              "subject": "recipient"
-            }
-          },
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "all_of": [
-                  "ORKS"
-                ]
-              },
-              "subject": "recipient"
-            }
-          },
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "all_of": [
-                  "INFANTRY"
-                ]
-              },
-              "subject": "recipient"
-            }
-          },
-          {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "matches",
-                "parameters": {
-                  "filter": {
-                    "all_of": [
-                      "GRETCHIN"
-                    ]
-                  },
-                  "subject": "recipient"
-                }
-              }
-            ]
-          },
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "within": {
-                  "range": {
-                    "inches": 3
-                  },
-                  "of": "defender"
-                }
-              }
-            }
-          }
-        ]
+      "type": "ability-part",
+      "trigger": {
+        "event": "after-roll",
+        "filter": {
+          "roll": "hit",
+          "result": "success"
+        },
+        "subject": {
+          "event_var": "when-subject"
+        }
       },
       "effect": {
         "type": "conditional",
@@ -8249,17 +8166,25 @@
           "operator": "and",
           "operands": [
             {
-              "type": "happened",
-              "parameters": {
-                "event": "after-roll",
-                "object": "defender",
-                "filter": {
-                  "roll": "hit",
-                  "result": "success",
-                  "attack_type": "ranged"
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "attack-is",
+                  "parameters": {
+                    "attack_type": "ranged"
+                  }
                 },
-                "window": "phase"
-              }
+                {
+                  "type": "same-unit",
+                  "parameters": {
+                    "subject": "defender",
+                    "as": {
+                      "event_var": "when-subject",
+                      "role": "object"
+                    }
+                  }
+                }
+              ]
             },
             {
               "type": "matches",
@@ -8290,7 +8215,7 @@
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "unit_ids": [],
     "ability_type": "stratagem",
@@ -8300,30 +8225,23 @@
     "faction_id": "orks",
     "trigger": {
       "event": "targets-selected",
-      "subject": {
-        "owner": "enemy"
-      },
-      "object": "this-unit",
       "filter": {
         "kind": "attack"
       },
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "opponent-turn"
-            }
-          }
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "INFANTRY",
+          "ORKS"
+        ],
+        "none_of": [
+          "GRETCHIN"
         ]
-      }
+      },
+      "binds_event_variable": "when-subject"
     }
   },
   {

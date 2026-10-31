@@ -198,6 +198,25 @@ export const ATTACK_EXTENSIONS: readonly FamilyExtension[] = [
       return { ...others, weapon: ANTECEDENT };
     },
   },
+  /**
+   * "attacks that target that X unit" inside a Stratagem's nested moment: the attacks aimed at the unit
+   * its WHEN moment's attacks targeted (compile-when-subject.ts binds it).
+   */
+  {
+    // "a hit roll for that enemy unit's ranged attacks that target that X unit".
+    family: "attack-filter",
+    version: 4,
+    description: "As the previous version, plus target that-unit: the attacks target the unit the Stratagem's WHEN moment named as the target of the enemy unit's attacks (\"ranged attacks that target that X unit\" under \"just after an enemy unit has selected its targets\"). It takes attack_type and negated beside it.",
+    schema: (previous) => withProperties(previous, { target: optional({ enum: ["that-unit"] }) }),
+    normalize: (input, previous) => {
+      if (!("target" in input)) return previous(input);
+      const { target, ...rest } = input;
+      enumValue(target, ["that-unit"], "attack-filter.target");
+      const extra = Object.keys(rest).filter((key) => key !== "attack_type" && key !== "negated");
+      if (extra.length) throw new TypeError(`attack-filter target that-unit takes attack_type and negated only, not ${extra.join(", ")}.`);
+      return { ...(Object.keys(rest).length ? previous(rest) : {}), target: "that-unit" };
+    },
+  },
   HIT_THIS_PHASE,
   /**
    * Weapon-qualified attack references: a hit-by-attacks leaf can name the unit hit by the

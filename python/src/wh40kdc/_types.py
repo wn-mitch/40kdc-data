@@ -238,6 +238,7 @@ class HasAbilityModels(TypedDict):
 
 class UnitRef1(TypedDict):
     event_var: str
+    role: NotRequired[Literal["object"]]
 
 
 class UnitRef2(TypedDict):

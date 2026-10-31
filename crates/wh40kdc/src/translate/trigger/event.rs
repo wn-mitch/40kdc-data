@@ -302,6 +302,13 @@ pub(crate) fn roll_clause(t: &P, f: &P) -> String {
         );
     }
     if is(f, "result", "success") && roll == "hit" {
+        // A bound unit's hits: "each time an attack made by that unit scores a hit".
+        if subject
+            .and_then(Value::as_object)
+            .is_some_and(|s| s.get("event_var").is_some_and(Value::is_string))
+        {
+            return "each time an attack made by that unit scores a hit".to_string();
+        }
         return "after scoring a hit".to_string();
     }
     if is(f, "result", "success") && roll == "wound" {

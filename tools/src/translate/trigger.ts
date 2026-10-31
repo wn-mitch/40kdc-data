@@ -144,7 +144,11 @@ function rollClause(t: AbilityTrigger, f: P): string {
     const by = !anyone && ["hit", "wound", "damage"].includes(roll) ? ATTACK_MODELS[str(subject ?? "this-unit")] ?? (typeof subject === "object" ? `a model in ${actor(subject)}` : undefined) : undefined;
     return `before ${/^[aeiou]/i.test(noun) ? "an" : "a"} ${noun} is made${by ? ` for an attack made by ${by}` : ""}`;
   }
-  if (f.result === "success" && roll === "hit") return "after scoring a hit";
+  if (f.result === "success" && roll === "hit") {
+    // A bound unit's hits: "each time an attack made by that unit scores a hit".
+    if (typeof subject === "object" && subject !== null && typeof (subject as P).event_var === "string") return "each time an attack made by that unit scores a hit";
+    return "after scoring a hit";
+  }
   if (f.result === "success" && roll === "wound") {
     const by = anyone ? "" : ` made by ${ATTACK_MODELS[str(subject ?? "this-unit")] ?? `a model in ${actor(subject)}`}`;
     return `each time an attack${by} scores a wound`;

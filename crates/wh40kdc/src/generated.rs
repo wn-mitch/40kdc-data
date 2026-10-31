@@ -11513,7 +11513,7 @@ for DesignatedConditionParametersVariant0SubjectVariant0 {
 ///        },
 ///        {
 ///          "not": {
-///            "description": "The actor or other game object a sibling trigger bound with binds_event_variable; when used as a unit reference it resolves that bound actor, not a keyword family or an inferred model.",
+///            "description": "The actor or other game object a sibling trigger bound with binds_event_variable; when used as a unit reference it resolves that bound actor (or, with role object, the unit that event was aimed at), not a keyword family or an inferred model.",
 ///            "type": "object",
 ///            "required": [
 ///              "event_var"
@@ -11522,6 +11522,10 @@ for DesignatedConditionParametersVariant0SubjectVariant0 {
 ///              "event_var": {
 ///                "type": "string",
 ///                "minLength": 1
+///              },
+///              "role": {
+///                "description": "The bound event's object (the unit it was aimed at) instead of its actor.",
+///                "const": "object"
 ///              }
 ///            },
 ///            "additionalProperties": false
@@ -11570,7 +11574,7 @@ for DesignatedConditionParametersVariant0SubjectVariant0 {
 ///            ]
 ///          },
 ///          {
-///            "description": "The actor or other game object a sibling trigger bound with binds_event_variable; when used as a unit reference it resolves that bound actor, not a keyword family or an inferred model.",
+///            "description": "The actor or other game object a sibling trigger bound with binds_event_variable; when used as a unit reference it resolves that bound actor (or, with role object, the unit that event was aimed at), not a keyword family or an inferred model.",
 ///            "type": "object",
 ///            "required": [
 ///              "event_var"
@@ -11579,6 +11583,10 @@ for DesignatedConditionParametersVariant0SubjectVariant0 {
 ///              "event_var": {
 ///                "type": "string",
 ///                "minLength": 1
+///              },
+///              "role": {
+///                "description": "The bound event's object (the unit it was aimed at) instead of its actor.",
+///                "const": "object"
 ///              }
 ///            },
 ///            "additionalProperties": false
@@ -11692,7 +11700,7 @@ for DesignatedConditionParametersVariant0SubjectVariant0 {
 ///          },
 ///          {
 ///            "not": {
-///              "description": "The actor or other game object a sibling trigger bound with binds_event_variable; when used as a unit reference it resolves that bound actor, not a keyword family or an inferred model.",
+///              "description": "The actor or other game object a sibling trigger bound with binds_event_variable; when used as a unit reference it resolves that bound actor (or, with role object, the unit that event was aimed at), not a keyword family or an inferred model.",
 ///              "type": "object",
 ///              "required": [
 ///                "event_var"
@@ -11701,6 +11709,10 @@ for DesignatedConditionParametersVariant0SubjectVariant0 {
 ///                "event_var": {
 ///                  "type": "string",
 ///                  "minLength": 1
+///                },
+///                "role": {
+///                  "description": "The bound event's object (the unit it was aimed at) instead of its actor.",
+///                  "const": "object"
 ///                }
 ///              },
 ///              "additionalProperties": false
@@ -11773,7 +11785,7 @@ for DesignatedConditionParametersVariant0SubjectVariant0 {
 ///          },
 ///          {
 ///            "not": {
-///              "description": "The actor or other game object a sibling trigger bound with binds_event_variable; when used as a unit reference it resolves that bound actor, not a keyword family or an inferred model.",
+///              "description": "The actor or other game object a sibling trigger bound with binds_event_variable; when used as a unit reference it resolves that bound actor (or, with role object, the unit that event was aimed at), not a keyword family or an inferred model.",
 ///              "type": "object",
 ///              "required": [
 ///                "event_var"
@@ -11782,6 +11794,10 @@ for DesignatedConditionParametersVariant0SubjectVariant0 {
 ///                "event_var": {
 ///                  "type": "string",
 ///                  "minLength": 1
+///                },
+///                "role": {
+///                  "description": "The bound event's object (the unit it was aimed at) instead of its actor.",
+///                  "const": "object"
 ///                }
 ///              },
 ///              "additionalProperties": false
@@ -11841,7 +11857,7 @@ pub enum DesignatedConditionParametersVariant0SubjectVariant0Variant0 {}
 ///          ]
 ///        },
 ///        {
-///          "description": "The actor or other game object a sibling trigger bound with binds_event_variable; when used as a unit reference it resolves that bound actor, not a keyword family or an inferred model.",
+///          "description": "The actor or other game object a sibling trigger bound with binds_event_variable; when used as a unit reference it resolves that bound actor (or, with role object, the unit that event was aimed at), not a keyword family or an inferred model.",
 ///          "type": "object",
 ///          "required": [
 ///            "event_var"
@@ -11850,6 +11866,10 @@ pub enum DesignatedConditionParametersVariant0SubjectVariant0Variant0 {}
 ///            "event_var": {
 ///              "type": "string",
 ///              "minLength": 1
+///            },
+///            "role": {
+///              "description": "The bound event's object (the unit it was aimed at) instead of its actor.",
+///              "const": "object"
 ///            }
 ///          },
 ///          "additionalProperties": false
@@ -11946,7 +11966,7 @@ pub enum DesignatedConditionParametersVariant0SubjectVariant0Variant0 {}
 ///          },
 ///          {
 ///            "not": {
-///              "description": "The actor or other game object a sibling trigger bound with binds_event_variable; when used as a unit reference it resolves that bound actor, not a keyword family or an inferred model.",
+///              "description": "The actor or other game object a sibling trigger bound with binds_event_variable; when used as a unit reference it resolves that bound actor (or, with role object, the unit that event was aimed at), not a keyword family or an inferred model.",
 ///              "type": "object",
 ///              "required": [
 ///                "event_var"
@@ -11955,6 +11975,10 @@ pub enum DesignatedConditionParametersVariant0SubjectVariant0Variant0 {}
 ///                "event_var": {
 ///                  "type": "string",
 ///                  "minLength": 1
+///                },
+///                "role": {
+///                  "description": "The bound event's object (the unit it was aimed at) instead of its actor.",
+///                  "const": "object"
 ///                }
 ///              },
 ///              "additionalProperties": false
@@ -12044,7 +12068,7 @@ pub enum DesignatedConditionParametersVariant0SubjectVariant0Variant0 {}
 ///          },
 ///          {
 ///            "not": {
-///              "description": "The actor or other game object a sibling trigger bound with binds_event_variable; when used as a unit reference it resolves that bound actor, not a keyword family or an inferred model.",
+///              "description": "The actor or other game object a sibling trigger bound with binds_event_variable; when used as a unit reference it resolves that bound actor (or, with role object, the unit that event was aimed at), not a keyword family or an inferred model.",
 ///              "type": "object",
 ///              "required": [
 ///                "event_var"
@@ -12053,6 +12077,10 @@ pub enum DesignatedConditionParametersVariant0SubjectVariant0Variant0 {}
 ///                "event_var": {
 ///                  "type": "string",
 ///                  "minLength": 1
+///                },
+///                "role": {
+///                  "description": "The bound event's object (the unit it was aimed at) instead of its actor.",
+///                  "const": "object"
 ///                }
 ///              },
 ///              "additionalProperties": false
@@ -12125,7 +12153,7 @@ pub enum DesignatedConditionParametersVariant0SubjectVariant0Variant0 {}
 ///          },
 ///          {
 ///            "not": {
-///              "description": "The actor or other game object a sibling trigger bound with binds_event_variable; when used as a unit reference it resolves that bound actor, not a keyword family or an inferred model.",
+///              "description": "The actor or other game object a sibling trigger bound with binds_event_variable; when used as a unit reference it resolves that bound actor (or, with role object, the unit that event was aimed at), not a keyword family or an inferred model.",
 ///              "type": "object",
 ///              "required": [
 ///                "event_var"
@@ -12134,6 +12162,10 @@ pub enum DesignatedConditionParametersVariant0SubjectVariant0Variant0 {}
 ///                "event_var": {
 ///                  "type": "string",
 ///                  "minLength": 1
+///                },
+///                "role": {
+///                  "description": "The bound event's object (the unit it was aimed at) instead of its actor.",
+///                  "const": "object"
 ///                }
 ///              },
 ///              "additionalProperties": false
@@ -12233,7 +12265,7 @@ pub enum DesignatedConditionParametersVariant0SubjectVariant0Variant1 {}
 ///        },
 ///        {
 ///          "not": {
-///            "description": "The actor or other game object a sibling trigger bound with binds_event_variable; when used as a unit reference it resolves that bound actor, not a keyword family or an inferred model.",
+///            "description": "The actor or other game object a sibling trigger bound with binds_event_variable; when used as a unit reference it resolves that bound actor (or, with role object, the unit that event was aimed at), not a keyword family or an inferred model.",
 ///            "type": "object",
 ///            "required": [
 ///              "event_var"
@@ -12242,6 +12274,10 @@ pub enum DesignatedConditionParametersVariant0SubjectVariant0Variant1 {}
 ///              "event_var": {
 ///                "type": "string",
 ///                "minLength": 1
+///              },
+///              "role": {
+///                "description": "The bound event's object (the unit it was aimed at) instead of its actor.",
+///                "const": "object"
 ///              }
 ///            },
 ///            "additionalProperties": false
@@ -12298,7 +12334,7 @@ pub enum DesignatedConditionParametersVariant0SubjectVariant0Variant1 {}
 ///          },
 ///          {
 ///            "not": {
-///              "description": "The actor or other game object a sibling trigger bound with binds_event_variable; when used as a unit reference it resolves that bound actor, not a keyword family or an inferred model.",
+///              "description": "The actor or other game object a sibling trigger bound with binds_event_variable; when used as a unit reference it resolves that bound actor (or, with role object, the unit that event was aimed at), not a keyword family or an inferred model.",
 ///              "type": "object",
 ///              "required": [
 ///                "event_var"
@@ -12307,6 +12343,10 @@ pub enum DesignatedConditionParametersVariant0SubjectVariant0Variant1 {}
 ///                "event_var": {
 ///                  "type": "string",
 ///                  "minLength": 1
+///                },
+///                "role": {
+///                  "description": "The bound event's object (the unit it was aimed at) instead of its actor.",
+///                  "const": "object"
 ///                }
 ///              },
 ///              "additionalProperties": false
@@ -12356,7 +12396,7 @@ pub enum DesignatedConditionParametersVariant0SubjectVariant0Variant1 {}
 ///            ]
 ///          },
 ///          {
-///            "description": "The actor or other game object a sibling trigger bound with binds_event_variable; when used as a unit reference it resolves that bound actor, not a keyword family or an inferred model.",
+///            "description": "The actor or other game object a sibling trigger bound with binds_event_variable; when used as a unit reference it resolves that bound actor (or, with role object, the unit that event was aimed at), not a keyword family or an inferred model.",
 ///            "type": "object",
 ///            "required": [
 ///              "event_var"
@@ -12365,6 +12405,10 @@ pub enum DesignatedConditionParametersVariant0SubjectVariant0Variant1 {}
 ///              "event_var": {
 ///                "type": "string",
 ///                "minLength": 1
+///              },
+///              "role": {
+///                "description": "The bound event's object (the unit it was aimed at) instead of its actor.",
+///                "const": "object"
 ///              }
 ///            },
 ///            "additionalProperties": false
@@ -12477,7 +12521,7 @@ pub enum DesignatedConditionParametersVariant0SubjectVariant0Variant1 {}
 ///          },
 ///          {
 ///            "not": {
-///              "description": "The actor or other game object a sibling trigger bound with binds_event_variable; when used as a unit reference it resolves that bound actor, not a keyword family or an inferred model.",
+///              "description": "The actor or other game object a sibling trigger bound with binds_event_variable; when used as a unit reference it resolves that bound actor (or, with role object, the unit that event was aimed at), not a keyword family or an inferred model.",
 ///              "type": "object",
 ///              "required": [
 ///                "event_var"
@@ -12486,6 +12530,10 @@ pub enum DesignatedConditionParametersVariant0SubjectVariant0Variant1 {}
 ///                "event_var": {
 ///                  "type": "string",
 ///                  "minLength": 1
+///                },
+///                "role": {
+///                  "description": "The bound event's object (the unit it was aimed at) instead of its actor.",
+///                  "const": "object"
 ///                }
 ///              },
 ///              "additionalProperties": false
@@ -12584,7 +12632,7 @@ pub enum DesignatedConditionParametersVariant0SubjectVariant0Variant2 {}
 ///        },
 ///        {
 ///          "not": {
-///            "description": "The actor or other game object a sibling trigger bound with binds_event_variable; when used as a unit reference it resolves that bound actor, not a keyword family or an inferred model.",
+///            "description": "The actor or other game object a sibling trigger bound with binds_event_variable; when used as a unit reference it resolves that bound actor (or, with role object, the unit that event was aimed at), not a keyword family or an inferred model.",
 ///            "type": "object",
 ///            "required": [
 ///              "event_var"
@@ -12593,6 +12641,10 @@ pub enum DesignatedConditionParametersVariant0SubjectVariant0Variant2 {}
 ///              "event_var": {
 ///                "type": "string",
 ///                "minLength": 1
+///              },
+///              "role": {
+///                "description": "The bound event's object (the unit it was aimed at) instead of its actor.",
+///                "const": "object"
 ///              }
 ///            },
 ///            "additionalProperties": false
@@ -12650,7 +12702,7 @@ pub enum DesignatedConditionParametersVariant0SubjectVariant0Variant2 {}
 ///          },
 ///          {
 ///            "not": {
-///              "description": "The actor or other game object a sibling trigger bound with binds_event_variable; when used as a unit reference it resolves that bound actor, not a keyword family or an inferred model.",
+///              "description": "The actor or other game object a sibling trigger bound with binds_event_variable; when used as a unit reference it resolves that bound actor (or, with role object, the unit that event was aimed at), not a keyword family or an inferred model.",
 ///              "type": "object",
 ///              "required": [
 ///                "event_var"
@@ -12659,6 +12711,10 @@ pub enum DesignatedConditionParametersVariant0SubjectVariant0Variant2 {}
 ///                "event_var": {
 ///                  "type": "string",
 ///                  "minLength": 1
+///                },
+///                "role": {
+///                  "description": "The bound event's object (the unit it was aimed at) instead of its actor.",
+///                  "const": "object"
 ///                }
 ///              },
 ///              "additionalProperties": false
@@ -12708,7 +12764,7 @@ pub enum DesignatedConditionParametersVariant0SubjectVariant0Variant2 {}
 ///            ]
 ///          },
 ///          {
-///            "description": "The actor or other game object a sibling trigger bound with binds_event_variable; when used as a unit reference it resolves that bound actor, not a keyword family or an inferred model.",
+///            "description": "The actor or other game object a sibling trigger bound with binds_event_variable; when used as a unit reference it resolves that bound actor (or, with role object, the unit that event was aimed at), not a keyword family or an inferred model.",
 ///            "type": "object",
 ///            "required": [
 ///              "event_var"
@@ -12717,6 +12773,10 @@ pub enum DesignatedConditionParametersVariant0SubjectVariant0Variant2 {}
 ///              "event_var": {
 ///                "type": "string",
 ///                "minLength": 1
+///              },
+///              "role": {
+///                "description": "The bound event's object (the unit it was aimed at) instead of its actor.",
+///                "const": "object"
 ///              }
 ///            },
 ///            "additionalProperties": false
@@ -12830,7 +12890,7 @@ pub enum DesignatedConditionParametersVariant0SubjectVariant0Variant2 {}
 ///          },
 ///          {
 ///            "not": {
-///              "description": "The actor or other game object a sibling trigger bound with binds_event_variable; when used as a unit reference it resolves that bound actor, not a keyword family or an inferred model.",
+///              "description": "The actor or other game object a sibling trigger bound with binds_event_variable; when used as a unit reference it resolves that bound actor (or, with role object, the unit that event was aimed at), not a keyword family or an inferred model.",
 ///              "type": "object",
 ///              "required": [
 ///                "event_var"
@@ -12839,6 +12899,10 @@ pub enum DesignatedConditionParametersVariant0SubjectVariant0Variant2 {}
 ///                "event_var": {
 ///                  "type": "string",
 ///                  "minLength": 1
+///                },
+///                "role": {
+///                  "description": "The bound event's object (the unit it was aimed at) instead of its actor.",
+///                  "const": "object"
 ///                }
 ///              },
 ///              "additionalProperties": false
@@ -56579,7 +56643,7 @@ pub struct UnitRating {
 ///      "$ref": "#/$defs/unit-filter"
 ///    },
 ///    {
-///      "description": "The actor or other game object a sibling trigger bound with binds_event_variable; when used as a unit reference it resolves that bound actor, not a keyword family or an inferred model.",
+///      "description": "The actor or other game object a sibling trigger bound with binds_event_variable; when used as a unit reference it resolves that bound actor (or, with role object, the unit that event was aimed at), not a keyword family or an inferred model.",
 ///      "type": "object",
 ///      "required": [
 ///        "event_var"
@@ -56588,6 +56652,10 @@ pub struct UnitRating {
 ///        "event_var": {
 ///          "type": "string",
 ///          "minLength": 1
+///        },
+///        "role": {
+///          "description": "The bound event's object (the unit it was aimed at) instead of its actor.",
+///          "const": "object"
 ///        }
 ///      },
 ///      "additionalProperties": false
@@ -56628,7 +56696,12 @@ pub struct UnitRating {
 pub enum UnitRef {
     Variant0(UnitRefVariant0),
     Variant1(UnitFilter),
-    Variant2 { event_var: UnitRefVariant2EventVar },
+    Variant2 {
+        event_var: UnitRefVariant2EventVar,
+        ///The bound event's object (the unit it was aimed at) instead of its actor.
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        role: ::std::option::Option<::serde_json::Value>,
+    },
     Variant3 { selection_var: UnitRefVariant3SelectionVar },
     Variant4 { stratagem_target: EntityId },
 }

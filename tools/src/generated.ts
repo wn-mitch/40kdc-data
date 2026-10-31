@@ -348,6 +348,10 @@ export type UnitRef =
   | UnitFilter
   | {
       event_var: string;
+      /**
+       * The bound event's object (the unit it was aimed at) instead of its actor.
+       */
+      role?: "object";
     }
   | {
       selection_var: string;
@@ -1373,6 +1377,10 @@ export interface UnitFilter {
     | UnitFilter
     | {
         event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
       }
     | {
         selection_var: string;
@@ -1401,6 +1409,10 @@ export interface UnitFilter {
     | UnitFilter
     | {
         event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
       }
     | {
         selection_var: string;
@@ -1433,6 +1445,10 @@ export interface UnitFilter {
     | UnitFilter
     | {
         event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
       }
     | {
         selection_var: string;
@@ -1461,6 +1477,10 @@ export interface UnitFilter {
     | UnitFilter
     | {
         event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
       }
     | {
         selection_var: string;
@@ -1489,6 +1509,10 @@ export interface UnitFilter {
     | UnitFilter
     | {
         event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
       }
     | {
         selection_var: string;
@@ -1517,6 +1541,10 @@ export interface UnitFilter {
     | UnitFilter
     | {
         event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
       }
     | {
         selection_var: string;
@@ -1594,6 +1622,10 @@ export interface ObjectiveFilter {
     | UnitFilter
     | {
         event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
       }
     | {
         selection_var: string;
@@ -1685,6 +1717,10 @@ export interface UnitFilter1 {
     | UnitFilter
     | {
         event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
       }
     | {
         selection_var: string;
@@ -1713,6 +1749,10 @@ export interface UnitFilter1 {
     | UnitFilter
     | {
         event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
       }
     | {
         selection_var: string;
@@ -1745,6 +1785,10 @@ export interface UnitFilter1 {
     | UnitFilter
     | {
         event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
       }
     | {
         selection_var: string;
@@ -1773,6 +1817,10 @@ export interface UnitFilter1 {
     | UnitFilter
     | {
         event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
       }
     | {
         selection_var: string;
@@ -1801,6 +1849,10 @@ export interface UnitFilter1 {
     | UnitFilter
     | {
         event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
       }
     | {
         selection_var: string;
@@ -1829,6 +1881,10 @@ export interface UnitFilter1 {
     | UnitFilter
     | {
         event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
       }
     | {
         selection_var: string;
@@ -2132,6 +2188,10 @@ export interface EligibleCondition {
       | UnitFilter
       | {
           event_var: string;
+          /**
+           * The bound event's object (the unit it was aimed at) instead of its actor.
+           */
+          role?: "object";
         }
       | {
           selection_var: string;
@@ -2282,6 +2342,10 @@ export interface EventFilter {
     | UnitFilter
     | {
         event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
       }
     | {
         selection_var: string;
@@ -4279,6 +4343,10 @@ export interface IssueOrdersEffect {
     | UnitFilter
     | {
         event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
       }
     | {
         selection_var: string;
@@ -4719,6 +4787,10 @@ export interface PersistentDesignationEffect {
       | UnitFilter
       | {
           event_var: string;
+          /**
+           * The bound event's object (the unit it was aimed at) instead of its actor.
+           */
+          role?: "object";
         }
       | {
           selection_var: string;
@@ -5068,6 +5140,10 @@ export interface TargetingEffect {
       | UnitFilter
       | {
           event_var: string;
+          /**
+           * The bound event's object (the unit it was aimed at) instead of its actor.
+           */
+          role?: "object";
         }
       | {
           selection_var: string;
@@ -5106,6 +5182,10 @@ export interface TargetingEffect {
       | UnitFilter
       | {
           event_var: string;
+          /**
+           * The bound event's object (the unit it was aimed at) instead of its actor.
+           */
+          role?: "object";
         }
       | {
           selection_var: string;
@@ -5959,6 +6039,10 @@ export interface ResourceSpendEffect {
       | UnitFilter
       | {
           event_var: string;
+          /**
+           * The bound event's object (the unit it was aimed at) instead of its actor.
+           */
+          role?: "object";
         }
       | {
           selection_var: string;
@@ -6048,6 +6132,10 @@ export interface ObjectiveFilter1 {
     | UnitFilter
     | {
         event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
       }
     | {
         selection_var: string;
@@ -6097,6 +6185,10 @@ export interface DesignateEffect {
       | UnitFilter
       | {
           event_var: string;
+          /**
+           * The bound event's object (the unit it was aimed at) instead of its actor.
+           */
+          role?: "object";
         }
       | {
           selection_var: string;
@@ -6244,6 +6336,10 @@ export interface UnitFilter2 {
     | UnitFilter
     | {
         event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
       }
     | {
         selection_var: string;
@@ -6272,6 +6368,10 @@ export interface UnitFilter2 {
     | UnitFilter
     | {
         event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
       }
     | {
         selection_var: string;
@@ -6304,6 +6404,10 @@ export interface UnitFilter2 {
     | UnitFilter
     | {
         event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
       }
     | {
         selection_var: string;
@@ -6332,6 +6436,10 @@ export interface UnitFilter2 {
     | UnitFilter
     | {
         event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
       }
     | {
         selection_var: string;
@@ -6360,6 +6468,10 @@ export interface UnitFilter2 {
     | UnitFilter
     | {
         event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
       }
     | {
         selection_var: string;
@@ -6388,6 +6500,10 @@ export interface UnitFilter2 {
     | UnitFilter
     | {
         event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
       }
     | {
         selection_var: string;
@@ -6496,6 +6612,10 @@ export interface UnitFilter3 {
     | UnitFilter
     | {
         event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
       }
     | {
         selection_var: string;
@@ -6524,6 +6644,10 @@ export interface UnitFilter3 {
     | UnitFilter
     | {
         event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
       }
     | {
         selection_var: string;
@@ -6556,6 +6680,10 @@ export interface UnitFilter3 {
     | UnitFilter
     | {
         event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
       }
     | {
         selection_var: string;
@@ -6584,6 +6712,10 @@ export interface UnitFilter3 {
     | UnitFilter
     | {
         event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
       }
     | {
         selection_var: string;
@@ -6612,6 +6744,10 @@ export interface UnitFilter3 {
     | UnitFilter
     | {
         event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
       }
     | {
         selection_var: string;
@@ -6640,6 +6776,10 @@ export interface UnitFilter3 {
     | UnitFilter
     | {
         event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
       }
     | {
         selection_var: string;
@@ -6748,6 +6888,10 @@ export interface UnitFilter4 {
     | UnitFilter
     | {
         event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
       }
     | {
         selection_var: string;
@@ -6776,6 +6920,10 @@ export interface UnitFilter4 {
     | UnitFilter
     | {
         event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
       }
     | {
         selection_var: string;
@@ -6808,6 +6956,10 @@ export interface UnitFilter4 {
     | UnitFilter
     | {
         event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
       }
     | {
         selection_var: string;
@@ -6836,6 +6988,10 @@ export interface UnitFilter4 {
     | UnitFilter
     | {
         event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
       }
     | {
         selection_var: string;
@@ -6864,6 +7020,10 @@ export interface UnitFilter4 {
     | UnitFilter
     | {
         event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
       }
     | {
         selection_var: string;
@@ -6892,6 +7052,10 @@ export interface UnitFilter4 {
     | UnitFilter
     | {
         event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
       }
     | {
         selection_var: string;

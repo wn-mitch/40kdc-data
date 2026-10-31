@@ -14,9 +14,15 @@ const WHEN_SUBJECT = "when-subject";
  * later trigger's own event-subject is not the enemy unit the WHEN moment named. The WHEN trigger binds that unit
  * (`binds_event_variable`) and the mortal wounds name it by `event_var` (compile-fragments.ts reads `recipient_var`).
  *
- * Binds only a mortal-wounds recipient `that-unit` whose own wording says "enemy", in a Stratagem with no selection
- * of its own and exactly one enemy-acting WHEN moment, and only past a moment that nests under the WHEN moment
- * (nestedWhenMoments). Without one the leaf is left for the selection rule (compile.ts), whose refusal stands.
+ * The same binding names the WHEN moment's units for the nested moment itself ("When a hit roll for that enemy unit's
+ * ranged attacks that target that X unit …"): an after-roll whose subject is event-subject is the WHEN unit's roll
+ * (`subject_var`), and an attack-filter with target `that-unit` is aimed at the unit the WHEN moment's attacks
+ * targeted (`defender_var`: the bound event's object).
+ *
+ * Binds only a mortal-wounds recipient `that-unit` whose own wording says "enemy", such an after-roll, and such an
+ * attack-filter, in a Stratagem with no selection of its own and exactly one enemy-acting WHEN moment, and only past a moment
+ * that nests under the WHEN moment (nestedWhenMoments). Without one the leaf is left for the selection rule
+ * (compile.ts), whose refusal stands.
  */
 export function bindWhenSubject(leaves: readonly CompileLeaf[], sourceText: string | undefined): CompileLeaf[] {
   if (sourceText === undefined || !leaves.some((leaf) => STRATAGEM_HEADER.has(leaf.family_id))) return [...leaves];
@@ -26,16 +32,24 @@ export function bindWhenSubject(leaves: readonly CompileLeaf[], sourceText: stri
   if (whens.length !== 1) return [...leaves];
   const when = whens[0]!;
   const nested = nestedWhenMoments(leaves);
-  const binds = (leaf: CompileLeaf, index: number): boolean => {
-    if (leaf.family_id !== "mortal-wounds" || leaf.parameters.recipient !== "that-unit" || leaf.end_byte === undefined || index < when) return false;
-    if (!/\benemy\b/iu.test(bytes.subarray(leaf.start_byte, leaf.end_byte).toString("utf8"))) return false;
-    return [...nested].some((at) => at > when && at < index);
+  // The parameter each bound leaf takes: the unit it names is the WHEN moment's (its actor, or with defender_var its object).
+  const binding = (leaf: CompileLeaf, index: number): string | null => {
+    if (index < when) return null;
+    if (leaf.family_id === "event" && leaf.parameters.kind === "after-roll" && leaf.parameters.subject === "event-subject" && nested.has(index)) return "subject_var";
+    const past = [...nested].some((at) => at > when && at <= index);
+    if (leaf.family_id === "attack-filter" && leaf.parameters.target === "that-unit" && past) return "defender_var";
+    if (leaf.family_id !== "mortal-wounds" || leaf.parameters.recipient !== "that-unit" || leaf.end_byte === undefined) return null;
+    if (!/\benemy\b/iu.test(bytes.subarray(leaf.start_byte, leaf.end_byte).toString("utf8"))) return null;
+    return [...nested].some((at) => at > when && at < index) ? "recipient_var" : null;
   };
-  if (!leaves.some(binds)) return [...leaves];
+  if (!leaves.some((leaf, index) => binding(leaf, index) !== null)) return [...leaves];
   const existing = leaves[when]!.parameters.binds_event_variable;
   if (existing !== undefined && existing !== WHEN_SUBJECT) throw new CompileError(`The WHEN moment is bound as both ${String(existing)} and ${WHEN_SUBJECT}.`);
-  return leaves.map((leaf, index) => index === when ? { ...leaf, parameters: { ...leaf.parameters, binds_event_variable: WHEN_SUBJECT } }
-    : binds(leaf, index) ? { ...leaf, parameters: { ...leaf.parameters, recipient_var: WHEN_SUBJECT } } : leaf);
+  return leaves.map((leaf, index) => {
+    if (index === when) return { ...leaf, parameters: { ...leaf.parameters, binds_event_variable: WHEN_SUBJECT } };
+    const key = binding(leaf, index);
+    return key === null ? leaf : { ...leaf, parameters: { ...leaf.parameters, [key]: WHEN_SUBJECT } };
+  });
 }
 
 /** Leaves only a Stratagem has: its phase window, its TARGET and its cost. */

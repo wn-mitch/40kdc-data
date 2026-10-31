@@ -746,9 +746,13 @@
             "event_var": {
               "type": "string",
               "minLength": 1
+            },
+            "role": {
+              "const": "object",
+              "description": "The bound event's object (the unit it was aimed at) instead of its actor."
             }
           },
-          "description": "The actor or other game object a sibling trigger bound with binds_event_variable; when used as a unit reference it resolves that bound actor, not a keyword family or an inferred model."
+          "description": "The actor or other game object a sibling trigger bound with binds_event_variable; when used as a unit reference it resolves that bound actor (or, with role object, the unit that event was aimed at), not a keyword family or an inferred model."
         },
         {
           "type": "object",
