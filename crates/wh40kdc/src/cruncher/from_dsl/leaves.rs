@@ -649,16 +649,15 @@ pub(super) fn named_region_state(node: &Obj, opts: &WalkOpts, out: &mut Out) {
         );
         return;
     };
-    let Some(filter) = consumer.get("beneficiary_filter") else {
-        out.unsupported("named-region-state beneficiary filter is missing", node);
-        return;
-    };
-    match super::conditions::matches_unit_filter(
-        filter,
-        opts.context,
-        super::TranslationPerspective::Attacker,
-        "friendly",
-    ) {
+    let eligible = consumer.get("beneficiary_filter").and_then(|filter| {
+        super::conditions::matches_unit_filter(
+            filter,
+            opts.context,
+            super::TranslationPerspective::Attacker,
+            "friendly",
+        )
+    });
+    match eligible {
         Some(false) => return,
         None => {
             out.unsupported(

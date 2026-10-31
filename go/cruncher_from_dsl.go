@@ -1995,13 +1995,17 @@ func translateNamedRegionState(node, source map[string]any, opts dslOpts, out *e
 		out.unsupported = append(out.unsupported, unsup("named-region-state without a consumer declares a region only; it is not modelled by the buff layer", node))
 		return
 	}
+	// The beneficiary filter is a unit filter on the attacker, read like every other one.
 	beneficiary, _ := getMap(consumer, "beneficiary_filter")
-	matches, reason := auraRecipientFilterMatches(beneficiary, opts.context, opts.perspective)
-	if reason != "" {
-		out.unsupported = append(out.unsupported, unsup("named-region-state beneficiary filter cannot be evaluated against current attacker keywords", node))
+	var eligible any
+	if beneficiary != nil {
+		eligible = matchesUnitFilter(beneficiary, opts.context, "attacker", "friendly")
+	}
+	if eligible == nil {
+		out.unsupported = append(out.unsupported, unsup("named-region-state beneficiary filter cannot be evaluated against current attacker facts", node))
 		return
 	}
-	if !matches {
+	if eligible == false {
 		return
 	}
 	defaultBranch, ok := getMap(consumer, "default_branch")

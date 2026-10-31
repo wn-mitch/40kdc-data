@@ -15888,6 +15888,606 @@
       }
     },
     {
+      "caseId": "canonical/named-region-beneficiary/any-of-held",
+      "abilityId": "named-region-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "named-region-example",
+        "abilityKind": "army"
+      },
+      "effect": {
+        "type": "named-region-state",
+        "target": {
+          "owner": "friendly"
+        },
+        "modifier": {
+          "region_ref": {
+            "region_id": "example-region",
+            "owner_faction": "example-faction"
+          },
+          "consumer": {
+            "state_ref": {
+              "region_id": "example-region",
+              "owner_faction": "example-faction"
+            },
+            "beneficiary_filter": {
+              "owner": "friendly",
+              "any_of": [
+                "VEHICLE",
+                "INFANTRY"
+              ]
+            },
+            "membership": {
+              "unit_scope": "whole-unit",
+              "relation": "wholly-within"
+            },
+            "qualified_condition": {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "all_of": [
+                    "EXAMPLE"
+                  ]
+                }
+              }
+            },
+            "default_branch": {
+              "effect": {
+                "type": "re-roll",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "hit",
+                  "subset": "ones"
+                }
+              }
+            },
+            "qualified_branch": {
+              "effect": {
+                "type": "re-roll",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "hit",
+                  "subset": "all-failures"
+                }
+              }
+            }
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerKeywords": [
+          "infantry",
+          "example"
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "reroll",
+            "roll": "hit",
+            "subset": "ones"
+          }
+        ],
+        "unsupportedReasons": [
+          "named-region-state qualified branch: region membership is unavailable in EngineContext; qualified replacement is unsupported"
+        ],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/named-region-beneficiary/none-of-held",
+      "abilityId": "named-region-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "named-region-example",
+        "abilityKind": "army"
+      },
+      "effect": {
+        "type": "named-region-state",
+        "target": {
+          "owner": "friendly"
+        },
+        "modifier": {
+          "region_ref": {
+            "region_id": "example-region",
+            "owner_faction": "example-faction"
+          },
+          "consumer": {
+            "state_ref": {
+              "region_id": "example-region",
+              "owner_faction": "example-faction"
+            },
+            "beneficiary_filter": {
+              "owner": "friendly",
+              "none_of": [
+                "VEHICLE",
+                "INFANTRY"
+              ]
+            },
+            "membership": {
+              "unit_scope": "whole-unit",
+              "relation": "wholly-within"
+            },
+            "qualified_condition": {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "all_of": [
+                    "EXAMPLE"
+                  ]
+                }
+              }
+            },
+            "default_branch": {
+              "effect": {
+                "type": "re-roll",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "hit",
+                  "subset": "ones"
+                }
+              }
+            },
+            "qualified_branch": {
+              "effect": {
+                "type": "re-roll",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "hit",
+                  "subset": "all-failures"
+                }
+              }
+            }
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerKeywords": [
+          "infantry",
+          "example"
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/named-region-beneficiary/none-of-clear",
+      "abilityId": "named-region-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "named-region-example",
+        "abilityKind": "army"
+      },
+      "effect": {
+        "type": "named-region-state",
+        "target": {
+          "owner": "friendly"
+        },
+        "modifier": {
+          "region_ref": {
+            "region_id": "example-region",
+            "owner_faction": "example-faction"
+          },
+          "consumer": {
+            "state_ref": {
+              "region_id": "example-region",
+              "owner_faction": "example-faction"
+            },
+            "beneficiary_filter": {
+              "owner": "friendly",
+              "none_of": [
+                "VEHICLE"
+              ]
+            },
+            "membership": {
+              "unit_scope": "whole-unit",
+              "relation": "wholly-within"
+            },
+            "qualified_condition": {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "all_of": [
+                    "EXAMPLE"
+                  ]
+                }
+              }
+            },
+            "default_branch": {
+              "effect": {
+                "type": "re-roll",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "hit",
+                  "subset": "ones"
+                }
+              }
+            },
+            "qualified_branch": {
+              "effect": {
+                "type": "re-roll",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "hit",
+                  "subset": "all-failures"
+                }
+              }
+            }
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerKeywords": [
+          "infantry",
+          "example"
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "reroll",
+            "roll": "hit",
+            "subset": "ones"
+          }
+        ],
+        "unsupportedReasons": [
+          "named-region-state qualified branch: region membership is unavailable in EngineContext; qualified replacement is unsupported"
+        ],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/named-region-beneficiary/not-all-of-held",
+      "abilityId": "named-region-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "named-region-example",
+        "abilityKind": "army"
+      },
+      "effect": {
+        "type": "named-region-state",
+        "target": {
+          "owner": "friendly"
+        },
+        "modifier": {
+          "region_ref": {
+            "region_id": "example-region",
+            "owner_faction": "example-faction"
+          },
+          "consumer": {
+            "state_ref": {
+              "region_id": "example-region",
+              "owner_faction": "example-faction"
+            },
+            "beneficiary_filter": {
+              "owner": "friendly",
+              "not_all_of": [
+                "INFANTRY",
+                "EXAMPLE"
+              ]
+            },
+            "membership": {
+              "unit_scope": "whole-unit",
+              "relation": "wholly-within"
+            },
+            "qualified_condition": {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "all_of": [
+                    "EXAMPLE"
+                  ]
+                }
+              }
+            },
+            "default_branch": {
+              "effect": {
+                "type": "re-roll",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "hit",
+                  "subset": "ones"
+                }
+              }
+            },
+            "qualified_branch": {
+              "effect": {
+                "type": "re-roll",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "hit",
+                  "subset": "all-failures"
+                }
+              }
+            }
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerKeywords": [
+          "infantry",
+          "example"
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/named-region-beneficiary/model-level-unknown",
+      "abilityId": "named-region-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "named-region-example",
+        "abilityKind": "army"
+      },
+      "effect": {
+        "type": "named-region-state",
+        "target": {
+          "owner": "friendly"
+        },
+        "modifier": {
+          "region_ref": {
+            "region_id": "example-region",
+            "owner_faction": "example-faction"
+          },
+          "consumer": {
+            "state_ref": {
+              "region_id": "example-region",
+              "owner_faction": "example-faction"
+            },
+            "beneficiary_filter": {
+              "owner": "friendly",
+              "level": "model",
+              "all_of": [
+                "EXAMPLE"
+              ]
+            },
+            "membership": {
+              "unit_scope": "whole-unit",
+              "relation": "wholly-within"
+            },
+            "qualified_condition": {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "all_of": [
+                    "EXAMPLE"
+                  ]
+                }
+              }
+            },
+            "default_branch": {
+              "effect": {
+                "type": "re-roll",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "hit",
+                  "subset": "ones"
+                }
+              }
+            },
+            "qualified_branch": {
+              "effect": {
+                "type": "re-roll",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "hit",
+                  "subset": "all-failures"
+                }
+              }
+            }
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerKeywords": [
+          "infantry",
+          "example"
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "named-region-state beneficiary filter cannot be evaluated against current attacker facts"
+        ],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/named-region-beneficiary/model-level-every-model",
+      "abilityId": "named-region-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "named-region-example",
+        "abilityKind": "army"
+      },
+      "effect": {
+        "type": "named-region-state",
+        "target": {
+          "owner": "friendly"
+        },
+        "modifier": {
+          "region_ref": {
+            "region_id": "example-region",
+            "owner_faction": "example-faction"
+          },
+          "consumer": {
+            "state_ref": {
+              "region_id": "example-region",
+              "owner_faction": "example-faction"
+            },
+            "beneficiary_filter": {
+              "owner": "friendly",
+              "level": "model",
+              "all_of": [
+                "EXAMPLE"
+              ]
+            },
+            "membership": {
+              "unit_scope": "whole-unit",
+              "relation": "wholly-within"
+            },
+            "qualified_condition": {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "all_of": [
+                    "EXAMPLE"
+                  ]
+                }
+              }
+            },
+            "default_branch": {
+              "effect": {
+                "type": "re-roll",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "hit",
+                  "subset": "ones"
+                }
+              }
+            },
+            "qualified_branch": {
+              "effect": {
+                "type": "re-roll",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "hit",
+                  "subset": "all-failures"
+                }
+              }
+            }
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerKeywords": [
+          "infantry",
+          "example"
+        ],
+        "attackerModelKeywords": [
+          "infantry",
+          "example"
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "reroll",
+            "roll": "hit",
+            "subset": "ones"
+          }
+        ],
+        "unsupportedReasons": [
+          "named-region-state qualified branch: region membership is unavailable in EngineContext; qualified replacement is unsupported"
+        ],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/named-region-beneficiary/no-keywords",
+      "abilityId": "named-region-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "named-region-example",
+        "abilityKind": "army"
+      },
+      "effect": {
+        "type": "named-region-state",
+        "target": {
+          "owner": "friendly"
+        },
+        "modifier": {
+          "region_ref": {
+            "region_id": "example-region",
+            "owner_faction": "example-faction"
+          },
+          "consumer": {
+            "state_ref": {
+              "region_id": "example-region",
+              "owner_faction": "example-faction"
+            },
+            "beneficiary_filter": {
+              "owner": "friendly",
+              "any_of": [
+                "INFANTRY"
+              ]
+            },
+            "membership": {
+              "unit_scope": "whole-unit",
+              "relation": "wholly-within"
+            },
+            "qualified_condition": {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "all_of": [
+                    "EXAMPLE"
+                  ]
+                }
+              }
+            },
+            "default_branch": {
+              "effect": {
+                "type": "re-roll",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "hit",
+                  "subset": "ones"
+                }
+              }
+            },
+            "qualified_branch": {
+              "effect": {
+                "type": "re-roll",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "hit",
+                  "subset": "all-failures"
+                }
+              }
+            }
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "named-region-state beneficiary filter cannot be evaluated against current attacker facts"
+        ],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
       "caseId": "canonical/designation/applies-list-unit-first",
       "abilityId": "designation-example",
       "source": {

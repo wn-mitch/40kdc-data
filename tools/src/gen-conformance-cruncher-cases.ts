@@ -15,6 +15,7 @@ export const SCENARIO_CASE_PREFIX = "canonical/scenario/";
 export const TRIGGER_SUBJECT_CASE_PREFIX = "canonical/trigger-subject/";
 export const STRATAGEM_MODEL_CASE_PREFIX = "canonical/stratagem-model/";
 export const STRATAGEM_TARGET_CASE_PREFIX = "canonical/stratagem-target/";
+export const NAMED_REGION_BENEFICIARY_CASE_PREFIX = "canonical/named-region-beneficiary/";
 export const DESIGNATION_CASE_PREFIX = "canonical/designation/";
 
 export interface DslInput {
@@ -175,6 +176,54 @@ export function canonicalStratagemTargetCases() {
 }
 
 /**
+ * A fabricated named region whose beneficiary filter is read as a unit filter against the
+ * attacker's facts: keyword lists, a model-level filter, and a filter with no facts to read.
+ */
+export function canonicalNamedRegionBeneficiaryCases() {
+  const source = { kind: "ability", abilityId: "named-region-example", abilityKind: "army" } as const;
+  const region = { region_id: "example-region", owner_faction: "example-faction" };
+  const effect = (filter: Record<string, unknown>) => ({
+    type: "named-region-state",
+    target: { owner: "friendly" },
+    modifier: {
+      region_ref: region,
+      consumer: {
+        state_ref: region,
+        beneficiary_filter: { owner: "friendly", ...filter },
+        membership: { unit_scope: "whole-unit", relation: "wholly-within" },
+        qualified_condition: { type: "matches", parameters: { filter: { all_of: ["EXAMPLE"] } } },
+        default_branch: { effect: { type: "re-roll", target: "this-unit", modifier: { roll: "hit", subset: "ones" } } },
+        qualified_branch: { effect: { type: "re-roll", target: "this-unit", modifier: { roll: "hit", subset: "all-failures" } } },
+      },
+    },
+  });
+  const context = { phase: "shooting" as const, attackerKeywords: ["infantry", "example"] };
+  const rows: Array<Omit<DslInput, "abilityId" | "caseId"> & { id: string }> = [
+    { id: "any-of-held", source, effect: effect({ any_of: ["VEHICLE", "INFANTRY"] }), context, perspective: "attacker" },
+    { id: "none-of-held", source, effect: effect({ none_of: ["VEHICLE", "INFANTRY"] }), context, perspective: "attacker" },
+    { id: "none-of-clear", source, effect: effect({ none_of: ["VEHICLE"] }), context, perspective: "attacker" },
+    { id: "not-all-of-held", source, effect: effect({ not_all_of: ["INFANTRY", "EXAMPLE"] }), context, perspective: "attacker" },
+    { id: "model-level-unknown", source, effect: effect({ level: "model", all_of: ["EXAMPLE"] }), context, perspective: "attacker" },
+    { id: "model-level-every-model", source, effect: effect({ level: "model", all_of: ["EXAMPLE"] }), context: { ...context, attackerModelKeywords: ["infantry", "example"] }, perspective: "attacker" },
+    { id: "no-keywords", source, effect: effect({ any_of: ["INFANTRY"] }), context: { phase: "shooting" as const }, perspective: "attacker" },
+  ];
+  return rows.map(({ id, ...row }) => {
+    const result = effectToBuffs(row.effect, row.source, row.context, row.perspective);
+    return { caseId: `${NAMED_REGION_BENEFICIARY_CASE_PREFIX}${id}`, abilityId: row.source.abilityId, ...row, expected: {
+      applied: result.applied.map((buff) => buff.contribution),
+      unsupportedReasons: result.unsupported.map((item) => item.reason),
+      needKeys: needKeys(result),
+      activatable: result.activatable.map((lever) => ({
+        id: lever.id, label: lever.label, group: lever.group ?? null,
+        requires: lever.requires ?? null, capRaise: lever.capRaise ?? null,
+        ...stanceOptionFields(lever),
+        buffs: lever.buffs.map((buff) => buff.contribution),
+      })),
+    } };
+  });
+}
+
+/**
  * A fabricated designation with one entry on the designated unit and one on attacks against it: the
  * attacks' entry is the lever, the unit's own entry is reported unsupported, whatever the entry order.
  */
@@ -184,8 +233,8 @@ export function canonicalDesignationCases() {
   const strength = { to: "attackers-of-target", effect: { type: "stat-modifier", target: { owner: "friendly" }, modifier: { stat: "S", operation: "improve", value: 2 } } };
   const designation = (applies: unknown[]) => ({ type: "designate-target", designation: "combined-fire-target", select: { kind: "unit", selector: { filter: { owner: "enemy" }, count: { min: 1, max: 1 } } }, applies, duration: "phase" });
   const rows: Array<Omit<DslInput, "abilityId" | "caseId"> & { id: string }> = [
-    { id: "applies-list-unit-first", source, effect: designation([cover, strength]), context: { phase: "shooting" }, perspective: "attacker" },
-    { id: "applies-list-attacks-first", source, effect: designation([strength, cover]), context: { phase: "shooting" }, perspective: "attacker" },
+    { id: "applies-list-unit-first", source, effect: designation([cover, strength]), context: { phase: "shooting" as const }, perspective: "attacker" },
+    { id: "applies-list-attacks-first", source, effect: designation([strength, cover]), context: { phase: "shooting" as const }, perspective: "attacker" },
   ];
   return rows.map(({ id, ...row }) => {
     const result = effectToBuffs(row.effect, row.source, row.context, row.perspective);

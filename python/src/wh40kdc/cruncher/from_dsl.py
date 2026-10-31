@@ -1678,51 +1678,21 @@ def _translate_named_region_state(
         )
         return
     consumer: dict[str, Any] = consumer_raw
-    gate_raw = consumer.get("beneficiary_filter")
-    gate = gate_raw if _is_object(gate_raw) else {}
-    allowed = {"owner", "level", "all_of", "any_of", "none_of", "not_all_of"}
-    all_of = gate.get("all_of", [])
-    any_of = gate.get("any_of", [])
-    none_of = gate.get("none_of", [])
-    not_all_of = gate.get("not_all_of", [])
-    if (
-        not gate
-        or set(gate) - allowed
-        or any(
-            not isinstance(keywords, list)
-            or any(not isinstance(keyword, str) or not keyword for keyword in keywords)
-            for keywords in (all_of, any_of, none_of, not_all_of)
-        )
-    ):
-        out["unsupported"].append(
-            {
-                "reason": (
-                    "named-region-state beneficiary filter cannot be evaluated "
-                    "against current attacker keywords"
-                ),
-                "effectFragment": node,
-            }
-        )
-        return
-    attacker_keywords = opts["context"].get("attackerKeywords")
-    if not isinstance(attacker_keywords, list):
-        out["unsupported"].append(
-            {
-                "reason": (
-                    "named-region-state beneficiary filter cannot be evaluated "
-                    "against current attacker keywords"
-                ),
-                "effectFragment": node,
-            }
-        )
-        return
-    current = {keyword.lower() for keyword in attacker_keywords if isinstance(keyword, str)}
-    eligible = (
-        all(keyword.lower() in current for keyword in all_of)
-        and (not any_of or any(keyword.lower() in current for keyword in any_of))
-        and not any(keyword.lower() in current for keyword in none_of)
-        and not (not_all_of and all(keyword.lower() in current for keyword in not_all_of))
+    # The beneficiary filter is a unit filter on the attacker, read like every other one.
+    eligible = _matches_unit_filter(
+        consumer.get("beneficiary_filter"), opts["context"], "attacker", "friendly"
     )
+    if eligible == "unknown":
+        out["unsupported"].append(
+            {
+                "reason": (
+                    "named-region-state beneficiary filter cannot be evaluated "
+                    "against current attacker facts"
+                ),
+                "effectFragment": node,
+            }
+        )
+        return
     if not eligible:
         return
     default_branch_raw = consumer.get("default_branch")
