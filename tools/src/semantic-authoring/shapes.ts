@@ -7,6 +7,7 @@ import { compileLeaves, type CompileLeaf, type Compiled } from "./compile.js";
 import { coreCheckErrors } from "./core-checks.js";
 import { bumpWorkbenchRevision, withTransaction } from "./db.js";
 import { checkEntry, entryWithMechanics, resolveCheckedEntity, semanticAuthoringDataRoot } from "./entries.js";
+import { cruncherGateErrors } from "./gates.js";
 import { assertReviewer, requireHuman, type Actor } from "./authority.js";
 import { tiledSources } from "./leaf-view.js";
 import { ownAbilityIds } from "./own-abilities.js";
@@ -121,7 +122,9 @@ function render(factionId: string, abilityId: string, compiled: Compiled): { aut
   if (!compiled.ok) return { authored, compiled: null, errors: compiled.errors, differs: true };
   const entry = entryWithMechanics(original, compiled.mechanics);
   const check = checkEntry(entry);
+  if (!check.rendered_text && check.errors.length === 0) check.errors.push("The describer produced no text.");
   check.errors.push(...coreCheckErrors(semanticAuthoringDataRoot(), abilityId, compiled.checks));
+  check.errors.push(...cruncherGateErrors(semanticAuthoringDataRoot(), factionId, abilityId, entry));
   const fields = ["effect", "scope", "behavior", "optional", "trigger", "usage"] as const;
   const differs = fields.some((field) => hashJson(original[field] ?? null) !== hashJson(entry[field] ?? null));
   return { authored, compiled: check.rendered_text, errors: check.errors, differs };

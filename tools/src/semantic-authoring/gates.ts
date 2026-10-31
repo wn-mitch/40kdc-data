@@ -253,6 +253,51 @@ export function classifyUnsupported(
   return { honestUnknown, outsideDamagePath, unrecognizedShape };
 }
 
+/**
+ * The cruncher gate judges a record on its own merits — never against the old record.
+ * The old records are being replaced piecemeal and are frequently just wrong (a dropped
+ * condition, a wrong target/subset, a malformed combined gate); comparing against them turns
+ * "the new DSL is now more faithful" into a false "regression". A record passes this gate iff
+ * every unsupported branch it yields is either an honest runtime unknown (a condition the
+ * static cruncher genuinely can't evaluate without live game state) or outside the damage path
+ * by design (heal, a non-combat stat/roll — the cruncher estimates damage, not everything a DSL
+ * effect can express). "Unrecognized shape" is reserved for a damage-path effect the cruncher
+ * should be able to model but can't parse — a real gap; `reasons` lists those.
+ */
+function cruncherGate(dataRoot: string, factionId: string, abilityId: string, trigger: unknown, effect: unknown): GateCounts & { translation: EffectTranslation; reasons: string[] } {
+  const source: BuffSource = { kind: "ability", abilityId, abilityKind: "unit" };
+  // The record's own trigger binds `event-subject` at runtime; judge the effect as a matching unit sees it.
+  const bound = assumeEventSubjectMatches(trigger as never, effect as never);
+  // A granted record is the holders' own ability: it is judged as the printed rule it names.
+  const recordEffect = grantedRecordEffect(dataRoot, factionId);
+  const granted = resolveGrantedRecords(bound.effect, grantedRecord(dataRoot, factionId), new Set([abilityId]));
+  const translation = effectToBuffs(granted, source, CRUNCHER_CONTEXT, bound.perspective);
+  const counts = classifyUnsupported(translation.unsupported, recordEffect);
+  const reasons = counts.unrecognizedShape === 0 ? [] : [...new Set(translation.unsupported
+    .filter((item) => classifyUnsupported([item], recordEffect).unrecognizedShape > 0)
+    .map((item) => item.reason))];
+  return { ...counts, translation, reasons };
+}
+
+/** The cruncher gate's refusal of a record as publication writes it, or nothing when it passes. */
+export function cruncherGateErrors(dataRoot: string, factionId: string, abilityId: string, entry: Record<string, unknown>): string[] {
+  const crunch = cruncherGate(dataRoot, factionId, abilityId, entry.trigger ?? null, entry.effect);
+  return crunch.unrecognizedShape > 0 ? [`The cruncher cannot model ${crunch.reasons.join("; ")}`] : [];
+}
+
+/**
+ * The gates a record must pass to be approved or published, judged on the entry as publication
+ * writes it: schema and canonical form, a describer render, and a cruncher that models every
+ * damage-path effect it carries. The describer round-trip similarity is a review signal, not one
+ * of these: it needs the local embedder and scores wording, not meaning.
+ */
+export function recordGateErrors(dataRoot: string, factionId: string, abilityId: string, entry: Record<string, unknown>): string[] {
+  const checked = checkEntry(entry);
+  const errors = [...checked.errors];
+  if (!checked.rendered_text) errors.push("The describer produced no text.");
+  return [...errors, ...cruncherGateErrors(dataRoot, factionId, abilityId, entry)];
+}
+
 async function gateCompiledAbility(
   db: DatabaseSync, embedder: Embedder, publication: () => ProjectionChecker, dataRoot: string, factionId: string, abilityId: string, compiled: Extract<Compiled, { ok: true }>, sourceText: string, floor: number,
   companions: readonly CompiledRecord[],
@@ -292,30 +337,12 @@ async function gateCompiledAbility(
     failures.push({ faction_id: factionId, ability_id: abilityId, reason: "describer-roundtrip", detail: "describer produced no text" });
   }
 
-  // The cruncher gate judges the new compile on its own merits — never against the old record.
-  // The old records are being replaced piecemeal and are frequently just wrong (a dropped
-  // condition, a wrong target/subset, a malformed combined gate); comparing against them turns
-  // "the new DSL is now more faithful" into a false "regression". A compile passes this gate iff
-  // every unsupported branch it yields is either an honest runtime unknown (a condition the
-  // static cruncher genuinely can't evaluate without live game state) or outside the damage path
-  // by design (heal, a non-combat stat/roll — the cruncher estimates damage, not everything a DSL
-  // effect can express). "Unrecognized shape" is reserved for a damage-path effect the cruncher
-  // should be able to model but can't parse — a real gap.
-  const source: BuffSource = { kind: "ability", abilityId, abilityKind: "unit" };
-  // The record's own trigger binds `event-subject` at runtime; judge the effect as a matching unit sees it.
-  const bound = assumeEventSubjectMatches(compiled.mechanics.trigger, compiled.mechanics.effect);
-  // A granted record is the holders' own ability: it is judged as the printed rule it names.
-  const recordEffect = grantedRecordEffect(dataRoot, factionId);
-  const granted = resolveGrantedRecords(bound.effect, grantedRecord(dataRoot, factionId), new Set([abilityId]));
-  const newTranslation = effectToBuffs(granted, source, CRUNCHER_CONTEXT, bound.perspective);
-  const { honestUnknown, outsideDamagePath, unrecognizedShape } = classifyUnsupported(newTranslation.unsupported, recordEffect);
+  const crunch = cruncherGate(dataRoot, factionId, abilityId, compiled.mechanics.trigger, compiled.mechanics.effect);
+  const { honestUnknown, outsideDamagePath, unrecognizedShape } = crunch;
   const crunchShapeOk = unrecognizedShape === 0;
-  if (!crunchShapeOk) {
-    const reasons = newTranslation.unsupported
-      .filter((item) => classifyUnsupported([item], recordEffect).unrecognizedShape > 0)
-      .map((item) => item.reason);
-    failures.push({ faction_id: factionId, ability_id: abilityId, reason: "cruncher-unrecognized-shape", detail: [...new Set(reasons)].join("; ").slice(0, 300) });
-  }
+  if (!crunchShapeOk) failures.push({ faction_id: factionId, ability_id: abilityId, reason: "cruncher-unrecognized-shape", detail: crunch.reasons.join("; ").slice(0, 300) });
+  const source: BuffSource = { kind: "ability", abilityId, abilityKind: "unit" };
+  const newTranslation = crunch.translation;
 
   // Informational only: how this compares to the old record's own lever extraction, when there
   // was one (a mirror stub has no `effect` to compare against).

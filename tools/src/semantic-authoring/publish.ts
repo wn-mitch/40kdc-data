@@ -7,6 +7,7 @@ import { hashJson } from "../canonical-hash.js";
 import { sourceDigest } from "../source-digest.js";
 import { compilationInputsHash, compiledIdentity, getCompiledEntry } from "./compiled.js";
 import { abilityFilePath, canonicalDataRoot, semanticAuthoringDataRoot, schemaTreeHash, type Mechanics } from "./entries.js";
+import { recordGateErrors } from "./gates.js";
 import { bumpWorkbenchRevision, withTransaction } from "./db.js";
 import { gameVersionForDataVersion } from "../mfm/dataslate.js";
 import { fullyDescribed } from "./leaf-view.js";
@@ -274,6 +275,13 @@ function buildProjection(
     digests: new Map([...sources.records.values()].map((source) => [source.abilityId, sourceDigest(source.text)])),
   };
   const projected = projectRecords(dataRoot, options.faction_id, rows.map((row, index) => ({ ...row, source_digest: snapshots[index]!.source_digest })), stamp);
+  // An approval judged the record gates against the data root of its day; the entry written now is judged again.
+  const published = new Set(snapshots.map((snapshot) => snapshot.ability_id));
+  for (const entry of projected.entries) {
+    if (typeof entry.ability_id !== "string" || !published.has(entry.ability_id)) continue;
+    const errors = recordGateErrors(dataRoot, options.faction_id, entry.ability_id, entry);
+    if (errors.length > 0) throw new PublicationError(422, `${options.faction_id}/${entry.ability_id} fails its record gates: ${errors.join("; ")}`);
+  }
   return {
     core: projected.core,
     dataRoot,

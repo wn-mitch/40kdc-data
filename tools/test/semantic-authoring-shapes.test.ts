@@ -9,12 +9,12 @@ import { validateFingerprint } from "../src/semantic-authoring/contracts.js";
 import { initializeWorkbench, insertSpan } from "../src/semantic-authoring/db.js";
 import { upgradeFamilyVersions } from "../src/semantic-authoring/family-versions.js";
 
-import { preparePublication, publishPublication } from "../src/semantic-authoring/publish.js";
+import { checkPublication, preparePublication, publishPublication } from "../src/semantic-authoring/publish.js";
 import { publishableEntries } from "../src/semantic-authoring/publish-queue.js";
 
 import { applyChatReview } from "../src/semantic-authoring/review-apply.js";
 import { factionReviewSheet, writeReviewSheet } from "../src/semantic-authoring/review-sheet.js";
-import { getShape, listShapes, reviewMembers } from "../src/semantic-authoring/shapes.js";
+import { compiledRecordsOf, getShape, listShapes, reviewMembers } from "../src/semantic-authoring/shapes.js";
 import { refreshSources } from "../src/semantic-authoring/source.js";
 import { applyAnnotationBatch, approveShape, confirmSurface, moveSurface, rejectShapeMembers, undoBatch } from "./semantic-authoring-human.js";
 
@@ -25,6 +25,7 @@ const REVIEWER = "fixture-reviewer";
 const LEAD = "While this model is leading a unit";
 const REROLL = "you can re-roll a Hit roll of 1";
 const SHAPE = "CONDITION(leading-unit) · EFFECT(reroll)";
+const AIM = "Its ranged weapons aim at 3+";
 
 const roots: string[] = [];
 const originalDataRoot = process.env.SEMANTIC_AUTHORING_DATA_ROOT;
@@ -42,6 +43,8 @@ const records = [
   { faction_id: "fixture", ability_id: "partial", raw_text: `${LEAD}, ${REROLL} and roll a die.` },
   // Fully described only once a reviewer accepts its connective.
   { faction_id: "fixture", ability_id: "joined", raw_text: `${LEAD}, ${REROLL} or ${REROLL}.` },
+  // Compiles to a set Ballistic Skill, which the cruncher cannot model.
+  { faction_id: "fixture", ability_id: "aimed", raw_text: `${AIM}.` },
 ];
 
 /** A tracked entry the compiler can graft onto, authored with a different (wrong) meaning. */
@@ -176,6 +179,32 @@ describe("Semantic authoring shapes", () => {
     expect(published.find((entry) => entry.ability_id === "partial")!.effect).toEqual(authoredEntry("partial").effect);
     expect(publishableEntries(db)).toEqual({ factions: [], stale: 0, unchanged: 3, blocked: [] });
   }, 120_000);
+
+  it("refuses to approve a member the cruncher cannot model", async () => {
+    confirmSurface(db, { reviewer: REVIEWER, exact_text: AIM, family_id: "characteristic-set", parameters: { subject: "this-model", characteristic: "BS", value: 3, weapon_type: "ranged" } });
+    const aimed = reviewMembers(db).find((row) => row.ability_id === "aimed")!;
+    const member = getShape(db, aimed.signature).members[0]!;
+    expect(member.errors).toEqual([expect.stringMatching(/^The cruncher cannot model stat-modifier BS: operation "set"/u)]);
+    await expect(approveShape(db, { reviewer: REVIEWER, signature: aimed.signature, ability_version_ids: member.ability_version_ids }))
+      .rejects.toThrow(/fixture\/aimed cannot be approved: The cruncher cannot model/u);
+    expect(db.prepare("SELECT count(*) AS total FROM compiled_entries WHERE status = 'approved'").get()).toEqual({ total: 0 });
+  });
+
+  it("refuses to publish an approved entry that no longer passes the record gates", async () => {
+    reroll("failed");
+    await approveShape(db, { reviewer: REVIEWER, signature: SHAPE, ability_version_ids: getShape(db, SHAPE).members.find((member) => member.abilities[0]!.ability_id === "other")!.ability_version_ids });
+    const entry = db.prepare("SELECT id, mechanics_json FROM compiled_entries WHERE status = 'approved'").get() as { id: string; mechanics_json: string };
+    expect(await checkPublication(db, { faction_id: "fixture", entry_ids: [entry.id] })).toMatchObject({ valid: true });
+    // An approval recorded before the cruncher gate held: the approved effect is a set Ballistic Skill.
+    confirmSurface(db, { reviewer: REVIEWER, exact_text: AIM, family_id: "characteristic-set", parameters: { subject: "this-model", characteristic: "BS", value: 3, weapon_type: "ranged" } });
+    const [aimed] = compiledRecordsOf(db, [reviewMembers(db).find((row) => row.ability_id === "aimed")!.ability_version_id]);
+    const mechanics = { ...JSON.parse(entry.mechanics_json), effect: aimed!.mechanics.effect };
+    db.prepare("UPDATE compiled_entries SET mechanics_json = ? WHERE id = ?").run(JSON.stringify(mechanics), entry.id);
+    const before = readFileSync(abilitiesFile, "utf8");
+    await expect(checkPublication(db, { faction_id: "fixture", entry_ids: [entry.id] })).rejects.toThrow(/fixture\/other fails its record gates: The cruncher cannot model/u);
+    await expect(preparePublication(db, { faction_id: "fixture", entry_ids: [entry.id] })).rejects.toThrow(/fails its record gates/u);
+    expect(readFileSync(abilitiesFile, "utf8")).toBe(before);
+  });
 
   it("revokes an approval when the shape is later rejected, so its prepared publication cannot publish", async () => {
     reroll("failed");
