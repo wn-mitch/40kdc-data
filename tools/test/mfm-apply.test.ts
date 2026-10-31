@@ -250,3 +250,22 @@ describe("openProjectionChecker — many projections of one snapshot", () => {
     });
   }, FULL_VALIDATION_TIMEOUT_MS);
 });
+
+describe("prepareWrites — game_modes stamps", () => {
+  it("stamps the weapons and wargear options of a unit a pass moves to Combat Patrol, in the same write", async () => {
+    await withCopiedData(async (dataRoot) => {
+      const units = path.join(dataRoot, path.relative(DATA_ROOT, UNITS));
+      const weaponsFile = path.join(dataRoot, "core", "world-eaters", "weapons.json");
+      const records = readArr(units);
+      // A unit with a weapon no other World Eaters unit carries.
+      const carriers = new Map<string, number>();
+      for (const unit of records) for (const id of (unit.weapon_ids as string[] | undefined) ?? []) carriers.set(id, (carriers.get(id) ?? 0) + 1);
+      const unit = records.find((candidate) => !candidate.game_modes && ((candidate.weapon_ids as string[] | undefined) ?? []).some((id) => carriers.get(id) === 1))!;
+      const own = (unit.weapon_ids as string[]).find((id) => carriers.get(id) === 1)!;
+      unit.game_modes = ["combat-patrol"];
+      (await prepareWrites([{ path: units, value: records }], { label: "test", dataRoot })).commit();
+      const weapon = readArr(weaponsFile).find((candidate) => candidate.id === own);
+      expect(weapon?.game_modes).toEqual(["combat-patrol"]);
+    });
+  }, FULL_VALIDATION_TIMEOUT_MS);
+});

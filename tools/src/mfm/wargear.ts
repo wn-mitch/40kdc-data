@@ -2207,6 +2207,9 @@ export function runWargear(dump: MfmDump, write: boolean, onlyDir?: string): War
         if (o.replacement) rec.replacement = o.replacement;
         if (o.replacement_choice) rec.replacement_choice = o.replacement_choice;
         if (o.model_constraint) rec.model_constraint = o.model_constraint;
+        // An option is in its unit's game modes (game-mode-stamps.ts).
+        const modes = (byId.get(id) as { game_modes?: string[] } | undefined)?.game_modes;
+        if (modes?.length) (rec as WargearOptionRecord & { game_modes?: string[] }).game_modes = [...modes];
         return rec;
       });
       optionsByUnit.set(id, built);

@@ -31,6 +31,7 @@ import { escape as globEscape, globSync } from "glob";
 import { createValidator } from "../schema-loader.js";
 import { validateFiles, type ValidationResult } from "../validate.js";
 import { checkReferentialIntegrity } from "../integrity.js";
+import { readFactionCore, STAMP_FILES, stampGameModes } from "../game-mode-stamps.js";
 import { formatReport } from "../report.js";
 import { REPO_ROOT } from "./repo-files.js";
 
@@ -114,6 +115,40 @@ function snapshotInputs(dataRoot: string): InputSnapshot {
     hashes.set(relativePath, digest(content));
   }
   return { hashes, bytes };
+}
+
+/**
+ * Re-derive the `game_modes` stamps (game-mode-stamps.ts) over the projected dataset: a pass that
+ * adds a Combat Patrol unit or detachment also stamps the weapons, wargear options and stratagems
+ * those records use, so the projection validates and persists them together. Edits `prepared`.
+ */
+function withGameModeStamps(
+  prepared: PreparedWrite[],
+  inputs: ReadonlyMap<string, Buffer>,
+  dataRoot: string,
+  label?: string,
+): void {
+  const projectedText = (relativePath: string): string | undefined =>
+    prepared.find((write) => write.relativePath === relativePath)?.text ?? inputs.get(relativePath)?.toString("utf8");
+  const dirs = new Set([...inputs.keys()].filter((key) => key.startsWith("core/")).map((key) => key.split("/")[1]!)
+    .filter((dir) => !dir.startsWith("_") && !dir.endsWith(".json")));
+  let stamped = 0;
+  for (const dir of [...dirs].sort()) {
+    const core = readFactionCore((file) => projectedText(`core/${dir}/${file}`));
+    for (const collection of stampGameModes(core)) {
+      const relativePath = path.join("core", dir, STAMP_FILES[collection]);
+      const text = serialize(core[collection]);
+      const at = prepared.findIndex((write) => write.relativePath === relativePath);
+      if (at >= 0) prepared[at] = { ...prepared[at]!, text };
+      else prepared.push({ path: path.join(dataRoot, relativePath), relativePath, text });
+      stamped++;
+    }
+  }
+  // A staged file the stamps return to its bytes on disk is no change.
+  for (let at = prepared.length - 1; at >= 0; at--) {
+    if (inputs.get(prepared[at]!.relativePath)?.toString("utf8") === prepared[at]!.text) prepared.splice(at, 1);
+  }
+  if (stamped > 0 && label !== undefined) console.log(`[${label}] stamped game_modes in ${stamped} file(s).`);
 }
 
 function prepareStagedWrites(
@@ -328,6 +363,7 @@ export function openProjectionChecker(opts: PrepareWriteOptions): ProjectionChec
   let previous: Promise<unknown> = Promise.resolve();
   const validateOne = async (staged: StagedWrite[]): Promise<ProjectionValidation> => {
     const prepared = prepareStagedWrites(staged, configuredRoot, dataRoot, opts.label);
+    withGameModeStamps(prepared, inputs, dataRoot);
     baseline ??= schemaResult(projRoot, ALL_DATA_FILES, validators);
     const unchanged = await baseline;
     const touched = new Set(prepared.map((item) => item.relativePath.split(path.sep).join("/")));
@@ -406,6 +442,7 @@ export async function prepareWrites(
   }
   const inputSnapshot = snapshotInputs(dataRoot);
   const inputHashes = inputSnapshot.hashes;
+  withGameModeStamps(prepared, inputSnapshot.bytes, dataRoot, opts.label);
 
   const projected = await validateOverlay(inputSnapshot.bytes, prepared);
   if (projected.failed > 0) {

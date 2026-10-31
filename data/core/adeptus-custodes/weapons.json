@@ -343,6 +343,10 @@
         "namespace": "mfm",
         "id": "d26f2f8d-693f-4da5-affd-d78333ad83f1"
       }
+    ],
+    "game_modes": [
+      "matched-play",
+      "combat-patrol"
     ]
   },
   {
@@ -635,6 +639,9 @@
         "namespace": "mfm",
         "id": "9de4ed7a-19a1-49ff-b7f6-78346a4f0ac9"
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -943,6 +950,9 @@
         "namespace": "mfm",
         "id": "5398474a-3f3f-4042-b760-64448fd6f0ed"
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -1464,6 +1474,9 @@
         "namespace": "mfm",
         "id": "965baf19-1d7f-476e-b50e-0f6ab9cbd90a"
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -2034,6 +2047,10 @@
         "namespace": "mfm",
         "id": "95e188f6-14be-4d1a-8bfb-1b639fa026af"
       }
+    ],
+    "game_modes": [
+      "matched-play",
+      "combat-patrol"
     ]
   },
   {
@@ -3100,7 +3117,11 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "2026-10-14"
-    }
+    },
+    "game_modes": [
+      "matched-play",
+      "combat-patrol"
+    ]
   },
   {
     "id": "eternity-pattern-paragon-blade",
@@ -3137,7 +3158,11 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "2026-10-14"
-    }
+    },
+    "game_modes": [
+      "matched-play",
+      "combat-patrol"
+    ]
   },
   {
     "id": "pyrithite-spear",
@@ -3942,6 +3967,9 @@
         "namespace": "mfm",
         "id": "f651a6f2-afe4-4cbf-951e-0b1bb2125817"
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -4007,6 +4035,9 @@
         "namespace": "mfm",
         "id": "73baadc4-6e5f-404d-bdef-a16674cfaefe"
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -4514,6 +4545,9 @@
         "namespace": "mfm",
         "id": "965baf19-1d7f-476e-b50e-0f6ab9cbd90a"
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -4578,6 +4612,9 @@
         "namespace": "mfm",
         "id": "eddf7611-a528-4385-bc6b-f0e421f76db5"
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {

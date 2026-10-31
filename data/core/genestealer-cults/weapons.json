@@ -111,6 +111,10 @@
         "namespace": "mfm",
         "id": "f65fc8f4-869c-4af2-8eb0-daaf14f707ba"
       }
+    ],
+    "game_modes": [
+      "matched-play",
+      "combat-patrol"
     ]
   },
   {
@@ -346,6 +350,10 @@
         "namespace": "mfm",
         "id": "c4264e96-49d6-40d7-806f-c0c061bec825"
       }
+    ],
+    "game_modes": [
+      "matched-play",
+      "combat-patrol"
     ]
   },
   {
@@ -1043,6 +1051,10 @@
         "namespace": "mfm",
         "id": "fd7da38e-377b-4f81-b654-34560f44a52e"
       }
+    ],
+    "game_modes": [
+      "matched-play",
+      "combat-patrol"
     ]
   },
   {
@@ -1537,6 +1549,10 @@
         "namespace": "mfm",
         "id": "d46a142b-2aee-4e11-8a36-8ed2ddfd9a43"
       }
+    ],
+    "game_modes": [
+      "matched-play",
+      "combat-patrol"
     ]
   },
   {
@@ -1582,6 +1598,10 @@
         "namespace": "mfm",
         "id": "5e028034-99c9-48c1-8ace-52c199f761aa"
       }
+    ],
+    "game_modes": [
+      "matched-play",
+      "combat-patrol"
     ]
   },
   {
@@ -2706,7 +2726,10 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "game_modes": [
+      "combat-patrol"
+    ]
   },
   {
     "id": "stolen-blade",
@@ -2734,6 +2757,9 @@
         "namespace": "mfm",
         "id": "d29f7b62-fb03-4a2f-8c5f-06a2c64b0fc0"
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -2767,6 +2793,9 @@
         "namespace": "mfm",
         "id": "bcf482ac-bf87-47cc-aa1e-215e5479ffcc"
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -2795,6 +2824,9 @@
         "namespace": "mfm",
         "id": "f91b36e6-7bf0-4088-83fc-ab44609c3ff7"
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -2828,6 +2860,9 @@
         "namespace": "mfm",
         "id": "3fb8f047-b5d7-41cf-b4c8-26ddd50e3f86"
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -2869,6 +2904,9 @@
         "namespace": "mfm",
         "id": "efc8873b-c995-4067-8d4f-29fc41ceeb4b"
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -2913,6 +2951,9 @@
         "namespace": "mfm",
         "id": "bd354aff-c2af-4c32-b032-0fb3912667e5"
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -2950,6 +2991,9 @@
         "namespace": "mfm",
         "id": "eb33ed22-0cb9-42b0-afae-b7864fc4b74e"
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -2983,6 +3027,9 @@
         "namespace": "mfm",
         "id": "d29f7b62-fb03-4a2f-8c5f-06a2c64b0fc0"
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   }
 ]

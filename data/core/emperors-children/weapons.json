@@ -556,6 +556,9 @@
         "namespace": "mfm",
         "id": "0d67204a-bec8-4df0-aa83-ef83d01537c6"
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -730,6 +733,10 @@
         "namespace": "mfm",
         "id": "efbe4b14-6e4e-4e6a-8608-0ea3bd2ffb98"
       }
+    ],
+    "game_modes": [
+      "matched-play",
+      "combat-patrol"
     ]
   },
   {
@@ -1594,6 +1601,9 @@
         "namespace": "mfm",
         "id": "f876be00-3ba5-49bb-bc20-99aa9aebb7f8"
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -1741,6 +1751,10 @@
         "namespace": "mfm",
         "id": "317f8085-b808-4905-ae71-11865e20b6f1"
       }
+    ],
+    "game_modes": [
+      "matched-play",
+      "combat-patrol"
     ]
   },
   {
@@ -2922,6 +2936,9 @@
         "namespace": "mfm",
         "id": "1b6d2907-3eb6-4895-abdc-80ff5639e859"
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -3000,6 +3017,9 @@
         "namespace": "mfm",
         "id": "6267c763-c582-4e33-b165-a225fd6b610b"
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -3041,6 +3061,9 @@
         "namespace": "mfm",
         "id": "ff253138-99ed-4465-84d5-f5866df8ad2c"
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {

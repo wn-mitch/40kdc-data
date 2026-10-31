@@ -438,6 +438,9 @@
         "namespace": "mfm",
         "id": "0b18e869-508f-49bd-b569-8dd5a8a215f0"
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -514,6 +517,9 @@
         "namespace": "mfm",
         "id": "8c550a00-75e8-4255-9e0d-5087c3017906"
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -1004,6 +1010,9 @@
         "namespace": "mfm",
         "id": "b7144e9c-5777-4bc4-8fd9-f3544889261a"
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {

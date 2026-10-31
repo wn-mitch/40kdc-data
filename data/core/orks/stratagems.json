@@ -448,7 +448,10 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "game_modes": [
+      "combat-patrol"
+    ]
   },
   {
     "id": "glowin-dakka-shoota-boyz-orks",
@@ -918,7 +921,10 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "2026-10-14"
-    }
+    },
+    "game_modes": [
+      "combat-patrol"
+    ]
   },
   {
     "id": "kustom-dakka-shoota-boyz-orks",
@@ -1013,7 +1019,10 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "2026-10-14"
-    }
+    },
+    "game_modes": [
+      "combat-patrol"
+    ]
   },
   {
     "id": "mind-mostly-on-the-mission-taktikal-brigade-orks",

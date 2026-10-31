@@ -518,7 +518,10 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "game_modes": [
+      "combat-patrol"
+    ]
   },
   {
     "id": "big-choppa-boyz",
@@ -1189,7 +1192,10 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "game_modes": [
+      "combat-patrol"
+    ]
   },
   {
     "id": "choppa-bannernob",
@@ -3005,6 +3011,9 @@
         "namespace": "mfm",
         "id": "68e9958c-aa87-41dc-ba18-d381f63afd5e"
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -3268,6 +3277,9 @@
         "namespace": "mfm",
         "id": "cbc0e892-bcaf-4806-a724-e5a66707529d"
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -4612,6 +4624,9 @@
         "namespace": "mfm",
         "id": "bec3f5b4-f46a-4a1e-a60c-c91d3f3fa25c"
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -4829,6 +4844,10 @@
         "namespace": "mfm",
         "id": "ed45541e-3d67-4614-8dee-9ef591caef78"
       }
+    ],
+    "game_modes": [
+      "matched-play",
+      "combat-patrol"
     ]
   },
   {
@@ -6925,6 +6944,9 @@
         "namespace": "mfm",
         "id": "fcbda1b6-22f4-4466-a97c-e8cff322bb30"
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -7213,7 +7235,10 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "2026-10-14"
-    }
+    },
+    "game_modes": [
+      "combat-patrol"
+    ]
   },
   {
     "id": "waaagh-staff",
@@ -7268,7 +7293,10 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "2026-10-14"
-    }
+    },
+    "game_modes": [
+      "combat-patrol"
+    ]
   },
   {
     "id": "runtherds-toolz",
@@ -7469,7 +7497,10 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "2026-10-14"
-    }
+    },
+    "game_modes": [
+      "combat-patrol"
+    ]
   },
   {
     "id": "lobbin-bombs",
@@ -7502,7 +7533,10 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "2026-10-14"
-    }
+    },
+    "game_modes": [
+      "combat-patrol"
+    ]
   },
   {
     "id": "scavenged-shivs",
@@ -7534,7 +7568,11 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "2026-10-14"
-    }
+    },
+    "game_modes": [
+      "matched-play",
+      "combat-patrol"
+    ]
   },
   {
     "id": "extra-dakka",
@@ -9776,6 +9814,9 @@
         "namespace": "mfm",
         "id": "c5889d53-fef1-4e25-a332-bdb3a485a646"
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {

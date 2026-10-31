@@ -198,7 +198,10 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "2026-10-14"
-    }
+    },
+    "game_modes": [
+      "combat-patrol"
+    ]
   },
   {
     "id": "duty-unto-death-auric-champions-adeptus-custodes",
@@ -352,6 +355,9 @@
         "namespace": "mfm",
         "id": "61d4cd0c-e0d6-4a95-b44c-74112add34f5"
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -718,6 +724,9 @@
         "namespace": "mfm",
         "id": "9bc24dd6-5c08-41e1-ad41-f4397e391eaa"
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -842,6 +851,9 @@
         "namespace": "mfm",
         "id": "c4b60961-67ad-4237-8dbc-2e3641dadadb"
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -908,7 +920,10 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "2026-10-14"
-    }
+    },
+    "game_modes": [
+      "combat-patrol"
+    ]
   },
   {
     "id": "preternatural-rapidity-dread-host-adeptus-custodes",
@@ -1114,7 +1129,10 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "2026-10-14"
-    }
+    },
+    "game_modes": [
+      "combat-patrol"
+    ]
   },
   {
     "id": "selfless-service-emissaries-imperatus-adeptus-custodes",
@@ -1449,7 +1467,10 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "2026-10-14"
-    }
+    },
+    "game_modes": [
+      "combat-patrol"
+    ]
   },
   {
     "id": "tip-of-the-talon-aquilan-shield-adeptus-custodes",
@@ -1618,7 +1639,10 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "2026-10-14"
-    }
+    },
+    "game_modes": [
+      "combat-patrol"
+    ]
   },
   {
     "id": "unstoppable-momentum-might-of-the-moritoi-adeptus-custodes",
@@ -1683,7 +1707,10 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "2026-10-14"
-    }
+    },
+    "game_modes": [
+      "combat-patrol"
+    ]
   },
   {
     "id": "victory-before-death-grav-assault-force-adeptus-custodes",

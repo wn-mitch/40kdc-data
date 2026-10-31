@@ -763,6 +763,9 @@
     "model_constraint": {
       "model_name": "Serberys Sulphurhound",
       "any_number": true
-    }
+    },
+    "game_modes": [
+      "combat-patrol"
+    ]
   }
 ]
