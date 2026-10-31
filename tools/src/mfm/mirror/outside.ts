@@ -9,7 +9,7 @@
  */
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import * as path from "node:path";
-import { applyReplacements, type Replacement } from "../../round6/json-spans.js";
+import { applyReplacements, type Replacement } from "../../json-spans.js";
 import { DESIGNATION_IDS } from "../../translate/designations.js";
 import { editObjectKeys } from "./json-edit.js";
 import type { MirrorPlan, Undecided } from "./plan.js";

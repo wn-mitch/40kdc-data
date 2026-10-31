@@ -1,10 +1,10 @@
 /**
  * Span-preserving edits to a JSON file whose top level is an array (data files) or an object
- * (`vocab-overrides.json`): per-element value replacement through `round6/json-spans.ts`, element
+ * (`vocab-overrides.json`): per-element value replacement through `json-spans.ts`, element
  * removal and append, and object member rename and removal. Bytes outside the edited spans stay
  * as the file wrote them.
  */
-import { applyReplacements, escapesNonAscii, type Replacement } from "../../round6/json-spans.js";
+import { applyReplacements, escapesNonAscii, type Replacement } from "../../json-spans.js";
 
 function skipWs(t: string, i: number): number {
   while (i < t.length && " \t\r\n".includes(t[i]!)) i++;

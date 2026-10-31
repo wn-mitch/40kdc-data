@@ -25,7 +25,7 @@ import * as fs from "fs";
 import * as path from "path";
 
 import { nameToId } from "../converters/id-generator.js";
-import { applyReplacements, type Replacement } from "../round6/json-spans.js";
+import { applyReplacements, type Replacement } from "../json-spans.js";
 import type { StagedWrite } from "./apply.js";
 import { repoDirForFactionName, SHARED_ROSTERS } from "./faction-map.js";
 import type { MfmDump } from "./loader.js";

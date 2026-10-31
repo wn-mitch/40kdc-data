@@ -22,7 +22,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       # Node 24: the Round 5C workbench tests open node:sqlite through
-      # `openWorkbench`, which requires it.
+      # `openWorkbench`, which requires it. Every job that regenerates and
+      # diff-checks artifacts uses the same major, so goldens come from one Node.
       - uses: actions/setup-node@v4
         with:
           node-version: 24
@@ -33,6 +34,8 @@ jobs:
       - name: Check generated TS types are up to date
         run: git diff --exit-code tools/src/generated.ts
       - run: cd tools && npm run build
+      # The test files are outside the build's tsconfig; typecheck them too.
+      - run: cd tools && npx tsc -p tsconfig.test.json
       - run: cd tools && npm test
       - name: Test DSL campaign graph and workflow contracts
         run: node --test .omp/skills/dsl-campaign/graph/*.test.js .omp/skills/dsl-campaign/workflows/*.test.js
@@ -63,7 +66,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
       # Regenerate the bundled schema and Rust types, then fail if the committed
@@ -91,7 +94,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
       - uses: actions/setup-python@v5
@@ -128,7 +131,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
       - uses: actions/setup-go@v5
@@ -163,7 +166,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
       - run: cd tools && npm ci

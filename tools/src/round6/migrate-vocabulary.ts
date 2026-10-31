@@ -20,7 +20,7 @@ import { keywordIndex } from "../semantic-authoring/core-keywords.js";
 import { DEFAULT_DUMP_PATH } from "../mfm/loader.js";
 import { loadRepoProse, type RepoProse } from "../mfm/record-prose.js";
 import { storeSource } from "../mfm/store-source.js";
-import { applyReplacements, type Replacement } from "./json-spans.js";
+import { applyReplacements, type Replacement } from "../json-spans.js";
 import { LEGACY_TYPES, migrateSimple, type KeywordSets, type Place, type Node, type Outcome } from "./vocab-conditions.js";
 import { migrateTrigger } from "./vocab-triggers.js";
 import { LEGACY_ONLY_TYPES, LEGACY_TARGETS, migrateEffect, migrateMovement, targetRef, type EffectContext } from "./vocab-effects.js";

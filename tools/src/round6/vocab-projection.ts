@@ -3,7 +3,7 @@ import * as path from "node:path";
 import { globSync } from "glob";
 import { formatCompact } from "../compact-json.js";
 import { prepareWrites, type PreparedWrites, type StagedWrite } from "../mfm/apply.js";
-import { applyReplacements, type Replacement } from "./json-spans.js";
+import { applyReplacements, type Replacement } from "../json-spans.js";
 import { StanceIndex, type StanceRecord } from "./vocab-cutover-stance.js";
 import { transformTiming } from "./vocab-cutover-timing.js";
 import { transformFilters } from "./vocab-cutover-filters.js";

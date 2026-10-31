@@ -123,7 +123,6 @@
     "derive:keystones": "tsx src/derive-keystones.ts"
   },
   "dependencies": {
-    "@typesafe-ai/sdk": "^0.6.0",
     "ajv": "^8.17.0",
     "ajv-formats": "^3.0.0",
     "bson": "^7.3.2",
@@ -136,6 +135,7 @@
   "devDependencies": {
     "@huggingface/transformers": "^4.3.0",
     "@types/node": "^22.0.0",
+    "@typesafe-ai/sdk": "^0.6.0",
     "json-schema-to-typescript": "^15.0.4",
     "tsx": "^4.0.0",
     "typedoc": "^0.28.0",

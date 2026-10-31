@@ -3,7 +3,7 @@
  * edited in place (span-preserving) so the diff is only what the mirror changed. Also returns a
  * per-file log of every reference rewrite and removal for the report.
  */
-import type { Replacement } from "../../round6/json-spans.js";
+import type { Replacement } from "../../json-spans.js";
 import { CORE_FACTION, safeSlug } from "../dump-prose-rows.js";
 import { PROVISIONAL_DATASLATE } from "../dataslate.js";
 import { bareName, type Identity, ratingFromTail } from "./identity.js";

@@ -13,7 +13,7 @@ import { existsSync, readdirSync, readFileSync } from "node:fs";
 import * as path from "node:path";
 import type { DatabaseSync } from "node:sqlite";
 
-import { applyReplacements, type Replacement } from "../../round6/json-spans.js";
+import { applyReplacements, type Replacement } from "../../json-spans.js";
 import type { StagedWrite } from "../apply.js";
 import { currentGameVersion, type GameVersion } from "../dataslate.js";
 import type { MfmDump } from "../loader.js";
