@@ -23,6 +23,14 @@ export function exactKeys(parameters: Record<string, unknown>, keys: readonly st
   }
 }
 
+/** The parameters hold every required key and no key outside the required and optional ones. */
+export function keySet(input: Record<string, unknown>, required: readonly string[], optional: readonly string[], family: string): void {
+  const keys = Object.keys(input);
+  const allowed = new Set([...required, ...optional]);
+  for (const key of keys) if (!allowed.has(key)) throw new TypeError(`${family} parameters must be one of: ${[...allowed].join(", ")}.`);
+  for (const key of required) if (!(key in input)) throw new TypeError(`${family} parameters must include ${key}.`);
+}
+
 export function enumValue(value: unknown, values: readonly string[], label: string): string {
   if (typeof value === "string" && values.includes(value)) return value;
   throw new TypeError(`${label} must be one of ${values.join(", ")}.`);

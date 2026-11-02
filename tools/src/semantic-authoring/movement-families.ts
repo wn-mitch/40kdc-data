@@ -1,6 +1,6 @@
 import type { SemanticFamilyDefinition } from "./contracts.js";
 import {
-  boundedInteger, booleanValue, enumOrSource, enumOrSourceSchema, enumSet, enumValue, sourceQualifiedSchema, type SourceQualifiedValue,
+  boundedInteger, booleanValue, enumOrSource, enumOrSourceSchema, enumSet, enumValue, keySet, sourceQualifiedSchema, type SourceQualifiedValue,
 } from "./family-validation.js";
 
 /**
@@ -47,13 +47,6 @@ function distanceValue(value: unknown, label: string): number | string | SourceQ
     if (source && source === source.trim()) return { source };
   }
   throw new TypeError(`${label} must be a non-negative integer, a dice expression, or an exact source snippet.`);
-}
-
-function keySet(input: Record<string, unknown>, required: readonly string[], optional: readonly string[], family: string): void {
-  const keys = Object.keys(input);
-  const allowed = new Set([...required, ...optional]);
-  for (const key of keys) if (!allowed.has(key)) throw new TypeError(`${family} parameters must be one of: ${[...allowed].join(", ")}.`);
-  for (const key of required) if (!(key in input)) throw new TypeError(`${family} parameters must include ${key}.`);
 }
 
 export const MOVEMENT_FAMILIES: readonly SemanticFamilyDefinition[] = [

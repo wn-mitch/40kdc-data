@@ -1,5 +1,5 @@
 import type { CompileLeaf } from "./compile-fragments.js";
-import { CompileError } from "./compile-error.js";
+import { checkedKeys, CompileError } from "./compile-error.js";
 import { condition, duration, negate } from "./compile-conditions.js";
 import { foldUnitFilters } from "./compile-unit-filters.js";
 import { selectionFilter } from "./compile-wrappers.js";
@@ -40,11 +40,6 @@ function one(leaves: readonly CompileLeaf[], family: string): CompileLeaf {
   const found = leaves.filter((leaf) => leaf.family_id === family);
   if (found.length !== 1) throw new CompileError(`An ability selection override needs exactly one ${family} leaf.`);
   return found[0]!;
-}
-
-function checkedKeys(leaf: CompileLeaf, keys: readonly string[]): void {
-  const unexpected = Object.keys(leaf.parameters).filter((key) => !keys.includes(key));
-  if (unexpected.length) throw new CompileError(`Ability-use selection cannot consume ${leaf.family_id}.${unexpected.join(", ")}.`);
 }
 
 /**
@@ -98,13 +93,13 @@ export function foldAbilityUseContext(leaves: readonly CompileLeaf[]): CompileLe
     }
   }
   const selection = one(folded, "select-unit");
-  checkedKeys(selection, ["scope", "distance", "visible", "count", "up_to", "filter", "target_kind"]);
+  checkedKeys(selection, ["scope", "distance", "visible", "count", "up_to", "filter", "target_kind"], "Ability-use selection");
   if (selection.parameters.distance !== "any" || selection.parameters.visible !== false) throw new CompileError("Contextual selection reach and visibility need separate supported qualifiers.");
   const recipient = selection.parameters.filter;
   if (recipient === null || typeof recipient !== "object" || Array.isArray(recipient)) {
     throw new CompileError("A contextual selection needs one folded recipient unit-filter.");
   }
-  checkedKeys({ ...selection, parameters: recipient as Node }, ["keywords", "any_keywords", "excluded_keywords"]);
+  checkedKeys({ ...selection, parameters: recipient as Node }, ["keywords", "any_keywords", "excluded_keywords"], "Ability-use selection");
   const count = selection.parameters.count ?? 1;
   if (!Number.isSafeInteger(count) || Number(count) < 1) throw new CompileError("Contextual selection count must be a positive integer.");
   const baseFilter = selectionFilter(selection);
@@ -112,7 +107,7 @@ export function foldAbilityUseContext(leaves: readonly CompileLeaf[]): CompileLe
   if (exclusions.length > 1) throw new CompileError("A contextual selection has multiple designation exclusions.");
   if (exclusions.length) {
     const exclusion = exclusions[0]!;
-    checkedKeys(exclusion, ["subject", "tag", "negated"]);
+    checkedKeys(exclusion, ["subject", "tag", "negated"], "Ability-use selection");
     if (exclusion.parameters.subject !== "selected-unit" || exclusion.parameters.negated !== true) throw new CompileError("Contextual designation exclusion must test the selected recipient negatively.");
     baseFilter.not_designated = exclusion.parameters.tag;
   }
@@ -122,13 +117,13 @@ export function foldAbilityUseContext(leaves: readonly CompileLeaf[]): CompileLe
   const replacements = folded.filter((leaf) => leaf.family_id === "instead");
   if (replacements.length > 1) throw new CompileError("A contextual selection has more than one replacement connective.");
   for (const replacement of replacements) {
-    checkedKeys(replacement, []);
+    checkedKeys(replacement, [], "Ability-use selection");
     if (replacement.start_byte <= selection.start_byte || replacement.start_byte >= reaches[0]!.start_byte) {
       throw new CompileError("A contextual replacement connective must qualify its recipient selection.");
     }
   }
   const selectors = reaches.map((reach) => {
-    checkedKeys(reach, ["subject", "kind", "of", "inches", "negated", "wholly"]);
+    checkedKeys(reach, ["subject", "kind", "of", "inches", "negated", "wholly"], "Ability-use selection");
     const p = reach.parameters;
     if (p.subject !== "selected-unit" || p.kind !== "within" || p.of !== "event-subject" || p.negated === true || typeof p.inches !== "number") {
       throw new CompileError("Contextual selection reach must be within a distance of its triggering actor.");
@@ -141,7 +136,7 @@ export function foldAbilityUseContext(leaves: readonly CompileLeaf[]): CompileLe
   const recipientDuration = duration(lifetime);
   const consumed = new Set([selection, ...reaches, ...gates, ...exclusions, ...replacements]);
   for (const owner of folded.filter((leaf) => leaf.family_id === "unit-owner")) {
-    checkedKeys(owner, ["owner"]);
+    checkedKeys(owner, ["owner"], "Ability-use selection");
     if (owner.end_byte === undefined || event.end_byte === undefined
       || owner.start_byte < event.start_byte || owner.end_byte > event.end_byte || owner.parameters.owner !== actor.owner) {
       throw new CompileError("Contextual ability ownership must qualify the triggering actor with the same owner.");

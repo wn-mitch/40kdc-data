@@ -1,6 +1,6 @@
 import type { SemanticFamilyDefinition } from "./contracts.js";
 import {
-  boundedInteger, booleanValue, enumOrSource, enumOrSourceSchema, enumSet, enumValue, integerOrSource, integerOrSourceSchema,
+  boundedInteger, booleanValue, enumOrSource, enumOrSourceSchema, enumSet, enumValue, integerOrSource, integerOrSourceSchema, keySet,
   sourceQualifiedSchema, sourceQualified, type SourceQualifiedValue,
 } from "./family-validation.js";
 
@@ -66,13 +66,6 @@ const ARMY_RULES = [
   "warlord-required", "warlord-forbidden", "unique", "enhancement-forbidden", "enhancement-slot",
   "attachment", "composition", "faction-forbidden", "single-chapter", "detachment-forbidden", "detachment-tag-exclusive",
 ] as const;
-
-function keySet(input: Record<string, unknown>, required: readonly string[], optional: readonly string[], family: string): void {
-  const keys = Object.keys(input);
-  const allowed = new Set([...required, ...optional]);
-  for (const key of keys) if (!allowed.has(key)) throw new TypeError(`${family} parameters must be one of: ${[...allowed].join(", ")}.`);
-  for (const key of required) if (!(key in input)) throw new TypeError(`${family} parameters must include ${key}.`);
-}
 
 function keywordArray(value: unknown, label: string): string[] {
   if (!Array.isArray(value) || value.length === 0) throw new TypeError(`${label} must be a nonempty list of keywords.`);

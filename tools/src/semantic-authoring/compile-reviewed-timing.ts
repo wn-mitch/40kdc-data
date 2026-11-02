@@ -1,5 +1,6 @@
 import { compileStratagemActivation } from "./compile-stratagem-activation.js";
 import { duration } from "./compile-conditions.js";
+import { checkedKeys } from "./compile-error.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { foldHolderAbilities } from "./compile-holder-abilities.js";
 import { trigger } from "./compile-triggers.js";
@@ -57,11 +58,6 @@ function optional(leaves: readonly CompileLeaf[]): boolean {
 
 function localPart(triggerNode: Node, effect: Node): Node {
   return { type: "ability-part", trigger: triggerNode, effect: structuredClone(effect) };
-}
-
-function checkedKeys(leaf: CompileLeaf, allowed: readonly string[], label: string): void {
-  const unexpected = Object.keys(leaf.parameters).filter((key) => !allowed.includes(key));
-  if (unexpected.length) throw new CompileError(`${label} cannot consume ${leaf.family_id}.${unexpected.join(", ")}.`);
 }
 
 function reviewedWithin(leaf: CompileLeaf, subject: string, origin: string, label: string): { range: { inches: number }; wholly?: true } {
