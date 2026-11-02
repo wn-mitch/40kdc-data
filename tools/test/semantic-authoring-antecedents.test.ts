@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 
 import { describe, expect, it } from "vitest";
 
-import { compileLeaves, leafFragment } from "../src/semantic-authoring/compile.js";
+import { compileLeaves, leafFragment, type Compiled } from "../src/semantic-authoring/compile.js";
 import { bindAntecedents, postfixFilter } from "../src/semantic-authoring/compile-antecedent.js";
 import type { CompileLeaf } from "../src/semantic-authoring/compile-fragments.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters, REVIEWED_FAMILY_REGISTRY } from "../src/semantic-authoring/contracts.js";
@@ -25,24 +25,27 @@ const enemyFallsBack = () => leaf("event", { kind: "move-ended", owner: "enemy",
 const engaged = (subject: string) => leaf("unit-state", { states: ["engaged"], subject, negated: false });
 const mortal = (recipient: string) => leaf("mortal-wounds", { recipient, count: "D3" });
 
+/** The record with the anaphor compiles, and to exactly what naming its referent compiles to: two refusals are not equal readings. */
+function bindsAs(pointing: Compiled, named: Compiled): void {
+  expectCompiled(pointing);
+  expect(pointing).toEqual(named);
+}
+
 describe("Semantic authoring anaphoric subjects", () => {
   it("binds 'that enemy unit' after a selection to the selected unit, exactly as naming it would", () => {
-    const pointing = compileLeaves([selectEnemy(), mortal("antecedent")]);
-    expect(pointing.ok).toBe(true);
     // A mortal-wounds recipient names a selected unit as that-unit.
-    expect(pointing).toEqual(compileLeaves([selectEnemy(), mortal("that-unit")]));
+    bindsAs(compileLeaves([selectEnemy(), mortal("antecedent")]), compileLeaves([selectEnemy(), mortal("that-unit")]));
   });
 
   it("binds it after a triggering event to the event's unit", () => {
     const pointing = compileLeaves([enemyFallsBack(), engaged("antecedent"), mortal("this-unit")]);
-    expect(pointing.ok).toBe(true);
-    expect(pointing).toEqual(compileLeaves([enemyFallsBack(), engaged("event-subject"), mortal("this-unit")]));
-    expect(JSON.stringify(pointing)).not.toContain("antecedent");
+    bindsAs(pointing, compileLeaves([enemyFallsBack(), engaged("event-subject"), mortal("this-unit")]));
+    expect((pointing as unknown as { mechanics: { effect: { condition: unknown } } }).mechanics.effect.condition)
+      .toEqual({ type: "matches", parameters: { subject: "event-subject", filter: { state: "engaged" } } });
   });
 
   it("prefers an earlier selection over an earlier event", () => {
-    expect(compileLeaves([enemyFallsBack(), selectEnemy(), engaged("antecedent"), mortal("this-unit")]))
-      .toEqual(compileLeaves([enemyFallsBack(), selectEnemy(), engaged("selected-unit"), mortal("this-unit")]));
+    bindsAs(compileLeaves([enemyFallsBack(), selectEnemy(), engaged("antecedent"), mortal("this-unit")]), compileLeaves([enemyFallsBack(), selectEnemy(), engaged("selected-unit"), mortal("this-unit")]));
   });
 
   it("refuses a Stratagem's anaphor nothing earlier introduces, or one its family cannot name", () => {
@@ -52,26 +55,28 @@ describe("Semantic authoring anaphoric subjects", () => {
     // A selection after the anaphor does not count.
     expect(compileLeaves([inEffect(mortal("antecedent")), inEffect(selectEnemy())])).toMatchObject({ ok: false });
     // An apply-mark subject lowers as any unit-ref, so it also names a triggering unit.
-    expect(JSON.stringify(compileLeaves([enemyFallsBack(), leaf("apply-mark", { subject: "antecedent", tag: "suppressed" })]))).toContain('"type":"designate","target":"event-subject"');
+    const marked = compileLeaves([enemyFallsBack(), leaf("apply-mark", { subject: "antecedent", tag: "suppressed" })]);
+    expectCompiled(marked);
+    expect(marked.mechanics.effect).toEqual({ type: "designate", target: "event-subject", modifier: { tag: "suppressed" } });
   });
 
   it("binds a Stratagem's 'that unit' to its target, which its effects name as this unit", () => {
     const target = () => ({ ...leaf("stratagem-target", { count: "one", side: "your-army", selects: "unit", keywords: ["INFANTRY"], match: "all", excluded_keywords: [] }), fragment: "TARGET" });
     const advance = (subject: string) => ({ ...leaf("characteristic-modifier", { subject, characteristics: ["M"], operation: "add", value: 2, weapon_type: "all" }), fragment: "EFFECT" });
-    const pointing = compileLeaves([target(), advance("antecedent")]);
-    expect(pointing.ok).toBe(true);
-    expect(pointing).toEqual(compileLeaves([target(), advance("this-unit")]));
+    bindsAs(compileLeaves([target(), advance("antecedent")]), compileLeaves([target(), advance("this-unit")]));
     // Families that only name the ability's own unit can point back to the target, and nothing else.
     const permission = (subject: string) => ({ ...leaf("eligibility-permission", { subject, activity: "shoot", allow: true }), fragment: "EFFECT" });
-    expect(compileLeaves([target(), permission("antecedent")])).toEqual(compileLeaves([target(), permission("this-unit")]));
+    bindsAs(compileLeaves([target(), permission("antecedent")]), compileLeaves([target(), permission("this-unit")]));
     // A selected unit is a plain DSL unit-ref, which the permission's subject (lowered as any unit-ref) takes.
-    expect(JSON.stringify(compileLeaves([selectEnemy(), permission("antecedent")]))).toContain('"target":"selected-unit"');
+    const selected = compileLeaves([selectEnemy(), permission("antecedent")]);
+    expectCompiled(selected);
+    expect(selected.mechanics.effect).toMatchObject({ type: "select-units", effect: { type: "permission", target: "selected-unit" } });
     // A key that names only the ability's own unit still refuses it.
     const restriction = () => ({ ...leaf("targeting-restriction", { subject: "antecedent", may: "cannot-target", kind: "shoot", weapon_type: "all" }), fragment: "EFFECT" });
     expect(compileLeaves([selectEnemy(), restriction()]))
       .toMatchObject({ ok: false, errors: [expect.stringMatching(/selected-unit, which its subject cannot name/u)] });
     // A selection inside the Stratagem still comes first: "select one enemy unit … that enemy unit".
-    expect(compileLeaves([target(), selectEnemy(), mortal("antecedent")])).toEqual(compileLeaves([target(), selectEnemy(), mortal("that-unit")]));
+    bindsAs(compileLeaves([target(), selectEnemy(), mortal("antecedent")]), compileLeaves([target(), selectEnemy(), mortal("that-unit")]));
   });
 
   it("binds to a triggering event only when its moment names a unit", () => {
@@ -79,28 +84,29 @@ describe("Semantic authoring anaphoric subjects", () => {
     // A phase boundary introduces no unit: in a Stratagem nothing binds; elsewhere it is the record's own unit.
     expect(compileLeaves([{ ...phaseStarts(), fragment: "WHEN" }, { ...engaged("antecedent"), fragment: "EFFECT" }, { ...mortal("this-unit"), fragment: "EFFECT" }]))
       .toMatchObject({ ok: false, errors: [expect.stringMatching(/names a unit's moment/u)] });
-    expect(compileLeaves([phaseStarts(), engaged("antecedent"), mortal("this-unit")]))
-      .toEqual(compileLeaves([phaseStarts(), engaged("this-unit"), mortal("this-unit")]));
+    bindsAs(compileLeaves([phaseStarts(), engaged("antecedent"), mortal("this-unit")]), compileLeaves([phaseStarts(), engaged("this-unit"), mortal("this-unit")]));
     // A unit's moment after it still binds.
-    expect(compileLeaves([phaseStarts(), enemyFallsBack(), engaged("antecedent"), mortal("this-unit")]))
-      .toEqual(compileLeaves([phaseStarts(), enemyFallsBack(), engaged("event-subject"), mortal("this-unit")]));
+    bindsAs(compileLeaves([phaseStarts(), enemyFallsBack(), engaged("antecedent"), mortal("this-unit")]), compileLeaves([phaseStarts(), enemyFallsBack(), engaged("event-subject"), mortal("this-unit")]));
     // A Stratagem's target outranks the triggering unit.
-    const target = () => ({ ...leaf("stratagem-target", { count: "one" }), fragment: "TARGET" });
-    expect(compileLeaves([enemyFallsBack(), target(), engaged("antecedent"), mortal("this-unit")]))
-      .toEqual(compileLeaves([enemyFallsBack(), target(), engaged("this-unit"), mortal("this-unit")]));
+    const target = () => ({ ...leaf("stratagem-target", { count: "one", side: "your-army", selects: "unit", keywords: [], match: "all", excluded_keywords: [] }), fragment: "TARGET" });
+    const when = () => ({ ...enemyFallsBack(), fragment: "WHEN" });
+    const inEffect = (item: CompileLeaf): CompileLeaf => ({ ...item, fragment: "EFFECT" });
+    const outranked = compileLeaves([when(), target(), inEffect(engaged("antecedent")), inEffect(mortal("this-unit"))]);
+    bindsAs(outranked, compileLeaves([when(), target(), inEffect(engaged("this-unit")), inEffect(mortal("this-unit"))]));
+    expect(JSON.stringify(outranked)).not.toContain("event-subject");
   });
 
   it("binds an anaphor nothing introduces outside a Stratagem to the record's own unit, or its model", () => {
     const setUp = (subject: string) => leaf("set-up", { subject, to: "battlefield", min_enemy_distance: 9 });
-    expect(compileLeaves([setUp("antecedent")])).toEqual(compileLeaves([setUp("this-unit")]));
+    bindsAs(compileLeaves([setUp("antecedent")]), compileLeaves([setUp("this-unit")]));
     // A record whose leaves only ever name this model points back to the model.
     const save = leaf("invulnerable-save", { subject: "this-model", threshold: 4 });
-    expect(compileLeaves([save, setUp("antecedent")])).toEqual(compileLeaves([save, setUp("this-model")]));
+    bindsAs(compileLeaves([save, setUp("antecedent")]), compileLeaves([save, setUp("this-model")]));
     const mark = (subject: string) => leaf("apply-mark", { subject, tag: "suppressed" });
-    expect(compileLeaves([save, mark("antecedent")])).toEqual(compileLeaves([save, mark("this-model")]));
+    bindsAs(compileLeaves([save, mark("antecedent")]), compileLeaves([save, mark("this-model")]));
     // A leaf naming this unit anywhere in the record makes the unit the referent.
     const unitSave = leaf("invulnerable-save", { subject: "this-unit", threshold: 5 });
-    expect(compileLeaves([save, unitSave, mark("antecedent")])).toEqual(compileLeaves([save, unitSave, mark("this-unit")]));
+    bindsAs(compileLeaves([save, unitSave, mark("antecedent")]), compileLeaves([save, unitSave, mark("this-unit")]));
   });
 
   it("previews an anaphor as text-free, since only the record says who it is", () => {
@@ -291,9 +297,12 @@ describe("Semantic authoring antecedent slots: \"that unit\" after an earlier fi
       friendlyAlpha("friendly ALPHA unit"),
       ["is within range of an objective marker", "unit-position", { kind: "objective-range", controlled_by: "any", subject: "antecedent", negated: false }],
       ["that unit can make a Normal move of up to 3\"", "make-move", { subject: "antecedent", move_type: "normal", distance: 3 }]), text);
-    expect(effect.type).toBe("conditional");
-    expect(JSON.stringify(effect.condition)).toContain('"recipient"');
-    expect(effect.effect).toMatchObject({ type: "move", target: ALPHA });
+    // The gate reads each unit the filter names (the recipient), not this unit.
+    expect(effect).toEqual({
+      type: "conditional",
+      condition: { type: "matches", parameters: { subject: "recipient", filter: { within: { of: { objective: {} }, range: "objective-control" } } } },
+      effect: { type: "move", target: ALPHA, modifier: { move_type: "normal", distance: 3 } },
+    });
   });
 
   it("makes each filtered unit take its own test, and marks the filtered units", () => {
@@ -314,8 +323,12 @@ describe("Semantic authoring antecedent slots: \"that unit\" after an earlier fi
       ["is within 3\" of this model", "unit-position", { kind: "within", inches: 3, of: "this-model", subject: "antecedent", negated: false }],
       ["that unit is Afflicted", "apply-mark", { subject: "antecedent", tag: "afflicted" }]), text)).toMatch(/Battle-shock test/iu);
     expect(text_).not.toContain("filtered-units");
-    expect(text_).toContain('"type":"test","target":{"owner":"enemy"}');
-    expect(text_).toContain('"type":"designate","target":{"owner":"enemy"}');
+    // Each sentence gates its own effect on each enemy unit it names, at its own range.
+    const within = (inches: number) => ({ type: "matches", parameters: { subject: "recipient", filter: { within: { of: "this-model", range: { inches } } } } });
+    expect(effect).toEqual({ type: "sequence", steps: [
+      { type: "conditional", condition: within(6), effect: { type: "test", target: { owner: "enemy" }, modifier: { test: "battle-shock" } } },
+      { type: "conditional", condition: within(3), effect: { type: "designate", target: { owner: "enemy" }, modifier: { tag: "afflicted" } } },
+    ] });
   });
 
   it("names the filtered unit as the destroyer of a unit-destroyed moment", () => {

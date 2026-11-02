@@ -90,9 +90,14 @@ describe("Semantic authoring properties of an attack with conditions on its targ
       ["LETHAL HITS", "weapon-ability-keyword", { keyword: "Lethal Hits" }]), text, { name: FIXTURE_RULE_NAME });
     expect(result.ok ? [] : result.errors).toEqual([]);
     if (!result.ok) return;
-    const json = JSON.stringify(result.mechanics);
-    expect(json).toContain('"all_of":["ALPHA"]');
-    expect(json).toContain('"keyword_id":"lethal-hits"');
+    const effect = result.mechanics.effect as unknown as Record<string, any>;
+    // The selection is the designation's, its range the selection's eligibility; the grant reaches only attacks against it.
+    expect(effect).toMatchObject({ type: "designate-target", duration: "phase" });
+    expect(effect.select.selector.eligibility).toEqual({ type: "matches", parameters: { subject: "selected-unit", filter: { within: { of: "this-unit", range: { inches: 12 } } } } });
+    expect(effect.applies).toEqual({
+      to: "attackers-of-target",
+      effect: { type: "weapon-ability-grant", target: { owner: "friendly", all_of: ["ALPHA"] }, modifier: { keywords: [{ keyword_id: "lethal-hits" }] } },
+    });
     expect((result.mechanics as unknown as Record<string, any>).scope.duration).toBe("phase");
   });
 });
@@ -211,15 +216,17 @@ describe("Semantic authoring attack-filter frame over subjectless rolls", () => 
         ["where the attacker's power is above the target's resilience", "attack-compare", COMPARE],
         ["have -1 to wound rolls.", "roll-modifier", WOUND_MINUS_ONE]));
       expect(result.ok).toBe(true);
-      const json = mechanicsOf(result);
-      expect(json).toContain('"all_of":["ZETA"]');
-      expect(json).toContain('"type":"matches","parameters":{"subject":"defender","filter":{"owner":"friendly","all_of":["ZETA"]}}');
-      expect(json).toContain('"attack_type":"ranged"');
-      expect(json).toContain('"type":"attack-compare"');
-      expect(json).not.toContain("unit-filter-target");
-      // The wound roll is the attacking unit's: the -1 lands on the attacker, not on this unit.
-      expect(json).toContain('"type":"roll-modifier","target":"attacker"');
-      expect(json).not.toContain('"target":"this-unit"');
+      // The attack type, the defender's filter and the comparison all gate the one roll; the wound roll is the attacking
+      // unit's, so the -1 lands on the attacker, not on this unit.
+      expect((result as { mechanics: { effect: unknown } }).mechanics.effect).toEqual({
+        type: "conditional",
+        condition: { operator: "and", operands: [
+          { type: "attack-is", parameters: { attack_type: "ranged" } },
+          { type: "matches", parameters: { subject: "defender", filter: { owner: "friendly", all_of: ["ZETA"] } } },
+          { type: "attack-compare", parameters: { left: { of: "attacker", stat: "S" }, comparison: "gt", right: { of: "defender", stat: "T" } } },
+        ] },
+        effect: { type: "roll-modifier", target: "attacker", modifier: WOUND_MINUS_ONE },
+      });
     });
 
     it("refuses a target filter that is not friendly or enemy", () => {
@@ -308,11 +315,12 @@ describe("Semantic authoring attack-filter frame over subjectless rolls", () => 
         ["ranged attacks", "attack-filter", { attack_type: "ranged" }], TARGET_12,
         ["have +1 to hit rolls.", "roll-modifier", HIT_PLUS_ONE]), TEXT4);
       expect(result.ok).toBe(true);
-      const json = mechanicsOf(result);
-      expect(json).toContain('"subject":"defender","filter":{"within":{"of":"attacker","range":{"inches":12}}}');
-      expect(json).toContain('"owner":"friendly","all_of":["ECHO"]');
-      expect(json).toContain('"weapons":{"type":"ranged"}');
-      expect(json).not.toContain("attack-filter");
+      // The distance gates the roll; the attacker filter is the roll's target and the attack type its weapon scope.
+      expect((result as { mechanics: { effect: unknown } }).mechanics.effect).toEqual({
+        type: "conditional",
+        condition: { type: "matches", parameters: { subject: "defender", filter: { within: { of: "attacker", range: { inches: 12 } } } } },
+        effect: { type: "roll-modifier", target: { owner: "friendly", all_of: ["ECHO"] }, modifier: { ...HIT_PLUS_ONE, weapons: { type: "ranged" } } },
+      });
     });
 
     it("refuses a gate whose subject is not the attack's target", () => {
@@ -347,11 +355,15 @@ describe("Semantic authoring attack-filter frame over subjectless rolls", () => 
   describe("a bare unit-filter gated by a hit-by condition after it", () => {
     it("binds the hit and its attack-filter to a per-unit pass over the filter's units", () => {
       const mechanics = mechanicsOf(placed(TEXT, SHOOTING, AFTER_SHOT, INFANTRY, HIT_BY, ZAP, PINNED), TEXT);
-      const json = JSON.stringify(mechanics);
-      expect(json).toContain('"type":"for-each-unit"');
-      expect(json).toContain('"filter":{"owner":"enemy","all_of":["INFANTRY"]}');
-      expect(json).toContain('"weapons":{"name":"zap cannon"}');
-      expect(json).toContain('"object":"this-unit"');
+      // Each INFANTRY unit hit by this unit's zap cannon attacks is a recipient of the pass, and the mark is on it.
+      expect((mechanics as { effect: { effect: unknown } }).effect.effect).toEqual({
+        type: "for-each-unit",
+        selector: {
+          filter: { owner: "enemy", all_of: ["INFANTRY"] },
+          eligibility: { type: "happened", parameters: { event: "after-roll", subject: "event-subject", object: "this-unit", filter: { roll: "hit", result: "success", weapons: { name: "zap cannon" } }, window: "event" } },
+        },
+        effect: { type: "designate", target: "recipient", modifier: { tag: "pinned" } },
+      });
     });
 
     it("gates on no weapon when the hit-by condition has no attack-filter", () => {
