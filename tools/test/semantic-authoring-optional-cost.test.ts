@@ -120,6 +120,15 @@ describe("use-time spend, gated clause later in the same use (S1)", () => {
     expect(() => mechanicsOf([...leaves, extra], S1_TEXT)).toThrow(/exactly one spend/);
   });
 
+  it("compiles the use itself as no trigger when the leaves carry a Stratagem's fragments", () => {
+    const fragments = ["WHEN", "TARGET", "TARGET"];
+    const leaves = s1Leaves(S1_TEXT).map((leaf, index) => ({ ...leaf, fragment: fragments[index] ?? "EFFECT" }));
+    const mechanics = mechanicsOf(leaves, S1_TEXT);
+    expect(mechanics.trigger ?? null).toBeNull();
+    expect(mechanics.behavior).toBe("activated");
+    expect(nodesOf(mechanics, "ability-part").filter((part) => part.optional === true)).toHaveLength(1);
+  });
+
   it("refuses a use read with no used event that starts the ability", () => {
     const leaves = s1Leaves(S1_TEXT).filter((leaf) => leaf.family_id !== "event");
     expect(() => mechanicsOf(leaves, S1_TEXT)).toThrow(/used event/);

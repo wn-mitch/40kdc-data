@@ -112,10 +112,31 @@ describe("a Stratagem's effect moment is a part under its WHEN moment (compile.t
     expect(mechanics.effect.type).toBe("permission");
   });
 
-  it("keeps the Stratagem's own use beside its WHEN moment", () => {
+  it("reads the Stratagem's own use as the use its WHEN moment times, not a second trigger", () => {
     const use = "Your opponent's Shooting phase, just after a KEYA model from your army is destroyed.\nOne KEYB unit from your army.\nEach time you use this Stratagem, your unit can shoot as if it were your Shooting phase.";
     const used: Piece[] = [...pieces.slice(0, 6), ["Each time you use this Stratagem", "event", { kind: "used", activity: "stratagem" }, "EFFECT"], pieces[7]!];
-    expect(mechanicsOf(use, used).effect.type).toBe("permission");
+    const mechanics = mechanicsOf(use, used);
+    expect(Array.isArray(mechanics.trigger)).toBe(false);
+    expect(mechanics.trigger).toMatchObject({ event: "model-destroyed" });
+    expect(mechanics.effect.type).toBe("permission");
+  });
+
+  it("keeps a bare used event in the WHEN as the Stratagem's moment", () => {
+    const use = "Your Command phase, just after you use another Stratagem.\nOne KEYB unit from your army.\nYour unit can shoot as if it were your Shooting phase.";
+    const used: Piece[] = [
+      ["Your Command phase", "use-window", { your_phases: ["command"], opponent_phases: [], either_phases: [] }, "WHEN"],
+      ["just after you use another Stratagem", "event", { kind: "used", activity: "stratagem" }, "WHEN"],
+      ...pieces.slice(3, 6),
+      ["Your unit can shoot as if it were your Shooting phase", "eligibility-permission", { subject: "this-unit", activity: "shoot", allow: true, as_if: "shooting-phase" }, "EFFECT"],
+    ];
+    expect(mechanicsOf(use, used).trigger).toMatchObject({ event: "used", filter: { kind: "stratagem" } });
+  });
+
+  it("keeps a used event that names whose Stratagem as a trigger", () => {
+    const use = "Your opponent's Shooting phase, just after a KEYA model from your army is destroyed.\nOne KEYB unit from your army.\nEach time your opponent uses a Stratagem, your unit can shoot as if it were your Shooting phase.";
+    const used: Piece[] = [...pieces.slice(0, 6), ["Each time your opponent uses a Stratagem", "event", { kind: "used", activity: "stratagem", owner: "enemy" }, "EFFECT"], pieces[7]!];
+    const trigger = mechanicsOf(use, used).trigger;
+    expect(trigger).toEqual(expect.arrayContaining([expect.objectContaining({ event: "used", subject: { owner: "enemy" } })]));
   });
 
   it("puts a selection printed before the later moment outside the part", () => {
