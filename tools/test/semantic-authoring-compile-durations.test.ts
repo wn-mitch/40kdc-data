@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { CONFLICTING_DURATIONS, NO_ROLL_AFTER_ADVANCE, NO_ROLL_PLUS_SIX } from "../src/semantic-authoring/compile-durations.js";
 import { currentFamilyVersion, familyRole } from "../src/semantic-authoring/contracts.js";
+import { placed } from "./semantic-authoring-connective-fixture.js";
 import { createValidator } from "../src/schema-loader.js";
 import { describeAbility } from "../src/translate/index.js";
 
@@ -10,19 +11,6 @@ import { describeAbility } from "../src/translate/index.js";
 const FIXTURE_RULE_NAME = "A Trap Well Laid";
 
 /** Several printed durations in one ability (compile-durations.ts). All wording is fabricated for this file. */
-
-/** Leaves on their own wording in `text`, in order (fabricated wording, not rules text). */
-function placed(text: string, ...items: Array<[string, string, Record<string, unknown>]>): CompileLeaf[] {
-  const bytes = Buffer.from(text, "utf8");
-  let from = 0;
-  return items.map(([wording, family, parameters]) => {
-    const start = bytes.indexOf(Buffer.from(wording, "utf8"), from);
-    if (start < 0) throw new Error(`"${wording}" is not in the text`);
-    from = start + Buffer.byteLength(wording, "utf8");
-    const version = currentFamilyVersion(family);
-    return { role: familyRole(family, version), family_id: family, family_version: version, parameters, start_byte: start, end_byte: from, fragment: "RAW_TEXT" };
-  });
-}
 
 const DURATION_PHASE = { endpoint: "end-of-phase" };
 const DURATION_TURN = { endpoint: "end-of-turn" };
@@ -469,21 +457,29 @@ describe("kept refusals when an ability prints two durations", () => {
   it("a rules bundle refuses with two durations, and compiles with none", () => {
     const bundle: Array<[string, string, Record<string, unknown>]> = [["Bundle", "rules-bundle-marker", {}]];
     const alone = withTail(BASES.rolls!, " Bundle.", bundle);
-    expect(compileLeaves(alone.leaves, alone.text, { name: FIXTURE_RULE_NAME }).ok).toBe(true);
+    const aloneResult = compileLeaves(alone.leaves, alone.text, { name: FIXTURE_RULE_NAME }); console.log("ALONE", JSON.stringify(aloneResult.ok ? "ok" : aloneResult.errors));
+    expect(aloneResult.ok).toBe(true);
     const { leaves, text } = withTail(BASES.rolls!, " Bundle. Until the end of the phase. Until the end of the turn.", [...bundle, ...TWO_DURATIONS]);
     const result = compileLeaves(leaves, text, { name: FIXTURE_RULE_NAME });
     expect(result.ok ? [] : result.errors).toContain(CONFLICTING_DURATIONS);
   });
 
   it("an optional spend read as this use refuses with two durations", () => {
-    const spend: Array<[string, string, Record<string, unknown>]> = [
-      ["Used", "event", { kind: "used" }],
-      ["Spend it", "resource-spend", { pool: "yp-pool", amount: 1 }],
-      ["Optional read", "optional-cost-paid", { window: "use", pool: "yp-pool" }],
-      ["You can use this", "optional-use", { who: "this-unit" }],
+    const text = "Each time you use this ability, you can spend 1YP. Add 1 to Hit rolls for this unit. If you spent YP during this use, add 1 to the Wound roll as well.";
+    const items: Array<[string, string, Record<string, unknown>]> = [
+      ["Each time you use this ability", "event", { kind: "used", activity: "ability" }],
+      ["you can", "optional-use", { who: "you" }],
+      ["spend 1YP", "resource-spend", { pool: "yp-pool", amount: 1 }],
+      ["Add 1 to Hit rolls for this unit", "roll-modifier", { roll: "hit", operation: "add", value: 1, subject: "this-unit" }],
+      ["If you spent YP during this use", "optional-cost-paid", { pool: "yp-pool", window: "use", subject: "this-unit" }],
+      ["add 1 to the Wound roll as well", "roll-modifier", { roll: "wound", operation: "add", value: 1, subject: "this-unit" }],
     ];
-    const { leaves, text } = withTail(BASES.rolls!, " Used. Spend it. Optional read. You can use this." + TWO_DURATIONS_TAIL, [...spend, ...TWO_DURATIONS]);
-    const result = compileLeaves(leaves, text, { name: FIXTURE_RULE_NAME });
+    // Without the two durations the spend compiles to its declinable part, so the refusal is the durations'.
+    const alone = compileLeaves(placed(text, ...items), text, { name: FIXTURE_RULE_NAME });
+    if (!alone.ok) throw new Error(alone.errors.join("; "));
+    expect((alone.mechanics.effect as unknown as { steps: unknown[] }).steps[0]).toMatchObject({ type: "ability-part", optional: true });
+    const { leaves, text: tailed } = withTail({ text, items }, TWO_DURATIONS_TAIL, TWO_DURATIONS);
+    const result = compileLeaves(leaves, tailed, { name: FIXTURE_RULE_NAME });
     expect(result.ok ? [] : result.errors).toContain(CONFLICTING_DURATIONS);
   });
 });
