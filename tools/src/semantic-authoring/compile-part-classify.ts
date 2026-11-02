@@ -171,8 +171,11 @@ export function classifyLeaves(given: CompileLeaf[], places: Placement[], contai
   }
   for (const at of pairCandidates) endConditions.add(at);
   const selectionIndex = list.findIndex((leaf) => leaf.family_id === "select-unit");
+  // A condition on the unit the selection picks: its subject, or either side of a past selection of targets that names it
+  // ("that was selected as the target of one or more of your unit's attacks", "that selected your unit as a target").
+  const namesSelected = (leaf: CompileLeaf) => namesSelection(leaf) && (leaf.parameters.target === "selected-unit" || leaf.parameters.by === "selected-unit");
   const eligibilityIndexes = selectionIndex === -1 ? [] : list.flatMap((leaf, at) => at > selectionIndex && leaf.role === "CONDITION"
-    && leaf.parameters.subject === "selected-unit" && sameSentence(at, selectionIndex)
+    && (leaf.parameters.subject === "selected-unit" || namesSelected(leaf)) && sameSentence(at, selectionIndex)
     && !list.slice(selectionIndex + 1, at).some((between) => between.role === "EFFECT") ? [at] : []);
   for (const at of eligibilityIndexes) endConditions.add(at);
   // A pair's outer gates come before the inner select and are not an embark eligibility (that names the inner Transport).

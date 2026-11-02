@@ -5,7 +5,7 @@ import type { Placement } from "./compile-placement.js";
 type Node = Record<string, unknown>;
 
 /** The planned-effect fields this pass reads and gates (compile.ts PlannedEffect). */
-type Planned = { index: number; leaf: CompileLeaf; gate: Node[] };
+type Planned = { index: number; leaf: CompileLeaf; gate: Node[]; selected: boolean };
 
 /** Effects that change the rolls of attacks, so the attacks they apply to are the ones an earlier sentence framed. */
 const ATTACK_SCOPED = new Set(["roll-modifier", "re-roll"]);
@@ -21,8 +21,9 @@ const ATTACK_QUALIFIERS = new Set(["same-unit"]);
  * test was failed, subtract 1 from the Wound roll as well.": a roll change in a later sentence with no attack of its
  * own, ending "as well", applies to the attacks the earlier sentence's roll change applies to. It takes the qualifiers
  * printed on that earlier effect's attack ("that targets your unit"), so the second change is not made to attacks the
- * first one is not. An attack's type gate already wraps both sentences, and other conditions of the earlier sentence
- * ("below Starting Strength") are not the attack's: the later sentence states its own.
+ * first one is not; an earlier change limited to attacks against a selected unit ("that targets that enemy unit")
+ * limits the later one to them too. An attack's type gate already wraps both sentences, and other conditions of the
+ * earlier sentence ("below Starting Strength") are not the attack's: the later sentence states its own.
  *
  * Applies only to a roll change or re-roll in a sentence with no attack leaf and no gate of its own naming the
  * attack, whose wording ends "as well", with an earlier-sentence roll change of the same kind that follows an attack.
@@ -44,6 +45,7 @@ export function inheritAttackFrames(
     if (list.some((other, at) => other.family_id === "attack" && at < item.index && places[at]!.sentence === sentence)) continue;
     const earlier = planned.filter((other) => other.index < item.index && ATTACK_SCOPED.has(other.leaf.family_id) && places[other.index]!.sentence < sentence).at(-1);
     if (earlier === undefined) continue;
+    if (earlier.selected) item.selected = true;
     const attackAt = list.map((other, at) => other.family_id === "attack" && !isBackref(other) && at < earlier.index && places[at]!.sentence === places[earlier.index]!.sentence ? at : -1)
       .filter((at) => at !== -1).at(-1);
     if (attackAt === undefined) continue;
