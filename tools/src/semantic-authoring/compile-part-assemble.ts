@@ -235,10 +235,19 @@ export function assemblePart(
   // one printed duration in a later part, after only the grant of the ability, lasts that part, not the grant.
   // So does one after a first part that has a moment of its own ("At the start of the battle, select … add 1 to
   // the Attacks …. Each time the bearer is selected to fight, … If it does, while resolving those attacks, …").
+  // So does one in a later part of an ability that is not a Stratagem ("The bearer has the Feel No Pain 5+ ability. At the
+  // start of any turn, if …, until the end of the battle, it has …"): the standing first part has no end.
   const onlyGrantBefore = partStarts.length > 0 && list.every((leaf, at) => at >= partStarts[0]!.index || leaf.role !== "EFFECT" || leaf.family_id === "ability-record-grant");
   const firstPartTriggered = partStarts.length > 0 && triggerIndexes.some((index) => index < partStarts[0]!.index);
-  const laterPartDuration = !split && (onlyGrantBefore || firstPartTriggered) && durations.length === 1 && durationAt.length === 1 && partOf(durationAt[0]!) > 0 ? partOf(durationAt[0]!) : 0;
-  const scopeDuration = split || laterPartDuration ? "permanent" : (durations[0] ?? "permanent");
+  const laterPartDuration = !split && (onlyGrantBefore || firstPartTriggered || !list.some((leaf) => STRATAGEM_FAMILIES.has(leaf.family_id))) && durations.length === 1 && durationAt.length === 1 && partOf(durationAt[0]!) > 0 ? partOf(durationAt[0]!) : 0;
+  let scopeDuration = split || laterPartDuration ? "permanent" : (durations[0] ?? "permanent");
+  // "Each time this unit is selected to shoot, until the end of the phase, …. Then, each time this unit ends a Normal move, …":
+  // one printed duration before an effect of a triggered first part lasts that part, not a later part beside it with its own
+  // moment in a later sentence. One printed only before the later moment ("If you do, until the end of the phase, each time …")
+  // or over a sentence that holds it ("Until the end of the phase, your unit has Stealth and each time …") stays the scope.
+  const firstPartDuration = !split && firstPartTriggered && durations.length === 1 && durationAt.length === 1 && partOf(durationAt[0]!) === 0
+    && planned.some((item) => item.index > durationAt[0]! && partOf(item.index) === 0)
+    && partStarts.every((part) => places[part.index]!.sentence > places[durationAt[0]!]!.sentence);
   // "If an enemy unit within 8\" of this unit is below Starting Strength": a gate on each unit an
   // aura or a for-each reaches holds per recipient, inside the wrap, not once around it.
   if (auraLeaf || forEachLeaf) {
@@ -468,8 +477,10 @@ export function assemblePart(
   if (windowHead) { windowHead.trigger = entryTrigger; entryTrigger = null; }
   if (partStarts.length) {
     // The first part fires on the ability's leading moment, if it has one; each later part on its own.
-    const first = auraFirst ? [body!] : steps;
+    // A first part wrapped above its steps (a selection, an aura) stays whole; an unwrapped one lists its steps.
+    const first = auraFirst || body !== unwrapped ? [body!] : steps;
     const partSteps: Node[] = entryTrigger ? [{ type: "ability-part", trigger: entryTrigger, effect: body }] : first;
+    const entryPart = entryTrigger ? partSteps[0]! : null;
     // "The first time the bearer's unit destroys an enemy unit": a usage limit right before a later
     // part's moment, after an earlier effect, limits only that part.
     const usageAt = usageIndexes.length === 1 && firstEffectIndex !== -1 && usageIndexes[0]! > firstEffectIndex ? usageIndexes[0]! : -1;
@@ -533,6 +544,10 @@ export function assemblePart(
       const entry = partSteps[0]!;
       const inner = entry.effect as Node;
       partSteps[0] = { ...entry, effect: { type: "sequence", steps: [...(inner.type === "sequence" ? inner.steps as Node[] : [inner]), ...nestedSteps] } };
+    }
+    if (firstPartDuration && entryPart !== null && partSteps.length > 1 && partSteps[0]!.trigger === entryPart.trigger && partSteps[0]!.duration === undefined) {
+      partSteps[0] = { ...partSteps[0]!, duration: durations[0] };
+      scopeDuration = "permanent";
     }
     if (usagePart !== -1) usages.splice(0);
     body = partSteps.length === 1 ? partSteps[0]! : { type: "sequence", steps: partSteps };

@@ -1,4 +1,4 @@
-import type { CompileLeaf } from "./compile-fragments.js";
+import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { isAnyDestruction, isAnyPhaseEnd } from "./compile-delayed-destruction.js";
 
 /** "If you do" after an offered use: the sentences that follow depend on the use having been made. */
@@ -37,6 +37,30 @@ export function momentsUnderUse(
     if (IF_YOU_DO.test(bytes.subarray(use.end_byte, moment.start_byte).toString("utf8"))) nested.add(position);
   });
   return nested;
+}
+
+/**
+ * "At the start of your opponent's Movement phase, you can use this ability. If you do, when an enemy unit ends a
+ * Normal move, …": a later moment under the use an earlier moment offers, with no effect between the use and it. Both
+ * moments come before the first effect, so the compiler would join them as alternatives and the effect would fire at
+ * the opening moment too, with or without the use. momentsUnderUse nests only a moment after an effect, so this is
+ * refused.
+ */
+export function refuseMomentUnderBareUse(list: readonly CompileLeaf[], sourceText: string | undefined): void {
+  if (sourceText === undefined) return;
+  const bytes = Buffer.from(sourceText, "utf8");
+  const sorted = [...list].sort((a, b) => a.start_byte - b.start_byte);
+  sorted.forEach((use, at) => {
+    if (use.family_id !== "optional-use" || use.end_byte === undefined) return;
+    if (!sorted.slice(0, at).some((leaf) => leaf.family_id === "event")) return;
+    const after = sorted.slice(at + 1);
+    const firstEffect = after.findIndex((leaf) => leaf.role === "EFFECT");
+    const moment = (firstEffect === -1 ? after : after.slice(0, firstEffect)).find((leaf) => leaf.family_id === "event");
+    // The selected unit's own moment ("you can select one friendly unit. If you do, when that unit is selected to …")
+    // nests in the selection (compile-selection-moment.ts selectedUnitMoments).
+    if (moment === undefined || moment.parameters.subject === "selected-unit" || !IF_YOU_DO.test(bytes.subarray(use.end_byte, moment.start_byte).toString("utf8"))) return;
+    throw new CompileError(`A moment at byte ${moment.start_byte} waits on the use an earlier moment offers (byte ${use.start_byte}), with no effect between them; it has no reading yet.`);
+  });
 }
 
 /** "Then, at the end of the phase": the moment follows a sentence-opening "Then" with nothing between. */

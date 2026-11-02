@@ -7,8 +7,9 @@ import { CompileError, type CompileLeaf } from "./compile-fragments.js";
  * the moment's window, not a second moment, so the fold removes the step leaf and stores the step
  * and whose turn on the moment (`step_window`), which `trigger()` lowers to its phase-is and
  * player-turn-is condition. "In the Reinforcements step of your Movement phase, when you set up a
- * unit …" opens its moment with ", when" the same way. A step followed by anything else (an "or",
- * or a moment in another clause) stays its own moment.
+ * unit …" opens its moment with ", when" the same way. The moment's "or" alternatives in the same
+ * sentence share the step. A step followed by anything else (an "or", or a moment in another clause)
+ * stays its own moment.
  */
 
 /** The phase each step belongs to. */
@@ -42,7 +43,22 @@ export function foldStepWindow(list: readonly CompileLeaf[], sourceText?: string
     const stepName = String(step.parameters.step);
     if (STEP_PHASES[stepName] === undefined) throw new CompileError(`step-started at byte ${step.start_byte} names step ${JSON.stringify(stepName)}, which belongs to no known phase.`);
     const turn = step.parameters.turn;
-    out[at] = { ...moment, parameters: { ...moment.parameters, step_window: { step: stepName, ...(turn !== undefined && turn !== "either" ? { turn } : {}) } } };
+    const window = { step: stepName, ...(turn !== undefined && turn !== "either" ? { turn } : {}) };
+    out[at] = { ...moment, parameters: { ...moment.parameters, step_window: window } };
+    // "…, just after an enemy unit is set up … or just after an enemy unit ends a Normal move": each alternative
+    // printed after the moment, before any effect and in the same sentence, happens in the same step.
+    let previous = out[at]!;
+    for (let next = at + 1; next < out.length && out[next]!.fragment === step.fragment && out[next]!.role !== "EFFECT"; next += 1) {
+      const leaf = out[next]!;
+      if (previous.end_byte === undefined || leaf.start_byte === undefined) break;
+      const gap = bytes.subarray(previous.end_byte, leaf.start_byte).toString("utf8");
+      if (/[.;:]/u.test(gap)) break;
+      if (leaf.family_id === "event" && !CLOCK.has(String(leaf.parameters.kind)) && /\bor\b/iu.test(gap)) {
+        if (leaf.parameters.step_window !== undefined) throw new CompileError(`A moment at byte ${leaf.start_byte} is already in a step; a second step leaf names it.`);
+        out[next] = { ...leaf, parameters: { ...leaf.parameters, step_window: window } };
+      }
+      previous = out[next]!;
+    }
     out.splice(index, 1);
   }
   return out;

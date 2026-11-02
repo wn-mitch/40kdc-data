@@ -79,7 +79,10 @@ describe("leading-unit from the led unit's side", () => {
     expect(text({ subject: "this-unit", attachment: "led", leader_keywords: ["FARSEER"] }))
       .toContain('{"type":"attachment","parameters":{"role":"led","with":{"all_of":["FARSEER"]}}}');
     expect(text({ subject: "this-model", attachment: "leading", negated: true })).toContain('"operator":"not"');
-    expect(text({ subject: "selected-unit", attachment: "led" })).toContain('"subject":"selected-unit"');
+    // A selected unit needs the selection that picks it; the condition is then that selection's eligibility.
+    const selected = mechanicsOf(leaves(["select-unit", { scope: "friendly", distance: "any", visible: false }], ["leading-unit", { subject: "selected-unit", attachment: "led" }], heal()));
+    expect(JSON.stringify((selected.effect as Record<string, any>).selector.eligibility)).toContain('"subject":"selected-unit"');
+    expect(() => mechanicsOf(leaves(["leading-unit", { subject: "selected-unit", attachment: "led" }], heal()))).toThrow(/selected unit outside the selection/u);
     expect(() => normalizeFingerprintParameters("leading-unit", { subject: "this-model", attachment: "leading", leader_keywords: ["FARSEER"] }, currentFamilyVersion("leading-unit")))
       .toThrow(/attachment led/u);
   });

@@ -38,6 +38,26 @@ function compiled(leaves: CompileLeaf[]) {
   return result;
 }
 
+const namesSelected = (parameters: Record<string, unknown>) => Object.values(parameters).includes("selected-unit");
+
+/**
+ * A condition on the selected unit needs a selection to pick that unit, or no unit is named. Printed right after the
+ * selection, a condition on the candidate lowers to the selection's eligibility; one that compares another unit with it
+ * (same-unit, closest) gates the effect inside the selection. Either holds the same condition node.
+ */
+function selectedCase(conditionLeaf: () => CompileLeaf, expected: Record<string, unknown>): void {
+  const selection = leaf("EVENT", "select-unit", { scope: "enemy", distance: "any", visible: false });
+  const result = compiled([selection, conditionLeaf(), leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" })]);
+  const effect = result.mechanics.effect as unknown as Record<string, any>;
+  const reroll = { type: "re-roll", target: "this-unit", modifier: { roll: "hit", subset: "ones" } };
+  expect(effect.type).toBe("select-units");
+  if (effect.selector.eligibility === undefined) expect(effect.effect).toEqual({ type: "conditional", condition: expected, effect: reroll });
+  else {
+    expect(effect.selector.eligibility).toEqual(expected);
+    expect(effect.effect).toEqual(reroll);
+  }
+}
+
 /** The compiled entry on a real authored base must validate against the ability schema, lint, and render. */
 function rendered(base: Record<string, unknown>, leaves: CompileLeaf[]): string {
   const entry = entryWithMechanics(base, compiled(leaves).mechanics);
@@ -126,6 +146,7 @@ describe("Semantic authoring batch-6 predicate families", () => {
   const effect = () => leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" });
 
   function conditionCase(familyId: string, parameters: Record<string, unknown>, expected: Record<string, unknown>): void {
+    if (namesSelected(parameters)) return selectedCase(() => leaf("CONDITION", familyId, parameters), expected);
     const result = compiled([leaf("CONDITION", familyId, parameters), effect()]);
     expect(result.mechanics.effect).toEqual({ type: "conditional", condition: expected, effect: { type: "re-roll", target: "this-unit", modifier: { roll: "hit", subset: "ones" } } });
   }
@@ -232,6 +253,7 @@ describe("Semantic authoring batch-6 army-faction@2 (resolved kebab id)", () => 
 
 describe("Semantic authoring batch-6 widened subject vocabulary (unit-keyword@2, unit-state@4, unit-activity@3, unit-position@2)", () => {
   function conditionCase(familyId: string, parameters: Record<string, unknown>, version: number, expected: Record<string, unknown>): void {
+    if (namesSelected(parameters)) return selectedCase(() => leaf("CONDITION", familyId, parameters, version), expected);
     const result = compiled([leaf("CONDITION", familyId, parameters, version), leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" })]);
     expect(result.mechanics.effect).toEqual({ type: "conditional", condition: expected, effect: { type: "re-roll", target: "this-unit", modifier: { roll: "hit", subset: "ones" } } });
   }

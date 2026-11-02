@@ -18,19 +18,22 @@ const isMoment = (leaf: CompileLeaf) => leaf.family_id === "event" || (leaf.fami
 
 export function refuseSelectionAcrossMoment(list: readonly CompileLeaf[]): void {
   const sorted = [...list].sort((a, b) => a.start_byte - b.start_byte);
+  const own = selectedUnitMoments(sorted);
   sorted.forEach((selection, at) => {
     if (selection.family_id !== "select-unit") return;
-    const moment = sorted.slice(at + 1).find(isMoment);
-    if (moment === undefined) return;
-    if (selectedUnitMoments(sorted).has(sorted.indexOf(moment))) return;
-    const later = sorted.find((leaf) => leaf.start_byte > moment.start_byte && leaf.role !== "EVENT" && leaf.role !== "DURATION"
-      && leaf.parameters.subject === "selected-unit" && leaf.start_byte >= (moment.end_byte ?? moment.start_byte));
-    if (later === undefined) return;
-    const scoped = sorted.some((leaf) => leaf.family_id === "target-is-selected" && leaf.start_byte > selection.start_byte && leaf.start_byte < later.start_byte);
-    if (scoped) return;
-    // A later selection before that leaf is the unit it names ("One eligible unit … that was hit"), not this one.
-    if (sorted.some((leaf) => leaf.family_id === "select-unit" && leaf.start_byte > selection.start_byte && leaf.start_byte < later.start_byte)) return;
-    throw new CompileError(`A ${later.family_id} at byte ${later.start_byte} acts on the unit an earlier selection (byte ${selection.start_byte}) picked, but a later moment (byte ${moment.start_byte}) sits between them; the selection cannot carry its effect to that moment.`);
+    // Every moment after the selection, not only the first: "when that unit is selected to make an Advance move or when an
+    // enemy unit ends a Normal move" holds the selected unit's own moment and another one beside it.
+    for (const moment of sorted.slice(at + 1).filter(isMoment)) {
+      if (own.has(sorted.indexOf(moment))) continue;
+      const later = sorted.find((leaf) => leaf.start_byte > moment.start_byte && leaf.role !== "EVENT" && leaf.role !== "DURATION"
+        && leaf.parameters.subject === "selected-unit" && leaf.start_byte >= (moment.end_byte ?? moment.start_byte));
+      if (later === undefined) continue;
+      const scoped = sorted.some((leaf) => leaf.family_id === "target-is-selected" && leaf.start_byte > selection.start_byte && leaf.start_byte < later.start_byte);
+      if (scoped) continue;
+      // A later selection before that leaf is the unit it names ("One eligible unit … that was hit"), not this one.
+      if (sorted.some((leaf) => leaf.family_id === "select-unit" && leaf.start_byte > selection.start_byte && leaf.start_byte < later.start_byte)) continue;
+      throw new CompileError(`A ${later.family_id} at byte ${later.start_byte} acts on the unit an earlier selection (byte ${selection.start_byte}) picked, but a later moment (byte ${moment.start_byte}) sits between them; the selection cannot carry its effect to that moment.`);
+    }
   });
 }
 

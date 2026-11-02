@@ -275,7 +275,10 @@ export function classifyLeaves(given: CompileLeaf[], places: Placement[], contai
         }
         gateOrigin.set(node, index);
       } else if (!effectSentences.has(sentence) || (sentence === firstSentence && leading)) {
-        if (node === "selected") selectedGlobally = true;
+        // "that unit" in the first effect sentence limits that sentence only, unless a colon lists the later sentences under
+        // it ("ranged attacks that target that enemy unit can: A. B."); one outside the effect sentences limits all.
+        if (node === "selected" && effectSentences.has(sentence) && !listsLaterSentences(index, first)) selectedSentences.add(sentence);
+        else if (node === "selected") selectedGlobally = true;
         else global.push(node);
       } else if (leading) {
         if (node === "selected") selectedSentences.add(sentence);

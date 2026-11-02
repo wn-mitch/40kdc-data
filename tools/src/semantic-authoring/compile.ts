@@ -1,5 +1,5 @@
 import { foldStepWindow } from "./compile-step-window.js";
-import { unscopedRecipientEffect } from "./compile-recipient-scope.js";
+import { hasUnboundSelectedUnit, unscopedRecipientEffect } from "./compile-recipient-scope.js";
 import { resolveUnitNames, type UnitNameContext } from "./compile-unit-names.js";
 import { resolveRuleReferences } from "./compile-rule-refs.js";
 import { foldAuraEmitter, lowerConditionalAuras } from "./compile-aura-emitter.js";
@@ -54,6 +54,7 @@ import { optionalDesignationUses, timingMoments } from "./compile-redesignate.js
 import { compileNamedRegionState } from "./compile-named-region.js";
 import { foldAlternativeConditions } from "./compile-alternative-conditions.js";
 import { foldConditionExclusions } from "./compile-condition-exclusions.js";
+import { refuseMomentUnderBareUse } from "./compile-nested-moment.js";
 import { refuseSelectionAcrossMoment } from "./compile-selection-moment.js";
 import { foldUnitFilters } from "./compile-unit-filters.js";
 import { mergeStackedFilters } from "./compile-unit-filter-merge.js";
@@ -222,6 +223,9 @@ function compileChecked(leaves: readonly CompileLeaf[], sourceText: string | und
   // "That unit must take a test" bound to an aura's recipient with no aura or loop around it reaches no unit.
   const unscoped = result.ok && !enclosed ? unscopedRecipientEffect(result.mechanics.effect) : null;
   if (unscoped !== null) return { ok: false, signature: result.signature, errors: [`A ${unscoped} effect names the unit it is applied to (recipient), but no aura or for-each-unit applies it to any unit.`] };
+  // A later part assembled beside a selection, not inside it, names a unit nothing picked. The ability's own trigger may
+  // be the selected unit's moment ("Select one enemy unit. Each time that unit ends a move, …"), so only the effect is read.
+  if (result.ok && !enclosed && hasUnboundSelectedUnit(result.mechanics.effect)) return { ok: false, signature: result.signature, errors: ["An effect names the selected unit outside the selection that picks it."] };
   // A rolled distance or a start-of-move position that a lowering path read as plain inches would be lost, not refused.
   const lost = result.ok ? lostDistance(leaves, result.mechanics) : null;
   return lost === null ? result : { ok: false, signature: result.signature, errors: [lost] };
@@ -404,6 +408,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     list = lowerHistoryMoments(list, conditionOf.flatMap((plan) => plan.kind === "history" ? [plan] : []));
     refuseUnboundWeaponScope(list);
     refuseSelectionAcrossMoment(list);
+    refuseMomentUnderBareUse(list, sourceText);
     refuseDistanceWithoutWeapon(list);
     refuseEmbarkDestination(list);
     refuseHistoryValueWithoutSource(list);

@@ -31,3 +31,24 @@ export function unscopedRecipientEffect(tree: unknown): string | null {
   };
   return walk(tree, false);
 }
+
+/** The nodes that bind the unit a selection picked, which the DSL calls `selected-unit`. */
+const SELECTION_SCOPES = new Set(["select-units", "designate-target", "persistent-designation"]);
+
+/**
+ * Whether the mechanics name `selected-unit` with no selection around it: "Select one enemy unit …. At the end of the
+ * phase, that unit suffers …" whose later part was assembled beside the selection, not inside it, names a unit nothing
+ * picked. An action's own eligibility selector (a selector with a count) picks its candidate, so it binds the unit too.
+ */
+export function hasUnboundSelectedUnit(tree: unknown): boolean {
+  const walk = (node: unknown, bound: boolean): boolean => {
+    if (node === "selected-unit") return !bound;
+    if (Array.isArray(node)) return node.some((item) => walk(item, bound));
+    if (node === null || typeof node !== "object") return false;
+    const type = (node as Node).type;
+    const eligibility = (node as Node).eligibility as Node | undefined;
+    const binds = bound || (typeof type === "string" && SELECTION_SCOPES.has(type)) || (eligibility !== null && typeof eligibility === "object" && "count" in eligibility);
+    return Object.values(node as Node).some((value) => walk(value, binds));
+  };
+  return walk(tree, false);
+}

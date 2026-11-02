@@ -118,13 +118,12 @@ describe("optional-use and the moments it governs", () => {
     expect(moments.every((moment) => moment.optional === true)).toBe(true);
   });
 
-  it("makes a moment opened after \"if you do\" mandatory while the offering moment stays optional", () => {
+  it("refuses a moment opened after \"if you do\" with no effect before it: joined as an alternative, it would fire without the use", () => {
     const text = "When this unit is selected to shoot, you can use this ability. If you do, until the end of the turn, when this unit declares a charge, this unit can re-roll that charge roll.";
-    const moments = triggerOf(text,
-      selected("is selected to shoot", "shoot"), useIt("you can use this ability"), declares("declares a charge"), reroll("re-roll that charge roll"));
-    expect(moments).toHaveLength(2);
-    expect(moments[0]!.optional).toBe(true);
-    expect(moments[1]!.optional).toBeUndefined();
+    const result = compileLeaves(placed(text,
+      selected("is selected to shoot", "shoot"), useIt("you can use this ability"), declares("declares a charge"), reroll("re-roll that charge roll")), text);
+    expect(result.ok).toBe(false);
+    expect(result.ok ? [] : result.errors).toEqual([expect.stringMatching(/waits on the use an earlier moment offers/u)]);
   });
 
   it("keeps a lone dependent moment optional when no moment offers the use", () => {
