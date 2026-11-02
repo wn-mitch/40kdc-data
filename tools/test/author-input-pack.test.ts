@@ -1,5 +1,5 @@
 import { spawnSync } from "node:child_process";
-import { chmodSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { chmodSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
@@ -63,6 +63,7 @@ describe("captureBody (column isolation)", () => {
 describe("faction pack CLI paths", () => {
   it("passes repository-relative single and directory PDF paths to pdftotext", () => {
     const root = join(import.meta.dirname, "../..");
+    mkdirSync(join(root, "_private"), { recursive: true });
     const fixture = mkdtempSync(join(root, "_private", "pack-path-test-"));
     try {
       const stub = join(fixture, "pdftotext");

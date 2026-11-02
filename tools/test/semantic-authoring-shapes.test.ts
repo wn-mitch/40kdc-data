@@ -349,6 +349,7 @@ describe("Semantic authoring shapes", () => {
     roots.push(outside);
     expect(writeReviewSheet(sheet, outside).decisions).toBe(join(outside, "fixture.decisions.json"));
     const privateRoot = join(process.cwd(), "..", "_private");
+    mkdirSync(privateRoot, { recursive: true });
     const privateDir = mkdtempSync(join(privateRoot, "review-sheet-test-"));
     roots.push(privateDir);
     const relativeDir = join("_private", privateDir.split("/").at(-1)!);

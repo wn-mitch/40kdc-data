@@ -1,4 +1,4 @@
-import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
@@ -39,6 +39,7 @@ describe("stack damage matrix configuration", () => {
 
   it("resolves scenario and output paths from the repository root by default", () => {
     const root = join(import.meta.dirname, "../..");
+    mkdirSync(join(root, "_private"), { recursive: true });
     const dir = mkdtempSync(join(root, "_private", "matrix-config-test-"));
     try {
       writeFileSync(join(dir, "scenario.json"), JSON.stringify({ battleRound: 2 }));
