@@ -17,7 +17,7 @@ import { boundAttackDesignation, designation, directEntry, selectUnit, wrapAura,
 import { filterObjectMoment, wrapModelAura } from "./compile-model-level.js";
 import { auraPart, namesUnboundRecipient } from "./compile-aura-parts.js";
 import { isForbiddenSetUp } from "./compile-set-up-placement.js";
-import { momentsAfterOwnUse, momentsUnderUse, momentsWhileMarked } from "./compile-nested-moment.js";
+import { momentsAfterOwnUse, momentsEndingEarlierPart, momentsUnderUse, momentsWhileMarked } from "./compile-nested-moment.js";
 import { gatedMoment } from "./compile-usability-gate.js";
 import { isTargetRef, resolveEntry } from "./compile-target-refs.js";
 import { optionalTargetGroup, severalTargets } from "./compile-target-groups.js";
@@ -496,6 +496,9 @@ export function assemblePart(
     const afterOwnUse = momentsAfterOwnUse(list, triggerIndexes, partStarts, sourceText);
     // "Each time this unit uses this ability, at the end of the phase": the use is the offering part's own moment.
     for (const position of afterThisUse.keys()) afterOwnUse.add(position);
+    // "After resolving those attacks", a Stratagem's "at the end of the phase": the end of what the earlier part began.
+    const endingEarlier = entryTrigger ? momentsEndingEarlierPart(list, triggerIndexes, partStarts, sourceText) : new Set<number>();
+    for (const position of endingEarlier) afterOwnUse.add(position);
     afterOwnUse.delete(usagePart);
     const partMoments = (part: { moments: number[] }, position: number) => part.moments.filter((at) => at !== afterThisUse.get(position)).map((at) => moments[at]!);
     const nestedSteps: Node[] = [];
@@ -538,7 +541,12 @@ export function assemblePart(
       else if (afterOwnUse.has(position) && partSteps.length > 0) {
         const owner = partSteps.at(-1)!;
         const inner = owner.effect as Node;
-        partSteps[partSteps.length - 1] = { ...owner, effect: { type: "sequence", steps: [...(inner.type === "sequence" ? inner.steps as Node[] : [inner]), { ...node, duration: "phase" }] } };
+        // "Until the attacking unit has finished making its attacks, …. At the end of the phase, …": a lifetime shorter
+        // than the phase is the earlier effects' own, so it bounds them alone and the ability lasts the phase the later moment ends.
+        const bounded = endingEarlier.has(position) && WITHIN_PHASE.has(scopeDuration);
+        const before = bounded ? [{ type: "ability-part", duration: scopeDuration, effect: inner }] : inner.type === "sequence" ? inner.steps as Node[] : [inner];
+        if (bounded) scopeDuration = "phase";
+        partSteps[partSteps.length - 1] = { ...owner, effect: { type: "sequence", steps: [...before, { ...node, duration: "phase" }] } };
       } else partSteps.push(node);
     });
     if (nestedSteps.length) {
@@ -593,6 +601,9 @@ export function assemblePart(
  * A selection's eligibility condition as the DSL reads it. "This unit" in a hit's eligibility is the
  * candidate being selected, so a hit-by-attacks names its unit as this-unit; the leaf is otherwise unchanged.
  */
+/** Lifetimes that end within the phase they start in. */
+const WITHIN_PHASE = new Set(["attack-sequence", "resolution", "after-resolving", "one-use", "until-this-unit-has-shot"]);
+
 function eligibilityLeaf(leaf: CompileLeaf): CompileLeaf {
   return leaf.family_id === "hit-by-attacks" ? { ...leaf, parameters: { ...leaf.parameters, subject: "this-unit" } } : leaf;
 }

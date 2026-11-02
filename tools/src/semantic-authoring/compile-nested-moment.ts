@@ -168,6 +168,42 @@ export function momentsAfterOwnUse(
   return nested;
 }
 
+/** "After resolving those attacks": the wording names the attacks an earlier moment of the ability began. */
+const THOSE_ATTACKS = /\bthose attacks\b/iu;
+
+/**
+ * The later moments that are the end of something the ability's earlier part began: "Each time this model is selected
+ * to shoot, … each time this model makes an attack, add 1 to the Wound roll. After resolving those attacks, roll one
+ * D6 …" ends the shooting the ability was used for, and "At the end of the phase, … you gain 1 Pain Token" in a
+ * Stratagem's effect ends the phase it was used in. Each exists only once that earlier part has happened, so it nests
+ * in that part for the phase instead of being a sibling that fires after every attack sequence, or at the end of
+ * every phase. Returns the positions (in `partStarts`) of the parts whose every moment is one of those: an
+ * attacks-resolved moment whose wording says "those attacks", or a phase end that names no phase or turn
+ * (isAnyPhaseEnd), in the earlier part's paragraph. The caller nests them only under a triggered earlier part: with no
+ * moment before them there is nothing for them to end.
+ */
+export function momentsEndingEarlierPart(
+  list: readonly CompileLeaf[],
+  triggerIndexes: readonly number[],
+  partStarts: ReadonlyArray<{ index: number; moments: number[] }>,
+  sourceText: string | undefined,
+): Set<number> {
+  const nested = new Set<number>();
+  if (sourceText === undefined) return nested;
+  const bytes = Buffer.from(sourceText, "utf8");
+  const ends = (moment: CompileLeaf) => isAnyPhaseEnd(moment) || (moment.family_id === "event" && moment.parameters.kind === "attacks-resolved"
+    && THOSE_ATTACKS.test(bytes.subarray(moment.start_byte, moment.end_byte).toString("utf8")));
+  partStarts.forEach((part, position) => {
+    if (!part.moments.every((at) => ends(list[triggerIndexes[at]!]!))) return;
+    // A moment in a later paragraph is that paragraph's own, not the end of the earlier part.
+    const before = list[part.index - 1];
+    const first = list[triggerIndexes[part.moments[0]!]!]!;
+    if (before?.end_byte === undefined || /[\r\n]/u.test(bytes.subarray(before.end_byte, first.start_byte).toString("utf8"))) return;
+    nested.add(position);
+  });
+  return nested;
+}
+
 /**
  * The later parts whose moments are a use of the record's own ability and then the end of the phase: "… it can use
  * this ability. … Each time this unit uses this ability, at the end of the phase, roll one D6 …". The phase end is

@@ -148,8 +148,9 @@ describe("Semantic authoring independent sentences", () => {
     expect(JSON.stringify(steps[1])).toContain("GAMMA");
   });
 
-  it("compiles as one part when a later sentence cannot stand alone", () => {
-    // "instead" replaces the first sentence's effect, so the moment sentence stays tied to it.
+  it("keeps a later sentence that cannot stand alone tied to the one it replaces", () => {
+    // "instead" replaces the first sentence's effect, so the moment sentence stays tied to it. The replacement holds
+    // only under the later moment, which no DSL form reads yet (compile-part-instead.ts), so the compile is refused.
     const text = "This model has the Feel No Pain 5+ ability. At the start of any turn, if this model has lost wounds, until the end of the battle, it has the Feel No Pain 4+ ability instead.";
     const list = placed(text,
       ["This model has the Feel No Pain 5+ ability", "feel-no-pain", { subject: "this-model", threshold: 5, against: "all" }],
@@ -160,7 +161,7 @@ describe("Semantic authoring independent sentences", () => {
       ["instead", "instead", {}]);
     expect(sentenceSegments(list, text)).toHaveLength(2);
     const result = compileLeaves(list, text);
-    expect(result.ok ? [] : result.errors).toEqual([]);
+    expect(result.ok ? [] : result.errors).toEqual(["\"Instead\" under a later moment replaces a standing effect only while that moment's part lasts; that has no DSL reading yet."]);
   });
 });
 

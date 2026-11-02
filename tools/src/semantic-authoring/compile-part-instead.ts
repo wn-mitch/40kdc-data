@@ -182,6 +182,13 @@ export function resolveInstead(frame: PartFrame, planned: PlannedEffect[], bound
       }
       continue;
     }
+    // "Add 1 to … . Each time …, roll one D3: until the end of the phase, add the result … instead": a replacement under a
+    // later moment holds only while that moment's part lasts, and a negated gate on the standing effect would test that
+    // moment's condition when no such moment happened. The DSL has no part-long replacement of a standing effect yet.
+    if (triggerIndexes.some((at) => at > replaced.index && at < replacement.index)) {
+      errors.push("\"Instead\" under a later moment replaces a standing effect only while that moment's part lasts; that has no DSL reading yet.");
+      continue;
+    }
     const alternative = allOf(replacingConditions(replacement, [replaced], isRollMarker));
     if (!alternative) {
       errors.push(`"Instead" needs a condition in its clause saying when ${replacement.leaf.family_id} is replaced.`);
