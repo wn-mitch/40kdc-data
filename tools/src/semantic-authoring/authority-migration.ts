@@ -17,7 +17,10 @@ import { leafSurfaceKey } from "./matching.js";
  * - anything else is `machine` and listed under `flagged` in the audit.
  *
  * A surface is `human` when its founding batch was a human reviewer's, or (for surfaces the
- * `migration-leaf-surfaces` backfill created) when a direct human decision on that wording exists.
+ * `migration-leaf-surfaces` backfill created) when a direct human decision on that wording records
+ * the surface's meaning: its fingerprint, or the fingerprint a family-version migration carried
+ * that decision to. A backfilled surface whose wording Will decided with another meaning, or with
+ * several meanings, stays `machine` and is listed under `flagged_surfaces` for review.
  * Machine batches never decide proposals: their proposal and structural decisions return to
  * pending so Will reviews them. The audit lands in the migration batch's metadata.
  */
@@ -35,6 +38,8 @@ export type AuthorityAudit = {
   annotations: Array<{ reviewer: string; operation: string; origin: string; authority: Authority; active: number; total: number }>;
   surfaces: Array<{ id: number; surface: string; status: string; authority: "human" | "machine"; evidence: string; authorizing_annotation_id: number | null }>;
   flagged: Array<{ annotation_id: number; reason: string }>;
+  /** Backfilled surfaces the human evidence on their wording did not settle; absent in audits recorded before it existed. */
+  flagged_surfaces?: Array<{ surface_id: number; reason: string }>;
   reverted: { proposals: number; atom_proposals: number; atom_reviews: number };
 };
 
@@ -63,7 +68,10 @@ export function needsAuthorityMigration(db: DatabaseSync): boolean {
   return sql !== undefined && !sql.includes("'derived'");
 }
 
-function classify(db: DatabaseSync): { annotations: Map<number, Classified>; surfaces: Map<number, AuthorityAudit["surfaces"][number]>; batches: Map<string, BatchRow>; rows: AnnotationRow[] } {
+function classify(db: DatabaseSync): {
+  annotations: Map<number, Classified>; surfaces: Map<number, AuthorityAudit["surfaces"][number]>; batches: Map<string, BatchRow>; rows: AnnotationRow[];
+  flaggedSurfaces: NonNullable<AuthorityAudit["flagged_surfaces"]>;
+} {
   const batches = new Map((db.prepare("SELECT id, operation, reviewer FROM annotation_batches").all() as BatchRow[]).map((row) => [row.id, row]));
   const hasAuthority = columns(db, "annotations").has("authority_kind");
   const rows = db.prepare(`
@@ -81,7 +89,8 @@ function classify(db: DatabaseSync): { annotations: Map<number, Classified>; sur
   const operationOf = (batchId: string): string => batches.get(batchId)?.operation ?? "";
   const isMigration = (row: AnnotationRow): boolean => operationOf(row.batch_id).startsWith("migration-");
 
-  // Direct human decisions (not surface propagation), followed back through migration copies.
+  // Direct human decisions (not surface propagation) by wording and meaning. A migration copy keeps
+  // its root's decision at the fingerprint it migrated to, so both versions of that meaning count.
   const rootOf = (row: AnnotationRow): AnnotationRow => {
     let current = row;
     for (let depth = 0; depth < 64 && isMigration(current) && current.supersedes_id !== null; depth += 1) {
@@ -91,15 +100,20 @@ function classify(db: DatabaseSync): { annotations: Map<number, Classified>; sur
     }
     return current;
   };
-  const directHuman = new Map<string, number>();
+  const directHuman = new Map<string, { byFingerprint: Map<string, number>; rootMeanings: Set<string> }>();
   for (const row of rows) {
     const root = rootOf(row);
     if (root.origin === "leaf-surface" || isMigration(root)) continue;
     const reviewer = reviewerOf(root.batch_id);
     if (!HUMAN_REVIEWERS.has(reviewer)) continue;
     const key = leafSurfaceKey(row.exact_text);
-    if (key && !directHuman.has(key)) directHuman.set(key, root.id);
+    if (!key) continue;
+    const decided = directHuman.get(key) ?? { byFingerprint: new Map<string, number>(), rootMeanings: new Set<string>() };
+    if (!decided.byFingerprint.has(row.fingerprint_id)) decided.byFingerprint.set(row.fingerprint_id, root.id);
+    decided.rootMeanings.add(root.fingerprint_id);
+    directHuman.set(key, decided);
   }
+  const flaggedSurfaces: NonNullable<AuthorityAudit["flagged_surfaces"]> = [];
 
   const surfaces = new Map<number, AuthorityAudit["surfaces"][number]>();
   for (const surface of surfaceRows) {
@@ -113,9 +127,19 @@ function classify(db: DatabaseSync): { annotations: Map<number, Classified>; sur
       authority = "human";
       evidence = `founded by ${reviewer} (${operation})`;
     } else if (operation === "migration-leaf-surfaces" && directHuman.has(surface.normalized_surface)) {
-      authority = "human";
-      authorizing = directHuman.get(surface.normalized_surface)!;
-      evidence = `backfilled from human annotation ${authorizing}`;
+      const decided = directHuman.get(surface.normalized_surface)!;
+      const match = decided.byFingerprint.get(surface.fingerprint_id);
+      if (decided.rootMeanings.size > 1) {
+        evidence = `backfilled wording Will decided with ${decided.rootMeanings.size} meanings`;
+        flaggedSurfaces.push({ surface_id: surface.id, reason: evidence });
+      } else if (match === undefined) {
+        evidence = "backfilled wording Will decided with another meaning";
+        flaggedSurfaces.push({ surface_id: surface.id, reason: evidence });
+      } else {
+        authority = "human";
+        authorizing = match;
+        evidence = `backfilled from human annotation ${authorizing}`;
+      }
     } else evidence = `founded by ${reviewer || "unknown"} (${operation || "unknown"}) with no direct human decision on this wording`;
     surfaces.set(surface.id, { id: surface.id, surface: surface.normalized_surface, status: surface.status, authority, evidence, authorizing_annotation_id: authorizing });
   }
@@ -152,7 +176,7 @@ function classify(db: DatabaseSync): { annotations: Map<number, Classified>; sur
     return result;
   };
   for (const row of rows) classifyRow(row);
-  return { annotations: memo, surfaces, batches, rows };
+  return { annotations: memo, surfaces, batches, rows, flaggedSurfaces };
 }
 
 function revertMachineDecisions(db: DatabaseSync, batches: Map<string, BatchRow>, batchId: string): AuthorityAudit["reverted"] {
@@ -260,7 +284,7 @@ export function upgradeAuthority(db: DatabaseSync): AuthorityAudit | null {
   try {
     db.exec("BEGIN IMMEDIATE");
     try {
-      const { annotations, surfaces, batches, rows } = classify(db);
+      const { annotations, surfaces, batches, rows, flaggedSurfaces } = classify(db);
       const batchId = `migration_${randomUUID()}`;
       db.prepare("INSERT INTO annotation_batches (id, operation, reviewer, created_at, metadata_json) VALUES (?, 'migration-authority', 'system', ?, '{}')")
         .run(batchId, new Date().toISOString());
@@ -296,7 +320,7 @@ export function upgradeAuthority(db: DatabaseSync): AuthorityAudit | null {
       }
       db.exec(AUTHORITY_INDEXES);
 
-      const audit = buildAudit(rows, annotations, surfaces, batches, reverted);
+      const audit = { ...buildAudit(rows, annotations, surfaces, batches, reverted), flagged_surfaces: flaggedSurfaces };
       db.prepare("UPDATE annotation_batches SET metadata_json = ? WHERE id = ?").run(JSON.stringify({ authority_audit: audit }), batchId);
       const violations = db.prepare("PRAGMA foreign_key_check").all();
       if (violations.length > 0) throw new Error(`The authority migration broke ${violations.length} foreign key reference(s).`);
@@ -339,4 +363,28 @@ function buildAudit(
 export function authorityAudit(db: DatabaseSync): AuthorityAudit | null {
   const row = db.prepare("SELECT metadata_json FROM annotation_batches WHERE operation = 'migration-authority' ORDER BY created_at DESC LIMIT 1").get() as { metadata_json: string } | undefined;
   return row ? (JSON.parse(row.metadata_json) as { authority_audit: AuthorityAudit }).authority_audit : null;
+}
+
+/**
+ * Human surfaces whose authority rests on a backfilled annotation that does not record the
+ * surface's meaning: neither that annotation nor any family-version migration copy of it carries
+ * the surface's fingerprint. Read-only; an empty list means every backfilled authority holds.
+ */
+export function backfilledAuthorityMismatches(db: DatabaseSync): Array<{ surface_id: number; surface: string; authorizing_annotation_id: number }> {
+  if (!columns(db, "leaf_surfaces").has("authorizing_annotation_id")) return [];
+  return db.prepare(`
+    WITH RECURSIVE chain(root, id, fingerprint_id) AS (
+      SELECT annotations.id, annotations.id, annotations.fingerprint_id FROM annotations
+      WHERE annotations.id IN (SELECT authorizing_annotation_id FROM leaf_surfaces WHERE authorizing_annotation_id IS NOT NULL)
+      UNION ALL
+      SELECT chain.root, next.id, next.fingerprint_id FROM chain
+      JOIN annotations next ON next.supersedes_id = chain.id
+      JOIN annotation_batches batch ON batch.id = next.batch_id AND batch.operation LIKE 'migration-%'
+    )
+    SELECT leaf_surfaces.id AS surface_id, leaf_surfaces.normalized_surface AS surface, leaf_surfaces.authorizing_annotation_id
+    FROM leaf_surfaces
+    WHERE leaf_surfaces.authority_kind = 'human' AND leaf_surfaces.authorizing_annotation_id IS NOT NULL
+      AND NOT EXISTS (SELECT 1 FROM chain WHERE chain.root = leaf_surfaces.authorizing_annotation_id AND chain.fingerprint_id = leaf_surfaces.fingerprint_id)
+    ORDER BY leaf_surfaces.id
+  `).all() as Array<{ surface_id: number; surface: string; authorizing_annotation_id: number }>;
 }

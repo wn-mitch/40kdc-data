@@ -1,7 +1,7 @@
 import { resolve } from "node:path";
 import type { DatabaseSync } from "node:sqlite";
 
-import { authorityAudit } from "./authority-migration.js";
+import { authorityAudit, backfilledAuthorityMismatches } from "./authority-migration.js";
 import { REVIEWED_FAMILY_REGISTRY } from "./contracts.js";
 import { getCurrentCoverage } from "./coverage.js";
 import { BODY_SPAN_SQL, backupBeforeLiveRun, getDataEpoch, openWorkbench, openWorkbenchReadOnly, workbenchPath } from "./db.js";
@@ -130,7 +130,11 @@ export function projectStatus(db: DatabaseSync): Record<string, unknown> {
     // Horizontal-to-vertical trigger: composition work waits for 300 trusted leaf-complete texts.
     leaf_complete_texts: { count: leafCompleteTexts(db), trigger_at: 300 },
     recent_sessions: reviewSessions(db, 5),
-    authority_migration: audit ? { flagged_rows: audit.flagged.length, reverted: audit.reverted, machine_surfaces: audit.surfaces.filter((surface) => surface.authority === "machine").length } : null,
+    authority_migration: audit ? {
+      flagged_rows: audit.flagged.length, flagged_surfaces: audit.flagged_surfaces?.length ?? null, reverted: audit.reverted,
+      machine_surfaces: audit.surfaces.filter((surface) => surface.authority === "machine").length,
+      backfill_mismatches: backfilledAuthorityMismatches(db).length,
+    } : null,
   };
 }
 

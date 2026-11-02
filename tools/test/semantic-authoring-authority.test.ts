@@ -6,7 +6,9 @@ import type { DatabaseSync as DatabaseType } from "node:sqlite";
 
 import { afterEach, describe, expect, it } from "vitest";
 import { AuthorityError, humanActor, machineActor } from "../src/semantic-authoring/authority.js";
-import { authorityAudit } from "../src/semantic-authoring/authority-migration.js";
+import { authorityAudit, backfilledAuthorityMismatches } from "../src/semantic-authoring/authority-migration.js";
+import { validateFingerprint } from "../src/semantic-authoring/contracts.js";
+import { leafSurfaceKey } from "../src/semantic-authoring/matching.js";
 import { getAbilityCoverage } from "../src/semantic-authoring/coverage.js";
 import { initializeWorkbench, openWorkbench } from "../src/semantic-authoring/db.js";
 import { confirmSurface, reapplyLeafSurfaces } from "../src/semantic-authoring/leaves.js";
@@ -57,6 +59,23 @@ function confirmDecision(db: DatabaseSync, abilityId: string, phrase: string) {
     action: "confirm", ability_version_id: source.id, source_hash: source.source_hash, fragment: "RAW_TEXT",
     start_byte: start, end_byte: start + Buffer.byteLength(phrase, "utf8"), exact_text: phrase, role: "EFFECT", ...cp,
   };
+}
+
+/** Rewind a workbench to the schema before recorded authority, every row claiming to be human. */
+function rewindToPreAuthority(db: DatabaseSync): void {
+  db.exec(`
+    PRAGMA foreign_keys = OFF;
+    CREATE TABLE annotations_old (id INTEGER PRIMARY KEY, span_id INTEGER NOT NULL, fingerprint_id TEXT NOT NULL,
+      status TEXT NOT NULL, origin TEXT NOT NULL, authority_kind TEXT NOT NULL DEFAULT 'human' CHECK(authority_kind IN ('human', 'stamp')),
+      confirmed_by TEXT NOT NULL, batch_id TEXT NOT NULL, supersedes_id INTEGER, created_at TEXT NOT NULL) STRICT;
+    INSERT INTO annotations_old SELECT id, span_id, fingerprint_id, status, origin, 'human', confirmed_by, batch_id, supersedes_id, created_at FROM annotations;
+    DROP TABLE annotations; ALTER TABLE annotations_old RENAME TO annotations;
+    CREATE TABLE surfaces_old (id INTEGER PRIMARY KEY, normalized_surface TEXT NOT NULL, fingerprint_id TEXT NOT NULL,
+      status TEXT NOT NULL, batch_id TEXT NOT NULL, created_at TEXT NOT NULL) STRICT;
+    INSERT INTO surfaces_old SELECT id, normalized_surface, fingerprint_id, status, batch_id, created_at FROM leaf_surfaces;
+    DROP TABLE leaf_surfaces; ALTER TABLE surfaces_old RENAME TO leaf_surfaces;
+    PRAGMA foreign_keys = ON;
+  `);
 }
 
 describe("Semantic authoring authority boundary", () => {
@@ -171,19 +190,7 @@ describe("Semantic authoring authority boundary", () => {
       JOIN source_spans ON source_spans.id = annotations.span_id WHERE source_spans.ability_version_id = ?
     `).run(two.id).lastInsertRowid);
     db.prepare("INSERT INTO batch_members (batch_id, entity_kind, entity_id) VALUES ('pilot', 'proposal-accepted', ?)").run(String(proposal));
-    db.exec(`
-      PRAGMA foreign_keys = OFF;
-      CREATE TABLE annotations_old (id INTEGER PRIMARY KEY, span_id INTEGER NOT NULL, fingerprint_id TEXT NOT NULL,
-        status TEXT NOT NULL, origin TEXT NOT NULL, authority_kind TEXT NOT NULL DEFAULT 'human' CHECK(authority_kind IN ('human', 'stamp')),
-        confirmed_by TEXT NOT NULL, batch_id TEXT NOT NULL, supersedes_id INTEGER, created_at TEXT NOT NULL) STRICT;
-      INSERT INTO annotations_old SELECT id, span_id, fingerprint_id, status, origin, 'human', confirmed_by, batch_id, supersedes_id, created_at FROM annotations;
-      DROP TABLE annotations; ALTER TABLE annotations_old RENAME TO annotations;
-      CREATE TABLE surfaces_old (id INTEGER PRIMARY KEY, normalized_surface TEXT NOT NULL, fingerprint_id TEXT NOT NULL,
-        status TEXT NOT NULL, batch_id TEXT NOT NULL, created_at TEXT NOT NULL) STRICT;
-      INSERT INTO surfaces_old SELECT id, normalized_surface, fingerprint_id, status, batch_id, created_at FROM leaf_surfaces;
-      DROP TABLE leaf_surfaces; ALTER TABLE surfaces_old RENAME TO leaf_surfaces;
-      PRAGMA foreign_keys = ON;
-    `);
+    rewindToPreAuthority(db);
     db.close();
 
     db = openWorkbench(path);
@@ -195,6 +202,64 @@ describe("Semantic authoring authority boundary", () => {
       expect(audit.reverted.proposals).toBe(1);
       expect(audit.surfaces.map((surface) => surface.authority).sort()).toEqual(["human", "machine"]);
       expect(readdirSync(directory)).toContain("workbench.sqlite.pre5d");
+    } finally {
+      db.close();
+    }
+  });
+
+  it("gives a backfilled surface human authority only from a human decision of its meaning", () => {
+    const directory = mkdtempSync(join(tmpdir(), "semantic-authoring-authority-backfill-"));
+    roots.push(directory);
+    const path = join(directory, "workbench.sqlite");
+    const REROLL = "Re-roll a Hit roll of 1";
+    let db = fixture([
+      { ability_id: "one", raw_text: `Once per battle, ${CP}.` },
+      { ability_id: "two", raw_text: `${REROLL}.` },
+      { ability_id: "three", raw_text: `While leading, ${REROLL}.` },
+    ], path);
+    applyAnnotationBatch(db, { reviewer: "will", decisions: [confirmDecision(db, "one", CP)] }, WILL);
+    const reroll = (abilityId: string, subset: string) => ({ ...confirmDecision(db, abilityId, REROLL), family_id: "reroll", parameters: { roll: "hit", subset, weapon_type: "all" } });
+    // Will decided the re-roll wording with two meanings on two records.
+    applyAnnotationBatch(db, { reviewer: "will", decisions: [reroll("two", "ones"), reroll("three", "failed")] }, WILL);
+    const will = db.prepare("SELECT annotations.id, annotations.span_id, annotations.fingerprint_id FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id WHERE source_spans.ability_version_id = ?")
+      .get(ability(db, "one").id) as { id: number; span_id: number; fingerprint_id: string };
+    const meaning = (amount: number) => validateFingerprint(db, cp.family_id, { ...cp.parameters, amount }, undefined, CP);
+    const migrated = meaning(3);
+    const other = meaning(2);
+    const rerollOnes = db.prepare("SELECT fingerprint_id FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id WHERE source_spans.ability_version_id = ?").get(ability(db, "two").id) as { fingerprint_id: string };
+    rewindToPreAuthority(db);
+    db.exec(`
+      INSERT INTO annotation_batches (id, operation, reviewer, created_at) VALUES ('family-up', 'migration-family-versions', 'system', 'y'), ('backfill', 'migration-leaf-surfaces', 'system', 'z');
+      UPDATE annotations SET status = 'superseded' WHERE id = ${will.id};
+    `);
+    // A family-version migration carried Will's decision to a new fingerprint.
+    db.prepare("INSERT INTO annotations (span_id, fingerprint_id, status, origin, authority_kind, confirmed_by, batch_id, supersedes_id, created_at) VALUES (?, ?, 'active', 'migration', 'human', 'system', 'family-up', ?, 'y')")
+      .run(will.span_id, migrated, will.id);
+    const surface = db.prepare("INSERT INTO leaf_surfaces (normalized_surface, fingerprint_id, status, batch_id, created_at) VALUES (?, ?, ?, 'backfill', 'z')");
+    const key = (text: string) => leafSurfaceKey(text);
+    const ids = {
+      root: Number(surface.run(key(CP), will.fingerprint_id, "retired").lastInsertRowid),
+      migrated: Number(surface.run(key(CP), migrated, "active").lastInsertRowid),
+      other: Number(surface.run(key(CP), other, "retired").lastInsertRowid),
+      ambiguous: Number(surface.run(key(REROLL), rerollOnes.fingerprint_id, "active").lastInsertRowid),
+    };
+    db.close();
+
+    db = openWorkbench(path);
+    try {
+      const authority = (id: number) => db.prepare("SELECT authority_kind, authorizing_annotation_id FROM leaf_surfaces WHERE id = ?").get(id);
+      expect(authority(ids.root)).toEqual({ authority_kind: "human", authorizing_annotation_id: will.id });
+      expect(authority(ids.migrated)).toEqual({ authority_kind: "human", authorizing_annotation_id: will.id });
+      expect(authority(ids.other)).toEqual({ authority_kind: "machine", authorizing_annotation_id: null });
+      expect(authority(ids.ambiguous)).toEqual({ authority_kind: "machine", authorizing_annotation_id: null });
+      expect(authorityAudit(db)!.flagged_surfaces).toEqual([
+        { surface_id: ids.other, reason: "backfilled wording Will decided with another meaning" },
+        { surface_id: ids.ambiguous, reason: "backfilled wording Will decided with 2 meanings" },
+      ]);
+      expect(backfilledAuthorityMismatches(db)).toEqual([]);
+      // A human surface whose authorizing decision never carried its meaning is reported.
+      db.prepare("UPDATE leaf_surfaces SET authority_kind = 'human', authorizing_annotation_id = ? WHERE id = ?").run(will.id, ids.other);
+      expect(backfilledAuthorityMismatches(db)).toEqual([{ surface_id: ids.other, surface: key(CP), authorizing_annotation_id: will.id }]);
     } finally {
       db.close();
     }
