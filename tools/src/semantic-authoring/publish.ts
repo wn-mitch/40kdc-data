@@ -1,4 +1,4 @@
-import { createHash, randomUUID } from "node:crypto";
+import { randomUUID } from "node:crypto";
 import { readFileSync } from "node:fs";
 import type { DatabaseSync } from "node:sqlite";
 
@@ -6,70 +6,22 @@ import { prepareWrites } from "../mfm/apply.js";
 import { hashJson } from "../canonical-hash.js";
 import { sourceDigest } from "../source-digest.js";
 import { compilationInputsHash, compiledIdentity, getCompiledEntry } from "./compiled.js";
-import { abilityFilePath, canonicalDataRoot, semanticAuthoringDataRoot, schemaTreeHash, type Mechanics } from "./entries.js";
+import { canonicalDataRoot, semanticAuthoringDataRoot, schemaTreeHash, type Mechanics } from "./entries.js";
 import { recordGateErrors } from "./gates.js";
 import { bumpWorkbenchRevision, withTransaction } from "./db.js";
 import { gameVersionForDataVersion } from "../mfm/dataslate.js";
 import { fullyDescribed } from "./leaf-view.js";
-import { PublicationError, projectRecords, record, relativeAbilityPath, stagedWrites, type PublicationDiff, type PublicationStamp } from "./publication-projection.js";
-import { coreManifest, coreReplicaManifests, coreStratagemFile, observeFile, type CoreManifest, type CoreProjection } from "./publish-core.js";
+import { PublicationError, projectRecords, record, stagedWrites, type PublicationDiff, type PublicationStamp } from "./publication-projection.js";
+import { coreManifest, coreReplicaManifests, observeFile, type CoreManifest, type CoreProjection } from "./publish-core.js";
+import {
+  loadBatch, parseManifest, receiptFromBatch, sha256Bytes,
+  type PublicationEntrySnapshot, type PublicationManifest, type PublicationReceipt, type PublicationReceiptData, type PublicationState,
+} from "./publish-batch.js";
+import { reconcilePublicationBatches } from "./publish-recovery.js";
 import { loadSourceRecords, type SourceRecord } from "./source.js";
 
-;
-
-type PublicationState = "prepared" | "publishing" | "published" | "failed";
-
-/** What one approved compiled entry was when its publication was prepared. */
-type PublicationEntrySnapshot = {
-  entry_id: string;
-  ability_id: string;
-  ability_version_id: number;
-  shape_signature: string;
-  inputs_hash: string;
-  mechanics_hash: string;
-  source_hash: string;
-  source_digest: string;
-  source_match_hash: string;
-};
-
-type PublicationReceiptData = {
-  published_at: string;
-  actual_after_hash: string;
-  recovered: boolean;
-  ability_ids: string[];
-};
-
-type PublicationFailureData = {
-  failed_at: string;
-  // PARTIAL_WRITE_OBSERVED: each file holds its before or its staged bytes, and not all the same (a commit stopped
-  // between files). EXTERNAL_CHANGE_CONFLICT: some file holds bytes that are neither.
-  reason_code: "NO_WRITE_OBSERVED" | "PARTIAL_WRITE_OBSERVED" | "EXTERNAL_CHANGE_CONFLICT";
-  observed_hash: string;
-};
-
-type PublicationManifest = {
-  schema_version: 2;
-  batch_id: string;
-  faction_id: string;
-  data_root: string;
-  destination: string;
-  relative_path: string;
-  before_hash: string;
-  after_hash: string;
-  after_text: string;
-  schema_hash: string;
-  entries: PublicationEntrySnapshot[];
-  diff: PublicationDiff[];
-  created_at: string;
-  /** The faction's core stratagems.json, when approved leaves set a stratagem's target. */
-  core?: CoreManifest;
-  /** Other factions' core stratagems.json holding a replicated copy of a changed stratagem. */
-  core_replicas?: CoreManifest[];
-  receipt?: PublicationReceiptData;
-  failure?: PublicationFailureData;
-  /** Why the last reconciliation could not observe the destinations; the batch stays publishing. */
-  unobserved?: { observed_at: string; errors: string[] };
-};
+export type { PublicationReceipt } from "./publish-batch.js";
+export { reconcilePublicationBatches } from "./publish-recovery.js";
 
 type PublicationProjection = {
   dataRoot: string;
@@ -94,83 +46,11 @@ export type PublicationPreview = {
   diff: PublicationDiff[];
 };
 
-export type PublicationReceipt = {
-  batch_id: string;
-  preview_hash: string;
-  faction_id: string;
-  state: "published";
-  published_at: string;
-  actual_after_hash: string;
-  recovered: boolean;
-  ability_ids: string[];
-};
-
 export type PublicationPage = {
   items: Array<Record<string, unknown>>;
   next_cursor: string | null;
   total: number;
 };
-
-function sha256Bytes(value: string | Buffer): string {
-  return createHash("sha256").update(value).digest("hex");
-}
-
-function parseManifest(serialized: string): PublicationManifest {
-  const value = record(JSON.parse(serialized), "Publication manifest is malformed.");
-  if (
-    value.schema_version !== 2
-    || typeof value.batch_id !== "string"
-    || typeof value.faction_id !== "string"
-    || typeof value.data_root !== "string"
-    || typeof value.destination !== "string"
-    || typeof value.relative_path !== "string"
-    || typeof value.before_hash !== "string"
-    || typeof value.after_hash !== "string"
-    || typeof value.after_text !== "string"
-    || typeof value.schema_hash !== "string"
-    || !Array.isArray(value.entries)
-    || !Array.isArray(value.diff)
-    || typeof value.created_at !== "string"
-  ) throw new PublicationError(409, "Publication manifest is malformed.");
-  if (sha256Bytes(value.after_text) !== value.after_hash) {
-    throw new PublicationError(409, "Publication manifest staged bytes do not match their hash.");
-  }
-  if (value.core_replicas !== undefined && (!Array.isArray(value.core_replicas) || value.core === undefined)) {
-    throw new PublicationError(409, "Publication manifest core replicas are malformed.");
-  }
-  for (const item of [...(value.core !== undefined ? [value.core] : []), ...((value.core_replicas as unknown[] | undefined) ?? [])]) {
-    const core = record(item, "Publication manifest core file is malformed.");
-    if (["destination", "relative_path", "before_hash", "after_hash", "after_text"].some((key) => typeof core[key] !== "string")) {
-      throw new PublicationError(409, "Publication manifest core file is malformed.");
-    }
-    if (sha256Bytes(core.after_text as string) !== core.after_hash) throw new PublicationError(409, "Publication manifest core staged bytes do not match their hash.");
-  }
-  return value as PublicationManifest;
-}
-
-function manifestFile(manifest: PublicationManifest): string {
-  let root: string;
-  try {
-    root = canonicalDataRoot(manifest.data_root);
-  } catch (error) {
-    throw new PublicationError(409, `Publication root is unavailable: ${error instanceof Error ? error.message : String(error)}`);
-  }
-  if (root !== manifest.data_root) throw new PublicationError(409, "Publication manifest data root is not canonical.");
-  const expected = abilityFilePath(root, manifest.faction_id);
-  if (
-    manifest.destination !== expected
-    || relativeAbilityPath(root, expected) !== manifest.relative_path
-    || (manifest.core !== undefined && manifest.core.destination !== coreStratagemFile(root, manifest.faction_id))
-    || (manifest.core_replicas ?? []).some((replica) => !isReplicaDestination(root, manifest.faction_id, replica))
-  ) throw new PublicationError(409, "Publication manifest destination no longer matches its pinned root and faction.");
-  return expected;
-}
-
-/** A replica destination is another faction's core stratagems.json under the pinned root, named by its own relative path. */
-function isReplicaDestination(root: string, factionId: string, replica: CoreManifest): boolean {
-  const match = /^core\/([a-z0-9][a-z0-9-]*[a-z0-9])\/stratagems\.json$/u.exec(replica.relative_path);
-  return match !== null && match[1] !== factionId && replica.destination === coreStratagemFile(root, match[1]!);
-}
 
 /** The fresh source records of the selected abilities, and the dump `data_version` they were read from. */
 function freshSourceMap(rows: EntryRow[]): { records: Map<string, SourceRecord>; dataVersion: number | undefined } {
@@ -319,111 +199,6 @@ function assertProjectionMatchesManifest(projection: PublicationProjection, mani
     || hashJson(coreManifest(projection.core) ?? null) !== hashJson(manifest.core ?? null)
     || hashJson(coreReplicaManifests(projection.core)) !== hashJson(manifest.core_replicas ?? [])
   ) throw new PublicationError(409, "Publication preview is stale; prepare a new batch.");
-}
-
-function loadBatch(db: DatabaseSync, batchId: string): { preview_hash: string; faction_id: string; state: PublicationState; manifest: PublicationManifest } {
-  const row = db.prepare("SELECT preview_hash, faction_id, state, manifest_json FROM publication_batches WHERE id = ?")
-    .get(batchId) as { preview_hash: string; faction_id: string; state: PublicationState; manifest_json: string } | undefined;
-  if (!row) throw new PublicationError(404, `Unknown publication batch ${batchId}.`);
-  const manifest = parseManifest(row.manifest_json);
-  if (manifest.batch_id !== batchId || manifest.faction_id !== row.faction_id) throw new PublicationError(409, "Publication batch identity does not match its manifest.");
-  const previewManifest = { ...manifest };
-  delete previewManifest.receipt;
-  delete previewManifest.failure;
-  delete previewManifest.unobserved;
-  if (hashJson(previewManifest) !== row.preview_hash) throw new PublicationError(409, "Publication manifest no longer matches its preview hash.");
-  return { preview_hash: row.preview_hash, faction_id: row.faction_id, state: row.state, manifest };
-}
-
-function receiptFromBatch(batchId: string, previewHash: string, factionId: string, manifest: PublicationManifest): PublicationReceipt {
-  if (!manifest.receipt || manifest.receipt.actual_after_hash !== manifest.after_hash) {
-    throw new PublicationError(409, "Published batch is missing its observed receipt.");
-  }
-  return {
-    batch_id: batchId,
-    preview_hash: previewHash,
-    faction_id: factionId,
-    state: "published",
-    published_at: manifest.receipt.published_at,
-    actual_after_hash: manifest.receipt.actual_after_hash,
-    recovered: manifest.receipt.recovered,
-    ability_ids: manifest.receipt.ability_ids,
-  };
-}
-
-function finishPublishingBatch(db: DatabaseSync, batchId: string, observedHash: string, observedCore: string | null, observedReplicas: ReadonlyArray<string | null> = []): PublicationReceipt | null {
-  const batch = loadBatch(db, batchId);
-  if (batch.state === "published") return receiptFromBatch(batchId, batch.preview_hash, batch.faction_id, batch.manifest);
-  if (batch.state !== "publishing") return null;
-  const now = new Date().toISOString();
-  // Both files are written in one commit: published only when both hold the staged bytes.
-  const core = batch.manifest.core;
-  const replicas = batch.manifest.core_replicas ?? [];
-  // Each destination file against its before and staged bytes: the abilities file, then core, then each replica.
-  const files = [
-    { observed: observedHash, before: batch.manifest.before_hash, after: batch.manifest.after_hash },
-    ...(core ? [{ observed: observedCore, before: core.before_hash, after: core.after_hash }] : []),
-    ...replicas.map((replica, position) => ({ observed: observedReplicas[position], before: replica.before_hash, after: replica.after_hash })),
-  ];
-  const states = files.map((file) => file.observed === file.after ? "after" : file.observed === file.before ? "before" : "other");
-  if (states.every((state) => state === "after")) {
-    const receipt: PublicationReceiptData = {
-      published_at: now,
-      actual_after_hash: observedHash,
-      recovered: true,
-      ability_ids: batch.manifest.entries.map((entry) => entry.ability_id),
-    };
-    const manifest = { ...batch.manifest, receipt };
-    const changed = db.prepare("UPDATE publication_batches SET state = 'published', manifest_json = ?, updated_at = ? WHERE id = ? AND state = 'publishing'")
-      .run(JSON.stringify(manifest), now, batchId);
-    if (changed.changes === 1) bumpWorkbenchRevision(db);
-    return receiptFromBatch(batchId, batch.preview_hash, batch.faction_id, manifest);
-  }
-  const failure: PublicationFailureData = {
-    failed_at: now,
-    reason_code: states.every((state) => state === "before") ? "NO_WRITE_OBSERVED" : states.includes("other") ? "EXTERNAL_CHANGE_CONFLICT" : "PARTIAL_WRITE_OBSERVED",
-    observed_hash: observedHash,
-  };
-  const changed = db.prepare("UPDATE publication_batches SET state = 'failed', manifest_json = ?, updated_at = ? WHERE id = ? AND state = 'publishing'")
-    .run(JSON.stringify({ ...batch.manifest, failure }), now, batchId);
-  if (changed.changes === 1) bumpWorkbenchRevision(db);
-  return null;
-}
-
-/** Reconcile durable publishing markers against the only authoritative observation: destination bytes. */
-export function reconcilePublicationBatches(db: DatabaseSync, batchId?: string): { recovered: PublicationReceipt[]; failed: string[]; unobserved: Array<{ batch_id: string; errors: string[] }> } {
-  const rows = db.prepare(`
-    SELECT id, manifest_json FROM publication_batches
-    WHERE state = 'publishing' ${batchId === undefined ? "" : "AND id = ?"}
-    ORDER BY created_at, id
-  `).all(...(batchId === undefined ? [] : [batchId])) as Array<{ id: string; manifest_json: string }>;
-  const recovered: PublicationReceipt[] = [];
-  const failed: string[] = [];
-  const unobserved: Array<{ batch_id: string; errors: string[] }> = [];
-  for (const row of rows) {
-    const manifest = parseManifest(row.manifest_json);
-    let main: ReturnType<typeof observeFile>;
-    try {
-      main = observeFile(manifestFile(manifest));
-    } catch (error) {
-      main = { error: error instanceof Error ? error.message : String(error) };
-    }
-    const core = manifest.core ? observeFile(manifest.core.destination) : null;
-    const replicas = (manifest.core_replicas ?? []).map((replica) => observeFile(replica.destination));
-    const errors = [main, core, ...replicas].flatMap((observation) => (observation && "error" in observation ? [observation.error] : []));
-    if (errors.length > 0) {
-      // Unread destinations prove nothing either way: keep the marker and the reason, and retry later.
-      withTransaction(db, () => db.prepare("UPDATE publication_batches SET manifest_json = json_set(manifest_json, '$.unobserved', json(?)), updated_at = ? WHERE id = ? AND state = 'publishing'")
-        .run(JSON.stringify({ observed_at: new Date().toISOString(), errors }), new Date().toISOString(), row.id));
-      unobserved.push({ batch_id: row.id, errors });
-      continue;
-    }
-    const hashOf = (observation: ReturnType<typeof observeFile>) => (observation as { hash: string }).hash;
-    const receipt = withTransaction(db, () => finishPublishingBatch(db, row.id, hashOf(main), core && hashOf(core), replicas.map(hashOf)));
-    if (receipt) recovered.push(receipt);
-    else failed.push(row.id);
-  }
-  return { recovered, failed, unobserved };
 }
 
 /** Validate and persist a no-write publication preview for one faction file. */
