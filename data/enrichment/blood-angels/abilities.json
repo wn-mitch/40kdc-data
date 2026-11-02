@@ -800,32 +800,18 @@
     "detachment_id": "sanguinary-spearhead",
     "ability_type": "stratagem",
     "behavior": "reactive",
-    "trigger": [
-      {
-        "event": "selected",
-        "subject": {
-          "owner": "enemy"
-        },
-        "filter": {
-          "move_types": [
-            "fall-back"
-          ],
-          "to": "move"
-        }
+    "trigger": {
+      "event": "selected",
+      "subject": {
+        "owner": "enemy"
       },
-      {
-        "event": "selected",
-        "filter": {
-          "move_types": [
-            "fall-back"
-          ],
-          "to": "move"
-        },
-        "subject": {
-          "owner": "enemy"
-        }
+      "filter": {
+        "move_types": [
+          "fall-back"
+        ],
+        "to": "move"
       }
-    ],
+    },
     "effect": {
       "type": "conditional",
       "condition": {

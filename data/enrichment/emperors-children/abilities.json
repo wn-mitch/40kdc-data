@@ -110,35 +110,44 @@
           }
         },
         "effect": {
-          "type": "sequence",
-          "steps": [
-            {
-              "type": "re-roll",
-              "target": "this-unit",
-              "modifier": {
-                "roll": "charge",
-                "result_scope": "any-result"
-              }
-            },
-            {
-              "type": "move-modifier",
-              "target": "event-subject",
-              "modifier": {
-                "applies_to_moves": [
-                  "charge"
-                ],
-                "ends_when": {
-                  "type": "matches",
-                  "parameters": {
-                    "subject": "event-subject",
-                    "filter": {
-                      "engaged_with": "selected-unit"
+          "type": "ability-part",
+          "trigger": {
+            "event": "targets-selected",
+            "filter": {
+              "kind": "charge"
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "re-roll",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "charge",
+                  "result_scope": "any-result"
+                }
+              },
+              {
+                "type": "move-modifier",
+                "target": "event-subject",
+                "modifier": {
+                  "applies_to_moves": [
+                    "charge"
+                  ],
+                  "ends_when": {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "event-subject",
+                      "filter": {
+                        "engaged_with": "selected-unit"
+                      }
                     }
                   }
                 }
               }
-            }
-          ]
+            ]
+          }
         }
       }
     },
@@ -151,21 +160,13 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "faction_id": "emperors-children",
-    "trigger": [
-      {
-        "event": "attacks-resolved",
-        "filter": {
-          "kind": "shoot"
-        },
-        "optional": true
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
       },
-      {
-        "event": "targets-selected",
-        "filter": {
-          "kind": "charge"
-        }
-      }
-    ]
+      "optional": true
+    }
   },
   {
     "ability_id": "warped-interference-emperors-children",
@@ -1468,7 +1469,8 @@
                 "tag": "poisoned"
               }
             }
-          }
+          },
+          "duration": "battle"
         },
         {
           "type": "ability-part",
@@ -1509,7 +1511,7 @@
       ]
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "unit_ids": [
       "fulgrim"

@@ -5228,13 +5228,7 @@
     "scope": {
       "duration": "phase"
     },
-    "behavior": "reactive",
-    "trigger": {
-      "event": "used",
-      "filter": {
-        "kind": "stratagem"
-      }
-    },
+    "behavior": "activated",
     "source_digest": "21aa8eb779488e4d5033db3c28ca3d40496306cc22ba37ab47f39daf7ce31371"
   },
   {
@@ -5736,27 +5730,19 @@
       "duration": "phase"
     },
     "behavior": "reactive",
-    "trigger": [
-      {
-        "event": "move-ended",
-        "subject": {
-          "owner": "enemy"
-        },
-        "filter": {
-          "move_types": [
-            "normal",
-            "advance",
-            "fall-back"
-          ]
-        }
+    "trigger": {
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
       },
-      {
-        "event": "used",
-        "filter": {
-          "kind": "stratagem"
-        }
+      "filter": {
+        "move_types": [
+          "normal",
+          "advance",
+          "fall-back"
+        ]
       }
-    ],
+    },
     "source_digest": "20018d2ef5481b3f95e53edb586af8a6bf35edbf0de2ab9a2d6564a49d786094"
   },
   {
@@ -5899,13 +5885,7 @@
     "scope": {
       "duration": "phase"
     },
-    "behavior": "reactive",
-    "trigger": {
-      "event": "used",
-      "filter": {
-        "kind": "stratagem"
-      }
-    },
+    "behavior": "activated",
     "source_digest": "fecb464d09f0899a04f589217a5c716ebf0525b0a106c672b39f84c31027b82b"
   },
   {
@@ -6337,13 +6317,7 @@
     "scope": {
       "duration": "phase"
     },
-    "behavior": "reactive",
-    "trigger": {
-      "event": "used",
-      "filter": {
-        "kind": "stratagem"
-      }
-    },
+    "behavior": "activated",
     "source_digest": "dc06160cc444dd43ea6e74bc471cf7ea2e291490b2af798d29236f4976f57b0c"
   },
   {
@@ -7057,13 +7031,7 @@
     "scope": {
       "duration": "phase"
     },
-    "behavior": "reactive",
-    "trigger": {
-      "event": "used",
-      "filter": {
-        "kind": "stratagem"
-      }
-    },
+    "behavior": "activated",
     "source_digest": "587c82c9f3298f10872d4cb87e58bde845868b9a39ae73e0b987a1947beeb962"
   },
   {
@@ -7975,13 +7943,7 @@
     "scope": {
       "duration": "phase"
     },
-    "behavior": "reactive",
-    "trigger": {
-      "event": "used",
-      "filter": {
-        "kind": "stratagem"
-      }
-    },
+    "behavior": "activated",
     "source_digest": "b6857b5c60a9c2726e55dc69ab6b1240254eb09b635091df71efe36d71992b2b"
   },
   {
@@ -8370,13 +8332,7 @@
     "scope": {
       "duration": "phase"
     },
-    "behavior": "reactive",
-    "trigger": {
-      "event": "used",
-      "filter": {
-        "kind": "stratagem"
-      }
-    },
+    "behavior": "activated",
     "source_digest": "98c22e5d68081e2da363166022eed66b2e342a1921dc8b985ea3c5e5a9e9b578"
   },
   {
@@ -9180,38 +9136,19 @@
       "duration": "until-next-shooting-phase"
     },
     "behavior": "reactive",
-    "trigger": [
-      {
-        "event": "attacks-resolved",
-        "filter": {
-          "kind": "shoot"
-        },
-        "subject": {
-          "owner": "friendly",
-          "all_of": [
-            "CTHONIAN",
-            "EARTHSHAKERS"
-          ]
-        }
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
       },
-      {
-        "event": "used",
-        "filter": {
-          "kind": "stratagem"
-        },
-        "condition": {
-          "type": "matches",
-          "parameters": {
-            "filter": {
-              "all_of": [
-                "CTHONIAN",
-                "EARTHSHAKERS"
-              ]
-            }
-          }
-        }
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "CTHONIAN",
+          "EARTHSHAKERS"
+        ]
       }
-    ],
+    },
     "source_digest": "e11c33323319eb588157b7ede3dcd020062cc77b706dd1451b8a6ae3654c7404"
   },
   {

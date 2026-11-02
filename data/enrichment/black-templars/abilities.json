@@ -3111,32 +3111,18 @@
       "duration": "phase"
     },
     "behavior": "reactive",
-    "trigger": [
-      {
-        "event": "selected",
-        "subject": {
-          "owner": "enemy"
-        },
-        "filter": {
-          "move_types": [
-            "fall-back"
-          ],
-          "to": "move"
-        }
+    "trigger": {
+      "event": "selected",
+      "subject": {
+        "owner": "enemy"
       },
-      {
-        "event": "selected",
-        "filter": {
-          "move_types": [
-            "fall-back"
-          ],
-          "to": "move"
-        },
-        "subject": {
-          "owner": "enemy"
-        }
+      "filter": {
+        "move_types": [
+          "fall-back"
+        ],
+        "to": "move"
       }
-    ],
+    },
     "source_digest": "7b89f38f269bb5a6e7e3d7d14e27a6c104b52264cb6c16ee3354c16a2d157708"
   },
   {

@@ -5447,32 +5447,18 @@
     "scope": {
       "duration": "permanent"
     },
-    "trigger": [
-      {
-        "event": "selected",
-        "filter": {
-          "move_types": [
-            "fall-back"
-          ],
-          "to": "move"
-        },
-        "subject": {
-          "owner": "enemy"
-        }
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "move_types": [
+          "fall-back"
+        ],
+        "to": "move"
       },
-      {
-        "event": "selected",
-        "filter": {
-          "move_types": [
-            "fall-back"
-          ],
-          "to": "move"
-        },
-        "subject": {
-          "owner": "enemy"
-        }
+      "subject": {
+        "owner": "enemy"
       }
-    ]
+    }
   },
   {
     "ability_id": "territorial-infection-paragons-of-putrescence-death-guard",

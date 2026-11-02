@@ -7482,12 +7482,13 @@
                 }
               ]
             }
-          }
+          },
+          "duration": "phase"
         }
       ]
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "applies_to": {
       "all_of": [

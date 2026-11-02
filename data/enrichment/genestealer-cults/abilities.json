@@ -4625,12 +4625,13 @@
                 }
               }
             }
-          }
+          },
+          "duration": "phase"
         }
       ]
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "community_notes": "ABERRANTS, BIOPHAGUS and PURESTRAIN GENESTEALERS units get +1 to Charge rolls; if such a unit made a Charge move this turn, melee weapons get +1 Attack until the end of the Fight phase."
   },

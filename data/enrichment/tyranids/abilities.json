@@ -410,19 +410,19 @@
     "source_digest": "35b75d6aa70bf908e96518227e6df930880e956082166ee4318886d6b250008a",
     "version": "2025-q3",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "ability-part",
-          "trigger": {
-            "event": "selected",
-            "subject": "this-model",
-            "filter": {
-              "to": "shoot"
-            },
-            "optional": true
-          },
-          "effect": {
+      "type": "ability-part",
+      "trigger": {
+        "event": "selected",
+        "subject": "this-model",
+        "filter": {
+          "to": "shoot"
+        },
+        "optional": true
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
             "type": "roll-modifier",
             "target": "this-model",
             "modifier": {
@@ -430,29 +430,30 @@
               "operation": "add",
               "value": 1
             }
-          }
-        },
-        {
-          "type": "ability-part",
-          "trigger": {
-            "event": "attacks-resolved"
           },
-          "effect": {
-            "type": "dice-gated",
-            "dice": "D6",
-            "threshold": 2,
-            "comparison": "gte",
-            "on_success": {
-              "type": "mortal-wounds",
-              "target": "this-model",
-              "modifier": {
-                "count": "D3"
-              }
+          {
+            "type": "ability-part",
+            "trigger": {
+              "event": "attacks-resolved"
             },
-            "on_fail": null
+            "effect": {
+              "type": "dice-gated",
+              "dice": "D6",
+              "threshold": 2,
+              "comparison": "gte",
+              "on_success": {
+                "type": "mortal-wounds",
+                "target": "this-model",
+                "modifier": {
+                  "count": "D3"
+                }
+              },
+              "on_fail": null
+            },
+            "duration": "phase"
           }
-        }
-      ]
+        ]
+      }
     },
     "scope": {
       "duration": "phase"
@@ -9250,12 +9251,13 @@
           "usage": {
             "frequency": "first-this-battle",
             "per": "model"
-          }
+          },
+          "duration": "battle"
         }
       ]
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "behavior": "reactive",
     "source_digest": "f2f4144ea298a2a5a8fc65c27ac4030015313750a3757fabb7263678298c85ff"
@@ -10368,52 +10370,65 @@
           "count": {
             "min": 1,
             "max": 1
+          },
+          "eligibility": {
+            "type": "happened",
+            "parameters": {
+              "event": "targets-selected",
+              "object": "selected-unit",
+              "window": "event"
+            }
           }
         }
       },
-      "applies": {
-        "to": "attackers-of-target",
-        "effect": {
-          "type": "sequence",
-          "steps": [
-            {
-              "type": "test",
-              "target": "selected-unit",
-              "modifier": {
-                "test": "battle-shock"
-              }
-            },
-            {
-              "type": "roll-modifier",
-              "target": "this-unit",
-              "modifier": {
-                "roll": "hit",
-                "operation": "add",
-                "value": 1
-              }
-            },
-            {
-              "type": "conditional",
-              "condition": {
-                "type": "roll-result",
-                "parameters": {
-                  "roll": "battle-shock",
-                  "result": "failure"
-                }
-              },
-              "effect": {
+      "applies": [
+        {
+          "to": "target",
+          "effect": {
+            "type": "test",
+            "target": "selected-unit",
+            "modifier": {
+              "test": "battle-shock"
+            }
+          }
+        },
+        {
+          "to": "attackers-of-target",
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
                 "type": "roll-modifier",
                 "target": "this-unit",
                 "modifier": {
-                  "roll": "wound",
+                  "roll": "hit",
                   "operation": "add",
                   "value": 1
                 }
+              },
+              {
+                "type": "conditional",
+                "condition": {
+                  "type": "roll-result",
+                  "parameters": {
+                    "roll": "battle-shock",
+                    "result": "failure"
+                  }
+                },
+                "effect": {
+                  "type": "roll-modifier",
+                  "target": "this-unit",
+                  "modifier": {
+                    "roll": "wound",
+                    "operation": "add",
+                    "value": 1
+                  }
+                }
               }
-            }
-          ]
+            ]
+          }
         }
-      },
+      ],
       "duration": "phase"
     },
     "scope": {

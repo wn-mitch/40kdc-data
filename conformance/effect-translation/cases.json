@@ -5155,14 +5155,8 @@
     "scope": {
       "duration": "phase"
     },
-    "trigger": {
-      "event": "used",
-      "filter": {
-        "kind": "stratagem"
-      }
-    },
     "expected": {
-      "text": "Each time you use a Stratagem, until the end of the phase:\n  -> You can:\n    -> Spend 3 YP.\n    -> The unit is YP-spent this use until the end of the phase.\n  -> While the unit is not YP-spent this use, ranged weapons equipped by models in this unit gain [SUSTAINED HITS 1].\n  -> While the unit is YP-spent this use, ranged weapons equipped by models in this unit gain [SUSTAINED HITS 2]."
+      "text": "Until the end of the phase:\n  -> You can:\n    -> Spend 3 YP.\n    -> The unit is YP-spent this use until the end of the phase.\n  -> While the unit is not YP-spent this use, ranged weapons equipped by models in this unit gain [SUSTAINED HITS 1].\n  -> While the unit is YP-spent this use, ranged weapons equipped by models in this unit gain [SUSTAINED HITS 2]."
     }
   },
   {
@@ -7327,44 +7321,23 @@
     "scope": {
       "duration": "permanent"
     },
-    "trigger": [
-      {
-        "event": "move-ended",
-        "filter": {
-          "move_types": [
-            "charge"
-          ]
-        },
-        "subject": {
-          "owner": "friendly",
-          "all_of": [
-            "GRAVIS"
-          ]
-        },
-        "optional": true
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "charge"
+        ]
       },
-      {
-        "event": "move-ended",
-        "filter": {
-          "move_types": [
-            "charge"
-          ]
-        },
-        "optional": true,
-        "condition": {
-          "type": "matches",
-          "parameters": {
-            "filter": {
-              "all_of": [
-                "GRAVIS"
-              ]
-            }
-          }
-        }
-      }
-    ],
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "GRAVIS"
+        ]
+      },
+      "optional": true
+    },
     "expected": {
-      "text": "Each time a friendly unit ends a Charge move (the triggering unit must have GRAVIS), you may use this ability or when the unit ends a Charge move, if the unit has the GRAVIS keyword, you may use this ability:\n  -> Select one enemy unit if the selected unit is a unit within Engagement Range of the unit: roll one D6 for each friendly model in the unit that is a unit within Engagement Range of the selected unit: for each 3+, that unit suffers 1 mortal wound."
+      "text": "Each time a friendly unit ends a Charge move (the triggering unit must have GRAVIS), you may use this ability:\n  -> Select one enemy unit if the selected unit is a unit within Engagement Range of the unit: roll one D6 for each friendly model in the unit that is a unit within Engagement Range of the selected unit: for each 3+, that unit suffers 1 mortal wound."
     }
   },
   {

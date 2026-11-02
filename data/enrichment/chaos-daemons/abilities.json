@@ -671,57 +671,57 @@
           }
         }
       },
-      "applies": {
-        "to": "attackers-of-target",
-        "effect": {
-          "type": "sequence",
-          "steps": [
-            {
-              "type": "conditional",
-              "condition": {
-                "type": "attack-is",
-                "parameters": {
-                  "attack_type": "melee"
-                }
-              },
-              "effect": {
-                "type": "roll-modifier",
-                "target": {
-                  "owner": "friendly",
-                  "all_of": [
-                    "LEGIONES DAEMONICA",
-                    "SLAANESH"
-                  ],
-                  "level": "model"
-                },
-                "modifier": {
-                  "roll": "wound",
-                  "operation": "add",
-                  "value": 1
-                }
+      "applies": [
+        {
+          "to": "attackers-of-target",
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "attack-is",
+              "parameters": {
+                "attack_type": "melee"
               }
             },
-            {
-              "type": "conditional",
-              "condition": {
-                "type": "attack-is",
-                "parameters": {
-                  "attack_type": "melee"
-                }
+            "effect": {
+              "type": "roll-modifier",
+              "target": {
+                "owner": "friendly",
+                "all_of": [
+                  "LEGIONES DAEMONICA",
+                  "SLAANESH"
+                ],
+                "level": "model"
               },
-              "effect": {
-                "type": "roll-modifier",
-                "target": "selected-unit",
-                "modifier": {
-                  "roll": "wound",
-                  "operation": "subtract",
-                  "value": 1
-                }
+              "modifier": {
+                "roll": "wound",
+                "operation": "add",
+                "value": 1
               }
             }
-          ]
+          }
+        },
+        {
+          "to": "target",
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "attack-is",
+              "parameters": {
+                "attack_type": "melee"
+              }
+            },
+            "effect": {
+              "type": "roll-modifier",
+              "target": "selected-unit",
+              "modifier": {
+                "roll": "wound",
+                "operation": "subtract",
+                "value": 1
+              }
+            }
+          }
         }
-      },
+      ],
       "duration": "phase"
     },
     "scope": {
@@ -7491,32 +7491,18 @@
     "scope": {
       "duration": "phase"
     },
-    "trigger": [
-      {
-        "event": "selected",
-        "subject": {
-          "owner": "enemy"
-        },
-        "filter": {
-          "move_types": [
-            "fall-back"
-          ],
-          "to": "move"
-        }
+    "trigger": {
+      "event": "selected",
+      "subject": {
+        "owner": "enemy"
       },
-      {
-        "event": "selected",
-        "filter": {
-          "move_types": [
-            "fall-back"
-          ],
-          "to": "move"
-        },
-        "subject": {
-          "owner": "enemy"
-        }
+      "filter": {
+        "move_types": [
+          "fall-back"
+        ],
+        "to": "move"
       }
-    ]
+    }
   },
   {
     "ability_id": "carnival-of-excess-lords-of-the-warp-chaos-daemons",

@@ -4461,134 +4461,140 @@
     "detachment_id": "warpbane-task-force",
     "ability_type": "stratagem",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "matches",
-        "parameters": {
-          "subject": "event-subject",
+      "type": "ability-part",
+      "trigger": [
+        {
+          "event": "set-up",
+          "subject": {
+            "owner": "enemy"
+          }
+        },
+        {
+          "event": "move-ended",
+          "subject": {
+            "owner": "enemy"
+          },
           "filter": {
-            "within": {
-              "of": "this-unit",
-              "range": {
-                "inches": 6
-              }
-            }
+            "move_types": [
+              "normal",
+              "advance",
+              "fall-back"
+            ]
           }
         }
-      },
+      ],
       "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "conditional",
-            "condition": {
-              "type": "in-region",
-              "parameters": {
-                "subject": "this-unit",
-                "region": {
-                  "rule_region": {
-                    "region_id": "hallowed-ground",
-                    "owner_faction": "grey-knights"
-                  }
-                },
-                "wholly": true
+        "type": "conditional",
+        "condition": {
+          "type": "matches",
+          "parameters": {
+            "subject": "event-subject",
+            "filter": {
+              "within": {
+                "of": "this-unit",
+                "range": {
+                  "inches": 6
+                }
               }
-            },
-            "effect": {
-              "type": "dice-gated",
-              "dice": "D6+2",
-              "threshold": 4,
-              "comparison": "gte",
-              "on_success": {
-                "type": "mortal-wounds",
-                "target": "event-subject",
-                "modifier": {
-                  "count": "D3"
-                }
-              },
-              "on_fail": null
-            }
-          },
-          {
-            "type": "conditional",
-            "condition": {
-              "operator": "not",
-              "operands": [
-                {
-                  "type": "in-region",
-                  "parameters": {
-                    "subject": "this-unit",
-                    "region": {
-                      "rule_region": {
-                        "region_id": "hallowed-ground",
-                        "owner_faction": "grey-knights"
-                      }
-                    },
-                    "wholly": true
-                  }
-                }
-              ]
-            },
-            "effect": {
-              "type": "dice-gated",
-              "dice": "D6",
-              "threshold": 4,
-              "comparison": "gte",
-              "on_success": {
-                "type": "mortal-wounds",
-                "target": "event-subject",
-                "modifier": {
-                  "count": "D3"
-                }
-              },
-              "on_fail": null
             }
           }
-        ]
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "in-region",
+                "parameters": {
+                  "subject": "this-unit",
+                  "region": {
+                    "rule_region": {
+                      "region_id": "hallowed-ground",
+                      "owner_faction": "grey-knights"
+                    }
+                  },
+                  "wholly": true
+                }
+              },
+              "effect": {
+                "type": "dice-gated",
+                "dice": "D6+2",
+                "threshold": 4,
+                "comparison": "gte",
+                "on_success": {
+                  "type": "mortal-wounds",
+                  "target": "event-subject",
+                  "modifier": {
+                    "count": "D3"
+                  }
+                },
+                "on_fail": null
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "in-region",
+                    "parameters": {
+                      "subject": "this-unit",
+                      "region": {
+                        "rule_region": {
+                          "region_id": "hallowed-ground",
+                          "owner_faction": "grey-knights"
+                        }
+                      },
+                      "wholly": true
+                    }
+                  }
+                ]
+              },
+              "effect": {
+                "type": "dice-gated",
+                "dice": "D6",
+                "threshold": 4,
+                "comparison": "gte",
+                "on_success": {
+                  "type": "mortal-wounds",
+                  "target": "event-subject",
+                  "modifier": {
+                    "count": "D3"
+                  }
+                },
+                "on_fail": null
+              }
+            }
+          ]
+        }
       }
     },
     "scope": {
       "duration": "phase"
     },
     "behavior": "reactive",
-    "trigger": [
-      {
-        "event": "phase-started",
-        "condition": {
-          "operator": "and",
-          "operands": [
-            {
-              "type": "phase-is",
-              "parameters": {
-                "phase": "movement"
-              }
-            },
-            {
-              "type": "player-turn-is",
-              "parameters": {
-                "turn": "opponent-turn"
-              }
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
             }
-          ]
-        }
-      },
-      {
-        "event": "set-up",
-        "subject": {
-          "owner": "enemy"
-        }
-      },
-      {
-        "event": "move-ended",
-        "filter": {
-          "move_types": [
-            "normal",
-            "advance",
-            "fall-back"
-          ]
-        }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
       }
-    ],
+    },
     "source_digest": "8c3926ea2eadc43ca44da8e0418bbe16dafaa0afa21ee6f552a67cae31de5c5b"
   },
   {
