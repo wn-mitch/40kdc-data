@@ -1,5 +1,5 @@
 import { createRequire } from "node:module";
-import { cpSync, mkdtempSync, mkdirSync, readFileSync, realpathSync, renameSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
+import { chmodSync, cpSync, mkdtempSync, mkdirSync, readFileSync, realpathSync, renameSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import type { DatabaseSync as DatabaseType } from "node:sqlite";
@@ -413,6 +413,30 @@ describe("Semantic authoring explicit publication", () => {
     }
   }, 120_000);
 
+  it("keeps a publishing marker it cannot observe, with the read error, and recovers it once the destination reads", async () => {
+    const fixture = buildFixture();
+    try {
+      const preview = await preparePublication(fixture.db, { faction_id: factionId, entry_ids: [fixture.selectedEntryId] });
+      const marker = cloneAsPublishing(fixture.db, preview.batch_id, "pub-unreadable");
+      writeFileSync(fixture.abilitiesFile, String(marker.manifest.after_text));
+      chmodSync(fixture.abilitiesFile, 0o000);
+      let first: ReturnType<typeof reconcilePublicationBatches>;
+      try {
+        first = reconcilePublicationBatches(fixture.db, "pub-unreadable");
+      } finally {
+        chmodSync(fixture.abilitiesFile, 0o644);
+      }
+      expect(first).toEqual({ recovered: [], failed: [], unobserved: [{ batch_id: "pub-unreadable", errors: [expect.stringMatching(/EACCES|permission denied/iu)] }] });
+      const stored = fixture.db.prepare("SELECT state, manifest_json FROM publication_batches WHERE id = 'pub-unreadable'").get() as { state: string; manifest_json: string };
+      expect(stored.state).toBe("publishing");
+      expect(JSON.parse(stored.manifest_json).unobserved.errors).toEqual(first.unobserved[0]!.errors);
+      // The same marker reconciles once the destination can be read.
+      expect(reconcilePublicationBatches(fixture.db, "pub-unreadable").recovered).toEqual([expect.objectContaining({ batch_id: "pub-unreadable", state: "published", recovered: true })]);
+    } finally {
+      fixture.db.close();
+    }
+  }, 120_000);
+
   it("recovers durable publishing markers only from observed before/after hashes and reports external edits as conflicts", async () => {
     const fixture = buildFixture();
     try {
@@ -423,7 +447,7 @@ describe("Semantic authoring explicit publication", () => {
       });
 
       cloneAsPublishing(fixture.db, preview.batch_id, "pub-before-rename");
-      expect(reconcilePublicationBatches(fixture.db, "pub-before-rename")).toEqual({ recovered: [], failed: ["pub-before-rename"] });
+      expect(reconcilePublicationBatches(fixture.db, "pub-before-rename")).toEqual({ recovered: [], failed: ["pub-before-rename"], unobserved: [] });
       expect(listPublications(fixture.db).items.find((item) => item.batch_id === "pub-before-rename")).toMatchObject({
         state: "failed",
         failure: { reason_code: "NO_WRITE_OBSERVED" },
@@ -435,7 +459,7 @@ describe("Semantic authoring explicit publication", () => {
       const otherRoot = cloneAsPublishing(fixture.db, preview.batch_id, "pub-other-root");
       writeFileSync(join(otherDataRoot, "enrichment", factionId, "abilities.json"), String(otherRoot.manifest.after_text));
       process.env.SEMANTIC_AUTHORING_DATA_ROOT = otherDataRoot;
-      expect(reconcilePublicationBatches(fixture.db, "pub-other-root")).toEqual({ recovered: [], failed: ["pub-other-root"] });
+      expect(reconcilePublicationBatches(fixture.db, "pub-other-root")).toEqual({ recovered: [], failed: ["pub-other-root"], unobserved: [] });
       expect(listPublications(fixture.db).items.find((item) => item.batch_id === "pub-other-root")).toMatchObject({
         state: "failed",
         failure: { reason_code: "NO_WRITE_OBSERVED" },
@@ -454,11 +478,12 @@ describe("Semantic authoring explicit publication", () => {
       const recovered = reconcilePublicationBatches(fixture.db, "pub-after-rename");
       expect(recovered.recovered[0]).toMatchObject({ batch_id: "pub-after-rename", state: "published", recovered: true });
       expect(recovered.failed).toEqual([]);
+      expect(recovered.unobserved).toEqual([]);
 
       writeFileSync(fixture.abilitiesFile, originalText);
       cloneAsPublishing(fixture.db, preview.batch_id, "pub-external-conflict");
       writeFileSync(fixture.abilitiesFile, `${originalText} `);
-      expect(reconcilePublicationBatches(fixture.db, "pub-external-conflict")).toEqual({ recovered: [], failed: ["pub-external-conflict"] });
+      expect(reconcilePublicationBatches(fixture.db, "pub-external-conflict")).toEqual({ recovered: [], failed: ["pub-external-conflict"], unobserved: [] });
       expect(listPublications(fixture.db).items.find((item) => item.batch_id === "pub-external-conflict")).toMatchObject({
         state: "failed",
         failure: { reason_code: "EXTERNAL_CHANGE_CONFLICT" },

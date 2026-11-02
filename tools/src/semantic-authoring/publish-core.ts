@@ -132,12 +132,19 @@ export function coreReplicaManifests(projection: CoreProjection | null): CoreMan
   return (projection?.replicas ?? []).map((replica) => coreManifest(replica)!);
 }
 
-/** What the core file holds now, for reconciling an interrupted publication. */
-export function observedCoreHash(manifest: CoreManifest | undefined): string | null {
-  if (!manifest) return null;
+/** The hash an observation records for a file that does not exist. */
+export const ABSENT_FILE = "absent";
+
+/**
+ * What a publication destination holds now, for reconciling an interrupted publication: the hash
+ * of its bytes, {@link ABSENT_FILE} when it does not exist, or the error that kept it from being
+ * read. An error is not an observation; the caller leaves the batch to be reconciled again.
+ */
+export function observeFile(path: string): { hash: string } | { error: string } {
   try {
-    return sha256(readFileSync(manifest.destination));
+    return { hash: sha256(readFileSync(path)) };
   } catch (error) {
-    return hashJson({ destination_unavailable: error instanceof Error ? error.message : String(error) });
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") return { hash: ABSENT_FILE };
+    return { error: `${path}: ${error instanceof Error ? error.message : String(error)}` };
   }
 }

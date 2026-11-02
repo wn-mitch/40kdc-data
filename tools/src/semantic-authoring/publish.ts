@@ -12,7 +12,7 @@ import { bumpWorkbenchRevision, withTransaction } from "./db.js";
 import { gameVersionForDataVersion } from "../mfm/dataslate.js";
 import { fullyDescribed } from "./leaf-view.js";
 import { PublicationError, projectRecords, record, relativeAbilityPath, stagedWrites, type PublicationDiff, type PublicationStamp } from "./publication-projection.js";
-import { coreManifest, coreReplicaManifests, coreStratagemFile, observedCoreHash, type CoreManifest, type CoreProjection } from "./publish-core.js";
+import { coreManifest, coreReplicaManifests, coreStratagemFile, observeFile, type CoreManifest, type CoreProjection } from "./publish-core.js";
 import { loadSourceRecords, type SourceRecord } from "./source.js";
 
 ;
@@ -65,6 +65,8 @@ type PublicationManifest = {
   core_replicas?: CoreManifest[];
   receipt?: PublicationReceiptData;
   failure?: PublicationFailureData;
+  /** Why the last reconciliation could not observe the destinations; the batch stays publishing. */
+  unobserved?: { observed_at: string; errors: string[] };
 };
 
 type PublicationProjection = {
@@ -321,6 +323,7 @@ function loadBatch(db: DatabaseSync, batchId: string): { preview_hash: string; f
   const previewManifest = { ...manifest };
   delete previewManifest.receipt;
   delete previewManifest.failure;
+  delete previewManifest.unobserved;
   if (hashJson(previewManifest) !== row.preview_hash) throw new PublicationError(409, "Publication manifest no longer matches its preview hash.");
   return { preview_hash: row.preview_hash, faction_id: row.faction_id, state: row.state, manifest };
 }
@@ -376,7 +379,7 @@ function finishPublishingBatch(db: DatabaseSync, batchId: string, observedHash: 
 }
 
 /** Reconcile durable publishing markers against the only authoritative observation: destination bytes. */
-export function reconcilePublicationBatches(db: DatabaseSync, batchId?: string): { recovered: PublicationReceipt[]; failed: string[] } {
+export function reconcilePublicationBatches(db: DatabaseSync, batchId?: string): { recovered: PublicationReceipt[]; failed: string[]; unobserved: Array<{ batch_id: string; errors: string[] }> } {
   const rows = db.prepare(`
     SELECT id, manifest_json FROM publication_batches
     WHERE state = 'publishing' ${batchId === undefined ? "" : "AND id = ?"}
@@ -384,22 +387,31 @@ export function reconcilePublicationBatches(db: DatabaseSync, batchId?: string):
   `).all(...(batchId === undefined ? [] : [batchId])) as Array<{ id: string; manifest_json: string }>;
   const recovered: PublicationReceipt[] = [];
   const failed: string[] = [];
+  const unobserved: Array<{ batch_id: string; errors: string[] }> = [];
   for (const row of rows) {
     const manifest = parseManifest(row.manifest_json);
-    let observedHash: string;
+    let main: ReturnType<typeof observeFile>;
     try {
-      const file = manifestFile(manifest);
-      observedHash = sha256Bytes(readFileSync(file));
+      main = observeFile(manifestFile(manifest));
     } catch (error) {
-      observedHash = hashJson({
-        destination_unavailable: error instanceof Error ? error.message : String(error),
-      });
+      main = { error: error instanceof Error ? error.message : String(error) };
     }
-    const receipt = withTransaction(db, () => finishPublishingBatch(db, row.id, observedHash, observedCoreHash(manifest.core), (manifest.core_replicas ?? []).map(observedCoreHash)));
+    const core = manifest.core ? observeFile(manifest.core.destination) : null;
+    const replicas = (manifest.core_replicas ?? []).map((replica) => observeFile(replica.destination));
+    const errors = [main, core, ...replicas].flatMap((observation) => (observation && "error" in observation ? [observation.error] : []));
+    if (errors.length > 0) {
+      // Unread destinations prove nothing either way: keep the marker and the reason, and retry later.
+      withTransaction(db, () => db.prepare("UPDATE publication_batches SET manifest_json = json_set(manifest_json, '$.unobserved', json(?)), updated_at = ? WHERE id = ? AND state = 'publishing'")
+        .run(JSON.stringify({ observed_at: new Date().toISOString(), errors }), new Date().toISOString(), row.id));
+      unobserved.push({ batch_id: row.id, errors });
+      continue;
+    }
+    const hashOf = (observation: ReturnType<typeof observeFile>) => (observation as { hash: string }).hash;
+    const receipt = withTransaction(db, () => finishPublishingBatch(db, row.id, hashOf(main), core && hashOf(core), replicas.map(hashOf)));
     if (receipt) recovered.push(receipt);
     else failed.push(row.id);
   }
-  return { recovered, failed };
+  return { recovered, failed, unobserved };
 }
 
 /** Validate and persist a no-write publication preview for one faction file. */
@@ -507,10 +519,11 @@ export async function publishPublication(
       prepared.commit();
       const actualAfterHash = sha256Bytes(readFileSync(projection.file));
       if (actualAfterHash !== batch.manifest.after_hash) throw new PublicationError(409, "Publication destination does not match the validated staged bytes after commit.");
-      if (batch.manifest.core && observedCoreHash(batch.manifest.core) !== batch.manifest.core.after_hash) {
+      const holds = (manifest: CoreManifest) => { const observed = observeFile(manifest.destination); return "hash" in observed && observed.hash === manifest.after_hash; };
+      if (batch.manifest.core && !holds(batch.manifest.core)) {
         throw new PublicationError(409, "Core stratagems.json does not match the validated staged bytes after commit.");
       }
-      if ((batch.manifest.core_replicas ?? []).some((replica) => observedCoreHash(replica) !== replica.after_hash)) {
+      if ((batch.manifest.core_replicas ?? []).some((replica) => !holds(replica))) {
         throw new PublicationError(409, "A replicated core stratagems.json does not match the validated staged bytes after commit.");
       }
       const receipt: PublicationReceiptData = {
