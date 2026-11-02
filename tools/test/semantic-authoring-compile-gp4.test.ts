@@ -104,12 +104,37 @@ describe("a Stratagem's effect moment is a part under its WHEN moment (compile.t
     expect(mechanics.effect).toMatchObject({ type: "ability-part", trigger: { event: "attacks-resolved", subject: { owner: "enemy" } }, effect: { type: "permission" } });
   });
 
-  it("keeps a moment that restates the WHEN moment beside it", () => {
+  it("reads a moment that restates the WHEN moment as the WHEN moment, not a second trigger", () => {
     const again = "Your opponent's Shooting phase, just after a KEYA model from your army is destroyed.\nOne KEYB unit from your army.\nWhen a KEYA model in your unit is destroyed, your unit can shoot as if it were your Shooting phase.";
     const restated: Piece[] = [...pieces.slice(0, 6), ["When a KEYA model in your unit is destroyed", "event", { kind: "model-destroyed" }, "EFFECT"], pieces[7]!];
     const mechanics = mechanicsOf(again, restated);
-    expect(Array.isArray(mechanics.trigger)).toBe(true);
+    expect(Array.isArray(mechanics.trigger)).toBe(false);
+    expect(mechanics.trigger).toMatchObject({ event: "model-destroyed", object: { owner: "friendly", all_of: ["KEYA"] } });
     expect(mechanics.effect.type).toBe("permission");
+  });
+
+  const fallBack = (whenOwner: Record<string, unknown>, again: Piece[]): [string, Piece[]] => [
+    "Your opponent's Movement phase, when a unit is selected to fall back.\nOne KEYB unit from your army.\nWhen an enemy unit is selected to fall back, it suffers 1 mortal wound.",
+    [
+      ["Your opponent's Movement phase", "use-window", { your_phases: [], opponent_phases: ["movement"], either_phases: [] }, "WHEN"],
+      ["when a unit is selected to fall back", "event", { kind: "selected", move_types: ["fall-back"], to: "move", ...whenOwner }, "WHEN"],
+      ...pieces.slice(3, 6),
+      ...again,
+      ["it suffers 1 mortal wound", "mortal-wounds", { amount: 1, recipient: "event-subject" }, "EFFECT"],
+    ],
+  ];
+
+  it("reads a restated moment's enemy unit-filter as the WHEN moment's enemy owner", () => {
+    const [text, leaves] = fallBack({ owner: "enemy" }, [
+      ["enemy unit", "unit-filter", { side: "enemy" }, "EFFECT"],
+      ["is selected to fall back", "event", { kind: "selected", move_types: ["fall-back"], to: "move" }, "EFFECT"],
+    ]);
+    expect(mechanicsOf(text, leaves).trigger).toEqual({ event: "selected", subject: { owner: "enemy" }, filter: { move_types: ["fall-back"], to: "move" } });
+  });
+
+  it("refuses a restated moment that names a unit its WHEN moment does not", () => {
+    const [text, leaves] = fallBack({}, [["When an enemy unit is selected", "event", { kind: "selected", owner: "enemy", move_types: ["fall-back"], to: "move" }, "EFFECT"]]);
+    expect(errorsOf(text, leaves)).toContain("A moment in a Stratagem's effect restates its WHEN moment but names what the WHEN moment does not.");
   });
 
   it("reads the Stratagem's own use as the use its WHEN moment times, not a second trigger", () => {

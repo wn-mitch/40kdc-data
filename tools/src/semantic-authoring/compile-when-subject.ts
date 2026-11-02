@@ -1,6 +1,7 @@
 import { ATTACK_EVENTS } from "./compile-conditions.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { STRATAGEM_HEADER } from "./compile-segments.js";
+import { trigger, triggerLeaves } from "./compile-triggers.js";
 
 /** WHEN moments that name an enemy unit as the one acting (compile-triggers.ts: the subject owner is the enemy). */
 const ENEMY_ACTING_MOMENTS = new Set(["enemy-selected-targets", "enemy-ended-move", "enemy-has-shot", "enemy-declared-charge"]);
@@ -65,7 +66,7 @@ const STRATAGEM_LEAVES = new Set([...STRATAGEM_HEADER, "triggering-target", "tar
  * Stratagem that has a WHEN moment before them and no moment after its first effect. A record whose later moments
  * start parts of their own keeps the old reading for every moment. A moment that restates a WHEN moment ("when a
  * unit is selected to Fall Back" in both) or is the Stratagem's own use ("each time you use this Stratagem") is
- * the WHEN moment again and stays beside it.
+ * the WHEN moment again: it is not nested, and no trigger of its own either (repeatsWhenMoment).
  */
 export function nestedWhenMoments(list: readonly CompileLeaf[]): Set<number> {
   const nested = new Set<number>();
@@ -75,13 +76,45 @@ export function nestedWhenMoments(list: readonly CompileLeaf[]): Set<number> {
   const opening = list.findIndex((leaf) => moment(leaf) && leaf.fragment === "WHEN");
   if (first === -1 || opening === -1) return nested;
   // The same moment printed again in the effect text, or a use of the Stratagem itself, is the WHEN moment, not a later one.
-  const key = (leaf: CompileLeaf) => JSON.stringify([leaf.parameters.kind, leaf.parameters.to, leaf.parameters.activity, leaf.parameters.move_types, leaf.parameters.action_kind]);
   const restated = (leaf: CompileLeaf) => (leaf.parameters.kind === "used" && leaf.parameters.activity === "stratagem")
-    || list.some((other) => moment(other) && other.fragment === "WHEN" && key(other) === key(leaf));
+    || list.some((other) => moment(other) && other.fragment === "WHEN" && momentKey(other) === momentKey(leaf));
   const own = list.flatMap((leaf, index) => moment(leaf) && leaf.fragment !== "WHEN" && index > opening && !restated(leaf) ? [index] : []);
   if (own.some((index) => index > first)) return nested;
   // A set-up moment beside another moment has its own decided refusal and pinned readings (compile.ts, compile-durations tests).
   if (own.some((index) => list[index]!.parameters.kind === "set-up")) return nested;
   for (const index of own) nested.add(index);
   return nested;
+}
+
+/** What makes two event leaves the same moment, whoever they name as acting. */
+const momentKey = (leaf: CompileLeaf) => JSON.stringify([leaf.parameters.kind, leaf.parameters.to, leaf.parameters.activity, leaf.parameters.move_types, leaf.parameters.action_kind]);
+
+/**
+ * Whether a moment in a Stratagem card's EFFECT (only a Stratagem has that fragment) is the moment its WHEN already
+ * times, so no trigger of its own: the Stratagem's own use ("each time you use this Stratagem": a used event that
+ * names no Stratagem, user or unit), or a WHEN moment printed again naming nothing that WHEN moment lacks ("when your
+ * unit ends a charge move" under a WHEN that names that move). In its WHEN, the same event is a moment of its own.
+ * Throws for a restatement that names what its WHEN moment does not: as a second trigger beside the WHEN moment it
+ * would fire on moments the WHEN moment never allows.
+ */
+export function repeatsWhenMoment(leaf: CompileLeaf, list: readonly CompileLeaf[]): boolean {
+  const p = leaf.parameters;
+  if (leaf.family_id !== "event" || leaf.fragment !== "EFFECT" || ATTACK_EVENTS.has(String(p.kind))) return false;
+  if (p.kind === "used" && p.activity === "stratagem") return ["id", "ids", "owner", "subject", "object"].every((key) => p[key] === undefined);
+  const whens = list.filter((other) => other.family_id === "event" && other.fragment === "WHEN" && momentKey(other) === momentKey(leaf));
+  if (whens.length === 0) return false;
+  // Compared as triggers: "an enemy unit" printed beside the moment lowers to the same subject as an enemy owner on it,
+  // and "a model in this unit" is the shorthand of a model that is a member of this unit (compile-conditions.ts).
+  const moments = (event: CompileLeaf) => triggerLeaves(event).map(trigger)
+    .map((node) => node.object === "model-in-this-unit" ? { ...node, object: { level: "model", member_of: "this-unit" } } : node);
+  const whenMoments = whens.flatMap(moments);
+  if (moments(leaf).every((again) => whenMoments.some((when) => within(again, when)))) return true;
+  throw new CompileError("A moment in a Stratagem's effect restates its WHEN moment but names what the WHEN moment does not.");
+}
+
+/** Whether every value `part` names is the same in `whole`. */
+function within(part: unknown, whole: unknown): boolean {
+  if (part === null || typeof part !== "object" || Array.isArray(part)) return JSON.stringify(part) === JSON.stringify(whole);
+  if (whole === null || typeof whole !== "object" || Array.isArray(whole)) return false;
+  return Object.entries(part).every(([key, value]) => within(value, (whole as Record<string, unknown>)[key]));
 }

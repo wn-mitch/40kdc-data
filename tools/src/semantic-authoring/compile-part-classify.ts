@@ -3,7 +3,7 @@ import { retargetMenu } from "./compile-activation.js";
 import { AURA_RECIPIENT, FILTERED_UNITS } from "./compile-antecedent.js";
 import { checkAbilityUsedWindows, namedAbilityChecks } from "./compile-named-ability.js";
 import { selectedUnitMoments } from "./compile-selection-moment.js";
-import { nestedWhenMoments } from "./compile-when-subject.js";
+import { nestedWhenMoments, repeatsWhenMoment } from "./compile-when-subject.js";
 import { bandMoments } from "./compile-band-moment.js";
 import { addsAttackGate, attackTargetBinding } from "./compile-attack-backref.js";
 import { trailingTestCondition } from "./compile-preceding-roll.js";
@@ -54,16 +54,6 @@ export type PartContainers = {
 
 /** Everything one part's leaves say once each is classified: its gates, moments, durations, usages, selections and wrappers. */
 export type PartFrame = ReturnType<typeof classifyLeaves>;
-
-/**
- * A used event in a Stratagem card's EFFECT (only a Stratagem has that fragment) that names no
- * Stratagem, user or unit: the Stratagem's own use. In its WHEN the same event is a moment of its own.
- */
-function namesOwnStratagemUse(leaf: CompileLeaf): boolean {
-  const p = leaf.parameters;
-  return leaf.family_id === "event" && leaf.fragment === "EFFECT" && p.kind === "used" && p.activity === "stratagem"
-    && ["id", "ids", "owner", "subject", "object"].every((key) => p[key] === undefined);
-}
 
 /**
  * Sorts each leaf of a part by what it is: a condition becomes a gate of the scope it binds to, an
@@ -419,9 +409,9 @@ export function classifyLeaves(given: CompileLeaf[], places: Placement[], contai
             errors.push("A dice-roll per_model counts every model of its unit, but its wording narrows the models; author the bare quantifier (for-each-unit-select, a model unit-filter, membership, and the narrowing condition).");
           }
         }
-        // "Each time you use this Stratagem": the use itself, which the Stratagem's WHEN already times. It anchors the
-        // use's optional spend (compile-optional-cost.ts) and is no trigger of its own.
-        else if (namesOwnStratagemUse(leaf)) { /* the use itself */ }
+        // "Each time you use this Stratagem", or the WHEN moment printed again: the moment the Stratagem's WHEN already
+        // times. The use anchors its optional spend (compile-optional-cost.ts); neither is a trigger of its own.
+        else if (attempt(() => repeatsWhenMoment(leaf, list)) !== false) { /* the WHEN moment again, or refused */ }
         else if (!(leaf.family_id === "event" && ATTACK_EVENTS.has(String(leaf.parameters.kind)))) {
           // A list of roll kinds is one trigger per kind (compile-triggers.ts triggerLeaves).
           // A Stratagem's effect moment is a part under its WHEN moment (compile-when-subject.ts), not another trigger.
