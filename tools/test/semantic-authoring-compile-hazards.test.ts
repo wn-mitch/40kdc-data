@@ -191,3 +191,27 @@ describe("a moment under a use with no effect between them", () => {
     expect(errors).toEqual([expect.stringMatching(/waits on the use an earlier moment offers/u)]);
   });
 });
+
+describe("a Stratagem whose EFFECT window holds moments of its own", () => {
+  it("nests the window's alternative moments under the WHEN moment, each the enemy unit's, for the phase", () => {
+    const text = "WHEN: Start of your opponent's Movement phase.\nTARGET: One FIXTURE INFANTRY unit from your army.\nEFFECT: Until the end of the phase, each time an enemy unit is set up or ends a Normal move within 6\" of your unit, that enemy unit suffers 1 mortal wound.";
+    const mechanics = compiled(text,
+      ["Start of your opponent's Movement phase", "event", { kind: "phase-start", phase: "movement", turn: "opponent" }, "WHEN"],
+      ["One", "stratagem-target", { count: "one" }, "TARGET"],
+      ["FIXTURE INFANTRY unit", "unit-filter", { side: "friendly", keywords: ["FIXTURE INFANTRY"] }, "TARGET"],
+      ["Until the end of the phase", "duration", PHASE, "EFFECT"],
+      ["enemy unit", "unit-filter", { side: "enemy" }, "EFFECT"],
+      ["is set up", "event", { kind: "set-up" }, "EFFECT"],
+      ["ends a Normal move", "event", { kind: "move-ended", move_types: ["normal"] }, "EFFECT"],
+      ["within 6\" of your unit", "unit-position", { kind: "within", inches: 6, of: "this-unit", subject: "event-subject", negated: false }, "EFFECT"],
+      ["that enemy unit suffers 1 mortal wound", "mortal-wounds", { recipient: "event-subject", count: "1" }, "EFFECT"]);
+    expect(Array.isArray(mechanics.trigger)).toBe(false);
+    expect(mechanics.trigger).toMatchObject({ event: "phase-started" });
+    expect(mechanics.scope.duration).toBe("phase");
+    expect(mechanics.effect).toMatchObject({ type: "ability-part", trigger: [
+      { event: "set-up", subject: { owner: "enemy" } },
+      { event: "move-ended", subject: { owner: "enemy" }, filter: { move_types: ["normal"] } },
+    ] });
+    expect(mechanics.effect.effect).toMatchObject({ type: "conditional", effect: { type: "mortal-wounds", target: "event-subject" } });
+  });
+});

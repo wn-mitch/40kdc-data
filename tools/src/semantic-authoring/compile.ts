@@ -43,7 +43,7 @@ import { bindUsedSelections } from "./compile-used-selection.js";
 import { bindSelectionRefs } from "./compile-named-selections.js";
 import { bindThatMany } from "./compile-that-many.js";
 import { foldRollFaces } from "./compile-roll-faces.js";
-import { compileWindowMoment } from "./compile-window-moment.js";
+import { compileStratagemWindowMoments, compileWindowMoment } from "./compile-window-moment.js";
 import { foldDelayedMoments } from "./compile-delayed-moment.js";
 import { foldRitualTest } from "./compile-ritual-test.js";
 import { foldEmergencyDisembark } from "./compile-emergency-disembark.js";
@@ -345,6 +345,18 @@ function compileRecord(given: readonly CompileLeaf[], sourceText?: string, optio
   if (reactions !== null) return reactions;
   const oath = compileOathRecord(leaves, sourceText, (group) => compilePart(group, sourceText, options));
   if (oath !== null) return oath;
+  const split = splitRecord(leaves, sourceText, options, oneRule);
+  // A Stratagem whose WHEN moment came out as one alternative beside its EFFECT window's own moments: those moments
+  // fire only inside the window it opens, so they nest under the WHEN moment (compile-window-moment.ts).
+  if (split.ok && Array.isArray(split.mechanics.trigger)) {
+    const nested = compileStratagemWindowMoments(ordered(leaves), sourceText, (group) => compilePart(group, sourceText, options));
+    if (nested !== null) return nested;
+  }
+  return split;
+}
+
+/** The record's parts: a moment within an earlier moment's window, independent sentences, or one part. */
+function splitRecord(leaves: CompileLeaf[], sourceText: string | undefined, options: CompileOptions, oneRule: boolean): Compiled {
   // A moment printed within an earlier moment's duration is a part on that window (compile-window-moment.ts).
   const window = compileWindowMoment(ordered(leaves), sourceText, (group) => compilePart(group, sourceText, options));
   if (window !== null) return window;
