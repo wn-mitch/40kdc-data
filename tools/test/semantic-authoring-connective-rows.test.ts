@@ -168,6 +168,69 @@ describe("reviewed connective rows", () => {
   });
 });
 
+describe("duplicate propagation of connectives", () => {
+  const span = () => bytes("If it does");
+  const connectivesOn = (db: DatabaseSync, id: number) => db.prepare(`
+    SELECT proposals.status, proposals.reason_json FROM proposals JOIN source_spans ON source_spans.id = proposals.span_id
+    WHERE proposals.role = 'CONNECTIVE' AND source_spans.ability_version_id = ? ORDER BY proposals.id
+  `).all(id) as Array<{ status: string; reason_json: string }>;
+  const connectiveOn = (db: DatabaseSync, id: number, text: string, status: string, reason: Record<string, unknown>) => {
+    const { start_byte, end_byte, exact_text } = bytes(text);
+    const spanId = insertSpan(db, id, "RAW_TEXT", start_byte, end_byte, exact_text);
+    db.prepare("INSERT INTO proposals (span_id, fingerprint_id, role, origin, model_run_id, status, reason_json, score, created_at) VALUES (?, NULL, 'CONNECTIVE', 'fixture', NULL, ?, ?, NULL, ?)")
+      .run(spanId, status, JSON.stringify(reason), new Date().toISOString());
+  };
+
+  it("does not copy a connective onto a record where it was rejected, and reports the block", () => {
+    const { db, twin } = fixture("condition-of");
+    try {
+      connectiveOn(db, twin, "If it does", "rejected", {});
+      const report = propagateDuplicateTexts(db, { dryRun: false });
+      expect(report.connectives.planned).toBe(0);
+      expect(report.blocked).toContainEqual({ ability_version_id: twin, fragment: "RAW_TEXT", ...pick(span()), reason: "REJECTED_HERE" });
+      expect(connectivesOn(db, twin).map((row) => row.status)).toEqual(["rejected"]);
+    } finally {
+      db.close();
+    }
+  });
+
+  it("does not copy over a connective the target decided on other bytes", () => {
+    const { db, twin } = fixture("condition-of");
+    try {
+      connectiveOn(db, twin, "If it does,", "accepted", { connective_span: true });
+      const report = propagateDuplicateTexts(db, { dryRun: false });
+      expect(report.connectives.planned).toBe(0);
+      expect(report.blocked).toContainEqual({ ability_version_id: twin, fragment: "RAW_TEXT", ...pick(span()), reason: "TRUSTED_HERE" });
+    } finally {
+      db.close();
+    }
+  });
+
+  it("copies nothing when two records of one text relate the connective differently, and copies when they agree", () => {
+    for (const [relation, expected] of [["coexists-with", "SOURCES_DISAGREE"], ["condition-of", null]] as const) {
+      const { db, twin } = fixture("condition-of");
+      try {
+        const third = addAbility(db, "fade-step-third");
+        connectiveOn(db, twin, "If it does", "accepted", { connective_span: true, reviewed_relation: relation });
+        const report = propagateDuplicateTexts(db, { dryRun: false });
+        const blockedThird = report.blocked.filter((block) => block.ability_version_id === third).map((block) => block.reason);
+        if (expected) {
+          expect(blockedThird).toEqual([expected]);
+          expect(connectivesOn(db, third)).toEqual([]);
+        } else {
+          expect(blockedThird).toEqual([]);
+          expect(connectivesOn(db, third)).toHaveLength(1);
+          expect(reviewedConnectives(db, [third])).toEqual([expect.objectContaining({ ability_version_id: third, relation: "condition-of" })]);
+        }
+      } finally {
+        db.close();
+      }
+    }
+  });
+});
+
+const pick = ({ start_byte, end_byte }: { start_byte: number; end_byte: number }) => ({ start_byte, end_byte });
+
 describe("compilation inputs hash", () => {
   it("is the leaves-only hash until a consumed connective is reviewed, and changes with that connective", () => {
     const { db, source, twin, proposal } = fixture(undefined);

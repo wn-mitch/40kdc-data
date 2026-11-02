@@ -15,7 +15,10 @@ import { stillAuthorized } from "./leaves.js";
  * Copies follow the same layering as a surface's derived rows: a copy promotes a machine row at
  * the same bytes and meaning, ignores other machine rows, never replaces a trusted row
  * (`TRUSTED_HERE`), and is not written where Will rejected that meaning (`REJECTED_HERE`) or
- * where two records of the same text were decided differently (`SOURCES_DISAGREE`).
+ * where two records of the same text were decided differently (`SOURCES_DISAGREE`). Connective
+ * copies follow the same rules: a connective rejected on the target, a target decision over the
+ * same bytes, or sources that place or relate the connective differently each block the copy and
+ * are reported, never resolved by picking one source.
  */
 
 type DuplicateBlock = { ability_version_id: number; fragment: string; start_byte: number; end_byte: number; reason: "TRUSTED_HERE" | "REJECTED_HERE" | "SOURCES_DISAGREE" };
@@ -118,10 +121,12 @@ function plan(db: DatabaseSync, groups: readonly number[][]): { leaves: PlannedL
       AND proposals.fingerprint_id = ? AND proposals.status IN ('rejected', 'corrected') LIMIT 1
   `);
   const accepted = db.prepare(`
-    SELECT proposals.id, proposals.status, json_extract(proposals.reason_json, '$.copied_from_proposal') IS NOT NULL AS copied, source_spans.ability_version_id, source_spans.fragment, source_spans.start_byte, source_spans.end_byte, source_spans.exact_text
+    SELECT proposals.id, proposals.status, json_extract(proposals.reason_json, '$.copied_from_proposal') IS NOT NULL AS copied,
+      json_extract(proposals.reason_json, '$.reviewed_relation') AS relation,
+      source_spans.ability_version_id, source_spans.fragment, source_spans.start_byte, source_spans.end_byte, source_spans.exact_text
     FROM proposals JOIN source_spans ON source_spans.id = proposals.span_id
-    WHERE proposals.role = 'CONNECTIVE' AND proposals.status IN ('accepted', 'pending') AND source_spans.ability_version_id IN (${idList(members)})
-  `).all() as Array<ConnectiveRow & { status: string; copied: number }>;
+    WHERE proposals.role = 'CONNECTIVE' AND proposals.status IN ('accepted', 'pending', 'rejected') AND source_spans.ability_version_id IN (${idList(members)})
+  `).all() as Array<ConnectiveRow & { status: string; copied: number; relation: string | null }>;
   const overlaps = (left: { fragment: string; start_byte: number; end_byte: number }, right: { fragment: string; start_byte: number; end_byte: number }) =>
     left.fragment === right.fragment && left.start_byte < right.end_byte && right.start_byte < left.end_byte;
   const same = (left: { fragment: string; start_byte: number; end_byte: number }, right: { fragment: string; start_byte: number; end_byte: number }) =>
@@ -150,15 +155,23 @@ function plan(db: DatabaseSync, groups: readonly number[][]): { leaves: PlannedL
         leaves.push({ source, target, promote: promote?.id ?? null });
       }
       const sourceConnectives = accepted.filter((row) => row.status === "accepted" && row.copied === 0 && row.ability_version_id !== target && group.includes(row.ability_version_id));
+      const decidedHere = accepted.filter((row) => row.ability_version_id === target && row.status !== "pending");
       const seen = new Set<string>();
       for (const source of sourceConnectives) {
         const key = `${source.fragment}:${source.start_byte}:${source.end_byte}`;
         if (seen.has(key)) continue;
         seen.add(key);
-        const mine = accepted.filter((row) => row.ability_version_id === target && same(row, source));
-        if (mine.some((row) => row.status === "accepted")) { already.connectives += 1; continue; }
-        if (trustedHere.some((row) => overlaps(row, source))) continue;
-        connectives.push({ source, target, pending: mine.find((row) => row.status === "pending")?.id ?? null });
+        const block = (reason: DuplicateBlock["reason"]) => blocked.push({ ability_version_id: target, fragment: source.fragment, start_byte: source.start_byte, end_byte: source.end_byte, reason });
+        if (decidedHere.some((row) => row.status === "accepted" && same(row, source))) { already.connectives += 1; continue; }
+        // Will rejected this connective on this record: the copy would overrule him.
+        if (decidedHere.some((row) => row.status === "rejected" && same(row, source))) { block("REJECTED_HERE"); continue; }
+        if (trustedHere.some((row) => overlaps(row, source)) || decidedHere.some((row) => overlaps(row, source))) { block("TRUSTED_HERE"); continue; }
+        // Two records of one text decided this connective differently (another span over the same
+        // bytes, or another relation): neither is copied.
+        const disagrees = sourceConnectives.some((other) => other !== source && overlaps(other, source) && (!same(other, source) || other.relation !== source.relation));
+        if (disagrees) { block("SOURCES_DISAGREE"); continue; }
+        const pending = accepted.find((row) => row.ability_version_id === target && row.status === "pending" && same(row, source));
+        connectives.push({ source, target, pending: pending?.id ?? null });
       }
     }
   }
