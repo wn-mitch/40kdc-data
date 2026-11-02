@@ -324,7 +324,15 @@ export async function runControlCommand(command: string | undefined, args: reado
     } catch {
       envelope.data_epoch = null;
     }
-    envelope.errors = [];
+    const data = envelope.data;
+    const rejected = command === "review-apply" && data && typeof data === "object" && "failed" in data && Array.isArray(data.failed)
+      ? data.failed as Array<{ error: string }>
+      : [];
+    envelope.errors = rejected.map(({ error }) => ({ code: "REVIEW_DECISIONS_REJECTED", message: error }));
+    if (rejected.length > 0) {
+      envelope.ok = false;
+      process.exitCode = 1;
+    }
   } catch (error) {
     envelope.ok = false;
     envelope.errors = [{ code: (error as { code?: string }).code ?? "FAILED", message: error instanceof Error ? error.message : String(error) }];

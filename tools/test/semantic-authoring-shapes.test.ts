@@ -124,14 +124,16 @@ describe("Semantic authoring shapes", () => {
     db.prepare("UPDATE semantic_families SET status = 'deprecated' WHERE id = 'reroll' AND version = 2").run();
     db.prepare("INSERT INTO annotation_batches (id, operation, reviewer, created_at) VALUES ('legacy', 'review', ?, ?)").run(REVIEWER, new Date().toISOString());
     db.prepare("UPDATE annotations SET status = 'superseded' WHERE id = ?").run(leaf.id);
-    db.prepare("INSERT INTO annotations (span_id, fingerprint_id, status, origin, authority_kind, confirmed_by, batch_id, created_at) VALUES (?, ?, 'active', 'manual', 'human', ?, 'legacy', ?)")
-      .run(leaf.span_id, legacy, REVIEWER, new Date().toISOString());
+    const legacyAnnotation = Number(db.prepare("INSERT INTO annotations (span_id, fingerprint_id, status, origin, authority_kind, confirmed_by, batch_id, created_at) VALUES (?, ?, 'active', 'manual', 'human', ?, 'legacy', ?)")
+      .run(leaf.span_id, legacy, REVIEWER, new Date().toISOString()).lastInsertRowid);
     await approveShape(db, { reviewer: REVIEWER, signature: SHAPE, ability_version_ids: [alpha] });
     const state = () => reviewMembers(db).find((row) => row.ability_version_id === alpha)!.state;
     expect(state()).toBe("approved");
 
     await new Promise((resolve) => setTimeout(resolve, 5));
     expect(upgradeFamilyVersions(db).migrated_annotations).toBe(1);
+    const stale = await applyChatReview(db, { reviewer: REVIEWER, decisions: [{ action: "retire", annotation_id: legacyAnnotation }] });
+    expect(stale.failed[0]?.error).toMatch(/No active annotation/u);
     expect(state()).toBe("stale");
     const carried = await applyChatReview(db, { reviewer: REVIEWER, decisions: [{ action: "carry-approvals", faction_id: "fixture" }] });
     expect(carried.applied).toEqual([expect.objectContaining({ carried: { checked: 1, carried: 1 } })]);
@@ -279,10 +281,42 @@ describe("Semantic authoring shapes", () => {
       { action: "reject-shape", signature: SHAPE, ability_version_ids: other },
       { action: "approve-shape", signature: "EFFECT(reroll)", ability_version_ids: other },
     ] });
-    expect(result.applied).toHaveLength(2);
+    expect(result.applied).toEqual([]);
+    expect(result.pilot_reviewed).toEqual([]);
     expect(result.failed).toEqual([expect.objectContaining({ error: expect.stringMatching(/no longer has this shape/u) })]);
+    expect(db.prepare("SELECT count(*) AS n FROM compiled_entries").get()).toEqual({ n: 0 });
+    expect(db.prepare("SELECT count(*) AS n FROM annotation_batches WHERE metadata_json LIKE '%shape-%'").get()).toEqual({ n: 0 });
+
+    const committed = await applyChatReview(db, { reviewer: REVIEWER, decisions: [
+      { action: "approve-shape", signature: SHAPE, ability_version_ids: rest },
+      { action: "reject-shape", signature: SHAPE, ability_version_ids: other },
+    ] });
+    expect(committed.failed).toEqual([]);
+    expect(committed.applied).toHaveLength(2);
     expect(db.prepare("SELECT status, count(*) AS n FROM compiled_entries GROUP BY status ORDER BY status").all()).toEqual([{ status: "approved", n: 2 }, { status: "rejected", n: 1 }]);
-    expect((db.prepare("SELECT DISTINCT reviewer FROM annotation_batches WHERE metadata_json LIKE '%shape-%'").all() as Array<{ reviewer: string }>).map((row) => row.reviewer)).toEqual([REVIEWER]);
+  });
+
+  it("rejects missing add targets, stale annotation IDs, and unknown pilot records atomically", async () => {
+    const annotation = db.prepare("SELECT id FROM annotations WHERE status = 'active' LIMIT 1").get() as { id: number };
+    const before = db.prepare("SELECT id, status FROM annotations ORDER BY id").all();
+    const batches = db.prepare("SELECT count(*) AS n FROM annotation_batches").get();
+    const missing = await applyChatReview(db, { reviewer: REVIEWER, decisions: [
+      { action: "retire", annotation_id: annotation.id },
+      { action: "add", exact_text: LEAD, family_id: "leading-unit", role: "CONDITION" },
+    ] });
+    expect(missing.failed[0]?.error).toMatch(/ability_version_id/u);
+    expect(db.prepare("SELECT id, status FROM annotations ORDER BY id").all()).toEqual(before);
+    expect(db.prepare("SELECT count(*) AS n FROM annotation_batches").get()).toEqual(batches);
+
+    const unknown = await applyChatReview(db, { reviewer: REVIEWER, decisions: [
+      { action: "retire", annotation_id: annotation.id },
+    ], pilot_reviewed: [99999999] });
+    expect(unknown.failed[0]?.error).toMatch(/No ability/u);
+    expect(db.prepare("SELECT id, status FROM annotations ORDER BY id").all()).toEqual(before);
+
+    expect((await applyChatReview(db, { reviewer: REVIEWER, decisions: [{ action: "retire", annotation_id: annotation.id }] })).failed).toEqual([]);
+    const stale = await applyChatReview(db, { reviewer: REVIEWER, decisions: [{ action: "retire", annotation_id: annotation.id }] });
+    expect(stale.failed[0]?.error).toMatch(/No active annotation/u);
   });
 
   it("lists each fully described source once with its shape and state", async () => {
@@ -314,5 +348,11 @@ describe("Semantic authoring shapes", () => {
     const outside = mkdtempSync(join(tmpdir(), "review-sheet-"));
     roots.push(outside);
     expect(writeReviewSheet(sheet, outside).decisions).toBe(join(outside, "fixture.decisions.json"));
+    const privateRoot = join(process.cwd(), "..", "_private");
+    const privateDir = mkdtempSync(join(privateRoot, "review-sheet-test-"));
+    roots.push(privateDir);
+    const relativeDir = join("_private", privateDir.split("/").at(-1)!);
+    expect(writeReviewSheet(sheet, relativeDir).decisions).toBe(join(privateDir, "fixture.decisions.json"));
+    expect(() => writeReviewSheet(sheet, "tools/src")).toThrow(/_private/u);
   });
 });

@@ -598,6 +598,7 @@ class Report:
     cases_run: int = 0
     diffs: list[Diff] = field(default_factory=list)
     skipped: dict[str, int] = field(default_factory=dict)
+    unexpected_skips: list[dict[str, str]] = field(default_factory=list)
     elapsed: float = 0.0
 
     def add_pass(self) -> None:
@@ -612,7 +613,7 @@ class Report:
 
     @property
     def ok(self) -> bool:
-        return not self.diffs
+        return not self.diffs and not self.unexpected_skips
 
 
 # ----------------------------------------------------------------------------
@@ -622,18 +623,14 @@ class Report:
 
 def negotiate_unsupported(
     lhs: Runner, rhs: Runner, probe_ops: Iterable[str]
-) -> set[str]:
-    """Return the set of op names at least one runner refuses with
-    ``UNKNOWN_OP``. Sends a no-arg request so the result is purely about op
-    recognition; an ``INVALID_INPUT`` reply still counts as "supported."
-    """
-    unsupported: set[str] = set()
+) -> dict[str, list[Runner]]:
+    """Retain each runner that rejects an operation with UNKNOWN_OP."""
+    unsupported: dict[str, list[Runner]] = {}
     for op in probe_ops:
-        for r in (lhs, rhs):
-            resp = r.call({"op": op, "args": {}})
+        for runner in (lhs, rhs):
+            resp = runner.call({"op": op, "args": {}})
             if not resp.get("ok") and resp.get("error_kind") == "UNKNOWN_OP":
-                unsupported.add(op)
-                break
+                unsupported.setdefault(op, []).append(runner)
     return unsupported
 
 
@@ -722,16 +719,17 @@ def run_corpus(
     for a in areas:
         probes.update(needed_ops.get(a, []))
     unsupported = negotiate_unsupported(lhs, rhs, probes)
-    skipped_areas = {
-        a
-        for a in areas
-        if any(op in unsupported for op in needed_ops.get(a, []))
-    }
     for area in areas:
-        if area in skipped_areas:
-            if not quiet:
-                print(f"[skip] {area}: op not implemented in one runner", file=sys.stderr)
+        missing = [(op, runner) for op in needed_ops.get(area, []) for runner in unsupported.get(op, [])]
+        if missing:
             rep.skip(area)
+            for op, runner in missing:
+                detail = {"area": area, "op": op, "runner": runner.impl}
+                expected = runner.impl == "rust" and area in {"compare", "loadout"}
+                if not expected:
+                    rep.unexpected_skips.append(detail)
+                if not quiet:
+                    print(f"[{'skip' if expected else 'unsupported'}] {area}: {op} in {runner.impl}", file=sys.stderr)
             continue
         iterator = AREA_ITERATORS.get(area)
         if iterator is None:
@@ -780,6 +778,8 @@ def print_text_report(report: Report, lhs: Runner, rhs: Runner) -> None:
             print(f"  ... {len(report.diffs) - 10} more")
     for area, n in sorted(report.skipped.items()):
         print(f"  [skip] {area}: {n}")
+    for item in report.unexpected_skips:
+        print(f"  [unsupported] {item['area']}: {item['op']} in {item['runner']}")
 
 
 def print_json_report(report: Report, lhs: Runner, rhs: Runner) -> None:
@@ -790,6 +790,7 @@ def print_json_report(report: Report, lhs: Runner, rhs: Runner) -> None:
         "lhs": {"impl": lhs.impl, "impl_version": lhs.impl_version},
         "rhs": {"impl": rhs.impl, "impl_version": rhs.impl_version},
         "skipped": report.skipped,
+        "unexpected_skips": report.unexpected_skips,
         "diffs": [
             {
                 "area": d.case.area,
@@ -809,28 +810,18 @@ def print_json_report(report: Report, lhs: Runner, rhs: Runner) -> None:
 
 
 def default_ts_cmd() -> list[str]:
-    built = REPO_ROOT / "tools" / "dist" / "runner.js"
-    if built.exists():
-        return ["node", str(built)]
-    return ["npx", "tsx", str(REPO_ROOT / "tools" / "src" / "runner.ts")]
+    local = REPO_ROOT / "tools" / "node_modules" / ".bin" / "tsx"
+    tsx = local if local.exists() else REPO_ROOT / "node_modules" / ".bin" / "tsx"
+    return [str(tsx), str(REPO_ROOT / "tools" / "src" / "runner.ts")]
 
 
 def default_rust_cmd() -> list[str]:
-    built = REPO_ROOT / "target" / "release" / "wh40kdc-runner"
-    if built.exists():
-        return [str(built)]
-    debug = REPO_ROOT / "target" / "debug" / "wh40kdc-runner"
-    if debug.exists():
-        return [str(debug)]
+    # Cargo refreshes the executable from the current workspace sources.
     return ["cargo", "run", "--quiet", "--release", "--bin", "wh40kdc-runner"]
 
 
 def default_go_cmd() -> list[str]:
-    # Prefer a prebuilt binary at go/wh40kdc-runner (CI builds it up front);
-    # otherwise `go run -C go` so the in-repo module is used without an install.
-    built = REPO_ROOT / "go" / "wh40kdc-runner"
-    if built.exists():
-        return [str(built)]
+    # Go refreshes the executable from the current workspace sources.
     return ["go", "run", "-C", "go", "./cmd/wh40kdc-runner"]
 
 

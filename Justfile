@@ -18,6 +18,8 @@
 
 set shell := ["bash", "-uc"]
 
+python := env_var_or_default("PYTHON", `if test -x python/.venv/bin/python; then printf '%s/python/.venv/bin/python' "$PWD"; else printf python3; fi`)
+
 # The exact generated-artifact paths CI guards with `git diff --exit-code`.
 ARTIFACTS := "tools/src/generated.ts \
 crates/wh40kdc/schemas/bundled.schema.json crates/wh40kdc/schemas/validation.schema.json crates/wh40kdc/src/generated.rs crates/wh40kdc/src/data/bundle.generated.json \
@@ -36,15 +38,16 @@ preflight: regen fmt verify-clean test-all version-lockstep
 
 # Regenerate every derived artifact (order is load-bearing: Python copies the Rust bundle).
 regen:
+    @{{python}} -c 'import datamodel_code_generator' 2>/dev/null || { echo "Missing Python codegen dependency. Run: cd python && uv venv && uv pip install -e '.[dev]'" >&2; exit 1; }
     @echo "▸ regenerating derived artifacts (TS → Rust → Python → Go → conformance)"
     cd tools && npm run bundle:schemas
     cd tools && npm run codegen:types
     cd tools && npm run codegen:data
     cargo run -p xtask -- codegen
     cargo run -p xtask -- bundle-data
-    python3 python/codegen/sync_bundle.py
-    python3 python/codegen/sync_spec.py
-    python3 python/codegen/gen_typeddicts.py
+    {{python}} python/codegen/sync_bundle.py
+    {{python}} python/codegen/sync_spec.py
+    {{python}} python/codegen/gen_typeddicts.py
     bash go/codegen/sync.sh
     cd tools && npm run codegen:data && npx tsc && npx tsc -p tsconfig.test.json && npm run gen:conformance
     cd tools && npm run audit:external-refs
@@ -107,9 +110,9 @@ test-rust:
 # Python: ruff + mypy + pytest.
 test-python:
     @echo "▸ Python: ruff + mypy + pytest"
-    cd python && ruff check .
-    cd python && mypy src
-    cd python && pytest
+    cd python && PYTHONPATH="{{justfile_directory()}}/python/src${PYTHONPATH:+:$PYTHONPATH}" {{python}} -m ruff check .
+    cd python && PYTHONPATH="{{justfile_directory()}}/python/src${PYTHONPATH:+:$PYTHONPATH}" {{python}} -m mypy src
+    cd python && PYTHONPATH="{{justfile_directory()}}/python/src${PYTHONPATH:+:$PYTHONPATH}" {{python}} -m pytest
 
 # Go: gofmt-check + vet + build + test.
 test-go:

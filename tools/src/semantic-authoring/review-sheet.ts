@@ -104,7 +104,7 @@ const REPO_ROOT = resolve(fileURLToPath(new URL("../../../", import.meta.url)));
 
 /** Write the sheet's Markdown and decisions. Inside the repository only `_private/` is allowed. */
 export function writeReviewSheet(sheet: ReviewSheet, outDir: string): { markdown: string; decisions: string } {
-  const dir = resolve(outDir);
+  const dir = resolve(REPO_ROOT, outDir);
   const inRepo = relative(REPO_ROOT, dir);
   if (!inRepo.startsWith("..") && !(inRepo === "_private" || inRepo.startsWith(`_private${sep}`))) {
     throw Object.assign(new Error(`Review sheets hold rule-derived text; write them under _private/, not ${inRepo || "."}.`), { code: "INVALID_ARGUMENT" });

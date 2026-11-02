@@ -47,7 +47,9 @@ One live workbench database (`_private/round5c/workbench.sqlite`) holds all sour
 decisions and derived rows. All authoring runs through the `semantic-authoring` CLI: model stages
 (`segment`, `classify`) and mechanical copies (`propagate`) may write to it directly after keeping
 one rolling copy (`workbench.sqlite.pre-run`); human decisions arrive only through
-`review-apply <decisions.json>`, written from the reviewer's answers in chat. There is no review UI.
+`review-apply <decisions.json>`, written from the reviewer's answers in chat. A signed packet
+commits all decisions and pilot marks together; a rejected decision rolls the packet back and
+the CLI exits nonzero with `REVIEW_DECISIONS_REJECTED`. There is no review UI.
 
 Publication follows the same rule. `review-sheet <faction>` (read-only) compiles and gates every
 fully described source in a faction, renders each beside its published record, and drafts an

@@ -21,14 +21,10 @@ the curated corpus but disagreeing on inputs nobody wrote down.
 From the repo root:
 
 ```bash
-# 1. Build the runners (the differ falls back to running from source when a
-#    pre-built artifact is missing).
-cd tools && npm ci && npm run build && cd ..
-cargo build --release --bin wh40kdc-runner
-(cd go && go build -o wh40kdc-runner ./cmd/wh40kdc-runner)
+# Install the workspace dependencies, then run corpus parity.
+cd tools && npm ci && cd ..
 
-# 2. Corpus parity — runs every case in every area for one pairing.
-#    Exits 0 iff every case agrees.
+# Exits 0 when all cases agree and no required operation is unsupported.
 python3 tooling/parity/differ.py                 # ts,rust
 python3 tooling/parity/differ.py --pair ts,py
 python3 tooling/parity/differ.py --pair rust,go
@@ -41,18 +37,16 @@ python3 tooling/parity/differ.py --mode fuzz --fuzz-target crunch     --fuzz-see
 
 ## Auto-detection
 
-- `--ts-cmd` defaults to `node tools/dist/runner.js` if the built artifact
-  exists, otherwise `npx tsx tools/src/runner.ts`.
-- `--rust-cmd` defaults to `target/release/wh40kdc-runner`, then the debug
-  build, and finally `cargo run --quiet --release --bin wh40kdc-runner`.
-- `--py-cmd` defaults to `python -m wh40kdc.runner` with `python/src` on
-  `PYTHONPATH`, using `python/.venv` when present (the interpreter needs
-  `jsonschema`).
-- `--go-cmd` defaults to `go/wh40kdc-runner` if built, otherwise
-  `go run -C go ./cmd/wh40kdc-runner`.
+- TypeScript runs `tools/src/runner.ts` with the workspace `tsx` binary, preferring
+  `tools/node_modules/.bin/tsx` and using the root `node_modules/.bin/tsx` when
+  npm hoists it.
+- Rust runs `cargo run --quiet --release --bin wh40kdc-runner`.
+- Python runs `python -m wh40kdc.runner` with `python/src` on `PYTHONPATH`, using
+  `python/.venv` when present (the interpreter needs `jsonschema`).
+- Go runs `go run -C go ./cmd/wh40kdc-runner`.
 
-The same invocation works locally (running from source) and in CI (running
-from pre-built artifacts) with no flag changes.
+Defaults use current source. The `--*-cmd` options explicitly select alternative
+commands, including prebuilt runners.
 
 ## Useful flags
 
@@ -97,9 +91,9 @@ expected value, then add a properly-named case under `conformance/<area>/`.
 | `validator` | `validate` | structural, order-insensitive |
 | `share` | `share_encode`, `share_decode` | tokens are bytes; decoded lists are structural |
 
-The differ probes both runners at startup and skips any area where one side
-answers `UNKNOWN_OP`. The Rust runner does not implement `compare` or
-`loadout`, so those areas run only in pairings without Rust. The corpus areas
+The differ probes both runners at startup. Rust's unsupported `compare` and
+`loadout` operations are expected skips; any other `UNKNOWN_OP` fails the report
+and identifies the area, operation, and runner.
 `abilities-resolver`, `affordability`, `roster_legality`, `roster_validation`
 and `weapon-keywords` are not in the differ; the per-language conformance
 tests cover them.

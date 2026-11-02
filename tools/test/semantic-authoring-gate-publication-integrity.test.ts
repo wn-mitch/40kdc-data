@@ -132,12 +132,12 @@ describe("compile gates run publication integrity", () => {
     expect(result.failed).toEqual([expect.objectContaining({
       error: expect.stringMatching(/^fixture\/dangling-grant cannot be approved: integrity: enrichment\/fixture\/abilities\.json\[1\] .*"gloaming-step" resolves to no ability entity/u),
     })]);
-    // The refused decision records nothing, not even its passing member; the second approves.
+    // The packet stops at the refused decision and records no approvals.
     const approved = db.prepare(`
       SELECT abilities.ability_id FROM compiled_entries JOIN abilities ON abilities.id = compiled_entries.ability_version_id
       WHERE compiled_entries.status = 'approved'
     `).all() as Array<{ ability_id: string }>;
-    expect(approved.map((row) => row.ability_id)).toEqual(["resolved-grant"]);
+    expect(approved).toEqual([]);
   });
 });
 

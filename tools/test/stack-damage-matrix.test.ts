@@ -1,4 +1,4 @@
-import { mkdtempSync, writeFileSync } from "node:fs";
+import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
@@ -35,6 +35,20 @@ describe("stack damage matrix configuration", () => {
     expect(config.bodyguardLimit).toBe(Infinity);
     expect(config.attachmentLimit).toBe(Infinity);
     expect(config.finalistLimit).toBe(Infinity);
+  });
+
+  it("resolves scenario and output paths from the repository root by default", () => {
+    const root = join(import.meta.dirname, "../..");
+    const dir = mkdtempSync(join(root, "_private", "matrix-config-test-"));
+    try {
+      writeFileSync(join(dir, "scenario.json"), JSON.stringify({ battleRound: 2 }));
+      const name = dir.split("/").at(-1)!;
+      const config = parseMatrixConfig({ HC_SCENARIO: `_private/${name}/scenario.json`, HC_OUTPUT: `_private/${name}/output.json` }, catalog);
+      expect(config.scenario).toEqual({ battleRound: 2 });
+      expect(config.outputPath).toBe(join(dir, "output.json"));
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
   });
 
   it("rejects unknown ids and ambiguous all-target requests before search", () => {

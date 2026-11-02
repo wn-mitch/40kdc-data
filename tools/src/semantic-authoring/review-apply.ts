@@ -9,6 +9,7 @@ import { confirmOperator, type OperatorSlot } from "./leaf-operators.js";
 import { NAME_FRAGMENT } from "./compile-name.js";
 import { approveShape, carryApprovals, compiledRecordsOf, rejectShapeMembers } from "./shapes.js";
 import { exactSpan } from "./contracts.js";
+import { withTransactionAsync } from "./db.js";
 
 /**
  * Will's decisions, made in conversation, applied as his own. Each decision names a proposal
@@ -153,7 +154,8 @@ function annotationDecision(db: DatabaseSync, item: ChatDecision): Record<string
  * reviewed without widening an enclosing span or silently choosing a sibling occurrence.
  */
 function addDecision(db: DatabaseSync, item: ChatDecision): Record<string, unknown> {
-  const ability = db.prepare("SELECT id, source_hash, source_text, fragments_json, name FROM abilities WHERE id = ?").get(item.ability_version_id!) as
+  if (item.ability_version_id === undefined) throw new Error("add needs ability_version_id, exact_text, role and family_id.");
+  const ability = db.prepare("SELECT id, source_hash, source_text, fragments_json, name FROM abilities WHERE id = ?").get(item.ability_version_id) as
     { id: number; source_hash: string; source_text: string; fragments_json: string; name: string | null } | undefined;
   if (!ability || !item.exact_text || !item.family_id || !item.role) throw new Error("add needs ability_version_id, exact_text, role and family_id.");
   if (item.source_hash !== undefined && item.source_hash !== ability.source_hash) throw new Error(`Ability ${ability.id} source hash does not match the requested authorization.`);
@@ -276,18 +278,20 @@ function decision(db: DatabaseSync, item: ChatDecision): Record<string, unknown>
   };
 }
 
-/** Apply Will's conversational review: one batch per decision, so one bad decision stops only itself. */
+/** Apply a signed conversational review as one atomic packet. */
 export async function applyChatReview(db: DatabaseSync, review: ChatReview): Promise<{ applied: Array<{ proposal_id?: number; annotation_id?: number; ability_version_id?: number; batch_id: string }>; failed: Array<{ proposal_id?: number; annotation_id?: number; error: string }>; pilot_reviewed: number[] }> {
   if (review.reviewer === UNSIGNED_REVIEWER) throw new Error("This decisions file is an unsigned draft; set reviewer to your own name before applying it.");
   const actor = humanActor(review.reviewer, "review-apply");
   const applied: Array<{ proposal_id?: number; annotation_id?: number; ability_version_id?: number; batch_id: string }> = [];
-  const failed: Array<{ proposal_id?: number; annotation_id?: number; error: string }> = [];
+  let current: ChatDecision | undefined;
   // Every approval in this review, compiled as it stands when each approval is checked, so
   // records that only pass integrity as one publication can be approved together.
   const approving = review.decisions.filter((item) => item.action === "approve-shape").flatMap((item) => item.ability_version_ids ?? []);
   const coApproved = () => compiledRecordsOf(db, approving);
-  for (const item of review.decisions) {
-    try {
+  try {
+    await withTransactionAsync(db, async () => {
+      for (const item of review.decisions) {
+        current = item;
       // A relation on a decision that cannot record one is refused, never dropped.
       if (item.relation !== undefined && item.relation !== null && !RELATION_ACTIONS.has(item.action)) {
         throw new Error(`relation is only valid on a connective decision (${[...RELATION_ACTIONS].join(", ")}), not on ${item.action}.`);
@@ -369,18 +373,18 @@ export async function applyChatReview(db: DatabaseSync, review: ChatReview): Pro
       const full = decision(db, item);
       if (full.family_version === undefined) delete full.family_version;
       applied.push({ proposal_id: item.proposal_id, annotation_id: item.annotation_id, batch_id: applyAnnotationBatch(db, { reviewer: actor.reviewer, decisions: [full] }, actor).batch_id });
-    } catch (error) {
-      failed.push({ proposal_id: item.proposal_id, annotation_id: item.annotation_id, error: error instanceof Error ? error.message : String(error) });
-    }
+      }
+      current = undefined;
+      for (const id of review.pilot_reviewed ?? []) {
+        const ability = db.prepare("SELECT source_hash FROM abilities WHERE id = ?").get(id) as { source_hash: string } | undefined;
+        if (!ability) throw new Error(`No ability ${id} for pilot review.`);
+        markPilotReviewed(db, id, { reviewer: actor.reviewer, source_hash: ability.source_hash }, actor);
+      }
+    });
+    return { applied, failed: [], pilot_reviewed: review.pilot_reviewed ?? [] };
+  } catch (error) {
+    return { applied: [], failed: [{ proposal_id: current?.proposal_id, annotation_id: current?.annotation_id, error: error instanceof Error ? error.message : String(error) }], pilot_reviewed: [] };
   }
-  const marked: number[] = [];
-  for (const id of review.pilot_reviewed ?? []) {
-    const ability = db.prepare("SELECT source_hash FROM abilities WHERE id = ?").get(id) as { source_hash: string } | undefined;
-    if (!ability) continue;
-    markPilotReviewed(db, id, { reviewer: actor.reviewer, source_hash: ability.source_hash }, actor);
-    marked.push(id);
-  }
-  return { applied, failed, pilot_reviewed: marked };
 }
 
 /** A gap Will names: vocabulary the DSL lacks, or source that says two things. Open until resolved. */

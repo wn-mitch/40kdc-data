@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 
 import type { ComparePhase } from "../compare.js";
 import type { EngineContext } from "../cruncher/index.js";
@@ -149,7 +150,7 @@ function limit(value: string | undefined, name: string): number {
 export function parseMatrixConfig(
   env: Readonly<Record<string, string | undefined>>,
   catalog: MatrixCatalog,
-  cwd = process.cwd(),
+  cwd = fileURLToPath(new URL("../../../", import.meta.url)),
 ): MatrixConfig {
   const factionIds = list(env.HC_FACTIONS, DEFAULT_HC_FACTIONS, "HC_FACTIONS");
   for (const id of factionIds) {

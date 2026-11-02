@@ -50,6 +50,7 @@ export { slug, titleCase } from "./pack-blocks.js";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 const DATA_ROOT = resolve(__dirname, "../../data");
+const REPO_ROOT = resolve(DATA_ROOT, "..");
 const OUT_DIR = resolve(DATA_ROOT, "_audit", "faction-pack-input");
 
 /** Pack-filename fragment → 40kdc faction id. `--all` uses this to route packs. */
@@ -332,7 +333,7 @@ function main(): void {
   let jobs: Array<{ pdf: string; faction: string }> = [];
   if (argv[0] === "--all") {
     const dirIdx = argv.indexOf("--dir");
-    const dir = dirIdx === -1 ? undefined : argv[dirIdx + 1];
+    const dir = dirIdx === -1 || !argv[dirIdx + 1] ? undefined : resolve(REPO_ROOT, argv[dirIdx + 1]);
     if (!dir) {
       console.error("Usage: extract-faction-pack.ts --all --dir <pack-pdf-dir>");
       process.exit(1);
@@ -349,7 +350,7 @@ function main(): void {
       console.error("Usage: extract-faction-pack.ts <pdf-path> --faction <faction-id>");
       process.exit(1);
     }
-    jobs = [{ pdf: resolve(pdf), faction: argv[facIdx + 1] }];
+    jobs = [{ pdf: resolve(REPO_ROOT, pdf), faction: argv[facIdx + 1] }];
   }
 
   for (const { pdf, faction } of jobs) {

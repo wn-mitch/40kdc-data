@@ -144,6 +144,13 @@ import {
 const REPORT_DIR = path.join(CORE_DIR, "_reports");
 const UNMATCHED_DIR = path.join(REPO_ROOT, "_private", "mfm");
 
+/** Keep dry-run diagnostics private; applied reports remain in the tracked report directory. */
+export function mfmReportPath(name: string, write: boolean, appliedDir = REPORT_DIR, dryRunDir = UNMATCHED_DIR): string {
+  const dir = write ? appliedDir : dryRunDir;
+  fs.mkdirSync(dir, { recursive: true });
+  return path.join(dir, name);
+}
+
 function repoIds(dir: string, file: string): Set<string> {
   return new Set(
     readJsonArray<{ id: string }>(path.join(CORE_DIR, dir, file)).map(
@@ -615,8 +622,7 @@ async function runDispositionsCmd(
   includeCombatPatrol = false,
 ): Promise<void> {
   const report = runDispositions(dump, write, { includeCombatPatrol });
-  fs.mkdirSync(REPORT_DIR, { recursive: true });
-  const reportPath = path.join(REPORT_DIR, "mfm-dispositions.md");
+  const reportPath = mfmReportPath("mfm-dispositions.md", write);
   fs.writeFileSync(reportPath, buildDispReport(report, write));
 
   fs.mkdirSync(UNMATCHED_DIR, { recursive: true });
@@ -655,8 +661,7 @@ async function runEnhancementsCmd(
   includeCombatPatrol = false,
 ): Promise<void> {
   const report = runEnhancements(dump, write, { includeCombatPatrol });
-  fs.mkdirSync(REPORT_DIR, { recursive: true });
-  const reportPath = path.join(REPORT_DIR, "mfm-enhancements.md");
+  const reportPath = mfmReportPath("mfm-enhancements.md", write);
   fs.writeFileSync(reportPath, buildEnhReport(report, write));
 
   fs.mkdirSync(UNMATCHED_DIR, { recursive: true });
@@ -696,8 +701,7 @@ async function runNormalizeEnhancementsCmd(
   write: boolean,
 ): Promise<void> {
   const report = normalizeEnhancementNames(dump);
-  fs.mkdirSync(REPORT_DIR, { recursive: true });
-  const reportPath = path.join(REPORT_DIR, "mfm-normalize-enhancements.md");
+  const reportPath = mfmReportPath("mfm-normalize-enhancements.md", write);
   const renameLines = Object.entries(report.renames)
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([o, n]) => `| \`${o}\` | \`${n}\` |`);
@@ -748,8 +752,7 @@ async function runFactionFieldsCmd(
   write: boolean,
 ): Promise<void> {
   const report = runFactionFields(dump);
-  fs.mkdirSync(REPORT_DIR, { recursive: true });
-  const reportPath = path.join(REPORT_DIR, "mfm-faction-fields.md");
+  const reportPath = mfmReportPath("mfm-faction-fields.md", write);
   fs.writeFileSync(reportPath, buildFactionFieldsReport(report, write));
 
   fs.mkdirSync(UNMATCHED_DIR, { recursive: true });
@@ -790,8 +793,7 @@ async function runDetachmentFieldsCmd(
   write: boolean,
 ): Promise<void> {
   const report = runDetachmentFields(dump);
-  fs.mkdirSync(REPORT_DIR, { recursive: true });
-  const reportPath = path.join(REPORT_DIR, "mfm-detachment-fields.md");
+  const reportPath = mfmReportPath("mfm-detachment-fields.md", write);
   fs.writeFileSync(reportPath, buildDetFieldsReport(report, write));
 
   fs.mkdirSync(UNMATCHED_DIR, { recursive: true });
@@ -889,8 +891,7 @@ async function runPointsCmd(
   compositionTiers?: ReturnType<typeof runCompositionTiers>,
 ): Promise<void> {
   const report = runPoints(dump, write);
-  fs.mkdirSync(REPORT_DIR, { recursive: true });
-  const reportPath = path.join(REPORT_DIR, "mfm-points.md");
+  const reportPath = mfmReportPath("mfm-points.md", write);
   fs.writeFileSync(reportPath, buildPointsReport(report, write));
 
   fs.mkdirSync(UNMATCHED_DIR, { recursive: true });
@@ -960,8 +961,7 @@ async function runPointsAndCompositionTiersCmd(
 
 async function runCullCmd(dump: MfmDump, write: boolean): Promise<void> {
   const report = runCull(dump, write);
-  fs.mkdirSync(REPORT_DIR, { recursive: true });
-  const reportPath = path.join(REPORT_DIR, "mfm-cull-legends.md");
+  const reportPath = mfmReportPath("mfm-cull-legends.md", write);
   fs.writeFileSync(reportPath, buildCullReport(report, write));
 
   fs.mkdirSync(UNMATCHED_DIR, { recursive: true });
@@ -1011,8 +1011,7 @@ async function runCullCmd(dump: MfmDump, write: boolean): Promise<void> {
 
 async function runReissueCmd(dump: MfmDump, write: boolean): Promise<void> {
   const report = runReissue(dump);
-  fs.mkdirSync(REPORT_DIR, { recursive: true });
-  const reportPath = path.join(REPORT_DIR, "mfm-reissued-refs.md");
+  const reportPath = mfmReportPath("mfm-reissued-refs.md", write);
   fs.writeFileSync(reportPath, buildReissueReport(report, write));
   console.log(`Reissued-refs report → ${path.relative(REPO_ROOT, reportPath)}`);
   console.log(
@@ -1026,8 +1025,7 @@ async function runReissueCmd(dump: MfmDump, write: boolean): Promise<void> {
 
 async function runStratagemsCmd(dump: MfmDump, write: boolean): Promise<void> {
   const report = runStratagems(dump, write);
-  fs.mkdirSync(REPORT_DIR, { recursive: true });
-  const reportPath = path.join(REPORT_DIR, "mfm-stratagems.md");
+  const reportPath = mfmReportPath("mfm-stratagems.md", write);
   fs.writeFileSync(reportPath, buildStratReport(report, write));
 
   const sum = (f: (d: (typeof report.dirs)[number]) => number) =>
@@ -1051,8 +1049,7 @@ async function runSeedStratagemsCmd(
   includeCombatPatrol = false,
 ): Promise<void> {
   const report = seedStratagems(dump, { includeCombatPatrol });
-  fs.mkdirSync(REPORT_DIR, { recursive: true });
-  const reportPath = path.join(REPORT_DIR, "mfm-seed-stratagems.md");
+  const reportPath = mfmReportPath("mfm-seed-stratagems.md", write);
   const byDir = new Map<string, { id: string; name: string }[]>();
   for (const s of report.seeded)
     (byDir.get(s.dir) ?? byDir.set(s.dir, []).get(s.dir)!).push(s);
@@ -1094,8 +1091,7 @@ async function runSeedStratagemsCmd(
 
 async function runMissionsCmd(dump: MfmDump, write: boolean): Promise<void> {
   const report = runMissions(dump, write);
-  fs.mkdirSync(REPORT_DIR, { recursive: true });
-  const reportPath = path.join(REPORT_DIR, "mfm-missions.md");
+  const reportPath = mfmReportPath("mfm-missions.md", write);
   fs.writeFileSync(reportPath, buildMissionsReport(report, write));
 
   if (
@@ -1141,8 +1137,7 @@ async function runMissionMatchupsCmd(
   write: boolean,
 ): Promise<void> {
   const report = runMissionMatchups(dump);
-  fs.mkdirSync(REPORT_DIR, { recursive: true });
-  const reportPath = path.join(REPORT_DIR, "mfm-mission-matchups.md");
+  const reportPath = mfmReportPath("mfm-mission-matchups.md", write);
   fs.writeFileSync(reportPath, buildMatchupReport(report, write));
 
   if (report.repoOnly.length || report.unresolvedDump.length) {
@@ -1171,8 +1166,7 @@ async function runMissionMatchupsCmd(
 
 async function runUnitKeywordsCmd(dump: MfmDump, write: boolean): Promise<void> {
   const report = runUnitKeywords(dump);
-  fs.mkdirSync(REPORT_DIR, { recursive: true });
-  const reportPath = path.join(REPORT_DIR, "mfm-unit-keywords.md");
+  const reportPath = mfmReportPath("mfm-unit-keywords.md", write);
   fs.writeFileSync(reportPath, buildUnitKeywordsReport(report, write));
   console.log(`Unit-keywords report → ${path.relative(REPO_ROOT, reportPath)}`);
   console.log(`Changed ${report.changed.length}, confirmed ${report.confirmed}.`);
@@ -1183,8 +1177,7 @@ async function runUnitKeywordsCmd(dump: MfmDump, write: boolean): Promise<void> 
 
 async function runBaseSizesCmd(dump: MfmDump, write: boolean): Promise<void> {
   const report = runBaseSizes(dump);
-  fs.mkdirSync(REPORT_DIR, { recursive: true });
-  const reportPath = path.join(REPORT_DIR, "mfm-base-sizes.md");
+  const reportPath = mfmReportPath("mfm-base-sizes.md", write);
   fs.writeFileSync(reportPath, buildBaseSizeReport(report, write));
 
   const notAttributed =
@@ -1228,8 +1221,7 @@ async function runChapterScopeCmd(
   write: boolean,
 ): Promise<void> {
   const report = runChapterScope(dump, write);
-  fs.mkdirSync(REPORT_DIR, { recursive: true });
-  const reportPath = path.join(REPORT_DIR, "mfm-chapter-scope.md");
+  const reportPath = mfmReportPath("mfm-chapter-scope.md", write);
   fs.writeFileSync(reportPath, buildChapterScopeReport(report, write));
 
   if (report.repoOnly.length || report.dumpOnly.length) {
@@ -1261,8 +1253,7 @@ async function runWargearCmd(
   onlyDir?: string,
 ): Promise<void> {
   const report = runWargear(dump, write, onlyDir);
-  fs.mkdirSync(REPORT_DIR, { recursive: true });
-  const reportPath = path.join(REPORT_DIR, "mfm-wargear.md");
+  const reportPath = mfmReportPath("mfm-wargear.md", write);
   fs.writeFileSync(reportPath, buildWargearReport(report, write));
 
   const sum = (f: (d: (typeof report.dirs)[number]) => number) =>
@@ -1374,8 +1365,7 @@ async function runAttachmentRoleCmd(
   onlyDir?: string,
 ): Promise<void> {
   const report = runAttachmentRoles(dump, onlyDir);
-  const reportPath = path.join(REPORT_DIR, "mfm-attachment.md");
-  fs.mkdirSync(REPORT_DIR, { recursive: true });
+  const reportPath = mfmReportPath("mfm-attachment.md", write);
   fs.writeFileSync(reportPath, buildAttachmentReport(report, write));
 
   const sum = (f: (d: (typeof report.dirs)[number]) => number) =>
@@ -1397,8 +1387,7 @@ async function runExternalRefsCmd(
   onlyDir?: string,
 ): Promise<void> {
   const report = runMfmExternalRefs(dump, onlyDir);
-  fs.mkdirSync(REPORT_DIR, { recursive: true });
-  const reportPath = path.join(REPORT_DIR, "mfm-external-refs.md");
+  const reportPath = mfmReportPath("mfm-external-refs.md", write);
   fs.writeFileSync(reportPath, buildMfmExternalRefsReport(report, write));
   const added = Object.values(report.added).reduce(
     (sum, count) => sum + count,
@@ -1426,8 +1415,7 @@ async function runSeedUnitsCmd(
   includeCombatPatrol = false,
 ): Promise<void> {
   const report = runSeedUnits(dump, { onlyDir, includeCombatPatrol });
-  const reportPath = path.join(REPORT_DIR, "mfm-seed-units.md");
-  fs.mkdirSync(REPORT_DIR, { recursive: true });
+  const reportPath = mfmReportPath("mfm-seed-units.md", write);
   fs.writeFileSync(reportPath, buildSeedUnitsReport(report, write));
 
   const created = report.dirs.reduce((a, d) => a + d.created.length, 0);
@@ -1485,8 +1473,7 @@ async function runSeedDetachmentsCmd(
   includeCombatPatrol = false,
 ): Promise<void> {
   const report = runSeedDetachments(dump, { onlyDir, includeCombatPatrol });
-  fs.mkdirSync(REPORT_DIR, { recursive: true });
-  const reportPath = path.join(REPORT_DIR, "mfm-seed-detachments.md");
+  const reportPath = mfmReportPath("mfm-seed-detachments.md", write);
   fs.writeFileSync(reportPath, buildSeedDetachmentsReport(report, write));
 
   const dets = report.dirs.reduce((a, d) => a + d.createdDetachments.length, 0);
@@ -1510,8 +1497,7 @@ async function runSeedDetachmentsCmd(
 
 async function runAlliesCmd(dump: MfmDump, write: boolean): Promise<void> {
   const report = runAllies(dump);
-  fs.mkdirSync(REPORT_DIR, { recursive: true });
-  const reportPath = path.join(REPORT_DIR, "mfm-allies.md");
+  const reportPath = mfmReportPath("mfm-allies.md", write);
   fs.writeFileSync(reportPath, buildAlliesReport(report, write));
 
   console.log(`Allies report → ${path.relative(REPO_ROOT, reportPath)}`);
@@ -1541,8 +1527,7 @@ async function runWeaponVariantsCmd(
   onlyDir?: string,
 ): Promise<void> {
   const report = runWeaponVariants(dump, onlyDir);
-  fs.mkdirSync(REPORT_DIR, { recursive: true });
-  const reportPath = path.join(REPORT_DIR, "mfm-weapon-variants.md");
+  const reportPath = mfmReportPath("mfm-weapon-variants.md", write);
   fs.writeFileSync(reportPath, buildWeaponVariantsReport(report, write));
 
   const sum = (f: (d: (typeof report.dirs)[number]) => number) =>
@@ -1562,8 +1547,7 @@ async function runWeaponVariantsCmd(
 
 async function runWeaponStatsCmd(dump: MfmDump, write: boolean, onlyDir?: string): Promise<void> {
   const report = runWeaponStats(dump, onlyDir);
-  fs.mkdirSync(REPORT_DIR, { recursive: true });
-  const reportPath = path.join(REPORT_DIR, "mfm-weapon-stats.md");
+  const reportPath = mfmReportPath("mfm-weapon-stats.md", write);
   fs.writeFileSync(reportPath, buildWeaponStatsReport(report));
   const sum = (key: "updated" | "variants" | "refusals" | "unconfirmed") => report.dirs.reduce((total, dir) => total + dir[key].length, 0);
   console.log(`Weapon-stats report → ${path.relative(REPO_ROOT, reportPath)}`);
@@ -1613,8 +1597,7 @@ async function runConditionalKeywordsCmd(
   onlyDir?: string,
 ): Promise<void> {
   const report = runConditionalKeywords(dump, onlyDir);
-  fs.mkdirSync(REPORT_DIR, { recursive: true });
-  const reportPath = path.join(REPORT_DIR, "mfm-conditional-keywords.md");
+  const reportPath = mfmReportPath("mfm-conditional-keywords.md", write);
   fs.writeFileSync(reportPath, buildConditionalKeywordReport(report, write));
   fs.mkdirSync(UNMATCHED_DIR, { recursive: true });
   fs.writeFileSync(
@@ -1650,8 +1633,7 @@ async function runDataslatesCmd(dump: MfmDump, write: boolean, dumpPath: string)
   } finally {
     db.close();
   }
-  fs.mkdirSync(REPORT_DIR, { recursive: true });
-  const reportPath = path.join(REPORT_DIR, "mfm-dataslates.md");
+  const reportPath = mfmReportPath("mfm-dataslates.md", write);
   fs.writeFileSync(reportPath, buildDataslatesReport(report, write));
   console.log(`Dataslate report → ${path.relative(REPO_ROOT, reportPath)}`);
   let promote = 0;

@@ -303,6 +303,35 @@ export function withTransaction<T>(db: DatabaseSync, fn: () => T): T {
   }
 }
 
+/** Execute asynchronous work atomically, including nested workbench operations. */
+export async function withTransactionAsync<T>(db: DatabaseSync, fn: () => Promise<T>): Promise<T> {
+  const depth = transactionDepth.get(db) ?? 0;
+  const savepoint = `semantic_authoring_transaction_${depth}`;
+  if (depth === 0) db.exec("BEGIN IMMEDIATE");
+  else db.exec(`SAVEPOINT ${savepoint}`);
+  transactionDepth.set(db, depth + 1);
+  try {
+    const result = await fn();
+    if (depth === 0) db.exec("COMMIT");
+    else db.exec(`RELEASE SAVEPOINT ${savepoint}`);
+    return result;
+  } catch (error) {
+    try {
+      if (depth === 0) db.exec("ROLLBACK");
+      else {
+        db.exec(`ROLLBACK TO SAVEPOINT ${savepoint}`);
+        db.exec(`RELEASE SAVEPOINT ${savepoint}`);
+      }
+    } catch {
+      // Preserve the original failure; a failed transaction may already be closed.
+    }
+    throw error;
+  } finally {
+    if (depth === 0) transactionDepth.delete(db);
+    else transactionDepth.set(db, depth);
+  }
+}
+
 /**
  * SQL predicate: this pending proposal restates an active trusted annotation, the same fingerprint
  * on the same exact bytes. A machine row restating it does not settle it: Will still reviews it. Such a proposal is not a decision anyone needs to make, so every review
