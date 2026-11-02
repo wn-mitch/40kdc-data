@@ -1,5 +1,6 @@
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { isAnyDestruction, isAnyPhaseEnd } from "./compile-delayed-destruction.js";
+import { selectedUnitMoments } from "./compile-selection-moment.js";
 
 /** "If you do" after an offered use: the sentences that follow depend on the use having been made. */
 const IF_YOU_DO = /\bif you do\b/iu;
@@ -50,15 +51,17 @@ export function refuseMomentUnderBareUse(list: readonly CompileLeaf[], sourceTex
   if (sourceText === undefined) return;
   const bytes = Buffer.from(sourceText, "utf8");
   const sorted = [...list].sort((a, b) => a.start_byte - b.start_byte);
+  const nestedInSelection = selectedUnitMoments(sorted);
   sorted.forEach((use, at) => {
     if (use.family_id !== "optional-use" || use.end_byte === undefined) return;
     if (!sorted.slice(0, at).some((leaf) => leaf.family_id === "event")) return;
     const after = sorted.slice(at + 1);
     const firstEffect = after.findIndex((leaf) => leaf.role === "EFFECT");
     const moment = (firstEffect === -1 ? after : after.slice(0, firstEffect)).find((leaf) => leaf.family_id === "event");
-    // The selected unit's own moment ("you can select one friendly unit. If you do, when that unit is selected to …")
-    // nests in the selection (compile-selection-moment.ts selectedUnitMoments).
-    if (moment === undefined || moment.parameters.subject === "selected-unit" || !IF_YOU_DO.test(bytes.subarray(use.end_byte, moment.start_byte).toString("utf8"))) return;
+    // A moment the use's selection holds ("you can select one friendly unit. If you do, when that unit is selected to …",
+    // "… select one enemy unit. Until the end of the turn, when this unit …") nests in the selection
+    // (compile-selection-moment.ts selectedUnitMoments).
+    if (moment === undefined || nestedInSelection.has(sorted.indexOf(moment)) || !IF_YOU_DO.test(bytes.subarray(use.end_byte, moment.start_byte).toString("utf8"))) return;
     throw new CompileError(`A moment at byte ${moment.start_byte} waits on the use an earlier moment offers (byte ${use.start_byte}), with no effect between them; it has no reading yet.`);
   });
 }

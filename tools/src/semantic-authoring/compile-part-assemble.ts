@@ -260,9 +260,10 @@ export function assemblePart(
   // A Stratagem's effect moment holds the selection printed before it, never the reverse: "Select one … unit. When it
   // declares a charge, …" selects at the WHEN moment, and the later moment is the selected unit's.
   const selectsBeforeMoment = [...nestedMoments].some((moment) => list.some((leaf, at) => at < moment && (leaf.family_id === "select-unit" || leaf.family_id === "for-each-unit-select")));
+  // The whole ability's gates ("In your Shooting phase, after this unit has shot, … select one enemy unit") are the opening
+  // moment's, decided when the selection is made, so they stay around the selection, not inside the later moment.
   if (nestedTriggers.length && selectsBeforeMoment) {
-    body = { type: "ability-part", trigger: nestedTriggers.length === 1 ? nestedTriggers[0]! : nestedTriggers, effect: gated(global, body!) };
-    global.splice(0, global.length);
+    body = { type: "ability-part", trigger: nestedTriggers.length === 1 ? nestedTriggers[0]! : nestedTriggers, effect: body! };
   }
   const pairCandidateEligibility = pairCandidates.length ? attempt(() => allOf(pairCandidates.map((at) => condition(list[at]!)))) : null;
 

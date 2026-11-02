@@ -40,18 +40,25 @@ export function refuseSelectionAcrossMoment(list: readonly CompileLeaf[]): void 
 /**
  * "At the start of your Movement phase, select one friendly unit. If you do, when that unit is selected to make an
  * Advance move this turn, …": the selection is made at an earlier moment, and a later moment whose subject is the
- * unit it picked, with no effect between them, is that unit's own. Its effects wait for it inside the selection
- * (compile-part-classify.ts nests it as a part), never beside the opening moment as an alternative trigger. With no
- * moment before the selection, the event is the ability's own trigger and is not nested. Positions are in `list`'s order.
+ * unit it picked, with no effect between them, is that unit's own. "… select one enemy unit hit by those attacks.
+ * Until the end of the turn, when this unit declares a charge, …": a later moment of any subject that a duration
+ * printed after the selection opens is the selection's too; it exists only once the unit is picked. Their effects
+ * wait for them inside the selection (compile-part-classify.ts nests each as a part), never beside the opening
+ * moment as an alternative trigger. With no moment before the selection, the event is the ability's own trigger and
+ * is not nested. Positions are in `list`'s order.
  */
 export function selectedUnitMoments(list: readonly CompileLeaf[]): Set<number> {
   const nested = new Set<number>();
   let opened = false;
   let selected = false;
+  let held = false;
   list.forEach((leaf, at) => {
-    if (selected && leaf.family_id === "event" && leaf.parameters.subject === "selected-unit") nested.add(at);
-    if (leaf.family_id === "select-unit") selected = opened;
-    else if (leaf.role === "EFFECT") selected = false;
+    if (selected && leaf.family_id === "event" && (held || leaf.parameters.subject === "selected-unit")) nested.add(at);
+    if (leaf.family_id === "select-unit") {
+      selected = opened;
+      held = false;
+    } else if (leaf.role === "EFFECT") selected = false;
+    else if (leaf.role === "DURATION") held = true;
     if (isMoment(leaf) || leaf.family_id === "phase-window") opened = true;
   });
   return nested;
