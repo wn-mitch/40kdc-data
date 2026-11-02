@@ -245,6 +245,9 @@ function addDecision(db: DatabaseSync, item: ChatDecision): Record<string, unkno
   };
 }
 
+/** The chat actions that record a connective's relation. */
+const RELATION_ACTIONS: ReadonlySet<ChatDecision["action"]> = new Set(["connective", "add-connective", "connective-surface", "connective-relation"]);
+
 /** Turn one conversational decision into the review batch's full decision shape. */
 function decision(db: DatabaseSync, item: ChatDecision): Record<string, unknown> {
   if (item.action === "add") return addDecision(db, item);
@@ -260,7 +263,7 @@ function decision(db: DatabaseSync, item: ChatDecision): Record<string, unknown>
   if (!row) throw new Error(`Unknown proposal ${item.proposal_id}.`);
   const bytes = item.exact_text ? { ...located(row, item.exact_text), exact_text: item.exact_text } : { start_byte: row.start_byte, end_byte: row.end_byte, exact_text: row.exact_text };
   const base = { proposal_id: row.id, ability_version_id: row.ability_version_id, source_hash: item.source_hash ?? row.source_hash, fragment: row.fragment, ...bytes, ...(item.allow_overlap ? { allow_overlap: true } : {}), ...(item.historical ? { historical: true } : {}) };
-  if (item.action === "connective") return { ...base, action: "confirm-connective", role: "CONNECTIVE" };
+  if (item.action === "connective") return { ...base, action: "confirm-connective", role: "CONNECTIVE", ...(typeof item.relation === "string" ? { relation: item.relation } : {}) };
   if (item.action === "reject" || item.action === "novel" || item.action === "ambiguous") {
     return { ...base, action: item.action, role: item.role ?? (row.role === "UNRESOLVED" ? "EFFECT" : row.role) };
   }
@@ -285,6 +288,10 @@ export async function applyChatReview(db: DatabaseSync, review: ChatReview): Pro
   const coApproved = () => compiledRecordsOf(db, approving);
   for (const item of review.decisions) {
     try {
+      // A relation on a decision that cannot record one is refused, never dropped.
+      if (item.relation !== undefined && item.relation !== null && !RELATION_ACTIONS.has(item.action)) {
+        throw new Error(`relation is only valid on a connective decision (${[...RELATION_ACTIONS].join(", ")}), not on ${item.action}.`);
+      }
       if (item.action === "surface") {
         // One wording, one meaning, everywhere it occurs (a human surface; its copies are derived).
         const report = confirmSurface(db, {

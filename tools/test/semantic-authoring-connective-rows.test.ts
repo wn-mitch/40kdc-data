@@ -16,6 +16,7 @@ import { connectiveRowsSql, reviewedConnectives } from "../src/semantic-authorin
 import { initializeWorkbench, insertSpan } from "../src/semantic-authoring/db.js";
 import { tiledSources } from "../src/semantic-authoring/leaf-view.js";
 import { propagateDuplicateTexts } from "../src/semantic-authoring/propagate.js";
+import { applyChatReview } from "../src/semantic-authoring/review-apply.js";
 import { applyAnnotationBatch, undoBatch } from "./semantic-authoring-human.js";
 
 const DatabaseSync = createRequire(import.meta.url)("node:sqlite").DatabaseSync as { new(path: string): DatabaseType };
@@ -225,6 +226,39 @@ describe("duplicate propagation of connectives", () => {
       } finally {
         db.close();
       }
+    }
+  });
+});
+
+describe("chat review of a connective's relation", () => {
+  /** The fixture's connective, returned to review as a model proposal. */
+  const pendingConnective = () => {
+    const made = fixture(undefined);
+    made.db.prepare("UPDATE proposals SET status = 'pending', reason_json = '{}' WHERE id = ?").run(made.proposal);
+    return made;
+  };
+
+  it("records the relation a chat connective decision names", async () => {
+    const { db, proposal } = pendingConnective();
+    try {
+      const result = await applyChatReview(db, { reviewer: REVIEWER, decisions: [{ action: "connective", proposal_id: proposal, relation: "condition-of" }] });
+      expect(result.failed).toEqual([]);
+      const row = db.prepare("SELECT status, json_extract(reason_json, '$.reviewed_relation') AS relation FROM proposals WHERE id = ?").get(proposal);
+      expect(row).toEqual({ status: "accepted", relation: "condition-of" });
+    } finally {
+      db.close();
+    }
+  });
+
+  it("refuses a relation on a decision that cannot record one, and leaves the proposal alone", async () => {
+    const { db, proposal } = pendingConnective();
+    try {
+      const result = await applyChatReview(db, { reviewer: REVIEWER, decisions: [{ action: "reject", proposal_id: proposal, relation: "condition-of" }] });
+      expect(result.applied).toEqual([]);
+      expect(result.failed).toEqual([{ proposal_id: proposal, error: expect.stringMatching(/relation is only valid on a connective decision/u) }]);
+      expect(db.prepare("SELECT status FROM proposals WHERE id = ?").get(proposal)).toEqual({ status: "pending" });
+    } finally {
+      db.close();
     }
   });
 });
