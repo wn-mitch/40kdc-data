@@ -75,4 +75,19 @@ export const EVENT_USED_OBJECT_EXTENSIONS: readonly FamilyExtension[] = [
       return { ...previous(rest), mode: enumValue(mode, SELECTED_DISEMBARK_MODES, "event.mode") };
     },
   },
+  {
+    // "Select one friendly unit. … each time an attack is allocated to a model in that unit, …".
+    family: "event",
+    version: 38,
+    description: "As the previous version, plus object selected-unit on a damage-allocated moment: the attack is allocated to a model in the unit a selection picked (\"each time an attack is allocated to a model in that unit\", after \"select one friendly unit\").",
+    schema: (previous) => {
+      const object = (previous.properties as Record<string, Schema>).object!;
+      return withProperties(previous, { object: { ...object, enum: [...new Set([...(object.enum as string[]), "selected-unit"])] } });
+    },
+    normalize: (input, previous) => {
+      if (input.object !== "selected-unit") return previous(input);
+      // The previous version checks the rest, and that only a moment that takes an object names one, with this unit standing in.
+      return { ...previous({ ...input, object: "this-unit" }), object: "selected-unit" };
+    },
+  },
 ];

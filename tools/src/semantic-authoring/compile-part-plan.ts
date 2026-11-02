@@ -79,7 +79,7 @@ export function planEffects(frame: PartFrame, sourceText: string | undefined, op
         // An allocation moment before the effect ("Each time an attack … is allocated to a model in that unit"):
         // the attack a makes-attack names is the one allocated to the bearer's unit (compile-fragments.ts attackOwner).
         defended: currentMoment?.family_id === "event" && currentMoment.parameters.kind === "damage-allocated",
-        allocatedToModel: currentMoment?.parameters.object === "this-model",
+        allocatedTo: currentMoment?.parameters.object,
       });
       // "… are selected as a target …, each time an attack targets that unit": the attacks on the moment's
       // targeted unit (its object, folded from the filter before it), not every attack the enemy makes.

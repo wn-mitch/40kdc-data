@@ -230,10 +230,10 @@ export function attackOwner(context: { attacker?: Node | string | null; incoming
  * One effect. `subject` is who the ability's own subject resolves to: the unit when a leader
  * is attached, else the family's subject parameter. `incoming` marks an effect on attacks that
  * target this unit, where the attacker's rolls are modified. `defended` is set when an
- * allocation moment precedes the effect (see attackOwner). `allocatedToModel` keeps bearer-only
- * allocation modifiers on the general stat path rather than widening them to unit-wide reduction.
+ * allocation moment precedes the effect (see attackOwner). `allocatedTo` is that moment's object: an attack allocated
+ * to this model, or to the unit a selection picked, reduces that model's or that unit's damage, not this unit's.
  */
-export function effect(leaf: CompileLeaf, context: { attached: boolean; attacker?: Node | string | null; incoming: boolean; defended?: boolean; allocatedToModel?: boolean }): Node {
+export function effect(leaf: CompileLeaf, context: { attached: boolean; attacker?: Node | string | null; incoming: boolean; defended?: boolean; allocatedTo?: unknown }): Node {
   // "That unit (and any units embarked within that unit)": the same effect on the embarked units too (compile-with-embarked.ts).
   if (leaf.parameters.with_embarked === true) {
     const { with_embarked: _widened, ...parameters } = leaf.parameters;
@@ -624,7 +624,7 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
         const scopedLeaf = weaponName === undefined ? leaf : { ...leaf, parameters: { ...leaf.parameters, weapon_name: weaponName } };
         if (allocatedDamageReduction && stat === "D") {
           return {
-            type: "damage-reduction", target: context.allocatedToModel === true ? "this-model" : "this-unit",
+            type: "damage-reduction", target: context.allocatedTo === "this-model" || context.allocatedTo === "selected-unit" ? context.allocatedTo : "this-unit",
             modifier: { reduction: closed(leaf, "value"), ...weaponScope(scopedLeaf) },
           };
         }
