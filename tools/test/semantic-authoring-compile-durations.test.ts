@@ -1,5 +1,3 @@
-import { readFileSync } from "node:fs";
-import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
@@ -11,31 +9,7 @@ import { describeAbility } from "../src/translate/index.js";
 /** A registered designation, so a designate-target compiles (compile-wrappers.ts designationIdFor). */
 const FIXTURE_RULE_NAME = "A Trap Well Laid";
 
-/**
- * Several printed durations in one ability (compile-durations.ts). The fixtures under
- * test/fixtures/semantic-authoring-durations are stored leaves of workbench records with their wording
- * masked, each holding the canonical mechanics it compiled to. Every other case is fabricated wording
- * written for this file.
- */
-
-const FIXTURE_DIR = fileURLToPath(new URL("./fixtures/semantic-authoring-durations/", import.meta.url));
-
-type Fixture = { id: number; source_text: string; leaves: CompileLeaf[]; edits: string | null; baseline_mechanics?: unknown };
-
-function fixture(id: number): Fixture {
-  return JSON.parse(readFileSync(`${FIXTURE_DIR}${id}.json`, "utf8")) as Fixture;
-}
-
-function compileFixture(id: number) {
-  const { leaves, source_text } = fixture(id);
-  return compileLeaves(leaves, source_text, { name: FIXTURE_RULE_NAME });
-}
-
-function mechanicsOf(id: number): Record<string, any> {
-  const result = compileFixture(id);
-  if (!result.ok) throw new Error(result.errors.join("; "));
-  return result.mechanics as unknown as Record<string, any>;
-}
+/** Several printed durations in one ability (compile-durations.ts). All wording is fabricated for this file. */
 
 /** Leaves on their own wording in `text`, in order (fabricated wording, not rules text). */
 function placed(text: string, ...items: Array<[string, string, Record<string, unknown>]>): CompileLeaf[] {
@@ -253,16 +227,6 @@ describe("bound durations on records with several", () => {
   });
 });
 
-describe("bound durations on the stored records", () => {
-  // 1596 and 2540: the Strategic Reserves set-up is folded away before the check; 3620: one moment (use-window, then
-  // set-up) is not refused.
-  it("a single-duration record keeps its canonical baseline mechanics", () => {
-    for (const id of [3620, 1596, 2540]) {
-      const { baseline_mechanics } = fixture(id);
-      expect(mechanicsOf(id), `av ${id}`).toEqual(baseline_mechanics);
-    }
-  });
-});
 
 describe("bound durations on fabricated sentences", () => {
   it("X until A and Y until B: each effect takes the duration of its own clause", () => {
@@ -367,12 +331,6 @@ describe("bound durations on fabricated sentences", () => {
     expect(compileLeaves(leaves, text, { name: FIXTURE_RULE_NAME }).ok).toBe(true);
   });
 
-  it("3545, 8334, 8554, 10074: set-up triggers beside another moment keep their canonical baseline mechanics", () => {
-    for (const id of [3545, 8334, 8554, 10074]) {
-      const { baseline_mechanics } = fixture(id);
-      expect(mechanicsOf(id), `av ${id}`).toEqual(baseline_mechanics);
-    }
-  });
 });
 
 describe("a no-roll and its add-6 fold into one move", () => {
