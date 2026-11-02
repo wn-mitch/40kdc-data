@@ -1,4 +1,4 @@
-import { duration } from "./compile-conditions.js";
+import { duration } from "./compile-duration-scope.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 
 /**

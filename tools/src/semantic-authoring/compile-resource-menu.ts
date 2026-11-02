@@ -1,7 +1,8 @@
 import { closed, CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { trigger, triggerLeaves } from "./compile-triggers.js";
 import { canonicalDurationName } from "./compile-durations.js";
-import { condition, duration } from "./compile-conditions.js";
+import { condition } from "./compile-conditions.js";
+import { duration } from "./compile-duration-scope.js";
 
 /**
  * The resource-action-menu container (Battle Focus's Agile Manoeuvres): its actions, their

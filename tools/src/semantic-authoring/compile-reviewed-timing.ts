@@ -1,5 +1,5 @@
 import { compileStratagemActivation } from "./compile-stratagem-activation.js";
-import { duration } from "./compile-conditions.js";
+import { duration } from "./compile-duration-scope.js";
 import { checkedKeys } from "./compile-error.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { foldHolderAbilities } from "./compile-holder-abilities.js";

@@ -1,6 +1,6 @@
 import { CompileError, type CompileLeaf, unitOf } from "./compile-fragments.js";
 import type { Compiled } from "./compile.js";
-import { duration } from "./compile-conditions.js";
+import { duration } from "./compile-duration-scope.js";
 import { dslUnitFilter } from "./compile-unit-filter-dsl.js";
 import { ordered, placements, shapeSignature } from "./compile-placement.js";
 import { exactSpan } from "./contracts.js";

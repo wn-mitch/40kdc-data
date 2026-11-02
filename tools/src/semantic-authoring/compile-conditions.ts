@@ -24,8 +24,6 @@ import { namedRange } from "./named-ranges.js";
 import { optionalCostCondition } from "./compile-optional-cost.js";
 import { namedEquipmentPredicate } from "./compile-named-equipment.js";
 import { checkStratagemActivity, stratagemTargetedAnyOf } from "./compile-opponent-stratagem.js";
-import { phaseEdgeDuration } from "./compile-duration-edges.js";
-import { PHASE_EDGE_ENDPOINTS } from "./families/durations-and-designations.js";
 import { canonicalDesignation } from "./compile-redesignate.js";
 import { liftWarlord } from "./core-keywords.js";
 
@@ -57,19 +55,6 @@ function attackFilter(leaf: CompileLeaf, source: Node): Node {
   }
   return parameters;
 }
-
-const DURATIONS: Record<string, string> = {
-  "end-of-phase": "phase", "end-of-turn": "turn", "end-of-battle-round": "battle-round", "end-of-battle": "battle",
-  "start-of-next-turn": "until-start-next-turn", "start-of-next-command-phase": "until-next-command-phase",
-  "start-of-next-movement-phase": "until-next-movement-phase", "start-of-next-battle-round": "until-next-battle-round",
-  // Version 3 (batch 7a).
-  "end-of-attack-sequence": "attack-sequence", "end-of-this-use": "resolution", "start-of-next-shooting-phase": "until-next-shooting-phase",
-  "end-of-your-next-turn": "until-end-of-your-next-turn", "end-of-opponents-next-turn": "until-end-of-opponent-next-turn",
-  "this-unit-has-shot": "until-this-unit-has-shot", "control-lost": "control-lost",
-  "after-this-use": "after-resolving",
-  // Version 6: the turn after the current one, whoever's.
-  "end-of-next-turn": "until-end-of-next-turn",
-};
 
 /** A unit's own activity, as the history it leaves: [event, filter, window]. */
 const ACTIVITIES: Record<string, [string, Node, string]> = {
@@ -834,14 +819,6 @@ export function condition(leaf: CompileLeaf): Node {
 /** `subjectOf`'s own subject value, when the leaf names one other than the implicit default. */
 function subjectOf(leaf: CompileLeaf): string | undefined {
   return leaf.parameters.subject === undefined ? undefined : (closed(leaf, "subject") as string);
-}
-
-/** A DURATION leaf's DSL scope. */
-export function duration(leaf: CompileLeaf): string {
-  if (PHASE_EDGE_ENDPOINTS.includes(String(closed(leaf, "endpoint")))) return phaseEdgeDuration(leaf);
-  const found = DURATIONS[String(closed(leaf, "endpoint"))];
-  if (!found) throw new CompileError(`Duration ${String(leaf.parameters.endpoint)} has no DSL scope yet.`);
-  return found;
 }
 
 /** Several conditions all holding, or null when there are none; shared with `compile.ts`'s own gating. */

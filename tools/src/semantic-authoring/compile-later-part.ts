@@ -1,4 +1,4 @@
-import { duration } from "./compile-conditions.js";
+import { duration } from "./compile-duration-scope.js";
 import type { CompileLeaf } from "./compile-fragments.js";
 
 type Node = Record<string, unknown>;

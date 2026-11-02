@@ -1,4 +1,5 @@
-import { allOf, condition, duration, matchingUnit } from "./compile-conditions.js";
+import { allOf, condition, matchingUnit } from "./compile-conditions.js";
+import { duration } from "./compile-duration-scope.js";
 import { dslUnitFilter } from "./compile-unit-filter-dsl.js";
 import { trigger } from "./compile-triggers.js";
 import type { CompileLeaf } from "./compile-fragments.js";

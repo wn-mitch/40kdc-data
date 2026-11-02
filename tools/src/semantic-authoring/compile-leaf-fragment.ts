@@ -1,5 +1,6 @@
 import { hasAntecedent } from "./compile-antecedent.js";
-import { attackTypeCondition, ATTACK_EVENTS, condition, duration } from "./compile-conditions.js";
+import { attackTypeCondition, ATTACK_EVENTS, condition } from "./compile-conditions.js";
+import { duration } from "./compile-duration-scope.js";
 import { isContainerOpener } from "./compile-containers.js";
 import { effect, type CompileLeaf } from "./compile-fragments.js";
 import { trigger, triggerLeaves } from "./compile-triggers.js";

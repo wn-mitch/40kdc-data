@@ -1,6 +1,7 @@
 import type { CompileLeaf } from "./compile-fragments.js";
 import { checkedKeys, CompileError } from "./compile-error.js";
-import { condition, duration, negate } from "./compile-conditions.js";
+import { condition, negate } from "./compile-conditions.js";
+import { duration } from "./compile-duration-scope.js";
 import { foldUnitFilters } from "./compile-unit-filters.js";
 import { selectionFilter } from "./compile-wrappers.js";
 
