@@ -13,9 +13,9 @@ const FIXTURE_RULE_NAME = "A Trap Well Laid";
 
 /**
  * Several printed durations in one ability (compile-durations.ts). The fixtures under
- * test/fixtures/semantic-authoring-durations are the stored leaves of eleven ability versions, with fabricated
- * wording that keeps the gaps' punctuation and connectives, and with the Wave 10 leaf re-authorings
- * applied. The synthetic cases below are fabricated wording written for this file.
+ * test/fixtures/semantic-authoring-durations are stored leaves of workbench records with their wording
+ * masked; each pins a reading or refusal named in its test. Every other case is fabricated wording
+ * written for this file.
  */
 
 const FIXTURE_DIR = fileURLToPath(new URL("./fixtures/semantic-authoring-durations/", import.meta.url));
@@ -290,12 +290,92 @@ describe("a no-roll and its add-6 fold into one move", () => {
   });
 });
 
-/** The fixture's leaves, then `tail` appended to its wording with `items` placed in it: two durations in an effectless sentence. */
-function withTail(id: number, tail: string, items: Array<[string, string, Record<string, unknown>]>): { leaves: CompileLeaf[]; text: string } {
-  const { leaves, source_text } = fixture(id);
-  const offset = Buffer.byteLength(source_text, "utf8");
-  const extra = placed(tail, ...items).map((leaf) => ({ ...leaf, start_byte: leaf.start_byte + offset, end_byte: leaf.end_byte === undefined ? undefined : leaf.end_byte + offset }));
-  return { leaves: [...leaves, ...extra], text: source_text + tail };
+type Base = { text: string; items: Array<[string, string, Record<string, unknown>]> };
+
+/**
+ * Records of each structure the duration split must keep refusing (fabricated wording). Each
+ * compiles alone to the node named in `shape`; `withTail` then appends two durations.
+ */
+const BASES: Record<string, Base & { shape: Record<string, unknown> }> = {
+  rolls: {
+    text: "Each time a model in this unit is destroyed by a melee attack, if that model has not fought this phase, roll one D6. On a 2+, it can fight after the attacking unit has finished its attacks.",
+    items: [
+      ["Each time a model in this unit is destroyed by a melee attack", "event", { kind: "model-destroyed" }],
+      ["if that model has not fought this phase", "unit-activity", { activities: ["fought-this-phase"], subject: "event-subject", negated: true }],
+      ["roll one D6", "dice-roll", { dice: "D6" }],
+      ["On a 2+", "roll-result", { from: 2 }],
+      ["it can fight after the attacking unit has finished its attacks", "fight-on-death", { act: "fight", timing: "after-the-attacking-unit-finishes" }],
+    ],
+    shape: { type: "act-on-death", modifier: expect.objectContaining({ gate: expect.objectContaining({ dice: "D6", threshold: 2 }) }) },
+  },
+  aura: {
+    text: "While an enemy unit is within 6\" of this model, worsen the Leadership of models in that unit by 1.",
+    items: [
+      ["enemy unit", "unit-filter", { side: "enemy" }],
+      ["within 6\" of this model", "aura-range", { inches: 6, of: "this-model" }],
+      ["worsen the Leadership of models in that unit by 1", "characteristic-modifier", { subject: "antecedent", characteristics: ["Ld"], operation: "worsen", value: 1, weapon_type: "all" }],
+    ],
+    shape: { type: "aura", modifier: expect.objectContaining({ range: { inches: 6 } }) },
+  },
+  leader: {
+    text: "If a FIXTURE PRIEST model with the Leader ability can be attached to a FIXTURE SQUAD unit, it can be attached to this unit instead. If a FIXTURE PRIEST model is attached to this unit when battle formations are declared, that model gains the Scouts 6\" ability.",
+    items: [
+      ["a FIXTURE PRIEST model", "unit-filter", { side: "friendly", keywords: ["FIXTURE PRIEST"] }],
+      ["with the Leader ability", "unit-has-ability", { subject: "antecedent", ability: "leader" }],
+      ["can be attached to a", "leading-unit", { subject: "antecedent", attachment: "can-attach", object: "following-filter" }],
+      ["FIXTURE SQUAD unit", "unit-filter", { side: "friendly", keywords: ["FIXTURE SQUAD"] }],
+      ["it can be attached to this unit", "army-construction", { rule: "attachment", subject: "antecedent", object: "this-unit" }],
+      ["instead", "instead", {}],
+      ["a FIXTURE PRIEST model is attached to this unit", "leader-target", { leader_keywords: ["FIXTURE PRIEST"] }],
+      ["when battle formations are declared", "event", { kind: "battle-formations-declared" }],
+      ["that model gains the Scouts 6\" ability", "core-ability-grant", { subject: "this-model", ability: "scouts", value: 6 }],
+    ],
+    shape: { type: "sequence", steps: [expect.objectContaining({ type: "army-rule", modifier: expect.objectContaining({ rule: "attachment" }) }), expect.objectContaining({ type: "ability-part" })] },
+  },
+  "for-each": {
+    text: "At the start of the Fight phase, each enemy unit engaged with this unit takes a Nerve test, with -1 to that Nerve test.",
+    items: [
+      ["At the start of the Fight phase", "event", { kind: "phase-start", phase: "fight", turn: "either" }],
+      ["each", "for-each-unit-select", {}],
+      ["enemy unit", "unit-filter", { side: "enemy" }],
+      ["engaged with this unit", "unit-state", { states: ["engaged"], subject: "antecedent", negated: false, with: "this-unit" }],
+      ["takes a Nerve test", "test", { target: "antecedent", test: "battle-shock" }],
+      ["with -1 to that Nerve test", "roll-modifier", { roll: "battle-shock", operation: "subtract", value: 1 }],
+    ],
+    shape: { type: "for-each-unit", selector: { filter: { owner: "enemy", engaged_with: "this-unit" } }, effect: { type: "test", target: "recipient", modifier: { test: "battle-shock", modifier: -1 } } },
+  },
+  designation: {
+    text: "In your Shooting phase, when this unit is selected to shoot, you can select one visible enemy unit. This unit's ranged attacks that target that unit have [DEVASTATING WOUNDS].",
+    items: [
+      ["In your Shooting phase", "phase-window", { phase: "shooting", turn: "your" }],
+      ["when this unit is selected to shoot", "event", { kind: "selected-to-shoot" }],
+      ["you can", "optional-use", { who: "you" }],
+      ["select one", "select-unit", { distance: "any", visible: false }],
+      ["visible enemy unit", "unit-filter", { side: "enemy", visible: true }],
+      ["This unit's ranged attacks", "attack", { direction: "makes", unit: "this-unit", attack_type: "ranged" }],
+      ["that target that unit", "target-is-selected", {}],
+      ["DEVASTATING WOUNDS", "weapon-ability-keyword", { keyword: "Devastating Wounds" }],
+    ],
+    shape: { type: "conditional", effect: expect.objectContaining({ type: "designate-target", applies: expect.objectContaining({ to: "attackers-of-target" }) }) },
+  },
+  "usage-limit": {
+    text: "WHEN: The Battle-shock step of your Command phase, just before you take a Nerve test for a friendly unit. TARGET: That unit. EFFECT: That unit passes that Nerve test automatically. RESTRICTIONS: You can use this Stratagem once per battle.",
+    items: [
+      ["The Battle-shock step of your Command phase", "event", { kind: "step-started", step: "battle-shock", turn: "your" }],
+      ["just before you take a Nerve test for a", "event", { kind: "before-roll", roll: "battle-shock" }],
+      ["friendly unit", "unit-filter", { side: "friendly" }],
+      ["That unit", "triggering-target", { selects: "unit", keywords: [], match: "all" }],
+      ["passes that Nerve test automatically", "roll-auto-result", { roll: "battle-shock", outcome: "auto-pass" }],
+      ["You can use this Stratagem once per battle", "usage-limit", { frequency: "once-per-battle", per: "army" }],
+    ],
+    shape: { type: "roll-result", modifier: { roll: "battle-shock", result: "pass" } },
+  },
+};
+
+/** `base` with `tail` appended to its wording and `items` placed in the tail. */
+function withTail(base: Base, tail: string, items: Array<[string, string, Record<string, unknown>]>): { leaves: CompileLeaf[]; text: string } {
+  const text = base.text + tail;
+  return { leaves: placed(text, ...base.items, ...items), text };
 }
 
 const TWO_DURATIONS: Array<[string, string, Record<string, unknown>]> = [
@@ -305,33 +385,34 @@ const TWO_DURATIONS: Array<[string, string, Record<string, unknown>]> = [
 const TWO_DURATIONS_TAIL = " Until the end of the phase. Until the end of the turn.";
 
 describe("kept refusals when an ability prints two durations", () => {
-  // Each base record compiles on its own; the appended durations make the split path run, and the refusal must hold.
-  it.each([
-    [7, "rolls"],
-    [41, "aura"],
-    [6239, "leader"],
-    [10099, "for-each"],
-    [10118, "designation (selected attacks)"],
-  ])("av %i (%s) refuses", (id) => {
-    const base = compileFixture(id);
-    expect(base.ok, `av ${id} alone`).toBe(true);
-    const { leaves, text } = withTail(id, TWO_DURATIONS_TAIL, TWO_DURATIONS);
+  // Each base compiles on its own; the appended durations make the split path run, and the refusal must hold.
+  it.each(["rolls", "aura", "leader", "for-each", "designation"])("a %s record refuses", (label) => {
+    const base = BASES[label]!;
+    const alone = compileLeaves(placed(base.text, ...base.items), base.text, { name: FIXTURE_RULE_NAME });
+    if (!alone.ok) throw new Error(alone.errors.join("; "));
+    expect(alone.mechanics.effect).toMatchObject(base.shape);
+    const { leaves, text } = withTail(base, TWO_DURATIONS_TAIL, TWO_DURATIONS);
     const result = compileLeaves(leaves, text, { name: FIXTURE_RULE_NAME });
     expect(result.ok).toBe(false);
     expect(result.ok ? [] : result.errors).toContain(CONFLICTING_DURATIONS);
   });
 
-  it("av 6228 (usage limit) refuses with the usage message", () => {
-    const { leaves, text } = withTail(6228, TWO_DURATIONS_TAIL, TWO_DURATIONS);
+  it("a usage-limited record refuses with the usage message", () => {
+    const base = BASES["usage-limit"]!;
+    const alone = compileLeaves(placed(base.text, ...base.items), base.text, { name: FIXTURE_RULE_NAME });
+    if (!alone.ok) throw new Error(alone.errors.join("; "));
+    expect(alone.mechanics.effect).toMatchObject(base.shape);
+    expect(alone.mechanics.usage).toMatchObject({ frequency: "n-per-battle", count: 1 });
+    const { leaves, text } = withTail(base, TWO_DURATIONS_TAIL, TWO_DURATIONS);
     const result = compileLeaves(leaves, text, { name: FIXTURE_RULE_NAME });
     expect(result.ok ? [] : result.errors).toContain("A usage limit in an ability with several durations has no reading yet.");
   });
 
   it("a rules bundle refuses with two durations, and compiles with none", () => {
     const bundle: Array<[string, string, Record<string, unknown>]> = [["Bundle", "rules-bundle-marker", {}]];
-    const alone = withTail(7, " Bundle.", bundle);
+    const alone = withTail(BASES.rolls!, " Bundle.", bundle);
     expect(compileLeaves(alone.leaves, alone.text, { name: FIXTURE_RULE_NAME }).ok).toBe(true);
-    const { leaves, text } = withTail(7, " Bundle. Until the end of the phase. Until the end of the turn.", [...bundle, ...TWO_DURATIONS]);
+    const { leaves, text } = withTail(BASES.rolls!, " Bundle. Until the end of the phase. Until the end of the turn.", [...bundle, ...TWO_DURATIONS]);
     const result = compileLeaves(leaves, text, { name: FIXTURE_RULE_NAME });
     expect(result.ok ? [] : result.errors).toContain(CONFLICTING_DURATIONS);
   });
@@ -343,7 +424,7 @@ describe("kept refusals when an ability prints two durations", () => {
       ["Optional read", "optional-cost-paid", { window: "use", pool: "yp-pool" }],
       ["You can use this", "optional-use", { who: "this-unit" }],
     ];
-    const { leaves, text } = withTail(7, " Used. Spend it. Optional read. You can use this." + TWO_DURATIONS_TAIL, [...spend, ...TWO_DURATIONS]);
+    const { leaves, text } = withTail(BASES.rolls!, " Used. Spend it. Optional read. You can use this." + TWO_DURATIONS_TAIL, [...spend, ...TWO_DURATIONS]);
     const result = compileLeaves(leaves, text, { name: FIXTURE_RULE_NAME });
     expect(result.ok ? [] : result.errors).toContain(CONFLICTING_DURATIONS);
   });
