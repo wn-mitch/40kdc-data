@@ -8,7 +8,7 @@ import type { DatabaseSync as DatabaseType } from "node:sqlite";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { initializeWorkbench } from "../src/semantic-authoring/db.js";
 
-import { preparePublication, publishPublication, reconcilePublicationBatches } from "../src/semantic-authoring/publish.js";
+import { listPublications, preparePublication, publishPublication, reconcilePublicationBatches } from "../src/semantic-authoring/publish.js";
 import { canonicalTarget } from "../src/semantic-authoring/publish-core.js";
 import { assertKnownKeywords, keywordIndex } from "../src/semantic-authoring/core-keywords.js";
 import { listShapes } from "../src/semantic-authoring/shapes.js";
@@ -97,6 +97,8 @@ describe("Semantic authoring stratagem targets", () => {
     });
     // Phases were only checked against core, never rewritten.
     expect(core[0]!.phases).toEqual(["shooting"]);
+    // The evidence it was published from still stands, core target and all.
+    expect(listPublications(db).items[0]).toMatchObject({ batch_id: preview.batch_id, evidence_status: "current" });
   });
 
   it("recovers an interrupted publication only when both files hold the staged bytes", async () => {

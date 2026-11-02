@@ -222,6 +222,11 @@ function loadEntryRows(db: DatabaseSync, factionId: string, entryIds: string[]):
   return rows;
 }
 
+/** The hash a publication snapshot records for an entry's mechanics and core patch, and checks it against. */
+function mechanicsHash(entry: { mechanics: Mechanics; core: EntryRow["core"] }): string {
+  return hashJson(compiledIdentity(entry.mechanics, entry.core));
+}
+
 function sourceMatchHash(sourceType: string | null, fragments: unknown): string {
   return hashJson({ source_type: sourceType, fragments });
 }
@@ -247,7 +252,7 @@ function approvedEntrySnapshot(db: DatabaseSync, row: EntryRow, freshSource: Sou
     ability_version_id: row.ability_version_id,
     shape_signature: row.shape_signature,
     inputs_hash: row.inputs_hash,
-    mechanics_hash: hashJson(compiledIdentity(row.mechanics, row.core)),
+    mechanics_hash: mechanicsHash(row),
     source_hash: row.source_hash,
     source_digest: sourceDigest(freshSource.text),
     source_match_hash: storedMatchHash,
@@ -558,7 +563,7 @@ function evidenceStatus(db: DatabaseSync, manifest: PublicationManifest): "curre
       !entry || !source
       || entry.status !== "approved"
       || entry.inputs_hash !== snapshot.inputs_hash
-      || hashJson(entry.mechanics) !== snapshot.mechanics_hash
+      || mechanicsHash(entry) !== snapshot.mechanics_hash
       || compilationInputsHash(db, entry.ability_version_id) !== snapshot.inputs_hash
       || source.current !== 1
       || source.source_hash !== snapshot.source_hash
