@@ -136,7 +136,7 @@ function collect(node: unknown, found: { tests: string[]; marks: string[] }): vo
 
 /**
  * A tag tested after it is applied to the same subject in one part, with no moment between, refuses:
- * the compiler does not order the test before the mark (4194's pin order). A test whose subject is
+ * the compiler does not order the test before the mark. A test whose subject is
  * not named (a gate on this ability's own mark) is not checked.
  */
 export function refuseTestAfterMark(items: ReadonlyArray<{ index: number; node: Node; gate: Node[] }>, partOf: (index: number) => number): string | null {

@@ -14,7 +14,7 @@ const FIXTURE_RULE_NAME = "A Trap Well Laid";
 /**
  * Several printed durations in one ability (compile-durations.ts). The fixtures under
  * test/fixtures/semantic-authoring-durations are stored leaves of workbench records with their wording
- * masked; each pins a reading or refusal named in its test. Every other case is fabricated wording
+ * masked, each holding the canonical mechanics it compiled to. Every other case is fabricated wording
  * written for this file.
  */
 
@@ -67,9 +67,122 @@ it("keeps expiry after resolution distinct from a duration during resolution", (
   expect(compileDuration("after-this-use")).toBe("after-resolving");
 });
 
-describe("bound durations on the stored records", () => {
-  it("3746: the no-roll's +6 folds into it (one move, not two), the grant lasts the turn", () => {
-    const mechanics = mechanicsOf(3746);
+type Items = Array<[string, string, Record<string, unknown>]>;
+const STRATAGEM_TARGET = (keywords: string[]) => ({ count: "one", side: "your-army", selects: "unit", keywords, match: "all", excluded_keywords: [] });
+const ADD_SIX: [string, string, Record<string, unknown>] = ["add 6\" to the Move characteristic of models in your unit", "characteristic-modifier", { subject: "this-unit", characteristics: ["M"], operation: "add", value: 6, weapon_type: "all" }];
+
+/** Fabricated records with several printed durations, by the reading each pins. */
+const RECORDS: Record<string, { text: string; items: Items }> = {
+  "advance fold": {
+    text: "Each time a friendly FIXTURE VEHICLE unit starts an Advance move, it does not make an Advance roll; until the end of the phase, add 6\" to the Move characteristic of models in that unit, and until the end of the turn, ranged weapons equipped by models in that unit have the [ASSAULT] ability.",
+    items: [
+      ["friendly FIXTURE VEHICLE unit", "unit-filter", { side: "friendly", keywords: ["FIXTURE", "VEHICLE"] }],
+      ["starts an Advance move", "event", { kind: "move-started", owner: "friendly", move_types: ["advance"] }],
+      ["it does not make an Advance roll", "no-advance-roll", { subject: "antecedent" }],
+      ["until the end of the phase", "duration", DURATION_PHASE],
+      ["add 6\" to the Move characteristic of models in that unit", "characteristic-modifier", { ...MOVE_SIX, subject: "antecedent" }],
+      ["until the end of the turn", "duration", DURATION_TURN],
+      ["ranged weapons equipped by models in that unit have the [ASSAULT] ability", "weapon-ability-grant", { ...ASSAULT, subject: "antecedent" }],
+    ],
+  },
+  "window stratagem": {
+    text: "WHEN: Your Movement phase.\nTARGET: One FIXTURE GUARDIANS unit from your army.\nEFFECT: Until the end of the phase, each time your unit Advances, do not make an Advance roll for it. Instead, until the end of the phase, add 6\" to the Move characteristic of models in your unit. Until the end of the turn, your unit is eligible to shoot and declare a charge in a turn in which it Advanced.",
+    items: [
+      ["Your Movement phase", "use-window", { your_phases: ["movement"], opponent_phases: [], either_phases: [] }],
+      ["One FIXTURE GUARDIANS unit from your army", "stratagem-target", STRATAGEM_TARGET(["FIXTURE GUARDIANS"])],
+      ["Until the end of the phase", "duration", DURATION_PHASE],
+      ["each time your unit Advances", "event", { kind: "move-started", move_types: ["advance"] }],
+      ["do not make an Advance roll for it", "no-advance-roll", { subject: "this-unit" }],
+      ["Instead", "instead", {}],
+      ["until the end of the phase", "duration", DURATION_PHASE],
+      ADD_SIX,
+      ["Until the end of the turn", "duration", DURATION_TURN],
+      ["your unit is eligible to shoot and declare a charge in a turn in which it Advanced", "act-after-move", { subject: "this-unit", moves: ["advance"], acts: ["shoot", "charge"] }],
+    ],
+  },
+  "gated fold": {
+    text: "WHEN: Your Movement phase, just after a friendly FIXTURE PENITENT unit starts an Advance move.\nTARGET: That FIXTURE PENITENT unit.\nEFFECT: Until the end of the turn, your unit is eligible to declare a charge in a turn in which it Advanced. If your unit has the FIXTURE ENGINES keyword, do not make an Advance roll for it; instead, until the end of the phase, add 6\" to the Move characteristic of models in your unit.",
+    items: [
+      ["Your Movement phase", "use-window", { your_phases: ["movement"], opponent_phases: [], either_phases: [] }],
+      ["friendly FIXTURE PENITENT unit", "unit-filter", { side: "friendly", keywords: ["FIXTURE PENITENT"] }],
+      ["starts an Advance move", "event", { kind: "move-started", owner: "friendly", move_types: ["advance"] }],
+      ["That FIXTURE PENITENT unit", "triggering-target", { selects: "unit", keywords: ["FIXTURE PENITENT"], match: "all" }],
+      ["Until the end of the turn", "duration", DURATION_TURN],
+      ["your unit is eligible to declare a charge in a turn in which it Advanced", "act-after-move", { subject: "this-unit", moves: ["advance"], acts: ["charge"] }],
+      ["your unit has the FIXTURE ENGINES keyword", "unit-keyword", { keywords: ["FIXTURE ENGINES"], subject: "this-unit", negated: false }],
+      ["do not make an Advance roll for it", "no-advance-roll", { subject: "this-unit" }],
+      ["instead", "instead", {}],
+      ["until the end of the phase", "duration", DURATION_PHASE],
+      ADD_SIX,
+    ],
+  },
+  "gated parts": {
+    text: "WHEN: Fight phase.\nTARGET: One FIXTURE SISTERS unit from your army.\nEFFECT: Until the end of the turn, improve the Strength characteristic of melee weapons equipped by models in your unit by 1. If your unit is Righteous, until the end of the phase, improve the Armour Penetration characteristic of melee weapons equipped by models in your unit by 1 as well.",
+    items: [
+      ["Fight phase", "use-window", { your_phases: [], opponent_phases: [], either_phases: ["fight"] }],
+      ["One FIXTURE SISTERS unit from your army", "stratagem-target", STRATAGEM_TARGET(["FIXTURE SISTERS"])],
+      ["Until the end of the turn", "duration", DURATION_TURN],
+      ["improve the Strength characteristic of melee weapons equipped by models in your unit by 1", "characteristic-modifier", { subject: "this-unit", characteristics: ["S"], operation: "improve", value: 1, weapon_type: "melee" }],
+      [" If your unit is Righteous,", "rule-active", { rule: "righteous", negated: false }],
+      ["until the end of the phase", "duration", DURATION_PHASE],
+      ["improve the Armour Penetration characteristic of melee weapons equipped by models in your unit by 1", "characteristic-modifier", { subject: "this-unit", characteristics: ["AP"], operation: "improve", value: 1, weapon_type: "melee" }],
+    ],
+  },
+  suppression: {
+    text: "FIXTURE COMMANDER model only. After this model has shot, you can select one enemy unit hit by those attacks. That unit is Suppressed until the start of your next turn: while a unit is Suppressed, each time a model in that unit makes an attack, apply -1 to the Hit roll. Each time this unit ends an Ingress move, it can be set up anywhere on the battlefield that is more than 6\" horizontally away from all enemy units (instead of more than 9\"). If it does, it is not eligible to declare a charge until the end of the turn.",
+    items: [
+      ["FIXTURE COMMANDER model only", "bearer-eligibility", { keywords: ["FIXTURE COMMANDER"], match: "all", excluded_keywords: [] }],
+      ["After this model has shot", "event", { kind: "after-shooting" }],
+      ["you can", "optional-use", { who: "you" }],
+      ["select one enemy unit", "select-unit", { scope: "enemy", distance: "any", visible: false }],
+      ["hit by those attacks", "hit-by-attacks", { subject: "selected-unit" }],
+      ["That unit is Suppressed", "apply-mark", { subject: "antecedent", tag: "suppressed" }],
+      ["until the start of your next turn", "duration", { endpoint: "start-of-next-turn" }],
+      ["while a unit is Suppressed", "designated-filter", { tag: "suppressed" }],
+      ["apply -1 to the Hit roll", "roll-modifier", { roll: "hit", operation: "subtract", value: 1 }],
+      ["ends an Ingress move", "event", { kind: "move-ended", move_types: ["ingress"] }],
+      ["it can be set up anywhere on the battlefield that is more than 6\" horizontally away from all enemy units", "set-up", { subject: "this-unit", to: "battlefield", min_enemy_distance: 6 }],
+      ["instead", "instead", {}],
+      ["it is not eligible to declare a charge", "eligibility-permission", { subject: "this-unit", activity: "declare-charge", allow: false }],
+      ["until the end of the turn", "duration", DURATION_TURN],
+    ],
+  },
+  "marks past a moment": {
+    text: "Each time a friendly unit is selected to shoot in your Shooting phase, that unit can use this ability. If it does, select one enemy unit (excluding MONSTER and VEHICLE units). Until the end of the phase, models in that unit must target that enemy unit. After those attacks have resolved, if that enemy unit was hit by one or more of those attacks, until the start of your next Shooting phase, that unit is Assailed. While a unit is Assailed, until the start of your next Shooting phase, it is Pinned; while a unit is Pinned, subtract 2\" from its Move characteristic and subtract 2 from its Charge rolls.",
+    items: [
+      ["friendly unit", "unit-owner", { owner: "friendly" }],
+      ["is selected to shoot", "event", { kind: "selected", to: "shoot" }],
+      ["in your Shooting phase", "phase-window", { phase: "shooting", turn: "your" }],
+      ["that unit can use this ability", "optional-use", { who: "this-unit" }],
+      ["select one enemy unit", "select-unit", { scope: "enemy", distance: "any", visible: false }],
+      ["excluding MONSTER and VEHICLE units", "unit-keyword", { keywords: ["MONSTER", "VEHICLE"], subject: "selected-unit", negated: true }],
+      ["Until the end of the phase", "duration", DURATION_PHASE],
+      ["models in that unit must target that enemy unit", "targeting-restriction", { may: "must-target", kind: "attack", weapon_type: "all", target: "antecedent", by: "this-unit" }],
+      ["After those attacks have resolved", "event", { kind: "attacks-resolved" }],
+      ["if that enemy unit was hit by one or more of those attacks", "hit-by-attacks", { subject: "antecedent" }],
+      ["until the start of your next Shooting phase", "duration", { endpoint: "start-of-next-shooting-phase" }],
+      ["that unit is Assailed", "apply-mark", { subject: "antecedent", tag: "assailed" }],
+      ["While a unit is Assailed", "designated-filter", { subject: "selected-unit", tag: "assailed" }],
+      ["until the start of your next Shooting phase", "duration", { endpoint: "start-of-next-shooting-phase" }],
+      ["it is Pinned", "apply-mark", { subject: "antecedent", tag: "pinned" }],
+      ["while a unit is Pinned", "designated-filter", { tag: "pinned" }],
+      ["subtract 2\" from its Move characteristic", "characteristic-modifier", { subject: "antecedent", characteristics: ["M"], operation: "subtract", value: 2, weapon_type: "all" }],
+      ["subtract 2 from its Charge rolls", "roll-modifier", { roll: "charge", operation: "subtract", value: 2 }],
+    ],
+  },
+};
+
+const recordLeaves = (name: string): CompileLeaf[] => placed(RECORDS[name]!.text, ...RECORDS[name]!.items);
+const compileRecord = (name: string, leaves = recordLeaves(name)) => compileLeaves(leaves, RECORDS[name]!.text, { name: FIXTURE_RULE_NAME });
+function recordMechanics(name: string): Record<string, any> {
+  const result = compileRecord(name);
+  if (!result.ok) throw new Error(result.errors.join("; "));
+  return result.mechanics as unknown as Record<string, any>;
+}
+
+describe("bound durations on records with several", () => {
+  it("advance fold: the no-roll's +6 folds into it (one move, not two), the grant lasts the turn", () => {
+    const mechanics = recordMechanics("advance fold");
     const [noRoll, grant] = mechanics.effect.steps;
     expect(noRoll).toMatchObject({ type: "ability-part", duration: "phase", effect: { type: "move-modifier", modifier: { advance: "fixed-6" } } });
     expect(grant).toMatchObject({ type: "ability-part", duration: "turn", effect: { type: "weapon-ability-grant" } });
@@ -78,37 +191,36 @@ describe("bound durations on the stored records", () => {
     expect(mechanics.scope.duration).toBe("permanent");
   });
 
-  it("3746 with its first stored leaves (move-ended, no-roll on this unit, +6 on the antecedent) refuses: the +6 is on another unit than the no-roll", () => {
-    const { leaves, source_text } = fixture(3746);
-    const stored = leaves.map((leaf) => (leaf.family_id === "event" ? { ...leaf, parameters: { ...leaf.parameters, kind: "move-ended" } }
+  it("advance fold after the move ended, with the no-roll on this unit and the +6 on the advancing one, refuses: the +6 is on another unit than the no-roll", () => {
+    const leaves = recordLeaves("advance fold").map((leaf) => (leaf.family_id === "event" ? { ...leaf, parameters: { ...leaf.parameters, kind: "move-ended" } }
       : leaf.family_id === "no-advance-roll" ? { ...leaf, parameters: { subject: "this-unit" } } : leaf));
-    const result = compileLeaves(stored, source_text, { name: FIXTURE_RULE_NAME });
+    const result = compileRecord("advance fold", leaves);
     expect(result.ok).toBe(false);
     expect(result.ok ? [] : result.errors).toContain(NO_ROLL_PLUS_SIX);
   });
 
-  it("1185 with its stored leaves (an Advance already happened) refuses: the no-roll cannot follow the Advance", () => {
-    const { leaves, source_text } = fixture(1185);
-    const stored = leaves.map((leaf) => (leaf.family_id === "event" ? { ...leaf, role: "CONDITION", family_id: "unit-activity", parameters: { activities: ["advanced-this-turn"], subject: "this-unit" } } : leaf));
-    const result = compileLeaves(stored, source_text, { name: FIXTURE_RULE_NAME });
+  it("window stratagem read as an Advance already made refuses: the no-roll cannot follow the Advance", () => {
+    const leaves = recordLeaves("window stratagem").map((leaf) => (leaf.family_id === "event"
+      ? { ...leaf, role: "CONDITION", family_id: "unit-activity", family_version: currentFamilyVersion("unit-activity"), parameters: { activities: ["advanced-this-turn"], subject: "this-unit" } } : leaf));
+    const result = compileRecord("window stratagem", leaves);
     expect(result.ok).toBe(false);
     expect(result.ok ? [] : result.errors).toContain(NO_ROLL_AFTER_ADVANCE);
   });
 
-  it("1185: the window part carries the moment and the phase, and the turn part has no trigger", () => {
-    const mechanics = mechanicsOf(1185);
+  it("window stratagem: the window part carries the moment and the phase, and the turn part has no trigger", () => {
+    const mechanics = recordMechanics("window stratagem");
     const [window, turn] = mechanics.effect.steps;
     expect(window).toMatchObject({ type: "ability-part", duration: "phase", trigger: { event: "move-started", filter: { move_types: ["advance"] } } });
     expect(window.trigger.subject).toBeUndefined();
-    expect(JSON.stringify(window.effect)).toContain('"advance":"fixed-6"');
+    expect(window.effect).toEqual({ type: "move-modifier", target: "this-unit", modifier: { advance: "fixed-6" } });
     expect(turn).toMatchObject({ type: "ability-part", duration: "turn" });
     expect(turn.trigger).toBeUndefined();
     expect(mechanics.trigger).toBeNull();
     expect(mechanics.scope.duration).toBe("permanent");
   });
 
-  it("70: the no-roll takes the phase from its folded +6, under the penitent gate", () => {
-    const mechanics = mechanicsOf(70);
+  it("gated fold: the no-roll takes the phase from its folded +6, under the keyword gate", () => {
+    const mechanics = recordMechanics("gated fold");
     const [turn, gate] = mechanics.effect.steps;
     expect(turn).toMatchObject({ type: "ability-part", duration: "turn", effect: { type: "permission" } });
     expect(gate.type).toBe("conditional");
@@ -116,38 +228,32 @@ describe("bound durations on the stored records", () => {
     expect(mechanics.trigger.event).toBe("move-started");
   });
 
-  it("6323: the strength lasts the turn, the armour penetration the phase, behind the Righteous gate", () => {
-    const [strength, gated] = mechanicsOf(6323).effect.steps;
-    expect(strength).toMatchObject({ type: "ability-part", duration: "turn", effect: { type: "stat-modifier" } });
+  it("gated parts: the strength lasts the turn, the armour penetration the phase, behind the Righteous gate", () => {
+    const [strength, gated] = recordMechanics("gated parts").effect.steps;
+    expect(strength).toMatchObject({ type: "ability-part", duration: "turn", effect: { type: "stat-modifier", modifier: { stat: "S" } } });
     expect(gated.type).toBe("conditional");
     expect(gated.condition).toMatchObject({ type: "rule-active" });
-    expect(gated.effect).toMatchObject({ type: "ability-part", duration: "phase" });
+    expect(gated.effect).toMatchObject({ type: "ability-part", duration: "phase", effect: { type: "stat-modifier", modifier: { stat: "AP" } } });
   });
 
-  it("9605: the nested parts validate against the DSL effect schema, and the suppression lasts to the next turn", () => {
-    const mechanics = mechanicsOf(9605);
+  it("suppression: the nested parts validate against the DSL effect schema, and the suppression lasts to the next turn", () => {
+    const mechanics = recordMechanics("suppression");
     const validate = createValidator().compile({ $ref: "https://40kdc.dev/schemas/enrichment/ability-dsl/effect.schema.json#/$defs/effect-node" });
     expect(validate(mechanics.effect), JSON.stringify(validate.errors?.slice(0, 2))).toBe(true);
     expect(JSON.stringify(mechanics.effect)).toContain('"duration":"until-start-next-turn"');
     expect(mechanics.scope.duration).toBe("permanent");
   });
 
-  it("4194: refused — the selection cannot carry past the attacks-resolved moment, else the pinned test follows the assailed mark", () => {
-    const result = compileFixture(4194);
+  it("marks past a moment: refused — the selection cannot carry past the attacks-resolved moment, else the pinned test follows the assailed mark", () => {
+    const result = compileRecord("marks past a moment");
     expect(result.ok).toBe(false);
     // The selection-across-moment guard (compile-selection-moment.ts) fires first; without it the tag-order refusal would.
     const errors = result.ok ? [] : result.errors;
     expect(errors.some((error) => error.startsWith("A hit-by-attacks at byte") || error === "A tag tested after it is applied in the same part; the compiler does not order them.")).toBe(true);
   });
+});
 
-  it("8879 and 994: a set-up moment beside another moment is refused", () => {
-    for (const id of [8879, 994]) {
-      const result = compileFixture(id);
-      expect(result.ok, `av ${id}`).toBe(false);
-      expect(result.ok ? [] : result.errors, `av ${id}`).toContain("A set-up moment next to another moment has no reading yet.");
-    }
-  });
-
+describe("bound durations on the stored records", () => {
   it("1596 and 2540: the Strategic Reserves set-up is folded away before the check, so they still compile", () => {
     for (const id of [1596, 2540]) expect(compileFixture(id).ok, `av ${id}`).toBe(true);
   });
@@ -431,8 +537,8 @@ describe("kept refusals when an ability prints two durations", () => {
 });
 
 describe("a bound duration renders as its own clause", () => {
-  it("3746: the folded phase part and the turn part each name their lifetime in the describer", () => {
-    const mechanics = mechanicsOf(3746);
+  it("advance fold: the folded phase part and the turn part each name their lifetime in the describer", () => {
+    const mechanics = recordMechanics("advance fold");
     const text = describeAbility({ effect: mechanics.effect, scope: mechanics.scope, trigger: mechanics.trigger } as never);
     expect(text).toContain("-> Until the end of the phase: the triggering unit does not make an Advance roll; add 6\" to its Move characteristic instead.");
     expect(text).not.toContain("Move characteristic.");

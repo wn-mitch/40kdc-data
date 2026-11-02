@@ -149,7 +149,7 @@ export function planEffects(frame: PartFrame, sourceText: string | undefined, op
   if (binding?.error) errors.push(binding.error);
   const boundDuration = new Map<number, string>(binding?.effects ?? []);
   const windows = binding?.windows ?? new Map<number, string>();
-  // A set-up moment beside another moment, scoping a set-up effect after it (the Deep Strike shape, 8879 and 994),
+  // A set-up moment beside another moment, scoping a set-up effect after it (the Deep Strike shape),
   // has no reading: the effect's scope would be one of two moments. A set-up moment that is only a trigger stays as it was.
   if (leadingAt.length >= 2 && leadingAt.some((index) => list[index]!.family_id === "event" && list[index]!.parameters.kind === "set-up"
     && planned.some((item) => item.node.type === "set-up" && item.index > index))) {
