@@ -41,7 +41,9 @@ type PublicationReceiptData = {
 
 type PublicationFailureData = {
   failed_at: string;
-  reason_code: "NO_WRITE_OBSERVED" | "EXTERNAL_CHANGE_CONFLICT";
+  // PARTIAL_WRITE_OBSERVED: each file holds its before or its staged bytes, and not all the same (a commit stopped
+  // between files). EXTERNAL_CHANGE_CONFLICT: some file holds bytes that are neither.
+  reason_code: "NO_WRITE_OBSERVED" | "PARTIAL_WRITE_OBSERVED" | "EXTERNAL_CHANGE_CONFLICT";
   observed_hash: string;
 };
 
@@ -357,9 +359,14 @@ function finishPublishingBatch(db: DatabaseSync, batchId: string, observedHash: 
   // Both files are written in one commit: published only when both hold the staged bytes.
   const core = batch.manifest.core;
   const replicas = batch.manifest.core_replicas ?? [];
-  const coreAfter = (!core || observedCore === core.after_hash) && replicas.every((replica, position) => observedReplicas[position] === replica.after_hash);
-  const coreBefore = (!core || observedCore === core.before_hash) && replicas.every((replica, position) => observedReplicas[position] === replica.before_hash);
-  if (observedHash === batch.manifest.after_hash && coreAfter) {
+  // Each destination file against its before and staged bytes: the abilities file, then core, then each replica.
+  const files = [
+    { observed: observedHash, before: batch.manifest.before_hash, after: batch.manifest.after_hash },
+    ...(core ? [{ observed: observedCore, before: core.before_hash, after: core.after_hash }] : []),
+    ...replicas.map((replica, position) => ({ observed: observedReplicas[position], before: replica.before_hash, after: replica.after_hash })),
+  ];
+  const states = files.map((file) => file.observed === file.after ? "after" : file.observed === file.before ? "before" : "other");
+  if (states.every((state) => state === "after")) {
     const receipt: PublicationReceiptData = {
       published_at: now,
       actual_after_hash: observedHash,
@@ -374,7 +381,7 @@ function finishPublishingBatch(db: DatabaseSync, batchId: string, observedHash: 
   }
   const failure: PublicationFailureData = {
     failed_at: now,
-    reason_code: observedHash === batch.manifest.before_hash && coreBefore ? "NO_WRITE_OBSERVED" : "EXTERNAL_CHANGE_CONFLICT",
+    reason_code: states.every((state) => state === "before") ? "NO_WRITE_OBSERVED" : states.includes("other") ? "EXTERNAL_CHANGE_CONFLICT" : "PARTIAL_WRITE_OBSERVED",
     observed_hash: observedHash,
   };
   const changed = db.prepare("UPDATE publication_batches SET state = 'failed', manifest_json = ?, updated_at = ? WHERE id = ? AND state = 'publishing'")

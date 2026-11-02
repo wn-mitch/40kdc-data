@@ -1,4 +1,4 @@
-import { copyFileSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { chmodSync, copyFileSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
@@ -128,6 +128,40 @@ describe("Semantic authoring stratagem targets", () => {
     // Only one of the two files holds the new bytes: that is not a finished publication.
     expect(await interrupted(false)).toMatchObject({ recovered: [], failed: [expect.any(String)] });
     expect((await interrupted(true)).recovered).toHaveLength(1);
+  });
+
+  it("records a commit stopped between its two files as a partial write, and a new batch completes it", async () => {
+    for (const [exact_text, family_id, parameters] of [
+      ["One STELLAR WARDENS INFANTRY unit from your army", "stratagem-target", { count: "one", side: "your-army", selects: "unit", keywords: ["STELLAR WARDENS INFANTRY"], match: "all", excluded_keywords: [] }],
+      ["Your Shooting phase", "use-window", { your_phases: ["shooting"], opponent_phases: [], either_phases: [] }],
+      ["that has not been selected to shoot this phase", "unit-activity", { activities: ["selected-to-shoot-this-phase"], subject: "this-unit", negated: true }],
+      ["Until the end of the phase", "duration", { endpoint: "end-of-phase" }],
+      ["models in your unit have the Fights First ability", "fights-first", { subject: "this-unit" }],
+    ] as const) confirmSurface(db, { reviewer: REVIEWER, exact_text, family_id, parameters: parameters as Record<string, unknown> });
+    const shape = listShapes(db).shapes[0]!;
+    await approveShape(db, { reviewer: REVIEWER, signature: shape.signature, ability_version_ids: [(db.prepare("SELECT id FROM abilities WHERE ability_id = 'hold-fast'").get() as { id: number }).id] });
+    const entry = db.prepare("SELECT id FROM compiled_entries WHERE status = 'approved'").get() as { id: string };
+    const abilitiesFile = join(dirname(dirname(dirname(stratagemsFile))), "enrichment", "fixture", "abilities.json");
+    const coreBefore = readFileSync(stratagemsFile, "utf8");
+
+    // The abilities file is written first; the core directory refuses the second file's write.
+    const stopped = await preparePublication(db, { faction_id: "fixture", entry_ids: [entry.id] });
+    chmodSync(dirname(stratagemsFile), 0o555);
+    try {
+      await expect(publishPublication(db, { batch_id: stopped.batch_id, preview_hash: stopped.preview_hash })).rejects.toThrow(/I\/O FAULT after 1\/2 files written/u);
+    } finally {
+      chmodSync(dirname(stratagemsFile), 0o755);
+    }
+    expect(readFileSync(stratagemsFile, "utf8")).toBe(coreBefore);
+    expect(JSON.parse(readFileSync(abilitiesFile, "utf8"))[0].effect).toMatchObject({ type: "ability-grant" });
+    expect(listPublications(db).items.find((item) => item.batch_id === stopped.batch_id)).toMatchObject({ state: "failed", failure: { reason_code: "PARTIAL_WRITE_OBSERVED" } });
+
+    // A new batch starts from the half-written files and finishes the core file.
+    const resumed = await preparePublication(db, { faction_id: "fixture", entry_ids: [entry.id] });
+    expect(resumed.diff[0]!.fields.map((field) => field.field)).toEqual(["core.target_restrictions"]);
+    await publishPublication(db, { batch_id: resumed.batch_id, preview_hash: resumed.preview_hash });
+    expect((JSON.parse(readFileSync(stratagemsFile, "utf8")) as Array<Record<string, unknown>>)[0]!.target_restrictions).toMatchObject({ count: "one", side: "your-army" });
+    expect(listPublications(db).items.find((item) => item.batch_id === resumed.batch_id)).toMatchObject({ state: "published", evidence_status: "current" });
   });
 
   it("writes the new TARGET into every faction's replicated copy of the stratagem, and recovers only when all hold it", async () => {

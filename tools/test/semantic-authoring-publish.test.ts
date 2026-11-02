@@ -381,6 +381,32 @@ describe("Semantic authoring explicit publication", () => {
     }
   }, 180_000);
 
+  it("refuses a prepared batch whose source or a still-complete leaf changed after the preview, writing nothing", async () => {
+    const fixture = buildFixture();
+    try {
+      const before = readFileSync(fixture.abilitiesFile, "utf8");
+      const state = (batchId: string) => (fixture.db.prepare("SELECT state FROM publication_batches WHERE id = ?").get(batchId) as { state: string }).state;
+      // The source text changes between the preview and the publish.
+      const sourceFile = join(fixture.rawStore, `${factionId}.json`);
+      const rawSource = readFileSync(sourceFile, "utf8");
+      const sourceBatch = await preparePublication(fixture.db, { faction_id: factionId, entry_ids: [fixture.selectedEntryId] });
+      writeFileSync(sourceFile, rawSource.replace(privateSourceText, `${privateSourceText} Changed.`));
+      await expect(publishPublication(fixture.db, { batch_id: sourceBatch.batch_id, preview_hash: sourceBatch.preview_hash })).rejects.toThrow(/source changed after approval/i);
+      expect(readFileSync(fixture.abilitiesFile, "utf8")).toBe(before);
+      expect(state(sourceBatch.batch_id)).toBe("prepared");
+      writeFileSync(sourceFile, rawSource);
+      // A leaf is corrected between the preview and the publish; the record is still fully described.
+      const leafBatch = await preparePublication(fixture.db, { faction_id: factionId, entry_ids: [fixture.selectedEntryId] });
+      correctSelectedLeaf(fixture);
+      expect(fullyDescribed(fixture.db, [fixture.selectedAbilityVersionId]).has(fixture.selectedAbilityVersionId)).toBe(true);
+      await expect(publishPublication(fixture.db, { batch_id: leafBatch.batch_id, preview_hash: leafBatch.preview_hash })).rejects.toThrow(/leaves changed after approval/i);
+      expect(readFileSync(fixture.abilitiesFile, "utf8")).toBe(before);
+      expect(state(leafBatch.batch_id)).toBe("prepared");
+    } finally {
+      fixture.db.close();
+    }
+  }, 180_000);
+
   it("marks a published batch stale once its entry's leaves change", async () => {
     const fixture = buildFixture();
     try {
