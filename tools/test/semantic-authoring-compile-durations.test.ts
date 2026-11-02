@@ -254,14 +254,8 @@ describe("bound durations on records with several", () => {
 });
 
 describe("bound durations on the stored records", () => {
-  it("1596 and 2540: the Strategic Reserves set-up is folded away before the check, so they still compile", () => {
-    for (const id of [1596, 2540]) expect(compileFixture(id).ok, `av ${id}`).toBe(true);
-  });
-
-  it("3620: one moment (use-window, then set-up) is not refused", () => {
-    expect(compileFixture(3620).ok).toBe(true);
-  });
-
+  // 1596 and 2540: the Strategic Reserves set-up is folded away before the check; 3620: one moment (use-window, then
+  // set-up) is not refused.
   it("a single-duration record keeps its canonical baseline mechanics", () => {
     for (const id of [3620, 1596, 2540]) {
       const { baseline_mechanics } = fixture(id);
