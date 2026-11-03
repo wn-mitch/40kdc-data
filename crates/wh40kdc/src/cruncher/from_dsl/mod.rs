@@ -229,7 +229,43 @@ fn alternatives_match(node: &Obj, opts: &WalkOpts) -> Option<bool> {
         _ if owner == "enemy" => TranslationPerspective::Target,
         _ => opts.perspective,
     };
-    conditions::matches_unit_filter(node.get("target")?, opts.context, side, owner)
+    let target = node.get("target")?;
+    conditions::matches_unit_filter(
+        &without_own_holding(target, opts),
+        opts.context,
+        side,
+        owner,
+    )
+}
+
+/// A friendly unit filter without its `has_ability` clause when that clause names only the
+/// ability being resolved ("units with this ability"): the ability is resolved for its holder, so
+/// the holder has it. An ability another unit provides is not the crunched unit's own, so its
+/// clause stays.
+fn without_own_holding(filter: &Value, opts: &WalkOpts) -> Value {
+    let BuffSource::Ability {
+        ability_id,
+        ability_kind,
+        ..
+    } = opts.source_meta
+    else {
+        return filter.clone();
+    };
+    let Some(object) = filter.as_object() else {
+        return filter.clone();
+    };
+    let own = *ability_kind != AbilityKind::Support
+        && object.get("owner").and_then(Value::as_str) == Some("friendly")
+        && object
+            .get("has_ability")
+            .and_then(Value::as_array)
+            .is_some_and(|ids| ids.len() == 1 && ids[0].as_str() == Some(ability_id.as_str()));
+    if !own {
+        return filter.clone();
+    }
+    let mut rest = object.clone();
+    rest.remove("has_ability");
+    Value::Object(rest)
 }
 
 /// Walk an ability DSL `effect` tree and produce the buff stack it contributes against
@@ -1184,3 +1220,6 @@ pub fn strip_nulls(v: &Value) -> Value {
 
 #[cfg(test)]
 mod tests;
+
+#[cfg(test)]
+mod named_grant_tests;

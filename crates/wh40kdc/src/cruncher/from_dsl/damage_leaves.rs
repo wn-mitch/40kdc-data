@@ -210,14 +210,18 @@ pub(super) fn ignore_modifiers(node: &Obj, opts: &WalkOpts, out: &mut Out) {
     }
 }
 
-/// A printed grant (`definition`) translates its body for the holders. Otherwise, the core
-/// abilities the buff layer models on the unit being attacked: Stealth and the benefit of cover
-/// (Stealth gives the benefit of cover) and Feel No Pain. Like the other defender-side leaves,
-/// they contribute nothing to the buffed unit's own attacks.
+/// A printed grant (`definition`) translates its body for the holders, whether the grant names the
+/// ability it prints (`{ability_id, definition_id}`) or not. A named ability without a printed
+/// definition is unsupported: its owner is not resolved. Otherwise, the core abilities the buff
+/// layer models on the unit being attacked: Stealth and the benefit of cover (Stealth gives the
+/// benefit of cover) and Feel No Pain. Like the other defender-side leaves, they contribute
+/// nothing to the buffed unit's own attacks.
 pub(super) fn ability_grant(node: &Obj, opts: &WalkOpts, out: &mut Out) {
     let empty = Obj::new();
     let m = object(node.get("modifier")).unwrap_or(&empty);
-    if m.get("ability").is_some_and(Value::is_object) {
+    if m.get("ability").is_some_and(Value::is_object)
+        && !m.get("definition").is_some_and(Value::is_object)
+    {
         out.unsupported(
             "ability-grant: named ability ownership is not resolved by the buff engine",
             node,

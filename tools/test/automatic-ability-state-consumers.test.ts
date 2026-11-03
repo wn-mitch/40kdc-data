@@ -30,15 +30,16 @@ describe("named automatic ability ownership", () => {
     expect(effectToBuffs(effect, source, { phase: "command" }).applied).toEqual([]);
   });
 
-  it("does not execute a named definition as an unconditional anonymous grant", () => {
-    const effect = { type: "ability-grant", target: "this-unit", modifier: {
-      ability: first,
-      definition: { type: "ability-part", effect: { type: "roll-modifier", target: "this-unit", modifier: { roll: "hit", operation: "add", value: 1 } } },
-    } };
+  it("runs a named definition the grant prints, and refuses one it only names", () => {
+    const definition = { type: "ability-part", effect: { type: "roll-modifier", target: "this-unit", modifier: { roll: "hit", operation: "add", value: 1 } } };
+    const effect = { type: "ability-grant", target: "this-unit", modifier: { ability: first, definition } };
     expect(describeEffectInline(effect)).toContain("First Form (Example Host)");
     const result = effectToBuffs(effect, source, { phase: "shooting" });
-    expect(result.applied).toEqual([]);
-    expect(result.unsupported[0].reason).toBe("ability-grant: named ability ownership is not resolved by the buff engine");
+    expect(result.applied.map((buff) => buff.contribution)).toEqual([{ type: "hit-mod", value: 1 }]);
+    expect(result.unsupported).toEqual([]);
+    const named = effectToBuffs({ type: "ability-grant", target: "this-unit", modifier: { ability: first } }, source, { phase: "shooting" });
+    expect(named.applied).toEqual([]);
+    expect(named.unsupported[0].reason).toBe("ability-grant: named ability ownership is not resolved by the buff engine");
   });
 
   it("renders army and oath states in positive and negated forms", () => {

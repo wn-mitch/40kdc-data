@@ -148,13 +148,27 @@ def translate_ignore_modifiers(
 def translate_ability_grant(
     node: dict[str, Any], source: BuffSource, opts: dict[str, Any], out: dict[str, Any]
 ) -> None:
-    """A printed grant (``definition``) translates its body for the holders. Otherwise, the core
-    abilities the buff layer models on the unit being attacked: Stealth and the benefit of cover
-    (Stealth gives the benefit of cover) and Feel No Pain. Like the other defender-side leaves,
-    they contribute nothing to the buffed unit's own attacks."""
+    """A printed grant (``definition``) translates its body for the holders, whether the grant
+    names the ability it prints (``{ability_id, definition_id}``) or not. A named ability without a
+    printed definition is unsupported: its owner is not resolved. Otherwise, the core abilities
+    the buff layer models on the unit being attacked: Stealth and the benefit of cover (Stealth
+    gives the benefit of cover) and Feel No Pain. Like the other defender-side leaves, they
+    contribute nothing to the buffed unit's own attacks."""
     from wh40kdc.cruncher import from_dsl as dsl
 
     modifier = _modifier(node)
+    if isinstance(modifier.get("ability"), dict) and not isinstance(
+        modifier.get("definition"), dict
+    ):
+        out["unsupported"].append(
+            {
+                "reason": (
+                    "ability-grant: named ability ownership is not resolved by the buff engine"
+                ),
+                "effectFragment": node,
+            }
+        )
+        return
     # A printed grant carries the granted ability's body: it is the holders' own ability, so it
     # reaches the buffed unit exactly when the grant does, and its "this unit" is the holder.
     definition = modifier.get("definition")

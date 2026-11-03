@@ -493,7 +493,7 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
         else:
             side = "attacker" if opts["perspective"] == "attacker" else "target"
         verdict = _matches_unit_filter(
-            target,
+            _without_own_holding(target, source),
             opts["context"],
             side,
             "enemy" if target.get("owner") == "enemy" else "friendly",
@@ -718,6 +718,26 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
         _levers.translate_ignore_modifiers(node, source, opts, out)
     elif node_type == "ability-grant":
         _levers.translate_ability_grant(node, source, opts, out)
+    elif node_type == "rule-state":
+        # Changes to which abilities a unit has (a named ability suppressed or exchanged) persist
+        # beyond the attack; the buff engine does not track ownership.
+        modifier = node.get("modifier")
+        persistent = isinstance(modifier, dict) and (
+            isinstance(modifier.get("rule"), dict)
+            or modifier.get("direction") == "exchanged"
+            or "except_from" in modifier
+        )
+        out["unsupported"].append(
+            {
+                "reason": (
+                    "rule-state: persistent ability ownership and suppression are not resolved"
+                    " by the buff engine"
+                    if persistent
+                    else 'effect type "rule-state" is not modelled by the buff layer'
+                ),
+                "effectFragment": node,
+            }
+        )
     elif node_type == "ability-modifier":
         _levers.translate_ability_modifier(node, source, opts, out)
     else:
@@ -3684,6 +3704,23 @@ def _undecided_needs(
         lambda node: _evaluate_condition(node, ctx, perspective, source),
     )
     return [need for need in needs if need["condition"].get("type") != "timing-is"]
+
+
+def _without_own_holding(filter_: dict[str, Any], source: BuffSource) -> dict[str, Any]:
+    """A friendly unit filter without its ``has_ability`` clause when that clause names only the
+    ability being resolved ("units with this ability"): the ability is resolved for its holder, so
+    the holder has it. An ability another unit provides is not the crunched unit's own, so its
+    clause stays."""
+    if (
+        source.get("kind") != "ability"
+        or source.get("abilityKind") == "support"
+        or filter_.get("owner") != "friendly"
+    ):
+        return filter_
+    ids = filter_.get("has_ability")
+    if not isinstance(ids, list) or len(ids) != 1 or ids[0] != source.get("abilityId"):
+        return filter_
+    return {key: value for key, value in filter_.items() if key != "has_ability"}
 
 
 def _holds_own_ability(filter_: Any, source: BuffSource | None) -> bool:

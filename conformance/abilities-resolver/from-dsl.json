@@ -6163,6 +6163,161 @@
       }
     },
     {
+      "_comment": "Mission Tactics grants three named tactics with printed definitions to friendly KILL TEAM units holding the rule, which the crunched unit does by resolving it. Under Devastator Doctrine only Furor Tactics (Sustained Hits 1) applies.",
+      "abilityId": "mission-tactics-deathwatch-support-deathwatch",
+      "source": {
+        "kind": "ability",
+        "abilityId": "mission-tactics-deathwatch-support-deathwatch",
+        "abilityKind": "detachment"
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerKeywords": [
+          "infantry",
+          "kill team"
+        ],
+        "activeRules": [
+          {
+            "ability_id": "combat-doctrines-adeptus-astartes",
+            "option_id": "devastator-doctrine"
+          }
+        ]
+      },
+      "expected": {
+        "applied": [
+          {
+            "type": "extra-keyword",
+            "keywordRef": {
+              "keyword_id": "sustained-hits",
+              "parameters": {
+                "value": 1
+              }
+            }
+          }
+        ],
+        "unsupportedReasons": [
+          "effect type \"army-rule\" is not modelled by the buff layer",
+          "effect type \"army-rule\" is not modelled by the buff layer"
+        ],
+        "unsupportedScopes": [
+          "out-of-scope",
+          "out-of-scope"
+        ],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "Mission Tactics with no doctrine declared: Furor and Malleus Tactics are levers that each require their own Combat Doctrines option, so the stance's pick-one pool keeps them from stacking; Purgatus Tactics waits on the defender being within 9\".",
+      "abilityId": "mission-tactics-deathwatch-support-deathwatch",
+      "source": {
+        "kind": "ability",
+        "abilityId": "mission-tactics-deathwatch-support-deathwatch",
+        "abilityKind": "detachment"
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerKeywords": [
+          "infantry",
+          "kill team"
+        ]
+      },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"and\" against current context",
+          "effect type \"army-rule\" is not modelled by the buff layer",
+          "effect type \"army-rule\" is not modelled by the buff layer"
+        ],
+        "unsupportedScopes": [
+          "unresolved",
+          "out-of-scope",
+          "out-of-scope"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"filter\":{\"within\":{\"of\":\"this-unit\",\"range\":{\"inches\":9}}},\"subject\":\"defender\"},\"type\":\"matches\"}"
+        ],
+        "activatable": [
+          {
+            "id": "mission-tactics-deathwatch-support-deathwatch#devastator-doctrine",
+            "label": "devastator-doctrine: Sustained Hits 1",
+            "group": null,
+            "requires": null,
+            "capRaise": null,
+            "requiresOption": {
+              "ability_id": "combat-doctrines-adeptus-astartes",
+              "option_id": "devastator-doctrine"
+            },
+            "buffs": [
+              {
+                "type": "extra-keyword",
+                "keywordRef": {
+                  "keyword_id": "sustained-hits",
+                  "parameters": {
+                    "value": 1
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "id": "mission-tactics-deathwatch-support-deathwatch#tactical-doctrine",
+            "label": "tactical-doctrine: Lethal Hits",
+            "group": null,
+            "requires": null,
+            "capRaise": null,
+            "requiresOption": {
+              "ability_id": "combat-doctrines-adeptus-astartes",
+              "option_id": "tactical-doctrine"
+            },
+            "buffs": [
+              {
+                "type": "extra-keyword",
+                "keywordRef": {
+                  "keyword_id": "lethal-hits"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "_comment": "Ruthless Reinvestment names Hostile Acquisition without printing it: the named ability's owner is not resolved, so it adds no buffs.",
+      "abilityId": "ruthless-reinvestment-leagues-of-votann",
+      "source": {
+        "kind": "ability",
+        "abilityId": "ruthless-reinvestment-leagues-of-votann",
+        "abilityKind": "detachment"
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerKeywords": [
+          "leagues of votann",
+          "infantry"
+        ]
+      },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "rule-state: persistent ability ownership and suppression are not resolved by the buff engine",
+          "rule-state: persistent ability ownership and suppression are not resolved by the buff engine",
+          "ability-grant: named ability ownership is not resolved by the buff engine",
+          "conditional: cannot evaluate condition \"resource\" against current context"
+        ],
+        "unsupportedScopes": [
+          "unresolved",
+          "unresolved",
+          "unresolved",
+          "unresolved"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"count\":{\"min\":3},\"pool\":\"yp-pool\"},\"type\":\"resource\"}"
+        ],
+        "activatable": []
+      }
+    },
+    {
       "caseId": "canonical/recipient-snapshot/attested-strength-after-detachment",
       "abilityId": "snapshot-example",
       "source": {
@@ -9333,7 +9488,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [
-          "unit-filter target: identity, state or model membership is unresolved"
+          "effect type \"designate\" is not modelled by the buff layer"
         ],
         "unsupportedScopes": [
           "encounter-layer"
@@ -9414,7 +9569,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [
-          "unit-filter target: identity, state or model membership is unresolved",
+          "effect type \"designate\" is not modelled by the buff layer",
           "conditional: cannot evaluate condition \"matches\" against current context"
         ],
         "unsupportedScopes": [
@@ -9482,7 +9637,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [
-          "unit-filter target: identity, state or model membership is unresolved"
+          "effect type \"designate\" is not modelled by the buff layer"
         ],
         "unsupportedScopes": [
           "encounter-layer"

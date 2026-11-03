@@ -396,7 +396,7 @@ function walk(
     const side = currentNode.target.member_of === "attacker" ? "attacker" :
       currentNode.target.member_of === "defender" || currentNode.target.owner === "enemy" ? "target" :
         opts.perspective === "attacker" ? "attacker" : "target";
-    const verdict = matchesUnitFilter(currentNode.target, opts.context, side, currentNode.target.owner === "enemy" ? "enemy" : "friendly");
+    const verdict = matchesUnitFilter(withoutOwnHolding(currentNode.target, source), opts.context, side, currentNode.target.owner === "enemy" ? "enemy" : "friendly");
     if (verdict === false) return;
     if (verdict === "unknown") {
       out.unsupported.push({ reason: "unit-filter target: identity, state or model membership is unresolved", effectFragment: currentNode });
@@ -1318,14 +1318,16 @@ function translateIgnoreModifiers(node: Record<string, unknown>, source: BuffSou
 }
 
 /**
- * A printed grant (`definition`) translates its body for the holders. Otherwise, the core abilities
+ * A printed grant (`definition`) translates its body for the holders, whether the grant names the
+ * ability it prints (`{ability_id, definition_id}`) or not. A named ability without a printed
+ * definition is unsupported: its owner is not resolved. Otherwise, the core abilities
  * the buff layer models on the unit being attacked: Stealth and the benefit of
  * cover (Stealth gives the benefit of cover) and Feel No Pain. Like the other defender-side leaves,
  * they contribute nothing to the buffed unit's own attacks.
  */
 function translateAbilityGrant(node: Record<string, unknown>, source: BuffSource, opts: WalkOpts, out: EffectTranslation): void {
   const modifier = isObject(node.modifier) ? node.modifier : {};
-  if (isObject(modifier.ability)) {
+  if (isObject(modifier.ability) && !isObject(modifier.definition)) {
     out.unsupported.push({ reason: "ability-grant: named ability ownership is not resolved by the buff engine", effectFragment: node });
     return;
   }
@@ -2621,6 +2623,18 @@ function conditionSide(subject: unknown, perspective: TranslationPerspective): "
 function holdsOwnAbility(filter: unknown, source: BuffSource | undefined): boolean {
   if (source?.kind !== "ability" || !isObject(filter) || Object.keys(filter).length !== 1) return false;
   return Array.isArray(filter.has_ability) && filter.has_ability.length === 1 && filter.has_ability[0] === source.abilityId;
+}
+
+/**
+ * A friendly unit filter without its `has_ability` clause when that clause names only the ability
+ * being resolved ("units with this ability"): the ability is resolved for its holder, so the holder
+ * has it. An ability another unit provides is not the crunched unit's own, so its clause stays.
+ */
+function withoutOwnHolding(filter: Record<string, unknown>, source: BuffSource): Record<string, unknown> {
+  if (source.kind !== "ability" || isProvidedByAnotherUnit(source) || filter.owner !== "friendly") return filter;
+  if (!Array.isArray(filter.has_ability) || filter.has_ability.length !== 1 || filter.has_ability[0] !== source.abilityId) return filter;
+  const { has_ability: _held, ...rest } = filter;
+  return rest;
 }
 
 /** The single required keyword in a canonical filter, else undefined. */

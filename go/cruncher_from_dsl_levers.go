@@ -292,12 +292,19 @@ func translateIgnoreModifiers(node, source map[string]any, opts dslOpts, out *ef
 	}
 }
 
-// translateAbilityGrant translates a printed grant's (`definition`) body for the holders.
-// Otherwise it handles the core abilities the buff layer models on the unit being attacked:
+// translateAbilityGrant translates a printed grant's (`definition`) body for the holders, whether
+// the grant names the ability it prints ({ability_id, definition_id}) or not. A named ability
+// without a printed definition is unsupported: its owner is not resolved. Otherwise it handles the core abilities the buff layer models on the unit being attacked:
 // Stealth and the benefit of cover (Stealth gives the benefit of cover) and Feel No Pain. Like
 // the other defender-side leaves, they contribute nothing to the buffed unit's own attacks.
 func translateAbilityGrant(node, source map[string]any, opts dslOpts, out *effectTranslation) {
 	modifier := modifierOrEmpty(node)
+	if _, named := modifier["ability"].(map[string]any); named {
+		if _, printed := modifier["definition"].(map[string]any); !printed {
+			out.unsupported = append(out.unsupported, unsup("ability-grant: named ability ownership is not resolved by the buff engine", node))
+			return
+		}
+	}
 	// A printed grant carries the granted ability's body: it is the holders' own ability, so it
 	// reaches the buffed unit exactly when the grant does, and its "this unit" is the holder.
 	if definition, ok := modifier["definition"].(map[string]any); ok {

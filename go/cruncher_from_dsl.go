@@ -359,7 +359,7 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 		if filter["owner"] == "enemy" {
 			owner = "enemy"
 		}
-		switch verdict := matchesUnitFilter(filter, opts.context, side, owner); verdict {
+		switch verdict := matchesUnitFilter(withoutOwnHolding(filter, source), opts.context, side, owner); verdict {
 		case false:
 			return
 		case nil:
@@ -600,6 +600,17 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 		translateIgnoreModifiers(n, source, opts, out)
 	case "ability-grant":
 		translateAbilityGrant(n, source, opts, out)
+	case "rule-state":
+		// Changes to which abilities a unit has (a named ability suppressed or exchanged) persist
+		// beyond the attack; the buff engine does not track ownership.
+		modifier, _ := asMap(n["modifier"])
+		_, named := modifier["rule"].(map[string]any)
+		_, except := modifier["except_from"]
+		if named || modifier["direction"] == "exchanged" || except {
+			out.unsupported = append(out.unsupported, unsup("rule-state: persistent ability ownership and suppression are not resolved by the buff engine", n))
+		} else {
+			out.unsupported = append(out.unsupported, unsup("effect type \"rule-state\" is not modelled by the buff layer", n))
+		}
 	case "ability-modifier":
 		translateAbilityModifier(n, source, opts, out)
 	default:
@@ -2998,6 +3009,27 @@ func evaluateCondition(condition, ctx map[string]any, rest ...any) any {
 // holdsOwnAbility reports whether a filter only asks that the unit have the ability being
 // resolved ("a unit with this ability"): the ability is resolved for its holder, so the holder
 // has it.
+// withoutOwnHolding is a friendly unit filter without its has_ability clause when that clause
+// names only the ability being resolved ("units with this ability"): the ability is resolved for
+// its holder, so the holder has it. An ability another unit provides is not the crunched unit's
+// own, so its clause stays.
+func withoutOwnHolding(filter, source map[string]any) map[string]any {
+	if getStr(source, "kind") != "ability" || isProvidedByAnotherUnit(source) || filter["owner"] != "friendly" {
+		return filter
+	}
+	ids, ok := asList(filter["has_ability"])
+	if !ok || len(ids) != 1 || ids[0] != source["abilityId"] {
+		return filter
+	}
+	out := make(map[string]any, len(filter)-1)
+	for key, value := range filter {
+		if key != "has_ability" {
+			out[key] = value
+		}
+	}
+	return out
+}
+
 func holdsOwnAbility(filter, source map[string]any) bool {
 	if source == nil || source["kind"] != "ability" || len(filter) != 1 {
 		return false

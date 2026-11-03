@@ -970,6 +970,36 @@
       }
     },
     {
+      "_comment": "First Prince of Chaos grants SHADOW LEGION TZEENTCH units the named Penumbral Puppetry, printed with the grant: Stealth, so the benefit of cover.",
+      "abilityId": "first-prince-of-chaos-chaos-daemons",
+      "source": {
+        "kind": "ability",
+        "abilityId": "first-prince-of-chaos-chaos-daemons",
+        "abilityKind": "detachment"
+      },
+      "perspective": "target",
+      "context": {
+        "phase": "shooting",
+        "targetKeywords": [
+          "shadow legion",
+          "tzeentch",
+          "infantry"
+        ],
+        "targetArmyFaction": "chaos-daemons"
+      },
+      "expected": {
+        "applied": [
+          {
+            "type": "cover"
+          }
+        ],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
       "caseId": "canonical/recipient-snapshot/attested-toughness-after-detachment",
       "abilityId": "snapshot-example",
       "source": {

@@ -523,17 +523,9 @@ fn quantified_bodyguards_receive_separate_melee_strength_and_model_toughness() {
 }
 
 #[test]
-fn named_and_model_only_definitions_do_not_leak_unit_buffs() {
+fn model_only_definitions_do_not_leak_unit_buffs() {
     let definition = json!({"type":"ability-part","effect":{"type":"roll-modifier","target":"this-unit",
         "modifier":{"roll":"hit","operation":"add","value":1}}});
-    let named = run(
-        json!({"type":"ability-grant","target":"this-unit","modifier":{
-        "ability":{"ability_id":"test-owner","definition_id":"test-state"},"definition":definition}}),
-    );
-    assert!(named.applied.is_empty());
-    assert!(named.unsupported[0]
-        .reason
-        .contains("named ability ownership"));
     let mut context = EngineContext::new(Phase::Shooting);
     context.attacker_attachment_role = Some(crate::cruncher::AttachmentRole::Leader);
     let effect = json!({"type":"ability-grant",
