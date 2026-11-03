@@ -88,7 +88,13 @@ export function conditionLeadIn(c: Condition, defending = false): string {
   if (c.operator === "not" && c.operands) {
     const only = c.operands[0];
     if (c.operands.length === 1 && only && !only.operator) return negatedLeadIn(only, defending);
-    return `unless ${c.operands.map((o) => conditionLeadIn(o, defending).replace(/^if /, "")).join(" or ")}`;
+    // not(and[not A, not B]) is or[A, B], and not(or[not A, not B]) is and[A, B]: read the positive form.
+    const inner = only?.operands ?? [];
+    if (c.operands.length === 1 && (only?.operator === "and" || only?.operator === "or") && inner.length > 0 && inner.every((o) => o.operator === "not" && o.operands?.length === 1)) {
+      return conditionLeadIn({ operator: only.operator === "and" ? "or" : "and", operands: inner.map((o) => o.operands![0]!) }, defending);
+    }
+    // Otherwise "unless" covers the whole compound, read as one predicate with no lead word of its own.
+    return `unless ${c.operands.map((o) => describeCondition(o)).join(" or ")}`;
   }
   const p = c.parameters ?? {};
   switch (c.type) {

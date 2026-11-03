@@ -11830,7 +11830,7 @@
       }
     },
     "expected": {
-      "text": "At the start of your Shooting phase:\n  -> Select one enemy unit if the selected unit is within 30\" of this model and the selected unit is visible to this model (your Blight Bombardment Target). Until the end of the phase, each time a friendly unit makes an attack against it:\n    -> While making ranged attacks, unless while making ranged attacks, while making attacks made with [BLAST] weapons, you can re-roll a Hit roll of 1 for attacks made by all friendly DEATH GUARD models.\n    -> While making ranged attacks, while making attacks made with [BLAST] weapons, you can re-roll the Hit roll for attacks made by all friendly DEATH GUARD models."
+      "text": "At the start of your Shooting phase:\n  -> Select one enemy unit if the selected unit is within 30\" of this model and the selected unit is visible to this model (your Blight Bombardment Target). Until the end of the phase, each time a friendly unit makes an attack against it:\n    -> While making ranged attacks, unless for ranged attacks and for attacks made with [BLAST] weapons, you can re-roll a Hit roll of 1 for attacks made by all friendly DEATH GUARD models.\n    -> While making ranged attacks, while making attacks made with [BLAST] weapons, you can re-roll the Hit roll for attacks made by all friendly DEATH GUARD models."
     }
   },
   {
@@ -25125,7 +25125,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "If your Army Faction is CHAOS DAEMONS, your deployment zone is within The Shadow of Chaos. At the start of each phase, if you control at least half of the objectives in no man's land, no man's land is within The Shadow of Chaos until the end of the phase (evaluated once at that time). At the start of each phase, if you control at least half of the objectives in your opponent's deployment zone, your opponent's deployment zone is within The Shadow of Chaos until the end of the phase (evaluated once at that time).\n-> When a friendly unit takes a Battle-shock test (the triggering unit must have LEGIONES DAEMONICA): if your Army Faction is CHAOS DAEMONS, while the triggering unit is within The Shadow of Chaos, the triggering unit gets +1 to Battle-shock rolls; if the triggering battle shock roll succeeded, unless the triggering unit has the BATTLELINE keyword, if the triggering battle shock roll succeeded, the triggering unit regains up to D3 lost wounds; if the triggering unit has the BATTLELINE keyword, if the triggering battle shock roll succeeded, return D3 destroyed models (excluding CHARACTER models) to the triggering unit, each with its full wounds remaining.\n-> When an enemy unit takes a Battle-shock test: if your Army Faction is CHAOS DAEMONS, while the triggering unit is within The Shadow of Chaos or while the triggering unit is within 6\" of a friendly unit with the BLOODTHIRSTER, GREAT UNCLEAN ONE, KAIROS FATEWEAVER, KEEPER OF SECRETS, LORD OF CHANGE, ROTIGUS, SHALAXI HELBANE or SKARBRAND keyword, the triggering unit gets -1 to Battle-shock rolls; if the triggering battle shock roll was a failure, the triggering unit suffers D3 mortal wounds."
+      "text": "If your Army Faction is CHAOS DAEMONS, your deployment zone is within The Shadow of Chaos. At the start of each phase, if you control at least half of the objectives in no man's land, no man's land is within The Shadow of Chaos until the end of the phase (evaluated once at that time). At the start of each phase, if you control at least half of the objectives in your opponent's deployment zone, your opponent's deployment zone is within The Shadow of Chaos until the end of the phase (evaluated once at that time).\n-> When a friendly unit takes a Battle-shock test (the triggering unit must have LEGIONES DAEMONICA): if your Army Faction is CHAOS DAEMONS, while the triggering unit is within The Shadow of Chaos, the triggering unit gets +1 to Battle-shock rolls; if the triggering battle shock roll succeeded, unless the triggering unit has the BATTLELINE keyword and the triggering battle shock roll succeeded, the triggering unit regains up to D3 lost wounds; if the triggering unit has the BATTLELINE keyword, if the triggering battle shock roll succeeded, return D3 destroyed models (excluding CHARACTER models) to the triggering unit, each with its full wounds remaining.\n-> When an enemy unit takes a Battle-shock test: if your Army Faction is CHAOS DAEMONS, while the triggering unit is within The Shadow of Chaos or while the triggering unit is within 6\" of a friendly unit with the BLOODTHIRSTER, GREAT UNCLEAN ONE, KAIROS FATEWEAVER, KEEPER OF SECRETS, LORD OF CHANGE, ROTIGUS, SHALAXI HELBANE or SKARBRAND keyword, the triggering unit gets -1 to Battle-shock rolls; if the triggering battle shock roll was a failure, the triggering unit suffers D3 mortal wounds."
     }
   },
   {
@@ -31142,7 +31142,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "Unless while the target unit is an enemy unit, while the target is within range of an objective marker, you can re-roll a Hit roll of 1.\nWhile the target unit is an enemy unit, while the target is within range of an objective marker, you can re-roll the Hit roll."
+      "text": "Unless the target unit is an enemy unit and the target is within range of an objective marker, you can re-roll a Hit roll of 1.\nWhile the target unit is an enemy unit, while the target is within range of an objective marker, you can re-roll the Hit roll."
     }
   },
   {
@@ -41139,6 +41139,128 @@
     }
   },
   {
+    "caseId": "fidelity/not-and-of-negations-reads-positive",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "filter": {
+                        "all_of": [
+                          "CHAOS"
+                        ]
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "filter": {
+                        "all_of": [
+                          "IMPERIUM"
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "stat": "OC",
+          "operation": "add",
+          "value": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "If the unit has the CHAOS keyword or if the unit has the IMPERIUM keyword, when resolving this use, add 1 to the unit's Objective Control characteristic."
+    }
+  },
+  {
+    "caseId": "fidelity/not-or-of-negations-reads-positive",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "operator": "or",
+            "operands": [
+              {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "filter": {
+                        "all_of": [
+                          "CHAOS"
+                        ]
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "filter": {
+                        "all_of": [
+                          "IMPERIUM"
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "stat": "OC",
+          "operation": "add",
+          "value": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "If the unit is a CHAOS IMPERIUM unit, when resolving this use, add 1 to the unit's Objective Control characteristic."
+    }
+  },
+  {
     "caseId": "fidelity/move-modifier-mode-choice-named-beside-clause",
     "effect": {
       "type": "move-modifier",
@@ -43311,7 +43433,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "Unless the unit has been targeted with the Alpha Strike Fabricated Stratagem this phase or if the unit has been targeted with the Beta Strike Fabricated Stratagem this phase, you gain 1CP."
+      "text": "Unless the unit has been targeted with the Alpha Strike Fabricated Stratagem this phase or the unit has been targeted with the Beta Strike Fabricated Stratagem this phase, you gain 1CP."
     }
   },
   {

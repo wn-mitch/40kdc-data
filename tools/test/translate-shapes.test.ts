@@ -262,3 +262,26 @@ describe("negated alternatives of an or", () => {
     expect(gate({ operator: "not", operands: [glory] })).toMatch(/^Unless you have 2\+ glory points, /);
   });
 });
+
+describe("Unless over a compound condition", () => {
+  const has = (keyword: string) => ({ type: "matches", parameters: { filter: { all_of: [keyword] } } });
+  const fight = { type: "phase-is", parameters: { phase: "fight" } };
+  const gate = (condition: unknown) =>
+    render({ type: "conditional", condition, effect: { type: "stat-modifier", target: "this-unit", modifier: { stat: "OC", operation: "add", value: 1 } } } as Effect);
+
+  it("reads the negated alternatives as one predicate with no lead word of their own", () => {
+    expect(gate({ operator: "not", operands: [{ operator: "or", operands: [has("WRAITHLORD"), has("WRAITHKNIGHT")] }] })).toMatch(
+      /^Unless the unit has the WRAITHLORD keyword or the unit has the WRAITHKNIGHT keyword, /,
+    );
+  });
+
+  it("keeps a negated conjunction under the one Unless", () => {
+    const text = gate({ operator: "not", operands: [{ operator: "and", operands: [has("INFANTRY"), fight] }] });
+    expect(text).toMatch(/^Unless the unit has the INFANTRY keyword and during the Fight phase, /);
+  });
+
+  it("reads a negation of negations in its positive form", () => {
+    const notAll = { operator: "not", operands: [{ operator: "and", operands: [{ operator: "not", operands: [has("CHAOS")] }, { operator: "not", operands: [has("IMPERIUM")] }] }] };
+    expect(gate(notAll)).toMatch(/^If the unit has the CHAOS keyword or if the unit has the IMPERIUM keyword, /);
+  });
+});

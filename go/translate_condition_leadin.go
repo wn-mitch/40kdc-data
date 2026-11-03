@@ -24,7 +24,6 @@ func keywordNames(p map[string]any) string {
 }
 
 var (
-	leadingIfRe          = regexp.MustCompile(`^if `)
 	battleRoundOnwardRe  = regexp.MustCompile(`^during the (\w+) battle round onward$`)
 	belowStartingRe      = regexp.MustCompile(` is below starting strength$`)
 	leadingForRe         = regexp.MustCompile(`^for `)
@@ -166,9 +165,30 @@ func conditionLeadInFor(c map[string]any, defending bool) string {
 		if len(ops) == 1 && !jsTruthy(ops[0]["operator"]) {
 			return negatedLeadIn(ops[0], defending)
 		}
+		// not(and[not A, not B]) is or[A, B], and not(or[not A, not B]) is and[A, B]: read the
+		// positive form.
+		if len(ops) == 1 && (ops[0]["operator"] == "and" || ops[0]["operator"] == "or") {
+			if inner, ok := conditionOperands(ops[0], cstr(ops[0]["operator"])); ok && len(inner) > 0 {
+				positives := make([]any, 0, len(inner))
+				for _, o := range inner {
+					if negated, ok := conditionOperands(o, "not"); ok && len(negated) == 1 {
+						positives = append(positives, negated[0])
+					}
+				}
+				if len(positives) == len(inner) {
+					flipped := "and"
+					if ops[0]["operator"] == "and" {
+						flipped = "or"
+					}
+					return conditionLeadInFor(map[string]any{"operator": flipped, "operands": positives}, defending)
+				}
+			}
+		}
+		// Otherwise "unless" covers the whole compound, read as one predicate with no lead word of
+		// its own.
 		parts := make([]string, len(ops))
 		for i, o := range ops {
-			parts[i] = leadingIfRe.ReplaceAllString(conditionLeadInFor(o, defending), "")
+			parts[i] = describeCondition(o)
 		}
 		return "unless " + strings.Join(parts, " or ")
 	}

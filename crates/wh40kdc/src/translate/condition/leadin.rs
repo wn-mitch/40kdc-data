@@ -106,13 +106,34 @@ pub fn condition_lead_in_for(c: &Value, defending: bool) -> String {
             if ops.len() == 1 && ops[0].is_object() && !has_operator(&ops[0]) {
                 return negated_lead_in(&ops[0], defending);
             }
+            // not(and[not A, not B]) is or[A, B], and not(or[not A, not B]) is and[A, B]: read the
+            // positive form.
+            if let [only] = ops.as_slice() {
+                let compound = operator(only);
+                let inner = operands(only).map(Vec::as_slice).unwrap_or(&[]);
+                if matches!(compound, Some("and") | Some("or"))
+                    && !inner.is_empty()
+                    && inner.iter().all(|o| {
+                        operator(o) == Some("not") && operands(o).is_some_and(|x| x.len() == 1)
+                    })
+                {
+                    let flipped = if compound == Some("and") { "or" } else { "and" };
+                    let positives: Vec<Value> = inner
+                        .iter()
+                        .filter_map(|o| operands(o).and_then(|x| x.first()).cloned())
+                        .collect();
+                    return condition_lead_in_for(
+                        &serde_json::json!({ "operator": flipped, "operands": positives }),
+                        defending,
+                    );
+                }
+            }
+            // Otherwise "unless" covers the whole compound, read as one predicate with no lead
+            // word of its own.
             return format!(
                 "unless {}",
                 ops.iter()
-                    .map(|o| {
-                        let l = condition_lead_in_for(o, defending);
-                        l.strip_prefix("if ").map(str::to_string).unwrap_or(l)
-                    })
+                    .map(super::describe_condition_value)
                     .collect::<Vec<_>>()
                     .join(" or ")
             );

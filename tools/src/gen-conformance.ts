@@ -4200,6 +4200,10 @@ function genEffectTranslation(): void {
     { caseId: "fidelity/or-with-negated-last-alternative", effect: { type: "conditional",
       condition: { operator: "or", operands: [{ type: "phase-is", parameters: { phase: "fight" } }, { operator: "not", operands: [{ type: "resource", parameters: { pool: "glory-points", count: { min: 2 } } }] }] },
       effect: { type: "stat-modifier", target: "this-unit", modifier: { stat: "OC", operation: "add", value: 1 } } } },
+    // A negation of negations reads in its positive form: not(and[not A, not B]) is A or B, not(or[not A, not B]) is A and B.
+    ...(["and", "or"] as const).map((operator) => ({ caseId: `fidelity/not-${operator}-of-negations-reads-positive`, effect: { type: "conditional",
+      condition: { operator: "not", operands: [{ operator, operands: ["CHAOS", "IMPERIUM"].map((keyword) => ({ operator: "not", operands: [{ type: "matches", parameters: { filter: { all_of: [keyword] } } }] })) }] },
+      effect: { type: "stat-modifier", target: "this-unit", modifier: { stat: "OC", operation: "add", value: 1 } } } })),
     { caseId: "fidelity/move-modifier-mode-choice-named-beside-clause", effect: { type: "move-modifier", target: "this-unit", modifier: { applies_to_moves: ["consolidation"], no_end_in_engagement: true, mode_choice: { modes: ["objective"], ignore_before_moving: true } } } },
   ];
   for (const example of fidelityBoundaryCases) {

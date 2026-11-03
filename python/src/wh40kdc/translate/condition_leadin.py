@@ -194,9 +194,28 @@ def condition_lead_in(c: Condition, defending: bool = False) -> str:
             and not _truthy(operands[0].get("operator"))
         ):
             return _negated_lead_in(operands[0], defending)
-        return "unless " + " or ".join(
-            re.sub(r"^if ", "", condition_lead_in(o, defending), count=1) for o in operands
-        )
+        # not(and[not A, not B]) is or[A, B], and not(or[not A, not B]) is and[A, B]: read the
+        # positive form.
+        only = operands[0] if len(operands) == 1 and isinstance(operands[0], dict) else {}
+        inner = only.get("operands") or []
+        if (
+            only.get("operator") in ("and", "or")
+            and inner
+            and all(
+                isinstance(o, dict)
+                and o.get("operator") == "not"
+                and isinstance(o.get("operands"), list)
+                and len(o["operands"]) == 1
+                for o in inner
+            )
+        ):
+            flipped = "or" if only["operator"] == "and" else "and"
+            return condition_lead_in(
+                {"operator": flipped, "operands": [o["operands"][0] for o in inner]}, defending
+            )
+        # Otherwise "unless" covers the whole compound, read as one predicate with no lead word
+        # of its own.
+        return "unless " + " or ".join(describe_condition(o) for o in operands)
     p = _obj(c.get("parameters"))
     ctype = c.get("type")
     if ctype == "phase-is":
