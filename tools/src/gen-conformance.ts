@@ -42,9 +42,6 @@ import {
   type AbilityTrigger,
 } from "./translate/index.js";
 import type { GameEvent } from "./generated.js";
-import { effectToBuffs } from "./cruncher/from-dsl.js";
-import type { BuffSource, EngineContext } from "./cruncher/buffs.js";
-import { withRating } from "./data/ability-refs.js";
 import { awardsOf } from "./scoring/index.js";
 import { createRunnerState, dispatch } from "./runner.js";
 import { exportRoster, type ExportFormat } from "./export/index.js";
@@ -60,7 +57,6 @@ import type { ParsedRoster, Roster } from "./import/types.js";
 import { encodeBase } from "./runner.js";
 import { attributeStages } from "./cruncher/attribution.js";
 import { allocate, type AllocationOutput, type DamageZeroing } from "./cruncher/allocation.js";
-import type { GrantedRecord } from "./cruncher/granted-records.js";
 import type { Buff } from "./cruncher/buffs.js";
 import type { EngineInput } from "./cruncher/index.js";
 import {
@@ -72,25 +68,7 @@ import { keystoneMeasurements, BOARD_INCHES } from "./terrain/keystones.js";
 import {
   canonicalAttackCompareCases,
   canonicalCriticalWoundCases,
-  canonicalHalfWeaponRangeCases,
-  canonicalScenarioCases,
-  canonicalTriggerSubjectCases,
-  TRIGGER_SUBJECT_CASE_PREFIX,
-  canonicalStratagemModelCases,
-  canonicalStratagemTargetCases,
-  canonicalNamedRegionBeneficiaryCases,
-  canonicalDesignationCases,
-  DESIGNATION_CASE_PREFIX,
-  STRATAGEM_MODEL_CASE_PREFIX,
-  STRATAGEM_TARGET_CASE_PREFIX,
-  NAMED_REGION_BENEFICIARY_CASE_PREFIX,
-  canonicalRecipientCases,
   canonicalWeaponScopeCases,
-  HALF_WEAPON_RANGE_CASE_PREFIX,
-  SCENARIO_CASE_PREFIX,
-  RECIPIENT_CASE_PREFIX,
-  stanceOptionFields,
-  needKeys,
 } from "./gen-conformance-cruncher-cases.js";
 import {
   GAME_MODE_LINKED_QUERIES,
@@ -98,9 +76,7 @@ import {
 } from "./gen-conformance-game-mode-cases.js";
 import { canonicalMortalSourceCases } from "./gen-conformance-mortal-cases.js";
 import { canonicalDefensiveLeverCases } from "./gen-conformance-defensive-levers.js";
-import { canonicalDamageZeroingCases, DAMAGE_ZEROING_CASE_PREFIX } from "./gen-conformance-zeroing-cases.js";
-import { canonicalIgnoreModifiersCases, IGNORE_MODIFIERS_CASE_PREFIX } from "./gen-conformance-ignore-cases.js";
-import { canonicalGrantedRecordCases, GRANTED_RECORD_CASE_PREFIX, withGrantedRecords } from "./gen-conformance-granted-cases.js";
+import { canonicalDslCases, refreshResolverDslCases, withCanonicalDslCases, type ResolverDslCase } from "./gen-conformance-resolver-dsl.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = join(__dirname, "../..");
@@ -4415,63 +4391,13 @@ function genShare(): void {
   );
 }
 
-type ResolverDslCase = {
-  abilityId: string;
-  rating?: string | number;
-  effect?: unknown;
-  /** Ability records the effect grants, resolved as printed definitions before translation. */
-  grantedRecords?: Record<string, GrantedRecord>;
-  source: BuffSource;
-  context: EngineContext;
-  perspective?: "attacker" | "target";
-  expected?: {
-    applied: unknown[];
-    unsupportedReasons: string[];
-    /** Each unsupported fragment's scope, parallel to `unsupportedReasons`. */
-    unsupportedScopes?: string[];
-    needKeys?: string[];
-    activatable?: unknown[];
-  };
-};
-
 /** Refresh every seeded DSL expectation through the same public translation boundary as adapters. */
 function genResolverDslCases(): void {
   const ds = Dataset.embedded();
   for (const filename of ["from-dsl.json", "defensive-from-dsl.json"] as const) {
     const path = join(CONFORMANCE, "abilities-resolver", filename);
     const corpus = JSON.parse(readFileSync(path, "utf8")) as { cases: ResolverDslCase[] };
-    for (const row of corpus.cases) {
-      const perspective = row.perspective ?? "attacker";
-      const result = row.effect === undefined
-        ? ds.abilities.getAny(row.abilityId)?.describeBuffs(
-          row.source,
-          row.context,
-          perspective,
-          row.rating,
-        )
-        : effectToBuffs(
-          withRating(withGrantedRecords(row), row.rating),
-          row.source,
-          row.context,
-          perspective,
-        );
-      if (!result) throw new Error(`resolver conformance references unknown ability ${row.abilityId}`);
-      row.expected = {
-        applied: result.applied.map((buff) => buff.contribution),
-        unsupportedReasons: result.unsupported.map((entry) => entry.reason),
-        unsupportedScopes: result.unsupported.map((entry) => entry.scope ?? "unresolved"),
-        needKeys: needKeys(result),
-        activatable: result.activatable.map((lever) => ({
-          id: lever.id,
-          label: lever.label,
-          group: lever.group ?? null,
-          requires: lever.requires ?? null,
-          capRaise: lever.capRaise ?? null,
-          ...stanceOptionFields(lever),
-          buffs: lever.buffs.map((buff) => buff.contribution),
-        })),
-      };
-    }
+    corpus.cases = refreshResolverDslCases(corpus.cases, ds);
     writeJson(path, corpus);
     console.log(`abilities-resolver/${filename}: ${corpus.cases.length} DSL cases`);
   }
@@ -4493,23 +4419,14 @@ function genDefensiveLeverCases(): void {
 
 /** Append fabricated direct-API cases without duplicating their stable identities on regen. */
 function genCanonicalCruncherCases(): void {
-  const appended = [...canonicalRecipientCases(), ...canonicalHalfWeaponRangeCases(), ...canonicalScenarioCases(), ...canonicalGrantedRecordCases(), ...canonicalDamageZeroingCases(), ...canonicalIgnoreModifiersCases(), ...canonicalTriggerSubjectCases(), ...canonicalStratagemModelCases(), ...canonicalStratagemTargetCases(), ...canonicalNamedRegionBeneficiaryCases(), ...canonicalDesignationCases()];
+  const appended = canonicalDslCases();
   for (const [filename, perspective] of [
     ["from-dsl.json", "attacker"],
     ["defensive-from-dsl.json", "target"],
   ] as const) {
     const path = join(CONFORMANCE, "abilities-resolver", filename);
     const corpus = JSON.parse(readFileSync(path, "utf8")) as { cases: Record<string, unknown>[] };
-    corpus.cases = [
-      ...corpus.cases.filter((row) => typeof row.caseId !== "string" ||
-        (!row.caseId.startsWith(RECIPIENT_CASE_PREFIX) && !row.caseId.startsWith(HALF_WEAPON_RANGE_CASE_PREFIX) &&
-          !row.caseId.startsWith(SCENARIO_CASE_PREFIX) && !row.caseId.startsWith(GRANTED_RECORD_CASE_PREFIX) &&
-          !row.caseId.startsWith(DAMAGE_ZEROING_CASE_PREFIX) && !row.caseId.startsWith(IGNORE_MODIFIERS_CASE_PREFIX) &&
-          !row.caseId.startsWith(TRIGGER_SUBJECT_CASE_PREFIX) && !row.caseId.startsWith(STRATAGEM_MODEL_CASE_PREFIX) &&
-          !row.caseId.startsWith(STRATAGEM_TARGET_CASE_PREFIX) && !row.caseId.startsWith(NAMED_REGION_BENEFICIARY_CASE_PREFIX) &&
-          !row.caseId.startsWith(DESIGNATION_CASE_PREFIX))),
-      ...appended.filter((row) => row.perspective === perspective),
-    ];
+    corpus.cases = withCanonicalDslCases(corpus.cases, perspective, appended);
     writeJson(path, corpus);
     console.log(`abilities-resolver/${filename}: ${corpus.cases.length} cases`);
   }
