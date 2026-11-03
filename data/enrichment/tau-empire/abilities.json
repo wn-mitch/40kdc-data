@@ -10183,7 +10183,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [
       "commander-cloudspear",
@@ -10203,110 +10203,6 @@
           "modifier": {
             "label": "Drone token",
             "operation": "place"
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "unit-wargear",
-                "parameters": {
-                  "subject": "this-unit",
-                  "wargear": "guardian-drone"
-                }
-              },
-              {
-                "type": "attack-is",
-                "parameters": {
-                  "attack_type": "ranged"
-                }
-              }
-            ]
-          },
-          "effect": {
-            "type": "roll-modifier",
-            "target": "attacker",
-            "modifier": {
-              "roll": "wound",
-              "operation": "subtract",
-              "value": 1
-            }
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "unit-wargear",
-            "parameters": {
-              "subject": "this-unit",
-              "wargear": "gun-drone"
-            }
-          },
-          "effect": {
-            "type": "weapon-grant",
-            "target": "this-model",
-            "modifier": {
-              "weapon_id": "twin-pulse-carbine-drone"
-            }
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "unit-wargear",
-            "parameters": {
-              "subject": "this-unit",
-              "wargear": "marker-drone"
-            }
-          },
-          "effect": {
-            "type": "keyword-grant",
-            "target": "this-unit",
-            "modifier": {
-              "keywords": [
-                "MARKERLIGHT"
-              ]
-            }
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "unit-wargear",
-            "parameters": {
-              "subject": "this-unit",
-              "wargear": "marker-drone"
-            }
-          },
-          "effect": {
-            "type": "permission",
-            "target": "this-unit",
-            "modifier": {
-              "activity": "observe",
-              "allow": true,
-              "despite": [
-                "advanced"
-              ]
-            }
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "unit-wargear",
-            "parameters": {
-              "subject": "this-unit",
-              "wargear": "missile-drone"
-            }
-          },
-          "effect": {
-            "type": "weapon-grant",
-            "target": "this-model",
-            "modifier": {
-              "weapon_id": "missile-pod-drone"
-            }
           }
         },
         {
@@ -10334,7 +10230,7 @@
       "duration": "permanent"
     },
     "behavior": "passive",
-    "source_digest": "0da83ebe422f3e9605827a2afeca7f485d262f4fe489623c31cefaa735a7e9f0",
+    "source_digest": "c6d650cbe9657c4396a2bd5a9f627327d71f8cb5f9af716065f78c17dcf2c12e",
     "interactions": [
       {
         "ability_ref": "drones-tau-empire",

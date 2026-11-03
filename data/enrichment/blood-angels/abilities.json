@@ -2428,17 +2428,15 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "source_digest": "be34bcbee09ef568893baf17dbdc48a23e9ce10b380050bcf7fa460626ca8891",
+    "source_digest": "c4cfcdd1f88adb0f41af62b10c83f1a30a474ba6e3480e4ddc2b677238efe9a3",
     "version": "2025-q3",
     "effect": {
       "type": "army-rule",
-      "target": {
-        "owner": "friendly"
-      },
+      "target": "this-unit",
       "modifier": {
-        "rule": "composition"
+        "rule": "single-chapter"
       }
     },
     "scope": {

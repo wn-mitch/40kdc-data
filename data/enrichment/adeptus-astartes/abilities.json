@@ -4463,124 +4463,17 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "source_digest": "27784b8df061d7215e01f5d5c005c1448d89a0dbbf908d61565fff6785359e81",
+    "source_digest": "51806c57b00f6f4f71efad14e9a2547b91c6a2f058ac75a3e4d2cad1d239dd04",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "adeptus-astartes",
     "ability_type": "faction",
-    "behavior": "reactive",
+    "behavior": "activated",
     "effect": {
-      "type": "stance-select",
-      "mode": "consumable",
-      "options": [
-        {
-          "id": "assault-doctrine",
-          "name": "Assault Doctrine",
-          "effect": {
-            "type": "ability-part",
-            "effect": {
-              "type": "permission",
-              "target": "this-unit",
-              "modifier": {
-                "activity": "declare-charge",
-                "allow": true,
-                "despite": [
-                  "advanced"
-                ]
-              }
-            },
-            "trigger": {
-              "event": "selected",
-              "filter": {
-                "move_types": [
-                  "advance"
-                ],
-                "to": "move"
-              }
-            }
-          }
-        },
-        {
-          "id": "devastator-doctrine",
-          "name": "Devastator Doctrine",
-          "effect": {
-            "type": "weapon-ability-grant",
-            "target": "this-unit",
-            "modifier": {
-              "keywords": [
-                {
-                  "keyword_id": "assault"
-                }
-              ],
-              "weapons": {
-                "type": "ranged"
-              }
-            }
-          }
-        },
-        {
-          "id": "tactical-doctrine",
-          "name": "Tactical Doctrine",
-          "effect": {
-            "type": "ability-part",
-            "effect": {
-              "type": "sequence",
-              "steps": [
-                {
-                  "type": "permission",
-                  "target": "this-unit",
-                  "modifier": {
-                    "activity": "shoot",
-                    "allow": true,
-                    "despite": [
-                      "fell-back"
-                    ]
-                  }
-                },
-                {
-                  "type": "permission",
-                  "target": "this-unit",
-                  "modifier": {
-                    "activity": "declare-charge",
-                    "allow": true,
-                    "despite": [
-                      "fell-back"
-                    ]
-                  }
-                }
-              ]
-            },
-            "trigger": {
-              "event": "selected",
-              "filter": {
-                "move_types": [
-                  "fall-back"
-                ],
-                "to": "move"
-              }
-            }
-          }
-        }
-      ],
-      "min_choices": 1,
-      "max_choices": 1
-    },
-    "scope": {
-      "duration": "until-next-command-phase"
-    },
-    "community_notes": "[APPROX] Codex army rule. A consumable army-wide stance chosen at the start of your Command phase; each doctrine may be selected once per battle and only one is active for a unit at a time. Devastator grants [ASSAULT] to ranged weapons; Assault and Tactical are captured as opaque eligibility grants. Full rule in raw-text store.",
-    "detachment_id": "assault-force",
-    "interactions": [
-      {
-        "ability_ref": "combat-doctrines-adeptus-astartes",
-        "type": "replaces"
-      }
-    ],
-    "trigger": {
-      "event": "phase-started",
+      "type": "conditional",
       "condition": {
         "operator": "and",
         "operands": [
@@ -4598,8 +4491,91 @@
           }
         ]
       },
-      "optional": true
-    }
+      "effect": {
+        "type": "stance-select",
+        "mode": "consumable",
+        "options": [
+          {
+            "id": "assault-doctrine",
+            "name": "Assault Doctrine",
+            "effect": {
+              "type": "permission",
+              "target": "this-unit",
+              "modifier": {
+                "activity": "declare-charge",
+                "allow": true,
+                "after": [
+                  "advance"
+                ]
+              }
+            }
+          },
+          {
+            "id": "devastator-doctrine",
+            "name": "Devastator Doctrine",
+            "effect": {
+              "type": "weapon-ability-grant",
+              "target": "this-unit",
+              "modifier": {
+                "keywords": [
+                  {
+                    "keyword_id": "assault"
+                  }
+                ],
+                "weapons": {
+                  "type": "ranged"
+                }
+              }
+            }
+          },
+          {
+            "id": "tactical-doctrine",
+            "name": "Tactical Doctrine",
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "permission",
+                  "target": "this-unit",
+                  "modifier": {
+                    "activity": "shoot",
+                    "allow": true,
+                    "after": [
+                      "fall-back"
+                    ]
+                  }
+                },
+                {
+                  "type": "permission",
+                  "target": "this-unit",
+                  "modifier": {
+                    "activity": "declare-charge",
+                    "allow": true,
+                    "after": [
+                      "fall-back"
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "min_choices": 1,
+        "max_choices": 1
+      }
+    },
+    "scope": {
+      "duration": "until-next-command-phase"
+    },
+    "community_notes": "[APPROX] Codex army rule. A consumable army-wide stance chosen at the start of your Command phase; each doctrine may be selected once per battle and only one is active for a unit at a time. Devastator grants [ASSAULT] to ranged weapons; Assault and Tactical are captured as opaque eligibility grants. Full rule in raw-text store.",
+    "detachment_id": "assault-force",
+    "interactions": [
+      {
+        "ability_ref": "combat-doctrines-adeptus-astartes",
+        "type": "replaces"
+      }
+    ],
+    "optional": true
   },
   {
     "ability_id": "shadow-masters-adeptus-astartes",

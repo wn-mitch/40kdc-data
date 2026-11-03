@@ -36,32 +36,7 @@
               "id": "combat-doctrines-assault-force-adeptus-astartes?stance",
               "maxActivations": 1
             },
-            "requires": [
-              {
-                "type": "ability-part",
-                "trigger": {
-                  "event": "phase-started",
-                  "condition": {
-                    "operator": "and",
-                    "operands": [
-                      {
-                        "type": "phase-is",
-                        "parameters": {
-                          "phase": "command"
-                        }
-                      },
-                      {
-                        "type": "player-turn-is",
-                        "parameters": {
-                          "turn": "your-turn"
-                        }
-                      }
-                    ]
-                  },
-                  "optional": true
-                }
-              }
-            ],
+            "requires": null,
             "capRaise": null,
             "buffs": [
               {

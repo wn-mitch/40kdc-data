@@ -3211,17 +3211,15 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "d572eb1d97922fa4e9d20781ed2d8f83a0f5cf6f42b69c6a9ec87b6aabd5b697",
     "version": "2025-q3",
     "effect": {
       "type": "army-rule",
-      "target": {
-        "owner": "friendly"
-      },
+      "target": "this-unit",
       "modifier": {
-        "rule": "composition"
+        "rule": "single-chapter"
       }
     },
     "scope": {

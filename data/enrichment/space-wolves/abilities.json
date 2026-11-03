@@ -4509,7 +4509,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [
       "askars-wolfpack-blood-claws",
@@ -4521,136 +4521,107 @@
     "detachment_id": "askars-wolfpack",
     "ability_type": "faction",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "conditional",
-          "condition": {
-            "operator": "and",
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "or",
             "operands": [
               {
-                "operator": "or",
-                "operands": [
-                  {
-                    "type": "matches",
-                    "parameters": {
-                      "filter": {
-                        "within": {
-                          "of": {
-                            "owner": "friendly",
-                            "all_of": [
-                              "CHARACTER",
-                              "SPACE WOLVES"
-                            ],
-                            "none_of": [
-                              "WULFEN"
-                            ],
-                            "level": "model"
-                          },
-                          "range": {
-                            "inches": 6
-                          }
-                        }
-                      }
-                    }
-                  },
-                  {
-                    "type": "matches",
-                    "parameters": {
-                      "filter": {
-                        "within": {
-                          "of": {
-                            "owner": "friendly",
-                            "all_of": [
-                              "WOLF PRIEST"
-                            ],
-                            "level": "model"
-                          },
-                          "range": {
-                            "inches": 12
-                          }
-                        }
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "within": {
+                      "of": {
+                        "owner": "friendly",
+                        "all_of": [
+                          "CHARACTER",
+                          "SPACE WOLVES"
+                        ],
+                        "none_of": [
+                          "WULFEN"
+                        ],
+                        "level": "model"
+                      },
+                      "range": {
+                        "inches": 6
                       }
                     }
                   }
-                ]
+                }
               },
               {
-                "operator": "not",
-                "operands": [
-                  {
-                    "type": "matches",
-                    "parameters": {
-                      "filter": {
-                        "state": "battle-shocked"
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "within": {
+                      "of": {
+                        "owner": "friendly",
+                        "all_of": [
+                          "WOLF PRIEST"
+                        ],
+                        "level": "model"
+                      },
+                      "range": {
+                        "inches": 12
                       }
                     }
                   }
-                ]
+                }
               }
             ]
           },
-          "effect": {
-            "type": "sequence",
-            "steps": [
+          {
+            "operator": "not",
+            "operands": [
               {
-                "type": "conditional",
-                "condition": {
-                  "type": "matches",
-                  "parameters": {
-                    "filter": {
-                      "all_of": [
-                        "INFANTRY"
-                      ]
-                    }
-                  }
-                },
-                "effect": {
-                  "type": "stat-modifier",
-                  "target": "this-unit",
-                  "modifier": {
-                    "stat": "OC",
-                    "operation": "add",
-                    "value": 1
-                  }
-                }
-              },
-              {
-                "type": "conditional",
-                "condition": {
-                  "type": "matches",
-                  "parameters": {
-                    "filter": {
-                      "all_of": [
-                        "VEHICLE"
-                      ]
-                    }
-                  }
-                },
-                "effect": {
-                  "type": "stat-modifier",
-                  "target": "this-unit",
-                  "modifier": {
-                    "stat": "OC",
-                    "operation": "add",
-                    "value": 3
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "state": "battle-shocked"
                   }
                 }
               }
             ]
           }
-        },
-        {
-          "type": "transport-capacity",
-          "target": "this-unit",
-          "modifier": {
-            "occupancy_kind": "fixed-model-spaces",
-            "subject_kind": "unit-models",
-            "model_keyword": "Wulfen",
-            "spaces_per_model": 2
+        ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "stat-modifier",
+            "target": {
+              "level": "model",
+              "member_of": "this-unit",
+              "all_of": [
+                "INFANTRY"
+              ]
+            },
+            "modifier": {
+              "stat": "OC",
+              "operation": "add",
+              "value": 1
+            }
+          },
+          {
+            "type": "stat-modifier",
+            "target": {
+              "level": "model",
+              "member_of": "this-unit",
+              "all_of": [
+                "VEHICLE"
+              ]
+            },
+            "modifier": {
+              "stat": "OC",
+              "operation": "add",
+              "value": 3
+            }
           }
-        }
-      ]
+        ]
+      }
     },
     "scope": {
       "duration": "permanent"
@@ -4662,7 +4633,7 @@
       }
     ],
     "behavior": "passive",
-    "source_digest": "ac0ddb485def70c4ff04e0bdb58aa6b84c0d6379db686bdb18c4d97daaab63a5"
+    "source_digest": "1ed9ad9610e8f2024b1855ecf4b324a1fe1927bf39286ade8490ae4baa92a464"
   },
   {
     "ability_id": "high-rune-priest-space-wolves",

@@ -15910,106 +15910,7 @@
   {
     "caseId": "combat-doctrines-assault-force-adeptus-astartes#219",
     "effect": {
-      "type": "stance-select",
-      "mode": "consumable",
-      "options": [
-        {
-          "id": "assault-doctrine",
-          "name": "Assault Doctrine",
-          "effect": {
-            "type": "ability-part",
-            "effect": {
-              "type": "permission",
-              "target": "this-unit",
-              "modifier": {
-                "activity": "declare-charge",
-                "allow": true,
-                "despite": [
-                  "advanced"
-                ]
-              }
-            },
-            "trigger": {
-              "event": "selected",
-              "filter": {
-                "move_types": [
-                  "advance"
-                ],
-                "to": "move"
-              }
-            }
-          }
-        },
-        {
-          "id": "devastator-doctrine",
-          "name": "Devastator Doctrine",
-          "effect": {
-            "type": "weapon-ability-grant",
-            "target": "this-unit",
-            "modifier": {
-              "keywords": [
-                {
-                  "keyword_id": "assault"
-                }
-              ],
-              "weapons": {
-                "type": "ranged"
-              }
-            }
-          }
-        },
-        {
-          "id": "tactical-doctrine",
-          "name": "Tactical Doctrine",
-          "effect": {
-            "type": "ability-part",
-            "effect": {
-              "type": "sequence",
-              "steps": [
-                {
-                  "type": "permission",
-                  "target": "this-unit",
-                  "modifier": {
-                    "activity": "shoot",
-                    "allow": true,
-                    "despite": [
-                      "fell-back"
-                    ]
-                  }
-                },
-                {
-                  "type": "permission",
-                  "target": "this-unit",
-                  "modifier": {
-                    "activity": "declare-charge",
-                    "allow": true,
-                    "despite": [
-                      "fell-back"
-                    ]
-                  }
-                }
-              ]
-            },
-            "trigger": {
-              "event": "selected",
-              "filter": {
-                "move_types": [
-                  "fall-back"
-                ],
-                "to": "move"
-              }
-            }
-          }
-        }
-      ],
-      "min_choices": 1,
-      "max_choices": 1
-    },
-    "scope": {
-      "duration": "until-next-command-phase"
-    },
-    "trigger": {
-      "event": "phase-started",
+      "type": "conditional",
       "condition": {
         "operator": "and",
         "operands": [
@@ -16027,10 +15928,85 @@
           }
         ]
       },
-      "optional": true
+      "effect": {
+        "type": "stance-select",
+        "mode": "consumable",
+        "options": [
+          {
+            "id": "assault-doctrine",
+            "name": "Assault Doctrine",
+            "effect": {
+              "type": "permission",
+              "target": "this-unit",
+              "modifier": {
+                "activity": "declare-charge",
+                "allow": true,
+                "after": [
+                  "advance"
+                ]
+              }
+            }
+          },
+          {
+            "id": "devastator-doctrine",
+            "name": "Devastator Doctrine",
+            "effect": {
+              "type": "weapon-ability-grant",
+              "target": "this-unit",
+              "modifier": {
+                "keywords": [
+                  {
+                    "keyword_id": "assault"
+                  }
+                ],
+                "weapons": {
+                  "type": "ranged"
+                }
+              }
+            }
+          },
+          {
+            "id": "tactical-doctrine",
+            "name": "Tactical Doctrine",
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "permission",
+                  "target": "this-unit",
+                  "modifier": {
+                    "activity": "shoot",
+                    "allow": true,
+                    "after": [
+                      "fall-back"
+                    ]
+                  }
+                },
+                {
+                  "type": "permission",
+                  "target": "this-unit",
+                  "modifier": {
+                    "activity": "declare-charge",
+                    "allow": true,
+                    "after": [
+                      "fall-back"
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "min_choices": 1,
+        "max_choices": 1
+      }
     },
+    "scope": {
+      "duration": "until-next-command-phase"
+    },
+    "optional": true,
     "expected": {
-      "text": "At the start of your Command phase, you may use this ability, until the start of your next Command phase:\n  -> Select one (each may be chosen once per battle):\n    - Assault Doctrine: when the unit is selected to make an Advance move: the unit is eligible to declare a charge even if it Advanced this turn.\n    - Devastator Doctrine: ranged weapons equipped by models in this unit gain [ASSAULT].\n    - Tactical Doctrine: when the unit is selected to make a Fall Back move: the unit is eligible to shoot even if it Fell Back this turn; the unit is eligible to declare a charge even if it Fell Back this turn."
+      "text": "You can: During the Command phase, in your turn, until the start of your next Command phase:\n  -> Select one (each may be chosen once per battle):\n    - Assault Doctrine: the unit is eligible to declare a charge in a turn in which it Advanced.\n    - Devastator Doctrine: ranged weapons equipped by models in this unit gain [ASSAULT].\n    - Tactical Doctrine: the unit is eligible to shoot in a turn in which it Fell Back; the unit is eligible to declare a charge in a turn in which it Fell Back."
     }
   },
   {
@@ -16752,7 +16728,7 @@
     }
   },
   {
-    "caseId": "curse-of-the-wulfen-askars-wolfpack-space-wolves#230",
+    "caseId": "curse-of-the-wulfen-space-wolves#230",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -16893,148 +16869,7 @@
     }
   },
   {
-    "caseId": "curse-of-the-wulfen-space-wolves#231",
-    "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "conditional",
-          "condition": {
-            "operator": "and",
-            "operands": [
-              {
-                "operator": "or",
-                "operands": [
-                  {
-                    "type": "matches",
-                    "parameters": {
-                      "filter": {
-                        "within": {
-                          "of": {
-                            "owner": "friendly",
-                            "all_of": [
-                              "CHARACTER",
-                              "SPACE WOLVES"
-                            ],
-                            "none_of": [
-                              "WULFEN"
-                            ],
-                            "level": "model"
-                          },
-                          "range": {
-                            "inches": 6
-                          }
-                        }
-                      }
-                    }
-                  },
-                  {
-                    "type": "matches",
-                    "parameters": {
-                      "filter": {
-                        "within": {
-                          "of": {
-                            "owner": "friendly",
-                            "all_of": [
-                              "WOLF PRIEST"
-                            ],
-                            "level": "model"
-                          },
-                          "range": {
-                            "inches": 12
-                          }
-                        }
-                      }
-                    }
-                  }
-                ]
-              },
-              {
-                "operator": "not",
-                "operands": [
-                  {
-                    "type": "matches",
-                    "parameters": {
-                      "filter": {
-                        "state": "battle-shocked"
-                      }
-                    }
-                  }
-                ]
-              }
-            ]
-          },
-          "effect": {
-            "type": "sequence",
-            "steps": [
-              {
-                "type": "conditional",
-                "condition": {
-                  "type": "matches",
-                  "parameters": {
-                    "filter": {
-                      "all_of": [
-                        "INFANTRY"
-                      ]
-                    }
-                  }
-                },
-                "effect": {
-                  "type": "stat-modifier",
-                  "target": "this-unit",
-                  "modifier": {
-                    "stat": "OC",
-                    "operation": "add",
-                    "value": 1
-                  }
-                }
-              },
-              {
-                "type": "conditional",
-                "condition": {
-                  "type": "matches",
-                  "parameters": {
-                    "filter": {
-                      "all_of": [
-                        "VEHICLE"
-                      ]
-                    }
-                  }
-                },
-                "effect": {
-                  "type": "stat-modifier",
-                  "target": "this-unit",
-                  "modifier": {
-                    "stat": "OC",
-                    "operation": "add",
-                    "value": 3
-                  }
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "transport-capacity",
-          "target": "this-unit",
-          "modifier": {
-            "occupancy_kind": "fixed-model-spaces",
-            "subject_kind": "unit-models",
-            "model_keyword": "Wulfen",
-            "spaces_per_model": 2
-          }
-        }
-      ]
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "expected": {
-      "text": "While the unit is within 6\" of a friendly CHARACTER SPACE WOLVES model (excluding WULFEN models) or while the unit is within 12\" of a friendly WOLF PRIEST model, while the unit is not Battle-shocked:\n  -> If the unit has the INFANTRY keyword, add 1 to the unit's Objective Control characteristic.\n  -> If the unit has the VEHICLE keyword, add 3 to the unit's Objective Control characteristic.\nFor Transport capacity, each Wulfen model occupies 2 model spaces."
-    }
-  },
-  {
-    "caseId": "da-gobshot-thunderbuss-brute-bosses-orks#232",
+    "caseId": "da-gobshot-thunderbuss-brute-bosses-orks#231",
     "effect": {
       "type": "weapon-grant",
       "target": "this-model",
@@ -17050,7 +16885,7 @@
     }
   },
   {
-    "caseId": "da-krunch-wurrband-orks#233",
+    "caseId": "da-krunch-wurrband-orks#232",
     "effect": {
       "type": "weapon-grant",
       "target": "this-model",
@@ -17066,7 +16901,7 @@
     }
   },
   {
-    "caseId": "daemonic-allegiance-soul-grinder-chaos-daemons#234",
+    "caseId": "daemonic-allegiance-soul-grinder-chaos-daemons#233",
     "effect": {
       "type": "ability-part",
       "trigger": {
@@ -17187,7 +17022,7 @@
     }
   },
   {
-    "caseId": "daemonic-patrons-callous-blades-flawless-blades-emperors-children#235",
+    "caseId": "daemonic-patrons-callous-blades-flawless-blades-emperors-children#234",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -17270,7 +17105,7 @@
     }
   },
   {
-    "caseId": "daemonkin-aranis-zarkan-chaos-space-marines#236",
+    "caseId": "daemonkin-aranis-zarkan-chaos-space-marines#235",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -17313,7 +17148,7 @@
     }
   },
   {
-    "caseId": "damaged#237",
+    "caseId": "damaged#236",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -17343,7 +17178,7 @@
     }
   },
   {
-    "caseId": "damaged-1-6-wounds-remaining-adepta-sororitas#238",
+    "caseId": "damaged-1-6-wounds-remaining-adepta-sororitas#237",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -17385,7 +17220,7 @@
     }
   },
   {
-    "caseId": "damaged-1-6-wounds-remaining-necrons#239",
+    "caseId": "damaged-1-6-wounds-remaining-necrons#238",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -17426,7 +17261,7 @@
     }
   },
   {
-    "caseId": "damaged-1-7-wounds-remaining-chaos-daemons#240",
+    "caseId": "damaged-1-7-wounds-remaining-chaos-daemons#239",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -17458,7 +17293,7 @@
     }
   },
   {
-    "caseId": "data-severed-adeptus-mechanicus#241",
+    "caseId": "data-severed-adeptus-mechanicus#240",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -17501,7 +17336,7 @@
     }
   },
   {
-    "caseId": "dauntless-bravery-sanguinary-spearhead-blood-angels#242",
+    "caseId": "dauntless-bravery-sanguinary-spearhead-blood-angels#241",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -17546,7 +17381,7 @@
     }
   },
   {
-    "caseId": "dauntless-defenders-imperial-knights#243",
+    "caseId": "dauntless-defenders-imperial-knights#242",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -17598,7 +17433,7 @@
     }
   },
   {
-    "caseId": "death-korps-medi-pack-astra-militarum#244",
+    "caseId": "death-korps-medi-pack-astra-militarum#243",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -17705,7 +17540,7 @@
     }
   },
   {
-    "caseId": "deathstrike-missile-astra-militarum#245",
+    "caseId": "deathstrike-missile-astra-militarum#244",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -17750,7 +17585,7 @@
     }
   },
   {
-    "caseId": "divinator-class-auspexes-adeptus-astartes#246",
+    "caseId": "divinator-class-auspexes-adeptus-astartes#245",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -17866,7 +17701,7 @@
     }
   },
   {
-    "caseId": "downtrodden-orks#247",
+    "caseId": "downtrodden-orks#246",
     "effect": {
       "type": "transport-capacity",
       "target": "this-unit",
@@ -17892,7 +17727,7 @@
     }
   },
   {
-    "caseId": "drawn-to-the-slaughter-cult-of-blood-world-eaters#248",
+    "caseId": "drawn-to-the-slaughter-cult-of-blood-world-eaters#247",
     "effect": {
       "type": "add-unit",
       "target": "stratagem-target",
@@ -17919,7 +17754,7 @@
     }
   },
   {
-    "caseId": "dreadblades-chaos-knights#249",
+    "caseId": "dreadblades-chaos-knights#248",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -18028,7 +17863,7 @@
     }
   },
   {
-    "caseId": "drive-them-out-gate-warden-lance-imperial-knights#250",
+    "caseId": "drive-them-out-gate-warden-lance-imperial-knights#249",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -18060,7 +17895,48 @@
     }
   },
   {
-    "caseId": "drones-sudden-dawn-cadre-tau-empire#251",
+    "caseId": "drones-sudden-dawn-cadre-tau-empire#250",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "marker",
+          "target": "this-model",
+          "modifier": {
+            "label": "Drone token",
+            "operation": "place"
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "unit-wargear",
+            "parameters": {
+              "subject": "this-unit",
+              "wargear": "shield-drone"
+            }
+          },
+          "effect": {
+            "type": "stat-modifier",
+            "target": "this-model",
+            "modifier": {
+              "stat": "W",
+              "operation": "add",
+              "value": 1
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Place a Drone token marker.\nIf this unit has the Shield Drone wargear, add 1 to this model's Wounds characteristic."
+    }
+  },
+  {
+    "caseId": "drones-tau-empire#251",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -18205,152 +18081,7 @@
     }
   },
   {
-    "caseId": "drones-tau-empire#252",
-    "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "marker",
-          "target": "this-model",
-          "modifier": {
-            "label": "Drone token",
-            "operation": "place"
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "unit-wargear",
-                "parameters": {
-                  "subject": "this-unit",
-                  "wargear": "guardian-drone"
-                }
-              },
-              {
-                "type": "attack-is",
-                "parameters": {
-                  "attack_type": "ranged"
-                }
-              }
-            ]
-          },
-          "effect": {
-            "type": "roll-modifier",
-            "target": "attacker",
-            "modifier": {
-              "roll": "wound",
-              "operation": "subtract",
-              "value": 1
-            }
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "unit-wargear",
-            "parameters": {
-              "subject": "this-unit",
-              "wargear": "gun-drone"
-            }
-          },
-          "effect": {
-            "type": "weapon-grant",
-            "target": "this-model",
-            "modifier": {
-              "weapon_id": "twin-pulse-carbine-drone"
-            }
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "unit-wargear",
-            "parameters": {
-              "subject": "this-unit",
-              "wargear": "marker-drone"
-            }
-          },
-          "effect": {
-            "type": "keyword-grant",
-            "target": "this-unit",
-            "modifier": {
-              "keywords": [
-                "MARKERLIGHT"
-              ]
-            }
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "unit-wargear",
-            "parameters": {
-              "subject": "this-unit",
-              "wargear": "marker-drone"
-            }
-          },
-          "effect": {
-            "type": "permission",
-            "target": "this-unit",
-            "modifier": {
-              "activity": "observe",
-              "allow": true,
-              "despite": [
-                "advanced"
-              ]
-            }
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "unit-wargear",
-            "parameters": {
-              "subject": "this-unit",
-              "wargear": "missile-drone"
-            }
-          },
-          "effect": {
-            "type": "weapon-grant",
-            "target": "this-model",
-            "modifier": {
-              "weapon_id": "missile-pod-drone"
-            }
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "unit-wargear",
-            "parameters": {
-              "subject": "this-unit",
-              "wargear": "shield-drone"
-            }
-          },
-          "effect": {
-            "type": "stat-modifier",
-            "target": "this-model",
-            "modifier": {
-              "stat": "W",
-              "operation": "add",
-              "value": 1
-            }
-          }
-        }
-      ]
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "expected": {
-      "text": "Place a Drone token marker.\nIf this unit has the Guardian Drone wargear, against ranged attacks, the attacking unit gets -1 to Wound rolls.\nIf this unit has the Gun Drone wargear, this model gains 1 Twin Pulse Carbine weapon.\nIf this unit has the Marker Drone wargear, the unit gains the MARKERLIGHT keyword.\nIf this unit has the Marker Drone wargear, the unit is eligible to act as an Observer even if it Advanced this turn.\nIf this unit has the Missile Drone wargear, this model gains 1 Missile Pod weapon.\nIf this unit has the Shield Drone wargear, add 1 to this model's Wounds characteristic."
-    }
-  },
-  {
-    "caseId": "embarking-krieg-heavy-weapons-squad-astra-militarum#253",
+    "caseId": "embarking-krieg-heavy-weapons-squad-astra-militarum#252",
     "effect": {
       "type": "transport-capacity",
       "target": "this-unit",
@@ -18369,7 +18100,7 @@
     }
   },
   {
-    "caseId": "empowered-manifestation-hexwarp-thrallband-thousand-sons#254",
+    "caseId": "empowered-manifestation-hexwarp-thrallband-thousand-sons#253",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -18422,7 +18153,7 @@
     }
   },
   {
-    "caseId": "empyric-onslaught-hexwarp-thrallband-thousand-sons#255",
+    "caseId": "empyric-onslaught-hexwarp-thrallband-thousand-sons#254",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -18459,7 +18190,7 @@
     }
   },
   {
-    "caseId": "exemplar-of-the-code-imperial-knights#256",
+    "caseId": "exemplar-of-the-code-imperial-knights#255",
     "effect": {
       "type": "ability-part",
       "trigger": {
@@ -18529,7 +18260,7 @@
     }
   },
   {
-    "caseId": "exemplar-of-the-kauyon-kauyon-tau-empire#257",
+    "caseId": "exemplar-of-the-kauyon-kauyon-tau-empire#256",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -18572,7 +18303,7 @@
     }
   },
   {
-    "caseId": "exemplar-of-the-montka-montka-tau-empire#258",
+    "caseId": "exemplar-of-the-montka-montka-tau-empire#257",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -18615,7 +18346,7 @@
     }
   },
   {
-    "caseId": "fables-of-nightmare-spearhead-at-arms-imperial-knights#259",
+    "caseId": "fables-of-nightmare-spearhead-at-arms-imperial-knights#258",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -18658,7 +18389,7 @@
     }
   },
   {
-    "caseId": "fated-hero-aeldari#260",
+    "caseId": "fated-hero-aeldari#259",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -18698,7 +18429,7 @@
     }
   },
   {
-    "caseId": "fates-in-flux-chaos-daemons#261",
+    "caseId": "fates-in-flux-chaos-daemons#260",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -18738,7 +18469,7 @@
     }
   },
   {
-    "caseId": "ferocious-show-off-green-tide-orks#262",
+    "caseId": "ferocious-show-off-green-tide-orks#261",
     "effect": {
       "type": "choice",
       "options": [
@@ -18786,7 +18517,7 @@
     }
   },
   {
-    "caseId": "fire-and-fury-bringers-of-flame-adepta-sororitas#263",
+    "caseId": "fire-and-fury-bringers-of-flame-adepta-sororitas#262",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -18846,7 +18577,7 @@
     }
   },
   {
-    "caseId": "fire-zone-purge-astra-militarum#264",
+    "caseId": "fire-zone-purge-astra-militarum#263",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -18953,7 +18684,7 @@
     }
   },
   {
-    "caseId": "fires-of-damnation-sanctuary-guardians-adepta-sororitas#265",
+    "caseId": "fires-of-damnation-sanctuary-guardians-adepta-sororitas#264",
     "effect": {
       "type": "rules-bundle",
       "steps": [
@@ -18995,7 +18726,7 @@
     }
   },
   {
-    "caseId": "flow-of-magic-thousand-sons#266",
+    "caseId": "flow-of-magic-thousand-sons#265",
     "effect": {
       "type": "named-region-state",
       "target": {
@@ -19150,7 +18881,7 @@
     }
   },
   {
-    "caseId": "forward-assault-warsuit-adeptus-astartes#267",
+    "caseId": "forward-assault-warsuit-adeptus-astartes#266",
     "effect": {
       "type": "ability-part",
       "trigger": {
@@ -19228,7 +18959,7 @@
     }
   },
   {
-    "caseId": "freeblades-imperial-knights#268",
+    "caseId": "freeblades-imperial-knights#267",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -19337,7 +19068,7 @@
     }
   },
   {
-    "caseId": "gift-of-change-warpmeld-pact-thousand-sons#269",
+    "caseId": "gift-of-change-warpmeld-pact-thousand-sons#268",
     "effect": {
       "type": "add-unit",
       "target": "this-unit",
@@ -19358,7 +19089,7 @@
     }
   },
   {
-    "caseId": "grot-shields-runt-swarm-orks#270",
+    "caseId": "grot-shields-runt-swarm-orks#269",
     "effect": {
       "type": "ability-part",
       "trigger": {
@@ -19453,7 +19184,7 @@
     }
   },
   {
-    "caseId": "guns-blazing-chaos-space-marines#271",
+    "caseId": "guns-blazing-chaos-space-marines#270",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -19566,7 +19297,7 @@
     }
   },
   {
-    "caseId": "hallowed-ground-grey-knights#272",
+    "caseId": "hallowed-ground-grey-knights#271",
     "effect": {
       "type": "named-region-state",
       "target": {
@@ -19772,7 +19503,7 @@
     }
   },
   {
-    "caseId": "headhunters-space-wolves#273",
+    "caseId": "headhunters-space-wolves#272",
     "effect": {
       "type": "ability-part",
       "trigger": {
@@ -19857,7 +19588,7 @@
     }
   },
   {
-    "caseId": "headlong-destruction-chaos-space-marines#274",
+    "caseId": "headlong-destruction-chaos-space-marines#273",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -19886,7 +19617,7 @@
     }
   },
   {
-    "caseId": "heroes-of-legend-imperial-knights#275",
+    "caseId": "heroes-of-legend-imperial-knights#274",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -19978,7 +19709,7 @@
     }
   },
   {
-    "caseId": "honour-or-death-dark-angels#276",
+    "caseId": "honour-or-death-dark-angels#275",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -20058,7 +19789,7 @@
     }
   },
   {
-    "caseId": "horrors-are-pink-horrors-are-blue-where-once-there-was-one-now-there-are-two-chaos-daemons#277",
+    "caseId": "horrors-are-pink-horrors-are-blue-where-once-there-was-one-now-there-are-two-chaos-daemons#276",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -20085,7 +19816,7 @@
     }
   },
   {
-    "caseId": "horrors-are-pink-horrors-are-blue-where-once-there-was-one-now-there-are-two-thousand-sons#278",
+    "caseId": "horrors-are-pink-horrors-are-blue-where-once-there-was-one-now-there-are-two-thousand-sons#277",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -20157,7 +19888,7 @@
     }
   },
   {
-    "caseId": "hyper-adaptations-tyranids#279",
+    "caseId": "hyper-adaptations-tyranids#278",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -20297,7 +20028,7 @@
     }
   },
   {
-    "caseId": "hyperspace-hunters-necrons#280",
+    "caseId": "hyperspace-hunters-necrons#279",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -20413,7 +20144,7 @@
     }
   },
   {
-    "caseId": "icon-of-khorne-world-eaters#281",
+    "caseId": "icon-of-khorne-world-eaters#280",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -20455,7 +20186,7 @@
     }
   },
   {
-    "caseId": "idol-of-blessed-blood-khorne-lord-of-skulls-world-eaters#282",
+    "caseId": "idol-of-blessed-blood-khorne-lord-of-skulls-world-eaters#281",
     "effect": {
       "type": "resource-die",
       "target": "this-model",
@@ -20477,7 +20208,7 @@
     }
   },
   {
-    "caseId": "imposing-arrival-steel-hammer-astra-militarum#283",
+    "caseId": "imposing-arrival-steel-hammer-astra-militarum#282",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -20514,7 +20245,7 @@
     }
   },
   {
-    "caseId": "independent-power-tau-empire#284",
+    "caseId": "independent-power-tau-empire#283",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -20570,7 +20301,7 @@
     }
   },
   {
-    "caseId": "infested-war-zone-runt-swarm-orks#285",
+    "caseId": "infested-war-zone-runt-swarm-orks#284",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -20651,7 +20382,7 @@
     }
   },
   {
-    "caseId": "join-the-hunt-kroot-hunting-pack-tau-empire#286",
+    "caseId": "join-the-hunt-kroot-hunting-pack-tau-empire#285",
     "effect": {
       "type": "add-unit",
       "target": "this-unit",
@@ -20675,6 +20406,25 @@
     },
     "expected": {
       "text": "Once per battle per army, for the rest of the battle, add a new unit identical to the unit to your army in Strategic Reserves.\nApplies to: units with KROOT."
+    }
+  },
+  {
+    "caseId": "kill-team-agents-of-the-imperium#286",
+    "effect": {
+      "type": "transport-capacity",
+      "target": "this-unit",
+      "modifier": {
+        "occupancy_kind": "fixed-model-spaces",
+        "subject_kind": "unit-models",
+        "model_keyword": "GRAVIS",
+        "spaces_per_model": 2
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "For Transport capacity, each GRAVIS model occupies 2 model spaces."
     }
   },
   {
