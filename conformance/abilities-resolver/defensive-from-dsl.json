@@ -1078,6 +1078,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -1127,6 +1128,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": [],
         "applicableWhen": [
@@ -1176,6 +1178,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": [],
         "applicableWhen": []
@@ -1228,6 +1231,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": [],
         "applicableWhen": [
@@ -1290,6 +1294,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": [],
         "applicableWhen": []
@@ -1352,6 +1357,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": [],
         "applicableWhen": [
@@ -1405,6 +1411,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": [],
         "applicableWhen": [
@@ -1447,6 +1454,9 @@
         "applied": [],
         "unsupportedReasons": [
           "conditional: cannot evaluate condition \"roll-result\" against current context"
+        ],
+        "unsupportedScopes": [
+          "unresolved"
         ],
         "needKeys": [
           "target:{\"parameters\":{\"result\":\"critical\",\"roll\":\"wound\"},\"type\":\"roll-result\"}"
@@ -1499,6 +1509,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": [],
         "applicableWhen": [
@@ -1538,6 +1549,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": [],
         "applicableWhen": []
@@ -1583,6 +1595,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -1615,6 +1628,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -1649,6 +1663,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": [
           {
@@ -1706,6 +1721,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": [
           {
@@ -1769,6 +1785,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": [
           {
@@ -1827,6 +1844,9 @@
         "unsupportedReasons": [
           "damage-reduction: halving Damage is not modelled by the buff layer"
         ],
+        "unsupportedScopes": [
+          "unresolved"
+        ],
         "needKeys": [],
         "activatable": []
       }
@@ -1859,6 +1879,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -1890,6 +1911,9 @@
         "applied": [],
         "unsupportedReasons": [
           "model-only target"
+        ],
+        "unsupportedScopes": [
+          "unresolved"
         ],
         "needKeys": [],
         "activatable": []
@@ -1942,6 +1966,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -1997,6 +2022,7 @@
           }
         ],
         "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -2042,6 +2068,10 @@
           "unit-filter target: identity, state or model membership is unresolved",
           "unit-filter target: identity, state or model membership is unresolved"
         ],
+        "unsupportedScopes": [
+          "unresolved",
+          "unresolved"
+        ],
         "needKeys": [],
         "activatable": []
       }
@@ -2074,6 +2104,9 @@
         "applied": [],
         "unsupportedReasons": [
           "unit-filter target: identity, state or model membership is unresolved"
+        ],
+        "unsupportedScopes": [
+          "unresolved"
         ],
         "needKeys": [],
         "activatable": []

@@ -75,17 +75,7 @@ export function canonicalRecipientCases() {
   add("choice-composition-refused", [], { effect: { type: "choice", options: [hit, effect] } });
   return cases.map((row) => {
     const result = effectToBuffs(row.effect, row.source, row.context, row.perspective);
-    return { ...row, expected: {
-      applied: result.applied.map((buff) => buff.contribution),
-      unsupportedReasons: result.unsupported.map((item) => item.reason),
-    needKeys: needKeys(result),
-      activatable: result.activatable.map((lever) => ({
-        id: lever.id, label: lever.label, group: lever.group ?? null,
-        requires: lever.requires ?? null, capRaise: lever.capRaise ?? null,
-        ...stanceOptionFields(lever),
-        buffs: lever.buffs.map((buff) => buff.contribution),
-      })),
-    } };
+    return { ...row, expected: dslProjection(result) };
   });
 }
 
@@ -106,17 +96,7 @@ export function canonicalTriggerSubjectCases() {
   ].map((row) => ({ ...row, abilityId: source.abilityId, source, context: { phase: "shooting" }, perspective: "attacker" as const }));
   return cases.map((row) => {
     const result = effectToBuffs(row.effect, row.source, row.context, row.perspective);
-    return { ...row, expected: {
-      applied: result.applied.map((buff) => buff.contribution),
-      unsupportedReasons: result.unsupported.map((item) => item.reason),
-    needKeys: needKeys(result),
-      activatable: result.activatable.map((lever) => ({
-        id: lever.id, label: lever.label, group: lever.group ?? null,
-        requires: lever.requires ?? null, capRaise: lever.capRaise ?? null,
-        ...stanceOptionFields(lever),
-        buffs: lever.buffs.map((buff) => buff.contribution),
-      })),
-    } };
+    return { ...row, expected: dslProjection(result) };
   });
 }
 
@@ -138,17 +118,7 @@ export function canonicalStratagemModelCases() {
   ];
   return rows.map(({ id, ...row }) => {
     const result = effectToBuffs(row.effect, row.source, row.context, row.perspective);
-    return { caseId: `${STRATAGEM_MODEL_CASE_PREFIX}${id}`, abilityId: row.source.abilityId, ...row, expected: {
-      applied: result.applied.map((buff) => buff.contribution),
-      unsupportedReasons: result.unsupported.map((item) => item.reason),
-    needKeys: needKeys(result),
-      activatable: result.activatable.map((lever) => ({
-        id: lever.id, label: lever.label, group: lever.group ?? null,
-        requires: lever.requires ?? null, capRaise: lever.capRaise ?? null,
-        ...stanceOptionFields(lever),
-        buffs: lever.buffs.map((buff) => buff.contribution),
-      })),
-    } };
+    return { caseId: `${STRATAGEM_MODEL_CASE_PREFIX}${id}`, abilityId: row.source.abilityId, ...row, expected: dslProjection(result) };
   });
 }
 
@@ -168,17 +138,7 @@ export function canonicalStratagemTargetCases() {
   ];
   return rows.map(({ id, ...row }) => {
     const result = effectToBuffs(row.effect, row.source, row.context, row.perspective);
-    return { caseId: `${STRATAGEM_TARGET_CASE_PREFIX}${id}`, abilityId: row.source.abilityId, ...row, expected: {
-      applied: result.applied.map((buff) => buff.contribution),
-      unsupportedReasons: result.unsupported.map((item) => item.reason),
-      needKeys: needKeys(result),
-      activatable: result.activatable.map((lever) => ({
-        id: lever.id, label: lever.label, group: lever.group ?? null,
-        requires: lever.requires ?? null, capRaise: lever.capRaise ?? null,
-        ...stanceOptionFields(lever),
-        buffs: lever.buffs.map((buff) => buff.contribution),
-      })),
-    } };
+    return { caseId: `${STRATAGEM_TARGET_CASE_PREFIX}${id}`, abilityId: row.source.abilityId, ...row, expected: dslProjection(result) };
   });
 }
 
@@ -216,17 +176,7 @@ export function canonicalNamedRegionBeneficiaryCases() {
   ];
   return rows.map(({ id, ...row }) => {
     const result = effectToBuffs(row.effect, row.source, row.context, row.perspective);
-    return { caseId: `${NAMED_REGION_BENEFICIARY_CASE_PREFIX}${id}`, abilityId: row.source.abilityId, ...row, expected: {
-      applied: result.applied.map((buff) => buff.contribution),
-      unsupportedReasons: result.unsupported.map((item) => item.reason),
-      needKeys: needKeys(result),
-      activatable: result.activatable.map((lever) => ({
-        id: lever.id, label: lever.label, group: lever.group ?? null,
-        requires: lever.requires ?? null, capRaise: lever.capRaise ?? null,
-        ...stanceOptionFields(lever),
-        buffs: lever.buffs.map((buff) => buff.contribution),
-      })),
-    } };
+    return { caseId: `${NAMED_REGION_BENEFICIARY_CASE_PREFIX}${id}`, abilityId: row.source.abilityId, ...row, expected: dslProjection(result) };
   });
 }
 
@@ -245,17 +195,7 @@ export function canonicalDesignationCases() {
   ];
   return rows.map(({ id, ...row }) => {
     const result = effectToBuffs(row.effect, row.source, row.context, row.perspective);
-    return { caseId: `${DESIGNATION_CASE_PREFIX}${id}`, abilityId: row.source.abilityId, ...row, expected: {
-      applied: result.applied.map((buff) => buff.contribution),
-      unsupportedReasons: result.unsupported.map((item) => item.reason),
-      needKeys: needKeys(result),
-      activatable: result.activatable.map((lever) => ({
-        id: lever.id, label: lever.label, group: lever.group ?? null,
-        requires: lever.requires ?? null, capRaise: lever.capRaise ?? null,
-        ...stanceOptionFields(lever),
-        buffs: lever.buffs.map((buff) => buff.contribution),
-      })),
-    } };
+    return { caseId: `${DESIGNATION_CASE_PREFIX}${id}`, abilityId: row.source.abilityId, ...row, expected: dslProjection(result) };
   });
 }
 
@@ -294,34 +234,33 @@ export function canonicalHalfWeaponRangeCases() {
       perspective: "attacker",
     };
     const result = effectToBuffs(row.effect, row.source, row.context, row.perspective);
-    return { ...row, expected: {
-      applied: result.applied.map((applied) => applied.contribution),
-      unsupportedReasons: result.unsupported.map((item) => item.reason),
-    needKeys: needKeys(result),
-      activatable: result.activatable.map((lever) => ({
-        id: lever.id, label: lever.label, group: lever.group ?? null,
-        requires: lever.requires ?? null, capRaise: lever.capRaise ?? null,
-        ...stanceOptionFields(lever),
-        buffs: lever.buffs.map((applied) => applied.contribution),
-      })),
-    } };
+    return { ...row, expected: dslProjection(result) };
   });
+}
+
+/**
+ * A translation's from-dsl expectation as every port projects it: contributions, reasons, each
+ * reason's scope, need keys and levers.
+ */
+export function dslProjection(result: EffectTranslation) {
+  return {
+    applied: result.applied.map((applied) => applied.contribution),
+    unsupportedReasons: result.unsupported.map((item) => item.reason),
+    unsupportedScopes: result.unsupported.map((item) => item.scope ?? "unresolved"),
+    needKeys: needKeys(result),
+    activatable: result.activatable.map((lever) => ({
+      id: lever.id, label: lever.label, group: lever.group ?? null,
+      requires: lever.requires ?? null, capRaise: lever.capRaise ?? null,
+      ...stanceOptionFields(lever),
+      buffs: lever.buffs.map((applied) => applied.contribution),
+    })),
+  };
 }
 
 /** The from-dsl row's expectation: contributions, reasons and levers, as every port projects them. */
 export function dslExpectation(row: DslInput) {
   const result = effectToBuffs(row.effect, row.source, row.context, row.perspective);
-  return { ...row, expected: {
-    applied: result.applied.map((applied) => applied.contribution),
-    unsupportedReasons: result.unsupported.map((item) => item.reason),
-    needKeys: needKeys(result),
-    activatable: result.activatable.map((lever) => ({
-      id: lever.id, label: lever.label, group: lever.group ?? null,
-      requires: lever.requires ?? null, capRaise: lever.capRaise ?? null,
-        ...stanceOptionFields(lever),
-      buffs: lever.buffs.map((applied) => applied.contribution),
-    })),
-  } };
+  return { ...row, expected: dslProjection(result) };
 }
 
 /**

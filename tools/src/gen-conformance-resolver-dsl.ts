@@ -22,10 +22,9 @@ import {
   DESIGNATION_CASE_PREFIX,
   HALF_WEAPON_RANGE_CASE_PREFIX,
   NAMED_REGION_BENEFICIARY_CASE_PREFIX,
-  needKeys,
+  dslProjection,
   RECIPIENT_CASE_PREFIX,
   SCENARIO_CASE_PREFIX,
-  stanceOptionFields,
   STRATAGEM_MODEL_CASE_PREFIX,
   STRATAGEM_TARGET_CASE_PREFIX,
   TRIGGER_SUBJECT_CASE_PREFIX,
@@ -83,8 +82,8 @@ export function canonicalDslCases(): Array<Record<string, unknown> & { perspecti
 /**
  * The seeded rows with their expectations re-derived through the same public translation boundary
  * adapters use. Canonical rows pass through unchanged: their builders project their own expectation
- * (some pin `applicableWhen`, none pin `unsupportedScopes`), and re-projecting them here would
- * rewrite another generator's goldens.
+ * (the scenario rows also pin `applicableWhen`), and re-projecting them here would rewrite another
+ * generator's goldens.
  */
 export function refreshResolverDslCases<T extends ResolverDslCase>(cases: readonly T[], ds: Dataset): T[] {
   return cases.map((row) => {
@@ -94,24 +93,7 @@ export function refreshResolverDslCases<T extends ResolverDslCase>(cases: readon
       ? ds.abilities.getAny(row.abilityId)?.describeBuffs(row.source, row.context, perspective, row.rating)
       : effectToBuffs(withRating(withGrantedRecords(row), row.rating), row.source, row.context, perspective);
     if (!result) throw new Error(`resolver conformance references unknown ability ${row.abilityId}`);
-    return {
-      ...row,
-      expected: {
-        applied: result.applied.map((buff) => buff.contribution),
-        unsupportedReasons: result.unsupported.map((entry) => entry.reason),
-        unsupportedScopes: result.unsupported.map((entry) => entry.scope ?? "unresolved"),
-        needKeys: needKeys(result),
-        activatable: result.activatable.map((lever) => ({
-          id: lever.id,
-          label: lever.label,
-          group: lever.group ?? null,
-          requires: lever.requires ?? null,
-          capRaise: lever.capRaise ?? null,
-          ...stanceOptionFields(lever),
-          buffs: lever.buffs.map((buff) => buff.contribution),
-        })),
-      },
-    };
+    return { ...row, expected: dslProjection(result) };
   });
 }
 
