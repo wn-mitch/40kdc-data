@@ -205,8 +205,8 @@ class SalvoState {
   defenderEnhancementId = $state<string | null>(null);
   /** The target's wargear, with the unit it was chosen for. */
   defenderWargear = $state<{ unitId: string; wargear: Record<string, number> } | null>(null);
-  /** The target's optional abilities the defender turns on (lever ids), with the unit they were chosen for. */
-  defenderLevers = $state<{ unitId: string; ids: string[] } | null>(null);
+  /** The defender's on/off choices for the target's optional abilities (lever id → on), with the unit they were chosen for. */
+  defenderLevers = $state<{ unitId: string; overrides: Record<string, boolean> } | null>(null);
 
   // Fleet comparison (the "Compare" view).
   compareFactionId = $state<string | null>("world-eaters");
@@ -231,17 +231,16 @@ class SalvoState {
     return this.defenderWargear && this.defenderWargear.unitId === this.targetUnitId ? this.defenderWargear.wargear : null;
   }
 
-  /** The optional abilities turned on for the current target; none once the target changes. */
-  get targetLeverIds(): string[] {
-    return this.defenderLevers && this.defenderLevers.unitId === this.targetUnitId ? this.defenderLevers.ids : [];
+  /** The defender's choices for the current target's optional abilities; none once the target changes. */
+  get targetLeverOverrides(): Record<string, boolean> {
+    return this.defenderLevers && this.defenderLevers.unitId === this.targetUnitId ? this.defenderLevers.overrides : {};
   }
 
   /** Turn one of the current target's optional abilities on or off. */
   setTargetLever(id: string, on: boolean): void {
     const unitId = this.targetUnitId;
     if (!unitId) return;
-    const rest = this.targetLeverIds.filter((item) => item !== id);
-    this.defenderLevers = { unitId, ids: on ? [...rest, id] : rest };
+    this.defenderLevers = { unitId, overrides: { ...this.targetLeverOverrides, [id]: on } };
   }
 
   /**

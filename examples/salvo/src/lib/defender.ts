@@ -29,8 +29,11 @@ export type DefenderBuild = {
   enhancementId: string | null;
   /** The target's wargear by id, with how many models carry each; its out-of-the-box loadout's when null. */
   wargear?: Readonly<Record<string, number>> | null;
-  /** Ids of the {@link defenderLevers} the defender turns on; an id no longer offered is ignored. */
-  leverIds?: readonly string[];
+  /**
+   * The defender's on/off choices for {@link defenderLevers}, by lever id; a lever without one
+   * takes its `enabled` default. An id no longer offered is ignored.
+   */
+  leverOverrides?: Readonly<Record<string, boolean>>;
 };
 
 /** The defender's optional abilities as toggleable levers, with the pools that cap them. */
@@ -93,10 +96,9 @@ export function defenderBuffs(ds: Dataset, unit: UnitView, build: DefenderBuild,
   const targetWargear = build.wargear ?? defaultTargetWargear(ds, unit);
   const context: EngineContext = { ...baseContext, targetWargear };
   const always = equippedBuffs(unit.raw, new Map(Object.entries(targetWargear)), buildBuffs(ds, unit, build, context));
-  const chosen = new Set(build.leverIds ?? []);
-  if (chosen.size === 0) return always;
   const levers = defenderLevers(ds, unit, build, baseContext);
-  const on = new Set(levers.buffs.filter((lever) => chosen.has(lever.id)).map((lever) => lever.id));
+  const on = new Set(levers.buffs.filter((lever) => leverIsOn(lever, build.leverOverrides)).map((lever) => lever.id));
+  if (on.size === 0) return always;
   if (!isLegalLeverSelection(levers.buffs, levers.groups, on)) {
     throw new Error("the defender's selected abilities exceed an allowance");
   }
@@ -104,11 +106,12 @@ export function defenderBuffs(ds: Dataset, unit: UnitView, build: DefenderBuild,
 }
 
 /**
- * The target's optional abilities as opt-in levers: the activatable levers of the abilities
+ * The target's optional abilities as levers: the activatable levers of the abilities
  * {@link defenderBuffs} walks (an optional ability, a usage-limited activation, a choice) and of
  * its Enhancement, read with the target's wargear. A lever behind an undecided condition appears
  * once that condition is answered true in the context's `conditionFacts`; a lever whose every
- * buff comes from wargear the target does not carry is left out.
+ * buff comes from wargear the target does not carry is left out. A lever of an opted-in Stratagem
+ * is on by default, since opting in already declares its use; every other lever is off.
  */
 export function defenderLevers(ds: Dataset, unit: UnitView, build: DefenderBuild, baseContext: EngineContext): DefenderLevers {
   const targetWargear = build.wargear ?? defaultTargetWargear(ds, unit);
@@ -146,7 +149,15 @@ export function defenderLevers(ds: Dataset, unit: UnitView, build: DefenderBuild
   const equipped = levers
     .map((lever) => ({ ...lever, buffs: equippedBuffs(unit.raw, carried, lever.buffs) }))
     .filter((lever, index) => lever.buffs.length > 0 || levers[index].buffs.length === 0);
+  for (const lever of equipped) {
+    if (lever.source.kind === "ability" && lever.source.abilityKind === "detachment-stratagem") lever.enabled = true;
+  }
   return { buffs: equipped, groups: pools.filter((pool) => equipped.some((lever) => lever.group === pool.id || lever.groups?.includes(pool.id))) };
+}
+
+/** Whether a lever is on: the defender's choice in `overrides`, else the lever's default. */
+export function leverIsOn(lever: StackableBuff, overrides: DefenderBuild["leverOverrides"]): boolean {
+  return overrides?.[lever.id] ?? lever.enabled;
 }
 
 /**

@@ -85,7 +85,7 @@
     stratagemIds: salvo.defenderStratagemIds,
     enhancementId: salvo.defenderEnhancementId,
     wargear: salvo.targetWargear,
-    leverIds: salvo.targetLeverIds,
+    leverOverrides: salvo.targetLeverOverrides,
   }, context));
 
   // The ticked mortal-wound sources, after the target's Feel No Pain: a line of the combined total.

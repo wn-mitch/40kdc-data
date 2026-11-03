@@ -7,6 +7,7 @@
     defenderEnhancements,
     defenderLevers,
     defenderStratagems,
+    leverIsOn,
     targetWargearChoices,
     type DefenderLevers,
   } from "./defender.js";
@@ -48,7 +49,7 @@
       return { buffs: [], groups: [], error: (err as Error).message };
     }
   });
-  const leverOn = (lever: StackableBuff) => salvo.targetLeverIds.includes(lever.id);
+  const leverOn = (lever: StackableBuff) => leverIsOn(lever, salvo.targetLeverOverrides);
   const poolLabel = (id: string) => levers.groups.find((group) => group.id === id);
   // Turning a lever off is always allowed; turning one on must keep every pool within its allowance.
   function canToggleLever(lever: StackableBuff): boolean {

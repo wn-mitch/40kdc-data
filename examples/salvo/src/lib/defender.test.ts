@@ -115,27 +115,34 @@ describe("the target's optional abilities", () => {
 
   it("gives the target the invulnerable save only while toggled on", () => {
     const off = defenderBuffs(ds, psyker, none, rolled(true));
-    const on = defenderBuffs(ds, psyker, { ...none, leverIds: [barrier] }, rolled(true));
+    const on = defenderBuffs(ds, psyker, { ...none, leverOverrides: { [barrier]: true } }, rolled(true));
     expect(invulns(off)).toEqual([]);
     expect(invulns(on)).toEqual([{ type: "invulnerable-save", threshold: 4 }]);
   });
 
   it("ignores a toggled ability no longer offered", () => {
     // The roll answered false withdraws the lever, so its save does not apply.
-    expect(invulns(defenderBuffs(ds, psyker, { ...none, leverIds: [barrier] }, rolled(false)))).toEqual([]);
+    expect(invulns(defenderBuffs(ds, psyker, { ...none, leverOverrides: { [barrier]: true } }, rolled(false)))).toEqual([]);
   });
 
-  it("offers an opted-in Stratagem's optional buff only with the Stratagem", () => {
+  it("applies an opted-in Stratagem's optional buff with no further click, until unticked", () => {
     const mortifiers = ds.units.getInFaction("mortifiers", "adepta-sororitas")!;
     const strat = "purity-of-suffering-penitent-host-adepta-sororitas";
     const build = { ...none, detachmentId: "penitent-host" };
-    const ids = (stratagemIds: string[]) => defenderLevers(ds, mortifiers, { ...build, stratagemIds }, context).buffs.map((lever) => lever.id);
-    expect(ids([]).some((id) => id.startsWith(strat))).toBe(false);
-    const lever = ids([strat]).find((id) => id.startsWith(strat))!;
-    expect(lever).toBeDefined();
-    const fnp = (leverIds: string[]) => defenderBuffs(ds, mortifiers, { ...build, stratagemIds: [strat], leverIds }, context)
-      .filter((buff) => buff.source.kind === "ability" && buff.source.abilityId === strat);
-    expect(fnp([])).toEqual([]);
-    expect(fnp([lever]).map((buff) => buff.contribution)).toEqual([{ type: "feel-no-pain", threshold: 4 }]);
+    const levers = (stratagemIds: string[]) => defenderLevers(ds, mortifiers, { ...build, stratagemIds }, context).buffs;
+    expect(levers([]).some((lever) => lever.id.startsWith(strat))).toBe(false);
+    const lever = levers([strat]).find((item) => item.id.startsWith(strat))!;
+    // Listed, and on by default: opting into the Stratagem declares its use.
+    expect(lever.enabled).toBe(true);
+    const fnp = (leverOverrides: Record<string, boolean>) =>
+      defenderBuffs(ds, mortifiers, { ...build, stratagemIds: [strat], leverOverrides }, context)
+        .filter((buff) => buff.source.kind === "ability" && buff.source.abilityId === strat)
+        .map((buff) => buff.contribution);
+    expect(fnp({})).toEqual([{ type: "feel-no-pain", threshold: 4 }]);
+    expect(fnp({ [lever.id]: false })).toEqual([]);
+  });
+
+  it("keeps a unit's own optional ability off until ticked", () => {
+    expect(defenderLevers(ds, psyker, none, rolled(true)).buffs.find((lever) => lever.id === barrier)?.enabled).toBe(false);
   });
 });
