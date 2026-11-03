@@ -1,4 +1,5 @@
-import { closed, type CompileLeaf, unitOf, weaponScope } from "./compile-fragments.js";
+import { closed, type CompileLeaf, unitOf } from "./compile-fragments.js";
+import { weaponScope } from "./compile-weapon-effects.js";
 
 type Node = Record<string, unknown>;
 

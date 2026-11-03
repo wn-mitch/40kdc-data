@@ -7,7 +7,7 @@ import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { currentFamilyVersion, normalizeFingerprintParameters, familyRole } from "../src/semantic-authoring/contracts.js";
 import { bindAdditiveOptions } from "../src/semantic-authoring/compile-additive-option.js";
-import { keywordRef } from "../src/semantic-authoring/compile-fragments.js";
+import { keywordRef } from "../src/semantic-authoring/compile-weapon-effects.js";
 import { checkEntry, entryWithMechanics } from "../src/semantic-authoring/entries.js";
 import { sentenceSegments } from "../src/semantic-authoring/compile-segments.js";
 import { createValidator } from "../src/schema-loader.js";

@@ -13,7 +13,8 @@ import type {
   UnitFilter,
   WeaponKeywordSelector,
 } from "../generated.js";
-import { closed, CompileError, keywordRef, type CompileLeaf } from "./compile-fragments.js";
+import { closed, CompileError, type CompileLeaf } from "./compile-fragments.js";
+import { keywordRef } from "./compile-weapon-effects.js";
 
 type Node = Record<string, unknown>;
 

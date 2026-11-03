@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 
 import { describe, expect, it } from "vitest";
 import { CompileError, compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
-import { keywordRef } from "../src/semantic-authoring/compile-fragments.js";
+import { keywordRef } from "../src/semantic-authoring/compile-weapon-effects.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { foldWeaponKeywords } from "../src/semantic-authoring/compile-weapon-keywords.js";
 import { checkEntry, entryWithMechanics } from "../src/semantic-authoring/entries.js";

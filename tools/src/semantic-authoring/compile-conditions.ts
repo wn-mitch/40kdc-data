@@ -9,7 +9,8 @@ import { abilityUseCondition } from "./compile-ability-use.js";
 
 import { armyIncludesCondition } from "./compile-army.js";
 import { armyFactionId } from "./compile-army-faction.js";
-import { closed, CompileError, weaponScope, type CompileLeaf } from "./compile-fragments.js";
+import { closed, CompileError, type CompileLeaf } from "./compile-fragments.js";
+import { weaponScope } from "./compile-weapon-effects.js";
 import { isSelectionRef } from "./compile-pair-eligibility.js";
 import { dslUnitFilter } from "./compile-unit-filter-dsl.js";
 import { everyModelFlag } from "./compile-every-model.js";

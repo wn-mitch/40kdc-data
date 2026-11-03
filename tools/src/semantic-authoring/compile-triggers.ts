@@ -6,7 +6,8 @@ import { abilityUseTrigger } from "./compile-ability-use.js";
  */
 
 import { attackTypeCondition } from "./compile-conditions.js";
-import { closed, CompileError, weaponScope, type CompileLeaf } from "./compile-fragments.js";
+import { closed, CompileError, type CompileLeaf } from "./compile-fragments.js";
+import { weaponScope } from "./compile-weapon-effects.js";
 import { OWNED_EVENT_KINDS } from "./event-family.js";
 import { TRIGGER_ROLL_KINDS } from "./dice-families.js";
 import { ANTECEDENT } from "./antecedent-families.js";

@@ -5,7 +5,7 @@ import { resolveAuthoredNames } from "../src/semantic-authoring/compile-weapon-n
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { familyExtension } from "../src/semantic-authoring/families/index.js";
 import type { WeaponCatalog } from "../src/semantic-authoring/weapon-catalog.js";
-import { keywordRef } from "../src/semantic-authoring/compile-fragments.js";
+import { keywordRef } from "../src/semantic-authoring/compile-weapon-effects.js";
 
 /** The family versions the extensions under test create. */
 const WEAPON_SCOPE_NAME_KEYWORD_EXCLUSION_VERSIONS: ReadonlySet<string> = new Set(["weapon-property-scope@8", "characteristic-set@8", "roll-modifier@8"]);

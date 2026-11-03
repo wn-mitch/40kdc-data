@@ -1,6 +1,7 @@
 import { anyOf } from "./compile-conditions.js";
 import { CompileError } from "./compile-error.js";
-import { closed, type CompileLeaf, weaponScope } from "./compile-fragments.js";
+import { closed, type CompileLeaf } from "./compile-fragments.js";
+import { weaponScope } from "./compile-weapon-effects.js";
 import { matchedPoolOf } from "./compile-matched-set.js";
 
 type Node = Record<string, unknown>;
