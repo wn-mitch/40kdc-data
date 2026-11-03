@@ -8720,10 +8720,17 @@
           }
         },
         "effect": {
-          "type": "damage-reduction",
-          "target": "this-unit",
-          "modifier": {
-            "reduction": 1
+          "type": "ability-part",
+          "trigger": {
+            "event": "damage-allocated",
+            "object": "selected-unit"
+          },
+          "effect": {
+            "type": "damage-reduction",
+            "target": "selected-unit",
+            "modifier": {
+              "reduction": 1
+            }
           }
         }
       }
@@ -8731,10 +8738,7 @@
     "scope": {
       "duration": "until-next-command-phase"
     },
-    "behavior": "reactive",
-    "trigger": {
-      "event": "damage-allocated"
-    },
+    "behavior": "passive",
     "source_digest": "aa55cf7f84c44e5d28b9a5fa11c4f9ac1b7c91d048a903faf81133547b628ee9"
   },
   {
