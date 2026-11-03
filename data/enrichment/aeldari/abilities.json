@@ -9725,7 +9725,7 @@
                   },
                   "eligible": {
                     "owner": "friendly",
-                    "all_of": [
+                    "any_of": [
                       "WRAITHBLADES",
                       "WRAITHGUARD",
                       "WRAITHLORD"

@@ -33181,7 +33181,7 @@
                   },
                   "eligible": {
                     "owner": "friendly",
-                    "all_of": [
+                    "any_of": [
                       "WRAITHBLADES",
                       "WRAITHGUARD",
                       "WRAITHLORD"
@@ -33198,7 +33198,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "-> Each time an enemy unit destroys a friendly ASURYANI PSYKER model: the triggering unit is marked as vengeful dead.\nWhile the unit is tagged vengeful dead:\n  -> All friendly WRAITH CONSTRUCT models get +1 to Hit rolls.\n  -> All friendly WRAITH CONSTRUCT models get +1 to Wound rolls.\nAll friendly ASURYANI PSYKER models gain the Spirit Guides ability:\n  -> While a friendly WRAITHBLADES WRAITHGUARD WRAITHLORD unit is within 12\" of this model, that unit gains the Battle Focus ability."
+      "text": "-> Each time an enemy unit destroys a friendly ASURYANI PSYKER model: the triggering unit is marked as vengeful dead.\nWhile the unit is tagged vengeful dead:\n  -> All friendly WRAITH CONSTRUCT models get +1 to Hit rolls.\n  -> All friendly WRAITH CONSTRUCT models get +1 to Wound rolls.\nAll friendly ASURYANI PSYKER models gain the Spirit Guides ability:\n  -> While a friendly unit with the WRAITHBLADES, WRAITHGUARD or WRAITHLORD keyword is within 12\" of this model, that unit gains the Battle Focus ability."
     }
   },
   {
