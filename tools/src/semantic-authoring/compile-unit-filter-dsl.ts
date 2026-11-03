@@ -14,6 +14,13 @@ export const HELD_STATES: Record<string, string> = { "strategic-reserves": "in-s
 
 /** The states a unit-filter holds as its one DSL `state` (unengaged and not-battle-shocked are negations). */
 // "on-battlefield" arrives only from a loop's folded "on the battlefield" (compile-unit-filters.ts).
+/** The unit a unit-filter's "other" excludes: the unit with the ability unless other_than names another. */
+const OTHER_THAN_REFS: Record<string, string> = { "this-unit": "this-unit", "event-subject": "event-subject", target: "defender", "event-object": "event-object" };
+
+function unknownOtherThan(value: unknown): never {
+  throw new CompileError(`A unit-filter's other_than ${JSON.stringify(value)} has no DSL unit to exclude.`);
+}
+
 const POSITIVE_FILTER_STATES: readonly string[] = ["battle-shocked", "engaged", "hidden", "on-battlefield"];
 
 const positiveFilterStates = (states: readonly string[] | undefined): string[] => (states ?? []).filter((state) => POSITIVE_FILTER_STATES.includes(state));
@@ -71,7 +78,7 @@ export function dslUnitFilter(filter: CompileLeaf, options: { warlordTest?: bool
     ...(p.visible === true ? { visible: { to: "this-model" } } : {}),
     // "engaged with an enemy unit engaged with a friendly CHARACTER unit": the unit this one is engaged with (nestedEngagedChain).
     ...(p.nested_engaged_with !== undefined ? { engaged_with: p.nested_engaged_with } : {}),
-    ...(p.other === true ? { excluding: p.other_than === "event-subject" ? "event-subject" : "this-unit" } : {}),
+    ...(p.other === true ? { excluding: OTHER_THAN_REFS[p.other_than ?? "this-unit"] ?? unknownOtherThan(p.other_than) } : {}),
     ...(filter.parameters.level === "model" ? { level: "model" } : {}),
     // "Character models in this unit" (groupMembership): the unit the models belong to.
     ...(p.member_of !== undefined ? { member_of: p.member_of } : {}),

@@ -190,7 +190,8 @@ export function wrapForEachUnit(leaf: CompileLeaf, body: Node): Node {
   const hit = forEachHitGate(leaf);
   if (leaf.parameters.including === "target") {
     if (hit !== null) throw new CompileError("A for-each including the target cannot gate the target on a hit.");
-    const { other: _other, ...folded } = (leaf.parameters.filter ?? {}) as UnitFilter;
+    // The target is its own operand, so "other" (than the target) drops out of the within operand.
+    const { other: _other, other_than: _otherThan, ...folded } = (leaf.parameters.filter ?? {}) as UnitFilter & { other_than?: string };
     const filter = selectionFilter(leaf, folded);
     return {
       type: "for-each-unit",

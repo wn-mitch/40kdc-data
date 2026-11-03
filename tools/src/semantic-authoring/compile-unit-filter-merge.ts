@@ -9,7 +9,7 @@ import { assertOneFilterState, HELD_STATES } from "./compile-unit-filter-dsl.js"
 import { isFilter } from "./compile-unit-filter-predicates.js";
 
 type FilterParameters = {
-  among?: string; side?: string; keywords?: string[]; any_keywords?: string[]; excluded_keywords?: string[]; states?: string[]; visible?: boolean; other?: boolean; level?: string;
+  among?: string; side?: string; keywords?: string[]; any_keywords?: string[]; excluded_keywords?: string[]; states?: string[]; visible?: boolean; other?: boolean; other_than?: string; level?: string;
   held_in?: string; abilities?: string[]; excluded_abilities?: string[]; excluded_all_keywords?: string[]; alternatives?: FilterAlternative[]; datasheets?: string[]; designated?: string; designated_by?: string; embarked_in?: string;
   attachment_role?: string; member_of?: string; not_designated?: string; unit_ids?: string[];
 };
@@ -39,6 +39,8 @@ export function mergedFilter(first: CompileLeaf, second: CompileLeaf): CompileLe
   if (a.embarked_in !== undefined && b.embarked_in !== undefined && a.embarked_in !== b.embarked_in) return null;
   if (a.attachment_role !== undefined && b.attachment_role !== undefined && a.attachment_role !== b.attachment_role) return null;
   if (a.member_of !== undefined && b.member_of !== undefined && a.member_of !== b.member_of) return null;
+  // "Other" than two different units is not one exclusion.
+  if (a.other_than !== undefined && b.other_than !== undefined && a.other_than !== b.other_than) return null;
   const parameters: Record<string, unknown> = { side: [...sides][0] ?? "any" };
   const unitIds = a.unit_ids && b.unit_ids
     ? a.unit_ids.filter((id) => b.unit_ids!.includes(id))
@@ -58,6 +60,7 @@ export function mergedFilter(first: CompileLeaf, second: CompileLeaf): CompileLe
   if (states.length) parameters.states = states;
   if (a.visible === true || b.visible === true) parameters.visible = true;
   if (a.other === true || b.other === true) parameters.other = true;
+  if (a.other_than !== undefined || b.other_than !== undefined) parameters.other_than = a.other_than ?? b.other_than;
   if (a.level === "model") parameters.level = "model";
   if (a.attachment_role !== undefined || b.attachment_role !== undefined) parameters.attachment_role = a.attachment_role ?? b.attachment_role;
   if (a.member_of !== undefined || b.member_of !== undefined) parameters.member_of = a.member_of ?? b.member_of;

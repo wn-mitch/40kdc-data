@@ -90,4 +90,5 @@ export const REGISTRY_ORDER: readonly string[] = [
   "mortal-wounds@6", "regain-wounds@6", "attack@9", "regain-wounds@7",
   "attack-filter@4", "roll-result@3", "roll-modifier@12", "mortal-wounds@7", "roll-auto-result@6", "battle-shock-state@3", "choice-open@4", "stance-select-open@3", "resource-gain@5", "history-compare@2", "named-option@4",
   "event@38",
+  "unit-filter@20",
 ];

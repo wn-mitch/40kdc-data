@@ -11143,7 +11143,7 @@
               "selector": {
                 "filter": {
                   "owner": "enemy",
-                  "excluding": "this-unit"
+                  "excluding": "defender"
                 },
                 "count": {
                   "min": 1,

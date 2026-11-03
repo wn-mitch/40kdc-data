@@ -13,6 +13,9 @@ import { EMBARKED_IN, ENHANCEMENT_KIND, FOLLOWING_FILTER, HELD_IN, MATCHED_UNITS
  * previous version, so every earlier leaf still fits it unchanged.
  */
 
+/** The units "other" can be other than (unit-filter@15 event-subject; @20 target, event-object). */
+const OTHER_THAN = ["event-subject", "target", "event-object"] as const;
+
 /** Who selected the target, and which unit was selected, in a target-is-selected leaf that names them. */
 const SELECTION_BY = ["event-subject", "this-unit", "selected-unit", ANTECEDENT] as const;
 
@@ -408,6 +411,20 @@ export const UNIT_FILTER_EXTENSIONS: readonly FamilyExtension[] = [
         ...previous(rest),
         lone_operative_protection: { inches: boundedInteger(value.inches, 1, 36, "unit-filter.lone_operative_protection.inches"), of: enumValue(value.of, ["this-model", "this-unit"], "unit-filter.lone_operative_protection.of") },
       };
+    },
+  },
+  {
+    // "one D6 for each other enemy unit within 6\" of the target unit", "each other unit from your
+    // opponent's army that is within 3\" of it" (the destroyed unit).
+    family: "unit-filter",
+    version: 20,
+    description: "As the previous version, plus other_than target: \"other\" means other than the unit the attack or shooting targets; and other_than event-object: other than the unit the trigger's moment was aimed at, or the unit a unit-destroyed moment destroyed.",
+    schema: (previous) => withProperties(previous, { other_than: optional({ enum: [...OTHER_THAN], "x-only-when": { other: [true] } }) }),
+    normalize: (input, previous) => {
+      if (input.other_than !== "target" && input.other_than !== "event-object") return previous(input);
+      const { other_than: otherThan, ...rest } = input;
+      if (rest.other !== true) throw new TypeError("unit-filter.other_than needs other: true.");
+      return { ...previous(rest), other_than: otherThan };
     },
   },
   TARGET_IS_SELECTED_PARTIES,
