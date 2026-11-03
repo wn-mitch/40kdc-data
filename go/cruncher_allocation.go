@@ -15,10 +15,10 @@ import (
 // Each attack that gets through deals its Damage to one model; damage beyond
 // that model's remaining wounds is lost, and an already damaged model takes the
 // next attack. Feel No Pain rolls once for each wound that would be lost.
-// Devastating Wounds mortal wounds are inflicted after all normal damage and
-// also damage at most one model each, the rest being lost. Mortal wounds an
-// ability inflicts on the attack's rolls come last, one wound at a time, each
-// carrying over to the next model.
+// Mortal wounds an ability inflicts on the attack's rolls come after all normal
+// damage, one wound at a time, each carrying over to the next model. Devastating
+// Wounds mortal wounds come last and damage at most one model each, the rest
+// being lost.
 //
 // The state is (models alive, wounds left on the damaged model, zeroing uses
 // left). Event counts come from the exact joint distribution of normal damage
@@ -353,6 +353,11 @@ func AllocateModelWith(model *AttackModel, defences AllocationDefences) (Allocat
 	if err != nil {
 		return AllocationOutput{}, err
 	}
+	// An ability mortal wound: one Damage, rolling the mortal-wound Feel No Pain.
+	one, err := woundsLost([]DamageOutcome{{1, 1}}, model.MortalWoundLost)
+	if err != nil {
+		return AllocationOutput{}, err
+	}
 	zeros := func() []float64 { return make([]float64, dead+1) }
 	// States by the ability mortal wounds still to inflict: layer k waits on k of them.
 	state := layers{zeros()}
@@ -492,48 +497,46 @@ func AllocateModelWith(model *AttackModel, defences AllocationDefences) (Allocat
 		if err != nil {
 			return AllocationOutput{}, err
 		}
+		// Normal damage, then the ability's mortal wounds, then the Devastating Wounds events:
+		// every ability mortal wound is inflicted here, so the outcome lands in layer 0.
+		target := zeros()
 		current := state[0]
 		for normalEvents, row := range events {
 			if normalEvents > 0 {
 				current = step(current, normal, true)
 			}
-			anyPositive := false
-			for _, cell := range row {
-				for _, p := range cell {
-					anyPositive = anyPositive || p > 0
+			afterWounds := current
+			for count := 0; count < len(row[0]); count++ {
+				anyPositive := false
+				for _, cell := range row {
+					for _, p := range cell[count:] {
+						anyPositive = anyPositive || p > 0
+					}
 				}
-			}
-			if !anyPositive {
-				continue
-			}
-			after := current
-			for mortalEvents, cell := range row {
-				if mortalEvents > 0 {
-					after = step(after, mortal, false)
+				if !anyPositive {
+					break
 				}
-				for count, p := range cell {
-					if p <= 0 {
-						continue
+				if count > 0 {
+					afterWounds = step(afterWounds, one, false)
+				}
+				after := afterWounds
+				for mortalEvents, cell := range row {
+					if mortalEvents > 0 {
+						after = step(after, mortal, false)
 					}
-					for len(pending) <= count {
-						pending = append(pending, nil)
-					}
-					if pending[count] == nil {
-						pending[count] = zeros()
-					}
-					for id, q := range after {
-						pending[count][id] += p * q
+					if p := cell[count]; p > 0 {
+						for id, q := range after {
+							target[id] += p * q
+						}
 					}
 				}
 			}
 		}
+		pending = append(pending, target)
 	}
 
-	// The ability's mortal wounds, one wound each after everything else: layer k takes k of them.
-	one, err := woundsLost([]DamageOutcome{{1, 1}}, model.MortalWoundLost)
-	if err != nil {
-		return AllocationOutput{}, err
-	}
+	// The ability's mortal wounds the step-by-step path leaves pending, one wound each after all
+	// normal damage: layer k takes k of them.
 	final := zeros()
 	if len(pending) > 0 && pending[len(pending)-1] != nil {
 		final = pending[len(pending)-1]

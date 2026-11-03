@@ -39,8 +39,8 @@ function draw(random: () => number, distribution: Array<[number, number]>): numb
 
 /**
  * An independent simulation of the same attack sequence: every attack rolls in turn, normal damage
- * allocates as it lands, Devastating Wounds mortal wounds wait until all normal damage is done, and
- * mortal wounds the attack's rolls inflict come last, one wound at a time.
+ * allocates as it lands, mortal wounds the attack's rolls inflict wait until all normal damage is
+ * done and then land one wound at a time, and Devastating Wounds mortal wounds come last.
  */
 function simulate(attack: AttackModel, trials: number, seed: number, zeroing?: DamageZeroing): { damageDealt: number; modelsDestroyed: number } {
   const random = rng(seed);
@@ -95,8 +95,8 @@ function simulate(attack: AttackModel, trials: number, seed: number, zeroing?: D
         }
       }
     }
-    for (; mortal > 0; mortal -= 1) land(attack.mortalWoundLost, false, criticalDamage);
     for (; rolled > 0; rolled -= 1) land(attack.mortalWoundLost, false, [[1, 1]]);
+    for (; mortal > 0; mortal -= 1) land(attack.mortalWoundLost, false, criticalDamage);
     dealt += removed;
     destroyed += attack.modelCount - alive;
   }
@@ -335,12 +335,13 @@ describe("mortal wounds an attack's rolls inflict", () => {
     expect(allocateModel(model({ rollMortals: { ...none, hit: 2 }, wounds: 3, modelCount: 1 })).modelsDestroyed).toBe(1);
   });
 
-  it("inflicts them after Devastating Wounds, with mortal-only Feel No Pain", () => {
-    // The D2 Devastating Wounds mortal wounds kill the first 2-wound model, then the ability's
-    // mortal wound damages the second: 3 wounds removed. Inflicted first, the ability's wound
-    // would leave the D2 event 1 wound to remove and 2 in all.
+  it("inflicts them before Devastating Wounds, with mortal-only Feel No Pain", () => {
+    // The ability's mortal wound damages the first 2-wound model, then the D2 Devastating Wounds
+    // event kills it and loses its excess: 2 wounds removed. Inflicted after the D2 event, the
+    // ability's wound would carry over to the second model and remove 3.
     const ordered = model({ wound: { pass: 1, crit: 1 }, devastating: true, damage: [{ value: 2, probability: 1 }], rollMortals: { ...none, criticalWound: 1 }, wounds: 2, modelCount: 2 });
-    expect(allocateModel(ordered).damageDealt).toBe(3);
+    expect(allocateModel(ordered).damageDealt).toBe(2);
+    expect(allocateModel(ordered).modelsDestroyedDistribution).toEqual([0, 1, 0]);
     // Mortal-only Feel No Pain removes each with probability 1/2.
     const shielded = allocateModel(model({ rollMortals: { ...none, wound: 2 }, mortalWoundLost: 0.5, wounds: 5, modelCount: 1 }));
     expect(shielded.damageDealt).toBeCloseTo(1 + 2 * 0.5, 12);

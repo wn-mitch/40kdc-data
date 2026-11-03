@@ -455,14 +455,16 @@ func TestAllocateCarriesAbilityMortalWoundsOver(t *testing.T) {
 	near(t, "models destroyed", hit.ModelsDestroyed, 1, 1e-12)
 }
 
-func TestAllocateInflictsAbilityMortalWoundsAfterDevastatingWounds(t *testing.T) {
-	// The D2 Devastating Wounds event kills the first 2-wound model, then the
-	// ability's mortal wound damages the second: 3 wounds removed (2 if it came first).
+func TestAllocateInflictsAbilityMortalWoundsBeforeDevastatingWounds(t *testing.T) {
+	// The ability's mortal wound damages the first 2-wound model, then the D2
+	// Devastating Wounds event kills it and loses its excess: 2 wounds removed
+	// (3 if it came after).
 	ordered := mustAllocate(t, allocModel(func(m *AttackModel) {
 		m.WoundCrit, m.Devastating, m.Damage = 1, true, []DamageOutcome{{2, 1}}
 		m.RollMortals.CriticalWound, m.Wounds, m.ModelCount = 1, 2, 2
 	}))
-	near(t, "damage dealt", ordered.DamageDealt, 3, 1e-12)
+	near(t, "damage dealt", ordered.DamageDealt, 2, 1e-12)
+	near(t, "models destroyed", ordered.ModelsDestroyed, 1, 1e-12)
 	// Mortal-only Feel No Pain removes each with probability 1/2.
 	shielded := mustAllocate(t, allocModel(func(m *AttackModel) { m.RollMortals.Wound, m.MortalWoundLost, m.Wounds = 2, 0.5, 5 }))
 	near(t, "damage dealt", shielded.DamageDealt, 2, 1e-12)

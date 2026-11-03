@@ -5,10 +5,10 @@ expected value.
 Each attack that gets through deals its Damage to one model; damage beyond
 that model's remaining wounds is lost, and an already damaged model takes the
 next attack. Feel No Pain rolls once for each wound that would be lost.
-Devastating Wounds mortal wounds are inflicted after all normal damage and
-also damage at most one model each, the rest being lost. Mortal wounds an
-ability inflicts on the attack's rolls come last, one wound at a time, each
-carrying over to the next model.
+Mortal wounds an ability inflicts on the attack's rolls come after all normal
+damage, one wound at a time, each carrying over to the next model. Devastating
+Wounds mortal wounds come last and damage at most one model each, the rest
+being lost.
 
 The state is (models alive, wounds left on the damaged model, zeroing uses
 left). Event counts come from the exact joint distribution of normal damage
@@ -391,6 +391,8 @@ def allocate_model(
     per, counts, most = _bounded_per_attack(model)
     mortals = _roll_mortals_of(model)
     normal = _wounds_lost(model["damage"], model["woundLost"])
+    # An ability mortal wound: one Damage, rolling the mortal-wound Feel No Pain.
+    one = _wounds_lost([{"value": 1, "probability": 1.0}], model["mortalWoundLost"])
 
     def zeros() -> list[float]:
         return [0.0] * (dead + 1)
@@ -496,22 +498,31 @@ def allocate_model(
         # Devastating Wounds' mortal wounds deal a critical wound's own Damage when it has one.
         mortal_roll = critical["damage"] if critical is not None else model["damage"]
         mortal = _wounds_lost(mortal_roll, model["mortalWoundLost"])
+        # Normal damage, then the ability's mortal wounds, then the Devastating Wounds events:
+        # every ability mortal wound is inflicted here, so the outcome lands in layer 0.
+        target = zeros()
         current = state[0]
         for normal_events, row in enumerate(events):
             if normal_events > 0:
                 current = step(current, normal, True)
-            if not any(p > 0 for cell in row for p in cell):
-                continue
-            after = current
-            for mortal_events, cell in enumerate(row):
-                if mortal_events > 0:
-                    after = step(after, mortal, False)
-                for count, p in enumerate(cell):
+            after_wounds = current
+            for count in range(len(row[0])):
+                if not any(p > 0 for cell in row for p in cell[count:]):
+                    break
+                if count > 0:
+                    after_wounds = step(after_wounds, one, False)
+                after = after_wounds
+                for mortal_events, cell in enumerate(row):
+                    if mortal_events > 0:
+                        after = step(after, mortal, False)
+                    p = cell[count]
                     if p > 0:
-                        gather(pending, [[] for _ in range(count)] + [after], p)
+                        for id_, q in enumerate(after):
+                            target[id_] += p * q
+        pending.append(target)
 
-    # The ability's mortal wounds, one wound each after everything else: layer k takes k of them.
-    one = _wounds_lost([{"value": 1, "probability": 1.0}], model["mortalWoundLost"])
+    # The ability's mortal wounds the step-by-step path leaves pending, one wound each after all
+    # normal damage: layer k takes k of them.
     final = pending[-1] if pending and pending[-1] else zeros()
     for layer in reversed(pending[:-1]):
         final = step(final, one, False)

@@ -241,20 +241,20 @@
     "name": "lascannon vs cultists with Devastating Wounds, two sources of D3 mortal wounds per critical hit and a mortal-only FNP",
     "cruncher_case": "49-mortal-wounds-per-critical-hit-stacked-mortal-fnp-lascannon-vs-cultists.json",
     "expected": {
-      "damageDealt": 2.6641919152867652,
+      "damageDealt": 2.6641919152867657,
       "modelsDestroyed": 2.6641919152867657,
       "modelsDestroyedDistribution": [
-        0.07313791108750378,
-        0.224304578288912,
+        0.07313791108750375,
+        0.22430457828891198,
         0.25199444907418944,
         0.16122233951336232,
-        0.12264493975545135,
-        0.092426217028208,
-        0.040972764318254765,
-        0.018437561350381985,
-        0.010358278252886205,
-        0.003254778547252071,
-        0.001246182783598181
+        0.12264493975545136,
+        0.09242621702820801,
+        0.04097276431825477,
+        0.018437561350381982,
+        0.010358278252886207,
+        0.0032547785472520703,
+        0.0012461827835981805
       ]
     }
   },
@@ -394,6 +394,40 @@
         0.21652221504981234,
         0.14859367699496925,
         0.11108029881953639
+      ]
+    }
+  },
+  {
+    "name": "Canonical critical wound: devastating-damage + 1 mortal wound on each critical wound",
+    "cruncher_case": "canonical-critical-wound-devastating-damage.json",
+    "buffs": [
+      {
+        "source": {
+          "kind": "ability",
+          "abilityId": "fabricated-critical-wound",
+          "abilityKind": "unit"
+        },
+        "contribution": {
+          "type": "mortal-wounds-on-roll",
+          "roll": "wound",
+          "outcome": "success",
+          "count": 1
+        },
+        "applicableWhen": {
+          "onCritical": "wound"
+        }
+      }
+    ],
+    "expected": {
+      "damageDealt": 5.928463731127562,
+      "modelsDestroyed": 2.9642318655637805,
+      "modelsDestroyedDistribution": [
+        0.03861077083162306,
+        0.14850296473701174,
+        0.21590046411765548,
+        0.21194624316311972,
+        0.1771085426508503,
+        0.20793101449973955
       ]
     }
   }

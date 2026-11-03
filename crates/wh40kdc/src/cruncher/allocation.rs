@@ -5,11 +5,10 @@
 //! Mirrors `tools/src/cruncher/allocation.ts`. Each attack that gets through
 //! deals its Damage to one model; damage beyond that model's remaining wounds
 //! is lost, and an already damaged model takes the next attack. Feel No Pain
-//! rolls once for each wound that would be lost. Devastating Wounds mortal
-//! wounds are inflicted after all normal damage and also damage at most one
-//! model each, the rest being lost. Mortal wounds an ability inflicts on the
-//! attack's rolls come last, one wound at a time, each carrying over to the
-//! next model.
+//! rolls once for each wound that would be lost. Mortal wounds an ability
+//! inflicts on the attack's rolls come after all normal damage, one wound at a
+//! time, each carrying over to the next model. Devastating Wounds mortal
+//! wounds come last and damage at most one model each, the rest being lost.
 //!
 //! The state is (models alive, wounds left on the damaged model, zeroing uses
 //! left). Event counts come from the exact joint distribution of normal damage
@@ -365,6 +364,8 @@ pub fn allocate_model_with(
         });
     }
     let normal = wounds_lost(&model.damage, model.wound_lost)?;
+    // An ability mortal wound: one Damage, rolling the mortal-wound Feel No Pain.
+    let one = wounds_lost(&[(1.0, 1.0)], model.mortal_wound_lost)?;
     let zeros = || vec![0.0; dead + 1];
     // States by the ability mortal wounds still to inflict: layer k waits on k of them.
     let mut state: Layers = vec![zeros()];
@@ -506,39 +507,44 @@ pub fn allocate_model_with(
             .as_ref()
             .map_or(&model.damage, |critical| &critical.damage);
         let mortal = wounds_lost(mortal_roll, model.mortal_wound_lost)?;
+        // Normal damage, then the ability's mortal wounds, then the Devastating Wounds events:
+        // every ability mortal wound is inflicted here, so the outcome lands in layer 0.
+        let mut target = zeros();
         let mut current = state.swap_remove(0);
         for (normal_events, row) in events.iter().enumerate() {
             if normal_events > 0 {
                 current = step(&current, &normal, true);
             }
-            if !row.iter().any(|cell| cell.iter().any(|&p| p > 0.0)) {
-                continue;
-            }
-            let mut after = current.clone();
-            for (mortal_events, cell) in row.iter().enumerate() {
-                if mortal_events > 0 {
-                    after = step(&after, &mortal, false);
+            let mut after_wounds = current.clone();
+            for wounds in 0..row[0].len() {
+                if !row
+                    .iter()
+                    .any(|cell| cell[wounds..].iter().any(|&p| p > 0.0))
+                {
+                    break;
                 }
-                for (count, &p) in cell.iter().enumerate() {
-                    if p <= 0.0 {
-                        continue;
+                if wounds > 0 {
+                    after_wounds = step(&after_wounds, &one, false);
+                }
+                let mut after = after_wounds.clone();
+                for (mortal_events, cell) in row.iter().enumerate() {
+                    if mortal_events > 0 {
+                        after = step(&after, &mortal, false);
                     }
-                    if pending.len() <= count {
-                        pending.resize_with(count + 1, Vec::new);
-                    }
-                    if pending[count].is_empty() {
-                        pending[count] = zeros();
-                    }
-                    for (id, &q) in after.iter().enumerate() {
-                        pending[count][id] += p * q;
+                    let p = cell[wounds];
+                    if p > 0.0 {
+                        for (id, &q) in after.iter().enumerate() {
+                            target[id] += p * q;
+                        }
                     }
                 }
             }
         }
+        pending.push(target);
     }
 
-    // The ability's mortal wounds, one wound each after everything else: layer k takes k of them.
-    let one = wounds_lost(&[(1.0, 1.0)], model.mortal_wound_lost)?;
+    // The ability's mortal wounds the step-by-step path leaves pending, one wound each after all
+    // normal damage: layer k takes k of them.
     let mut finals = pending
         .pop()
         .filter(|layer| !layer.is_empty())

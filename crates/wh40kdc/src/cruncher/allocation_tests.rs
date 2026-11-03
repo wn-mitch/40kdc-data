@@ -287,9 +287,9 @@ fn carries_each_ability_mortal_wound_over_to_the_next_model() {
 }
 
 #[test]
-fn inflicts_ability_mortal_wounds_after_devastating_wounds() {
-    // The D2 Devastating Wounds event kills the first 2-wound model, then the ability's mortal
-    // wound damages the second: 3 wounds removed (2 if it came first).
+fn inflicts_ability_mortal_wounds_before_devastating_wounds() {
+    // The ability's mortal wound damages the first 2-wound model, then the D2 Devastating Wounds
+    // event kills it and loses its excess: 2 wounds removed (3 if it came after).
     let ordered = allocate_model(&AttackModel {
         wound: RollProbabilities {
             pass: 1.0,
@@ -306,7 +306,8 @@ fn inflicts_ability_mortal_wounds_after_devastating_wounds() {
         ..model()
     })
     .expect("whole quantities");
-    assert_close(ordered.damage_dealt, 3.0, 1e-12);
+    assert_close(ordered.damage_dealt, 2.0, 1e-12);
+    assert_eq!(ordered.models_destroyed_distribution, vec![0.0, 1.0, 0.0]);
     // Mortal-only Feel No Pain removes each with probability 1/2.
     let shielded = allocate_model(&AttackModel {
         roll_mortals: RollMortalCounts {

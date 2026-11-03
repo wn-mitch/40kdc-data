@@ -4,10 +4,10 @@
  *
  * Each attack that gets through deals its Damage to one model; damage beyond that model's
  * remaining wounds is lost, and an already damaged model takes the next attack. Feel No Pain rolls
- * once for each wound that would be lost. Devastating Wounds mortal wounds are inflicted after all
- * normal damage and also damage at most one model each, the rest being lost. Mortal wounds an
- * ability inflicts on the attack's rolls come last, one wound at a time, each carrying over to the
- * next model.
+ * once for each wound that would be lost. Mortal wounds an ability inflicts on the attack's rolls
+ * come after all normal damage, one wound at a time, each carrying over to the next model.
+ * Devastating Wounds mortal wounds come last and damage at most one model each, the rest being
+ * lost.
  *
  * The state is (models alive, wounds left on the damaged model, zeroing uses left). Event counts
  * come from the exact joint distribution of normal damage events, mortal-wound events and ability
@@ -254,6 +254,8 @@ export function allocateModel(model: AttackModel, defences: AllocationDefences =
   const work = most * (most * (per.length - 1) + 1) * (most * (per[0]!.length - 1) + 1) * (most * (per[0]![0]!.length - 1) + 1);
   if (work > MAX_EVENT_WORK) throw new Error(`allocate: ${most} attacks exceed the exact allocation bound (work ${work} > ${MAX_EVENT_WORK})`);
   const normal = woundsLost(model.damage, model.woundLost);
+  // An ability mortal wound: one Damage, rolling the mortal-wound Feel No Pain.
+  const one = woundsLost([{ value: 1, probability: 1 }], model.mortalWoundLost);
   const mortals = model.rollMortals;
   const zeros = (): number[] => new Array<number>(dead + 1).fill(0);
   // States by the ability mortal wounds still to inflict: layer k waits on k of them.
@@ -328,19 +330,23 @@ export function allocateModel(model: AttackModel, defences: AllocationDefences =
     const events = eventTable();
     // Devastating Wounds' mortal wounds deal a critical wound's own Damage when it has one.
     const mortal = woundsLost(model.criticalWound?.damage ?? model.damage, model.mortalWoundLost);
+    // Normal damage, then the ability's mortal wounds, then the Devastating Wounds events: every
+    // ability mortal wound is inflicted here, so the outcome lands in layer 0.
+    const target = pending[0] ??= zeros();
     let current = state[0]!;
     events.forEach((row, normalEvents) => {
       if (normalEvents > 0) current = step(current, normal, true);
-      if (!row.some((cell) => cell.some((p) => p > 0))) return;
-      let after = current;
-      row.forEach((cell, mortalEvents) => {
-        if (mortalEvents > 0) after = step(after, mortal, false);
-        cell.forEach((p, wounds) => {
-          if (!(p > 0)) return;
-          const target = pending[wounds] ??= zeros();
-          after.forEach((q, id) => { target[id]! += p * q; });
+      let afterWounds = current;
+      for (let wounds = 0; wounds < row[0]!.length; wounds += 1) {
+        if (!row.some((cell) => cell.slice(wounds).some((p) => p > 0))) break;
+        if (wounds > 0) afterWounds = step(afterWounds, one, false);
+        let after = afterWounds;
+        row.forEach((cell, mortalEvents) => {
+          if (mortalEvents > 0) after = step(after, mortal, false);
+          const p = cell[wounds]!;
+          if (p > 0) after.forEach((q, id) => { target[id]! += p * q; });
         });
-      });
+      }
     });
   }
 
@@ -355,8 +361,8 @@ export function allocateModel(model: AttackModel, defences: AllocationDefences =
     return total;
   }
 
-  // The ability's mortal wounds, one wound each after everything else: layer k takes k of them.
-  const one = woundsLost([{ value: 1, probability: 1 }], model.mortalWoundLost);
+  // The ability's mortal wounds the step-by-step path leaves pending, one wound each after all
+  // normal damage: layer k takes k of them.
   let final = pending[pending.length - 1] ?? zeros();
   for (let k = pending.length - 2; k >= 0; k -= 1) {
     final = step(final, one, false);

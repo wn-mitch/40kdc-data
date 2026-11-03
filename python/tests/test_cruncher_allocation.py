@@ -262,9 +262,9 @@ def test_carries_each_ability_mortal_wound_over_to_the_next_model() -> None:
     assert hit["modelsDestroyed"] == pytest.approx(1, abs=1e-12)
 
 
-def test_inflicts_ability_mortal_wounds_after_devastating_wounds() -> None:
-    # The D2 Devastating Wounds event kills the first 2-wound model, then the ability's mortal
-    # wound damages the second: 3 wounds removed (2 if it came first).
+def test_inflicts_ability_mortal_wounds_before_devastating_wounds() -> None:
+    # The ability's mortal wound damages the first 2-wound model, then the D2 Devastating Wounds
+    # event kills it and loses its excess: 2 wounds removed (3 if it came after).
     ordered = _model(
         wound={"pass": 1, "crit": 1},
         devastating=True,
@@ -273,7 +273,8 @@ def test_inflicts_ability_mortal_wounds_after_devastating_wounds() -> None:
         wounds=2,
         modelCount=2,
     )
-    assert allocate_model(ordered)["damageDealt"] == pytest.approx(3, abs=1e-12)
+    assert allocate_model(ordered)["damageDealt"] == pytest.approx(2, abs=1e-12)
+    assert allocate_model(ordered)["modelsDestroyedDistribution"] == [0, 1, 0]
     # Mortal-only Feel No Pain removes each with probability 1/2.
     shielded = _model(rollMortals={**_NO_MORTALS, "wound": 2}, mortalWoundLost=0.5, wounds=5)
     assert allocate_model(shielded)["damageDealt"] == pytest.approx(2, abs=1e-12)

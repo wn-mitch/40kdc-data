@@ -1192,6 +1192,17 @@ const ALLOCATION_ZEROING_CASES: Array<{ cruncher_case: string; label: string; ze
   ] },
 ];
 
+/**
+ * Allocation cases that append buffs to a cruncher case. Devastating Wounds events of Damage 2
+ * plus 1 mortal wound on each critical wound, against 2-wound models, pin the order: the ability's
+ * mortal wound is inflicted first, so a D2 event that follows it loses its excess.
+ */
+const ALLOCATION_BUFF_CASES: Array<{ cruncher_case: string; label: string; buffs: Buff[] }> = [
+  { cruncher_case: "canonical-critical-wound-devastating-damage.json", label: "1 mortal wound on each critical wound", buffs: [
+    { source: { kind: "ability", abilityId: "fabricated-critical-wound", abilityKind: "unit" }, contribution: { type: "mortal-wounds-on-roll", roll: "wound", outcome: "success", count: 1 }, applicableWhen: { onCritical: "wound" } },
+  ] },
+];
+
 function genAllocation(): void {
   const ds = Dataset.embedded();
   const cases: Array<{ name: string; cruncher_case: string; zeroing?: DamageZeroing; buffs?: Buff[]; expected: AllocationOutput }> = ALLOCATION_CASE_FILES.map((filename) => {
@@ -1207,6 +1218,10 @@ function genAllocation(): void {
       ...(zeroing ? { zeroing } : {}), ...(buffs ? { buffs } : {}),
       expected: allocate(withBuffs, ds, zeroing ? { zeroing } : {}),
     });
+  }
+  for (const { cruncher_case, label, buffs } of ALLOCATION_BUFF_CASES) {
+    const { name, input } = loadAttributionInput(ds, cruncher_case);
+    cases.push({ name: `${name} + ${label}`, cruncher_case, buffs, expected: allocate({ ...input, buffs: [...input.buffs, ...buffs] }, ds) });
   }
   writeJson(join(CONFORMANCE, "allocation", "cases.json"), cases);
   console.log(`allocation/cases.json: ${cases.length} cases`);
