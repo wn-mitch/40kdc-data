@@ -3443,7 +3443,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [
       "emperors-champion-vedrenn",
@@ -3461,11 +3461,46 @@
           "type": "army-rule",
           "target": "this-unit",
           "modifier": {
+            "rule": "single-chapter"
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "army-includes",
+            "parameters": {
+              "filter": {
+                "owner": "friendly",
+                "all_of": [
+                  "BLACK TEMPLARS"
+                ]
+              }
+            }
+          },
+          "effect": {
+            "type": "rule-state",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "ADEPTUS ASTARTES"
+              ]
+            },
+            "modifier": {
+              "direction": "granted",
+              "rule_kind": "ability",
+              "rule": "templar-vows-vow-sworn-of-vedrenn-black-templars"
+            }
+          }
+        },
+        {
+          "type": "army-rule",
+          "target": "this-unit",
+          "modifier": {
             "rule": "composition",
             "with": {
               "all_of": [
-                "Adeptus Astartes",
-                "Psyker"
+                "ADEPTUS ASTARTES",
+                "PSYKER"
               ]
             },
             "max": 0
@@ -3481,8 +3516,11 @@
               "gladiator-reaper",
               "gladiator-valiant",
               "impulsor",
+              "land-raider-crusader",
               "repulsor",
-              "repulsor-executioner"
+              "repulsor-executioner",
+              "sternguard-veteran-squad",
+              "terminator-squad"
             ],
             "max": 0
           }
@@ -3499,7 +3537,7 @@
       }
     ],
     "behavior": "passive",
-    "source_digest": "3ce947d1c863f46392b04857d54747806493cea994080782434505f8cf12d215"
+    "source_digest": "e6cad7cff38c5c5929e8320fb24d32d88d7d5ac0df41ea6bc999371223ceae49"
   },
   {
     "ability_id": "rapid-disembarkation-black-templars",

@@ -13460,7 +13460,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [
       "ardmob-boyz",
@@ -13476,94 +13476,21 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "sequence",
-          "steps": [
-            {
-              "type": "re-roll",
-              "target": "this-unit",
-              "modifier": {
-                "roll": "advance",
-                "result_scope": "any-result"
-              }
+          "type": "ability-part",
+          "optional": true,
+          "effect": {
+            "type": "re-roll",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "ORKS"
+              ]
             },
-            {
-              "type": "conditional",
-              "condition": {
-                "type": "matches",
-                "parameters": {
-                  "filter": {
-                    "designated": "riled-up"
-                  }
-                }
-              },
-              "effect": {
-                "type": "invulnerable-save",
-                "target": "this-unit",
-                "modifier": {
-                  "invuln_sv": 5
-                }
-              }
-            },
-            {
-              "type": "conditional",
-              "condition": {
-                "type": "matches",
-                "parameters": {
-                  "filter": {
-                    "designated": "riled-up"
-                  }
-                }
-              },
-              "effect": {
-                "type": "weapon-ability-grant",
-                "target": "this-unit",
-                "modifier": {
-                  "keywords": [
-                    {
-                      "keyword_id": "assault"
-                    }
-                  ],
-                  "weapons": {
-                    "type": "ranged"
-                  }
-                }
-              }
-            },
-            {
-              "type": "ability-part",
-              "trigger": {
-                "event": "selected",
-                "filter": {
-                  "move_types": [
-                    "advance"
-                  ],
-                  "to": "move"
-                }
-              },
-              "effect": {
-                "type": "conditional",
-                "condition": {
-                  "type": "matches",
-                  "parameters": {
-                    "filter": {
-                      "designated": "riled-up"
-                    }
-                  }
-                },
-                "effect": {
-                  "type": "permission",
-                  "target": "event-subject",
-                  "modifier": {
-                    "activity": "declare-charge",
-                    "allow": true,
-                    "despite": [
-                      "advanced"
-                    ]
-                  }
-                }
-              }
+            "modifier": {
+              "roll": "advance",
+              "result_scope": "any-result"
             }
-          ]
+          }
         },
         {
           "type": "ability-part",
@@ -13584,19 +13511,63 @@
           },
           "duration": "until-end-of-next-turn",
           "effect": {
-            "type": "designate",
-            "target": {
-              "owner": "friendly",
-              "all_of": [
-                "ORKS"
-              ],
-              "has_ability": [
-                "waaagh-ardmob-orks"
-              ]
-            },
-            "modifier": {
-              "tag": "riled-up"
-            }
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "designate",
+                "target": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "ORKS"
+                  ]
+                },
+                "modifier": {
+                  "tag": "waaagh-called"
+                }
+              },
+              {
+                "type": "conditional",
+                "condition": {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "this-unit",
+                    "filter": {
+                      "designated": "waaagh-called"
+                    }
+                  }
+                },
+                "effect": {
+                  "type": "sequence",
+                  "steps": [
+                    {
+                      "type": "weapon-ability-grant",
+                      "target": "this-unit",
+                      "modifier": {
+                        "keywords": [
+                          {
+                            "keyword_id": "assault"
+                          }
+                        ],
+                        "weapons": {
+                          "type": "ranged"
+                        }
+                      }
+                    },
+                    {
+                      "type": "permission",
+                      "target": "this-unit",
+                      "modifier": {
+                        "activity": "declare-charge",
+                        "allow": true,
+                        "after": [
+                          "advance"
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         }
       ]
@@ -13611,7 +13582,7 @@
       }
     ],
     "behavior": "reactive",
-    "source_digest": "515094349d27d2640a02229494a4ddaf361a59b786b04da8d14075024bc9f1a0"
+    "source_digest": "f57aea3e266025e3ebdd72961865422aa1552545bdcdcfb893295f312402a3e5"
   },
   {
     "ability_id": "crazed-rampage-dread-mob-orks",

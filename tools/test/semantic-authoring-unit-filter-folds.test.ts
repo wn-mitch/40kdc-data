@@ -194,6 +194,23 @@ describe("a colon list of units after a grant", () => {
     expect(json).toContain('"all_of":["ALPHA"],"any_of_filters":[{"all_of":["BETA"]},{"all_of":["DELTA","ECHO"]}]');
   });
 
+  it("reads a bulleted list after the colon as the same alternatives", () => {
+    const json = JSON.stringify(mechanics("The following friendly Alpha units have Gamma:\n■ Beta units\n■ Delta Echo units", ...LEAVES));
+    expect(json).toContain('"all_of":["ALPHA"],"any_of_filters":[{"all_of":["BETA"]},{"all_of":["DELTA","ECHO"]}]');
+  });
+
+  it("spreads an any-of list item into one-keyword alternatives", () => {
+    const json = JSON.stringify(mechanics("The following friendly Alpha units have Gamma:\n■ Beta units\n■ Delta and Echo units",
+      LEAVES[0]!, LEAVES[1]!, LEAVES[2]!, ["Delta and Echo units", "unit-filter", { side: "friendly", any_keywords: ["DELTA", "ECHO"] }]));
+    expect(json).toContain('"all_of":["ALPHA"],"any_of":["BETA","DELTA","ECHO"]');
+  });
+
+  it("still refuses an any-of list item that also excludes a keyword", () => {
+    const result = compile("The following friendly Alpha units have Gamma:\n■ Beta units\n■ Delta and Echo units",
+      LEAVES[0]!, LEAVES[1]!, LEAVES[2]!, ["Delta and Echo units", "unit-filter", { side: "friendly", any_keywords: ["DELTA", "ECHO"], excluded_keywords: ["FOXTROT"] }]);
+    expect(result.ok).toBe(false);
+  });
+
   it("refuses the same filters after a sentence break instead of a colon", () => {
     const result = compile("The following friendly Alpha units have Gamma. Beta units. Delta Echo units.", ...LEAVES);
     expect(result.ok).toBe(false);

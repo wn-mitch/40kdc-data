@@ -12150,7 +12150,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [
       "amonhotekhs-guard-canoptek-scarab-swarms",
@@ -12170,82 +12170,46 @@
         }
       },
       "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "ability-part",
-            "trigger": {
-              "event": "phase-ended",
-              "condition": {
-                "operator": "and",
-                "operands": [
-                  {
-                    "type": "phase-is",
-                    "parameters": {
-                      "phase": "command"
-                    }
-                  },
-                  {
-                    "type": "player-turn-is",
-                    "parameters": {
-                      "turn": "your-turn"
-                    }
-                  }
-                ]
-              }
-            },
-            "effect": {
-              "type": "for-each-unit",
-              "selector": {
-                "filter": {
-                  "owner": "friendly",
-                  "has_ability": [
-                    "reanimation-protocols-amonhotekhs-guard-necrons"
-                  ]
-                }
-              },
-              "effect": {
-                "type": "conditional",
-                "condition": {
-                  "type": "matches",
-                  "parameters": {
-                    "subject": "recipient",
-                    "filter": {
-                      "state": "on-battlefield"
-                    }
-                  }
-                },
-                "effect": {
-                  "type": "ability-activate",
-                  "target": "recipient",
-                  "modifier": {
-                    "ability": "reanimation-protocols-necrons"
-                  }
-                }
+        "type": "for-each-unit",
+        "selector": {
+          "filter": {
+            "owner": "friendly",
+            "has_ability": [
+              "reanimation-protocols-amonhotekhs-guard-necrons"
+            ]
+          }
+        },
+        "effect": {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": "recipient",
+              "filter": {
+                "state": "on-battlefield"
               }
             }
           },
-          {
-            "type": "ability-part",
-            "trigger": {
-              "event": "used",
-              "filter": {
-                "kind": "ability",
-                "id": "reanimation-protocols-necrons"
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "ability-activate",
+                "target": "recipient",
+                "modifier": {
+                  "ability": "reanimation-protocols-amonhotekhs-guard-necrons"
+                }
               },
-              "subject": {
-                "owner": "friendly"
+              {
+                "type": "heal",
+                "target": "recipient",
+                "modifier": {
+                  "amount": "D3"
+                }
               }
-            },
-            "effect": {
-              "type": "heal",
-              "target": "event-subject",
-              "modifier": {
-                "amount": "D3"
-              }
-            }
+            ]
           }
-        ]
+        }
       }
     },
     "scope": {
@@ -12258,7 +12222,27 @@
       }
     ],
     "behavior": "reactive",
-    "source_digest": "e6aa1c66abf819af5ec9fc5713117e3b5ca4ac0611420f4a2f326073e19c0f02"
+    "source_digest": "d9a00e8cfae71821b00b94cf12c14a64bc58838df2e315693881bb44e8388109",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "reinforced-resilience-amonhotekhs-guard-necrons",

@@ -206,6 +206,7 @@ pub const DESIGNATION_IDS: &[&str] = &[
     "vengeful-dead",
     "victim",
     "virulent-blessing-target",
+    "waaagh-called",
     "warded",
     "warlord",
     "whispering-web",

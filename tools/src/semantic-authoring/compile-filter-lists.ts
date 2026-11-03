@@ -19,7 +19,8 @@ export function foldListNarrowing(
   if (sourceText === undefined) return [...input];
   const list = [...input];
   const bytes = Buffer.from(sourceText, "utf8");
-  const between = (from: number, to: number) => bytes.subarray(from, to).toString("utf8").replace(/[*\s]/gu, "");
+  // Bold markers, whitespace and list bullets ("■", "□") do not separate the head from its list.
+  const between = (from: number, to: number) => bytes.subarray(from, to).toString("utf8").replace(/[*\s■□]/gu, "");
   for (let index = 0; index < list.length; index += 1) {
     const head = list[index]!;
     if (!isFilter(head) || exclusionOnly(head)) continue;

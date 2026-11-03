@@ -4191,9 +4191,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [
       "master-zacharial",
       "vengeful-brethren-bladeguard-veteran-squad",
@@ -4204,7 +4203,31 @@
     "detachment_id": "the-vengeful-brethren",
     "ability_type": "faction",
     "effect": {
-      "type": "no-effect"
+      "type": "keyword-grant",
+      "target": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS ASTARTES"
+        ],
+        "any_of": [
+          "BLADEGUARD ANCIENT",
+          "BLADEGUARD VETERAN SQUAD",
+          "DREADNOUGHT",
+          "LAND RAIDER",
+          "LAND RAIDER CRUSADER",
+          "LAND RAIDER REDEEMER",
+          "REPULSOR",
+          "REPULSOR EXECUTIONER",
+          "STERNGUARD VETERAN SQUAD",
+          "TERMINATOR",
+          "VANGUARD VETERAN SQUAD WITH JUMP PACKS"
+        ]
+      },
+      "modifier": {
+        "keywords": [
+          "DEATHWING"
+        ]
+      }
     },
     "scope": {
       "duration": "permanent"
@@ -4214,7 +4237,9 @@
         "ability_ref": "the-deathwing-dark-angels",
         "type": "replaces"
       }
-    ]
+    ],
+    "behavior": "passive",
+    "source_digest": "5ec857a368b1600628338d051bcb5c3da6ca34975abbf43b9cd78b36d80a9cc7"
   },
   {
     "ability_id": "the-ravenwing-the-vengeful-brethren-dark-angels",
@@ -4222,7 +4247,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [
       "master-zacharial",
@@ -4270,7 +4295,7 @@
       }
     ],
     "behavior": "passive",
-    "source_digest": "a6c002561986e711c70daac6dd8f981a08c07968850ae3fb713f62cbb1aeaecb"
+    "source_digest": "289c22b214142132934cb7818c33f615bd9960ba445b76309e97263b383d9af4"
   },
   {
     "ability_id": "the-watchers-dark-angels",

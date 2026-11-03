@@ -27,7 +27,14 @@ const without = (list: readonly string[] | undefined, drop: readonly string[]) =
  * rather than narrow to units that are both.
  */
 export function alternativeFilter(filters: readonly CompileLeaf[]): CompileLeaf {
-  const params = filters.map((filter) => filter.parameters as FilterParameters);
+  // A filter that is only an any-of ("**A**, **B** and **C** units" in a list of alternatives) is that many
+  // one-keyword alternatives; any other content beside its any-of still refuses below.
+  const params = filters.flatMap((filter): FilterParameters[] => {
+    const p = filter.parameters as FilterParameters;
+    const { any_keywords: anyOf, side: _side, ...others } = p;
+    const plain = Object.values(others).every((value) => value === undefined || value === false || value === "unit");
+    return anyOf?.length && plain ? anyOf.map((keyword) => ({ side: p.side, keywords: [keyword] })) : [p];
+  });
   const fail = (why: string): never => { throw new CompileError(`Alternative unit-filters (A or B) ${why}; one DSL unit-filter cannot say them.`); };
   const same = (pick: (p: FilterParameters) => unknown) => params.every((p) => JSON.stringify(pick(p) ?? null) === JSON.stringify(pick(params[0]!) ?? null));
   const sides = new Set(params.map((p) => p.side).filter((value) => value !== "any"));

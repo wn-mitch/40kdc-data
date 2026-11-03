@@ -19617,7 +19617,89 @@
     }
   },
   {
-    "caseId": "heroes-of-legend-imperial-knights#274",
+    "caseId": "heirs-of-sigismund-vow-sworn-of-vedrenn-black-templars#274",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "army-rule",
+          "target": "this-unit",
+          "modifier": {
+            "rule": "single-chapter"
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "army-includes",
+            "parameters": {
+              "filter": {
+                "owner": "friendly",
+                "all_of": [
+                  "BLACK TEMPLARS"
+                ]
+              }
+            }
+          },
+          "effect": {
+            "type": "rule-state",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "ADEPTUS ASTARTES"
+              ]
+            },
+            "modifier": {
+              "direction": "granted",
+              "rule_kind": "ability",
+              "rule": "templar-vows-vow-sworn-of-vedrenn-black-templars"
+            }
+          }
+        },
+        {
+          "type": "army-rule",
+          "target": "this-unit",
+          "modifier": {
+            "rule": "composition",
+            "with": {
+              "all_of": [
+                "ADEPTUS ASTARTES",
+                "PSYKER"
+              ]
+            },
+            "max": 0
+          }
+        },
+        {
+          "type": "army-rule",
+          "target": "this-unit",
+          "modifier": {
+            "rule": "composition",
+            "datasheets": [
+              "gladiator-lancer",
+              "gladiator-reaper",
+              "gladiator-valiant",
+              "impulsor",
+              "land-raider-crusader",
+              "repulsor",
+              "repulsor-executioner",
+              "sternguard-veteran-squad",
+              "terminator-squad"
+            ],
+            "max": 0
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Your army can include units from only one Chapter.\nIf your army includes a BLACK TEMPLARS unit, all friendly ADEPTUS ASTARTES units gain the Templar Vows Vow Sworn of Vedrenn ability.\nYour army cannot include ADEPTUS ASTARTES PSYKER units.\nYour army cannot include Gladiator Lancer, Gladiator Reaper, Gladiator Valiant, Impulsor, Land Raider Crusader, Repulsor, Repulsor Executioner, Sternguard Veteran Squad or Terminator Squad units."
+    }
+  },
+  {
+    "caseId": "heroes-of-legend-imperial-knights#275",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -19709,7 +19791,7 @@
     }
   },
   {
-    "caseId": "honour-or-death-dark-angels#275",
+    "caseId": "honour-or-death-dark-angels#276",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -19789,7 +19871,7 @@
     }
   },
   {
-    "caseId": "horrors-are-pink-horrors-are-blue-where-once-there-was-one-now-there-are-two-chaos-daemons#276",
+    "caseId": "horrors-are-pink-horrors-are-blue-where-once-there-was-one-now-there-are-two-chaos-daemons#277",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -19816,7 +19898,7 @@
     }
   },
   {
-    "caseId": "horrors-are-pink-horrors-are-blue-where-once-there-was-one-now-there-are-two-thousand-sons#277",
+    "caseId": "horrors-are-pink-horrors-are-blue-where-once-there-was-one-now-there-are-two-thousand-sons#278",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -19888,7 +19970,7 @@
     }
   },
   {
-    "caseId": "hyper-adaptations-tyranids#278",
+    "caseId": "hyper-adaptations-tyranids#279",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -20028,7 +20110,7 @@
     }
   },
   {
-    "caseId": "hyperspace-hunters-necrons#279",
+    "caseId": "hyperspace-hunters-necrons#280",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -20144,7 +20226,7 @@
     }
   },
   {
-    "caseId": "icon-of-khorne-world-eaters#280",
+    "caseId": "icon-of-khorne-world-eaters#281",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -20186,7 +20268,7 @@
     }
   },
   {
-    "caseId": "idol-of-blessed-blood-khorne-lord-of-skulls-world-eaters#281",
+    "caseId": "idol-of-blessed-blood-khorne-lord-of-skulls-world-eaters#282",
     "effect": {
       "type": "resource-die",
       "target": "this-model",
@@ -20208,7 +20290,7 @@
     }
   },
   {
-    "caseId": "imposing-arrival-steel-hammer-astra-militarum#282",
+    "caseId": "imposing-arrival-steel-hammer-astra-militarum#283",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -20242,62 +20324,6 @@
     },
     "expected": {
       "text": "From the second battle round onward, the unit can be set up on the battlefield wholly within 8\" of a battlefield edge more than 6\" away from all enemy models.\nApplies to: units with ASTRA MILITARUM, TITANIC."
-    }
-  },
-  {
-    "caseId": "independent-power-tau-empire#283",
-    "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "army-rule",
-          "target": "this-unit",
-          "modifier": {
-            "rule": "composition",
-            "with": {
-              "owner": "friendly",
-              "all_of": [
-                "ETHEREAL"
-              ]
-            },
-            "max": 0
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "army-includes",
-            "parameters": {
-              "filter": {
-                "owner": "friendly",
-                "all_of": [
-                  "ETHEREAL"
-                ]
-              }
-            }
-          },
-          "effect": {
-            "type": "army-rule",
-            "target": "this-unit",
-            "modifier": {
-              "rule": "composition",
-              "with": {
-                "owner": "friendly",
-                "all_of": [
-                  "COMMANDER FARSIGHT"
-                ]
-              },
-              "max": 0
-            }
-          }
-        }
-      ]
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "expected": {
-      "text": "Your army cannot include friendly ETHEREAL units.\nIf your army includes an ETHEREAL unit, your army cannot include friendly COMMANDER FARSIGHT units."
     }
   },
   {

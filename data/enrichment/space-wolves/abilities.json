@@ -4736,7 +4736,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [
       "askars-wolfpack-blood-claws",
@@ -4751,14 +4751,7 @@
       "type": "army-rule",
       "target": "this-unit",
       "modifier": {
-        "rule": "composition",
-        "with": {
-          "owner": "friendly",
-          "all_of": [
-            "APOTHECARY"
-          ]
-        },
-        "max": 0
+        "rule": "single-chapter"
       }
     },
     "scope": {
@@ -4771,7 +4764,7 @@
       }
     ],
     "behavior": "passive",
-    "source_digest": "c379f2bbeae8e2ebf2c805ee97b9205974d0912682595f0c1bca9c3ea4bae9a2"
+    "source_digest": "620cb3dbba5109e5f9f8e9ee815d70f69bbff53ef0f0bd7f511e5e31385febcc"
   },
   {
     "ability_id": "transhuman-strategist-space-wolves",

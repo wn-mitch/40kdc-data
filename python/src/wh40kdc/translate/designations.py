@@ -215,6 +215,7 @@ DESIGNATION_IDS: frozenset[str] = frozenset(
         "vengeful-dead",
         "victim",
         "virulent-blessing-target",
+        "waaagh-called",
         "warded",
         "warlord",
         "whispering-web",

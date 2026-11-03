@@ -209,6 +209,7 @@ export const DESIGNATION_IDS: ReadonlySet<string> = new Set([
   "vengeful-dead",
   "victim",
   "virulent-blessing-target",
+  "waaagh-called",
   "warded",
   "warlord",
   "whispering-web",
