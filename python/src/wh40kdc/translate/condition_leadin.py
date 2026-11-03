@@ -164,6 +164,18 @@ def is_defensive_effect(e: object) -> bool:
     return e.get("type") == "stat-modifier" and stat in _DEFENSIVE_STATS
 
 
+def _or_operand_lead_in(o: Condition, defending: bool) -> str:
+    """One alternative of an ``or``.
+
+    "Unless" would read as negating the whole alternation, so a negated alternative reads as its
+    own negated predicate: "if you do not have 2+ glory points or during the Fight phase".
+    """
+    lead = condition_lead_in(o, defending)
+    if o.get("operator") == "not" and lead.startswith("unless "):
+        return f"if {describe_condition(o)}"
+    return lead
+
+
 def condition_lead_in(c: Condition, defending: bool = False) -> str:
     """A condition as a natural lead-in clause (lowercase-initial; the caller capitalizes at
     the sentence boundary). Falls back to ``if <condition>`` for shapes without a dedicated
@@ -174,7 +186,7 @@ def condition_lead_in(c: Condition, defending: bool = False) -> str:
     if op == "and" and operands is not None:
         return _join_lead_ins(operands, defending)
     if op == "or" and operands is not None:
-        return " or ".join(condition_lead_in(o, defending) for o in operands)
+        return " or ".join(_or_operand_lead_in(o, defending) for o in operands)
     if op == "not" and operands is not None:
         if (
             len(operands) == 1

@@ -78,6 +78,18 @@ pub fn condition_lead_in_value(c: &Value) -> String {
     condition_lead_in_for(c, false)
 }
 
+/// One alternative of an `or`. "Unless" would read as negating the whole alternation, so a
+/// negated alternative reads as its own negated predicate: "if you do not have 2+ glory points or
+/// during the Fight phase".
+fn or_operand_lead_in(o: &Value, defending: bool) -> String {
+    let lead = condition_lead_in_for(o, defending);
+    if operator(o) == Some("not") && lead.starts_with("unless ") {
+        format!("if {}", super::describe_condition_value(o))
+    } else {
+        lead
+    }
+}
+
 /// [`condition_lead_in_value`], with `defending` framing attack conditions from the attacked
 /// unit's side ("against ranged attacks"), for a condition gating a defensive effect.
 pub fn condition_lead_in_for(c: &Value, defending: bool) -> String {
@@ -86,7 +98,7 @@ pub fn condition_lead_in_for(c: &Value, defending: bool) -> String {
         (Some("or"), Some(ops)) => {
             return ops
                 .iter()
-                .map(|o| condition_lead_in_for(o, defending))
+                .map(|o| or_operand_lead_in(o, defending))
                 .collect::<Vec<_>>()
                 .join(" or ")
         }

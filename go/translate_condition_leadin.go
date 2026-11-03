@@ -127,6 +127,17 @@ func isDefensiveEffect(e map[string]any) bool {
 	return false
 }
 
+// orOperandLeadIn: one alternative of an or. "Unless" would read as negating the whole
+// alternation, so a negated alternative reads as its own negated predicate: "if you do not have
+// 2+ glory points or during the Fight phase".
+func orOperandLeadIn(o map[string]any, defending bool) string {
+	lead := conditionLeadInFor(o, defending)
+	if o["operator"] == "not" && strings.HasPrefix(lead, "unless ") {
+		return "if " + describeCondition(o)
+	}
+	return lead
+}
+
 // conditionLeadIn renders a condition as a natural lead-in clause
 // (lowercase-initial; the caller capitalizes at the sentence boundary). Falls
 // back to `if <condition>` for shapes without a dedicated framing.
@@ -147,7 +158,7 @@ func conditionLeadInFor(c map[string]any, defending bool) string {
 	if ops, ok := conditionOperands(c, "or"); ok {
 		parts := make([]string, len(ops))
 		for i, o := range ops {
-			parts[i] = conditionLeadInFor(o, defending)
+			parts[i] = orOperandLeadIn(o, defending)
 		}
 		return strings.Join(parts, " or ")
 	}

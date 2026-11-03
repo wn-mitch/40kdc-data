@@ -41047,6 +41047,98 @@
     }
   },
   {
+    "caseId": "fidelity/or-with-negated-first-alternative",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "or",
+        "operands": [
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "resource",
+                "parameters": {
+                  "pool": "glory-points",
+                  "count": {
+                    "min": 2
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "stat": "OC",
+          "operation": "add",
+          "value": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "If you do not have 2+ glory points or during the Fight phase, when resolving this use, add 1 to the unit's Objective Control characteristic."
+    }
+  },
+  {
+    "caseId": "fidelity/or-with-negated-last-alternative",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "or",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "resource",
+                "parameters": {
+                  "pool": "glory-points",
+                  "count": {
+                    "min": 2
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "stat": "OC",
+          "operation": "add",
+          "value": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "During the Fight phase or if you do not have 2+ glory points, when resolving this use, add 1 to the unit's Objective Control characteristic."
+    }
+  },
+  {
     "caseId": "fidelity/move-modifier-mode-choice-named-beside-clause",
     "effect": {
       "type": "move-modifier",

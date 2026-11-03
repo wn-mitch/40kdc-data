@@ -242,3 +242,23 @@ describe("triggers on an aura's recipient", () => {
     );
   });
 });
+
+describe("negated alternatives of an or", () => {
+  const glory = { type: "resource", parameters: { pool: "glory-points", count: { min: 2 } } };
+  const fight = { type: "phase-is", parameters: { phase: "fight" } };
+  const gate = (condition: unknown) =>
+    render({ type: "conditional", condition, effect: { type: "stat-modifier", target: "this-unit", modifier: { stat: "OC", operation: "add", value: 1 } } } as Effect);
+
+  it("does not lift one alternative's not over the whole or", () => {
+    const first = gate({ operator: "or", operands: [{ operator: "not", operands: [glory] }, fight] });
+    expect(first).not.toMatch(/^Unless/);
+    expect(first).toMatch(/^If you do not have 2\+ glory points or during the Fight phase, /);
+    expect(gate({ operator: "or", operands: [fight, { operator: "not", operands: [glory] }] })).toMatch(
+      /^During the Fight phase or if you do not have 2\+ glory points, /,
+    );
+  });
+
+  it("keeps Unless for a not that covers the whole condition", () => {
+    expect(gate({ operator: "not", operands: [glory] })).toMatch(/^Unless you have 2\+ glory points, /);
+  });
+});

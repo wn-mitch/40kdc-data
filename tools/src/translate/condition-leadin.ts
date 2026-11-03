@@ -84,7 +84,7 @@ export function isDefensiveEffect(e: { type?: string; target?: unknown; modifier
  */
 export function conditionLeadIn(c: Condition, defending = false): string {
   if (c.operator === "and" && c.operands) return joinLeadIns(c.operands, defending);
-  if (c.operator === "or" && c.operands) return c.operands.map((o) => conditionLeadIn(o, defending)).join(" or ");
+  if (c.operator === "or" && c.operands) return c.operands.map((o) => orOperandLeadIn(o, defending)).join(" or ");
   if (c.operator === "not" && c.operands) {
     const only = c.operands[0];
     if (c.operands.length === 1 && only && !only.operator) return negatedLeadIn(only, defending);
@@ -150,6 +150,16 @@ export function conditionLeadIn(c: Condition, defending = false): string {
     default:
       return `if ${describePredicate(c, false)}`;
   }
+}
+
+/**
+ * One alternative of an `or`. "Unless" would read as negating the whole alternation, so a negated
+ * alternative reads as its own negated predicate: "if you do not have 2+ glory points or during the
+ * Fight phase".
+ */
+function orOperandLeadIn(o: Condition, defending: boolean): string {
+  const lead = conditionLeadIn(o, defending);
+  return o.operator === "not" && lead.startsWith("unless ") ? `if ${describeCondition(o)}` : lead;
 }
 
 function negatedLeadIn(c: Condition, defending: boolean): string {

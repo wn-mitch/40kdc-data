@@ -4193,6 +4193,13 @@ function genEffectTranslation(): void {
     { caseId: "fidelity/part-trigger-subject-aura-recipient", effect: { type: "ability-part", trigger: { event: "after-roll", subject: "recipient", filter: { roll: "battle-shock", result: "failure" } },
       effect: { type: "aura", target: "enemy-within-aura", modifier: { range: { inches: 9 }, of: "this-unit", eligible: { owner: "enemy" },
         effect: { type: "mortal-wounds", target: "recipient", modifier: { count: 1 } } } } } },
+    // A negated alternative of an or reads as its own negated predicate, not as "unless" over the whole or.
+    { caseId: "fidelity/or-with-negated-first-alternative", effect: { type: "conditional",
+      condition: { operator: "or", operands: [{ operator: "not", operands: [{ type: "resource", parameters: { pool: "glory-points", count: { min: 2 } } }] }, { type: "phase-is", parameters: { phase: "fight" } }] },
+      effect: { type: "stat-modifier", target: "this-unit", modifier: { stat: "OC", operation: "add", value: 1 } } } },
+    { caseId: "fidelity/or-with-negated-last-alternative", effect: { type: "conditional",
+      condition: { operator: "or", operands: [{ type: "phase-is", parameters: { phase: "fight" } }, { operator: "not", operands: [{ type: "resource", parameters: { pool: "glory-points", count: { min: 2 } } }] }] },
+      effect: { type: "stat-modifier", target: "this-unit", modifier: { stat: "OC", operation: "add", value: 1 } } } },
     { caseId: "fidelity/move-modifier-mode-choice-named-beside-clause", effect: { type: "move-modifier", target: "this-unit", modifier: { applies_to_moves: ["consolidation"], no_end_in_engagement: true, mode_choice: { modes: ["objective"], ignore_before_moving: true } } } },
   ];
   for (const example of fidelityBoundaryCases) {
