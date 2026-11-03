@@ -47,7 +47,7 @@
   -&gt; Roll 8D6; allocate dice to activate up to 2 of the following:
     - Unbridled Bloodlust (requires pair of 1+): the unit gets +1 to Charge rolls.
     - Rage-Fuelled Invigoration (requires pair of 2+): add 3" to the unit's Pile-in and Consolidation moves.
-    - Total Carnage (requires pair of 3+): when a model in the unit is destroyed: each time a model in this unit is destroyed, unless that unit has fought this phase, roll one D6. On a 4+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.
+    - Total Carnage (requires pair of 3+): when a friendly model is destroyed in melee: each time a model in this unit is destroyed, unless that unit has fought this phase, roll one D6. On a 4+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.
     - Martial Excellence (requires pair of 4+ or triple of 1+): melee weapons equipped by models in this unit gain [SUSTAINED HITS 1].
     - Warp Blades (requires pair of 5+ or triple of 2+): melee weapons equipped by models in this unit gain [LETHAL HITS].
     - Decapitating Strikes (requires pair of 6+ or triple of 3+): while making melee attacks against INFANTRY targets, the unit's weapons gain [DEVASTATING WOUNDS].</characteristic>
@@ -147,7 +147,7 @@
   -&gt; Roll 8D6; allocate dice to activate up to 2 of the following:
     - Unbridled Bloodlust (requires pair of 1+): the unit gets +1 to Charge rolls.
     - Rage-Fuelled Invigoration (requires pair of 2+): add 3" to the unit's Pile-in and Consolidation moves.
-    - Total Carnage (requires pair of 3+): when a model in the unit is destroyed: each time a model in this unit is destroyed, unless that unit has fought this phase, roll one D6. On a 4+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.
+    - Total Carnage (requires pair of 3+): when a friendly model is destroyed in melee: each time a model in this unit is destroyed, unless that unit has fought this phase, roll one D6. On a 4+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.
     - Martial Excellence (requires pair of 4+ or triple of 1+): melee weapons equipped by models in this unit gain [SUSTAINED HITS 1].
     - Warp Blades (requires pair of 5+ or triple of 2+): melee weapons equipped by models in this unit gain [LETHAL HITS].
     - Decapitating Strikes (requires pair of 6+ or triple of 3+): while making melee attacks against INFANTRY targets, the unit's weapons gain [DEVASTATING WOUNDS].</characteristic>
@@ -356,7 +356,7 @@
   -&gt; Roll 8D6; allocate dice to activate up to 2 of the following:
     - Unbridled Bloodlust (requires pair of 1+): the unit gets +1 to Charge rolls.
     - Rage-Fuelled Invigoration (requires pair of 2+): add 3" to the unit's Pile-in and Consolidation moves.
-    - Total Carnage (requires pair of 3+): when a model in the unit is destroyed: each time a model in this unit is destroyed, unless that unit has fought this phase, roll one D6. On a 4+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.
+    - Total Carnage (requires pair of 3+): when a friendly model is destroyed in melee: each time a model in this unit is destroyed, unless that unit has fought this phase, roll one D6. On a 4+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.
     - Martial Excellence (requires pair of 4+ or triple of 1+): melee weapons equipped by models in this unit gain [SUSTAINED HITS 1].
     - Warp Blades (requires pair of 5+ or triple of 2+): melee weapons equipped by models in this unit gain [LETHAL HITS].
     - Decapitating Strikes (requires pair of 6+ or triple of 3+): while making melee attacks against INFANTRY targets, the unit's weapons gain [DEVASTATING WOUNDS].</characteristic>

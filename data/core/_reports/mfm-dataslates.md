@@ -1,6 +1,6 @@
 # MFM dataslates — APPLIED
 
-Current dataslate: `11th/mfm-995`.
+Current dataslate: `11th/2026-10-14`.
 
 Promote: verified, stamped current. Demote: claimed dump confirmation, failed verification,
 stamped provisional. Kept: verified and already current. Untouched: unverified and not claiming
@@ -9,71 +9,71 @@ dump confirmation.
 | Entity | Promote | Demote | Kept | Untouched |
 |---|--:|--:|--:|--:|
 | units | 0 | 0 | 1098 | 6 |
-| weapons | 3 | 0 | 3492 | 120 |
+| weapons | 0 | 0 | 3495 | 120 |
 | wargear | 0 | 0 | 165 | 87 |
 | unit-compositions | 0 | 0 | 1104 | 0 |
 | wargear-options | 0 | 0 | 1237 | 0 |
 | leader-attachments | 0 | 0 | 283 | 8 |
 | enhancements | 0 | 0 | 890 | 0 |
-| detachments | 0 | 0 | 172 | 285 |
-| stratagems | 0 | 0 | 1039 | 274 |
-| abilities | 0 | 0 | 3658 | 878 |
-| phase-mappings | 0 | 0 | 1136 | 445 |
+| detachments | 0 | 1 | 181 | 275 |
+| stratagems | 1 | 0 | 1057 | 255 |
+| abilities | 0 | 1 | 3741 | 794 |
+| phase-mappings | 0 | 1 | 1205 | 375 |
 | resource-pools | 0 | 0 | 0 | 6 |
 
 ## Abilities by faction
 
 | Faction | Promote | Demote | Kept | Untouched |
 |---|--:|--:|--:|--:|
-| _core | 0 | 0 | 8 | 18 |
-| adepta-sororitas | 0 | 0 | 120 | 28 |
+| _core | 0 | 0 | 11 | 15 |
+| adepta-sororitas | 0 | 0 | 121 | 27 |
 | adeptus-astartes | 0 | 0 | 211 | 39 |
 | adeptus-custodes | 0 | 0 | 144 | 14 |
-| adeptus-mechanicus | 0 | 0 | 138 | 29 |
-| aeldari | 0 | 0 | 243 | 57 |
-| agents-of-the-imperium | 0 | 0 | 96 | 42 |
-| astra-militarum | 0 | 0 | 193 | 58 |
+| adeptus-mechanicus | 0 | 0 | 141 | 26 |
+| aeldari | 0 | 0 | 247 | 53 |
+| agents-of-the-imperium | 0 | 0 | 98 | 40 |
+| astra-militarum | 0 | 0 | 208 | 43 |
 | black-templars | 0 | 0 | 52 | 11 |
-| blood-angels | 0 | 0 | 49 | 12 |
-| chaos-daemons | 0 | 0 | 162 | 33 |
-| chaos-knights | 0 | 0 | 85 | 25 |
-| chaos-space-marines | 0 | 0 | 220 | 61 |
-| dark-angels | 0 | 0 | 59 | 18 |
-| death-guard | 0 | 0 | 124 | 36 |
+| blood-angels | 0 | 0 | 50 | 11 |
+| chaos-daemons | 0 | 0 | 163 | 32 |
+| chaos-knights | 0 | 0 | 87 | 23 |
+| chaos-space-marines | 0 | 0 | 230 | 51 |
+| dark-angels | 0 | 0 | 62 | 15 |
+| death-guard | 0 | 0 | 131 | 29 |
 | deathwatch | 0 | 0 | 31 | 5 |
-| drukhari | 0 | 0 | 126 | 38 |
-| emperors-children | 0 | 0 | 122 | 26 |
-| genestealer-cults | 0 | 0 | 116 | 31 |
-| grey-knights | 0 | 0 | 121 | 13 |
+| drukhari | 0 | 0 | 128 | 36 |
+| emperors-children | 0 | 0 | 126 | 22 |
+| genestealer-cults | 0 | 0 | 120 | 27 |
+| grey-knights | 0 | 0 | 120 | 14 |
 | imperial-fists | 0 | 0 | 8 | 3 |
-| imperial-knights | 0 | 0 | 89 | 29 |
+| imperial-knights | 0 | 0 | 90 | 28 |
 | iron-hands | 0 | 0 | 9 | 2 |
-| leagues-of-votann | 0 | 0 | 127 | 28 |
-| necrons | 0 | 0 | 190 | 40 |
-| orks | 0 | 0 | 177 | 32 |
+| leagues-of-votann | 0 | 0 | 129 | 26 |
+| necrons | 0 | 0 | 193 | 37 |
+| orks | 0 | 0 | 179 | 30 |
 | raven-guard | 0 | 0 | 10 | 1 |
 | salamanders | 0 | 0 | 6 | 5 |
 | space-wolves | 0 | 0 | 74 | 13 |
-| tau-empire | 0 | 0 | 134 | 32 |
-| thousand-sons | 0 | 0 | 121 | 37 |
-| tyranids | 0 | 0 | 154 | 32 |
+| tau-empire | 0 | 0 | 137 | 29 |
+| thousand-sons | 0 | 0 | 127 | 31 |
+| tyranids | 0 | 0 | 159 | 27 |
 | ultramarines | 0 | 0 | 10 | 1 |
 | white-scars | 0 | 0 | 11 | 0 |
-| world-eaters | 0 | 0 | 118 | 29 |
+| world-eaters | 0 | 1 | 118 | 28 |
 
 ## Ability verification outcomes
 
 | Faction | Outcome | Records |
 |---|---|--:|
 | _core | ambiguous-source | 1 |
-| _core | digest-differs | 10 |
+| _core | digest-differs | 8 |
 | _core | stub | 1 |
-| _core | unpublished | 6 |
-| _core | verified | 8 |
+| _core | unpublished | 5 |
+| _core | verified | 11 |
 | adepta-sororitas | digest-differs | 8 |
 | adepta-sororitas | stub | 4 |
-| adepta-sororitas | unpublished | 16 |
-| adepta-sororitas | verified | 120 |
+| adepta-sororitas | unpublished | 15 |
+| adepta-sororitas | verified | 121 |
 | adeptus-astartes | ambiguous-source | 1 |
 | adeptus-astartes | digest-differs | 13 |
 | adeptus-astartes | no-source | 5 |
@@ -85,118 +85,116 @@ dump confirmation.
 | adeptus-custodes | stub | 9 |
 | adeptus-custodes | unpublished | 2 |
 | adeptus-custodes | verified | 144 |
-| adeptus-mechanicus | digest-differs | 10 |
+| adeptus-mechanicus | digest-differs | 8 |
 | adeptus-mechanicus | stub | 16 |
-| adeptus-mechanicus | unpublished | 3 |
-| adeptus-mechanicus | verified | 138 |
-| aeldari | digest-differs | 8 |
-| aeldari | stub | 27 |
-| aeldari | unpublished | 22 |
-| aeldari | verified | 243 |
+| adeptus-mechanicus | unpublished | 2 |
+| adeptus-mechanicus | verified | 141 |
+| aeldari | digest-differs | 9 |
+| aeldari | stub | 26 |
+| aeldari | unpublished | 18 |
+| aeldari | verified | 247 |
 | agents-of-the-imperium | ambiguous-source | 1 |
-| agents-of-the-imperium | digest-differs | 11 |
+| agents-of-the-imperium | digest-differs | 10 |
 | agents-of-the-imperium | stub | 18 |
-| agents-of-the-imperium | unpublished | 12 |
-| agents-of-the-imperium | verified | 96 |
-| astra-militarum | digest-differs | 15 |
-| astra-militarum | stub | 17 |
-| astra-militarum | unpublished | 26 |
-| astra-militarum | verified | 193 |
+| agents-of-the-imperium | unpublished | 11 |
+| agents-of-the-imperium | verified | 98 |
+| astra-militarum | digest-differs | 11 |
+| astra-militarum | stub | 14 |
+| astra-militarum | unpublished | 18 |
+| astra-militarum | verified | 208 |
 | black-templars | digest-differs | 1 |
 | black-templars | stub | 10 |
 | black-templars | verified | 52 |
 | blood-angels | digest-differs | 6 |
-| blood-angels | no-source | 1 |
 | blood-angels | stub | 4 |
 | blood-angels | unpublished | 1 |
-| blood-angels | verified | 49 |
+| blood-angels | verified | 50 |
 | chaos-daemons | digest-differs | 3 |
 | chaos-daemons | stub | 17 |
-| chaos-daemons | unpublished | 13 |
-| chaos-daemons | verified | 162 |
-| chaos-knights | digest-differs | 5 |
-| chaos-knights | unpublished | 20 |
-| chaos-knights | verified | 85 |
-| chaos-space-marines | digest-differs | 18 |
+| chaos-daemons | unpublished | 12 |
+| chaos-daemons | verified | 163 |
+| chaos-knights | digest-differs | 4 |
+| chaos-knights | unpublished | 19 |
+| chaos-knights | verified | 87 |
+| chaos-space-marines | digest-differs | 12 |
 | chaos-space-marines | stub | 24 |
-| chaos-space-marines | unpublished | 19 |
-| chaos-space-marines | verified | 220 |
-| dark-angels | digest-differs | 9 |
-| dark-angels | no-source | 1 |
-| dark-angels | stub | 8 |
-| dark-angels | verified | 59 |
+| chaos-space-marines | unpublished | 15 |
+| chaos-space-marines | verified | 230 |
+| dark-angels | digest-differs | 8 |
+| dark-angels | stub | 7 |
+| dark-angels | verified | 62 |
 | death-guard | digest-differs | 4 |
-| death-guard | stub | 18 |
-| death-guard | unpublished | 14 |
-| death-guard | verified | 124 |
+| death-guard | stub | 16 |
+| death-guard | unpublished | 9 |
+| death-guard | verified | 131 |
 | deathwatch | ambiguous-source | 1 |
 | deathwatch | digest-differs | 1 |
 | deathwatch | no-source | 1 |
 | deathwatch | stub | 2 |
 | deathwatch | verified | 31 |
-| drukhari | digest-differs | 9 |
+| drukhari | digest-differs | 8 |
 | drukhari | stub | 20 |
-| drukhari | unpublished | 9 |
-| drukhari | verified | 126 |
-| emperors-children | digest-differs | 7 |
-| emperors-children | unpublished | 19 |
-| emperors-children | verified | 122 |
-| genestealer-cults | digest-differs | 6 |
+| drukhari | unpublished | 8 |
+| drukhari | verified | 128 |
+| emperors-children | digest-differs | 5 |
+| emperors-children | unpublished | 17 |
+| emperors-children | verified | 126 |
+| genestealer-cults | digest-differs | 3 |
 | genestealer-cults | stub | 13 |
-| genestealer-cults | unpublished | 12 |
-| genestealer-cults | verified | 116 |
+| genestealer-cults | unpublished | 11 |
+| genestealer-cults | verified | 120 |
+| grey-knights | digest-differs | 1 |
 | grey-knights | stub | 11 |
 | grey-knights | unpublished | 2 |
-| grey-knights | verified | 121 |
+| grey-knights | verified | 120 |
 | imperial-fists | digest-differs | 3 |
 | imperial-fists | verified | 8 |
 | imperial-knights | digest-differs | 6 |
 | imperial-knights | stub | 13 |
-| imperial-knights | unpublished | 10 |
-| imperial-knights | verified | 89 |
+| imperial-knights | unpublished | 9 |
+| imperial-knights | verified | 90 |
 | iron-hands | digest-differs | 1 |
 | iron-hands | stub | 1 |
 | iron-hands | verified | 9 |
 | leagues-of-votann | digest-differs | 3 |
-| leagues-of-votann | stub | 17 |
-| leagues-of-votann | unpublished | 8 |
-| leagues-of-votann | verified | 127 |
+| leagues-of-votann | stub | 16 |
+| leagues-of-votann | unpublished | 7 |
+| leagues-of-votann | verified | 129 |
 | necrons | digest-differs | 7 |
 | necrons | stub | 15 |
-| necrons | unpublished | 18 |
-| necrons | verified | 190 |
+| necrons | unpublished | 15 |
+| necrons | verified | 193 |
 | orks | ambiguous-source | 1 |
-| orks | digest-differs | 18 |
+| orks | digest-differs | 16 |
 | orks | stub | 7 |
 | orks | unpublished | 6 |
-| orks | verified | 177 |
+| orks | verified | 179 |
 | raven-guard | stub | 1 |
 | raven-guard | verified | 10 |
 | salamanders | digest-differs | 2 |
 | salamanders | stub | 3 |
 | salamanders | verified | 6 |
-| space-wolves | digest-differs | 4 |
-| space-wolves | no-source | 1 |
+| space-wolves | digest-differs | 5 |
 | space-wolves | stub | 8 |
 | space-wolves | verified | 74 |
 | tau-empire | digest-differs | 5 |
 | tau-empire | stub | 3 |
-| tau-empire | unpublished | 24 |
-| tau-empire | verified | 134 |
+| tau-empire | unpublished | 21 |
+| tau-empire | verified | 137 |
 | thousand-sons | digest-differs | 7 |
-| thousand-sons | stub | 3 |
-| thousand-sons | unpublished | 27 |
-| thousand-sons | verified | 121 |
-| tyranids | digest-differs | 5 |
-| tyranids | stub | 16 |
-| tyranids | unpublished | 11 |
-| tyranids | verified | 154 |
+| thousand-sons | stub | 2 |
+| thousand-sons | unpublished | 22 |
+| thousand-sons | verified | 127 |
+| tyranids | digest-differs | 4 |
+| tyranids | stub | 13 |
+| tyranids | unpublished | 10 |
+| tyranids | verified | 159 |
 | ultramarines | stub | 1 |
 | ultramarines | verified | 10 |
 | white-scars | verified | 11 |
-| world-eaters | digest-differs | 4 |
+| world-eaters | digest-differs | 5 |
 | world-eaters | stub | 2 |
-| world-eaters | unpublished | 23 |
+| world-eaters | unpublished | 22 |
 | world-eaters | verified | 118 |
 
 ## Weapon verification outcomes

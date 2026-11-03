@@ -551,6 +551,7 @@
         "parameters": {
           "subject": "defender",
           "filter": {
+            "owner": "enemy",
             "any_of": [
               "MONSTER",
               "VEHICLE"
@@ -560,7 +561,7 @@
       },
       "effect": {
         "type": "roll-modifier",
-        "target": "this-unit",
+        "target": "event-subject",
         "modifier": {
           "roll": "wound",
           "operation": "add",
@@ -584,7 +585,7 @@
       }
     },
     "expected": {
-      "text": "When a friendly unit is selected to fight (the triggering unit must have TERMINATOR SQUAD), against MONSTER or VEHICLE targets, until the end of the phase, the unit gets +1 to Wound rolls."
+      "text": "When a friendly unit is selected to fight (the triggering unit must have TERMINATOR SQUAD), while the target is an enemy unit with the MONSTER or VEHICLE keyword, until the end of the phase, the triggering unit gets +1 to Wound rolls."
     }
   },
   {
@@ -669,6 +670,7 @@
                 "parameters": {
                   "subject": "defender",
                   "filter": {
+                    "owner": "enemy",
                     "all_of": [
                       "CHARACTER"
                     ]
@@ -732,7 +734,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "While making melee attacks against CHARACTER targets:\n  -> You can re-roll the Hit roll for attacks made by this model with melee weapons.\n  -> You can re-roll the Wound roll for attacks made by this model with melee weapons.\n-> Each time the unit destroys an enemy CHARACTER model: you gain 1CP."
+      "text": "While making melee attacks, while the target is an enemy CHARACTER unit:\n  -> You can re-roll the Hit roll for attacks made by this model with melee weapons.\n  -> You can re-roll the Wound roll for attacks made by this model with melee weapons.\n-> Each time the unit destroys an enemy CHARACTER model: you gain 1CP."
     }
   },
   {
@@ -752,7 +754,7 @@
             "level": "model"
           },
           "filter": {
-            "by": "this-unit"
+            "by": "event-subject"
           },
           "window": "event"
         }
@@ -804,7 +806,7 @@
       "optional": true
     },
     "expected": {
-      "text": "After a friendly unit shoots (the triggering unit must have BLOOD LEGIONS or WORLD EATERS), you may use this ability, if the unit has destroyed 1+ enemy models with the CHARACTER or MONSTER keyword with its just-resolved attacks:\n  -> You gain D3 Blood Tithe points.\n  -> Spend one or more Blood Tithe points.\n  -> Select one option of Blood Tithe for the unit, in addition to any already active."
+      "text": "After a friendly unit shoots (the triggering unit must have BLOOD LEGIONS or WORLD EATERS), you may use this ability, if the triggering unit has destroyed 1+ enemy models with the CHARACTER or MONSTER keyword with its just-resolved attacks:\n  -> You gain D3 Blood Tithe points.\n  -> Spend one or more Blood Tithe points.\n  -> Select one option of Blood Tithe for the unit, in addition to any already active."
     }
   },
   {
@@ -11427,7 +11429,13 @@
               },
               "trigger": {
                 "event": "model-destroyed",
-                "object": "model-in-this-unit"
+                "object": {
+                  "owner": "friendly",
+                  "level": "model"
+                },
+                "filter": {
+                  "attack_type": "melee"
+                }
               }
             }
           },
@@ -11561,7 +11569,7 @@
       "optional": true
     },
     "expected": {
-      "text": "At the start of the battle round, you may use this ability, once per battle round per army, if your Army Faction is WORLD EATERS, until the end of the battle round:\n  -> Roll 8D6; allocate dice to activate up to 2 of the following:\n    - Unbridled Bloodlust (requires pair of 1+): the unit gets +1 to Charge rolls.\n    - Rage-Fuelled Invigoration (requires pair of 2+): add 3\" to the unit's Pile-in and Consolidation moves.\n    - Total Carnage (requires pair of 3+): when a model in the unit is destroyed: each time a model in this unit is destroyed, unless that unit has fought this phase, roll one D6. On a 4+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.\n    - Martial Excellence (requires pair of 4+ or triple of 1+): melee weapons equipped by models in this unit gain [SUSTAINED HITS 1].\n    - Warp Blades (requires pair of 5+ or triple of 2+): melee weapons equipped by models in this unit gain [LETHAL HITS].\n    - Decapitating Strikes (requires pair of 6+ or triple of 3+): while making melee attacks against INFANTRY targets, the unit's weapons gain [DEVASTATING WOUNDS]."
+      "text": "At the start of the battle round, you may use this ability, once per battle round per army, if your Army Faction is WORLD EATERS, until the end of the battle round:\n  -> Roll 8D6; allocate dice to activate up to 2 of the following:\n    - Unbridled Bloodlust (requires pair of 1+): the unit gets +1 to Charge rolls.\n    - Rage-Fuelled Invigoration (requires pair of 2+): add 3\" to the unit's Pile-in and Consolidation moves.\n    - Total Carnage (requires pair of 3+): when a friendly model is destroyed in melee: each time a model in this unit is destroyed, unless that unit has fought this phase, roll one D6. On a 4+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.\n    - Martial Excellence (requires pair of 4+ or triple of 1+): melee weapons equipped by models in this unit gain [SUSTAINED HITS 1].\n    - Warp Blades (requires pair of 5+ or triple of 2+): melee weapons equipped by models in this unit gain [LETHAL HITS].\n    - Decapitating Strikes (requires pair of 6+ or triple of 3+): while making melee attacks against INFANTRY targets, the unit's weapons gain [DEVASTATING WOUNDS]."
     }
   },
   {

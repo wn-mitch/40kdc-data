@@ -135,7 +135,13 @@
               },
               "trigger": {
                 "event": "model-destroyed",
-                "object": "model-in-this-unit"
+                "object": {
+                  "owner": "friendly",
+                  "level": "model"
+                },
+                "filter": {
+                  "attack_type": "melee"
+                }
               }
             }
           },
@@ -923,7 +929,7 @@
     "faction_id": "world-eaters",
     "detachment_id": null,
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "activated",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -959,7 +965,8 @@
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "optional": true
   },
   {
     "ability_id": "loping-speed-world-eaters",
@@ -1101,7 +1108,7 @@
         "target": "this-model",
         "modifier": {
           "stat": "A",
-          "operation": "improve",
+          "operation": "add",
           "value": 2,
           "weapons": {
             "type": "melee",
@@ -2937,7 +2944,8 @@
                       "advance",
                       "fall-back",
                       "charge"
-                    ]
+                    ],
+                    "ignore_vertical": true
                   }
                 }
               }
@@ -4155,7 +4163,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "2026-10-14"
+      "dataslate": "pre-launch-provisional"
     },
     "source_digest": "a4823c276e24a6bc3293e156f250415009dc8aa8148ffa9b9c63cc08810deaed",
     "version": "2025-q3",
@@ -4655,14 +4663,12 @@
     "faction_id": "world-eaters",
     "detachment_id": "berzerker-warband",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
-      "type": "stat-modifier",
-      "target": "attacker",
+      "type": "damage-reduction",
+      "target": "this-model",
       "modifier": {
-        "stat": "D",
-        "operation": "subtract",
-        "value": 1
+        "reduction": 1
       }
     },
     "scope": {
@@ -4672,6 +4678,10 @@
       "all_of": [
         "WORLD EATERS"
       ]
+    },
+    "trigger": {
+      "event": "damage-allocated",
+      "object": "this-model"
     }
   },
   {
@@ -5832,7 +5842,8 @@
     "effect": {
       "type": "ability-part",
       "trigger": {
-        "event": "damage-allocated"
+        "event": "damage-allocated",
+        "object": "this-unit"
       },
       "effect": {
         "type": "damage-reduction",
@@ -6805,7 +6816,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "53e38da0a0d2961300253182e5dcc361896655c963e1cfaf69ff53859f9219db",
     "version": "2025-q3",
@@ -6814,56 +6825,47 @@
     "faction_id": "world-eaters",
     "detachment_id": "goretrack-onslaught",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "movement"
-            }
+        "type": "happened",
+        "parameters": {
+          "event": "move-ended",
+          "filter": {
+            "move_types": [
+              "normal"
+            ]
           },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "your-turn"
-            }
-          }
-        ]
+          "window": "phase"
+        }
       },
       "effect": {
-        "type": "conditional",
-        "condition": {
-          "type": "happened",
-          "parameters": {
-            "subject": "this-unit",
-            "event": "move-ended",
-            "filter": {
-              "move_types": [
-                "normal"
-              ]
-            },
-            "window": "turn"
-          }
-        },
-        "effect": {
-          "type": "permission",
-          "target": "event-subject",
-          "modifier": {
-            "activity": "declare-charge",
-            "allow": true,
-            "after": [
-              "disembark"
-            ]
-          }
+        "type": "permission",
+        "target": "this-unit",
+        "modifier": {
+          "activity": "declare-charge",
+          "allow": true,
+          "despite": [
+            "disembarked-this-turn"
+          ]
         }
       }
     },
     "scope": {
-      "duration": "turn"
+      "duration": "phase"
+    },
+    "trigger": {
+      "event": "disembarked",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "WORLD EATERS"
+        ]
+      },
+      "filter": {
+        "transport": "this-unit"
+      }
     }
   },
   {
@@ -7241,7 +7243,7 @@
             "level": "model"
           },
           "filter": {
-            "by": "this-unit"
+            "by": "event-subject"
           },
           "window": "event"
         }
@@ -7334,6 +7336,9 @@
     },
     "trigger": {
       "event": "destroyed",
+      "filter": {
+        "timing": "before-removal"
+      },
       "object": "event-object"
     },
     "community_notes": "Set up a Bloodletters unit from Reserves wholly within 9\" of the destroyed model and more than 6\" from enemy units, once per battle round. Modeled with resurrection — the local blood-legions summon pattern (cf. daemontide); the Reserves origin, 9\"/>6\" placement, and once-per-battle-round limit are recorded here rather than in the effect shape.",
@@ -8706,6 +8711,7 @@
         "parameters": {
           "subject": "defender",
           "filter": {
+            "owner": "enemy",
             "any_of": [
               "MONSTER",
               "VEHICLE"
@@ -8715,7 +8721,7 @@
       },
       "effect": {
         "type": "roll-modifier",
-        "target": "this-unit",
+        "target": "event-subject",
         "modifier": {
           "roll": "wound",
           "operation": "add",
@@ -8828,6 +8834,9 @@
     "community_notes": "Friendly WORLD EATERS CHARACTER (excluding EPIC HERO) gains Feel No Pain 4+ against mortal wounds when it suffers a mortal wound.",
     "trigger": {
       "event": "damage-allocated",
+      "filter": {
+        "attack_type": "mortal"
+      },
       "object": {
         "owner": "friendly",
         "all_of": [
@@ -9036,6 +9045,7 @@
                 "parameters": {
                   "subject": "defender",
                   "filter": {
+                    "owner": "enemy",
                     "all_of": [
                       "CHARACTER"
                     ]
